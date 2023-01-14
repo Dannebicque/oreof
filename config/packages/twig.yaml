@@ -1,6 +1,9 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
-
+    globals:
+        # the value is the service's id
+        user_data: '@App\Classes\DataUserSession'
+        product_name: 'ORéOF'
 when@test:
     twig:
         strict_variables: true

@@ -6,7 +6,18 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.css';
+window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.min')
+
+import './styles/app.scss';
 
 // start the Stimulus application
-import './bootstrap';
+import './bootstrap'
+
+
+import './js/vendor/OverlayScrollbars.min'
+import './js/vendor/clamp.min'
+
+import './js/base/init'
+import './js/common'
+import './js/scripts'
+import './js/base/loader'

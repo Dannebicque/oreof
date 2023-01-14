@@ -1,19 +1,624 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<html lang="fr" data-footer="true">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ block('header')|raw }} - {{product_name}}</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet"/>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+{#    <script src="{{ asset('autoComplete.min.js') }}"></script>#}
+{#    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>#}
+{#    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>#}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+<!-- Content Container Start -->
+<div id="root">
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    <!-- Nav Content Start -->
+    <div id="nav" class="nav-container d-flex">
+        <div class="nav-content d-flex">
+            <!-- Logo Start -->
+            <div class="logo position-relative">
+                <a href="{{ path('app_homepage') }}">
+                    <div class="logo-but">
+                        <i class="fa-duotone fa-pencil"></i>&nbsp;{{product_name}}
+{#                        {% if not is_granted('ROLE_IUT') and user_data.departement#}
+{#                            !=#}
+{#                            null %}#}
+{#                            | <span>{{ user_data.departement.sigle }}</span>#}
+{#                        {% endif %}#}
+                    </div>
+                </a>
+
+            </div>
+            <!-- Logo End -->
+
+            <!-- User Menu Start -->
+{#            <div class="user-container d-flex">#}
+{#                <a href="#" class="d-flex user position-relative" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{#                    <div class="name">{{ app.user.display }}</div>#}
+{#                </a>#}
+{#                <div class="dropdown-menu dropdown-menu-end user-menu wide">#}
+{#                    <div class="row mb-3 ms-0 me-0">#}
+{#                        <div class="col-12 ps-1 mb-2">#}
+{#                            <div class="text-extra-small text-primary">COMPTE</div>#}
+{#                        </div>#}
+{#                        <div class="col-12 ps-1 pe-1">#}
+{#                            <ul class="list-unstyled">#}
+{#                                <li>#}
+{#                                    <a href="{{ path('profil_profil') }}">Mes informations</a>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="row mb-1 ms-0 me-0">#}
+{#                        <div class="col-12 p-1 mb-2 pt-2">#}
+{#                            <div class="text-extra-small text-primary">APPLICATION</div>#}
+{#                        </div>#}
+{#                        <div class="col-12 ps-1 pe-1">#}
+{#                            <ul class="list-unstyled">#}
+{#                                <li>#}
+{#                                    <a href="{{ path('profil_theme') }}">Themes</a>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="row mb-1 ms-0 me-0">#}
+{#                        <div class="col-12 p-1 mb-2 pt-2">#}
+{#                            <div class="text-extra-small text-primary">ACCÈS</div>#}
+{#                        </div>#}
+{#                        <div class="col-12 ps-1 pe-1">#}
+{#                            <ul class="list-unstyled">#}
+{#                                <li>#}
+{#                                    <a href="{{ path('profil_password') }}">Modification du mot de passe</a>#}
+{#                                </li>#}
+{#                                <li>#}
+{#                                    <a href="{{ path('app_logout') }}">Déconnexion</a>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+            <!-- User Menu End -->
+
+            <!-- Icons Menu Start -->
+{#            <ul class="list-unstyled list-inline text-center menu-icons">#}
+{#                <li class="list-inline-item">#}
+{#                    <a href="#" data-bs-toggle="modal" data-bs-target="#searchPagesModal">#}
+{#                        <i class="bi bi-search"></i>#}
+{#                    </a>#}
+{#                </li>#}
+{#                <li class="list-inline-item">#}
+{#                    <a href="#" id="colorButton">#}
+{#                        <i class="bi bi-moon light"></i>#}
+{#                        <i class="bi bi-sun dark"></i>#}
+{#                    </a>#}
+{#                </li>#}
+{#            </ul>#}
+            <!-- Icons Menu End -->
+
+            <!-- Menu Start -->
+{#            <div class="menu-container flex-grow-1">#}
+{#                <ul id="menu" class="menu">#}
+{#                    {% if user_data.departement != null %}#}
+{#                        {% if is_granted('ROLE_IUT') %}#}
+{#                            <li>#}
+{#                                <a href="{{ path('homepage_specialite') }}">#}
+{#                                    <i class="bi bi-house-door icon"></i>#}
+{#                                    <span class="label">{{ user_data.departement.sigle }}</span>#}
+{#                                </a>#}
+{#                            </li>#}
+{#                        {% endif %}#}
+{#                        <li>#}
+{#                            <a href="#ref_competences" data-href="{{ path('administration_apc_referentiel_index', {departement:1}) }}">#}
+{#                                <i class="bi bi-wallet2 icon"></i>#}
+{#                                <span class="label">Info. Spécialité</span>#}
+{#                            </a>#}
+{#                            <ul id="ref_competences">#}
+{#                                <li>#}
+{#                                    <a href="{{ path('administration_apc_referentiel_index', {departement: user_data#}
+{#                                    .departement.id}) }}">#}
+{#                                        <span class="label">Consulter</span>#}
+{#                                    </a>#}
+{#                                </li>#}
+{#                                <li>#}
+{#                                    <a href="{{ path('administration_apc_apprentissage_critique_index', {departement:#}
+{#                                        user_data.departement.id}) }}">#}
+{#                                        <span class="label">Liste des AC</span>#}
+{#                                    </a>#}
+{#                                </li>#}
+{#                                {% if is_granted('ROLE_GT') or is_granted('ROLE_CPN') or is_granted('ROLE_CPN_LECTEUR')#}
+{#                                    or is_granted('ROLE_PACD') or is_granted('ROLE_EDITEUR') %}#}
+{#                                    <li>#}
+{#                                        <a href="{{ path('administration_departement_edit', {id: user_data.departement#}
+{#                                        .id}) }}">#}
+{#                                            <span class="label">Texte descriptif de la spécialité</span>#}
+{#                                        </a>#}
+{#                                    </li>#}
+{#                                    {% for parcours in user_data.departement.apcParcours %}#}
+{#                                        <li>#}
+{#                                            <a href="{{ path('administration_apc_parcours_edit', {id:parcours.id}) }}">#}
+{#                                                <span class="label">texte du parcours : {{ parcours.libelle }}</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endfor %}#}
+{#                                {% else %}#}
+{#                                    <li>#}
+{#                                        <a href="{{ path('administration_departement_lecteur_show', {id: user_data.departement.id}) }}">#}
+{#                                            <span class="label">Consulter le Texte descriptif de la spécialité</span>#}
+{#                                        </a>#}
+{#                                    </li>#}
+{#                                    {% for parcours in user_data.departement.apcParcours %}#}
+{#                                        <li>#}
+{#                                            <a href="{{ path('administration_apc_parcours_show', {id:parcours.id}) }}">#}
+{#                                                <span class="label">Consulter le  texte du parcours : {{ parcours#}
+{#                                                    .libelle }}</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endfor %}#}
+{#                                {% endif %}#}
+{#                            </ul>#}
+{#                        </li>#}
+{#                        <li>#}
+{#                            <a href="#tableaux" data-href="tableaux">#}
+{#                                <i class="bi bi-table icon"></i>#}
+{#                                <span class="label">Tableaux</span>#}
+{#                            </a>#}
+{#                            <ul id="tableaux">#}
+{#                                <li>#}
+{#                                    <a href="{{ path('tableau_structure') }}">#}
+{#                                        <span class="label">Structure des 3 années</span>#}
+{#                                    </a>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </li>#}
+{#                        {% for annee in user_data.annees %}#}
+{#                            <li {% if user_data.departement.typeStructure == 'type3' or annee.ordre >= 2 %}class="mega dropdown"{% endif %}>#}
+{#                                <a href="#but{{ annee.ordre }}" data-href="{{ path('but_annee', {annee: annee.id}) }}">#}
+{#                                    <i class="bi bi-calendar3 icon"></i>#}
+{#                                    <span class="label">B.U.T. {{ annee.ordre }}</span>#}
+{#                                </a>#}
+{#                                <ul id="but{{ annee.ordre }}" {% if user_data.departement.typeStructure == 'type3' or annee.ordre >= 2 %}class="row align-items-start row-cols-{{ user_data.departement.apcParcours|length + 1 }} dropdown-menu" data-popper-placement="bottom-start" {% endif %}>#}
+{#                                    {% if user_data.departement.typeStructure != 'type3' %}#}
+{#                                        {% if user_data.departement.typeStructure == 'type3' or annee.ordre >= 2 %}#}
+{#                                            <li class="dropdown col d-flex flex-column">#}
+{#                                                <a href="#tronc" class="dropdown-toggle#}
+{#                                    active">#}
+{#                                                    <span class="label">Toutes les ressources/SAÉ</span>#}
+{#                                                </a>#}
+{#                                                <ul id="tronc">#}
+{#                                                    <li>#}
+{#                                                        <a href="{{ path('but_ressources_annee', {annee: annee.id}) }}">#}
+{#                                                            <span class="label">Ressources</span>#}
+{#                                                        </a>#}
+{#                                                    </li>#}
+{#                                                    <li>#}
+{#                                                        <a href="{{ path('but_sae_annee', {annee: annee.id}) }}">#}
+{#                                                            <span class="label">SAÉ</span>#}
+{#                                                        </a>#}
+{#                                                    </li>#}
+{#                                                </ul>#}
+{#                                            </li>#}
+{#                                        {% else %}#}
+{#                                            <li>#}
+{#                                                <a href="{{ path('but_ressources_annee', {annee: annee.id}) }}">#}
+{#                                                    <span class="label">Ressources</span>#}
+{#                                                </a>#}
+{#                                            </li>#}
+{#                                            <li>#}
+{#                                                <a href="{{ path('but_sae_annee', {annee: annee.id}) }}">#}
+{#                                                    <span class="label">SAÉ</span>#}
+{#                                                </a>#}
+{#                                            </li>#}
+{#                                        {% endif %}#}
+{#                                    {% endif %}#}
+
+{#                                    {% if user_data.departement.typeStructure == 'type3' or annee.ordre >= 2 %}#}
+{#                                        {% for parcours in user_data.departement.apcParcours %}#}
+{#                                            <li>#}
+{#                                                <a href="#parcours{{ parcours.id }}">#}
+{#                                                    <span class="label"><abbr title="{{ parcours.libelle }}">{{ parcours#}
+{#                                                            .code }}</abbr></span>#}
+{#                                                </a>#}
+{#                                                <ul id="parcours{{ parcours.id }}">#}
+{#                                                    <li>#}
+{#                                                        <a href="{{ path('but_ressources_annee', {annee: annee.id, parcours: parcours.id}) }}">#}
+{#                                                            <span class="label">Ressources du parcours</span>#}
+{#                                                        </a>#}
+{#                                                    </li>#}
+{#                                                    <li>#}
+{#                                                        <a href="{{ path('but_sae_annee', {annee: annee.id, parcours: parcours.id}) }}">#}
+{#                                                            <span class="label">SAÉ du parcours</span>#}
+{#                                                        </a>#}
+{#                                                    </li>#}
+
+{#                                                    <li>#}
+{#                                                        <a href="{{ path('tableau_croise_annee', {annee: annee.id, parcours: parcours.id}) }}">#}
+{#                                                            <span class="label">Tableau croisé par semestre</span>#}
+{#                                                        </a>#}
+{#                                                    </li>#}
+{#                                                    <li>#}
+{#                                                        <a href="{{ path('tableau_preconisations_annee', {annee: annee.id, parcours: parcours.id}) }}">#}
+{#                                                            <span class="label">#}
+{#                                                                Préconisations par semestre#}
+{#                                                            </span>#}
+{#                                                        </a>#}
+{#                                                    </li>#}
+{#                                                    {% if is_granted('ROLE_PACD') %}#}
+{#                                                        <li>#}
+{#                                                            <a href="{{ path('tableau_horaire_annee', {annee: annee.id,#}
+{#                                                                parcours: parcours.id}) }}">#}
+{#                                                                <span class="label">Volumes horaires par semestre</span>#}
+{#                                                            </a>#}
+{#                                                        </li>#}
+
+{#                                                        <li>#}
+{#                                                            <a href="{{ path('tableau_validation_sae_ac_annee', {annee: annee.id,#}
+{#                                                                parcours: parcours.id}) }}">#}
+{#                                                                <span class="label">Validation des AC par les SAÉ</span>#}
+{#                                                            </a>#}
+{#                                                        </li>#}
+{#                                                    {% endif %}#}
+{#                                                </ul>#}
+{#                                            </li>#}
+{#                                        {% endfor %}#}
+{#                                    {% else %}#}
+
+{#                                        <li>#}
+{#                                            <a href="{{ path('tableau_croise_annee', {annee: annee.id}) }}">#}
+{#                                                <span class="label">Tableau croisé par semestre</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                        <li>#}
+{#                                            <a href="{{ path('tableau_preconisations_annee', {annee: annee.id}) }}">#}
+{#                                                <span class="label">Préconisations par semestre</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                        {% if is_granted('ROLE_PACD') %}#}
+{#                                            <li>#}
+{#                                                <a href="{{ path('tableau_horaire_annee', {annee: annee.id}) }}">#}
+{#                                                    <span class="label">Volumes horaires par semestre</span>#}
+{#                                                </a>#}
+{#                                            </li>#}
+
+{#                                            <li>#}
+{#                                                <a href="{{ path('tableau_validation_sae_ac_annee', {annee: annee.id}) }}">#}
+{#                                                    <span class="label">Validation des AC par les SAÉ</span>#}
+{#                                                </a>#}
+{#                                            </li>#}
+{#                                        {% endif %}#}
+{#                                    {% endif %}#}
+{#                                </ul>#}
+{#                            </li>#}
+{#                        {% endfor %}#}
+{#                    {% endif %}#}
+{#                    <li>#}
+{#                        <a href="#export" data-href="export">#}
+{#                            <i class="bi bi-cloud-download icon"></i>#}
+{#                            <span class="label">Export.</span>#}
+{#                        </a>#}
+{#                        <ul id="export">#}
+{#                            <li>#}
+{#                                <a href="{{ path('administration_apc_referentiel_competence_export') }}">#}
+{#                                    <span class="label">Sauvegarder le référentiel de compétences (XML)</span>#}
+{#                                </a>#}
+{#                            </li>#}
+{#                            <li>#}
+{#                                <a href="{{ path('administration_apc_referentiel_formation_export') }}">#}
+{#                                    <span class="label">Sauvegarder le référentiel de formation (XML)</span>#}
+{#                                </a>#}
+{#                            </li>#}
+{#                        </ul>#}
+{#                    </li>#}
+{#                    {% if is_granted('ROLE_PACD') %}#}
+{#                        <li>#}
+{#                            <a href="#admin" data-href="admin">#}
+{#                                <i class="bi bi-gear icon"></i>#}
+{#                                <span class="label">Admin.</span>#}
+{#                            </a>#}
+{#                            <ul id="admin">#}
+{#                                {% if is_granted('ROLE_GT') %}#}
+{#                                    #}{#                                <li> #}
+{#                                    #}{#                                    <a href="{{ path('administration_apc_referentiel_import') }}"> #}
+{#                                    #}{#                                        <span class="label">Importer des référentiels</span> #}
+{#                                    #}{#                                    </a> #}
+{#                                    #}{#                                </li> #}
+{#                                    <li>#}
+{#                                        <a href="{{ path('administration_apc_referentiel_export') }}">#}
+{#                                            <span class="label">Exporter</span>#}
+{#                                        </a>#}
+{#                                    </li>#}
+{#                                    <li>#}
+{#                                        <a href="{{ path('administration_departement_index') }}">#}
+{#                                            <span class="label">Gestion des spécialités</span>#}
+{#                                        </a>#}
+{#                                    </li>#}
+{#                                {% endif %}#}
+{#                                <li>#}
+{#                                    <a href="{{ path('administration_utilisateur_index') }}">#}
+{#                                        <span class="label">Gérer les accès</span>#}
+{#                                    </a>#}
+{#                                </li>#}
+
+{#                                <li>#}
+{#                                    <a href="{{ path('update_codification_index') }}">#}
+{#                                        <span class="label">MàJ codification</span>#}
+{#                                    </a>#}
+{#                                </li>#}
+{#                                <li>#}
+{#                                    <a href="{{ path('export_index') }}">#}
+{#                                        <span class="label">Exporter</span>#}
+{#                                    </a>#}
+{#                                </li>#}
+{#                                #}{#                            {% if not is_granted('ROLE_GT') %} #}
+{#                                <li>#}
+{#                                    <a href="{{ path('administration_apc_referentiel_competence_export') }}">#}
+{#                                        <span class="label">Sauvegarder le référentiel de compétences</span>#}
+{#                                    </a>#}
+{#                                </li>#}
+{#                                <li>#}
+{#                                    <a href="{{ path('administration_apc_referentiel_formation_export') }}">#}
+{#                                        <span class="label">Sauvegarder le référentiel de formation</span>#}
+{#                                    </a>#}
+{#                                </li>#}
+
+{#                                #}{#                            {% endif %} #}
+{#                                #}{#                            <li> #}
+{#                                #}{#                                <a href="{{ path('administration_apc_referentiel_import_formation_index') }}"> #}
+{#                                #}{#                                    <span class="label">Importer le référentiel de formation</span> #}
+{#                                #}{#                                </a> #}
+{#                                #}{#                            </li> #}
+{#                            </ul>#}
+{#                        </li>#}
+{#                    {% endif %}#}
+{#                    {% if (is_granted('ROLE_GT') or is_granted('ROLE_IUT')) %}#}
+{#                        <li class="mega dropdown">#}
+{#                            <a href="#ref_formation" data-href="ref_formation">#}
+{#                                <i class="bi bi-shuffle icon"></i>#}
+{#                                <span class="label">B.U.T.</span>#}
+{#                            </a>#}
+{#                            <ul id="ref_formation" class="row align-items-start row-cols-2 dropdown-menu"#}
+{#                                data-popper-placement="bottom-start">#}
+{#                                <li class="dropdown col d-flex flex-column">#}
+{#                                    <a href="#tertiaires" data-href="tertiaires" class="dropdown-toggle">#}
+{#                                        <span class="label">Tertiaires</span>#}
+{#                                    </a>#}
+{#                                    <ul id="tertiaires">#}
+{#                                        {% for specialite in user_data.specialites|filter(specialite => specialite#}
+{#                                        .typeDepartement == 'tertiaire') %}#}
+{#                                            <li class="col d-flex flex-column">#}
+{#                                                <a href="{{ path('change_specialite', {departement:specialite.id}) }}">#}
+{#                                                    <span class="label">{{ specialite.sigle }}</span>#}
+{#                                                </a>#}
+{#                                            </li>#}
+{#                                        {% endfor %}#}
+{#                                    </ul>#}
+{#                                </li>#}
+{#                                <li class="dropdown col d-flex flex-column">#}
+{#                                    <a href="#Secondaires" class="dropdown-toggle" data-href="Secondaires">#}
+{#                                        <span class="label">Secondaires</span>#}
+{#                                    </a>#}
+{#                                    <ul id="Secondaires">#}
+{#                                        {% for specialite in user_data.specialites|filter(specialite => specialite#}
+{#                                        .typeDepartement == 'secondaire') %}#}
+{#                                            <li class="col d-flex flex-column">#}
+{#                                                <a href="{{ path('change_specialite', {departement:specialite.id}) }}">#}
+{#                                                    <span class="label">{{ specialite.sigle }}</span>#}
+{#                                                </a>#}
+{#                                            </li>#}
+{#                                        {% endfor %}#}
+{#                                    </ul>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </li>#}
+{#                    {% endif %}#}
+{#                    {% if user_data.user.isCpn %}#}
+{#                        <li class="mega dropdown">#}
+{#                            <a href="#ref_formation" data-href="ref_formation">#}
+{#                                <i class="bi bi-shuffle icon"></i>#}
+{#                                <span class="label">B.U.T.</span>#}
+{#                            </a>#}
+{#                            <ul id="ref_formation" class="row align-items-start row-cols-2 dropdown-menu"#}
+{#                                data-popper-placement="bottom-start">#}
+{#                                <li class="dropdown col d-flex flex-column">#}
+{#                                    <a href="#tertiaires" data-href="tertiaires" class="dropdown-toggle">#}
+{#                                        <span class="label">Tertiaires</span>#}
+{#                                    </a>#}
+{#                                    <ul id="tertiaires">#}
+{#                                        {% for specialite in user_data.user.cpnDepartements|filter(specialite =>#}
+{#                                            specialite#}
+{#                                            .typeDepartement == 'tertiaire') %}#}
+{#                                            <li class="col d-flex flex-column">#}
+{#                                                <a href="{{ path('change_specialite', {departement:specialite.id}) }}">#}
+{#                                                    <span class="label">{{ specialite.sigle }}</span>#}
+{#                                                </a>#}
+{#                                            </li>#}
+{#                                        {% endfor %}#}
+{#                                    </ul>#}
+{#                                </li>#}
+{#                                <li class="dropdown col d-flex flex-column">#}
+{#                                    <a href="#Secondaires" class="dropdown-toggle" data-href="Secondaires">#}
+{#                                        <span class="label">Secondaires</span>#}
+{#                                    </a>#}
+{#                                    <ul id="Secondaires">#}
+{#                                        {% for specialite in user_data.user.cpnDepartements|filter(specialite =>#}
+{#                                            specialite#}
+{#                                            .typeDepartement == 'secondaire') %}#}
+{#                                            <li class="col d-flex flex-column">#}
+{#                                                <a href="{{ path('change_specialite', {departement:specialite.id}) }}">#}
+{#                                                    <span class="label">{{ specialite.sigle }}</span>#}
+{#                                                </a>#}
+{#                                            </li>#}
+{#                                        {% endfor %}#}
+{#                                    </ul>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </li>#}
+{#                    {% endif %}#}
+{#                </ul>#}
+{#            </div>#}
+            <!-- Menu End -->
+
+            <!-- Mobile Buttons Start -->
+            <div class="mobile-buttons-container">
+                <!-- Scrollspy Mobile Button Start -->
+                <a href="#" id="scrollSpyButton" class="spy-button" data-bs-toggle="dropdown">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                <!-- Scrollspy Mobile Button End -->
+
+                <!-- Scrollspy Mobile Dropdown Start -->
+                <div class="dropdown-menu dropdown-menu-end" id="scrollSpyDropdown"></div>
+                <!-- Scrollspy Mobile Dropdown End -->
+
+                <!-- Menu Button Start -->
+                <a href="#" id="mobileMenuButton" class="menu-button">
+                    <i class="fas fa-justify"></i>
+                </a>
+                <!-- Menu Button End -->
+            </div>
+            <!-- Mobile Buttons End -->
+        </div>
+        <div class="nav-shadow"></div>
+    </div>
+    <!-- Nav Content End -->
+
+    <!-- Main Content Start -->
+    <main>
+        <!-- messages flash -->
+        {# read and display all flash messages #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="toast position-fixed align-items-center top-0 end-0 m-3 bg-{{ label }} border-0" style="z-index:
+                2000">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <p class="text-white"> {{ message }}</p>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <!-- fin messages flash -->
+        <div class="container">
+            <!-- Title and Top Buttons Start -->
+            <div class="page-title-container">
+                <div class="row">
+                    <!-- Title Start -->
+                    <div class="col-12 col-sm-6">
+                        <h1 class="mb-0 pb-0 display-4" id="title">{% block header %}{% endblock %}</h1>
+                        <nav class="breadcrumb-container d-inline-block" aria-label="breadcrumb">
+                            {% block breadcrumb %}
+
+                            {% endblock %}
+
+                        </nav>
+                    </div>
+                    <!-- Title End -->
+
+                    <!-- Top Buttons Start -->
+                    <div class="col-12 col-sm-6 d-flex align-items-start justify-content-end">
+                        <!-- Tour Button Start -->
+                        {% block bouton_header %}
+
+                        {% endblock %}
+                        <!-- Tour Button End -->
+                    </div>
+                    <!-- Top Buttons End -->
+                </div>
+            </div>
+            <!-- Title and Top Buttons End -->
+            {#            <div class="alert alert-success"><strong style="font-size:20px;"> #}
+            {% block content %}
+
+            {% endblock %}
+        </div>
+    </main>
+    <!-- Main Content End -->
+
+    <!-- Footer Content Start -->
+    <footer>
+        <div class="footer-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-sm-6">
+
+                        <ul class="breadcrumb pt-0 pe-0 mb-0">
+                            <li class="breadcrumb-item mb-0 text-medium">
+                                <p class="mb-0 text-muted text-medium">&copy; 2031 David Annebicque -
+                                                                       version {{ user_data.version }}</p>
+                            </li>
+                            <li class="breadcrumb-item mb-0 text-medium">
+                                <a href="#" class="btn-link">Docs</a>
+                            </li>
+                            <li class="breadcrumb-item mb-0 text-medium">
+                                <a href="#" class="btn-link" data-bs-toggle="modal"
+                                   data-bs-target="#modalUsageDonnees">Usage des données</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Modal -->
+                    <div
+                            class="modal fade modal-close-out"
+                            id="modalUsageDonnees"
+                            tabindex="-1"
+                            role="dialog"
+                            aria-labelledby="examplemodalUsageDonnees"
+                            aria-hidden="true"
+                    >
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="examplemodalUsageDonnees">Usage des données</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Ce site n'enregistre aucune données sur votre utilisation de l'outil.</p>
+                                    <p>Un seul cookie est utilisé permettant de gérer la connexion (lorsque vous activez
+                                       l'option "se souvenir de moi" sur la page de connexion.</p>
+                                    <p>Les fichiers de log (en cas d'erreur ou de problème) sont complètement
+                                       anonymes et sans information personnelles vous concernant.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 d-none d-sm-block">
+                        <ul class="breadcrumb pt-0 pe-0 mb-0 float-end">
+                            <li class="breadcrumb-item mb-0 text-medium">
+                                <a href="mailto:david.annebicque@univ-reims.fr" target="_blank" class="btn-link"><i
+                                            class="text-primary icon-14
+                                    fas fa-envelope"></i></a>
+                            </li>
+                            <li class="breadcrumb-item mb-0 text-medium">
+                                <a href="https://github.com/Dannebicque/oreof" target="_blank"
+                                   class="btn-link"><i class="text-primary icon-14
+                                    fa-brands fa-github"></i></a>
+                            </li>
+                            <li class="breadcrumb-item mb-0 text-medium">
+                                <a href="https://twitter.com/davidannebicque" target="_blank" class="btn-link">
+                                    <i class="text-primary icon-14 fa-brands fa-twitter"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Content End -->
+
+</div>
+<!-- Content Container End -->
+</body>
 </html>

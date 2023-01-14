@@ -18,17 +18,10 @@ security:
             provider: app_user_provider
             custom_authenticator:
                 - App\Security\LoginFormAuthenticator
-                - App\Security\LoginCasAuthenticator
+               # - App\Security\LoginCasAuthenticator
             logout:
                 path: app_logout
-                # where to redirect after logout
                 # target: app_any_route
-
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
