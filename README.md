@@ -6,4 +6,4 @@ Un outil pour accompagner les universités dans la rédaction de l'offre de form
 
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 
-[![wakatime](https://wakatime.com/badge/github/Dannebicque/oreof.svg)](https://wakatime.com/badge/github/Dannebicque/oreof)
+[![wakatime](https://wakatime.com/badge/user/0fe4fe6d-69cf-45d8-b776-72cd9aa52cbb/project/ebb5dc14-530a-489f-b258-779c09022791.svg)](https://wakatime.com/badge/user/0fe4fe6d-69cf-45d8-b776-72cd9aa52cbb/project/ebb5dc14-530a-489f-b258-779c09022791)
