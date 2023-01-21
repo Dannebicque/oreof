@@ -17,7 +17,7 @@ export default class extends Controller {
     const url = event.params.url
     const csrf = event.params.csrf
     console.log(event)
-    const modal = new Modal(document.getElementById('modal-delete'))
+    let modal = new Modal(document.getElementById('modal-delete'))
     modal.show()
     document.getElementById('btn-confirm-supprimer').addEventListener('click', async (event) => {
       const body = {
@@ -26,7 +26,7 @@ export default class extends Controller {
           csrf: csrf,
         }),
       }
-      delete(modal)
+      modal = null
       await fetch(url, body).then((response) => {
         addCallout('Suppression effectuée', 'success')
         this._updateListe()

@@ -13,7 +13,7 @@ var Globals = Globals || {};
 Globals.menuPlacementChange = 'MENU_PLACEMENT_CHANGE';
 Globals.menuBehaviourChange = 'MENU_BEHAVIOUR_CHANGE';
 Globals.layoutChange = 'LAYOUT_CHANGE';
-Globals.colorAttributeChange = 'COLOR_ATTRIBITE_CHANGE';
+Globals.colorAttributeChange = 'COLOR_ATTRIBUTE_CHANGE';
 Globals.borderRadiusChange = 'BORDER_RADIUS_CHANGE';
 Globals.lightDarkModeClick = 'LIGHT_DARK_MODE_CLICK';
 Globals.pinButtonClick = 'PIN_BUTTON_CLICK';
@@ -83,3 +83,4 @@ export class Variables {
 }
 
 export default Globals
+

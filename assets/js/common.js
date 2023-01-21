@@ -22,9 +22,7 @@ class Common {
     this._initModalPadding();
     this._initTooltips();
     this._initPopovers();
-    this._initToasts();
     this._initDropdownAsSelect();
-    this._initDropdownSubMenu();
     this._initClamp();
     this._initScrollspy();
     this._setQuillDefaults();
@@ -58,21 +56,6 @@ class Common {
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
       return new bootstrap.Popover(popoverTriggerEl);
     });
-  }
-
-  // Bootstrap toasts
-  _initToasts() {
-    var toastElList = [].slice.call(document.querySelectorAll('.toast'));
-    var toastList = toastElList.map(function (toastEl) {
-      return new bootstrap.Toast(toastEl);
-    });
-  }
-
-  // Dropdown submenu
-  _initDropdownSubMenu() {
-    if (jQuery().submenupicker) {
-      jQuery('[data-submenu]').submenupicker();
-    }
   }
 
   // Clamp plugin

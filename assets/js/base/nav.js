@@ -11,8 +11,8 @@
  *
  *
  **/
-import Globals from './globals'
-import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min'
+import Globals from './globals';
+import {Collapse, Dropdown} from 'bootstrap'
 
 export default class Nav {
   // Default options
@@ -95,12 +95,10 @@ export default class Nav {
     // Checking if there is a side menu, if so injecting it to the menuVertical for mobile
     if (this.menuSideInner) {
       if (this.html.getAttribute('data-dimension') == 'mobile') {
-        // this.menuVertical = jQuery('<ul id="menu" class="menu">' + this.menuSideInner + this.menuPlainInner + '</ul>');
         this.menuVertical = document.createElement('DIV');
         this.menuVertical.innerHTML = '<ul id="menu" class="menu">' + this.menuSideInner + this.menuPlainInner + '</ul>';
         this.menuVertical = this.menuVertical.firstChild;
       } else {
-        // this.menuVertical = jQuery('<ul id="menu" class="menu">' + this.menuPlainInner + '</ul>');
         this.menuVertical = document.createElement('DIV');
         this.menuVertical.innerHTML = '<ul id="menu" class="menu">' + this.menuPlainInner + '</ul>';
         this.menuVertical = this.menuVertical.firstChild;
@@ -160,7 +158,7 @@ export default class Nav {
         element.setAttribute('data-role', 'button');
         element.setAttribute('aria-expanded', false);
         element.nextElementSibling.classList.add('collapse');
-        new bootstrap.Collapse(element.nextElementSibling, {
+        new Collapse(element.nextElementSibling, {
           toggle: false,
         });
         if (element.getAttribute('data-bs-target')) {
@@ -201,7 +199,7 @@ export default class Nav {
     this.notificationDropdown && this.notificationDropdown.dispose();
 
     if (document.querySelector('.user-container .user')) {
-      this.userDropdown = new bootstrap.Dropdown(document.querySelector('.user-container .user'), {
+      this.userDropdown = new Dropdown(document.querySelector('.user-container .user'), {
         popperConfig: function (defaultBsPopperConfig) {
           var newPopperConfig = {placement: 'bottom'};
           return newPopperConfig;
@@ -209,7 +207,7 @@ export default class Nav {
       });
     }
     if (document.querySelector('.language-switch-container .language-button')) {
-      this.languageDropdown = new bootstrap.Dropdown(document.querySelector('.language-switch-container .language-button'), {
+      this.languageDropdown = new Dropdown(document.querySelector('.language-switch-container .language-button'), {
         popperConfig: function (defaultBsPopperConfig) {
           var newPopperConfig = {placement: 'bottom'};
           return newPopperConfig;
@@ -217,7 +215,7 @@ export default class Nav {
       });
     }
     if (document.querySelector('.menu-icons .notification-button')) {
-      this.notificationDropdown = new bootstrap.Dropdown(document.querySelector('.menu-icons .notification-button'), {
+      this.notificationDropdown = new Dropdown(document.querySelector('.menu-icons .notification-button'), {
         reference: document.querySelector('.menu-icons'),
         popperConfig: function (defaultBsPopperConfig) {
           var newPopperConfig = {placement: 'bottom'};
@@ -225,6 +223,12 @@ export default class Nav {
         },
       });
     }
+  }
+
+  _hideOtherDropdownsVertical() {
+    this.userDropdown && this.userDropdown.hide();
+    this.languageDropdown && this.languageDropdown.hide();
+    this.notificationDropdown && this.notificationDropdown.hide();
   }
 
   _addVerticalMenuListeners() {
@@ -362,7 +366,7 @@ export default class Nav {
     this.notificationDropdown && this.notificationDropdown.dispose();
 
     if (document.querySelector('.user-container .user')) {
-      this.userDropdown = new bootstrap.Dropdown(document.querySelector('.user-container .user'), {
+      this.userDropdown = new Dropdown(document.querySelector('.user-container .user'), {
         popperConfig: function (defaultBsPopperConfig) {
           var newPopperConfig = {placement: 'bottom-end'};
           return newPopperConfig;
@@ -371,7 +375,7 @@ export default class Nav {
     }
 
     if (document.querySelector('.language-switch-container .language-button')) {
-      this.languageDropdown = new bootstrap.Dropdown(document.querySelector('.language-switch-container .language-button'), {
+      this.languageDropdown = new Dropdown(document.querySelector('.language-switch-container .language-button'), {
         popperConfig: function (defaultBsPopperConfig) {
           var newPopperConfig = {placement: 'bottom-end'};
           return newPopperConfig;
@@ -380,7 +384,7 @@ export default class Nav {
     }
 
     if (document.querySelector('.menu-icons .notification-button')) {
-      this.notificationDropdown = new bootstrap.Dropdown(document.querySelector('.menu-icons .notification-button'), {
+      this.notificationDropdown = new Dropdown(document.querySelector('.menu-icons .notification-button'), {
         popperConfig: function (defaultBsPopperConfig) {
           var newPopperConfig = {placement: 'bottom-end'};
           return newPopperConfig;
@@ -390,8 +394,8 @@ export default class Nav {
   }
 
   _initIcons() {
-    if (typeof csicons !== 'undefined') {
-      csicons.replace();
+    if (typeof AcornIcons !== 'undefined') {
+      new AcornIcons().replace();
     }
   }
 
@@ -528,13 +532,14 @@ export default class Nav {
 
   // Decides which type of menu to add based on the parameters or the current window size.
   // placementStatus:
-  // 1 {seleted: 'horizontal',  dimension: 'mobile',         html-attr: 'horizontal', render: 'vertical'}
-  // 2 {seleted: 'horizontal',  dimension: 'tablet|desktop', html-attr: 'horizontal', render: 'horizontal'}
-  // 3 {seleted: 'vertical',    dimension: 'mobile',         html-attr: 'horizontal', render: 'vertical' }
-  // 4 {seleted: 'vertical',    dimension: 'tablet|desktop', html-attr: 'vertical',   render: 'vertical' }
+  // 1 {selected: 'horizontal',  dimension: 'mobile',         html-attr: 'horizontal', render: 'vertical'}
+  // 2 {selected: 'horizontal',  dimension: 'tablet|desktop', html-attr: 'horizontal', render: 'horizontal'}
+  // 3 {selected: 'vertical',    dimension: 'mobile',         html-attr: 'horizontal', render: 'vertical' }
+  // 4 {selected: 'vertical',    dimension: 'tablet|desktop', html-attr: 'vertical',   render: 'vertical' }
   _initMenuPlacement() {
     var windowWidth = window.innerWidth;
     var previousPlacementStatus = this.placementStatus;
+    this._hideOtherDropdownsVertical();
     if (this.selectedMenuPlacement === 'horizontal') {
       if (this.horizontalMobile > windowWidth) {
         // Adding vertical menu for mobile
@@ -673,7 +678,7 @@ export default class Nav {
   _collapseMenu() {
     document.querySelectorAll('#menu>li>a').forEach((element) => {
       if (element.getAttribute('data-clicked') === 'true') {
-        const collapse = bootstrap.Collapse.getInstance(element.nextElementSibling);
+        const collapse = Collapse.getInstance(element.nextElementSibling);
         if (collapse) {
           collapse.hide();
         }
@@ -686,7 +691,7 @@ export default class Nav {
   _unCollapseMenu() {
     document.querySelectorAll('#menu>li>a').forEach((element) => {
       if (element.getAttribute('data-clicked') === 'true') {
-        const collapse = bootstrap.Collapse.getInstance(element.nextElementSibling);
+        const collapse = Collapse.getInstance(element.nextElementSibling);
         if (collapse) {
           collapse.show();
         }
@@ -699,7 +704,7 @@ export default class Nav {
     const dropdownElementList = [].slice.call(document.querySelectorAll('#menu>li>ul [data-bs-toggle="dropdown"]'));
     dropdownElementList.map(function (dropdownToggleEl) {
       if (dropdownToggleEl.classList.contains('show')) {
-        const dropdown = bootstrap.Dropdown.getInstance(dropdownToggleEl);
+        const dropdown = Dropdown.getInstance(dropdownToggleEl);
         if (dropdown) {
           dropdown.hide();
         }
@@ -712,6 +717,8 @@ export default class Nav {
         element.closest('ul').classList.remove('show');
       }
     });
+
+    this._hideOtherDropdownsVertical();
   }
 
   // Enables pin button.
@@ -797,6 +804,7 @@ export default class Nav {
     ) {
       this.html.setAttribute('data-menu-animate', 'hidden');
       this._hideShowMenuDelayed();
+      this._hideOtherDropdownsVertical();
     }
   }
 

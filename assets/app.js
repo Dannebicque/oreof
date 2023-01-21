@@ -6,7 +6,7 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.min')
+// import * as bootstrap from 'bootstrap'
 
 window.da = {
   loaderStimulus: '<div class="loader-stimulus text-center">... Chargement en cours ...</div>',
@@ -24,4 +24,3 @@ import './js/vendor/clamp.min'
 import './js/base/init'
 import './js/common'
 import './js/scripts'
-import './js/base/loader'

@@ -8,7 +8,7 @@
  * @param {string} attributes.behaviour  Menu pin behaviour, accepted values are "pinned", "unpinned".
  * @param {string} attributes.layout     Layout mode, accepted values are "boxed", "fluid".
  * @param {string} attributes.radius     Border radius of the whole template, accepted values are "rounded", "standard", "flat".
- * @param {string} attributes.color      Theme color, accepted values are "light-blue", "light-green", "light-red", "light-pink", "light-purple", "dark-blue", "dark-green", "dark-red", "dark-pink", "dark-purple".
+ * @param {string} attributes.color      Theme color, accepted values are "light-blue", "light-sky", "light-teal", "light-green", "light-lime", "light-red", "light-pink", "light-purple", "dark-blue", "dark-sky", "dark-teal", "dark-green", "dark-lime", "dark-red", "dark-pink", "dark-purple".
  * @param {string} attributes.navcolor   Navcolor override, accepted values are default, "light", "dark".
  * @param {string} storagePrefix         Local storage key.
  * @param {boolean} showSettings         Hides settings button and panel when set to false.
@@ -25,13 +25,14 @@
  *
  *
  */
-import Globals from './globals'
+
+import Globals from './globals';
 
 export default class Settings {
   get options() {
     return {
       attributes: {
-        placement: 'horizontal',
+        placement: 'vertical',
         behaviour: 'pinned',
         layout: 'fluid',
         radius: 'rounded',
@@ -207,7 +208,7 @@ export default class Settings {
   _setVisibility() {
     if (!this.settings.showSettings) {
       document.getElementById('settings') && document.getElementById('settings').classList.add('d-none');
-      document.getElementById('settingsButton') && document.getElementById('settingsButton').classList.add('d-none');
+      document.querySelector('.settings-buttons-container') && document.querySelector('.settings-buttons-container').classList.add('d-none');
     }
   }
 

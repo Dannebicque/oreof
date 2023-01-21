@@ -21,7 +21,6 @@ export const get = (url, params) => request(url, params, 'GET')
 export const post = (url, params) => request(url, params, 'POST')
 
 export const load = (url, params, objet) => {
-  window.umbrella.Spinner.show()
   objet.innerHTML = ''
   fetch(Routing.generate(url, params))
     .then(function (response) {
@@ -29,7 +28,6 @@ export const load = (url, params, objet) => {
     })
     .then(function (body) {
       objet.innerHTML = body
-      window.umbrella.Spinner.hide()
     })
 }
 
