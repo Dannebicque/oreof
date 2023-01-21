@@ -1,0 +1,69 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Libelle</th>
+        <th>Sigle</th>
+        <th>actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for domaine in domaines %}
+        <tr>
+            <td>{{ domaine.id }}</td>
+            <td>{{ domaine.libelle }}</td>
+            <td>{{ domaine.sigle }}</td>
+            <td class="text-end">
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Voir un domaine de formation',
+                            modalUrl: path('app_domaine_show',{'id': domaine.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-info"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Voir un domaine de formation"
+                >
+                    <i class="{{ iconShow }}"></i>
+                    <span> voir</span>
+                </button>
+
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Modifier un domaine de formation',
+                            modalUrl: path('app_domaine_edit',{'id': domaine.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-warning"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Modifier un domaine de formation"
+                >
+                    <i class="{{ iconEdit }}"></i>
+                    <span> modifier</span>
+                </button>
+
+                <button {{ stimulus_action('crud', 'duplicate', 'click', {
+                    url:path('app_domaine_duplicate',{'id': domaine.id})
+                }) }} class="btn btn-sm text-success">
+                    <i class="{{ iconDuplicate }}"></i> Dupliquer
+                </button>
+                <button {{ stimulus_action('crud', 'delete', 'click', {
+                    url:path('app_domaine_delete',{'id': domaine.id}),
+                    csrf: csrf_token('delete' ~ domaine.id)
+                }) }} class="btn btn-sm text-danger">
+                    <i class="{{ iconDelete }}"></i> Supprimer
+                </button>
+            </td>
+
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="4">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
