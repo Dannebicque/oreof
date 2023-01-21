@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Config;
 
 use App\Entity\Composante;
 use App\Form\ComposanteType;
