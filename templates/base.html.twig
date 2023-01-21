@@ -31,11 +31,6 @@
                 <a href="{{ path('app_homepage') }}">
                     <div class="logo-but">
                         <i class="fa-duotone fa-pencil"></i>&nbsp;{{ product_name }}
-                        {#                        {% if not is_granted('ROLE_IUT') and user_data.departement #}
-                        {#                            != #}
-                        {#                            null %} #}
-                        {#                            | <span>{{ user_data.departement.sigle }}</span> #}
-                        {#                        {% endif %} #}
                     </div>
                 </a>
 
@@ -83,157 +78,68 @@
             <div class="menu-container flex-grow-1">
                 <ul id="menu" class="menu">
                     <li>
-                        <a href="#">
+                        <a href="">
                             <i class="bi bi-house-door icon"></i>
                             <span class="label">Formation xx / Admin</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="#ref_competences" data-href="#">
-                            <i class="bi bi-wallet2 icon"></i>
-                            <span class="label">Info. Spécialité</span>
-                        </a>
-                        <ul id="ref_competences">
-                            <li>
-                                <a href="#">
-                                    <span class="label">Consulter</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="label">Liste des AC</span>
-                                </a>
-                            </li>
 
-                            <li>
-                                <a href="#">
-                                    <span class="label">Texte descriptif de la spécialité</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="label">texte du parcours : A</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#tableaux" data-href="tableaux">
-                            <i class="bi bi-table icon"></i>
-                            <span class="label">Tableaux</span>
-                        </a>
-                        <ul id="tableaux">
-                            <li>
-                                <a href="#">
-                                    <span class="label">Structure des 3 années</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="mega dropdown">
-                        <a href="#but" data-href="">
-                            <i class="bi bi-calendar3 icon"></i>
-                            <span class="label">B.U.T. 1</span>
-                        </a>
-                        <ul id="but" class="row align-items-start row-cols-3 dropdown-menu"
-                            data-popper-placement="bottom-start">
-                            <li class="dropdown col d-flex flex-column">
-                                <a href="#tronc" class="dropdown-toggle
-                                    active">
-                                    <span class="label">Toutes les ressources/SAÉ</span>
-                                </a>
-                                <ul id="tronc">
-                                    <li>
-                                        <a href="">
-                                            <span class="label">Ressources</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="">
-                                            <span class="label">SAÉ</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li>
-                                <a href="#parcours">
-                                    <span class="label"><abbr title="Parcours 1">Parcour 1</abbr></span>
-                                </a>
-                                <ul id="parcours">
-                                    <li>
-                                        <a href="1">
-                                            <span class="label">Ressources du parcours</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="2">
-                                            <span class="label">SAÉ du parcours</span>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="3">
-                                            <span class="label">Tableau croisé par semestre</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="4">
-                                            <span class="label">
-                                                Préconisations par semestre
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#export" data-href="export">
-                            <i class="bi bi-cloud-download icon"></i>
-                            <span class="label">Export.</span>
-                        </a>
-                        <ul id="export">
-                            <li>
-                                <a href="">
-                                    <span class="label">Sauvegarder le référentiel de compétences (XML)</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="">
-                                    <span class="label">Sauvegarder le référentiel de formation (XML)</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="mega dropdown">
-                        <a href="#administration" data-href="">
-                            <i class="bi bi-calendar3 icon"></i>
+                    <li class="mega">
+                        <a href="#administration" data-href="administration">
+                            <i class="fas fa-wrench icon"></i>
                             <span class="label">Administration</span>
                         </a>
-                        <ul id="administration" class="row align-items-start row-cols-3 dropdown-menu"
-                            data-popper-placement="bottom-start">
-                            <li class="dropdown col d-flex flex-column">
-                                <a href="#tronc" class="dropdown-toggle
-                                    active">
+                        <ul id="administration">
+                            <li>
+                                <a href="#structure">
                                     <span class="label">Structure de l'établissement</span>
                                 </a>
-                                <ul id="tronc">
+                                <ul id="structure">
                                     <li>
-                                        <a href="">
+                                        <a href="{{ path('app_composante_index') }}">
                                             <span class="label">Composantes</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="">
+                                        <a href="{{ path('app_site_index') }}">
                                             <span class="label">Sites</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="">
+                                        <a href="{{ path('app_etablissement_index') }}">
+                                            <span class="label">Etablissement</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a href="#struct_formation">
+                                    <span class="label">Structure de formation</span>
+                                </a>
+                                <ul id="struct_formation">
+                                    <li>
+                                        <a href="{{ path('app_mention_index') }}">
+                                            <span class="label">Mentions</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('app_type_diplome_index') }}">
+                                            <span class="label">Type de diplôme</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('app_domaine_index') }}">
+                                            <span class="label">Domaines</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('app_site_index') }}">
+                                            <span class="label">Sites</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('app_etablissement_index') }}">
                                             <span class="label">Etablissement</span>
                                         </a>
                                     </li>
@@ -242,7 +148,7 @@
 
                             <li>
                                 <a href="#utilisateurs">
-                                    <span class="label"><abbr title="Parcours 1">Utilisateurs et droits</abbr></span>
+                                    <span class="label">Utilisateurs et droits</span>
                                 </a>
                                 <ul id="utilisateurs">
                                     <li>
@@ -257,13 +163,14 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li>
+
+                            <li >
                                 <a href="#configuration">
-                                    <span class="label"><abbr title="Parcours 1">Configuration</abbr></span>
+                                    <span class="label">Configuration</span>
                                 </a>
                                 <ul id="configuration">
                                     <li>
-                                        <a href="1">
+                                        <a href="3">
                                             <span class="label">Notifications et mails</span>
                                         </a>
                                     </li>
@@ -274,7 +181,6 @@
                                     </li>
                                 </ul>
                             </li>
-
                         </ul>
                     </li>
                 </ul>
@@ -335,7 +241,6 @@
                             {% block breadcrumb %}
 
                             {% endblock %}
-
                         </nav>
                     </div>
                     <!-- Title End -->
@@ -352,7 +257,6 @@
                 </div>
             </div>
             <!-- Title and Top Buttons End -->
-            {#            <div class="alert alert-success"><strong style="font-size:20px;"> #}
             {% block content %}
 
             {% endblock %}
@@ -465,7 +369,7 @@
                 <button type="button" class="btn btn-danger"
                         id="btn-confirm-supprimer"
                         data-bs-dismiss="modal">
-                    Confirmer la suppression définive
+                    Confirmer la suppression définitive
                 </button>
             </div>
         </div>
