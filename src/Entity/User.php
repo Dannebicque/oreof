@@ -36,6 +36,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'directeur', targetEntity: Composante::class)]
     private Collection $composantes;
 
+    #[ORM\Column(length: 50)]
+    private ?string $nom = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $prenom = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
     public function __construct()
     {
         $this->composantes = new ArrayCollection();
@@ -155,5 +164,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function display() {
         return $this->username; //todo: nom/prénom majuscule
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(string $prenom): self
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
     }
 }
