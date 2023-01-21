@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -27,6 +29,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Etablissement $etablissement = null;
+
+    #[ORM\OneToMany(mappedBy: 'directeur', targetEntity: Composante::class)]
+    private Collection $composantes;
+
+    public function __construct()
+    {
+        $this->composantes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -96,5 +109,51 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getEtablissement(): ?Etablissement
+    {
+        return $this->etablissement;
+    }
+
+    public function setEtablissement(?Etablissement $etablissement): self
+    {
+        $this->etablissement = $etablissement;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Composante>
+     */
+    public function getComposantes(): Collection
+    {
+        return $this->composantes;
+    }
+
+    public function addComposante(Composante $composante): self
+    {
+        if (!$this->composantes->contains($composante)) {
+            $this->composantes->add($composante);
+            $composante->setDirecteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComposante(Composante $composante): self
+    {
+        if ($this->composantes->removeElement($composante)) {
+            // set the owning side to null (unless already changed)
+            if ($composante->getDirecteur() === $this) {
+                $composante->setDirecteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function display() {
+        return $this->username; //todo: nom/prénom majuscule
     }
 }

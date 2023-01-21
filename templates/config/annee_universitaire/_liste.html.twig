@@ -1,0 +1,70 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Libelle</th>
+        <th>Annee</th>
+        <th>Defaut</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for annee_universitaire in annee_universitaires %}
+        <tr>
+            <td>{{ annee_universitaire.id }}</td>
+            <td>{{ annee_universitaire.libelle }}</td>
+            <td>{{ annee_universitaire.annee }}</td>
+            <td>{{ annee_universitaire.defaut ? 'Oui' : 'Non' }}</td>
+            <td class="text-end">
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Voir une année universitaire',
+                            modalUrl: path('app_annee_universitaire_show',{'id': annee_universitaire.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-info"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Voir une année universitaire"
+                >
+                    <i class="{{ iconShow }}"></i>
+                    <span> voir</span>
+                </button>
+
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Modifier une année universitaire',
+                            modalUrl: path('app_annee_universitaire_edit',{'id': annee_universitaire.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-warning"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Modifier une année universitaire"
+                >
+                    <i class="{{ iconEdit }}"></i>
+                    <span> modifier</span>
+                </button>
+
+                <button {{ stimulus_action('crud', 'duplicate', 'click', {
+                    url:path('app_annee_universitaire_duplicate',{'id': annee_universitaire.id})
+                }) }} class="btn btn-sm text-success">
+                    <i class="{{ iconDuplicate }}"></i> Dupliquer
+                </button>
+                <button {{ stimulus_action('crud', 'delete', 'click', {
+                    url:path('app_annee_universitaire_delete',{'id': annee_universitaire.id}),
+                    csrf: csrf_token('delete' ~ annee_universitaire.id)
+                }) }} class="btn btn-sm text-danger">
+                    <i class="{{ iconDelete }}"></i> Supprimer
+                </button>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="5">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

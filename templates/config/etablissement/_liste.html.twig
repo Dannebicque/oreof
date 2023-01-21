@@ -1,0 +1,64 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Libelle</th>
+        <th>actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for etablissement in etablissements %}
+        <tr>
+            <td>{{ etablissement.id }}</td>
+            <td>{{ etablissement.libelle }}</td>
+            <td class="text-end">
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Voir un établissement',
+                            modalUrl: path('app_etablissement_show',{'id': etablissement.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-info"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Voir un étalissement"
+                >
+                    <i class="{{ iconShow }}"></i>
+                    <span> voir</span>
+                </button>
+
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Modifier un établissement',
+                            modalUrl: path('app_etablissement_edit',{'id': etablissement.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-warning"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Modifier un établissement"
+                >
+                    <i class="{{ iconEdit }}"></i>
+                    <span> modifier</span>
+                </button>
+
+                <button {{ stimulus_action('crud', 'duplicate', 'click', {
+                    url:path('app_etablissement_delete',{'id': etablissement.id})
+                })}} class="btn btn-sm text-success">
+                    <i class="{{ iconDuplicate }}"></i> Dupliquer</button>
+                <button {{ stimulus_action('crud', 'delete', 'click', {
+                    url:path('app_etablissement_delete',{'id': etablissement.id})
+                })}} class="btn btn-sm text-danger">
+                    <i class="{{ iconDelete }}"></i> Supprimer</button>
+
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="3">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

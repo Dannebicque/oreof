@@ -1,0 +1,6 @@
+<ul class="breadcrumb pt-0">
+    <li class="breadcrumb-item"><a href="{{ path('app_homepage') }}">Home</a></li>
+    {% for lien in liens %}
+        <li class="breadcrumb-item"><a href="{{ lien.href }}">{{ lien.title }}</a></li>
+    {% endfor %}
+</ul>

@@ -25,6 +25,8 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-pro": "^6.2.1"
+        "@fortawesome/fontawesome-pro": "^6.2.1",
+        "@popperjs/core": "^2.11.6",
+        "stimulus-use": "^0.51.3"
     }
 }

@@ -4,6 +4,11 @@ twig:
         # the value is the service's id
         user_data: '@App\Classes\DataUserSession'
         product_name: 'ORéOF'
+        iconAdd: 'fas fa-plus-circle'
+        iconEdit: 'fas fa-edit'
+        iconDelete: 'fas fa-trash-alt'
+        iconShow: 'fas fa-eye'
+        iconDuplicate: 'fas fa-copy'
 when@test:
     twig:
         strict_variables: true

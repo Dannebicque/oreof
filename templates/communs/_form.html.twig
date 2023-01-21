@@ -1,0 +1,27 @@
+{% form_theme form 'communs/form_theme.html.twig' %}
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+
+<button class="btn btn-success" {% if isModal is defined and isModal == true %}
+    {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+{% endif %}>
+    <i class="fas fa-floppy-disk"></i>
+    Enregistrer
+</button>
+
+{% if button_add_other is defined and button_add_other == true %}
+    <button class="btn btn-success" value="add_other" name="btn_update">
+        <i class="fas fa-floppy-disk-circle-arrow-right"></i> Enregistrer et continuer
+    </button>
+{% endif %}
+
+{% if button_label is defined and button_label == 'Modifier' %}
+    <button class="btn btn-success" value="redirect_to_index" name="btn_update">
+        <i class="fas fa-floppy-disk-circle-arrow-right"></i> Modifier
+    </button>
+{% endif %}
+<div class="alert alert-info mt-2">
+    Tous les champs avec un <span class="text-red">*</span> sont obligatoires
+</div>
+{{ form_end(form) }}
+

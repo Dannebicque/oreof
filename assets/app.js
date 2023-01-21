@@ -8,6 +8,10 @@
 // any CSS you import will output into a single css file (app.css in this case)
 window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.min')
 
+window.da = {
+  loaderStimulus: '<div class="loader-stimulus text-center">... Chargement en cours ...</div>',
+  loader: document.getElementById('loader'),
+}
 import './styles/app.scss';
 
 // start the Stimulus application

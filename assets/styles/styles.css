@@ -3224,25 +3224,25 @@ html[data-color='light-pink'] {
 
 .alert-success {
   color: var(--success);
-  background-color: rgba(var(--success-rgb), 0.15); }
+  }
   .alert-success .alert-link {
     color: var(--success); }
 
 .alert-danger {
   color: var(--danger);
-  background-color: rgba(var(--danger-rgb), 0.15); }
+  }
   .alert-danger .alert-link {
     color: var(--danger); }
 
 .alert-info {
   color: var(--info);
-  background-color: rgba(var(--info-rgb), 0.15); }
+}
   .alert-info .alert-link {
     color: var(--info); }
 
 .alert-warning {
   color: var(--warning);
-  background-color: rgba(var(--warning-rgb), 0.15); }
+}
   .alert-warning .alert-link {
     color: var(--warning); }
 
@@ -4944,7 +4944,6 @@ button {
   background: initial;
   opacity: 1;
   font-size: 18px;
-  font-family: 'CS-Interface' !important;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -4955,7 +4954,7 @@ button {
   color: var(--alternate); }
   .btn-close:after {
     display: inline-block;
-    content: '\e91b'; }
+  }
   .btn-close:hover:after {
     color: var(--primary); }
 

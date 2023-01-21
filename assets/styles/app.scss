@@ -6,6 +6,9 @@
 @import "@fortawesome/fontawesome-pro/css/solid.min.css";
 @import "@fortawesome/fontawesome-pro/css/brands.min.css";
 
+$variable-prefix:             bs- !default; // Deprecated in v5.2.0 for the shorter `$prefix`
+$prefix:                      $variable-prefix !default;
+
 @import "./styles.css";
 @import "./main.scss";
 

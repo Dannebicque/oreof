@@ -2,17 +2,20 @@
 <html lang="fr" data-footer="true">
 <head>
     <meta charset="UTF-8">
-    <title>{{ block('header')|raw }} - {{product_name}}</title>
+    <title>{{ block('header')|raw }} - {{ product_name }}</title>
     <link rel="preconnect" href="https://fonts.gstatic.com"/>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet"/>
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
-{#    <script src="{{ asset('autoComplete.min.js') }}"></script>#}
-{#    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>#}
-{#    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>#}
+    {#    <script src="{{ asset('autoComplete.min.js') }}"></script> #}
+    {#    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script> #}
+    {#    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script> #}
     {% block javascripts %}
+        <script>
+          let toasts = {{ app.session.flashbag.get('toast')|json_encode|raw }};
+        </script>
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
 </head>
@@ -27,12 +30,12 @@
             <div class="logo position-relative">
                 <a href="{{ path('app_homepage') }}">
                     <div class="logo-but">
-                        <i class="fa-duotone fa-pencil"></i>&nbsp;{{product_name}}
-{#                        {% if not is_granted('ROLE_IUT') and user_data.departement#}
-{#                            !=#}
-{#                            null %}#}
-{#                            | <span>{{ user_data.departement.sigle }}</span>#}
-{#                        {% endif %}#}
+                        <i class="fa-duotone fa-pencil"></i>&nbsp;{{ product_name }}
+                        {#                        {% if not is_granted('ROLE_IUT') and user_data.departement #}
+                        {#                            != #}
+                        {#                            null %} #}
+                        {#                            | <span>{{ user_data.departement.sigle }}</span> #}
+                        {#                        {% endif %} #}
                     </div>
                 </a>
 
@@ -40,430 +43,242 @@
             <!-- Logo End -->
 
             <!-- User Menu Start -->
-{#            <div class="user-container d-flex">#}
-{#                <a href="#" class="d-flex user position-relative" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-{#                    <div class="name">{{ app.user.display }}</div>#}
-{#                </a>#}
-{#                <div class="dropdown-menu dropdown-menu-end user-menu wide">#}
-{#                    <div class="row mb-3 ms-0 me-0">#}
-{#                        <div class="col-12 ps-1 mb-2">#}
-{#                            <div class="text-extra-small text-primary">COMPTE</div>#}
-{#                        </div>#}
-{#                        <div class="col-12 ps-1 pe-1">#}
-{#                            <ul class="list-unstyled">#}
-{#                                <li>#}
-{#                                    <a href="{{ path('profil_profil') }}">Mes informations</a>#}
-{#                                </li>#}
-{#                            </ul>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="row mb-1 ms-0 me-0">#}
-{#                        <div class="col-12 p-1 mb-2 pt-2">#}
-{#                            <div class="text-extra-small text-primary">APPLICATION</div>#}
-{#                        </div>#}
-{#                        <div class="col-12 ps-1 pe-1">#}
-{#                            <ul class="list-unstyled">#}
-{#                                <li>#}
-{#                                    <a href="{{ path('profil_theme') }}">Themes</a>#}
-{#                                </li>#}
-{#                            </ul>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="row mb-1 ms-0 me-0">#}
-{#                        <div class="col-12 p-1 mb-2 pt-2">#}
-{#                            <div class="text-extra-small text-primary">ACCÈS</div>#}
-{#                        </div>#}
-{#                        <div class="col-12 ps-1 pe-1">#}
-{#                            <ul class="list-unstyled">#}
-{#                                <li>#}
-{#                                    <a href="{{ path('profil_password') }}">Modification du mot de passe</a>#}
-{#                                </li>#}
-{#                                <li>#}
-{#                                    <a href="{{ path('app_logout') }}">Déconnexion</a>#}
-{#                                </li>#}
-{#                            </ul>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
+            <div class="user-container d-flex">
+                <a href="#" class="d-flex user position-relative" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="name">John Doe</div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end user-menu wide">
+                    <div class="row mb-3 ms-0 me-0">
+                        <div class="col-12 ps-1 mb-2">
+                            <div class="text-extra-small text-primary">COMPTE</div>
+                        </div>
+                        <div class="col-12 ps-1 pe-1">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a href="#">Mes informations</a>
+                                </li>
+                                <li>
+                                    <a href="#">Mes notifications</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row mb-1 ms-0 me-0">
+                        <div class="col-12 p-1 mb-2 pt-2">
+                            <div class="text-extra-small text-primary">ACCÈS</div>
+                        </div>
+                        <div class="col-12 ps-1 pe-1">
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a href="{{ path('app_logout') }}">Déconnexion</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- User Menu End -->
 
-            <!-- Icons Menu Start -->
-{#            <ul class="list-unstyled list-inline text-center menu-icons">#}
-{#                <li class="list-inline-item">#}
-{#                    <a href="#" data-bs-toggle="modal" data-bs-target="#searchPagesModal">#}
-{#                        <i class="bi bi-search"></i>#}
-{#                    </a>#}
-{#                </li>#}
-{#                <li class="list-inline-item">#}
-{#                    <a href="#" id="colorButton">#}
-{#                        <i class="bi bi-moon light"></i>#}
-{#                        <i class="bi bi-sun dark"></i>#}
-{#                    </a>#}
-{#                </li>#}
-{#            </ul>#}
-            <!-- Icons Menu End -->
-
             <!-- Menu Start -->
-{#            <div class="menu-container flex-grow-1">#}
-{#                <ul id="menu" class="menu">#}
-{#                    {% if user_data.departement != null %}#}
-{#                        {% if is_granted('ROLE_IUT') %}#}
-{#                            <li>#}
-{#                                <a href="{{ path('homepage_specialite') }}">#}
-{#                                    <i class="bi bi-house-door icon"></i>#}
-{#                                    <span class="label">{{ user_data.departement.sigle }}</span>#}
-{#                                </a>#}
-{#                            </li>#}
-{#                        {% endif %}#}
-{#                        <li>#}
-{#                            <a href="#ref_competences" data-href="{{ path('administration_apc_referentiel_index', {departement:1}) }}">#}
-{#                                <i class="bi bi-wallet2 icon"></i>#}
-{#                                <span class="label">Info. Spécialité</span>#}
-{#                            </a>#}
-{#                            <ul id="ref_competences">#}
-{#                                <li>#}
-{#                                    <a href="{{ path('administration_apc_referentiel_index', {departement: user_data#}
-{#                                    .departement.id}) }}">#}
-{#                                        <span class="label">Consulter</span>#}
-{#                                    </a>#}
-{#                                </li>#}
-{#                                <li>#}
-{#                                    <a href="{{ path('administration_apc_apprentissage_critique_index', {departement:#}
-{#                                        user_data.departement.id}) }}">#}
-{#                                        <span class="label">Liste des AC</span>#}
-{#                                    </a>#}
-{#                                </li>#}
-{#                                {% if is_granted('ROLE_GT') or is_granted('ROLE_CPN') or is_granted('ROLE_CPN_LECTEUR')#}
-{#                                    or is_granted('ROLE_PACD') or is_granted('ROLE_EDITEUR') %}#}
-{#                                    <li>#}
-{#                                        <a href="{{ path('administration_departement_edit', {id: user_data.departement#}
-{#                                        .id}) }}">#}
-{#                                            <span class="label">Texte descriptif de la spécialité</span>#}
-{#                                        </a>#}
-{#                                    </li>#}
-{#                                    {% for parcours in user_data.departement.apcParcours %}#}
-{#                                        <li>#}
-{#                                            <a href="{{ path('administration_apc_parcours_edit', {id:parcours.id}) }}">#}
-{#                                                <span class="label">texte du parcours : {{ parcours.libelle }}</span>#}
-{#                                            </a>#}
-{#                                        </li>#}
-{#                                    {% endfor %}#}
-{#                                {% else %}#}
-{#                                    <li>#}
-{#                                        <a href="{{ path('administration_departement_lecteur_show', {id: user_data.departement.id}) }}">#}
-{#                                            <span class="label">Consulter le Texte descriptif de la spécialité</span>#}
-{#                                        </a>#}
-{#                                    </li>#}
-{#                                    {% for parcours in user_data.departement.apcParcours %}#}
-{#                                        <li>#}
-{#                                            <a href="{{ path('administration_apc_parcours_show', {id:parcours.id}) }}">#}
-{#                                                <span class="label">Consulter le  texte du parcours : {{ parcours#}
-{#                                                    .libelle }}</span>#}
-{#                                            </a>#}
-{#                                        </li>#}
-{#                                    {% endfor %}#}
-{#                                {% endif %}#}
-{#                            </ul>#}
-{#                        </li>#}
-{#                        <li>#}
-{#                            <a href="#tableaux" data-href="tableaux">#}
-{#                                <i class="bi bi-table icon"></i>#}
-{#                                <span class="label">Tableaux</span>#}
-{#                            </a>#}
-{#                            <ul id="tableaux">#}
-{#                                <li>#}
-{#                                    <a href="{{ path('tableau_structure') }}">#}
-{#                                        <span class="label">Structure des 3 années</span>#}
-{#                                    </a>#}
-{#                                </li>#}
-{#                            </ul>#}
-{#                        </li>#}
-{#                        {% for annee in user_data.annees %}#}
-{#                            <li {% if user_data.departement.typeStructure == 'type3' or annee.ordre >= 2 %}class="mega dropdown"{% endif %}>#}
-{#                                <a href="#but{{ annee.ordre }}" data-href="{{ path('but_annee', {annee: annee.id}) }}">#}
-{#                                    <i class="bi bi-calendar3 icon"></i>#}
-{#                                    <span class="label">B.U.T. {{ annee.ordre }}</span>#}
-{#                                </a>#}
-{#                                <ul id="but{{ annee.ordre }}" {% if user_data.departement.typeStructure == 'type3' or annee.ordre >= 2 %}class="row align-items-start row-cols-{{ user_data.departement.apcParcours|length + 1 }} dropdown-menu" data-popper-placement="bottom-start" {% endif %}>#}
-{#                                    {% if user_data.departement.typeStructure != 'type3' %}#}
-{#                                        {% if user_data.departement.typeStructure == 'type3' or annee.ordre >= 2 %}#}
-{#                                            <li class="dropdown col d-flex flex-column">#}
-{#                                                <a href="#tronc" class="dropdown-toggle#}
-{#                                    active">#}
-{#                                                    <span class="label">Toutes les ressources/SAÉ</span>#}
-{#                                                </a>#}
-{#                                                <ul id="tronc">#}
-{#                                                    <li>#}
-{#                                                        <a href="{{ path('but_ressources_annee', {annee: annee.id}) }}">#}
-{#                                                            <span class="label">Ressources</span>#}
-{#                                                        </a>#}
-{#                                                    </li>#}
-{#                                                    <li>#}
-{#                                                        <a href="{{ path('but_sae_annee', {annee: annee.id}) }}">#}
-{#                                                            <span class="label">SAÉ</span>#}
-{#                                                        </a>#}
-{#                                                    </li>#}
-{#                                                </ul>#}
-{#                                            </li>#}
-{#                                        {% else %}#}
-{#                                            <li>#}
-{#                                                <a href="{{ path('but_ressources_annee', {annee: annee.id}) }}">#}
-{#                                                    <span class="label">Ressources</span>#}
-{#                                                </a>#}
-{#                                            </li>#}
-{#                                            <li>#}
-{#                                                <a href="{{ path('but_sae_annee', {annee: annee.id}) }}">#}
-{#                                                    <span class="label">SAÉ</span>#}
-{#                                                </a>#}
-{#                                            </li>#}
-{#                                        {% endif %}#}
-{#                                    {% endif %}#}
+            <div class="menu-container flex-grow-1">
+                <ul id="menu" class="menu">
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-house-door icon"></i>
+                            <span class="label">Formation xx / Admin</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#ref_competences" data-href="#">
+                            <i class="bi bi-wallet2 icon"></i>
+                            <span class="label">Info. Spécialité</span>
+                        </a>
+                        <ul id="ref_competences">
+                            <li>
+                                <a href="#">
+                                    <span class="label">Consulter</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="label">Liste des AC</span>
+                                </a>
+                            </li>
 
-{#                                    {% if user_data.departement.typeStructure == 'type3' or annee.ordre >= 2 %}#}
-{#                                        {% for parcours in user_data.departement.apcParcours %}#}
-{#                                            <li>#}
-{#                                                <a href="#parcours{{ parcours.id }}">#}
-{#                                                    <span class="label"><abbr title="{{ parcours.libelle }}">{{ parcours#}
-{#                                                            .code }}</abbr></span>#}
-{#                                                </a>#}
-{#                                                <ul id="parcours{{ parcours.id }}">#}
-{#                                                    <li>#}
-{#                                                        <a href="{{ path('but_ressources_annee', {annee: annee.id, parcours: parcours.id}) }}">#}
-{#                                                            <span class="label">Ressources du parcours</span>#}
-{#                                                        </a>#}
-{#                                                    </li>#}
-{#                                                    <li>#}
-{#                                                        <a href="{{ path('but_sae_annee', {annee: annee.id, parcours: parcours.id}) }}">#}
-{#                                                            <span class="label">SAÉ du parcours</span>#}
-{#                                                        </a>#}
-{#                                                    </li>#}
+                            <li>
+                                <a href="#">
+                                    <span class="label">Texte descriptif de la spécialité</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="label">texte du parcours : A</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#tableaux" data-href="tableaux">
+                            <i class="bi bi-table icon"></i>
+                            <span class="label">Tableaux</span>
+                        </a>
+                        <ul id="tableaux">
+                            <li>
+                                <a href="#">
+                                    <span class="label">Structure des 3 années</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="mega dropdown">
+                        <a href="#but" data-href="">
+                            <i class="bi bi-calendar3 icon"></i>
+                            <span class="label">B.U.T. 1</span>
+                        </a>
+                        <ul id="but" class="row align-items-start row-cols-3 dropdown-menu"
+                            data-popper-placement="bottom-start">
+                            <li class="dropdown col d-flex flex-column">
+                                <a href="#tronc" class="dropdown-toggle
+                                    active">
+                                    <span class="label">Toutes les ressources/SAÉ</span>
+                                </a>
+                                <ul id="tronc">
+                                    <li>
+                                        <a href="">
+                                            <span class="label">Ressources</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="">
+                                            <span class="label">SAÉ</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
-{#                                                    <li>#}
-{#                                                        <a href="{{ path('tableau_croise_annee', {annee: annee.id, parcours: parcours.id}) }}">#}
-{#                                                            <span class="label">Tableau croisé par semestre</span>#}
-{#                                                        </a>#}
-{#                                                    </li>#}
-{#                                                    <li>#}
-{#                                                        <a href="{{ path('tableau_preconisations_annee', {annee: annee.id, parcours: parcours.id}) }}">#}
-{#                                                            <span class="label">#}
-{#                                                                Préconisations par semestre#}
-{#                                                            </span>#}
-{#                                                        </a>#}
-{#                                                    </li>#}
-{#                                                    {% if is_granted('ROLE_PACD') %}#}
-{#                                                        <li>#}
-{#                                                            <a href="{{ path('tableau_horaire_annee', {annee: annee.id,#}
-{#                                                                parcours: parcours.id}) }}">#}
-{#                                                                <span class="label">Volumes horaires par semestre</span>#}
-{#                                                            </a>#}
-{#                                                        </li>#}
+                            <li>
+                                <a href="#parcours">
+                                    <span class="label"><abbr title="Parcours 1">Parcour 1</abbr></span>
+                                </a>
+                                <ul id="parcours">
+                                    <li>
+                                        <a href="1">
+                                            <span class="label">Ressources du parcours</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="2">
+                                            <span class="label">SAÉ du parcours</span>
+                                        </a>
+                                    </li>
 
-{#                                                        <li>#}
-{#                                                            <a href="{{ path('tableau_validation_sae_ac_annee', {annee: annee.id,#}
-{#                                                                parcours: parcours.id}) }}">#}
-{#                                                                <span class="label">Validation des AC par les SAÉ</span>#}
-{#                                                            </a>#}
-{#                                                        </li>#}
-{#                                                    {% endif %}#}
-{#                                                </ul>#}
-{#                                            </li>#}
-{#                                        {% endfor %}#}
-{#                                    {% else %}#}
+                                    <li>
+                                        <a href="3">
+                                            <span class="label">Tableau croisé par semestre</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="4">
+                                            <span class="label">
+                                                Préconisations par semestre
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
-{#                                        <li>#}
-{#                                            <a href="{{ path('tableau_croise_annee', {annee: annee.id}) }}">#}
-{#                                                <span class="label">Tableau croisé par semestre</span>#}
-{#                                            </a>#}
-{#                                        </li>#}
-{#                                        <li>#}
-{#                                            <a href="{{ path('tableau_preconisations_annee', {annee: annee.id}) }}">#}
-{#                                                <span class="label">Préconisations par semestre</span>#}
-{#                                            </a>#}
-{#                                        </li>#}
-{#                                        {% if is_granted('ROLE_PACD') %}#}
-{#                                            <li>#}
-{#                                                <a href="{{ path('tableau_horaire_annee', {annee: annee.id}) }}">#}
-{#                                                    <span class="label">Volumes horaires par semestre</span>#}
-{#                                                </a>#}
-{#                                            </li>#}
+                        </ul>
+                    </li>
 
-{#                                            <li>#}
-{#                                                <a href="{{ path('tableau_validation_sae_ac_annee', {annee: annee.id}) }}">#}
-{#                                                    <span class="label">Validation des AC par les SAÉ</span>#}
-{#                                                </a>#}
-{#                                            </li>#}
-{#                                        {% endif %}#}
-{#                                    {% endif %}#}
-{#                                </ul>#}
-{#                            </li>#}
-{#                        {% endfor %}#}
-{#                    {% endif %}#}
-{#                    <li>#}
-{#                        <a href="#export" data-href="export">#}
-{#                            <i class="bi bi-cloud-download icon"></i>#}
-{#                            <span class="label">Export.</span>#}
-{#                        </a>#}
-{#                        <ul id="export">#}
-{#                            <li>#}
-{#                                <a href="{{ path('administration_apc_referentiel_competence_export') }}">#}
-{#                                    <span class="label">Sauvegarder le référentiel de compétences (XML)</span>#}
-{#                                </a>#}
-{#                            </li>#}
-{#                            <li>#}
-{#                                <a href="{{ path('administration_apc_referentiel_formation_export') }}">#}
-{#                                    <span class="label">Sauvegarder le référentiel de formation (XML)</span>#}
-{#                                </a>#}
-{#                            </li>#}
-{#                        </ul>#}
-{#                    </li>#}
-{#                    {% if is_granted('ROLE_PACD') %}#}
-{#                        <li>#}
-{#                            <a href="#admin" data-href="admin">#}
-{#                                <i class="bi bi-gear icon"></i>#}
-{#                                <span class="label">Admin.</span>#}
-{#                            </a>#}
-{#                            <ul id="admin">#}
-{#                                {% if is_granted('ROLE_GT') %}#}
-{#                                    #}{#                                <li> #}
-{#                                    #}{#                                    <a href="{{ path('administration_apc_referentiel_import') }}"> #}
-{#                                    #}{#                                        <span class="label">Importer des référentiels</span> #}
-{#                                    #}{#                                    </a> #}
-{#                                    #}{#                                </li> #}
-{#                                    <li>#}
-{#                                        <a href="{{ path('administration_apc_referentiel_export') }}">#}
-{#                                            <span class="label">Exporter</span>#}
-{#                                        </a>#}
-{#                                    </li>#}
-{#                                    <li>#}
-{#                                        <a href="{{ path('administration_departement_index') }}">#}
-{#                                            <span class="label">Gestion des spécialités</span>#}
-{#                                        </a>#}
-{#                                    </li>#}
-{#                                {% endif %}#}
-{#                                <li>#}
-{#                                    <a href="{{ path('administration_utilisateur_index') }}">#}
-{#                                        <span class="label">Gérer les accès</span>#}
-{#                                    </a>#}
-{#                                </li>#}
+                    <li>
+                        <a href="#export" data-href="export">
+                            <i class="bi bi-cloud-download icon"></i>
+                            <span class="label">Export.</span>
+                        </a>
+                        <ul id="export">
+                            <li>
+                                <a href="">
+                                    <span class="label">Sauvegarder le référentiel de compétences (XML)</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    <span class="label">Sauvegarder le référentiel de formation (XML)</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
-{#                                <li>#}
-{#                                    <a href="{{ path('update_codification_index') }}">#}
-{#                                        <span class="label">MàJ codification</span>#}
-{#                                    </a>#}
-{#                                </li>#}
-{#                                <li>#}
-{#                                    <a href="{{ path('export_index') }}">#}
-{#                                        <span class="label">Exporter</span>#}
-{#                                    </a>#}
-{#                                </li>#}
-{#                                #}{#                            {% if not is_granted('ROLE_GT') %} #}
-{#                                <li>#}
-{#                                    <a href="{{ path('administration_apc_referentiel_competence_export') }}">#}
-{#                                        <span class="label">Sauvegarder le référentiel de compétences</span>#}
-{#                                    </a>#}
-{#                                </li>#}
-{#                                <li>#}
-{#                                    <a href="{{ path('administration_apc_referentiel_formation_export') }}">#}
-{#                                        <span class="label">Sauvegarder le référentiel de formation</span>#}
-{#                                    </a>#}
-{#                                </li>#}
+                    <li class="mega dropdown">
+                        <a href="#administration" data-href="">
+                            <i class="bi bi-calendar3 icon"></i>
+                            <span class="label">Administration</span>
+                        </a>
+                        <ul id="administration" class="row align-items-start row-cols-3 dropdown-menu"
+                            data-popper-placement="bottom-start">
+                            <li class="dropdown col d-flex flex-column">
+                                <a href="#tronc" class="dropdown-toggle
+                                    active">
+                                    <span class="label">Structure de l'établissement</span>
+                                </a>
+                                <ul id="tronc">
+                                    <li>
+                                        <a href="">
+                                            <span class="label">Composantes</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="">
+                                            <span class="label">Sites</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="">
+                                            <span class="label">Etablissement</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
 
-{#                                #}{#                            {% endif %} #}
-{#                                #}{#                            <li> #}
-{#                                #}{#                                <a href="{{ path('administration_apc_referentiel_import_formation_index') }}"> #}
-{#                                #}{#                                    <span class="label">Importer le référentiel de formation</span> #}
-{#                                #}{#                                </a> #}
-{#                                #}{#                            </li> #}
-{#                            </ul>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-{#                    {% if (is_granted('ROLE_GT') or is_granted('ROLE_IUT')) %}#}
-{#                        <li class="mega dropdown">#}
-{#                            <a href="#ref_formation" data-href="ref_formation">#}
-{#                                <i class="bi bi-shuffle icon"></i>#}
-{#                                <span class="label">B.U.T.</span>#}
-{#                            </a>#}
-{#                            <ul id="ref_formation" class="row align-items-start row-cols-2 dropdown-menu"#}
-{#                                data-popper-placement="bottom-start">#}
-{#                                <li class="dropdown col d-flex flex-column">#}
-{#                                    <a href="#tertiaires" data-href="tertiaires" class="dropdown-toggle">#}
-{#                                        <span class="label">Tertiaires</span>#}
-{#                                    </a>#}
-{#                                    <ul id="tertiaires">#}
-{#                                        {% for specialite in user_data.specialites|filter(specialite => specialite#}
-{#                                        .typeDepartement == 'tertiaire') %}#}
-{#                                            <li class="col d-flex flex-column">#}
-{#                                                <a href="{{ path('change_specialite', {departement:specialite.id}) }}">#}
-{#                                                    <span class="label">{{ specialite.sigle }}</span>#}
-{#                                                </a>#}
-{#                                            </li>#}
-{#                                        {% endfor %}#}
-{#                                    </ul>#}
-{#                                </li>#}
-{#                                <li class="dropdown col d-flex flex-column">#}
-{#                                    <a href="#Secondaires" class="dropdown-toggle" data-href="Secondaires">#}
-{#                                        <span class="label">Secondaires</span>#}
-{#                                    </a>#}
-{#                                    <ul id="Secondaires">#}
-{#                                        {% for specialite in user_data.specialites|filter(specialite => specialite#}
-{#                                        .typeDepartement == 'secondaire') %}#}
-{#                                            <li class="col d-flex flex-column">#}
-{#                                                <a href="{{ path('change_specialite', {departement:specialite.id}) }}">#}
-{#                                                    <span class="label">{{ specialite.sigle }}</span>#}
-{#                                                </a>#}
-{#                                            </li>#}
-{#                                        {% endfor %}#}
-{#                                    </ul>#}
-{#                                </li>#}
-{#                            </ul>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-{#                    {% if user_data.user.isCpn %}#}
-{#                        <li class="mega dropdown">#}
-{#                            <a href="#ref_formation" data-href="ref_formation">#}
-{#                                <i class="bi bi-shuffle icon"></i>#}
-{#                                <span class="label">B.U.T.</span>#}
-{#                            </a>#}
-{#                            <ul id="ref_formation" class="row align-items-start row-cols-2 dropdown-menu"#}
-{#                                data-popper-placement="bottom-start">#}
-{#                                <li class="dropdown col d-flex flex-column">#}
-{#                                    <a href="#tertiaires" data-href="tertiaires" class="dropdown-toggle">#}
-{#                                        <span class="label">Tertiaires</span>#}
-{#                                    </a>#}
-{#                                    <ul id="tertiaires">#}
-{#                                        {% for specialite in user_data.user.cpnDepartements|filter(specialite =>#}
-{#                                            specialite#}
-{#                                            .typeDepartement == 'tertiaire') %}#}
-{#                                            <li class="col d-flex flex-column">#}
-{#                                                <a href="{{ path('change_specialite', {departement:specialite.id}) }}">#}
-{#                                                    <span class="label">{{ specialite.sigle }}</span>#}
-{#                                                </a>#}
-{#                                            </li>#}
-{#                                        {% endfor %}#}
-{#                                    </ul>#}
-{#                                </li>#}
-{#                                <li class="dropdown col d-flex flex-column">#}
-{#                                    <a href="#Secondaires" class="dropdown-toggle" data-href="Secondaires">#}
-{#                                        <span class="label">Secondaires</span>#}
-{#                                    </a>#}
-{#                                    <ul id="Secondaires">#}
-{#                                        {% for specialite in user_data.user.cpnDepartements|filter(specialite =>#}
-{#                                            specialite#}
-{#                                            .typeDepartement == 'secondaire') %}#}
-{#                                            <li class="col d-flex flex-column">#}
-{#                                                <a href="{{ path('change_specialite', {departement:specialite.id}) }}">#}
-{#                                                    <span class="label">{{ specialite.sigle }}</span>#}
-{#                                                </a>#}
-{#                                            </li>#}
-{#                                        {% endfor %}#}
-{#                                    </ul>#}
-{#                                </li>#}
-{#                            </ul>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-{#                </ul>#}
-{#            </div>#}
+                            <li>
+                                <a href="#utilisateurs">
+                                    <span class="label"><abbr title="Parcours 1">Utilisateurs et droits</abbr></span>
+                                </a>
+                                <ul id="utilisateurs">
+                                    <li>
+                                        <a href="1">
+                                            <span class="label">Utilisateurs</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="2">
+                                            <span class="label">Droits</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#configuration">
+                                    <span class="label"><abbr title="Parcours 1">Configuration</abbr></span>
+                                </a>
+                                <ul id="configuration">
+                                    <li>
+                                        <a href="1">
+                                            <span class="label">Notifications et mails</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('app_annee_universitaire_index') }}">
+                                            <span class="label">Année Universitaire</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
             <!-- Menu End -->
 
             <!-- Mobile Buttons Start -->
@@ -620,5 +435,43 @@
 
 </div>
 <!-- Content Container End -->
+
+<div {{ stimulus_controller('base') }} data-action="modal:openModal@window->base#openModal">
+    {{ include('communs/_modal.html.twig') }}
+</div>
+
+<!-- modal delete -->
+<div class="modal fade"
+     tabindex="-1"
+     aria-hidden="true"
+     id="modal-delete"
+     >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmer la suppression</h5>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"><i class="far fa-xmark-large"></i></button>
+            </div>
+            <div class="modal-body">
+                Confirmer la suppression de l'élément sélectionné.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Annuler
+                </button>
+                <button type="button" class="btn btn-danger"
+                        id="btn-confirm-supprimer"
+                        data-bs-dismiss="modal">
+                    Confirmer la suppression définive
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </body>
 </html>

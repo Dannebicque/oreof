@@ -1,0 +1,134 @@
+framework:
+    workflows:
+        dpe:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'currentPlace'
+            supports:
+                - App\Entity\Dpe
+            initial_marking: 'initialisation_dpe'
+            places:
+                - 'initialisation_dpe'
+                - 'en_cours_redaction'
+                - 'soumis_rf'
+                - 'soumis_dpe_composante'
+                - 'refuse_rf'
+                - 'refuse_dpe_composante'
+                - 'soumis_conseil'
+                - 'refuse_conseil'
+                - 'refuse_central'
+                - 'soumis_central'
+                - 'soumis_vp'
+                - 'soumis_cfvu'
+                - 'refuse_definitif_cfvu'
+                - 'valie_a_publier'
+                - 'publie'
+                - 'valide_pour_publication'
+                - 'soumis_conseil_reserve'
+            transitions:
+                initialiser:
+                    from: 'initialisation_dpe'
+                    to: 'en_cours_redaction'
+                rediger:
+                    from: 'en_cours_redaction'
+                    to: 'soumis_rf'
+                refuser_rf:
+                    from: 'soumis_rf'
+                    to: 'refuse_rf'
+                valide_rf:
+                    from: 'soumis_rf'
+                    to: 'soumis_dpe_composante'
+                reserver_rf:
+                    from: 'soumis_rf'
+                    to: 'en_cours_redaction'
+                refuser_dpe_composante:
+                    from: 'soumis_dpe_composante'
+                    to: 'refuse_dpe_composante'
+                valide_dpe_composante:
+                    from: 'soumis_dpe_composante'
+                    to: 'soumis_conseil'
+                reserver_dpe_composante:
+                    from: 'soumis_dpe_composante'
+                    to: 'soumis_rf'
+                refuser_conseil:
+                    from: 'soumis_conseil'
+                    to: 'refuse_conseil'
+                valider_conseil:
+                    from: 'soumis_conseil'
+                    to: 'soumis_central'
+                reserver_conseil:
+                    from: 'soumis_conseil'
+                    to: 'soumis_dpe_composante'
+                laisser_passer_conseil:
+                    from: 'soumis_conseil'
+                    to: 'soumis_central'
+                refuser_central:
+                    from: 'soumis_central'
+                    to: 'refuse_central'
+                valider_central:
+                    from: 'soumis_central'
+                    to: 'soumis_vp'
+                reserver_central:
+                    from: 'soumis_central'
+                    to: 'soumis_dpe_composante'
+                transmettre_cfvu:
+                    from: 'soumis_vp'
+                    to: 'soumis_cfvu'
+                refuser_definitif_cfvu:
+                    from: 'soumis_cfvu'
+                    to: 'refuse_definitif_cfvu'
+                refuser_revoir_cfvu:
+                    from: 'soumis_cfvu'
+                    to: 'soumis_dpe_composante'
+                valider_reserve_cfvu:
+                    from: 'soumis_cfvu'
+                    to: 'soumis_dpe_composante'
+                valider_reserve_conseil_cfvu:
+                    from: 'soumis_cfvu'
+                    to: 'soumis_conseil_reserve' #todo mais on court-circuite le retour directement vers valider publicatio
+                valider_reserve_central_cfvu:
+                    from: 'soumis_conseil_reserve'
+                    to: 'valide_pour_publication'
+                valider_cfvu:
+                    from: 'soumis_cfvu'
+                    to: 'valide_pour_publication'
+                valider_publication:
+                    from: 'valide_pour_publication'
+                    to: 'valie_a_publier'
+                publier:
+                    from: 'valie_a_publier'
+                    to: 'publie'
+                    #•	Visa transmission CVFU
+                    #•	Refus définitif CFVU
+                    #•	Refus CFVU – projet à revoir
+                    #•	Validé CFVU - sous réserve de modification
+                    #•	Validé CFVU - sous réserve validation conseil
+                    #•	Validé CFVU
+                    #•	Visa publication, attente de publication
+                    #•	DPE publié
+
+
+# •	En attente de rédaction (après initialisation de la campagne par le central)
+#•	En cours de rédaction
+#•	Soumis au RF (par rédacteur)
+#•	Réserve RF
+#•	Validé RF, soumis DPE composante
+#•	Refusé DPE composante
+#•	Réserve DPE composante
+#•	Visa DPE composante, soumis conseil
+#•	Refusé conseil
+#•	Réserve conseil
+#•	Validé conseil, soumis central
+#•	Laissez-passer, soumis central
+#•	Refusé central
+#•	Réserve central
+#•	Soumis au VP
+#•	Visa transmission CVFU
+#•	Refus définitif CFVU
+#•	Refus CFVU – projet à revoir
+#•	Validé CFVU - sous réserve de modification
+#•	Validé CFVU - sous réserve validation conseil
+#•	Validé CFVU
+#•	Visa publication, attente de publication
+#•	DPE publié
