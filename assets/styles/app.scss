@@ -8,7 +8,12 @@
 
 $variable-prefix:             bs- !default; // Deprecated in v5.2.0 for the shorter `$prefix`
 $prefix:                      $variable-prefix !default;
-
+body {
+  --avatar-size: 2rem;
+  --avatar-size-md: 4rem;
+  --avatar-size-xxl: 6rem;
+  --color-avatar: #007bff;
+}
 @import "./styles.css";
 @import "./main.scss";
 

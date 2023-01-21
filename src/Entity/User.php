@@ -84,7 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_LECTEUR';
 
         return array_unique($roles);
     }
@@ -162,32 +162,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function display() {
-        return $this->username; //todo: nom/prénom majuscule
+    public function getPrenom(): ?string
+    {
+        return ucwords(mb_strtolower($this->prenom));
+    }
+
+    public function setPrenom(?string $prenom): void
+    {
+        $this->prenom = $prenom;
     }
 
     public function getNom(): ?string
     {
-        return $this->nom;
+        return mb_strtoupper($this->nom);
     }
 
-    public function setNom(string $nom): self
+    public function setNom(?string $nom): void
     {
         $this->nom = $nom;
-
-        return $this;
     }
 
-    public function getPrenom(): ?string
+    public function getDisplay(): string
     {
-        return $this->prenom;
+        return $this->getPrenom().' '.$this->getNom();
     }
 
-    public function setPrenom(string $prenom): self
+    public function getAvatarInitiales(): ?string
     {
-        $this->prenom = $prenom;
-
-        return $this;
+        return mb_strtoupper(mb_substr(trim($this->getPrenom()), 0, 1).mb_substr(trim($this->getNom()), 0, 1));
     }
 
     public function getEmail(): ?string
