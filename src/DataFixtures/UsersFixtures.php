@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\PasswordHasher\PasswordHasherInterface;
@@ -11,6 +12,9 @@ use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 class UsersFixtures extends Fixture
 {
     //constructeur avec password
+    public const RESPONSABLE_DPE_COMPOSANTE = 'resp_dpe';
+    public const RESPONSABLE_FORMATION = 'resp_formation';
+
     public function __construct(private readonly UserPasswordHasherInterface $encoder)
     {
     }
@@ -60,7 +64,9 @@ class UsersFixtures extends Fixture
         $userDpe->setRoles(['ROLE_RESP_DPE']);
         $password = $this->encoder->hashPassword($userDpe, 'test');
         $userDpe->setPassword($password);
+
         $manager->persist($userDpe);
+
 
         //Responsable Formation
         $userRespFormation = new User();
@@ -71,6 +77,8 @@ class UsersFixtures extends Fixture
         $userRespFormation->setRoles(['ROLE_RESP_FORMATION']);
         $password = $this->encoder->hashPassword($userRespFormation, 'test');
         $userRespFormation->setPassword($password);
+        $this->addReference(self::RESPONSABLE_FORMATION, $userDpe);
+
         $manager->persist($userRespFormation);
 
         //Responsable EC
@@ -85,5 +93,8 @@ class UsersFixtures extends Fixture
         $manager->persist($userRespFormation);
 
         $manager->flush();
+
+        $this->addReference(self::RESPONSABLE_DPE_COMPOSANTE, $userDpe);
+
     }
 }
