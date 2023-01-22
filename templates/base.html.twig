@@ -81,15 +81,18 @@
             <div class="menu-container flex-grow-1">
                 <ul id="menu" class="menu">
                     <li>
-                        <a href="">
+                        <a href="{{ path('app_formation_index') }}">
                             <i class="bi bi-house-door icon"></i>
                             <span class="label">Formation xx / Admin</span>
                         </a>
                     </li>
 
+
+
+                    {% if is_granted('ROLE_ADMIN') %}
                     <li class="mega">
                         <a href="#administration" data-href="administration">
-                            <i class="fas fa-wrench icon"></i>
+                            <i class="fal fa-wrench icon"></i>
                             <span class="label">Administration</span>
                         </a>
                         <ul id="administration">
@@ -124,11 +127,6 @@
                                     <li>
                                         <a href="{{ path('app_mention_index') }}">
                                             <span class="label">Mentions</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_type_diplome_index') }}">
-                                            <span class="label">Type de diplôme</span>
                                         </a>
                                     </li>
                                     <li>
@@ -186,6 +184,7 @@
                             </li>
                         </ul>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
             <!-- Menu End -->
@@ -194,7 +193,7 @@
             <div class="mobile-buttons-container">
                 <!-- Scrollspy Mobile Button Start -->
                 <a href="#" id="scrollSpyButton" class="spy-button" data-bs-toggle="dropdown">
-                    <i class="fas fa-chevron-right"></i>
+                    <i class="fal fa-chevron-right"></i>
                 </a>
                 <!-- Scrollspy Mobile Button End -->
 
@@ -204,7 +203,7 @@
 
                 <!-- Menu Button Start -->
                 <a href="#" id="mobileMenuButton" class="menu-button">
-                    <i class="fas fa-justify"></i>
+                    <i class="fal fa-justify"></i>
                 </a>
                 <!-- Menu Button End -->
             </div>
@@ -320,7 +319,7 @@
                             <li class="breadcrumb-item mb-0 text-medium">
                                 <a href="mailto:david.annebicque@univ-reims.fr" target="_blank" class="btn-link"><i
                                             class="text-primary icon-14
-                                    fas fa-envelope"></i></a>
+                                    fal fa-envelope"></i></a>
                             </li>
                             <li class="breadcrumb-item mb-0 text-medium">
                                 <a href="https://github.com/Dannebicque/oreof" target="_blank"
