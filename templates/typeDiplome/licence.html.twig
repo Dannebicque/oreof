@@ -1,0 +1,104 @@
+<div class="row">
+    <div class="col">
+        <h1>Formation</h1>
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ formation.id }}</td>
+            </tr>
+            <tr>
+                <th>TypeDiplome</th>
+                <td>{{ formation.typeDiplome }}</td>
+            </tr>
+            <tr>
+                <th>MentionTexte</th>
+                <td>{{ formation.mentionTexte }}</td>
+            </tr>
+            <tr>
+                <th>NiveauEntree</th>
+                <td>{{ formation.niveauEntree }}</td>
+            </tr>
+            <tr>
+                <th>NiveauSortie</th>
+                <td>{{ formation.niveauSortie }}</td>
+            </tr>
+            <tr>
+                <th>InscriptionRNCP</th>
+                <td>{{ formation.inscriptionRNCP ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>CodeRNCP</th>
+                <td>{{ formation.codeRNCP }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Scrollspy Start -->
+    <div class="col-md-auto d-none d-lg-block" id="scrollSpyMenu">
+        <ul class="nav flex-column">
+            <li>
+                <a class="nav-link p-2" href="#identite_formation">
+                    <i class="fal fa-chevron-right"></i>
+                    Identité de la formation (SES)
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#identite_formation_responsable">
+                    <i class="fal fa-chevron-right"></i>
+                    Identité de la formation (Responsable)
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#presentation">
+                    <i class="fal fa-chevron-right"></i>
+                    Présentation
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#competences">
+                    <i class="fal fa-chevron-right"></i>
+                    Compétences Acquises
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#descriptif">
+                    <i class="fal fa-chevron-right"></i>
+                    Images Descriptif de la formation
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#admission">
+                    <i class="fal fa-chevron-right"></i>
+                    Admission
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#inscription">
+                    <i class="fal fa-chevron-right"></i>
+                    Inscription
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#et_apres">
+                    <i class="fal fa-chevron-right"></i>
+                    Et après...
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#contacts">
+                    <i class="fal fa-chevron-right text-start"></i>
+                    Contacts pédagogiques
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#ecs">
+                    <i class="fal fa-chevron-right"></i>
+                    Fiches des EC
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- Scrollspy End -->
+</div>

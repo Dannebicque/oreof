@@ -1,0 +1,190 @@
+<div class="row">
+    <div class="col">
+        <section class="scroll-section" id="identite_formation">
+            <h2 class="small-title">Identité de la formation (SES)</h2>
+            <div class="card">
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-4">Type de diplôme</dt>
+                        <dd class="col-8">{{ formation.typeDiplome }}</dd>
+                        <dt class="col-4">Domaine</dt>
+                        <dd class="col-8">{{ formation.domaine != null ? formation.domaine.libelle : 'Non définie' }}</dd>
+                        <dt class="col-4">Mention</dt>
+                        <dd class="col-8">{{ formation.mention != null ? formation.mention.libelle : (formation
+                            .mentionTexte|trim != null ? formation.mentionTexte : 'Non définie') }}</dd>
+                        <dt class="col-4">Niveau à l'entrée en formation</dt>
+                        <dd class="col-8">{{ formation.niveauEntree }}</dd>
+                        <dt class="col-4">Niveau à la sortie de la formation</dt>
+                        <dd class="col-8">{{ formation.niveauSortie }}</dd>
+                        <dt class="col-4">Inscription RNCP / Code RNCP</dt>
+                        <dd class="col-8">{{ formation.inscriptionRNCP ? 'Oui' : 'Non' }} {% if formation
+                            .inscriptionRNCP %}({{ formation.codeRNCP|rncp_link }}){% endif
+                            %}</dd>
+                        <dt class="col-4">Responsable de la mention</dt>
+                        <dd class="col-8">
+                            {% if formation.responsableMention != null %}
+                                {{ formation.responsableMention.display }}<br>
+                                {{ formation.responsableMention.email|mailto }}<br>
+{#                                {{ formation.responsableMention.telephone }}#}
+                            {% else %}
+                                Non défini
+                            {% endif %}
+                        </dd>
+
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <section class="scroll-section mt-3" id="identite_formation_responsable">
+            <h2 class="small-title">Identité de la formation (Responsable)</h2>
+            <div class="card">
+                <div class="card-body">
+
+                </div>
+            </div>
+        </section>
+
+        <section class="scroll-section mt-3" id="presentation">
+            <h2 class="small-title">Présentation</h2>
+            <div class="card">
+                <div class="card-body">
+
+                </div>
+            </div>
+        </section>
+
+        <section class="scroll-section mt-3" id="competences">
+            <h2 class="small-title">Compétences Acquises</h2>
+            <div class="card">
+                <div class="card-body">
+
+                </div>
+            </div>
+        </section>
+
+        <section class="scroll-section mt-3" id="descriptif">
+            <h2 class="small-title">Descriptif de la formation</h2>
+            <div class="card">
+                <div class="card-body">
+
+                </div>
+            </div>
+        </section>
+
+
+        <section class="scroll-section mt-3" id="admission">
+            <h2 class="small-title">Admission</h2>
+            <div class="card">
+                <div class="card-body">
+
+                </div>
+            </div>
+        </section>
+
+
+        <section class="scroll-section mt-3" id="inscription">
+            <h2 class="small-title">Inscription</h2>
+            <div class="card">
+                <div class="card-body">
+
+                </div>
+            </div>
+        </section>
+
+
+        <section class="scroll-section mt-3" id="et_apres">
+            <h2 class="small-title">Et après...</h2>
+            <div class="card">
+                <div class="card-body">
+
+                </div>
+            </div>
+        </section>
+
+        <section class="scroll-section mt-3" id="contacts">
+            <h2 class="small-title">Contacts pédagogiques</h2>
+
+            <div class="card">
+                <div class="card-body">
+
+                </div>
+            </div>
+        </section>
+
+        <section class="scroll-section mt-3" id="ec">
+            <h2 class="small-title">Fiches des EC</h2>
+            <div class="card">
+                <div class="card-body">
+
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- Scrollspy Start -->
+    <div class="col-md-auto d-none d-lg-block" id="scrollSpyMenu">
+        <ul class="nav flex-column">
+            <li>
+                <a class="nav-link p-2" href="#identite_formation">
+                    <i class="fal fa-chevron-right"></i>
+                    Identité de la formation (SES)
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#identite_formation_responsable">
+                    <i class="fal fa-chevron-right"></i>
+                    Identité de la formation (Responsable)
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#presentation">
+                    <i class="fal fa-chevron-right"></i>
+                    Présentation
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#competences">
+                    <i class="fal fa-chevron-right"></i>
+                    Compétences Acquises
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#descriptif">
+                    <i class="fal fa-chevron-right"></i>
+                    Descriptif de la formation
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#admission">
+                    <i class="fal fa-chevron-right"></i>
+                    Admission
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#inscription">
+                    <i class="fal fa-chevron-right"></i>
+                    Inscription
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#et_apres">
+                    <i class="fal fa-chevron-right"></i>
+                    Et après...
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#contacts">
+                    <i class="fal fa-chevron-right text-start"></i>
+                    Contacts pédagogiques
+                </a>
+            </li>
+            <li>
+                <a class="nav-link p-2" href="#ecs">
+                    <i class="fal fa-chevron-right"></i>
+                    Fiches des EC
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- Scrollspy End -->
+</div>

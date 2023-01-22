@@ -19,8 +19,8 @@ class Mention
     #[ORM\Column(length: 20)]
     private ?string $sigle = null;
 
-    #[ORM\ManyToOne(inversedBy: 'mentions')]
-    private ?TypeDiplome $typeDiplome = null;
+    #[ORM\Column(length: 255)]
+    private ?string $typeDiplome = null;
 
     #[ORM\ManyToOne(inversedBy: 'mentions')]
     private ?Domaine $domaine = null;
@@ -54,12 +54,12 @@ class Mention
         return $this;
     }
 
-    public function getTypeDiplome(): ?TypeDiplome
+    public function getTypeDiplome(): ?string
     {
         return $this->typeDiplome;
     }
 
-    public function setTypeDiplome(?TypeDiplome $typeDiplome): self
+    public function setTypeDiplome(?string $typeDiplome): self
     {
         $this->typeDiplome = $typeDiplome;
 
