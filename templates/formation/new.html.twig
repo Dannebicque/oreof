@@ -1,0 +1,66 @@
+
+
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="card"
+            {{ stimulus_controller('formation', {
+                url: path('app_formation_api')
+            }) }}
+    >
+        <div class="card-body">
+            {% form_theme form 'communs/form_theme.html.twig' %}
+            {{ form_start(form) }}
+            <div class="row">
+                <div class="col-6">{{ form_row(form.typeDiplome) }}</div>
+                <div class="col-6">{{ form_row(form.domaine) }}</div>
+
+                <div class="col-6">{{ form_row(form.mention) }}</div>
+                <div class="col-6">{{ form_row(form.mentionTexte) }}</div>
+
+                <div class="col-6">{{ form_row(form.niveauEntree) }}</div>
+                <div class="col-6">{{ form_row(form.niveauSortie) }}</div>
+
+                <div class="col-6">{{ form_row(form.inscriptionRNCP) }}</div>
+                <div class="col-6">{{ form_row(form.codeRNCP) }}</div>
+
+                <div class="col-12">{{ form_row(form.responsableMention) }}</div>
+                <div class="col-6">//afficher les infos en live...</div>
+            </div>
+
+            <button class="btn btn-success">
+                <i class="fal fa-floppy-disk"></i>
+                Enregistrer
+            </button>
+
+            <div class="alert alert-info mt-2">
+                Tous les champs avec un <span class="text-red">*</span> sont obligatoires
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block header %}
+    Créer une nouvelle formation
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('app_formation_index'), title: 'Liste des formations'},
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    {% if is_granted('ROLE_SES') %}
+        <a href="{{ path('app_formation_index')  }}"
+           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Retour à la liste des formations"
+        >
+            <i class="{{ iconBack }}"></i>
+            <span> Retour à la liste des formations</span>
+        </a>
+    {% endif %}
+{% endblock %}
