@@ -8,6 +8,14 @@
         <th>Libelle</th>
         <td>{{ composante.libelle }}</td>
     </tr>
+    <tr>
+        <th>Directeur</th>
+        <td>{{ composante.directeur ? composante.directeur.display : 'Non défini' }}</td>
+    </tr>
+    <tr>
+        <th>Responsable DPE</th>
+        <td>{{ composante.responsableDpe ? composante.responsableDpe.display : 'Non défini' }}</td>
+    </tr>
     </tbody>
 </table>
 

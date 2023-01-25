@@ -1,10 +1,11 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Id</th>
-        <th>Libelle</th>
+        <th>#</th>
+        <th>Nom Composante</th>
         <th>Directeur</th>
-        <th>actions</th>
+        <th>Responsable DPE</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -13,6 +14,7 @@
             <td>{{ composante.id }}</td>
             <td>{{ composante.libelle }}</td>
             <td>{{ composante.directeur ? composante.directeur.display : 'Non défini' }}</td>
+            <td>{{ composante.responsableDpe ? composante.responsableDpe.display : 'Non défini' }}</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {
@@ -46,10 +48,6 @@
                     <span> modifier</span>
                 </button>
 
-                <button {{ stimulus_action('crud', 'duplicate', 'click', {
-                    url:path('app_composante_duplicate',{'id': composante.id})
-                })}} class="btn btn-sm text-success">
-                    <i class="{{ iconDuplicate }}"></i> Dupliquer</button>
                 <button {{ stimulus_action('crud', 'delete', 'click', {
                     url:path('app_composante_delete',{'id': composante.id})
                 })}} class="btn btn-sm text-danger">

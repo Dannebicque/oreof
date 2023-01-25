@@ -19,6 +19,9 @@ class Composante
     #[ORM\ManyToOne(inversedBy: 'composantes')]
     private ?User $directeur = null;
 
+    #[ORM\ManyToOne]
+    private ?User $responsableDpe = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Composante
     public function setDirecteur(?User $directeur): self
     {
         $this->directeur = $directeur;
+
+        return $this;
+    }
+
+    public function getResponsableDpe(): ?User
+    {
+        return $this->responsableDpe;
+    }
+
+    public function setResponsableDpe(?User $responsableDpe): self
+    {
+        $this->responsableDpe = $responsableDpe;
 
         return $this;
     }
