@@ -2,11 +2,10 @@
     <thead>
     <tr>
         <th>Id</th>
-        <th>TypeDiplome</th>
+        <th>Type de diplôme</th>
         <th>Domaine</th>
         <th>Mention</th>
-        <th>Niveau Entree</th>
-        <th>Niveau Sortie</th>
+        <th>Composante</th>
         <th>Inscription RNCP</th>
         <th></th>
     </tr>
@@ -18,15 +17,16 @@
                 {{ formation.id }}
             </td>
             <td>
-                {{ formation.typeDiplome }} {# todo: filtre twig ? #}
+                {{ formation.typeDiplome|typeDiplome }}
             </td>
             <td>{{ formation.domaine != null ? formation.domaine.libelle : 'Non définie' }}</td>
             <td>
                 {{ formation.mention != null ? formation.mention.libelle : (formation.mentionTexte|trim != null ?
                 formation.mentionTexte : 'Non définie') }}
             </td>
-            <td>{{ formation.niveauEntree }}</td>
-            <td>{{ formation.niveauSortie }}</td>
+            <td>
+                Compo.
+            </td>
             <td>{{ formation.inscriptionRNCP ? 'Oui' : 'Non' }} {% if formation.inscriptionRNCP %}({{ formation
                 .codeRNCP }}){% endif %}</td>
             <td>

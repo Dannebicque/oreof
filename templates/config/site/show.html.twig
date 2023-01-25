@@ -8,6 +8,10 @@
         <th>Libelle</th>
         <td>{{ site.libelle }}</td>
     </tr>
+    <tr>
+        <th>Etablissement</th>
+        <td>{{ site.etablissement ? site.etablissement.libelle : 'Non défini' }}</td>
+    </tr>
     </tbody>
 </table>
 

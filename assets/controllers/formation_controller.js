@@ -3,9 +3,12 @@ import { Modal } from 'bootstrap'
 import { addCallout } from '../js/callOut'
 
 export default class extends Controller {
-  static targets = []
+  static targets = [
+    'user',
+  ]
   static values = {
     url: String,
+    urlUser: String,
   }
 
   connect() {
@@ -29,6 +32,12 @@ export default class extends Controller {
 
   changeDomaine(event) {
     this._updateListeMention(document.getElementById('formation_ses_typeDiplome').value, event.target.value)
+  }
+
+  async changeResponsableMention(event) {
+    const responsableMention = event.target.value
+    const reponse = await fetch(this.urlUserValue + '?id=' + responsableMention)
+    this.userTarget.innerHTML =  await reponse.text()
   }
 
   async _updateListeMention(typeDiplome, domaine) {

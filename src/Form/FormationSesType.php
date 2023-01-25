@@ -8,6 +8,9 @@ use App\Entity\Mention;
 use App\Entity\User;
 use App\Enums\NiveauFormationEnum;
 use App\Form\Type\YesNoType;
+use App\Twig\TypeDiplomeExtension;
+use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Utils\Tools;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -23,6 +26,7 @@ class FormationSesType extends AbstractType
         $builder
             ->add('typeDiplome', ChoiceType::class, [
                 'choices' => $options['typesDiplomes'],
+                'translation_domain' => 'enum',
                 'label' => 'Type de diplôme',
                 'attr' => ['data-action' => 'change->formation#changeTypeDiplome']
             ])
@@ -47,10 +51,16 @@ class FormationSesType extends AbstractType
             ])
             ->add('niveauEntree', EnumType::class, [
                 'class' => NiveauFormationEnum::class,
+                'choice_label' => static function (\UnitEnum $choice): string {
+                    return $choice->libelle();
+                },
                 'label' => 'Niveau d\'entrée en formation',
             ])
             ->add('niveauSortie', EnumType::class, [
                 'class' => NiveauFormationEnum::class,
+                'choice_label' => static function (\UnitEnum $choice): string {
+                    return $choice->libelle();
+                },
                 'label' => 'Niveau de sortie de la formation',
             ])
             ->add('inscriptionRNCP', YesNoType::class, [

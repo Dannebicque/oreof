@@ -5,7 +5,8 @@
 {% block content %}
     <div class="card"
             {{ stimulus_controller('formation', {
-                url: path('app_formation_api')
+                url: path('app_formation_api'),
+                urlUser: path('api_user_get_user'),
             }) }}
     >
         <div class="card-body">
@@ -25,7 +26,9 @@
                 <div class="col-6">{{ form_row(form.codeRNCP) }}</div>
 
                 <div class="col-12">{{ form_row(form.responsableMention) }}</div>
-                <div class="col-6">//afficher les infos en live...</div>
+                <div class="col-12" {{ stimulus_target('formation', 'user') }}>
+                    <i>.:: Choisir le responsable pour afficher ses informations ::.</i>
+                </div>
             </div>
 
             <button class="btn btn-success">
