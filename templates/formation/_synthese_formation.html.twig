@@ -1,0 +1,28 @@
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-4">
+                <dl>
+                    <dt>Domaine</dt>
+                    <dd>{{ formation.domaine ? formation.domaine.libelle : 'Non défini' }}</dd>
+                    <dt>Type de formation</dt>
+                    <dd>{{ typeDiplome.libelle }}</dd>
+                </dl>
+            </div>
+            <div class="col-4">
+                <dl>
+                    <dt>Mention</dt>
+                    <dd>{{ formation.display }}</dd>
+                </dl>
+            </div>
+            <div class="col-4">
+                <dl>
+                    <dt>Niveau à l'entrée en formation</dt>
+                    <dd>{{ formation.niveauEntree }}</dd>
+                    <dt>Niveau en sortie de formation</dt>
+                    <dd>{{ formation.niveauSortie }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

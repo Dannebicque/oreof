@@ -28,8 +28,10 @@ class FormationController extends AbstractController
     #[Route('/liste', name: 'app_formation_liste', methods: ['GET'])]
     public function liste(FormationRepository $formationRepository): Response
     {
+
+
         return $this->render('formation/_liste.html.twig', [
-            'formations' => $formationRepository->findAll(),
+            'formations' => $formationRepository->findByRoleUser($this->getUser()),
         ]);
     }
 
@@ -83,24 +85,20 @@ class FormationController extends AbstractController
         return $this->render('formation/show.html.twig', [
             'template' => $typeDiplome::TEMPLATE,
             'formation' => $formation,
+            'typeDiplome' => $typeDiplome
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Formation $formation, FormationRepository $formationRepository): Response
+    public function edit(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        Formation $formation, FormationRepository $formationRepository): Response
     {
-        $form = $this->createForm(FormationType::class, $formation);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $formationRepository->save($formation, true);
-
-            return $this->redirectToRoute('app_formation_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('formation/edit.html.twig', [
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->typeDiplome());
+        return $this->render('formation/edit.html.twig', [
             'formation' => $formation,
-            'form' => $form,
+            'step' => 1,
+            'typeDiplome' => $typeDiplome
         ]);
     }
 

@@ -1,0 +1,29 @@
+<h2>Descriptif de la formation</h2>
+<div {{ stimulus_controller('formation--step4', {
+    url: path('app_formation_save', {formation:formation.id}),
+}) }}>
+    {% form_theme form 'communs/form_theme.html.twig' %}
+    {{ form_start(form) }}
+    {{ form_row(form.modalitesEnseignement) }}
+    {{ form_row(form.hasStage) }}
+    <div id="blocStage" style="display:{% if formation.hasStage == null or formation.hasStage == false %}none{% endif
+    %}">
+        {{ form_row(form.stageText) }}
+        {# todo seulement si L ou M ? #}
+        {{ form_row(form.nbHeuresStages) }}
+    </div>
+    {{ form_row(form.hasProjet) }}
+    <div id="blocProjet" style="display:{% if formation.hasProjet == null or formation.hasProjet == false %}none{% endif %}">
+        {{ form_row(form.projetText) }}
+        {# todo seulement si L ou M ? #}
+        {{ form_row(form.nbHeuresProjet) }}
+    </div>
+
+    {{ form_row(form.hasMemoire) }}
+    <div id="blocMemoire" style="display:{% if formation.hasMemoire == null or formation.hasMemoire == false %}none{% endif %}">
+        {{ form_row(form.memoireText) }}
+        {# todo seulement si L ou M ? #}
+        {{ form_row(form.nbHeuresMemoire) }}
+    </div>
+    {{ form_end(form) }}
+</div>

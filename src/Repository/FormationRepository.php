@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Formation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Formation>
@@ -39,28 +40,28 @@ class FormationRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Formation[] Returns an array of Formation objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByRoleUser(UserInterface $user): array
+    {
+        $roles = $user->getRoles();
 
-//    public function findOneBySomeField($value): ?Formation
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if (in_array('ROLE_SES', $roles) || in_array('ROLE_ADMIN', $roles)) {
+            return $this->findAll();
+        }
+
+        if (in_array('ROLE_RESP_DPE', $roles)) {
+            //todo: formation de la composante ? Le Resp DPE est dans la composante ??
+            return $this->findAll();
+        }
+
+        if (in_array('ROLE_RESP_FORMATION', $roles)) {
+            //todo: formation de la composante ? Le Resp DPE est dans la composante ??
+            return $this->findBy(['responsableMention' => $user]);
+        }
+
+        if (in_array('ROLE_RESP_EC', $roles)) {
+            //todo: les formations dans lesquels il est impliqué ?
+            //todo: comment on a le lien DPE => Composante et Composante => Formation ?
+
+        }
+    }
 }

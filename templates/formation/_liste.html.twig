@@ -18,13 +18,12 @@
                 {{ formation.id }}
             </td>
             <td>
-                {{ formation.typeDiplome  }} {# todo: filtre twig ? #}
+                {{ formation.typeDiplome }} {# todo: filtre twig ? #}
             </td>
             <td>{{ formation.domaine != null ? formation.domaine.libelle : 'Non définie' }}</td>
             <td>
                 {{ formation.mention != null ? formation.mention.libelle : (formation.mentionTexte|trim != null ?
-                formation.mentionTexte : 'Non définie')
-                }}
+                formation.mentionTexte : 'Non définie') }}
             </td>
             <td>{{ formation.niveauEntree }}</td>
             <td>{{ formation.niveauSortie }}</td>
@@ -32,41 +31,45 @@
                 .codeRNCP }}){% endif %}</td>
             <td>
                 <a href="{{ path('app_formation_show',{'id': formation.id}) }}"
-                        class="btn btn-sm text-info"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Voir une formation"
+                   class="btn btn-sm text-info"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom"
+                   title="Voir une formation"
                 >
                     <i class="{{ iconShow }}"></i>
                     <span> voir</span>
                 </a>
 
+                {% if is_granted('ROLE_RESP_FORMATION') %}
                 <a href="{{ path('app_formation_edit',{'id': formation.id}) }}"
-                        class="btn btn-sm text-warning"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Modifier une année universitaire"
+                   class="btn btn-sm text-warning"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom"
+                   title="Modifier une année universitaire"
                 >
                     <i class="{{ iconEdit }}"></i>
                     <span> modifier</span>
                 </a>
+                {% endif %}
 
-{#                <button {{ stimulus_action('crud', 'duplicate', 'click', {#}
-{#                    url:path('app_formation_duplicate',{'id': formation.id})#}
-{#                }) }} class="btn btn-sm text-success">#}
-{#                    <i class="{{ iconDuplicate }}"></i> Dupliquer#}
-{#                </button>#}
-                <button {{ stimulus_action('crud', 'delete', 'click', {
-                    url:path('app_formation_delete',{'id': formation.id}),
-                    csrf: csrf_token('delete' ~ formation.id)
-                }) }} class="btn btn-sm text-danger">
-                    <i class="{{ iconDelete }}"></i> Supprimer
-                </button>
+                {% if is_granted('ROLE_SES') %}
+                    {#                <button {{ stimulus_action('crud', 'duplicate', 'click', { #}
+                    {#                    url:path('app_formation_duplicate',{'id': formation.id}) #}
+                    {#                }) }} class="btn btn-sm text-success"> #}
+                    {#                    <i class="{{ iconDuplicate }}"></i> Dupliquer #}
+                    {#                </button> #}
+                    <button {{ stimulus_action('crud', 'delete', 'click', {
+                        url:path('app_formation_delete',{'id': formation.id}),
+                        csrf: csrf_token('delete' ~ formation.id)
+                    }) }} class="btn btn-sm text-danger">
+                        <i class="{{ iconDelete }}"></i> Supprimer
+                    </button>
+                {% endif %}
             </td>
         </tr>
     {% else %}
         <tr>
-            <td colspan="8">no records found</td>
+            <td colspan="8" class="bg-warning">Aucun enregistrement trouvé</td>
         </tr>
     {% endfor %}
     </tbody>
