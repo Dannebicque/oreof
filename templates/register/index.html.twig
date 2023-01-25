@@ -1,0 +1,22 @@
+{% extends 'base-speciale.html.twig' %}
+
+{% block title %}Demande d'accès{% endblock %}
+
+{% block content %}
+    <div class="mb-2">
+        <h2 class="cta-1 mb-0 text-primary">Bienvenue,</h2>
+        <h2 class="cta-1 text-primary">Complétez votre demande d'accès</h2>
+    </div>
+    <div class="d-grid mb-2">
+        <a href="{{ path('app_login') }}" class="btn d-block btn-primary" type="submit">
+            Déjà un compte ? Connectez vous
+        </a>
+    </div>
+    {% form_theme form 'communs/form_theme.html.twig' %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="d-grid">
+        <button class="btn d-block btn-primary" type="submit">Valider la demande</button>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

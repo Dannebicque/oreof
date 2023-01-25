@@ -1,0 +1,21 @@
+{% extends 'base-speciale.html.twig' %}
+
+{% block content %}
+    <div class="mb-2">
+        <h2 class="cta-1 mb-0 text-primary">Bienvenue,</h2>
+        <h2 class="cta-1 text-primary">Demande d'accès prise en compte</h2>
+    </div>
+
+    <div>
+        <p><strong>{{ user.display }},</strong></p>
+        <p>Votre demande a été transmise à votre responsable de composante et à l'administrateur du site. Elle sera
+           validée
+           dans les plus brefs délais.</p>
+        <p>Vous recevrez un mail de confirmation.</p>
+    </div>
+{% endblock %}
+
+{% block title %}
+    Confirmation de demande
+{% endblock %}
+

@@ -16,7 +16,6 @@
     {% endif %}
 
     <form class="tooltip-end-bottom" method="post">
-
         <div class="mb-3 filled form-group tooltip-end-top form-floating">
             <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control"
                    required autofocus>
@@ -35,8 +34,13 @@
         <input type="hidden" name="_csrf_token"
                value="{{ csrf_token('authenticate') }}"
         >
-
-        <button class="btn btn-lg btn-primary" type="submit">Se connecter</button>
+        <div class="d-grid">
+        <button class="btn d-block btn-primary" type="submit">Se connecter</button>
         {#            <a href="{{ path('app_forgot_password_request') }}">Mot de passe perdu ?</a><br> #}
+        </div>
     </form>
+    <p class="text-center mt-3">OU</p>
+    <div class="d-grid">
+        <a href="{{ path('app_register') }}" class="btn d-block btn-secondary">Demander un accès</a>
+    </div>
 {% endblock %}
