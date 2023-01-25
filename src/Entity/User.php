@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use App\Enums\CentreGestionEnum;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -27,7 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?string $password = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
@@ -44,6 +46,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
+
+    #[ORM\Column]
+    private ?bool $isEnable = false;
+
+    #[ORM\Column]
+    private ?bool $isValidDpe = false;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateValideDpe = null;
+
+    #[ORM\Column]
+    private ?bool $isValideAdministration = false;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateValideAdministration = null;
+
+    #[ORM\Column(length: 30, nullable: true, enumType: CentreGestionEnum::class)]
+    private ?CentreGestionEnum $centreDemande = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateDemande = null;
 
     public function __construct()
     {
@@ -104,7 +127,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
@@ -200,6 +223,90 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function isIsEnable(): ?bool
+    {
+        return $this->isEnable;
+    }
+
+    public function setIsEnable(bool $isEnable): self
+    {
+        $this->isEnable = $isEnable;
+
+        return $this;
+    }
+
+    public function isIsValidDpe(): ?bool
+    {
+        return $this->isValidDpe;
+    }
+
+    public function setIsValidDpe(bool $isValidDpe): self
+    {
+        $this->isValidDpe = $isValidDpe;
+
+        return $this;
+    }
+
+    public function getDateValideDpe(): ?\DateTimeInterface
+    {
+        return $this->dateValideDpe;
+    }
+
+    public function setDateValideDpe(\DateTimeInterface $dateValideDpe): self
+    {
+        $this->dateValideDpe = $dateValideDpe;
+
+        return $this;
+    }
+
+    public function isIsValideAdministration(): ?bool
+    {
+        return $this->isValideAdministration;
+    }
+
+    public function setIsValideAdministration(bool $isValideAdministration): self
+    {
+        $this->isValideAdministration = $isValideAdministration;
+
+        return $this;
+    }
+
+    public function getDateValideAdministration(): ?\DateTimeInterface
+    {
+        return $this->dateValideAdministration;
+    }
+
+    public function setDateValideAdministration(?\DateTimeInterface $dateValideAdministration): self
+    {
+        $this->dateValideAdministration = $dateValideAdministration;
+
+        return $this;
+    }
+
+    public function getCentreDemande(): ?CentreGestionEnum
+    {
+        return $this->centreDemande;
+    }
+
+    public function setCentreDemande(?CentreGestionEnum $centreDemande): self
+    {
+        $this->centreDemande = $centreDemande;
+
+        return $this;
+    }
+
+    public function getDateDemande(): ?\DateTimeInterface
+    {
+        return $this->dateDemande;
+    }
+
+    public function setDateDemande(?\DateTimeInterface $dateDemande): self
+    {
+        $this->dateDemande = $dateDemande;
 
         return $this;
     }
