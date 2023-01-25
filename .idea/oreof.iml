@@ -76,13 +76,16 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/service-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/validator" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/workflow" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/uid" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/intl" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-uuid" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/translation" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/easycorp/easyadmin-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/sensio/framework-extra-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/annotations" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/data-fixtures" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/doctrine-fixtures-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/egulias/email-validator" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-idn" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/mailer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/mime" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/ldap" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/translation" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

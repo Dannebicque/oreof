@@ -10,7 +10,7 @@ security:
                 class: App\Entity\User
                 property: username
     role_hierarchy:
-        ROLE_ADMINISTRATION:        ROLE_SES
+        ROLE_ADMIN:                 ROLE_SES
         ROLE_SES:                   [ROLE_VP,ROLE_RESP_DPE]
         ROLE_RESP_DPE:              ROLE_RESP_FORMATION
         ROLE_RESP_FORMATION:        ROLE_RESP_EC
@@ -33,6 +33,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/connexion, roles: PUBLIC_ACCESS }
+        - { path: ^/demande-acces, roles: PUBLIC_ACCESS }
         - { path: ^/cas, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 
