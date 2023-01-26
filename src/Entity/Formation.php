@@ -92,7 +92,7 @@ class Formation
     private ?string $rythmeFormationTexte = null;
 
     #[ORM\Column]
-    private ?bool $hasParcours = null;
+    private ?bool $hasParcours = false;
 
     #[ORM\Column(nullable: true)]
     private ?array $structureSemestres = [];
