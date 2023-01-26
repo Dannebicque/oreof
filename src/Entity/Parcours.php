@@ -46,7 +46,7 @@ class Parcours
     private ?Site $site = null;
 
     #[ORM\Column]
-    private ?bool $hasStage = null;
+    private ?bool $hasStage = false;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $stageText = null;
@@ -55,7 +55,7 @@ class Parcours
     private ?float $nbHeuresStages = null;
 
     #[ORM\Column]
-    private ?bool $hasProjet = null;
+    private ?bool $hasProjet = false;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $projetText = null;
@@ -64,7 +64,7 @@ class Parcours
     private ?float $nbHeuresProjet = null;
 
     #[ORM\Column]
-    private ?bool $hasMemoire = null;
+    private ?bool $hasMemoire = false;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $memoireText = null;
