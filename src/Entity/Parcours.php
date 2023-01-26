@@ -52,7 +52,7 @@ class Parcours
     private ?string $stageText = null;
 
     #[ORM\Column(nullable: true)]
-    private ?float $nbHeuresStages = null;
+    private ?float $nbHeuresStages = 0;
 
     #[ORM\Column]
     private ?bool $hasProjet = false;
@@ -61,7 +61,7 @@ class Parcours
     private ?string $projetText = null;
 
     #[ORM\Column]
-    private ?float $nbHeuresProjet = null;
+    private ?float $nbHeuresProjet = 0;
 
     #[ORM\Column]
     private ?bool $hasMemoire = false;
