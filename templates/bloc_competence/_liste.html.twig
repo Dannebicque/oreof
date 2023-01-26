@@ -20,12 +20,12 @@
                 <span> modifier</span>
             </button>
 
-            <button {{ stimulus_action('formation--step3', 'duplicateBcc', 'click', {
-                url:path('app_annee_universitaire_duplicate',{'id': blocCompetence.id})
+            <button {{ stimulus_action('parcours--step3', 'duplicate', 'click', {
+                url:path('app_bloc_competence_duplicate',{'id': blocCompetence.id})
             }) }} class="btn btn-sm text-success">
                 <i class="{{ iconDuplicate }}"></i> Dupliquer
             </button>
-            <button {{ stimulus_action('formation--step3', 'deleteBcc', 'click', {
+            <button {{ stimulus_action('parcours--step3', 'delete', 'click', {
                 url:path('app_bloc_competence_delete',{'id': blocCompetence.id}),
                 csrf: csrf_token('delete' ~ blocCompetence.id)
             }) }} class="btn btn-sm text-danger">
@@ -59,12 +59,12 @@
                             <span> modifier</span>
                         </button>
 
-                        <button {{ stimulus_action('formation--step3', 'duplicateCompetence', 'click', {
-                            url:path('app_annee_universitaire_duplicate',{'id': competence.id})
+                        <button {{ stimulus_action('parcours--step3', 'duplicate', 'click', {
+                            url:path('app_competence_duplicate',{'id': competence.id})
                         }) }} class="btn btn-sm text-success">
                             <i class="{{ iconDuplicate }}"></i> Dupliquer
                         </button>
-                        <button {{ stimulus_action('formation--step3', 'deleteCompetence', 'click', {
+                        <button {{ stimulus_action('parcours--step3', 'delete', 'click', {
                             url:path('app_competence_delete',{'id': competence.id}),
                             csrf: csrf_token('delete' ~ competence.id)
                         }) }} class="btn btn-sm text-danger">
