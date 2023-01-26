@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/Dannebicque/oreof/compare/v0.0.3...v0.0.4) (2023-01-26)
+
+
+### Features
+
+* Base de données (compétences, blocs de compétences, diverses mises à jour) ([b3d6ad7](https://github.com/Dannebicque/oreof/commit/b3d6ad701c9ba4a6bb66ea4f7bc0e8c5f3b69280))
+* Blocs de compétences et compétences ([9e85492](https://github.com/Dannebicque/oreof/commit/9e8549202d8d7dc790fcb607815258d46addad8e))
+* Composante ([8c5e18a](https://github.com/Dannebicque/oreof/commit/8c5e18a78de78c124c68f3c4a7e93178d1a8bead))
+* Création d'une formation ([c01f8ab](https://github.com/Dannebicque/oreof/commit/c01f8ab758aacdda284e63a8a426627994c8f88f))
+* Demande d'acces ([4763302](https://github.com/Dannebicque/oreof/commit/47633025dabecf26868ddc914904d1ba571366a0))
+* Dépendances ([6473861](https://github.com/Dannebicque/oreof/commit/6473861484c4cee8ad7e5cd412bcb7e62e108ac8))
+* Enum pour différents champs ([84b2655](https://github.com/Dannebicque/oreof/commit/84b2655e45756144555149923a3f278126e1b655))
+* Formation : step 1, 2, 3 6, 7 et 8 ([961c54d](https://github.com/Dannebicque/oreof/commit/961c54d14b97d741c00e907f52ca69c3c3c7449e))
+* Parcours, formation suite V2 document + structure Semestre/UE/EC ([a977f0d](https://github.com/Dannebicque/oreof/commit/a977f0d7319ec2136c033911f2768b1a7816de10))
+
 ### [0.0.3](https://github.com/Dannebicque/oreof/compare/v0.0.2...v0.0.3) (2023-01-22)
 
 
