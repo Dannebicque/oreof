@@ -1,3 +1,5 @@
+{# todo : présenter avec des "tabular data" pour les parcours ?? ou un mode afficher/masquer #}
+
 <table class="table">
     <thead>
     <tr>
@@ -6,7 +8,8 @@
         <th>Domaine</th>
         <th>Mention</th>
         <th>Composante</th>
-        <th>Inscription RNCP</th>
+        <th>Remplissage</th>
+        <th>Etat</th>
         <th></th>
     </tr>
     </thead>
@@ -27,8 +30,12 @@
             <td>
                 {{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'Non définie' }}
             </td>
-            <td>{{ formation.inRncp ? 'Oui' : 'Non' }} {% if formation.inRncp %}({{ formation
-                .codeRNCP }}){% endif %}</td>
+            <td>
+                {{ formation.etatDpe }}
+            </td>
+            <td>
+                {{ formation.remplissage }}
+            </td>
             <td>
                 <a href="{{ path('app_formation_show',{'id': formation.id}) }}"
                    class="btn btn-sm text-info"
@@ -70,12 +77,14 @@
 
             <tr>
                 <td>Parcours</td>
-                <td colspan="6">
+                <td colspan="7">
                     <table class="table">
         {% for parcours in formation.parcours %}
                         <tr>
                             <td>#{{ parcours.id }}</td>
                             <td>{{ parcours.libelle }}</td>
+                            <td>{{ parcours.remplissage }}</td>
+                            <td>{{ parcours.etat }}</td>
                             <td class="text-end">
                                 <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"
                                    class="btn btn-sm text-info"

@@ -32,8 +32,14 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFilter('tel_format', [$this, 'telFormat']),
             new TwigFilter('mailto', [$this, 'mailto'], ['is_safe' => ['html']]),
+            new TwigFilter('dateFr', [$this, 'dateFr'], ['is_safe' => ['html']]),
             new TwigFilter('rncp_link', [$this, 'rncpLink'], ['is_safe' => ['html']])
         ];
+    }
+
+    public function dateFr(\DateTimeInterface $value): string
+    {
+        return $value->format('d/m/Y H:i');
     }
 
     public function rncpLink(?string $code): string

@@ -4,6 +4,9 @@
         <th>Id</th>
         <th>Libelle</th>
         <th>Annee</th>
+        <th>Dépôt</th>
+        <th>CI CFVU</th>
+        <th>CFVU</th>
         <th>Defaut</th>
         <th></th>
     </tr>
@@ -14,7 +17,12 @@
             <td>{{ annee_universitaire.id }}</td>
             <td>{{ annee_universitaire.libelle }}</td>
             <td>{{ annee_universitaire.annee }}</td>
-            <td>{{ annee_universitaire.defaut ? 'Oui' : 'Non' }}</td>
+            <td>{{ annee_universitaire.dateTransmissionSes|dateFr }}</td>
+            <td>{{ annee_universitaire.dateCiCfvu|dateFr }}</td>
+            <td>{{ annee_universitaire.dateCfvu|dateFr }}</td>
+            <td><span class="badge {% if annee_universitaire.defaut %}bg-success{% else %}bg-warning{% endif %}">{{
+                    annee_universitaire
+                    .defaut ? 'Oui' : 'Non' }}</span></td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {

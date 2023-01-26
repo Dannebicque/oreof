@@ -1,20 +1,30 @@
 <table class="table">
     <tbody>
     <tr>
-        <th>Id</th>
-        <td>{{ annee_universitaire.id }}</td>
-    </tr>
-    <tr>
         <th>Libelle</th>
         <td>{{ annee_universitaire.libelle }}</td>
     </tr>
     <tr>
-        <th>Annee</th>
+        <th>Année</th>
         <td>{{ annee_universitaire.annee }}</td>
     </tr>
     <tr>
-        <th>Defaut</th>
-        <td>{{ annee_universitaire.defaut ? 'Yes' : 'No' }}</td>
+        <th>Date de transmission limite au SES</th>
+        <td>{{ annee_universitaire.dateTransmissionSes|dateFr }}</td>
+    </tr>
+    <tr>
+        <th>Date de la CI CFVU</th>
+        <td>{{ annee_universitaire.dateCiCfvu|dateFr }}</td>
+    </tr>
+    <tr>
+        <th>Date de la CFVU</th>
+        <td>{{ annee_universitaire.dateCfvu|dateFr }}</td>
+    </tr>
+    <tr>
+        <th>Année Active</th>
+        <td><span class="badge {% if annee_universitaire.defaut %}bg-success{% else %}bg-warning{% endif %}">{{
+                annee_universitaire
+                .defaut ? 'Oui' : 'Non' }}</span></td>
     </tr>
     </tbody>
 </table>

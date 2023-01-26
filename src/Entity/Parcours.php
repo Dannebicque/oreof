@@ -411,4 +411,14 @@ class Parcours
 
         return $this;
     }
+
+    public function etat()
+    {
+        return 'En cours de rédaction';
+    }
+
+    public function remplissage(): float
+    {
+        return 20;
+    }
 }

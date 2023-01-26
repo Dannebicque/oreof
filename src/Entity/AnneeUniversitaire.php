@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AnneeUniversitaireRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AnneeUniversitaireRepository::class)]
@@ -21,6 +22,15 @@ class AnneeUniversitaire
 
     #[ORM\Column]
     private ?bool $defaut = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateTransmissionSes = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateCiCfvu = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateCfvu = null;
 
     public function getId(): ?int
     {
@@ -59,6 +69,42 @@ class AnneeUniversitaire
     public function setDefaut(bool $defaut): self
     {
         $this->defaut = $defaut;
+
+        return $this;
+    }
+
+    public function getDateTransmissionSes(): ?\DateTimeInterface
+    {
+        return $this->dateTransmissionSes;
+    }
+
+    public function setDateTransmissionSes(?\DateTimeInterface $dateTransmissionSes): self
+    {
+        $this->dateTransmissionSes = $dateTransmissionSes;
+
+        return $this;
+    }
+
+    public function getDateCiCfvu(): ?\DateTimeInterface
+    {
+        return $this->dateCiCfvu;
+    }
+
+    public function setDateCiCfvu(?\DateTimeInterface $dateCiCfvu): self
+    {
+        $this->dateCiCfvu = $dateCiCfvu;
+
+        return $this;
+    }
+
+    public function getDateCfvu(): ?\DateTimeInterface
+    {
+        return $this->dateCfvu;
+    }
+
+    public function setDateCfvu(?\DateTimeInterface $dateCfvu): self
+    {
+        $this->dateCfvu = $dateCfvu;
 
         return $this;
     }

@@ -559,4 +559,9 @@ class Formation
 
         return $this;
     }
+
+    public function remplissage(): float
+    {
+        return 20;
+    }
 }

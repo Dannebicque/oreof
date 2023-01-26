@@ -1,0 +1,11 @@
+<!-- component html -->
+<div class="language-switch-container" {{ attributes }}>
+    <button class="btn btn-empty language-button dropdown-toggle" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">2021/2022
+    </button>
+    <div class="dropdown-menu">
+        {% for anneeUniversitaire in this.anneesUniversitaires %}
+        <a href="#" class="dropdown-item">{{ anneeUniversitaire.libelle }}</a>
+        {% endfor %}
+    </div>
+</div>
