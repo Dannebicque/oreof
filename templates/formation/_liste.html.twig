@@ -25,9 +25,9 @@
                 formation.mentionTexte : 'Non définie') }}
             </td>
             <td>
-                Compo.
+                {{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'Non définie' }}
             </td>
-            <td>{{ formation.inscriptionRNCP ? 'Oui' : 'Non' }} {% if formation.inscriptionRNCP %}({{ formation
+            <td>{{ formation.inRncp ? 'Oui' : 'Non' }} {% if formation.inRncp %}({{ formation
                 .codeRNCP }}){% endif %}</td>
             <td>
                 <a href="{{ path('app_formation_show',{'id': formation.id}) }}"
@@ -41,15 +41,15 @@
                 </a>
 
                 {% if is_granted('ROLE_RESP_FORMATION') %}
-                <a href="{{ path('app_formation_edit',{'id': formation.id}) }}"
-                   class="btn btn-sm text-warning"
-                   data-bs-toggle="tooltip"
-                   data-bs-placement="bottom"
-                   title="Modifier une année universitaire"
-                >
-                    <i class="{{ iconEdit }}"></i>
-                    <span> modifier</span>
-                </a>
+                    <a href="{{ path('app_formation_edit',{'id': formation.id}) }}"
+                       class="btn btn-sm text-warning"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="Modifier une année universitaire"
+                    >
+                        <i class="{{ iconEdit }}"></i>
+                        <span> modifier</span>
+                    </a>
                 {% endif %}
 
                 {% if is_granted('ROLE_SES') %}
@@ -67,9 +67,53 @@
                 {% endif %}
             </td>
         </tr>
+
+            <tr>
+                <td>Parcours</td>
+                <td colspan="6">
+                    <table class="table">
+        {% for parcours in formation.parcours %}
+                        <tr>
+                            <td>#{{ parcours.id }}</td>
+                            <td>{{ parcours.libelle }}</td>
+                            <td class="text-end">
+                                <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"
+                                   class="btn btn-sm text-info"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="bottom"
+                                   title="Voir une formation"
+                                >
+                                    <i class="{{ iconShow }}"></i>
+                                    <span> voir</span>
+                                </a>
+
+                                <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
+                                   class="btn btn-sm text-warning"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="bottom"
+                                   target="_blank"
+                                   title="Modifier une année universitaire"
+                                >
+                                    <i class="{{ iconEdit }}"></i>
+                                    <span> modifier</span>
+                                </a>
+
+                                <button {{ stimulus_action('crud', 'delete', 'click', {
+                                    url:path('app_parcours_delete',{'id': parcours.id}),
+                                    csrf: csrf_token('delete' ~ parcours.id)
+                                }) }} class="btn btn-sm text-danger">
+                                    <i class="{{ iconDelete }}"></i> Supprimer
+                                </button>
+                            </td>
+                        </tr>
+        {% endfor %}
+                    </table>
+                </td>
+            </tr>
+
     {% else %}
         <tr>
-            <td colspan="8" class="bg-warning">Aucun enregistrement trouvé</td>
+            <td colspan="7" class="bg-warning">Aucun enregistrement trouvé</td>
         </tr>
     {% endfor %}
     </tbody>

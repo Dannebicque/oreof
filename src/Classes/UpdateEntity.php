@@ -13,7 +13,7 @@ class UpdateEntity
     }
 
     public function saveCheckbox(
-        Formation $formation,
+        object $formation,
         string $champ,
         mixed $value,
         mixed $isChecked,
@@ -39,7 +39,7 @@ class UpdateEntity
     }
 
     public function saveYesNo(
-        Formation $formation,
+        object $formation,
         string $champ,
         mixed $value
     ) {
@@ -53,7 +53,7 @@ class UpdateEntity
     }
 
     public function saveField(
-        Formation $formation,
+        object $formation,
         string $champ,
         mixed $value
     ) {
@@ -62,6 +62,46 @@ class UpdateEntity
             $formation->$method($value);
             $this->entityManager->flush();
             return true;
+        }
+        return false;
+    }
+
+    public function addToArray(object $formation, string $champ, mixed $value)
+    {
+        $setMethod = 'set'.ucfirst($champ);
+        $getMethod = 'get'.ucfirst($champ);
+        if (method_exists($formation, $setMethod) && method_exists($formation, $getMethod)) {
+            $t = $formation->$getMethod();
+            if (is_array($t)) {
+                $t[] = $value;
+                $formation->$setMethod($t);
+                $this->entityManager->flush();
+                return true;
+            }
+
+            if ($t === null) {
+                $t = [];
+                $t[] = $value;
+                $formation->$setMethod($t);
+                $this->entityManager->flush();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function removeToArray(Formation $formation, string $champ, mixed $value)
+    {
+        $setMethod = 'set'.ucfirst($champ);
+        $getMethod = 'get'.ucfirst($champ);
+        if (method_exists($formation, $setMethod) && method_exists($formation, $getMethod)) {
+            $t = $formation->$getMethod();
+            if (is_array($t)) {
+                $t = array_diff($t, [$value]);
+                $formation->$setMethod($t);
+                $this->entityManager->flush();
+                return true;
+            }
         }
         return false;
     }

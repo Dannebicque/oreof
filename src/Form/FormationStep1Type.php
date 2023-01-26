@@ -2,12 +2,17 @@
 
 namespace App\Form;
 
+use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\Site;
+use App\Enums\RegimeInscriptionEnum;
+use App\Form\Type\TextareaWithSaveType;
 use App\Form\Type\YesNoType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,7 +23,7 @@ class FormationStep1Type extends AbstractType
         $formation = $options['data'];
 
         $builder
-            ->add('sites', EntityType::class, [
+            ->add('localisationMention', EntityType::class, [
                 'class' => Site::class,
                 'choice_label' => 'libelle',
                 'multiple' => true,
@@ -28,34 +33,32 @@ class FormationStep1Type extends AbstractType
                 'choice_attr' => function($choice, $key, $value) {
                     return ['data-action' => 'change->formation--step1#changeSite'];
                 },
-            ]);
-        if ($formation->getTypeDiplome() === 'LP') {
-            $builder->
-            add('semestre', ChoiceType::class, [
-                //todo: filtrer ? uniquement pour les LP?
-                'choices' => [
-                    'Semestre 1' => 1,
-                    'Semestre 2' => 2,
-                    'Semestre 3' => 3,
-                    'Semestre 4' => 4,
-                    'Semestre 5' => 5,
-                    'Semestre 6' => 6,
-
-                ],
-                'label' => 'Semestre de début de la formation',
-                'attr' => ['data-action' => 'change->formation--step1#changeSemestre'],
-            ]);
-        }
-
-        $builder->add('hasParcours', YesNoType::class, [
-            'label' => 'Formation en parcours ? ',
-            'choice_attr' => function($choice, $key, $value) {
-                // adds a class like attending_yes, attending_no, etc
-                return ['data-action' => 'change->formation--step1#changeParcours'];
-            },
-        ])
-            //si oui...
-            //alors formulaire dynamique pour ajouter les libellés des parcours ?
+            ])
+            ->add('composantesInscription', EntityType::class, [
+                'class' => Composante::class,
+                'choice_label' => 'libelle',
+                'label' => 'Composante d\'inscription',
+                'multiple' => true,
+                'expanded' => true,
+                'choice_attr' => function($choice, $key, $value) {
+                    return ['data-action' => 'change->formation--step1#changeComposanteInscription'];
+                },
+                'attr' => ['data-action' => 'change->formation--step6#changeComposanteInscription']
+            ])//todo: faire une liste avec un "+" pour ajouter une composante d'inscription et un "-" pour retirer...
+            ->add('regimeInscription', EnumType::class, [
+                'label' => 'Régime d\'inscription',
+                'class' => RegimeInscriptionEnum::class,
+                'translation_domain' => 'enum',
+                'multiple' => true,
+                'expanded' => true,
+                'attr' => ['data-action' => 'change->formation--step1#changeRegimeInscription']
+            ])
+            ->add('modalitesAlternance', TextareaWithSaveType::class, [
+                'label' => 'Modalités de l\'alternance',
+                'help' => 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.',
+                'attr' => ['row' => 20, 'maxlength' => 3000],
+                'button_action' => 'click->formation--step1#saveModalitesAlternance',
+            ])
         ;
     }
 

@@ -94,7 +94,7 @@ class FormationController extends AbstractController
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Formation $formation, FormationRepository $formationRepository): Response
     {
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->typeDiplome());
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
         return $this->render('formation/edit.html.twig', [
             'formation' => $formation,
             'step' => 1,

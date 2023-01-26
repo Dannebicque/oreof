@@ -21,33 +21,29 @@ export default class extends Controller {
     })
   }
 
-  changeSemestre(event) {
+  changeRegimeInscription(event) {
     this._save({
-      action: 'semestre',
+      action: 'array',
+      field: 'regimeInscription',
       value: event.target.value,
+      isChecked: event.target.checked,
     })
   }
 
-  changeParcours(event) {
-    const data = event.target.value
-    console.log(data)
-    // if (data == '0') {
-    //   if (confirm('Voulez-vous vraiment supprimer ce parcours ?')) {
-    //     //confirm ne fonctionne qu'une seule fois??
-    //     //fetch pour supprimer les parcours ? ou sur le save?
-    //     this.contentTarget.innerHTML = ''
-    //   } else {
-    //     event.stopPropagation() //annule le changement de valeur
-    //     event.target.value = '1'
-    //   }
-    // }
-
+  changeComposanteInscription(event) {
     this._save({
-      field: 'hasParcours',
-      action: 'yesNo',
+      action: 'composanteInscription',
       value: event.target.value,
+      isChecked: event.target.checked,
     })
-    //fetch pour récupérer le contenu du parcours
+  }
+
+  saveModalitesAlternance(event) {
+    this._save({
+      field: 'modalitesAlternance',
+      action: 'textarea',
+      value: document.getElementById('formation_step1_modalitesAlternance').value,
+    })
   }
 
   _save(options) {

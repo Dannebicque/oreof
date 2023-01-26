@@ -1,26 +1,79 @@
-<h2>Compétences acquises</h2>
+<h2>Semestres & Parcours</h2>
 <div {{ stimulus_controller('formation--step3', {
     url: path('app_formation_save', {formation:formation.id}),
-    urlListe: path('app_bloc_competence_liste', {formation:formation.id}),
+    urlListeParcours: path('app_formation_liste_parcours', {formation:formation.id}),
+    hasParcours: formation.hasParcours
 }) }}
         data-action="base:refreshListe@window->formation--step3#refreshListe"
 >
-    <div {{ stimulus_target('formation--step3', 'liste') }}>
+    <ul>
+        {% for i in formation.semestreDebut..typeDiplome.nbSemestres %}
+            <li>
+                Semestre {{ i }} :
+                <div class="form-check-inline">
+                    <input type="radio" id="formation_parcours_1" name="semestre_{{ i }}" required="required"
+                           {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] == 'tronc_commun' %}checked{% endif %}
+                           class="form-check-input" value="tronc_commun" {{ stimulus_action('formation--step3',
+                        'changeSemestre',
+                        'click', {semestre: i}) }}>
+                    <label class="form-check-label required" for="formation_parcours_1">Tronc Commun</label>
+                </div>
+                <strong class="text-primary me-2">OU</strong>
+                <div class="form-check-inline">
+                    <input type="radio" id="formation_parcours_1" name="semestre_{{ i }}" required="required"
+                           {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] ==
+                               'parcours' %}checked{% endif %}
+                           class="form-check-input" value="parcours" {{ stimulus_action('formation--step3',
+                        'changeSemestre', 'click', {semestre: i}) }}>
+                    <label class="form-check-label required" for="formation_parcours_1">Parcours</label>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
 
+    <fieldset class="mb-3">
+        <legend class="col-form-label required">Formation avec parcours ?</legend>
+        <div>
+            <div class="form-check">
+                <input type="radio" id="formation_parcours_1" name="formation_parcours" required="required"
+                       {% if formation.hasParcours == true %}checked{% endif %}
+                       class="form-check-input" value="1" {{ stimulus_action('formation--step3', 'changeHasParcours', 'click') }}>
+                <label class="form-check-label required" for="formation_parcours_1">Oui</label></div>
+            <div class="form-check">
+                <input type="radio" id="formation_parcours_0" name="formation_parcours" required="required"
+                       {% if formation.hasParcours == false %}checked{% endif %}
+                       class="form-check-input" value="0" {{ stimulus_action('formation--step3', 'changeHasParcours', 'click') }}>
+                <label class="form-check-label required" for="formation_parcours_0">Non</label></div>
+        </div>
+        <div class="form-text mb-0 help-text">
+            Indiquez si la formation comporte des  parcours
+        </div>
+    </fieldset>
+
+    <div id="liste_Parcours" {% if formation.hasParcours == false or formation.hasParcours == null %}class="d-none"{%
+        endif %}>
+        <div {{ stimulus_target('formation--step3', 'liste') }}>
+
+        </div>
+
+        <button
+                {{ stimulus_controller('modal', {
+                    size: 'lg',
+                    modalTitle: 'Ajouter un parcours',
+                    modalUrl: path('app_parcours_new', {formation:formation.id}) }) }}
+                data-action="click->modal#openModal"
+                class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 mt-4"
+                data-size="lg"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Ajouter un parcours"
+        >
+            <i class="{{ iconAdd }}"></i>
+            <span> Ajouter un parcours</span>
+        </button>
     </div>
-    <button
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'Ajouter un bloc de compétences',
-                modalUrl: path('app_bloc_competence_new', {formation:formation.id}) }) }}
-            data-action="click->modal#openModal"
-            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 mt-4"
-            data-size="lg"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Ajouter un bloc de compétences"
-    >
-        <i class="{{ iconAdd }}"></i>
-        <span> Ajouter un bloc de compétences</span>
-    </button>
+
+    {% if typeDiplome == 'Master MEEF' %}
+        //todo: options du master MEEF 2D
+    {% endif %}
 </div>

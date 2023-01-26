@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Composante;
 use App\Entity\Domaine;
 use App\Entity\Formation;
 use App\Entity\Mention;
@@ -36,6 +37,15 @@ class FormationSesType extends AbstractType
                 'label' => 'Domaine',
                 'attr' => ['data-action' => 'change->formation#changeDomaine']
             ])
+
+            ->add('composantePorteuse', EntityType::class, [
+                'attr' => ['placeholder' => 'Choisir la composante porteuse du projet'],
+                'class' => Composante::class,
+                'choice_label' => 'libelle',
+                'label' => 'Composante porteuse',
+                'required' => true,
+                'help' => 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation'
+            ])
             ->add('mention', EntityType::class, [
                 'attr' => ['placeholder' => 'Choisir un type de diplôme et un domaine'],
                 'class' => Mention::class,
@@ -63,7 +73,7 @@ class FormationSesType extends AbstractType
                 },
                 'label' => 'Niveau de sortie de la formation',
             ])
-            ->add('inscriptionRNCP', YesNoType::class, [
+            ->add('inRncp', YesNoType::class, [
                 'label' => 'Inscription au RNCP ?',
                 'attr' => ['data-action' => 'change->formation#changeInscriptionRNCP']
             ])

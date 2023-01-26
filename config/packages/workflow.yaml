@@ -4,9 +4,9 @@ framework:
             type: 'state_machine'
             marking_store:
                 type: 'method'
-                property: 'currentPlace'
+                property: 'etatDpe'
             supports:
-                - App\Entity\Dpe
+                - App\Entity\Formation
             initial_marking: 'initialisation_dpe'
             places:
                 - 'initialisation_dpe'

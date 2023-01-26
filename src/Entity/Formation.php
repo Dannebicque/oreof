@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Enums\CentreGestionEnum;
-use App\Enums\ModaliteEnseignementEnum;
+use App\Enums\NiveauFormationEnum;
+use App\Enums\RegimeInscriptionEnum;
 use App\Enums\RythmeFormationEnum;
 use App\Repository\FormationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,11 +19,17 @@ class Formation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $typeDiplome = null;
 
     #[ORM\ManyToOne]
     private ?Domaine $domaine = null;
+
+    #[ORM\ManyToOne]
+    private ?Composante $composantePorteuse = null;
+
+    #[ORM\ManyToOne]
+    private ?AnneeUniversitaire $anneeUniversitaire = null;
 
     #[ORM\ManyToOne]
     private ?Mention $mention = null;
@@ -31,29 +37,47 @@ class Formation
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $mentionTexte = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $niveauEntree = null;
+    #[ORM\Column(type: Types::INTEGER, enumType: NiveauFormationEnum::class)]
+    private ?NiveauFormationEnum $niveauEntree = null;
 
-    #[ORM\Column(length: 20)]
-    private ?string $niveauSortie = null;
+    #[ORM\Column(type: Types::INTEGER, enumType: NiveauFormationEnum::class)]
+    private ?NiveauFormationEnum $niveauSortie = null;
 
     #[ORM\Column]
-    private ?bool $inscriptionRNCP = null;
+    private ?bool $inRncp = true;
 
-    #[ORM\Column(length: 10, nullable: true)]
+    #[ORM\Column(length: 20, nullable: true)]
     private ?string $codeRNCP = null;
 
     #[ORM\ManyToOne]
     private ?User $responsableMention = null;
 
-    #[ORM\ManyToMany(targetEntity: Site::class, inversedBy: 'formations')]
-    private Collection $sites;
-
     #[ORM\Column]
     private ?int $semestreDebut = 1;
 
-    #[ORM\Column]
-    private ?bool $hasParcours = false;
+    #[ORM\ManyToMany(targetEntity: Site::class, inversedBy: 'formations')]
+    private Collection $localisationMention;
+
+    #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'formations')]
+    private Collection $composantesInscription;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $regimeInscriptionTexte = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $modalitesAlternance = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $etatDpe = 'initialisation_dpe';
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $created;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $updated;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $regimeInscription = [];
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $contenuFormation = null;
@@ -61,51 +85,35 @@ class Formation
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $resultatsAttendus = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $rythmeFormationTexte = null;
-
-    #[ORM\Column]
-    private ?bool $hasStage = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $stageText = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?float $nbHeuresStages = null;
-
-    #[ORM\Column]
-    private ?bool $hasProjet = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $projetText = null;
-
-    #[ORM\Column]
-    private ?float $nbHeuresProjet = null;
-
-    #[ORM\Column]
-    private ?bool $hasMemoire = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $memoireText = null;
-
-    #[ORM\Column]
-    private ?float $nbHeuresMemoire = null;
-
-    #[ORM\Column(type: Types::INTEGER,  nullable: true, enumType: ModaliteEnseignementEnum::class)]
-    private ?ModaliteEnseignementEnum $modalitesEnseignement = null;
-
-    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: BlocCompetence::class)]
-    private Collection $blocCompetences;
-
     #[ORM\Column(type: Types::STRING, length: 30, nullable: true, enumType: RythmeFormationEnum::class)]
     private ?RythmeFormationEnum $rythmeFormation = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $prerequis = null;
+    private ?string $rythmeFormationTexte = null;
+
+    #[ORM\Column]
+    private ?bool $hasParcours = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $structureSemestres = [];
+
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: Parcours::class)]
+    private Collection $parcours;
+
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: Semestre::class)]
+    private Collection $semestres;
+
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: BlocCompetence::class)]
+    private Collection $blocCompetences;
 
     public function __construct()
     {
-        $this->sites = new ArrayCollection();
+        $this->localisationMention = new ArrayCollection();
+        $this->parcours = new ArrayCollection();
+        $this->composantesInscription = new ArrayCollection();
+        $this->created = new \DateTime();
+        $this->updated = new \DateTime();
+        $this->semestres = new ArrayCollection();
         $this->blocCompetences = new ArrayCollection();
     }
 
@@ -119,7 +127,7 @@ class Formation
         return $this->typeDiplome;
     }
 
-    public function setTypeDiplome(?string $typeDiplome): self
+    public function setTypeDiplome(string $typeDiplome): self
     {
         $this->typeDiplome = $typeDiplome;
 
@@ -134,6 +142,30 @@ class Formation
     public function setDomaine(?Domaine $domaine): self
     {
         $this->domaine = $domaine;
+
+        return $this;
+    }
+
+    public function getComposantePorteuse(): ?Composante
+    {
+        return $this->composantePorteuse;
+    }
+
+    public function setComposantePorteuse(?Composante $composantePorteuse): self
+    {
+        $this->composantePorteuse = $composantePorteuse;
+
+        return $this;
+    }
+
+    public function getAnneeUniversitaire(): ?AnneeUniversitaire
+    {
+        return $this->anneeUniversitaire;
+    }
+
+    public function setAnneeUniversitaire(?AnneeUniversitaire $anneeUniversitaire): self
+    {
+        $this->anneeUniversitaire = $anneeUniversitaire;
 
         return $this;
     }
@@ -162,38 +194,38 @@ class Formation
         return $this;
     }
 
-    public function getNiveauEntree(): ?string
+    public function getNiveauEntree(): ?NiveauFormationEnum
     {
         return $this->niveauEntree;
     }
 
-    public function setNiveauEntree(string $niveauEntree): self
+    public function setNiveauEntree(NiveauFormationEnum $niveauEntree): self
     {
         $this->niveauEntree = $niveauEntree;
 
         return $this;
     }
 
-    public function getNiveauSortie(): ?string
+    public function getNiveauSortie(): ?NiveauFormationEnum
     {
         return $this->niveauSortie;
     }
 
-    public function setNiveauSortie(string $niveauSortie): self
+    public function setNiveauSortie(NiveauFormationEnum $niveauSortie): self
     {
         $this->niveauSortie = $niveauSortie;
 
         return $this;
     }
 
-    public function isInscriptionRNCP(): ?bool
+    public function isInRncp(): ?bool
     {
-        return $this->inscriptionRNCP;
+        return $this->inRncp;
     }
 
-    public function setInscriptionRNCP(bool $inscriptionRNCP): self
+    public function setInRncp(bool $inRncp): self
     {
-        $this->inscriptionRNCP = $inscriptionRNCP;
+        $this->inRncp = $inRncp;
 
         return $this;
     }
@@ -222,41 +254,6 @@ class Formation
         return $this;
     }
 
-    /**
-     * @return Collection<int, Site>
-     */
-    public function getSites(): Collection
-    {
-        return $this->sites;
-    }
-
-    public function addSite(Site $site): self
-    {
-        if (!$this->sites->contains($site)) {
-            $this->sites->add($site);
-        }
-
-        return $this;
-    }
-
-    public function removeSite(Site $site): self
-    {
-        $this->sites->removeElement($site);
-
-        return $this;
-    }
-
-    public function display()
-    {
-        //si la mention est renseignée, on affiche le nom de la mention
-        if ($this->mention) {
-            return $this->mention->getLibelle();
-        }
-
-        //sinon on affiche le texte de la mention
-        return $this->typeDiplome . ' ' . $this->mentionTexte;
-    }
-
     public function getSemestreDebut(): ?int
     {
         return $this->semestreDebut;
@@ -269,14 +266,134 @@ class Formation
         return $this;
     }
 
-    public function isHasParcours(): ?bool
+    /**
+     * @return Collection<int, Site>
+     */
+    public function getLocalisationMention(): Collection
     {
-        return $this->hasParcours;
+        return $this->localisationMention;
     }
 
-    public function setHasParcours(bool $hasParcours): self
+    public function addLocalisationMention(Site $localisationMention): self
     {
-        $this->hasParcours = $hasParcours;
+        if (!$this->localisationMention->contains($localisationMention)) {
+            $this->localisationMention->add($localisationMention);
+        }
+
+        return $this;
+    }
+
+    public function removeLocalisationMention(Site $localisationMention): self
+    {
+        $this->localisationMention->removeElement($localisationMention);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Composante>
+     */
+    public function getComposantesInscription(): Collection
+    {
+        return $this->composantesInscription;
+    }
+
+    public function addComposantesInscription(Composante $composantesInscription): self
+    {
+        if (!$this->composantesInscription->contains($composantesInscription)) {
+            $this->composantesInscription->add($composantesInscription);
+        }
+
+        return $this;
+    }
+
+    public function removeComposantesInscription(Composante $composantesInscription): self
+    {
+        $this->composantesInscription->removeElement($composantesInscription);
+
+        return $this;
+    }
+
+
+    public function getRegimeInscriptionTexte(): ?string
+    {
+        return $this->regimeInscriptionTexte;
+    }
+
+    public function setRegimeInscriptionTexte(?string $regimeInscriptionTexte): self
+    {
+        $this->regimeInscriptionTexte = $regimeInscriptionTexte;
+
+        return $this;
+    }
+
+    public function getModalitesAlternance(): ?string
+    {
+        return $this->modalitesAlternance;
+    }
+
+    public function setModalitesAlternance(?string $modalitesAlternance): self
+    {
+        $this->modalitesAlternance = $modalitesAlternance;
+
+        return $this;
+    }
+
+    public function getEtatDpe(): ?string
+    {
+        return $this->etatDpe;
+    }
+
+    public function setEtatDpe(string $etatDpe): self
+    {
+        $this->etatDpe = $etatDpe;
+
+        return $this;
+    }
+
+    public function getCreated(): ?\DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(\DateTimeInterface $created): self
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    public function getUpdated(): ?\DateTimeInterface
+    {
+        return $this->updated;
+    }
+
+    public function setUpdated(\DateTimeInterface $updated): self
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    public function display(): string
+    {
+        return $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
+    }
+
+    public function getRegimeInscription(): array
+    {
+        $t = [];
+        foreach ($this->regimeInscription as $key => $value) {
+            $t[] = RegimeInscriptionEnum::from($value);
+        }
+
+
+        return $t;
+    }
+
+    public function setRegimeInscription(?array $regimeInscription): self
+    {
+        $this->regimeInscription = $regimeInscription;
 
         return $this;
     }
@@ -305,6 +422,18 @@ class Formation
         return $this;
     }
 
+    public function getRythmeFormation(): ?RythmeFormationEnum
+    {
+        return $this->rythmeFormation;
+    }
+
+    public function setRythmeFormation(?RythmeFormationEnum $rythmeFormation): self
+    {
+        $this->rythmeFormation = $rythmeFormation;
+
+        return $this;
+    }
+
     public function getRythmeFormationTexte(): ?string
     {
         return $this->rythmeFormationTexte;
@@ -317,131 +446,86 @@ class Formation
         return $this;
     }
 
-    public function typeDiplome(): string
+    public function isHasParcours(): ?bool
     {
-        if ($this->mention !== null) {
-            return $this->mention->getTypeDiplome();
+        return $this->hasParcours;
+    }
+
+    public function setHasParcours(bool $hasParcours): self
+    {
+        $this->hasParcours = $hasParcours;
+
+        return $this;
+    }
+
+    public function getStructureSemestres(): array
+    {
+        return $this->structureSemestres ?? [];
+    }
+
+    public function setStructureSemestres(?array $structureSemestres): self
+    {
+        $this->structureSemestres = $structureSemestres;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Parcours>
+     */
+    public function getParcours(): Collection
+    {
+        return $this->parcours;
+    }
+
+    public function addParcour(Parcours $parcour): self
+    {
+        if (!$this->parcours->contains($parcour)) {
+            $this->parcours->add($parcour);
+            $parcour->setFormation($this);
         }
 
-        return $this->typeDiplome;
+        return $this;
     }
 
-    public function isHasStage(): ?bool
+    public function removeParcour(Parcours $parcour): self
     {
-        return $this->hasStage;
-    }
-
-    public function setHasStage(bool $hasStage): self
-    {
-        $this->hasStage = $hasStage;
+        if ($this->parcours->removeElement($parcour)) {
+            // set the owning side to null (unless already changed)
+            if ($parcour->getFormation() === $this) {
+                $parcour->setFormation(null);
+            }
+        }
 
         return $this;
     }
 
-    public function getStageText(): ?string
+    /**
+     * @return Collection<int, Semestre>
+     */
+    public function getSemestres(): Collection
     {
-        return $this->stageText;
+        return $this->semestres;
     }
 
-    public function setStageText(?string $stageText): self
+    public function addSemestre(Semestre $semestre): self
     {
-        $this->stageText = $stageText;
+        if (!$this->semestres->contains($semestre)) {
+            $this->semestres->add($semestre);
+            $semestre->setFormation($this);
+        }
 
         return $this;
     }
 
-    public function getNbHeuresStages(): ?float
+    public function removeSemestre(Semestre $semestre): self
     {
-        return $this->nbHeuresStages;
-    }
-
-    public function setNbHeuresStages(?float $nbHeuresStages): self
-    {
-        $this->nbHeuresStages = $nbHeuresStages;
-
-        return $this;
-    }
-
-    public function isHasProjet(): ?bool
-    {
-        return $this->hasProjet;
-    }
-
-    public function setHasProjet(bool $hasProjet): self
-    {
-        $this->hasProjet = $hasProjet;
-
-        return $this;
-    }
-
-    public function getProjetText(): ?string
-    {
-        return $this->projetText;
-    }
-
-    public function setProjetText(?string $projetText): self
-    {
-        $this->projetText = $projetText;
-
-        return $this;
-    }
-
-    public function getNbHeuresProjet(): ?float
-    {
-        return $this->nbHeuresProjet;
-    }
-
-    public function setNbHeuresProjet(float $nbHeuresProjet): self
-    {
-        $this->nbHeuresProjet = $nbHeuresProjet;
-
-        return $this;
-    }
-
-    public function isHasMemoire(): ?bool
-    {
-        return $this->hasMemoire;
-    }
-
-    public function setHasMemoire(bool $hasMemoire): self
-    {
-        $this->hasMemoire = $hasMemoire;
-
-        return $this;
-    }
-
-    public function getMemoireText(): ?string
-    {
-        return $this->memoireText;
-    }
-
-    public function setMemoireText(?string $memoireText): self
-    {
-        $this->memoireText = $memoireText;
-
-        return $this;
-    }
-
-    public function getNbHeuresMemoire(): ?float
-    {
-        return $this->nbHeuresMemoire;
-    }
-
-    public function setNbHeuresMemoire(float $nbHeuresMemoire): self
-    {
-        $this->nbHeuresMemoire = $nbHeuresMemoire;
-
-        return $this;
-    }
-
-    public function getModalitesEnseignement(): ?ModaliteEnseignementEnum
-    {
-        return $this->modalitesEnseignement;
-    }
-
-    public function setModalitesEnseignement(?ModaliteEnseignementEnum $modalitesEnseignement): self
-    {
-        $this->modalitesEnseignement = $modalitesEnseignement;
+        if ($this->semestres->removeElement($semestre)) {
+            // set the owning side to null (unless already changed)
+            if ($semestre->getFormation() === $this) {
+                $semestre->setFormation(null);
+            }
+        }
 
         return $this;
     }
@@ -472,30 +556,6 @@ class Formation
                 $blocCompetence->setFormation(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getRythmeFormation(): ?RythmeFormationEnum
-    {
-        return $this->rythmeFormation;
-    }
-
-    public function setRythmeFormation(?RythmeFormationEnum $rythmeFormation): self
-    {
-        $this->rythmeFormation = $rythmeFormation;
-
-        return $this;
-    }
-
-    public function getPrerequis(): ?string
-    {
-        return $this->prerequis;
-    }
-
-    public function setPrerequis(?string $prerequis): self
-    {
-        $this->prerequis = $prerequis;
 
         return $this;
     }

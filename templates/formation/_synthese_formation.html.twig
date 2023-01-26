@@ -11,6 +11,9 @@
             </div>
             <div class="col-4">
                 <dl>
+                    <dt>Composante</dt>
+                    <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'Non définie'
+                        }}</dd>
                     <dt>Mention</dt>
                     <dd>{{ formation.display }}</dd>
                 </dl>
@@ -18,9 +21,9 @@
             <div class="col-4">
                 <dl>
                     <dt>Niveau à l'entrée en formation</dt>
-                    <dd>{{ formation.niveauEntree }}</dd>
+                    <dd>{{ formation.niveauEntree.value }}</dd>
                     <dt>Niveau en sortie de formation</dt>
-                    <dd>{{ formation.niveauSortie }}</dd>
+                    <dd>{{ formation.niveauSortie.value }}</dd>
                 </dl>
             </div>
         </div>

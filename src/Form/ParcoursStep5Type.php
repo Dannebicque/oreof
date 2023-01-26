@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Formation;
+use App\Entity\Parcours;
 use App\Entity\Site;
 use App\Form\Type\TextareaWithSaveType;
 use App\Form\Type\YesNoType;
@@ -13,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FormationStep5Type extends AbstractType
+class ParcoursStep5Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -22,7 +23,7 @@ class FormationStep5Type extends AbstractType
                 'label' => 'Prérequis recommandés',
                 'attr' => ['rows' => 5, 'maxlength' => 3000],
                 'help' => 'Indiquez ici si des prérequis pédagogiques sont conseillés pour réussir dans cette formation',
-                'button_action' => 'click->formation--step5#savePrerequis',
+                'button_action' => 'click->parcours--step5#savePrerequis',
             ])
         ;
     }
@@ -30,7 +31,7 @@ class FormationStep5Type extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Formation::class,
+            'data_class' => Parcours::class,
         ]);
     }
 }

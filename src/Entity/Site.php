@@ -21,7 +21,7 @@ class Site
     #[ORM\ManyToOne(inversedBy: 'sites')]
     private ?Etablissement $etablissement = null;
 
-    #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'sites')]
+    #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'localisationMention')]
     private Collection $formations;
 
     public function __construct()
@@ -70,7 +70,7 @@ class Site
     {
         if (!$this->formations->contains($formation)) {
             $this->formations->add($formation);
-            $formation->addSite($this);
+            $formation->addLocalisationMention($this);
         }
 
         return $this;
@@ -79,7 +79,7 @@ class Site
     public function removeFormation(Formation $formation): self
     {
         if ($this->formations->removeElement($formation)) {
-            $formation->removeSite($this);
+            $formation->removeLocalisationMention($this);
         }
 
         return $this;

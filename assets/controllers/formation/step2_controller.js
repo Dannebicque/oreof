@@ -1,6 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
-import { addCallout } from '../../js/callOut'
 
 export default class extends Controller {
   static targets = [

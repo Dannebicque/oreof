@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Composante;
 use App\Entity\Formation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -50,7 +51,7 @@ class FormationRepository extends ServiceEntityRepository
 
         if (in_array('ROLE_RESP_DPE', $roles)) {
             //todo: formation de la composante ? Le Resp DPE est dans la composante ??
-            return $this->findAll();
+            return $this->findByComposateDpe($user);
         }
 
         if (in_array('ROLE_RESP_FORMATION', $roles)) {
@@ -61,7 +62,16 @@ class FormationRepository extends ServiceEntityRepository
         if (in_array('ROLE_RESP_EC', $roles)) {
             //todo: les formations dans lesquels il est impliqué ?
             //todo: comment on a le lien DPE => Composante et Composante => Formation ?
-
         }
+    }
+
+    private function findByComposateDpe(UserInterface $user)
+    {
+        return $this->createQueryBuilder('f')
+            ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
+            ->where('c.responsableDpe = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
     }
 }

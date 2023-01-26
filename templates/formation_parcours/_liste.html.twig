@@ -1,0 +1,48 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Libellé du parcours</th>
+        <th>Sigle</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for parcour in parcours %}
+        <tr>
+            <td>
+                {{ parcour.libelle }}
+            </td>
+            <td>Sigle</td>
+            <td class="text-end">
+                <a href="{{ path('app_parcours_show',{'id': parcour.id}) }}"
+                   class="btn btn-sm text-info"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom"
+                   title="Voir une formation"
+                >
+                    <i class="{{ iconShow }}"></i>
+                    <span> voir</span>
+                </a>
+
+                <a href="{{ path('app_parcours_edit',{'id': parcour.id}) }}"
+                   class="btn btn-sm text-warning"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom"
+                   target="_blank"
+                   title="Modifier une année universitaire"
+                >
+                    <i class="{{ iconEdit }}"></i>
+                    <span> modifier</span>
+                </a>
+
+                <button {{ stimulus_action('crud', 'delete', 'click', {
+                    url:path('app_parcours_delete',{'id': parcour.id}),
+                    csrf: csrf_token('delete' ~ parcour.id)
+                }) }} class="btn btn-sm text-danger">
+                    <i class="{{ iconDelete }}"></i> Supprimer
+                </button>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

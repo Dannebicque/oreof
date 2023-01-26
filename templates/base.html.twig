@@ -30,7 +30,14 @@
             <div class="logo position-relative">
                 <a href="{{ path('app_homepage') }}">
                     <div class="logo-but">
-                        <i class="fa-duotone fa-pencil"></i>&nbsp;{{ product_name }}
+                        <i class="fa-duotone fa-pencil"></i>&nbsp;{{ product_name }} /
+
+                        {% if is_granted('ROLE_ADMIN') %}Administration
+                        {% elseif is_granted('ROLE_VP') %}VP
+                        {% elseif is_granted('ROLE_SES') %}SES
+                        {% elseif is_granted('ROLE_RESP_DPE') %}Compo.{# todo récupérer la composante #}
+                        {% elseif is_granted('ROLE_RESP_FORMATION') %}Formation{% endif %}{# todo récupérer la
+                        formation #}
                     </div>
                 </a>
 
@@ -88,107 +95,106 @@
                     </li>
 
 
-
                     {% if is_granted('ROLE_ADMIN') %}
-                    <li class="mega">
-                        <a href="#administration" data-href="administration">
-                            <i class="fal fa-wrench icon"></i>
-                            <span class="label">Administration</span>
-                        </a>
-                        <ul id="administration">
-                            <li>
-                                <a href="#structure">
-                                    <span class="label">Structure de l'établissement</span>
-                                </a>
-                                <ul id="structure">
-                                    <li>
-                                        <a href="{{ path('app_composante_index') }}">
-                                            <span class="label">Composantes</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_site_index') }}">
-                                            <span class="label">Sites</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_etablissement_index') }}">
-                                            <span class="label">Etablissement</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                        <li class="mega">
+                            <a href="#administration" data-href="administration">
+                                <i class="fal fa-wrench icon"></i>
+                                <span class="label">Administration</span>
+                            </a>
+                            <ul id="administration">
+                                <li>
+                                    <a href="#structure">
+                                        <span class="label">Structure de l'établissement</span>
+                                    </a>
+                                    <ul id="structure">
+                                        <li>
+                                            <a href="{{ path('app_composante_index') }}">
+                                                <span class="label">Composantes</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_site_index') }}">
+                                                <span class="label">Sites</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_etablissement_index') }}">
+                                                <span class="label">Etablissement</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
 
-                            <li>
-                                <a href="#struct_formation">
-                                    <span class="label">Structure de formation</span>
-                                </a>
-                                <ul id="struct_formation">
-                                    <li>
-                                        <a href="{{ path('app_mention_index') }}">
-                                            <span class="label">Mentions</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_domaine_index') }}">
-                                            <span class="label">Domaines</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_site_index') }}">
-                                            <span class="label">Sites</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_etablissement_index') }}">
-                                            <span class="label">Etablissement</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                                <li>
+                                    <a href="#struct_formation">
+                                        <span class="label">Structure de formation</span>
+                                    </a>
+                                    <ul id="struct_formation">
+                                        <li>
+                                            <a href="{{ path('app_mention_index') }}">
+                                                <span class="label">Mentions</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_domaine_index') }}">
+                                                <span class="label">Domaines</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_site_index') }}">
+                                                <span class="label">Sites</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_etablissement_index') }}">
+                                                <span class="label">Etablissement</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
 
-                            <li>
-                                <a href="#utilisateurs">
-                                    <span class="label">Utilisateurs et droits</span>
-                                </a>
-                                <ul id="utilisateurs">
-                                    <li>
-                                        <a href="{{ path('app_user_attente') }}">
-                                            <span class="label">Utilisateurs en attente</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_user_index') }}">
-                                            <span class="label">Utilisateurs</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="2">
-                                            <span class="label">Droits</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                                <li>
+                                    <a href="#utilisateurs">
+                                        <span class="label">Utilisateurs et droits</span>
+                                    </a>
+                                    <ul id="utilisateurs">
+                                        <li>
+                                            <a href="{{ path('app_user_attente') }}">
+                                                <span class="label">Utilisateurs en attente</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_user_index') }}">
+                                                <span class="label">Utilisateurs</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="2">
+                                                <span class="label">Droits</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
 
-                            <li >
-                                <a href="#configuration">
-                                    <span class="label">Configuration</span>
-                                </a>
-                                <ul id="configuration">
-                                    <li>
-                                        <a href="3">
-                                            <span class="label">Notifications et mails</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('app_annee_universitaire_index') }}">
-                                            <span class="label">Année Universitaire</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
+                                <li>
+                                    <a href="#configuration">
+                                        <span class="label">Configuration</span>
+                                    </a>
+                                    <ul id="configuration">
+                                        <li>
+                                            <a href="3">
+                                                <span class="label">Notifications et mails</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_annee_universitaire_index') }}">
+                                                <span class="label">Année Universitaire</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
@@ -356,7 +362,7 @@
      tabindex="-1"
      aria-hidden="true"
      id="modal-delete"
-     >
+>
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

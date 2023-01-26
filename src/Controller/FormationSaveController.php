@@ -6,8 +6,10 @@ use App\Classes\UpdateEntity;
 use App\Entity\Formation;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\RythmeFormationEnum;
+use App\Repository\ComposanteRepository;
 use App\Repository\SiteRepository;
 use App\Utils\JsonRequest;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,8 +17,10 @@ class FormationSaveController extends BaseController
 {
     #[Route('/formation/save/{formation}', name: 'app_formation_save')]
     public function save(
+        EntityManagerInterface $em,
         UpdateEntity $updateEntity,
         SiteRepository $siteRepository,
+        ComposanteRepository $composanteRepository,
         Request $request,
         Formation $formation
     ) {
@@ -24,8 +28,13 @@ class FormationSaveController extends BaseController
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
             case 'site':
-                $rep = $updateEntity->saveCheckbox($formation, 'site', $data['value'], $data['isChecked'],
+                $rep = $updateEntity->saveCheckbox($formation, 'localisationMention', $data['value'], $data['isChecked'],
                     $siteRepository);
+
+                return $this->json($rep);
+                case 'composanteInscription':
+                $rep = $updateEntity->saveCheckbox($formation, 'composantesInscription', $data['value'], $data['isChecked'],
+                    $composanteRepository);
 
                 return $this->json($rep);
             case 'yesNo':
@@ -47,7 +56,24 @@ class FormationSaveController extends BaseController
             case 'int':
                 $rep = $updateEntity->saveField($formation, $data['field'], (int)$data['value']);
                 return $this->json($rep);
+            case 'structureSemestres':
+                $tSemestre = $formation->getStructureSemestres();
+                    $tSemestre[$data['semestre']] = $data['value'];
+               $formation->setStructureSemestres($tSemestre);
+                $em->flush();
+                return $this->json(true);
+
+            case 'array':
+                if ($data['isChecked'] === true) {
+                    $rep = $updateEntity->addToArray($formation, $data['field'], $data['value']);
+                } else {
+                    $rep = $updateEntity->removeToArray($formation, $data['field'], $data['value']);
+
+                }
+
+                return $this->json($rep);
         }
     }
+
 
 }

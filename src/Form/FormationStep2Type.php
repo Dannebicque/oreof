@@ -20,6 +20,8 @@ class FormationStep2Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $formation = $options['data'];
+
         $builder
             ->add('contenuFormation', TextareaWithSaveType::class, [
                 'label' => 'Contenu de la formation',
@@ -45,8 +47,25 @@ class FormationStep2Type extends AbstractType
                 'help' => 'Indiquez en 3000 caractères maximum le rythme de la formation : temps plein, temps partiel, cours du soir,etc..',
                 'attr' => ['rows' => 20, 'maxlength' => 3000],
                 'button_action' => 'click->formation--step2#saveRythme',
-            ])
-        ;
+            ]);
+
+        if ($formation->getTypeDiplome() === 'LP') {
+            $builder->
+            add('semestre', ChoiceType::class, [
+                //todo: filtrer ? uniquement pour les LP?
+                'choices' => [
+                    'Semestre 1' => 1,
+                    'Semestre 2' => 2,
+                    'Semestre 3' => 3,
+                    'Semestre 4' => 4,
+                    'Semestre 5' => 5,
+                    'Semestre 6' => 6,
+
+                ],
+                'label' => 'Semestre de début de la formation',
+                'attr' => ['data-action' => 'change->formation--step1#changeSemestre'],
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)

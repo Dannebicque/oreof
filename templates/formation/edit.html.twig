@@ -15,50 +15,20 @@
                 <a class="nav-link active" data-bs-toggle="tab" href="#" role="tab" aria-selected="true"
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 1}) }}
                 >
-                    Identité
+                    Localisation de la mention/spécialité
                 </a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" data-bs-toggle="tab" href="#" role="tab"
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 2}) }}
-                   aria-selected="false">Présentation</a>
+                   aria-selected="false">Présentation de la mention/spécialité</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 3}) }}
-                >Compétences</a>
+                >Semestre & Parcours</a>
             </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-bs-toggle="tab" href="#" role="tab"
-                        {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 4}) }}
-                   aria-selected="false">Descriptif</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                        {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 5}) }}>
-                    Admission
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                        {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 6}) }}>
-                    Inscription
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                        {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 7}) }}
-                >
-                    Et après...
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                        {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 8}) }}
-                >
-                    Contacts
-                </a>
-            </li>
+
             <!-- An empty list to put overflowed links -->
             <li class="nav-item dropdown ms-auto pe-0 d-none responsive-tab-dropdown">
                 <a

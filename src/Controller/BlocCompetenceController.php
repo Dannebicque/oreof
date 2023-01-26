@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\BlocCompetence;
 use App\Entity\Formation;
+use App\Entity\Parcours;
 use App\Form\BlocCompetenceType;
 use App\Repository\BlocCompetenceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,19 +15,48 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/bloc/competence')]
 class BlocCompetenceController extends AbstractController
 {
-    #[Route('/liste/{formation}', name: 'app_bloc_competence_liste', methods: ['GET'])]
-    public function liste(BlocCompetenceRepository $blocCompetenceRepository, Formation $formation): Response
+    #[Route('/liste/formation/{formation}', name: 'app_bloc_competence_liste_formation', methods: ['GET'])]
+    public function listeFormation(BlocCompetenceRepository $blocCompetenceRepository, Formation $formation): Response
     {
         return $this->render('bloc_competence/_liste.html.twig', [
             'bloc_competences' => $blocCompetenceRepository->findByFormation(['formation' => $formation->getId()]),
         ]);
     }
 
-    #[Route('/new/{formation}', name: 'app_bloc_competence_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, BlocCompetenceRepository $blocCompetenceRepository, Formation $formation): Response
+    #[Route('/liste/parcours/{parcours}', name: 'app_bloc_competence_liste_parcours', methods: ['GET'])]
+    public function listeParcours(BlocCompetenceRepository $blocCompetenceRepository, Parcours $parcours): Response
     {
-        $blocCompetence = new BlocCompetence($formation);
-        $form = $this->createForm(BlocCompetenceType::class, $blocCompetence, ['action' => $this->generateUrl('app_bloc_competence_new', ['formation' => $formation->getId()])]);
+        return $this->render('bloc_competence/_liste.html.twig', [
+            'bloc_competences' => $blocCompetenceRepository->findByParcours(['parcours' => $parcours->getId()]),
+        ]);
+    }
+
+    #[Route('/new/parcours/{parcours}', name: 'app_bloc_competence_new_parcours', methods: ['GET', 'POST'])]
+    public function newParcours(Request $request, BlocCompetenceRepository $blocCompetenceRepository, Parcours $parcours): Response
+    {
+        $blocCompetence = new BlocCompetence();
+        $blocCompetence->setParcours($parcours);
+        $form = $this->createForm(BlocCompetenceType::class, $blocCompetence, ['action' => $this->generateUrl('app_bloc_competence_new_parcours', ['parcours' => $parcours->getId()])]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $blocCompetenceRepository->save($blocCompetence, true);
+
+            return $this->json(true);
+        }
+
+        return $this->render('bloc_competence/new.html.twig', [
+            'bloc_competence' => $blocCompetence,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/new/formation/{formation}', name: 'app_bloc_competence_new_formation', methods: ['GET', 'POST'])]
+    public function newFormation(Request $request, BlocCompetenceRepository $blocCompetenceRepository, Formation $formation): Response
+    {
+        $blocCompetence = new BlocCompetence();
+        $blocCompetence->setFormation($formation);
+        $form = $this->createForm(BlocCompetenceType::class, $blocCompetence, ['action' => $this->generateUrl('app_bloc_competence_new_formation', ['formation' => $formation->getId()])]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

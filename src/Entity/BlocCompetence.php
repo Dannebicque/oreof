@@ -15,9 +15,6 @@ class BlocCompetence
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'blocCompetences')]
-    private ?Formation $formation = null;
-
     #[ORM\Column(length: 10)]
     private ?string $code = null;
 
@@ -27,27 +24,20 @@ class BlocCompetence
     #[ORM\OneToMany(mappedBy: 'blocCompetence', targetEntity: Competence::class)]
     private Collection $competences;
 
-    public function __construct(Formation $formation)
+    #[ORM\ManyToOne(inversedBy: 'blocCompetences')]
+    private ?Parcours $parcours = null;
+
+    #[ORM\ManyToOne(inversedBy: 'blocCompetences')]
+    private ?Formation $formation = null;
+
+    public function __construct()
     {
-        $this->formation = $formation;
         $this->competences = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getFormation(): ?Formation
-    {
-        return $this->formation;
-    }
-
-    public function setFormation(?Formation $formation): self
-    {
-        $this->formation = $formation;
-
-        return $this;
     }
 
     public function getCode(): ?string
@@ -100,6 +90,30 @@ class BlocCompetence
                 $competence->setBlocCompetence(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getParcours(): ?Parcours
+    {
+        return $this->parcours;
+    }
+
+    public function setParcours(?Parcours $parcours): self
+    {
+        $this->parcours = $parcours;
+
+        return $this;
+    }
+
+    public function getFormation(): ?Formation
+    {
+        return $this->formation;
+    }
+
+    public function setFormation(?Formation $formation): self
+    {
+        $this->formation = $formation;
 
         return $this;
     }

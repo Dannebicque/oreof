@@ -37,7 +37,7 @@ export default class extends Controller {
     saveData(this.urlValue, {
       field: 'stageText',
       action: 'textarea',
-      value: document.getElementById('formation_step4_stageText').value,
+      value: document.getElementById('parcours_step2_stageText').value,
     })
   }
 
@@ -69,7 +69,7 @@ export default class extends Controller {
     saveData(this.urlValue, {
       field: 'projetText',
       action: 'textarea',
-      value: document.getElementById('formation_step4_projetText').value,
+      value: document.getElementById('parcours_step2_projetText').value,
     })
   }
 
@@ -101,7 +101,7 @@ export default class extends Controller {
     saveData(this.urlValue, {
       field: 'memoireText',
       action: 'textarea',
-      value: document.getElementById('formation_step4_memoireText').value,
+      value: document.getElementById('parcours_step2_memoireText').value,
     })
   }
 
@@ -113,5 +113,4 @@ export default class extends Controller {
         value: event.target.value,
       })
   }
-
 }
