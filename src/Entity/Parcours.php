@@ -70,7 +70,7 @@ class Parcours
     private ?string $memoireText = null;
 
     #[ORM\Column]
-    private ?float $nbHeuresMemoire = null;
+    private ?float $nbHeuresMemoire = 0;
 
     #[ORM\Column(type: Types::INTEGER,  nullable: true, enumType: ModaliteEnseignementEnum::class)]
     private ?ModaliteEnseignementEnum $modalitesEnseignement = null;
