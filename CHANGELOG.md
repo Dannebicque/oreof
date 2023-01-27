@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/Dannebicque/oreof/compare/v0.0.4...v0.0.5) (2023-01-27)
+
+
+### Features
+
+* Choix Année universitaire + dates ([27a0038](https://github.com/Dannebicque/oreof/commit/27a00380c283f682019e37bf7d26e8ddd3ccdb3d))
+* Choix Année universitaire + dates ([a8e2f3a](https://github.com/Dannebicque/oreof/commit/a8e2f3aa4cdc61d5552d25f3ed9a943734dbbdc8))
+* Choix Année universitaire + dates ([6f2f292](https://github.com/Dannebicque/oreof/commit/6f2f2921265ad98da21b7cc3d204b3f24747c19c))
+* Choix Année universitaire + dates ([5998c67](https://github.com/Dannebicque/oreof/commit/5998c67797726301e79b9b9ab68ca6430116353b))
+* Choix Année universitaire + dates ([308c01d](https://github.com/Dannebicque/oreof/commit/308c01d608aeb65f9870687708b1e6d70427be53))
+* Choix Année universitaire + dates ([845efac](https://github.com/Dannebicque/oreof/commit/845efacbcea6e124cebbc795ce8148ac51b650e6))
+* Choix Année universitaire + dates ([b092b50](https://github.com/Dannebicque/oreof/commit/b092b500f26a2a05d8fdb3765165c502c2183382))
+* Gestion compétences et blocs de compétences ([a649775](https://github.com/Dannebicque/oreof/commit/a649775b0e5a86b722b6506eb3c43aa9bd93ca41))
+* Notificatons + Parcours + Formation et semestres ([405844b](https://github.com/Dannebicque/oreof/commit/405844b3a9e3f8c645759d01ccafbdb178599316))
+
 ### [0.0.4](https://github.com/Dannebicque/oreof/compare/v0.0.3...v0.0.4) (2023-01-26)
 
 
