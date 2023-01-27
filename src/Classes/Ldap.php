@@ -21,6 +21,7 @@ class Ldap
 
     public function getUsername(?string $email): ?string
     {
+        return 'login'.rand(1, 1000);
         $this->connect();
 
         $query = $this->ds->query($this->parameterBag->get('LDAP_BASE_DN'), '(mail='.$email.')',

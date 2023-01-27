@@ -68,6 +68,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDemande = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $centreId = null;
+
     public function __construct()
     {
         $this->composantes = new ArrayCollection();
@@ -307,6 +310,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDateDemande(?\DateTimeInterface $dateDemande): self
     {
         $this->dateDemande = $dateDemande;
+
+        return $this;
+    }
+
+    public function getCentreId(): ?int
+    {
+        return $this->centreId;
+    }
+
+    public function setCentreId(?int $centreId): self
+    {
+        $this->centreId = $centreId;
 
         return $this;
     }

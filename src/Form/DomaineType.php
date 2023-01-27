@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Domaine;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -12,8 +13,14 @@ class DomaineType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('libelle')
-            ->add('sigle')
+            ->add('libelle', TextType::class, [
+                'label' => 'Libellé',
+                'required' => true,
+            ])
+            ->add('sigle', TextType::class, [
+                'label' => 'Sigle',
+                'required' => true,
+            ])
         ;
     }
 

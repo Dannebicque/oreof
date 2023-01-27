@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Classes\Ldap;
 use App\Entity\User;
+use App\Enums\RoleEnum;
 use App\Events\UserEvent;
 use App\Form\RegisterType;
 use App\Repository\UserRepository;
@@ -32,7 +33,10 @@ class RegisterController extends AbstractController
             if ($existUser === null) {
                 $username = $ldap->getUsername($user->getEmail());
                 $user->setUsername($username ?? $user->getEmail());
-                $user->setRoles([strtoupper($form->get('role')->getData())]);
+                $user->setRoles([strtoupper($form->get('role')->getData()->value)]);
+                $user->setDateDemande(new \DateTime());
+                $user->setCentreId($request->request->get('selectListe'));
+
                 $userRepository->save($user, true);
                 $this->addFlash('success', 'Votre demande a bien été prise en compte');
 

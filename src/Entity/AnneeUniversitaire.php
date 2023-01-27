@@ -34,6 +34,9 @@ class AnneeUniversitaire
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateCfvu = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $datePublication = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,18 +90,6 @@ class AnneeUniversitaire
         return $this;
     }
 
-    public function getDateCiCfvu(): ?\DateTimeInterface
-    {
-        return $this->dateCiCfvu;
-    }
-
-    public function setDateCiCfvu(?\DateTimeInterface $dateCiCfvu): self
-    {
-        $this->dateCiCfvu = $dateCiCfvu;
-
-        return $this;
-    }
-
     public function getDateCfvu(): ?\DateTimeInterface
     {
         return $this->dateCfvu;
@@ -131,6 +122,18 @@ class AnneeUniversitaire
     public function setDateClotureDpe(?\DateTimeInterface $dateClotureDpe): self
     {
         $this->dateClotureDpe = $dateClotureDpe;
+
+        return $this;
+    }
+
+    public function getDatePublication(): ?\DateTimeInterface
+    {
+        return $this->datePublication;
+    }
+
+    public function setDatePublication(?\DateTimeInterface $datePublication): self
+    {
+        $this->datePublication = $datePublication;
 
         return $this;
     }

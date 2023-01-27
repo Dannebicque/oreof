@@ -3,34 +3,63 @@
 namespace App\EventSubscriber;
 
 use App\Classes\Mailer;
+use App\Enums\CentreGestionEnum;
 use App\Events\UserEvent;
+use App\Repository\ComposanteRepository;
+use App\Repository\FormationRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class UserAccesSubscriber implements EventSubscriberInterface
 {
-    public function __construct(protected Mailer $myMailer)
-    {
+    public function __construct(
+        protected UserRepository $userRepository,
+        protected ComposanteRepository $composanteRepository,
+        protected FormationRepository $formationRepository,
+        protected Mailer $myMailer
+    ) {
     }
 
     public function onUserDemandeAcces(UserEvent $event): void
     {
+        $admins = $this->userRepository->findByRole('ROLE_ADMIN');
         $user = $event->getUser();
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate('mails/user/confirm_demande.txt.twig',
             ['user' => $user]);
         $this->myMailer->sendMessage([$user->getEmail()], '[ORéOF] Confirmation demande accès');
 
+        $valid = null;
+
         //si centre : Composante ou Formation
-        $this->myMailer->initEmail();
-        $this->myMailer->setTemplate('mails/user/demande_en_attente_dpe.txt.twig',
-            ['user' => $user]);
-        $this->myMailer->sendMessage([$dep->getEmail()], '[ORéOF]  Une demande d\'accès est en attente de validation');
+        if ($user->getCentreDemande() === CentreGestionEnum::CENTRE_GESTION_COMPOSANTE) {
+            $comp = $this->composanteRepository->find($user->getCentreId());
+            if ($comp !== null && $comp->getResponsableDpe() !== null) {
+                $valid = $comp->getResponsableDpe();
+            }
+        } elseif ($user->getCentreDemande() === CentreGestionEnum::CENTRE_GESTION_FORMATION) {
+            $formation = $this->formationRepository->find($user->getCentreId());
+            if ($formation !== null && $formation->getResponsableMention() !== null) {
+                $valid = $formation->getResponsableMention();
+            }
+        }
+
+        if ($valid !== null) {
+            $this->myMailer->initEmail();
+            $this->myMailer->setTemplate('mails/user/demande_en_attente_dpe.txt.twig',
+                ['user' => $user, 'dpe' => $valid]);
+            $this->myMailer->sendMessage([$valid->getEmail()],
+                '[ORéOF]  Une demande d\'accès est en attente de validation');
+        }
 
         //si centre : Etablissement
-        $this->myMailer->initEmail();
-        $this->myMailer->setTemplate('mails/user/demande_en_attente_admin.txt.twig',
-            ['user' => $user]);
-        $this->myMailer->sendMessage([$admin->getEmail()], '[ORéOF] Une demande d\'accès est en attente de validation');
+        foreach ($admins as $admin) {
+            $this->myMailer->initEmail();
+            $this->myMailer->setTemplate('mails/user/demande_en_attente_admin.txt.twig',
+                ['user' => $user]);
+            $this->myMailer->sendMessage([$admin->getEmail()],
+                '[ORéOF] Une demande d\'accès est en attente de validation');
+        }
     }
 
     public function onUserValideAdmin(UserEvent $event)

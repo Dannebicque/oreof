@@ -5,6 +5,7 @@ namespace App\Controller\Config;
 use App\Entity\Mention;
 use App\Form\MentionType;
 use App\Repository\MentionRepository;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,11 +31,14 @@ class MentionController extends AbstractController
     }
 
     #[Route('/new', name: 'app_mention_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, MentionRepository $mentionRepository): Response
+    public function new(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        Request $request, MentionRepository $mentionRepository): Response
     {
         $mention = new Mention();
         $form = $this->createForm(MentionType::class, $mention, [
             'action' => $this->generateUrl('app_mention_new'),
+            'typesDiplomes' => $typeDiplomeRegistry->getChoices(),
         ]);
         $form->handleRequest($request);
 
@@ -58,10 +62,13 @@ class MentionController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_mention_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Mention $mention, MentionRepository $mentionRepository): Response
+    public function edit(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        Request $request, Mention $mention, MentionRepository $mentionRepository): Response
     {
         $form = $this->createForm(MentionType::class, $mention, [
             'action' => $this->generateUrl('app_mention_edit', ['id' => $mention->getId()]),
+            'typesDiplomes' => $typeDiplomeRegistry->getChoices(),
         ]);
         $form->handleRequest($request);
 
