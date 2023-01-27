@@ -13,9 +13,9 @@ export default class extends Controller {
     console.log('step 1')
   }
 
-  changeSite(event) {
+  changeVille(event) {
     this._save({
-      action: 'site',
+      action: 'ville',
       value: event.target.value,
       isChecked: event.target.checked,
     })

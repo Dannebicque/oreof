@@ -3,16 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Formation;
-use App\Entity\Site;
 use App\Enums\RythmeFormationEnum;
 use App\Form\Type\TextareaWithSaveType;
-use App\Form\Type\YesNoType;
-use Doctrine\Common\Annotations\Annotation\Enum;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

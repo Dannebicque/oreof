@@ -1,66 +1,79 @@
 <!DOCTYPE html>
 <html lang="fr" data-footer="true">
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet" />
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
-{#        <script src="{{ asset('csicons.min.js') }}"></script>#}
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body class="h-100">
-    <div id="root" class="h-100">
-        <!-- Background Start -->
-        <div class="fixed-background"></div>
-        <!-- Background End -->
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Raleway:wght@100;500&display=swap" rel="stylesheet">
+{#    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>#}
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet"/>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+    {#        <script src="{{ asset('csicons.min.js') }}"></script> #}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body class="h-100">
+<div id="root" class="h-100">
+    <!-- Background Start -->
+    <div class="fixed-background"></div>
+    <!-- Background End -->
 
-        <div class="container-fluid p-0 h-100 position-relative">
-            <div class="row g-0 h-100">
-                <!-- Left Side Start -->
-                <div class="offset-0 col-12 d-none d-lg-flex offset-md-1 col-lg h-lg-100">
-                    <div class="min-h-100 d-flex align-items-center">
-                        <div class="w-100">
-                            <div>
-                                <div class="mb-5">
-                                    <h1 class="display-3 text-white">{{product_name}}</h1>
-                                    <h2 class="display-3 text-white">
-                                        <span style="color:#000000">O</span>util de<br>
-                                        <span style="color:#000000">Ré</span>daction de l'<br>
-                                        <span style="color:#000000">O</span>ffre de<br/>
-                                        <span style="color:#000000">F</span>ormation<br/>
-                                    </h2>
+    <div class="container-fluid p-0 h-100 position-relative">
+        <div class="row g-0 h-100">
+            <!-- Left Side Start -->
+            <div class="offset-0 col-12 d-none d-lg-flex offset-md-1 col-lg h-lg-100">
+                <div class="min-h-100 d-flex align-items-center">
+                    <div class="w-100">
+                        <div>
+                            <div class="mb-5">
+                                <h1 class="display-3 text-white"><i class="fa-duotone fa-pencil-ruler fa-2x"
+                                                                    style="--fa-primary-color: var(--complementaire);
+"></i> {{ product_name
+                                    }}</h1>
+                                <h2 class="display-3 text-white">
+                                    <span style="color:#000000">O</span>util de<br>
+                                    <span style="color:#000000">Ré</span>daction de l'<br>
+                                    <span style="color:#000000">O</span>ffre de<br/>
+                                    <span style="color:#000000">F</span>ormation<br/>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Left Side End -->
+
+            <!-- Right Side Start -->
+            <div class="col-12 col-lg-auto h-100 pb-4 px-4 pt-0 p-lg-0">
+                <div class="sw-lg-70 min-h-100 bg-foreground d-flex justify-content-center align-items-center shadow-deep py-5 full-page-content-right-border">
+                    <div class="sw-lg-50 px-5">
+                        <div class="sh-11 ">
+                            <div class="row">
+
+                                <div class=" col-6"><img src="{{ asset('images/logo_urca.png') }}" alt="Logo URCA">
+                                </div>
+                                <div class=" col-6">
+                                    <div class="logo-special-but pt-2"><i class="fa-duotone fa-pencil-ruler fa-2x"
+                                                                          style="--fa-primary-color: var(--complementaire);
+"></i> {{
+                                        product_name }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        {% block content %}
+
+                        {% endblock %}
                     </div>
                 </div>
-                <!-- Left Side End -->
-
-                <!-- Right Side Start -->
-                <div class="col-12 col-lg-auto h-100 pb-4 px-4 pt-0 p-lg-0">
-                    <div class="sw-lg-70 min-h-100 bg-foreground d-flex justify-content-center align-items-center shadow-deep py-5 full-page-content-right-border">
-                        <div class="sw-lg-50 px-5">
-                            <div class="sh-11">
-                                <a href="{{ path('app_homepage') }}">
-                                    <div class="logo-but"><i class="fal fa-pencil"></i> {{product_name}}</div>
-                                </a>
-                            </div>
-                            {% block content %}
-
-                            {% endblock %}
-                        </div>
-                    </div>
-                </div>
-                <!-- Right Side End -->
             </div>
+            <!-- Right Side End -->
         </div>
     </div>
+</div>
 
-    </body>
+</body>
 </html>

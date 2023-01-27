@@ -1,26 +1,10 @@
 <?php
-/*
- * Copyright (c) 2023. | David Annebicque | IUT de Troyes  - All Rights Reserved
- * @file /Users/davidannebicque/Sites/intranetV3/src/Twig/AppExtension.php
- * @author davidannebicque
- * @project intranetV3
- * @lastUpdate 03/01/2023 17:57
- */
 
 namespace App\Twig;
 
-use App\Classes\Configuration;
-use App\Entity\Constantes;
-use App\Entity\Etudiant;
-use App\Entity\Personnel;
 use App\Utils\Tools;
-use Carbon\Carbon;
-use Carbon\CarbonInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use Twig\TwigFunction;
-use function chr;
-use function count;
 
 /**
  * Class AppExtension.

@@ -30,7 +30,9 @@
             <div class="logo position-relative">
                 <a href="{{ path('app_homepage') }}">
                     <div class="logo-but">
-                        <i class="fa-duotone fa-pencil"></i>&nbsp;{{ product_name }} /
+                        <i class="fa-duotone fa-pencil-ruler" style="--fa-primary-color: var(--complementaire);
+"></i>&nbsp;{{
+                        product_name }} /
 
                         {% if is_granted('ROLE_ADMIN') %}Administration
                         {% elseif is_granted('ROLE_VP') %}VP
@@ -91,10 +93,32 @@
             <!-- Menu Start -->
             <div class="menu-container flex-grow-1">
                 <ul id="menu" class="menu">
+                    {% if is_granted('ROLE_SES') or is_granted('ROLE_VP') %}
+                        <li>
+                            <a href="{{ path('app_composante_index') }}">
+                                <i class="fal fa-school icon"></i>
+                                <span class="label">Composantes</span>
+                            </a>
+                        </li>
+                    {% endif %}
+
                     <li>
                         <a href="{{ path('app_formation_index') }}">
-                            <i class="bi bi-house-door icon"></i>
-                            <span class="label">Formation xx / Admin</span>
+                            <i class="fal fa-screen-users icon"></i>
+                            <span class="label">Formations</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ path('app_formation_index') }}">
+                            <i class="fal fa-person-chalkboard icon"></i>
+                            <span class="label">E.C.</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ path('app_formation_index') }}">
+                            <i class="fal fa-book icon"></i>
+                            <span class="label">Offre de formation</span>
                         </a>
                     </li>
 
@@ -117,8 +141,8 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="{{ path('app_site_index') }}">
-                                                <span class="label">Sites</span>
+                                            <a href="{{ path('app_ville_index') }}">
+                                                <span class="label">Villes</span>
                                             </a>
                                         </li>
                                         <li>
@@ -142,16 +166,6 @@
                                         <li>
                                             <a href="{{ path('app_domaine_index') }}">
                                                 <span class="label">Domaines</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_site_index') }}">
-                                                <span class="label">Sites</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_etablissement_index') }}">
-                                                <span class="label">Etablissement</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -323,7 +337,7 @@
                                     <p>Un seul cookie est utilisé permettant de gérer la connexion (lorsque vous activez
                                        l'option "se souvenir de moi" sur la page de connexion.</p>
                                     <p>Les fichiers de log (en cas d'erreur ou de problème) sont complètement
-                                       anonymes et sans information personnelles vous concernant.</p>
+                                       anonymes et sans informations personnelles vous concernant.</p>
                                 </div>
                             </div>
                         </div>

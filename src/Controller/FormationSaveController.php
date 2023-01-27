@@ -7,7 +7,7 @@ use App\Entity\Formation;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\RythmeFormationEnum;
 use App\Repository\ComposanteRepository;
-use App\Repository\SiteRepository;
+use App\Repository\VilleRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +19,7 @@ class FormationSaveController extends BaseController
     public function save(
         EntityManagerInterface $em,
         UpdateEntity $updateEntity,
-        SiteRepository $siteRepository,
+        VilleRepository $villeRepository,
         ComposanteRepository $composanteRepository,
         Request $request,
         Formation $formation
@@ -27,9 +27,9 @@ class FormationSaveController extends BaseController
         //todo: check si bonne formation...
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
-            case 'site':
+            case 'ville':
                 $rep = $updateEntity->saveCheckbox($formation, 'localisationMention', $data['value'], $data['isChecked'],
-                    $siteRepository);
+                    $villeRepository);
 
                 return $this->json($rep);
                 case 'composanteInscription':

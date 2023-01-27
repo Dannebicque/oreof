@@ -19,17 +19,17 @@ class UpdateEntity
         mixed $isChecked,
         ServiceEntityRepository $repository
     ) {
-        $site = $repository->find($value);
-        if ($site !== null) {
+        $ville = $repository->find($value);
+        if ($ville !== null) {
             if ($isChecked) {
                 $method = 'add'.ucfirst($champ);
                 if (method_exists($formation, $method)) {
-                    $formation->$method($site);
+                    $formation->$method($ville);
                 }
             } else {
                 $method = 'remove'.ucfirst($champ);
                 if (method_exists($formation, $method)) {
-                    $formation->$method($site);
+                    $formation->$method($ville);
                 }
             }
             $this->entityManager->flush();

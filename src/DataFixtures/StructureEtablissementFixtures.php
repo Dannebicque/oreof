@@ -5,7 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Composante;
 use App\Entity\Domaine;
 use App\Entity\Etablissement;
-use App\Entity\Site;
+use App\Entity\Ville;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -24,23 +24,23 @@ class StructureEtablissementFixtures extends Fixture implements DependentFixture
         //$etablissement->setTelephone('03 26 51 51 51');
         $manager->persist($etablissement);
 
-        $site = new Site();
-        $site->setLibelle('Site de Reims');
+        $site = new Ville();
+        $site->setLibelle('Reims');
         $site->setEtablissement($etablissement);
         $manager->persist($site);
 
-        $site = new Site();
-        $site->setLibelle('Site de Châlons-en-Champagne');
+        $site = new Ville();
+        $site->setLibelle('Châlons-en-Champagne');
         $site->setEtablissement($etablissement);
         $manager->persist($site);
 
-        $site = new Site();
-        $site->setLibelle('Site de Troyes');
+        $site = new Ville();
+        $site->setLibelle('Troyes');
         $site->setEtablissement($etablissement);
         $manager->persist($site);
 
-        $site = new Site();
-        $site->setLibelle('Site de Charleville-Mézières');
+        $site = new Ville();
+        $site->setLibelle('Charleville-Mézières');
         $site->setEtablissement($etablissement);
         $manager->persist($site);
 

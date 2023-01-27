@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Formation;
-use App\Entity\Site;
+use App\Entity\Ville;
 use App\Form\Type\YesNoType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -17,13 +17,13 @@ class FormationStep7Type extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('sites', EntityType::class, [
-                'class' => Site::class,
+            ->add('Villes', EntityType::class, [
+                'class' => Ville::class,
                 'choice_label' => 'libelle',
                 'multiple' => true,
                 'expanded' => true,
                 'label' => 'Localisation de la formation',
-                'attr' => ['data-action' => 'change->formation--step1#changeSite']
+                'attr' => ['data-action' => 'change->formation--step1#changeVille']
             ])
             ->add('semestre', ChoiceType::class, [
                 //todo: filtrer ? uniquement pour les LP?

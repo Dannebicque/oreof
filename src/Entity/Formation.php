@@ -55,7 +55,7 @@ class Formation
     #[ORM\Column]
     private ?int $semestreDebut = 1;
 
-    #[ORM\ManyToMany(targetEntity: Site::class, inversedBy: 'formations')]
+    #[ORM\ManyToMany(targetEntity: Ville::class, inversedBy: 'formations')]
     private Collection $localisationMention;
 
     #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'formations')]
@@ -267,14 +267,14 @@ class Formation
     }
 
     /**
-     * @return Collection<int, Site>
+     * @return Collection<int, Ville>
      */
     public function getLocalisationMention(): Collection
     {
         return $this->localisationMention;
     }
 
-    public function addLocalisationMention(Site $localisationMention): self
+    public function addLocalisationMention(Ville $localisationMention): self
     {
         if (!$this->localisationMention->contains($localisationMention)) {
             $this->localisationMention->add($localisationMention);
@@ -283,7 +283,7 @@ class Formation
         return $this;
     }
 
-    public function removeLocalisationMention(Site $localisationMention): self
+    public function removeLocalisationMention(Ville $localisationMention): self
     {
         $this->localisationMention->removeElement($localisationMention);
 

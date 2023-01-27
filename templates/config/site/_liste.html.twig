@@ -8,23 +8,23 @@
     </tr>
     </thead>
     <tbody>
-    {% for site in sites %}
+    {% for ville in villes %}
         <tr>
-            <td>{{ site.id }}</td>
-            <td>{{ site.libelle }}</td>
-            <td>{{ site.etablissement ? site.etablissement.libelle : 'Non défini' }}</td>
+            <td>{{ ville.id }}</td>
+            <td>{{ ville.libelle }}</td>
+            <td>{{ ville.etablissement ? ville.etablissement.libelle : 'Non défini' }}</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
-                            modalTitle: 'Voir un site de l\'établissement',
-                            modalUrl: path('app_site_show',{'id': site.id}) }) }}
+                            modalTitle: 'Voir un ville de l\'établissement',
+                            modalUrl: path('app_ville_show',{'id': ville.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm text-info"
                         data-size="lg"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
-                        title="Voir un site de l\'établissement"
+                        title="Voir un ville de l\'établissement"
                 >
                     <i class="{{ iconShow }}"></i>
                     <span> voir</span>
@@ -33,27 +33,27 @@
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
-                            modalTitle: 'Modifier un site de l\'établissement',
-                            modalUrl: path('app_site_edit',{'id': site.id}) }) }}
+                            modalTitle: 'Modifier un ville de l\'établissement',
+                            modalUrl: path('app_ville_edit',{'id': ville.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm text-warning"
                         data-size="lg"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
-                        title="Modifier un site de l\'établissement"
+                        title="Modifier un ville de l\'établissement"
                 >
                     <i class="{{ iconEdit }}"></i>
                     <span> modifier</span>
                 </button>
 
                 <button {{ stimulus_action('crud', 'duplicate', 'click', {
-                    url:path('app_site_duplicate',{'id': site.id})
+                    url:path('app_ville_duplicate',{'id': ville.id})
                 }) }} class="btn btn-sm text-success">
                     <i class="{{ iconDuplicate }}"></i> Dupliquer
                 </button>
                 <button {{ stimulus_action('crud', 'delete', 'click', {
-                    url:path('app_site_delete',{'id': site.id}),
-                    csrf: csrf_token('delete' ~ site.id)
+                    url:path('app_ville_delete',{'id': ville.id}),
+                    csrf: csrf_token('delete' ~ ville.id)
                 }) }} class="btn btn-sm text-danger">
                     <i class="{{ iconDelete }}"></i> Supprimer
                 </button>

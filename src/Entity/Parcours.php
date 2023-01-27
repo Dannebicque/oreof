@@ -43,7 +43,7 @@ class Parcours
     private ?string $rythmeFormationTexte = null;
 
     #[ORM\ManyToOne]
-    private ?Site $site = null;
+    private ?Ville $ville = null;
 
     #[ORM\Column]
     private ?bool $hasStage = false;
@@ -184,14 +184,14 @@ class Parcours
         return $this;
     }
 
-    public function getSite(): ?Site
+    public function getVille(): ?Ville
     {
-        return $this->site;
+        return $this->ville;
     }
 
-    public function setSite(?Site $site): self
+    public function setVille(?Ville $ville): self
     {
-        $this->site = $site;
+        $this->ville = $ville;
 
         return $this;
     }

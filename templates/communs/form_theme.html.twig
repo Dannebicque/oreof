@@ -1,6 +1,24 @@
 {% use "bootstrap_5_layout.html.twig" %}
 {% trans_default_domain 'form' %}
 
+{% block textarea_with_save_row %}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %} {{ stimulus_controller('textarea') }}>
+        {{- form_label(form) -}}
+        {{- form_errors(form) -}}
+        {{- form_widget(form, widget_attr) -}}
+        {%- if help is not empty -%}
+            {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' help-text')|trim}) -%}
+            <div id="{{ id }}_help"{% with { attr: help_attr } %}{{ block('attributes') }}{% endwith %}>
+                {{- block('form_help_content') -}}.
+                <span {{ stimulus_target('textarea', 'texte') }}></span>
+            </div>
+        {%- endif -%}
+    </div>
+{% endblock %}
 {% block textarea_with_save_widget %}
 
     <div class="row">
@@ -14,7 +32,8 @@
                         class="btn btn-success d-block"
                         style="height: 100%"
                         {{ button_action }}
-                >Enregistrer</button>
+                >Enregistrer
+                </button>
             </div>
         </div>
     </div>

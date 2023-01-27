@@ -24,13 +24,14 @@ class TextareaWithSaveType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'button_action' => null
+            'button_action' => null,
         ]);
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['button_action'] = 'data-action = '.$options['button_action'];
+        $view->vars['attr'] = array_merge($options['attr'], ['data-textarea-target' => 'input']);
     }
 
 

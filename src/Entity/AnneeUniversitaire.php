@@ -24,10 +24,12 @@ class AnneeUniversitaire
     private ?bool $defaut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateTransmissionSes = null;
+    private ?\DateTimeInterface $dateOuvertureDpe = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateCiCfvu = null;
+    private ?\DateTimeInterface $dateClotureDpe = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dateTransmissionSes = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateCfvu = null;
@@ -105,6 +107,30 @@ class AnneeUniversitaire
     public function setDateCfvu(?\DateTimeInterface $dateCfvu): self
     {
         $this->dateCfvu = $dateCfvu;
+
+        return $this;
+    }
+
+    public function getDateOuvertureDpe(): ?\DateTimeInterface
+    {
+        return $this->dateOuvertureDpe;
+    }
+
+    public function setDateOuvertureDpe(?\DateTimeInterface $dateOuvertureDpe): self
+    {
+        $this->dateOuvertureDpe = $dateOuvertureDpe;
+
+        return $this;
+    }
+
+    public function getDateClotureDpe(): ?\DateTimeInterface
+    {
+        return $this->dateClotureDpe;
+    }
+
+    public function setDateClotureDpe(?\DateTimeInterface $dateClotureDpe): self
+    {
+        $this->dateClotureDpe = $dateClotureDpe;
 
         return $this;
     }

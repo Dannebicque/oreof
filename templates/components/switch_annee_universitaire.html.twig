@@ -1,7 +1,9 @@
 <!-- component html -->
 <div class="language-switch-container" {{ attributes }}>
     <button class="btn btn-empty language-button dropdown-toggle" data-bs-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">2021/2022
+            aria-haspopup="true" aria-expanded="false"> {{ user_data.anneeUniversitaire != null ? user_data
+        .anneeUniversitaire
+        .libelle : 'erreur' }}
     </button>
     <div class="dropdown-menu">
         {% for anneeUniversitaire in this.anneesUniversitaires %}

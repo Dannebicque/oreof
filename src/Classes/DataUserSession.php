@@ -2,6 +2,8 @@
 
 namespace App\Classes;
 
+use App\Entity\AnneeUniversitaire;
+use App\Repository\AnneeUniversitaireRepository;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -12,16 +14,24 @@ class DataUserSession
     private UserInterface $user;
 
     private string $dir;
+    private ?AnneeUniversitaire $anneeUniversitaire;
 
 
     public function __construct(
+        AnneeUniversitaireRepository $anneeUniversitaireRepository,
         TokenStorageInterface $tokenStorage,
         KernelInterface $kernel,
     ) {
+        $this->anneeUniversitaire = $anneeUniversitaireRepository->findOneBy(['defaut' => true]);
         $this->dir = $kernel->getProjectDir();
         if ($tokenStorage->getToken() !== null) {
             $this->user = $tokenStorage->getToken()->getUser();
         }
+    }
+
+    public function getAnneeUniversitaire(): ?AnneeUniversitaire
+    {
+       return $this->anneeUniversitaire;
     }
 
     public function version()

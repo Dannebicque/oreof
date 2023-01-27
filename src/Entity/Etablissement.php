@@ -21,8 +21,8 @@ class Etablissement
     #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: User::class)]
     private Collection $users;
 
-    #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: Site::class)]
-    private Collection $sites;
+    #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: Ville::class)]
+    private Collection $villes;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Adresse $adresse = null;
@@ -30,7 +30,7 @@ class Etablissement
     public function __construct()
     {
         $this->users = new ArrayCollection();
-        $this->sites = new ArrayCollection();
+        $this->villes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -81,29 +81,29 @@ class Etablissement
     }
 
     /**
-     * @return Collection<int, Site>
+     * @return Collection<int, Ville>
      */
-    public function getSites(): Collection
+    public function getVilles(): Collection
     {
-        return $this->sites;
+        return $this->villes;
     }
 
-    public function addSite(Site $site): self
+    public function addVille(Ville $ville): self
     {
-        if (!$this->sites->contains($site)) {
-            $this->sites->add($site);
-            $site->setEtablissement($this);
+        if (!$this->villes->contains($ville)) {
+            $this->villes->add($ville);
+            $ville->setEtablissement($this);
         }
 
         return $this;
     }
 
-    public function removeSite(Site $site): self
+    public function removeVille(Ville $ville): self
     {
-        if ($this->sites->removeElement($site)) {
+        if ($this->villes->removeElement($ville)) {
             // set the owning side to null (unless already changed)
-            if ($site->getEtablissement() === $this) {
-                $site->setEtablissement(null);
+            if ($ville->getEtablissement() === $this) {
+                $ville->setEtablissement(null);
             }
         }
 

@@ -4,15 +4,12 @@ namespace App\Form;
 
 use App\Entity\Composante;
 use App\Entity\Formation;
-use App\Entity\Site;
+use App\Entity\Ville;
 use App\Enums\RegimeInscriptionEnum;
 use App\Form\Type\TextareaWithSaveType;
-use App\Form\Type\YesNoType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,14 +21,14 @@ class FormationStep1Type extends AbstractType
 
         $builder
             ->add('localisationMention', EntityType::class, [
-                'class' => Site::class,
+                'class' => Ville::class,
                 'choice_label' => 'libelle',
                 'multiple' => true,
                 'expanded' => true,
                 'label' => 'Localisation(s) de la formation',
                 'help' => 'Plusieurs choix possibles',
                 'choice_attr' => function($choice, $key, $value) {
-                    return ['data-action' => 'change->formation--step1#changeSite'];
+                    return ['data-action' => 'change->formation--step1#changeVille'];
                 },
             ])
             ->add('composantesInscription', EntityType::class, [
