@@ -12,8 +12,13 @@ class LicenceProfessionnelleTypeDiplome extends AbstractTypeDiplome implements T
 
     public string $libelle = 'Licence Professionnelle';
 
-    public function initParcours(Parcours $parcours, Formation $formation): void
+    public function initParcours(Parcours $parcours): void
     {
         // TODO: Implement initParcours() method.
+    }
+
+    public function genereStructure(Formation $formation): void
+    {
+        // TODO: Implement genereStructure() method.
     }
 }

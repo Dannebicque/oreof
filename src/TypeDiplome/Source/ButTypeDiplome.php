@@ -11,8 +11,13 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
     public const TEMPLATE = 'but.html.twig';
     public string $libelle = 'Bachelor Universitaire de Technologie (B.U.T.)';
 
-    public function initParcours(Parcours $parcours, Formation $formation): void
+    public function initParcours(Parcours $parcours): void
     {
         // TODO: Implement initParcours() method.
+    }
+
+    public function genereStructure(Formation $formation): void
+    {
+        // TODO: Implement genereStructure() method.
     }
 }

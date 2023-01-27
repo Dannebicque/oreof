@@ -28,6 +28,13 @@
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 3}) }}
                 >Semestre & Parcours</a>
             </li>
+            {% if formation.semestres|length > 0 %}
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
+                            {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 4}) }}
+                    >Structure de la maquette</a>
+                </li>
+            {% endif %}
 
             <!-- An empty list to put overflowed links -->
             <li class="nav-item dropdown ms-auto pe-0 d-none responsive-tab-dropdown">

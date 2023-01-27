@@ -1,36 +1,12 @@
 <h2>Semestres & Parcours</h2>
 <div {{ stimulus_controller('formation--step3', {
     url: path('app_formation_save', {formation:formation.id}),
+    urlGenereStructre: path('app_formation_genere_structure', {formation:formation.id}),
     urlListeParcours: path('app_formation_liste_parcours', {formation:formation.id}),
     hasParcours: formation.hasParcours
 }) }}
         data-action="base:refreshListe@window->formation--step3#refreshListe"
 >
-    <ul>
-        {% for i in formation.semestreDebut..typeDiplome.nbSemestres %}
-            <li>
-                Semestre {{ i }} :
-                <div class="form-check-inline">
-                    <input type="radio" id="formation_parcours_1" name="semestre_{{ i }}" required="required"
-                           {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] == 'tronc_commun' %}checked{% endif %}
-                           class="form-check-input" value="tronc_commun" {{ stimulus_action('formation--step3',
-                        'changeSemestre',
-                        'click', {semestre: i}) }}>
-                    <label class="form-check-label required" for="formation_parcours_1">Tronc Commun</label>
-                </div>
-                <strong class="text-primary me-2">OU</strong>
-                <div class="form-check-inline">
-                    <input type="radio" id="formation_parcours_1" name="semestre_{{ i }}" required="required"
-                           {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] ==
-                               'parcours' %}checked{% endif %}
-                           class="form-check-input" value="parcours" {{ stimulus_action('formation--step3',
-                        'changeSemestre', 'click', {semestre: i}) }}>
-                    <label class="form-check-label required" for="formation_parcours_1">Parcours</label>
-                </div>
-            </li>
-        {% endfor %}
-    </ul>
-
     <fieldset class="mb-3">
         <legend class="col-form-label required">Formation avec parcours ?</legend>
         <div>
@@ -46,12 +22,11 @@
                 <label class="form-check-label required" for="formation_parcours_0">Non</label></div>
         </div>
         <div class="form-text mb-0 help-text">
-            Indiquez si la formation comporte des  parcours
+            Indiquez si la formation comporte des parcours
         </div>
     </fieldset>
 
-    <div id="liste_Parcours" {% if formation.hasParcours == false or formation.hasParcours == null %}class="d-none"{%
-        endif %}>
+    <div id="liste_Parcours" {% if formation.hasParcours == false or formation.hasParcours == null %}class="d-none"{% endif %}>
         <div {{ stimulus_target('formation--step3', 'liste') }}>
 
         </div>
@@ -76,4 +51,46 @@
     {% if typeDiplome == 'Master MEEF' %}
         //todo: options du master MEEF 2D
     {% endif %}
+
+    <div id="bloc_semestre" {% if formation.hasParcours == false %}class="d-none"{% endif %}>
+        <div class="alert alert-info mt-2">
+            Précisez la structure de la mention avec les parcours (semestre de tronc commun ou semestre spécifique au
+            parcours)
+        </div>
+        <ul>
+            {% for i in formation.semestreDebut..typeDiplome.nbSemestres %}
+                <li>
+                    Semestre {{ i }} :
+                    <div class="form-check-inline">
+                        <input type="radio" id="formation_parcours_1" name="semestre_{{ i }}" required="required"
+                               {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] == 'tronc_commun' %}checked{% endif %}
+                               class="form-check-input" value="tronc_commun" {{ stimulus_action('formation--step3',
+                            'changeSemestre',
+                            'click', {semestre: i}) }}>
+                        <label class="form-check-label required" for="formation_parcours_1">Tronc Commun</label>
+                    </div>
+                    <strong class="text-primary me-2">OU</strong>
+                    <div class="form-check-inline">
+                        <input type="radio" id="formation_parcours_1" name="semestre_{{ i }}" required="required"
+                               {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] ==
+                                   'parcours' %}checked{% endif %}
+                               class="form-check-input" value="parcours" {{ stimulus_action('formation--step3',
+                            'changeSemestre', 'click', {semestre: i}) }}>
+                        <label class="form-check-label required" for="formation_parcours_1">Parcours</label>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="d-grid">
+        <button type="button" {{ stimulus_action('formation--step3', 'initStructure') }}
+                class="btn d-block btn-outline-warning">
+            Générer la structure de base pour la mention et ses parcours
+        </button>
+    </div>
+    <div class="alert alert-warning mt-2">
+        <strong>Attention !</strong> Cette action va générer une structure de base
+                                     pour la mention et ses parcours selon le paramètrage ci-dessus.
+    </div>
 </div>

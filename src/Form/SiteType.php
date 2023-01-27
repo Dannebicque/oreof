@@ -23,6 +23,9 @@ class SiteType extends AbstractType
                 'choice_label' => 'libelle',
                 'label' => 'Etablissement',
             ])
+            ->add('adresse', AdresseType::class, [
+                'label' => 'Adresse du site',
+            ])
         ;
     }
 

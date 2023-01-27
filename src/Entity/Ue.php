@@ -87,4 +87,9 @@ class Ue
 
         return $this;
     }
+
+    public function display(): string
+    {
+        return 'UE ' . $this->getOrdre();
+    }
 }

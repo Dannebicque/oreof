@@ -24,6 +24,9 @@ class Etablissement
     #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: Site::class)]
     private Collection $sites;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Adresse $adresse = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -103,6 +106,18 @@ class Etablissement
                 $site->setEtablissement(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAdresse(): ?Adresse
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(?Adresse $adresse): self
+    {
+        $this->adresse = $adresse;
 
         return $this;
     }

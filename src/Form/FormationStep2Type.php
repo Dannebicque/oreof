@@ -37,13 +37,13 @@ class FormationStep2Type extends AbstractType
             ])
             ->add('rythmeFormation', EnumType::class, [
                 'label' => 'Rythme de la formation',
-                'help' => 'Indiquez le rythme de la formation (en heures, en jours, en semaines, en mois, en années, …).',
+                'help' => 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir,etc.).',
                 'class' => RythmeFormationEnum::class,
                 'translation_domain' => 'enum',
                 'attr' => ['data-action' => 'change->formation--step2#changeRythme'],
             ])
             ->add('rythmeFormationTexte', TextareaWithSaveType::class, [
-                'label' => 'Résultats attendus de la formation',
+                'label' => 'Compléments sur le rythlme de formation',
                 'help' => 'Indiquez en 3000 caractères maximum le rythme de la formation : temps plein, temps partiel, cours du soir,etc..',
                 'attr' => ['rows' => 20, 'maxlength' => 3000],
                 'button_action' => 'click->formation--step2#saveRythme',

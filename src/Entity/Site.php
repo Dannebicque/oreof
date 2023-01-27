@@ -24,6 +24,9 @@ class Site
     #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'localisationMention')]
     private Collection $formations;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Adresse $adresse = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -81,6 +84,18 @@ class Site
         if ($this->formations->removeElement($formation)) {
             $formation->removeLocalisationMention($this);
         }
+
+        return $this;
+    }
+
+    public function getAdresse(): ?Adresse
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(?Adresse $adresse): self
+    {
+        $this->adresse = $adresse;
 
         return $this;
     }

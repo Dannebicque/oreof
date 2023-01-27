@@ -56,4 +56,17 @@ class FormationWizardController extends AbstractController
             'typeDiplome' => $typeDiplome,
         ]);
     }
+
+    #[Route('/{formation}/4', name: 'app_formation_wizard_step_4', methods: ['GET'])]
+    public function step4(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        Formation $formation
+    ): Response {
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+
+        return $this->render('formation_wizard/_step4.html.twig', [
+            'formation' => $formation,
+            'typeDiplome' => $typeDiplome,
+        ]);
+    }
 }

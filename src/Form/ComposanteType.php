@@ -30,6 +30,9 @@ class ComposanteType extends AbstractType
                 'label' => 'Responsable "DPE" de la composante',
                 'help' => 'Personne responsable de la validation des DPE des formations de la composante'
             ])
+            ->add('adresse', AdresseType::class, [
+                'label' => 'Adresse du site principal de la composante',
+            ])
         ;
     }
 

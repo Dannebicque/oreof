@@ -102,4 +102,9 @@ class Semestre
 
         return $this;
     }
+
+    public function display(): string
+    {
+        return 'S'.$this->getOrdre();
+    }
 }

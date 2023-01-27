@@ -27,6 +27,9 @@ class Composante
     #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'composantesInscription')]
     private Collection $formations;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Adresse $adresse = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -96,6 +99,18 @@ class Composante
         if ($this->formations->removeElement($formation)) {
             $formation->removeComposantesInscription($this);
         }
+
+        return $this;
+    }
+
+    public function getAdresse(): ?Adresse
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(?Adresse $adresse): self
+    {
+        $this->adresse = $adresse;
 
         return $this;
     }

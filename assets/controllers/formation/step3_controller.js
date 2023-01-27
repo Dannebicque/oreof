@@ -8,6 +8,7 @@ export default class extends Controller {
   static values = {
     url: String,
     urlListeParcours: String,
+    urlGenereStructre: String,
     hasParcours: Boolean,
   }
 
@@ -28,9 +29,6 @@ export default class extends Controller {
   }
 
   changeSemestre(event) {
-    console.log(event.params)
-    console.log(event.target.value)
-
     saveData(this.urlValue,{
       action: 'structureSemestres',
       value: event.target.value,
@@ -43,8 +41,10 @@ export default class extends Controller {
 
     if (data == 1) {
       document.getElementById('liste_Parcours').classList.remove('d-none');
+      document.getElementById('bloc_semestre').classList.remove('d-none');
     } else {
       document.getElementById('liste_Parcours').classList.add('d-none');
+      document.getElementById('bloc_semestre').classList.add('d-none');
     }
 
     saveData(this.urlValue,{
@@ -54,5 +54,11 @@ export default class extends Controller {
     })
 
     this._refreshListe()
+  }
+
+  initStructure() {
+    if (confirm('Voulez-vous vraiment initialiser la structure ?')) {
+      window.location = this.urlGenereStructreValue
+    }
   }
 }

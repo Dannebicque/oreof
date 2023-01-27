@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th rowspan="2">Notification</th>
+            <th colspan="2">Central</th>
+            <th colspan="3">Composante</th>
+        </tr>
+        <tr>
+            <th>SES</th>
+            <th>VP</th>
+            <th>Resp. DPE</th>
+            <th>Resp. Formation</th>
+            <th>Resp. EC</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for notification in notifications %}
+            <tr>
+                <td>{{ notification.libelle }}</td>
+                {% if notification.isCentral %}
+                    <td>
+                        <input type="checkbox" id="ses_{{ notification.id }}"
+                                {{ stimulus_action('notification-liste', 'change', 'change', {
+                                    'id': notification.id,
+                                    'to': 'toSes'
+                                }) }}
+                                {{ notification.toSes == true ? 'checked' : '' }}>
+                        <label for="ses_{{ notification.id }}" class="sr-only"></label>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" id="vp_{{ notification.id }}"
+                                {{ stimulus_action('notification-liste', 'change', 'change', {
+                                    'id': notification.id,
+                                    'to': 'toVp'
+                                }) }}
+                                {{ notification.toVp == true ? 'checked' : '' }}>
+                        <label for="vp_{{ notification.id }}" class="sr-only"></label>
+                    </td>
+                {% else %}
+                    <td colspan="2"></td>
+                {% endif %}
+                {% if notification.isComposante %}
+                    <td>
+                        <input type="checkbox" id="toRespDpe_{{ notification.id }}"
+                                {{ stimulus_action('notification-liste', 'change', 'change', {
+                                    'id': notification.id,
+                                    'to': 'toRespDpe'
+                                }) }}
+                                {{ notification.toRespDpe == true ? 'checked' : '' }}>
+                        <label for="toRespDpe_{{ notification.id }}" class="sr-only"></label>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="toRespFormation_{{ notification.id }}"
+                                {{ stimulus_action('notification-liste', 'change', 'change', {
+                                    'id': notification.id,
+                                    'to': 'toRespFormation'
+                                }) }}
+                                {{ notification.toRespFormation == true ? 'checked' : '' }}>
+                        <label for="toRespFormation_{{ notification.id }}" class="sr-only"></label>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="toRespEc_{{ notification.id }}"
+                                {{ stimulus_action('notification-liste', 'change', 'change', {
+                                    'id': notification.id,
+                                    'to': 'toRespEc'
+                                }) }}
+                                {{ notification.toRespEc == true ? 'checked' : '' }}>
+                        <label for="toRespEc_{{ notification.id }}" class="sr-only"></label>
+                    </td>
+                {% else %}
+                    <td colspan="3"></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

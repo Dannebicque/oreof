@@ -13,6 +13,9 @@ class EtablissementType extends AbstractType
     {
         $builder
             ->add('libelle')
+            ->add('adresse', AdresseType::class, [
+                'label' => 'Adresse du siège de l\'établissement',
+            ])
         ;
     }
 

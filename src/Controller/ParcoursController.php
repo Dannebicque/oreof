@@ -31,9 +31,6 @@ class ParcoursController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //init parcours depuis le type de diplôme (initi des semestres, voire des UE si L)
-//            $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
-//            $typeDiplome->initParcours($parcour, $formation);
             $parcoursRepository->save($parcour, true);
 
             return $this->json(true);
