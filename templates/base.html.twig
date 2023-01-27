@@ -31,8 +31,7 @@
                 <a href="{{ path('app_homepage') }}">
                     <div class="logo-but">
                         <i class="fa-duotone fa-pencil-ruler" style="--fa-primary-color: var(--complementaire);
-"></i>&nbsp;{{
-                        product_name }} /
+"></i>&nbsp;{{ product_name }} /
 
                         {% if is_granted('ROLE_ADMIN') %}Administration
                         {% elseif is_granted('ROLE_VP') %}VP

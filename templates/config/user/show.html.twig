@@ -1,46 +1,54 @@
-{% extends '../../base.html.twig' %}
+<table class="table">
+    <tbody>
+    <tr>
+        <th>Id</th>
+        <td>{{ user.id }}</td>
+    </tr>
+    <tr>
+        <th>Login URCA</th>
+        {# todo: possibilité de mise à jour? bouton ldap  #}
+        <td>{{ user.username }}</td>
+    </tr>
+    <tr>
+        <th>Rôles</th>
+        {# todo: liste case à cocher ? #}
+        <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+    </tr>
 
-{% block title %}User{% endblock %}
+    <tr>
+        <th>Nom</th>
+        <td>{{ user.nom }}</td>
+    </tr>
+    <tr>
+        <th>Prénom</th>
+        <td>{{ user.prenom }}</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{{ user.email }}</td>
+    </tr>
+    </tbody>
+</table>
 
-{% block body %}
-    <h1>User</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Username</th>
-                <td>{{ user.username }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ user.nom }}</td>
-            </tr>
-            <tr>
-                <th>Prenom</th>
-                <td>{{ user.prenom }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_user_index') }}">back to list</a>
-
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-
-    {{ include('user/_delete_form.html.twig') }}
-{% endblock %}
+{% if user.isEnable %}
+    <button class="btn btn-outline-danger">
+        Désactiver l'accès
+    </button>
+{% else %}
+    {% if user.isValidDpe == false or user.isValideAdministration == false %}
+        {% if user.isValidDpe == false %}
+            <span class="badge bg-warning">Non valider par DPE</span>
+        {% else %}
+            <span class="badge bg-success">
+            Valider par DPE le {{ user.dateValideDpe|dateTimeFr }}
+            </span>
+        {% endif %}
+        <button class="btn btn-outline-success">
+            Valider l'accès
+        </button>
+    {% else %}
+        <button class="btn btn-outline-success">
+            Réactiver l'accès
+        </button>
+    {% endif %}
+{% endif %}

@@ -18,8 +18,14 @@ class AppExtension extends AbstractExtension
             new TwigFilter('mailto', [$this, 'mailto'], ['is_safe' => ['html']]),
             new TwigFilter('dateFr', [$this, 'dateFr'], ['is_safe' => ['html']]),
             new TwigFilter('dateTimeFr', [$this, 'dateTimeFr'], ['is_safe' => ['html']]),
-            new TwigFilter('rncp_link', [$this, 'rncpLink'], ['is_safe' => ['html']])
+            new TwigFilter('rncp_link', [$this, 'rncpLink'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeBoolean', [$this, 'badgeBoolean'], ['is_safe' => ['html']])
         ];
+    }
+
+    public function badgeBoolean(bool $value): string
+    {
+        return $value ? '<span class="badge bg-success">Oui</span>' : '<span class="badge bg-danger">Non</span>';
     }
 
     public function dateFr(?\DateTimeInterface $value): string
