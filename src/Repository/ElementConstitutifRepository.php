@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\ElementConstitutif;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<ElementConstitutif>
@@ -39,28 +40,8 @@ class ElementConstitutifRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return ElementConstitutif[] Returns an array of ElementConstitutif objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?ElementConstitutif
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByRoleUser(?UserInterface $user)
+    {
+        return $this->findAll(); //todo: a faire
+    }
 }

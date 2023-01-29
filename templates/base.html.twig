@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>{{ block('header')|raw }} - {{ product_name }}</title>
     <link rel="preconnect" href="https://fonts.gstatic.com"/>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet"/>
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
@@ -94,7 +94,7 @@
                 <ul id="menu" class="menu">
                     {% if is_granted('ROLE_SES') or is_granted('ROLE_VP') %}
                         <li>
-                            <a href="{{ path('app_composante_index') }}">
+                            <a href="{{ path('structure_composante_index') }}">
                                 <i class="fal fa-school icon"></i>
                                 <span class="label">Composantes</span>
                             </a>
@@ -102,14 +102,14 @@
                     {% endif %}
 
                     <li>
-                        <a href="{{ path('app_formation_index') }}">
+                        <a href="{{ path('structure_formation_index') }}">
                             <i class="fal fa-screen-users icon"></i>
                             <span class="label">Formations</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="{{ path('app_formation_index') }}">
+                        <a href="{{ path('structure_ec_index') }}">
                             <i class="fal fa-person-chalkboard icon"></i>
                             <span class="label">E.C.</span>
                         </a>

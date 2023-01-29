@@ -14,10 +14,13 @@ body {
   --avatar-size-xxl: 6rem;
   --color-avatar: #007bff;
   --complementaire:#e36724;
+  --secondary: #e36724;
 }
 @import "./styles.css";
 @import "./main.scss";
 
-
+body {
+  --secondary: #e36724;
+}
 
 

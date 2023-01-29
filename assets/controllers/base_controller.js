@@ -7,8 +7,9 @@ export default class extends Controller {
   modal = null
 
   sauvegardeFormModal(event) {
-    const zone = document.getElementById('liste')
     event.preventDefault()
+    const zone = document.getElementById('liste')
+
 
     const form = this.element.getElementsByTagName('form')[0]
     fetch(form.action, {

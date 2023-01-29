@@ -26,7 +26,7 @@ class MentionController extends AbstractController
     public function liste(MentionRepository $mentionRepository): Response
     {
         return $this->render('config/mention/_liste.html.twig', [
-            'mentions' => $mentionRepository->findAll(),
+            'mentions' => $mentionRepository->findBy([], ['typeDiplome' => 'ASC', 'libelle' => 'ASC']),
         ]);
     }
 

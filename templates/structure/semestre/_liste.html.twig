@@ -1,0 +1,87 @@
+<div class="row">
+    <div class="col-12 mb-5">
+        <section class="scroll-section" id="labels">
+            <h2 class="small-title">Semestres</h2>
+            <div class="card mb-2 bg-transparent no-shadow d-none d-md-block sh-3">
+                <div class="card-body pt-0 pb-0 h-100">
+                    <div class="row g-0 h-100 align-content-center">
+                        <div class="col-12 col-md-4 d-flex align-items-center mb-2 text-secondary mb-md-0 text-small">
+                            Semestre
+                        </div>
+                        <div class="col-6 col-md-2 d-flex align-items-center
+                        justify-content-end text-secondary text-small">
+                            CATEGORY
+                        </div>
+                        <div class="col-6 col-md-2 d-flex align-items-center justify-content-end
+                        justify-content-end text-secondary text-small">
+                            PRICE
+                        </div>
+                        <div class="col-6 col-md-2 d-flex align-items-center
+                        justify-content-end text-secondary text-small">
+                            SALES
+                        </div>
+                        <div class="col-6 col-md-2 d-flex align-items-center
+                        justify-content-end text-secondary text-small">
+                            STOCK
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>{# class="scroll-out" #}
+                {% for semestre in semestres %}
+                    <div {{ stimulus_controller('structure--semestre') }}>
+                        <div class="card mb-2 sh-19 sh-md-8">
+                            <div class="card-body pt-0 pb-0 h-100">
+                                <div class="row g-0 h-100 align-content-center">
+                                    <div class="col-12 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">Semestre</div>
+                                        <a href="#" class="text-truncate">{{ semestre.display }}</a>
+                                    </div>
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center align-items-md-end mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">Category</div>
+                                        <div class="text-alternate">Whole Wheat</div>
+                                    </div>
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center align-items-md-end mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">Price</div>
+                                        <div class="text-alternate">
+<span>
+<span class="text-small">$</span>
+3.25
+</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-1 d-flex flex-column justify-content-center
+                                            align-items-md-end mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">Sale</div>
+
+                                        <button class="btn btn-sm btn-outline-primary"
+                                                {{ stimulus_action('structure--semestre', 'detail', 'click',
+                                                    {semestre:semestre.id, url: path
+                                                        ('structure_ue_detail_semestre', {semestre:semestre.id})}
+                                                ) }}
+                                        >
+                                            <i class="fal fa-caret-right"></i> Détails
+                                        </button>
+
+                                    </div>
+                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-center
+                                            align-items-md-end mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">Stock</div>
+                                        <div class="text-alternate">2.345</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="detail_semestre_{{ semestre.id }}" class="d-none detail_semestre">
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-11" {{ stimulus_target('structure--semestre', 'detail') }}></div>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+</div>

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CompetenceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CompetenceRepository::class)]
@@ -22,10 +24,14 @@ class Competence
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
+    #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'competences')]
+    private Collection $elementConstitutifs;
+
 
     public function __construct(BlocCompetence $blocCompetence)
     {
         $this->blocCompetence = $blocCompetence;
+        $this->elementConstitutifs = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -64,6 +70,33 @@ class Competence
     public function setLibelle(string $libelle): self
     {
         $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ElementConstitutif>
+     */
+    public function getElementConstitutifs(): Collection
+    {
+        return $this->elementConstitutifs;
+    }
+
+    public function addElementConstitutif(ElementConstitutif $elementConstitutif): self
+    {
+        if (!$this->elementConstitutifs->contains($elementConstitutif)) {
+            $this->elementConstitutifs->add($elementConstitutif);
+            $elementConstitutif->addCompetence($this);
+        }
+
+        return $this;
+    }
+
+    public function removeElementConstitutif(ElementConstitutif $elementConstitutif): self
+    {
+        if ($this->elementConstitutifs->removeElement($elementConstitutif)) {
+            $elementConstitutif->removeCompetence($this);
+        }
 
         return $this;
     }

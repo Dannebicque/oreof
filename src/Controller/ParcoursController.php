@@ -7,6 +7,7 @@ use App\Entity\Parcours;
 use App\Form\ParcoursType;
 use App\Repository\ParcoursRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,13 +63,14 @@ class ParcoursController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_parcours_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_parcours_delete', methods: ['DELETE'])]
     public function delete(Request $request, Parcours $parcour, ParcoursRepository $parcoursRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $parcour->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $parcour->getId(), JsonRequest::getValueFromRequest($request, 'csrf'))) {
             $parcoursRepository->remove($parcour, true);
+            return $this->json(true);
         }
 
-        return $this->redirectToRoute('app_parcours_index', [], Response::HTTP_SEE_OTHER);
+        return $this->json(false);
     }
 }
