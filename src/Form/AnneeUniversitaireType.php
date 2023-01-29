@@ -38,16 +38,24 @@ class AnneeUniversitaireType extends AbstractType
             ->add('defaut', YesNoType::class, [
                 'label' => 'Année active ?',
             ])
+            ->add('dateOuvertureDpe', DateTimeType::class, [
+                'label' => 'Date d\'ouverture du DPE',
+                'widget' => 'single_text',
+            ])
+            ->add('dateClotureDpe', DateTimeType::class, [
+                'label' => 'Date de clôture du DPE',
+                'widget' => 'single_text',
+            ])
             ->add('dateTransmissionSes', DateTimeType::class, [
                 'label' => 'Date limite de transmission des dossiers ',
                 'widget' => 'single_text',
             ])
-            ->add('dateCiCfvu', DateTimeType::class, [
-                'label' => 'Date de la CI CFVU ',
-                'widget' => 'single_text',
-            ])
             ->add('dateCfvu', DateTimeType::class, [
                 'label' => 'Date de la CFVU ',
+                'widget' => 'single_text',
+            ])
+            ->add('datePublication', DateTimeType::class, [
+                'label' => 'Date de publication ',
                 'widget' => 'single_text',
             ])
         ;
