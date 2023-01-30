@@ -86,7 +86,7 @@
 
             </tr>
         {% endfor %}
-        {% if is_granted('ROLE_RESP_FORMATION') %}
+        {% if is_granted('ROLE_RESP_FORMATION') and ue is defined %}
             <tr>
                 <td colspan="5">
 
