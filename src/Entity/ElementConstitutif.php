@@ -26,7 +26,7 @@ class ElementConstitutif
     private ?string $libelleAnglais = null;
 
     #[ORM\Column]
-    private ?bool $enseignementMutualise = null;
+    private ?bool $enseignementMutualise = false;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
@@ -41,25 +41,25 @@ class ElementConstitutif
     private ?string $modaliteEnseignement = null;
 
     #[ORM\Column]
-    private ?float $ects = null;
+    private ?float $ects = 0;
 
     #[ORM\Column]
-    private ?float $volumeCmPresentiel = null;
+    private ?float $volumeCmPresentiel = 0;
 
     #[ORM\Column]
-    private ?float $volumeTdPresentiel = null;
+    private ?float $volumeTdPresentiel = 0;
 
     #[ORM\Column]
-    private ?float $volumeTpPresentiel = null;
+    private ?float $volumeTpPresentiel = 0;
 
     #[ORM\Column]
-    private ?float $volumeCmDistanciel = null;
+    private ?float $volumeCmDistanciel = 0;
 
     #[ORM\Column]
-    private ?float $volumeTdDistanciel = null;
+    private ?float $volumeTdDistanciel = 0;
 
     #[ORM\Column]
-    private ?float $volumeTpDistanciel = null;
+    private ?float $volumeTpDistanciel = 0;
 
     #[ORM\ManyToOne]
     private ?User $responsableEc = null;
@@ -276,5 +276,10 @@ class ElementConstitutif
         $this->responsableEc = $responsableEc;
 
         return $this;
+    }
+
+    public function remplissage(): float
+    {
+        return 10;
     }
 }

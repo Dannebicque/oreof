@@ -1,16 +1,113 @@
-<table class="table table-striped table-bordered table-hover table-condensed">
-    <thead>
-    <tr>
-        <th>Libellé</th>
-        <th>...</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for ec in ecs %}
+<div>
+    <table class="table table-striped table-bordered table-hover table-condensed">
+        <thead>
         <tr>
-            <td>{{ ec.libelle }}</td>
-            <td>...</td>
+            <th>Libellé</th>
+            <th>Référent</th>
+            <th>Remplissage</th>
+            <th>Heures</th>
+            <th>Mcc</th>
+            <th></th>
         </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        {% for ec in ecs %}
+            <tr>
+                <td>{{ ec.libelle }}</td>
+                <td>{{ ec.responsableEc != null ? ec.responsableEc.display : 'Non défini' }}</td>
+                <td>{{ ec.remplissage|remplissage }}</td>
+                <td><button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Volumes Horaires',
+                                modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm btn-outline-info"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Volumes Horaires"
+                    >
+                        <i class="fal fa-clock"></i>
+                        <span> Volumes Horaires</span>
+                    </button></td>
+                <td>
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Modalités de Contrôle des Connaissances',
+                                modalUrl: path('app_element_constitutif_show',{'id': ec.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm btn-outline-info"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Modalités de Contrôle des Connaissances"
+                    >
+                        <i class="fal fa-marker"></i>
+                        <span> MCC</span>
+                    </button></td>
+                <td class="text-end">
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Voir un EC',
+                                modalUrl: path('app_element_constitutif_show',{'id': ec.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm text-info"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Voir un EC"
+                    >
+                        <i class="{{ iconShow }}"></i>
+                        <span> voir</span>
+                    </button>
+
+                    <a
+                            href="{{ path('app_element_constitutif_edit',{'id': ec.id}) }}"
+                            class="btn btn-sm text-warning"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            target="_blank"
+                            title="Modifier un EC"
+                    >
+                        <i class="{{ iconEdit }}"></i>
+                        <span> modifier</span>
+                    </a>
+                    {% if is_granted('ROLE_RESP_FORMATION') %}
+                        <button {{ stimulus_action('crud', 'delete', 'click', {
+                            url:path('app_element_constitutif_delete',{'id': ec.id})
+                        }) }} class="btn btn-sm text-danger">
+                            <i class="{{ iconDelete }}"></i> Supprimer
+                        </button>
+                    {% endif %}
+                </td>
+
+            </tr>
+        {% endfor %}
+        {% if is_granted('ROLE_RESP_FORMATION') %}
+            <tr>
+                <td colspan="5">
+
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Ajouter un élément constitutif (matière)',
+                                modalUrl: path('app_element_constitutif_new', {ue: ue.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Ajouter un élément constitutif (matière)"
+                    >
+                        <i class="{{ iconAdd }}"></i>
+                        <span>Ajouter un élément constitutif (matière)</span>
+                    </button>
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</div>

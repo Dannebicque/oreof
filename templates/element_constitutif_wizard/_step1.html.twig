@@ -1,0 +1,8 @@
+<h2>Identité de l'enseignement</h2>
+<div {{ stimulus_controller('ec--step1', {
+    url: path('app_ec_save', {ec:ec.id}),
+}) }}>
+{% form_theme form 'communs/form_theme.html.twig' %}
+{{ form(form) }}
+    //responsable
+</div>

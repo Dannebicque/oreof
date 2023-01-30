@@ -9,20 +9,19 @@
                             Parcours
                         </div>
                         <div class="col-6 col-md-2 d-flex align-items-center
-                        justify-content-end text-secondary text-small">
-                            CATEGORY
+                        text-secondary text-small">
+                            Etat
                         </div>
-                        <div class="col-6 col-md-2 d-flex align-items-center justify-content-end
-                        justify-content-end text-secondary text-small">
-                            PRICE
+                        <div class="col-6 col-md-2 d-flex align-items-center text-secondary text-small">
+                            Remplissage
+                        </div>
+                        <div class="col-6 col-md-2 d-flex align-items-center
+                         text-secondary text-small">
+                            Détails
                         </div>
                         <div class="col-6 col-md-2 d-flex align-items-center
                         justify-content-end text-secondary text-small">
-                            SALES
-                        </div>
-                        <div class="col-6 col-md-2 d-flex align-items-center
-                        justify-content-end text-secondary text-small">
-                            STOCK
+                            Actions
                         </div>
                     </div>
                 </div>
@@ -37,24 +36,21 @@
                                         <div class="text-muted text-small d-md-none">Parcours</div>
                                         <a href="#" class="text-truncate">{{ parcour.libelle }}</a>
                                     </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Category</div>
-                                        <div class="text-alternate">Whole Wheat</div>
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">Etat</div>
+                                        <div class="text-alternate">... En cours...</div>
                                     </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Price</div>
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">Remplissage</div>
                                         <div class="text-alternate">
-<span>
-<span class="text-small">$</span>
-3.25
-</span>
+                                            {{ parcour.remplissage|remplissage }}
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center
-                                            align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Sale</div>
+                                            mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">Détails</div>
 
-                                        <button class="btn btn-sm btn-outline-primary"
+                                        <button class="ms-2 btn btn-sm btn-outline-primary"
                                                 {{ stimulus_action('structure--parcours', 'detail', 'click',
                                                     {parcours:parcour.id, url: path
                                                         ('structure_semestre_detail_parcours', {parcours:parcour.id})}
@@ -66,16 +62,15 @@
                                     </div>
                                     <div class="col-6 col-md-3 d-flex flex-column justify-content-center
                                             align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Stock</div>
+                                        <div class="text-muted text-small d-md-none">Actions</div>
                                         <div class="text-alternate">2.345</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="detail_parcours_{{ parcour.id }}" class="d-none detail_parcours">
+                        <div id="detail_parcours_{{ parcour.id }}" class="d-none detail_parcours ms-4">
                             <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-11" {{ stimulus_target('structure--parcours', 'detail') }}></div>
+                                <div class="col-12" {{ stimulus_target('structure--parcours', 'detail') }}></div>
                             </div>
                         </div>
                     </div>

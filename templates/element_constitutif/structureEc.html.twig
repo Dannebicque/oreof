@@ -1,0 +1,28 @@
+{% form_theme form 'communs/form_theme.html.twig' %}
+{{ form_start(form) }}
+    {{ form_row(form.modaliteEnseignement) }}
+    {{ form_row(form.ects) }}
+<h3>Volume Présentiel</h3>
+<div class="row">
+    <div class="col-4">{{ form_row(form.volumeCmPresentiel) }}</div>
+    <div class="col-4">{{ form_row(form.volumeTdPresentiel) }}</div>
+    <div class="col-4">{{ form_row(form.volumeTpPresentiel) }}</div>
+</div>
+<h3>Volume Distanciel</h3>
+<div class="row">
+    <div class="col-4">{{ form_row(form.volumeCmDistanciel) }}</div>
+    <div class="col-4">{{ form_row(form.volumeTdDistanciel) }}</div>
+    <div class="col-4">{{ form_row(form.volumeTpDistanciel) }}</div>
+</div>
+<button type="submit" class="btn btn-success"
+        {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+>
+    <i class="fal fa-floppy-disk"></i>
+    Enregistrer
+</button>
+
+<div class="alert alert-info mt-2">
+    tous les champs avec un <span class="text-red">*</span> sont obligatoires
+</div>
+{{ form_end(form) }}
+

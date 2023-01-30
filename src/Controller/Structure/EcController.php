@@ -42,7 +42,8 @@ class EcController extends AbstractController
         $ecs = $elementConstitutifRepository->findBy(['ue' => $ue]);
 
         return $this->render('structure/ec/_liste.html.twig', [
-            'ecs' => $ecs
+            'ecs' => $ecs,
+            'ue' => $ue
         ]);
     }
 }

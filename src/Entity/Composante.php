@@ -114,4 +114,9 @@ class Composante
 
         return $this;
     }
+
+    public function remplissage(): float
+    {
+        return 10;
+    }
 }

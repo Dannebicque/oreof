@@ -25,7 +25,7 @@
                             % Remplissage
                         </div>
                         <div class="col-6 col-md-1 d-flex align-items-center
-                        justify-content-end text-secondary text-small">
+                        text-secondary text-small">
                             Détails
                         </div>
                         <div class="col-6 col-md-2 d-flex align-items-center
@@ -41,32 +41,32 @@
                         <div class="card mb-2 sh-19 sh-md-8">
                             <div class="card-body pt-0 pb-0 h-100">
                                 <div class="row g-0 h-100 align-content-center">
-                                    <div class="col-12 col-md-3 d-flex flex-column mb-1 mb-md-0">
+                                    <div class="col-12 col-md-3 d-flex flex-column mb-1 mb-md-0 justify-content-center">
                                         <div class="text-muted text-small d-md-none">Formation</div>
                                         <a href="#" class="text-truncate">{{ formation.display }}</a>
                                     </div>
-                                    <div class="col-12 col-md-1 d-flex flex-column mb-1 mb-md-0">
+                                    <div class="col-12 col-md-1 d-flex flex-column mb-1 mb-md-0 justify-content-center">
                                         <div class="text-muted text-small d-md-none">Nb Parcours</div>
                                         {{ formation.parcours|length }} parcours
                                     </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column mb-1 mb-md-0">
+                                    <div class="col-6 col-md-2 d-flex flex-column mb-1 mb-md-0 justify-content-center">
                                         <div class="text-muted text-small d-md-none">Type de diplôme</div>
                                         <div class="text-alternate">{{ formation.typeDiplome|typeDiplome }}</div>
                                     </div>
-                                    <div class="col-6 col-md-1 d-flex flex-column mb-1 mb-md-0">
+                                    <div class="col-6 col-md-1 d-flex flex-column mb-1 mb-md-0 justify-content-center">
                                         <div class="text-muted text-small d-md-none">Etat</div>
                                         <div class="text-alternate">
                                             {{ formation.etatDpe }}
                                         </div>
                                     </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column mb-1 mb-md-0">
+                                    <div class="col-6 col-md-2 d-flex flex-column mb-1 mb-md-0 justify-content-center">
                                         <div class="text-muted text-small d-md-none">% Remplissage</div>
                                         <div class="text-alternate">
                                             {{ formation.remplissage|remplissage }}
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column
-                                            mb-1 mb-md-0">
+                                            mb-1 mb-md-0 justify-content-center">
                                         <div class="text-muted text-small d-md-none">Détails</div>
 
                                         <button class="ms-2 btn btn-sm btn-outline-primary"
@@ -88,10 +88,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="detail_formation_{{ formation.id }}" class="d-none detail_formation">
+                        <div id="detail_formation_{{ formation.id }}" class="d-none detail_formation ms-4">
                             <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-11" {{ stimulus_target('structure--formation', 'detail') }}></div>
+                                <div class="col-12" {{ stimulus_target('structure--formation', 'detail') }}></div>
                             </div>
                         </div>
                     </div>

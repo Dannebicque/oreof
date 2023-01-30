@@ -8,21 +8,25 @@
                         <div class="col-12 col-md-4 d-flex align-items-center mb-2 text-secondary mb-md-0">
                             Composante
                         </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center
+                        text-secondary">
+                            Nb Mentions
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center
+                        text-secondary">
+                            Etat
+                        </div>
                         <div class="col-6 col-md-2 d-flex align-items-center
-                        justify-content-end text-secondary">
-                            CATEGORY
+                        text-medium text-secondary">
+                            Remplissage
                         </div>
-                        <div class="col-6 col-md-2 d-flex align-items-center justify-content-end
-                        text-medium justify-content-end text-secondary">
-                            PRICE
+                        <div class="col-6 col-md-1 d-flex align-items-center text-medium
+                         text-secondary">
+                            Détails
                         </div>
-                        <div class="col-6 col-md-2 d-flex align-items-center text-medium
+                        <div class="col-6 col-md-3 d-flex align-items-center text-medium
                         justify-content-end text-secondary">
-                            SALES
-                        </div>
-                        <div class="col-6 col-md-2 d-flex align-items-center text-medium
-                        justify-content-end text-secondary">
-                            STOCK
+                            Actions
                         </div>
                     </div>
                 </div>
@@ -37,24 +41,25 @@
                                         <div class="text-muted d-md-none">Composante</div>
                                         <a href="#" class="text-truncate">{{ composante.libelle }}</a>
                                     </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted d-md-none">Category</div>
-                                        <div class="text-alternate">Whole Wheat</div>
+                                    <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                        <div class="text-muted d-md-none">Nb Mentions</div>
+                                        <div class="text-alternate">{{ composante.formations|length }} mentions</div>
                                     </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted d-md-none">Price</div>
+                                    <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                        <div class="text-muted d-md-none">Etat</div>
+                                        <div class="text-alternate">Etat...</div>
+                                    </div>
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                        <div class="text-muted d-md-none">Remplissage</div>
                                         <div class="text-alternate">
-<span>
-<span class=>$</span>
-3.25
-</span>
+                                            {{ composante.remplissage|remplissage }}
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center
-                                            align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted d-md-none">Sale</div>
+                                            mb-1 mb-md-0">
+                                        <div class="text-muted d-md-none">Détails</div>
 
-                                        <button class="btn btn-sm btn-outline-primary"
+                                        <button class="ms-2 btn btn-sm btn-outline-primary"
                                                 {{ stimulus_action('structure--composante', 'detail', 'click',
                                                     {composante:composante.id, url: path('structure_formation_detail_composante', {composante:composante.id})}
                                                     ) }}
@@ -63,18 +68,18 @@
                                         </button>
 
                                     </div>
-                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-center
-                                            align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted d-md-none">Stock</div>
+                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-end
+                                    align-items-md-end
+                                            mb-1 mb-md-0">
+                                        <div class="text-muted d-md-none">Actions</div>
                                         <div class="text-alternate">2.345</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="detail_composante_{{ composante.id }}" class="d-none detail_composante">
+                        <div id="detail_composante_{{ composante.id }}" class="d-none detail_composante ms-4">
                             <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-11" {{ stimulus_target('structure--composante', 'detail') }}></div>
+                                <div class="col-12" {{ stimulus_target('structure--composante', 'detail') }}></div>
                             </div>
                         </div>
                     </div>
