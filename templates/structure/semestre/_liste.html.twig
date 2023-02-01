@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-12 mb-5">
+    <div class="col-12 mb-2">
         <section class="scroll-section" id="labels">
             <h2 class="small-title">Semestres</h2>
             <div class="card mb-2 bg-transparent no-shadow d-none d-md-block sh-3">
@@ -9,20 +9,20 @@
                             Semestre
                         </div>
                         <div class="col-6 col-md-2 d-flex align-items-center
-                        justify-content-end text-secondary text-small">
-                            CATEGORY
-                        </div>
-                        <div class="col-6 col-md-2 d-flex align-items-center justify-content-end
-                        justify-content-end text-secondary text-small">
-                            PRICE
+                        text-secondary text-small">
+                            Commun ?
                         </div>
                         <div class="col-6 col-md-2 d-flex align-items-center
-                        justify-content-end text-secondary text-small">
-                            SALES
+                        text-secondary text-small">
+                            ECTS
                         </div>
                         <div class="col-6 col-md-2 d-flex align-items-center
-                        justify-content-end text-secondary text-small">
-                            STOCK
+                        text-secondary text-small">
+                            Détails
+                        </div>
+                        <div class="col-6 col-md-2 d-flex align-items-center
+                        text-secondary text-small">
+                            Actions
                         </div>
                     </div>
                 </div>
@@ -35,23 +35,24 @@
                                 <div class="row g-0 h-100 align-content-center">
                                     <div class="col-12 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Semestre</div>
-                                        <a href="#" class="text-truncate">{{ semestre.display }} (Tronc Commun)</a>
+                                        <a href="#" class="text-truncate">{{ semestre.display }} </a>
                                     </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Category</div>
-                                        <div class="text-alternate">Whole Wheat</div>
-                                    </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Price</div>
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center
+                                    mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">Commun ?</div>
                                         <div class="text-alternate">
-<span>
-<span class="text-small">$</span>
-3.25
-</span>
+                                            <span class="badge bg-success">Tronc Commun</span>
                                         </div>
                                     </div>
-                                    <div class="col-6 col-md-1 d-flex flex-column justify-content-center
-                                            align-items-md-end mb-1 mb-md-0">
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center
+                                    mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">ECTS</div>
+                                        <div class="text-alternate">
+                                            xx ECTS
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center
+                                            mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Sale</div>
 
                                         <button class="btn btn-sm btn-outline-primary"
@@ -62,12 +63,11 @@
                                         >
                                             <i class="fal fa-caret-right"></i> Détails
                                         </button>
-
                                     </div>
-                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-center
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center
                                             align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Stock</div>
-                                        <div class="text-alternate">2.345</div>
+                                        <div class="text-muted text-small d-md-none">Actions</div>
+                                        <button class="btn btn-outline-info btn-sm">Boutons à définir ?</button>
                                     </div>
                                 </div>
                             </div>
@@ -89,23 +89,21 @@
                                         <div class="text-muted text-small d-md-none">Semestre</div>
                                         <a href="#" class="text-truncate">{{ semestre.display }}</a>
                                     </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Category</div>
-                                        <div class="text-alternate">Whole Wheat</div>
-                                    </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Price</div>
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">Commun ?</div>
                                         <div class="text-alternate">
-<span>
-<span class="text-small">$</span>
-3.25
-</span>
+                                            <span class="badge bg-secondary">Parcours</span>
                                         </div>
                                     </div>
-                                    <div class="col-6 col-md-1 d-flex flex-column justify-content-center
-                                            align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Sale</div>
-
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">ECTS</div>
+                                        <div class="text-alternate">
+                                            xx ECTS ? {# todo: calculé des EC/UE ? #}
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center
+                                            mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">Détails</div>
                                         <button class="btn btn-sm btn-outline-primary"
                                                 {{ stimulus_action('structure--semestre', 'detail', 'click',
                                                     {semestre:semestre.id, url: path
@@ -116,10 +114,10 @@
                                         </button>
 
                                     </div>
-                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-center
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center
                                             align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Stock</div>
-                                        <div class="text-alternate">2.345</div>
+                                        <div class="text-muted text-small d-md-none">Actions</div>
+                                        <button class="btn btn-outline-info btn-sm">Boutons à définir ?</button>
                                     </div>
                                 </div>
                             </div>

@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-12 mb-5">
+    <div class="col-12 mb-2">
         <section class="scroll-section" id="labels">
             <h2 class="small-title">Parcours</h2>
             <div class="card mb-2 bg-transparent no-shadow d-none d-md-block sh-3">
@@ -60,10 +60,20 @@
                                         </button>
 
                                     </div>
-                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-center
-                                            align-items-md-end mb-1 mb-md-0">
+                                    <div class="col-6 col-md-3 text-end mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Actions</div>
-                                        <div class="text-alternate">2.345</div>
+                                        <a href="{{ path('app_parcours_show', {id:parcour.id}) }}"
+                                           class="btn btn-outline-info btn-sm"
+                                        >
+                                            <i class="{{ iconShow }}"></i>
+                                        </a>
+                                        {% if is_granted('ROLE_RESP_FORMATION') %}
+                                            <a href="{{ path('app_parcours_edit', {id:parcour.id}) }}"
+                                               class="btn btn-outline-warning btn-sm"
+                                            >
+                                                <i class="{{ iconEdit }}"></i>
+                                            </a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
