@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\ElementConstitutifRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -37,7 +38,7 @@ class ElementConstitutif
     #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'elementConstitutifs')]
     private Collection $competences;
 
-    #[ORM\Column(length: 30, nullable: true)]
+    #[ORM\Column(length: 30, nullable: true, enumType: ModaliteEnseignementEnum::class )]
     private ?string $modaliteEnseignement = null;
 
     #[ORM\Column]
@@ -64,9 +65,19 @@ class ElementConstitutif
     #[ORM\ManyToOne]
     private ?User $responsableEc = null;
 
+    #[ORM\ManyToMany(targetEntity: Langue::class, inversedBy: 'elementConstitutifs')]
+    #[ORM\JoinTable(name: 'element_constitutif_langue_dispense')]
+    private Collection $langueDispense;
+
+    #[ORM\ManyToMany(targetEntity: Langue::class, inversedBy: 'languesSupportsEcs')]
+    #[ORM\JoinTable(name: 'element_constitutif_langue_support')]
+    private Collection $langueSupport;
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
+        $this->langueDispense = new ArrayCollection();
+        $this->langueSupport = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -281,5 +292,85 @@ class ElementConstitutif
     public function remplissage(): float
     {
         return 10;
+    }
+
+    public function etatStructure(): string
+    {
+        $nbHeures = $this->volumeCmPresentiel + $this->volumeTdPresentiel + $this->volumeTpPresentiel + $this->volumeCmDistanciel + $this->volumeTdDistanciel + $this->volumeTpDistanciel;
+
+        if ($nbHeures === 0.0 && $this->modaliteEnseignement === null && $this->ects === 0.0) {
+            return 'Non complété';
+        }
+
+        if ($nbHeures === 0.0) {
+            return 'Pas d\'heures';
+        }
+
+        if ($this->ects === 0.0){
+            return 'Pas d\'ECTS';
+        }
+
+        if ($this->modaliteEnseignement === null){
+            return 'Modalité d\'enseignement non renseignée';
+        }
+
+        return 'Complet';
+    }
+
+    public function etatMcc(): string
+    {
+        if ($this->competences->isEmpty()) {
+            return 'Non complété';
+        }
+
+        return 'Complet';
+    }
+
+    /**
+     * @return Collection<int, Langue>
+     */
+    public function getLangueDispense(): Collection
+    {
+        return $this->langueDispense;
+    }
+
+    public function addLangueDispense(Langue $langueDispense): self
+    {
+        if (!$this->langueDispense->contains($langueDispense)) {
+            $this->langueDispense->add($langueDispense);
+        }
+
+        return $this;
+    }
+
+    public function removeLangueDispense(Langue $langueDispense): self
+    {
+        $this->langueDispense->removeElement($langueDispense);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Langue>
+     */
+    public function getLangueSupport(): Collection
+    {
+        return $this->langueSupport;
+    }
+
+    public function addLangueSupport(Langue $langueSupport): self
+    {
+        if (!$this->langueSupport->contains($langueSupport)) {
+            $this->langueSupport->add($langueSupport);
+        }
+
+        return $this;
+    }
+
+    public function removeLangueSupport(Langue $langueSupport): self
+    {
+        $this->langueSupport->removeElement($langueSupport);
+
+        return $this;
     }
 }

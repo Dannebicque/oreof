@@ -9,9 +9,7 @@
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
-    {#    <script src="{{ asset('autoComplete.min.js') }}"></script> #}
-    {#    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script> #}
-    {#    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script> #}
+
     {% block javascripts %}
         <script>
           let toasts = {{ app.session.flashbag.get('toast')|json_encode|raw }};
@@ -167,6 +165,16 @@
                                                 <span class="label">Domaines</span>
                                             </a>
                                         </li>
+                                        <li>
+                                            <a href="{{ path('app_type_ue_index') }}">
+                                                <span class="label">Type UE</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_type_enseignement_index') }}">
+                                                <span class="label">Type Enseignement</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
 
@@ -206,6 +214,16 @@
                                         <li>
                                             <a href="{{ path('app_annee_universitaire_index') }}">
                                                 <span class="label">Année Universitaire</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_langue_index') }}">
+                                                <span class="label">Langues</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_rythme_formation_index') }}">
+                                                <span class="label">Rythmes de formation</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -392,7 +410,7 @@
                 Confirmer la suppression de l'élément sélectionné.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary"
+                <button type="button" class="btn btn-info"
                         data-bs-dismiss="modal">
                     Annuler
                 </button>
