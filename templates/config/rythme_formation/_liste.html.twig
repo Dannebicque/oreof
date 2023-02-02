@@ -1,0 +1,67 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Libellé</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for rythme_formation in rythme_formations %}
+        <tr>
+            <td>{{ rythme_formation.id }}</td>
+            <td>{{ rythme_formation.libelle }}</td>
+            <td class="text-end">
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Voir un rythme de formation',
+                            modalUrl: path('app_rythme_formation_show',{'id': rythme_formation.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-info"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Voir un rythme de formation"
+                >
+                    <i class="{{ iconShow }}"></i>
+                    <span> voir</span>
+                </button>
+
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Modifier un rythme de formation',
+                            modalUrl: path('app_rythme_formation_edit',{'id': rythme_formation.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-warning"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Modifier un rythme de formation"
+                >
+                    <i class="{{ iconEdit }}"></i>
+                    <span> modifier</span>
+                </button>
+
+                <button {{ stimulus_action('crud', 'duplicate', 'click', {
+                    url:path('app_rythme_formation_duplicate',{'id': rythme_formation.id})
+                }) }} class="btn btn-sm text-success">
+                    <i class="{{ iconDuplicate }}"></i> Dupliquer
+                </button>
+                <button {{ stimulus_action('crud', 'delete', 'click', {
+                    url:path('app_rythme_formation_delete',{'id': rythme_formation.id}),
+                    csrf: csrf_token('delete' ~ rythme_formation.id)
+                }) }} class="btn btn-sm text-danger">
+                    <i class="{{ iconDelete }}"></i> Supprimer
+                </button>
+            </td>
+
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="3">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
