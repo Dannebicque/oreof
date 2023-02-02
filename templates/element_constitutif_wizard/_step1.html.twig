@@ -5,7 +5,7 @@
     {% form_theme form 'communs/form_theme.html.twig' %}
 
     {% if is_granted('ROLE_RESP_FORMATION') %}
-        {{ form_row(form) }}
+        {{ form_row(form.responsableEc) }}
     {% endif %}
     {{ form_row(form.libelle) }}
     {{ form_row(form.libelleAnglais) }}

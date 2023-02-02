@@ -21,18 +21,18 @@ class Ue
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?Semestre $semestre = null;
 
-    #[ORM\OneToMany(mappedBy: 'ue', targetEntity: ElementConstitutif::class)]
-    private Collection $elementConstitutifs;
-
     #[ORM\ManyToOne]
     private ?TypeUe $typeUe = null;
 
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $typeUeTexte = null;
 
+    #[ORM\OneToMany(mappedBy: 'ue', targetEntity: EcUe::class)]
+    private Collection $ecUes;
+
     public function __construct()
     {
-        $this->elementConstitutifs = new ArrayCollection();
+        $this->ecUes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -60,36 +60,6 @@ class Ue
     public function setSemestre(?Semestre $semestre): self
     {
         $this->semestre = $semestre;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ElementConstitutif>
-     */
-    public function getElementConstitutifs(): Collection
-    {
-        return $this->elementConstitutifs;
-    }
-
-    public function addElementConstitutif(ElementConstitutif $elementConstitutif): self
-    {
-        if (!$this->elementConstitutifs->contains($elementConstitutif)) {
-            $this->elementConstitutifs->add($elementConstitutif);
-            $elementConstitutif->setUe($this);
-        }
-
-        return $this;
-    }
-
-    public function removeElementConstitutif(ElementConstitutif $elementConstitutif): self
-    {
-        if ($this->elementConstitutifs->removeElement($elementConstitutif)) {
-            // set the owning side to null (unless already changed)
-            if ($elementConstitutif->getUe() === $this) {
-                $elementConstitutif->setUe(null);
-            }
-        }
 
         return $this;
     }
@@ -126,10 +96,40 @@ class Ue
     public function totalEctsUe(): int
     {
         $total = 0;
-        foreach ($this->getElementConstitutifs() as $elementConstitutif) {
-            $total += $elementConstitutif->getEcts();
+        foreach ($this->getEcUes() as $ecUe) {
+            $total += $ecUe->getEc()?->getEcts();
         }
 
         return $total;
+    }
+
+    /**
+     * @return Collection<int, EcUe>
+     */
+    public function getEcUes(): Collection
+    {
+        return $this->ecUes;
+    }
+
+    public function addEcUe(EcUe $ecUe): self
+    {
+        if (!$this->ecUes->contains($ecUe)) {
+            $this->ecUes->add($ecUe);
+            $ecUe->setUe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEcUe(EcUe $ecUe): self
+    {
+        if ($this->ecUes->removeElement($ecUe)) {
+            // set the owning side to null (unless already changed)
+            if ($ecUe->getUe() === $this) {
+                $ecUe->setUe(null);
+            }
+        }
+
+        return $this;
     }
 }

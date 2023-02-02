@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\EcUe;
 use App\Entity\ElementConstitutif;
+use App\Entity\Parcours;
 use App\Entity\Ue;
 use App\Form\EcStep4Type;
 use App\Form\ElementConstitutifType;
+use App\Repository\EcUeRepository;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\LangueRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,18 +29,21 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/new/{ue}', name: 'app_element_constitutif_new', methods: ['GET', 'POST'])]
     public function new(
+        EcUeRepository $ecUeRepository,
         LangueRepository $langueRepository,
         Request $request, ElementConstitutifRepository $elementConstitutifRepository, Ue $ue): Response
     {
         $elementConstitutif = new ElementConstitutif();
-        $elementConstitutif->setUe($ue);
+
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl('app_element_constitutif_new', ['ue' => $ue->getId()]),
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $langueFr = $langueRepository->findOneBy(['code' => 'fr']);
+            $ueEc = new EcUe($ue, $elementConstitutif);
+            $ecUeRepository->save($ueEc, true);
+            $langueFr = $langueRepository->findOneBy(['codeIso' => 'fr']);
             if ($langueFr !== null) {
                 $elementConstitutif->addLangueDispense($langueFr);
                 $langueFr->addElementConstitutif($elementConstitutif);
@@ -63,11 +69,12 @@ class ElementConstitutifController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
-    public function edit(ElementConstitutif $elementConstitutif): Response
+    #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
+    public function edit(ElementConstitutif $elementConstitutif, Parcours $parcours): Response
     {
         return $this->render('element_constitutif/edit.html.twig', [
             'ec' => $elementConstitutif,
+            'parcours' => $parcours
         ]);
     }
 

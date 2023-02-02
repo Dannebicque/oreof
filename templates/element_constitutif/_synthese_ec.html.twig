@@ -12,11 +12,12 @@
             <div class="col-6">
                 <dl>
                     <dt>Semestre</dt>
-                    <dd>{{ ec.ue != null ? (ec.ue.semestre !=null ? ec.ue.semestre.display : '<span class="badge
+                    <dd>{{ ec.ecUes[0].ue != null ? (ec.ecUes[0].ue.semestre !=null ? ec.ecUes[0].ue.semestre.display : '<span class="badge
                     bg-danger">Erreur !</span>')
                         : '<span class="badge bg-danger">Erreur !</span>' }}</dd>
                     <dt>UE</dt>
-                    <dd>{{ ec.ue != null ? ec.ue.display : '<span class="badge bg-danger">Erreur !</span>' }}</dd>
+                    <dd>{{ ec.ecUes[0].ue != null ? ec.ecUes[0].ue.display : '<span class="badge bg-danger">Erreur !</span>'
+                        }}</dd>
                 </dl>
             </div>
             <div class="col-12">

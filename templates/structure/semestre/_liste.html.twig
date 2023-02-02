@@ -28,58 +28,6 @@
                 </div>
             </div>
             <div>{# class="scroll-out" #}
-                {% for semestre in semestresTc %}
-                    <div {{ stimulus_controller('structure--semestre') }}>
-                        <div class="card mb-2 sh-19 sh-md-8">
-                            <div class="card-body pt-0 pb-0 h-100">
-                                <div class="row g-0 h-100 align-content-center">
-                                    <div class="col-12 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Semestre</div>
-                                        <a href="#" class="text-truncate">{{ semestre.display }} </a>
-                                    </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center
-                                    mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Commun ?</div>
-                                        <div class="text-alternate">
-                                            <span class="badge bg-success">Tronc Commun</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center
-                                    mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">ECTS</div>
-                                        <div class="text-alternate">
-                                            {{ semestre.totalEctsSemestre|badgeEctsSemestre() }}
-                                        </div>
-                                    </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center
-                                            mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Sale</div>
-
-                                        <button class="btn btn-sm btn-outline-primary"
-                                                {{ stimulus_action('structure--semestre', 'detail', 'click',
-                                                    {semestre:semestre.id, url: path
-                                                        ('structure_ue_detail_semestre', {semestre:semestre.id})}
-                                                ) }}
-                                        >
-                                            <i class="fal fa-caret-right"></i> Détails
-                                        </button>
-                                    </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center
-                                            align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Actions</div>
-                                        <button class="btn btn-outline-info btn-sm">Boutons à définir ?</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="detail_semestre_{{ semestre.id }}" class="d-none detail_semestre ms-4">
-                            <div class="row">
-                                <div class="col-12" {{ stimulus_target('structure--semestre', 'detail') }}></div>
-                            </div>
-                        </div>
-                    </div>
-
-                {% endfor %}
                 {% for semestre in semestres %}
                     <div {{ stimulus_controller('structure--semestre') }}>
                         <div class="card mb-2 sh-19 sh-md-8">
@@ -87,18 +35,23 @@
                                 <div class="row g-0 h-100 align-content-center">
                                     <div class="col-12 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Semestre</div>
-                                        <a href="#" class="text-truncate">{{ semestre.display }}</a>
+                                        <a href="#" class="text-truncate">{{ semestre.semestre.display }}</a>
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Commun ?</div>
                                         <div class="text-alternate">
+                                            {% if semestre.semestre.troncCommun == true %}
+                                                <span class="badge bg-info">Tronc Commun</span>
+
+                                            {% else %}
                                             <span class="badge bg-secondary">Parcours</span>
+                                                {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
                                         <div class="text-alternate">
-                                            {{ semestre.totalEctsSemestre|badgeEctsSemestre }}
+                                            {{ semestre.semestre.totalEctsSemestre|badgeEctsSemestre }}
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center
@@ -106,8 +59,9 @@
                                         <div class="text-muted text-small d-md-none">Détails</div>
                                         <button class="btn btn-sm btn-outline-primary"
                                                 {{ stimulus_action('structure--semestre', 'detail', 'click',
-                                                    {semestre:semestre.id, url: path
-                                                        ('structure_ue_detail_semestre', {semestre:semestre.id})}
+                                                    {semestre:semestre.semestre.id, url: path
+                                                        ('structure_ue_detail_semestre', {semestre:semestre.semestre
+                                                        .id, parcours: parcours.id})}
                                                 ) }}
                                         >
                                             <i class="fal fa-caret-right"></i> Détails
@@ -121,7 +75,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="detail_semestre_{{ semestre.id }}" class="d-none detail_semestre">
+                        <div id="detail_semestre_{{ semestre.semestre.id }}" class="d-none detail_semestre">
                             <div class="row">
                                 <div class="col-1"></div>
                                 <div class="col-11" {{ stimulus_target('structure--semestre', 'detail') }}></div>

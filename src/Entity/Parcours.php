@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
-use App\Enums\RythmeFormationEnum;
 use App\Repository\ParcoursRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,8 +11,11 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ParcoursRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Parcours
 {
+    use LifeCycleTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -23,9 +26,6 @@ class Parcours
 
     #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours')]
     private ?Formation $formation = null;
-
-    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: Semestre::class)]
-    private Collection $semestres;
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: BlocCompetence::class)]
     private Collection $blocCompetences;
@@ -87,11 +87,15 @@ class Parcours
     #[ORM\ManyToOne()]
     private ?RythmeFormation $rythmeFormation = null;
 
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: SemestreParcours::class)]
+    private Collection $semestreParcours;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
         $this->semestres = new ArrayCollection();
         $this->blocCompetences = new ArrayCollection();
+        $this->semestreParcours = new ArrayCollection();
     }
 
 
@@ -120,36 +124,6 @@ class Parcours
     public function setFormation(?Formation $formation): self
     {
         $this->formation = $formation;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Semestre>
-     */
-    public function getSemestres(): Collection
-    {
-        return $this->semestres;
-    }
-
-    public function addSemestre(Semestre $semestre): self
-    {
-        if (!$this->semestres->contains($semestre)) {
-            $this->semestres->add($semestre);
-            $semestre->setParcours($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSemestre(Semestre $semestre): self
-    {
-        if ($this->semestres->removeElement($semestre)) {
-            // set the owning side to null (unless already changed)
-            if ($semestre->getParcours() === $this) {
-                $semestre->setParcours(null);
-            }
-        }
 
         return $this;
     }
@@ -420,6 +394,36 @@ class Parcours
     public function setRythmeFormation(?RythmeFormation $rythmeFormation): self
     {
         $this->rythmeFormation = $rythmeFormation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SemestreParcours>
+     */
+    public function getSemestreParcours(): Collection
+    {
+        return $this->semestreParcours;
+    }
+
+    public function addSemestreParcour(SemestreParcours $semestreParcour): self
+    {
+        if (!$this->semestreParcours->contains($semestreParcour)) {
+            $this->semestreParcours->add($semestreParcour);
+            $semestreParcour->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSemestreParcour(SemestreParcours $semestreParcour): self
+    {
+        if ($this->semestreParcours->removeElement($semestreParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($semestreParcour->getParcours() === $this) {
+                $semestreParcour->setParcours(null);
+            }
+        }
 
         return $this;
     }

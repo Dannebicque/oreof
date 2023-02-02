@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Formation;
+use App\Entity\Parcours;
 use App\Form\FormationStep1Type;
 use App\Form\FormationStep2Type;
 use App\TypeDiplome\TypeDiplomeRegistry;
@@ -57,15 +58,17 @@ class FormationWizardController extends AbstractController
         ]);
     }
 
-    #[Route('/{formation}/4', name: 'app_formation_wizard_step_4', methods: ['GET'])]
+    #[Route('/{formation}/{parcours}/4', name: 'app_formation_wizard_step_4', methods: ['GET'])]
     public function step4(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        Formation $formation
+        Formation $formation,
+        Parcours $parcours
     ): Response {
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
 
         return $this->render('formation_wizard/_step4.html.twig', [
             'formation' => $formation,
+            'parcours' => $parcours,
             'typeDiplome' => $typeDiplome,
         ]);
     }

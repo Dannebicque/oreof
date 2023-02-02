@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\ElementConstitutifRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,15 +11,15 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ElementConstitutifRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class ElementConstitutif
 {
+    use LifeCycleTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
-    private ?Ue $ue = null;
 
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
@@ -94,28 +95,20 @@ class ElementConstitutif
     #[ORM\ManyToOne]
     private ?TypeEnseignement $typeEnseignement = null;
 
+    #[ORM\OneToMany(mappedBy: 'ec', targetEntity: EcUe::class)]
+    private Collection $ecUes;
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
         $this->langueDispense = new ArrayCollection();
         $this->langueSupport = new ArrayCollection();
+        $this->ecUes = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUe(): ?Ue
-    {
-        return $this->ue;
-    }
-
-    public function setUe(?Ue $ue): self
-    {
-        $this->ue = $ue;
-
-        return $this;
     }
 
     public function getLibelle(): ?string
@@ -479,8 +472,40 @@ class ElementConstitutif
         return $this;
     }
 
-    public function getFormation(): ?Formation
+    /**
+     * @return Collection<int, EcUe>
+     */
+    public function getEcUes(): Collection
     {
-        return $this->getUe()?->getSemestre()?->getFormation() ?? $this->getUe()?->getSemestre()?->getParcours()?->getFormation();
+        return $this->ecUes;
+    }
+
+    public function addEcUe(EcUe $ecUe): self
+    {
+        if (!$this->ecUes->contains($ecUe)) {
+            $this->ecUes->add($ecUe);
+            $ecUe->setEc($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEcUe(EcUe $ecUe): self
+    {
+        if ($this->ecUes->removeElement($ecUe)) {
+            // set the owning side to null (unless already changed)
+            if ($ecUe->getEc() === $this) {
+                $ecUe->setEc(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getParcours(): Parcours
+    {
+        //todo: à revoir, pourquoi first et pas autre ?
+        return $this->getEcUes()->first()?->getUe()->getSemestre()?->getSemestreParcours()->first()->getParcours();
+
     }
 }

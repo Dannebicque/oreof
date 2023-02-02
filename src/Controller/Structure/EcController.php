@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Controller\Structure;
+
+use App\Entity\Parcours;
 use App\Entity\Ue;
+use App\Repository\EcUeRepository;
 use App\Repository\ElementConstitutifRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,23 +31,26 @@ class EcController extends AbstractController
     public function liste(ElementConstitutifRepository $elementConstitutifRepository): Response
     {
         $ecs = $elementConstitutifRepository->findByRoleUser($this->getUser());
+
         return $this->render('structure/ec/_liste.html.twig', [
             'ecs' => $ecs
         ]);
     }
 
     #[
-        Route('/detail/ue/{ue}', name: 'detail_ue')
+        Route('/detail/ue/{ue}/{parcours}', name: 'detail_ue')
     ]
     public function detailComposante(
-        ElementConstitutifRepository $elementConstitutifRepository,
-        Ue $ue): Response
-    {
-        $ecs = $elementConstitutifRepository->findBy(['ue' => $ue]);
+        EcUeRepository $ecUeRepository,
+        Ue $ue,
+        Parcours $parcours
+    ): Response {
+        $ecs = $ecUeRepository->findByUe($ue);
 
         return $this->render('structure/ec/_liste.html.twig', [
             'ecs' => $ecs,
-            'ue' => $ue
+            'ue' => $ue,
+            'parcours' => $parcours
         ]);
     }
 }

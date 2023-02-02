@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\NiveauFormationEnum;
 use App\Enums\RegimeInscriptionEnum;
-use App\Enums\RythmeFormationEnum;
 use App\Repository\FormationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,8 +12,11 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Formation
 {
+    use LifeCycleTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -70,12 +73,6 @@ class Formation
     #[ORM\Column(length: 50)]
     private ?string $etatDpe = 'initialisation_dpe';
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $updated;
-
     #[ORM\Column(nullable: true)]
     private ?array $regimeInscription = [];
 
@@ -111,8 +108,6 @@ class Formation
         $this->localisationMention = new ArrayCollection();
         $this->parcours = new ArrayCollection();
         $this->composantesInscription = new ArrayCollection();
-        $this->created = new \DateTime();
-        $this->updated = new \DateTime();
         $this->semestres = new ArrayCollection();
         $this->blocCompetences = new ArrayCollection();
     }
@@ -347,30 +342,6 @@ class Formation
     public function setEtatDpe(string $etatDpe): self
     {
         $this->etatDpe = $etatDpe;
-
-        return $this;
-    }
-
-    public function getCreated(): ?\DateTimeInterface
-    {
-        return $this->created;
-    }
-
-    public function setCreated(\DateTimeInterface $created): self
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    public function getUpdated(): ?\DateTimeInterface
-    {
-        return $this->updated;
-    }
-
-    public function setUpdated(\DateTimeInterface $updated): self
-    {
-        $this->updated = $updated;
 
         return $this;
     }

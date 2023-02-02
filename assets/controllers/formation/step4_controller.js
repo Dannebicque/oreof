@@ -1,5 +1,4 @@
 import { Controller } from '@hotwired/stimulus'
-import { saveData } from '../../js/saveData'
 
 export default class extends Controller {
 
@@ -10,12 +9,10 @@ export default class extends Controller {
   }
 
   connect() {
-    console.log('step4_controller connect')
-    this._loadTroncCommun()
+    this._loadParcours()
   }
 
-  async _loadTroncCommun() {
-    console.log('step4_controller load')
+  async _loadParcours() {
     const response = await fetch(this.urlValue)
     this.detailTarget.innerHTML = await response.text()
   }

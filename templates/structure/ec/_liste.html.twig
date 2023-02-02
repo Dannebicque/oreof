@@ -12,6 +12,9 @@
         </thead>
         <tbody>
         {% for ec in ecs %}
+            {% if not ec|isElementConstitutif %}
+                {% set ec = ec.ec %}
+            {% endif %}
             <tr>
                 <td>{{ ec.libelle }}</td>
                 <td>{{ ec.responsableEc != null ? ec.responsableEc.display : 'Non défini' }}</td>
@@ -71,7 +74,7 @@
                     </button>
 
                     <a
-                            href="{{ path('app_element_constitutif_edit',{'id': ec.id}) }}"
+                            href="{{ path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }}"
                             class="btn btn-sm text-warning"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"

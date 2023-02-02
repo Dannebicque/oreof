@@ -1,8 +1,7 @@
 <h2>Semestres & Parcours</h2>
 <div {{ stimulus_controller('formation--step4', {
-    url: path('structure_semestre_detail_formation_tronc_commun', {formation: formation.id})
+    url: path('structure_parcours_detail_formation_parcours', {parcours: parcours.id})
 }) }}
-
 >
 <div {{ stimulus_target('formation--step4', 'detail') }}></div>
 </div>

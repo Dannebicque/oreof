@@ -7,6 +7,7 @@ export default class extends Controller {
   static values = {
     url: String,
     ec: String,
+    parcours: String,
   }
 
   connect() {
@@ -18,7 +19,7 @@ export default class extends Controller {
   }
 
   async _loadStep(step) {
-    const response = await fetch(this.urlValue + this.ecValue + "/" + step)
+    const response = await fetch(this.urlValue + this.ecValue + "/" + this.parcoursValue + "/" + step)
     this.contentTarget.innerHTML = await response.text()
   }
 

@@ -17,8 +17,17 @@ export default class extends Controller {
     this._loadStep(event.params.step)
   }
 
+  async changeStepParcours(event) {
+    this._loadStepParcours(event.params.step, event.params.parcours)
+  }
+
   async _loadStep(step) {
     const response = await fetch(this.urlValue + this.formationValue + "/" + step)
+    this.contentTarget.innerHTML = await response.text()
+  }
+
+  async _loadStepParcours(step, parcours) {
+    const response = await fetch(this.urlValue + this.formationValue + "/" + parcours + "/"+ step)
     this.contentTarget.innerHTML = await response.text()
   }
 

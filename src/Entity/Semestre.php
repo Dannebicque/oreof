@@ -18,18 +18,19 @@ class Semestre
     #[ORM\Column]
     private ?int $ordre = null;
 
-    #[ORM\ManyToOne(inversedBy: 'semestres')]
-    private ?Formation $formation = null;
-
-    #[ORM\ManyToOne(inversedBy: 'semestres')]
-    private ?Parcours $parcours = null;
-
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: Ue::class)]
     private Collection $ues;
+
+    #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: SemestreParcours::class)]
+    private Collection $semestreParcours;
+
+    #[ORM\Column]
+    private ?bool $troncCommun = false;
 
     public function __construct()
     {
         $this->ues = new ArrayCollection();
+        $this->semestreParcours = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -45,30 +46,6 @@ class Semestre
     public function setOrdre(int $ordre): self
     {
         $this->ordre = $ordre;
-
-        return $this;
-    }
-
-    public function getFormation(): ?Formation
-    {
-        return $this->formation;
-    }
-
-    public function setFormation(?Formation $formation): self
-    {
-        $this->formation = $formation;
-
-        return $this;
-    }
-
-    public function getParcours(): ?Parcours
-    {
-        return $this->parcours;
-    }
-
-    public function setParcours(?Parcours $parcours): self
-    {
-        $this->parcours = $parcours;
 
         return $this;
     }
@@ -116,5 +93,47 @@ class Semestre
         }
 
         return $total;
+    }
+
+    /**
+     * @return Collection<int, SemestreParcours>
+     */
+    public function getSemestreParcours(): Collection
+    {
+        return $this->semestreParcours;
+    }
+
+    public function addSemestreParcour(SemestreParcours $semestreParcour): self
+    {
+        if (!$this->semestreParcours->contains($semestreParcour)) {
+            $this->semestreParcours->add($semestreParcour);
+            $semestreParcour->setSemestre($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSemestreParcour(SemestreParcours $semestreParcour): self
+    {
+        if ($this->semestreParcours->removeElement($semestreParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($semestreParcour->getSemestre() === $this) {
+                $semestreParcour->setSemestre(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isTroncCommun(): ?bool
+    {
+        return $this->troncCommun;
+    }
+
+    public function setTroncCommun(bool $troncCommun): self
+    {
+        $this->troncCommun = $troncCommun;
+
+        return $this;
     }
 }

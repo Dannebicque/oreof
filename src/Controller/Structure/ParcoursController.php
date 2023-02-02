@@ -3,7 +3,9 @@
 namespace App\Controller\Structure;
 
 use App\Entity\Formation;
+use App\Entity\Parcours;
 use App\Repository\ParcoursRepository;
+use App\Repository\SemestreParcoursRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,6 +49,17 @@ class ParcoursController extends AbstractController
         ]);
     }
 
+    #[Route('/detail/parcours/{parcours}', name: 'detail_formation_parcours')]
+    public function detailFormationTroncCommun(
+        SemestreParcoursRepository $semestreRepository,
+        Parcours $parcours): Response
+    {
+        $semestres = $semestreRepository->findByParcours($parcours);
 
-
+        return $this->render('structure/semestre/_liste.html.twig', [
+            'semestres' => $semestres,
+            'parcours' => $parcours,
+            'hasParcours' => $parcours->getFormation()?->isHasParcours()
+        ]);
+    }
 }
