@@ -122,4 +122,14 @@ class Ue
 
         return $this;
     }
+
+    public function totalEctsUe(): int
+    {
+        $total = 0;
+        foreach ($this->getElementConstitutifs() as $elementConstitutif) {
+            $total += $elementConstitutif->getEcts();
+        }
+
+        return $total;
+    }
 }

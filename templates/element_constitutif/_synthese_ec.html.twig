@@ -1,0 +1,25 @@
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-6">
+                <dl>
+                    <dt>Elément Constitutif</dt>
+                    <dd>{{ ec.libelle }}</dd>
+                    <dt>Formation/mention</dt>
+                    <dd></dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Semestre</dt>
+                    <dd>{{ ec.ue != null ? (ec.ue.semestre !=null ? ec.ue.semestre.display : '<span class="badge
+                    bg-danger">Erreur !</span>')
+                        : '<span class="badge bg-danger">Erreur !</span>' }}</dd>
+                    <dt>UE</dt>
+                    <dd>{{ ec.ue != null ? ec.ue.display : '<span class="badge bg-danger">Erreur !</span>' }}</dd>
+
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

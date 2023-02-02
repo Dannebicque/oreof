@@ -30,6 +30,7 @@
                     >
                         <i class="fal fa-clock"></i>
                         <span> Volumes Horaires</span>
+                        <span class="badge bg-success">{{ ec.etatStructure }}</span>
                     </button></td>
                 <td>
                     <button
@@ -45,7 +46,7 @@
                             title="Modalités de Contrôle des Connaissances"
                     >
                         <i class="fal fa-marker"></i>
-                        <span> MCC</span>
+                        <span> MCC </span>
                     </button></td>
                 <td class="text-end">
                     <button
@@ -88,7 +89,7 @@
         {% endfor %}
         {% if is_granted('ROLE_RESP_FORMATION') and ue is defined %}
             <tr>
-                <td colspan="5">
+                <td colspan="6">
 
                     <button
                             {{ stimulus_controller('modal', {

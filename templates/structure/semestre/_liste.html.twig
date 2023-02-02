@@ -48,7 +48,7 @@
                                     mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
                                         <div class="text-alternate">
-                                            xx ECTS
+                                            {{ semestre.totalEctsSemestre|badgeEctsSemestre() }}
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center
@@ -98,7 +98,7 @@
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
                                         <div class="text-alternate">
-                                            xx ECTS ? {# todo: calculé des EC/UE ? #}
+                                            {{ semestre.totalEctsSemestre|badgeEctsSemestre }}
                                         </div>
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center
@@ -112,7 +112,6 @@
                                         >
                                             <i class="fal fa-caret-right"></i> Détails
                                         </button>
-
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center
                                             align-items-md-end mb-1 mb-md-0">

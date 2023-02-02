@@ -8,8 +8,9 @@
         <th>Domaine</th>
         <th>Mention</th>
         <th>Composante</th>
-        <th>Remplissage</th>
+
         <th>Etat</th>
+        <th>Remplissage</th>
         <th></th>
     </tr>
     </thead>
@@ -34,7 +35,7 @@
                 {{ formation.etatDpe }}
             </td>
             <td>
-                {{ formation.remplissage }}
+                {{ formation.remplissage|remplissage }}
             </td>
             <td>
                 <a href="{{ path('app_formation_show',{'id': formation.id}) }}"

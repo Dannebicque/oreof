@@ -1,6 +1,4 @@
 import { Controller } from '@hotwired/stimulus'
-import { Modal } from 'bootstrap'
-import { addCallout } from '../js/callOut'
 
 export default class extends Controller {
   static targets = [

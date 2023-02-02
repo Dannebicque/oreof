@@ -35,7 +35,8 @@
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center align-items-md-end mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
-                                        <div class="text-alternate">xx ECTS{# todo: calcul depuis les EC ? #}</div>
+                                        {{ ue.totalEctsUe|badgeEctsUe(6) }} {# todo: injecter le type de diplôme pour
+                                         avoir le nb ects par UE max #}
                                     </div>
 
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center

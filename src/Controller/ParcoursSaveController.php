@@ -6,6 +6,7 @@ use App\Classes\UpdateEntity;
 use App\Entity\Parcours;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\RythmeFormationEnum;
+use App\Repository\RythmeFormationRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +18,7 @@ class ParcoursSaveController extends AbstractController
 {
     #[Route('/parcours/save/{parcours}', name: 'app_parcours_save')]
     public function save(
+        RythmeFormationRepository $rythmeFormationRepository,
         EntityManagerInterface $em,
         UpdateEntity $updateEntity,
         Request $request,
@@ -39,7 +41,8 @@ class ParcoursSaveController extends AbstractController
                 $rep = $updateEntity->saveField($parcours, 'modalitesEnseignement', ModaliteEnseignementEnum::from($data['value']));
                 return $this->json($rep);
             case 'rythmeFormation':
-                $rep = $updateEntity->saveField($parcours, 'rythmeFormation', RythmeFormationEnum::from($data['value']));
+                $rythme = $rythmeFormationRepository->find($data['value']);
+                $rep = $updateEntity->saveField($parcours, 'rythmeFormation', $rythme);
                 return $this->json($rep);
             case 'int':
                 $rep = $updateEntity->saveField($parcours, $data['field'], (int)$data['value']);

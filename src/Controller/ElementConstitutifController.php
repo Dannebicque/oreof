@@ -68,7 +68,7 @@ class ElementConstitutifController extends AbstractController
             'action' => $this->generateUrl('app_element_constitutif_structure', ['id' => $elementConstitutif->getId()]),
         ]);
 
-        return $this->render('element_constitutif/structureEc.html.twig', [
+        return $this->render('element_constitutif/_structureEc.html.twig', [
             'ec' => $elementConstitutif,
             'form' => $form->createView(),
         ]);

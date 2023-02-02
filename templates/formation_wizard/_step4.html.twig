@@ -1,8 +1,8 @@
 <h2>Semestres & Parcours</h2>
 <div {{ stimulus_controller('formation--step4', {
-    url: path('app_formation_save', {formation:formation.id}),
+    url: path('structure_semestre_detail_formation_tronc_commun', {formation: formation.id})
 }) }}
-        data-action="base:refreshListe@window->formation--step4#refreshListe"
+
 >
-    {{ include('structure/_semestres.html.twig', {semestres:formation.semestres}) }}
+<div {{ stimulus_target('formation--step4', 'detail') }}></div>
 </div>

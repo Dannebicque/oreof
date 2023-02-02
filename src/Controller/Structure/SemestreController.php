@@ -2,6 +2,7 @@
 
 namespace App\Controller\Structure;
 
+use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Repository\SemestreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,6 +30,19 @@ class SemestreController extends AbstractController
         return $this->render('structure/semestre/_liste.html.twig', [
             'semestresTc' => $semestresTc,
             'semestres' => $semestres
+        ]);
+    }
+
+    #[Route('/detail/formation/tron_commun/{formation}', name: 'detail_formation_tronc_commun')]
+    public function detailFormationTroncCommun(
+        SemestreRepository $semestreRepository,
+        Formation $formation): Response
+    {
+        $semestresTc = $semestreRepository->findBy(['formation' => $formation]);
+
+        return $this->render('structure/semestre/_liste.html.twig', [
+            'semestresTc' => $semestresTc,
+            'semestres' => []
         ]);
     }
 

@@ -7,6 +7,7 @@ use App\Entity\Formation;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\RythmeFormationEnum;
 use App\Repository\ComposanteRepository;
+use App\Repository\RythmeFormationRepository;
 use App\Repository\VilleRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +18,7 @@ class FormationSaveController extends BaseController
 {
     #[Route('/formation/save/{formation}', name: 'app_formation_save')]
     public function save(
+        RythmeFormationRepository $rythmeFormationRepository,
         EntityManagerInterface $em,
         UpdateEntity $updateEntity,
         VilleRepository $villeRepository,
@@ -51,7 +53,8 @@ class FormationSaveController extends BaseController
                 $rep = $updateEntity->saveField($formation, 'modalitesEnseignement', ModaliteEnseignementEnum::from($data['value']));
                 return $this->json($rep);
             case 'rythmeFormation':
-                $rep = $updateEntity->saveField($formation, 'rythmeFormation', RythmeFormationEnum::from($data['value']));
+                $rythme = $rythmeFormationRepository->find($data['value']);
+                $rep = $updateEntity->saveField($formation, 'rythmeFormation', $rythme);
                 return $this->json($rep);
             case 'int':
                 $rep = $updateEntity->saveField($formation, $data['field'], (int)$data['value']);
