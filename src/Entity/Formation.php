@@ -55,7 +55,7 @@ class Formation
     #[ORM\Column]
     private ?int $semestreDebut = 1;
 
-    #[ORM\ManyToMany(targetEntity: Ville::class, inversedBy: 'formations')]
+    #[ORM\ManyToMany(targetEntity: Ville::class)]
     private Collection $localisationMention;
 
     #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'formations')]
@@ -85,9 +85,6 @@ class Formation
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $resultatsAttendus = null;
 
-    #[ORM\Column(type: Types::STRING, length: 30, nullable: true, enumType: RythmeFormationEnum::class)]
-    private ?RythmeFormationEnum $rythmeFormation = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $rythmeFormationTexte = null;
 
@@ -105,6 +102,9 @@ class Formation
 
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: BlocCompetence::class)]
     private Collection $blocCompetences;
+
+    #[ORM\ManyToOne]
+    private ?RythmeFormation $rythmeFormation = null;
 
     public function __construct()
     {
@@ -422,18 +422,6 @@ class Formation
         return $this;
     }
 
-    public function getRythmeFormation(): ?RythmeFormationEnum
-    {
-        return $this->rythmeFormation;
-    }
-
-    public function setRythmeFormation(?RythmeFormationEnum $rythmeFormation): self
-    {
-        $this->rythmeFormation = $rythmeFormation;
-
-        return $this;
-    }
-
     public function getRythmeFormationTexte(): ?string
     {
         return $this->rythmeFormationTexte;
@@ -574,5 +562,17 @@ class Formation
         $total += $this->getStructureSemestres() === null ? 0 : 1;
 
         return $total / 9 * 100;
+    }
+
+    public function getRythmeFormation(): ?RythmeFormation
+    {
+        return $this->rythmeFormation;
+    }
+
+    public function setRythmeFormation(?RythmeFormation $rythmeFormation): self
+    {
+        $this->rythmeFormation = $rythmeFormation;
+
+        return $this;
     }
 }

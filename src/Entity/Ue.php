@@ -24,6 +24,12 @@ class Ue
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: ElementConstitutif::class)]
     private Collection $elementConstitutifs;
 
+    #[ORM\ManyToOne]
+    private ?TypeUe $typeUe = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $typeUeTexte = null;
+
     public function __construct()
     {
         $this->elementConstitutifs = new ArrayCollection();
@@ -91,5 +97,29 @@ class Ue
     public function display(): string
     {
         return 'UE ' . $this->getOrdre();
+    }
+
+    public function getTypeUe(): ?TypeUe
+    {
+        return $this->typeUe;
+    }
+
+    public function setTypeUe(?TypeUe $typeUe): self
+    {
+        $this->typeUe = $typeUe;
+
+        return $this;
+    }
+
+    public function getTypeUeTexte(): ?string
+    {
+        return $this->typeUeTexte;
+    }
+
+    public function setTypeUeTexte(?string $typeUeTexte): self
+    {
+        $this->typeUeTexte = $typeUeTexte;
+
+        return $this;
     }
 }

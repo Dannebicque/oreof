@@ -3,8 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Formation;
-use App\Enums\RythmeFormationEnum;
+use App\Entity\RythmeFormation;
 use App\Form\Type\TextareaWithSaveType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -30,11 +31,11 @@ class FormationStep2Type extends AbstractType
                 'attr' => ['rows' => 20, 'maxlength' => 3000],
                 'button_action' => 'click->formation--step2#saveResultats',
             ])
-            ->add('rythmeFormation', EnumType::class, [
+            ->add('rythmeFormation', EntityType::class, [
                 'label' => 'Rythme de la formation',
                 'help' => 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir,etc.).',
-                'class' => RythmeFormationEnum::class,
-                'translation_domain' => 'enum',
+                'class' => RythmeFormation::class,
+                'choice_label' => 'libelle',
                 'attr' => ['data-action' => 'change->formation--step2#changeRythme'],
             ])
             ->add('rythmeFormationTexte', TextareaWithSaveType::class, [

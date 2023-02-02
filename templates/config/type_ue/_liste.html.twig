@@ -1,0 +1,67 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Libellé</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for type_ue in type_ues %}
+        <tr>
+            <td>{{ type_ue.id }}</td>
+            <td>{{ type_ue.libelle }}</td>
+            <td class="text-end">
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Voir un type d\'unité d\'enseignement',
+                            modalUrl: path('app_type_ue_show',{'id': type_ue.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-info"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Voir un type d\'unité d\'enseignement"
+                >
+                    <i class="{{ iconShow }}"></i>
+                    <span> voir</span>
+                </button>
+
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Modifier un type d\'unité d\'enseignement',
+                            modalUrl: path('app_type_ue_edit',{'id': type_ue.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-warning"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Modifier un type d\'unité d\'enseignement"
+                >
+                    <i class="{{ iconEdit }}"></i>
+                    <span> modifier</span>
+                </button>
+
+                <button {{ stimulus_action('crud', 'duplicate', 'click', {
+                    url:path('app_type_ue_duplicate',{'id': type_ue.id})
+                }) }} class="btn btn-sm text-success">
+                    <i class="{{ iconDuplicate }}"></i> Dupliquer
+                </button>
+                <button {{ stimulus_action('crud', 'delete', 'click', {
+                    url:path('app_type_ue_delete',{'id': type_ue.id}),
+                    csrf: csrf_token('delete' ~ type_ue.id)
+                }) }} class="btn btn-sm text-danger">
+                    <i class="{{ iconDelete }}"></i> Supprimer
+                </button>
+            </td>
+
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="3">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

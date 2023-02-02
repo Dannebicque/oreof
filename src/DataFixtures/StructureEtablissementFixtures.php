@@ -30,7 +30,7 @@ class StructureEtablissementFixtures extends Fixture implements DependentFixture
         $manager->persist($site);
 
         $site = new Ville();
-        $site->setLibelle('Châlons-en-Champagne');
+        $site->setLibelle('Châlons en Champagne');
         $site->setEtablissement($etablissement);
         $manager->persist($site);
 
@@ -44,10 +44,41 @@ class StructureEtablissementFixtures extends Fixture implements DependentFixture
         $site->setEtablissement($etablissement);
         $manager->persist($site);
 
+        $site = new Ville();
+        $site->setLibelle('Chaumont');
+        $site->setEtablissement($etablissement);
+        $manager->persist($site);
+
+        $site = new Ville();
+        $site->setLibelle('Colmar (UHA)');
+        $site->setEtablissement($etablissement);
+        $manager->persist($site);
+
         $domaine = new Domaine();
-        $domaine->setLibelle('Sciences et Technologies');
-        $domaine->setSigle('ST');
+        $domaine->setLibelle('Arts, lettres, langues');
+        $domaine->setSigle('All');
+        $manager->persist($domaine);
+
+        $domaine = new Domaine();
+        $domaine->setLibelle('Droit, économie, gestion');
+        $domaine->setSigle('DEG');
+        $manager->persist($domaine);
+
+        $domaine = new Domaine();
+        $domaine->setLibelle('Sciences humaines et sociales');
+        $domaine->setSigle('SHS');
+        $this->addReference('domaine_shs', $domaine);
+        $manager->persist($domaine);
+
+        $domaine = new Domaine();
+        $domaine->setLibelle('Sciences, technologies, santé');
+        $domaine->setSigle('STS');
         $this->addReference('domaine_st', $domaine);
+        $manager->persist($domaine);
+
+        $domaine = new Domaine();
+        $domaine->setLibelle('Enseignement');
+        $domaine->setSigle('Ens.');
         $manager->persist($domaine);
 
         $domaine = new Domaine();
@@ -56,9 +87,8 @@ class StructureEtablissementFixtures extends Fixture implements DependentFixture
         $manager->persist($domaine);
 
         $domaine = new Domaine();
-        $domaine->setLibelle('Sciences Humaines et Sociales');
-        $domaine->setSigle('SHS');
-        $this->addReference('domaine_shs', $domaine);
+        $domaine->setLibelle('Autre');
+        $domaine->setSigle('Autre');
         $manager->persist($domaine);
 
         $composante = new Composante();

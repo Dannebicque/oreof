@@ -36,9 +36,6 @@ class Parcours
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $resultatsAttendus = null;
 
-    #[ORM\Column(type: Types::STRING, length: 30, nullable: true, enumType: RythmeFormationEnum::class)]
-    private ?RythmeFormationEnum $rythmeFormation = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $rythmeFormationTexte = null;
 
@@ -86,6 +83,9 @@ class Parcours
 
     #[ORM\Column(nullable: true)]
     private ?array $codesRome = [];
+
+    #[ORM\ManyToOne()]
+    private ?RythmeFormation $rythmeFormation = null;
 
     public function __construct(Formation $formation)
     {
@@ -216,18 +216,6 @@ class Parcours
     public function setResultatsAttendus(?string $resultatsAttendus): self
     {
         $this->resultatsAttendus = $resultatsAttendus;
-
-        return $this;
-    }
-
-    public function getRythmeFormation(): ?string
-    {
-        return $this->rythmeFormation;
-    }
-
-    public function setRythmeFormation(?string $rythmeFormation): self
-    {
-        $this->rythmeFormation = $rythmeFormation;
 
         return $this;
     }
@@ -420,5 +408,17 @@ class Parcours
     public function remplissage(): float
     {
         return 20;
+    }
+
+    public function getRythmeFormation(): ?RythmeFormation
+    {
+        return $this->rythmeFormation;
+    }
+
+    public function setRythmeFormation(?RythmeFormation $rythmeFormation): self
+    {
+        $this->rythmeFormation = $rythmeFormation;
+
+        return $this;
     }
 }

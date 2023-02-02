@@ -3,8 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Parcours;
-use App\Enums\RythmeFormationEnum;
+use App\Entity\RythmeFormation;
 use App\Form\Type\TextareaWithSaveType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -31,11 +32,11 @@ class ParcoursStep1Type extends AbstractType
                 'attr' => ['rows' => 20, 'maxlength' => 3000],
                 'button_action' => 'click->parcours--step1#saveResultats',
             ])
-            ->add('rythmeFormation', EnumType::class, [
+            ->add('rythmeFormation', EntityType::class, [
                 'label' => 'Rythme du parcours',
                 'help' => 'Indiquez le rythme de la formation (en heures, en jours, en semaines, en mois, en années, …).',
-                'class' => RythmeFormationEnum::class,
-                'translation_domain' => 'enum',
+                'class' => RythmeFormation::class,
+                'choice_label' => 'libelle',
                 'attr' => ['data-action' => 'change->parcours--step1#changeRythme'],
             ])
             ->add('rythmeFormationTexte', TextareaWithSaveType::class, [
