@@ -31,6 +31,7 @@ class TextareaWithSaveType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['button_action'] = 'data-action = '.$options['button_action'];
+        $view->vars['button_disabled'] = $options['disabled'];
         $view->vars['attr'] = array_merge($options['attr'], ['data-textarea-target' => 'input']);
     }
 

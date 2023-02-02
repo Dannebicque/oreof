@@ -15,8 +15,9 @@ class EcStep3Type extends AbstractType
         $builder
 
             ->add('objectifs', TextareaWithSaveType::class, [
-                'label' => 'Objectifs',
-                'attr' => ['maxlength' => 3000]
+                'label' => 'Objectifs de l\'enseignement',
+                'attr' => ['data-action' => 'change->ec--step3#saveObjectifs', 'maxlength' => 3000, 'rows' => 20],
+                'help' => 'Indiquez ici en 3000 caractères maximum les objectifs de l’enseignement.'
             ])
         ;
     }

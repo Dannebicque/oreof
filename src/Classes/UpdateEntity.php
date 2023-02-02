@@ -99,7 +99,7 @@ class UpdateEntity
         return false;
     }
 
-    public function removeToArray(Formation $formation, string $champ, mixed $value)
+    public function removeToArray(object $formation, string $champ, mixed $value)
     {
         $setMethod = 'set' . ucfirst($champ);
         $getMethod = 'get' . ucfirst($champ);

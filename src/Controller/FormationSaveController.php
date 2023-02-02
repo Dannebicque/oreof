@@ -30,40 +30,50 @@ class FormationSaveController extends BaseController
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
             case 'ville':
-                $rep = $updateEntity->saveCheckbox($formation, 'localisationMention', $data['value'], $data['isChecked'],
+                $rep = $updateEntity->saveCheckbox($formation, 'localisationMention', $data['value'],
+                    $data['isChecked'],
                     $villeRepository);
 
                 return $this->json($rep);
-                case 'composanteInscription':
-                $rep = $updateEntity->saveCheckbox($formation, 'composantesInscription', $data['value'], $data['isChecked'],
+            case 'composanteInscription':
+                $rep = $updateEntity->saveCheckbox($formation, 'composantesInscription', $data['value'],
+                    $data['isChecked'],
                     $composanteRepository);
 
                 return $this->json($rep);
             case 'yesNo':
                 $rep = $updateEntity->saveYesNo($formation, $data['field'], $data['value']);
+
                 return $this->json($rep);
             case 'textarea':
             case 'selectWithoutEntity':
                 $rep = $updateEntity->saveField($formation, $data['field'], $data['value']);
+
                 return $this->json($rep);
             case 'float':
                 $rep = $updateEntity->saveField($formation, $data['field'], (float)$data['value']);
+
                 return $this->json($rep);
             case 'modalitesEnseignement':
-                $rep = $updateEntity->saveField($formation, 'modalitesEnseignement', ModaliteEnseignementEnum::from($data['value']));
+                $rep = $updateEntity->saveField($formation, 'modalitesEnseignement',
+                    ModaliteEnseignementEnum::from($data['value']));
+
                 return $this->json($rep);
             case 'rythmeFormation':
                 $rythme = $rythmeFormationRepository->find($data['value']);
                 $rep = $updateEntity->saveField($formation, 'rythmeFormation', $rythme);
+
                 return $this->json($rep);
             case 'int':
                 $rep = $updateEntity->saveField($formation, $data['field'], (int)$data['value']);
+
                 return $this->json($rep);
             case 'structureSemestres':
                 $tSemestre = $formation->getStructureSemestres();
-                    $tSemestre[$data['semestre']] = $data['value'];
-               $formation->setStructureSemestres($tSemestre);
+                $tSemestre[$data['semestre']] = $data['value'];
+                $formation->setStructureSemestres($tSemestre);
                 $em->flush();
+
                 return $this->json(true);
 
             case 'array':

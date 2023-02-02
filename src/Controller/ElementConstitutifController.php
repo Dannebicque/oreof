@@ -7,6 +7,7 @@ use App\Entity\Ue;
 use App\Form\EcStep4Type;
 use App\Form\ElementConstitutifType;
 use App\Repository\ElementConstitutifRepository;
+use App\Repository\LangueRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,9 @@ class ElementConstitutifController extends AbstractController
     }
 
     #[Route('/new/{ue}', name: 'app_element_constitutif_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ElementConstitutifRepository $elementConstitutifRepository, Ue $ue): Response
+    public function new(
+        LangueRepository $langueRepository,
+        Request $request, ElementConstitutifRepository $elementConstitutifRepository, Ue $ue): Response
     {
         $elementConstitutif = new ElementConstitutif();
         $elementConstitutif->setUe($ue);
@@ -34,6 +37,13 @@ class ElementConstitutifController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $langueFr = $langueRepository->findOneBy(['code' => 'fr']);
+            if ($langueFr !== null) {
+                $elementConstitutif->addLangueDispense($langueFr);
+                $langueFr->addElementConstitutif($elementConstitutif);
+                $elementConstitutif->addLangueSupport($langueFr);
+                $langueFr->addLanguesSupportsEc($elementConstitutif);
+            }
             $elementConstitutifRepository->save($elementConstitutif, true);
 
             return $this->json(true);
@@ -64,13 +74,20 @@ class ElementConstitutifController extends AbstractController
     #[Route('/{id}/structure-ec', name: 'app_element_constitutif_structure', methods: ['GET', 'POST'])]
     public function structureEc(ElementConstitutif $elementConstitutif): Response
     {
-        $form = $this->createForm(EcStep4Type::class, $elementConstitutif, [
-            'action' => $this->generateUrl('app_element_constitutif_structure', ['id' => $elementConstitutif->getId()]),
-        ]);
+        if ($this->isGranted('ROLE_RESP_FORMATION')) {
+            $form = $this->createForm(EcStep4Type::class, $elementConstitutif, [
+                'action' => $this->generateUrl('app_element_constitutif_structure',
+                    ['id' => $elementConstitutif->getId()]),
+            ]);
 
-        return $this->render('element_constitutif/_structureEc.html.twig', [
+            return $this->render('element_constitutif/_structureEc.html.twig', [
+                'ec' => $elementConstitutif,
+                'form' => $form->createView(),
+            ]);
+        }
+
+        return $this->render('element_constitutif/_structureEcNonEditable.html.twig', [
             'ec' => $elementConstitutif,
-            'form' => $form->createView(),
         ]);
     }
 

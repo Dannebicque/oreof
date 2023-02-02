@@ -12,9 +12,9 @@ export default class extends Controller {
   }
 
   saveModaliteEnseignement(event) {
+    console.log('toto')
     saveData(this.urlSaveValue, {
-      action: 'selectWithoutEntity',
-      field: 'modaliteEnseignement',
+      action: 'modalitesEnseignement',
       value: event.target.value,
     })
   }

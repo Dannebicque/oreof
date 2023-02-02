@@ -17,9 +17,18 @@
                         : '<span class="badge bg-danger">Erreur !</span>' }}</dd>
                     <dt>UE</dt>
                     <dd>{{ ec.ue != null ? ec.ue.display : '<span class="badge bg-danger">Erreur !</span>' }}</dd>
-
                 </dl>
             </div>
+            <div class="col-12">
+                <strong>Reponsable de l'EC :</strong><br>
+                {% if ec.responsableEc != null %}
+                    {{ ec.responsableEc.display }}<br>
+                    <a href="mailto:{{ ec.responsableEc.email }}">{{ ec.responsableEc.email }}</a>
+                {% else %}
+                    <span class="badge bg-danger">Erreur !</span>
+                {% endif %}
+            </div>
         </div>
+
     </div>
 </div>

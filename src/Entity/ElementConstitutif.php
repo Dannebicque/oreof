@@ -39,7 +39,7 @@ class ElementConstitutif
     private Collection $competences;
 
     #[ORM\Column(length: 30, nullable: true, enumType: ModaliteEnseignementEnum::class )]
-    private ?string $modaliteEnseignement = null;
+    private ?ModaliteEnseignementEnum $modaliteEnseignement = null;
 
     #[ORM\Column]
     private ?float $ects = 0;
@@ -62,6 +62,24 @@ class ElementConstitutif
     #[ORM\Column]
     private ?float $volumeTpDistanciel = 0;
 
+    #[ORM\Column]
+    private ?bool $isCmPresentielMutualise = true;
+
+    #[ORM\Column]
+    private ?bool $isTdPresentielMutualise = true;
+
+    #[ORM\Column]
+    private ?bool $isTpPresentielMutualise = true;
+
+    #[ORM\Column]
+    private ?bool $isCmDistancielMutualise = true;
+
+    #[ORM\Column]
+    private ?bool $isTdDistancielMutualise = true;
+
+    #[ORM\Column]
+    private ?bool $isTpDistancielMutualise = true;
+
     #[ORM\ManyToOne]
     private ?User $responsableEc = null;
 
@@ -72,6 +90,9 @@ class ElementConstitutif
     #[ORM\ManyToMany(targetEntity: Langue::class, inversedBy: 'languesSupportsEcs')]
     #[ORM\JoinTable(name: 'element_constitutif_langue_support')]
     private Collection $langueSupport;
+
+    #[ORM\ManyToOne]
+    private ?TypeEnseignement $typeEnseignement = null;
 
     public function __construct()
     {
@@ -181,12 +202,12 @@ class ElementConstitutif
         return $this;
     }
 
-    public function getModaliteEnseignement(): ?string
+    public function getModaliteEnseignement(): ?ModaliteEnseignementEnum
     {
         return $this->modaliteEnseignement;
     }
 
-    public function setModaliteEnseignement(?string $modaliteEnseignement): self
+    public function setModaliteEnseignement(?ModaliteEnseignementEnum $modaliteEnseignement): self
     {
         $this->modaliteEnseignement = $modaliteEnseignement;
 
@@ -372,5 +393,94 @@ class ElementConstitutif
         $this->langueSupport->removeElement($langueSupport);
 
         return $this;
+    }
+
+    public function isIsCmPresentielMutualise(): ?bool
+    {
+        return $this->isCmPresentielMutualise;
+    }
+
+    public function setIsCmPresentielMutualise(bool $isCmPresentielMutualise): self
+    {
+        $this->isCmPresentielMutualise = $isCmPresentielMutualise;
+
+        return $this;
+    }
+
+    public function isIsTdPresentielMutualise(): ?bool
+    {
+        return $this->isTdPresentielMutualise;
+    }
+
+    public function setIsTdPresentielMutualise(bool $isTdPresentielMutualise): self
+    {
+        $this->isTdPresentielMutualise = $isTdPresentielMutualise;
+
+        return $this;
+    }
+
+    public function isIsTpPresentielMutualise(): ?bool
+    {
+        return $this->isTpPresentielMutualise;
+    }
+
+    public function setIsTpPresentielMutualise(bool $isTpPresentielMutualise): self
+    {
+        $this->isTpPresentielMutualise = $isTpPresentielMutualise;
+
+        return $this;
+    }
+
+    public function isIsCmDistancielMutualise(): ?bool
+    {
+        return $this->isCmDistancielMutualise;
+    }
+
+    public function setIsCmDistancielMutualise(bool $isCmDistancielMutualise): self
+    {
+        $this->isCmDistancielMutualise = $isCmDistancielMutualise;
+
+        return $this;
+    }
+
+    public function isIsTdDistancielMutualise(): ?bool
+    {
+        return $this->isTdDistancielMutualise;
+    }
+
+    public function setIsTdDistancielMutualise(bool $isTdDistancielMutualise): self
+    {
+        $this->isTdDistancielMutualise = $isTdDistancielMutualise;
+
+        return $this;
+    }
+
+    public function isIsTpDistancielMutualise(): ?bool
+    {
+        return $this->isTpDistancielMutualise;
+    }
+
+    public function setIsTpDistancielMutualise(bool $isTpDistancielMutualise): self
+    {
+        $this->isTpDistancielMutualise = $isTpDistancielMutualise;
+
+        return $this;
+    }
+
+    public function getTypeEnseignement(): ?TypeEnseignement
+    {
+        return $this->typeEnseignement;
+    }
+
+    public function setTypeEnseignement(?TypeEnseignement $typeEnseignement): self
+    {
+        $this->typeEnseignement = $typeEnseignement;
+
+        return $this;
+    }
+
+    public function getFormation(): ?Formation
+    {
+        return $this->getUe()?->getSemestre()?->getFormation() !== null ? $this->getUe()?->getSemestre()?->getFormation() : $this->getUe()?->getSemestre()?->getParcours()?->getFormation();
     }
 }

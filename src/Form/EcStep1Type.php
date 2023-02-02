@@ -3,30 +3,74 @@
 namespace App\Form;
 
 use App\Entity\ElementConstitutif;
+use App\Entity\User;
 use App\Form\Type\TextareaWithSaveType;
 use App\Form\Type\YesNoType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class EcStep1Type extends AbstractType
 {
+    private ?AuthorizationCheckerInterface $authorizationChecker=null;
+
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
+    {
+        $this->authorizationChecker=$authorizationChecker;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('libelle', TextType::class, [
-                'label' => 'Libellé',
-                'disabled' => true, //non modifiable sauf si Respo_Formation
-                'attr' => ['maxlength' => 255]
+            ->add('responsableEc', EntityType::class, [
+                'label' => 'Responsable de l\'EC',
+                'class' => User::class,
+                'disabled' => $this->authorizationChecker->isGranted('ROLE_RESP_FORMATION') ? false : true,
+                'attr' => ['data-action' => 'change->ec--step1#changeResponsableEc'],
+                'choice_label' => 'display',
             ])
-            ->add('libelleAnglais', TextType::class, [
+            ->add('libelle', TextareaWithSaveType::class, [
+                'label' => 'Libellé',
+                'disabled' => $this->authorizationChecker->isGranted('ROLE_RESP_FORMATION') ? false : true,
+                'attr' => ['data-action' => 'change->ec--step1#saveContenuFr', 'maxlength' => 255],
+                'help' => 'N\'est modifiable que par le responsable de la formation',
+            ])
+            ->add('libelleAnglais', TextareaWithSaveType::class, [
                 'label' => 'Libellé anglais',
-                'attr' => ['maxlength' => 255]
+                'attr' => ['data-action' => 'change->ec--step1#saveContenuEn', 'maxlength' => 255],
+                'help' => 'Précisez la version anglaise du libellé de l\'EC',
             ])
             ->add('enseignementMutualise', YesNoType::class, [
+                'attr' => ['data-action' => 'change->ec--step1#changeEnseignementMutualise'],
                 'label' => 'Enseignement mutualisé ?',
-            ])//si oui ajouter le cboix des formations/Parcours?
+                'help' => 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez cette case.',
+            ])
+            ->add('isCmPresentielMutualise', YesNoType::class, [
+                'attr' => ['data-action' => 'change->ec--step1#isMutualise', 'data-ec--step1-type-param' => 'isCmPresentielMutualise'],
+                'label' => 'Les CM présentiels sont-ils mutualisés',
+            ])
+            ->add('isTdPresentielMutualise', YesNoType::class, [
+                'attr' => ['data-action' => 'change->ec--step1#isMutualise', 'data-ec--step1-type-param' => 'isTdPresentielMutualise'],
+                'label' => 'Les TD présentiels sont-ils mutualisés',
+            ])
+            ->add('isTpPresentielMutualise', YesNoType::class, [
+                'attr' => ['data-action' => 'change->ec--step1#isMutualise', 'data-ec--step1-type-param' => 'isTpPresentielMutualise'],
+                'label' => 'Les TP présentiels sont-ils mutualisés',
+            ])
+            ->add('isCmDistancielMutualise', YesNoType::class, [
+                'attr' => ['data-action' => 'change->ec--step1#isMutualise', 'data-ec--step1-type-param' => 'isCmDistancielMutualise'],
+                'label' => 'Les CM distanciels sont-ils mutualisés',
+            ])
+            ->add('isTdDistancielMutualise', YesNoType::class, [
+                'attr' => ['data-action' => 'change->ec--step1#isMutualise', 'data-ec--step1-type-param' => 'isTdDistancielMutualise'],
+                'label' => 'Les TD distanciels sont-ils mutualisés',
+            ])
+            ->add('isTpDistancielMutualise', YesNoType::class, [
+                'attr' => ['data-action' => 'change->ec--step1#isMutualise', 'data-ec--step1-type-param' => 'isTpDistancielMutualise'],
+                'label' => 'Les TP distanciels sont-ils mutualisés',
+            ])
         ;
     }
 

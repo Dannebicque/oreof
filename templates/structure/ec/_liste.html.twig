@@ -16,7 +16,8 @@
                 <td>{{ ec.libelle }}</td>
                 <td>{{ ec.responsableEc != null ? ec.responsableEc.display : 'Non défini' }}</td>
                 <td>{{ ec.remplissage|remplissage }}</td>
-                <td><button
+                <td>
+                    <button
                             {{ stimulus_controller('modal', {
                                 size: 'lg',
                                 modalTitle: 'Volumes Horaires',
@@ -30,8 +31,11 @@
                     >
                         <i class="fal fa-clock"></i>
                         <span> Volumes Horaires</span>
-                        <span class="badge bg-success">{{ ec.etatStructure }}</span>
-                    </button></td>
+                        <span class="badge bg-{% if ec.EtatStructure == 'Complet' %}success{% else %}warning{% endif %}">
+                            {{ ec.etatStructure }}
+                        </span>
+                    </button>
+                </td>
                 <td>
                     <button
                             {{ stimulus_controller('modal', {
@@ -47,7 +51,8 @@
                     >
                         <i class="fal fa-marker"></i>
                         <span> MCC </span>
-                    </button></td>
+                    </button>
+                </td>
                 <td class="text-end">
                     <button
                             {{ stimulus_controller('modal', {

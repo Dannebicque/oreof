@@ -1,0 +1,51 @@
+<div>
+    {% if ec.modaliteEnseignement == null %}
+    <div class="alert alert-danger">
+        Informations sur les modalités d'enseignement non renseignées
+    </div>
+    {% else %}
+
+            <dl>
+                <dt>Modalités d'enseignement</dt>
+                <dd>{{ ec.modaliteEnseignement.libelle }}</dd>
+            </dl>
+            <dl>
+                <dt>ECTS</dt>
+                <dd>{{ ec.ects }}</dd>
+            </dl>
+        {% if ec.modaliteEnseignement.value != 2 %}
+            <h3>Volume Présentiel</h3>
+            <div class="row">
+                <div class="col-4">CM</div>
+                <div class="col-4">TD</div>
+                <div class="col-4">TP</div>
+            </div>
+            <div class="row">
+                <div class="col-4">{{ ec.volumeCmPresentiel }}</div>
+                <div class="col-4">{{ ec.volumeTdPresentiel }}</div>
+                <div class="col-4">{{ ec.volumeTpPresentiel }}</div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                Formation proposée uniquement en distanciel
+            </div>
+        {% endif %}
+        {% if ec.modaliteEnseignement.value != 0 %}
+            <h3 class="mt-2">Volume Distanciel</h3>
+            <div class="row">
+                <div class="col-4">CM</div>
+                <div class="col-4">TD</div>
+                <div class="col-4">TP</div>
+            </div>
+            <div class="row">
+                <div class="col-4">{{ ec.volumeCmDistanciel }}</div>
+                <div class="col-4">{{ ec.volumeTdDistanciel }}</div>
+                <div class="col-4">{{ ec.volumeTpDistanciel }}</div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                Formation proposée uniquement en présentiel
+            </div>
+        {% endif %}
+    {% endif %}
+</div>

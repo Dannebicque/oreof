@@ -23,7 +23,6 @@ export default class extends Controller {
   }
 
   get count() {
-    console.log(this.inputTarget)
     let value = this.inputTarget.value.length
     return Math.max(this.maxLength - value, 0)
   }

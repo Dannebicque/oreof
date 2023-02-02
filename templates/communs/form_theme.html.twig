@@ -6,15 +6,16 @@
     {%- if help is not empty -%}
         {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
     {%- endif -%}
-    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %} {{ stimulus_controller('textarea') }}>
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %} {% if button_disabled == false %}{{
+    stimulus_controller('textarea') }}{% endif %} class="mb-3">
         {{- form_label(form) -}}
         {{- form_errors(form) -}}
         {{- form_widget(form, widget_attr) -}}
         {%- if help is not empty -%}
-            {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' help-text')|trim}) -%}
+            {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' text-small')|trim}) -%}
             <div id="{{ id }}_help"{% with { attr: help_attr } %}{{ block('attributes') }}{% endwith %}>
                 {{- block('form_help_content') -}}.
-                <span {{ stimulus_target('textarea', 'texte') }}></span>
+                <span {{ stimulus_target('textarea', 'texte') }} class="text-small text-secondary"></span>
             </div>
         {%- endif -%}
     </div>
@@ -29,6 +30,7 @@
             <div class="d-grid" style="height: 100%">
                 <button
                         type="button"
+                        {{ button_disabled == true ? 'disabled' : '' }}
                         class="btn btn-success d-block"
                         style="height: 100%"
                         {{ button_action }}

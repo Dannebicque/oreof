@@ -10,6 +10,8 @@ use App\Form\EcStep2Type;
 use App\Form\EcStep3Type;
 use App\Form\EcStep4Type;
 use App\Form\EcStep5Type;
+use App\Repository\BlocCompetenceRepository;
+use App\Repository\LangueRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +39,8 @@ class ElementConstitutifWizardController extends AbstractController
     }
 
     #[Route('/{ec}/2', name: 'app_ec_wizard_step_2', methods: ['GET'])]
-    public function step2(ElementConstitutif $ec): Response
+    public function step2(
+        ElementConstitutif $ec): Response
     {
         $form = $this->createForm(EcStep2Type::class, $ec);
 
@@ -45,13 +48,12 @@ class ElementConstitutifWizardController extends AbstractController
         return $this->render('element_constitutif_wizard/_step2.html.twig', [
             'form' => $form->createView(),
             'ec' => $ec,
-
         ]);
     }
 
     #[Route('/{ec}/3', name: 'app_ec_wizard_step_3', methods: ['GET'])]
     public function step3(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
+        BlocCompetenceRepository $blocCompetenceRepository,
         ElementConstitutif $ec
     ): Response {
         $form = $this->createForm(EcStep3Type::class, $ec);
@@ -59,6 +61,7 @@ class ElementConstitutifWizardController extends AbstractController
         return $this->render('element_constitutif_wizard/_step3.html.twig', [
             'ec' => $ec,
             'form' => $form->createView(),
+            'bcs' => $blocCompetenceRepository->findBy(['formation' => $ec->getFormation()]),
         ]);
     }
 
