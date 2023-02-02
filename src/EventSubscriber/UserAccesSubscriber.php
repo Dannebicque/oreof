@@ -62,7 +62,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onUserValideAdmin(UserEvent $event)
+    public function onUserValideAdmin(UserEvent $event): void
     {
         $user = $event->getUser();
         $this->myMailer->initEmail();
@@ -72,7 +72,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
         $this->myMailer->sendMessage([$user->getEmail()], '[ORéOF] Validation demande accès');
     }
 
-    public function onUserValideDpe(UserEvent $event)
+    public function onUserValideDpe(UserEvent $event): void
     {
         $user = $event->getUser();
         $this->myMailer->initEmail();

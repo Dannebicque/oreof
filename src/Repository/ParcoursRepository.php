@@ -40,7 +40,7 @@ class ParcoursRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByFormation(Formation $formation)
+    public function findByFormation(Formation $formation): array
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.formation = :formation')

@@ -63,9 +63,11 @@ class FormationRepository extends ServiceEntityRepository
             //todo: les formations dans lesquels il est impliqué ?
             //todo: comment on a le lien DPE => Composante et Composante => Formation ?
         }
+
+        return [];
     }
 
-    private function findByComposateDpe(UserInterface $user)
+    private function findByComposateDpe(UserInterface $user): array
     {
         return $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')

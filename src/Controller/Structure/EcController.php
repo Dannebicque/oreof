@@ -4,6 +4,7 @@ namespace App\Controller\Structure;
 use App\Entity\Ue;
 use App\Repository\ElementConstitutifRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[
@@ -14,7 +15,7 @@ class EcController extends AbstractController
     #[
         Route('/', name: 'index')
     ]
-    public function index()
+    public function index(): Response
     {
         return $this->render('structure/ec/index.html.twig', [
 
@@ -24,7 +25,7 @@ class EcController extends AbstractController
     #[
         Route('/liste', name: 'liste')
     ]
-    public function liste(ElementConstitutifRepository $elementConstitutifRepository,)
+    public function liste(ElementConstitutifRepository $elementConstitutifRepository): Response
     {
         $ecs = $elementConstitutifRepository->findByRoleUser($this->getUser());
         return $this->render('structure/ec/_liste.html.twig', [
@@ -37,7 +38,7 @@ class EcController extends AbstractController
     ]
     public function detailComposante(
         ElementConstitutifRepository $elementConstitutifRepository,
-        Ue $ue)
+        Ue $ue): Response
     {
         $ecs = $elementConstitutifRepository->findBy(['ue' => $ue]);
 

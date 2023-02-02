@@ -4,6 +4,7 @@ namespace App\Controller\Structure;
 
 use App\Repository\ComposanteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[
@@ -14,7 +15,7 @@ class ComposanteController extends AbstractController
     #[
         Route('/', name: 'index')
     ]
-    public function index()
+    public function index(): Response
     {
         return $this->render('structure/composante/index.html.twig', [
         ]);
@@ -25,7 +26,7 @@ class ComposanteController extends AbstractController
     ]
     public function liste(
         ComposanteRepository $composanteRepository
-    )
+    ): Response
     {
         if ($this->isGranted('ROLE_SES')) {
             $composantes = $composanteRepository->findAll();
@@ -33,6 +34,7 @@ class ComposanteController extends AbstractController
             $composantes = $composanteRepository->findBy(['responsableDpe' => $this->getUser()]);
         } else {
             //todo: find des composantes d'attachement en lecture ?
+            $composantes = [];
         }
 
 

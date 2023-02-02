@@ -400,13 +400,15 @@ class Parcours
         return $this;
     }
 
-    public function etat()
+    public function etat(): string
     {
+        //todo: a gérer
         return 'En cours de rédaction';
     }
 
     public function remplissage(): float
     {
+        //todo: a gérer
         return 20;
     }
 

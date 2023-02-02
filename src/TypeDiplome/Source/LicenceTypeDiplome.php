@@ -25,6 +25,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         //semestres
         $semestres = $formation->getStructureSemestres();
         foreach ($semestres as $key => $format) {
+            $semestre = null;
             if ($format === 'tronc_commun') {
                 $semestre = new Semestre();
                 $semestre->setFormation($formation);
@@ -38,7 +39,9 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                     $this->entityManager->persist($semestre);
                 }
             }
-            $this->generesUe($semestre);
+            if ($semestre !== null) {
+                $this->generesUe($semestre);
+            }
         }
 
         $this->entityManager->flush();

@@ -20,7 +20,7 @@ class BlocCompetenceController extends AbstractController
     public function listeFormation(BlocCompetenceRepository $blocCompetenceRepository, Formation $formation): Response
     {
         return $this->render('bloc_competence/_liste.html.twig', [
-            'bloc_competences' => $blocCompetenceRepository->findByFormation(['formation' => $formation->getId()]),
+            'bloc_competences' => $blocCompetenceRepository->findByFormation($formation),
         ]);
     }
 
@@ -28,7 +28,7 @@ class BlocCompetenceController extends AbstractController
     public function listeParcours(BlocCompetenceRepository $blocCompetenceRepository, Parcours $parcours): Response
     {
         return $this->render('bloc_competence/_liste.html.twig', [
-            'bloc_competences' => $blocCompetenceRepository->findByParcours(['parcours' => $parcours->getId()]),
+            'bloc_competences' => $blocCompetenceRepository->findByParcours($parcours),
         ]);
     }
 

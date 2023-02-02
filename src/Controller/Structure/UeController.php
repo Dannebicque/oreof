@@ -5,6 +5,7 @@ namespace App\Controller\Structure;
 use App\Entity\Semestre;
 use App\Repository\UeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[
@@ -17,7 +18,7 @@ class UeController extends AbstractController
     ]
     public function detailComposante(
         UeRepository $ueRepository,
-        Semestre $semestre)
+        Semestre $semestre): Response
     {
         $ues = $ueRepository->findBy(['semestre' => $semestre]);
 

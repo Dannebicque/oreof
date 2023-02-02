@@ -9,8 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class FormationStructure
 {
     public function __construct(
-        private TypeDiplomeRegistry $typeDiplomeRegistry,
-        private EntityManagerInterface $entityManager
+        private readonly TypeDiplomeRegistry $typeDiplomeRegistry
     ){}
 
     public function genereStructre(Formation $formation): void

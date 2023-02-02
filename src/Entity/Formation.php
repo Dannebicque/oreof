@@ -553,13 +553,13 @@ class Formation
         $total = 0;
         $total += $this->getMention() === null ? 0 : 1;
         $total += $this->getMentionTexte() === null ? 0 : 1;
-        $total += $this->getRegimeInscription() === null ? 0 : 1;
+        $total += count($this->getRegimeInscription()) === 0 ? 0 : 1;
         $total += $this->getContenuFormation() === null ? 0 : 1;
         $total += $this->getResultatsAttendus() === null ? 0 : 1;
         $total += $this->getRythmeFormation() === null ? 0 : 1;
         $total += $this->getRythmeFormationTexte() === null ? 0 : 1;
         $total += $this->isHasParcours() === null ? 0 : 1;
-        $total += $this->getStructureSemestres() === null ? 0 : 1;
+        $total += count($this->getStructureSemestres()) === 0 ? 0 : 1;
 
         return $total / 9 * 100;
     }

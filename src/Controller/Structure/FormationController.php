@@ -5,6 +5,7 @@ namespace App\Controller\Structure;
 use App\Entity\Composante;
 use App\Repository\FormationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[
@@ -15,7 +16,7 @@ class FormationController extends AbstractController
     #[
         Route('/', name: 'index')
     ]
-    public function index()
+    public function index(): Response
     {
         return $this->render('structure/formation/index.html.twig', [
 
@@ -27,7 +28,7 @@ class FormationController extends AbstractController
     ]
     public function liste(
         FormationRepository $formationRepository
-    )
+    ): Response
     {
         $formations = $formationRepository->findByRoleUser($this->getUser());
 
@@ -41,7 +42,7 @@ class FormationController extends AbstractController
     ]
     public function detailComposante(
         FormationRepository $formationRepository,
-        Composante $composante)
+        Composante $composante): Response
     {
         $formations = $formationRepository->findBy(['composantePorteuse' => $composante]);//todo: filtrer selon droits ? Ajouter les co-portées ? avec une mise en valeur et sans édition ? si resp DPE
 

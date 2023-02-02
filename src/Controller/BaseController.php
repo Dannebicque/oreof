@@ -27,7 +27,7 @@ class BaseController extends AbstractController
         }
     }
 
-    protected function toast(string $type, $text, $title = null): void
+    protected function toast(string $type, string $text, ?string $title = null): void
     {
         $this->addFlash('toast', [
             'type' => $type,

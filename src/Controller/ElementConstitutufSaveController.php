@@ -10,6 +10,7 @@ use App\Repository\TypeEnseignementRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ElementConstitutufSaveController extends BaseController
@@ -22,7 +23,7 @@ class ElementConstitutufSaveController extends BaseController
         UpdateEntity $updateEntity,
         Request $request,
         ElementConstitutif $ec
-    ) {
+    ): Response {
         //todo: check si bonne formation...
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
@@ -55,9 +56,6 @@ class ElementConstitutufSaveController extends BaseController
                     ModaliteEnseignementEnum::from($data['value']));
 
                 return $this->json($rep);
-//            case 'rythmeFormation':
-//                $rep = $updateEntity->saveField($ec, 'rythmeFormation', RythmeFormationEnum::from($data['value']));
-//                return $this->json($rep);
             case 'int':
                 $rep = $updateEntity->saveField($ec, $data['field'], (int)$data['value']);
 
@@ -72,6 +70,8 @@ class ElementConstitutufSaveController extends BaseController
 
                 return $this->json($rep);
         }
+        return $this->json(['error' => 'action inconnue']);
+
     }
 
 

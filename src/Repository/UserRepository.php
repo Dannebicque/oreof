@@ -56,7 +56,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->save($user, true);
     }
 
-    public function findNotEnableAvecDemande()
+    public function findNotEnableAvecDemande(): array
     {
         return $this->createQueryBuilder('u')
             ->where('u.isEnable = :isEnable')
@@ -68,7 +68,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
     }
 
-    public function findByRole(string $role)
+    public function findByRole(string $role): array
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.roles LIKE :role')

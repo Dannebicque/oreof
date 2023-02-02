@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\BlocCompetence;
+use App\Entity\Formation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,28 +40,24 @@ class BlocCompetenceRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return BlocCompetence[] Returns an array of BlocCompetence objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByFormation(Formation $formation): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.formation = :formation')
+            ->setParameter('formation', $formation)
+            ->orderBy('b.ordre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?BlocCompetence
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByParcours(\App\Entity\Parcours $parcours): array
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.parcours = :parcours')
+            ->setParameter('parcours', $parcours)
+            ->orderBy('b.ordre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

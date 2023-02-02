@@ -5,13 +5,13 @@ namespace App\Controller;
 use App\Classes\UpdateEntity;
 use App\Entity\Formation;
 use App\Enums\ModaliteEnseignementEnum;
-use App\Enums\RythmeFormationEnum;
 use App\Repository\ComposanteRepository;
 use App\Repository\RythmeFormationRepository;
 use App\Repository\VilleRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class FormationSaveController extends BaseController
@@ -25,7 +25,7 @@ class FormationSaveController extends BaseController
         ComposanteRepository $composanteRepository,
         Request $request,
         Formation $formation
-    ) {
+    ): Response {
         //todo: check si bonne formation...
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
@@ -86,6 +86,8 @@ class FormationSaveController extends BaseController
 
                 return $this->json($rep);
         }
+        return $this->json(['error' => 'action inconnue']);
+
     }
 
 

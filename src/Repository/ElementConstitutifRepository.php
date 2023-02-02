@@ -45,7 +45,7 @@ class ElementConstitutifRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByRoleUser(?UserInterface $user)
+    public function findByRoleUser(UserInterface $user): array
     {
         $roles = $user->getRoles();
 

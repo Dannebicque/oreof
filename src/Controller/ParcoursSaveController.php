@@ -57,5 +57,7 @@ class ParcoursSaveController extends AbstractController
 
                 return $this->json($rep);
         }
+
+        return $this->json(['error' => 'action inconnue']);
     }
 }

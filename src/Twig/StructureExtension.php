@@ -24,11 +24,11 @@ class StructureExtension extends AbstractExtension
 
     public function badgeEctsUe(float $ects, float $max = 0): string
     {
-        if ($max === 0 && $ects === 0) {
+        if ($max === 0.0 && $ects === 0.0) {
             return sprintf('<span class="badge bg-warning">%s ECTS</span>', $ects);
         }
 
-        if ($max === 0 && $ects !== 0) {
+        if ($max === 0.0 && $ects !== 0.0) {
             return sprintf('<span class="badge bg-success">%s ECTS</span>', $ects);
         }
 

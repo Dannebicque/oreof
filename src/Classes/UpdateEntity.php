@@ -18,7 +18,7 @@ class UpdateEntity
         mixed $value,
         mixed $isChecked,
         ServiceEntityRepository $repository
-    ) {
+    ): bool {
         $ville = $repository->find($value);
         if ($ville !== null) {
             if ($isChecked) {
@@ -44,7 +44,7 @@ class UpdateEntity
         object $formation,
         string $champ,
         mixed $value
-    ) {
+    ): bool {
         $method = 'set' . ucfirst($champ);
         if (method_exists($formation, $method)) {
             $formation->$method((bool)$value);
@@ -60,7 +60,7 @@ class UpdateEntity
         object $formation,
         string $champ,
         mixed $value
-    ) {
+    ): bool {
         $method = 'set' . ucfirst($champ);
         if (method_exists($formation, $method)) {
             $formation->$method($value);
@@ -72,7 +72,7 @@ class UpdateEntity
         return false;
     }
 
-    public function addToArray(object $formation, string $champ, mixed $value)
+    public function addToArray(object $formation, string $champ, mixed $value): bool
     {
         $setMethod = 'set' . ucfirst($champ);
         $getMethod = 'get' . ucfirst($champ);
@@ -99,7 +99,7 @@ class UpdateEntity
         return false;
     }
 
-    public function removeToArray(object $formation, string $champ, mixed $value)
+    public function removeToArray(object $formation, string $champ, mixed $value): bool
     {
         $setMethod = 'set' . ucfirst($champ);
         $getMethod = 'get' . ucfirst($champ);

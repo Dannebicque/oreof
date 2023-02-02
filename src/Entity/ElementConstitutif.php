@@ -481,6 +481,6 @@ class ElementConstitutif
 
     public function getFormation(): ?Formation
     {
-        return $this->getUe()?->getSemestre()?->getFormation() !== null ? $this->getUe()?->getSemestre()?->getFormation() : $this->getUe()?->getSemestre()?->getParcours()?->getFormation();
+        return $this->getUe()?->getSemestre()?->getFormation() ?? $this->getUe()?->getSemestre()?->getParcours()?->getFormation();
     }
 }
