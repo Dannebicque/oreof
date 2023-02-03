@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/Dannebicque/oreof/compare/v0.0.5...v0.0.6) (2023-02-03)
+
+
+### Features
+
+* [EC + Structure] Structure et EC ([f23e161](https://github.com/Dannebicque/oreof/commit/f23e161d76bc03470f8615dfac89b813c3fc6478))
+* [EC + Structure] Structure et EC ([18d21f2](https://github.com/Dannebicque/oreof/commit/18d21f232f2dfdb202ac169471ad241f481de147))
+* [EC + Structure] Structure et EC ([8671c52](https://github.com/Dannebicque/oreof/commit/8671c52c012048032a9fda135e3053f454203fb2))
+* [EC + Structure] Titres, boutons, bouton détail pour refermer ([2a8d181](https://github.com/Dannebicque/oreof/commit/2a8d181ffa6dc185cef440ecfb41544a7921b907))
+* [LAngue] Gestion des langues disponibles ([6a52702](https://github.com/Dannebicque/oreof/commit/6a5270285cda72da2d04c00eebf98e1e3471e017))
+* [Rythme de formation] Gestion des Rythme de formation disponibles ([4e434bb](https://github.com/Dannebicque/oreof/commit/4e434bb3d39384aafea8564a77332159c94f8c18))
+* [Structure] Affichage de la structure composante/formation/parcours/semestre/UE. Nombreux correctifs ([9747108](https://github.com/Dannebicque/oreof/commit/97471080665d480ca6e7283e87788a8e6fc519b7))
+* [Type UE et Type Enseignement] Gestion des Type UE et Type Enseignement disponibles ([a7114d4](https://github.com/Dannebicque/oreof/commit/a7114d486fcb4adbf9b28a203bca731cdf9f22f6))
+* Affichages divers, ECTS Semestres et UE ([3956972](https://github.com/Dannebicque/oreof/commit/3956972307a9b582142737480a5dfc1c87cf1fb4))
+* Création d'un EC ([d44159e](https://github.com/Dannebicque/oreof/commit/d44159e3c6245eb167ba5e626e7a032a06377432))
+* Réorganisation Parcours, UE, Semestre. Semestre mutualisable sur plusieurs parcours, EC sur plusieurs UE. Les Blocs de compétences uniquement sur les parcours ([e23d017](https://github.com/Dannebicque/oreof/commit/e23d017388ca12b44549ef8d924f4d9c1ba51871))
+
+
+### Bug Fixes
+
+* [Année Universitaire] Modification des champs ([d6f0b56](https://github.com/Dannebicque/oreof/commit/d6f0b563c02204e07630e311c0a7cc2d4b82c7c1))
+* [Structure] sur tronc commun ([370ebdb](https://github.com/Dannebicque/oreof/commit/370ebdb742e86f922ceacfa7c18cb8f08cee4d16))
+
 ### [0.0.5](https://github.com/Dannebicque/oreof/compare/v0.0.4...v0.0.5) (2023-01-27)
 
 
