@@ -1,6 +1,6 @@
 import Toast from '../components/Toast'
 
-export function addCallout(message, label) {
+export default function addCallout(message, label) {
   switch (label) {
     case 'success':
       Toast.success(message)
@@ -15,5 +15,7 @@ export function addCallout(message, label) {
     case 'info':
       Toast.info(message)
       break
+    default:
+      Toast.info(message)
   }
 }

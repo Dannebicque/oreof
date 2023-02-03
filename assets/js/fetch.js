@@ -5,29 +5,17 @@
 // @lastUpdate 10/06/2021 17:23
 
 const request = (url, params = {}, method = 'GET') => {
-  let options = {
-    method
+  const options = {
+    method,
   }
-  if ('GET' === method) {
-    url += '?' + (new URLSearchParams(params)).toString()
+  if (method === 'GET') {
+    url += `?${(new URLSearchParams(params)).toString()}`
   } else {
     options.body = JSON.stringify(params)
   }
 
-  return fetch(url, options).then(response => response.json())
+  return fetch(url, options).then((response) => response.json())
 }
 
 export const get = (url, params) => request(url, params, 'GET')
 export const post = (url, params) => request(url, params, 'POST')
-
-export const load = (url, params, objet) => {
-  objet.innerHTML = ''
-  fetch(Routing.generate(url, params))
-    .then(function (response) {
-      return response.text()
-    })
-    .then(function (body) {
-      objet.innerHTML = body
-    })
-}
-
