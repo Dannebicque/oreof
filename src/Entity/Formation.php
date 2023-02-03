@@ -94,9 +94,6 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: Parcours::class)]
     private Collection $parcours;
 
-    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: Semestre::class)]
-    private Collection $semestres;
-
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: BlocCompetence::class)]
     private Collection $blocCompetences;
 

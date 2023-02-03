@@ -38,16 +38,20 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 5 => 'tronc_commun',
                 6 => 'tronc_commun',
             ];
-
+            $formation->addParcour($parcours);
+            $parcours->setFormation($formation);
             $this->entityManager->persist($parcours);
+
         }
 
         $tSemestres = [];
         foreach ($formation->getParcours() as $parcours) {
+
             foreach ($semestres as $key => $format) {
                 $semestre = null;
                 if ($format === 'tronc_commun') {
                     if (array_key_exists($key, $tSemestres) === false) {
+
                         $semestre = new Semestre();
                         $semestre->setOrdre($key);
                         $semestre->setTroncCommun(true);
