@@ -1,6 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
-import { addCallout } from '../js/callOut'
+import callOut from '../js/callOut'
 
 export default class extends Controller {
   static targets = ['modal', 'modalBody', 'modalTitle', 'size', 'btnClose', 'liste']
@@ -18,7 +18,7 @@ export default class extends Controller {
     })
       .then((response) => response.json())
       .then(async (data) => {
-        addCallout('Sauvegarde effectuée', 'success')
+        callOut('Sauvegarde effectuée', 'success')
         this.modal.hide()
         this.dispatch('refreshListe')
       })

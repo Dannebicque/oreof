@@ -1,7 +1,7 @@
-<h2>Semestres & Parcours</h2>
-<div {{ stimulus_controller('formation--step4', {
-    url: path('structure_parcours_detail_formation_parcours', {parcours: parcours.id})
-}) }}
->
-<div {{ stimulus_target('formation--step4', 'detail') }}></div>
-</div>
+{% if formation.isHasParcours == false %}
+<h2>Structure de la formation</h2>
+{% else %}
+<h2>Parcours : {{ parcours.libelle }}</h2>
+{% endif %}
+
+{{ include('parcours/_wizard.html.twig') }}

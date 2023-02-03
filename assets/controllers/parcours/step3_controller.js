@@ -1,11 +1,12 @@
 import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
-import { addCallout } from '../../js/callOut'
+import callOut from '../../js/callOut'
 
 export default class extends Controller {
   static targets = [
     'liste',
   ]
+
   static values = {
     url: String,
     urlListe: String,
@@ -17,31 +18,30 @@ export default class extends Controller {
 
   delete(event) {
     event.preventDefault()
-    const url = event.params.url
-    const csrf = event.params.csrf
+    const { url } = event.params
+    const { csrf } = event.params
     let modal = new Modal(document.getElementById('modal-delete'))
     modal.show()
     document.getElementById('btn-confirm-supprimer').addEventListener('click', async (event) => {
       const body = {
         method: 'DELETE',
         body: JSON.stringify({
-          csrf: csrf,
+          csrf,
         }),
       }
       modal = null
       await fetch(url, body).then((response) => {
-        addCallout('Suppression effectuée', 'success')
+        callOut('Suppression effectuée', 'success')
         this._updateListe()
       })
-
     })
   }
 
   async duplicate(event) {
     event.preventDefault()
-    const url = event.params.url
+    const { url } = event.params
     await fetch(url).then((response) => {
-      addCallout('Duplication effectuée', 'success')
+      callOut('Duplication effectuée', 'success')
       this._updateListe()
     })
   }

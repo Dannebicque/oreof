@@ -16,25 +16,25 @@ class ParcoursStep6Type extends AbstractType
         $builder
             ->add('poursuitesEtudes', TextareaWithSaveType::class, [
                 'label' => 'Poursuites d\'études envisageables',
-                'attr' => ['rows' => 5, 'maxlength' => 3000],
-                'help' => 'Indiquez ici...',
-                'button_action' => 'click->parcours--step5#savePoursuitesEtudes',
+                'attr' => ['rows' => 20, 'maxlength' => 3000],
+                'help' => 'Indiquez en 3000 caractères maximum quelles sont les poursuites d’études envisageables.',
+                'button_action' => 'click->parcours--step6#savePoursuitesEtudes',
             ])
             ->add('debouches', TextareaWithSaveType::class, [
                 'label' => 'Débouchés',
-                'attr' => ['rows' => 5, 'maxlength' => 3000],
-                'help' => 'Indiquez ici...',
-                'button_action' => 'click->parcours--step5#saveDebouches',
+                'attr' => ['rows' => 10, 'maxlength' => 3000],
+                'help' => 'Indiquez ici les principaux débouchés professionnels accessibles à l’issue de cette formation.',
+                'button_action' => 'click->parcours--step6#saveDebouches',
             ])
             ->add('code', TextType::class, [
-                'label' => 'Débouchés',
+                'label' => 'Code ROME',
                 'mapped' => false,
-                'help' => 'Indiquez ici...',
+                'help' => 'Indiquez le code ROME accessible à l’issue de cette formation',
             ])
             ->add('libelleCode', TextType::class, [
-                'label' => 'Débouchés',
+                'label' => 'Libellé du code ROME',
                 'mapped' => false,
-                'help' => 'Indiquez ici...',
+                'help' => 'Indiquez le libellé du code ROME accessible à l’issue de cette formation',
             ])
         ;
     }

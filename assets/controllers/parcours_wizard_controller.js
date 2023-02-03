@@ -4,13 +4,15 @@ export default class extends Controller {
   static targets = [
     'content',
   ]
+
   static values = {
     url: String,
+    step: String,
     parcours: String,
   }
 
   connect() {
-    this._loadStep(1)
+    this._loadStep(this.stepValue)
   }
 
   async changeStep(event) {
@@ -18,8 +20,7 @@ export default class extends Controller {
   }
 
   async _loadStep(step) {
-    const response = await fetch(this.urlValue + this.parcoursValue + "/" + step)
+    const response = await fetch(`${this.urlValue + this.parcoursValue}/${step}`)
     this.contentTarget.innerHTML = await response.text()
   }
-
 }

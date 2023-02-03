@@ -1,6 +1,4 @@
 import { Controller } from '@hotwired/stimulus'
-import { Modal } from 'bootstrap'
-import { addCallout } from '../js/callOut'
 
 export default class extends Controller {
   static targets = ['input', 'texte']
@@ -19,11 +17,11 @@ export default class extends Controller {
   }
 
   update() {
-    this.texteTarget.innerHTML = this.count.toString() + " caractères restants"
+    this.texteTarget.innerHTML = `${this.count.toString()} caractères restants`
   }
 
   get count() {
-    let value = this.inputTarget.value.length
+    const value = this.inputTarget.value.length
     return Math.max(this.maxLength - value, 0)
   }
 

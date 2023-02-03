@@ -30,6 +30,9 @@ class BlocCompetence
     #[ORM\ManyToOne(inversedBy: 'blocCompetences')]
     private ?Formation $formation = null;
 
+    #[ORM\Column]
+    private ?int $ordre = null;
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
@@ -114,6 +117,18 @@ class BlocCompetence
     public function setFormation(?Formation $formation): self
     {
         $this->formation = $formation;
+
+        return $this;
+    }
+
+    public function getOrdre(): ?int
+    {
+        return $this->ordre;
+    }
+
+    public function setOrdre(int $ordre): self
+    {
+        $this->ordre = $ordre;
 
         return $this;
     }

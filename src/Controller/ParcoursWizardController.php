@@ -10,6 +10,7 @@ use App\Form\ParcoursStep1Type;
 use App\Form\ParcoursStep2Type;
 use App\Form\ParcoursStep5Type;
 use App\Form\ParcoursStep6Type;
+use App\Form\ParcoursStep7Type;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,10 +60,7 @@ class ParcoursWizardController extends AbstractController
     #[Route('/{parcours}/4', name: 'app_parcours_wizard_step_4', methods: ['GET'])]
     public function step4(Parcours $parcours): Response
     {
-        $form = $this->createForm(ParcoursStep4Type::class, $parcours);
-
         return $this->render('parcours_wizard/_step4.html.twig', [
-            'form' => $form->createView(),
             'parcours' => $parcours,
         ]);
     }

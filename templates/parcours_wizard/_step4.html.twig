@@ -1,9 +1,7 @@
 <h2>Structure de la maquette</h2>
 <div {{ stimulus_controller('formation--step4', {
-    url: path('app_formation_save', {formation:formation.id}),
-}) }}>
-    {% form_theme form 'communs/form_theme.html.twig' %}
-    {{ form_start(form) }}
-    ...
-    {{ form_end(form) }}
+    url: path('structure_parcours_detail_formation_parcours', {parcours: parcours.id})
+}) }}
+>
+<div {{ stimulus_target('formation--step4', 'detail') }}></div>
 </div>

@@ -4,6 +4,7 @@ export default class extends Controller {
   static targets = [
     'user',
   ]
+
   static values = {
     url: String,
     urlUser: String,
@@ -11,13 +12,11 @@ export default class extends Controller {
 
   connect() {
     this._updateListeMention(document.getElementById('formation_ses_typeDiplome').value, document.getElementById('formation_ses_domaine').value)
-
   }
 
   changeInscriptionRNCP(event) {
     const inscriptionRNCP = event.target.value
-    console.log(inscriptionRNCP)
-    if (1 === parseInt(inscriptionRNCP)) {
+    if (parseInt(inscriptionRNCP) === 1) {
       document.getElementById('formation_ses_codeRNCP').disabled = false
     } else {
       document.getElementById('formation_ses_codeRNCP').disabled = true
@@ -34,26 +33,24 @@ export default class extends Controller {
 
   async changeResponsableMention(event) {
     const responsableMention = event.target.value
-    const reponse = await fetch(this.urlUserValue + '?id=' + responsableMention)
-    this.userTarget.innerHTML =  await reponse.text()
+    const reponse = await fetch(`${this.urlUserValue}?id=${responsableMention}`)
+    this.userTarget.innerHTML = await reponse.text()
   }
 
   async _updateListeMention(typeDiplome, domaine) {
-    console.log(typeDiplome, domaine)
-    await fetch(this.urlValue + '?typeDiplome=' + typeDiplome + '&domaine=' + domaine).then(response => response.json()).then(
-      data => {
-        console.log(data)
-        const mentions = data.mentions
-        let selectMention = document.getElementById('formation_ses_mention')
+    await fetch(`${this.urlValue}?typeDiplome=${typeDiplome}&domaine=${domaine}`).then((response) => response.json()).then(
+      (data) => {
+        const { mentions } = data
+        const selectMention = document.getElementById('formation_ses_mention')
         selectMention.innerHTML = ''
 
-        mentions.forEach(mention => {
-          let option = document.createElement('option')
+        mentions.forEach((mention) => {
+          const option = document.createElement('option')
           option.value = mention.id
           option.text = mention.libelle
           selectMention.appendChild(option)
         })
-      }
+      },
     )
   }
 }

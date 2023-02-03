@@ -1,6 +1,6 @@
-import { addCallout } from './callOut'
+import callOut from './callOut'
 
-const saveData = async (url, options) => {
+export const saveData = async (url, options) => {
   const body = {
     method: 'POST',
     body: JSON.stringify(
@@ -10,11 +10,9 @@ const saveData = async (url, options) => {
 
   await fetch(url, body).then((response) => response.json()).then((data) => {
     if (data === true) {
-      addCallout('Sauvegarde effectuée', 'success')
+      callOut('Sauvegarde effectuée', 'success')
     } else {
-      addCallout('Erreur lors de la sauvegarde', 'danger')
+      callOut('Erreur lors de la sauvegarde', 'danger')
     }
   })
 }
-
-export default saveData
