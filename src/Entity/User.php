@@ -74,6 +74,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isDeleted = false;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $civilite = null;
+
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $telFixe = null;
+
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $telPortable = null;
+
     public function __construct()
     {
         $this->composantes = new ArrayCollection();
@@ -337,6 +346,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsDeleted(bool $isDeleted): self
     {
         $this->isDeleted = $isDeleted;
+
+        return $this;
+    }
+
+    public function getCivilite(): ?string
+    {
+        return $this->civilite;
+    }
+
+    public function setCivilite(?string $civilite): self
+    {
+        $this->civilite = $civilite;
+
+        return $this;
+    }
+
+    public function getTelFixe(): ?string
+    {
+        return $this->telFixe;
+    }
+
+    public function setTelFixe(?string $telFixe): self
+    {
+        $this->telFixe = $telFixe;
+
+        return $this;
+    }
+
+    public function getTelPortable(): ?string
+    {
+        return $this->telPortable;
+    }
+
+    public function setTelPortable(?string $telPortable): self
+    {
+        $this->telPortable = $telPortable;
 
         return $this;
     }

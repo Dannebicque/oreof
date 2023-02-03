@@ -19,7 +19,7 @@ class CompetenceType extends AbstractType
                 ])
             ->add('libelle', TextType::class, [
                 'attr' => ['maxlength' => 255],
-                'help' => 'Le libellé de la compétence doit commencer par un verbe d\'action, et ne doit pas dépasser 255 caractères.'
+                'help' => 'Le libellé de la compétence doit commencer par un verbe d\'action, et ne doit pas dépasser 255 caractères. Doit être cohérente avec la fiche RNCP du diplôme.'
                 ])
         ;
     }

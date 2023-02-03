@@ -5,6 +5,7 @@ export default class extends Controller {
   static targets = [
     'liste',
   ]
+
   static values = {
     url: String,
     urlListeParcours: String,
@@ -29,10 +30,18 @@ export default class extends Controller {
   }
 
   changeSemestre(event) {
-    saveData(this.urlValue,{
+    saveData(this.urlValue, {
       action: 'structureSemestres',
       value: event.target.value,
       semestre: event.params.semestre,
+    })
+  }
+
+  changeSemestreDebut(event) {
+    saveData(this.urlValue, {
+      field: 'semestreDebut',
+      action: 'yesNo',
+      value: event.target.value,
     })
   }
 
@@ -47,7 +56,7 @@ export default class extends Controller {
       document.getElementById('bloc_semestre').classList.add('d-none');
     }
 
-    saveData(this.urlValue,{
+    saveData(this.urlValue, {
       field: 'hasParcours',
       action: 'yesNo',
       value: event.target.value,

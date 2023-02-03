@@ -1,0 +1,8 @@
+<h2>Contacts Pédagogiques</h2>
+<div {{ stimulus_controller('parcours--step8', {
+    url: path('app_parcours_save', {parcours:parcours.id}),
+}) }}>
+    {% form_theme form 'communs/form_theme.html.twig' %}
+    {{ form(form) }}
+
+</div>

@@ -30,6 +30,9 @@ class Ue
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: EcUe::class)]
     private Collection $ecUes;
 
+    #[ORM\ManyToOne]
+    private ?TypeEnseignement $ueObligatoire = null;
+
     public function __construct()
     {
         $this->ecUes = new ArrayCollection();
@@ -129,6 +132,18 @@ class Ue
                 $ecUe->setUe(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUeObligatoire(): ?TypeEnseignement
+    {
+        return $this->ueObligatoire;
+    }
+
+    public function setUeObligatoire(?TypeEnseignement $ueObligatoire): self
+    {
+        $this->ueObligatoire = $ueObligatoire;
 
         return $this;
     }

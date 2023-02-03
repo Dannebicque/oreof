@@ -66,9 +66,6 @@ class Parcours
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $memoireText = null;
 
-    #[ORM\Column]
-    private ?float $nbHeuresMemoire = 0;
-
     #[ORM\Column(type: Types::INTEGER,  nullable: true, enumType: ModaliteEnseignementEnum::class)]
     private ?ModaliteEnseignementEnum $modalitesEnseignement = null;
 
@@ -89,6 +86,27 @@ class Parcours
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: SemestreParcours::class)]
     private Collection $semestreParcours;
+
+    #[ORM\ManyToOne]
+    private ?Composante $composanteInscription = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $regimeInscription = [];
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $modalitesAlternance = null;
+
+    #[ORM\ManyToOne]
+    private ?User $respParcours = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $coordSecretariat = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $nbHeuresSituationPro = null;
+
+    #[ORM\ManyToOne]
+    private ?Ville $localisation = null;
 
     public function __construct(Formation $formation)
     {
@@ -302,18 +320,6 @@ class Parcours
         return $this;
     }
 
-    public function getNbHeuresMemoire(): ?float
-    {
-        return $this->nbHeuresMemoire;
-    }
-
-    public function setNbHeuresMemoire(float $nbHeuresMemoire): self
-    {
-        $this->nbHeuresMemoire = $nbHeuresMemoire;
-
-        return $this;
-    }
-
     public function getModalitesEnseignement(): ?ModaliteEnseignementEnum
     {
         return $this->modalitesEnseignement;
@@ -424,6 +430,90 @@ class Parcours
                 $semestreParcour->setParcours(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getComposanteInscription(): ?Composante
+    {
+        return $this->composanteInscription;
+    }
+
+    public function setComposanteInscription(?Composante $composanteInscription): self
+    {
+        $this->composanteInscription = $composanteInscription;
+
+        return $this;
+    }
+
+    public function getModalitesAlternance(): ?string
+    {
+        return $this->modalitesAlternance;
+    }
+
+    public function setModalitesAlternance(string $modalitesAlternance): self
+    {
+        $this->modalitesAlternance = $modalitesAlternance;
+
+        return $this;
+    }
+
+    public function getRegimeInscription(): array
+    {
+        return $this->regimeInscription;
+    }
+
+    public function setRegimeInscription(?array $regimeInscription): self
+    {
+        $this->regimeInscription = $regimeInscription;
+
+        return $this;
+    }
+
+    public function getRespParcours(): ?User
+    {
+        return $this->respParcours;
+    }
+
+    public function setRespParcours(?User $respParcours): self
+    {
+        $this->respParcours = $respParcours;
+
+        return $this;
+    }
+
+    public function getCoordSecretariat(): ?string
+    {
+        return $this->coordSecretariat;
+    }
+
+    public function setCoordSecretariat(?string $coordSecretariat): self
+    {
+        $this->coordSecretariat = $coordSecretariat;
+
+        return $this;
+    }
+
+    public function getNbHeuresSituationPro(): ?float
+    {
+        return $this->nbHeuresSituationPro;
+    }
+
+    public function setNbHeuresSituationPro(?float $nbHeuresSituationPro): self
+    {
+        $this->nbHeuresSituationPro = $nbHeuresSituationPro;
+
+        return $this;
+    }
+
+    public function getLocalisation(): ?Ville
+    {
+        return $this->localisation;
+    }
+
+    public function setLocalisation(?Ville $localisation): self
+    {
+        $this->localisation = $localisation;
 
         return $this;
     }

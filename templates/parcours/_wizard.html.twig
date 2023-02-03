@@ -19,17 +19,19 @@
         {% endif %}
 
         <li class="nav-item" role="presentation">
-            <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
+            <a class="nav-link {% if parcours.formation.isHasParcours == false %}active{% endif %}"
+               data-bs-toggle="tab" href="#" role="tab" aria-selected="{% if parcours.formation.isHasParcours ==
+                false %}true{% endif %}"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 2}) }}
             >
-                Descriptif du parcours
+                Descriptif
             </a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 3}) }}
             >
-                Compétences du parcours
+                Compétences
             </a>
         </li>
         <li class="nav-item" role="presentation">
@@ -43,19 +45,28 @@
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 5}) }}
             >
-                Admission et inscription
+                Admission
             </a>
         </li>
+        {% if parcours.formation.isHasParcours == true %}
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
+                        {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 6}) }}
+                >
+                    Inscription
+                </a>
+            </li>
+        {% endif %}
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                    {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 6}) }}
+                    {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 7}) }}
             >
                 Et après...
             </a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                    {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 7}) }}
+                    {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 8}) }}
             >
                 Contacts pédagogiques
             </a>

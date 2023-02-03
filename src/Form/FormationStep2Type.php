@@ -44,24 +44,6 @@ class FormationStep2Type extends AbstractType
                 'attr' => ['rows' => 20, 'maxlength' => 3000],
                 'button_action' => 'click->formation--step2#saveRythme',
             ]);
-
-        if ($formation->getTypeDiplome() === 'LP') {
-            $builder->
-            add('semestre', ChoiceType::class, [
-                //todo: filtrer ? uniquement pour les LP?
-                'choices' => [
-                    'Semestre 1' => 1,
-                    'Semestre 2' => 2,
-                    'Semestre 3' => 3,
-                    'Semestre 4' => 4,
-                    'Semestre 5' => 5,
-                    'Semestre 6' => 6,
-
-                ],
-                'label' => 'Semestre de début de la formation',
-                'attr' => ['data-action' => 'change->formation--step1#changeSemestre'],
-            ]);
-        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void

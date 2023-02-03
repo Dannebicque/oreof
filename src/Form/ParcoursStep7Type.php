@@ -15,15 +15,26 @@ class ParcoursStep7Type extends AbstractType
     {
         $builder
             ->add('poursuitesEtudes', TextareaWithSaveType::class, [
-                'label' => 'Responsable du parcours (si existant)',
-                'required' => false,
+                'label' => 'Poursuites d\'études envisageables',
+                'attr' => ['rows' => 20, 'maxlength' => 3000],
+                'help' => 'Indiquez en 3000 caractères maximum quelles sont les poursuites d’études envisageables.',
                 'button_action' => 'click->parcours--step7#savePoursuitesEtudes',
             ])
             ->add('debouches', TextareaWithSaveType::class, [
-                'label' => 'Coordonnées du secrétariat',
-                'attr' => ['rows' => 5, 'maxlength' => 3000],
-                'help' => 'Indiquez ici les coordonnées postales et téléphoniques du secrétariat ainsi que son adresse mail générique.',
-                'button_action' => 'click->parcours--step5#saveDebouches',
+                'label' => 'Débouchés',
+                'attr' => ['rows' => 10, 'maxlength' => 3000],
+                'help' => 'Indiquez ici les principaux débouchés professionnels accessibles à l’issue de cette formation.',
+                'button_action' => 'click->parcours--step7#saveDebouches',
+            ])
+            ->add('code', TextType::class, [
+                'label' => 'Code ROME',
+                'mapped' => false,
+                'help' => 'Indiquez le code ROME accessible à l’issue de cette formation',
+            ])
+            ->add('libelleCode', TextType::class, [
+                'label' => 'Libellé du code ROME',
+                'mapped' => false,
+                'help' => 'Indiquez le libellé du code ROME accessible à l’issue de cette formation',
             ])
         ;
     }

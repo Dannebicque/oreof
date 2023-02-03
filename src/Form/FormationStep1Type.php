@@ -53,7 +53,7 @@ class FormationStep1Type extends AbstractType
             ->add('modalitesAlternance', TextareaWithSaveType::class, [
                 'label' => 'Modalités de l\'alternance',
                 'help' => 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.',
-                'attr' => ['row' => 20, 'maxlength' => 3000],
+                'attr' => ['rows' => 20, 'maxlength' => 3000],
                 'button_action' => 'click->formation--step1#saveModalitesAlternance',
             ])
         ;

@@ -49,7 +49,7 @@ class Formation
     #[ORM\Column]
     private ?bool $inRncp = true;
 
-    #[ORM\Column(length: 20, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeRNCP = null;
 
     #[ORM\ManyToOne]

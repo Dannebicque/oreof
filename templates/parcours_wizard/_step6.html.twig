@@ -1,38 +1,7 @@
-<h2>Et après...</h2>
+<h2>Localisation</h2>
 <div {{ stimulus_controller('parcours--step6', {
     url: path('app_parcours_save', {parcours:parcours.id}),
 }) }}>
     {% form_theme form 'communs/form_theme.html.twig' %}
-    {{ form_start(form) }}
-    {{ form_row(form.poursuitesEtudes) }}
-    {{ form_row(form.debouches) }}
-    <div {{ stimulus_target('parcours--step6', 'listeCodes') }}>
-        {% for code in parcours.codesRome %}
-            <div class="row">
-                <div class="col-4">
-                    {{ code.code }}
-                </div>
-                <div class="col-6">
-                    {{ code.libelle }}
-                </div>
-                <div class="col-2 d-grid" style="height: 100%">
-                    <button type="submit" class="btn btn-danger d-block">Supprimer</button>
-                </div>
-
-            </div>
-        {% endfor %}
-    </div>
-    <div class="row">
-        <div class="col-4">
-            {{ form_row(form.code) }}
-        </div>
-        <div class="col-6">
-            {{ form_row(form.libelleCode) }}
-        </div>
-        <div class="col-2 d-grid" style="height: 100%">
-            <button type="submit" class="btn btn-success d-block">Ajouter</button>
-        </div>
-
-    </div>
-    {{ form_end(form) }}
+    {{ form(form) }}
 </div>

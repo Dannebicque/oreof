@@ -30,6 +30,18 @@ class Composante
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Adresse $adresse = null;
 
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $telStandard = null;
+
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $telComplementaire = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $mailContact = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $urlSite = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -118,5 +130,53 @@ class Composante
     public function remplissage(): float
     {
         return 10;
+    }
+
+    public function getTelStandard(): ?string
+    {
+        return $this->telStandard;
+    }
+
+    public function setTelStandard(?string $telStandard): self
+    {
+        $this->telStandard = $telStandard;
+
+        return $this;
+    }
+
+    public function getTelComplementaire(): ?string
+    {
+        return $this->telComplementaire;
+    }
+
+    public function setTelComplementaire(?string $telComplementaire): self
+    {
+        $this->telComplementaire = $telComplementaire;
+
+        return $this;
+    }
+
+    public function getMailContact(): ?string
+    {
+        return $this->mailContact;
+    }
+
+    public function setMailContact(?string $mailContact): self
+    {
+        $this->mailContact = $mailContact;
+
+        return $this;
+    }
+
+    public function getUrlSite(): ?string
+    {
+        return $this->urlSite;
+    }
+
+    public function setUrlSite(?string $urlSite): self
+    {
+        $this->urlSite = $urlSite;
+
+        return $this;
     }
 }

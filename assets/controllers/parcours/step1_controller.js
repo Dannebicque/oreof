@@ -5,6 +5,7 @@ export default class extends Controller {
   static targets = [
     'content',
   ]
+
   static values = {
     url: String,
   }
@@ -29,6 +30,14 @@ export default class extends Controller {
     saveData(this.urlValue, {
       field: 'rythmeFormation',
       action: 'rythmeFormation',
+      value: event.target.value,
+    })
+  }
+
+  changeLocalisation(event) {
+    saveData(this.urlValue, {
+      field: 'localisation',
+      action: 'localisation',
       value: event.target.value,
     })
   }

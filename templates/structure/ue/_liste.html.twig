@@ -5,10 +5,16 @@
             <div class="card mb-2 bg-transparent no-shadow d-none d-md-block sh-3">
                 <div class="card-body pt-0 pb-0 h-100">
                     <div class="row g-0 h-100 align-content-center">
-                        <div class="col-12 col-md-5 d-flex align-items-center mb-2 text-secondary mb-md-0 text-small">
+                        <div class="col-12 col-md-1 d-flex align-items-center mb-2 text-secondary mb-md-0 text-small">
                             UE
                         </div>
-                        <div class="col-6 col-md-2 d-flex align-items-center
+                        <div class="col-12 col-md-3 d-flex align-items-center mb-2 text-secondary mb-md-0 text-small">
+                            Type UE
+                        </div>
+                        <div class="col-12 col-md-3 d-flex align-items-center mb-2 text-secondary mb-md-0 text-small">
+                            Obligatoire ?
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center
                         justify-content-end text-secondary text-small">
                             ECTS
                         </div>
@@ -29,11 +35,62 @@
                         <div class="card mb-2 sh-19 sh-md-8">
                             <div class="card-body pt-0 pb-0 h-100">
                                 <div class="row g-0 h-100 align-content-center">
-                                    <div class="col-12 col-md-5 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="col-12 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ue</div>
                                         <a href="#" class="text-truncate">{{ ue.display }}</a>
                                     </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center align-items-md-end mb-1 mb-md-0">
+                                    <div class="col-12 col-md-3 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">ue</div>
+                                        {% if is_granted('ROLE_RESP_FORMATION') %}
+                                            <select class="form-select form-select-sm"
+                                                    {{ stimulus_action('structure--ue', 'changeTypeUe', 'change', {
+                                                        url: path('structure_ue_change_type_ue', {ue: ue.id})
+                                                    }) }}
+                                            >
+                                                <option value="">Choisir un type</option>
+                                                {% for typeUe in typeUes %}
+                                                    <option value="{{ typeUe.id }}"
+                                                            {% if ue.typeUe != null and ue.typeUe.id == typeUe.id %}
+                                                                selected
+                                                            {% endif %}
+                                                    >
+                                                        {{ typeUe.libelle }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        {% else %}
+                                            {{ ue.typeUe != null ? ue.typeUe.libelle : 'erreur' }}
+                                            {# todo: gérer le cas autre ? #}
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12 col-md-3 d-flex flex-column justify-content-center mb-1
+                                    mb-md-0">
+                                        <div class="text-muted text-small d-md-none">ue</div>
+                                        {% if is_granted('ROLE_RESP_FORMATION') %}
+                                            <select class="form-select form-select-sm ms-2"
+                                                    {{ stimulus_action('structure--ue', 'changeUeObligatoire',
+                                                        'change', {
+                                                        url: path('structure_ue_change_ue_obligatoire', {ue: ue.id})
+                                                    }) }}
+                                            >
+                                                <option value="">Choisir</option>
+                                                {% for typeEnseignement in typeEnseignements %}
+                                                    <option value="{{ typeEnseignement.id }}"
+                                                            {% if ue.ueObligatoire != null and ue.ueObligatoire.id == typeEnseignement.id %}
+                                                                selected
+                                                            {% endif %}
+                                                    >
+                                                        {{ typeEnseignement.libelle }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        {% else %}
+                                            {{ ue.ueObligatoire != null ? ue.ueObligatoire.libelle : 'erreur' }}
+                                            {# todo: gérer le cas autre ? #}
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-6 col-md-1 d-flex flex-column justify-content-center
+                                    align-items-md-end mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
                                         {{ ue.totalEctsUe|badgeEctsUe(6) }} {# todo: injecter le type de diplôme pour
                                          avoir le nb ects par UE max #}
@@ -53,7 +110,7 @@
                                         </button>
 
                                     </div>
-                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-center
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center
                                             align-items-md-end mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Actions</div>
                                         <div class="text-alternate">

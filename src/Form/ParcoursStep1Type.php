@@ -4,7 +4,10 @@ namespace App\Form;
 
 use App\Entity\Parcours;
 use App\Entity\RythmeFormation;
+use App\Entity\Ville;
 use App\Form\Type\TextareaWithSaveType;
+use App\Repository\FormationRepository;
+use App\Repository\VilleRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -17,7 +20,12 @@ class ParcoursStep1Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $formation = $options['data'];
+        $formation = $options['data']->getFormation();
+
+        $villes = [];
+        foreach ($formation->getLocalisationMention() as $ville) {
+            $villes[$ville->getLibelle()] = $ville->getId();
+        }
 
         $builder
             ->add('contenuFormation', TextareaWithSaveType::class, [
@@ -33,9 +41,11 @@ class ParcoursStep1Type extends AbstractType
                 'button_action' => 'click->parcours--step1#saveResultats',
             ])
             ->add('rythmeFormation', EntityType::class, [
+                'required' => false,
                 'label' => 'Rythme du parcours',
                 'help' => 'Indiquez le rythme de la formation (en heures, en jours, en semaines, en mois, en années, …).',
                 'class' => RythmeFormation::class,
+                'expanded' => true,
                 'choice_label' => 'libelle',
                 'attr' => ['data-action' => 'change->parcours--step1#changeRythme'],
             ])
@@ -44,7 +54,15 @@ class ParcoursStep1Type extends AbstractType
                 'help' => 'Indiquez en 3000 caractères maximum le rythme de la formation : temps plein, temps partiel, cours du soir,etc..',
                 'attr' => ['rows' => 20, 'maxlength' => 3000],
                 'button_action' => 'click->parcours--step1#saveRythme',
-            ]);
+            ])
+            ->add('localisation', ChoiceType::class, [
+                'required' => false,
+                'expanded' => true,
+                'label' => 'Localisation du parcours',
+                'choices' => $villes,
+                'attr' => ['data-action' => 'change->parcours--step1#changeLocalisation'],
+            ])
+        ;
 
     }
 

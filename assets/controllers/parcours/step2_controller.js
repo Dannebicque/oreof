@@ -5,27 +5,32 @@ export default class extends Controller {
   static targets = [
     'content',
   ]
+
   static values = {
     url: String,
   }
 
   changeModaliteEnseignement(event) {
     console.log(event.target.value)
-    saveData(this.urlValue,
+    saveData(
+      this.urlValue,
       {
         field: 'modalitesEnseignement',
         action: 'modalitesEnseignement',
         value: event.target.value,
-      })
+      },
+    )
   }
 
   changeStage(event) {
-    saveData(this.urlValue,
+    saveData(
+      this.urlValue,
       {
         field: 'hasStage',
         action: 'yesNo',
         value: event.target.value,
-      })
+      },
+    )
     if (event.target.value == 1) {
       document.getElementById('blocStage').style.display = 'block';
     } else {
@@ -42,22 +47,26 @@ export default class extends Controller {
   }
 
   changeNbHeuresStages(event) {
-    saveData(this.urlValue,
+    saveData(
+      this.urlValue,
       {
         field: 'nbHeuresStages',
         action: 'float',
         value: event.target.value,
-      })
+      },
+    )
   }
 
-  ///// Projet /////
+  /// // Projet /////
   changeProjet(event) {
-    saveData(this.urlValue,
+    saveData(
+      this.urlValue,
       {
         field: 'hasProjet',
         action: 'yesNo',
         value: event.target.value,
-      })
+      },
+    )
     if (event.target.value == 1) {
       document.getElementById('blocProjet').style.display = 'block';
     } else {
@@ -74,22 +83,37 @@ export default class extends Controller {
   }
 
   changeNbHeuresProjet(event) {
-    saveData(this.urlValue,
+    saveData(
+      this.urlValue,
       {
         field: 'nbHeuresProjet',
         action: 'float',
         value: event.target.value,
-      })
+      },
+    )
   }
 
-  ///// Mémoire /////
+  changeNbHeuresSituationPro(event) {
+    saveData(
+      this.urlValue,
+      {
+        field: 'nbHeuresSituationPro',
+        action: 'float',
+        value: event.target.value,
+      },
+    )
+  }
+
+  /// // Mémoire /////
   changeMemoire(event) {
-    saveData(this.urlValue,
+    saveData(
+      this.urlValue,
       {
         field: 'hasMemoire',
         action: 'yesNo',
         value: event.target.value,
-      })
+      },
+    )
     if (event.target.value == 1) {
       document.getElementById('blocMemoire').style.display = 'block';
     } else {
@@ -103,14 +127,5 @@ export default class extends Controller {
       action: 'textarea',
       value: document.getElementById('parcours_step2_memoireText').value,
     })
-  }
-
-  changeNbHeuresMemoire(event) {
-    saveData(this.urlValue,
-      {
-        field: 'nbHeuresMemoire',
-        action: 'float',
-        value: event.target.value,
-      })
   }
 }
