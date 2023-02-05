@@ -1,0 +1,10 @@
+<div class="col-12">
+    <dl>
+        <dt>Responsable du parcours</dt>
+        <dd>{{ parcours.respParcours != null ? parcours.respParcours.display : 'erreur' }}</dd>
+        <dt>Email</dt>
+        <dd>{{ parcours.respParcours != null ? parcours.respParcours.email : 'erreur' }}</dd>
+        <dt>Coordonnées secrétariat</dt>
+        <dd>{{ parcours.coordSecretariat|raw }}</dd>
+    </dl>
+</div>

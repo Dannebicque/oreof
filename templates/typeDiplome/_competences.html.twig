@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="col-12">
+        <ul>
+        {% for bc in parcours.blocCompetences %}
+            <li>{{ bc.display }}</li>
+            <li>
+                <ul>
+                {% for c in bc.competences %}
+                    <li>{{ c.display }}</li>
+                {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>

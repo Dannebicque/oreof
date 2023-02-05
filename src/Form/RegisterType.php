@@ -36,16 +36,17 @@ class RegisterType extends AbstractType
                 'required' => true,
                 'attr' => ['data-action' => 'change->register#changeCentre']
             ])
-            ->add('role', EnumType::class, [
-                'class' => RoleEnum::class,
-                'choice_label' => static function (\UnitEnum $choice): string {
-                    return $choice->libelle();
-                },
-                'label' => 'Droits',
-                'placeholder' => 'Indiquez les droits souhaités',
-                'required' => true,
-                'mapped' => false,
-            ])
+// todo: déplacer au moment de la validation
+//            ->add('role', EnumType::class, [
+//                'class' => RoleEnum::class,
+//                'choice_label' => static function (\UnitEnum $choice): string {
+//                    return $choice->libelle();
+//                },
+//                'label' => 'Droits',
+//                'placeholder' => 'Indiquez les droits souhaités',
+//                'required' => true,
+//                'mapped' => false,
+//            ])
         ;
     }
 

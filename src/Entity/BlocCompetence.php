@@ -132,4 +132,9 @@ class BlocCompetence
 
         return $this;
     }
+
+    public function display(): string
+    {
+        return $this->getCode() . ' - '. $this->getLibelle();
+    }
 }

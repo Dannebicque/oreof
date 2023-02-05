@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-12">
+        <dl>
+            <dt>Poursuites d'études envisageables</dt>
+            <dd>{{ parcours.poursuitesEtudes|raw }}</dd>
+            <dt>Débouchés</dt>
+            <dd>{{ parcours.debouches|raw }}</dd>
+        </dl>
+    </div>
+    <div class="col-12">
+        <strong>Code ROME</strong>
+        <ul>
+        {% for code in parcours.codesRome %}
+            <li>{{ code.code }} :  {{ code.libelle }}</li>    
+        {% endfor %}
+        </ul>
+    </div>
+</div>

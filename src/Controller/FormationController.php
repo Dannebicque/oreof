@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Formation;
 use App\Form\FormationSesType;
-use App\Form\FormationType;
 use App\Repository\DomaineRepository;
 use App\Repository\FormationRepository;
 use App\Repository\MentionRepository;

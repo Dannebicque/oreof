@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-6">
+        <dl>
+            <dt>Localisation du parcours</dt>
+            <dd>
+                {{ parcours.localisation != null ? parcours.localisation.libelle : 'Erreur' }}
+            </dd>
+            <dt>Modalités de l'alternance</dt>
+            <dd>
+                {{ parcours.modalitesAlternance|raw }}
+            </dd>
+        </dl>
+    </div>
+    <div class="col-6">
+        Composante(s) d'inscription
+        {% if parcours.composanteInscription != null %}
+        <dl>
+            <dt>Composante</dt>
+            <dd>{{ parcours.composanteInscription.libelle }}</dd>
+            <dt>Adresse</dt>
+            <dd>{{ parcours.composanteInscription.adresse != null ? parcours.composanteInscription.adresse.display : 'Erreur'}}</dd>
+            <dt>Téléphone</dt>
+            <dd>{{ parcours.composanteInscription.telStandard|tel_format }} {% if parcours.composanteInscription.telComplementaire != null %}ou {{ parcours.composanteInscription
+                .telComplementaire|tel_format }}{% endif %}</dd>
+            <dt>Email</dt>
+            <dd>{{ parcours.composanteInscription.mailContact|mailto }}</dd>
+            <dt>Site web</dt>
+            <dd>{{ parcours.composanteInscription.urlSite }}</dd>
+        </dl>
+        {% endif %}
+    </div>
+</div>

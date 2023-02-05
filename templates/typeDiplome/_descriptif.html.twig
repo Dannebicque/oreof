@@ -1,0 +1,40 @@
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+        <dl>
+            <dt>Modalités d'enseignement</dt>
+            <dd>{{ parcours.modalitesEnseignement != null ? parcours.modalitesEnseignement.libelle : 'Erreur' }}</dd>
+            <dt>Stage(s)</dt>
+            <dd>
+                {% if parcours.hasStage == true %}
+                    Oui ({{ parcours.nbHeuresStages }} heures). {{ parcours
+                .stageText|raw }}
+                {% else %}
+                    Non
+                {% endif %}
+            </dd>
+        </dl>
+    </div>
+    <div class="col-sm-12 col-md-6">
+        <dl>
+            <dt>Projet(s) tutoré(s)</dt>
+            <dd>
+                {% if parcours.hasProjet == true %}
+                    Oui ({{ parcours.nbHeuresProjet }} heures). {{ parcours
+                .projetTexte|raw }}
+                {% else %}
+                    Non
+                {% endif %}
+            </dd>
+            <dt>TER/Mémoire</dt>
+            <dd>
+                {% if parcours.hasMemoire == true %}
+                    Oui ({{ parcours.nbHeuresMemoire }} heures). {{ parcours
+                .memoireTexte|raw }}
+                {% else %}
+                    Non
+                {% endif %}
+            </dd>
+        </dl>
+    </div>
+    {# todo: heures de situation pro pour LP et BUT #}
+</div>

@@ -1,0 +1,20 @@
+<div class="row">
+    <div class=col-sm-12">
+        <dl>
+            <dt>Contenu de la formation</dt>
+            <dd>{{ parcours.contenuFormation|raw }}</dd>
+            <dt>Résultats attendus de la formation</dt>
+            <dd>{{ parcours.resultatsAttendus|raw }}</dd>
+            <dt>Rythme de formation</dt>
+            <dd>
+                <ul>
+                {% for rythme in parcours.rythmeFormation %}
+                <li>{{ rythme.libelle }}</li>
+                {% endfor %}
+                </ul>
+            </dd>
+            <dt>Précisions sur le rythme de formation</dt>
+            <dd>{{ parcours.rythmeFormationTexte|raw }}</dd>
+        </dl>
+    </div>
+</div>
