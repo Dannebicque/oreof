@@ -7,18 +7,23 @@ use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\SemestreParcours;
 use App\Entity\Ue;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 
 abstract class AbstractTypeDiplome
 {
+    private ?TypeDiplomeInterface $typeDiplome;
+
     public function __construct(
-        protected EntityManagerInterface $entityManager
+        protected EntityManagerInterface $entityManager,
+        protected TypeDiplomeRegistry $typeDiplomeRegistry
     )
     {
     }
 
     public function genereStructure(Formation $formation): void
     {
+        $this->typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
         //semestres
         $semestres = $formation->getStructureSemestres();
 
@@ -82,7 +87,7 @@ abstract class AbstractTypeDiplome
 
     private function generesUe(Semestre $semestre): void
     {
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= $this->typeDiplome->nbUes; $i++) {
             $ue = new Ue();
             $ue->setSemestre($semestre);
             $ue->setOrdre($i);

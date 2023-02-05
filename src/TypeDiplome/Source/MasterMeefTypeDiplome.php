@@ -12,13 +12,8 @@ class MasterMeefTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeIn
 
     public string $libelle = 'Master MEEF';
 
-    public function initParcours(Parcours $parcours): void
-    {
-        // TODO: Implement initParcours() method.
-    }
+    public int $nbSemestres = 4;
+    public int $nbUes = 0;
 
-    public function genereStructure(Formation $formation): void
-    {
-        // TODO: Implement genereStructure() method.
-    }
+
 }

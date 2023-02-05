@@ -12,13 +12,6 @@ class MasterTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterf
 
     public string $libelle = 'Master';
 
-    public function initParcours(Parcours $parcours): void
-    {
-        // TODO: Implement initParcours() method.
-    }
-
-    public function genereStructure(Formation $formation): void
-    {
-        // TODO: Implement genereStructure() method.
-    }
+    public int $nbSemestres = 4;
+    public int $nbUes = 0;
 }

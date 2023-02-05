@@ -16,13 +16,6 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
 
     public string $libelle = 'Licence';
     public int $nbSemestres = 6;
-
-    public function initParcours(Parcours $parcours): void
-    {
-        // TODO: Implement initParcours() method.
-    }
-
-
-
+    public int $nbUes = 5;
 }
 

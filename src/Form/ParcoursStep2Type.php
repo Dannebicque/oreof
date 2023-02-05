@@ -77,7 +77,7 @@ class ParcoursStep2Type extends AbstractType
                 'button_action' => 'click->parcours--step2#saveMemoireText',
             ]);
 
-            if ($typeDiplome === ButTypeDiplome::SOURCE || $typeDiplome === LicenceProfessionnelleTypeDiplome::SOURCE)
+            if ($typeDiplome::SOURCE === ButTypeDiplome::SOURCE || $typeDiplome::SOURCE === LicenceProfessionnelleTypeDiplome::SOURCE)
             {
                 $builder->add('nbHeuresSituationPro', NumberType::class, [
                     'label' => 'Nombre d\'heures de situation professionnelle prévu',
