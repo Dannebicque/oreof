@@ -40,7 +40,7 @@ export default class extends Controller {
   changeSemestreDebut(event) {
     saveData(this.urlValue, {
       field: 'semestreDebut',
-      action: 'yesNo',
+      action: 'int',
       value: event.target.value,
     })
   }

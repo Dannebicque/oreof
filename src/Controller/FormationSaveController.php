@@ -54,6 +54,10 @@ class FormationSaveController extends BaseController
                 $rep = $updateEntity->saveField($formation, $data['field'], (float)$data['value']);
 
                 return $this->json($rep);
+            case 'int':
+                $rep = $updateEntity->saveField($formation, $data['field'], (int)$data['value']);
+
+                return $this->json($rep);
             case 'modalitesEnseignement':
                 $rep = $updateEntity->saveField($formation, 'modalitesEnseignement',
                     ModaliteEnseignementEnum::from($data['value']));

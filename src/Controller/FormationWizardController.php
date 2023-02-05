@@ -21,6 +21,15 @@ class FormationWizardController extends AbstractController
         ]);
     }
 
+    #[Route('/{formation}/0', name: 'app_formation_wizard_step_0', methods: ['GET'])]
+    public function step0(Formation $formation): Response
+    {
+
+        return $this->render('formation_wizard/_step0.html.twig', [
+            'formation' => $formation,
+        ]);
+    }
+
     #[Route('/{formation}/1', name: 'app_formation_wizard_step_1', methods: ['GET'])]
     public function step1(Formation $formation): Response
     {

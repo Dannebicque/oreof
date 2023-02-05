@@ -7,27 +7,6 @@
 }) }}
         data-action="base:refreshListe@window->formation--step3#refreshListe"
 >
-    {% if constant('SOURCE',typeDiplome) == constant
-        ('App\\TypeDiplome\\Source\\LicenceProfessionnelleTypeDiplome::SOURCE') %}
-        <fieldset class="mb-3">
-            <legend class="col-form-label required">Semestre de début de la formation</legend>
-            <div>
-                {% for i in 1..6 %}
-                <div class="form-check">
-                    <input type="radio" id="formation_semestreDebut_{{ i }}" name="formation_semestreDebut"
-                           required="required"
-                           {% if formation.semestreDebut == i %}checked{% endif %}
-                           class="form-check-input" value="{{ i }}" {{ stimulus_action('formation--step3',
-                        'changeSemestreDebut', 'click') }}>
-                    <label class="form-check-label required" for="formation_semestreDebut_{{ i }}">Semestre {{ i }}</label>
-                </div>
-                {% endfor %}
-            </div>
-            <div class="form-text mb-0 help-text">
-                Indiquez le semestre de début de la formation
-            </div>
-        </fieldset>
-    {% endif %}
     <fieldset class="mb-3">
         <legend class="col-form-label required">Formation avec parcours ?</legend>
         <div>
@@ -79,6 +58,7 @@
             parcours)
         </div>
         <ul>
+
             {% for i in formation.semestreDebut..typeDiplome.nbSemestres %}
                 <li>
                     Semestre {{ i }} :

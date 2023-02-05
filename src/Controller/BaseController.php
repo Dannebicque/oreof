@@ -2,11 +2,21 @@
 
 namespace App\Controller;
 
+use App\Classes\DataUserSession;
+use App\Entity\AnneeUniversitaire;
 use App\Entity\Constantes;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class BaseController extends AbstractController
 {
+    protected DataUserSession $dataUserSession;
+
+    #[Required]
+    public function setDataUserSession(DataUserSession $dataUserSession): void
+    {
+        $this->dataUserSession = $dataUserSession;
+    }
     public function addFlashBag(string $niveau, string $message): void
     {
         switch ($niveau) {
@@ -34,5 +44,10 @@ class BaseController extends AbstractController
             'text' => $text,
             'title' => $title,
         ]);
+    }
+
+    public function getAnneeUniversitaire(): AnneeUniversitaire
+    {
+        return $this->dataUserSession->getAnneeUniversitaire();
     }
 }

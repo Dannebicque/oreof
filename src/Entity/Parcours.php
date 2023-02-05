@@ -93,7 +93,7 @@ class Parcours
     #[ORM\Column(nullable: true)]
     private ?array $regimeInscription = [];
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $modalitesAlternance = null;
 
     #[ORM\ManyToOne]
@@ -451,7 +451,7 @@ class Parcours
         return $this->modalitesAlternance;
     }
 
-    public function setModalitesAlternance(string $modalitesAlternance): self
+    public function setModalitesAlternance(?string $modalitesAlternance): self
     {
         $this->modalitesAlternance = $modalitesAlternance;
 

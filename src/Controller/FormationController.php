@@ -8,15 +8,17 @@ use App\Repository\DomaineRepository;
 use App\Repository\FormationRepository;
 use App\Repository\MentionRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Workflow\Registry;
 
 #[Route('/formation')]
-class FormationController extends AbstractController
+class FormationController extends BaseController
 {
+    public function __construct(private Registry $workflows)
+    {}
     #[Route('/', name: 'app_formation_index', methods: ['GET'])]
     public function index(): Response
     {
@@ -27,8 +29,6 @@ class FormationController extends AbstractController
     #[Route('/liste', name: 'app_formation_liste', methods: ['GET'])]
     public function liste(FormationRepository $formationRepository): Response
     {
-
-
         return $this->render('formation/_liste.html.twig', [
             'formations' => $formationRepository->findByRoleUser($this->getUser()),
         ]);
@@ -40,7 +40,7 @@ class FormationController extends AbstractController
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request, FormationRepository $formationRepository): Response
     {
-        $formation = new Formation();
+        $formation = new Formation($this->getAnneeUniversitaire());
         $form = $this->createForm(FormationSesType::class, $formation, [
             'action' => $this->generateUrl('app_formation_new'),
             'typesDiplomes' => $typeDiplomeRegistry->getChoices(),
@@ -48,6 +48,9 @@ class FormationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $stateMachine = $this->workflows->get($formation, 'dpe');
+            $stateMachine->apply($formation, 'initialiser');
+
             $formationRepository->save($formation, true);
 
             return $this->redirectToRoute('app_formation_index');

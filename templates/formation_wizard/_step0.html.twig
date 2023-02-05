@@ -1,0 +1,24 @@
+<h2>Début de la mention/spécialité</h2>
+<div {{ stimulus_controller('formation--step0', {
+    url: path('app_formation_save', {formation:formation.id})
+}) }}
+>
+        <fieldset class="mb-3">
+            <legend class="col-form-label required">Semestre de début de la formation</legend>
+            <div>
+                {% for i in 1..6 %}
+                <div class="form-check">
+                    <input type="radio" id="formation_semestreDebut_{{ i }}" name="formation_semestreDebut"
+                           required="required"
+                           {% if formation.semestreDebut == i %}checked{% endif %}
+                           class="form-check-input" value="{{ i }}" {{ stimulus_action('formation--step0',
+                        'changeSemestreDebut', 'click') }}>
+                    <label class="form-check-label required" for="formation_semestreDebut_{{ i }}">Semestre {{ i }}</label>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="form-text mb-0 help-text">
+                Indiquez le semestre de début de la formation
+            </div>
+        </fieldset>
+</div>

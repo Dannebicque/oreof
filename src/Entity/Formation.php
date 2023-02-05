@@ -100,8 +100,9 @@ class Formation
     #[ORM\ManyToOne]
     private ?RythmeFormation $rythmeFormation = null;
 
-    public function __construct()
+    public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
+        $this->anneeUniversitaire = $anneeUniversitaire;
         $this->localisationMention = new ArrayCollection();
         $this->parcours = new ArrayCollection();
         $this->composantesInscription = new ArrayCollection();
@@ -343,7 +344,7 @@ class Formation
         return $this;
     }
 
-    public function display(): string
+    public function display(): ?string
     {
         return $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
     }
