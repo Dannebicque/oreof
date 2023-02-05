@@ -69,7 +69,7 @@ class Ue
 
     public function display(): string
     {
-        return 'UE ' . $this->getOrdre();
+        return 'UE ' . $this->getSemestre()?->getOrdre() .'.'.$this->getOrdre();
     }
 
     public function getTypeUe(): ?TypeUe

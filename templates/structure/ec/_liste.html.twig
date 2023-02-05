@@ -5,6 +5,7 @@
             <th>Libellé</th>
             <th>Référent</th>
             <th>Remplissage</th>
+            <th>Etat</th>
             <th>Heures</th>
             <th>Mcc</th>
             <th></th>
@@ -19,6 +20,7 @@
                 <td>{{ ec.libelle }}</td>
                 <td>{{ ec.responsableEc != null ? ec.responsableEc.display : 'Non défini' }}</td>
                 <td>{{ ec.remplissage|remplissage }}</td>
+                <td>{{ ec.etatEc }}</td>
                 <td>
                     <button
                             {{ stimulus_controller('modal', {
@@ -97,7 +99,7 @@
         {% endfor %}
         {% if is_granted('ROLE_RESP_FORMATION') and ue is defined %}
             <tr>
-                <td colspan="6">
+                <td colspan="7">
 
                     <button
                             {{ stimulus_controller('modal', {

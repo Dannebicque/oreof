@@ -98,6 +98,9 @@ class ElementConstitutif
     #[ORM\OneToMany(mappedBy: 'ec', targetEntity: EcUe::class)]
     private Collection $ecUes;
 
+    #[ORM\Column(length: 50)]
+    private ?string $etat_ec = 'initialise';
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
@@ -305,7 +308,59 @@ class ElementConstitutif
 
     public function remplissage(): float
     {
-        return 10;
+        //calcul un remplissage de l'entité en fonction des champs obligatoires
+        $nbChampsRemplis = 0;
+
+        if ($this->langueDispense->isEmpty() === false) {
+            $nbChampsRemplis++;
+        }
+
+        if ($this->typeEnseignement !== null) {
+            $nbChampsRemplis++;
+        }
+
+        if ($this->libelle !== null) {
+            $nbChampsRemplis++;
+        }
+
+        if ($this->libelleAnglais !== null) {
+            $nbChampsRemplis++;
+        }
+
+        if ($this->enseignementMutualise !== null) {
+            $nbChampsRemplis++;
+        }
+
+        if ($this->description !== null) {
+            $nbChampsRemplis++;
+        }
+
+        if ($this->objectifs !== null) {
+            $nbChampsRemplis++;
+        }
+
+        if ($this->competences->isEmpty() === false) {
+            $nbChampsRemplis++;
+        }
+
+
+        $nbHeures = $this->volumeCmPresentiel + $this->volumeTdPresentiel + $this->volumeTpPresentiel + $this->volumeCmDistanciel + $this->volumeTdDistanciel + $this->volumeTpDistanciel;
+
+        if ($nbHeures > 0.0) {
+            $nbChampsRemplis++;
+        }
+
+        if ($this->modaliteEnseignement !== null) {
+            $nbChampsRemplis++;
+        }
+
+        if ($this->ects > 0.0) {
+            $nbChampsRemplis++;
+        }
+
+        $nbChampsObligatoires = 11;
+
+        return round($nbChampsRemplis / $nbChampsObligatoires * 100, 2);
     }
 
     public function etatStructure(): string
@@ -324,7 +379,7 @@ class ElementConstitutif
             return 'Pas d\'ECTS';
         }
 
-        if ($this->modaliteEnseignement === null){
+        if ($this->modaliteEnseignement === null ) {
             return 'Modalité d\'enseignement non renseignée';
         }
 
@@ -507,5 +562,17 @@ class ElementConstitutif
         //todo: à revoir, pourquoi first et pas autre ?
         return $this->getEcUes()->first()?->getUe()->getSemestre()?->getSemestreParcours()->first()->getParcours();
 
+    }
+
+    public function getEtatEc(): ?string
+    {
+        return $this->etat_ec;
+    }
+
+    public function setEtatEc(string $etat_ec): self
+    {
+        $this->etat_ec = $etat_ec;
+
+        return $this;
     }
 }
