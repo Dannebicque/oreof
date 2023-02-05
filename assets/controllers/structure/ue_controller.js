@@ -1,5 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
+import { Modal } from 'bootstrap'
 import { saveData } from '../../js/saveData'
+import callOut from '../../js/callOut'
 
 export default class extends Controller {
   static targets = ['detail']
@@ -29,6 +31,27 @@ export default class extends Controller {
     saveData(event.params.url, {
       actions: 'changeTypeUe',
       value: event.target.value,
+    })
+  }
+
+  delete(event) {
+    event.preventDefault()
+    const { url } = event.params
+    const { csrf } = event.params
+    let modal = new Modal(document.getElementById('modal-delete'))
+    modal.show()
+    document.getElementById('btn-confirm-supprimer').addEventListener('click', async (event) => {
+      const body = {
+        method: 'DELETE',
+        body: JSON.stringify({
+          csrf,
+        }),
+      }
+      modal = null
+      await fetch(url, body).then(() => {
+        callOut('Suppression effectuée', 'success')
+        this.dispatch('refreshListe')// todo: ne marche pas ??
+      })
     })
   }
 }

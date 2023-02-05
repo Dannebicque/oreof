@@ -113,9 +113,15 @@
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center
                                             align-items-md-end mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Actions</div>
-                                        <div class="text-alternate">
-                                            <button class="btn btn-outline-info btn-sm">Boutons à définir ?</button>
-                                        </div>
+                                        {% if constant('SOURCE',typeDiplome) != constant
+                                            ('App\\TypeDiplome\\Source\\LicenceTypeDiplome::SOURCE') or ue.ordre > 5 %}
+                                            <button {{ stimulus_action('structure--ue', 'delete', 'click', {
+                                                url:path('structure_ue_delete',{'id': ue.id}),
+                                                csrf: csrf_token('delete' ~ ue.id)
+                                            }) }} class="btn btn-sm text-danger">
+                                                <i class="{{ iconDelete }}"></i> Supprimer
+                                            </button>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

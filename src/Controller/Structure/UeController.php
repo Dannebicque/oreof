@@ -10,6 +10,7 @@ use App\Form\UeType;
 use App\Repository\TypeEnseignementRepository;
 use App\Repository\TypeUeRepository;
 use App\Repository\UeRepository;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +26,7 @@ class UeController extends AbstractController
         Route('/detail/semestre/{semestre}/{parcours}', name: 'detail_semestre')
     ]
     public function detailComposante(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
         UeRepository $ueRepository,
         TypeUeRepository $typeUeRepository,
         TypeEnseignementRepository $typeEnseignementRepository,
@@ -32,13 +34,14 @@ class UeController extends AbstractController
         Parcours $parcours
     ): Response {
         $ues = $ueRepository->findBy(['semestre' => $semestre]);
-
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome());
         return $this->render('structure/ue/_liste.html.twig', [
             'ues' => $ues,
             'semestre' => $semestre,
             'typeUes' => $typeUeRepository->findAll(), //todo: filtrer selon le type de diplôme
             'typeEnseignements' => $typeEnseignementRepository->findAll(),
-            'parcours' => $parcours
+            'parcours' => $parcours,
+            'typeDiplome' => $typeDiplome,
         ]);
     }
 
@@ -114,5 +117,22 @@ class UeController extends AbstractController
         $ueRepository->save($ue, true);
 
         return $this->json(true);
+    }
+
+    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
+    public function delete(
+        Request $request,
+        Ue $ue,
+        UeRepository $ueRepository
+    ): Response {
+        if ($this->isCsrfTokenValid('delete' . $ue->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+            //todo: supprimer les EC
+            $ueRepository->remove($ue, true);
+
+            return $this->json(true);
+        }
+
+        return $this->json(false);
     }
 }
