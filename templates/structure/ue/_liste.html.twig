@@ -132,8 +132,25 @@
                             </div>
                         </div>
                     </div>
-
                 {% endfor %}
+                <div class="card mb-2 sh-19 sh-md-8">
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Ajouter une UE au semestre',
+                                modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
+                            }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 mt-4"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Ajouter une UE"
+                    >
+                        <i class="{{ iconAdd }}"></i>
+                        <span> Ajouter une UE</span>
+                    </button>
+                </div>
             </div>
         </section>
     </div>

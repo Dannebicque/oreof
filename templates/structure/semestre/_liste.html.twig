@@ -78,7 +78,14 @@
                         <div id="detail_semestre_{{ semestre.semestre.id }}" class="d-none detail_semestre">
                             <div class="row">
                                 <div class="col-1"></div>
-                                <div class="col-11" {{ stimulus_target('structure--semestre', 'detail') }}></div>
+                                <div class="col-11" {{ stimulus_target('structure--semestre', 'detail') }}
+                                     data-action="base:refreshListe@window->structure--semestre#refreshListe"
+                                     data-structure--semestre-semestre-param="{{ semestre.semestre.id }}"
+                                     data-structure--semestre-url-param="{{ path
+                                    ('structure_ue_detail_semestre', {semestre:semestre.semestre.id, parcours: parcours.id}) }}"
+                                >
+
+                                </div>
                             </div>
                         </div>
                     </div>

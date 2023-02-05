@@ -6,6 +6,7 @@ use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\TypeUe;
 use App\Entity\Ue;
+use App\Form\UeType;
 use App\Repository\TypeEnseignementRepository;
 use App\Repository\TypeUeRepository;
 use App\Repository\UeRepository;
@@ -34,9 +35,41 @@ class UeController extends AbstractController
 
         return $this->render('structure/ue/_liste.html.twig', [
             'ues' => $ues,
+            'semestre' => $semestre,
             'typeUes' => $typeUeRepository->findAll(), //todo: filtrer selon le type de diplôme
             'typeEnseignements' => $typeEnseignementRepository->findAll(),
             'parcours' => $parcours
+        ]);
+    }
+
+    #[
+        Route('/add-ue/semestre/{semestre}/{parcours}', name: 'add_ue_semestre')
+    ]
+    public function addUe(
+        Request $request,
+        UeRepository $ueRepository,
+        Semestre $semestre,
+        Parcours $parcours
+    ): Response {
+        $ue = new Ue();
+        $ue->setSemestre($semestre);
+        $form = $this->createForm(UeType::class, $ue, [
+            'action' => $this->generateUrl('structure_ue_add_ue_semestre', [
+                'semestre' => $semestre->getId(),
+                'parcours' => $parcours->getId()
+            ])
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ueRepository->save($ue, true);
+
+            return $this->json(true);
+        }
+
+        return $this->render('structure/ue/_new.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
