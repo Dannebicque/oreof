@@ -1,0 +1,31 @@
+<ul class="list-unstyled list-inline text-center menu-icons">
+    <li class="list-inline-item">
+        <a href="#" data-bs-toggle="dropdown" data-bs-target="#notifications" aria-haspopup="true" aria-expanded="false" class="notification-button">
+            <div class="position-relative d-inline-flex">
+                <i class="fal fa-bell icon"></i>
+                <span class="position-absolute notification-dot rounded-xl"></span>
+            </div>
+        </a>
+        <div class="dropdown-menu dropdown-menu-end wide notification-dropdown scroll-out" id="notifications">
+            <div class="scroll">
+                <ul class="list-unstyled border-last-none">
+                    {% for notif in this.notifs %}
+                        <li class="mb-3 pb-3 border-bottom border-separator-light d-flex">
+                            <img src="img/profile/profile-1.webp" class="me-3 sw-4 sh-4 rounded-xl align-self-center" alt="..."/>
+                            <div class="align-self-center">
+                                {{ notif.codeNotification }}
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="mb-3 pb-3 border-bottom border-separator-light d-flex">
+
+                            <div class="align-self-center">
+                                Pas de notification
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </li>
+</ul>

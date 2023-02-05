@@ -43,9 +43,13 @@
             </div>
             <!-- Logo End -->
 
+            <!-- Notifications -->
+            {{ component('notifications', {user: app.user}) }}
+
             <!-- Language Switch Start -->
             {{ component('switch_annee_universitaire') }}
             <!-- Language Switch End -->
+
 
             <!-- User Menu Start -->
             <div class="user-container d-flex">
@@ -90,6 +94,7 @@
             <!-- Menu Start -->
             <div class="menu-container flex-grow-1">
                 <ul id="menu" class="menu">
+
                     {% if is_granted('ROLE_SES') or is_granted('ROLE_VP') %}
                         <li>
                             <a href="{{ path('structure_composante_index') }}">

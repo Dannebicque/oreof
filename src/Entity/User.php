@@ -83,9 +83,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $telPortable = null;
 
+    #[ORM\OneToMany(mappedBy: 'destinataire', targetEntity: Notification::class)]
+    private Collection $notifications;
+
     public function __construct()
     {
         $this->composantes = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -382,6 +386,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTelPortable(?string $telPortable): self
     {
         $this->telPortable = $telPortable;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setDestinataire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getDestinataire() === $this) {
+                $notification->setDestinataire(null);
+            }
+        }
 
         return $this;
     }
