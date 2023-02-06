@@ -18,6 +18,7 @@ class ElementConstitutifType extends AbstractType
             ->add('libelle', TextType::class, [
                 'label' => 'Libellé',
                 'required' => true,
+                'attr' => ['maxlength' => 250],
             ])
             ->add('responsableEc', EntityType::class, [
                 'class' => User::class,

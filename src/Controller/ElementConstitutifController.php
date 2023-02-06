@@ -11,6 +11,7 @@ use App\Form\ElementConstitutifType;
 use App\Repository\EcUeRepository;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\LangueRepository;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,11 +71,16 @@ class ElementConstitutifController extends AbstractController
     }
 
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
-    public function edit(ElementConstitutif $elementConstitutif, Parcours $parcours): Response
+    public function edit(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        ElementConstitutif $elementConstitutif, Parcours $parcours): Response
     {
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome());
+
         return $this->render('element_constitutif/edit.html.twig', [
             'ec' => $elementConstitutif,
-            'parcours' => $parcours
+            'parcours' => $parcours,
+            'typeDiplome' => $typeDiplome,
         ]);
     }
 

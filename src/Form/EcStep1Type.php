@@ -34,12 +34,12 @@ class EcStep1Type extends AbstractType
             ->add('libelle', TextareaAutoSaveType::class, [
                 'label' => 'Libellé',
                 'disabled' => $this->authorizationChecker->isGranted('ROLE_RESP_FORMATION') ? false : true,
-                'attr' => ['data-action' => 'change->ec--step1#saveContenuFr', 'maxlength' => 255],
+                'attr' => ['data-action' => 'change->ec--step1#saveContenuFr', 'maxlength' => 250],
                 'help' => 'N\'est modifiable que par le responsable de la formation',
             ])
             ->add('libelleAnglais', TextareaAutoSaveType::class, [
                 'label' => 'Libellé anglais',
-                'attr' => ['data-action' => 'change->ec--step1#saveContenuEn', 'maxlength' => 255],
+                'attr' => ['data-action' => 'change->ec--step1#saveContenuEn', 'maxlength' => 250],
                 'help' => 'Précisez la version anglaise du libellé de l\'EC',
             ])
             ->add('enseignementMutualise', YesNoType::class, [

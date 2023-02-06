@@ -21,10 +21,10 @@ class ElementConstitutif
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 250)]
     private ?string $libelle = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 250, nullable: true)]
     private ?string $libelleAnglais = null;
 
     #[ORM\Column]
@@ -564,6 +564,13 @@ class ElementConstitutif
 
     }
 
+    public function getAllParcours(): Collection
+    {
+        //todo: à revoir, pourquoi first et pas autre ?
+        return $this->getEcUes()->first()?->getUe()?->getSemestre()?->getSemestreParcours();
+
+    }
+
     public function getEtatEc(): ?string
     {
         return $this->etat_ec;
@@ -574,5 +581,15 @@ class ElementConstitutif
         $this->etat_ec = $etat_ec;
 
         return $this;
+    }
+
+    public function domaineLibelle(): ?string
+    {
+        return $this->getParcours()->getFormation()?->getDomaine()?->getLibelle();
+    }
+
+    public function formationLibelle(): ?string
+    {
+        return $this->getParcours()->getFormation()?->display();
     }
 }
