@@ -2,10 +2,9 @@
 
 namespace App\Form;
 
-use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Enums\ModaliteEnseignementEnum;
-use App\Form\Type\TextareaWithSaveType;
+use App\Form\Type\TextareaAutoSaveType;
 use App\Form\Type\YesNoType;
 use App\TypeDiplome\Source\ButTypeDiplome;
 use App\TypeDiplome\Source\LicenceProfessionnelleTypeDiplome;
@@ -39,11 +38,10 @@ class ParcoursStep2Type extends AbstractType
                 'attr' => ['data-action' => 'change->parcours--step2#changeStage'],
             ])
             //si oui...
-            ->add('stageText', TextareaWithSaveType::class, [
+            ->add('stageText', TextareaAutoSaveType::class, [
                 'label' => 'Description du stage',
-                'attr' => ['rows' => 15, 'maxlength' => 3000],
+                'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step2#saveStageText'],
                 'help' => 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...',
-                'button_action' => 'click->parcours--step2#saveStageText',
             ])
             ->add('nbHeuresStages', NumberType::class, [
                 'label' => 'Nombre d\'heures de stage prévu',
@@ -55,11 +53,10 @@ class ParcoursStep2Type extends AbstractType
                 'label' => 'Projets tuteurés ?',
                 'attr' => ['data-action' => 'change->parcours--step2#changeProjet'],
             ])
-            ->add('projetText', TextareaWithSaveType::class, [
+            ->add('projetText', TextareaAutoSaveType::class, [
                 'label' => 'Description du projet',
-                'attr' => ['rows' => 15, 'maxlength' => 3000],
+                'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step2#saveProjetText'],
                 'help' => 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...',
-                'button_action' => 'click->parcours--step2#saveProjetText',
             ])
             ->add('nbHeuresProjet', NumberType::class, [
                 'label' => 'Nombre d\'heures de projets tutorés prévu',
@@ -70,11 +67,10 @@ class ParcoursStep2Type extends AbstractType
                 'label' => 'TER/Mémoire ?',
                 'attr' => ['data-action' => 'change->parcours--step2#changeMemoire'],
             ])
-            ->add('memoireText', TextareaWithSaveType::class, [
+            ->add('memoireText', TextareaAutoSaveType::class, [
                 'label' => 'Description du projet',
-                'attr' => ['rows' => 15, 'maxlength' => 3000],
+                'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step2#saveMemoireText'],
                 'help' => 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...',
-                'button_action' => 'click->parcours--step2#saveMemoireText',
             ]);
 
             if ($typeDiplome::SOURCE === ButTypeDiplome::SOURCE || $typeDiplome::SOURCE === LicenceProfessionnelleTypeDiplome::SOURCE)

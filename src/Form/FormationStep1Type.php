@@ -6,7 +6,7 @@ use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\Ville;
 use App\Enums\RegimeInscriptionEnum;
-use App\Form\Type\TextareaWithSaveType;
+use App\Form\Type\TextareaAutoSaveType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -50,11 +50,10 @@ class FormationStep1Type extends AbstractType
                 'expanded' => true,
                 'attr' => ['data-action' => 'change->formation--step1#changeRegimeInscription']
             ])
-            ->add('modalitesAlternance', TextareaWithSaveType::class, [
+            ->add('modalitesAlternance', TextareaAutoSaveType::class, [
                 'label' => 'Modalités de l\'alternance',
                 'help' => 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.',
-                'attr' => ['rows' => 20, 'maxlength' => 3000],
-                'button_action' => 'click->formation--step1#saveModalitesAlternance',
+                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->formation--step1#saveModalitesAlternance'],
             ])
         ;
     }

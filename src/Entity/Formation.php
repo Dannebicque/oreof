@@ -106,7 +106,6 @@ class Formation
         $this->localisationMention = new ArrayCollection();
         $this->parcours = new ArrayCollection();
         $this->composantesInscription = new ArrayCollection();
-        $this->semestres = new ArrayCollection();
         $this->blocCompetences = new ArrayCollection();
     }
 
@@ -451,36 +450,6 @@ class Formation
             // set the owning side to null (unless already changed)
             if ($parcour->getFormation() === $this) {
                 $parcour->setFormation(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Semestre>
-     */
-    public function getSemestres(): Collection
-    {
-        return $this->semestres;
-    }
-
-    public function addSemestre(Semestre $semestre): self
-    {
-        if (!$this->semestres->contains($semestre)) {
-            $this->semestres->add($semestre);
-            $semestre->setFormation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSemestre(Semestre $semestre): self
-    {
-        if ($this->semestres->removeElement($semestre)) {
-            // set the owning side to null (unless already changed)
-            if ($semestre->getFormation() === $this) {
-                $semestre->setFormation(null);
             }
         }
 

@@ -4,10 +4,9 @@ namespace App\Form;
 
 use App\Entity\Parcours;
 use App\Entity\User;
-use App\Form\Type\TextareaWithSaveType;
+use App\Form\Type\TextareaAutoSaveType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,11 +22,10 @@ class ParcoursStep8Type extends AbstractType
                 'choice_label' => 'display',
                 'attr' => ['data-action' => 'change->parcours--step8#respParcours'],
             ])
-            ->add('coordSecretariat', TextareaWithSaveType::class, [
+            ->add('coordSecretariat', TextareaAutoSaveType::class, [
                 'label' => 'Coordonnées du secrétariat',
-                'attr' => ['rows' => 5, 'maxlength' => 3000],
+                'attr' => ['rows' => 5, 'maxlength' => 3000, 'data-action' => 'change->parcours--step8#coordSecretariat'],
                 'help' => 'Indiquez ici les coordonnées postales et téléphoniques du secrétariat ainsi que son adresse mail générique.',
-                'button_action' => 'click->parcours--step8#coordSecretariat',
             ])
         ;
     }

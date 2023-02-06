@@ -560,7 +560,7 @@ class ElementConstitutif
     public function getParcours(): Parcours
     {
         //todo: à revoir, pourquoi first et pas autre ?
-        return $this->getEcUes()->first()?->getUe()->getSemestre()?->getSemestreParcours()->first()->getParcours();
+        return $this->getEcUes()->first()?->getUe()?->getSemestre()?->getSemestreParcours()->first()->getParcours();
 
     }
 

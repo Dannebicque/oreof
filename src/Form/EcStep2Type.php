@@ -5,7 +5,7 @@ namespace App\Form;
 use App\Entity\ElementConstitutif;
 use App\Entity\Langue;
 use App\Entity\TypeEnseignement;
-use App\Form\Type\TextareaWithSaveType;
+use App\Form\Type\TextareaAutoSaveType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,7 +17,7 @@ class EcStep2Type extends AbstractType
     {
         $builder
 
-            ->add('description', TextareaWithSaveType::class, [
+            ->add('description', TextareaAutoSaveType::class, [
                 'label' => 'Description',
                 'attr' => ['data-action' => 'change->ec--step2#saveDescription', 'maxlength' => 3000, 'rows' => 20],
                 'help' => 'Indiquez ici en 3000 caractères maximum le contenu de l’enseignement et une description détaillée des différents sujets traités dans cet enseignement.'

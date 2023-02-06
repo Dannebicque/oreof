@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\ElementConstitutif;
 use App\Entity\User;
-use App\Form\Type\TextareaWithSaveType;
+use App\Form\Type\TextareaAutoSaveType;
 use App\Form\Type\YesNoType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -31,13 +31,13 @@ class EcStep1Type extends AbstractType
                 'attr' => ['data-action' => 'change->ec--step1#changeResponsableEc'],
                 'choice_label' => 'display',
             ])
-            ->add('libelle', TextareaWithSaveType::class, [
+            ->add('libelle', TextareaAutoSaveType::class, [
                 'label' => 'Libellé',
                 'disabled' => $this->authorizationChecker->isGranted('ROLE_RESP_FORMATION') ? false : true,
                 'attr' => ['data-action' => 'change->ec--step1#saveContenuFr', 'maxlength' => 255],
                 'help' => 'N\'est modifiable que par le responsable de la formation',
             ])
-            ->add('libelleAnglais', TextareaWithSaveType::class, [
+            ->add('libelleAnglais', TextareaAutoSaveType::class, [
                 'label' => 'Libellé anglais',
                 'attr' => ['data-action' => 'change->ec--step1#saveContenuEn', 'maxlength' => 255],
                 'help' => 'Précisez la version anglaise du libellé de l\'EC',
