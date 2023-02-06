@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/Dannebicque/oreof/compare/v0.1.0...v0.2.0) (2023-02-06)
+
+
+### Features
+
+* [Cas] configuration connexion CAS ([f6a1e37](https://github.com/Dannebicque/oreof/commit/f6a1e370135b2e6cac85b43b751181e792c85f86))
+* [Monolog] Configuration Monolog en production ([1a23789](https://github.com/Dannebicque/oreof/commit/1a23789349edb497cc5c5c066bd07a110d9da3c2))
+
+
+### Bug Fixes
+
+* [Register] Suppression de la demande du rôle ([4644b63](https://github.com/Dannebicque/oreof/commit/4644b637a83fa4d14f4f6ff3a76d3783efeeebc8))
+
 ## [0.1.0](https://github.com/Dannebicque/oreof/compare/v0.0.6...v0.1.0) (2023-02-05)
 
 ### [0.0.6](https://github.com/Dannebicque/oreof/compare/v0.0.5...v0.0.6) (2023-02-03)
