@@ -33,7 +33,6 @@ class RegisterController extends AbstractController
             if ($existUser === null) {
                 $username = $ldap->getUsername($user->getEmail());
                 $user->setUsername($username ?? $user->getEmail());
-                $user->setRoles([strtoupper($form->get('role')->getData()->value)]);
                 $user->setDateDemande(new \DateTime());
                 $user->setCentreId($request->request->get('selectListe'));
 

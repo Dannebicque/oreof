@@ -32,21 +32,13 @@ class RegisterType extends AbstractType
             ])
             ->add('centreDemande', EnumType::class, [
                 'class' => CentreGestionEnum::class,
+                'choice_label' => static function (\UnitEnum $choice): string {
+                    return $choice->libelle();
+                },
                 'placeholder' => 'Indiquez un centre de gestion',
                 'required' => true,
                 'attr' => ['data-action' => 'change->register#changeCentre']
             ])
-// todo: déplacer au moment de la validation
-//            ->add('role', EnumType::class, [
-//                'class' => RoleEnum::class,
-//                'choice_label' => static function (\UnitEnum $choice): string {
-//                    return $choice->libelle();
-//                },
-//                'label' => 'Droits',
-//                'placeholder' => 'Indiquez les droits souhaités',
-//                'required' => true,
-//                'mapped' => false,
-//            ])
         ;
     }
 

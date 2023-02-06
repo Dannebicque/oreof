@@ -23,11 +23,17 @@ export default class extends Controller {
   async _updateSelect(url) {
     await fetch(url).then((response) => response.json()).then(
       (data) => {
-        const mentions = data
+        const items = data
         const selectMention = document.getElementById('selectListe')
         selectMention.innerHTML = ''
 
-        mentions.forEach((mention) => {
+        const option = document.createElement('option')
+        option.value = null
+        option.text = 'Choisir dans la liste'
+        option.selected = true
+        selectMention.appendChild(option)
+
+        items.forEach((mention) => {
           const option = document.createElement('option')
           option.value = mention.id
           option.text = mention.libelle
