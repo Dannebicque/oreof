@@ -69,12 +69,8 @@ class LoginCasAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        $data = [
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
-        ];
-
         $def_response = new RedirectResponse(
-            $this->router->generate('app_login', ['message' => $data])
+            $this->router->generate('app_login')
         );
 
         return (new CASAuthenticationFailureEvent($exception, $def_response))->getResponse();
