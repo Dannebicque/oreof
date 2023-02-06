@@ -13,6 +13,7 @@
         "doctrine/doctrine-bundle": "^2.8",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
+        "apereo/phpcas": "^1.6",
         "sensio/framework-extra-bundle": "^6.2",
         "symfony/console": "6.2.*",
         "symfony/dotenv": "6.2.*",
