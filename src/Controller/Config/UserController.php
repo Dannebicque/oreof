@@ -83,8 +83,10 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $username = $ldap->getUsername($user->getEmail());
-            $user->setUsername($username);
+            $dataUsers = $ldap->getDatas($user->getEmail());
+            $user->setUsername($dataUsers['username']);
+            $user->setNom($dataUsers['nom']);
+            $user->setPrenom($dataUsers['prenom']);
             $userRepository->save($user, true);
 
             $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');

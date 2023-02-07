@@ -33,4 +33,23 @@ class Ldap
 
         return null;
     }
+
+    public function getDatas(?string $email)
+    {
+        $this->connect();
+
+        $query = $this->ds->query($this->parameterBag->get('LDAP_BASE_DN'), '(mail='.$email.')',
+            ['filter' => ['uid','sn', 'givenName']]);
+        $results = $query->execute()->toArray();
+        $t = [];
+        if (1 === count($results)) {
+            $t['username'] = $results[0]->getAttribute('uid')[0];
+            $t['nom'] = $results[0]->getAttribute('sn')[0];
+            $t['prenom'] = $results[0]->getAttribute('givenName')[0];
+
+            return $t;
+        }
+
+        return null;
+    }
 }
