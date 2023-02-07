@@ -4,6 +4,7 @@ twig:
         # the value is the service's id
         user_data: '@App\Classes\DataUserSession'
         product_name: 'ORéOF'
+        product_url: 'https://oreof.univ-reims.fr'
         mail_contact: 'oreof@univ-reims.fr'
         iconAdd: 'fal fa-plus-circle'
         iconEdit: 'fal fa-edit'
