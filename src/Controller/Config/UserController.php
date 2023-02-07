@@ -4,10 +4,12 @@ namespace App\Controller\Config;
 
 use App\Classes\Ldap;
 use App\Entity\User;
+use App\Enums\RoleEnum;
 use App\Events\UserEvent;
 use App\Form\UserLdapType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,29 +44,6 @@ class UserController extends AbstractController
     {
         return $this->render('config/user/_liste.html.twig', [
             'users' => $userRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_ADMIN')]
-    public function new(Request $request, UserRepository $userRepository): Response
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user, [
-            'action' => $this->generateUrl('app_user_new'),
-        ]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository->save($user, true);
-
-//todo: gérer LDAP => champ pour rechercher par email / login
-            return $this->json(true);
-        }
-
-        return $this->render('config/user/new.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
         ]);
     }
 
@@ -107,7 +86,28 @@ class UserController extends AbstractController
     {
         return $this->render('config/user/show.html.twig', [
             'user' => $user,
+            'roles' => RoleEnum::cases()
         ]);
+    }
+
+    #[Route('/change-role/{id}', name: 'app_user_roles', methods: ['POST'])]
+    public function changeRole(
+        Request $request,
+        UserRepository $userRepository,
+        User $user): Response
+    {
+        $data = JsonRequest::getFromRequest($request);
+        $roles = $user->getRoles();
+
+        if ($data['checked']) {
+            $roles[] = $data['role'];
+        } else {
+            $roles = array_diff($roles, [$data['role']]);
+        }
+        $user->setRoles($roles);
+        $userRepository->save($user, true);
+
+        return $this->json(true);
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
@@ -121,6 +121,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setRoles([strtoupper($request->request->all()['user']['role'])]);
             $userRepository->save($user, true);
 
             return $this->json(true);

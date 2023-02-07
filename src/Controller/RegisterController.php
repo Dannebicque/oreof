@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Classes\Ldap;
 use App\Entity\User;
-use App\Enums\RoleEnum;
 use App\Events\UserEvent;
 use App\Form\RegisterType;
 use App\Repository\UserRepository;

@@ -41,19 +41,4 @@
         <i class="{{ iconAdd }}"></i>
         <span> Ajouter un utilisateur depuis le LDAP</span>
     </button>
-    <button
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'Ajouter un utilisateur',
-                modalUrl: path('app_user_new') }) }}
-            data-action="click->modal#openModal"
-            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-            data-size="lg"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Ajouter un utilisateur"
-    >
-        <i class="{{ iconAdd }}"></i>
-        <span> Ajouter un utilisateur</span>
-    </button>
 {% endblock %}

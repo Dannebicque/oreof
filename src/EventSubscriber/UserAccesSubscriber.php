@@ -62,24 +62,31 @@ class UserAccesSubscriber implements EventSubscriberInterface
         }
     }
 
+    public function onUserRevoqueAdmin()
+    {
+    }
+
     public function onUserValideAdmin(UserEvent $event): void
     {
         $user = $event->getUser();
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate('mails/user/acces_valide.txt.twig',
             ['user' => $user]);
-        //todo: copie DPE
         $this->myMailer->sendMessage([$user->getEmail()], '[ORéOF] Validation demande accès');
     }
 
     public function onUserValideDpe(UserEvent $event): void
     {
+        $admins = $this->userRepository->findByRole('ROLE_ADMIN');
+
         $user = $event->getUser();
-        $this->myMailer->initEmail();
-        $this->myMailer->setTemplate('mails/user/acces_valide_dpe.txt.twig',
-            ['user' => $user]);
-        //mail à admin ORéOF
-        $this->myMailer->sendMessage([$user->getEmail()], '[ORéOF] Validation demande accès par le centre');
+
+        foreach ($admins as $admin) {
+            $this->myMailer->initEmail();
+            $this->myMailer->setTemplate('mails/user/acces_valide_dpe.txt.twig',
+                ['user' => $user, 'admin' => $admin]);
+            $this->myMailer->sendMessage([$admin->getEmail()], '[ORéOF] Validation demande accès par le centre');
+        }
     }
 
     public static function getSubscribedEvents(): array
@@ -88,6 +95,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
             UserEvent::USER_DEMANDE_ACCES => 'onUserDemandeAcces',
             UserEvent::USER_VALIDE_DPE => 'onUserValideDpe',
             UserEvent::USER_VALIDE_ADMIN => 'onUserValideAdmin',
+            UserEvent::USER_REVOQUE_ADMIN => 'onUserRevoqueAdmin',
             UserEvent::USER_AJOUTE => 'onUserAjoute',
         ];
     }

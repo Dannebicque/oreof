@@ -14,6 +14,7 @@ class UserEvent
     public const USER_AJOUTE = 'user.ajoute';
     public const USER_VALIDE_DPE = 'user.valide_dpe';
     public const USER_VALIDE_ADMIN = 'user.valide_admin';
+    public const USER_REVOQUE_ADMIN = 'user.revoque';
 
     public function __construct(User $user, string $centre = '', string $idCentre = '')
     {

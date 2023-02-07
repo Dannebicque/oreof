@@ -5,12 +5,11 @@
         {# todo: possibilité de mise à jour? bouton ldap  #}
         <td>{{ user.username }}</td>
     </tr>
-    <tr>
-        <th>Rôles</th>
-        {# todo: liste case à cocher ? #}
-        <td>{{ user.roles|badgeDroits }}</td>
-    </tr>
 
+    <tr>
+        <th>Civilité</th>
+        <td>{{ user.civilite }}</td>
+    </tr>
     <tr>
         <th>Nom</th>
         <td>{{ user.nom }}</td>
@@ -23,6 +22,26 @@
         <th>Email</th>
         <td>{{ user.email }}</td>
     </tr>
+
+    <tr>
+        <th>Rôles</th>
+        <td {{ stimulus_controller('user', {
+            url: path('app_user_roles', {id: user.id}),
+        }) }}>
+            {% for role in roles %}
+                <div class="me-2">
+                    <input
+                            {{ stimulus_action('user', 'changeRole', 'change', {
+                                role: role.name
+                            }) }}
+                            id="roles_{{ loop.index }}" type="checkbox" name="roles[]" value="{{ role.name }}"
+                            {% if role.name in user.roles %}checked{% endif %}>
+                    <label for="roles_{{ loop.index }}">{{ role.libelle }}</label>
+                </div>
+            {% endfor %}
+        </td>
+    </tr>
+
     </tbody>
 </table>
 
@@ -31,20 +50,33 @@
         Désactiver l'accès
     </button>
 {% else %}
-    {% if user.isValidDpe == false or user.isValideAdministration == false %}
-        {% if user.isValidDpe == false %}
-            <span class="badge bg-warning">Non valider par DPE</span>
+    {% if (user.centreDemande == null or user.centreDemande == 'cg_etablissement') and is_granted('ROLE_ADMIN') %}
+        {% if user.isValideAdministration == false %}
+            <a href="{{ path('app_user_gestion_valid_admin', {user:user.id}) }}" class="btn btn-outline-success">
+                Valider l'accès
+            </a>
         {% else %}
-            <span class="badge bg-success">
+            <a href="{{ path('app_user_gestion_revoque_admin', {user:user.id}) }}" class="btn btn-outline-danger">
+                Révoquer l'accès
+            </a>
+        {% endif %}
+    {% else %}
+        {% if (user.isValidDpe == false and (user.centreDemande == 'cg_composante' or user.centreDemande == 'cg_formation')
+            ) or user.isValideAdministration == false %}
+            {% if user.isValidDpe == false %}
+                <span class="badge bg-warning">Non valider par DPE</span>
+            {% else %}
+                <span class="badge bg-success">
             Valider par DPE le {{ user.dateValideDpe|dateTimeFr }}
             </span>
+            {% endif %}
+            <a href="{{ path('app_user_gestion_valid_dpe', {user:user.id}) }}" class="btn btn-outline-success">
+                Valider l'accès
+            </a>
+        {% else %}
+            <button class="btn btn-outline-success">
+                Réactiver l'accès
+            </button>
         {% endif %}
-        <button class="btn btn-outline-success">
-            Valider l'accès
-        </button>
-    {% else %}
-        <button class="btn btn-outline-success">
-            Réactiver l'accès
-        </button>
     {% endif %}
 {% endif %}

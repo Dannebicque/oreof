@@ -25,7 +25,7 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.roles|badgeDroits }}</td>
-                <td>{{ user.centreDemande.libelle }}</td>
+                <td>{{ user.centreDemande != null ? user.centreDemande.libelle : 'Non précisé' }}</td>
                 <td>{{ user.dateDemande|dateTimeFr }}</td>
                 <td>
                     {% if user.isValidDpe %}
