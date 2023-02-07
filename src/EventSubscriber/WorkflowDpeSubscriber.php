@@ -11,18 +11,14 @@ class WorkflowDpeSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'workflow.dpe.enter' => 'onEnter',
-            'workflow.dpe.guard' => 'onGuard',
+            'workflow.dpe.transition.initialiser' => 'onInitialise',
+
         ];
     }
 
-    public function onEnter(Event $event)
+    public function onInitialise(Event $event)
     {
-      //  dump($event);
+       dump($event->getSubject());
     }
 
-    public function onGuard(Event $event)
-    {
-        //dump($event);
-    }
 }

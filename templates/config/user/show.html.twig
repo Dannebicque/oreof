@@ -1,10 +1,6 @@
 <table class="table">
     <tbody>
     <tr>
-        <th>Id</th>
-        <td>{{ user.id }}</td>
-    </tr>
-    <tr>
         <th>Login URCA</th>
         {# todo: possibilité de mise à jour? bouton ldap  #}
         <td>{{ user.username }}</td>
@@ -12,7 +8,7 @@
     <tr>
         <th>Rôles</th>
         {# todo: liste case à cocher ? #}
-        <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+        <td>{{ user.roles|badgeDroits }}</td>
     </tr>
 
     <tr>

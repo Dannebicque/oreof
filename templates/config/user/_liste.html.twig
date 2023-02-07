@@ -1,26 +1,26 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Id</th>
         <th>Nom</th>
-        <th>Prenom</th>
+        <th>Prénom</th>
         <th>Email</th>
-        <th>Username</th>
-        <th>Roles</th>
-        <th>Valide?</th>
+        <th>Login URCA</th>
+        <th>Droits</th>
+        <th>Validé?</th>
+        <th>Centre</th>
         <th></th>
     </tr>
     </thead>
     <tbody>
     {% for user in users %}
         <tr>
-            <td>{{ user.id }}</td>
             <td>{{ user.nom }}</td>
             <td>{{ user.prenom }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.username }}</td>
-            <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+            <td>{{ user.roles|badgeDroits }}</td>
             <td>{{ user.isEnable|badgeBoolean }}</td>
+            <td>Centre...</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {

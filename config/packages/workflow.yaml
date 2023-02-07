@@ -1,7 +1,7 @@
 framework:
     workflows:
         dpe:
-            type: 'state_machine'
+            type: 'workflow'
             marking_store:
                 type: 'method'
                 property: 'etatDpe'
@@ -29,7 +29,7 @@ framework:
             transitions:
                 initialiser:
                     from: 'initialisation_dpe'
-                    to: 'en_cours_redaction'
+                    to: 'en_cours_redaction' #evoi mail aux responsable de formation et aux responsable DPE
                 rediger:
                     from: 'en_cours_redaction'
                     to: 'soumis_rf'

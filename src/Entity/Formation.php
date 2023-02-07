@@ -70,9 +70,6 @@ class Formation
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $modalitesAlternance = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $etatDpe = 'initialisation_dpe';
-
     #[ORM\Column(nullable: true)]
     private ?array $regimeInscription = [];
 
@@ -99,6 +96,9 @@ class Formation
 
     #[ORM\ManyToOne]
     private ?RythmeFormation $rythmeFormation = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $etatDpe = [];
 
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
@@ -331,18 +331,6 @@ class Formation
         return $this;
     }
 
-    public function getEtatDpe(): ?string
-    {
-        return $this->etatDpe;
-    }
-
-    public function setEtatDpe(string $etatDpe): self
-    {
-        $this->etatDpe = $etatDpe;
-
-        return $this;
-    }
-
     public function display(): ?string
     {
         return $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
@@ -510,6 +498,18 @@ class Formation
     public function setRythmeFormation(?RythmeFormation $rythmeFormation): self
     {
         $this->rythmeFormation = $rythmeFormation;
+
+        return $this;
+    }
+
+    public function getEtatDpe(): array
+    {
+        return $this->etatDpe ?? [];
+    }
+
+    public function setEtatDpe(?array $etatDpe): self
+    {
+        $this->etatDpe = $etatDpe;
 
         return $this;
     }

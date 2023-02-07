@@ -4,10 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    LDAP_HOST: env(LDAP_HOST)
-    LDAP_LOGIN: env(LDAP_LOGIN)
-    LDAP_PASSWORD: env(LDAP_PASSWORD)
-    LDAP_BASE_DN: env(LDAP_BASE_DN)
+    LDAP_HOST: '%env(LDAP_HOST)%'
+    LDAP_LOGIN: '%env(LDAP_LOGIN)%'
+    LDAP_PASSWORD: '%env(LDAP_PASSWORD)%'
+    LDAP_BASE_DN: '%env(LDAP_BASE_DN)%'
     CAS_HOST: '%env(resolve:CAS_HOST)%'
     CAS_PORT: '%env(resolve:CAS_PORT)%'
     CAS_CONTEXT: '%env(resolve:CAS_CONTEXT)%'

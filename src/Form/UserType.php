@@ -16,7 +16,12 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username')
+            ->add('username', TextType::class, [
+                'required' => true,
+                'label' => 'Login',
+                'help' => 'Login URCA',
+                'attr' => ['maxlength' => 10]
+            ])
             ->add('civilite', )
             ->add('nom', TextType::class, [
                 'required' => true,
@@ -51,7 +56,7 @@ class UserType extends AbstractType
                     return $choice->libelle();
                 },
                 'label' => 'Droits',
-                'placeholder' => 'Indiquez les droits souhaités',
+                'placeholder' => 'Indiquez les droits accordés',
                 'required' => true,
                 'mapped' => false,
             ])

@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/administration/utilisateurs')]
 class UserController extends AbstractController
@@ -21,8 +22,10 @@ class UserController extends AbstractController
     }
 
     #[Route('/attente-validation', name: 'app_user_attente', methods: ['GET'])]
+
     public function attente(UserRepository $repository): Response
     {
+        //todo: gérer par le responsable de DPE ?? pour affecter les droits et "pré-valider" les utilisateurs
         $users = $repository->findNotEnableAvecDemande();
 
         return $this->render('config/user/attente.html.twig', [
@@ -39,6 +42,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, UserRepository $userRepository): Response
     {
         $user = new User();
@@ -50,6 +54,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $userRepository->save($user, true);
 
+//todo: gérer LDAP => champ pour rechercher par email / login
             return $this->json(true);
         }
 
@@ -68,6 +73,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, User $user, UserRepository $userRepository): Response
     {
         $form = $this->createForm(UserType::class, $user,
@@ -89,6 +95,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, User $user, UserRepository $userRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {

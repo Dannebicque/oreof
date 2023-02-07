@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Enums\RoleEnum;
 use App\Utils\Tools;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -19,13 +20,27 @@ class AppExtension extends AbstractExtension
             new TwigFilter('dateFr', [$this, 'dateFr'], ['is_safe' => ['html']]),
             new TwigFilter('dateTimeFr', [$this, 'dateTimeFr'], ['is_safe' => ['html']]),
             new TwigFilter('rncp_link', [$this, 'rncpLink'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeBoolean', [$this, 'badgeBoolean'], ['is_safe' => ['html']])
+            new TwigFilter('badgeBoolean', [$this, 'badgeBoolean'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeDroits', [$this, 'badgeDroits'], ['is_safe' => ['html']])
         ];
     }
 
     public function badgeBoolean(bool $value): string
     {
         return $value ? '<span class="badge bg-success">Oui</span>' : '<span class="badge bg-danger">Non</span>';
+    }
+
+    public function badgeDroits(array $droits): string
+    {
+        $html = '';
+        $nbdroits = count($droits);
+        foreach ($droits as $droit) {
+            if ($nbdroits > 1 && $droit !== 'ROLE_LECTEUR') {
+                $html .= '<span class="badge bg-success me-1">' . RoleEnum::from(strtolower($droit))->libelle() . '</span>';
+            }
+        }
+
+        return $html;
     }
 
     public function dateFr(?\DateTimeInterface $value): string
@@ -44,7 +59,7 @@ class AppExtension extends AbstractExtension
             $code = mb_substr($code, 4, mb_strlen($code));
         }
 
-        return '<a href="https://www.francecompetences.fr/recherche/rncp/'.$code.'" target="_blank">'.$code.' <i class="fal
+        return '<a href="https://www.francecompetences.fr/recherche/rncp/' . $code . '" target="_blank">' . $code . ' <i class="fal
                             fa-arrow-up-right-from-square"></i></a>&nbsp;';
     }
 
@@ -54,7 +69,7 @@ class AppExtension extends AbstractExtension
             return '';
         }
 
-        return '<a href="mailto:'.$email.'" target="_blank">'.$email.' <i class="fal
+        return '<a href="mailto:' . $email . '" target="_blank">' . $email . ' <i class="fal
                             fa-arrow-up-right-from-square"></i></a>&nbsp;';
     }
 
