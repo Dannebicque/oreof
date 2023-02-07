@@ -56,7 +56,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
         foreach ($admins as $admin) {
             $this->myMailer->initEmail();
             $this->myMailer->setTemplate('mails/user/demande_en_attente_admin.txt.twig',
-                ['user' => $user]);
+                ['user' => $user, 'admin' => $admin]);
             $this->myMailer->sendMessage([$admin->getEmail()],
                 '[ORéOF] Une demande d\'accès est en attente de validation');
         }
