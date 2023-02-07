@@ -87,7 +87,7 @@ class UserController extends AbstractController
             $user->setUsername($dataUsers['username']);
             $user->setNom($dataUsers['nom']);
             $user->setPrenom($dataUsers['prenom']);
-            $user->setRoles([strtoupper($request->request->get('user_ldap')['role'])]);
+            $user->setRoles([strtoupper($request->request->all()['user_ldap']['role'])]);
             $userRepository->save($user, true);
 
             $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');
