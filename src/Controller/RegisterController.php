@@ -34,7 +34,7 @@ class RegisterController extends AbstractController
                 $username = $ldap->getUsername($user->getEmail());
                 $user->setUsername($username ?? $user->getEmail());
                 $user->setDateDemande(new \DateTime());
-                $user->setCentreId($request->request->get('selectListe'));
+                $user->setCentreId((int)$request->request->get('selectListe'));
 
                 $userRepository->save($user, true);
                 $this->addFlash('success', 'Votre demande a bien été prise en compte');
