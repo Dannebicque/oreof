@@ -46,11 +46,26 @@
 </table>
 
 {% if user.isEnable %}
-    <button class="btn btn-outline-danger">
+    <a href="{{ path('app_user_gestion_revoque_admin', {user:user.id}) }}" class="btn btn-outline-danger">
         Désactiver l'accès
-    </button>
+    </a>
 {% else %}
-    {% if (user.centreDemande == null or user.centreDemande == 'cg_etablissement') and is_granted('ROLE_ADMIN') %}
+    {% if (user.isValidDpe == false and (user.centreDemande == 'cg_composante' or user.centreDemande == 'cg_formation')
+        ) or user.isValideAdministration == false %}
+        {% if user.isValidDpe == false %}
+            <span class="badge bg-warning">Non valider par DPE</span>
+        {% else %}
+            <span class="badge bg-success">
+            Valider par DPE le {{ user.dateValideDpe|dateTimeFr }}
+            </span>
+        {% endif %}
+        {% if not is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_user_gestion_valid_dpe', {user:user.id}) }}" class="btn btn-outline-success">
+            Valider l'accès
+        </a>
+    {% endif %}
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
         {% if user.isValideAdministration == false %}
             <a href="{{ path('app_user_gestion_valid_admin', {user:user.id}) }}" class="btn btn-outline-success">
                 Valider l'accès
@@ -59,24 +74,6 @@
             <a href="{{ path('app_user_gestion_revoque_admin', {user:user.id}) }}" class="btn btn-outline-danger">
                 Révoquer l'accès
             </a>
-        {% endif %}
-    {% else %}
-        {% if (user.isValidDpe == false and (user.centreDemande == 'cg_composante' or user.centreDemande == 'cg_formation')
-            ) or user.isValideAdministration == false %}
-            {% if user.isValidDpe == false %}
-                <span class="badge bg-warning">Non valider par DPE</span>
-            {% else %}
-                <span class="badge bg-success">
-            Valider par DPE le {{ user.dateValideDpe|dateTimeFr }}
-            </span>
-            {% endif %}
-            <a href="{{ path('app_user_gestion_valid_dpe', {user:user.id}) }}" class="btn btn-outline-success">
-                Valider l'accès
-            </a>
-        {% else %}
-            <button class="btn btn-outline-success">
-                Réactiver l'accès
-            </button>
         {% endif %}
     {% endif %}
 {% endif %}
