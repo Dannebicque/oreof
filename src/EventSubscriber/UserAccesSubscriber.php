@@ -88,6 +88,16 @@ class UserAccesSubscriber implements EventSubscriberInterface
             UserEvent::USER_DEMANDE_ACCES => 'onUserDemandeAcces',
             UserEvent::USER_VALIDE_DPE => 'onUserValideDpe',
             UserEvent::USER_VALIDE_ADMIN => 'onUserValideAdmin',
+            UserEvent::USER_AJOUTE => 'onUserAjoute',
         ];
+    }
+
+    public function onUserAjoute(UserEvent $event)
+    {
+        $user = $event->getUser();
+        $this->myMailer->initEmail();
+        $this->myMailer->setTemplate('mails/user/acces_ajoute.txt.twig',
+            ['user' => $user]);
+        $this->myMailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
     }
 }

@@ -19,13 +19,22 @@ class FormationEtatController extends BaseController
     ): Response
     {
         $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()]);
-
+        $listeFormationsOuvrables = [];
         foreach ($formations as $formation) {
             if ($this->dpeWorkflow->can($formation, 'initialiser')) {
+                if (!array_key_exists($formation->getComposantePorteuse()?->getId(), $listeFormationsOuvrables)) {
+                    $listeFormationsOuvrables[$formation->getComposantePorteuse()?->getId()] = [];
+                }
+                $listeFormationsOuvrables[$formation->getComposantePorteuse()?->getId()][] = $formation;
                 $this->dpeWorkflow->apply($formation, 'initialiser');
                 $formationRepository->save($formation, true);
             }
         }
+
+        //envoi d'un mail de synthèse aux composantes porteuses
+        //todo: à faire
+
+        $this->addFlashBag('success', 'Les formations ont été ouvertes');
 
         return $this->redirectToRoute('structure_formation_index');
     }

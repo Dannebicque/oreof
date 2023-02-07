@@ -2,10 +2,14 @@
 
 namespace App\Controller\Config;
 
+use App\Classes\Ldap;
 use App\Entity\User;
+use App\Events\UserEvent;
+use App\Form\UserLdapType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -60,6 +64,37 @@ class UserController extends AbstractController
 
         return $this->render('config/user/new.html.twig', [
             'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/ajouter-ldap', name: 'app_user_new_ldap', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function newLdap(
+        Ldap $ldap,
+        EventDispatcherInterface $eventDispatcher,
+        Request $request, UserRepository $userRepository): Response
+    {
+
+        $user = new User();
+        $form = $this->createForm(UserLdapType::class, $user, [
+            'action' => $this->generateUrl('app_user_new_ldap'),
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $username = $ldap->getUsername($user->getEmail());
+            $user->setUsername($username);
+            $userRepository->save($user, true);
+
+            $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');
+
+            $userEvent = new UserEvent($user);
+            $eventDispatcher->dispatch($userEvent, UserEvent::USER_AJOUTE);
+            return $this->json(true);
+        }
+
+        return $this->render('config/user/new-ldap.html.twig', [
             'form' => $form->createView(),
         ]);
     }

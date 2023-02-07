@@ -1,0 +1,34 @@
+<div {{ stimulus_controller('register', {
+    urlComposante: path('api_composante'),
+    urlFormation: path('api_formation'),
+}) }}>
+    {% form_theme form 'communs/form_theme.html.twig' %}
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-12">
+            {{ form_row(form.email) }}
+        </div>
+        <div class="col-12">
+        {{ form_row(form.role) }}
+    </div>
+        <div class="col-6">
+            {{ form_row(form.centreDemande) }}
+        </div>
+        <div class="col-6">
+            <label for="selectListe" class="form-label">Selon le centre, précisez</label>
+            <select class="form-select" name="selectListe" id="selectListe">
+                <option value="">Choisissez un centre</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="d-grid">
+        <button type="submit" class="btn btn-success"
+            {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+       >
+            <i class="fal fa-floppy-disk"></i>
+            Ajouter l'utilisateur
+        </button>
+    </div>
+    {{ form_end(form) }}
+</div>

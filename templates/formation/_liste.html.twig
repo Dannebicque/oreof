@@ -32,7 +32,7 @@ bouton pour valider/invalide les étapes successives #}
                 {{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'Non définie' }}
             </td>
             <td>
-                {{ formation.etatDpe }}
+                {{ formation.etatDpe|badgeDpe }}
             </td>
             <td>
                 {{ formation.remplissage|remplissage }}
