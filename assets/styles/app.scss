@@ -13,14 +13,16 @@ body {
   --avatar-size-md: 4rem;
   --avatar-size-xxl: 6rem;
   --color-avatar: #007bff;
-  --complementaire:#e36724;
-  --secondary: #e36724;
+  --complementaire:#BE5219;
+  --secondary: #BE5219;
+  --alternate: #4e4e4e;
+  --warning: #B85600;
+  --info: #1F7B89;
+  --success: #39832F;
+  --primary:#187BB9;
 }
 @import "./styles.css";
 @import "./main.scss";
 
-body {
-  --secondary: #e36724;
-}
 
 
