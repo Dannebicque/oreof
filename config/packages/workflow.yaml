@@ -28,12 +28,13 @@ framework:
                 - 'soumis_conseil_reserve'
             transitions:
                 initialiser:
+                    guard: "is_granted('ROLE_ADMIN')"
                     from: 'initialisation_dpe'
                     to: 'en_cours_redaction' #evoi mail aux responsable de formation et aux responsable DPE
                 rediger:
                     from: 'en_cours_redaction'
                     to: 'soumis_rf'
-                refuser_rf:
+                refuser_rf: #evoi mail au responsable de formation par les responsable EC ? Sortir de ce worflow et avoir un worflow EC
                     from: 'soumis_rf'
                     to: 'refuse_rf'
                 valide_rf:
@@ -43,12 +44,15 @@ framework:
                     from: 'soumis_rf'
                     to: 'en_cours_redaction'
                 refuser_dpe_composante:
+                    guard: "is_granted('ROLE_RESP_DPE')"
                     from: 'soumis_dpe_composante'
                     to: 'refuse_dpe_composante'
                 valide_dpe_composante:
+                    guard: "is_granted('ROLE_RESP_DPE')"
                     from: 'soumis_dpe_composante'
                     to: 'soumis_conseil'
                 reserver_dpe_composante:
+                    guard: "is_granted('ROLE_RESP_DPE')"
                     from: 'soumis_dpe_composante'
                     to: 'soumis_rf'
                 refuser_conseil:
@@ -61,15 +65,19 @@ framework:
                     from: 'soumis_conseil'
                     to: 'soumis_dpe_composante'
                 laisser_passer_conseil:
+                    guard: "is_granted('ROLE_RESP_DPE')"
                     from: 'soumis_conseil'
                     to: 'soumis_central'
                 refuser_central:
+                    guard: "is_granted('ROLE_SES')"
                     from: 'soumis_central'
                     to: 'refuse_central'
                 valider_central:
+                    guard: "is_granted('ROLE_SES')"
                     from: 'soumis_central'
                     to: 'soumis_vp'
                 reserver_central:
+                    guard: "is_granted('ROLE_SES')"
                     from: 'soumis_central'
                     to: 'soumis_dpe_composante'
                 transmettre_cfvu:

@@ -42,9 +42,13 @@ class Composante
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $urlSite = null;
 
+    #[ORM\OneToMany(mappedBy: 'composante', targetEntity: UserCentre::class)]
+    private Collection $userCentres;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
+        $this->userCentres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -176,6 +180,36 @@ class Composante
     public function setUrlSite(?string $urlSite): self
     {
         $this->urlSite = $urlSite;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserCentre>
+     */
+    public function getUserCentres(): Collection
+    {
+        return $this->userCentres;
+    }
+
+    public function addUserCentre(UserCentre $userCentre): self
+    {
+        if (!$this->userCentres->contains($userCentre)) {
+            $this->userCentres->add($userCentre);
+            $userCentre->setComposante($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserCentre(UserCentre $userCentre): self
+    {
+        if ($this->userCentres->removeElement($userCentre)) {
+            // set the owning side to null (unless already changed)
+            if ($userCentre->getComposante() === $this) {
+                $userCentre->setComposante(null);
+            }
+        }
 
         return $this;
     }

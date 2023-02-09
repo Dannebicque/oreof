@@ -62,14 +62,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateValideAdministration = null;
 
-    #[ORM\Column(length: 30, nullable: true, enumType: CentreGestionEnum::class)]
-    private ?CentreGestionEnum $centreDemande = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDemande = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $centreId = null;
 
     #[ORM\Column]
     private ?bool $isDeleted = false;
@@ -86,10 +80,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'destinataire', targetEntity: Notification::class)]
     private Collection $notifications;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserCentre::class)]
+    private Collection $userCentres;
+
     public function __construct()
     {
         $this->composantes = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->userCentres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -306,18 +304,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCentreDemande(): ?CentreGestionEnum
-    {
-        return $this->centreDemande;
-    }
-
-    public function setCentreDemande(?CentreGestionEnum $centreDemande): self
-    {
-        $this->centreDemande = $centreDemande;
-
-        return $this;
-    }
-
     public function getDateDemande(): ?\DateTimeInterface
     {
         return $this->dateDemande;
@@ -326,18 +312,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDateDemande(?\DateTimeInterface $dateDemande): self
     {
         $this->dateDemande = $dateDemande;
-
-        return $this;
-    }
-
-    public function getCentreId(): ?int
-    {
-        return $this->centreId;
-    }
-
-    public function setCentreId(?int $centreId): self
-    {
-        $this->centreId = $centreId;
 
         return $this;
     }
@@ -414,6 +388,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($notification->getDestinataire() === $this) {
                 $notification->setDestinataire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserCentre>
+     */
+    public function getUserCentres(): Collection
+    {
+        return $this->userCentres;
+    }
+
+    public function addUserCentre(UserCentre $userCentre): self
+    {
+        if (!$this->userCentres->contains($userCentre)) {
+            $this->userCentres->add($userCentre);
+            $userCentre->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserCentre(UserCentre $userCentre): self
+    {
+        if ($this->userCentres->removeElement($userCentre)) {
+            // set the owning side to null (unless already changed)
+            if ($userCentre->getUser() === $this) {
+                $userCentre->setUser(null);
             }
         }
 

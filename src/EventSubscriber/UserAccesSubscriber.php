@@ -5,6 +5,7 @@ namespace App\EventSubscriber;
 use App\Classes\Mailer;
 use App\Enums\CentreGestionEnum;
 use App\Events\UserEvent;
+use App\Events\UserRegisterEvent;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\UserRepository;
@@ -20,7 +21,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
     ) {
     }
 
-    public function onUserDemandeAcces(UserEvent $event): void
+    public function onUserDemandeAcces(UserRegisterEvent $event): void
     {
         $admins = $this->userRepository->findByRole('ROLE_ADMIN');
         $user = $event->getUser();
@@ -32,13 +33,13 @@ class UserAccesSubscriber implements EventSubscriberInterface
         $valid = null;
 
         //si centre : Composante ou Formation
-        if ($user->getCentreDemande() === CentreGestionEnum::CENTRE_GESTION_COMPOSANTE) {
-            $comp = $this->composanteRepository->find($user->getCentreId());
+        if ($event->getCentre() === CentreGestionEnum::CENTRE_GESTION_COMPOSANTE) {
+            $comp = $event->getComposante();
             if ($comp !== null && $comp->getResponsableDpe() !== null) {
                 $valid = $comp->getResponsableDpe();
             }
-        } elseif ($user->getCentreDemande() === CentreGestionEnum::CENTRE_GESTION_FORMATION) {
-            $formation = $this->formationRepository->find($user->getCentreId());
+        } elseif ($event->getCentre() === CentreGestionEnum::CENTRE_GESTION_FORMATION) {
+            $formation = $event->getFormation();
             if ($formation !== null && $formation->getResponsableMention() !== null) {
                 $valid = $formation->getResponsableMention();
             }
@@ -92,7 +93,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            UserEvent::USER_DEMANDE_ACCES => 'onUserDemandeAcces',
+            UserRegisterEvent::USER_DEMANDE_ACCES => 'onUserDemandeAcces',
             UserEvent::USER_VALIDE_DPE => 'onUserValideDpe',
             UserEvent::USER_VALIDE_ADMIN => 'onUserValideAdmin',
             UserEvent::USER_REVOQUE_ADMIN => 'onUserRevoqueAdmin',

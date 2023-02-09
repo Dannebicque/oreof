@@ -4,8 +4,15 @@ namespace App\Controller;
 
 use App\Classes\Ldap;
 use App\Entity\User;
+use App\Entity\UserCentre;
+use App\Enums\CentreGestionEnum;
 use App\Events\UserEvent;
+use App\Events\UserRegisterEvent;
 use App\Form\RegisterType;
+use App\Repository\ComposanteRepository;
+use App\Repository\EtablissementRepository;
+use App\Repository\FormationRepository;
+use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -17,6 +24,10 @@ class RegisterController extends AbstractController
 {
     #[Route('/demande-acces', name: 'app_register')]
     public function index(
+        EtablissementRepository $etablissementRepository,
+        UserCentreRepository $userCentreRepository,
+        ComposanteRepository $composanteRepository,
+        FormationRepository $formationRepository,
         Ldap $ldap,
         EventDispatcherInterface $eventDispatcher,
         UserRepository $userRepository,
@@ -33,13 +44,40 @@ class RegisterController extends AbstractController
                 $username = $ldap->getUsername($user->getEmail());
                 $user->setUsername($username ?? $user->getEmail());
                 $user->setDateDemande(new \DateTime());
-                $user->setCentreId((int)$request->request->get('selectListe'));
-
                 $userRepository->save($user, true);
+
+                $centre = $form['centreDemande']->getData();
+                $userEvent = new UserRegisterEvent($user, $centre);
+                switch ($centre) {
+                    case CentreGestionEnum::CENTRE_GESTION_FORMATION:
+                        $formation = $formationRepository->find($request->request->get('selectListe'));
+                        $centreUser = new UserCentre();
+                        $centreUser->setUser($user);
+                        $centreUser->setFormation($formation);
+                        $userEvent->setFormation($formation);
+                        break;
+                    case CentreGestionEnum::CENTRE_GESTION_COMPOSANTE:
+                        $composante = $composanteRepository->find($request->request->get('selectListe'));
+                        $centreUser = new UserCentre();
+                        $centreUser->setUser($user);
+                        $centreUser->setComposante($composante);
+                        $userEvent->setComposante($composante);
+                        break;
+                    case CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT:
+                        $etablissement = $etablissementRepository->find(1);//todo: imposé car juste URCA
+                        $centreUser = new UserCentre();
+                        $centreUser->setUser($user);
+                        $centreUser->setEtablissement($etablissement);
+                        $userEvent->setEtablissement($etablissement);
+                        break;
+                }
+
+                $userCentreRepository->save($centreUser, true);
+
                 $this->addFlash('success', 'Votre demande a bien été prise en compte');
 
-                $userEvent = new UserEvent($user);
-                $eventDispatcher->dispatch($userEvent, UserEvent::USER_DEMANDE_ACCES);
+
+                $eventDispatcher->dispatch($userEvent, UserRegisterEvent::USER_DEMANDE_ACCES);
 
                 return $this->render('register/confirm.html.twig', [
                     'user' => $user,

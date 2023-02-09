@@ -100,6 +100,9 @@ class Formation
     #[ORM\Column(nullable: true)]
     private ?array $etatDpe = [];
 
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: UserCentre::class)]
+    private Collection $userCentres;
+
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
         $this->anneeUniversitaire = $anneeUniversitaire;
@@ -107,6 +110,7 @@ class Formation
         $this->parcours = new ArrayCollection();
         $this->composantesInscription = new ArrayCollection();
         $this->blocCompetences = new ArrayCollection();
+        $this->userCentres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -510,6 +514,36 @@ class Formation
     public function setEtatDpe(?array $etatDpe): self
     {
         $this->etatDpe = $etatDpe;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserCentre>
+     */
+    public function getUserCentres(): Collection
+    {
+        return $this->userCentres;
+    }
+
+    public function addUserCentre(UserCentre $userCentre): self
+    {
+        if (!$this->userCentres->contains($userCentre)) {
+            $this->userCentres->add($userCentre);
+            $userCentre->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserCentre(UserCentre $userCentre): self
+    {
+        if ($this->userCentres->removeElement($userCentre)) {
+            // set the owning side to null (unless already changed)
+            if ($userCentre->getFormation() === $this) {
+                $userCentre->setFormation(null);
+            }
+        }
 
         return $this;
     }

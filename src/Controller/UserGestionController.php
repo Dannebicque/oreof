@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Enums\RoleEnum;
 use App\Events\UserEvent;
 use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -56,6 +57,30 @@ class UserGestionController extends BaseController
     #[Route('/revoque/admin/{user}', name: 'app_user_gestion_revoque_admin')]
     #[IsGranted('ROLE_ADMIN')]
     public function revoqueAdmin(User $user): Response
+    {
+        $user->setIsEnable(false);
+        $user->setIsValideAdministration(false);
+        $user->setDateValideAdministration(new \DateTime());
+
+        $this->userRepository->save($user, true);
+        $this->eventDispatcher->dispatch(new UserEvent($user), UserEvent::USER_REVOQUE_ADMIN);
+
+        return $this->redirectToRoute('app_user_attente');
+    }
+
+    #[Route('/droits/{user}', name: 'app_user_gestion_droits')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function gestionDroits(User $user): Response
+    {
+        return $this->render('user/_gestion_droits.html.twig', [
+            'user' => $user,
+            'roles' => RoleEnum::cases()
+        ]);
+    }
+
+    #[Route('/gestion/centre/{user}', name: 'app_user_gestion_centre')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function gestionCentre(User $user): Response
     {
         $user->setIsEnable(false);
         $user->setIsValideAdministration(false);
