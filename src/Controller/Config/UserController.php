@@ -106,8 +106,11 @@ class UserController extends AbstractController
 
             $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');
 
-            $userEvent = new UserEvent($user);
-            $eventDispatcher->dispatch($userEvent, UserEvent::USER_AJOUTE);
+            if ($form['sendMail']->getData()) {
+                $userEvent = new UserEvent($user);
+                $eventDispatcher->dispatch($userEvent, UserEvent::USER_AJOUTE);
+            }
+
             return $this->json(true);
         }
 
