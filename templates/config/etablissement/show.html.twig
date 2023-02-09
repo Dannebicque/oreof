@@ -5,8 +5,12 @@
         <td>{{ etablissement.id }}</td>
     </tr>
     <tr>
-        <th>Libelle</th>
+        <th>Libellé</th>
         <td>{{ etablissement.libelle }}</td>
+    </tr>
+    <tr>
+        <th>Adresse</th>
+        <td>{{ etablissement.adresse ? etablissement.adresse.display : 'Non définie' }}</td>
     </tr>
     </tbody>
 </table>

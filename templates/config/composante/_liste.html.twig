@@ -5,6 +5,7 @@
         <th>Nom Composante</th>
         <th>Directeur</th>
         <th>Responsable DPE</th>
+        <th>Adresse</th>
         <th></th>
     </tr>
     </thead>
@@ -15,6 +16,7 @@
             <td>{{ composante.libelle }}</td>
             <td>{{ composante.directeur ? composante.directeur.display : 'Non défini' }}</td>
             <td>{{ composante.responsableDpe ? composante.responsableDpe.display : 'Non défini' }}</td>
+            <td>{{ composante.adresse ? composante.adresse.display : 'Non définie' }}</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {

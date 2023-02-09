@@ -77,4 +77,9 @@ class Adresse
 
         return $this;
     }
+
+    public function display(): string
+    {
+        return $this->adresse1 . '<br> ' . $this->adresse2 . '<br> ' . $this->codePostal . ' ' . $this->ville;
+    }
 }
