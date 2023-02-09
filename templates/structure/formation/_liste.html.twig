@@ -86,7 +86,8 @@
                                     <div class="col-6 col-md-2 flex-column
                                            mb-1 mb-md-0 text-end">
                                         <div class="text-muted text-small d-md-none">Actions</div>
-                                        {% if is_granted('ROLE_RESP_FORMATION') %}
+                                        {% if (is_granted('ROLE_RESP_FORMATION') and workflow_can(formation,
+                                            'valide_rf')) %}
                                             <button
                                                     {{ stimulus_controller('modal', {
                                                         size: 'lg',
@@ -101,11 +102,47 @@
                                                     title="Valider et soumettre la formation"
                                             >
                                                 <i class="{{ iconValidate }}"></i>
-                                                <span> Valider</span>
+                                                <span> Valider RF</span>
+                                            </button>
+                                        {% elseif is_granted('ROLE_SES') and workflow_can(formation,
+                                            'valider_central') %}
+                                            <button
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        modalTitle: 'Valider et soumettre la formation',
+                                                        modalUrl: path('structure_formation_modal_validation',
+                                                            {formation:formation.id}) }) }}
+                                                    data-action="click->modal#openModal"
+                                                    class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                                                    data-size="lg"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom"
+                                                    title="Valider et soumettre la formation"
+                                            >
+                                                <i class="{{ iconValidate }}"></i>
+                                                <span> Valider SES</span>
+                                            </button>
+                                        {% elseif is_granted('ROLE_RESP_DPE') and workflow_can
+                                            (formation, 'valide_dpe_composante') %}
+                                            <button
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        modalTitle: 'Valider et soumettre la formation',
+                                                        modalUrl: path('structure_formation_modal_validation',
+                                                            {formation:formation.id}) }) }}
+                                                    data-action="click->modal#openModal"
+                                                    class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                                                    data-size="lg"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom"
+                                                    title="Valider et soumettre la formation"
+                                            >
+                                                <i class="{{ iconValidate }}"></i>
+                                                <span> Valider DPE</span>
                                             </button>
                                         {% endif %}
                                         <a href="{{ path('app_formation_show', {id:formation.id}) }}"
-                                            class="btn btn-outline-info btn-sm"
+                                           class="btn btn-outline-info btn-sm"
                                         >
                                             <i class="{{ iconShow }}"></i>
                                         </a>

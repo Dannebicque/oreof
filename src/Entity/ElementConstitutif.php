@@ -98,8 +98,8 @@ class ElementConstitutif
     #[ORM\OneToMany(mappedBy: 'ec', targetEntity: EcUe::class)]
     private Collection $ecUes;
 
-    #[ORM\Column(length: 50)]
-    private ?string $etat_ec = 'initialise';
+    #[ORM\Column(nullable: true)]
+    private ?array $etatEc = [];
 
     public function __construct()
     {
@@ -571,14 +571,14 @@ class ElementConstitutif
 
     }
 
-    public function getEtatEc(): ?string
+    public function getEtatEc(): array
     {
-        return $this->etat_ec;
+        return $this->etatEc ?? [];
     }
 
-    public function setEtatEc(string $etat_ec): self
+    public function setEtatEc(?array $etatEc): self
     {
-        $this->etat_ec = $etat_ec;
+        $this->etatEc = $etatEc;
 
         return $this;
     }

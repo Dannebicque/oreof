@@ -45,10 +45,25 @@ class Composante
     #[ORM\OneToMany(mappedBy: 'composante', targetEntity: UserCentre::class)]
     private Collection $userCentres;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $etatComposante = [];
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
         $this->userCentres = new ArrayCollection();
+    }
+
+    public function getEtatComposante(): array
+    {
+        return $this->etatComposante ?? [];
+    }
+
+    public function setEtatComposante(?array $etatComposante): self
+    {
+        $this->etatComposante = $etatComposante;
+
+        return $this;
     }
 
     public function getId(): ?int

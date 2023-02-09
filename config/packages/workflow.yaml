@@ -31,14 +31,8 @@ framework:
                     guard: "is_granted('ROLE_ADMIN')"
                     from: 'initialisation_dpe'
                     to: 'en_cours_redaction' #evoi mail aux responsable de formation et aux responsable DPE
-                rediger:
-                    from: 'en_cours_redaction'
-                    to: 'soumis_rf'
-                refuser_rf: #evoi mail au responsable de formation par les responsable EC ? Sortir de ce worflow et avoir un worflow EC
-                    from: 'soumis_rf'
-                    to: 'refuse_rf'
                 valide_rf:
-                    from: 'soumis_rf'
+                    from: 'en_cours_redaction'
                     to: 'soumis_dpe_composante'
                 reserver_rf:
                     from: 'soumis_rf'
@@ -107,36 +101,51 @@ framework:
                 publier:
                     from: 'valie_a_publier'
                     to: 'publie'
-                    #•	Visa transmission CVFU
-                    #•	Refus définitif CFVU
-                    #•	Refus CFVU – projet à revoir
-                    #•	Validé CFVU - sous réserve de modification
-                    #•	Validé CFVU - sous réserve validation conseil
-                    #•	Validé CFVU
-                    #•	Visa publication, attente de publication
-                    #•	DPE publié
-
-
-# •	En attente de rédaction (après initialisation de la campagne par le central)
-#•	En cours de rédaction
-#•	Soumis au RF (par rédacteur)
-#•	Réserve RF
-#•	Validé RF, soumis DPE composante
-#•	Refusé DPE composante
-#•	Réserve DPE composante
-#•	Visa DPE composante, soumis conseil
-#•	Refusé conseil
-#•	Réserve conseil
-#•	Validé conseil, soumis central
-#•	Laissez-passer, soumis central
-#•	Refusé central
-#•	Réserve central
-#•	Soumis au VP
-#•	Visa transmission CVFU
-#•	Refus définitif CFVU
-#•	Refus CFVU – projet à revoir
-#•	Validé CFVU - sous réserve de modification
-#•	Validé CFVU - sous réserve validation conseil
-#•	Validé CFVU
-#•	Visa publication, attente de publication
-#•	DPE publié
+        ec:
+            type: 'workflow'
+            marking_store:
+                type: 'method'
+                property: 'etatEc'
+            supports:
+                - App\Entity\ElementConstitutif
+            initial_marking: 'initialisation_ec'
+            places:
+                - 'initialisation_ec'
+                - 'en_cours_redaction'
+                - 'soumis_rf'
+                - 'refuse_rf'
+            transitions:
+                initialiser:
+                    guard: "is_granted('ROLE_RESP_FORMATION')"
+                    from: 'initialisation_ec'
+                    to: 'en_cours_redaction'
+                valider_rf:
+                    from: 'en_cours_redaction'
+                    to: 'soumis_rf'
+                refuser_rf:
+                    from: 'en_cours_redaction'
+                    to: 'refuse_rf'
+        composante:
+            type: 'workflow'
+            marking_store:
+                type: 'method'
+                property: 'etatComposante'
+            supports:
+                - App\Entity\Composante
+            initial_marking: 'initialisation_composante'
+            places:
+                - 'initialisation_composante'
+                - 'en_cours_redaction'
+                - 'soumis_ses'
+                - 'refuse_dpe'
+            transitions:
+                initialiser:
+                    guard: "is_granted('ROLE_RESP_DPE')"
+                    from: 'initialisation_composante'
+                    to: 'en_cours_redaction'
+                valider_resp_dpe:
+                    from: 'en_cours_redaction'
+                    to: 'soumis_ses'
+                refuser_resp_dpe:
+                    from: 'en_cours_redaction'
+                    to: 'refuse_dpe'
