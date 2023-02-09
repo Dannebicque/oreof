@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://github.com/Dannebicque/oreof/compare/v0.2.0...v0.2.1) (2023-02-09)
+
+
+### Features
+
+* [CAS] Configuration du CAS ([da8cac1](https://github.com/Dannebicque/oreof/commit/da8cac17734d4e9dab626a52b6b8b09863144c39))
+* [CAS] Configuration du CAS ([5010365](https://github.com/Dannebicque/oreof/commit/5010365c427c2deb9af951046929dcfdf181aa12))
+* [Monolog] Configuration Monolog en production ([fe34640](https://github.com/Dannebicque/oreof/commit/fe346402b5353fb2cb18124d402f25e00bef0f79))
+* [Monolog] Configuration Monolog en production ([4e9af51](https://github.com/Dannebicque/oreof/commit/4e9af516bb19a0e67c077c0167edc6314119be2f))
+* [Monolog] Configuration Monolog en production ([98b76a5](https://github.com/Dannebicque/oreof/commit/98b76a5cf0b51a12f9a12b6f11a6ceac6784e20c))
+* [Monolog] Configuration Monolog en production ([c787db2](https://github.com/Dannebicque/oreof/commit/c787db204dbf296849ef2020891d270d67abc6c9))
+* [Monolog] Configuration Monolog en production ([c7a1ee4](https://github.com/Dannebicque/oreof/commit/c7a1ee494b4f24fc89e6a9f213c487c166b0eeea))
+* [Monolog] Configuration Monolog en production ([ebe280a](https://github.com/Dannebicque/oreof/commit/ebe280a5e5751c37992d6aadf08e3bd504c98444))
+* [Monolog] Configuration Monolog en production ([a832679](https://github.com/Dannebicque/oreof/commit/a8326793deb1518a20ea7e10244a3fa72a3e90c5))
+* Affichage des formations ([b9b634b](https://github.com/Dannebicque/oreof/commit/b9b634b8950b0ea4bb7e851284123fe1ad5de685))
+* Affichage des formations ([d9ea435](https://github.com/Dannebicque/oreof/commit/d9ea435d51c8a633941dcae18a68f8ff1b1fe116))
+* Affichage des formations ([fa66d52](https://github.com/Dannebicque/oreof/commit/fa66d52f6e72962898dce8aeccd49b895e5291e8))
+* Ajout d'un utilisateur en Admin ([8ae1366](https://github.com/Dannebicque/oreof/commit/8ae13662feaf28762a717a6e45d122dc7389a07e))
+* Ajout d'un utilisateur en Admin ([0110417](https://github.com/Dannebicque/oreof/commit/0110417f035e0409d52f87cb87d962cbe5201859))
+* Ajout d'un utilisateur en Admin ([fd74041](https://github.com/Dannebicque/oreof/commit/fd74041796c7b90eb01b6d25df69c7b06e78f8ec))
+* Ajout d'un utilisateur en Admin ([bb829c4](https://github.com/Dannebicque/oreof/commit/bb829c4ee133ac8c5961f6201b9b2331bcc82081))
+* Ajout d'un utilisateur en Admin ([7c28402](https://github.com/Dannebicque/oreof/commit/7c284021b29adc84ad32d1aa6e4b0ee2469e2aaf))
+* Ajout d'un utilisateur en Admin ([e7f9840](https://github.com/Dannebicque/oreof/commit/e7f9840f191e0330236e7d4f27cc71b2dc3e7548))
+* Gestion des centres ([792f350](https://github.com/Dannebicque/oreof/commit/792f350ca963aaf798dc42d4a7b1b742fe9b68bb))
+* Gestion des centres ([afec4c7](https://github.com/Dannebicque/oreof/commit/afec4c77208a6a4cd35c48a0e3eaaaeedc3da132))
+* Gestion des centres ([bce2037](https://github.com/Dannebicque/oreof/commit/bce203726752d50693ba541b61b800141164e19a))
+* Gestion des centres ([8066398](https://github.com/Dannebicque/oreof/commit/8066398e387b2de2e514e3f3a33c57f612835d84))
+* Gestion des rôles en utilisateurs ([aec2e2c](https://github.com/Dannebicque/oreof/commit/aec2e2ccb0126ef75f4d22d414fbc7ab9da6cded))
+* Gestion des rôles en utilisateurs ([f4ca37c](https://github.com/Dannebicque/oreof/commit/f4ca37c36875cbfa826fd9c381fbcd2cc0e5862a))
+
+
+### Bug Fixes
+
+* Affichage de l'adresse sur composante et établissement ([23cb900](https://github.com/Dannebicque/oreof/commit/23cb900bd2bec2ebba34675d55b44aa5d313ffd2))
+* Année Universitaire, date sans heures ([61e81ca](https://github.com/Dannebicque/oreof/commit/61e81ca702a11196c20cdd34c595326284f9e1fa))
+* Contrastes CSS ([c2b9d0c](https://github.com/Dannebicque/oreof/commit/c2b9d0c67ce25449f142a97f9e8c2e5b1d3e49fa))
+* Mention => Sigle pas obligatoire ([301065c](https://github.com/Dannebicque/oreof/commit/301065c5c069aee995e51ee069e57cc902599e2b))
+* radio sans le "*" sur les labels ([d041344](https://github.com/Dannebicque/oreof/commit/d0413447261e88b72c361021a4d3113acac5523b))
+
 ## [0.2.0](https://github.com/Dannebicque/oreof/compare/v0.1.0...v0.2.0) (2023-02-06)
 
 
