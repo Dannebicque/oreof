@@ -30,9 +30,9 @@ class UserLdapType extends AbstractType
                 },
                 'placeholder' => 'Indiquez un centre de gestion',
                 'required' => true,
+                'mapped' => false,
                 'attr' => ['data-action' => 'change->register#changeCentre']
             ])
-
 
             ->add('role', EnumType::class, [
                 'class' => RoleEnum::class,

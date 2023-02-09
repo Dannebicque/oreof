@@ -4,10 +4,17 @@ namespace App\Controller\Config;
 
 use App\Classes\Ldap;
 use App\Entity\User;
+use App\Entity\UserCentre;
+use App\Enums\CentreGestionEnum;
 use App\Enums\RoleEnum;
 use App\Events\UserEvent;
+use App\Events\UserRegisterEvent;
 use App\Form\UserLdapType;
 use App\Form\UserType;
+use App\Repository\ComposanteRepository;
+use App\Repository\EtablissementRepository;
+use App\Repository\FormationRepository;
+use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -50,6 +57,10 @@ class UserController extends AbstractController
     #[Route('/ajouter-ldap', name: 'app_user_new_ldap', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function newLdap(
+        EtablissementRepository $etablissementRepository,
+        UserCentreRepository $userCentreRepository,
+        ComposanteRepository $composanteRepository,
+        FormationRepository $formationRepository,
         Ldap $ldap,
         EventDispatcherInterface $eventDispatcher,
         Request $request, UserRepository $userRepository): Response
@@ -68,6 +79,30 @@ class UserController extends AbstractController
             $user->setPrenom($dataUsers['prenom']);
             $user->setRoles([strtoupper($request->request->all()['user_ldap']['role'])]);
             $userRepository->save($user, true);
+
+            $centre = $form['centreDemande']->getData();
+            switch ($centre) {
+                case CentreGestionEnum::CENTRE_GESTION_FORMATION:
+                    $formation = $formationRepository->find($request->request->get('selectListe'));
+                    $centreUser = new UserCentre();
+                    $centreUser->setUser($user);
+                    $centreUser->setFormation($formation);
+                    break;
+                case CentreGestionEnum::CENTRE_GESTION_COMPOSANTE:
+                    $composante = $composanteRepository->find($request->request->get('selectListe'));
+                    $centreUser = new UserCentre();
+                    $centreUser->setUser($user);
+                    $centreUser->setComposante($composante);
+                    break;
+                case CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT:
+                    $etablissement = $etablissementRepository->find(1);//todo: imposé car juste URCA
+                    $centreUser = new UserCentre();
+                    $centreUser->setUser($user);
+                    $centreUser->setEtablissement($etablissement);
+                    break;
+            }
+
+            $userCentreRepository->save($centreUser, true);
 
             $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');
 
