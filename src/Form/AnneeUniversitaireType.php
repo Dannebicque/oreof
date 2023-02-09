@@ -7,6 +7,7 @@ use App\Form\Type\YesNoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -38,23 +39,23 @@ class AnneeUniversitaireType extends AbstractType
             ->add('defaut', YesNoType::class, [
                 'label' => 'Année active ?',
             ])
-            ->add('dateOuvertureDpe', DateTimeType::class, [
+            ->add('dateOuvertureDpe', DateType::class, [
                 'label' => 'Date d\'ouverture du DPE',
                 'widget' => 'single_text',
             ])
-            ->add('dateClotureDpe', DateTimeType::class, [
+            ->add('dateClotureDpe', DateType::class, [
                 'label' => 'Date de clôture du DPE',
                 'widget' => 'single_text',
             ])
-            ->add('dateTransmissionSes', DateTimeType::class, [
+            ->add('dateTransmissionSes', DateType::class, [
                 'label' => 'Date limite de transmission des dossiers ',
                 'widget' => 'single_text',
             ])
-            ->add('dateCfvu', DateTimeType::class, [
+            ->add('dateCfvu', DateType::class, [
                 'label' => 'Date de la CFVU ',
                 'widget' => 'single_text',
             ])
-            ->add('datePublication', DateTimeType::class, [
+            ->add('datePublication', DateType::class, [
                 'label' => 'Date de publication ',
                 'widget' => 'single_text',
             ])
