@@ -1,6 +1,6 @@
 {# todo: reprendre cette page comme le bilan des formations pour le SES, DPE ou Admin avec état, remplissage et
 bouton pour valider/invalide les étapes successives #}
- <table class="table">
+<table class="table">
     <thead>
     <tr>
         <th>Id</th>
@@ -8,7 +8,6 @@ bouton pour valider/invalide les étapes successives #}
         <th>Domaine</th>
         <th>Mention</th>
         <th>Composante</th>
-
         <th>Etat</th>
         <th>Remplissage</th>
         <th></th>
@@ -25,11 +24,18 @@ bouton pour valider/invalide les étapes successives #}
             </td>
             <td>{{ formation.domaine != null ? formation.domaine.libelle : 'Non définie' }}</td>
             <td>
-                {{ formation.mention != null ? formation.mention.libelle : (formation.mentionTexte|trim != null ?
-                formation.mentionTexte : 'Non définie') }}
+                {% if formation.mention != null or formation.mentionTexte != null %}
+                    {{ formation.display }}
+                {% else %}
+                    <span class="badge bg-danger">Non définie</span>
+                {% endif %}
             </td>
             <td>
-                {{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'Non définie' }}
+                {% if formation.composantePorteuse != null %}
+                    {{ formation.composantePorteuse.libelle }}
+                {% else %}
+                    <span class="badge bg-danger">Non définie</span>
+                {% endif %}
             </td>
             <td>
                 {{ formation.etatDpe|badgeDpe }}
@@ -61,11 +67,6 @@ bouton pour valider/invalide les étapes successives #}
                 {% endif %}
 
                 {% if is_granted('ROLE_SES') %}
-                    {#                <button {{ stimulus_action('crud', 'duplicate', 'click', { #}
-                    {#                    url:path('app_formation_duplicate',{'id': formation.id}) #}
-                    {#                }) }} class="btn btn-sm text-success"> #}
-                    {#                    <i class="{{ iconDuplicate }}"></i> Dupliquer #}
-                    {#                </button> #}
                     <button {{ stimulus_action('crud', 'delete', 'click', {
                         url:path('app_formation_delete',{'id': formation.id}),
                         csrf: csrf_token('delete' ~ formation.id)
@@ -75,52 +76,6 @@ bouton pour valider/invalide les étapes successives #}
                 {% endif %}
             </td>
         </tr>
-
-            <tr>
-                <td>Parcours</td>
-                <td colspan="7">
-                    <table class="table">
-        {% for parcours in formation.parcours %}
-                        <tr>
-                            <td>#{{ parcours.id }}</td>
-                            <td>{{ parcours.libelle }}</td>
-                            <td>{{ parcours.remplissage }}</td>
-                            <td>{{ parcours.etat }}</td>
-                            <td class="text-end">
-                                <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"
-                                   class="btn btn-sm text-info"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="bottom"
-                                   title="Voir une formation"
-                                >
-                                    <i class="{{ iconShow }}"></i>
-                                    <span> voir</span>
-                                </a>
-
-                                <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
-                                   class="btn btn-sm text-warning"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="bottom"
-                                   target="_blank"
-                                   title="Modifier une année universitaire"
-                                >
-                                    <i class="{{ iconEdit }}"></i>
-                                    <span> modifier</span>
-                                </a>
-
-                                <button {{ stimulus_action('crud', 'delete', 'click', {
-                                    url:path('app_parcours_delete',{'id': parcours.id}),
-                                    csrf: csrf_token('delete' ~ parcours.id)
-                                }) }} class="btn btn-sm text-danger">
-                                    <i class="{{ iconDelete }}"></i> Supprimer
-                                </button>
-                            </td>
-                        </tr>
-        {% endfor %}
-                    </table>
-                </td>
-            </tr>
-
     {% else %}
         <tr>
             <td colspan="7" class="bg-warning">Aucun enregistrement trouvé</td>

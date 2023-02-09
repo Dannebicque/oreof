@@ -4,6 +4,7 @@
         <tr>
             <th>Libellé</th>
             <th>Référent</th>
+            <th>Mention/Parcours</th>
             <th>Remplissage</th>
             <th>Etat</th>
             <th>Heures</th>
@@ -19,6 +20,7 @@
             <tr>
                 <td>{{ ec.libelle }}</td>
                 <td>{{ ec.responsableEc != null ? ec.responsableEc.display : 'Non défini' }}</td>
+                <td>{{ ec.formationLibelle }}</td>
                 <td>{{ ec.remplissage|remplissage }}</td>
                 <td>{{ ec.etatEc }}</td>
                 <td>

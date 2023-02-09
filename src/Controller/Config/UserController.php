@@ -80,6 +80,7 @@ class UserController extends AbstractController
             $user->setRoles([strtoupper($request->request->all()['user_ldap']['role'])]);
             $userRepository->save($user, true);
 
+            //todo: fusionner avec Register
             $centre = $form['centreDemande']->getData();
             switch ($centre) {
                 case CentreGestionEnum::CENTRE_GESTION_FORMATION:
