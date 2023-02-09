@@ -31,8 +31,8 @@ class MentionType extends AbstractType
             ])
             ->add('sigle', TextType::class, [
                 'label' => 'Sigle',
-                'required' => true,
-
+                'help' => 'Le sigle est la dénomination courte de la mention, s\'il existe.',
+                'required' => false,
             ])
             ->add('domaine', EntityType::class, [
                 'class' => Domaine::class,
