@@ -37,7 +37,7 @@ class AnneeUniversitaireType extends AbstractType
                 ],
             ])
             ->add('defaut', YesNoType::class, [
-                'label' => 'Année active ?',
+                'label' => 'Campagne de collecte DPE active ?',
             ])
             ->add('dateOuvertureDpe', DateType::class, [
                 'label' => 'Date d\'ouverture du DPE',

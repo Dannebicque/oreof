@@ -8,7 +8,7 @@
         <th>Date Clôture</th>
         <th>Transmission SES</th>
         <th>CFVU</th>
-        <th>Défaut ?</th>
+        <th>Collecte DPE active ?</th>
         <th></th>
     </tr>
     </thead>
@@ -24,7 +24,7 @@
             <td>{{ annee_universitaire.dateCfvu|dateFr }}</td>
             <td><span class="badge {% if annee_universitaire.defaut %}bg-success{% else %}bg-warning{% endif %}">{{
                     annee_universitaire
-                    .defaut ? 'Oui' : 'Non' }}</span></td>
+                    .defaut ? 'Active' : 'Non' }}</span></td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {
