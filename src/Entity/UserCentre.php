@@ -93,4 +93,38 @@ class UserCentre
 
         return $this;
     }
+
+    public function display(): string
+    {
+        if ($this->composante !== null) {
+            return 'Composante ('.$this->composante->getLibelle().')';
+        }
+
+        if ($this->formation !== null) {
+            return 'Formation ('.$this->composante->getLibelle().')';
+        }
+
+        if ($this->etablissement !== null) {
+            return 'Etablissement ('.$this->etablissement->getLibelle().')';
+        }
+
+        return 'Non précisé';
+    }
+
+    public function typeCentre(): string
+    {
+        if ($this->composante !== null) {
+            return 'cg_composante';
+        }
+
+        if ($this->formation !== null) {
+            return 'cg_formation';
+        }
+
+        if ($this->etablissement !== null) {
+            return 'cg_etablissement';
+        }
+
+        return 'Non précisé';
+    }
 }

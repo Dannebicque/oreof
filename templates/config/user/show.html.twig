@@ -50,7 +50,8 @@
         Désactiver l'accès
     </a>
 {% else %}
-    {% if (user.isValidDpe == false and (user.centreDemande == 'cg_composante' or user.centreDemande == 'cg_formation')
+    {% if (user.isValidDpe == false and (user.userCentres[0].typeCentre == 'cg_composante' or user.userCentres[0].typeCentre ==
+        'cg_formation')
         ) or user.isValideAdministration == false %}
         {% if user.isValidDpe == false %}
             <span class="badge bg-warning">Non valider par DPE</span>

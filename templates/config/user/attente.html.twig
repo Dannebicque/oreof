@@ -11,7 +11,7 @@
                 <th>Email</th>
                 <th>Login URCA</th>
                 <th>Droits</th>
-                <th>Centre</th>
+                <th>Centre(s)</th>
                 <th>Date demande</th>
                 <th>Validé DPE ?</th>
                 <th></th>
@@ -25,7 +25,11 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.roles|badgeDroits }}</td>
-                <td>{{ user.centreDemande != null ? user.centreDemande.libelle : 'Non précisé' }}</td>
+                <td>
+                    {% for centre in user.userCentres %}
+                        <span class="badge bg-primary">{{ centre.display }}</span>
+                    {% endfor %}
+                </td>
                 <td>{{ user.dateDemande|dateTimeFr }}</td>
                 <td>
                     {% if user.isValidDpe %}
