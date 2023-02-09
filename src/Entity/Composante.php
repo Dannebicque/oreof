@@ -148,7 +148,14 @@ class Composante
 
     public function remplissage(): float
     {
-        return 10;
+        $totalRemplissage = 0;
+        $nbFormations = 0;
+        foreach ($this->formations as $formation) {
+            $totalRemplissage += $formation->remplissage();
+            $nbFormations++;
+        }
+
+        return $nbFormations > 0 ? $totalRemplissage / $nbFormations : 0;
     }
 
     public function getTelStandard(): ?string

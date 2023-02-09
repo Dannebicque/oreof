@@ -14,8 +14,37 @@ class BadgeDpeExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('badgeDpe', [$this, 'badgeDpe'], ['is_safe' => ['html']])
+            new TwigFilter('badgeDpe', [$this, 'badgeDpe'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeEtatComposante', [$this, 'badgeEtatComposante'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeFormation', [$this, 'badgeFormation'], ['is_safe' => ['html']])
         ];
+    }
+
+    public function badgeFormation(array $etatsFormation): string
+    {
+        $etatsFormation = array_keys($etatsFormation);
+        $html = '';
+        foreach ($etatsFormation as $etatFormation) {
+            $html .= '<span class="badge bg-secondary me-1">' . EtatDpeEnum::from(strtolower($etatFormation))->libelle() . '</span>';
+        }
+
+        return $html;
+    }
+
+    public function badgeEtatComposante(array $etatsComposante): string
+    {
+
+        $etatsComposante = array_keys($etatsComposante);
+
+        if (count($etatsComposante) === 0) {
+            return '<span class="badge bg-danger me-1">Etat inconnu</span>';
+        }
+        $html = '';
+        foreach ($etatsComposante as $etatComposante) {
+            $html .= '<span class="badge bg-secondary me-1">' . EtatDpeEnum::from(strtolower($etatComposante))->libelle() . '</span>';
+        }
+
+        return $html;
     }
 
     public function badgeDpe(array $etatsDpe): string
