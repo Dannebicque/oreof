@@ -2,6 +2,7 @@
 
 namespace App\Entity\Traits;
 
+use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,7 +20,7 @@ trait LifeCycleTrait
 
     public function getCreated(): ?DateTimeInterface
     {
-        return $this->created ?? new \DateTimeImmutable('now');
+        return $this->created ?? new DateTimeImmutable('now');
     }
 
     public function setCreated(?DateTimeInterface $created): void
@@ -39,19 +40,19 @@ trait LifeCycleTrait
 
     public function setUpdatedValue(): void
     {
-        $this->updated = new \DateTimeImmutable('now');
+        $this->updated = new DateTimeImmutable('now');
     }
 
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
     public function setUpdatedEntity(): void
     {
-        $this->updated = new \DateTimeImmutable('now');
+        $this->updated = new DateTimeImmutable('now');
     }
 
     #[ORM\PrePersist]
     public function setCreatedValue(): void
     {
-        $this->created = new \DateTimeImmutable('now');
+        $this->created = new DateTimeImmutable('now');
     }
 }
