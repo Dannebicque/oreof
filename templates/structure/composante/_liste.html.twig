@@ -39,11 +39,11 @@
                                 <div class="row g-0 h-100 align-content-center">
                                     <div class="col-12 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted d-md-none">Composante</div>
-                                        <a href="#" class="text-truncate">{{ composante.libelle }}</a>
+                                        {{ composante.libelle }}
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted d-md-none">Nb Mentions</div>
-                                        <div class="text-alternate">{{ composante.formations|length }} mentions</div>
+                                        {{ composante.formations|length }} mentions
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted d-md-none">Etat</div>
@@ -51,9 +51,7 @@
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted d-md-none">Remplissage</div>
-                                        <div class="text-alternate">
-                                            {{ composante.remplissage|remplissage }}
-                                        </div>
+                                        {{ composante.remplissage|remplissage }}
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center
                                             mb-1 mb-md-0">
@@ -62,21 +60,18 @@
                                         <button class="ms-2 btn btn-sm btn-outline-primary"
                                                 {{ stimulus_action('structure--composante', 'detail', 'click',
                                                     {composante:composante.id, url: path('structure_formation_detail_composante', {composante:composante.id})}
-                                                    ) }}
+                                                ) }}
                                         >
                                             <i class="fal fa-caret-right"></i> Détails
                                         </button>
 
                                     </div>
                                     <div class="col-6 col-md-3 d-flex flex-column justify-content-end
-                                    align-items-md-end
-                                            mb-1 mb-md-0">
+                                    align-items-md-end mb-1 mb-md-0">
                                         <div class="text-muted d-md-none">Actions</div>
-                                        <div class="text-alternate">
-                                            <button class="btn btn-outline-info btn-sm">
-                                                Actions à définir?
-                                            </button>
-                                        </div>
+                                        <button class="btn btn-outline-info btn-sm">
+                                            Actions à définir?
+                                        </button>
                                     </div>
                                 </div>
                             </div>

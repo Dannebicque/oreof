@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Traits\LifeCycleTrait;
+use App\Enums\EtatDpeEnum;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\ParcoursRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -380,10 +381,10 @@ class Parcours
         return $this;
     }
 
-    public function etat(): string
+    public function etat(): array
     {
-        //todo: a gérer
-        return 'En cours de rédaction';
+        //todo: a gérer wordlgow ?
+        return [];
     }
 
     public function remplissage(): float

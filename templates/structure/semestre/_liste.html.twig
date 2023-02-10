@@ -5,14 +5,14 @@
             <div class="card mb-2 bg-transparent no-shadow d-none d-md-block sh-3">
                 <div class="card-body pt-0 pb-0 h-100">
                     <div class="row g-0 h-100 align-content-center">
-                        <div class="col-12 col-md-4 d-flex align-items-center mb-2 text-secondary mb-md-0 text-small">
+                        <div class="col-12 col-md-2 d-flex align-items-center mb-2 text-secondary mb-md-0 text-small">
                             Semestre
                         </div>
-                        <div class="col-6 col-md-2 d-flex align-items-center
+                        <div class="col-6 col-md-3 d-flex align-items-center
                         text-secondary text-small">
                             Commun ?
                         </div>
-                        <div class="col-6 col-md-2 d-flex align-items-center
+                        <div class="col-6 col-md-3 d-flex align-items-center
                         text-secondary text-small">
                             ECTS
                         </div>
@@ -33,26 +33,22 @@
                         <div class="card mb-2 sh-19 sh-md-8">
                             <div class="card-body pt-0 pb-0 h-100">
                                 <div class="row g-0 h-100 align-content-center">
-                                    <div class="col-12 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="col-12 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Semestre</div>
-                                        <a href="#" class="text-truncate">{{ semestre.semestre.display }}</a>
+                                        {{ semestre.semestre.display }}
                                     </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Commun ?</div>
-                                        <div class="text-alternate">
                                             {% if semestre.semestre.troncCommun == true %}
-                                                <span class="badge bg-info">Tronc Commun</span>
+                                                <span class="badge bg-info me-2">Tronc Commun</span>
 
                                             {% else %}
-                                            <span class="badge bg-secondary">Parcours</span>
+                                            <span class="badge bg-secondary me-2">Parcours</span>
                                                 {% endif %}
-                                        </div>
                                     </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
-                                        <div class="text-alternate">
                                             {{ semestre.semestre.totalEctsSemestre|badgeEctsSemestre }}
-                                        </div>
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center
                                             mb-1 mb-md-0">

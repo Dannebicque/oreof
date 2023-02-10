@@ -54,19 +54,15 @@
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column mb-1 mb-md-0 justify-content-center">
                                         <div class="text-muted text-small d-md-none">Type de diplôme</div>
-                                        <div class="text-alternate">{{ formation.typeDiplome|typeDiplome }}</div>
+                                        {{ formation.typeDiplome|typeDiplome }}
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column mb-1 mb-md-0 justify-content-center">
                                         <div class="text-muted text-small d-md-none">Etat</div>
-                                        <div class="text-alternate">
                                             {{ formation.etatDpe|badgeDpe }}
-                                        </div>
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column mb-1 mb-md-0 justify-content-center">
                                         <div class="text-muted text-small d-md-none">% Remplissage</div>
-                                        <div class="text-alternate">
                                             {{ formation.remplissage|remplissage }}
-                                        </div>
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column
                                             mb-1 mb-md-0 justify-content-center">

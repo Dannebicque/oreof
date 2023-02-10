@@ -34,17 +34,16 @@
                                 <div class="row g-0 h-100 align-content-center">
                                     <div class="col-12 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Parcours</div>
-                                        <a href="#" class="text-truncate">{{ parcour.libelle }}</a>
+                                        <a href="" class="text-truncate">{{ parcour.libelle }}</a>
+                                        {# todo faire un lien vers formation avec l'ancre du parcours... #}
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Etat</div>
-                                        <div class="text-alternate">... En cours...</div>
+                                        {{ parcour.etat|badgeDpe }}
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Remplissage</div>
-                                        <div class="text-alternate">
                                             {{ parcour.remplissage|remplissage }}
-                                        </div>
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center
                                             mb-1 mb-md-0">
