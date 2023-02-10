@@ -14,14 +14,6 @@ class BlocCompetenceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('ordre', IntegerType::class, [
-                'label' => 'Numéro d\'ordre du bloc',
-                'attr' => ['min' => 1, 'max' => 99],
-            ])
-            ->add('code', TextType::class, [
-                'attr' => ['maxlength' => 10],
-                'help' => 'Le code doit être unique et ne doit pas dépasser 10 caractères.'
-            ])
             ->add('libelle', TextType::class, [
                 'attr' => ['maxlength' => 255],
                 'help' => 'Le libellé du bloc de compétences doit commencer par un verbe d\'action, et ne doit pas dépasser 255 caractères.'

@@ -23,6 +23,9 @@ class CompetenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $ordre = $competenceRepository->getMaxOrdreBlocCompetence($bcc);
+            $competence->setOrdre($ordre + 1);
+            $competence->genereCode();
             $competenceRepository->save($competence, true);
 
             return $this->json(true);
@@ -61,6 +64,9 @@ class CompetenceController extends AbstractController
     ): Response {
         $competenceNew = clone $competence;
         $competenceNew->setLibelle($competence->getLibelle() . ' - Copie');
+        $ordre = $competenceRepository->getMaxOrdreBlocCompetence($competence->getBlocCompetence());
+        $competenceNew->setOrdre($ordre + 1);
+        $competenceNew->genereCode();
         $competenceRepository->save($competenceNew, true);
         return $this->json(true);
     }
@@ -74,7 +80,6 @@ class CompetenceController extends AbstractController
         Competence $competence,
         CompetenceRepository $competenceRepository
     ): Response {
-        //todo: vérifier si c'est utilisé
         if ($this->isCsrfTokenValid('delete' . $competence->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf'))) {
             $competenceRepository->remove($competence, true);

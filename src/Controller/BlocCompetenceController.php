@@ -45,6 +45,9 @@ class BlocCompetenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $ordre = $blocCompetenceRepository->getMaxOrdreParcours($parcours);
+            $blocCompetence->setOrdre($ordre + 1);
+            $blocCompetence->genereCode();
             $blocCompetenceRepository->save($blocCompetence, true);
 
             return $this->json(true);
@@ -70,6 +73,9 @@ class BlocCompetenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $ordre = $blocCompetenceRepository->getMaxOrdre($formation);
+            $blocCompetence->setOrdre($ordre + 1);
+            $blocCompetence->genereCode();
             $blocCompetenceRepository->save($blocCompetence, true);
 
             return $this->json(true);
@@ -112,6 +118,16 @@ class BlocCompetenceController extends AbstractController
     ): Response {
         $blocCompetenceNew = clone $blocCompetence;
         $blocCompetenceNew->setLibelle($blocCompetence->getLibelle() . ' - Copie');
+
+        if ($blocCompetence->getFormation()) {
+            $ordre = $blocCompetenceRepository->getMaxOrdre($blocCompetence->getFormation());
+        } else {
+            $ordre = $blocCompetenceRepository->getMaxOrdreParcours($blocCompetence->getParcours());
+        }
+
+        $blocCompetenceNew->setOrdre($ordre + 1);
+        $blocCompetenceNew->genereCode();
+
         $blocCompetenceRepository->save($blocCompetenceNew, true);
         return $this->json(true);
     }

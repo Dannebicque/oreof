@@ -61,4 +61,24 @@ class BlocCompetenceRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getMaxOrdre(Formation $formation): ?int
+    {
+        return $this->createQueryBuilder('b')
+            ->select('MAX(b.ordre)')
+            ->andWhere('b.formation = :formation')
+            ->setParameter('formation', $formation)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function getMaxOrdreParcours(Parcours $parcours): ?int
+    {
+        return $this->createQueryBuilder('b')
+            ->select('MAX(b.ordre)')
+            ->andWhere('b.parcours = :parcours')
+            ->setParameter('parcours', $parcours)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 }

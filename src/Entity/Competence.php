@@ -27,6 +27,9 @@ class Competence
     #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'competences')]
     private Collection $elementConstitutifs;
 
+    #[ORM\Column]
+    private ?int $ordre = null;
+
 
     public function __construct(BlocCompetence $blocCompetence)
     {
@@ -104,5 +107,22 @@ class Competence
     public function display(): string
     {
         return $this->getCode() . ' - '. $this->getLibelle();
+    }
+
+    public function getOrdre(): ?int
+    {
+        return $this->ordre;
+    }
+
+    public function setOrdre(int $ordre): self
+    {
+        $this->ordre = $ordre;
+
+        return $this;
+    }
+
+    public function genereCode()
+    {
+        $this->setCode(chr($this->getBlocCompetence()?->getOrdre()+64)  . $this->getOrdre());
     }
 }

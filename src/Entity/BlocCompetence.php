@@ -137,4 +137,9 @@ class BlocCompetence
     {
         return $this->getCode() . ' - '. $this->getLibelle();
     }
+
+    public function genereCode()
+    {
+        $this->setCode('BC ' . chr($this->getOrdre()+64));
+    }
 }
