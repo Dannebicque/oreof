@@ -16,7 +16,7 @@ export default class extends Controller {
 
   changeInscriptionRNCP(event) {
     const inscriptionRNCP = event.target.value
-    if (parseInt(inscriptionRNCP) === 1) {
+    if (parseInt(inscriptionRNCP, 10) === 1) {
       document.getElementById('formation_ses_codeRNCP').disabled = false
     } else {
       document.getElementById('formation_ses_codeRNCP').disabled = true
@@ -44,8 +44,18 @@ export default class extends Controller {
         const selectMention = document.getElementById('formation_ses_mention')
         selectMention.innerHTML = ''
 
+        let option = document.createElement('option')
+        option.value = null
+        option.text = ''
+        selectMention.appendChild(option)
+
+        option = document.createElement('option')
+        option.value = 'autre'
+        option.text = 'Mention hors nomenclature, je complète la zone de saisie'
+        selectMention.appendChild(option)
+
         mentions.forEach((mention) => {
-          const option = document.createElement('option')
+          option = document.createElement('option')
           option.value = mention.id
           option.text = mention.libelle
           selectMention.appendChild(option)

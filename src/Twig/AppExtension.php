@@ -2,6 +2,8 @@
 
 namespace App\Twig;
 
+use App\Entity\UserCentre;
+use App\Enums\CentreGestionEnum;
 use App\Enums\RoleEnum;
 use App\Utils\Tools;
 use Twig\Extension\AbstractExtension;
@@ -21,7 +23,8 @@ class AppExtension extends AbstractExtension
             new TwigFilter('dateTimeFr', [$this, 'dateTimeFr'], ['is_safe' => ['html']]),
             new TwigFilter('rncp_link', [$this, 'rncpLink'], ['is_safe' => ['html']]),
             new TwigFilter('badgeBoolean', [$this, 'badgeBoolean'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeDroits', [$this, 'badgeDroits'], ['is_safe' => ['html']])
+            new TwigFilter('badgeDroits', [$this, 'badgeDroits'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeCentre', [$this, 'badgeCentre'], ['is_safe' => ['html']])
         ];
     }
 
@@ -38,6 +41,26 @@ class AppExtension extends AbstractExtension
             if ($nbdroits > 1 && $droit !== 'ROLE_LECTEUR') {
                 $html .= '<span class="badge bg-success me-1">' . RoleEnum::from(strtolower($droit))->libelle() . '</span>';
             }
+        }
+
+        return $html;
+    }
+
+    public function badgeCentre(UserCentre $userCentre): string
+    {
+        switch ($userCentre->typeCentre()) {
+            case CentreGestionEnum::CENTRE_GESTION_COMPOSANTE:
+                $html = '<span class="badge bg-success me-1">' . $userCentre->displaySimple() . '</span>';
+                break;
+            case CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT:
+                $html = '<span class="badge bg-warning me-1">' . $userCentre->displaySimple() . '</span>';
+                break;
+            case CentreGestionEnum::CENTRE_GESTION_FORMATION:
+                $html = '<span class="badge bg-info me-1">' . $userCentre->displaySimple() . '</span>';
+                break;
+            default:
+                $html = '<span class="badge bg-danger me-1">Inconnu</span>';
+                break;
         }
 
         return $html;

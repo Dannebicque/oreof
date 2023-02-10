@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enums\CentreGestionEnum;
 use App\Repository\UserCentreRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -94,7 +95,7 @@ class UserCentre
         return $this;
     }
 
-    public function display(): string
+    public function display(): ?string
     {
         if ($this->composante !== null) {
             return 'Composante ('.$this->composante->getLibelle().')';
@@ -108,23 +109,40 @@ class UserCentre
             return 'Etablissement ('.$this->etablissement->getLibelle().')';
         }
 
-        return 'Non précisé';
+        return null;
     }
 
-    public function typeCentre(): string
+    public function displaySimple(): ?string
     {
         if ($this->composante !== null) {
-            return 'cg_composante';
+            return $this->composante->getLibelle();
         }
 
         if ($this->formation !== null) {
-            return 'cg_formation';
+            return $this->composante->getLibelle();
         }
 
         if ($this->etablissement !== null) {
-            return 'cg_etablissement';
+            return $this->etablissement->getLibelle();
         }
 
-        return 'Non précisé';
+        return null;
+    }
+
+    public function typeCentre(): ?CentreGestionEnum
+    {
+        if ($this->composante !== null) {
+            return CentreGestionEnum::CENTRE_GESTION_COMPOSANTE;
+        }
+
+        if ($this->formation !== null) {
+            return CentreGestionEnum::CENTRE_GESTION_FORMATION;
+        }
+
+        if ($this->etablissement !== null) {
+            return CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT;
+        }
+
+        return null;
     }
 }

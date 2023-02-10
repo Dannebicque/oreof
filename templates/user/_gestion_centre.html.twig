@@ -1,0 +1,35 @@
+<div {{ stimulus_controller('register', {
+    urlComposante: path('api_composante'),
+    urlFormation: path('api_formation'),
+})|stimulus_controller('centre', {
+    urlListe: path('app_user_gestion_liste', {user:user.id}),
+    urlAdd: path('app_user_gestion_add_centre', {user:user.id}),
+}) }}>
+    <div {{ stimulus_target('centre', 'liste') }}>
+
+    </div>
+    <div>
+        <h3>Ajouter un centre</h3>
+        <div>
+            <label class="form-label" for="typeCentre">Type de centre</label>
+            <select id="typeCentre" class="form-select" {{ stimulus_action('register', 'changeCentre') }}>
+                {% for centre in centres %}
+                    <option value="{{ centre.value }}">{{ centre.libelle }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="selectListe" class="form-label">Selon le centre, précisez</label>
+            <select class="form-select" name="selectListe" id="selectListe">
+                <option value="">Choisissez un centre</option>
+            </select>
+        </div>
+        <div>
+            <label for="droits" class="form-label">Droits sur ce centre ?</label>
+            <select class="form-select" name="droits" id="droits">
+                <option value="">Choisissez un centre</option>
+            </select>
+        </div>
+        <button class="btn btn-success" {{ stimulus_action('centre', 'addCentre') }}>Ajouter le centre</button>
+    </div>
+</div>

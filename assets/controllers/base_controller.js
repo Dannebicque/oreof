@@ -47,5 +47,6 @@ export default class extends Controller {
   modalClose() {
     // todo: déclencher sur l'évent de Bootstrap?
     this.modalBodyTarget.innerHTML = ''
+    this.dispatch('refreshListe')
   }
 }

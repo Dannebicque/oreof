@@ -34,18 +34,21 @@
                 </button>
             </td>
             <td>{{ user.isEnable|badgeBoolean }}</td>
-            <td>Centre...
+            <td>
+                {% for centre in user.userCentres %}
+                {{ centre|badgeCentre }}
+                {% endfor %}
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
-                            modalTitle: 'Modifier un utilisateur',
+                            modalTitle: 'Gestion des centres de <strong>'~ user.display ~'</strong>',
                             modalUrl: path('app_user_gestion_centre',{'user': user.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm text-warning"
                         data-size="lg"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
-                        title="Modifier un utilisateur"
+                        title="Gestion des centres de <strong>{{ user.display }}</strong>"
                 >
                     <i class="{{ iconEdit }}"></i>
                 </button>

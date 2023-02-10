@@ -5,32 +5,33 @@
 // @lastUpdate 11/10/2021 21:49
 
 import { Controller } from '@hotwired/stimulus'
-import {useDispatch} from 'stimulus-use'
+import { useDispatch } from 'stimulus-use'
 
 export default class extends Controller {
   static values = {
     modalUrl: String,
     modalTitle: String,
     formAction: String,
-    size: {type: String, default:'md'},
-    btnClose: {type: String, default:'Fermer'},
-    form: {type: Boolean, default:false},
-    params: Array
+    size: { type: String, default: 'md' },
+    btnClose: { type: String, default: 'Fermer' },
+    form: { type: Boolean, default: false },
+    params: Array,
   }
 
-  connect () {
-    useDispatch(this, {debug: true})
+  connect() {
+    useDispatch(this, { debug: true })
   }
 
-  openModal (event) {
+  openModal(event) {
     event.preventDefault()
-    this.dispatch("openModal", {
+    this.dispatch('openModal', {
       url: this.modalUrlValue,
       formAction: this.formActionValue,
       form: this.formValue,
       size: this.sizeValue,
       btnClose: this.btnCloseValue,
       params: this.paramsValue,
-      title: this.modalTitleValue })
+      title: this.modalTitleValue,
+    })
   }
 }
