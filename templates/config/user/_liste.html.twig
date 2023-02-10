@@ -16,7 +16,7 @@
         <tr>
             <td>{{ user.nom }}</td>
             <td>{{ user.prenom }}</td>
-            <td>{{ user.email }}</td>
+            <td>{{ user.email|mailto }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.roles|badgeDroits }} <button
                         {{ stimulus_controller('modal', {

@@ -102,7 +102,7 @@ class UserCentre
         }
 
         if ($this->formation !== null) {
-            return 'Formation ('.$this->composante->getLibelle().')';
+            return 'Formation ('.$this->formation->display().')';
         }
 
         if ($this->etablissement !== null) {
@@ -119,7 +119,7 @@ class UserCentre
         }
 
         if ($this->formation !== null) {
-            return $this->composante->getLibelle();
+            return $this->formation->display();
         }
 
         if ($this->etablissement !== null) {

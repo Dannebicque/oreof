@@ -22,7 +22,7 @@ class Toast {
     const div = document.createElement('div')
     div.innerHTML = html
     div.children[0].addEventListener('hidden.bs.toast', (elem) => {
-      // elem.currentTarget.remove() // supprimer le code HTML après l'event.
+      elem.currentTarget.remove() // supprimer le code HTML après l'event.
     })
     document.body.append(div.children[0])
 

@@ -32,8 +32,10 @@ class ElementConstitutifController extends AbstractController
     public function new(
         EcUeRepository $ecUeRepository,
         LangueRepository $langueRepository,
-        Request $request, ElementConstitutifRepository $elementConstitutifRepository, Ue $ue): Response
-    {
+        Request $request,
+        ElementConstitutifRepository $elementConstitutifRepository,
+        Ue $ue
+    ): Response {
         $elementConstitutif = new ElementConstitutif();
 
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
@@ -73,8 +75,9 @@ class ElementConstitutifController extends AbstractController
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
     public function edit(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        ElementConstitutif $elementConstitutif, Parcours $parcours): Response
-    {
+        ElementConstitutif $elementConstitutif,
+        Parcours $parcours
+    ): Response {
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome());
 
         return $this->render('element_constitutif/edit.html.twig', [
@@ -93,6 +96,7 @@ class ElementConstitutifController extends AbstractController
                     ['id' => $elementConstitutif->getId()]),
             ]);
 
+//todo: gérer le submit du form dans ce cas précis... Mais utilisé dans le wizard de création d'EC également...
             return $this->render('element_constitutif/_structureEc.html.twig', [
                 'ec' => $elementConstitutif,
                 'form' => $form->createView(),
@@ -105,9 +109,12 @@ class ElementConstitutifController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_element_constitutif_delete', methods: ['POST'])]
-    public function delete(Request $request, ElementConstitutif $elementConstitutif, ElementConstitutifRepository $elementConstitutifRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$elementConstitutif->getId(), $request->request->get('_token'))) {
+    public function delete(
+        Request $request,
+        ElementConstitutif $elementConstitutif,
+        ElementConstitutifRepository $elementConstitutifRepository
+    ): Response {
+        if ($this->isCsrfTokenValid('delete' . $elementConstitutif->getId(), $request->request->get('_token'))) {
             $elementConstitutifRepository->remove($elementConstitutif, true);
         }
 

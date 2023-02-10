@@ -22,7 +22,7 @@
                 <td>{{ ec.responsableEc != null ? ec.responsableEc.display : 'Non défini' }}</td>
                 <td>{{ ec.formationLibelle }}</td>
                 <td>{{ ec.remplissage|remplissage }}</td>
-                <td>{{ ec.etatEc }}</td>
+                <td>{{ ec.etatEc|badgeEc }}</td>
                 <td>
                     <button
                             {{ stimulus_controller('modal', {
