@@ -2,13 +2,9 @@
 
 namespace App\EventSubscriber;
 
-use App\Classes\Mailer;
 use App\Entity\Formation;
 use App\Entity\Notification;
-use App\Repository\ComposanteRepository;
-use App\Repository\FormationRepository;
 use App\Repository\NotificationRepository;
-use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
 

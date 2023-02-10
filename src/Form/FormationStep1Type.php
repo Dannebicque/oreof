@@ -17,8 +17,6 @@ class FormationStep1Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $formation = $options['data'];
-
         $builder
             ->add('localisationMention', EntityType::class, [
                 'class' => Ville::class,
@@ -27,7 +25,7 @@ class FormationStep1Type extends AbstractType
                 'expanded' => true,
                 'label' => 'Localisation(s) de la formation',
                 'help' => 'Plusieurs choix possibles',
-                'choice_attr' => function($choice, $key, $value) {
+                'choice_attr' => function() {
                     return ['data-action' => 'change->formation--step1#changeVille'];
                 },
             ])
@@ -37,7 +35,7 @@ class FormationStep1Type extends AbstractType
                 'label' => 'Composante d\'inscription',
                 'multiple' => true,
                 'expanded' => true,
-                'choice_attr' => function($choice, $key, $value) {
+                'choice_attr' => function() {
                     return ['data-action' => 'change->formation--step1#changeComposanteInscription'];
                 },
                 'attr' => ['data-action' => 'change->formation--step6#changeComposanteInscription']

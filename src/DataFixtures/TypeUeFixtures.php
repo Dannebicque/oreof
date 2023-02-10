@@ -10,18 +10,6 @@ class TypeUeFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        /* générer les fixtures pour les types suivants
-         * Disciplinaire
-Ouverture
-Renforcement
-Outils et Langages (transversale)
-TER – travail d’étude et de recherche
-Mémoire
-Stage
-Projet tutoré
-Mise en situation professionnelle
-         */
-
         $typeUe = new TypeUe();
         $typeUe->setLibelle('Disciplinaire');
         $manager->persist($typeUe);

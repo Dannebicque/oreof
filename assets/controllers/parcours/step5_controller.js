@@ -5,18 +5,16 @@ export default class extends Controller {
   static targets = [
     'content',
   ]
+
   static values = {
     url: String,
   }
 
-  savePrerequis(event) {
+  savePrerequis() {
     saveData(this.urlValue, {
       field: 'prerequis',
       action: 'textarea',
       value: document.getElementById('formation_step5_prerequis').value,
     })
-  }
-
-  connect() {
   }
 }

@@ -1,5 +1,4 @@
 import { Controller } from '@hotwired/stimulus'
-import { useDispatch } from 'stimulus-use'
 import { Modal } from 'bootstrap'
 import callOut from '../js/callOut'
 
@@ -18,7 +17,7 @@ export default class extends Controller {
     const { csrf } = event.params
     let modal = new Modal(document.getElementById('modal-delete'))
     modal.show()
-    document.getElementById('btn-confirm-supprimer').addEventListener('click', async (event) => {
+    document.getElementById('btn-confirm-supprimer').addEventListener('click', async () => {
       const body = {
         method: 'DELETE',
         body: JSON.stringify({
@@ -26,7 +25,7 @@ export default class extends Controller {
         }),
       }
       modal = null
-      await fetch(url, body).then((response) => {
+      await fetch(url, body).then(() => {
         callOut('Suppression effectuée', 'success')
         this._updateListe()
       })
@@ -36,7 +35,7 @@ export default class extends Controller {
   async duplicate(event) {
     event.preventDefault()
     const { url } = event.params
-    await fetch(url).then((response) => {
+    await fetch(url).then(() => {
       callOut('Duplication effectuée', 'success')
       this._updateListe()
     })

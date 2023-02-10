@@ -59,6 +59,9 @@ class FormationController extends BaseController
         ]);
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[Route('/api', name: 'app_formation_api', methods: ['GET'])]
     #[IsGranted('ROLE_SES')]
     public function api(
@@ -75,6 +78,9 @@ class FormationController extends BaseController
         ]);
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[Route('/{id}', name: 'app_formation_show', methods: ['GET'])]
     public function show(
         TypeDiplomeRegistry $typeDiplomeRegistry,
@@ -88,10 +94,13 @@ class FormationController extends BaseController
         ]);
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[Route('/{id}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
     public function edit(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        Formation $formation, FormationRepository $formationRepository): Response
+        Formation $formation): Response
     {
         //todo: tester les droits et si on est en place "en_cours_redaction" => voter
 

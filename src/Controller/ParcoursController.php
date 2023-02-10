@@ -18,7 +18,6 @@ class ParcoursController extends AbstractController
 {
     #[Route('/new/{formation}', name: 'app_parcours_new', methods: ['GET', 'POST'])]
     public function new(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request,
         ParcoursRepository $parcoursRepository,
         Formation $formation
@@ -51,6 +50,9 @@ class ParcoursController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[Route('/{id}/edit', name: 'app_parcours_edit', methods: ['GET', 'POST'])]
     public function edit(Parcours $parcour, TypeDiplomeRegistry $typeDiplomeRegistry): Response
     {
@@ -63,6 +65,9 @@ class ParcoursController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/{id}', name: 'app_parcours_delete', methods: ['DELETE'])]
     public function delete(Request $request, Parcours $parcour, ParcoursRepository $parcoursRepository): Response
     {

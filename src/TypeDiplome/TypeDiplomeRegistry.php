@@ -3,7 +3,6 @@
 namespace App\TypeDiplome;
 
 use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
-use App\TypeDiplome\Source\AbstractTypeDiplome;
 use App\TypeDiplome\Source\TypeDiplomeInterface;
 
 class TypeDiplomeRegistry
@@ -27,6 +26,9 @@ class TypeDiplomeRegistry
         $this->typesDiplomes[$abstractTypeDiplome::class] = $abstractTypeDiplome;
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     public function getTypeDiplome(string $name): mixed
     {
         if (!array_key_exists($name, $this->typesDiplomes)) {

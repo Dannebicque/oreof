@@ -1,7 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-
   static targets = ['detail']
 
   static values = {
@@ -16,5 +15,4 @@ export default class extends Controller {
     const response = await fetch(this.urlValue)
     this.detailTarget.innerHTML = await response.text()
   }
-
 }

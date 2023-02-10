@@ -54,6 +54,9 @@ class FormationWizardController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[Route('/{formation}/3', name: 'app_formation_wizard_step_3', methods: ['GET'])]
     public function step3(
         TypeDiplomeRegistry $typeDiplomeRegistry,
@@ -67,6 +70,9 @@ class FormationWizardController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[Route('/{formation}/{parcours}/4', name: 'app_formation_wizard_step_4', methods: ['GET'])]
     public function step4(
         TypeDiplomeRegistry $typeDiplomeRegistry,

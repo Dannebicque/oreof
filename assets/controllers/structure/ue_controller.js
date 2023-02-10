@@ -6,11 +6,11 @@ import callOut from '../../js/callOut'
 export default class extends Controller {
   static targets = ['detail']
 
-  async detail(event) {
+  detail(event) {
     this._listeEc(event)
   }
 
-  async refreshListeEc(event) {
+  refreshListeEc(event) {
     this._listeEc(event)
   }
 
@@ -40,7 +40,7 @@ export default class extends Controller {
     const { csrf } = event.params
     let modal = new Modal(document.getElementById('modal-delete'))
     modal.show()
-    document.getElementById('btn-confirm-supprimer').addEventListener('click', async (event) => {
+    document.getElementById('btn-confirm-supprimer').addEventListener('click', async () => {
       const body = {
         method: 'DELETE',
         body: JSON.stringify({

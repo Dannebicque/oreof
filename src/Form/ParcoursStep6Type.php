@@ -16,8 +16,6 @@ class ParcoursStep6Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $formation = $options['data'];
-
         $builder
             ->add('composanteInscription', EntityType::class, [
                 'class' => Composante::class,
@@ -25,7 +23,7 @@ class ParcoursStep6Type extends AbstractType
                 'label' => 'Composante d\'inscription',
                 'multiple' => false,
                 'expanded' => true,
-                'choice_attr' => function($choice, $key, $value) {
+                'choice_attr' => function() {
                     return ['data-action' => 'change->parcours--step6#changeComposanteInscription'];
                 },
             ])//todo: faire une liste avec un "+" pour ajouter une composante d'inscription et un "-" pour retirer...

@@ -6,6 +6,7 @@ use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
 use App\Enums\RoleEnum;
 use App\Utils\Tools;
+use DateTimeInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -48,30 +49,22 @@ class AppExtension extends AbstractExtension
 
     public function badgeCentre(UserCentre $userCentre): string
     {
-        switch ($userCentre->typeCentre()) {
-            case CentreGestionEnum::CENTRE_GESTION_COMPOSANTE:
-                $html = '<span class="badge bg-success me-1">' . $userCentre->displaySimple() . '</span>';
-                break;
-            case CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT:
-                $html = '<span class="badge bg-warning me-1">' . $userCentre->displaySimple() . '</span>';
-                break;
-            case CentreGestionEnum::CENTRE_GESTION_FORMATION:
-                $html = '<span class="badge bg-info me-1">' . $userCentre->displaySimple() . '</span>';
-                break;
-            default:
-                $html = '<span class="badge bg-danger me-1">Inconnu</span>';
-                break;
-        }
+        $html = match ($userCentre->typeCentre()) {
+            CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => '<span class="badge bg-success me-1">' . $userCentre->displaySimple() . '</span>',
+            CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => '<span class="badge bg-warning me-1">' . $userCentre->displaySimple() . '</span>',
+            CentreGestionEnum::CENTRE_GESTION_FORMATION => '<span class="badge bg-info me-1">' . $userCentre->displaySimple() . '</span>',
+            default => '<span class="badge bg-danger me-1">Inconnu</span>',
+        };
 
         return $html;
     }
 
-    public function dateFr(?\DateTimeInterface $value): string
+    public function dateFr(?DateTimeInterface $value): string
     {
         return $value !== null ? $value->format('d/m/Y') : 'Erreur';
     }
 
-    public function dateTimeFr(?\DateTimeInterface $value): string
+    public function dateTimeFr(?DateTimeInterface $value): string
     {
         return $value !== null ? $value->format('d/m/Y H:i') : 'Erreur';
     }

@@ -29,6 +29,9 @@ class WorkflowDpeMailSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
     public function onInitialise(Event $event): void
     {
         /** @var Formation $formation */

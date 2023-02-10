@@ -10,7 +10,7 @@ export default class extends Controller {
     url: String,
   }
 
-  saveContenu(event) {
+  saveContenu() {
     saveData(this.urlValue, {
       field: 'contenuFormation',
       action: 'textarea',
@@ -18,7 +18,7 @@ export default class extends Controller {
     })
   }
 
-  saveResultats(event) {
+  saveResultats() {
     saveData(this.urlValue, {
       field: 'resultatsAttendus',
       action: 'textarea',
@@ -42,7 +42,7 @@ export default class extends Controller {
     })
   }
 
-  saveRythme(event) {
+  saveRythme() {
     saveData(this.urlValue, {
       field: 'rythmeFormationTexte',
       action: 'textarea',

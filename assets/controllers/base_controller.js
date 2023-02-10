@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
+
 import callOut from '../js/callOut'
 
 export default class extends Controller {
@@ -9,7 +10,6 @@ export default class extends Controller {
 
   sauvegardeFormModal(event) {
     event.preventDefault()
-    const zone = document.getElementById('liste')
 
     const form = this.element.getElementsByTagName('form')[0]
     fetch(form.action, {
@@ -17,7 +17,7 @@ export default class extends Controller {
       body: new URLSearchParams(new FormData(form)),
     })
       .then((response) => response.json())
-      .then(async (data) => {
+      .then(async () => {
         callOut('Sauvegarde effectuée', 'success')
         this.modal.hide()
         this.dispatch('refreshListe')

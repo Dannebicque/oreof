@@ -12,22 +12,22 @@
             <strong>Nombre d'ECTS</strong> : {{ ec.ects }}
         </p>
 
-        <p>
+        <div>
             <strong>Volume horaire en présentiel</strong>
             <ul>
                 <li>Nombre d’heures. CM : {{ ec.volumeCmPresentiel }}</li>
                 <li>Nombre d’heures. TD : {{ ec.volumeTdPresentiel }}</li>
                 <li>Nombre d’heures. TP : {{ ec.volumeTpPresentiel }}</li>
             </ul>
-        </p>
+        </div>
 
-        <p>
+        <div>
             <strong>Volume horaire en distanciel</strong>
             <ul>
                 <li>Nombre d’heures. CM : {{ ec.volumeCmDistanciel }}</li>
                 <li>Nombre d’heures. TD : {{ ec.volumeTdDistanciel }}</li>
                 <li>Nombre d’heures. TP : {{ ec.volumeTpDistanciel }}</li>
             </ul>
-        </p>
+        </div>
     </div>
 {% endif %}

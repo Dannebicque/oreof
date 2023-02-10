@@ -4,7 +4,7 @@ namespace App\Classes;
 
 use App\Entity\AnneeUniversitaire;
 use App\Repository\AnneeUniversitaireRepository;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Stringable;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -45,7 +45,7 @@ class DataUserSession
     /**
      * @return string|\Stringable|\Symfony\Component\Security\Core\User\UserInterface
      */
-    public function getUser(): UserInterface|\Stringable|string
+    public function getUser(): UserInterface|Stringable|string
     {
         return $this->user;
     }

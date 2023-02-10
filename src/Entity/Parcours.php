@@ -25,7 +25,7 @@ class Parcours
     private ?string $libelle = null;
 
     #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours')]
-    private ?Formation $formation = null;
+    private ?Formation $formation;
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: BlocCompetence::class)]
     private Collection $blocCompetences;
@@ -81,7 +81,7 @@ class Parcours
     #[ORM\Column(nullable: true)]
     private ?array $codesRome = [];
 
-    #[ORM\ManyToOne()]
+    #[ORM\ManyToOne]
     private ?RythmeFormation $rythmeFormation = null;
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: SemestreParcours::class)]

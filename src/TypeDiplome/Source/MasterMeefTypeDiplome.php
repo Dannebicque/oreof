@@ -2,9 +2,6 @@
 
 namespace App\TypeDiplome\Source;
 
-use App\Entity\Formation;
-use App\Entity\Parcours;
-
 class MasterMeefTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 {
     public const SOURCE = 'master_meef';

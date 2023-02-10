@@ -8,7 +8,6 @@ use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
 use App\Enums\RoleEnum;
 use App\Events\UserEvent;
-use App\Events\UserRegisterEvent;
 use App\Form\UserLdapType;
 use App\Form\UserType;
 use App\Repository\ComposanteRepository;
@@ -129,6 +128,9 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/change-role/{id}', name: 'app_user_roles', methods: ['POST'])]
     public function changeRole(
         Request $request,

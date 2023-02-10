@@ -4,13 +4,13 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Enums\CentreGestionEnum;
-use App\Enums\RoleEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use UnitEnum;
 
 class RegisterType extends AbstractType
 {
@@ -32,7 +32,7 @@ class RegisterType extends AbstractType
             ])
             ->add('centreDemande', EnumType::class, [
                 'class' => CentreGestionEnum::class,
-                'choice_label' => static function (\UnitEnum $choice): string {
+                'choice_label' => static function (UnitEnum $choice): string {
                     return $choice->libelle();
                 },
                 'placeholder' => 'Indiquez un centre de gestion',

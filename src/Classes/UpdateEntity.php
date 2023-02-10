@@ -2,7 +2,6 @@
 
 namespace App\Classes;
 
-use App\Entity\Formation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -23,14 +22,11 @@ class UpdateEntity
         if ($ville !== null) {
             if ($isChecked) {
                 $method = 'add' . ucfirst($champ);
-                if (method_exists($formation, $method)) {
-                    $formation->$method($ville);
-                }
             } else {
                 $method = 'remove' . ucfirst($champ);
-                if (method_exists($formation, $method)) {
-                    $formation->$method($ville);
-                }
+            }
+            if (method_exists($formation, $method)) {
+                $formation->$method($ville);
             }
             $this->entityManager->flush();
 

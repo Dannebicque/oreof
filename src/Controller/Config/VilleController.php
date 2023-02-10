@@ -87,6 +87,9 @@ class VilleController extends AbstractController
         return $this->json(true);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/{id}', name: 'app_ville_delete', methods: ['DELETE'])]
     public function delete(
         Request $request,

@@ -16,7 +16,7 @@ class Competence
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'competences')]
-    private ?BlocCompetence $blocCompetence = null;
+    private ?BlocCompetence $blocCompetence;
 
     #[ORM\Column(length: 10)]
     private ?string $code = null;

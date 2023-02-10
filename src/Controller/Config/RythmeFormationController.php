@@ -2,10 +2,8 @@
 
 namespace App\Controller\Config;
 
-use App\Entity\Domaine;
 use App\Entity\RythmeFormation;
 use App\Form\RythmeFormationType;
-use App\Repository\DomaineRepository;
 use App\Repository\RythmeFormationRepository;
 use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,7 +46,7 @@ class RythmeFormationController extends AbstractController
 
         return $this->render('config/rythme_formation/new.html.twig', [
             'rythme_formation' => $rythmeFormation,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -79,7 +77,7 @@ class RythmeFormationController extends AbstractController
 
         return $this->render('config/rythme_formation/new.html.twig', [
             'rythme_formation' => $rythmeFormation,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -94,6 +92,9 @@ class RythmeFormationController extends AbstractController
         return $this->json(true);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/{id}', name: 'app_rythme_formation_delete', methods: ['DELETE'])]
     public function delete(
         Request $request,

@@ -14,8 +14,6 @@ class FormationStep2Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $formation = $options['data'];
-
         $builder
             ->add('contenuFormation', TextareaAutoSaveType::class, [
                 'label' => 'Contenu de la formation',

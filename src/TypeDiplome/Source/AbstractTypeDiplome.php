@@ -21,6 +21,9 @@ abstract class AbstractTypeDiplome
     {
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     public function genereStructure(Formation $formation): void
     {
         $this->typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
@@ -65,22 +68,17 @@ abstract class AbstractTypeDiplome
                         $semestre = $tSemestres[$key];
                     }
 
-                    $sp = new SemestreParcours($semestre, $parcours);
-                    $this->entityManager->persist($sp);
-                    $parcours->addSemestreParcour($sp);
-                    $semestre->addSemestreParcour($sp);
-
                 } else {
 
                     $semestre = new Semestre();
                     $semestre->setOrdre($key);
                     $this->entityManager->persist($semestre);
                     $this->generesUe($semestre);
-                    $sp = new SemestreParcours($semestre, $parcours);
-                    $this->entityManager->persist($sp);
-                    $parcours->addSemestreParcour($sp);
-                    $semestre->addSemestreParcour($sp);
                 }
+                $sp = new SemestreParcours($semestre, $parcours);
+                $this->entityManager->persist($sp);
+                $parcours->addSemestreParcour($sp);
+                $semestre->addSemestreParcour($sp);
             }
         }
     }

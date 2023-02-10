@@ -5,13 +5,15 @@ export default class extends Controller {
   static targets = [
     'content',
   ]
+
   static values = {
     url: String,
   }
 
   changeResponsableEc(event) {
-//todo:....
+    // todo:....
   }
+
   saveContenuFr(event) {
     saveData(this.urlValue, {
       field: 'libelle',
@@ -29,12 +31,14 @@ export default class extends Controller {
   }
 
   changeEnseignementMutualise(event) {
-    saveData(this.urlValue,
+    saveData(
+      this.urlValue,
       {
         field: 'enseignementMutualise',
         action: 'yesNo',
         value: event.target.value,
-      })
+      },
+    )
     if (event.target.value == 1) {
       document.getElementById('coursMutualises').style.display = 'block'
     } else {
@@ -43,11 +47,13 @@ export default class extends Controller {
   }
 
   isMutualise(event) {
-    saveData(this.urlValue,
+    saveData(
+      this.urlValue,
       {
         field: event.params.type,
         action: 'yesNo',
         value: event.target.value,
-      })
+      },
+    )
   }
 }

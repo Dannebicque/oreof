@@ -93,6 +93,9 @@ class AnneeUniversitaireController extends AbstractController
         return $this->json(true);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/{id}', name: 'app_annee_universitaire_delete', methods: ['DELETE'])]
     public function delete(
         Request $request,

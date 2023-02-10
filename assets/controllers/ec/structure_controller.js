@@ -2,17 +2,11 @@ import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 
 export default class extends Controller {
-
   static values = {
     urlSave: String,
   }
 
-  connect() {
-
-  }
-
   saveModaliteEnseignement(event) {
-    console.log('toto')
     saveData(this.urlSaveValue, {
       action: 'modalitesEnseignement',
       value: event.target.value,
@@ -20,7 +14,7 @@ export default class extends Controller {
   }
 
   saveEcts(event) {
-    saveData(this.urlSaveValue,{
+    saveData(this.urlSaveValue, {
       field: 'ects',
       action: 'float',
       value: event.target.value,
@@ -28,8 +22,7 @@ export default class extends Controller {
   }
 
   saveVolume(event) {
-    console.log(event)
-    saveData(this.urlSaveValue,{
+    saveData(this.urlSaveValue, {
       field: event.params.type,
       action: 'float',
       value: event.target.value,

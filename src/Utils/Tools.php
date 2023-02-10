@@ -2,9 +2,6 @@
 
 namespace App\Utils;
 
-use App\TypeDiplome\TypeDiplomeRegistry;
-use Symfony\Contracts\Service\Attribute\Required;
-
 abstract class Tools
 {
     public static function telFormat(?string $number): string

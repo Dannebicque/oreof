@@ -17,11 +17,6 @@ class StructureEtablissementFixtures extends Fixture implements DependentFixture
 
         $etablissement = new Etablissement();
         $etablissement->setLibelle('Université de Reims Champagne-Ardenne');
-        //$etablissement->setSigle('URCA');
-        //$etablissement->setAdresse('1 rue du Doyen-Gabriel-Marty');
-        //$etablissement->setCodePostal('51100');
-        //$etablissement->setVille('Reims');
-        //$etablissement->setTelephone('03 26 51 51 51');
         $manager->persist($etablissement);
 
         $site = new Ville();

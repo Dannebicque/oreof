@@ -5,12 +5,9 @@ export default class extends Controller {
   static targets = [
     'content',
   ]
+
   static values = {
     url: String,
-  }
-
-  connect() {
-    console.log('step 1')
   }
 
   changeVille(event) {
@@ -38,7 +35,7 @@ export default class extends Controller {
     })
   }
 
-  saveModalitesAlternance(event) {
+  saveModalitesAlternance() {
     this._save({
       field: 'modalitesAlternance',
       action: 'textarea',

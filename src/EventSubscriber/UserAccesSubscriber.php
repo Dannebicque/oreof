@@ -21,6 +21,9 @@ class UserAccesSubscriber implements EventSubscriberInterface
     ) {
     }
 
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
     public function onUserDemandeAcces(UserRegisterEvent $event): void
     {
         $admins = $this->userRepository->findByRole('ROLE_ADMIN');
@@ -63,10 +66,13 @@ class UserAccesSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onUserRevoqueAdmin()
+    public function onUserRevoqueAdmin(): void
     {
     }
 
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
     public function onUserValideAdmin(UserEvent $event): void
     {
         $user = $event->getUser();
@@ -76,6 +82,9 @@ class UserAccesSubscriber implements EventSubscriberInterface
         $this->myMailer->sendMessage([$user->getEmail()], '[ORéOF] Validation demande accès');
     }
 
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
     public function onUserValideDpe(UserEvent $event): void
     {
         $admins = $this->userRepository->findByRole('ROLE_ADMIN');
@@ -101,7 +110,10 @@ class UserAccesSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onUserAjoute(UserEvent $event)
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
+    public function onUserAjoute(UserEvent $event): void
     {
         $user = $event->getUser();
         $this->myMailer->initEmail();

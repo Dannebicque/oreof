@@ -4,6 +4,7 @@ export default class extends Controller {
   static targets = [
     'content',
   ]
+
   static values = {
     url: String,
     ec: String,
@@ -14,13 +15,12 @@ export default class extends Controller {
     this._loadStep(1)
   }
 
-  async changeStep(event) {
+  changeStep(event) {
     this._loadStep(event.params.step)
   }
 
   async _loadStep(step) {
-    const response = await fetch(this.urlValue + this.ecValue + "/" + this.parcoursValue + "/" + step)
+    const response = await fetch(`${this.urlValue + this.ecValue}/${this.parcoursValue}/${step}`)
     this.contentTarget.innerHTML = await response.text()
   }
-
 }

@@ -2,20 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\Domaine;
-use App\Entity\Etablissement;
 use App\Entity\User;
 use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
 use App\Enums\RoleEnum;
 use App\Events\UserEvent;
 use App\Repository\ComposanteRepository;
-use App\Repository\DomaineRepository;
 use App\Repository\EtablissementRepository;
 use App\Repository\FormationRepository;
 use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
+use DateTime;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,13 +34,13 @@ class UserGestionController extends BaseController
     public function validAdmin(User $user): Response
     {
         if ($user->isIsValidDpe() === false) {
-            $user->setDateValideDpe(new \DateTime());
+            $user->setDateValideDpe(new DateTime());
             $user->setIsValidDpe(true);
         }
 
         $user->setIsEnable(true);
         $user->setIsValideAdministration(true);
-        $user->setDateValideAdministration(new \DateTime());
+        $user->setDateValideAdministration(new DateTime());
 
         $this->userRepository->save($user, true);
 
@@ -55,9 +53,9 @@ class UserGestionController extends BaseController
     #[IsGranted('ROLE_RESP_DPE')]
     public function validDpe(User $user): Response
     {
-        $user->setDateValideDpe(new \DateTime());
+        $user->setDateValideDpe(new DateTime());
         $user->setIsValidDpe(true);
-        $user->setDateValideAdministration(new \DateTime());
+        $user->setDateValideAdministration(new DateTime());
 
         $this->userRepository->save($user, true);
         $this->eventDispatcher->dispatch(new UserEvent($user), UserEvent::USER_VALIDE_DPE);
@@ -71,7 +69,7 @@ class UserGestionController extends BaseController
     {
         $user->setIsEnable(false);
         $user->setIsValideAdministration(false);
-        $user->setDateValideAdministration(new \DateTime());
+        $user->setDateValideAdministration(new DateTime());
 
         $this->userRepository->save($user, true);
         $this->eventDispatcher->dispatch(new UserEvent($user), UserEvent::USER_REVOQUE_ADMIN);
@@ -111,6 +109,9 @@ class UserGestionController extends BaseController
         ]);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/add/centre/{user}', name: 'app_user_gestion_add_centre')]
     #[IsGranted('ROLE_ADMIN')]
     public function addCentre(
@@ -154,6 +155,9 @@ class UserGestionController extends BaseController
         return $this->json(['success' => 'Centre ajouté avec succès']);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/{id}', name: 'app_user_gestion_delete_centre', methods: ['DELETE'])]
     public function delete(
         Request $request,

@@ -17,11 +17,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ParcoursSaveController extends AbstractController
 {
+    /**
+     * @throws \JsonException
+     */
     #[Route('/parcours/save/{parcours}', name: 'app_parcours_save')]
     public function save(
         VilleRepository $villeRepository,
         RythmeFormationRepository $rythmeFormationRepository,
-        EntityManagerInterface $em,
         UpdateEntity $updateEntity,
         Request $request,
         Parcours $parcours

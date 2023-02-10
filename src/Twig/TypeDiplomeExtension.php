@@ -20,6 +20,9 @@ class TypeDiplomeExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     public function typeDiplome(string $value): string
     {
         $typeD = $this->typeDiplomeRegistry->getTypeDiplome($value);

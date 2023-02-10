@@ -2,10 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Formation;
 use App\Entity\Parcours;
-use App\Form\FormationStep1Type;
-use App\Form\FormationStep2Type;
 use App\Form\ParcoursStep1Type;
 use App\Form\ParcoursStep2Type;
 use App\Form\ParcoursStep5Type;
@@ -38,6 +35,9 @@ class ParcoursWizardController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[Route('/{parcours}/2', name: 'app_parcours_wizard_step_2', methods: ['GET'])]
     public function step2(
         TypeDiplomeRegistry $typeDiplomeRegistry,

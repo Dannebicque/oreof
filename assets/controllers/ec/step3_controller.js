@@ -5,11 +5,12 @@ export default class extends Controller {
   static targets = [
     'content',
   ]
+
   static values = {
     url: String,
   }
 
-  saveObjectifs(event) {
+  saveObjectifs() {
     saveData(this.urlValue, {
       field: 'objectifs',
       action: 'textarea',

@@ -87,6 +87,9 @@ class DomaineController extends AbstractController
         return $this->json(true);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/{id}', name: 'app_domaine_delete', methods: ['DELETE'])]
     public function delete(
         Request $request,

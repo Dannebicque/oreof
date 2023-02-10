@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\BlocCompetence;
 use App\Entity\Formation;
+use App\Entity\Parcours;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -50,7 +51,7 @@ class BlocCompetenceRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByParcours(\App\Entity\Parcours $parcours): array
+    public function findByParcours(Parcours $parcours): array
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.parcours = :parcours')

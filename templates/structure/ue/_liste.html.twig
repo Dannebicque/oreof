@@ -42,7 +42,8 @@
                                     <div class="col-12 col-md-3 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ue</div>
                                         {% if is_granted('ROLE_RESP_FORMATION') %}
-                                            <select class="form-select form-select-sm"
+                                            <label for="detail_ue_{{ ue.id }}" class="sr-only">Type Ue</label>
+                                            <select class="form-select form-select-sm" id="detail_ue_{{ ue.id }}"
                                                     {{ stimulus_action('structure--ue', 'changeTypeUe', 'change', {
                                                         url: path('structure_ue_change_type_ue', {ue: ue.id})
                                                     }) }}
@@ -67,7 +68,9 @@
                                     mb-md-0">
                                         <div class="text-muted text-small d-md-none">ue</div>
                                         {% if is_granted('ROLE_RESP_FORMATION') %}
+                                            <label for="detail_ue_obligatoire_{{ ue.id }}" class="sr-only">Obligatoire ?</label>
                                             <select class="form-select form-select-sm ms-2"
+                                                    id="detail_ue_obligatoire_{{ ue.id }}"
                                                     {{ stimulus_action('structure--ue', 'changeUeObligatoire',
                                                         'change', {
                                                         url: path('structure_ue_change_ue_obligatoire', {ue: ue.id})

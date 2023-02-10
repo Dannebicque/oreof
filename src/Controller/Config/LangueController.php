@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class LangueController extends AbstractController
 {
     #[Route('/', name: 'app_langue_index', methods: ['GET'])]
-    public function index(LangueRepository $langueRepository): Response
+    public function index(): Response
     {
         return $this->render('config/langue/index.html.twig', [
         ]);
@@ -46,7 +46,7 @@ class LangueController extends AbstractController
 
         return $this->render('config/langue/new.html.twig', [
             'langue' => $langue,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -74,7 +74,7 @@ class LangueController extends AbstractController
 
         return $this->render('config/langue/new.html.twig', [
             'langue' => $langue,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -89,6 +89,9 @@ class LangueController extends AbstractController
         return $this->json(true);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/{id}', name: 'app_langue_delete', methods: ['DELETE'])]
     public function delete(
         Request $request,

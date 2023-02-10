@@ -5,11 +5,12 @@ export default class extends Controller {
   static targets = [
     'content',
   ]
+
   static values = {
     url: String,
   }
 
-  saveDescription(event) {
+  saveDescription() {
     saveData(this.urlValue, {
       field: 'description',
       action: 'textarea',
@@ -18,20 +19,24 @@ export default class extends Controller {
   }
 
   changeLangue(event) {
-    saveData(this.urlValue,
+    saveData(
+      this.urlValue,
       {
         field: event.params.type,
         action: 'langue',
         value: event.target.value,
         isChecked: event.target.checked,
-      })
+      },
+    )
   }
 
   changeTypeEnseignement(event) {
-    saveData(this.urlValue,
+    saveData(
+      this.urlValue,
       {
         action: 'typeEnseignement',
         value: event.target.value,
-      })
+      },
+    )
   }
 }

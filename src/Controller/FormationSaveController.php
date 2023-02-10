@@ -16,6 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FormationSaveController extends BaseController
 {
+    /**
+     * @throws \JsonException
+     */
     #[Route('/formation/save/{formation}', name: 'app_formation_save')]
     public function save(
         RythmeFormationRepository $rythmeFormationRepository,
@@ -66,10 +69,6 @@ class FormationSaveController extends BaseController
             case 'rythmeFormation':
                 $rythme = $rythmeFormationRepository->find($data['value']);
                 $rep = $updateEntity->saveField($formation, 'rythmeFormation', $rythme);
-
-                return $this->json($rep);
-            case 'int':
-                $rep = $updateEntity->saveField($formation, $data['field'], (int)$data['value']);
 
                 return $this->json($rep);
             case 'structureSemestres':

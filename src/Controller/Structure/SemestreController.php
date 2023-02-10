@@ -2,10 +2,8 @@
 
 namespace App\Controller\Structure;
 
-use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Repository\SemestreParcoursRepository;
-use App\Repository\SemestreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

@@ -34,7 +34,7 @@ class Ldap
         return null;
     }
 
-    public function getDatas(?string $email)
+    public function getDatas(?string $email): ?array
     {
         $this->connect();
 

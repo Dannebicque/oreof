@@ -13,11 +13,11 @@ class EcUe
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ecUes', cascade: ['persist'])]
-    private ?ElementConstitutif $ec = null;
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'ecUes')]
+    private ?ElementConstitutif $ec;
 
     #[ORM\ManyToOne(inversedBy: 'ecUes')]
-    private ?Ue $ue = null;
+    private ?Ue $ue;
 
 
     public function __construct(Ue $ue, ElementConstitutif $ec)

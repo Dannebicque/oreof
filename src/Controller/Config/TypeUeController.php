@@ -46,7 +46,7 @@ class TypeUeController extends AbstractController
 
         return $this->render('config/type_ue/new.html.twig', [
             'type_ue' => $typeUe,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -74,7 +74,7 @@ class TypeUeController extends AbstractController
 
         return $this->render('config/type_ue/new.html.twig', [
             'type_ue' => $typeUe,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -89,6 +89,9 @@ class TypeUeController extends AbstractController
         return $this->json(true);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/{id}', name: 'app_type_ue_delete', methods: ['DELETE'])]
     public function delete(
         Request $request,

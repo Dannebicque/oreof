@@ -32,7 +32,7 @@ class Formation
     private ?Composante $composantePorteuse = null;
 
     #[ORM\ManyToOne]
-    private ?AnneeUniversitaire $anneeUniversitaire = null;
+    private ?AnneeUniversitaire $anneeUniversitaire;
 
     #[ORM\ManyToOne]
     private ?Mention $mention = null;
@@ -343,7 +343,7 @@ class Formation
     public function getRegimeInscription(): array
     {
         $t = [];
-        foreach ($this->regimeInscription as $key => $value) {
+        foreach ($this->regimeInscription as $value) {
             $t[] = RegimeInscriptionEnum::from($value);
         }
 

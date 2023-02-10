@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AnneeUniversitaireRepository;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -24,18 +25,18 @@ class AnneeUniversitaire
     private ?bool $defaut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateOuvertureDpe = null;
+    private ?DateTimeInterface $dateOuvertureDpe = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateClotureDpe = null;
+    private ?DateTimeInterface $dateClotureDpe = null;
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateTransmissionSes = null;
+    private ?DateTimeInterface $dateTransmissionSes = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateCfvu = null;
+    private ?DateTimeInterface $dateCfvu = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $datePublication = null;
+    private ?DateTimeInterface $datePublication = null;
 
     public function getId(): ?int
     {
@@ -78,60 +79,60 @@ class AnneeUniversitaire
         return $this;
     }
 
-    public function getDateTransmissionSes(): ?\DateTimeInterface
+    public function getDateTransmissionSes(): ?DateTimeInterface
     {
         return $this->dateTransmissionSes;
     }
 
-    public function setDateTransmissionSes(?\DateTimeInterface $dateTransmissionSes): self
+    public function setDateTransmissionSes(?DateTimeInterface $dateTransmissionSes): self
     {
         $this->dateTransmissionSes = $dateTransmissionSes;
 
         return $this;
     }
 
-    public function getDateCfvu(): ?\DateTimeInterface
+    public function getDateCfvu(): ?DateTimeInterface
     {
         return $this->dateCfvu;
     }
 
-    public function setDateCfvu(?\DateTimeInterface $dateCfvu): self
+    public function setDateCfvu(?DateTimeInterface $dateCfvu): self
     {
         $this->dateCfvu = $dateCfvu;
 
         return $this;
     }
 
-    public function getDateOuvertureDpe(): ?\DateTimeInterface
+    public function getDateOuvertureDpe(): ?DateTimeInterface
     {
         return $this->dateOuvertureDpe;
     }
 
-    public function setDateOuvertureDpe(?\DateTimeInterface $dateOuvertureDpe): self
+    public function setDateOuvertureDpe(?DateTimeInterface $dateOuvertureDpe): self
     {
         $this->dateOuvertureDpe = $dateOuvertureDpe;
 
         return $this;
     }
 
-    public function getDateClotureDpe(): ?\DateTimeInterface
+    public function getDateClotureDpe(): ?DateTimeInterface
     {
         return $this->dateClotureDpe;
     }
 
-    public function setDateClotureDpe(?\DateTimeInterface $dateClotureDpe): self
+    public function setDateClotureDpe(?DateTimeInterface $dateClotureDpe): self
     {
         $this->dateClotureDpe = $dateClotureDpe;
 
         return $this;
     }
 
-    public function getDatePublication(): ?\DateTimeInterface
+    public function getDatePublication(): ?DateTimeInterface
     {
         return $this->datePublication;
     }
 
-    public function setDatePublication(?\DateTimeInterface $datePublication): self
+    public function setDatePublication(?DateTimeInterface $datePublication): self
     {
         $this->datePublication = $datePublication;
 

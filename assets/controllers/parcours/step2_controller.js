@@ -38,7 +38,7 @@ export default class extends Controller {
     }
   }
 
-  saveStageText(event) {
+  saveStageText() {
     saveData(this.urlValue, {
       field: 'stageText',
       action: 'textarea',
@@ -74,7 +74,7 @@ export default class extends Controller {
     }
   }
 
-  saveProjetText(event) {
+  saveProjetText() {
     saveData(this.urlValue, {
       field: 'projetText',
       action: 'textarea',

@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Enums\CentreGestionEnum;
 use App\Repository\UserRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -54,16 +54,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $isValidDpe = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateValideDpe = null;
+    private ?DateTimeInterface $dateValideDpe = null;
 
     #[ORM\Column]
     private ?bool $isValideAdministration = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateValideAdministration = null;
+    private ?DateTimeInterface $dateValideAdministration = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateDemande = null;
+    private ?DateTimeInterface $dateDemande = null;
 
     #[ORM\Column]
     private ?bool $isDeleted = false;
@@ -154,7 +154,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
@@ -268,12 +268,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getDateValideDpe(): ?\DateTimeInterface
+    public function getDateValideDpe(): ?DateTimeInterface
     {
         return $this->dateValideDpe;
     }
 
-    public function setDateValideDpe(\DateTimeInterface $dateValideDpe): self
+    public function setDateValideDpe(DateTimeInterface $dateValideDpe): self
     {
         $this->dateValideDpe = $dateValideDpe;
 
@@ -292,24 +292,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getDateValideAdministration(): ?\DateTimeInterface
+    public function getDateValideAdministration(): ?DateTimeInterface
     {
         return $this->dateValideAdministration;
     }
 
-    public function setDateValideAdministration(?\DateTimeInterface $dateValideAdministration): self
+    public function setDateValideAdministration(?DateTimeInterface $dateValideAdministration): self
     {
         $this->dateValideAdministration = $dateValideAdministration;
 
         return $this;
     }
 
-    public function getDateDemande(): ?\DateTimeInterface
+    public function getDateDemande(): ?DateTimeInterface
     {
         return $this->dateDemande;
     }
 
-    public function setDateDemande(?\DateTimeInterface $dateDemande): self
+    public function setDateDemande(?DateTimeInterface $dateDemande): self
     {
         $this->dateDemande = $dateDemande;
 

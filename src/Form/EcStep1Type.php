@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class EcStep1Type extends AbstractType
 {
-    private ?AuthorizationCheckerInterface $authorizationChecker=null;
+    private ?AuthorizationCheckerInterface $authorizationChecker;
 
     public function __construct(AuthorizationCheckerInterface $authorizationChecker)
     {

@@ -116,6 +116,9 @@ class BlocCompetenceController extends AbstractController
         return $this->json(true);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/{id}', name: 'app_bloc_competence_delete', methods: ['DELETE'])]
     public function delete(
         Request $request,

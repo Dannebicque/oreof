@@ -46,7 +46,7 @@ class TypeEnseignementController extends AbstractController
 
         return $this->render('config/type_enseignement/new.html.twig', [
             'type_enseignement' => $typeEnseignement,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -75,7 +75,7 @@ class TypeEnseignementController extends AbstractController
 
         return $this->render('config/type_enseignement/new.html.twig', [
             'type_enseignement' => $typeEnseignement,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -91,6 +91,9 @@ class TypeEnseignementController extends AbstractController
         return $this->json(true);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/{id}', name: 'app_type_enseignement_delete', methods: ['DELETE'])]
     public function delete(
         Request $request,

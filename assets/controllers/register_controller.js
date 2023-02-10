@@ -6,7 +6,7 @@ export default class extends Controller {
     urlComposante: String,
   }
 
-  async changeCentre(event) {
+  changeCentre(event) {
     const val = event.target.value
 
     if (val === 'cg_etablissement') {
@@ -27,14 +27,14 @@ export default class extends Controller {
         const selectMention = document.getElementById('selectListe')
         selectMention.innerHTML = ''
 
-        const option = document.createElement('option')
+        let option = document.createElement('option')
         option.value = null
         option.text = 'Choisir dans la liste'
         option.selected = true
         selectMention.appendChild(option)
 
         items.forEach((mention) => {
-          const option = document.createElement('option')
+          option = document.createElement('option')
           option.value = mention.id
           option.text = mention.libelle
           selectMention.appendChild(option)

@@ -122,11 +122,8 @@ class UserCentre
             return $this->formation->display();
         }
 
-        if ($this->etablissement !== null) {
-            return $this->etablissement->getLibelle();
-        }
+        return $this->etablissement?->getLibelle();
 
-        return null;
     }
 
     public function typeCentre(): ?CentreGestionEnum

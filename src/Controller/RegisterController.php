@@ -6,7 +6,6 @@ use App\Classes\Ldap;
 use App\Entity\User;
 use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
-use App\Events\UserEvent;
 use App\Events\UserRegisterEvent;
 use App\Form\RegisterType;
 use App\Repository\ComposanteRepository;
@@ -14,6 +13,7 @@ use App\Repository\EtablissementRepository;
 use App\Repository\FormationRepository;
 use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,7 +43,7 @@ class RegisterController extends AbstractController
             if ($existUser === null) {
                 $username = $ldap->getUsername($user->getEmail());
                 $user->setUsername($username ?? $user->getEmail());
-                $user->setDateDemande(new \DateTime());
+                $user->setDateDemande(new DateTime());
                 $userRepository->save($user, true);
 
                 $centre = $form['centreDemande']->getData();

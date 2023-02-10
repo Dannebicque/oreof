@@ -15,11 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ElementConstitutifSaveController extends BaseController
 {
+    /**
+     * @throws \JsonException
+     */
     #[Route('/ec/save/{ec}', name: 'app_ec_save')]
     public function save(
         TypeEnseignementRepository $typeEnseignementRepository,
         LangueRepository $langueRepository,
-        EntityManagerInterface $em,
         UpdateEntity $updateEntity,
         Request $request,
         ElementConstitutif $ec

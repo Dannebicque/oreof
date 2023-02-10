@@ -9,9 +9,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use UnitEnum;
 
 class UserLdapType extends AbstractType
 {
@@ -26,7 +26,7 @@ class UserLdapType extends AbstractType
             ])
             ->add('centreDemande', EnumType::class, [
                 'class' => CentreGestionEnum::class,
-                'choice_label' => static function (\UnitEnum $choice): string {
+                'choice_label' => static function (UnitEnum $choice): string {
                     return $choice->libelle();
                 },
                 'placeholder' => 'Indiquez un centre de gestion',
@@ -37,7 +37,7 @@ class UserLdapType extends AbstractType
 
             ->add('role', EnumType::class, [
                 'class' => RoleEnum::class,
-                'choice_label' => static function (\UnitEnum $choice): string {
+                'choice_label' => static function (UnitEnum $choice): string {
                     return $choice->libelle();
                 },
                 'label' => 'Droits',

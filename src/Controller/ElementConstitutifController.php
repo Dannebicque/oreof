@@ -64,14 +64,9 @@ class ElementConstitutifController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_element_constitutif_show', methods: ['GET'])]
-    public function show(ElementConstitutif $elementConstitutif): Response
-    {
-        return $this->render('element_constitutif/show.html.twig', [
-            'element_constitutif' => $elementConstitutif,
-        ]);
-    }
-
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
     public function edit(
         TypeDiplomeRegistry $typeDiplomeRegistry,

@@ -15,7 +15,7 @@ export default class extends Controller {
     this._loadStep(this.stepValue)
   }
 
-  async changeStep(event) {
+  changeStep(event) {
     this._loadStep(event.params.step)
   }
 

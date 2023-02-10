@@ -2,7 +2,6 @@
 
 namespace App\Twig\Components;
 
-use App\Repository\AnneeUniversitaireRepository;
 use App\Repository\NotificationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\User\UserInterface;

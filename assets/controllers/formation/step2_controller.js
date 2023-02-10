@@ -5,11 +5,12 @@ export default class extends Controller {
   static targets = [
     'content',
   ]
+
   static values = {
     url: String,
   }
 
-  saveContenu(event) {
+  saveContenu() {
     saveData(this.urlValue, {
       field: 'contenuFormation',
       action: 'textarea',
@@ -17,7 +18,7 @@ export default class extends Controller {
     })
   }
 
-  saveResultats(event) {
+  saveResultats() {
     saveData(this.urlValue, {
       field: 'resultatsAttendus',
       action: 'textarea',

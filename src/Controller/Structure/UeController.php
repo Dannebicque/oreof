@@ -4,7 +4,6 @@ namespace App\Controller\Structure;
 
 use App\Entity\Parcours;
 use App\Entity\Semestre;
-use App\Entity\TypeUe;
 use App\Entity\Ue;
 use App\Form\UeType;
 use App\Repository\TypeEnseignementRepository;
@@ -22,6 +21,9 @@ use Symfony\Component\Routing\Annotation\Route;
 ]
 class UeController extends AbstractController
 {
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[
         Route('/detail/semestre/{semestre}/{parcours}', name: 'detail_semestre')
     ]
@@ -76,6 +78,9 @@ class UeController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/ue/update/typeUe/{ue}', name: 'change_type_ue', methods: ['POST'])]
     public function updateTypeUe(
         Request $request,
@@ -98,6 +103,9 @@ class UeController extends AbstractController
 
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/ue/update/obligatoire/{ue}', name: 'change_ue_obligatoire', methods: ['POST'])]
     public function updateUeObligatoire(
         Request $request,
@@ -108,7 +116,6 @@ class UeController extends AbstractController
         $typeUe = JsonRequest::getValueFromRequest($request, 'value');
         if ($typeUe !== '') {
             $typeUe = $typeEnseignementRepository->find($typeUe);
-            dump($typeUe);
             $ue->setUeObligatoire($typeUe);
         } else {
             $ue->setUeObligatoire(null);
@@ -119,6 +126,9 @@ class UeController extends AbstractController
         return $this->json(true);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(
         Request $request,

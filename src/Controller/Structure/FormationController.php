@@ -55,7 +55,6 @@ class FormationController extends AbstractController
 
     #[Route('/validation/{formation}', name: 'modal_validation')]
     public function validation(
-        FormationRepository $formationRepository,
         Formation $formation): Response
     {
         //check des différents droits
