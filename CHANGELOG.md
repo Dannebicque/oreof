@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.2](https://github.com/Dannebicque/oreof/compare/v0.2.1...v0.2.2) (2023-02-10)
+
+
+### Features
+
+* Gestion des centres + hotreload ([da7fd5c](https://github.com/Dannebicque/oreof/commit/da7fd5cbe5579937dfa8950e940411ecf6743dbf))
+* Gestion des centres + hotreload ([02138bd](https://github.com/Dannebicque/oreof/commit/02138bd7d690ff03f4c44d01451e2da333155f96))
+
+
+### Bug Fixes
+
+* Codification BCC et Compétences ([1ea4048](https://github.com/Dannebicque/oreof/commit/1ea404873794dc7ecc18021c8bb0b83be9df42f1))
+* Mises en pages des composantes ([5e291bf](https://github.com/Dannebicque/oreof/commit/5e291bf080d121f52e47f0e448fc961ec40d344a))
+
 ### [0.2.1](https://github.com/Dannebicque/oreof/compare/v0.2.0...v0.2.1) (2023-02-09)
 
 
