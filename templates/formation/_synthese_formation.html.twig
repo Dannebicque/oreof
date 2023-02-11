@@ -26,6 +26,19 @@
                     <dd>{{ formation.niveauSortie.libelle }}</dd>
                 </dl>
             </div>
+            {% if is_granted('ROLE_ADMIN') %}
+            <div class="col-12 text-end">
+                    <a href="{{ path('app_formation_edit_modal',{'formation': formation.id}) }}"
+                       class="btn btn-sm text-warning "
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="Modifier la formation"
+                    >
+                        <i class="{{ iconEdit }}"></i>
+                        <span> modifier</span>
+                    </a>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

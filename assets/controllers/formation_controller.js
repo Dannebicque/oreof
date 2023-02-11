@@ -11,7 +11,16 @@ export default class extends Controller {
   }
 
   connect() {
-    this._updateListeMention(document.getElementById('formation_ses_typeDiplome').value, document.getElementById('formation_ses_domaine').value)
+    this._updateListeMention(document.getElementById('formation_ses_typeDiplome').value, document.getElementById('formation_ses_domaine').value).then(() => {
+      const mention = document.getElementById('formation_ses_mention')
+      const mentionTexte = document.getElementById('formation_ses_mentionTexte')
+
+      mentionTexte.disabled = mention.value !== 'autre' && mention.value.trim() !== 'null';
+
+      if (mentionTexte.value.trim() !== '') {
+        mention.value = 'autre'
+      }
+    })
   }
 
   changeInscriptionRNCP(event) {
@@ -35,6 +44,20 @@ export default class extends Controller {
     const responsableMention = event.target.value
     const reponse = await fetch(`${this.urlUserValue}?id=${responsableMention}`)
     this.userTarget.innerHTML = await reponse.text()
+  }
+
+  changeMention(event) {
+    if (event.target.value === 'autre' || event.target.value.trim() === 'null') {
+      document.getElementById('formation_ses_mentionTexte').disabled = false
+    } else {
+      document.getElementById('formation_ses_mentionTexte').disabled = true
+    }
+  }
+
+  changeMentionTexte(event) {
+    if (event.target.value.trim() !== '') {
+      document.getElementById('formation_ses_mention').value = 'autre'
+    }
   }
 
   async _updateListeMention(typeDiplome, domaine) {

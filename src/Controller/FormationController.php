@@ -47,13 +47,37 @@ class FormationController extends BaseController
         ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $formationRepository->save($formation, true);
 
             return $this->redirectToRoute('app_formation_index');
         }
 
         return $this->render('formation/new.html.twig', [
+            'formation' => $formation,
+            'form' => $form->createView()
+        ]);
+    }
+
+    #[Route('/edit/formation/{formation}', name: 'app_formation_edit_modal', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_SES')]
+    public function editModal(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        Request $request, FormationRepository $formationRepository, Formation $formation): Response
+    {
+        $form = $this->createForm(FormationSesType::class, $formation, [
+            'action' => $this->generateUrl('app_formation_edit_modal', ['formation' => $formation->getId()]),
+            'typesDiplomes' => $typeDiplomeRegistry->getChoices(),
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {//todo: si validate le choice de mention ne fonctionne pas
+            $formationRepository->save($formation, true);
+
+            return $this->redirectToRoute('app_formation_edit', ['id' => $formation->getId()]);
+        }
+
+        return $this->render('formation/editModal.html.twig', [
             'formation' => $formation,
             'form' => $form->createView()
         ]);
