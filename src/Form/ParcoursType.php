@@ -17,6 +17,14 @@ class ParcoursType extends AbstractType
                 'label' => 'Libellé',
                 'required' => true,
             ])
+            ->add('sigle', TextType::class, [
+                'label' => 'Sigle',
+                'help' => 'Optionnel, sigle/code ou appelation courte du parcours',
+                'required' => false,
+                'attr' => [
+                    'maxlength' => '15',
+                ],
+            ])
         ;
     }
 

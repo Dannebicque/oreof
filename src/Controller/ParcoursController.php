@@ -42,13 +42,38 @@ class ParcoursController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_parcours_show', methods: ['GET'])]
-    public function show(Parcours $parcour): Response
-    {
-        return $this->render('parcours/show.html.twig', [
-            'parcour' => $parcour,
+    #[Route('/edit/modal/{parcours}', name: 'app_parcours_edit_modal', methods: ['GET', 'POST'])]
+    public function editModal(
+        Request $request,
+        ParcoursRepository $parcoursRepository,
+        Parcours $parcours
+    ): Response {
+        $form = $this->createForm(ParcoursType::class, $parcours, [
+            'action' => $this->generateUrl('app_parcours_edit_modal', [
+                'parcours' => $parcours->getId(),
+            ]),
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $parcoursRepository->save($parcours, true);
+
+            return $this->json(true);
+        }
+
+        return $this->render('parcours/new.html.twig', [
+            'parcour' => $parcours,
+            'form' => $form->createView(),
         ]);
     }
+
+//    #[Route('/{id}', name: 'app_parcours_show', methods: ['GET'])]
+//    public function show(Parcours $parcour): Response
+//    {
+//        return $this->render('parcours/show.html.twig', [
+//            'parcour' => $parcour,
+//        ]);
+//    }
 
     /**
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException

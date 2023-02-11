@@ -109,6 +109,9 @@ class Parcours
     #[ORM\ManyToOne]
     private ?Ville $localisation = null;
 
+    #[ORM\Column(length: 15, nullable: true)]
+    private ?string $sigle = null;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -515,6 +518,18 @@ class Parcours
     public function setLocalisation(?Ville $localisation): self
     {
         $this->localisation = $localisation;
+
+        return $this;
+    }
+
+    public function getSigle(): ?string
+    {
+        return $this->sigle;
+    }
+
+    public function setSigle(?string $sigle): self
+    {
+        $this->sigle = $sigle;
 
         return $this;
     }
