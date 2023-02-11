@@ -7,6 +7,7 @@ export default class extends Controller {
 
   static values = {
     url: String,
+    urlListePersonnel: String,
     urlUser: String,
   }
 
@@ -21,6 +22,11 @@ export default class extends Controller {
         mention.value = 'autre'
       }
     })
+    this._updateListePersonnel(document.getElementById('formation_ses_composantePorteuse').value).then(() => {
+      if (document.getElementById('formation_ses_responsableMention').value !== 'null') {
+        this._updatePersonnel(document.getElementById('formation_ses_responsableMention').value)
+      }
+    })
   }
 
   changeInscriptionRNCP(event) {
@@ -32,6 +38,10 @@ export default class extends Controller {
     }
   }
 
+  changeComposante(event) {
+    this._updateListePersonnel(event.target.value)
+  }
+
   changeTypeDiplome(event) {
     this._updateListeMention(event.target.value, document.getElementById('formation_ses_domaine').value)
   }
@@ -40,8 +50,12 @@ export default class extends Controller {
     this._updateListeMention(document.getElementById('formation_ses_typeDiplome').value, event.target.value)
   }
 
-  async changeResponsableMention(event) {
-    const responsableMention = event.target.value
+  changeResponsableMention(event) {
+    this._updatePersonnel(event.target.value)
+  }
+
+  async _updatePersonnel(id) {
+    const responsableMention = id
     const reponse = await fetch(`${this.urlUserValue}?id=${responsableMention}`)
     this.userTarget.innerHTML = await reponse.text()
   }
@@ -58,6 +72,29 @@ export default class extends Controller {
     if (event.target.value.trim() !== '') {
       document.getElementById('formation_ses_mention').value = 'autre'
     }
+  }
+
+  async _updateListePersonnel(composante) {
+    await fetch(`${this.urlListePersonnelValue}?composante=${composante}`).then((response) => response.json()).then(
+      (data) => {
+        console.log(data)
+
+        const selectPersonnels = document.getElementById('formation_ses_responsableMention')
+        selectPersonnels.innerHTML = ''
+
+        let option = document.createElement('option')
+        option.value = null
+        option.text = ''
+        selectPersonnels.appendChild(option)
+
+        data.forEach((personnel) => {
+          option = document.createElement('option')
+          option.value = personnel.id
+          option.text = personnel.libelle
+          selectPersonnels.appendChild(option)
+        })
+      },
+    )
   }
 
   async _updateListeMention(typeDiplome, domaine) {

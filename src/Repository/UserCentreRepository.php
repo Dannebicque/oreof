@@ -39,28 +39,12 @@ class UserCentreRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return UserCentre[] Returns an array of UserCentre objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?UserCentre
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByComposante(int $composante): array
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.composante = :composante')
+            ->setParameter('composante', $composante)
+            ->getQuery()
+            ->getResult();
+    }
 }

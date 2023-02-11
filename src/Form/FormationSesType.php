@@ -51,7 +51,7 @@ class FormationSesType extends AbstractType
                 'attr' => ['data-action' => 'change->formation#changeDomaine']
             ])
             ->add('composantePorteuse', EntityType::class, [
-                'attr' => ['placeholder' => 'Choisir la composante porteuse du projet'],
+                'attr' => ['placeholder' => 'Choisir la composante porteuse du projet', 'data-action' => 'change->formation#changeComposante'],
                 'class' => Composante::class,
                 'choice_label' => 'libelle',
                 'label' => 'Composante porteuse',
