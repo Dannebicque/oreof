@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.3](https://github.com/Dannebicque/oreof/compare/v0.2.2...v0.2.3) (2023-02-11)
+
+
+### Features
+
+* Création d'une formation + modification. Gestion des listes ([8a0d0ca](https://github.com/Dannebicque/oreof/commit/8a0d0cab3fdace7bb8ad066b927371a9b5c8b912))
+* Filtre des types d'ue selon le diplôme ([fb43062](https://github.com/Dannebicque/oreof/commit/fb4306217829d713c7d6ae63ba3b5131780c89e4))
+* Parcours : modification du libelle/sigle depuis formation ([c347fba](https://github.com/Dannebicque/oreof/commit/c347fbac6b354d533b3ceaf5abc6e836f3924a40))
+* Parcours : suppression ([953d8ef](https://github.com/Dannebicque/oreof/commit/953d8ef20f4306e0dd6a30003247ccad38c33ebc))
+* Parcours : suppression ([8e4b283](https://github.com/Dannebicque/oreof/commit/8e4b28340f0de6aed8e353bc8eded169638b4814))
+* Texte de l'alternance uniquement si alternance ([e9eee25](https://github.com/Dannebicque/oreof/commit/e9eee2562ac7492d78a0fe0725f7544f715c1d64))
+* User selon la composante pour la création d'une formation ([b5bf1c4](https://github.com/Dannebicque/oreof/commit/b5bf1c4d501e02472bb2acf691b3b40cbecab1bb))
+
 ### [0.2.2](https://github.com/Dannebicque/oreof/compare/v0.2.1...v0.2.2) (2023-02-10)
 
 
