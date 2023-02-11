@@ -43,6 +43,7 @@ class ParcoursStep1Type extends AbstractType
                 'attr' => ['data-action' => 'change->parcours--step1#changeRythme'],
             ])
             ->add('rythmeFormationTexte', TextareaAutoSaveType::class, [
+                'required' => false,
                 'label' => 'Résultats attendus de la formation',
                 'help' => 'Indiquez en 3000 caractères maximum le rythme de la formation : temps plein, temps partiel, cours du soir,etc..',
                 'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'click->parcours--step1#saveRythme'],

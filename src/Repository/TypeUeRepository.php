@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\TypeUe;
+use App\TypeDiplome\Source\TypeDiplomeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,28 +40,23 @@ class TypeUeRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return TypeUe[] Returns an array of TypeUe objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('t.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByTypeDiplome(TypeDiplomeInterface $typeDiplome): array
+    {
+        $typeDiplomes = $this->createQueryBuilder('t')
+            ->orderBy('t.libelle', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
 
-//    public function findOneBySomeField($value): ?TypeUe
-//    {
-//        return $this->createQueryBuilder('t')
-//            ->andWhere('t.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $tab = [];
+
+        //filtre selon le type de diplome
+        foreach ($typeDiplomes as $td) {
+            if (in_array($typeDiplome::class, $td->getTypeDiplome())) {
+                $tab[$td->getLibelle()] = $td->getId();
+            }
+        }
+
+        return $tab;
+    }
 }

@@ -34,6 +34,7 @@ class FormationStep2Type extends AbstractType
             ])
             ->add('rythmeFormationTexte', TextareaAutoSaveType::class, [
                 'label' => 'Compléments sur le rythme de formation',
+                'required' => false,
                 'help' => 'Indiquez en 3000 caractères maximum le rythme de la formation : temps plein, temps partiel, cours du soir,etc..',
                 'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'click->formation--step2#saveRythme'],
             ]);

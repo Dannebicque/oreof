@@ -37,10 +37,11 @@ class UeController extends AbstractController
     ): Response {
         $ues = $ueRepository->findBy(['semestre' => $semestre]);
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome());
+
         return $this->render('structure/ue/_liste.html.twig', [
             'ues' => $ues,
             'semestre' => $semestre,
-            'typeUes' => $typeUeRepository->findAll(), //todo: filtrer selon le type de diplôme
+            'typeUes' => $typeUeRepository->findByTypeDiplome($typeDiplome),
             'typeEnseignements' => $typeEnseignementRepository->findAll(),
             'parcours' => $parcours,
             'typeDiplome' => $typeDiplome,
@@ -51,6 +52,8 @@ class UeController extends AbstractController
         Route('/add-ue/semestre/{semestre}/{parcours}', name: 'add_ue_semestre')
     ]
     public function addUe(
+        TypeUeRepository $typeUeRepository,
+        TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request,
         UeRepository $ueRepository,
         Semestre $semestre,
@@ -58,16 +61,20 @@ class UeController extends AbstractController
     ): Response {
         $ue = new Ue();
         $ue->setSemestre($semestre);
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome());
         $form = $this->createForm(UeType::class, $ue, [
             'action' => $this->generateUrl('structure_ue_add_ue_semestre', [
                 'semestre' => $semestre->getId(),
                 'parcours' => $parcours->getId()
-            ])
+            ]),
+            'choices' => $typeUeRepository->findByTypeDiplome($typeDiplome),
         ]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $tu = $typeUeRepository->find($form->get('typeUe')->getData());
+            $ue->setTypeUe($tu);
             $ueRepository->save($ue, true);
 
             return $this->json(true);

@@ -75,32 +75,33 @@ Encore
 // uncomment if you're having problems with a jQuery plugin
 // .autoProvidejQuery()
 
-  .addPlugin(new BrowserSyncPlugin(
-    {
-      host: 'localhost',
-      port: 3000,
-      proxy: process.env.PROXY,
-      files: [
-        {
-          match: ['src/*.php'],
-        },
-        {
-          match: ['templates/*.twig'],
-        },
-        {
-          match: ['assets/*.js'],
-        },
-        {
-          match: ['assets/*.css'],
-        },
-      ],
-      notify: false,
-    },
-
-    {
-
-      reload: true,
-    },
-  ))
+// .addPlugin(new BrowserSyncPlugin(
+//   {
+//     host: 'localhost',
+//     port: 3000,
+//     cors: true,
+//     proxy: process.env.PROXY,
+//     files: [
+//       {
+//         match: ['src/*.php'],
+//       },
+//       {
+//         match: ['templates/*.twig'],
+//       },
+//       {
+//         match: ['assets/*.js'],
+//       },
+//       {
+//         match: ['assets/*.css'],
+//       },
+//     ],
+//     notify: false,
+//   },
+//
+//   {
+//
+//     reload: true,
+//   },
+// ))
 
 module.exports = Encore.getWebpackConfig()

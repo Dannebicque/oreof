@@ -6,6 +6,7 @@
                 url: path('app_user_liste')
             }) }}
          data-action="base:refreshListe@window->crud#refreshListe"
+         data-action="base:modalClose@window->crud#refreshListe"
     >
         <div class="card-body" {{ stimulus_target('crud', 'liste') }}>
         </div>

@@ -5,7 +5,7 @@
             {{ stimulus_controller('crud', {
                 url: path('structure_ec_liste')
             }) }}
-         data-action="base:refreshListe@window->crud#refreshListe"
+         data-action="base:refreshListe@window->crud#refreshListe base:modalClose@window->crud#refreshListe"
     >
         <div class="card-body" {{ stimulus_target('crud', 'liste') }}>
         </div>
@@ -22,15 +22,5 @@
 {% endblock %}
 
 {% block bouton_header %}
-    {#    {% if is_granted('ROLE_SES') %}#}
-    {#        <a href="{{ path('app_formation_new')  }}"#}
-    {#           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"#}
-    {#           data-bs-toggle="tooltip"#}
-    {#           data-bs-placement="bottom"#}
-    {#           title="Ajouter une formation"#}
-    {#        >#}
-    {#            <i class="{{ iconAdd }}"></i>#}
-    {#            <span> Ajouter une formation</span>#}
-    {#        </a>#}
-    {#    {% endif %}#}
+
 {% endblock %}

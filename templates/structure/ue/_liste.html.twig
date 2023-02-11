@@ -49,13 +49,13 @@
                                                     }) }}
                                             >
                                                 <option value="">Choisir un type</option>
-                                                {% for typeUe in typeUes %}
-                                                    <option value="{{ typeUe.id }}"
-                                                            {% if ue.typeUe != null and ue.typeUe.id == typeUe.id %}
+                                                {% for key, typeUe in typeUes %}
+                                                    <option value="{{ typeUe }}"
+                                                            {% if ue.typeUe != null and ue.typeUe.id == typeUe %}
                                                                 selected
                                                             {% endif %}
                                                     >
-                                                        {{ typeUe.libelle }}
+                                                        {{ key }}
                                                     </option>
                                                 {% endfor %}
                                             </select>

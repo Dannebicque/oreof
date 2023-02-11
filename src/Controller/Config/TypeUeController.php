@@ -5,6 +5,7 @@ namespace App\Controller\Config;
 use App\Entity\TypeUe;
 use App\Form\TypeUeType;
 use App\Repository\TypeUeRepository;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,11 +31,15 @@ class TypeUeController extends AbstractController
     }
 
     #[Route('/new', name: 'app_type_ue_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, TypeUeRepository $typeUeRepository): Response
+    public function new(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        Request $request, TypeUeRepository $typeUeRepository): Response
     {
         $typeUe = new TypeUe();
         $form = $this->createForm(TypeUeType::class, $typeUe, [
             'action' => $this->generateUrl('app_type_ue_new'),
+            'typesDiplomes' => $typeDiplomeRegistry->getChoices(),
+
         ]);
         $form->handleRequest($request);
 
@@ -59,10 +64,14 @@ class TypeUeController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_type_ue_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, TypeUe $typeUe, TypeUeRepository $typeUeRepository): Response
+    public function edit(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        Request $request, TypeUe $typeUe, TypeUeRepository $typeUeRepository): Response
     {
         $form = $this->createForm(TypeUeType::class, $typeUe, [
             'action' => $this->generateUrl('app_type_ue_edit', ['id' => $typeUe->getId()]),
+            'typesDiplomes' => $typeDiplomeRegistry->getChoices(),
+
         ]);
         $form->handleRequest($request);
 
