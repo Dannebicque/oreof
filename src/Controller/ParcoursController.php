@@ -98,6 +98,7 @@ class ParcoursController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete' . $parcour->getId(), JsonRequest::getValueFromRequest($request, 'csrf'))) {
             $parcoursRepository->remove($parcour, true);
+            //todo: supprimer BCC, semestres, UE ? (ou les liens)
             return $this->json(true);
         }
 

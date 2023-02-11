@@ -30,8 +30,9 @@
                     <span> Modifier</span>
                 </button>
 
-                <button {{ stimulus_action('crud', 'delete', 'click', {
+                <button {{ stimulus_action('formation--step3', 'deleteParcours', 'click', {
                     url:path('app_parcours_delete',{'id': parcour.id}),
+                    id: parcour.id,
                     csrf: csrf_token('delete' ~ parcour.id)
                 }) }} class="btn btn-sm text-danger">
                     <i class="{{ iconDelete }}"></i> Supprimer

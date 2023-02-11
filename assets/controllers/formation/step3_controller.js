@@ -1,5 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
+import { Modal } from 'bootstrap'
 import { saveData } from '../../js/saveData'
+import callOut from '../../js/callOut'
 
 export default class extends Controller {
   static targets = [
@@ -16,6 +18,26 @@ export default class extends Controller {
   connect() {
     if (this.hasParcoursValue === true) {
       this._refreshListe()
+    }
+  }
+
+  async deleteParcours(event) {
+    event.preventDefault()
+    if (confirm('Voulez-vous vraiment supprimer ce parcours et toutes mles informations associées ?')) {
+      const { id } = event.params
+      const { url } = event.params
+      const { csrf } = event.params
+      const body = {
+        method: 'DELETE',
+        body: JSON.stringify({
+          csrf,
+        }),
+      }
+      await fetch(url, body).then(() => {
+        callOut('Suppression effectuée', 'success')
+        this._refreshListe()
+        document.getElementById(`tab_parcours_${event.params.id}`).remove()
+      })
     }
   }
 

@@ -3,9 +3,9 @@
 {% block content %}
     {% if constant('SOURCE',typeDiplome) == constant
         ('App\\TypeDiplome\\Source\\LicenceProfessionnelleTypeDiplome::SOURCE') %}
-    {% set step = 0 %}
+        {% set step = 0 %}
     {% else %}
-    {% set step = 1 %}
+        {% set step = 1 %}
     {% endif %}
     {{ include('formation/_synthese_formation.html.twig') }}
     <div class="mt-3"
@@ -26,8 +26,7 @@
             {% endif %}
             <li class="nav-item" role="presentation">
                 <a class="nav-link     {% if step == 1 %}active{% endif %}"
-                   data-bs-toggle="tab" href="#" role="tab"     {% if step == 1 %}aria-selected="true"{%
-                    endif %}
+                   data-bs-toggle="tab" href="#" role="tab" {% if step == 1 %}aria-selected="true"{% endif %}
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 1}) }}
                 >
                     Localisation de la mention/spécialité
@@ -44,7 +43,7 @@
                 >Semestre & Parcours</a>
             </li>
             {% for parcours in formation.parcours %}
-                <li class="nav-item" role="presentation">
+                <li class="nav-item" role="presentation" id="tab_parcours_{{ parcours.id }}">
                     <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                             {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 4, parcours:
                                 parcours.id}) }}
