@@ -10,6 +10,10 @@ export default class extends Controller {
     url: String,
   }
 
+  connect() {
+    this._checkIfAlternance()
+  }
+
   changeRegimeInscription(event) {
     this._save({
       action: 'array',
@@ -17,6 +21,7 @@ export default class extends Controller {
       value: event.target.value,
       isChecked: event.target.checked,
     })
+    this._checkIfAlternance()
   }
 
   changeComposanteInscription(event) {
@@ -24,6 +29,24 @@ export default class extends Controller {
       action: 'composanteInscription',
       value: event.target.value,
     })
+  }
+
+  _checkIfAlternance() {
+    let hasAlternance = false
+
+    document.querySelectorAll('input[name="parcours_step6[regimeInscription][]"]').forEach((element) => {
+      if (element.checked) {
+        if (element.value === 'Formation Initiale en apprentissage' || element.value === 'Formation Continue Contrat Professionnalisation') {
+          hasAlternance = true
+        }
+      }
+    })
+
+    if (hasAlternance) {
+      document.getElementById('parcours_step6_modalitesAlternance').disabled = false
+    } else {
+      document.getElementById('parcours_step6_modalitesAlternance').disabled = true
+    }
   }
 
   saveModalitesAlternance() {

@@ -461,7 +461,7 @@ class Parcours
 
     public function getRegimeInscription(): array
     {
-        return $this->regimeInscription;
+        return $this->regimeInscription ?? [];
     }
 
     public function setRegimeInscription(?array $regimeInscription): self

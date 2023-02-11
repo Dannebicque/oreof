@@ -10,6 +10,10 @@ export default class extends Controller {
     url: String,
   }
 
+  connect() {
+    this._checkIfAlternance()
+  }
+
   changeVille(event) {
     this._save({
       action: 'ville',
@@ -25,6 +29,25 @@ export default class extends Controller {
       value: event.target.value,
       isChecked: event.target.checked,
     })
+    this._checkIfAlternance()
+  }
+
+  _checkIfAlternance() {
+    let hasAlternance = false
+
+    document.querySelectorAll('input[name="formation_step1[regimeInscription][]"]').forEach((element) => {
+      if (element.checked) {
+        if (element.value === 'Formation Initiale en apprentissage' || element.value === 'Formation Continue Contrat Professionnalisation') {
+          hasAlternance = true
+        }
+      }
+    })
+
+    if (hasAlternance) {
+      document.getElementById('formation_step1_modalitesAlternance').disabled = false
+    } else {
+      document.getElementById('formation_step1_modalitesAlternance').disabled = true
+    }
   }
 
   changeComposanteInscription(event) {
