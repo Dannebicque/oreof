@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.4](https://github.com/Dannebicque/oreof/compare/v0.2.3...v0.2.4) (2023-02-12)
+
+
+### Bug Fixes
+
+* Menu mobile icone + replier les UE. ([828cb28](https://github.com/Dannebicque/oreof/commit/828cb2825a03ca5722eb047b8f1faa6d00f475bb))
+* Refresh uniquement de la liste des UE ([9c48c97](https://github.com/Dannebicque/oreof/commit/9c48c9714ebd864fb80f026013a43f8ea555c5c7))
+
 ### [0.2.3](https://github.com/Dannebicque/oreof/compare/v0.2.2...v0.2.3) (2023-02-11)
 
 
