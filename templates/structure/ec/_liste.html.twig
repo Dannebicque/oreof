@@ -28,6 +28,7 @@
                             {{ stimulus_controller('modal', {
                                 size: 'lg',
                                 modalTitle: 'Volumes Horaires',
+                                nomEvenement: 'refreshListeEc',
                                 modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
                             data-action="click->modal#openModal"
                             class="btn btn-sm btn-outline-info"
@@ -47,10 +48,12 @@
                     <button
                             {{ stimulus_controller('modal', {
                                 size: 'lg',
+                                nomEvenement: 'refreshListeEc',
                                 modalTitle: 'Modalités de Contrôle des Connaissances',
                                 modalUrl: path('app_element_constitutif_show',{'id': ec.id}) }) }}
                             data-action="click->modal#openModal"
                             class="btn btn-sm btn-outline-info"
+
                             data-size="lg"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
@@ -64,6 +67,7 @@
                     <button
                             {{ stimulus_controller('modal', {
                                 size: 'lg',
+                                nomEvenement: '',
                                 modalTitle: 'Voir un EC',
                                 modalUrl: path('app_element_constitutif_show',{'id': ec.id}) }) }}
                             data-action="click->modal#openModal"
