@@ -23,6 +23,10 @@ class BadgeDpeExtension extends AbstractExtension
 
     public function badgeEc(array $etatsEc): string
     {
+        if (count($etatsEc) === 0) {
+            return '<span class="badge bg-secondary me-1">Initialisé</span>';
+        }
+
         $etatsEc = array_keys($etatsEc);
         $html = '';
         foreach ($etatsEc as $etatEc) {
@@ -34,6 +38,10 @@ class BadgeDpeExtension extends AbstractExtension
 
     public function badgeFormation(array $etatsFormation): string
     {
+        if (count($etatsFormation) === 0) {
+            return '<span class="badge bg-secondary me-1">Initialisé</span>';
+        }
+
         $etatsFormation = array_keys($etatsFormation);
         $html = '';
         foreach ($etatsFormation as $etatFormation) {
@@ -45,11 +53,10 @@ class BadgeDpeExtension extends AbstractExtension
 
     public function badgeEtatComposante(array $etatsComposante): string
     {
-
         $etatsComposante = array_keys($etatsComposante);
 
         if (count($etatsComposante) === 0) {
-            return '<span class="badge bg-danger me-1">Etat inconnu</span>';
+            return '<span class="badge bg-danger me-1">Initialisé</span>';
         }
         $html = '';
         foreach ($etatsComposante as $etatComposante) {
@@ -61,6 +68,9 @@ class BadgeDpeExtension extends AbstractExtension
 
     public function badgeDpe(array $etatsDpe): string
     {
+        if (count($etatsDpe) === 0) {
+            return '<span class="badge bg-secondary me-1">Initialisé</span>';
+        }
         $etatsDpe = array_keys($etatsDpe);
         $html = '';
         foreach ($etatsDpe as $etatDpe) {

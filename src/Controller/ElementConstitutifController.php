@@ -91,16 +91,25 @@ class ElementConstitutifController extends AbstractController
     }
 
     #[Route('/{id}/structure-ec', name: 'app_element_constitutif_structure', methods: ['GET', 'POST'])]
-    public function structureEc(ElementConstitutif $elementConstitutif): Response
-    {
+    public function structureEc(
+        Request $request,
+        ElementConstitutifRepository $elementConstitutifRepository,
+        ElementConstitutif $elementConstitutif
+    ): Response {
         if ($this->isGranted('ROLE_RESP_FORMATION')) {
             $form = $this->createForm(EcStep4Type::class, $elementConstitutif, [
+                'isModal' => true,
                 'action' => $this->generateUrl('app_element_constitutif_structure',
                     ['id' => $elementConstitutif->getId()]),
             ]);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $elementConstitutifRepository->save($elementConstitutif, true);
 
-//todo: gérer le submit du form dans ce cas précis... Mais utilisé dans le wizard de création d'EC également...
-            return $this->render('element_constitutif/_structureEc.html.twig', [
+                return $this->json(true);
+            }
+
+            return $this->render('element_constitutif/_structureEcModal.html.twig', [
                 'ec' => $elementConstitutif,
                 'form' => $form->createView(),
             ]);

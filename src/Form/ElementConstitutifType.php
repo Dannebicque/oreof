@@ -24,7 +24,7 @@ class ElementConstitutifType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'display',
                 'label' => 'Responsable de l\'EC',
-                'required' => true,
+                'required' => false,
             ])
         ;
     }
