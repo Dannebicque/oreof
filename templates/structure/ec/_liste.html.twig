@@ -107,6 +107,7 @@
                             {{ stimulus_controller('modal', {
                                 size: 'lg',
                                 modalTitle: 'Ajouter un élément constitutif (matière)',
+                                nomEvenement: 'refreshListeEc',
                                 modalUrl: path('app_element_constitutif_new', {ue: ue.id}) }) }}
                             data-action="click->modal#openModal"
                             class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"

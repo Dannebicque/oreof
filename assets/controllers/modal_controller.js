@@ -10,6 +10,7 @@ import { useDispatch } from 'stimulus-use'
 export default class extends Controller {
   static values = {
     modalUrl: String,
+    nomEvenement: { type: String, default: 'refreshListe' },
     modalTitle: String,
     formAction: String,
     size: { type: String, default: 'md' },
@@ -28,6 +29,7 @@ export default class extends Controller {
       url: this.modalUrlValue,
       formAction: this.formActionValue,
       form: this.formValue,
+      nomEvenement: this.nomEvenementValue,
       size: this.sizeValue,
       btnClose: this.btnCloseValue,
       params: this.paramsValue,
