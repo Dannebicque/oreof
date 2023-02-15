@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="alert alert-info mb-2">
+        Le ROLE_ADMIN dispose de l'ensemble des accès.
+    </div>
+
+    <div class="card"
+            {{ stimulus_controller('crud', {
+                url: path('app_droits_access_liste')
+            }) }}
+         data-action="base:refreshListe@window->crud#refreshListe">
+        <div class="card-body" {{ stimulus_target('crud', 'liste') }}>
+        </div>
+    </div>
+{% endblock %}
+
+{% block header %}
+    Gestion des droirs d'accès et des rôles
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Administration',
+        }
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <button
+            {{ stimulus_controller('modal', {
+                size: 'lg',
+                modalTitle: 'Ajouter un rôle',
+                modalUrl: path('app_droits_access_new') }) }}
+            data-action="click->modal#openModal"
+            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-size="lg"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Ajouter un rôle"
+    >
+        <i class="{{ iconAdd }}"></i>
+        <span> Ajouter un rôle</span>
+    </button>
+{% endblock %}

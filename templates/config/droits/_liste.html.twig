@@ -1,0 +1,68 @@
+<div {{ stimulus_controller('droits', {
+    url: path('app_droits_access_sauvegarder'),
+}) }}>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>&nbsp;</th>
+            {% for role in roles %}
+                <th>
+                    {{ role.libelle }}
+                    {% if role.porte == 'ALL' %}(toutes){% else %}(propriétaire){% endif %}
+                    <div>
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Modifier un domaine de formation',
+                                modalUrl: path('app_droits_access_edit',{'id': role.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm text-warning"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Modifier un domaine de formation"
+                    >
+                        <i class="{{ iconEdit }}"></i>
+                        <span> modifier</span>
+                    </button>
+                    <button {{ stimulus_action('crud', 'delete', 'click', {
+                        url:path('app_droits_access_delete',{'id': role.id}),
+                        csrf: csrf_token('delete' ~ role.id)
+                    }) }} class="btn btn-sm text-danger">
+                        <i class="{{ iconDelete }}"></i> Supprimer
+                    </button>
+                    </div>
+                </th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for centre in centres %}
+            <tr>
+                <td colspan="{{ roles|length + 1 }}" class="text-center bg-secondary text-white">
+                    {{ centre.libelle }}
+                </td>
+            </tr>
+            {% for permission in permissions %}
+                <tr>
+                    <td>{{ permission.libelle }}</td>
+                    {% for role in roles %}
+                        {# todo: gérer des cas impossibles ? dans une liste enum et vérifier ? #}
+                        {% set valeur = 'ROLE_'~centre.value~'_'~permission.value|upper~'_'~role.porte %}
+                        <td>
+                            <input type="checkbox" value="{{ valeur }}"
+                                    {% if role.hasDroit(valeur) %}
+                                        checked
+                                    {% endif %}
+                                    {{ stimulus_action('droits', 'sauvegarde', 'change', {
+                                        role: role.codeRole
+                                    }) }}
+                            >
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
