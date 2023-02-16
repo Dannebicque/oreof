@@ -30,7 +30,7 @@ export default class extends Controller {
       body: JSON.stringify({
         centreType: document.getElementById('typeCentre').value,
         centreId: document.getElementById('selectListe').value,
-        droits: document.getElementById('droits').value,
+        role: document.getElementById('droits').value,
       }),
     })
       .then((response) => response.json())

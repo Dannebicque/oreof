@@ -6,12 +6,6 @@ security:
             entity:
                 class: App\Entity\User
                 property: username
-    role_hierarchy:
-        ROLE_ADMIN:                 ROLE_SES
-        ROLE_SES:                   [ROLE_VP,ROLE_RESP_DPE]
-        ROLE_RESP_DPE:              ROLE_RESP_FORMATION
-        ROLE_RESP_FORMATION:        ROLE_RESP_EC
-        ROLE_RESP_EC:               ROLE_LECTEUR
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

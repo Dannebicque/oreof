@@ -4,9 +4,10 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Enums\CentreGestionEnum;
-use App\Enums\RoleEnum;
+use App\Repository\RoleRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,6 +16,15 @@ use UnitEnum;
 
 class UserLdapType extends AbstractType
 {
+    private array $choices;
+    public function __construct(RoleRepository $roleRepository)
+    {
+        $this->choices = [];
+        $roles = $roleRepository->findByAll();
+        foreach ($roles as $role) {
+            $this->choices[$role->getCodeRole()] = $role->getLibelle();
+        }
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -35,11 +45,9 @@ class UserLdapType extends AbstractType
                 'attr' => ['data-action' => 'change->register#changeCentre']
             ])
 
-            ->add('role', EnumType::class, [
-                'class' => RoleEnum::class,
-                'choice_label' => static function (UnitEnum $choice): string {
-                    return $choice->libelle();
-                },
+            ->add('role', ChoiceType::class, [
+                'choices' => $this->choices,
+                'expanded' => true,
                 'label' => 'Droits',
                 'placeholder' => 'Indiquez les droits accordés',
                 'required' => true,

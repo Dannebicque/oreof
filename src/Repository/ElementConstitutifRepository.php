@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\AnneeUniversitaire;
 use App\Entity\Composante;
+use App\Entity\EcUe;
 use App\Entity\ElementConstitutif;
 use App\Entity\Formation;
 use App\Entity\Parcours;
@@ -45,72 +47,92 @@ class ElementConstitutifRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByRoleUser(UserInterface $user): array
+//    public function findByRoleUser(UserInterface $user): array
+//    {
+//        $roles = $user->getRoles();
+//
+//        if (in_array('ROLE_SES', $roles) || in_array('ROLE_ADMIN', $roles)) {
+//            //tous les droits on affiche tout (trier?)
+//            return $this->findAll();
+//        }
+//
+//        if (in_array('ROLE_RESP_DPE', $roles)) {
+//            //filtrer pour les formations de la composante
+//            return $this->findByComposanteDpe($user);
+//
+//        }
+//
+//        if (in_array('ROLE_RESP_FORMATION', $roles)) {
+//            return $this->findByResponsableFormation($user);
+//        }
+//
+//        if (in_array('ROLE_RESP_EC', $roles)) {
+//            //todo: juste les EC qui me concerne ?
+//            return $this->findBy(['responsableEc' => $user]);
+//        }
+//
+//        return []; //todo: ? est-ce vrai ?
+//    }
+
+    /**
+     * @param \Symfony\Component\Security\Core\User\UserInterface $user
+     *
+     * @return array
+     */
+    public function findByComposanteDpe(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
     {
-        $roles = $user->getRoles();
+        return $this->createQueryBuilder('ec')
+            ->join('ec.ecUes', 'ecue')
+            ->join('ecue.ue', 'ue')
+            ->innerJoin(Semestre::class, 's', 'WITH', 's.id = ue.semestre')
+            ->join('s.semestreParcours', 'sp')
+            ->innerJoin(Parcours::class, 'p', 'WITH', 'p.id = sp.parcours')
+            ->innerJoin(Formation::class, 'f', 'WITH', 'f.id = p.formation')
+            ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
+            ->where('c.responsableDpe = :user')
+            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->setParameter('user', $user)
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->getQuery()
+            ->getResult();
+    }
 
-        if (in_array('ROLE_SES', $roles) || in_array('ROLE_ADMIN', $roles)) {
-            //tous les droits on affiche tout (trier?)
-            return $this->findAll();
-        }
+    /**
+     * @param \Symfony\Component\Security\Core\User\UserInterface $user
+     *
+     * @return array
+     */
+    public function findByResponsableFormation(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
+    {
+        return $this->createQueryBuilder('ec')
+            ->join('ec.ecUes', 'ecue')
+            ->join('ecue.ue', 'ue')
+            ->innerJoin(Semestre::class, 's', 'WITH', 's.id = ue.semestre')
+            ->join('s.semestreParcours', 'sp')
+            ->innerJoin(Parcours::class, 'p', 'WITH', 'p.id = sp.parcours')
+            ->innerJoin(Formation::class, 'f', 'WITH', 'f.id = p.formation')
+            ->where('f.responsableMention = :user')
+            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->setParameter('user', $user)
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->getQuery()
+            ->getResult();
+    }
 
-        if (in_array('ROLE_RESP_DPE', $roles)) {
-            //filtrer pour les formations de la composante
-            $filtre1 = $this->createQueryBuilder('ec')
-                ->innerJoin(Ue::class, 'ue', 'WITH', 'ue.id = ec.ue')
-                ->innerJoin(Semestre::class, 's', 'WITH', 's.id = ue.semestre')
-                // ->leftJoin(Parcours::class, 'p', 'WITH', 'p.id = s.parcours')
-                ->innerJoin(Formation::class, 'f', 'WITH', 'f.id = s.formation')
-                ->innerJoin(Composante::class, 'c', 'WITH', 'c.id = f.composante')
-                ->where('c.responsableDpe = :user')
-                ->setParameter('user', $user)
-                ->getQuery()
-                ->getResult();
-
-            $filtre2 = $this->createQueryBuilder('ec')
-                ->innerJoin(Ue::class, 'ue', 'WITH', 'ue.id = ec.ue')
-                ->innerJoin(Semestre::class, 's', 'WITH', 's.id = ue.semestre')
-                ->leftJoin(Parcours::class, 'p', 'WITH', 'p.id = s.parcours')
-                ->innerJoin(Formation::class, 'f', 'WITH', 'f.id = p.formation')
-                ->innerJoin(Composante::class, 'c', 'WITH', 'c.id = f.composante')
-                ->where('c.responsableDpe = :user')
-                ->setParameter('user', $user)
-                ->getQuery()
-                ->getResult();
-
-            return array_merge($filtre1, $filtre2);
-
-        }
-
-        if (in_array('ROLE_RESP_FORMATION', $roles)) {
-            $filtre1 = $this->createQueryBuilder('ec')
-                ->innerJoin(Ue::class, 'ue', 'WITH', 'ue.id = ec.ue')
-                ->innerJoin(Semestre::class, 's', 'WITH', 's.id = ue.semestre')
-                // ->leftJoin(Parcours::class, 'p', 'WITH', 'p.id = s.parcours')
-                ->innerJoin(Formation::class, 'f', 'WITH', 'f.id = s.formation')
-                ->where('f.responsableFormation = :user')
-                ->setParameter('user', $user)
-                ->getQuery()
-                ->getResult();
-
-            $filtre2 = $this->createQueryBuilder('ec')
-                ->innerJoin(Ue::class, 'ue', 'WITH', 'ue.id = ec.ue')
-                ->innerJoin(Semestre::class, 's', 'WITH', 's.id = ue.semestre')
-                ->leftJoin(Parcours::class, 'p', 'WITH', 'p.id = s.parcours')
-                ->innerJoin(Formation::class, 'f', 'WITH', 'f.id = p.formation')
-                ->where('f.responsableFormation = :user')
-                ->setParameter('user', $user)
-                ->getQuery()
-                ->getResult();
-
-            return array_merge($filtre1, $filtre2);
-        }
-
-        if (in_array('ROLE_RESP_EC', $roles)) {
-            //todo: juste les EC qui me concerne ?
-            return $this->findBy(['responsableEc' => $user]);
-        }
-
-        return []; //todo: ? est-ce vrai ?
+    public function findByResponsableEc(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
+    {
+        return $this->createQueryBuilder('ec')
+            ->join('ec.ecUes', 'ecue')
+            ->join('ecue.ue', 'ue')
+            ->innerJoin(Semestre::class, 's', 'WITH', 's.id = ue.semestre')
+            ->join('s.semestreParcours', 'sp')
+            ->innerJoin(Parcours::class, 'p', 'WITH', 'p.id = sp.parcours')
+            ->innerJoin(Formation::class, 'f', 'WITH', 'f.id = p.formation')
+            ->where('ec.responsableEc = :user')
+            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->setParameter('user', $user)
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->getQuery()
+            ->getResult();
     }
 }

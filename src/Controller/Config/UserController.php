@@ -6,13 +6,13 @@ use App\Classes\Ldap;
 use App\Entity\User;
 use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
-use App\Enums\RoleEnum;
 use App\Events\UserEvent;
 use App\Form\UserLdapType;
 use App\Form\UserType;
 use App\Repository\ComposanteRepository;
 use App\Repository\EtablissementRepository;
 use App\Repository\FormationRepository;
+use App\Repository\RoleRepository;
 use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
@@ -102,16 +102,23 @@ class UserController extends AbstractController
                     break;
             }
 
-            $userCentreRepository->save($centreUser, true);
+            if (isset($centreUser)) {
+                $userCentreRepository->save($centreUser, true);
 
-            $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');
+                $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');
 
-            if ($form['sendMail']->getData()) {
-                $userEvent = new UserEvent($user);
-                $eventDispatcher->dispatch($userEvent, UserEvent::USER_AJOUTE);
+                if ($form['sendMail']->getData()) {
+                    $userEvent = new UserEvent($user);
+                    $eventDispatcher->dispatch($userEvent, UserEvent::USER_AJOUTE);
+                }
+
+                return $this->json(true);
             }
 
-            return $this->json(true);
+            $this->addFlash('error', 'Erreur lors de l\'ajout de l\'utilisateur');
+
+            return $this->json(false);
+
         }
 
         return $this->render('config/user/new-ldap.html.twig', [
@@ -120,11 +127,13 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user): Response
+    public function show(
+        RoleRepository $roleRepository,
+        User $user): Response
     {
         return $this->render('config/user/show.html.twig', [
             'user' => $user,
-            'roles' => RoleEnum::cases()
+            'roles' => $roleRepository->findByAll()
         ]);
     }
 

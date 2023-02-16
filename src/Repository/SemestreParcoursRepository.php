@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,28 +40,12 @@ class SemestreParcoursRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return SemestreParcours[] Returns an array of SemestreParcours objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?SemestreParcours
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByParcours(Parcours $parcours): array
+    {
+        return $this->createQueryBuilder('sp')
+            ->where('sp.parcours = :parcours')
+            ->setParameter('parcours', $parcours)
+            ->getQuery()
+            ->getResult();
+    }
 }

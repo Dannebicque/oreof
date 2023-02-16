@@ -39,28 +39,21 @@ class RoleRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Role[] Returns an array of Role objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('r.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByPermission(string $attribute): array
+    {
+        $t = [];
+        $all = $this->findAll();
+        foreach ($all as $role) {
+            if (in_array($attribute, $role->getDroits(), true)) {
+                $t[] = $role->getCodeRole();
+            }
+        }
 
-//    public function findOneBySomeField($value): ?Role
-//    {
-//        return $this->createQueryBuilder('r')
-//            ->andWhere('r.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return array_unique($t);
+    }
+
+    public function findByAll(): array
+    {
+        return $this->findBy(['porte' => 'All'], ['libelle' => 'ASC']);
+    }
 }

@@ -72,16 +72,21 @@ class RegisterController extends AbstractController
                         break;
                 }
 
-                $userCentreRepository->save($centreUser, true);
+                if (isset($centreUser)) {
+                    $userCentreRepository->save($centreUser, true);
+                    $this->addFlash('success', 'Votre demande a bien été prise en compte');
 
-                $this->addFlash('success', 'Votre demande a bien été prise en compte');
 
+                    $eventDispatcher->dispatch($userEvent, UserRegisterEvent::USER_DEMANDE_ACCES);
 
-                $eventDispatcher->dispatch($userEvent, UserRegisterEvent::USER_DEMANDE_ACCES);
+                    return $this->render('register/confirm.html.twig', [
+                        'user' => $user,
+                    ]);
+                }
 
-                return $this->render('register/confirm.html.twig', [
-                    'user' => $user,
-                ]);
+                $this->addFlash('Erreur', 'Une erreur est survenue, le centre n\'existe pas');
+
+                return $this->redirectToRoute('app_register');
             }
 
             $this->addFlash('danger', 'Cet utilisateur existe déjà');

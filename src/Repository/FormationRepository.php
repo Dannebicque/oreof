@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\AnneeUniversitaire;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -41,38 +42,14 @@ class FormationRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByRoleUser(UserInterface $user): array
-    {
-        $roles = $user->getRoles();
-
-        if (in_array('ROLE_SES', $roles) || in_array('ROLE_ADMIN', $roles)) {
-            return $this->findAll();
-        }
-
-        if (in_array('ROLE_RESP_DPE', $roles)) {
-            //todo: formation de la composante ? Le Resp DPE est dans la composante ??
-            return $this->findByComposateDpe($user);
-        }
-
-        if (in_array('ROLE_RESP_FORMATION', $roles)) {
-            //todo: formation de la composante ? Le Resp DPE est dans la composante ??
-            return $this->findBy(['responsableMention' => $user]);
-        }
-
-        if (in_array('ROLE_RESP_EC', $roles)) {
-            //todo: les formations dans lesquels il est impliqué ?
-            //todo: comment on a le lien DPE => Composante et Composante => Formation ?
-        }
-
-        return [];
-    }
-
-    private function findByComposateDpe(UserInterface $user): array
+    public function findByComposanteDpe(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
     {
         return $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
             ->where('c.responsableDpe = :user')
+            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
             ->setParameter('user', $user)
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
             ->getQuery()
             ->getResult();
     }

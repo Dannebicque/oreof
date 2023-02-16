@@ -17,8 +17,8 @@ use Symfony\Component\Workflow\WorkflowInterface;
 #[Route('/formation')]
 class FormationController extends BaseController
 {
-    public function __construct(private WorkflowInterface $dpeWorkflow)
-    {}
+//    public function __construct(private WorkflowInterface $dpeWorkflow)
+//    {}
     #[Route('/', name: 'app_formation_index', methods: ['GET'])]
     public function index(): Response
     {
@@ -29,8 +29,17 @@ class FormationController extends BaseController
     #[Route('/liste', name: 'app_formation_liste', methods: ['GET'])]
     public function liste(FormationRepository $formationRepository): Response
     {
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_COMPOSANTE_SHOW_ALL', $this->getUser()) || $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser())) {
+            $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()]);
+        } else {
+            $formations = [];
+            $formations[] = $formationRepository->findByComposanteDpe($this->getUser(),$this->getAnneeUniversitaire());
+            $formations[] = $formationRepository->findBy(['responsableMention' => $this->getUser(), 'anneeUniversitaire' => $this->getAnneeUniversitaire()]);
+            $formations = array_merge(...$formations);
+        }
+
         return $this->render('formation/_liste.html.twig', [
-            'formations' => $formationRepository->findByRoleUser($this->getUser()),
+            'formations' => $formations
         ]);
     }
 

@@ -6,10 +6,10 @@
         <div class="me-2">
             <input
                     {{ stimulus_action('user', 'changeRole', 'change', {
-                        role: role.name
+                        role: role.codeRole
                     }) }}
-                    id="roles_{{ loop.index }}" type="checkbox" name="roles[]" value="{{ role.name }}"
-                    {% if role.name in user.roles %}checked{% endif %}>
+                    id="roles_{{ loop.index }}" type="checkbox" name="roles[]" value="{{ role.codeRole }}"
+                    {% if role.codeRole in user.roles %}checked{% endif %}>
             <label for="roles_{{ loop.index }}">{{ role.libelle }}</label>
         </div>
     {% endfor %}

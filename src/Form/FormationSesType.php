@@ -5,10 +5,8 @@ namespace App\Form;
 use App\Entity\Composante;
 use App\Entity\Domaine;
 use App\Entity\Formation;
-use App\Entity\Mention;
 use App\Entity\User;
 use App\Enums\NiveauFormationEnum;
-use App\Form\Type\DateRangeType;
 use App\Form\Type\YesNoType;
 use App\Repository\MentionRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
@@ -106,7 +104,7 @@ class FormationSesType extends AbstractType
                 'attr' => ['data-action' => 'change->formation#changeResponsableMention']
             ])
             ->addEventListener(FormEvents::POST_SUBMIT,
-                static function(FormEvent $event) use ($typeDiplomeRegistry, $mentionRepository) {
+                static function(FormEvent $event) use ($mentionRepository) {
                     $formation = $event->getData();
                     $form = $event->getForm();
                     $mention = $form->get('mention')->getData();

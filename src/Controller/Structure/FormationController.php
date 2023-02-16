@@ -2,6 +2,7 @@
 
 namespace App\Controller\Structure;
 
+use App\Controller\BaseController;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Repository\FormationRepository;
@@ -12,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[
     Route('/structure/formation', name: 'structure_formation_')
 ]
-class FormationController extends AbstractController
+class FormationController extends BaseController
 {
     #[
         Route('/', name: 'index')
@@ -31,7 +32,14 @@ class FormationController extends AbstractController
         FormationRepository $formationRepository
     ): Response
     {
-        $formations = $formationRepository->findByRoleUser($this->getUser());
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_COMPOSANTE_SHOW_ALL', $this->getUser()) || $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser())) {
+            $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()]);
+        } else {
+            $formations = [];
+            $formations[] = $formationRepository->findByComposanteDpe($this->getUser(),$this->getAnneeUniversitaire());
+            $formations[] = $formationRepository->findBy(['responsableMention' => $this->getUser(), 'anneeUniversitaire' => $this->getAnneeUniversitaire()]);
+            $formations = array_merge(...$formations);
+        }
 
         return $this->render('structure/formation/_liste.html.twig', [
             'formations' => $formations

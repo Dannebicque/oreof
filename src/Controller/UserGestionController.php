@@ -5,11 +5,11 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
-use App\Enums\RoleEnum;
 use App\Events\UserEvent;
 use App\Repository\ComposanteRepository;
 use App\Repository\EtablissementRepository;
 use App\Repository\FormationRepository;
+use App\Repository\RoleRepository;
 use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
@@ -79,22 +79,27 @@ class UserGestionController extends BaseController
 
     #[Route('/droits/{user}', name: 'app_user_gestion_droits')]
     #[IsGranted('ROLE_ADMIN')]
-    public function gestionDroits(User $user): Response
+    public function gestionDroits(
+        RoleRepository $roleRepository,
+        User $user): Response
     {
         return $this->render('user/_gestion_droits.html.twig', [
             'user' => $user,
-            'roles' => RoleEnum::cases()
+            'roles' => $roleRepository->findByAll()
         ]);
     }
 
     #[Route('/gestion/centre/{user}', name: 'app_user_gestion_centre')]
     #[IsGranted('ROLE_ADMIN')]
-    public function gestionCentre(User $user): Response
+    public function gestionCentre(
+        RoleRepository $roleRepository,
+        User $user): Response
     {
         return $this->render('user/_gestion_centre.html.twig', [
             'user' => $user,
             'centres' => CentreGestionEnum::cases(),
-            'centresUser' => $user->getUserCentres()
+            'centresUser' => $user->getUserCentres(),
+            'roles' => $roleRepository->findAll()
         ]);
     }
 
@@ -115,6 +120,7 @@ class UserGestionController extends BaseController
     #[Route('/add/centre/{user}', name: 'app_user_gestion_add_centre')]
     #[IsGranted('ROLE_ADMIN')]
     public function addCentre(
+        RoleRepository $roleRepository,
         UserCentreRepository $userCentreRepository,
         ComposanteRepository $composanteRepository,
         EtablissementRepository $etablissementRepository,
@@ -124,6 +130,10 @@ class UserGestionController extends BaseController
         $data = JsonRequest::getFromRequest($request);
         $nCentre = new UserCentre();
         $nCentre->setUser($user);
+
+        $role = $roleRepository->find($data['role']);
+        $nCentre->addRole($role);
+
         switch (CentreGestionEnum::from($data['centreType'])) {
             case CentreGestionEnum::CENTRE_GESTION_COMPOSANTE:
                 $centre = $composanteRepository->find($data['centreId']);

@@ -32,12 +32,7 @@
                         <i class="fa-duotone fa-pencil-ruler" style="--fa-primary-color: var(--complementaire);
 "></i>&nbsp;{{ product_name }} /
 
-                        {% if is_granted('ROLE_ADMIN') %}Administration
-                        {% elseif is_granted('ROLE_VP') %}VP
-                        {% elseif is_granted('ROLE_SES') %}SES
-                        {% elseif is_granted('ROLE_RESP_DPE') %}Compo.{# todo récupérer la composante #}
-                        {% elseif is_granted('ROLE_RESP_FORMATION') %}Formation{% endif %}{# todo récupérer la
-                        formation #}
+                        {% if is_granted('ROLE_ADMIN') %}Administration{% endif %}
                     </div>
                 </a>
 
@@ -96,7 +91,7 @@
             <div class="menu-container flex-grow-1">
                 <ul id="menu" class="menu">
 
-                    {% if is_granted('ROLE_SES') or is_granted('ROLE_VP') %}
+                    {% if is_granted('ROLE_COMPOSANTE', app.user) %}
                         <li>
                             <a href="{{ path('structure_composante_index') }}">
                                 <i class="fal fa-school icon"></i>

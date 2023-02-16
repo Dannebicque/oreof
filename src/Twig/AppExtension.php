@@ -4,7 +4,6 @@ namespace App\Twig;
 
 use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
-use App\Enums\RoleEnum;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Twig\Extension\AbstractExtension;
@@ -40,7 +39,7 @@ class AppExtension extends AbstractExtension
         $nbdroits = count($droits);
         foreach ($droits as $droit) {
             if ($nbdroits > 1 && $droit !== 'ROLE_LECTEUR') {
-                $html .= '<span class="badge bg-success me-1">' . RoleEnum::from(strtolower($droit))->libelle() . '</span>';
+                $html .= '<span class="badge bg-success me-1">' . $droit . '</span>';//RoleEnum::from(strtolower($droit))->libelle()
             }
         }
 

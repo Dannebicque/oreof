@@ -142,4 +142,11 @@ class UserCentre
 
         return null;
     }
+
+    public function addRole(?Role $role): void
+    {
+        if ($role !== null) {
+            $this->droits[] = $role->getCodeRole();
+        }
+    }
 }

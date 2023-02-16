@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\EcUe;
+use App\Entity\Ue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,5 +38,14 @@ class EcUeRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findByUe(Ue $ue): array
+    {
+        return $this->createQueryBuilder('ecUe')
+            ->where('ecUe.ue = :ue')
+            ->setParameter('ue', $ue)
+            ->getQuery()
+            ->getResult();
     }
 }

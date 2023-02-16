@@ -32,7 +32,7 @@ class UserController extends AbstractController
         UserCentreRepository $userCenterRepository,
         Request $request
     ): Response {
-        $users = $userCenterRepository->findByComposante($request->query->get('composante'));
+        $users = $userCenterRepository->findByComposante((int)$request->query->get('composante'));
 
         $tab = [];
 

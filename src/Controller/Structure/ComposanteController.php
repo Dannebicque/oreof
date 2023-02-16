@@ -28,15 +28,11 @@ class ComposanteController extends AbstractController
         ComposanteRepository $composanteRepository
     ): Response
     {
-        if ($this->isGranted('ROLE_SES')) {
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_COMPOSANTE_SHOW_ALL', $this->getUser())) {
             $composantes = $composanteRepository->findAll();
-        } elseif ($this->isGranted('ROLE_RESP_DPE')) {
-            $composantes = $composanteRepository->findBy(['responsableDpe' => $this->getUser()]);
         } else {
-            //todo: find des composantes d'attachement en lecture ?
-            $composantes = [];
+            $composantes = $composanteRepository->findByCentreGestion($this->getUser());
         }
-
 
         return $this->render('structure/composante/_liste.html.twig', [
             'composantes' => $composantes

@@ -115,7 +115,6 @@ class Parcours
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
-        $this->semestres = new ArrayCollection();
         $this->blocCompetences = new ArrayCollection();
         $this->semestreParcours = new ArrayCollection();
     }
