@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/Dannebicque/oreof/compare/v0.2.4...v0.3.0) (2023-02-16)
+
+
+### Features
+
+* Gestion des droits ([30726b0](https://github.com/Dannebicque/oreof/commit/30726b0fafd5dcffd4028289a73cbc29063a9858))
+* Gestion des droits ([4290999](https://github.com/Dannebicque/oreof/commit/4290999c43f3ae7c14d069532e7e10f91f601681))
+
+
+### Bug Fixes
+
+* Refresh uniquement de la liste des UE ([f316807](https://github.com/Dannebicque/oreof/commit/f316807542a0ba4ecb57f2bc07d79bc0ec11f805))
+
 ### [0.2.4](https://github.com/Dannebicque/oreof/compare/v0.2.3...v0.2.4) (2023-02-12)
 
 
