@@ -22,6 +22,7 @@ class ParcoursSaveController extends AbstractController
      */
     #[Route('/parcours/save/{parcours}', name: 'app_parcours_save')]
     public function save(
+        EntityManagerInterface $entityManager,
         VilleRepository $villeRepository,
         RythmeFormationRepository $rythmeFormationRepository,
         UpdateEntity $updateEntity,
@@ -63,6 +64,26 @@ class ParcoursSaveController extends AbstractController
                 $rep = $updateEntity->saveField($parcours, $data['field'], (int)$data['value']);
 
                 return $this->json($rep);
+            case 'etatStructure':
+                if ($data['isChecked'] === true) {
+                    $rep = $parcours->setPartieStructureComplete(true);
+                } else {
+                    $rep = $parcours->setPartieStructureComplete(false);
+                }
+
+                $entityManager->flush();
+
+                return $this->json(true);
+            case 'etatCompetences':
+                if ($data['isChecked'] === true) {
+                    $rep = $parcours->setPartieCompetencesComplete(true);
+                } else {
+                    $rep = $parcours->setPartieCompetencesComplete(false);
+                }
+
+                $entityManager->flush();
+
+                return $this->json(true);
             case 'array':
                 if ($data['isChecked'] === true) {
                     $rep = $updateEntity->addToArray($parcours, $data['field'], $data['value']);

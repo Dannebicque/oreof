@@ -1,6 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
 import callOut from '../../js/callOut'
+import { saveData } from '../../js/saveData'
 
 export default class extends Controller {
   static targets = [
@@ -54,5 +55,21 @@ export default class extends Controller {
     this.listeTarget.innerHTML = window.da.loaderStimulus
     const response = await fetch(this.urlListeValue)
     this.listeTarget.innerHTML = await response.text()
+  }
+
+  etatCompetence(event) {
+    saveData(this.urlValue, {
+      action: 'etatCompetences',
+      isChecked: event.target.checked,
+    })
+
+    const parent = event.target.closest('.alert')
+    if (event.target.checked) {
+      parent.classList.remove('alert-warning')
+      parent.classList.add('alert-success')
+    } else {
+      parent.classList.remove('alert-success')
+      parent.classList.add('alert-warning')
+    }
   }
 }

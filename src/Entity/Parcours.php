@@ -113,6 +113,12 @@ class Parcours
     #[ORM\Column(length: 15, nullable: true)]
     private ?string $sigle = null;
 
+    #[ORM\Column]
+    private ?bool $partieCompetencesComplete = false;
+
+    #[ORM\Column]
+    private ?bool $partieStructureComplete = false;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -556,7 +562,7 @@ class Parcours
 
     private function getEtatOnglet1(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        return $this->getContenuFormation() === null && $this->getResultatsAttendus() === null && $this->getRythmeFormation() === null ? EtatRemplissageEnum::VIDE : ($this->getContenuFormation() !== null && $this->getResultatsAttendus() !== null && $this->getRythmeFormation() !== null ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     private function getEtatOnglet2(): EtatRemplissageEnum
@@ -566,12 +572,14 @@ class Parcours
 
     private function getEtatOnglet3(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        return $this->getBlocCompetences()->count() === 0 ? EtatRemplissageEnum::VIDE :
+            ($this->partieCompetencesComplete === true ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     private function getEtatOnglet4(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        return $this->getSemestreParcours()->count() === 0 ? EtatRemplissageEnum::VIDE :
+            ($this->partieStructureComplete === true ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     private function getEtatOnglet5(): EtatRemplissageEnum
@@ -592,5 +600,29 @@ class Parcours
     private function getEtatOnglet8(): EtatRemplissageEnum
     {
         return EtatRemplissageEnum::EN_COURS;
+    }
+
+    public function isPartieCompetencesComplete(): ?bool
+    {
+        return $this->partieCompetencesComplete;
+    }
+
+    public function setPartieCompetencesComplete(bool $partieCompetencesComplete): self
+    {
+        $this->partieCompetencesComplete = $partieCompetencesComplete;
+
+        return $this;
+    }
+
+    public function isPartieStructureComplete(): ?bool
+    {
+        return $this->partieStructureComplete;
+    }
+
+    public function setPartieStructureComplete(bool $partieStructureComplete): self
+    {
+        $this->partieStructureComplete = $partieStructureComplete;
+
+        return $this;
     }
 }

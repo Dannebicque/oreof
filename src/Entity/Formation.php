@@ -567,12 +567,12 @@ class Formation
 
     private function getEtatOnglet1(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        return $this->getLocalisationMention()->count() === 0 && $this->getComposantesInscription()->count() === 0 && count($this->getRegimeInscription()) === 0 ? EtatRemplissageEnum::VIDE : ($this->getLocalisationMention()->count() > 0 && $this->getComposantesInscription()->count() > 0 && count($this->getRegimeInscription()) > 0 ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS); //todo: gérer la zone de saisie selon le type de rythme choisit
     }
 
     private function getEtatOnglet2(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        return $this->getContenuFormation() === null && $this->getResultatsAttendus() === null && $this->getRythmeFormation() === null ? EtatRemplissageEnum::VIDE : ($this->getContenuFormation() !== null && $this->getResultatsAttendus() !== null && $this->getRythmeFormation() !== null ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     private function getEtatOnglet3(): EtatRemplissageEnum

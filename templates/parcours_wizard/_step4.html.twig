@@ -1,7 +1,22 @@
 <h2>Structure de la maquette</h2>
-<div {{ stimulus_controller('formation--step4', {
-    url: path('structure_parcours_detail_formation_parcours', {parcours: parcours.id})
+<div {{ stimulus_controller('parcours--step4', {
+    url: path('structure_parcours_detail_formation_parcours', {parcours: parcours.id}),
+    urlSave: path('app_parcours_save', {parcours:parcours.id}),
 }) }}
 >
-<div {{ stimulus_target('formation--step4', 'detail') }}></div>
+    <div {{ stimulus_target('parcours--step4', 'detail') }}></div>
+
+
+    <div class="alert {% if parcours.partieStructureComplete %}alert-success{% else %}alert-warning{% endif %}">
+        <input type="checkbox"
+               id="etatStructure"
+               class="form-check-inline"
+               {% if parcours.partieStructureComplete %}checked{% endif %}
+                {{ stimulus_action('parcours--step4', 'etatStructure', 'change') }}
+
+        ><label for="etatStructure">
+            Cochez cette case si vous avez terminé de définir la structure de ce parcours (Semestres, UE, Elements
+            Constitufis). Cela permet de mettre à jour
+            l'indicateur de l'onglet.</label>
+    </div>
 </div>
