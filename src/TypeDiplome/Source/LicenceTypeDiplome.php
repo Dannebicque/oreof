@@ -34,13 +34,13 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
             $mcccs[1]['et']->setTypeEpreuve([]);
         }
 
-        $mcccs[1]['chance']->setPourcentage((float)$request->get('pourcentage_s1_chance'));
+        $mcccs[3]['chance']->setPourcentage((float)$request->get('pourcentage_s1_chance'));
         if ((float)$request->get('pourcentage_s1_chance') > 0) {
-            $mcccs[1]['chance']->setNbEpreuves(count($request->all()['typeEpreuve_s1_chance']));
-            $mcccs[1]['chance']->setTypeEpreuve($request->all()['typeEpreuve_s1_chance']);
+            $mcccs[3]['chance']->setNbEpreuves(count($request->all()['typeEpreuve_s1_chance']));
+            $mcccs[3]['chance']->setTypeEpreuve($request->all()['typeEpreuve_s1_chance']);
         } else {
-            $mcccs[1]['chance']->setNbEpreuves(0);
-            $mcccs[1]['chance']->setTypeEpreuve([]);
+            $mcccs[3]['chance']->setNbEpreuves(0);
+            $mcccs[3]['chance']->setTypeEpreuve([]);
         }
 
         $mcccs[2]['et']->setPourcentage(100);
