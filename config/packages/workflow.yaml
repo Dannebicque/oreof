@@ -112,19 +112,19 @@ framework:
             places:
                 - 'initialisation_ec'
                 - 'en_cours_redaction'
-                - 'soumis_rf'
-                - 'refuse_rf'
+                - 'soumis_ec'
+                - 'refuse_ec'
             transitions:
                 initialiser:
-                    guard: "is_granted('ROLE_RESP_FORMATION')"
+                    #guard: "is_granted('ROLE_FORMATION')"
                     from: 'initialisation_ec'
                     to: 'en_cours_redaction'
-                valider_rf:
+                valider_ec:
                     from: 'en_cours_redaction'
-                    to: 'soumis_rf'
-                refuser_rf:
+                    to: 'soumis_ec'
+                refuser_ec:
                     from: 'en_cours_redaction'
-                    to: 'refuse_rf'
+                    to: 'refuse_ec'
         composante:
             type: 'workflow'
             marking_store:

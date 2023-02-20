@@ -97,7 +97,8 @@ class ElementConstitutifController extends AbstractController
         ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif $elementConstitutif
     ): Response {
-        if ($this->isGranted('ROLE_FORMATION_EDIT_MY', $elementConstitutif->getParcours()->getFormation())) { //todo: ajouter le workflow...
+        if ($this->isGranted('ROLE_FORMATION_EDIT_MY',
+            $elementConstitutif->getParcours()->getFormation())) { //todo: ajouter le workflow...
             $form = $this->createForm(EcStep4Type::class, $elementConstitutif, [
                 'isModal' => true,
                 'action' => $this->generateUrl('app_element_constitutif_structure',
@@ -129,10 +130,13 @@ class ElementConstitutifController extends AbstractController
         ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif $elementConstitutif
     ): Response {
-        if ($this->isGranted('ROLE_FORMATION_EDIT_MY', $elementConstitutif->getParcours()->getFormation())) { //todo: ajouter le workflow...
-            $formation = $elementConstitutif->getParcours()->getFormation();
-            if ($formation !== null) {
-                $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+        $formation = $elementConstitutif->getParcours()->getFormation();
+        if ($formation !== null) {
+            $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+            if ($this->isGranted('ROLE_FORMATION_EDIT_MY',
+                $elementConstitutif->getParcours()->getFormation())) { //todo: ajouter le workflow...
+
+
                 if ($elementConstitutif->getMcccs()->count() === 0) {
                     $typeDiplome->initMcccs($elementConstitutif);
                 }
@@ -144,18 +148,22 @@ class ElementConstitutifController extends AbstractController
                     return $this->json(true);
                 }
 
-                return $this->render('element_constitutif/_mcccEcModal.html.twig',[
+                return $this->render('element_constitutif/_mcccEcModal.html.twig', [
                     'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
                     'ec' => $elementConstitutif,
                     'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
                     'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
                 ]);
-            }
-        }
 
-        return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
-            'ec' => $elementConstitutif,
-        ]);
+            }
+
+            return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
+                'ec' => $elementConstitutif,
+                'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+                'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
+                'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
+            ]);
+        }
     }
 
     #[Route('/{id}', name: 'app_element_constitutif_delete', methods: ['POST'])]

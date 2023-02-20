@@ -53,7 +53,7 @@ class Formation
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeRNCP = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'formationsResponsableMention')]
     private ?User $responsableMention = null;
 
     #[ORM\Column]

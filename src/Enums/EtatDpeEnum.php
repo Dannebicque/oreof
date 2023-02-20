@@ -25,6 +25,7 @@ enum EtatDpeEnum : string
      */
 
     case initialisation_dpe = 'initialisation_dpe';
+    case initialisation_ec = 'initialisation_ec';
     case en_cours_redaction = 'en_cours_redaction';
     case soumis_rf = 'soumis_rf';
     case soumis_dpe_composante = 'soumis_dpe_composante';
@@ -47,6 +48,7 @@ enum EtatDpeEnum : string
     {
         return match($this) {
             self::initialisation_dpe => 'Initialisation DPE',
+            self::initialisation_ec => 'Initialisation EC',
             self::en_cours_redaction => 'En cours de rédaction',
             self::soumis_rf => 'Soumis RF',
             self::soumis_dpe_composante => 'Soumis DPE composante',

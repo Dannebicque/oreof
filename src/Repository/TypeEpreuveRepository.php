@@ -53,7 +53,7 @@ class TypeEpreuveRepository extends ServiceEntityRepository
         //filtre selon le type de diplome
         foreach ($typeDiplomes as $td) {
             if (in_array($typeDiplome::class, $td->getTypeDiplome())) {
-                $tab[] = $td;
+                $tab[$td->getId()] = $td;
             }
         }
 

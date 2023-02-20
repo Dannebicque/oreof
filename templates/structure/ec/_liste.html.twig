@@ -67,6 +67,9 @@
                     </button>
                 </td>
                 <td class="text-end">
+                    {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) or (workflow_can(ec,
+                        'valider_ec') and is_granted
+                        ('ROLE_EC_EDIT_MY', ec))  %}
                     <button
                             {{ stimulus_controller('modal', {
                                 size: 'lg',
@@ -83,7 +86,11 @@
                         <i class="{{ iconShow }}"></i>
                         <span> voir</span>
                     </button>
+                    {% endif %}
 
+                    {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) or (workflow_can(ec,
+                        'valider_ec') and is_granted
+                        ('ROLE_EC_EDIT_MY', ec))  %}
                     <a
                             href="{{ path('app_element_constitutif_edit',{'id': ec.id, parcours:ec.parcours.id}) }}"
                             class="btn btn-sm text-warning"
@@ -95,7 +102,9 @@
                         <i class="{{ iconEdit }}"></i>
                         <span> modifier</span>
                     </a>
-                    {% if is_granted('ROLE_EC_DELETE_MY') %}
+                    {% endif %}
+                    {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and workflow_can(ec,
+                        'valider_ec')  %}
                         <button {{ stimulus_action('crud', 'delete', 'click', {
                             url:path('app_element_constitutif_delete',{'id': ec.id})
                         }) }} class="btn btn-sm text-danger">

@@ -22,5 +22,15 @@
 {% endblock %}
 
 {% block bouton_header %}
-
+    {% if is_granted('ROLE_FORMATION', app.user) %}
+        <a href="{{ path('app_ec_etat_send_ouverture') }}"
+           class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title=" Ouvrir les EC à la rédaction"
+        >
+            <i class="{{ iconAdd }}"></i>
+            <span> Ouvrir les EC à la rédaction</span>
+        </a>
+    {% endif %}
 {% endblock %}

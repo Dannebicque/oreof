@@ -21,7 +21,7 @@ class Composante
     #[ORM\ManyToOne(inversedBy: 'composantes')]
     private ?User $directeur = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'composanteResponsableDpe')]
     private ?User $responsableDpe = null;
 
     #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'composantesInscription')]

@@ -10,7 +10,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
 
-class WorkflowDpeMailSubscriber implements EventSubscriberInterface
+class WorkflowEcMailSubscriber implements EventSubscriberInterface
 {
 
     public function __construct(
@@ -24,7 +24,7 @@ class WorkflowDpeMailSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.dpe.transition.initialiser' => 'onInitialise',
+            'workflow.ec.transition.initialiser' => 'onInitialise',
 
         ];
     }
@@ -34,14 +34,16 @@ class WorkflowDpeMailSubscriber implements EventSubscriberInterface
      */
     public function onInitialise(Event $event): void
     {
-        /** @var Formation $formation */
-        $formation = $event->getSubject();
-        //todo: check si le responsable de formation accepte le mail
-        $this->myMailer->initEmail();
-        $this->myMailer->setTemplate('mails/dpe/ouverture_redaction_formation.txt.twig',
-            ['formation' => $formation, 'responsable' => $formation->getResponsableMention()]);
-        $this->myMailer->sendMessage([$formation->getResponsableMention()?->getEmail()],
-            '[ORéOF]  Une formation est ouverte pour la rédaction/modification');
+        /** @var \App\Entity\ElementConstitutif $ec */
+        $ec = $event->getSubject();
+        if ($ec->getResponsableEc() !== null) {
+            //todo: check si le responsable de EC accepte le mail
+            $this->myMailer->initEmail();
+            $this->myMailer->setTemplate('mails/ec/ouverture_redaction_ec.txt.twig',
+                ['ec' => $ec, 'responsable' => $ec->getResponsableEc(), 'formation' => $ec->getParcours()->getFormation()]);
+            $this->myMailer->sendMessage([$ec->getResponsableEc()?->getEmail()],
+                '[ORéOF]  Un élément constitutif est ouvert pour la rédaction/modification');
+        }
     }
 
 }

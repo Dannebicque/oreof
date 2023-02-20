@@ -35,7 +35,7 @@ class HasComposanteAccessVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return $attribute === self::ROLE_COMPOSANTE
+        return in_array($attribute ,[self::ROLE_COMPOSANTE, self::ROLE_FORMATION], true)
             && $subject instanceof User;
     }
 
@@ -68,6 +68,9 @@ class HasComposanteAccessVoter extends Voter
 
     private function isCentreComposante(UserInterface $user): bool
     {
+        if ($user->getComposanteResponsableDpe()->count() > 0) {
+            return true;
+        }
         /** @var User $user */
         foreach ($user->getUserCentres() as $centre) {
             if ($centre->getComposante() === null && $centre->getFormation() === null) {
@@ -83,6 +86,10 @@ class HasComposanteAccessVoter extends Voter
 
     private function isCentreFormation(UserInterface $user): bool
     {
+        if ($user->getFormationsResponsableMention()->count() > 0) {
+            return true;
+        }
+
         /** @var User $user */
         foreach ($user->getUserCentres() as $centre) {
             if ($centre->getComposante() === null && $centre->getFormation() === null) {

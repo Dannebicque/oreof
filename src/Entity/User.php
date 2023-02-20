@@ -38,6 +38,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'directeur', targetEntity: Composante::class)]
     private Collection $composantes;
 
+    #[ORM\OneToMany(mappedBy: 'responsableDpe', targetEntity: Composante::class)]
+    private Collection $composanteResponsableDpe;
+    #[ORM\OneToMany(mappedBy: 'responsableMention', targetEntity: Formation::class)]
+    private Collection $formationsResponsableMention;
+
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
@@ -88,6 +93,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->composantes = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->userCentres = new ArrayCollection();
+        $this->composanteResponsableDpe = new ArrayCollection();
+        $this->formationsResponsableMention = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -418,6 +425,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userCentre->getUser() === $this) {
                 $userCentre->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Composante>
+     */
+    public function getComposanteResponsableDpe(): Collection
+    {
+        return $this->composanteResponsableDpe;
+    }
+
+    public function addComposanteResponsableDpe(Composante $composanteResponsableDpe): self
+    {
+        if (!$this->composanteResponsableDpe->contains($composanteResponsableDpe)) {
+            $this->composanteResponsableDpe->add($composanteResponsableDpe);
+            $composanteResponsableDpe->setResponsableDpe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComposanteResponsableDpe(Composante $composanteResponsableDpe): self
+    {
+        if ($this->composanteResponsableDpe->removeElement($composanteResponsableDpe)) {
+            // set the owning side to null (unless already changed)
+            if ($composanteResponsableDpe->getResponsableDpe() === $this) {
+                $composanteResponsableDpe->setResponsableDpe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Formation>
+     */
+    public function getFormationsResponsableMention(): Collection
+    {
+        return $this->formationsResponsableMention;
+    }
+
+    public function addFormationsResponsableMention(Formation $formationsResponsableMention): self
+    {
+        if (!$this->formationsResponsableMention->contains($formationsResponsableMention)) {
+            $this->formationsResponsableMention->add($formationsResponsableMention);
+            $formationsResponsableMention->setResponsableMention($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormationsResponsableMention(Formation $formationsResponsableMention): self
+    {
+        if ($this->formationsResponsableMention->removeElement($formationsResponsableMention)) {
+            // set the owning side to null (unless already changed)
+            if ($formationsResponsableMention->getResponsableMention() === $this) {
+                $formationsResponsableMention->setResponsableMention(null);
             }
         }
 
