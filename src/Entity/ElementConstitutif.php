@@ -391,14 +391,37 @@ class ElementConstitutif
         return 'Complet';
     }
 
-    public function etatMcc(): string
+    public function etatMccc(): string
     {
-        //todo: a faire
-        if ($this->competences->isEmpty()) {
-            return 'Non complété';
+        $totalPourcentage = [];
+        $nbNotes = [];
+        foreach ($this->getMcccs() as $mccc) {
+            if (!isset($totalPourcentage[$mccc->getNumeroSession()])) {
+                $totalPourcentage[$mccc->getNumeroSession()] = 0;
+            }
+            if (!isset($nbNotes[$mccc->getNumeroSession()])) {
+                $nbNotes[$mccc->getNumeroSession()] = 0;
+            }
+
+            $totalPourcentage[$mccc->getNumeroSession()] += $mccc->getPourcentage();
+            $nbNotes[$mccc->getNumeroSession()] += $mccc->getNbEpreuves();
         }
 
-        return 'Complet';
+        $pourcentageOK = count($totalPourcentage) > 0;
+        foreach ($totalPourcentage as $pourcentage) {
+            if ($pourcentage !== 100.0) {
+                $pourcentageOK = false;
+            }
+        }
+
+        $nbNotesOK = count($nbNotes) > 0;
+        foreach ($nbNotes as $nb) {
+            if ($nb <= 0) {
+                $nbNotesOK = false;
+            }
+        }
+
+        return $pourcentageOK && $nbNotesOK ? 'Complet' : 'Non complet';
     }
 
     /**

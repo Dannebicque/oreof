@@ -38,7 +38,7 @@
                             title="Volumes Horaires"
                     >
                         <i class="fal fa-clock"></i>
-                        <span> Volumes Horaires</span>
+                        Volumes Horaires
                         <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
                             {{ ec.etatStructure }}
                         </span>
@@ -60,7 +60,10 @@
                             title="Modalités de Contrôle des Connaissances"
                     >
                         <i class="fal fa-marker"></i>
-                        <span> MCC </span>
+                        MCCC
+                        <span class="badge bg-{% if ec.etatMccc == 'Complet' %}success{% else %}warning{% endif %}">
+                            {{ ec.etatMccc }}
+                        </span>
                     </button>
                 </td>
                 <td class="text-end">
@@ -103,7 +106,7 @@
 
             </tr>
         {% endfor %}
-        {% if is_granted('ROLE_EC_ADD_MY', parcours.formation) and ue is defined %}
+        {% if parcours is defined and is_granted('ROLE_EC_ADD_MY', parcours.formation) and ue is defined %}
             <tr>
                 <td colspan="7">
 

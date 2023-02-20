@@ -7,13 +7,17 @@
         <div class="col-4">
             <label for="pourcentage_s1_cc">Pourcentage</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="pourcentage_s1_cc" name="pourcentage_s1_cc">
+                <input type="text" class="form-control" id="pourcentage_s1_cc" name="pourcentage_s1_cc"
+                value="{{ mcccs[1]['cc'].pourcentage }}"
+                >
                 <span class="input-group-text">%</span>
             </div>
         </div>
         <div class="col-4">
             <label for="nbepreuve_s1_cc">Nb d'épreuve(s)</label>
-            <input type="number" id="nbepreuve_s1_cc" name="nbepreuve_s1_cc" class="form-control">
+            <input type="number" id="nbepreuve_s1_cc" name="nbepreuve_s1_cc" class="form-control"
+                   value="{{ mcccs[1]['cc'].nbEpreuves }}"
+            >
         </div>
     </div>
     <div class="row">
@@ -23,13 +27,23 @@
         <div class="col-4">
             <label for="pourcentage_s1_et">Pourcentage</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="pourcentage_s1_et" name="pourcentage_s1_et">
+                <input type="text" class="form-control" id="pourcentage_s1_et" name="pourcentage_s1_et"
+                       value="{{ mcccs[1]['et'].pourcentage }}"
+                >
                 <span class="input-group-text">%</span>
             </div>
         </div>
         <div class="col-4">
             <label for="typeEpreuve_s1_et">Type d'épreuve</label>
-            <select type="text" class="form-select" id="typeEpreuve_s1_et" name="typeEpreuve_s1_et"></select>
+            <select type="text" class="form-select" id="typeEpreuve_s1_et" name="typeEpreuve_s1_et">
+                <option value="">Choisir</option>
+                {% for typeE in typeEpreuves %}
+                    <option value="{{ typeE.id }}"
+                    {% if mcccs[1]['et'].typeEpreuve[0] is defined and mcccs[1]['et'].typeEpreuve[0] == typeE.id
+                    %}selected{% endif %}
+                    >{{ typeE.libelle }}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
 </div>
@@ -43,14 +57,24 @@
         <div class="col-4">
             <label for="pourcentage_s1_chance">Pourcentage</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="pourcentage_s1_chance" name="pourcentage_s1_chance">
+                <input type="text" class="form-control" id="pourcentage_s1_chance" name="pourcentage_s1_chance"
+                       value="{{ mcccs[3]['chance'].pourcentage }}"
+                >
                 <span class="input-group-text">%</span>
             </div>
         </div>
         <div class="col-4">
             <label for="typeEpreuve_s1_chance">Type d'épreuve</label>
-            <select type="text" class="form-select" id="typeEpreuve_s1_chance" name="typeEpreuve_s1_chance"
-                    multiple></select>
+            <select type="text" class="form-select" id="typeEpreuve_s1_chance" name="typeEpreuve_s1_chance[]"
+                    multiple>
+                <option value="">Choisir</option>
+                {% for typeE in typeEpreuves %}
+                    <option value="{{ typeE.id }}"
+                            {% if typeE.id in mcccs[3]['chance'].typeEpreuve
+                            %}selected{% endif %}
+                    >{{ typeE.libelle }}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
 </div>
@@ -64,13 +88,22 @@
             <label for="pourcentage_s2_et">Pourcentage</label>
             <div class="input-group">
                 <input type="text" class="form-control" id="pourcentage_s2_et" name="pourcentage_s2_et"
+                       disabled
                        value="100">
                 <span class="input-group-text">%</span>
             </div>
         </div>
         <div class="col-4">
             <label for="typeEpreuve_s2_et">Type d'épreuve</label>
-            <select type="text" class="form-select" id="typeEpreuve_s2_et" name="typeEpreuve_s2_et"></select>
+            <select type="text" class="form-select" id="typeEpreuve_s2_et" name="typeEpreuve_s2_et">
+                <option value="">Choisir</option>
+                {% for typeE in typeEpreuves %}
+                    <option value="{{ typeE.id }}"
+                            {% if mcccs[2]['et'].typeEpreuve[0] is defined and mcccs[1]['et'].typeEpreuve[0] == typeE.id
+                            %}selected{% endif %}
+                    >{{ typeE.libelle }}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
 </div>

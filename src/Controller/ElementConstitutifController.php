@@ -12,6 +12,7 @@ use App\Form\ElementConstitutifType;
 use App\Repository\EcUeRepository;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\LangueRepository;
+use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -122,6 +123,7 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/{id}/mccc-ec', name: 'app_element_constitutif_mccc', methods: ['GET', 'POST'])]
     public function mcccEc(
+        TypeEpreuveRepository $typeEpreuveRepository,
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request,
         ElementConstitutifRepository $elementConstitutifRepository,
@@ -143,6 +145,7 @@ class ElementConstitutifController extends AbstractController
                 }
 
                 return $this->render('element_constitutif/_mcccEcModal.html.twig',[
+                    'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
                     'ec' => $elementConstitutif,
                     'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
                     'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
