@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/Dannebicque/oreof/compare/v0.4.0...v0.5.0) (2023-02-20)
+
+
+### Features
+
+* Initialisation des EC + mails aux responsable EC + affichage MCCC si non éditeur ([2888886](https://github.com/Dannebicque/oreof/commit/28888860b8d4ee71b87c213cdd30e9977e50ba42))
+* Type d'épreuve + MCCC + Etat des MCCC ([4e859d2](https://github.com/Dannebicque/oreof/commit/4e859d2c69f205e8b1e9082eb8affbeb91eac0df))
+
 ## [0.4.0](https://github.com/Dannebicque/oreof/compare/v0.3.0...v0.4.0) (2023-02-20)
 
 
