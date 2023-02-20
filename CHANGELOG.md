@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/Dannebicque/oreof/compare/v0.3.0...v0.4.0) (2023-02-20)
+
+
+### Features
+
+* Indicateurs sur les parcours pour la structure et compétences ([64b4961](https://github.com/Dannebicque/oreof/commit/64b49617cc94f708d47d2e00987d9efb71bb513f))
+* MCCC pour licence ([0ca5ecc](https://github.com/Dannebicque/oreof/commit/0ca5ecc491a0dd6f7d14214f84033c8fde32fc3e))
+* Suppression d'une structure pour génération ([f317c46](https://github.com/Dannebicque/oreof/commit/f317c4698af1488e7274cdb3b000c9a2c1a70162))
+
 ## [0.3.0](https://github.com/Dannebicque/oreof/compare/v0.2.4...v0.3.0) (2023-02-16)
 
 
