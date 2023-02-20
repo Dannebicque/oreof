@@ -135,4 +135,20 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByAllAnneUniversitaire(AnneeUniversitaire $anneeUniversitaire): array
+    {
+        return $this->createQueryBuilder('ec')
+            ->join('ec.ecUes', 'ecue')
+            ->join('ecue.ue', 'ue')
+            ->innerJoin(Semestre::class, 's', 'WITH', 's.id = ue.semestre')
+            ->join('s.semestreParcours', 'sp')
+            ->innerJoin(Parcours::class, 'p', 'WITH', 'p.id = sp.parcours')
+            ->innerJoin(Formation::class, 'f', 'WITH', 'f.id = p.formation')
+            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->distinct(true)
+            ->getQuery()
+            ->getResult();
+    }
 }

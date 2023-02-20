@@ -11,10 +11,17 @@ export default class extends Controller {
   }
 
   changeResponsableEc(event) {
-    // todo:....
+    saveData(this.urlValue, {
+      field: 'responsableEc',
+      action: 'responsableEc',
+      value: event.target.value,
+    }).then(() => {
+      // dispatch pour mettre à jour le bloc de la page
+      this.dispatch('refreshSynthese', { bubbles: true })
+    })
   }
 
-  saveContenuFr(event) {
+  saveContenuFr() {
     saveData(this.urlValue, {
       field: 'libelle',
       action: 'textarea',

@@ -5,8 +5,11 @@ namespace App\Controller;
 use App\Classes\UpdateEntity;
 use App\Entity\ElementConstitutif;
 use App\Enums\ModaliteEnseignementEnum;
+use App\Repository\BlocCompetenceRepository;
+use App\Repository\CompetenceRepository;
 use App\Repository\LangueRepository;
 use App\Repository\TypeEnseignementRepository;
+use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +23,11 @@ class ElementConstitutifSaveController extends BaseController
      */
     #[Route('/ec/save/{ec}', name: 'app_ec_save')]
     public function save(
+        EntityManagerInterface $entityManager,
+        BlocCompetenceRepository $blocCompetenceRepository,
+        CompetenceRepository $competenceRepository,
         TypeEnseignementRepository $typeEnseignementRepository,
+        UserRepository $userRepository,
         LangueRepository $langueRepository,
         UpdateEntity $updateEntity,
         Request $request,
@@ -53,6 +60,11 @@ class ElementConstitutifSaveController extends BaseController
                 $rep = $updateEntity->saveField($ec, 'typeEnseignement', $rythme);
 
                 return $this->json($rep);
+            case 'responsableEc':
+                $responsableEc = $userRepository->find($data['value']);
+                $rep = $updateEntity->saveField($ec, 'responsableEc', $responsableEc);
+
+                return $this->json($rep);
             case 'modalitesEnseignement':
                 $rep = $updateEntity->saveField($ec, 'modaliteEnseignement',
                     ModaliteEnseignementEnum::from($data['value']));
@@ -62,6 +74,29 @@ class ElementConstitutifSaveController extends BaseController
                 $rep = $updateEntity->saveField($ec, $data['field'], (int)$data['value']);
 
                 return $this->json($rep);
+            case 'removeBcc':
+                $competences = $ec->getCompetences();
+
+                foreach ($competences as $competence) {
+                    if ($competence->getBlocCompetence()->getId() === $data['value']) {
+                        $competence->removeElementConstitutif($ec);
+                        $ec->removeCompetence($competence);
+                    }
+                }
+                $entityManager->flush();
+
+                return $this->json(true);
+            case 'addCompetence':
+                $competence = $competenceRepository->find($data['value']);
+                if ($competence !== null) {
+                    $ec->addCompetence($competence);
+                    $competence->addElementConstitutif($ec);
+                    $entityManager->flush();
+
+                    return $this->json(true);
+                }
+
+                return $this->json(false);
             case 'array':
                 if ($data['isChecked'] === true) {
                     $rep = $updateEntity->addToArray($ec, $data['field'], $data['value']);
@@ -72,6 +107,7 @@ class ElementConstitutifSaveController extends BaseController
 
                 return $this->json($rep);
         }
+
         return $this->json(['error' => 'action inconnue']);
 
     }

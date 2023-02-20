@@ -21,7 +21,8 @@
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" data-bs-toggle="tab" href="#" role="tab"
                             {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 0}) }}
-                       aria-selected="true">Début de la mention/spécialité</a>
+                       aria-selected="true">Début de la mention/spécialité {{ formation.onglets|etatRemplissage(0)
+                        }}</a>
                 </li>
             {% endif %}
             <li class="nav-item" role="presentation">
@@ -29,18 +30,18 @@
                    data-bs-toggle="tab" href="#" role="tab" {% if step == 1 %}aria-selected="true"{% endif %}
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 1}) }}
                 >
-                    Localisation de la mention/spécialité
+                    Localisation de la mention/spécialité {{ formation.onglets|etatRemplissage(1) }}
                 </a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" data-bs-toggle="tab" href="#" role="tab"
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 2}) }}
-                   aria-selected="false">Présentation de la mention/spécialité</a>
+                   aria-selected="false">Présentation de la mention/spécialité {{ formation.onglets|etatRemplissage(2) }}</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 3}) }}
-                >Semestre & Parcours</a>
+                >Semestre & Parcours {{ formation.onglets|etatRemplissage(3) }}</a>
             </li>
             {% for parcours in formation.parcours %}
                 <li class="nav-item" role="presentation" id="tab_parcours_{{ parcours.id }}">
@@ -49,9 +50,9 @@
                                 parcours.id}) }}
                     >
                         {% if formation.hasParcours == false and loop.first %}
-                            Structure de la maquette
+                            Structure de la maquette {{ formation.onglets|etatRemplissage(4) }}
                         {% else %}
-                            Parcours : {{ parcours.libelle }}
+                            Parcours : {{ parcours.libelle }} {{ formation.onglets|etatRemplissage(4, parcours.id) }}
                         {% endif %}
                     </a>
                 </li>

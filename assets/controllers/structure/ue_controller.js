@@ -62,7 +62,7 @@ export default class extends Controller {
       modal = null
       await fetch(url, body).then(() => {
         callOut('Suppression effectuée', 'success')
-        this.dispatch('refreshListe')// todo: ne marche pas ??
+        this.dispatch('refreshListe')
       })
     })
   }

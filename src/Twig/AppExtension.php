@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
+use App\Enums\EtatRemplissageEnum;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Twig\Extension\AbstractExtension;
@@ -24,13 +25,23 @@ class AppExtension extends AbstractExtension
             new TwigFilter('rncp_link', [$this, 'rncpLink'], ['is_safe' => ['html']]),
             new TwigFilter('badgeBoolean', [$this, 'badgeBoolean'], ['is_safe' => ['html']]),
             new TwigFilter('badgeDroits', [$this, 'badgeDroits'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeCentre', [$this, 'badgeCentre'], ['is_safe' => ['html']])
+            new TwigFilter('badgeCentre', [$this, 'badgeCentre'], ['is_safe' => ['html']]),
+            new TwigFilter('etatRemplissage', [$this, 'etatRemplissage'], ['is_safe' => ['html']])
         ];
     }
 
     public function badgeBoolean(bool $value): string
     {
         return $value ? '<span class="badge bg-success">Oui</span>' : '<span class="badge bg-danger">Non</span>';
+    }
+
+    public function etatRemplissage(array $onglets, int $step): string
+    {
+        if (array_key_exists($step, $onglets)) {
+            return '<span class="state state-'.$onglets[$step]->badge().'" id="onglet_'.$step.'"></span>';
+        }
+
+        return '';
     }
 
     public function badgeDroits(array $droits): string

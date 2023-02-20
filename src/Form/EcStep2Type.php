@@ -19,7 +19,7 @@ class EcStep2Type extends AbstractType
 
             ->add('description', TextareaAutoSaveType::class, [
                 'label' => 'Description',
-                'attr' => ['data-action' => 'change->ec--step2#saveDescription', 'maxlength' => 3000, 'rows' => 20],
+                'attr' => ['data-action' => 'change->ec--step2#saveDescription', 'maxlength' => 3000, 'rows' => 20, 'class' => 'tinyMce'],
                 'help' => 'Indiquez ici en 3000 caractères maximum le contenu de l’enseignement et une description détaillée des différents sujets traités dans cet enseignement.'
             ])
             ->add('langueDispense', EntityType::class, [

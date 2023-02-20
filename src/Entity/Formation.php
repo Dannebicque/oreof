@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Traits\LifeCycleTrait;
+use App\Enums\EtatRemplissageEnum;
 use App\Enums\NiveauFormationEnum;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\FormationRepository;
@@ -546,5 +547,41 @@ class Formation
         }
 
         return $this;
+    }
+
+    public function onglets(): array
+    {
+        $onglets[0] = $this->getEtatOnglet0();
+        $onglets[1] = $this->getEtatOnglet1();
+        $onglets[2] = $this->getEtatOnglet2();
+        $onglets[3] = $this->getEtatOnglet3();
+        $onglets[4] = $this->getEtatOnglet4();
+
+        return $onglets;
+    }
+
+    private function getEtatOnglet0(): EtatRemplissageEnum
+    {
+        return EtatRemplissageEnum::EN_COURS;
+    }
+
+    private function getEtatOnglet1(): EtatRemplissageEnum
+    {
+        return EtatRemplissageEnum::EN_COURS;
+    }
+
+    private function getEtatOnglet2(): EtatRemplissageEnum
+    {
+        return EtatRemplissageEnum::EN_COURS;
+    }
+
+    private function getEtatOnglet3(): EtatRemplissageEnum
+    {
+        return EtatRemplissageEnum::EN_COURS;
+    }
+
+    private function getEtatOnglet4(): EtatRemplissageEnum
+    {
+        return EtatRemplissageEnum::EN_COURS;
     }
 }

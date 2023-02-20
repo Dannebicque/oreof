@@ -122,3 +122,37 @@
   color: red;
 }
 
+.state {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.state-complete {
+  background-color: var(--success);
+}
+
+.state-vide {
+  background-color: var(--danger);
+}
+
+.state-en-cours {
+  background-color: var(--warning);
+  color: var(--warningText);
+}
+
+.bg-warning {
+  color: var(--warningText) !important;
+}
+
+.btn-warning {
+  color: var(--warningText) !important;
+}
+
+.text-warning {
+  color: var(--secondary) !important;
+}
+
+

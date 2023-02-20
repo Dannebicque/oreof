@@ -8,6 +8,7 @@
         "@symfony/webpack-encore": "^4.0.0",
         "browser-sync": "^2.27.11",
         "browser-sync-webpack-plugin": "^2.3.0",
+        "copy-webpack-plugin": "^11.0.0",
         "core-js": "^3.23.0",
         "dotenv": "^16.0.3",
         "eslint": "^7.32.0 || ^8.2.0",
@@ -35,7 +36,8 @@
         "@hotwired/stimulus": "^3.0.0",
         "@popperjs/core": "^2.9.2",
         "bootstrap": "^5.2.3",
-        "stimulus-use": "^0.51.3"
+        "stimulus-use": "^0.51.3",
+        "tinymce": "^6"
     },
     "name": "oreof",
     "repository": "https://github.com/Dannebicque/oreof.git"

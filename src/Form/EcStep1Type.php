@@ -23,17 +23,18 @@ class EcStep1Type extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $access = $this->authorizationChecker->isGranted('ROLE_FORMATION_EDIT_MY', $options['data']->getParcours()->getFormation());
         $builder
             ->add('responsableEc', EntityType::class, [
                 'label' => 'Responsable de l\'EC',
                 'class' => User::class,
-                'disabled' => $this->authorizationChecker->isGranted('ROLE_RESP_FORMATION') ? false : true,
+                'disabled' => !$access,
                 'attr' => ['data-action' => 'change->ec--step1#changeResponsableEc'],
                 'choice_label' => 'display',
             ])
             ->add('libelle', TextareaAutoSaveType::class, [
                 'label' => 'Libellé',
-                'disabled' => $this->authorizationChecker->isGranted('ROLE_RESP_FORMATION') ? false : true,
+                'disabled' => !$access,
                 'attr' => ['data-action' => 'change->ec--step1#saveContenuFr', 'maxlength' => 250],
                 'help' => 'N\'est modifiable que par le responsable de la formation',
             ])

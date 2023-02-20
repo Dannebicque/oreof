@@ -13,7 +13,7 @@
             <a class="nav-link active" data-bs-toggle="tab" href="#" role="tab" aria-selected="true"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 1}) }}
             >
-                Présentation du parcours
+                Présentation du parcours {{ parcours.onglets|etatRemplissage(1) }}
             </a>
         </li>
         {% endif %}
@@ -24,28 +24,28 @@
                 false %}true{% endif %}"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 2}) }}
             >
-                Descriptif
+                Descriptif {{ parcours.onglets|etatRemplissage(2) }}
             </a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 3}) }}
             >
-                Compétences
+                Compétences {{ parcours.onglets|etatRemplissage(3) }}
             </a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 4}) }}
             >
-                Structure de la maquette
+                Structure de la maquette {{ parcours.onglets|etatRemplissage(4) }}
             </a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 5}) }}
             >
-                Admission
+                Admission {{ parcours.onglets|etatRemplissage(5) }}
             </a>
         </li>
         {% if parcours.formation.isHasParcours == true %}
@@ -53,7 +53,7 @@
                 <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                         {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 6}) }}
                 >
-                    Inscription
+                    Inscription {{ parcours.onglets|etatRemplissage(6) }}
                 </a>
             </li>
         {% endif %}
@@ -61,14 +61,14 @@
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 7}) }}
             >
-                Et après...
+                Et après... {{ parcours.onglets|etatRemplissage(7) }}
             </a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 8}) }}
             >
-                Contacts pédagogiques
+                Contacts pédagogiques {{ parcours.onglets|etatRemplissage(8) }}
             </a>
         </li>
 

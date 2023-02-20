@@ -6,6 +6,7 @@ use App\Entity\EcUe;
 use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
 use App\Entity\Ue;
+use App\Enums\EtatRemplissageEnum;
 use App\Form\EcStep4Type;
 use App\Form\ElementConstitutifType;
 use App\Repository\EcUeRepository;
@@ -77,16 +78,15 @@ class ElementConstitutifController extends AbstractController
      */
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
     public function edit(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         ElementConstitutif $elementConstitutif,
         Parcours $parcours
     ): Response {
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome());
+
 
         return $this->render('element_constitutif/edit.html.twig', [
             'ec' => $elementConstitutif,
             'parcours' => $parcours,
-            'typeDiplome' => $typeDiplome,
+            'onglets' => $elementConstitutif->etatRemplissageOnglets(),
         ]);
     }
 

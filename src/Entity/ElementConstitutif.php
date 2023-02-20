@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Traits\LifeCycleTrait;
+use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\ElementConstitutifRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -388,6 +389,7 @@ class ElementConstitutif
 
     public function etatMcc(): string
     {
+        //todo: a faire
         if ($this->competences->isEmpty()) {
             return 'Non complété';
         }
@@ -591,5 +593,47 @@ class ElementConstitutif
     public function formationLibelle(): ?string
     {
         return $this->getParcours()->getFormation()?->display();
+    }
+
+    public function etatRemplissageOnglets(): array
+    {
+        // Onglet 1 : Identité de l'enseignement
+        // Onglet 2 : Présentation
+        // Onglet 3 : Objectifs et compétences
+        // Onglet 4 : Structure et organisation pédagogiques
+        // Onglet 5 : Modalités d'évaluation
+
+        $onglets[1] = $this->getEtatOnglet1();
+        $onglets[2] = $this->getEtatOnglet2();
+        $onglets[3] = $this->getEtatOnglet3(); //todo: ajouter un flag pour savoir si les compétences sont complètes
+        $onglets[4] = $this->getEtatOnglet4();
+        $onglets[5] = $this->getEtatOnglet5();
+
+        return $onglets;
+    }
+
+    public function getEtatOnglet1(): EtatRemplissageEnum
+    {
+        return $this->getLibelleAnglais() === null && $this->getLibelle() === null && $this->enseignementMutualise === null ? EtatRemplissageEnum::VIDE : (($this->getLibelleAnglais() !== null && $this->getLibelle() !== null && $this->enseignementMutualise !== null) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+    }
+
+    public function getEtatOnglet2(): EtatRemplissageEnum
+    {
+        return $this->getDescription() === null && $this->getLangueDispense()->count() === 0 && $this->getLangueSupport()->count() === 0 && $this->getTypeEnseignement() === null ? EtatRemplissageEnum::VIDE : (($this->getDescription() !== null && $this->getLangueDispense()->count() > 0 && $this->getLangueSupport()->count() > 0 && $this->getTypeEnseignement() !== null) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+    }
+
+    public function getEtatOnglet3(): EtatRemplissageEnum
+    {
+        return $this->getObjectifs() === null && $this->getCompetences() === null ? EtatRemplissageEnum::VIDE : (($this->getObjectifs() !== null && $this->getCompetences() !== null) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+    }
+
+    public function getEtatOnglet4(): EtatRemplissageEnum
+    {
+        return $this->etatStructure() === 'Non complété' ? EtatRemplissageEnum::VIDE : (($this->etatStructure() === 'Complet') ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+    }
+
+    public function getEtatOnglet5(): EtatRemplissageEnum
+    {
+        return EtatRemplissageEnum::VIDE;
     }
 }

@@ -22,6 +22,7 @@ export default class extends Controller {
       .then(async () => {
         callOut('Sauvegarde effectuée', 'success')
         this.modal.hide()
+        console.log(this.nomEvenement)
         this.dispatch(this.nomEvenement)
       })
   }
@@ -47,7 +48,6 @@ export default class extends Controller {
   }
 
   modalClose() {
-    // todo: déclencher sur l'évent de Bootstrap?
     this.modalBodyTarget.innerHTML = ''
     this.dispatch('modalClose')
   }

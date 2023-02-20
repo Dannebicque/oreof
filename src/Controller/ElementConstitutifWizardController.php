@@ -10,6 +10,7 @@ use App\Form\EcStep3Type;
 use App\Form\EcStep4Type;
 use App\Form\EcStep5Type;
 use App\Repository\BlocCompetenceRepository;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,6 +22,22 @@ class ElementConstitutifWizardController extends AbstractController
     public function index(): Response
     {
         return $this->render('element_constitutif/index.html.twig', [
+        ]);
+    }
+
+    #[Route('/{id}/{parcours}/synthese', name: 'app_ec_wizard_synthese', methods: ['GET'])]
+    public function synthese(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        ElementConstitutif $elementConstitutif,
+        Parcours $parcours
+    ): Response
+    {
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome());
+
+        return $this->render('element_constitutif/_synthese_ec.html.twig', [
+            'ec' => $elementConstitutif,
+            'parcours' => $parcours,
+            'typeDiplome' => $typeDiplome,
         ]);
     }
 
@@ -56,11 +73,21 @@ class ElementConstitutifWizardController extends AbstractController
     ): Response {
         $form = $this->createForm(EcStep3Type::class, $ec);
 
+        $ecBccs = [];
+        $ecComps = [];
+
+        foreach ($ec->getCompetences() as $competence) {
+            $ecComps[] = $competence->getId();
+            $ecBccs[] = $competence->getBlocCompetence()->getId();
+        }
+
         return $this->render('element_constitutif_wizard/_step3.html.twig', [
             'ec' => $ec,
             'parcours' => $parcours,
             'form' => $form->createView(),
-            'bcs' => $parcours->getBlocCompetences(),
+            'bccs' => $parcours->getBlocCompetences(),
+            'ecBccs' => array_flip(array_unique($ecBccs)),
+            'ecComps' => array_flip($ecComps),
         ]);
     }
 

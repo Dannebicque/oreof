@@ -35,7 +35,7 @@ class EcController extends BaseController
             $this->isGranted('ROLE_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('ROLE_EC_SHOW_ALL', $this->getUser())) {
-            $ecs = $elementConstitutifRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()]);
+            $ecs = $elementConstitutifRepository->findByAllAnneUniversitaire($this->getAnneeUniversitaire());
         } else {
             $ecs = [];
             $ecs[] = $elementConstitutifRepository->findByComposanteDpe($this->getUser(),

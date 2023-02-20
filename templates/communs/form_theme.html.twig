@@ -20,6 +20,34 @@
     </div>
 {% endblock %}
 
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {%- set parent_label_class = parent_label_class|default(label_attr.class|default('')) -%}
+        {%- if compound is defined and compound -%}
+            {%- set element = 'legend' -%}
+            {%- if 'col-form-label' not in parent_label_class -%}
+                {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' col-form-label' )|trim}) -%}
+            {%- endif -%}
+        {%- else -%}
+            {%- set row_class = row_class|default(row_attr.class|default('')) -%}
+            {%- set label_attr = label_attr|merge({for: id}) -%}
+            {%- if 'col-form-label' not in parent_label_class -%}
+                {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ('input-group' in row_class ? ' input-group-text' : ' form-label') )|trim}) -%}
+            {%- endif -%}
+        {%- endif -%}
+    {%- endif -%}
+    <{{ element|default('label') }}{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>
+    {{- block('form_label_content') -}} {% if help is defined and help != '' %}
+    <i class="fal fa-question-circle ms-1"
+       {{ stimulus_controller('tooltip', {
+              'placement': 'bottom',
+       }) }}
+       title="{{ help }}"></i>{%
+    endif %}
+    </{{ element|default('label') }}>
+{%- endblock form_label %}
+
+
 {% block textarea_with_save_widget %}
 
     <div class="row">
@@ -76,9 +104,9 @@
         {%- if not compound -%}
             {% set label_attr = label_attr|merge({'for': id}) %}
         {%- endif -%}
-{#        {%- if required -%}#}
-{#            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) -%}#}
-{#        {%- endif -%}#}
+        {#        {%- if required -%} #}
+        {#            {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' required')|trim}) -%} #}
+        {#        {%- endif -%} #}
         {%- if parent_label_class is defined -%}
             {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ parent_label_class)|replace({'checkbox-inline': '', 'radio-inline': ''})|trim}) -%}
         {%- endif -%}
