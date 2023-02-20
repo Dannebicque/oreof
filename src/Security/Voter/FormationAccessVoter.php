@@ -15,6 +15,7 @@ class FormationAccessVoter extends Voter
 
     public const ROLE_FORMATION_EDIT_MY = 'ROLE_FORMATION_EDIT_MY';
     public const ROLE_FORMATION_SHOW_MY = 'ROLE_FORMATION_SHOW_MY';
+    public const ROLE_EC_ADD_MY = 'ROLE_EC_ADD_MY';
 
     private array $roles;
 
@@ -32,7 +33,7 @@ class FormationAccessVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::ROLE_FORMATION_EDIT_MY, self::ROLE_FORMATION_SHOW_MY], true)
+        return in_array($attribute, [self::ROLE_FORMATION_EDIT_MY, self::ROLE_FORMATION_SHOW_MY, self::ROLE_EC_ADD_MY], true)
             && $subject instanceof Formation;
     }
 
@@ -55,6 +56,8 @@ class FormationAccessVoter extends Voter
                 return $this->hasShowOnHisFormation($user, $subject);
             case self::ROLE_FORMATION_EDIT_MY:
                 return $this->hasEditOnHisFormation($user, $subject);
+                case self::ROLE_EC_ADD_MY:
+                return $this->canAddEcFormation($user, $subject);
 
         }
 
@@ -82,6 +85,15 @@ class FormationAccessVoter extends Voter
         }
 
         return false;
+    }
+
+    private function canAddEcFormation(UserInterface $user, mixed $subject)
+    {
+        foreach ($user->getUserCentres() as $centre) {
+            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0 ) {
+                return true;
+            }
+        }
     }
 
 

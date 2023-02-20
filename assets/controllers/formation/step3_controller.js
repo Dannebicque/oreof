@@ -1,5 +1,4 @@
 import { Controller } from '@hotwired/stimulus'
-import { Modal } from 'bootstrap'
 import { saveData } from '../../js/saveData'
 import callOut from '../../js/callOut'
 
@@ -23,7 +22,7 @@ export default class extends Controller {
 
   async deleteParcours(event) {
     event.preventDefault()
-    if (confirm('Voulez-vous vraiment supprimer ce parcours et toutes mles informations associées ?')) {
+    if (confirm('Voulez-vous vraiment supprimer ce parcours et toutes les informations associées ?')) {
       const { id } = event.params
       const { url } = event.params
       const { csrf } = event.params
@@ -88,7 +87,7 @@ export default class extends Controller {
   }
 
   initStructure() {
-    if (confirm('Voulez-vous vraiment initialiser la structure ?')) {
+    if (confirm('Voulez-vous vraiment initialiser la structure ? Si des parcours ont déjà été initialisés, toutes les données associées seront supprimées.')) {
       window.location = this.urlGenereStructreValue
     }
   }

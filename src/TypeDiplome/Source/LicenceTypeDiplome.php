@@ -2,6 +2,9 @@
 
 namespace App\TypeDiplome\Source;
 
+use App\Entity\Formation;
+use App\Entity\Parcours;
+
 class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 {
     public const SOURCE = 'licence';
@@ -10,5 +13,6 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
     public string $libelle = 'Licence';
     public int $nbSemestres = 6;
     public int $nbUes = 5;
+
 }
 

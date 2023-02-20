@@ -54,19 +54,19 @@ bouton pour valider/invalide les étapes successives #}
                     <span> voir</span>
                 </a>
 
-                {% if is_granted('ROLE_RESP_FORMATION') %}
+                {% if is_granted('ROLE_FORMATION_EDIT_MY', formation) %}
                     <a href="{{ path('app_formation_edit',{'id': formation.id}) }}"
                        class="btn btn-sm text-warning"
                        data-bs-toggle="tooltip"
                        data-bs-placement="bottom"
-                       title="Modifier une année universitaire"
+                       title="Modifier une formation"
                     >
                         <i class="{{ iconEdit }}"></i>
                         <span> modifier</span>
                     </a>
                 {% endif %}
 
-                {% if is_granted('ROLE_SES') %}
+                {% if is_granted('ROLE_FORMATION_DELETE_MY') %}
                     <button {{ stimulus_action('crud', 'delete', 'click', {
                         url:path('app_formation_delete',{'id': formation.id}),
                         csrf: csrf_token('delete' ~ formation.id)

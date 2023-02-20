@@ -86,7 +86,7 @@ class Parcours
     #[ORM\ManyToOne]
     private ?RythmeFormation $rythmeFormation = null;
 
-    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: SemestreParcours::class)]
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: SemestreParcours::class, cascade: ['persist', 'remove'])]
     private Collection $semestreParcours;
 
     #[ORM\ManyToOne]

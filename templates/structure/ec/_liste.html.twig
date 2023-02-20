@@ -92,7 +92,7 @@
                         <i class="{{ iconEdit }}"></i>
                         <span> modifier</span>
                     </a>
-                    {% if is_granted('ROLE_RESP_FORMATION') %}
+                    {% if is_granted('ROLE_EC_DELETE_MY') %}
                         <button {{ stimulus_action('crud', 'delete', 'click', {
                             url:path('app_element_constitutif_delete',{'id': ec.id})
                         }) }} class="btn btn-sm text-danger">
@@ -103,7 +103,7 @@
 
             </tr>
         {% endfor %}
-        {% if is_granted('ROLE_RESP_FORMATION') and ue is defined %}
+        {% if is_granted('ROLE_EC_ADD_MY', parcours.formation) and ue is defined %}
             <tr>
                 <td colspan="7">
 

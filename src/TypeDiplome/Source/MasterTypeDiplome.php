@@ -2,6 +2,9 @@
 
 namespace App\TypeDiplome\Source;
 
+use App\Entity\Formation;
+use App\Entity\Parcours;
+
 class MasterTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 {
     public const SOURCE = 'master';
@@ -11,4 +14,6 @@ class MasterTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterf
 
     public int $nbSemestres = 4;
     public int $nbUes = 0;
+
+
 }
