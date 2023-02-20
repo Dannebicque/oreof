@@ -39,7 +39,7 @@
                     >
                         <i class="fal fa-clock"></i>
                         <span> Volumes Horaires</span>
-                        <span class="badge bg-{% if ec.EtatStructure == 'Complet' %}success{% else %}warning{% endif %}">
+                        <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
                             {{ ec.etatStructure }}
                         </span>
                     </button>
@@ -50,7 +50,7 @@
                                 size: 'lg',
                                 nomEvenement: 'refreshListeEc',
                                 modalTitle: 'Modalités de Contrôle des Connaissances',
-                                modalUrl: path('app_element_constitutif_show',{'id': ec.id}) }) }}
+                                modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
                             data-action="click->modal#openModal"
                             class="btn btn-sm btn-outline-info"
 

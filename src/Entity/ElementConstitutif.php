@@ -102,12 +102,16 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?array $etatEc = [];
 
+    #[ORM\OneToMany(mappedBy: 'ec', targetEntity: Mccc::class)]
+    private Collection $mcccs;
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
         $this->langueDispense = new ArrayCollection();
         $this->langueSupport = new ArrayCollection();
         $this->ecUes = new ArrayCollection();
+        $this->mcccs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -635,5 +639,35 @@ class ElementConstitutif
     public function getEtatOnglet5(): EtatRemplissageEnum
     {
         return EtatRemplissageEnum::VIDE;
+    }
+
+    /**
+     * @return Collection<int, Mccc>
+     */
+    public function getMcccs(): Collection
+    {
+        return $this->mcccs;
+    }
+
+    public function addMccc(Mccc $mccc): self
+    {
+        if (!$this->mcccs->contains($mccc)) {
+            $this->mcccs->add($mccc);
+            $mccc->setEc($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMccc(Mccc $mccc): self
+    {
+        if ($this->mcccs->removeElement($mccc)) {
+            // set the owning side to null (unless already changed)
+            if ($mccc->getEc() === $this) {
+                $mccc->setEc(null);
+            }
+        }
+
+        return $this;
     }
 }

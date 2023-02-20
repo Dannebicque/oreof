@@ -1,0 +1,15 @@
+<h2>MCCC pour {{ ec.libelle }}</h2>
+<form method="post" action="{{ path('app_element_constitutif_mccc', {id:ec.id}) }}">
+    {{ include('components/TypeDiplome/mccc/'~templateForm) }}
+
+    <button type="submit" class="btn btn-success"
+            {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+    >
+        <i class="fal fa-floppy-disk"></i>
+        Enregistrer
+    </button>
+
+    <div class="alert alert-info mt-2">
+        tous les champs avec un <span class="text-red">*</span> sont obligatoires
+    </div>
+</form>
