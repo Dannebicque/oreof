@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
+import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 
 export default class extends Controller {
   static targets = [
@@ -11,7 +12,7 @@ export default class extends Controller {
   }
 
   saveDescription() {
-    saveData(this.urlValue, {
+    this._save({
       field: 'description',
       action: 'textarea',
       value: document.getElementById('ec_step2_description').value,
@@ -19,24 +20,24 @@ export default class extends Controller {
   }
 
   changeLangue(event) {
-    saveData(
-      this.urlValue,
-      {
-        field: event.params.type,
-        action: 'langue',
-        value: event.target.value,
-        isChecked: event.target.checked,
-      },
-    )
+    this._save({
+      field: event.params.type,
+      action: 'langue',
+      value: event.target.value,
+      isChecked: event.target.checked,
+    })
   }
 
   changeTypeEnseignement(event) {
-    saveData(
-      this.urlValue,
-      {
-        action: 'typeEnseignement',
-        value: event.target.value,
-      },
-    )
+    this._save({
+      action: 'typeEnseignement',
+      value: event.target.value,
+    })
+  }
+
+  async _save(options) {
+    await saveData(this.urlValue, options).then(async () => {
+      await updateEtatOnglet(this.urlValue, 'onglet2', 'ec')
+    })
   }
 }

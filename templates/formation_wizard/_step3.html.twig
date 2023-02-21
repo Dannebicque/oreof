@@ -54,7 +54,7 @@
 
     <div id="bloc_semestre" {% if formation.hasParcours == false %}class="d-none"{% endif %}>
         <div class="alert alert-info mt-2">
-            Précisez la structure de la mention avec les parcours (semestre de tronc commun ou semestre spécifique au
+            Précisez la structure de la mention/spécialité avec les parcours (semestre de tronc commun ou semestre spécifique au
             parcours)
         </div>
         <ul>
@@ -87,11 +87,11 @@
     <div class="d-grid">
         <button type="button" {{ stimulus_action('formation--step3', 'initStructure') }}
                 class="btn d-block btn-outline-warning">
-            Générer la structure de base pour la mention et ses parcours
+            Générer la structure de base pour la mention/spécialité et ses parcours
         </button>{# todo: modifier le texte  #}
     </div>
     <div class="alert alert-warning mt-2">
         <strong>Attention !</strong> Cette action va générer une structure de base
-                                     pour la mention et ses parcours selon le paramètrage ci-dessus.
+                                     pour la mention/spécialité et ses parcours selon le paramètrage ci-dessus.
     </div>
 </div>

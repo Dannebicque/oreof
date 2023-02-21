@@ -8,10 +8,11 @@ use App\Form\EcStep1Type;
 use App\Form\EcStep2Type;
 use App\Form\EcStep3Type;
 use App\Form\EcStep4Type;
-use App\Form\EcStep5Type;
-use App\Repository\BlocCompetenceRepository;
+use App\Repository\ElementConstitutifRepository;
+use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -107,14 +108,44 @@ class ElementConstitutifWizardController extends AbstractController
 
     #[Route('/{ec}/{parcours}/5', name: 'app_ec_wizard_step_5', methods: ['GET'])]
     public function step5(
+        TypeEpreuveRepository $typeEpreuveRepository,
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif $ec, Parcours $parcours
     ): Response {
-        $form = $this->createForm(EcStep5Type::class, $ec); //todo: simple affichage selon les droits ?
 
-        return $this->render('element_constitutif_wizard/_step4.html.twig', [
-            'ec' => $ec,
-            'parcours' => $parcours,
-            'form' => $form->createView()
-        ]);
+        $formation = $ec->getParcours()->getFormation();
+        if ($formation !== null) {
+            $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+            if ($this->isGranted('ROLE_FORMATION_EDIT_MY',
+                $ec->getParcours()->getFormation())) { //todo: ajouter le workflow...
+
+
+                if ($ec->getMcccs()->count() === 0) {
+                    $typeDiplome->initMcccs($ec);
+                }
+
+                return $this->render('element_constitutif_wizard/_step5.html.twig', [
+                    'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+                    'ec' => $ec,
+                    'parcours' => $parcours,
+                    'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
+                    'mcccs' => $typeDiplome->getMcccs($ec),
+                    'editable' => true,
+                    'wizard' => true
+                ]);
+
+            }
+
+            return $this->render('element_constitutif_wizard/_step5.html.twig', [
+                'ec' => $ec,
+                'parcours' => $parcours,
+                'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+                'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
+                'mcccs' => $typeDiplome->getMcccs($ec),
+                'editable' => false,
+            ]);
+        }
+
     }
 }

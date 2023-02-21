@@ -555,49 +555,49 @@ class Parcours
         return $onglets;
     }
 
-    private function getEtatOnglet0(): EtatRemplissageEnum
+    public function getEtatOnglet0(): EtatRemplissageEnum
     {
         return EtatRemplissageEnum::EN_COURS;
     }
 
-    private function getEtatOnglet1(): EtatRemplissageEnum
+    public function getEtatOnglet1(): EtatRemplissageEnum
     {
         return $this->getContenuFormation() === null && $this->getResultatsAttendus() === null && $this->getRythmeFormation() === null ? EtatRemplissageEnum::VIDE : ($this->getContenuFormation() !== null && $this->getResultatsAttendus() !== null && $this->getRythmeFormation() !== null ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
-    private function getEtatOnglet2(): EtatRemplissageEnum
+    public function getEtatOnglet2(): EtatRemplissageEnum
     {
         return EtatRemplissageEnum::EN_COURS;
     }
 
-    private function getEtatOnglet3(): EtatRemplissageEnum
+    public function getEtatOnglet3(): EtatRemplissageEnum
     {
         return $this->getBlocCompetences()->count() === 0 ? EtatRemplissageEnum::VIDE :
             ($this->partieCompetencesComplete === true ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
-    private function getEtatOnglet4(): EtatRemplissageEnum
+    public function getEtatOnglet4(): EtatRemplissageEnum
     {
         return $this->getSemestreParcours()->count() === 0 ? EtatRemplissageEnum::VIDE :
             ($this->partieStructureComplete === true ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
-    private function getEtatOnglet5(): EtatRemplissageEnum
+    public function getEtatOnglet5(): EtatRemplissageEnum
     {
         return EtatRemplissageEnum::EN_COURS;
     }
 
-    private function getEtatOnglet6(): EtatRemplissageEnum
+    public function getEtatOnglet6(): EtatRemplissageEnum
     {
         return EtatRemplissageEnum::EN_COURS;
     }
 
-    private function getEtatOnglet7(): EtatRemplissageEnum
+    public function getEtatOnglet7(): EtatRemplissageEnum
     {
         return EtatRemplissageEnum::EN_COURS;
     }
 
-    private function getEtatOnglet8(): EtatRemplissageEnum
+    public function getEtatOnglet8(): EtatRemplissageEnum
     {
         return EtatRemplissageEnum::EN_COURS;
     }

@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
+import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 
 export default class extends Controller {
   static targets = [
@@ -11,7 +12,7 @@ export default class extends Controller {
   }
 
   changeResponsableEc(event) {
-    saveData(this.urlValue, {
+    this._save({
       field: 'responsableEc',
       action: 'responsableEc',
       value: event.target.value,
@@ -22,15 +23,15 @@ export default class extends Controller {
   }
 
   saveContenuFr() {
-    saveData(this.urlValue, {
+    this._save({
       field: 'libelle',
       action: 'textarea',
       value: document.getElementById('ec_step1_libelle').value,
     })
   }
 
-  saveContenuEn(event) {
-    saveData(this.urlValue, {
+  saveContenuEn() {
+    this._save({
       field: 'libelleAnglais',
       action: 'textarea',
       value: document.getElementById('ec_step1_libelleAnglais').value,
@@ -38,14 +39,11 @@ export default class extends Controller {
   }
 
   changeEnseignementMutualise(event) {
-    saveData(
-      this.urlValue,
-      {
-        field: 'enseignementMutualise',
-        action: 'yesNo',
-        value: event.target.value,
-      },
-    )
+    this._save({
+      field: 'enseignementMutualise',
+      action: 'yesNo',
+      value: event.target.value,
+    })
     if (event.target.value == 1) {
       document.getElementById('coursMutualises').style.display = 'block'
     } else {
@@ -54,13 +52,16 @@ export default class extends Controller {
   }
 
   isMutualise(event) {
-    saveData(
-      this.urlValue,
-      {
-        field: event.params.type,
-        action: 'yesNo',
-        value: event.target.value,
-      },
-    )
+    this._save({
+      field: event.params.type,
+      action: 'yesNo',
+      value: event.target.value,
+    })
+  }
+
+  async _save(options) {
+    await saveData(this.urlValue, options).then(async () => {
+      await updateEtatOnglet(this.urlValue, 'onglet1', 'ec')
+    })
   }
 }

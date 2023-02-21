@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
+import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 
 export default class extends Controller {
   static targets = [
@@ -11,7 +12,7 @@ export default class extends Controller {
   }
 
   saveContenu() {
-    saveData(this.urlValue, {
+    this._save({
       field: 'contenuFormation',
       action: 'textarea',
       value: document.getElementById('parcours_step1_contenuFormation').value,
@@ -19,7 +20,7 @@ export default class extends Controller {
   }
 
   saveResultats() {
-    saveData(this.urlValue, {
+    this._save({
       field: 'resultatsAttendus',
       action: 'textarea',
       value: document.getElementById('parcours_step1_resultatsAttendus').value,
@@ -27,7 +28,7 @@ export default class extends Controller {
   }
 
   changeRythme(event) {
-    saveData(this.urlValue, {
+    this._save({
       field: 'rythmeFormation',
       action: 'rythmeFormation',
       value: event.target.value,
@@ -35,7 +36,7 @@ export default class extends Controller {
   }
 
   changeLocalisation(event) {
-    saveData(this.urlValue, {
+    this._save({
       field: 'localisation',
       action: 'localisation',
       value: event.target.value,
@@ -43,10 +44,16 @@ export default class extends Controller {
   }
 
   saveRythme() {
-    saveData(this.urlValue, {
+    this._save({
       field: 'rythmeFormationTexte',
       action: 'textarea',
       value: document.getElementById('parcours_step1_rythmeFormationTexte').value,
+    })
+  }
+
+  async _save(options) {
+    await saveData(this.urlValue, options).then(async () => {
+      await updateEtatOnglet(this.urlValue, 'onglet1', 'parcours')
     })
   }
 }

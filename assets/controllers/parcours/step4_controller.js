@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
+import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 
 export default class extends Controller {
   static targets = ['detail']
@@ -19,7 +20,7 @@ export default class extends Controller {
   }
 
   etatStructure(event) {
-    saveData(this.urlSaveValue, {
+    this._save({
       action: 'etatStructure',
       isChecked: event.target.checked,
     })
@@ -32,5 +33,11 @@ export default class extends Controller {
       parent.classList.remove('alert-success')
       parent.classList.add('alert-warning')
     }
+  }
+
+  async _save(options) {
+    await saveData(this.urlSaveValue, options).then(async () => {
+      await updateEtatOnglet(this.urlSaveValue, 'onglet4', 'parcours')
+    })
   }
 }

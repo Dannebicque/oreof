@@ -35,10 +35,10 @@ class AppExtension extends AbstractExtension
         return $value ? '<span class="badge bg-success">Oui</span>' : '<span class="badge bg-danger">Non</span>';
     }
 
-    public function etatRemplissage(array $onglets, int $step): string
+    public function etatRemplissage(array $onglets, int $step, string $prefix = ''): string
     {
         if (array_key_exists($step, $onglets)) {
-            return '<span class="state state-'.$onglets[$step]->badge().'" id="onglet_'.$step.'"></span>';
+            return '<span class="state state-'.$onglets[$step]->badge().'" id="'.$prefix.'_onglet'.$step.'"></span>';
         }
 
         return '';

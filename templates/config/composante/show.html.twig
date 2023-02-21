@@ -18,7 +18,23 @@
     </tr>
     <tr>
         <th>Adresse</th>
-        <td>{{ composante.adresse ? composante.adresse.display : 'Non définie' }}</td>
+        <td>{{ composante.adresse ? composante.adresse.display|raw : 'Non définie' }}</td>
+    </tr>
+    <tr>
+        <th>Téléphone standard de la composante</th>
+        <td>{{ composante.telStandard|tel_format }}</td>
+    </tr>
+    <tr>
+        <th>Autre téléphone de la composante</th>
+        <td>{{ composante.telComplementaire|tel_format }}</td>
+    </tr>
+    <tr>
+        <th>Adresse mail de contact de la composante</th>
+        <td>{{ composante.mailContact|mailto }}</td>
+    </tr>
+    <tr>
+        <th>URL du site de la composante</th>
+        <td>{{ composante.urlSite }}</td>
     </tr>
     </tbody>
 </table>

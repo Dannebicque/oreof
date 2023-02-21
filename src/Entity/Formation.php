@@ -560,27 +560,27 @@ class Formation
         return $onglets;
     }
 
-    private function getEtatOnglet0(): EtatRemplissageEnum
+    public function getEtatOnglet0(): EtatRemplissageEnum
     {
         return EtatRemplissageEnum::EN_COURS;
     }
 
-    private function getEtatOnglet1(): EtatRemplissageEnum
+    public function getEtatOnglet1(): EtatRemplissageEnum
     {
         return $this->getLocalisationMention()->count() === 0 && $this->getComposantesInscription()->count() === 0 && count($this->getRegimeInscription()) === 0 ? EtatRemplissageEnum::VIDE : ($this->getLocalisationMention()->count() > 0 && $this->getComposantesInscription()->count() > 0 && count($this->getRegimeInscription()) > 0 ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS); //todo: gérer la zone de saisie selon le type de rythme choisit
     }
 
-    private function getEtatOnglet2(): EtatRemplissageEnum
+    public function getEtatOnglet2(): EtatRemplissageEnum
     {
         return $this->getContenuFormation() === null && $this->getResultatsAttendus() === null && $this->getRythmeFormation() === null ? EtatRemplissageEnum::VIDE : ($this->getContenuFormation() !== null && $this->getResultatsAttendus() !== null && $this->getRythmeFormation() !== null ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
-    private function getEtatOnglet3(): EtatRemplissageEnum
+    public function getEtatOnglet3(): EtatRemplissageEnum
     {
         return EtatRemplissageEnum::EN_COURS;
     }
 
-    private function getEtatOnglet4(): EtatRemplissageEnum
+    public function getEtatOnglet4(): EtatRemplissageEnum
     {
         return EtatRemplissageEnum::EN_COURS;
     }

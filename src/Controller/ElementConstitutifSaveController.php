@@ -10,6 +10,7 @@ use App\Repository\CompetenceRepository;
 use App\Repository\LangueRepository;
 use App\Repository\TypeEnseignementRepository;
 use App\Repository\UserRepository;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,7 @@ class ElementConstitutifSaveController extends BaseController
      */
     #[Route('/ec/save/{ec}', name: 'app_ec_save')]
     public function save(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
         EntityManagerInterface $entityManager,
         BlocCompetenceRepository $blocCompetenceRepository,
         CompetenceRepository $competenceRepository,
@@ -36,10 +38,25 @@ class ElementConstitutifSaveController extends BaseController
         //todo: check si bonne formation...
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
+            case 'stateOnglet':
+                $method = 'getEtat' . ucfirst($data['onglet']);
+                $val = $ec->$method();
+
+                return $this->json($val->badge());
             case 'yesNo':
                 $rep = $updateEntity->saveYesNo($ec, $data['field'], $data['value']);
 
                 return $this->json($rep);
+            case 'mcccs':
+                $formation = $ec->getParcours()->getFormation();
+                if ($formation === null) {
+                    return $this->json(false);
+                }
+                $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+                $typeDiplome->saveMccc($ec, $data['field'], $data['value']);
+
+                return $this->json(true);
+
             case 'textarea':
             case 'selectWithoutEntity':
                 $rep = $updateEntity->saveField($ec, $data['field'], $data['value']);

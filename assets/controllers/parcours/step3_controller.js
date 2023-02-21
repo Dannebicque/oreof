@@ -2,6 +2,7 @@ import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
 import callOut from '../../js/callOut'
 import { saveData } from '../../js/saveData'
+import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 
 export default class extends Controller {
   static targets = [
@@ -58,7 +59,7 @@ export default class extends Controller {
   }
 
   etatCompetence(event) {
-    saveData(this.urlValue, {
+    this._save({
       action: 'etatCompetences',
       isChecked: event.target.checked,
     })
@@ -71,5 +72,11 @@ export default class extends Controller {
       parent.classList.remove('alert-success')
       parent.classList.add('alert-warning')
     }
+  }
+
+  async _save(options) {
+    await saveData(this.urlValue, options).then(async () => {
+      await updateEtatOnglet(this.urlValue, 'onglet3', 'parcours')
+    })
   }
 }

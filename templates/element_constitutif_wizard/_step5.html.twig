@@ -3,5 +3,9 @@
     url: path('app_ec_save', {ec:ec.id}),
 }) }}
 >
-    ...reprise...
+    {% if editable %}
+        {{ include('components/TypeDiplome/mccc/'~templateForm) }}
+    {% else %}
+        {{ include('components/TypeDiplome/mccc-non-editable/'~templateForm) }}
+    {% endif %}
 </div>

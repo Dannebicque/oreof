@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
+import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 
 export default class extends Controller {
   static values = {
@@ -12,5 +13,6 @@ export default class extends Controller {
       action: 'int',
       value: event.target.value,
     })
+    updateEtatOnglet(this.urlValue, 'onglet0')
   }
 }

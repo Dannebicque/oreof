@@ -32,6 +32,10 @@ class ParcoursSaveController extends AbstractController
         //todo: check si bonne parcours...
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
+            case 'stateOnglet':
+                $method = 'getEtat' . ucfirst($data['onglet']);
+                $val = $parcours->$method();
+                return $this->json($val->badge());
             case 'yesNo':
                 $rep = $updateEntity->saveYesNo($parcours, $data['field'], $data['value']);
 

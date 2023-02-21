@@ -51,6 +51,56 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
 
     }
 
+    public function saveMccc(ElementConstitutif $elementConstitutif, string $field, mixed $value): void
+    {
+        $mcccs = $this->getMcccs($elementConstitutif);
+
+        switch ($field) {
+            case 'pourcentage_s1_cc':
+                $mcccs[1]['cc']->setPourcentage((float)$value);
+                break;
+            case 'nbepreuve_s1_cc':
+                $mcccs[1]['cc']->setNbEpreuves((int)$value);
+                break;
+            case 'pourcentage_s1_et':
+                $mcccs[1]['et']->setPourcentage((float)$value);
+                if ((float)$value <= 0) {
+                    $mcccs[1]['et']->setNbEpreuves(0);
+                    $mcccs[1]['et']->setTypeEpreuve([]);
+                }
+                break;
+            case 'typeEpreuve_s1_et':
+                $mcccs[1]['et']->setTypeEpreuve([$value]);
+                if (count( $mcccs[1]['et']->getTypeEpreuve())> 0) {
+                    $mcccs[1]['et']->setNbEpreuves(1);
+                }
+                break;
+
+            case 'pourcentage_s1_chance':
+                $mcccs[3]['chance']->setPourcentage((float)$value);
+                if ((float)$value <= 0) {
+                    $mcccs[3]['chance']->setNbEpreuves(0);
+                    $mcccs[3]['chance']->setTypeEpreuve([]);
+                }
+                break;
+            case 'typeEpreuve_s1_chance':
+                $mcccs[3]['chance']->setTypeEpreuve($value);//est un tableau
+                if (count( $mcccs[3]['chance']->getTypeEpreuve())> 0) {
+                    $mcccs[3]['chance']->setNbEpreuves(count($value));
+                }
+                break;
+            case 'typeEpreuve_s2_et':
+                $mcccs[2]['et']->setTypeEpreuve([$value]);
+                $mcccs[2]['et']->setNbEpreuves(1);
+                $mcccs[2]['et']->setPourcentage(100);
+                break;
+        }
+
+        $this->entityManager->flush();
+
+    }
+
+
     public function initMcccs(ElementConstitutif $elementConstitutif): void
     {
         //1ere session

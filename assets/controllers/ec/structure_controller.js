@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
+import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 
 export default class extends Controller {
   static values = {
@@ -26,6 +27,12 @@ export default class extends Controller {
       field: event.params.type,
       action: 'float',
       value: event.target.value,
+    })
+  }
+
+  async _save(options) {
+    await saveData(this.urlSaveValue, options).then(async () => {
+      await updateEtatOnglet(this.urlSaveValue, 'onglet4', 'ec')
     })
   }
 }

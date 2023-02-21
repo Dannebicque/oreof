@@ -8,6 +8,10 @@
             <label for="pourcentage_s1_cc">Pourcentage</label>
             <div class="input-group">
                 <input type="text" class="form-control" id="pourcentage_s1_cc" name="pourcentage_s1_cc"
+                       {% if wizard == true %}{{ stimulus_action('ec--step5', 'saveData', 'change', {
+                           action: 'float',
+                           field: 'pourcentage_s1_cc',
+                       }) }}{% endif %}
                 value="{{ mcccs[1]['cc'].pourcentage }}"
                 >
                 <span class="input-group-text">%</span>
@@ -16,6 +20,10 @@
         <div class="col-4">
             <label for="nbepreuve_s1_cc">Nb d'épreuve(s)</label>
             <input type="number" id="nbepreuve_s1_cc" name="nbepreuve_s1_cc" class="form-control"
+                    {% if wizard == true %}{{ stimulus_action('ec--step5', 'saveData', 'change', {
+                        action: 'integer',
+                        field: 'nbepreuve_s1_cc',
+                    }) }}{% endif %}
                    value="{{ mcccs[1]['cc'].nbEpreuves }}"
             >
         </div>
@@ -28,6 +36,10 @@
             <label for="pourcentage_s1_et">Pourcentage</label>
             <div class="input-group">
                 <input type="text" class="form-control" id="pourcentage_s1_et" name="pourcentage_s1_et"
+                        {% if wizard == true %}{{ stimulus_action('ec--step5', 'saveData', 'change', {
+                            action: 'float',
+                            field: 'pourcentage_s1_et',
+                        }) }}{% endif %}
                        value="{{ mcccs[1]['et'].pourcentage }}"
                 >
                 <span class="input-group-text">%</span>
@@ -35,7 +47,12 @@
         </div>
         <div class="col-4">
             <label for="typeEpreuve_s1_et">Type d'épreuve</label>
-            <select type="text" class="form-select" id="typeEpreuve_s1_et" name="typeEpreuve_s1_et">
+            <select type="text" class="form-select" id="typeEpreuve_s1_et" name="typeEpreuve_s1_et"
+                    {% if wizard == true %}{{ stimulus_action('ec--step5', 'saveData', 'change', {
+                        action: 'typeEpreuve',
+                        field: 'typeEpreuve_s1_et',
+                    }) }}{% endif %}
+            >
                 <option value="">Choisir</option>
                 {% for typeE in typeEpreuves %}
                     <option value="{{ typeE.id }}"
@@ -58,6 +75,10 @@
             <label for="pourcentage_s1_chance">Pourcentage</label>
             <div class="input-group">
                 <input type="text" class="form-control" id="pourcentage_s1_chance" name="pourcentage_s1_chance"
+                        {% if wizard == true %}{{ stimulus_action('ec--step5', 'saveData', 'change', {
+                            action: 'float',
+                            field: 'pourcentage_s1_chance',
+                        }) }}{% endif %}
                        value="{{ mcccs[3]['chance'].pourcentage }}"
                 >
                 <span class="input-group-text">%</span>
@@ -66,6 +87,10 @@
         <div class="col-4">
             <label for="typeEpreuve_s1_chance">Type d'épreuve</label>
             <select type="text" class="form-select" id="typeEpreuve_s1_chance" name="typeEpreuve_s1_chance[]"
+                    {% if wizard == true %}{{ stimulus_action('ec--step5', 'saveData', 'change', {
+                        action: 'typeEpreuve',
+                        field: 'typeEpreuve_s1_chance',
+                    }) }}{% endif %}
                     multiple>
                 <option value="">Choisir</option>
                 {% for typeE in typeEpreuves %}
@@ -95,7 +120,12 @@
         </div>
         <div class="col-4">
             <label for="typeEpreuve_s2_et">Type d'épreuve</label>
-            <select type="text" class="form-select" id="typeEpreuve_s2_et" name="typeEpreuve_s2_et">
+            <select type="text" class="form-select" id="typeEpreuve_s2_et" name="typeEpreuve_s2_et"
+                    {% if wizard == true %}{{ stimulus_action('ec--step5', 'saveData', 'change',{
+                        action: 'typeEpreuve',
+                        field: 'typeEpreuve_s2_et',
+                    }) }}{% endif %}
+            >
                 <option value="">Choisir</option>
                 {% for typeE in typeEpreuves %}
                     <option value="{{ typeE.id }}"

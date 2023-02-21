@@ -11,17 +11,18 @@ export default class extends Controller {
     url: String,
   }
 
-  savePrerequis() {
+  saveData(event) {
     this._save({
-      field: 'prerequis',
-      action: 'textarea',
-      value: document.getElementById('formation_step5_prerequis').value,
+      field: event.params.field,
+      action: 'mcccs',
+      type: event.params.action,
+      value: event.target.value,
     })
   }
 
   async _save(options) {
     await saveData(this.urlValue, options).then(async () => {
-      await updateEtatOnglet(this.urlValue, 'onglet5', 'parcours')
+      await updateEtatOnglet(this.urlValue, 'onglet5', 'ec')
     })
   }
 }

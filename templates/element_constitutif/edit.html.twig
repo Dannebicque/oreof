@@ -18,29 +18,29 @@
                     <a class="nav-link active" data-bs-toggle="tab" href="#" role="tab" aria-selected="true"
                             {{ stimulus_action('ec_wizard', 'changeStep', 'click', {step: 1}) }}
                     >
-                        Identité de l'enseignement {{ onglets|etatRemplissage(1) }}
+                        Identité de l'enseignement {{ onglets|etatRemplissage(1, 'ec') }}
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-bs-toggle="tab" href="#" role="tab"
                             {{ stimulus_action('ec_wizard', 'changeStep', 'click', {step: 2}) }}
-                       aria-selected="false">Présentation  {{ onglets|etatRemplissage(2) }}</a>
+                       aria-selected="false">Présentation  {{ onglets|etatRemplissage(2, 'ec') }}</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                             {{ stimulus_action('ec_wizard', 'changeStep', 'click', {step: 3}) }}
-                    >Objectifs et Compétences  {{ onglets|etatRemplissage(3) }}</a>
+                    >Objectifs et Compétences  {{ onglets|etatRemplissage(3, 'ec') }}</a>
                 </li>
 
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                             {{ stimulus_action('ec_wizard', 'changeStep', 'click', {step: 4}) }}
-                    >Structure et organisation pédagogiques {{ onglets|etatRemplissage(4) }}</a>
+                    >Structure et organisation pédagogiques {{ onglets|etatRemplissage(4, 'ec') }}</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                             {{ stimulus_action('ec_wizard', 'changeStep', 'click', {step: 5}) }}
-                    >Modalités de contrôle des connaissances {{ onglets|etatRemplissage(5) }}</a>
+                    >Modalités de contrôle des connaissances {{ onglets|etatRemplissage(5, 'ec') }}</a>
                 </li>
 
 

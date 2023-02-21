@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
+import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 
 export default class extends Controller {
   static targets = [
@@ -11,26 +12,19 @@ export default class extends Controller {
   }
 
   changeModaliteEnseignement(event) {
-    console.log(event.target.value)
-    saveData(
-      this.urlValue,
-      {
-        field: 'modalitesEnseignement',
-        action: 'modalitesEnseignement',
-        value: event.target.value,
-      },
-    )
+    this._save({
+      field: 'modalitesEnseignement',
+      action: 'modalitesEnseignement',
+      value: event.target.value,
+    })
   }
 
   changeStage(event) {
-    saveData(
-      this.urlValue,
-      {
-        field: 'hasStage',
-        action: 'yesNo',
-        value: event.target.value,
-      },
-    )
+    this._save({
+      field: 'hasStage',
+      action: 'yesNo',
+      value: event.target.value,
+    })
     if (event.target.value == 1) {
       document.getElementById('blocStage').style.display = 'block';
     } else {
@@ -39,7 +33,7 @@ export default class extends Controller {
   }
 
   saveStageText() {
-    saveData(this.urlValue, {
+    this._save({
       field: 'stageText',
       action: 'textarea',
       value: document.getElementById('parcours_step2_stageText').value,
@@ -47,26 +41,20 @@ export default class extends Controller {
   }
 
   changeNbHeuresStages(event) {
-    saveData(
-      this.urlValue,
-      {
-        field: 'nbHeuresStages',
-        action: 'float',
-        value: event.target.value,
-      },
-    )
+    this._save({
+      field: 'nbHeuresStages',
+      action: 'float',
+      value: event.target.value,
+    })
   }
 
   /// // Projet /////
   changeProjet(event) {
-    saveData(
-      this.urlValue,
-      {
-        field: 'hasProjet',
-        action: 'yesNo',
-        value: event.target.value,
-      },
-    )
+    this._save({
+      field: 'hasProjet',
+      action: 'yesNo',
+      value: event.target.value,
+    })
     if (event.target.value == 1) {
       document.getElementById('blocProjet').style.display = 'block';
     } else {
@@ -75,7 +63,7 @@ export default class extends Controller {
   }
 
   saveProjetText() {
-    saveData(this.urlValue, {
+    this._save({
       field: 'projetText',
       action: 'textarea',
       value: document.getElementById('parcours_step2_projetText').value,
@@ -83,37 +71,28 @@ export default class extends Controller {
   }
 
   changeNbHeuresProjet(event) {
-    saveData(
-      this.urlValue,
-      {
-        field: 'nbHeuresProjet',
-        action: 'float',
-        value: event.target.value,
-      },
-    )
+    this._save({
+      field: 'nbHeuresProjet',
+      action: 'float',
+      value: event.target.value,
+    })
   }
 
   changeNbHeuresSituationPro(event) {
-    saveData(
-      this.urlValue,
-      {
-        field: 'nbHeuresSituationPro',
-        action: 'float',
-        value: event.target.value,
-      },
-    )
+    this._save({
+      field: 'nbHeuresSituationPro',
+      action: 'float',
+      value: event.target.value,
+    })
   }
 
   /// // Mémoire /////
   changeMemoire(event) {
-    saveData(
-      this.urlValue,
-      {
-        field: 'hasMemoire',
-        action: 'yesNo',
-        value: event.target.value,
-      },
-    )
+    this._save({
+      field: 'hasMemoire',
+      action: 'yesNo',
+      value: event.target.value,
+    })
     if (event.target.value == 1) {
       document.getElementById('blocMemoire').style.display = 'block';
     } else {
@@ -121,11 +100,17 @@ export default class extends Controller {
     }
   }
 
-  saveMemoireText(event) {
-    saveData(this.urlValue, {
+  saveMemoireText() {
+    this._save({
       field: 'memoireText',
       action: 'textarea',
       value: document.getElementById('parcours_step2_memoireText').value,
+    })
+  }
+
+  async _save(options) {
+    await saveData(this.urlValue, options).then(async () => {
+      await updateEtatOnglet(this.urlValue, 'onglet2', 'parcours')
     })
   }
 }

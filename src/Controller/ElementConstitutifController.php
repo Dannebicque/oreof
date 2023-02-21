@@ -153,6 +153,7 @@ class ElementConstitutifController extends AbstractController
                     'ec' => $elementConstitutif,
                     'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
                     'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
+                    'wizard' => false
                 ]);
 
             }

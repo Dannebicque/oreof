@@ -32,6 +32,10 @@ class FormationSaveController extends BaseController
         //todo: check si bonne formation...
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
+            case 'stateOnglet':
+                $method = 'getEtat' . ucfirst($data['onglet']);
+                $val = $formation->$method();
+                return $this->json($val->badge());
             case 'ville':
                 $rep = $updateEntity->saveCheckbox($formation, 'localisationMention', $data['value'],
                     $data['isChecked'],

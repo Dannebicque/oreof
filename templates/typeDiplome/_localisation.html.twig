@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-6">
         <dl>
-            <dt>Localisation(s) de la mention</dt>
+            <dt>Localisation(s) de la mention/spécialité</dt>
             <dd>
                 {% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}
             </dd>

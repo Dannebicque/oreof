@@ -1,6 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import callOut from '../../js/callOut'
+import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 
 export default class extends Controller {
   static targets = [
@@ -51,7 +52,7 @@ export default class extends Controller {
   }
 
   changeSemestre(event) {
-    saveData(this.urlValue, {
+    this._save({
       action: 'structureSemestres',
       value: event.target.value,
       semestre: event.params.semestre,
@@ -59,7 +60,7 @@ export default class extends Controller {
   }
 
   changeSemestreDebut(event) {
-    saveData(this.urlValue, {
+    this._save({
       field: 'semestreDebut',
       action: 'int',
       value: event.target.value,
@@ -77,7 +78,7 @@ export default class extends Controller {
       document.getElementById('bloc_semestre').classList.add('d-none');
     }
 
-    saveData(this.urlValue, {
+    this._save({
       field: 'hasParcours',
       action: 'yesNo',
       value: event.target.value,
@@ -90,5 +91,11 @@ export default class extends Controller {
     if (confirm('Voulez-vous vraiment initialiser la structure ? Si des parcours ont déjà été initialisés, toutes les données associées seront supprimées.')) {
       window.location = this.urlGenereStructreValue
     }
+  }
+
+  async _save(options) {
+    await saveData(this.urlValue, options).then(async () => {
+      await updateEtatOnglet(this.urlValue, 'onglet3', 'formation')
+    })
   }
 }

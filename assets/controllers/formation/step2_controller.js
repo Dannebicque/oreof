@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
+import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 
 export default class extends Controller {
   static targets = [
@@ -11,7 +12,7 @@ export default class extends Controller {
   }
 
   saveContenu() {
-    saveData(this.urlValue, {
+    this._save({
       field: 'contenuFormation',
       action: 'textarea',
       value: document.getElementById('formation_step2_contenuFormation').value,
@@ -19,7 +20,7 @@ export default class extends Controller {
   }
 
   saveResultats() {
-    saveData(this.urlValue, {
+    this._save({
       field: 'resultatsAttendus',
       action: 'textarea',
       value: document.getElementById('formation_step2_resultatsAttendus').value,
@@ -27,18 +28,24 @@ export default class extends Controller {
   }
 
   changeRythme(event) {
-    saveData(this.urlValue, {
+    this._save({
       field: 'rythmeFormation',
       action: 'rythmeFormation',
       value: event.target.value,
     })
   }
 
-  saveRythme(event) {
-    saveData(this.urlValue, {
+  saveRythme() {
+    this._save({
       field: 'rythmeFormationTexte',
       action: 'textarea',
       value: document.getElementById('formation_step2_rythmeFormationTexte').value,
+    })
+  }
+
+  async _save(options) {
+    await saveData(this.urlValue, options).then(async () => {
+      await updateEtatOnglet(this.urlValue, 'onglet2', 'formation')
     })
   }
 }

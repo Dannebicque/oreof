@@ -1,6 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
-import callOut from '../../js/callOut'
+import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 
 export default class extends Controller {
   static targets = [
@@ -12,7 +12,7 @@ export default class extends Controller {
   }
 
   saveObjectifs() {
-    saveData(this.urlValue, {
+    this._save({
       field: 'objectifs',
       action: 'textarea',
       value: document.getElementById('ec_step3_objectifs').value,
@@ -27,11 +27,17 @@ export default class extends Controller {
       document.querySelectorAll(`.bcc_${event.params.id}`).forEach((element) => {
         element.checked = false
       })
-      saveData(this.urlValue, { action: 'removeBcc', value: event.params.id })
+      this._save({ action: 'removeBcc', value: event.params.id })
     }
   }
 
   changeCompetence(event) {
-    saveData(this.urlValue, { action: 'addCompetence', value: event.params.id, checked: event.target.checked })
+    this._save({ action: 'addCompetence', value: event.params.id, checked: event.target.checked })
+  }
+
+  async _save(options) {
+    await saveData(this.urlValue, options).then(async () => {
+      await updateEtatOnglet(this.urlValue, 'onglet3', 'ec')
+    })
   }
 }

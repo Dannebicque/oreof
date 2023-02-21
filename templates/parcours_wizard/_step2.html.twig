@@ -7,13 +7,15 @@
     {{ form_row(form.modalitesEnseignement) }}
     {{ form_row(form.hasStage) }}
     <div id="blocStage" style="display:{% if parcours.hasStage == null or parcours.hasStage == false %}none{% endif %}">
-        {{ form_row(form.stageText) }}
         {{ form_row(form.nbHeuresStages) }}
+        {{ form_row(form.stageText) }}
+
     </div>
     {{ form_row(form.hasProjet) }}
     <div id="blocProjet" style="display:{% if parcours.hasProjet == null or parcours.hasProjet == false %}none{% endif %}">
-        {{ form_row(form.projetText) }}
         {{ form_row(form.nbHeuresProjet) }}
+        {{ form_row(form.projetText) }}
+
     </div>
 
     {{ form_row(form.hasMemoire) }}
