@@ -15,6 +15,7 @@ class HasComposanteAccessVoter extends Voter
 {
     public const ROLE_COMPOSANTE = 'ROLE_COMPOSANTE';
     public const ROLE_COMPOSANTE_SHOW_ALL = 'ROLE_COMPOSANTE_SHOW_ALL';
+    public const ROLE_FORMATION_ADD_ALL = 'ROLE_FORMATION_ADD_ALL';
 
 
     public const ROLE_FORMATION = 'ROLE_FORMATION';
@@ -35,7 +36,7 @@ class HasComposanteAccessVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute ,[self::ROLE_COMPOSANTE, self::ROLE_FORMATION], true)
+        return in_array($attribute ,[self::ROLE_COMPOSANTE, self::ROLE_FORMATION, self::ROLE_FORMATION_ADD_ALL], true)
             && $subject instanceof User;
     }
 
@@ -58,6 +59,8 @@ class HasComposanteAccessVoter extends Voter
             case self::ROLE_COMPOSANTE:
                 return $this->isCentreComposante($user);
             case self::ROLE_FORMATION:
+                return $this->isCentreFormation($user);
+            case self::ROLE_FORMATION_ADD_ALL:
                 return $this->isCentreFormation($user);
             case self::ROLE_COMPOSANTE_SHOW_ALL:
                 return $this->hasShowOnAllComposante($user);

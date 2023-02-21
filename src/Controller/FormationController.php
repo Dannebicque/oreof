@@ -44,11 +44,12 @@ class FormationController extends BaseController
     }
 
     #[Route('/new', name: 'app_formation_new', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_SES')]
     public function new(
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request, FormationRepository $formationRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_FORMATION_ADD_ALL', $this->getUser());
+
         $formation = new Formation($this->getAnneeUniversitaire());
         $form = $this->createForm(FormationSesType::class, $formation, [
             'action' => $this->generateUrl('app_formation_new'),
