@@ -94,6 +94,8 @@ class FormationAccessVoter extends Voter
                 return true;
             }
         }
+
+        return false;
     }
 
 

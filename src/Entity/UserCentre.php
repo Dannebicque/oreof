@@ -149,4 +149,9 @@ class UserCentre
             $this->droits[] = $role->getCodeRole();
         }
     }
+
+    public function addRoleCode(string $role): void
+    {
+        $this->droits[] = $role;
+    }
 }

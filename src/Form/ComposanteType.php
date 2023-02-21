@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Composante;
 use App\Entity\User;
+use App\Form\Type\EntityWithAddType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,20 +17,27 @@ class ComposanteType extends AbstractType
     {
         $builder
             ->add('libelle')
-            ->add('directeur', EntityType::class, [
+            ->add('directeur', EntityWithAddType::class, [
                 'class' => User::class,
                 'choice_label' => 'display',
                 'multiple' => false,
                 'expanded' => false,
+                'help_to_add' => 'Saisir l\'email urca de la personne à ajouter.',
+                'placeholder' => 'Choisir dans la liste ou choisir "+" pour ajouter un nouveau directeur',
                 'label' => 'Directeur de composante',
+                'required' => false,
             ])
-            ->add('responsableDpe', EntityType::class, [
+            ->add('responsableDpe', EntityWithAddType::class, [
                 'class' => User::class,
                 'choice_label' => 'display',
                 'multiple' => false,
                 'expanded' => false,
+                'empty_data' => 'null',
+                'help_to_add' => 'Saisir l\'email urca de la personne à ajouter.',
+                'placeholder' => 'Choisir dans la liste ou choisir "+" pour ajouter un nouveau responsable',
                 'label' => 'Responsable "DPE" de la composante',
-                'help' => 'Personne responsable de la validation des DPE des formations de la composante'
+                'help' => 'Personne responsable de la validation des DPE des formations de la composante',
+                'required' => false,
             ])
             ->add('adresse', AdresseType::class, [
                 'label' => 'Adresse du site principal de la composante',
