@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.6.0](https://github.com/Dannebicque/oreof/compare/v0.5.0...v0.6.0) (2023-02-21)
+
+
+### Features
+
+* MCCC, mise à jour indicateurs d'onglets, diverses ajouts ([d679e4a](https://github.com/Dannebicque/oreof/commit/d679e4ac64ffc45f1491fa1b1975f09ed8d0d211))
+* Possibilité d'ajouter un utilisateur manquant ([3961031](https://github.com/Dannebicque/oreof/commit/39610311f2a50bb686ee169d536c6c9e90d623ba))
+* Type d'épreuve + MCCC + Etat des MCCC ([56d78de](https://github.com/Dannebicque/oreof/commit/56d78de8738d450d608f26612e74afbaea04aabe))
+
+
+### Bug Fixes
+
+* corrections de droits ([c68d4f5](https://github.com/Dannebicque/oreof/commit/c68d4f5d382b81e750818e3c5b340cc8fa7c8e54))
+
 ## [0.5.0](https://github.com/Dannebicque/oreof/compare/v0.4.0...v0.5.0) (2023-02-20)
 
 
