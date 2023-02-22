@@ -30,7 +30,7 @@ class BadgeDpeExtension extends AbstractExtension
         $etatsEc = array_keys($etatsEc);
         $html = '';
         foreach ($etatsEc as $etatEc) {
-            $html .= '<span class="badge bg-secondary me-1">' . EtatDpeEnum::from(strtolower($etatEc))->libelle() . '</span>';
+            $html .= '<span class="badge bg-'.EtatDpeEnum::from(strtolower($etatEc))->badge().' me-1">' . EtatDpeEnum::from(strtolower($etatEc))->libelle() . '</span>';
         }
 
         return $html;
@@ -45,7 +45,7 @@ class BadgeDpeExtension extends AbstractExtension
         $etatsFormation = array_keys($etatsFormation);
         $html = '';
         foreach ($etatsFormation as $etatFormation) {
-            $html .= '<span class="badge bg-secondary me-1">' . EtatDpeEnum::from(strtolower($etatFormation))->libelle() . '</span>';
+            $html .= '<span class="badge bg-'.EtatDpeEnum::from(strtolower($etatFormation))->badge().' me-1">' . EtatDpeEnum::from(strtolower($etatFormation))->libelle() . '</span>';
         }
 
         return $html;
@@ -60,7 +60,7 @@ class BadgeDpeExtension extends AbstractExtension
         }
         $html = '';
         foreach ($etatsComposante as $etatComposante) {
-            $html .= '<span class="badge bg-secondary me-1">' . EtatDpeEnum::from(strtolower($etatComposante))->libelle() . '</span>';
+            $html .= '<span class="badge bg-'.EtatDpeEnum::from(strtolower($etatComposante))->badge().' me-1">' . EtatDpeEnum::from(strtolower($etatComposante))->libelle() . '</span>';
         }
 
         return $html;
@@ -74,7 +74,7 @@ class BadgeDpeExtension extends AbstractExtension
         $etatsDpe = array_keys($etatsDpe);
         $html = '';
         foreach ($etatsDpe as $etatDpe) {
-                $html .= '<span class="badge bg-secondary me-1">' . EtatDpeEnum::from(strtolower($etatDpe))->libelle() . '</span>';
+                $html .= '<span class="badge bg-'.EtatDpeEnum::from(strtolower($etatDpe))->badge().' me-1">' . EtatDpeEnum::from(strtolower($etatDpe))->libelle() . '</span>';
         }
 
         return $html;
