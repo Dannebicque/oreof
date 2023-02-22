@@ -14,7 +14,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @method Composante|null find($id, $lockMode = null, $lockVersion = null)
  * @method Composante|null findOneBy(array $criteria, array $orderBy = null)
- * @method Composante[]    findAll()
  * @method Composante[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ComposanteRepository extends ServiceEntityRepository
@@ -22,6 +21,11 @@ class ComposanteRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Composante::class);
+    }
+
+    public function findAll()
+    {
+        return $this->findBy([], ['libelle' => 'ASC']);
     }
 
     public function save(Composante $entity, bool $flush = false): void

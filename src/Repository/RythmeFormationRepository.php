@@ -11,7 +11,6 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method RythmeFormation|null find($id, $lockMode = null, $lockVersion = null)
  * @method RythmeFormation|null findOneBy(array $criteria, array $orderBy = null)
- * @method RythmeFormation[]    findAll()
  * @method RythmeFormation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class RythmeFormationRepository extends ServiceEntityRepository
@@ -19,6 +18,11 @@ class RythmeFormationRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, RythmeFormation::class);
+    }
+
+    public function findAll()
+    {
+        return $this->findBy([], ['libelle' => 'ASC']);
     }
 
     public function save(RythmeFormation $entity, bool $flush = false): void

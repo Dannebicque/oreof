@@ -11,7 +11,6 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method TypeEnseignement|null find($id, $lockMode = null, $lockVersion = null)
  * @method TypeEnseignement|null findOneBy(array $criteria, array $orderBy = null)
- * @method TypeEnseignement[]    findAll()
  * @method TypeEnseignement[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class TypeEnseignementRepository extends ServiceEntityRepository
@@ -19,6 +18,11 @@ class TypeEnseignementRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, TypeEnseignement::class);
+    }
+
+    public function findAll()
+    {
+        return $this->findBy([], ['libelle' => 'ASC']);
     }
 
     public function save(TypeEnseignement $entity, bool $flush = false): void

@@ -11,7 +11,6 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method Domaine|null find($id, $lockMode = null, $lockVersion = null)
  * @method Domaine|null findOneBy(array $criteria, array $orderBy = null)
- * @method Domaine[]    findAll()
  * @method Domaine[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class DomaineRepository extends ServiceEntityRepository
@@ -19,6 +18,11 @@ class DomaineRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Domaine::class);
+    }
+
+    public function findAll()
+    {
+        return $this->findBy([], ['libelle' => 'ASC']);
     }
 
     public function save(Domaine $entity, bool $flush = false): void

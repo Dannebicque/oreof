@@ -12,7 +12,6 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method TypeUe|null find($id, $lockMode = null, $lockVersion = null)
  * @method TypeUe|null findOneBy(array $criteria, array $orderBy = null)
- * @method TypeUe[]    findAll()
  * @method TypeUe[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class TypeUeRepository extends ServiceEntityRepository
@@ -20,6 +19,11 @@ class TypeUeRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, TypeUe::class);
+    }
+
+    public function findAll()
+    {
+        return $this->findBy([], ['libelle' => 'ASC']);
     }
 
     public function save(TypeUe $entity, bool $flush = false): void

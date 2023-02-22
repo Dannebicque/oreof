@@ -13,7 +13,6 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method Mention|null find($id, $lockMode = null, $lockVersion = null)
  * @method Mention|null findOneBy(array $criteria, array $orderBy = null)
- * @method Mention[]    findAll()
  * @method Mention[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class MentionRepository extends ServiceEntityRepository
@@ -21,6 +20,11 @@ class MentionRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Mention::class);
+    }
+
+    public function findAll()
+    {
+        return $this->findBy([], ['libelle' => 'ASC']);
     }
 
     public function save(Mention $entity, bool $flush = false): void

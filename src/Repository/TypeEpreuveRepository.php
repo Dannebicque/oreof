@@ -12,7 +12,6 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method TypeEpreuve|null find($id, $lockMode = null, $lockVersion = null)
  * @method TypeEpreuve|null findOneBy(array $criteria, array $orderBy = null)
- * @method TypeEpreuve[]    findAll()
  * @method TypeEpreuve[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class TypeEpreuveRepository extends ServiceEntityRepository
@@ -20,6 +19,11 @@ class TypeEpreuveRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, TypeEpreuve::class);
+    }
+
+    public function findAll()
+    {
+        return $this->findBy([], ['libelle' => 'ASC']);
     }
 
     public function save(TypeEpreuve $entity, bool $flush = false): void
