@@ -70,22 +70,17 @@
                     {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) or (workflow_can(ec,
                         'valider_ec') and is_granted
                         ('ROLE_EC_EDIT_MY', ec))  %}
-                    <button
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                nomEvenement: '',
-                                modalTitle: 'Voir un EC',
-                                modalUrl: path('app_element_constitutif_show',{'id': ec.id}) }) }}
-                            data-action="click->modal#openModal"
+                    <a
+                            href="{{ path('app_element_constitutif_show',{'id': ec.id}) }}"
                             class="btn btn-sm text-info"
-                            data-size="lg"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
                             title="Voir un EC"
+                            target="_blank"
                     >
                         <i class="{{ iconShow }}"></i>
                         <span> voir</span>
-                    </button>
+                    </a>
                     {% endif %}
 
                     {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) or (workflow_can(ec,

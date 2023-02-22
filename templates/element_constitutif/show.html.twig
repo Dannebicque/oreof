@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    {{ include('typeDiplome/ec/'~template) }}
+{% endblock %}
+
+{% block header %}
+    Détail de l'élément constitutif : {{ elementConstitutif.libelle }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('app_element_constitutif_index'), title: 'Liste des éléments constitutifs'},
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <a href="{{ path('app_element_constitutif_index')  }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour à la liste des éléments constitutifs"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour à la liste des éléments constitutifs</span>
+    </a>
+{% endblock %}

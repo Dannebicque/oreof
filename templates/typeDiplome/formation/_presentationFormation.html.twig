@@ -6,7 +6,13 @@
             <dt>Résultats attendus de la formation</dt>
             <dd>{{ formation.resultatsAttendus|raw }}</dd>
             <dt>Rythme de formation</dt>
-            <dd>{{ formation.rythmeFormation }}</dd>
+            <dd>
+                <ul>
+                    {% for rythme in formation.rythmeFormation %}
+                        <li>{{ rythme.libelle }}</li>
+                    {% endfor %}
+                </ul>
+            </dd>
             <dt>Précisions sur le rythme de formation</dt>
             <dd>{{ formation.rythmeFormationTexte|raw }}</dd>
         </dl>

@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        <dl>
+            <dt>Type de diplôme</dt>
+            <dd>{{ typeDiplome.libelle }}</dd>
+            <dt>Domaine</dt>
+            <dd>{{ formation.domaine != null ? formation.domaine.libelle : 'erreur' }}</dd>
+            <dt>Parcours</dt>
+            <dd>{{ elementConstitutif.parcours != null ? elementConstitutif.parcours.libelle : 'erreur' }}</dd>
+        </dl>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <dl>
+            <dt>Composante porteuse</dt>
+            <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
+            <dt>Mention/Spécialité</dt>
+            <dd>{{ formation.display }}</dd>
+        </dl>
+    </div>
+    <div class="col-12">
+        <dl>
+            <dt>Intitulé de l'EC</dt>
+            <dd>{{ elementConstitutif.libelle }}</dd>
+            <dt>Intitulé de l'EC en anglais</dt>
+            <dd>{{ elementConstitutif.libelleAnglais }}</dd>
+            <dt>Enseignement mutualisé ?</dt>
+            <dd>{{ elementConstitutif.enseignementMutualise == true ? 'Oui' : 'Non' }}</dd>
+            {% if elementConstitutif.enseignementMutualise == true %}
+            <dt>Formation(s) partageant l’enseignement mutualisé</dt>
+            <dd></dd>
+            {% endif %}
+            <dt>Code Pégase</dt>
+            <dd>-A ajouter-</dd>
+        </dl>
+    </div>
+</div>

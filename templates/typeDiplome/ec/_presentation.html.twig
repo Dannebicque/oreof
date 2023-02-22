@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col-sm-12">
+        <dl>
+            <dt>Description de l’enseignement</dt>
+            <dd>
+                <p>{{ elementConstitutif.description|raw }}</p>
+            </dd>
+        </dl>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <dl>
+            <dt>Enseignement dispensé en</dt>
+            <dd>
+                <ul>
+                    {% for langue in elementConstitutif.langueDispense %}
+                    <li>{{ langue.libelle }}</li>
+                    {% endfor %}
+                </ul>
+            </dd>
+        </dl>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <dl>
+            <dt>Support de cours en</dt>
+            <dd>
+                <ul>
+                    {% for langue in elementConstitutif.langueSupport %}
+                    <li>{{ langue.libelle }}</li>
+                    {% endfor %}
+                </ul>
+            </dd>
+        </dl>
+    </div>
+    <div class="col-sm-12">
+        <dl>
+            <dt>Type d'enseignement</dt>
+            <dd>{{ elementConstitutif.ecUes[0].ue.typeUe != null ? elementConstitutif.ecUes[0].ue.typeUe.libelle :
+                'erreur'
+                }}</dd>
+            <dt>Enseignement Obligatoire / Optionnel</dt>
+            <dd>{{ elementConstitutif.ecUes[0].ue.ueObligatoire != null ? elementConstitutif.ecUes[0].ue
+                .ueObligatoire.libelle : 'erreur'}}</dd>
+        </dl>
+    </div>
+</div>

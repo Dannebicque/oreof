@@ -4,7 +4,7 @@
         <h2 class="small-title">Identité de la formation</h2>
         <div class="card mb-5">
             <div class="card-body">
-                {{ include('typeDiplome/_identiteFormation.html.twig') }}
+                {{ include('typeDiplome/formation/_identiteFormation.html.twig') }}
             </div>
         </div>
     </section>
@@ -13,7 +13,7 @@
         <h2 class="small-title">Localisation</h2>
         <div class="card mb-5">
             <div class="card-body">
-                {{ include('typeDiplome/_localisation.html.twig') }}
+                {{ include('typeDiplome/formation/_localisation.html.twig') }}
             </div>
         </div>
     </section>
@@ -22,7 +22,7 @@
         <h2 class="small-title">Présentation</h2>
         <div class="card mb-5">
             <div class="card-body">
-                {{ include('typeDiplome/_presentationFormation.html.twig') }}
+                {{ include('typeDiplome/formation/_presentationFormation.html.twig') }}
 
             </div>
         </div>
@@ -33,7 +33,7 @@
         <h2 class="small-title">Descriptif</h2>
         <div class="card mb-5">
             <div class="card-body">
-                {{ include('typeDiplome/_descriptif.html.twig', {parcours:formation.parcours[0]}) }}
+                {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours:formation.parcours[0]}) }}
             </div>
         </div>
     </section>
@@ -42,7 +42,7 @@
         <h2 class="small-title">Compétences acquises</h2>
         <div class="card mb-5">
             <div class="card-body">
-                {{ include('typeDiplome/_competences.html.twig', {parcours:formation.parcours[0]}) }}
+                {{ include('typeDiplome/formation/_competences.html.twig', {parcours:formation.parcours[0]}) }}
             </div>
         </div>
     </section>
@@ -51,7 +51,7 @@
             <h2 class="small-title">Structure</h2>
             <div class="card mb-5">
                 <div class="card-body">
-                    {{ include('typeDiplome/_structure.html.twig', {parcours:formation.parcours[0]}) }}
+                    {{ include('typeDiplome/formation/_structure.html.twig', {parcours:formation.parcours[0]}) }}
                 </div>
             </div>
         </section>
@@ -60,7 +60,7 @@
             <h2 class="small-title">Admission</h2>
             <div class="card mb-5">
                 <div class="card-body">
-                    {{ include('typeDiplome/_admission.html.twig', {parcours:formation.parcours[0]}) }}
+                    {{ include('typeDiplome/formation/_admission.html.twig', {parcours:formation.parcours[0]}) }}
 
                 </div>
             </div>
@@ -80,7 +80,7 @@
             <h2 class="small-title">Et après ?</h2>
             <div class="card mb-5">
                 <div class="card-body">
-                    {{ include('typeDiplome/_etApres.html.twig', {parcours:formation.parcours[0]}) }}
+                    {{ include('typeDiplome/formation/_etApres.html.twig', {parcours:formation.parcours[0]}) }}
 
                 </div>
             </div>
@@ -90,7 +90,7 @@
             <h2 class="small-title">Contacts pédagogiques</h2>
             <div class="card mb-5">
                 <div class="card-body">
-                    {{ include('typeDiplome/_contacts.html.twig', {parcours:formation.parcours[0]}) }}
+                    {{ include('typeDiplome/formation/_contacts.html.twig', {parcours:formation.parcours[0]}) }}
 
                 </div>
             </div>
@@ -100,7 +100,7 @@
             <h2 class="small-title">Fiches matières</h2>
             <div class="card mb-5">
                 <div class="card-body">
-                    {{ include('typeDiplome/_ecs.html.twig', {parcours:formation.parcours[0]}) }}
+                    {{ include('typeDiplome/formation/_ecs.html.twig', {parcours:formation.parcours[0]}) }}
                 </div>
             </div>
         </section>
@@ -114,7 +114,7 @@
                 <h2 class="small-title">Présentation</h2>
                 <div class="card mb-5">
                     <div class="card-body">
-                        {{ include('typeDiplome/_presentationParcours.html.twig', {parcours:parcours}) }}
+                        {{ include('typeDiplome/formation/_presentationParcours.html.twig', {parcours:parcours}) }}
 
                     </div>
                 </div>
@@ -124,7 +124,7 @@
                 <h2 class="small-title">Descriptif de la formation</h2>
                 <div class="card mb-5">
                     <div class="card-body">
-                        {{ include('typeDiplome/_descriptif.html.twig', {parcours:parcours}) }}
+                        {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours:parcours}) }}
 
                     </div>
                 </div>
@@ -134,7 +134,7 @@
                 <h2 class="small-title">Localisation</h2>
                 <div class="card mb-5">
                     <div class="card-body">
-                        {{ include('typeDiplome/_localisationParcours.html.twig', {parcours:parcours}) }}
+                        {{ include('typeDiplome/formation/_localisationParcours.html.twig', {parcours:parcours}) }}
 
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                 <h2 class="small-title">Compétences Acquises</h2>
                 <div class="card mb-5">
                     <div class="card-body">
-                        {{ include('typeDiplome/_competences.html.twig', {parcours:parcours}) }}
+                        {{ include('typeDiplome/formation/_competences.html.twig', {parcours:parcours}) }}
 
                     </div>
                 </div>
@@ -154,7 +154,7 @@
                 <h2 class="small-title">Structure</h2>
                 <div class="card mb-5">
                     <div class="card-body">
-                        {{ include('typeDiplome/_structure.html.twig', {parcours:parcours}) }}
+                        {{ include('typeDiplome/formation/_structure.html.twig', {parcours:parcours}) }}
                     </div>
                 </div>
             </section>
@@ -163,7 +163,7 @@
                 <h2 class="small-title">Admission</h2>
                 <div class="card mb-5">
                     <div class="card-body">
-                        {{ include('typeDiplome/_admission.html.twig', {parcours:parcours}) }}
+                        {{ include('typeDiplome/formation/_admission.html.twig', {parcours:parcours}) }}
                     </div>
                 </div>
             </section>
@@ -172,7 +172,7 @@
                 <h2 class="small-title">Inscription</h2>
                 <div class="card mb-5">
                     <div class="card-body">
-                        {{ include('typeDiplome/_inscription.html.twig', {parcours:parcours}) }}
+                        {{ include('typeDiplome/formation/_inscription.html.twig', {parcours:parcours}) }}
                     </div>
                 </div>
             </section>
@@ -181,7 +181,7 @@
                 <h2 class="small-title"> Et après...</h2>
                 <div class="card mb-5">
                     <div class="card-body">
-                        {{ include('typeDiplome/_etApres.html.twig', {parcours:parcours}) }}
+                        {{ include('typeDiplome/formation/_etApres.html.twig', {parcours:parcours}) }}
                     </div>
                 </div>
             </section>
@@ -190,7 +190,7 @@
                 <h2 class="small-title">Contacts pédagogiques</h2>
                 <div class="card mb-5">
                     <div class="card-body">
-                        {{ include('typeDiplome/_contacts.html.twig', {parcours:parcours}) }}
+                        {{ include('typeDiplome/formation/_contacts.html.twig', {parcours:parcours}) }}
                     </div>
                 </div>
             </section>
@@ -199,7 +199,7 @@
                 <h2 class="small-title">Fiches des EC</h2>
                 <div class="card mb-5">
                     <div class="card-body">
-                        {{ include('typeDiplome/_ecs.html.twig', {parcours:parcours}) }}
+                        {{ include('typeDiplome/formation/_ecs.html.twig', {parcours:parcours}) }}
                     </div>
                 </div>
             </section>
@@ -252,7 +252,6 @@
                         Structure
                     </a>
                 </li>
-
 
                 <li>
                     <a class="nav-link p-2" href="#admission">

@@ -3,11 +3,11 @@
 {% block title %}Formation{% endblock %}
 
 {% block content %}
-    {{ include('typeDiplome/'~template) }}
+    {{ include('typeDiplome/formation/'~template) }}
 {% endblock %}
 
 {% block header %}
-    Détail de la formation : xxx
+    Détail de la formation : {{ formation.display }}
 {% endblock %}
 
 {% block breadcrumb %}
