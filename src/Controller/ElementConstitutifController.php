@@ -18,10 +18,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 #[Route('/element/constitutif')]
 class ElementConstitutifController extends AbstractController
 {
+    public function __construct(private WorkflowInterface $ecWorkflow)
+    {}
     #[Route('/', name: 'app_element_constitutif_index', methods: ['GET'])]
     public function index(ElementConstitutifRepository $elementConstitutifRepository): Response
     {
@@ -104,6 +108,16 @@ class ElementConstitutifController extends AbstractController
         ElementConstitutif $elementConstitutif,
         Parcours $parcours
     ): Response {
+
+        //(is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) or is_granted
+        //                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
+        //                        'valider_ec')
+
+        $access = ($this->isGranted('ROLE_EC_EDIT_MY', $elementConstitutif) || $this->isGranted('ROLE_FORMATION_EDIT_MY', $parcours->getFormation())) && $this->ecWorkflow->can($elementConstitutif, 'valider_ec');
+
+        if (!$access) {
+            throw new AccessDeniedException();
+        }
 
 
         return $this->render('element_constitutif/edit.html.twig', [

@@ -40,7 +40,7 @@ class ComposanteController extends AbstractController
         ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() ) {//&& $form->isValid()
             //dump($form);
             if ($composante->getDirecteur() === null) {
                 $usr = $addUser->addUser($request->request->get('directeur_toAdd'));
@@ -80,14 +80,32 @@ class ComposanteController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_composante_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Composante $composante, ComposanteRepository $composanteRepository): Response
+    public function edit( AddUser $addUser, Request $request, Composante $composante, ComposanteRepository $composanteRepository): Response
     {
         $form = $this->createForm(ComposanteType::class, $composante, [
             'action' => $this->generateUrl('app_composante_edit', ['id' => $composante->getId()]),
         ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() ) { //&& $form->isValid()
+            if ($composante->getDirecteur() === null) {
+                $usr = $addUser->addUser($request->request->get('directeur_toAdd'));
+                if ($usr !== null) {
+                    $addUser->addRole($usr, 'ROLE_LECTEUR');
+                    $addUser->setCentreComposante($usr, $composante);
+                    $composante->setDirecteur($usr);
+                }
+            }
+
+            if ($composante->getResponsableDpe() === null) {
+                $usr = $addUser->addUser($request->request->get('responsableDpe_toAdd'));
+                if ($usr !== null) {
+                    $addUser->addRole($usr, 'ROLE_USER');
+                    $addUser->setCentreComposante($usr, $composante, 'ROLE_DPE_COMPOSANTE');
+                    $composante->setResponsableDpe($usr);
+                }
+            }
+
             $composanteRepository->save($composante, true);
 
             return $this->json(true);

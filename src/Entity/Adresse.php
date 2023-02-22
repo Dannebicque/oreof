@@ -13,16 +13,16 @@ class Adresse
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $adresse1 = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adresse2 = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 30, nullable: true)]
     private ?string $codePostal = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100, nullable: true)]
     private ?string $ville = null;
 
     public function getId(): ?int
@@ -35,7 +35,7 @@ class Adresse
         return $this->adresse1;
     }
 
-    public function setAdresse1(string $adresse1): self
+    public function setAdresse1(?string $adresse1): self
     {
         $this->adresse1 = $adresse1;
 
@@ -59,7 +59,7 @@ class Adresse
         return $this->codePostal;
     }
 
-    public function setCodePostal(string $codePostal): self
+    public function setCodePostal(?string $codePostal): self
     {
         $this->codePostal = $codePostal;
 
@@ -71,7 +71,7 @@ class Adresse
         return $this->ville;
     }
 
-    public function setVille(string $ville): self
+    public function setVille(?string $ville): self
     {
         $this->ville = $ville;
 

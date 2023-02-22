@@ -10,7 +10,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class ComposanteController extends AbstractController
 {
     #[Route('/api/composante', name: 'api_composante')]
-
     public function getComposante(
         ComposanteRepository $composanteRepository,
     ): Response

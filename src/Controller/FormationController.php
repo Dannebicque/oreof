@@ -70,7 +70,6 @@ class FormationController extends BaseController
     }
 
     #[Route('/edit/formation/{formation}', name: 'app_formation_edit_modal', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_SES')]
     public function editModal(
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request, FormationRepository $formationRepository, Formation $formation): Response
@@ -97,7 +96,6 @@ class FormationController extends BaseController
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
     #[Route('/api', name: 'app_formation_api', methods: ['GET'])]
-    #[IsGranted('ROLE_SES')]
     public function api(
         MentionRepository $mentionRepository,
         TypeDiplomeRegistry $typeDiplomeRegistry,

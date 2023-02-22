@@ -104,6 +104,15 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: UserCentre::class)]
     private Collection $userCentres;
 
+    #[ORM\Column(length: 10)]
+    private ?string $version = '0.1';
+
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'formationsAnterieures')]
+    private ?self $versionParent = null;
+
+    #[ORM\OneToMany(mappedBy: 'versionParent', targetEntity: self::class)]
+    private Collection $formationsAnterieures;
+
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
         $this->anneeUniversitaire = $anneeUniversitaire;
@@ -112,6 +121,7 @@ class Formation
         $this->composantesInscription = new ArrayCollection();
         $this->blocCompetences = new ArrayCollection();
         $this->userCentres = new ArrayCollection();
+        $this->formationsAnterieures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -583,5 +593,59 @@ class Formation
     public function getEtatOnglet4(): EtatRemplissageEnum
     {
         return EtatRemplissageEnum::EN_COURS;
+    }
+
+    public function getVersion(): ?string
+    {
+        return $this->version;
+    }
+
+    public function setVersion(string $version): self
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    public function getVersionParent(): ?self
+    {
+        return $this->versionParent;
+    }
+
+    public function setVersionParent(?self $versionParent): self
+    {
+        $this->versionParent = $versionParent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getFormationsAnterieures(): Collection
+    {
+        return $this->formationsAnterieures;
+    }
+
+    public function addFormationsAnterieure(self $formationsAnterieure): self
+    {
+        if (!$this->formationsAnterieures->contains($formationsAnterieure)) {
+            $this->formationsAnterieures->add($formationsAnterieure);
+            $formationsAnterieure->setVersionParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormationsAnterieure(self $formationsAnterieure): self
+    {
+        if ($this->formationsAnterieures->removeElement($formationsAnterieure)) {
+            // set the owning side to null (unless already changed)
+            if ($formationsAnterieure->getVersionParent() === $this) {
+                $formationsAnterieure->setVersionParent(null);
+            }
+        }
+
+        return $this;
     }
 }
