@@ -47,7 +47,7 @@ class Mention
         return $this->sigle;
     }
 
-    public function setSigle(string $sigle): self
+    public function setSigle(?string $sigle): self
     {
         $this->sigle = $sigle;
 
