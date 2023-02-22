@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.7.0](https://github.com/Dannebicque/oreof/compare/v0.6.0...v0.7.0) (2023-02-22)
+
+
+### Features
+
+* Affichage des EC + Réorganisation repertoires Formation + Installation KnpSnappy + PhpSpreedSheet ([79d2dcc](https://github.com/Dannebicque/oreof/commit/79d2dcc2972bb0632ab14c7630f3f1e1fd981943))
+* Export EC + Formation ([3bbefae](https://github.com/Dannebicque/oreof/commit/3bbefaecad8d86d06d99e40bfb4795c01c3b8ebb))
+
 ## [0.6.0](https://github.com/Dannebicque/oreof/compare/v0.5.0...v0.6.0) (2023-02-21)
 
 
