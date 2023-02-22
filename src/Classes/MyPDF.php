@@ -38,7 +38,7 @@ class MyPDF
         $date = new DateTime('now');
 
         self::setFooter([
-            'footer-left' => "Document généré depuis ORéOF le ".$date->format('d/m/Y H:i').'.',
+            'footer-left' => "Document produit depuis OReOF le ".$date->format('d/m/Y H:i').'.',
             'footer-right' => '[page] / [topage]',
             'footer-center' => '',
         ]);
