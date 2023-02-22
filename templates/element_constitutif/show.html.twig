@@ -15,6 +15,15 @@
 {% endblock %}
 
 {% block bouton_header %}
+    <a href="{{ path('app_element_constitutif_export', {elementConstitutif:elementConstitutif.id})  }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Télécharger en PDF"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Télécharger en PDF</span>
+    </a>
     <a href="{{ path('app_element_constitutif_index')  }}"
        class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"

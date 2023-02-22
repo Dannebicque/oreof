@@ -2,6 +2,8 @@
 
 namespace App\Utils;
 
+use Symfony\Component\String\Slugger\AsciiSlugger;
+
 abstract class Tools
 {
     public static function telFormat(?string $number): string
@@ -31,5 +33,10 @@ abstract class Tools
         }
 
         return $str;
+    }
+
+    public static function slug(string $texte): string
+    {
+        return (new AsciiSlugger())->slug($texte);
     }
 }

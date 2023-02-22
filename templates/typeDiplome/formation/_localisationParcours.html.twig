@@ -18,7 +18,8 @@
             <dt>Composante</dt>
             <dd>{{ parcours.composanteInscription.libelle }}</dd>
             <dt>Adresse</dt>
-            <dd>{{ parcours.composanteInscription.adresse != null ? parcours.composanteInscription.adresse.display : 'Erreur'}}</dd>
+            <dd>{{ parcours.composanteInscription.adresse != null ? parcours.composanteInscription.adresse.display|raw :
+                'Erreur'}}</dd>
             <dt>Téléphone</dt>
             <dd>{{ parcours.composanteInscription.telStandard|tel_format }} {% if parcours.composanteInscription.telComplementaire != null %}ou {{ parcours.composanteInscription
                 .telComplementaire|tel_format }}{% endif %}</dd>

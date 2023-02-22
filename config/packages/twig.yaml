@@ -13,6 +13,7 @@ twig:
         iconDuplicate: 'fal fa-copy'
         iconBack: 'fal fa-arrow-left'
         iconValidate: 'fal fa-check'
+        iconDownload: 'fal fa-download'
 when@test:
     twig:
         strict_variables: true
