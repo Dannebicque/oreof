@@ -48,6 +48,9 @@ class Composante
     #[ORM\Column(nullable: true)]
     private ?array $etatComposante = [];
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $sigle = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -232,6 +235,18 @@ class Composante
                 $userCentre->setComposante(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSigle(): ?string
+    {
+        return $this->sigle;
+    }
+
+    public function setSigle(?string $sigle): self
+    {
+        $this->sigle = $sigle;
 
         return $this;
     }

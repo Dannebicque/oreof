@@ -16,7 +16,15 @@ class ComposanteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('libelle')
+            ->add('libelle', TextType::class, [
+                'label' => 'Libellé',
+                'required' => true,
+            ])
+            ->add('sigle', TextType::class, [
+                'label' => 'Sigle',
+                'help' => 'Le sigle est la dénomination courte de la composante, s\'il existe.',
+                'required' => false,
+            ])
             ->add('directeur', EntityWithAddType::class, [
                 'class' => User::class,
                 'choice_label' => 'display',

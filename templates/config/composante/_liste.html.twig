@@ -1,8 +1,8 @@
 <table class="table">
     <thead>
     <tr>
-        <th>#</th>
         <th>Nom Composante</th>
+        <th>Sigle</th>
         <th>Directeur</th>
         <th>Responsable DPE</th>
         <th>Adresse</th>
@@ -12,8 +12,8 @@
     <tbody>
     {% for composante in composantes %}
         <tr>
-            <td>{{ composante.id }}</td>
             <td>{{ composante.libelle }}</td>
+            <td>{{ composante.sigle }}</td>
             <td>{{ composante.directeur ? composante.directeur.display : 'Non défini' }}</td>
             <td>{{ composante.responsableDpe ? composante.responsableDpe.display : 'Non défini' }}</td>
             <td>{{ composante.adresse ? composante.adresse.display|raw : 'Non définie' }}</td>
