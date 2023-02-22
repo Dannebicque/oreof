@@ -34,11 +34,11 @@ class ParcoursStep1Type extends AbstractType
                 'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'click->parcours--step1#saveResultats'],
             ])
             ->add('rythmeFormation', EntityType::class, [
+                'placeholder' => 'Choisissez un rythme de formation ou complétez le champ ci-dessous',
                 'required' => false,
                 'label' => 'Rythme du parcours',
-                'help' => 'Indiquez le rythme de la formation (en heures, en jours, en semaines, en mois, en années, …).',
+                'help' => 'Indiquez le rythme du parcours (en heures, en jours, en semaines, en mois, en années, …).',
                 'class' => RythmeFormation::class,
-                'expanded' => true,
                 'choice_label' => 'libelle',
                 'attr' => ['data-action' => 'change->parcours--step1#changeRythme'],
             ])
