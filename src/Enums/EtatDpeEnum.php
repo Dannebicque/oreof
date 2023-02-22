@@ -28,8 +28,10 @@ enum EtatDpeEnum : string
     case initialisation_ec = 'initialisation_ec';
     case en_cours_redaction = 'en_cours_redaction';
     case soumis_rf = 'soumis_rf';
+    case soumis_ec = 'soumis_ec';
     case soumis_dpe_composante = 'soumis_dpe_composante';
     case refuse_rf = 'refuse_rf';
+    case refuse_ec = 'refuse_ec';
     case refuse_dpe_composante = 'refuse_dpe_composante';
     case soumis_conseil = 'soumis_conseil';
     case refuse_conseil = 'refuse_conseil';
@@ -51,8 +53,10 @@ enum EtatDpeEnum : string
             self::initialisation_ec => 'Initialisation EC',
             self::en_cours_redaction => 'En cours de rédaction',
             self::soumis_rf => 'Soumis RF',
+            self::soumis_ec => 'Soumis EC',
             self::soumis_dpe_composante => 'Soumis DPE composante',
             self::refuse_rf => 'Refusé RF',
+            self::refuse_ec => 'Refusé EC',
             self::refuse_dpe_composante => 'Refusé DPE composante',
             self::soumis_conseil => 'Soumis Conseil',
             self::refuse_conseil => 'Refusé Conseil',
