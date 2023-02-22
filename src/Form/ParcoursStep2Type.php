@@ -24,7 +24,7 @@ class ParcoursStep2Type extends AbstractType
             ->add('modalitesEnseignement', EnumType::class, [
                 //http://lheo.gouv.fr/2.3/lheo/dict-modalites-enseignement.html#dict-modalites-enseignement
                 'class' => ModaliteEnseignementEnum::class,
-                'label' => 'Semestre de début de la parcours',
+                'label' => 'Modalités d\'enseignement du parcours',
                 'attr' => ['data-action' => 'change->parcours--step2#changeModaliteEnseignement'],
                 'choice_label' => fn ($choice) => match ($choice) {
                     modaliteEnseignementEnum::PRESENTIELLE => 'En présentiel',
