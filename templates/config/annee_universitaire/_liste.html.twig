@@ -1,7 +1,6 @@
 <table class="table table-striped">
     <thead>
     <tr>
-        <th>Id</th>
         <th>Libellé</th>
         <th>Année</th>
         <th>Date Ouverture</th>
@@ -15,7 +14,6 @@
     <tbody>
     {% for annee_universitaire in annee_universitaires %}
         <tr>
-            <td>{{ annee_universitaire.id }}</td>
             <td>{{ annee_universitaire.libelle }}</td>
             <td>{{ annee_universitaire.annee }}</td>
             <td>{{ annee_universitaire.dateOuvertureDpe|dateFr }}</td>

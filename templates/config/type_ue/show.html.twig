@@ -1,12 +1,19 @@
 <table class="table">
     <tbody>
     <tr>
-        <th>Id</th>
-        <td>{{ type_ue.id }}</td>
-    </tr>
-    <tr>
         <th>Libelle</th>
         <td>{{ type_ue.libelle }}</td>
+    </tr>
+    <tr>
+        <th>Type de diplôme</th>
+        <td>
+            {% for typeDip in type_ue.typeDiplome %}
+                {{ typeDip|typeDiplome }}
+                {% if loop.last == false %}
+                    ,
+                {% endif %}
+            {% endfor %}
+        </td>
     </tr>
     </tbody>
 </table>

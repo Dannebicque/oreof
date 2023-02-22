@@ -1,7 +1,6 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Id</th>
         <th>Libellé</th>
         <th>Type(s) diplôme</th>
         <th></th>
@@ -10,7 +9,6 @@
     <tbody>
     {% for type_ue in type_ues %}
         <tr>
-            <td>{{ type_ue.id }}</td>
             <td>{{ type_ue.libelle }}</td>
             <td>
                 {% for typeDip in type_ue.typeDiplome %}

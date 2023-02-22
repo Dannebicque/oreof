@@ -1,16 +1,16 @@
 <table class="table">
     <tbody>
     <tr>
-        <th>Id</th>
-        <td>{{ mention.id }}</td>
-    </tr>
-    <tr>
-        <th>Libelle</th>
+        <th>Libellé</th>
         <td>{{ mention.libelle }}</td>
     </tr>
     <tr>
         <th>Sigle</th>
         <td>{{ mention.sigle }}</td>
+    </tr>
+    <tr>
+        <th>Type de diplôme</th>
+        <td>{{ mention.typeDiplome|typeDiplome }}</td>
     </tr>
     </tbody>
 </table>

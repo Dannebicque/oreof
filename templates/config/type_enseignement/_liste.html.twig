@@ -1,7 +1,6 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Id</th>
         <th>Libellé</th>
         <th></th>
     </tr>
@@ -9,7 +8,6 @@
     <tbody>
     {% for type_enseignement in type_enseignements %}
         <tr>
-            <td>{{ type_enseignement.id }}</td>
             <td>{{ type_enseignement.libelle }}</td>
             <td class="text-end">
                 <button

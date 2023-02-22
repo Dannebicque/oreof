@@ -1,20 +1,18 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Id</th>
-        <th>Type de diplôme</th>
         <th>Libellé</th>
         <th>Sigle</th>
+        <th>Type de diplôme</th>
         <th></th>
     </tr>
     </thead>
     <tbody>
     {% for mention in mentions %}
         <tr>
-            <td>{{ mention.id }}</td>
-            <td>{{ mention.typeDiplome|typeDiplome }}</td>
             <td>{{ mention.libelle }}</td>
             <td>{{ mention.sigle }}</td>
+            <td>{{ mention.typeDiplome|typeDiplome }}</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {

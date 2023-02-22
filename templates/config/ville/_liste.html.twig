@@ -1,7 +1,6 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Id</th>
         <th>Libellé</th>
         <th>Etablissement</th>
         <th></th>
@@ -10,7 +9,6 @@
     <tbody>
     {% for ville in villes %}
         <tr>
-            <td>{{ ville.id }}</td>
             <td>{{ ville.libelle }}</td>
             <td>{{ ville.etablissement ? ville.etablissement.libelle : 'Non défini' }}</td>
             <td class="text-end">

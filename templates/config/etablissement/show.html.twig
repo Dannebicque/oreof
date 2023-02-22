@@ -1,16 +1,12 @@
 <table class="table">
     <tbody>
     <tr>
-        <th>Id</th>
-        <td>{{ etablissement.id }}</td>
-    </tr>
-    <tr>
         <th>Libellé</th>
         <td>{{ etablissement.libelle }}</td>
     </tr>
     <tr>
         <th>Adresse</th>
-        <td>{{ etablissement.adresse ? etablissement.adresse.display : 'Non définie' }}</td>
+        <td>{{ etablissement.adresse ? etablissement.adresse.display|raw : 'Non définie' }}</td>
     </tr>
     </tbody>
 </table>

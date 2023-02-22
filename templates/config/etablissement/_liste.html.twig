@@ -1,16 +1,16 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Id</th>
-        <th>Libelle</th>
+        <th>Libellé</th>
+        <th>Adresse</th>
         <th>actions</th>
     </tr>
     </thead>
     <tbody>
     {% for etablissement in etablissements %}
         <tr>
-            <td>{{ etablissement.id }}</td>
             <td>{{ etablissement.libelle }}</td>
+            <td>{{ etablissement.adresse != null ? etablissement.adresse.display|raw : '' }}</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {
