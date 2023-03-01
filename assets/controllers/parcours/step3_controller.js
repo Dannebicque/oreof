@@ -14,6 +14,23 @@ export default class extends Controller {
     urlListe: String,
   }
 
+  etatStep(event) {
+    this._save({
+      action: 'etatStep',
+      value: 3,
+      isChecked: event.target.checked,
+    })
+
+    const parent = event.target.closest('.alert')
+    if (event.target.checked) {
+      parent.classList.remove('alert-warning')
+      parent.classList.add('alert-success')
+    } else {
+      parent.classList.remove('alert-success')
+      parent.classList.add('alert-warning')
+    }
+  }
+
   connect() {
     this._updateListe()
   }
@@ -56,22 +73,6 @@ export default class extends Controller {
     this.listeTarget.innerHTML = window.da.loaderStimulus
     const response = await fetch(this.urlListeValue)
     this.listeTarget.innerHTML = await response.text()
-  }
-
-  etatCompetence(event) {
-    this._save({
-      action: 'etatCompetences',
-      isChecked: event.target.checked,
-    })
-
-    const parent = event.target.closest('.alert')
-    if (event.target.checked) {
-      parent.classList.remove('alert-warning')
-      parent.classList.add('alert-success')
-    } else {
-      parent.classList.remove('alert-success')
-      parent.classList.add('alert-warning')
-    }
   }
 
   async _save(options) {

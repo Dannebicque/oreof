@@ -35,6 +35,7 @@ class ParcoursSaveController extends AbstractController
             case 'stateOnglet':
                 $method = 'getEtat' . ucfirst($data['onglet']);
                 $val = $parcours->$method();
+
                 return $this->json($val->badge());
             case 'yesNo':
                 $rep = $updateEntity->saveYesNo($parcours, $data['field'], $data['value']);
@@ -68,22 +69,11 @@ class ParcoursSaveController extends AbstractController
                 $rep = $updateEntity->saveField($parcours, $data['field'], (int)$data['value']);
 
                 return $this->json($rep);
-            case 'etatStructure':
-                if ($data['isChecked'] === true) {
-                    $rep = $parcours->setPartieStructureComplete(true);
-                } else {
-                    $rep = $parcours->setPartieStructureComplete(false);
-                }
-
-                $entityManager->flush();
-
-                return $this->json(true);
-            case 'etatCompetences':
-                if ($data['isChecked'] === true) {
-                    $rep = $parcours->setPartieCompetencesComplete(true);
-                } else {
-                    $rep = $parcours->setPartieCompetencesComplete(false);
-                }
+            case 'etatStep':
+                $etatSteps = $parcours->getEtatSteps();
+                $step = $data['value'];
+                $etatSteps[$step] = $data['isChecked'];
+                $parcours->setEtatSteps($etatSteps);
 
                 $entityManager->flush();
 

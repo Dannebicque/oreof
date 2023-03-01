@@ -108,6 +108,9 @@ class ElementConstitutif
     #[ORM\Column(length: 5)]
     private ?string $code = null;
 
+    #[ORM\Column]
+    private ?array $etatSteps = [];
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
@@ -115,6 +118,18 @@ class ElementConstitutif
         $this->langueSupport = new ArrayCollection();
         $this->ecUes = new ArrayCollection();
         $this->mcccs = new ArrayCollection();
+
+        for ($i = 1; $i <= 5; $i++) {
+            $this->etatSteps[$i] = false;
+        }
+    }
+
+    public function getEtatStep(int $step): bool
+    {
+        if (array_key_exists($step, $this->getEtatSteps())) {
+            return $this->getEtatSteps()[$step];
+        }
+        return false;
     }
 
     public function getId(): ?int
@@ -701,6 +716,18 @@ class ElementConstitutif
     public function setCode(string $code): self
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function getEtatSteps(): array
+    {
+        return $this->etatSteps ?? [];
+    }
+
+    public function setEtatSteps(array $etatSteps): self
+    {
+        $this->etatSteps = $etatSteps;
 
         return $this;
     }

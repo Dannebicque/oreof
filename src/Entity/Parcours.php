@@ -114,16 +114,17 @@ class Parcours
     private ?string $sigle = null;
 
     #[ORM\Column]
-    private ?bool $partieCompetencesComplete = false;
-
-    #[ORM\Column]
-    private ?bool $partieStructureComplete = false;
+    private ?array $etatSteps = [];
 
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
         $this->blocCompetences = new ArrayCollection();
         $this->semestreParcours = new ArrayCollection();
+
+        for ($i = 1; $i <= 8; $i++) {
+            $this->etatSteps[$i] = false;
+        }
     }
 
 
@@ -553,71 +554,73 @@ class Parcours
 
     public function getEtatOnglet0(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        //todo: ajouter les vérifs?
+        return $this->getEtatStep(0) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
     public function getEtatOnglet1(): EtatRemplissageEnum
     {
-        return $this->getContenuFormation() === null && $this->getResultatsAttendus() === null && $this->getRythmeFormation() === null ? EtatRemplissageEnum::VIDE : ($this->getContenuFormation() !== null && $this->getResultatsAttendus() !== null && $this->getRythmeFormation() !== null ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+        return $this->getContenuFormation() === null && $this->getResultatsAttendus() === null && $this->getRythmeFormation() === null ? EtatRemplissageEnum::VIDE : ($this->getEtatStep(1) && $this->getContenuFormation() !== null && $this->getResultatsAttendus() !== null && $this->getRythmeFormation() !== null ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     public function getEtatOnglet2(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        //todo: ajouter les vérifs?
+        return $this->getEtatStep(2) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
     public function getEtatOnglet3(): EtatRemplissageEnum
     {
         return $this->getBlocCompetences()->count() === 0 ? EtatRemplissageEnum::VIDE :
-            ($this->partieCompetencesComplete === true ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+            ($this->getEtatStep(3) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     public function getEtatOnglet4(): EtatRemplissageEnum
     {
         return $this->getSemestreParcours()->count() === 0 ? EtatRemplissageEnum::VIDE :
-            ($this->partieStructureComplete === true ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+            ($this->getEtatStep(4) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     public function getEtatOnglet5(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        //todo: ajouter les vérifs?
+        return $this->getEtatStep(5) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
     public function getEtatOnglet6(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        //todo: ajouter les vérifs?
+        return $this->getEtatStep(6) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
     public function getEtatOnglet7(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        //todo: ajouter les vérifs?
+        return $this->getEtatStep(7) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
     public function getEtatOnglet8(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        //todo: ajouter les vérifs?
+        return $this->getEtatStep(8) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
-    public function isPartieCompetencesComplete(): ?bool
+    public function getEtatStep(int $step): bool
     {
-        return $this->partieCompetencesComplete;
+        if (array_key_exists($step, $this->getEtatSteps())) {
+            return $this->getEtatSteps()[$step];
+        }
+        return false;
     }
 
-    public function setPartieCompetencesComplete(bool $partieCompetencesComplete): self
+    public function getEtatSteps(): array
     {
-        $this->partieCompetencesComplete = $partieCompetencesComplete;
-
-        return $this;
+        return $this->etatSteps ?? [];
     }
 
-    public function isPartieStructureComplete(): ?bool
+    public function setEtatSteps(array $etatSteps): self
     {
-        return $this->partieStructureComplete;
-    }
-
-    public function setPartieStructureComplete(bool $partieStructureComplete): self
-    {
-        $this->partieStructureComplete = $partieStructureComplete;
+        $this->etatSteps = $etatSteps;
 
         return $this;
     }

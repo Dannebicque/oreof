@@ -35,6 +35,7 @@ class FormationSaveController extends BaseController
             case 'stateOnglet':
                 $method = 'getEtat' . ucfirst($data['onglet']);
                 $val = $formation->$method();
+
                 return $this->json($val->badge());
             case 'ville':
                 $rep = $updateEntity->saveCheckbox($formation, 'localisationMention', $data['value'],
@@ -82,7 +83,15 @@ class FormationSaveController extends BaseController
                 $em->flush();
 
                 return $this->json(true);
+            case 'etatStep':
+                $etatSteps = $formation->getEtatSteps();
+                $step = $data['value'];
+                $etatSteps[$step] = $data['isChecked'];
+                $formation->setEtatSteps($etatSteps);
 
+                $em->flush();
+
+                return $this->json(true);
             case 'array':
                 if ($data['isChecked'] === true) {
                     $rep = $updateEntity->addToArray($formation, $data['field'], $data['value']);
@@ -93,6 +102,7 @@ class FormationSaveController extends BaseController
 
                 return $this->json($rep);
         }
+
         return $this->json(['error' => 'action inconnue']);
 
     }

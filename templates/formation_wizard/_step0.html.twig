@@ -21,4 +21,15 @@
                 Indiquez le semestre de début de la formation
             </div>
         </fieldset>
+
+    <div class="alert {% if formation.getEtatStep(0) %}alert-success{% else %}alert-warning{% endif %}">
+        <input type="checkbox"
+               id="etatStructure"
+               class="form-check-inline"
+               {% if formation.getEtatStep(0) %}checked{% endif %}
+                {{ stimulus_action('formation--step0', 'etatStep', 'change') }}
+
+        ><label for="etatStructure">
+            Cochez cette case si vous avez terminé ...</label>
+    </div>
 </div>

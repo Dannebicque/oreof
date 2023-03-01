@@ -25,12 +25,12 @@
         <i class="{{ iconAdd }}"></i>
         <span> Ajouter un bloc de compétences</span>
     </button>
-    <div class="alert {% if parcours.partieCompetencesComplete %}alert-success{% else %}alert-warning{% endif %} mt-2">
+    <div class="alert {% if parcours.getEtatStep(3) %}alert-success{% else %}alert-warning{% endif %} mt-2">
         <input type="checkbox"
                id="etatCompetence"
                class="form-check-inline"
-               {% if parcours.partieCompetencesComplete %}checked{% endif %}
-                {{ stimulus_action('parcours--step3', 'etatCompetence', 'change') }}
+               {% if parcours.getEtatStep(3) %}checked{% endif %}
+                {{ stimulus_action('parcours--step3', 'etatStep', 'change') }}
 
         ><label for="etatCompetence">
             Cochez cette case si vous avez terminé de définir les compétences. Cela permet de mettre à jour

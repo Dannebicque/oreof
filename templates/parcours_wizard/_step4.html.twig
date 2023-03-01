@@ -7,12 +7,12 @@
     <div {{ stimulus_target('parcours--step4', 'detail') }}></div>
 
 
-    <div class="alert {% if parcours.partieStructureComplete %}alert-success{% else %}alert-warning{% endif %}">
+    <div class="alert {% if parcours.getEtatStep(4) %}alert-success{% else %}alert-warning{% endif %}">
         <input type="checkbox"
                id="etatStructure"
                class="form-check-inline"
-               {% if parcours.partieStructureComplete %}checked{% endif %}
-                {{ stimulus_action('parcours--step4', 'etatStructure', 'change') }}
+               {% if parcours.getEtatStep(4) %}checked{% endif %}
+                {{ stimulus_action('parcours--step4', 'etatStep', 'change') }}
 
         ><label for="etatStructure">
             Cochez cette case si vous avez terminé de définir la structure de ce parcours (Semestres, UE, Elements

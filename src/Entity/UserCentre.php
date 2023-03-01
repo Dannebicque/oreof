@@ -73,7 +73,7 @@ class UserCentre
 
     public function getDroits(): array
     {
-        return $this->droits;
+        return $this->droits ?? [];
     }
 
     public function setDroits(array $droits): self

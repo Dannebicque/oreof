@@ -35,4 +35,15 @@
 
     </div>
     {{ form_end(form) }}
+
+    <div class="alert {% if parcours.getEtatStep(7) %}alert-success{% else %}alert-warning{% endif %}">
+        <input type="checkbox"
+               id="etatStructure"
+               class="form-check-inline"
+               {% if parcours.getEtatStep(7) %}checked{% endif %}
+                {{ stimulus_action('parcours--step7', 'etatStep', 'change') }}
+
+        ><label for="etatStructure">
+            Cochez cette case si vous avez terminé ...</label>
+    </div>
 </div>

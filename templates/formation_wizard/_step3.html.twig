@@ -94,4 +94,15 @@
         <strong>Attention !</strong> Cette action va générer une structure de base
                                      pour la mention/spécialité et ses parcours selon le paramètrage ci-dessus.
     </div>
+
+    <div class="alert {% if formation.getEtatStep(3) %}alert-success{% else %}alert-warning{% endif %}">
+        <input type="checkbox"
+               id="etatStructure"
+               class="form-check-inline"
+               {% if formation.getEtatStep(3) %}checked{% endif %}
+                {{ stimulus_action('formation--step3', 'etatStep', 'change') }}
+
+        ><label for="etatStructure">
+            Cochez cette case si vous avez terminé ...</label>
+    </div>
 </div>

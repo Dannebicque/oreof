@@ -124,6 +124,15 @@ class ElementConstitutifSaveController extends BaseController
                 }
 
                 return $this->json($rep);
+            case 'etatStep':
+                $etatSteps = $ec->getEtatSteps();
+                $step = $data['value'];
+                $etatSteps[$step] = $data['isChecked'];
+                $ec->setEtatSteps($etatSteps);
+
+                $entityManager->flush();
+
+                return $this->json(true);
         }
 
         return $this->json(['error' => 'action inconnue']);

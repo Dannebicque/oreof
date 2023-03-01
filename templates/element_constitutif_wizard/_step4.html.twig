@@ -1,6 +1,17 @@
 <h2>Structure et Organisation pédagogique</h2>
 {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) %}
         {{ include('element_constitutif/_structureEc.html.twig') }}
+
+    <div class="alert {% if ec.getEtatStep(4) %}alert-success{% else %}alert-warning{% endif %}">
+        <input type="checkbox"
+               id="etatStructure"
+               class="form-check-inline"
+               {% if ec.getEtatStep(4) %}checked{% endif %}
+                {{ stimulus_action('ec--step4', 'etatStep', 'change') }}
+
+        ><label for="etatStructure">
+            Cochez cette case si vous avez terminé ...</label>
+    </div>
 {% else %}
     <div>
         <p>

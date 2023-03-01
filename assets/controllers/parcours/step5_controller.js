@@ -11,6 +11,23 @@ export default class extends Controller {
     url: String,
   }
 
+  etatStep(event) {
+    this._save({
+      action: 'etatStep',
+      value: 5,
+      isChecked: event.target.checked,
+    })
+
+    const parent = event.target.closest('.alert')
+    if (event.target.checked) {
+      parent.classList.remove('alert-warning')
+      parent.classList.add('alert-success')
+    } else {
+      parent.classList.remove('alert-success')
+      parent.classList.add('alert-warning')
+    }
+  }
+
   savePrerequis() {
     this._save({
       field: 'prerequis',

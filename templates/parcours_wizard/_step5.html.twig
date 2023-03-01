@@ -4,4 +4,15 @@
 }) }}>
     {% form_theme form 'communs/form_theme.html.twig' %}
     {{ form(form) }}
+
+    <div class="alert {% if parcours.getEtatStep(5) %}alert-success{% else %}alert-warning{% endif %}">
+        <input type="checkbox"
+               id="etatStructure"
+               class="form-check-inline"
+               {% if parcours.getEtatStep(5) %}checked{% endif %}
+                {{ stimulus_action('parcours--step5', 'etatStep', 'change') }}
+
+        ><label for="etatStructure">
+            Cochez cette case si vous avez terminé ...</label>
+    </div>
 </div>

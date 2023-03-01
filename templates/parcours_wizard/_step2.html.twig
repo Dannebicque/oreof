@@ -29,4 +29,15 @@
         {{ form_row(form.nbHeuresSituationPro) }}
     {% endif %}
     {{ form_end(form) }}
+
+    <div class="alert {% if parcours.getEtatStep(2) %}alert-success{% else %}alert-warning{% endif %}">
+        <input type="checkbox"
+               id="etatStructure"
+               class="form-check-inline"
+               {% if parcours.getEtatStep(2) %}checked{% endif %}
+                {{ stimulus_action('parcours--step2', 'etatStep', 'change') }}
+
+        ><label for="etatStructure">
+            Cochez cette case si vous avez terminé ...</label>
+    </div>
 </div>

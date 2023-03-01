@@ -36,4 +36,15 @@
         {% endfor %}
     </div>
     {{ form_end(form) }}
+
+    <div class="alert {% if ec.getEtatStep(3) %}alert-success{% else %}alert-warning{% endif %}">
+        <input type="checkbox"
+               id="etatStructure"
+               class="form-check-inline"
+               {% if ec.getEtatStep(3) %}checked{% endif %}
+                {{ stimulus_action('ec--step3', 'etatStep', 'change') }}
+
+        ><label for="etatStructure">
+            Cochez cette case si vous avez terminé ...</label>
+    </div>
 </div>

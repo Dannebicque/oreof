@@ -19,9 +19,10 @@ export default class extends Controller {
     this.detailTarget.innerHTML = await response.text()
   }
 
-  etatStructure(event) {
+  etatStep(event) {
     this._save({
-      action: 'etatStructure',
+      action: 'etatStep',
+      value: 4,
       isChecked: event.target.checked,
     })
 

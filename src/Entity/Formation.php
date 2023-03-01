@@ -113,6 +113,9 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'versionParent', targetEntity: self::class)]
     private Collection $formationsAnterieures;
 
+    #[ORM\Column]
+    private ?array $etatSteps = [];
+
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
         $this->anneeUniversitaire = $anneeUniversitaire;
@@ -122,6 +125,18 @@ class Formation
         $this->blocCompetences = new ArrayCollection();
         $this->userCentres = new ArrayCollection();
         $this->formationsAnterieures = new ArrayCollection();
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->etatSteps[$i] = false;
+        }
+    }
+
+    public function getEtatStep(int $step): bool
+    {
+        if (array_key_exists($step, $this->getEtatSteps())) {
+            return $this->getEtatSteps()[$step];
+        }
+        return false;
     }
 
     public function getId(): ?int
@@ -566,27 +581,30 @@ class Formation
 
     public function getEtatOnglet0(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        //todo: ajouter les vérifs?
+        return $this->getEtatStep(3) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
     public function getEtatOnglet1(): EtatRemplissageEnum
     {
-        return $this->getLocalisationMention()->count() === 0 && $this->getComposantesInscription()->count() === 0 && count($this->getRegimeInscription()) === 0 ? EtatRemplissageEnum::VIDE : ($this->getLocalisationMention()->count() > 0 && $this->getComposantesInscription()->count() > 0 && count($this->getRegimeInscription()) > 0 ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS); //todo: gérer la zone de saisie selon le type de rythme choisit
+        return $this->getLocalisationMention()->count() === 0 && $this->getComposantesInscription()->count() === 0 && count($this->getRegimeInscription()) === 0 ? EtatRemplissageEnum::VIDE : ($this->getEtatStep(1) && $this->getLocalisationMention()->count() > 0 && $this->getComposantesInscription()->count() > 0 && count($this->getRegimeInscription()) > 0 ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS); //todo: gérer la zone de saisie selon le type de rythme choisit
     }
 
     public function getEtatOnglet2(): EtatRemplissageEnum
     {
-        return $this->getContenuFormation() === null && $this->getResultatsAttendus() === null && $this->getRythmeFormation() === null ? EtatRemplissageEnum::VIDE : ($this->getContenuFormation() !== null && $this->getResultatsAttendus() !== null && $this->getRythmeFormation() !== null ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+        return $this->getContenuFormation() === null && $this->getResultatsAttendus() === null && $this->getRythmeFormation() === null ? EtatRemplissageEnum::VIDE : ($this->getEtatStep(2) && $this->getContenuFormation() !== null && $this->getResultatsAttendus() !== null && $this->getRythmeFormation() !== null ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     public function getEtatOnglet3(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        //todo: ajouter les vérifs?
+        return $this->getEtatStep(3) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
     public function getEtatOnglet4(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::EN_COURS;
+        //todo: ajouter les vérifs?
+        return $this->getEtatStep(4) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
     public function getVersion(): ?string
@@ -637,6 +655,18 @@ class Formation
         if ($this->formationsAnterieures->removeElement($formationsAnterieure) && $formationsAnterieure->getVersionParent() === $this) {
             $formationsAnterieure->setVersionParent(null);
         }
+
+        return $this;
+    }
+
+    public function getEtatSteps(): array
+    {
+        return $this->etatSteps ?? [];
+    }
+
+    public function setEtatSteps(array $etatSteps): self
+    {
+        $this->etatSteps = $etatSteps;
 
         return $this;
     }

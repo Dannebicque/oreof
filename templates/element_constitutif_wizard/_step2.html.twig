@@ -50,4 +50,15 @@
 
     {{ form_row(form.typeEnseignement) }}
     {{ form_end(form) }}
+
+    <div class="alert {% if ec.getEtatStep(2) %}alert-success{% else %}alert-warning{% endif %}">
+        <input type="checkbox"
+               id="etatStructure"
+               class="form-check-inline"
+               {% if ec.getEtatStep(2) %}checked{% endif %}
+                {{ stimulus_action('ec--step2', 'etatStep', 'change') }}
+
+        ><label for="etatStructure">
+            Cochez cette case si vous avez terminé ...</label>
+    </div>
 </div>
