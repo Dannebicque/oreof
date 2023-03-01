@@ -31,16 +31,7 @@
             <span class="form-text mb-0 help-text">{{ help_to_add }}</span>
         </div>
         <div class="col-2">
-{#            <div class="d-grid" style="height: 100%">#}
-{#                <button#}
-{#                        {{ stimulus_action('entity_with_add', 'save', 'click') }}#}
-{#                        type="button"#}
-{#                        class="btn btn-success d-block"#}
-{#                        style="height: 100%"#}
-{#                >#}
-{#                    <i class="fal fa-save"></i> Enregistrer#}
-{#                </button>#}
-{#            </div>#}
+&nbsp;
         </div>
     </div>
 {% endblock %}
@@ -93,7 +84,6 @@
 
 
 {% block textarea_with_save_widget %}
-
     <div class="row">
         <div class="col-11">
             {{ block('textarea_widget') }}
@@ -172,3 +162,32 @@
         </div>
     {%- endif -%}
 {%- endblock form_help %}
+
+{%- block form_label_content -%}
+    {%- if label is empty -%}
+        {%- if label_format is not empty -%}
+            {% set label = label_format|replace({
+                '%name%': name,
+                '%id%': id,
+            }) %}
+        {%- else -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+    {%- endif -%}
+    {%- if translation_domain is same as(false) -%}
+        {%- if label_html is same as(false) -%}
+            {{- label -}}
+        {%- else -%}
+            {{- label|raw -}}
+        {%- endif -%}
+    {%- else -%}
+        {%- if label_html is same as(false) -%}
+            {{- label|trans(label_translation_parameters, translation_domain) -}}
+        {%- else -%}
+            {{- label|trans(label_translation_parameters, translation_domain)|raw -}}
+        {%- endif -%}
+    {%- endif -%}
+    {% if required %}
+        <span class="required"></span>
+    {% endif %}
+{%- endblock form_label_content -%}

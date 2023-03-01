@@ -17,8 +17,7 @@ class LangueController extends AbstractController
     #[Route('/', name: 'app_langue_index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('config/langue/index.html.twig', [
-        ]);
+        return $this->render('config/langue/index.html.twig');
     }
 
     #[Route('/liste', name: 'app_langue_liste', methods: ['GET'])]

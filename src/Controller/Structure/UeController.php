@@ -48,6 +48,9 @@ class UeController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[
         Route('/add-ue/semestre/{semestre}/{parcours}', name: 'add_ue_semestre')
     ]

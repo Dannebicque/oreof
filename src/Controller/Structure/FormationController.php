@@ -20,9 +20,7 @@ class FormationController extends BaseController
     ]
     public function index(): Response
     {
-        return $this->render('structure/formation/index.html.twig', [
-
-        ]);
+        return $this->render('structure/formation/index.html.twig');
     }
 
     #[

@@ -23,8 +23,8 @@ class HasComposanteAccessVoter extends Voter
     private array $roles;
 
     public function __construct(
-        private Security $security,
-        private RoleRepository $roleRepository,
+        private readonly Security $security,
+        private readonly RoleRepository $roleRepository,
     )
     {
     }
@@ -55,18 +55,14 @@ class HasComposanteAccessVoter extends Voter
         $this->roles = $this->roleRepository->findByPermission($attribute);
 
 
-        switch ($attribute) {
-            case self::ROLE_COMPOSANTE:
-                return $this->isCentreComposante($user);
-            case self::ROLE_FORMATION:
-                return $this->isCentreFormation($user);
-            case self::ROLE_FORMATION_ADD_ALL:
-                return $this->isCentreFormation($user);
-            case self::ROLE_COMPOSANTE_SHOW_ALL:
-                return $this->hasShowOnAllComposante($user);
-        }
+        return match ($attribute) {
+            self::ROLE_COMPOSANTE => $this->isCentreComposante($user),
+            self::ROLE_FORMATION => $this->isCentreFormation($user),
+            self::ROLE_FORMATION_ADD_ALL => $this->isCentreFormation($user),
+            self::ROLE_COMPOSANTE_SHOW_ALL => $this->hasShowOnAllComposante($user),
+            default => false,
+        };
 
-        return false;
     }
 
     private function isCentreComposante(UserInterface $user): bool

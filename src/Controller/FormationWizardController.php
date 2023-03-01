@@ -17,8 +17,7 @@ class FormationWizardController extends AbstractController
     #[Route('/', name: 'app_formation_wizard', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('formation/index.html.twig', [
-        ]);
+        return $this->render('formation/index.html.twig');
     }
 
     #[Route('/{formation}/0', name: 'app_formation_wizard_step_0', methods: ['GET'])]

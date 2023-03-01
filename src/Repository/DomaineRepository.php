@@ -20,7 +20,7 @@ class DomaineRepository extends ServiceEntityRepository
         parent::__construct($registry, Domaine::class);
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         return $this->findBy([], ['libelle' => 'ASC']);
     }

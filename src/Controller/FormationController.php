@@ -17,29 +17,34 @@ use Symfony\Component\Workflow\WorkflowInterface;
 #[Route('/formation')]
 class FormationController extends BaseController
 {
-//    public function __construct(private WorkflowInterface $dpeWorkflow)
-//    {}
     #[Route('/', name: 'app_formation_index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('formation/index.html.twig', [
-        ]);
+        return $this->render('formation/index.html.twig');
     }
 
     #[Route('/liste', name: 'app_formation_liste', methods: ['GET'])]
-    public function liste(FormationRepository $formationRepository): Response
+    public function liste(
+        FormationRepository $formationRepository,
+        Request $request
+    ): Response
     {
+        $sort = $request->query->get('sort') ?? 'typeDiplome';
+        $direction = $request->query->get('direction') ?? 'asc';
+
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_COMPOSANTE_SHOW_ALL', $this->getUser()) || $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()]);
+            $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()], [$sort => $direction]);
         } else {
             $formations = [];
-            $formations[] = $formationRepository->findByComposanteDpe($this->getUser(),$this->getAnneeUniversitaire());
-            $formations[] = $formationRepository->findBy(['responsableMention' => $this->getUser(), 'anneeUniversitaire' => $this->getAnneeUniversitaire()]);
+            $formations[] = $formationRepository->findByComposanteDpe($this->getUser(),$this->getAnneeUniversitaire(), [$sort => $direction]);
+            $formations[] = $formationRepository->findBy(['responsableMention' => $this->getUser(), 'anneeUniversitaire' => $this->getAnneeUniversitaire()], [$sort => $direction]);
             $formations = array_merge(...$formations);
         }
 
         return $this->render('formation/_liste.html.twig', [
-            'formations' => $formations
+            'formations' => $formations,
+            'sort' => $sort,
+            'direction' => $direction
         ]);
     }
 
@@ -71,6 +76,7 @@ class FormationController extends BaseController
 
     #[Route('/edit/formation/{formation}', name: 'app_formation_edit_modal', methods: ['GET', 'POST'])]
     public function editModal(
+        MentionRepository $mentionRepository,
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request, FormationRepository $formationRepository, Formation $formation): Response
     {
@@ -81,6 +87,11 @@ class FormationController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {//todo: si validate le choice de mention ne fonctionne pas
+            if ($request->request->all()['formation_ses']['mention'] !== null) {
+                $mention = $mentionRepository->find($request->request->all()['formation_ses']['mention']);
+                $formation->setMentionTexte(null);
+                $formation->setMention($mention);
+            }
             $formationRepository->save($formation, true);
 
             return $this->redirectToRoute('app_formation_edit', ['id' => $formation->getId()]);
@@ -103,6 +114,13 @@ class FormationController extends BaseController
         Request $request): Response
     {
         $domaine = $domaineRepository->find($request->query->get('domaine'));
+
+        if ($domaine === null) {
+            return $this->json([
+                'mentions' => [],
+            ]);
+        }
+
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($request->query->get('typeDiplome'));
 
         return $this->json([

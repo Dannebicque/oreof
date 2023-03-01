@@ -21,6 +21,7 @@ class FormationExportController extends AbstractController
      * @throws \Twig\Error\SyntaxError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\LoaderError
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
     #[Route('/formation/export/{formation}', name: 'app_formation_export')]
     public function export(Formation $formation): Response

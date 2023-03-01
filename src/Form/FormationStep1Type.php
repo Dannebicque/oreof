@@ -23,6 +23,7 @@ class FormationStep1Type extends AbstractType
                 'choice_label' => 'libelle',
                 'multiple' => true,
                 'expanded' => true,
+                'required' => true,
                 'label' => 'Localisation(s) de la formation',
                 'help' => 'Plusieurs choix possibles',
                 'choice_attr' => function() {
@@ -51,7 +52,7 @@ class FormationStep1Type extends AbstractType
             ->add('modalitesAlternance', TextareaAutoSaveType::class, [
                 'label' => 'Modalités de l\'alternance',
                 'help' => 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.',
-                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->formation--step1#saveModalitesAlternance'],
+                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->formation--step1#saveModalitesAlternance'],
             ])
         ;
     }

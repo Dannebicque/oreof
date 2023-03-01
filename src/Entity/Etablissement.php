@@ -74,11 +74,9 @@ class Etablissement
 
     public function removeUser(User $user): self
     {
-        if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getEtablissement() === $this) {
-                $user->setEtablissement(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->users->removeElement($user) && $user->getEtablissement() === $this) {
+            $user->setEtablissement(null);
         }
 
         return $this;
@@ -104,11 +102,9 @@ class Etablissement
 
     public function removeVille(Ville $ville): self
     {
-        if ($this->villes->removeElement($ville)) {
-            // set the owning side to null (unless already changed)
-            if ($ville->getEtablissement() === $this) {
-                $ville->setEtablissement(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->villes->removeElement($ville) && $ville->getEtablissement() === $this) {
+            $ville->setEtablissement(null);
         }
 
         return $this;
@@ -146,11 +142,9 @@ class Etablissement
 
     public function removeUserCentre(UserCentre $userCentre): self
     {
-        if ($this->userCentres->removeElement($userCentre)) {
-            // set the owning side to null (unless already changed)
-            if ($userCentre->getEtablissement() === $this) {
-                $userCentre->setEtablissement(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->userCentres->removeElement($userCentre) && $userCentre->getEtablissement() === $this) {
+            $userCentre->setEtablissement(null);
         }
 
         return $this;

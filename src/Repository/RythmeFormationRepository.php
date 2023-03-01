@@ -20,7 +20,7 @@ class RythmeFormationRepository extends ServiceEntityRepository
         parent::__construct($registry, RythmeFormation::class);
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         return $this->findBy([], ['libelle' => 'ASC']);
     }

@@ -18,8 +18,7 @@ class TypeUeController extends AbstractController
     #[Route('/', name: 'app_type_ue_index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('config/type_ue/index.html.twig', [
-        ]);
+        return $this->render('config/type_ue/index.html.twig');
     }
 
     #[Route('/liste', name: 'app_type_ue_liste', methods: ['GET'])]

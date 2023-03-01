@@ -18,8 +18,7 @@ class MentionController extends AbstractController
     #[Route('/', name: 'app_mention_index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('config/mention/index.html.twig', [
-        ]);
+        return $this->render('config/mention/index.html.twig');
     }
 
     #[Route('/liste', name: 'app_mention_liste', methods: ['GET'])]

@@ -20,8 +20,7 @@ class ParcoursWizardController extends AbstractController
     #[Route('/', name: 'app_parcours_wizard', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('formation/index.html.twig', [
-        ]);
+        return $this->render('formation/index.html.twig');
     }
 
     #[Route('/{parcours}/1', name: 'app_parcours_wizard_step_1', methods: ['GET'])]

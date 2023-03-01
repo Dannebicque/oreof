@@ -126,11 +126,9 @@ class Ue
 
     public function removeEcUe(EcUe $ecUe): self
     {
-        if ($this->ecUes->removeElement($ecUe)) {
-            // set the owning side to null (unless already changed)
-            if ($ecUe->getUe() === $this) {
-                $ecUe->setUe(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->ecUes->removeElement($ecUe) && $ecUe->getUe() === $this) {
+            $ecUe->setUe(null);
         }
 
         return $this;

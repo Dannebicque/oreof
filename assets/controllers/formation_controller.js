@@ -77,8 +77,6 @@ export default class extends Controller {
   async _updateListePersonnel(composante) {
     await fetch(`${this.urlListePersonnelValue}?composante=${composante}`).then((response) => response.json()).then(
       (data) => {
-        console.log(data)
-
         const selectPersonnels = document.getElementById('formation_ses_responsableMention')
         selectPersonnels.innerHTML = ''
 

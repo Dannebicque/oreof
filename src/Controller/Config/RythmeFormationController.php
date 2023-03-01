@@ -17,8 +17,7 @@ class RythmeFormationController extends AbstractController
     #[Route('/', name: 'app_rythme_formation_index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('config/rythme_formation/index.html.twig', [
-        ]);
+        return $this->render('config/rythme_formation/index.html.twig');
     }
 
     #[Route('/liste', name: 'app_rythme_formation_liste', methods: ['GET'])]

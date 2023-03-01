@@ -1,0 +1,26 @@
+{% extends 'base-speciale.html.twig' %}
+
+{% block content %}
+    <div class="mb-2 mt-2">
+        <h2 class="cta-1 text-primary">Erreur 500</h2>
+    </div>
+
+    <div>
+        <p>Oups quelque chose s'est mal passé !</p>
+        <p>Si le problème persiste, merci de contacter les administrateurs du site : <a href="mailto:{{ mail_contact
+            }}">{{ mail_contact }}</a> en précisant le message d'erreur ci-dessous.</p>
+        <br>
+        <div class="alert alert-warning">
+            {{ exception.message }}
+        </div>
+        <br>
+        <a href="{{ path(app.request.server.get('http-referer')|default('app_homepage')) }}" class="btn btn-primary">
+            <i class="fal fa-arrow-left"></i>
+            Retour à la page précédente</a>
+    </div>
+{% endblock %}
+
+{% block title %}
+    Erreur 500, erreur interne du serveur
+{% endblock %}
+

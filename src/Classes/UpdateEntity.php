@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class UpdateEntity
 {
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
     }
 
@@ -108,10 +108,8 @@ class UpdateEntity
                         if ($v->value === $value) {
                             unset($t[$key]);
                         }
-                    } else {
-                        if ($v === $value) {
-                            unset($t[$key]);
-                        }
+                    } else if ($v === $value) {
+                        unset($t[$key]);
                     }
                 }
 

@@ -20,6 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ElementConstitutifSaveController extends BaseController
 {
     /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      * @throws \JsonException
      */
     #[Route('/ec/save/{ec}', name: 'app_ec_save')]
@@ -95,7 +96,7 @@ class ElementConstitutifSaveController extends BaseController
                 $competences = $ec->getCompetences();
 
                 foreach ($competences as $competence) {
-                    if ($competence->getBlocCompetence()->getId() === $data['value']) {
+                    if ($competence->getBlocCompetence()?->getId() === $data['value']) {
                         $competence->removeElementConstitutif($ec);
                         $ec->removeCompetence($competence);
                     }

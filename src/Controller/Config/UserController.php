@@ -29,8 +29,7 @@ class UserController extends AbstractController
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('config/user/index.html.twig', [
-        ]);
+        return $this->render('config/user/index.html.twig');
     }
 
     #[Route('/attente-validation', name: 'app_user_attente', methods: ['GET'])]

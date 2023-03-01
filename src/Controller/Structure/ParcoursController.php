@@ -20,9 +20,7 @@ class ParcoursController extends AbstractController
     ]
     public function index(): Response
     {
-        return $this->render('structure/parcours/index.html.twig', [
-
-        ]);
+        return $this->render('structure/parcours/index.html.twig');
     }
 
     #[
@@ -30,8 +28,7 @@ class ParcoursController extends AbstractController
     ]
     public function liste(): Response
     {
-        return $this->render('structure/parcours/_liste.html.twig', [
-        ]);
+        return $this->render('structure/parcours/_liste.html.twig');
     }
 
     #[

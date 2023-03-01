@@ -14,6 +14,7 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\LangueRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,8 +25,10 @@ use Symfony\Component\Workflow\WorkflowInterface;
 #[Route('/element/constitutif')]
 class ElementConstitutifController extends AbstractController
 {
-    public function __construct(private WorkflowInterface $ecWorkflow)
-    {}
+    public function __construct(private readonly WorkflowInterface $ecWorkflow)
+    {
+    }
+
     #[Route('/', name: 'app_element_constitutif_index', methods: ['GET'])]
     public function index(ElementConstitutifRepository $elementConstitutifRepository): Response
     {
@@ -70,26 +73,30 @@ class ElementConstitutifController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[Route('/{id}', name: 'app_element_constitutif_show', methods: ['GET'])]
     public function show(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        ElementConstitutif $elementConstitutif): Response
-    {
+        ElementConstitutif $elementConstitutif
+    ): Response {
         $formation = $elementConstitutif->getParcours()->getFormation();
         if ($formation === null) {
-            throw new \Exception('Formation non trouvée');
+            throw new RuntimeException('Formation non trouvée');
         }
 
         $bccs = [];
         foreach ($elementConstitutif->getCompetences() as $competence) {
-            if (!array_key_exists($competence->getBlocCompetence()->getId(), $bccs)) {
-                $bccs[$competence->getBlocCompetence()->getId()]['bcc'] = $competence->getBlocCompetence();
-                $bccs[$competence->getBlocCompetence()->getId()]['competences'] = [];
+            if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
+                $bccs[$competence->getBlocCompetence()?->getId()]['bcc'] = $competence->getBlocCompetence();
+                $bccs[$competence->getBlocCompetence()?->getId()]['competences'] = [];
             }
-            $bccs[$competence->getBlocCompetence()->getId()]['competences'][] = $competence;
+            $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
         }
 
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+
         return $this->render('element_constitutif/show.html.twig', [
             'elementConstitutif' => $elementConstitutif,
             'template' => $typeDiplome::TEMPLATE,
@@ -99,10 +106,6 @@ class ElementConstitutifController extends AbstractController
         ]);
     }
 
-
-    /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-     */
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
     public function edit(
         ElementConstitutif $elementConstitutif,
@@ -113,7 +116,9 @@ class ElementConstitutifController extends AbstractController
         //                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
         //                        'valider_ec')
 
-        $access = ($this->isGranted('ROLE_EC_EDIT_MY', $elementConstitutif) || $this->isGranted('ROLE_FORMATION_EDIT_MY', $parcours->getFormation())) && $this->ecWorkflow->can($elementConstitutif, 'valider_ec');
+        $access = ($this->isGranted('ROLE_EC_EDIT_MY',
+                    $elementConstitutif) || $this->isGranted('ROLE_FORMATION_EDIT_MY',
+                    $parcours->getFormation())) && $this->ecWorkflow->can($elementConstitutif, 'valider_ec');
 
         if (!$access) {
             throw new AccessDeniedException();
@@ -158,6 +163,9 @@ class ElementConstitutifController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[Route('/{id}/mccc-ec', name: 'app_element_constitutif_mccc', methods: ['GET', 'POST'])]
     public function mcccEc(
         TypeEpreuveRepository $typeEpreuveRepository,
@@ -167,57 +175,64 @@ class ElementConstitutifController extends AbstractController
         ElementConstitutif $elementConstitutif
     ): Response {
         $formation = $elementConstitutif->getParcours()->getFormation();
-        if ($formation !== null) {
-            $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
-            if ($this->isGranted('ROLE_FORMATION_EDIT_MY',
-                $elementConstitutif->getParcours()->getFormation())) { //todo: ajouter le workflow...
+        if ($formation === null) {
+            throw new RuntimeException('Formation non trouvée');
+        }
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+        if ($this->isGranted('ROLE_FORMATION_EDIT_MY',
+            $elementConstitutif->getParcours()->getFormation())) { //todo: ajouter le workflow...
 
 
-                if ($elementConstitutif->getMcccs()->count() === 0) {
-                    $typeDiplome->initMcccs($elementConstitutif);
-                }
-
-                if ($request->isMethod('POST')) {
-                    $typeDiplome->saveMcccs($elementConstitutif, $request->request);
-                    $elementConstitutifRepository->save($elementConstitutif, true);
-
-                    return $this->json(true);
-                }
-
-                return $this->render('element_constitutif/_mcccEcModal.html.twig', [
-                    'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
-                    'ec' => $elementConstitutif,
-                    'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
-                    'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
-                    'wizard' => false
-                ]);
-
+            if ($elementConstitutif->getMcccs()->count() === 0) {
+                $typeDiplome->initMcccs($elementConstitutif);
             }
 
-            return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
-                'ec' => $elementConstitutif,
+            if ($request->isMethod('POST')) {
+                $typeDiplome->saveMcccs($elementConstitutif, $request->request);
+                $elementConstitutifRepository->save($elementConstitutif, true);
+
+                return $this->json(true);
+            }
+
+            return $this->render('element_constitutif/_mcccEcModal.html.twig', [
                 'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+                'ec' => $elementConstitutif,
                 'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
                 'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
+                'wizard' => false
             ]);
+
         }
+
+        return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
+            'ec' => $elementConstitutif,
+            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+            'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
+            'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
+        ]);
+
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     public function displayMcccEc(
         TypeEpreuveRepository $typeEpreuveRepository,
         TypeDiplomeRegistry $typeDiplomeRegistry,
         ElementConstitutif $elementConstitutif
     ): Response {
         $formation = $elementConstitutif->getParcours()->getFormation();
-        if ($formation !== null) {
-            $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
-            return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
-                'ec' => $elementConstitutif,
-                'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
-                'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
-                'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
-            ]);
+        if ($formation === null) {
+            throw new RuntimeException('Formation non trouvée');
         }
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+
+        return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
+            'ec' => $elementConstitutif,
+            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+            'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
+            'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
+        ]);
     }
 
     #[Route('/{id}', name: 'app_element_constitutif_delete', methods: ['POST'])]

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Classes\MyPDF;
 use App\Entity\ElementConstitutif;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,22 +22,23 @@ class ElementConstitutifExportController extends AbstractController
      * @throws \Twig\Error\SyntaxError
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\LoaderError
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
     #[Route('/element/constitutif/export/{elementConstitutif}', name: 'app_element_constitutif_export')]
     public function export(ElementConstitutif $elementConstitutif): Response
     {
         $formation = $elementConstitutif->getParcours()->getFormation();
         if ($formation === null) {
-            throw new \Exception('Formation non trouvée');
+            throw new RuntimeException('Formation non trouvée');
         }
 
         $bccs = [];
         foreach ($elementConstitutif->getCompetences() as $competence) {
-            if (!array_key_exists($competence->getBlocCompetence()->getId(), $bccs)) {
-                $bccs[$competence->getBlocCompetence()->getId()]['bcc'] = $competence->getBlocCompetence();
-                $bccs[$competence->getBlocCompetence()->getId()]['competences'] = [];
+            if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
+                $bccs[$competence->getBlocCompetence()?->getId()]['bcc'] = $competence->getBlocCompetence();
+                $bccs[$competence->getBlocCompetence()?->getId()]['competences'] = [];
             }
-            $bccs[$competence->getBlocCompetence()->getId()]['competences'][] = $competence;
+            $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
         }
 
         $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());

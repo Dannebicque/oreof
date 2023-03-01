@@ -1,6 +1,6 @@
 <h2>MCCC pour {{ ec.libelle }}</h2>
 <form method="post" action="{{ path('app_element_constitutif_mccc', {id:ec.id}) }}">
-    {{ include('components/TypeDiplome/mccc/'~templateForm) }}
+    {{ include('typeDiplome/mccc/'~templateForm) }}
     <button type="submit" class="btn btn-success"
             {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
     >

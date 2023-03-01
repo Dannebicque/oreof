@@ -17,8 +17,7 @@ class ComposanteController extends AbstractController
     #[Route('/', name: 'app_composante_index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('config/composante/index.html.twig', [
-        ]);
+        return $this->render('config/composante/index.html.twig');
     }
 
     #[Route('/liste', name: 'app_composante_liste', methods: ['GET'])]

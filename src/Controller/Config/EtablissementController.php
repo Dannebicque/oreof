@@ -16,8 +16,7 @@ class EtablissementController extends BaseController
     #[Route('/', name: 'app_etablissement_index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('config/etablissement/index.html.twig', [
-        ]);
+        return $this->render('config/etablissement/index.html.twig');
     }
 
     #[Route('/liste', name: 'app_etablissement_liste', methods: ['GET'])]

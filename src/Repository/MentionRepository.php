@@ -22,7 +22,7 @@ class MentionRepository extends ServiceEntityRepository
         parent::__construct($registry, Mention::class);
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         return $this->findBy([], ['libelle' => 'ASC']);
     }

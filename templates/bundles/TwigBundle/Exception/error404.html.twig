@@ -1,0 +1,23 @@
+{% extends 'base-speciale.html.twig' %}
+
+{% block content %}
+    <div class="mb-2 mt-2">
+        <h2 class="cta-1 text-primary">Erreur 404</h2>
+    </div>
+
+    <div>
+        <p>La page que vous essayez de visualiser n'est pas accessible ou n'existe plus.</p>
+        <p>N'hésitez pas à contacter les administrateurs du site : <a href="mailto:{{ mail_contact }}">{{ mail_contact }}</a></p>
+        <br><br>
+        <a href="{{ path(app.request.server.get('http-referer')|default('app_homepage')) }}" class="btn
+        btn-primary">
+            <i class="fal fa-arrow-left"></i>
+            Retour à la page précédente
+        </a>
+    </div>
+{% endblock %}
+
+{% block title %}
+Erreur 404, page introuvable
+{% endblock %}
+

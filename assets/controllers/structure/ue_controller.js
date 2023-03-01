@@ -26,7 +26,6 @@ export default class extends Controller {
   }
 
   async _listeEc(event) {
-    console.log(`detail_ue_${event.params.ue}_${event.params.parcours}`)
     const response = await fetch(event.params.url)
     this.detailTarget.innerHTML = await response.text()
     document.getElementById(`detail_ue_${event.params.ue}_${event.params.parcours}`).classList.remove('d-none')

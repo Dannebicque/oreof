@@ -16,7 +16,7 @@ class RemplissageExtension extends AbstractExtension
 
     public function remplissage(float $value): string
     {
-        $value = round($value, 0);
+        $value = round($value);
 
         if ($value === 0.0) {
             return '<div class="progress sh-2">

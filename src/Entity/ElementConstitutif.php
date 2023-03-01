@@ -105,6 +105,9 @@ class ElementConstitutif
     #[ORM\OneToMany(mappedBy: 'ec', targetEntity: Mccc::class)]
     private Collection $mcccs;
 
+    #[ORM\Column(length: 5)]
+    private ?string $code = null;
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
@@ -576,11 +579,9 @@ class ElementConstitutif
 
     public function removeEcUe(EcUe $ecUe): self
     {
-        if ($this->ecUes->removeElement($ecUe)) {
-            // set the owning side to null (unless already changed)
-            if ($ecUe->getEc() === $this) {
-                $ecUe->setEc(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->ecUes->removeElement($ecUe) && $ecUe->getEc() === $this) {
+            $ecUe->setEc(null);
         }
 
         return $this;
@@ -684,12 +685,22 @@ class ElementConstitutif
 
     public function removeMccc(Mccc $mccc): self
     {
-        if ($this->mcccs->removeElement($mccc)) {
-            // set the owning side to null (unless already changed)
-            if ($mccc->getEc() === $this) {
-                $mccc->setEc(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->mcccs->removeElement($mccc) && $mccc->getEc() === $this) {
+            $mccc->setEc(null);
         }
+
+        return $this;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): self
+    {
+        $this->code = $code;
 
         return $this;
     }

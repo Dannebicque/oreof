@@ -17,8 +17,7 @@ class DomaineController extends AbstractController
     #[Route('/', name: 'app_domaine_index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('config/domaine/index.html.twig', [
-        ]);
+        return $this->render('config/domaine/index.html.twig');
     }
 
     #[Route('/liste', name: 'app_domaine_liste', methods: ['GET'])]

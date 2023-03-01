@@ -22,7 +22,6 @@ export default class extends Controller {
       .then(async () => {
         callOut('Sauvegarde effectuée', 'success')
         this.modal.hide()
-        console.log(this.nomEvenement)
         this.dispatch(this.nomEvenement)
       })
   }

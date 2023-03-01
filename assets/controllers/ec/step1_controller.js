@@ -44,7 +44,7 @@ export default class extends Controller {
       action: 'yesNo',
       value: event.target.value,
     })
-    if (event.target.value == 1) {
+    if (parseInt(event.target.value, 10) === 1) {
       document.getElementById('coursMutualises').style.display = 'block'
     } else {
       document.getElementById('coursMutualises').style.display = 'none'

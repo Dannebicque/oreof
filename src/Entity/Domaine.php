@@ -78,11 +78,9 @@ class Domaine
 
     public function removeMention(Mention $mention): self
     {
-        if ($this->mentions->removeElement($mention)) {
-            // set the owning side to null (unless already changed)
-            if ($mention->getDomaine() === $this) {
-                $mention->setDomaine(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->mentions->removeElement($mention) && $mention->getDomaine() === $this) {
+            $mention->setDomaine(null);
         }
 
         return $this;

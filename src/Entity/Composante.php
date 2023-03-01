@@ -229,11 +229,9 @@ class Composante
 
     public function removeUserCentre(UserCentre $userCentre): self
     {
-        if ($this->userCentres->removeElement($userCentre)) {
-            // set the owning side to null (unless already changed)
-            if ($userCentre->getComposante() === $this) {
-                $userCentre->setComposante(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->userCentres->removeElement($userCentre) && $userCentre->getComposante() === $this) {
+            $userCentre->setComposante(null);
         }
 
         return $this;

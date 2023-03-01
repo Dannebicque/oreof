@@ -21,7 +21,7 @@ class TypeUeRepository extends ServiceEntityRepository
         parent::__construct($registry, TypeUe::class);
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         return $this->findBy([], ['libelle' => 'ASC']);
     }

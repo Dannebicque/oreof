@@ -40,6 +40,10 @@ class CompetenceRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
+     */
     public function getMaxOrdreBlocCompetence(BlocCompetence $bcc): ?int
     {
         return $this->createQueryBuilder('c')

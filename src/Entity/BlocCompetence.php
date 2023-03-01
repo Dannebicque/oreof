@@ -87,11 +87,9 @@ class BlocCompetence
 
     public function removeCompetence(Competence $competence): self
     {
-        if ($this->competences->removeElement($competence)) {
-            // set the owning side to null (unless already changed)
-            if ($competence->getBlocCompetence() === $this) {
-                $competence->setBlocCompetence(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->competences->removeElement($competence) && $competence->getBlocCompetence() === $this) {
+            $competence->setBlocCompetence(null);
         }
 
         return $this;

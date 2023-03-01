@@ -21,7 +21,7 @@ class TypeEpreuveRepository extends ServiceEntityRepository
         parent::__construct($registry, TypeEpreuve::class);
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         return $this->findBy([], ['libelle' => 'ASC']);
     }

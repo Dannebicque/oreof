@@ -22,8 +22,7 @@ class DroitsController extends AbstractController
     public function index(
         RoleRepository $roleRepository
     ): Response {
-        return $this->render('config/droits/index.html.twig', [
-        ]);
+        return $this->render('config/droits/index.html.twig');
     }
 
     #[Route('/administration/droits/access/liste', name: 'app_droits_access_liste')]
@@ -81,6 +80,9 @@ class DroitsController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/administration/droits/access/sauvegarder', name: 'app_droits_access_sauvegarder')]
     public function sauvegarderDroits(
         RoleRepository $roleRepository,
@@ -108,6 +110,9 @@ class DroitsController extends AbstractController
         return $this->json(['success' => false]);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/administration/droits/access/{id}', name: 'app_droits_access_delete', methods: ['DELETE'])]
     public function delete(
         Request $request,

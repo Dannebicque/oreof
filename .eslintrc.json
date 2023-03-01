@@ -13,7 +13,8 @@
     "rules": {
         "semi": 0,
         "no-underscore-dangle": 0,
-        "no-param-reassign": 0
+        "no-param-reassign": 0,
+        "class-methods-use-this": "off"
     },
     "ignorePatterns": ["assets/js/vendor/", "assets/js/base/"]
 }

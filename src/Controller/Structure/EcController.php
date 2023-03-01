@@ -21,9 +21,7 @@ class EcController extends BaseController
     ]
     public function index(): Response
     {
-        return $this->render('structure/ec/index.html.twig', [
-
-        ]);
+        return $this->render('structure/ec/index.html.twig');
     }
 
     #[

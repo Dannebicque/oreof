@@ -11,6 +11,7 @@ use App\Form\EcStep4Type;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,10 +23,12 @@ class ElementConstitutifWizardController extends AbstractController
     #[Route('/', name: 'app_ec_wizard', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('element_constitutif/index.html.twig', [
-        ]);
+        return $this->render('element_constitutif/index.html.twig');
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[Route('/{id}/{parcours}/synthese', name: 'app_ec_wizard_synthese', methods: ['GET'])]
     public function synthese(
         TypeDiplomeRegistry $typeDiplomeRegistry,
@@ -79,7 +82,7 @@ class ElementConstitutifWizardController extends AbstractController
 
         foreach ($ec->getCompetences() as $competence) {
             $ecComps[] = $competence->getId();
-            $ecBccs[] = $competence->getBlocCompetence()->getId();
+            $ecBccs[] = $competence->getBlocCompetence()?->getId();
         }
 
         return $this->render('element_constitutif_wizard/_step3.html.twig', [
@@ -106,16 +109,20 @@ class ElementConstitutifWizardController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[Route('/{ec}/{parcours}/5', name: 'app_ec_wizard_step_5', methods: ['GET'])]
     public function step5(
         TypeEpreuveRepository $typeEpreuveRepository,
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif $ec, Parcours $parcours
     ): Response {
 
         $formation = $ec->getParcours()->getFormation();
-        if ($formation !== null) {
+        if ($formation === null) {
+            throw new Exception('Formation non trouvée');
+        }
             $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
             if ($this->isGranted('ROLE_FORMATION_EDIT_MY',
                 $ec->getParcours()->getFormation())) { //todo: ajouter le workflow...
@@ -145,7 +152,5 @@ class ElementConstitutifWizardController extends AbstractController
                 'mcccs' => $typeDiplome->getMcccs($ec),
                 'editable' => false,
             ]);
-        }
-
     }
 }

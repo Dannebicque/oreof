@@ -24,8 +24,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class UserGestionController extends BaseController
 {
     public function __construct(
-        private EventDispatcherInterface $eventDispatcher,
-        private UserRepository $userRepository,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly UserRepository $userRepository,
     ) {
     }
 

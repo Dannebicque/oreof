@@ -120,6 +120,8 @@
 .required:after {
   content:" *";
   color: red;
+  font-size: large;
+  font-weight: bolder;
 }
 
 .state {

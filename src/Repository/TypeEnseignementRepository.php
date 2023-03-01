@@ -20,7 +20,7 @@ class TypeEnseignementRepository extends ServiceEntityRepository
         parent::__construct($registry, TypeEnseignement::class);
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         return $this->findBy([], ['libelle' => 'ASC']);
     }

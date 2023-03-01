@@ -3,9 +3,30 @@ bouton pour valider/invalide les étapes successives #}
 <table class="table">
     <thead>
     <tr>
-        <th>Id</th>
-        <th>Type de diplôme</th>
-        <th>Domaine</th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'typeDiplome',
+                        'direction': getDirection('typeDiplome', sort, direction)
+                    }) }}
+            >
+                Type de diplôme
+
+                {{ displaySort('typeDiplome', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'domaine',
+                        'direction': getDirection('domaine', sort, direction)
+                    }) }}
+            >
+                Domaine
+
+                {{ displaySort('domaine', sort, direction) }}
+            </a>
+        </th>
         <th>Mention/spécialité</th>
         <th>Composante</th>
         <th>Etat</th>
@@ -16,9 +37,6 @@ bouton pour valider/invalide les étapes successives #}
     <tbody>
     {% for formation in formations %}
         <tr>
-            <td>
-                {{ formation.id }}
-            </td>
             <td>
                 {{ formation.typeDiplome|typeDiplome }}
             </td>

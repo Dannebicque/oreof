@@ -19,8 +19,8 @@ class EcAccessVoter extends Voter
     private array $roles;
 
     public function __construct(
-        private Security $security,
-        private RoleRepository $roleRepository,
+        private readonly Security $security,
+        private readonly RoleRepository $roleRepository,
     )
     {
     }
@@ -51,13 +51,12 @@ class EcAccessVoter extends Voter
         }
 
         $this->roles = $this->roleRepository->findByPermission($attribute);
-        switch ($attribute) {
-            case self::ROLE_EC_EDIT_MY:
-                return $this->isReponsableEc($user, $subject);
 
-        }
+        return match ($attribute) {
+            self::ROLE_EC_EDIT_MY => $this->isReponsableEc($user, $subject),
+            default => false,
+        };
 
-        return false;
     }
 
     private function isReponsableEc(UserInterface $user, ElementConstitutif $subject): bool

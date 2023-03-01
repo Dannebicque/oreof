@@ -18,8 +18,7 @@ class TypeEpreuveController extends AbstractController
     #[Route('/', name: 'app_type_epreuve_index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('config/type_epreuve/index.html.twig', [
-        ]);
+        return $this->render('config/type_epreuve/index.html.twig');
     }
 
     #[Route('/liste', name: 'app_type_epreuve_liste', methods: ['GET'])]

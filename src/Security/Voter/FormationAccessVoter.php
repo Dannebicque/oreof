@@ -20,8 +20,8 @@ class FormationAccessVoter extends Voter
     private array $roles;
 
     public function __construct(
-        private Security $security,
-        private RoleRepository $roleRepository,
+        private readonly Security $security,
+        private readonly RoleRepository $roleRepository,
     )
     {
     }
@@ -51,17 +51,13 @@ class FormationAccessVoter extends Voter
 
         $this->roles = $this->roleRepository->findByPermission($attribute);
 
-        switch ($attribute) {
-            case self::ROLE_FORMATION_SHOW_MY:
-                return $this->hasShowOnHisFormation($user, $subject);
-            case self::ROLE_FORMATION_EDIT_MY:
-                return $this->hasEditOnHisFormation($user, $subject);
-                case self::ROLE_EC_ADD_MY:
-                return $this->canAddEcFormation($user, $subject);
+        return match ($attribute) {
+            self::ROLE_FORMATION_SHOW_MY => $this->hasShowOnHisFormation($user, $subject),
+            self::ROLE_FORMATION_EDIT_MY => $this->hasEditOnHisFormation($user, $subject),
+            self::ROLE_EC_ADD_MY => $this->canAddEcFormation($user, $subject),
+            default => false,
+        };
 
-        }
-
-        return false;
     }
 
     private function hasShowOnHisFormation(UserInterface $user, Formation $subject): bool
@@ -87,7 +83,7 @@ class FormationAccessVoter extends Voter
         return false;
     }
 
-    private function canAddEcFormation(UserInterface $user, mixed $subject)
+    private function canAddEcFormation(UserInterface $user, mixed $subject): bool
     {
         foreach ($user->getUserCentres() as $centre) {
             if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0 ) {

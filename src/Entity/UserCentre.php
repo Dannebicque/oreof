@@ -24,7 +24,7 @@ class UserCentre
     #[ORM\ManyToOne(inversedBy: 'userCentres')]
     private ?Formation $formation = null;
 
-    #[ORM\Column(type: Types::ARRAY)]
+    #[ORM\Column(type: Types::JSON)]
     private array $droits = [];
 
     #[ORM\ManyToOne(inversedBy: 'userCentres')]

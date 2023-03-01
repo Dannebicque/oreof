@@ -36,7 +36,7 @@ export default class extends Controller {
       await fetch(url, body).then(() => {
         callOut('Suppression effectuée', 'success')
         this._refreshListe()
-        document.getElementById(`tab_parcours_${event.params.id}`).remove()
+        document.getElementById(`tab_parcours_${id}`).remove()
       })
     }
   }

@@ -24,7 +24,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         return $this->findBy([], ['nom' => 'ASC', 'prenom' => 'ASC']);
     }

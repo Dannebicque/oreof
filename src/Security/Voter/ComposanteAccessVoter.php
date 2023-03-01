@@ -20,8 +20,8 @@ class ComposanteAccessVoter extends Voter
     private array $roles;
 
     public function __construct(
-        private Security $security,
-        private RoleRepository $roleRepository,
+        private readonly Security $security,
+        private readonly RoleRepository $roleRepository,
     )
     {
     }
@@ -51,15 +51,12 @@ class ComposanteAccessVoter extends Voter
 
         $this->roles = $this->roleRepository->findByPermission($attribute);
 
-        switch ($attribute) {
-            case self::ROLE_COMPOSANTE_SHOW_MY:
-                return $this->hasShowOnHisComposante($user, $subject);
-            case self::ROLE_COMPOSANTE_EDIT_MY:
-                return $this->hasEditOnHisComposante($user, $subject);
+        return match ($attribute) {
+            self::ROLE_COMPOSANTE_SHOW_MY => $this->hasShowOnHisComposante($user, $subject),
+            self::ROLE_COMPOSANTE_EDIT_MY => $this->hasEditOnHisComposante($user, $subject),
+            default => false,
+        };
 
-        }
-
-        return false;
     }
 
     private function hasShowOnHisComposante(UserInterface $user, Composante $subject): bool

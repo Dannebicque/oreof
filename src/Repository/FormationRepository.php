@@ -42,15 +42,20 @@ class FormationRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByComposanteDpe(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
+    public function findByComposanteDpe(UserInterface $user, AnneeUniversitaire $anneeUniversitaire, array $sorts = []): array
     {
-        return $this->createQueryBuilder('f')
+        $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
             ->where('c.responsableDpe = :user')
             ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
             ->setParameter('user', $user)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
-            ->getQuery()
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire);
+
+        foreach ($sorts as $sort => $direction) {
+            $query->addOrderBy('f.' . $sort, $direction);
+        }
+
+        return $query->getQuery()
             ->getResult();
     }
 }

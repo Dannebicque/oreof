@@ -9,6 +9,7 @@ use App\Utils\Tools;
 use DateTimeInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 /**
  * Class AppExtension.
@@ -28,6 +29,32 @@ class AppExtension extends AbstractExtension
             new TwigFilter('badgeCentre', [$this, 'badgeCentre'], ['is_safe' => ['html']]),
             new TwigFilter('etatRemplissage', [$this, 'etatRemplissage'], ['is_safe' => ['html']])
         ];
+    }
+
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('displaySort', [$this, 'displaySort'], ['is_safe' => ['html']]),
+            new TwigFunction('getDirection', [$this, 'getDirection'], ['is_safe' => ['html']]),
+        ];
+    }
+
+    public function displaySort(string $field, ?string $sort, ?string $direction): ?string
+    {
+       if ($field === $sort) {
+           return '<i class="fal fa-caret-'.($direction === 'asc' ? 'up' : 'down').' fa-lg"></i>';
+       }
+
+       return '';
+    }
+
+    public function getDirection(string $field, ?string $sort, ?string $direction): ?string
+    {
+        if ($field === $sort) {
+            return $direction === 'asc' ? 'desc' : 'asc';
+        }
+
+        return 'asc';
     }
 
     public function badgeBoolean(bool $value): string
@@ -59,14 +86,12 @@ class AppExtension extends AbstractExtension
 
     public function badgeCentre(UserCentre $userCentre): string
     {
-        $html = match ($userCentre->typeCentre()) {
+        return match ($userCentre->typeCentre()) {
             CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => '<span class="badge bg-success me-1">' . $userCentre->displaySimple() . '</span>',
             CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => '<span class="badge bg-warning me-1">' . $userCentre->displaySimple() . '</span>',
             CentreGestionEnum::CENTRE_GESTION_FORMATION => '<span class="badge bg-info me-1">' . $userCentre->displaySimple() . '</span>',
             default => '<span class="badge bg-danger me-1">Inconnu</span>',
         };
-
-        return $html;
     }
 
     public function dateFr(?DateTimeInterface $value): string

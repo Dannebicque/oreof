@@ -176,11 +176,9 @@ class Parcours
 
     public function removeBlocCompetence(BlocCompetence $blocCompetence): self
     {
-        if ($this->blocCompetences->removeElement($blocCompetence)) {
-            // set the owning side to null (unless already changed)
-            if ($blocCompetence->getParcours() === $this) {
-                $blocCompetence->setParcours(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->blocCompetences->removeElement($blocCompetence) && $blocCompetence->getParcours() === $this) {
+            $blocCompetence->setParcours(null);
         }
 
         return $this;
@@ -434,11 +432,9 @@ class Parcours
 
     public function removeSemestreParcour(SemestreParcours $semestreParcour): self
     {
-        if ($this->semestreParcours->removeElement($semestreParcour)) {
-            // set the owning side to null (unless already changed)
-            if ($semestreParcour->getParcours() === $this) {
-                $semestreParcour->setParcours(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->semestreParcours->removeElement($semestreParcour) && $semestreParcour->getParcours() === $this) {
+            $semestreParcour->setParcours(null);
         }
 
         return $this;

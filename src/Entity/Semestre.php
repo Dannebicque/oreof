@@ -70,11 +70,9 @@ class Semestre
 
     public function removeUe(Ue $ue): self
     {
-        if ($this->ues->removeElement($ue)) {
-            // set the owning side to null (unless already changed)
-            if ($ue->getSemestre() === $this) {
-                $ue->setSemestre(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->ues->removeElement($ue) && $ue->getSemestre() === $this) {
+            $ue->setSemestre(null);
         }
 
         return $this;
@@ -115,11 +113,9 @@ class Semestre
 
     public function removeSemestreParcour(SemestreParcours $semestreParcour): self
     {
-        if ($this->semestreParcours->removeElement($semestreParcour)) {
-            // set the owning side to null (unless already changed)
-            if ($semestreParcour->getSemestre() === $this) {
-                $semestreParcour->setSemestre(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->semestreParcours->removeElement($semestreParcour) && $semestreParcour->getSemestre() === $this) {
+            $semestreParcour->setSemestre(null);
         }
 
         return $this;

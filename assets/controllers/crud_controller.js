@@ -45,9 +45,14 @@ export default class extends Controller {
     this._updateListe()
   }
 
-  async _updateListe() {
+  async _updateListe(params) {
+    const _params = new URLSearchParams(params)
     this.listeTarget.innerHTML = window.da.loaderStimulus
-    const response = await fetch(this.urlValue)
+    const response = await fetch(`${this.urlValue}?${_params.toString()}`)
     this.listeTarget.innerHTML = await response.text()
+  }
+
+  sort(event) {
+    this._updateListe(event.params)
   }
 }

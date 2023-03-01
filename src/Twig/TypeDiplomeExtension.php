@@ -9,7 +9,7 @@ use Twig\TwigFilter;
 class TypeDiplomeExtension extends AbstractExtension
 {
 
-    public function __construct(private TypeDiplomeRegistry $typeDiplomeRegistry)
+    public function __construct(private readonly TypeDiplomeRegistry $typeDiplomeRegistry)
     {
     }
 

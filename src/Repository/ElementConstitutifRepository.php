@@ -74,11 +74,6 @@ class ElementConstitutifRepository extends ServiceEntityRepository
 //        return []; //todo: ? est-ce vrai ?
 //    }
 
-    /**
-     * @param \Symfony\Component\Security\Core\User\UserInterface $user
-     *
-     * @return array
-     */
     public function findByComposanteDpe(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
     {
         return $this->createQueryBuilder('ec')
@@ -97,11 +92,6 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @param \Symfony\Component\Security\Core\User\UserInterface $user
-     *
-     * @return array
-     */
     public function findByResponsableFormation(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
     {
         return $this->createQueryBuilder('ec')
@@ -147,7 +137,7 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->innerJoin(Formation::class, 'f', 'WITH', 'f.id = p.formation')
             ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
             ->setParameter('anneeUniversitaire', $anneeUniversitaire)
-            ->distinct(true)
+            ->distinct()
             ->getQuery()
             ->getResult();
     }

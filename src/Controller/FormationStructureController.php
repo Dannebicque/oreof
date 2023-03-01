@@ -9,6 +9,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FormationStructureController extends BaseController
 {
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     #[Route('/formation/structure/{formation}', name: 'app_formation_genere_structure')]
     public function index(
         FormationStructure $formationStructure,

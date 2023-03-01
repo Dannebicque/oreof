@@ -13,9 +13,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class AddUser
 {
     public function __construct(
-        private UserCentreRepository $userCentreRepository,
-        private UserRepository $userRepository,
-        private Ldap $ldap)
+        private readonly UserCentreRepository $userCentreRepository,
+        private readonly UserRepository $userRepository,
+        private readonly Ldap $ldap)
     {
     }
 
@@ -41,12 +41,12 @@ class AddUser
         return null;
     }
 
-    public function addRole(UserInterface $user, string $role)
+    public function addRole(UserInterface $user, string $role): void
     {
         $user->setRoles([$role]);
     }
 
-    public function setCentreComposante(UserInterface $usr, Composante $composante, ?string $role = null)
+    public function setCentreComposante(UserInterface $usr, Composante $composante, ?string $role = null): void
     {
         $centre = new UserCentre();
         $centre->setUser($usr);

@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private readonly UserRepository $userRepository,
     ) {
     }
 
@@ -39,8 +39,8 @@ class UserController extends AbstractController
         foreach ($users as $user) {
             if ($user->getuser() !== null) {
                 $tab[] = [
-                    'id' => $user->getUser()->getId(),
-                    'libelle' => $user->getUser()->getDisplay(),
+                    'id' => $user->getUser()?->getId(),
+                    'libelle' => $user->getUser()?->getDisplay(),
                 ];
             }
         }

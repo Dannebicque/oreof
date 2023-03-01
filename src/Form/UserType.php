@@ -35,7 +35,16 @@ class UserType extends AbstractType
                 'help' => 'Login URCA',
                 'attr' => ['maxlength' => 10]
             ])
-            ->add('civilite', )
+            ->add('civilite', ChoiceType::class, [
+                'choices' => [
+                    'Monsieur' => 'M',
+                    'Madame' => 'Mme',
+                ],
+                'label' => 'Civilité',
+                'placeholder' => 'Indiquez votre civilité',
+                'required' => true,
+                'mapped' => false,
+            ])
             ->add('nom', TextType::class, [
                 'required' => true,
                 'label' => 'Nom',

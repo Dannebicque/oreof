@@ -24,8 +24,8 @@ use UnitEnum;
 class FormationSesType extends AbstractType
 {
     public function __construct(
-        private TypeDiplomeRegistry $typeDiplomeRegistry,
-        private MentionRepository $mentionRepository
+        private readonly TypeDiplomeRegistry $typeDiplomeRegistry,
+        private readonly MentionRepository $mentionRepository
     ) {
     }
 

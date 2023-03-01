@@ -81,7 +81,7 @@ class ParcoursController extends AbstractController
     #[Route('/{id}/edit', name: 'app_parcours_edit', methods: ['GET', 'POST'])]
     public function edit(Parcours $parcour, TypeDiplomeRegistry $typeDiplomeRegistry): Response
     {
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcour->getFormation()->getTypeDiplome());
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcour->getFormation()?->getTypeDiplome());
 
         return $this->render('parcours/edit.html.twig', [
             'parcours' => $parcour,

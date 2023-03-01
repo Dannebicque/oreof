@@ -449,11 +449,9 @@ class Formation
 
     public function removeParcour(Parcours $parcour): self
     {
-        if ($this->parcours->removeElement($parcour)) {
-            // set the owning side to null (unless already changed)
-            if ($parcour->getFormation() === $this) {
-                $parcour->setFormation(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->parcours->removeElement($parcour) && $parcour->getFormation() === $this) {
+            $parcour->setFormation(null);
         }
 
         return $this;
@@ -479,11 +477,9 @@ class Formation
 
     public function removeBlocCompetence(BlocCompetence $blocCompetence): self
     {
-        if ($this->blocCompetences->removeElement($blocCompetence)) {
-            // set the owning side to null (unless already changed)
-            if ($blocCompetence->getFormation() === $this) {
-                $blocCompetence->setFormation(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->blocCompetences->removeElement($blocCompetence) && $blocCompetence->getFormation() === $this) {
+            $blocCompetence->setFormation(null);
         }
 
         return $this;
@@ -549,11 +545,9 @@ class Formation
 
     public function removeUserCentre(UserCentre $userCentre): self
     {
-        if ($this->userCentres->removeElement($userCentre)) {
-            // set the owning side to null (unless already changed)
-            if ($userCentre->getFormation() === $this) {
-                $userCentre->setFormation(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->userCentres->removeElement($userCentre) && $userCentre->getFormation() === $this) {
+            $userCentre->setFormation(null);
         }
 
         return $this;
@@ -639,11 +633,9 @@ class Formation
 
     public function removeFormationsAnterieure(self $formationsAnterieure): self
     {
-        if ($this->formationsAnterieures->removeElement($formationsAnterieure)) {
-            // set the owning side to null (unless already changed)
-            if ($formationsAnterieure->getVersionParent() === $this) {
-                $formationsAnterieure->setVersionParent(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->formationsAnterieures->removeElement($formationsAnterieure) && $formationsAnterieure->getVersionParent() === $this) {
+            $formationsAnterieure->setVersionParent(null);
         }
 
         return $this;

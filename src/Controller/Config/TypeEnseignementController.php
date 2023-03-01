@@ -17,8 +17,7 @@ class TypeEnseignementController extends AbstractController
     #[Route('/', name: 'app_type_enseignement_index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('config/type_enseignement/index.html.twig', [
-        ]);
+        return $this->render('config/type_enseignement/index.html.twig');
     }
 
     #[Route('/liste', name: 'app_type_enseignement_liste', methods: ['GET'])]

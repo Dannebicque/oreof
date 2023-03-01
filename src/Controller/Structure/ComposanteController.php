@@ -17,8 +17,7 @@ class ComposanteController extends AbstractController
     ]
     public function index(): Response
     {
-        return $this->render('structure/composante/index.html.twig', [
-        ]);
+        return $this->render('structure/composante/index.html.twig');
     }
 
     #[

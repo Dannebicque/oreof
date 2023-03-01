@@ -61,6 +61,10 @@ class BlocCompetenceRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
+     */
     public function getMaxOrdre(Formation $formation): ?int
     {
         return $this->createQueryBuilder('b')
@@ -71,6 +75,10 @@ class BlocCompetenceRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
+     */
     public function getMaxOrdreParcours(Parcours $parcours): ?int
     {
         return $this->createQueryBuilder('b')

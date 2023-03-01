@@ -19,7 +19,6 @@ export default class extends Controller {
   }
 
   openModal(event) {
-    console.log(this.nomEvenementValue)
     event.preventDefault()
     this.dispatch('openModal', {
       detail: {

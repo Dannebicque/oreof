@@ -26,7 +26,7 @@ abstract class AbstractTypeDiplome
         foreach ($formation->getParcours() as $parcours) {
             foreach ($parcours->getSemestreParcours() as $semestre)
             {
-                foreach ($semestre->getSemestre()->getUes() as $ue)
+                foreach ($semestre->getSemestre()?->getUes() as $ue)
                 {
                     foreach ($ue->getEcUes() as $ecUe)
                     {
@@ -44,6 +44,9 @@ abstract class AbstractTypeDiplome
         $this->entityManager->flush();
     }
 
+    /**
+     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     */
     public function genereStructure(Formation $formation): void
     {
         $this->typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());

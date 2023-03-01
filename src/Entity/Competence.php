@@ -121,7 +121,7 @@ class Competence
         return $this;
     }
 
-    public function genereCode()
+    public function genereCode(): void
     {
         $this->setCode(chr($this->getBlocCompetence()?->getOrdre()+64)  . $this->getOrdre());
     }

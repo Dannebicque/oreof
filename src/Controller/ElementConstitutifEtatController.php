@@ -12,7 +12,7 @@ use Symfony\Component\Workflow\WorkflowInterface;
 #[Route('/formation/elements-constitutifs/etat')]
 class ElementConstitutifEtatController extends BaseController
 {
-    public function __construct(private WorkflowInterface $ecWorkflow)
+    public function __construct(private readonly WorkflowInterface $ecWorkflow)
     {
     }
 

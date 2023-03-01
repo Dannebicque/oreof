@@ -26,9 +26,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column(nullable: true)]
     private ?string $password = null;
 
@@ -199,11 +196,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeComposante(Composante $composante): self
     {
-        if ($this->composantes->removeElement($composante)) {
-            // set the owning side to null (unless already changed)
-            if ($composante->getDirecteur() === $this) {
-                $composante->setDirecteur(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->composantes->removeElement($composante) && $composante->getDirecteur() === $this) {
+            $composante->setDirecteur(null);
         }
 
         return $this;
@@ -391,11 +386,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeNotification(Notification $notification): self
     {
-        if ($this->notifications->removeElement($notification)) {
-            // set the owning side to null (unless already changed)
-            if ($notification->getDestinataire() === $this) {
-                $notification->setDestinataire(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->notifications->removeElement($notification) && $notification->getDestinataire() === $this) {
+            $notification->setDestinataire(null);
         }
 
         return $this;
@@ -421,11 +414,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeUserCentre(UserCentre $userCentre): self
     {
-        if ($this->userCentres->removeElement($userCentre)) {
-            // set the owning side to null (unless already changed)
-            if ($userCentre->getUser() === $this) {
-                $userCentre->setUser(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->userCentres->removeElement($userCentre) && $userCentre->getUser() === $this) {
+            $userCentre->setUser(null);
         }
 
         return $this;
@@ -451,11 +442,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeComposanteResponsableDpe(Composante $composanteResponsableDpe): self
     {
-        if ($this->composanteResponsableDpe->removeElement($composanteResponsableDpe)) {
-            // set the owning side to null (unless already changed)
-            if ($composanteResponsableDpe->getResponsableDpe() === $this) {
-                $composanteResponsableDpe->setResponsableDpe(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->composanteResponsableDpe->removeElement($composanteResponsableDpe) && $composanteResponsableDpe->getResponsableDpe() === $this) {
+            $composanteResponsableDpe->setResponsableDpe(null);
         }
 
         return $this;
@@ -481,11 +470,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeFormationsResponsableMention(Formation $formationsResponsableMention): self
     {
-        if ($this->formationsResponsableMention->removeElement($formationsResponsableMention)) {
-            // set the owning side to null (unless already changed)
-            if ($formationsResponsableMention->getResponsableMention() === $this) {
-                $formationsResponsableMention->setResponsableMention(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->formationsResponsableMention->removeElement($formationsResponsableMention) && $formationsResponsableMention->getResponsableMention() === $this) {
+            $formationsResponsableMention->setResponsableMention(null);
         }
 
         return $this;

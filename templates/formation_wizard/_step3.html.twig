@@ -14,12 +14,12 @@
                 <input type="radio" id="formation_parcours_1" name="formation_parcours" required="required"
                        {% if formation.hasParcours == true %}checked{% endif %}
                        class="form-check-input" value="1" {{ stimulus_action('formation--step3', 'changeHasParcours', 'click') }}>
-                <label class="form-check-label required" for="formation_parcours_1">Oui</label></div>
+                <label class="form-check-label" for="formation_parcours_1">Oui</label></div>
             <div class="form-check">
                 <input type="radio" id="formation_parcours_0" name="formation_parcours" required="required"
                        {% if formation.hasParcours == false %}checked{% endif %}
                        class="form-check-input" value="0" {{ stimulus_action('formation--step3', 'changeHasParcours', 'click') }}>
-                <label class="form-check-label required" for="formation_parcours_0">Non</label></div>
+                <label class="form-check-label" for="formation_parcours_0">Non</label></div>
         </div>
         <div class="form-text mb-0 help-text">
             Indiquez si la formation comporte des parcours
@@ -61,14 +61,14 @@
 
             {% for i in formation.semestreDebut..typeDiplome.nbSemestres %}
                 <li>
-                    Semestre {{ i }} :
+                    <span class="required">Semestre {{ i }}</span> :
                     <div class="form-check-inline">
                         <input type="radio" id="formation_parcours_1" name="semestre_{{ i }}" required="required"
                                {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] == 'tronc_commun' %}checked{% endif %}
                                class="form-check-input" value="tronc_commun" {{ stimulus_action('formation--step3',
                             'changeSemestre',
                             'click', {semestre: i}) }}>
-                        <label class="form-check-label required" for="formation_parcours_1">Tronc Commun</label>
+                        <label class="form-check-label" for="formation_parcours_1">Tronc Commun</label>
                     </div>
                     <strong class="text-primary me-2">OU</strong>
                     <div class="form-check-inline">
@@ -77,7 +77,7 @@
                                    'parcours' %}checked{% endif %}
                                class="form-check-input" value="parcours" {{ stimulus_action('formation--step3',
                             'changeSemestre', 'click', {semestre: i}) }}>
-                        <label class="form-check-label required" for="formation_parcours_1">Parcours</label>
+                        <label class="form-check-label" for="formation_parcours_1">Parcours</label>
                     </div>
                 </li>
             {% endfor %}
