@@ -8,6 +8,8 @@ use App\Repository\DomaineRepository;
 use App\Repository\FormationRepository;
 use App\Repository\MentionRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Utils\JsonRequest;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -162,13 +164,21 @@ class FormationController extends BaseController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_formation_delete', methods: ['POST'])]
-    public function delete(Request $request, Formation $formation, FormationRepository $formationRepository): Response
+    #[Route('/{id}', name: 'app_formation_delete', methods: ['DELETE'])]
+    public function delete(
+        EntityManagerInterface $entityManager,
+        Request $request, Formation $formation, FormationRepository $formationRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$formation->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $formation->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+            foreach ($formation->getParcours() as $parcours) {
+                $entityManager->remove($parcours);
+            }
             $formationRepository->remove($formation, true);
+
+            return $this->json(true);
         }
 
-        return $this->redirectToRoute('app_formation_index', [], Response::HTTP_SEE_OTHER);
+        return $this->json(false);
     }
 }

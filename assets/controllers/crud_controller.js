@@ -17,6 +17,8 @@ export default class extends Controller {
     const { csrf } = event.params
     let modal = new Modal(document.getElementById('modal-delete'))
     modal.show()
+    const btn = document.getElementById('btn-confirm-supprimer')
+    btn.replaceWith(btn.cloneNode(true));
     document.getElementById('btn-confirm-supprimer').addEventListener('click', async () => {
       const body = {
         method: 'DELETE',
@@ -25,11 +27,16 @@ export default class extends Controller {
         }),
       }
       modal = null
-      await fetch(url, body).then(() => {
-        callOut('Suppression effectuée', 'success')
-        this._updateListe()
+      await fetch(url, body).then((e) => {
+        if (e.status === 200) {
+          callOut('Suppression effectuée', 'success')
+          this._updateListe()
+        } else {
+          callOut('Erreur lors de la suppression', 'danger')
+        }
       })
     })
+    modal = null
   }
 
   async duplicate(event) {
