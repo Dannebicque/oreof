@@ -3,10 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Formation;
+use App\Entity\UserCentre;
 use App\Form\FormationSesType;
 use App\Repository\DomaineRepository;
 use App\Repository\FormationRepository;
 use App\Repository\MentionRepository;
+use App\Repository\RoleRepository;
+use App\Repository\UserCentreRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -52,6 +55,8 @@ class FormationController extends BaseController
 
     #[Route('/new', name: 'app_formation_new', methods: ['GET', 'POST'])]
     public function new(
+        RoleRepository $roleRepository,
+        UserCentreRepository $userCentreRepository,
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request, FormationRepository $formationRepository): Response
     {
@@ -67,6 +72,16 @@ class FormationController extends BaseController
         if ($form->isSubmitted()) {
             $formationRepository->save($formation, true);
 
+            //on vérifie si le responsable de formation à le centre
+            $hasCentre = $userCentreRepository->findOneBy(['user' => $formation->getResponsableMention(), 'formation' => $formation->getId()]);
+            if ($hasCentre === null) {
+                $role = $roleRepository->findOneBy(['code_role' => 'ROLE_RESP_FORMATION']);
+                $uc = new UserCentre();
+                $uc->setUser($formation->getResponsableMention());
+                $uc->setFormation($formation);
+                $uc->addRole($role);
+                $userCentreRepository->save($uc, true);
+            }
             return $this->redirectToRoute('app_formation_index');
         }
 
@@ -172,7 +187,13 @@ class FormationController extends BaseController
         if ($this->isCsrfTokenValid('delete' . $formation->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf'))) {
             foreach ($formation->getParcours() as $parcours) {
+                foreach ($parcours->getBlocCompetences() as $blocs) {
+                    $entityManager->remove($blocs);
+                }
                 $entityManager->remove($parcours);
+            }
+            foreach ($formation->getBlocCompetences() as $blocs) {
+                $entityManager->remove($blocs);
             }
             $formationRepository->remove($formation, true);
 
