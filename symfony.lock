@@ -59,6 +59,21 @@
             "config/packages/knp_snappy.yaml"
         ]
     },
+    "php-translation/symfony-bundle": {
+        "version": "0.13",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "0.10",
+            "ref": "f3ca4e4da63897d177e58da78626c20648c0e102"
+        },
+        "files": [
+            "config/packages/dev/php_translation.yaml",
+            "config/packages/php_translation.yaml",
+            "config/routes/dev/php_translation.yaml",
+            "config/routes/php_translation.yaml"
+        ]
+    },
     "sensio/framework-extra-bundle": {
         "version": "6.2",
         "recipe": {

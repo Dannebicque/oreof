@@ -38,21 +38,18 @@ class FormationSesType extends AbstractType
         $builder
             ->add('typeDiplome', ChoiceType::class, [
                 'choices' => $options['typesDiplomes'],
-                'translation_domain' => 'enum',
-                'label' => 'Type de diplôme',
                 'attr' => ['data-action' => 'change->formation#changeTypeDiplome']
             ])
             ->add('domaine', EntityType::class, [
                 'class' => Domaine::class,
                 'choice_label' => 'libelle',
-                'label' => 'Domaine',
                 'attr' => ['data-action' => 'change->formation#changeDomaine']
             ])
             ->add('composantePorteuse', EntityType::class, [
                 'attr' => ['placeholder' => 'Choisir la composante porteuse du projet', 'data-action' => 'change->formation#changeComposante'],
                 'class' => Composante::class,
                 'choice_label' => 'libelle',
-                'label' => 'Composante porteuse',
+//                'label' => '',
                 'required' => true,
                 'help' => 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation'
             ])
@@ -62,7 +59,7 @@ class FormationSesType extends AbstractType
                     'Choisir une mention' => null,
                     'Autre mention' => 'autre'
                 ],
-                'label' => 'Mention',
+//                'label' => '',
                 'required' => false,
                 'validation_groups' => false,
                 'mapped' => false,
@@ -70,7 +67,7 @@ class FormationSesType extends AbstractType
             ])
             ->add('mentionTexte', TextType::class, [
                 'attr' => ['data-action' => 'change->formation#changeMentionTexte'],
-                'label' => 'Autre mention',
+//                'label' => '',
                 'required' => false,
                 'help' => 'Si la mention existe, veuillez la sélectionner dans la liste déroulante'
             ])
@@ -79,28 +76,28 @@ class FormationSesType extends AbstractType
                 'choice_label' => static function(UnitEnum $choice): string {
                     return $choice->libelle();
                 },
-                'label' => 'Niveau d\'entrée en formation',
+//                'label' => '',
             ])
             ->add('niveauSortie', EnumType::class, [
                 'class' => NiveauFormationEnum::class,
                 'choice_label' => static function(UnitEnum $choice): string {
                     return $choice->libelle();
                 },
-                'label' => 'Niveau de sortie de la formation',
+//                'label' => '',
             ])
             ->add('inRncp', YesNoType::class, [
-                'label' => 'Inscription au RNCP ?',
+//                'label' => '',
                 'attr' => ['data-action' => 'change->formation#changeInscriptionRNCP']
             ])
             ->add('codeRNCP', TextType::class, [
                 'required' => false,
                 'attr' => ['maxlength' => 10],
-                'label' => 'Code RNCP'
+//                'label' => ''
             ])
             ->add('responsableMention', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'display',
-                'label' => 'Responsable de la mention',
+//                'label' => 'Responsable de la mention',
                 'attr' => ['data-action' => 'change->formation#changeResponsableMention']
             ])
             ->addEventListener(FormEvents::POST_SUBMIT,
@@ -144,7 +141,8 @@ class FormationSesType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Formation::class,
-            'typesDiplomes' => []
+            'typesDiplomes' => [],
+            'translation_domain' => 'form'
         ]);
     }
 }

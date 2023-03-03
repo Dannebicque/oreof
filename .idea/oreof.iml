@@ -110,6 +110,13 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/process" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/knplabs/knp-snappy" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/knplabs/knp-snappy-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/nyholm/nsa" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/php-translation/common" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/php-translation/symfony-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/php-translation/extractor" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/php-translation/symfony-storage" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/intl" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

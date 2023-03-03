@@ -1,6 +1,43 @@
 {% use "bootstrap_5_layout.html.twig" %}
 {% trans_default_domain 'form' %}
 
+{% macro form_parent_name(form, prefix) %}
+    {% apply spaceless %}
+        {% import _self as macros %}
+
+        {% set prefix = prefix|default(false) %}
+
+        {% if form.parent is empty %}
+            {{- form.vars.name -}}.labels
+        {% else %}
+            {% if form.vars.compound and not prefix %}
+                {{- macros.form_parent_name(form.parent) -}}.{{- form.vars.name -}}.label
+            {% else %}
+                {{- macros.form_parent_name(form.parent, true) -}}.{{- form.vars.name -}}
+            {% endif %}
+        {% endif %}
+    {% endapply %}
+{% endmacro %}
+
+{% macro form_parent_help_name(form, prefix) %}
+    {% apply spaceless %}
+        {% import _self as macros %}
+
+        {% set prefix = prefix|default(false) %}
+
+        {% if form.parent is empty %}
+            {{- form.vars.name -}}.helps
+        {% else %}
+            {% if form.vars.compound and not prefix %}
+                {{- macros.form_parent_help_name(form.parent) -}}.{{- form.vars.name -}}.help
+            {% else %}
+                {{- macros.form_parent_help_name(form.parent, true) -}}.{{- form.vars.name -}}
+            {% endif %}
+        {% endif %}
+    {% endapply %}
+{% endmacro %}
+
+
 {% block entity_with_add_row %}
     <div {{ stimulus_controller('entity_with_add') }}>
         {{- form_row(form) -}}
@@ -31,7 +68,7 @@
             <span class="form-text mb-0 help-text">{{ help_to_add }}</span>
         </div>
         <div class="col-2">
-&nbsp;
+            &nbsp;
         </div>
     </div>
 {% endblock %}
@@ -48,7 +85,6 @@
         {%- if help is not empty -%}
             {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' text-small')|trim}) -%}
             <div id="{{ id }}_help"{% with { attr: help_attr } %}{{ block('attributes') }}{% endwith %}>
-{#                {{- block('form_help_content') -}}.#}
                 <span {{ stimulus_target('textarea', 'texte') }} class="text-small text-secondary"></span>
             </div>
         {%- endif -%}
@@ -72,13 +108,16 @@
         {%- endif -%}
     {%- endif -%}
     <{{ element|default('label') }}{% if label_attr %}{% with { attr: label_attr } %}{{ block('attributes') }}{% endwith %}{% endif %}>
-    {{- block('form_label_content') -}} {% if help is defined and help != '' %}
+    {{- block('form_label_content') -}}
+    {% import _self as macros %}
+
+    {% if help is defined and help != '' %}
+        {% set help = macros.form_parent_help_name(form) %}
     <i class="fal fa-question-circle ms-1"
-       {{ stimulus_controller('tooltip', {
-              'placement': 'bottom',
-       }) }}
-       title="{{ help }}"></i>{%
-    endif %}
+            {{ stimulus_controller('tooltip', {
+                'placement': 'bottom',
+            }) }}
+       title="{{ help|trim|trans({}, 'help') }}"></i>{% endif %}
     </{{ element|default('label') }}>
 {%- endblock form_label %}
 
@@ -120,7 +159,7 @@
         {%- if help is not empty -%}
             {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' text-small')|trim}) -%}
             <div id="{{ id }}_help"{% with { attr: help_attr } %}{{ block('attributes') }}{% endwith %}>
-{#                {{- block('form_help_content') -}}.#}
+                {#                {{- block('form_help_content') -}}. #}
                 <span {{ stimulus_target('textarea', 'texte') }} class="text-secondary"></span>
             </div>
         {%- endif -%}
@@ -158,36 +197,31 @@
     {%- if help is not empty -%}
         {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' help-text')|trim}) -%}
         <div id="{{ id }}_help"{% with { attr: help_attr } %}{{ block('attributes') }}{% endwith %}>
-{#            {{- block('form_help_content') -}}#}
         </div>
     {%- endif -%}
 {%- endblock form_help %}
 
 {%- block form_label_content -%}
-    {%- if label is empty -%}
-        {%- if label_format is not empty -%}
-            {% set label = label_format|replace({
-                '%name%': name,
-                '%id%': id,
-            }) %}
-        {%- else -%}
-            {% set label = name|humanize %}
+    {% import _self as macros %}
+    {% apply spaceless %}
+        {%- if label is empty -%}
+            {% set label = macros.form_parent_name(form) %}
         {%- endif -%}
-    {%- endif -%}
-    {%- if translation_domain is same as(false) -%}
-        {%- if label_html is same as(false) -%}
-            {{- label -}}
+        {%- if translation_domain is same as(false) -%}
+            {%- if label_html is same as(false) -%}
+                {{- label -}}
+            {%- else -%}
+                {{- label|raw -}}
+            {%- endif -%}
         {%- else -%}
-            {{- label|raw -}}
+            {%- if label_html is same as(false) -%}
+                {{- label|trim|trans(label_translation_parameters, translation_domain) -}}
+            {%- else -%}
+                {{- label|trim|trans(label_translation_parameters, translation_domain)|raw -}}
+            {%- endif -%}
         {%- endif -%}
-    {%- else -%}
-        {%- if label_html is same as(false) -%}
-            {{- label|trans(label_translation_parameters, translation_domain) -}}
-        {%- else -%}
-            {{- label|trans(label_translation_parameters, translation_domain)|raw -}}
-        {%- endif -%}
-    {%- endif -%}
-    {% if required %}
-        <span class="required"></span>
-    {% endif %}
+        {% if required %}
+            <span class="required"></span>
+        {% endif %}
+    {% endapply %}
 {%- endblock form_label_content -%}

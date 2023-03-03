@@ -1,12 +1,14 @@
-TEMPS_PLEIN: Temps plein
-TEMPS_PARTIEL: Temps partiel
-TEMPS_MIXTE: Temps plein et partiel
-but: Bachelor Universitaire de Technologie
-licence_professionnelle: Licence professionnelle
+TEMPS_PLEIN: 'Temps plein'
+TEMPS_PARTIEL: 'Temps partiel'
+TEMPS_MIXTE: 'Temps plein et partiel'
+but: 'Bachelor Universitaire de Technologie'
+licence_professionnelle: 'Licence professionnelle'
 licence: Licence
-master_meef: Master MEEF
+master_meef: 'Master MEEF'
 master: Master
-FI: Formation initiale
-FI_APPRENTISSAGE: Formation initiale en apprentissage
-FC: Formation continue
-FC_CONTRAT_PRO: Formation continue en contrat pro
+FI: 'Formation initiale'
+FI_APPRENTISSAGE: 'Formation initiale en apprentissage'
+FC: 'Formation continue'
+FC_CONTRAT_PRO: 'Formation continue en contrat pro'
+'    formation_ses.labels.typeDiplome': '    formation_ses.labels.typeDiplome'
+formation_ses.labels.typeDiplome: formation_ses.labels.typeDiplome
