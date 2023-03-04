@@ -7,6 +7,7 @@ use App\Entity\Parcours;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\RythmeFormationEnum;
 use App\Repository\RythmeFormationRepository;
+use App\Repository\UserRepository;
 use App\Repository\VilleRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,6 +23,7 @@ class ParcoursSaveController extends AbstractController
      */
     #[Route('/parcours/save/{parcours}', name: 'app_parcours_save')]
     public function save(
+        UserRepository $userRepository,
         EntityManagerInterface $entityManager,
         VilleRepository $villeRepository,
         RythmeFormationRepository $rythmeFormationRepository,
@@ -58,6 +60,11 @@ class ParcoursSaveController extends AbstractController
             case 'rythmeFormation':
                 $rythme = $rythmeFormationRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'rythmeFormation', $rythme);
+
+                return $this->json($rep);
+            case 'respParcours':
+                $user = $userRepository->find($data['value']);
+                $rep = $updateEntity->saveField($parcours, 'respParcours', $user);
 
                 return $this->json($rep);
             case 'localisation':

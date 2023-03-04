@@ -24,16 +24,6 @@ class ParcoursStep7Type extends AbstractType
                 'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step7#saveDebouches'],
                 'help' => 'Indiquez ici les principaux débouchés professionnels accessibles à l’issue de cette formation.',
             ])
-            ->add('code', TextType::class, [
-                'label' => 'Code ROME',
-                'mapped' => false,
-                'help' => 'Indiquez le code ROME accessible à l’issue de cette formation',
-            ])
-            ->add('libelleCode', TextType::class, [
-                'label' => 'Libellé du code ROME',
-                'mapped' => false,
-                'help' => 'Indiquez le libellé du code ROME accessible à l’issue de cette formation',
-            ])
         ;
     }
 

@@ -1,0 +1,34 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Code rome</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for rome in codes %}
+        <tr>
+            <td>{{ rome.code }}</td>
+            <td>
+                <button class="btn btn-danger"
+                {{ stimulus_action('parcours--step7', 'removeCode', 'click',{code: rome.code}) }}
+                >Supprimer</button>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td>
+            <label class="sr-only" for="codeRomeToAdd">Code</label>
+            <input type="text" class="form-control" id="codeRomeToAdd">
+        </td>
+        <td>
+            <button class="btn btn-success"
+            {{ stimulus_action('parcours--step7', 'addCode') }}
+            >Ajouter le code</button>
+        </td>
+    </tr>
+    </tfoot>
+
+</table>

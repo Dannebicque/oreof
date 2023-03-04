@@ -9,8 +9,11 @@ use App\Form\ParcoursStep5Type;
 use App\Form\ParcoursStep6Type;
 use App\Form\ParcoursStep7Type;
 use App\Form\ParcoursStep8Type;
+use App\Repository\ParcoursRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -102,6 +105,51 @@ class ParcoursWizardController extends AbstractController
             'form' => $form->createView(),
             'parcours' => $parcours,
         ]);
+    }
+
+    #[Route('/{parcours}/code-rome', name: 'app_parcours_wizard_step_7_code_rome', methods: ['GET'])]
+    public function codeRome(Parcours $parcours): Response
+    {
+        $codes = $parcours->getCodesRome();
+
+        return $this->render('parcours_wizard/_codeRome.html.twig', [
+            'parcours' => $parcours,
+            'codes' => $codes,
+        ]);
+    }
+
+    #[Route('/{parcours}/code-rome/gere', name: 'app_parcours_wizard_step_7_code_rome_gere', methods: ['POST'])]
+    public function codeRomeGere(
+        ParcoursRepository $parcoursRepository,
+        Request $request,
+        Parcours $parcours): Response
+    {
+        $action = JsonRequest::getValueFromRequest($request, 'action');
+        $code = JsonRequest::getValueFromRequest($request, 'code');
+
+        switch ($action) {
+            case 'ADD':
+                $codes = $parcours->getCodesRome();
+                $codes[] = ['code' => $code];
+                $parcours->setCodesRome($codes);
+
+                $parcoursRepository->save($parcours, true);
+                return $this->json(true);
+            case 'DELETE':
+                $codes = $parcours->getCodesRome();
+                foreach ($codes as $key => $value) {
+                    if ($value['code'] === $code) {
+                        unset($codes[$key]);
+                    }
+                }
+                $parcours->setCodesRome($codes);
+
+                $parcoursRepository->save($parcours, true);
+                return $this->json(true);
+        }
+
+
+        return $this->json(false);
     }
 
     #[Route('/{parcours}/8', name: 'app_parcours_wizard_step_8', methods: ['GET'])]

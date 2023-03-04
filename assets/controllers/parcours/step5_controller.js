@@ -32,7 +32,7 @@ export default class extends Controller {
     this._save({
       field: 'prerequis',
       action: 'textarea',
-      value: document.getElementById('formation_step5_prerequis').value,
+      value: document.getElementById('parcours_step5_prerequis').value,
     })
   }
 
