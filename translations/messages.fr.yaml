@@ -30,3 +30,11 @@ Débouchés: Débouchés
 'Libellé du code ROME': 'Libellé du code ROME'
 'Responsable du parcours (si existant)': 'Responsable du parcours (si existant)'
 'Coordonnées du secrétariat': 'Coordonnées du secrétariat'
+"Modalité d'enseignement": "Modalité d'enseignement"
+PRESENTIELLE: PRESENTIELLE
+DISTANCIELLE: DISTANCIELLE
+HYBRIDE: HYBRIDE
+ECTS: ECTS
+'Volume CM': 'Volume CM'
+'Volume TD': 'Volume TD'
+'Volume TP': 'Volume TP'
