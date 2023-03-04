@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.8.0](https://github.com/Dannebicque/oreof/compare/v0.7.0...v0.8.0) (2023-03-04)
+
+
+### Features
+
+* Ajout d'un checkbox sur chaque step de EC, Parcours, Formation ([808f2b3](https://github.com/Dannebicque/oreof/commit/808f2b35111ca1335f6e0065c73d96d9754cb2ea))
+* Ajout du resp de formation dans le centre de la formation ([91530ac](https://github.com/Dannebicque/oreof/commit/91530ace4b93d8f67ca6a5a455ab91429c4efe5d))
+* Couleurs des badges ([09dc8fe](https://github.com/Dannebicque/oreof/commit/09dc8fe7a38721c58e93e11571285af56481d829))
+* Export EC + Formation ([c9ede4c](https://github.com/Dannebicque/oreof/commit/c9ede4c1047f5a64c66a16897d7c4eb9898c30ee))
+* Export EC + Formation ([1e7fab6](https://github.com/Dannebicque/oreof/commit/1e7fab6f9f13dfce62912fd41461db9766ca47e8))
+* Filtre heures selon type d'enseignement ([2d84584](https://github.com/Dannebicque/oreof/commit/2d8458461a298c58b76ffb0f64c00db38496a05b))
+* Ordre des EC + Code ([ca06113](https://github.com/Dannebicque/oreof/commit/ca06113ade22f629b5db705e8017863c7aaec250))
+* Parcours étapes 7 et 8 + code rome ([a41ad31](https://github.com/Dannebicque/oreof/commit/a41ad3197423105b12691b70c6f329523e04add9))
+* PHPTranslation pour gérer les traductions des formulaires ([bd38221](https://github.com/Dannebicque/oreof/commit/bd38221d7c9488a1b9952efc3f89dd6e41aa2003))
+* Sigle Composante ([f404a0e](https://github.com/Dannebicque/oreof/commit/f404a0e40f09d215b792701076e91979125c7f2d))
+* Suppression d'une formation + fix modal suppression ([87f1059](https://github.com/Dannebicque/oreof/commit/87f10597ba3ac4300d6e5c7506c3386ebe746a99))
+* Suppression des ID, corrections des affichages ([5d17350](https://github.com/Dannebicque/oreof/commit/5d173508b1ea9ab0f6305729170fc4b203aa6dd2))
+* Traduction des formulaires ([a2b334e](https://github.com/Dannebicque/oreof/commit/a2b334ee0cdc62ff2c903614d3786df27eae96a5))
+* Tri par défaut selon le libellé/texte ([c3b8c92](https://github.com/Dannebicque/oreof/commit/c3b8c921dd21f51abeef7441895d748dd0f6ceef))
+* Valide EC ([f7c114d](https://github.com/Dannebicque/oreof/commit/f7c114db5f8d6f436bafe201d92e6ed9a7fcb4f5))
+
+
+### Bug Fixes
+
+* Droits ([5384368](https://github.com/Dannebicque/oreof/commit/53843681929db85f252944c5e1e6007ff5a437d6))
+* Rythme formation dans les formulaires Formations et Parcours ([724d3b4](https://github.com/Dannebicque/oreof/commit/724d3b473925ff7fb69d50e48c57a988c6e3ea83))
+* Rythme formation dans les formulaires Formations et Parcours ([7ad0d08](https://github.com/Dannebicque/oreof/commit/7ad0d08b584ffa8c03c30e11595206354bcb426c))
+* Rythme formation dans les formulaires Formations et Parcours ([906f807](https://github.com/Dannebicque/oreof/commit/906f807278a3d676b783c0080419e877e5f31a1b))
+* Sigle non obligatoire ([597df5d](https://github.com/Dannebicque/oreof/commit/597df5d9bd5ec27880c9a27ec65798d1b7932f5f))
+
 ## [0.7.0](https://github.com/Dannebicque/oreof/compare/v0.6.0...v0.7.0) (2023-02-22)
 
 
