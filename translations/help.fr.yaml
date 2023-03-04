@@ -1,0 +1,30 @@
+formation_ses.helps.composantePorteuse: 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation'
+formation_ses.helps.mention: 'Si la mention n''existe pas, veuillez la créer dans la section "Autre mention"'
+formation_ses.helps.mentionTexte: 'Si la mention existe, veuillez la sélectionner dans la liste déroulante'
+
+formation_step1.helps.localisationMention.help: 'Plusieurs choix possibles'
+formation_step1.helps.modalitesAlternance: 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.'
+formation_step1.helps.composantesInscription.help: 'Composante d''inscription'
+formation_step1.helps.regimeInscription.help: 'Régime d''inscription'
+
+formation_step2.helps.contenuFormation: formation_step2.helps.contenuFormation
+formation_step2.helps.resultatsAttendus: formation_step2.helps.resultatsAttendus
+formation_step2.helps.rythmeFormation: formation_step2.helps.rythmeFormation
+formation_step2.helps.rythmeFormationTexte: formation_step2.helps.rythmeFormationTexte
+
+parcours_step2.helps.stageText: parcours_step2.helps.stageText
+parcours_step2.helps.projetText: parcours_step2.helps.projetText
+parcours_step2.helps.memoireText: parcours_step2.helps.memoireText
+
+bloc_competence.helps.libelle: bloc_competence.helps.libelle
+competence.helps.libelle: competence.helps.libelle
+
+parcours_step5.helps.prerequis: parcours_step5.helps.prerequis
+
+parcours_step7.helps.poursuitesEtudes: parcours_step7.helps.poursuitesEtudes
+parcours_step7.helps.debouches: parcours_step7.helps.debouches
+parcours_step7.helps.code: parcours_step7.helps.code
+parcours_step7.helps.libelleCode: parcours_step7.helps.libelleCode
+
+parcours_step8.helps.coordSecretariat: parcours_step8.helps.coordSecretariat
+

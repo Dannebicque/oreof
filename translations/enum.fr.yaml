@@ -12,3 +12,5 @@ FC: 'Formation continue'
 FC_CONTRAT_PRO: 'Formation continue en contrat pro'
 '    formation_ses.labels.typeDiplome': '    formation_ses.labels.typeDiplome'
 formation_ses.labels.typeDiplome: formation_ses.labels.typeDiplome
+"Régime d'inscription": "Régime d'inscription"
+formation_step1.labels.regimeInscription.label: formation_step1.labels.regimeInscription.label

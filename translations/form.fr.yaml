@@ -1,0 +1,36 @@
+but: 'Bachelor Universitaire de Technologie'
+licence_professionnelle: 'Licence professionnelle'
+licence: Licence
+master_meef: 'Master MEEF'
+master: Master
+
+'Choisir la composante porteuse du projet': 'Choisir la composante porteuse du projet'
+
+'Choisir une mention': 'Choisir une mention'
+'Autre mention': 'Autre mention'
+
+'Information non communiquée': 'Information non communiquée'
+'Sans niveau spécifique': 'Sans niveau spécifique'
+'niveau V (CAP, BEP, CFPA du premier degré)': 'niveau V (CAP, BEP, CFPA du premier degré)'
+'niveau IV (BP, BT, baccalauréat professionnel ou technologique)': 'niveau IV (BP, BT, baccalauréat professionnel ou technologique)'
+'niveau III (BTS, DUT)': 'niveau III (BTS, DUT)'
+'niveau II (licence ou maîtrise universitaire)': 'niveau II (licence ou maîtrise universitaire)'
+'niveau I (supérieur à la maîtrise)': 'niveau I (supérieur à la maîtrise)'
+
+Oui: Oui
+Non: Non
+
+formation_ses.labels.typeDiplome: 'Type de diplôme'
+formation_ses.labels.domaine: Domaine
+formation_ses.labels.mention: Mention
+formation_ses.labels.composantePorteuse: 'Composante porteuse'
+formation_ses.labels.mentionTexte: 'Autre mention'
+formation_ses.labels.niveauEntree: 'Niveau d\''entrée en formation'
+formation_ses.labels.codeRNCP: 'Code RNCP'
+formation_ses.labels.niveauSortie: 'Niveau de sortie de la formation'
+formation_ses.labels.inRncp.label: 'Inscription au RNCP ?'
+formation_ses.labels.responsableMention: 'Responsable de la mention'
+formation_step1.labels.localisationMention.label: 'Localisation(s) de la formation'
+formation_step1.labels.composantesInscription.label: 'Composante d''inscription'
+formation_step1.labels.regimeInscription.label: 'Régime d''inscription'
+formation_step1.labels.modalitesAlternance: 'Modalités de l''alternance'
