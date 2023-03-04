@@ -111,6 +111,9 @@ class ElementConstitutif
     #[ORM\Column]
     private ?array $etatSteps = [];
 
+    #[ORM\Column]
+    private ?int $ordre = null;
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
@@ -728,6 +731,18 @@ class ElementConstitutif
     public function setEtatSteps(array $etatSteps): self
     {
         $this->etatSteps = $etatSteps;
+
+        return $this;
+    }
+
+    public function getOrdre(): ?int
+    {
+        return $this->ordre;
+    }
+
+    public function setOrdre(int $ordre): self
+    {
+        $this->ordre = $ordre;
 
         return $this;
     }

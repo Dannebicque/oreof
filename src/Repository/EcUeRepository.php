@@ -48,4 +48,15 @@ class EcUeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findLastEc(Ue $ue): ?array
+    {
+        return $this->createQueryBuilder('ecUe')
+            ->join('ecUe.ec', 'ec')
+            ->select('MAX(ec.ordre) as ordreMax')
+            ->where('ecUe.ue = :ue')
+            ->setParameter('ue', $ue)
+            ->getQuery()
+            ->getScalarResult();
+    }
 }

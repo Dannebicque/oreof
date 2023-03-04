@@ -70,6 +70,7 @@ class FormationController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
+            $formation->addComposantesInscription($formation->getComposantePorteuse());
             $formationRepository->save($formation, true);
 
             //on vérifie si le responsable de formation à le centre

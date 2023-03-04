@@ -18,7 +18,7 @@
                 {% set ec = ec.ec %}
             {% endif %}
             <tr>
-                <td>{{ ec.libelle }}</td>
+                <td>{{ ec.code }} {{ ec.libelle }}</td>
                 <td>{{ ec.responsableEc != null ? ec.responsableEc.display : 'Non défini' }}</td>
                 <td>{{ ec.formationLibelle }}</td>
                 <td>{{ ec.remplissage|remplissage }}</td>

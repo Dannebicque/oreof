@@ -25,76 +25,78 @@
             Indiquez si la formation comporte des parcours
         </div>
     </fieldset>
+    <fieldset class="mb-3">
+        <legend class="col-form-label required">Générer la structure de la formation</legend><br>
+        <div id="liste_Parcours" {% if formation.hasParcours == false or formation.hasParcours == null %}class="d-none"{% endif %}>
+            <div {{ stimulus_target('formation--step3', 'liste') }}>
 
-    <div id="liste_Parcours" {% if formation.hasParcours == false or formation.hasParcours == null %}class="d-none"{% endif %}>
-        <div {{ stimulus_target('formation--step3', 'liste') }}>
+            </div>
 
+            <button
+                    {{ stimulus_controller('modal', {
+                        size: 'lg',
+                        modalTitle: 'Ajouter un parcours',
+                        modalUrl: path('app_parcours_new', {formation:formation.id}) }) }}
+                    data-action="click->modal#openModal"
+                    class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 mt-4"
+                    data-size="lg"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="Ajouter un parcours"
+            >
+                <i class="{{ iconAdd }}"></i>
+                <span> Ajouter un parcours</span>
+            </button>
         </div>
 
-        <button
-                {{ stimulus_controller('modal', {
-                    size: 'lg',
-                    modalTitle: 'Ajouter un parcours',
-                    modalUrl: path('app_parcours_new', {formation:formation.id}) }) }}
-                data-action="click->modal#openModal"
-                class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 mt-4"
-                data-size="lg"
-                data-bs-toggle="tooltip"
-                data-bs-placement="bottom"
-                title="Ajouter un parcours"
-        >
-            <i class="{{ iconAdd }}"></i>
-            <span> Ajouter un parcours</span>
-        </button>
-    </div>
+        {% if typeDiplome == 'Master MEEF' %}
+            //todo: options du master MEEF 2D
+        {% endif %}
 
-    {% if typeDiplome == 'Master MEEF' %}
-        //todo: options du master MEEF 2D
-    {% endif %}
+        <div id="bloc_semestre" {% if formation.hasParcours == false %}class="d-none"{% endif %}>
+            <div class="alert alert-info mt-2">
+                Précisez la structure de la mention/spécialité avec les parcours (semestre de tronc commun ou semestre
+                spécifique au
+                parcours)
+            </div>
+            <ul>
 
-    <div id="bloc_semestre" {% if formation.hasParcours == false %}class="d-none"{% endif %}>
-        <div class="alert alert-info mt-2">
-            Précisez la structure de la mention/spécialité avec les parcours (semestre de tronc commun ou semestre spécifique au
-            parcours)
+                {% for i in formation.semestreDebut..typeDiplome.nbSemestres %}
+                    <li>
+                        <span class="required">Semestre {{ i }}</span> :
+                        <div class="form-check-inline">
+                            <input type="radio" id="formation_parcours_1" name="semestre_{{ i }}" required="required"
+                                   {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] == 'tronc_commun' %}checked{% endif %}
+                                   class="form-check-input" value="tronc_commun" {{ stimulus_action('formation--step3',
+                                'changeSemestre',
+                                'click', {semestre: i}) }}>
+                            <label class="form-check-label" for="formation_parcours_1">Tronc Commun</label>
+                        </div>
+                        <strong class="text-primary me-2">OU</strong>
+                        <div class="form-check-inline">
+                            <input type="radio" id="formation_parcours_1" name="semestre_{{ i }}" required="required"
+                                   {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] ==
+                                       'parcours' %}checked{% endif %}
+                                   class="form-check-input" value="parcours" {{ stimulus_action('formation--step3',
+                                'changeSemestre', 'click', {semestre: i}) }}>
+                            <label class="form-check-label" for="formation_parcours_1">Parcours</label>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
-        <ul>
 
-            {% for i in formation.semestreDebut..typeDiplome.nbSemestres %}
-                <li>
-                    <span class="required">Semestre {{ i }}</span> :
-                    <div class="form-check-inline">
-                        <input type="radio" id="formation_parcours_1" name="semestre_{{ i }}" required="required"
-                               {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] == 'tronc_commun' %}checked{% endif %}
-                               class="form-check-input" value="tronc_commun" {{ stimulus_action('formation--step3',
-                            'changeSemestre',
-                            'click', {semestre: i}) }}>
-                        <label class="form-check-label" for="formation_parcours_1">Tronc Commun</label>
-                    </div>
-                    <strong class="text-primary me-2">OU</strong>
-                    <div class="form-check-inline">
-                        <input type="radio" id="formation_parcours_1" name="semestre_{{ i }}" required="required"
-                               {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] ==
-                                   'parcours' %}checked{% endif %}
-                               class="form-check-input" value="parcours" {{ stimulus_action('formation--step3',
-                            'changeSemestre', 'click', {semestre: i}) }}>
-                        <label class="form-check-label" for="formation_parcours_1">Parcours</label>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <div class="d-grid">
-        <button type="button" {{ stimulus_action('formation--step3', 'initStructure') }}
-                class="btn d-block btn-outline-warning">
-            Générer la structure de base pour la mention/spécialité et ses parcours
-        </button>{# todo: modifier le texte  #}
-    </div>
-    <div class="alert alert-warning mt-2">
-        <strong>Attention !</strong> Cette action va générer une structure de base
-                                     pour la mention/spécialité et ses parcours selon le paramètrage ci-dessus.
-    </div>
-
+        <div class="d-grid">
+            <button type="button" {{ stimulus_action('formation--step3', 'initStructure') }}
+                    class="btn d-block btn-outline-warning">
+                Générer la structure de base pour la mention/spécialité et ses parcours
+            </button>{# todo: modifier le texte  #}
+        </div>
+        <div class="alert alert-warning mt-2">
+            <strong>Attention !</strong> Cette action va générer une structure de base
+                                         pour la mention/spécialité et ses parcours selon le paramètrage ci-dessus.
+        </div>
+    </fieldset>
     <div class="alert {% if formation.getEtatStep(3) %}alert-success{% else %}alert-warning{% endif %}">
         <input type="checkbox"
                id="etatStructure"

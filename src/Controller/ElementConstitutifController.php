@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\EcOrdre;
 use App\Entity\EcUe;
 use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
@@ -39,6 +40,7 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/new/{ue}', name: 'app_element_constitutif_new', methods: ['GET', 'POST'])]
     public function new(
+        EcOrdre $ecOrdre,
         EcUeRepository $ecUeRepository,
         LangueRepository $langueRepository,
         Request $request,
@@ -53,8 +55,13 @@ class ElementConstitutifController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $lastEc = $ecOrdre->getOrdreSuivant($ue);
+            $elementConstitutif->setCode('EC ' . $lastEc);
+            $elementConstitutif->setOrdre($lastEc);
             $ueEc = new EcUe($ue, $elementConstitutif);
             $ecUeRepository->save($ueEc, true);
+
+
             $langueFr = $langueRepository->findOneBy(['codeIso' => 'fr']);
             if ($langueFr !== null) {
                 $elementConstitutif->addLangueDispense($langueFr);
@@ -62,6 +69,7 @@ class ElementConstitutifController extends AbstractController
                 $elementConstitutif->addLangueSupport($langueFr);
                 $langueFr->addLanguesSupportsEc($elementConstitutif);
             }
+
             $elementConstitutifRepository->save($elementConstitutif, true);
 
             return $this->json(true);

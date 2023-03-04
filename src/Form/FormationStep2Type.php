@@ -23,7 +23,7 @@ class FormationStep2Type extends AbstractType
             ->add('resultatsAttendus', TextareaAutoSaveType::class, [
                 'label' => 'Résultats attendus de la formation',
                 'help' => 'Indiquez en 3000 caractères maximum les résultats attendus de la formation (titre, diplôme, certificat, attestation, …) et précise les modalités de reconnaissance ou de validation. De la même manière que pour l’élément “intitule-formation”, les diplômes, titres ou certifications devraient utiliser des dénominations conformes aux tables de l’Éducation Nationale ou au Répertoire National des Certifications Professionnelles (RNCP).',
-                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'click->formation--step2#saveResultats'],
+                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->formation--step2#saveResultats'],
             ])
 
             ->add('rythmeFormation', EntityType::class, [
@@ -41,7 +41,7 @@ class FormationStep2Type extends AbstractType
                 'label' => 'Compléments sur le rythme de formation',
                 'required' => false,
                 'help' => 'Indiquez en 3000 caractères maximum le rythme de la formation : temps plein, temps partiel, cours du soir,etc..',
-                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'click->formation--step2#saveRythme'],
+                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->formation--step2#saveRythme'],
             ]);
     }
 
