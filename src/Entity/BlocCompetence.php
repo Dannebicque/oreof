@@ -22,6 +22,7 @@ class BlocCompetence
     private ?string $libelle = null;
 
     #[ORM\OneToMany(mappedBy: 'blocCompetence', targetEntity: Competence::class, cascade: ['persist', 'remove'])]
+    #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $competences;
 
     #[ORM\ManyToOne(inversedBy: 'blocCompetences')]

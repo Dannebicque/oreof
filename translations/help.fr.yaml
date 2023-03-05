@@ -39,3 +39,9 @@ parcours_step2.helps.hasProjet.help: parcours_step2.helps.hasProjet.help
 parcours_step2.helps.nbHeuresProjet: parcours_step2.helps.nbHeuresProjet
 parcours_step2.helps.hasMemoire.help: parcours_step2.helps.hasMemoire.help
 parcours_step8.helps.respParcours: parcours_step8.helps.respParcours
+parcours.helps.sigle: parcours.helps.sigle
+parcours_step1.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation et une description détaillée des différents sujets traités dans la formation.'
+parcours_step1.helps.resultatsAttendus: 'Indiquez en 3000 caractères maximum les résultats attendus de la formation (titre, diplôme, certificat, attestation, …) et précise les modalités de reconnaissance ou de validation. De la même manière que pour l’élément “intitule-formation”, les diplômes, titres ou certifications devraient utiliser des dénominations conformes aux tables de l’Éducation Nationale ou au Répertoire National des Certifications Professionnelles (RNCP).'
+parcours_step1.helps.rythmeFormation: 'Indiquez le rythme du parcours (en heures, en jours, en semaines, en mois, en années, …).'
+parcours_step1.helps.rythmeFormationTexte: 'Indiquez en 3000 caractères maximum le rythme de la formation : temps plein, temps partiel, cours du soir,etc..'
+parcours_step1.helps.localisation.help: 'Choisir les lieux où le parcours est proposé'

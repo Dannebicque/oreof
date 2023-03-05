@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\Bcc;
 use App\Entity\BlocCompetence;
 use App\Entity\Formation;
 use App\Entity\Parcours;
@@ -29,6 +30,7 @@ class BlocCompetenceController extends AbstractController
     {
         return $this->render('bloc_competence/_liste.html.twig', [
             'bloc_competences' => $blocCompetenceRepository->findByParcours($parcours),
+            'parcours' => $parcours,
         ]);
     }
 
@@ -59,33 +61,33 @@ class BlocCompetenceController extends AbstractController
         ]);
     }
 
-    #[Route('/new/formation/{formation}', name: 'app_bloc_competence_new_formation', methods: ['GET', 'POST'])]
-    public function newFormation(
-        Request $request,
-        BlocCompetenceRepository $blocCompetenceRepository,
-        Formation $formation
-    ): Response {
-        $blocCompetence = new BlocCompetence();
-        $blocCompetence->setFormation($formation);
-        $form = $this->createForm(BlocCompetenceType::class, $blocCompetence, [
-            'action' => $this->generateUrl('app_bloc_competence_new_formation', ['formation' => $formation->getId()])
-        ]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $ordre = $blocCompetenceRepository->getMaxOrdre($formation);
-            $blocCompetence->setOrdre($ordre + 1);
-            $blocCompetence->genereCode();
-            $blocCompetenceRepository->save($blocCompetence, true);
-
-            return $this->json(true);
-        }
-
-        return $this->render('bloc_competence/new.html.twig', [
-            'bloc_competence' => $blocCompetence,
-            'form' => $form->createView(),
-        ]);
-    }
+//    #[Route('/new/formation/{formation}', name: 'app_bloc_competence_new_formation', methods: ['GET', 'POST'])]
+//    public function newFormation(
+//        Request $request,
+//        BlocCompetenceRepository $blocCompetenceRepository,
+//        Formation $formation
+//    ): Response {
+//        $blocCompetence = new BlocCompetence();
+//        $blocCompetence->setFormation($formation);
+//        $form = $this->createForm(BlocCompetenceType::class, $blocCompetence, [
+//            'action' => $this->generateUrl('app_bloc_competence_new_formation', ['formation' => $formation->getId()])
+//        ]);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $ordre = $blocCompetenceRepository->getMaxOrdre($formation);
+//            $blocCompetence->setOrdre($ordre + 1);
+//            $blocCompetence->genereCode();
+//            $blocCompetenceRepository->save($blocCompetence, true);
+//
+//            return $this->json(true);
+//        }
+//
+//        return $this->render('bloc_competence/new.html.twig', [
+//            'bloc_competence' => $blocCompetence,
+//            'form' => $form->createView(),
+//        ]);
+//    }
 
     #[Route('/{id}/edit', name: 'app_bloc_competence_edit', methods: ['GET', 'POST'])]
     public function edit(
@@ -129,6 +131,17 @@ class BlocCompetenceController extends AbstractController
         $blocCompetenceNew->genereCode();
 
         $blocCompetenceRepository->save($blocCompetenceNew, true);
+        return $this->json(true);
+    }
+
+    #[Route('/{id}/deplacer/{sens}', name: 'app_bloc_competence_deplacer', methods: ['GET'])]
+    public function deplacer(
+        Bcc $bcc,
+        BlocCompetence $blocCompetence,
+        string $sens
+    ): Response {
+
+        $bcc->deplacerBlocCompetence($blocCompetence, $sens);
         return $this->json(true);
     }
 

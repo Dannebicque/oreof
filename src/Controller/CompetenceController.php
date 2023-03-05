@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\Bcc;
 use App\Entity\BlocCompetence;
 use App\Entity\Competence;
 use App\Form\CompetenceType;
@@ -68,6 +69,17 @@ class CompetenceController extends AbstractController
         $competenceNew->setOrdre($ordre + 1);
         $competenceNew->genereCode();
         $competenceRepository->save($competenceNew, true);
+        return $this->json(true);
+    }
+
+    #[Route('/{id}/deplacer/{sens}', name: 'app_competence_deplacer', methods: ['GET'])]
+    public function deplacer(
+        Bcc $bcc,
+        Competence $competence,
+        string $sens
+    ): Response {
+
+        $bcc->deplacerCompetence($competence, $sens);
         return $this->json(true);
     }
 

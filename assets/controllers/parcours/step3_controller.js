@@ -56,6 +56,24 @@ export default class extends Controller {
     })
   }
 
+  async deplacerBcc(event) {
+    event.preventDefault()
+    const { url } = event.params
+    await fetch(url).then(() => {
+      callOut('Bloc de compétence déplacé', 'success')
+      this._updateListe()
+    })
+  }
+
+  async deplacerCc(event) {
+    event.preventDefault()
+    const { url } = event.params
+    await fetch(url).then(() => {
+      callOut('Compétence déplacée', 'success')
+      this._updateListe()
+    })
+  }
+
   async duplicate(event) {
     event.preventDefault()
     const { url } = event.params
@@ -67,6 +85,19 @@ export default class extends Controller {
 
   refreshListe() {
     this._updateListe()
+  }
+
+  recopieBcc() {
+    const elt = document.getElementById('parcoursSource')
+    const nameParcours = elt.options[elt.selectedIndex].text
+    if (confirm(`Voulez-vous vraiment recopier les BCC du parcours "${nameParcours}" ? `)) {
+      this._save({
+        action: 'recopieBcc',
+        value: document.getElementById('parcoursSource').value,
+      })
+      callOut('Recopie effectuée.', 'success')
+      this._updateListe()
+    }
   }
 
   async _updateListe() {

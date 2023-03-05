@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\Bcc;
 use App\Classes\UpdateEntity;
 use App\Entity\Parcours;
 use App\Enums\ModaliteEnseignementEnum;
@@ -23,6 +24,7 @@ class ParcoursSaveController extends AbstractController
      */
     #[Route('/parcours/save/{parcours}', name: 'app_parcours_save')]
     public function save(
+        Bcc $bcc,
         UserRepository $userRepository,
         EntityManagerInterface $entityManager,
         VilleRepository $villeRepository,
@@ -52,6 +54,10 @@ class ParcoursSaveController extends AbstractController
                 $rep = $updateEntity->saveField($parcours, $data['field'], (float)$data['value']);
 
                 return $this->json($rep);
+            case 'recopieBcc':
+                $bcc->recopieBcc($parcours, $data['value']);
+
+                return $this->json(true);
             case 'modalitesEnseignement':
                 $rep = $updateEntity->saveField($parcours, 'modalitesEnseignement',
                     ModaliteEnseignementEnum::from($data['value']));

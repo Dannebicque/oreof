@@ -39,6 +39,10 @@
                 </button>
             </td>
         </tr>
+    {% else %}
+        <tr>
+            <td colspan="3" class="text-center bg-warning">Aucun parcours, veuillez en ajouter au moins un.</td>
+        </tr>
     {% endfor %}
     </tbody>
 </table>

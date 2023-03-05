@@ -29,7 +29,8 @@ class Parcours
     #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours')]
     private ?Formation $formation;
 
-    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: BlocCompetence::class)]
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: BlocCompetence::class, cascade: ['persist', 'remove'])]
+    #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $blocCompetences;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
