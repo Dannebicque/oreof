@@ -84,9 +84,11 @@
                     {% endif %}
 
 
-                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) or is_granted
+                    {% if ((is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and  (workflow_can(ec,
+                        'valider_ec') or workflow_can(ec,
+                        'initialiser'))) or (is_granted
                         ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
-                        'valider_ec') %}
+                        'valider_ec')) %}
                         <a
                                 href="{{ path('app_ec_etat_valide',{'id': ec.id, parcours:ec.parcours.id}) }}"
                                 class="btn btn-sm text-warning"

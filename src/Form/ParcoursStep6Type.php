@@ -47,6 +47,7 @@ class ParcoursStep6Type extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Parcours::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

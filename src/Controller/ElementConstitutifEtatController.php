@@ -22,6 +22,7 @@ class ElementConstitutifEtatController extends BaseController
     ): Response {
         $ecs = $elementConstitutifRepository->findByResponsableFormation($this->getUser(),
             $this->getAnneeUniversitaire());
+
         foreach ($ecs as $ec) {
             if ($this->ecWorkflow->can($ec, 'initialiser')) {
                 $this->ecWorkflow->apply($ec, 'initialiser');

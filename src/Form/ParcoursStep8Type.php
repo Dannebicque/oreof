@@ -16,16 +16,15 @@ class ParcoursStep8Type extends AbstractType
     {
         $builder
             ->add('respParcours', EntityType::class, [
-                'label' => 'Responsable du parcours (si existant)',
+                'help' => '-',
                 'required' => false,
                 'class' => User::class,
                 'choice_label' => 'display',
                 'attr' => ['data-action' => 'change->parcours--step8#respParcours'],
             ])
             ->add('coordSecretariat', TextareaAutoSaveType::class, [
-                'label' => 'Coordonnées du secrétariat',
                 'attr' => ['rows' => 5, 'maxlength' => 3000, 'data-action' => 'change->parcours--step8#coordSecretariat'],
-                'help' => 'Indiquez ici les coordonnées postales et téléphoniques du secrétariat ainsi que son adresse mail générique.',
+                'help' => '-',
             ])
         ;
     }
@@ -34,6 +33,7 @@ class ParcoursStep8Type extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Parcours::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

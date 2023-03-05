@@ -15,14 +15,12 @@ class ParcoursStep7Type extends AbstractType
     {
         $builder
             ->add('poursuitesEtudes', TextareaAutoSaveType::class, [
-                'label' => 'Poursuites d\'études envisageables',
                 'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->parcours--step7#savePoursuitesEtudes'],
-                'help' => 'Indiquez en 3000 caractères maximum quelles sont les poursuites d’études envisageables.',
+                'help' =>'-',
             ])
             ->add('debouches', TextareaAutoSaveType::class, [
-                'label' => 'Débouchés',
                 'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step7#saveDebouches'],
-                'help' => 'Indiquez ici les principaux débouchés professionnels accessibles à l’issue de cette formation.',
+                'help' => '-',
             ])
         ;
     }
@@ -31,6 +29,7 @@ class ParcoursStep7Type extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Parcours::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

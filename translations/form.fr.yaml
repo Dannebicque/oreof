@@ -29,3 +29,49 @@ formation_step1.labels.localisationMention.label: 'Localisation(s) de la formati
 formation_step1.labels.composantesInscription.label: "Composante d'inscription"
 formation_step1.labels.regimeInscription.label: "Régime d'inscription"
 formation_step1.labels.modalitesAlternance: "Modalités de l'alternance"
+ec_step1.labels.responsableEc: "Responsable de l'EC"
+ec_step1.labels.libelle: Libellé
+ec_step1.labels.libelleAnglais: 'Libellé anglais'
+ec_step1.labels.enseignementMutualise.label: 'Enseignement mutualisé ?'
+ec_step1.labels.isCmPresentielMutualise.label: 'Les CM présentiels sont-ils mutualisés'
+ec_step1.labels.isTdPresentielMutualise.label: 'Les TD présentiels sont-ils mutualisés'
+ec_step1.labels.isTpPresentielMutualise.label: 'Les TP présentiels sont-ils mutualisés'
+ec_step1.labels.isCmDistancielMutualise.label: 'Les CM distanciels sont-ils mutualisés'
+ec_step1.labels.isTdDistancielMutualise.label: 'Les TD distanciels sont-ils mutualisés'
+ec_step1.labels.isTpDistancielMutualise.label: 'Les TP distanciels sont-ils mutualisés'
+ec_step2.labels.description: Description
+ec_step2.labels.langueDispense.label: 'Enseignement dispensé en'
+ec_step2.labels.langueSupport.label: 'Support de cours en'
+ec_step2.labels.typeEnseignement.label: 'Enseignement Obligatoire / optionnel ?'
+ec_step3.labels.objectifs: "Objectifs de l'enseignement"
+ec_step4.labels.modaliteEnseignement.label: "Modalité d'enseignement"
+ec_step4.labels.ects: ECTS
+ec_step4.labels.volumeCmPresentiel: 'Volume CM présentiel'
+ec_step4.labels.volumeTdPresentiel: 'Volume TD présentiel'
+ec_step4.labels.volumeTpPresentiel: 'Volume TP présentiel'
+ec_step4.labels.volumeCmDistanciel: 'Volume CM distanciel'
+ec_step4.labels.volumeTdDistanciel: 'Volume TD distanciel'
+ec_step4.labels.volumeTpDistanciel: 'Volume TP distanciel'
+'En présentiel': 'En présentiel'
+'En distanciel': 'En distanciel'
+Hybride: Hybride
+'Choisissez un rythme de formation ou complétez le champ ci-dessous': ''
+'Compléments sur le rythme de formation': 'Compléments sur le rythme de formation'
+formation_step2.labels.contenuFormation: 'Contenu de la formation'
+formation_step2.labels.resultatsAttendus: 'Résultats attendus de la formation'
+formation_step2.labels.rythmeFormation: 'Rythme de la formation'
+formation_step2.labels.rythmeFormationTexte: 'Choisissez un rythme de formation et/ou complétez le champ ci-dessous'
+parcours_step2.labels.modalitesEnseignement.label: "Modalités d'enseignement du parcours"
+parcours_step2.labels.hasStage.label: 'Stage ?'
+parcours_step2.labels.nbHeuresStages: "Nombre d'heures de stage prévu"
+parcours_step2.labels.stageText: 'Description du stage'
+parcours_step2.labels.hasProjet.label: 'Projets tuteurés ?'
+parcours_step2.labels.nbHeuresProjet: "Nombre d'heures de projets tutorés prévu"
+parcours_step2.labels.projetText: 'Description du projet'
+parcours_step2.labels.hasMemoire.label: 'TER/Mémoire ?'
+parcours_step2.labels.memoireText: 'Description TER/Mémoire'
+parcours_step5.labels.prerequis: 'Prérequis recommandés'
+parcours_step7.labels.poursuitesEtudes: "Poursuites d'études envisageables"
+parcours_step7.labels.debouches: Débouchés
+parcours_step8.labels.respParcours: 'Responsable du parcours (si existant)'
+parcours_step8.labels.coordSecretariat: 'Coordonnées du secrétariat'

@@ -15,55 +15,59 @@ class EcStep4Type extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $isModal = $options['isModal'];
-        //todo: déplacer sur le resp de formation, c'est lui qui initie ca
         $builder
             ->add('modaliteEnseignement', EnumType::class, [
-                'label' => 'Modalité d\'enseignement',
+                'help' => '-',
                 'class' => ModaliteEnseignementEnum::class,
+                'choice_label' => fn ($choice) => match ($choice) {
+                    modaliteEnseignementEnum::PRESENTIELLE => 'En présentiel',
+                    modaliteEnseignementEnum::DISTANCIELLE => 'En distanciel',
+                    modaliteEnseignementEnum::HYBRIDE  => 'Hybride',
+                },
                 'expanded' => true,
                 'attr' => ['data-action' => !$isModal ? 'change->ec--structure#saveModaliteEnseignement' : ''],
             ])
             ->add('ects', NumberType::class, [
-                'label' => 'ECTS',
+                'help' => '-',
                 'attr' => ['data-action' => !$isModal ? 'change->ec--structure#saveEcts' : ''],
             ])
             ->add('volumeCmPresentiel', NumberType::class, [
-                'label' => 'Volume CM',
+                'help' => '-',
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeCmPresentiel'
                 ],
             ])
             ->add('volumeTdPresentiel', NumberType::class, [
-                'label' => 'Volume TD',
+                'help' => '-',
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeTdPresentiel'
                 ],
             ])
             ->add('volumeTpPresentiel', NumberType::class, [
-                'label' => 'Volume TP',
+                'help' => '-',
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeTpPresentiel'
                 ],
             ])
             ->add('volumeCmDistanciel', NumberType::class, [
-                'label' => 'Volume CM',
+                'help' => '-',
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeCmDistanciel'
                 ],
             ])
             ->add('volumeTdDistanciel', NumberType::class, [
-                'label' => 'Volume TD',
+                'help' => '-',
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeTdDistanciel'
                 ],
             ])
             ->add('volumeTpDistanciel', NumberType::class, [
-                'label' => 'Volume TP',
+                'help' => '-',
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeTpDistanciel'
@@ -75,7 +79,8 @@ class EcStep4Type extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ElementConstitutif::class,
-            'isModal' => false
+            'isModal' => false,
+            'translation_domain' => 'form'
         ]);
     }
 }

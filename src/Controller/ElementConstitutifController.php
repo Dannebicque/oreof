@@ -124,9 +124,9 @@ class ElementConstitutifController extends AbstractController
         //                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
         //                        'valider_ec')
 
-        $access = ($this->isGranted('ROLE_EC_EDIT_MY',
-                    $elementConstitutif) || $this->isGranted('ROLE_FORMATION_EDIT_MY',
-                    $parcours->getFormation())) && $this->ecWorkflow->can($elementConstitutif, 'valider_ec');
+        $access = (($this->isGranted('ROLE_EC_EDIT_MY',
+                    $elementConstitutif) && $this->ecWorkflow->can($elementConstitutif, 'valider_ec')) || ($this->isGranted('ROLE_FORMATION_EDIT_MY',
+                    $parcours->getFormation())) || ($this->ecWorkflow->can($elementConstitutif, 'valider_ec') || $this->ecWorkflow->can($elementConstitutif, 'initialiser')) || $this->isGranted('ROLE_ADMIN'));
 
         if (!$access) {
             throw new AccessDeniedException();

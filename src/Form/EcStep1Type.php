@@ -27,70 +27,76 @@ class EcStep1Type extends AbstractType
             $options['data']->getParcours()->getFormation());
         $builder
             ->add('responsableEc', EntityType::class, [
-//                'label' => 'Responsable de l\'EC',
-                'help' => 'Responsable de l\'EC',
+                'help' => '-',
                 'class' => User::class,
+//                'query_builder' => function ($er) use ($options) {
+//                    return $er->createQueryBuilder('u')
+//                        ->join('u.roles', 'r')
+//                        ->where('r.role = :role')
+//                        ->andWhere('u.parcours = :parcours')
+//                        ->setParameter('role', 'ROLE_FORMATION_EDIT_MY')
+//                        ->setParameter('parcours', $options['data']->getParcours()->getId())
+//                        ->orderBy('u.nom', 'ASC')
+//                        ->addOrderBy('u.prenom', 'ASC');
+//                },//filtrer par user dans le centre
                 'disabled' => !$access,
                 'attr' => ['data-action' => 'change->ec--step1#changeResponsableEc'],
                 'choice_label' => 'display',
             ])
             ->add('libelle', TextareaAutoSaveType::class, [
-//                'label' => 'Libellé',
                 'disabled' => !$access,
                 'attr' => ['data-action' => 'change->ec--step1#saveContenuFr', 'maxlength' => 250],
-                'help' => 'N\'est modifiable que par le responsable de la formation',
+                'help' => '-',
             ])
             ->add('libelleAnglais', TextareaAutoSaveType::class, [
-//                'label' => 'Libellé anglais',
                 'attr' => ['data-action' => 'change->ec--step1#saveContenuEn', 'maxlength' => 250],
-                'help' => 'Précisez la version anglaise du libellé de l\'EC',
+                'help' => '-',
             ])
             ->add('enseignementMutualise', YesNoType::class, [
                 'attr' => ['data-action' => 'change->ec--step1#changeEnseignementMutualise'],
-//                'label' => 'Enseignement mutualisé ?',
-                'help' => 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez cette case.',
+                'help' => '-',
             ])
             ->add('isCmPresentielMutualise', YesNoType::class, [
                 'attr' => [
                     'data-action' => 'change->ec--step1#isMutualise',
                     'data-ec--step1-type-param' => 'isCmPresentielMutualise'
                 ],
-//                'label' => 'Les CM présentiels sont-ils mutualisés',
+                'help' => '-'
             ])
             ->add('isTdPresentielMutualise', YesNoType::class, [
                 'attr' => [
                     'data-action' => 'change->ec--step1#isMutualise',
                     'data-ec--step1-type-param' => 'isTdPresentielMutualise'
                 ],
-//                'label' => 'Les TD présentiels sont-ils mutualisés',
+                'help' => '-'
             ])
             ->add('isTpPresentielMutualise', YesNoType::class, [
                 'attr' => [
                     'data-action' => 'change->ec--step1#isMutualise',
                     'data-ec--step1-type-param' => 'isTpPresentielMutualise'
                 ],
-//                'label' => 'Les TP présentiels sont-ils mutualisés',
+                'help' => '-'
             ])
             ->add('isCmDistancielMutualise', YesNoType::class, [
                 'attr' => [
                     'data-action' => 'change->ec--step1#isMutualise',
                     'data-ec--step1-type-param' => 'isCmDistancielMutualise'
                 ],
-//                'label' => 'Les CM distanciels sont-ils mutualisés',
+                'help' => '-'
             ])
             ->add('isTdDistancielMutualise', YesNoType::class, [
                 'attr' => [
                     'data-action' => 'change->ec--step1#isMutualise',
                     'data-ec--step1-type-param' => 'isTdDistancielMutualise'
                 ],
-//                'label' => 'Les TD distanciels sont-ils mutualisés',
+                'help' => '-'
             ])
             ->add('isTpDistancielMutualise', YesNoType::class, [
                 'attr' => [
                     'data-action' => 'change->ec--step1#isMutualise',
                     'data-ec--step1-type-param' => 'isTpDistancielMutualise'
                 ],
-//                'label' => 'Les TP distanciels sont-ils mutualisés',
+                'help' => '-'
             ]);
     }
 
@@ -98,6 +104,7 @@ class EcStep1Type extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ElementConstitutif::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

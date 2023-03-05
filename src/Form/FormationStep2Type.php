@@ -16,21 +16,18 @@ class FormationStep2Type extends AbstractType
     {
         $builder
             ->add('contenuFormation', TextareaAutoSaveType::class, [
-                'label' => 'Contenu de la formation',
-                'help' => 'Indiquez en 3000 caractères maximum le contenu de la formation et une description détaillée des différents sujets traités dans la formation.',
+                'help' => '-',
                 'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->formation--step2#saveContenu'],
             ])
             ->add('resultatsAttendus', TextareaAutoSaveType::class, [
-                'label' => 'Résultats attendus de la formation',
-                'help' => 'Indiquez en 3000 caractères maximum les résultats attendus de la formation (titre, diplôme, certificat, attestation, …) et précise les modalités de reconnaissance ou de validation. De la même manière que pour l’élément “intitule-formation”, les diplômes, titres ou certifications devraient utiliser des dénominations conformes aux tables de l’Éducation Nationale ou au Répertoire National des Certifications Professionnelles (RNCP).',
+                'help' => '-',
                 'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->formation--step2#saveResultats'],
             ])
 
             ->add('rythmeFormation', EntityType::class, [
                 'placeholder' => 'Choisissez un rythme de formation ou complétez le champ ci-dessous',
                 'required' => false,
-                'label' => 'Rythme de la formation',
-                'help' => 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir,etc.).',
+                'help' => '-',
                 'class' => RythmeFormation::class,
                 'choice_label' => 'libelle',
                 'attr' => ['data-action' => 'change->formation--step2#changeRythme'],
@@ -38,9 +35,8 @@ class FormationStep2Type extends AbstractType
 
 
             ->add('rythmeFormationTexte', TextareaAutoSaveType::class, [
-                'label' => 'Compléments sur le rythme de formation',
                 'required' => false,
-                'help' => 'Indiquez en 3000 caractères maximum le rythme de la formation : temps plein, temps partiel, cours du soir,etc..',
+                'help' => '-',
                 'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->formation--step2#saveRythme'],
             ]);
     }
@@ -49,6 +45,7 @@ class FormationStep2Type extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Formation::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

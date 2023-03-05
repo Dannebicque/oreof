@@ -5,18 +5,37 @@ formation_step1.helps.localisationMention.help: 'Plusieurs choix possibles'
 formation_step1.helps.modalitesAlternance: 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.'
 formation_step1.helps.composantesInscription.help: "Composante d'inscription"
 formation_step1.helps.regimeInscription.help: "Régime d'inscription"
-formation_step2.helps.contenuFormation: formation_step2.helps.contenuFormation
-formation_step2.helps.resultatsAttendus: formation_step2.helps.resultatsAttendus
-formation_step2.helps.rythmeFormation: formation_step2.helps.rythmeFormation
-formation_step2.helps.rythmeFormationTexte: formation_step2.helps.rythmeFormationTexte
-parcours_step2.helps.stageText: parcours_step2.helps.stageText
-parcours_step2.helps.projetText: parcours_step2.helps.projetText
-parcours_step2.helps.memoireText: parcours_step2.helps.memoireText
+formation_step2.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation et une description détaillée des différents sujets traités dans la formation.'
+formation_step2.helps.resultatsAttendus: 'Indiquez en 3000 caractères maximum les résultats attendus de la formation (titre, diplôme, certificat, attestation, …) et précise les modalités de reconnaissance ou de validation. De la même manière que pour l’élément “intitule-formation”, les diplômes, titres ou certifications devraient utiliser des dénominations conformes aux tables de l’Éducation Nationale ou au Répertoire National des Certifications Professionnelles (RNCP).'
+formation_step2.helps.rythmeFormation: 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir,etc.).'
+formation_step2.helps.rythmeFormationTexte: 'Indiquez en 3000 caractères maximum le rythme de la formation : temps plein, temps partiel, cours du soir,etc..'
+parcours_step2.helps.stageText: 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...'
+parcours_step2.helps.projetText: 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...'
+parcours_step2.helps.memoireText: 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...'
 bloc_competence.helps.libelle: bloc_competence.helps.libelle
 competence.helps.libelle: competence.helps.libelle
-parcours_step5.helps.prerequis: parcours_step5.helps.prerequis
-parcours_step7.helps.poursuitesEtudes: parcours_step7.helps.poursuitesEtudes
-parcours_step7.helps.debouches: parcours_step7.helps.debouches
-parcours_step7.helps.code: parcours_step7.helps.code
-parcours_step7.helps.libelleCode: parcours_step7.helps.libelleCode
-parcours_step8.helps.coordSecretariat: parcours_step8.helps.coordSecretariat
+parcours_step5.helps.prerequis: 'Indiquez ici si des prérequis pédagogiques sont conseillés pour réussir dans cette formation'
+parcours_step7.helps.poursuitesEtudes: 'Indiquez en 3000 caractères maximum quelles sont les poursuites d’études envisageables.'
+parcours_step7.helps.debouches: 'Indiquez ici les principaux débouchés professionnels accessibles à l’issue de cette formation.'
+parcours_step8.helps.coordSecretariat: 'Indiquez ici les coordonnées postales et téléphoniques du secrétariat ainsi que son adresse mail générique.'
+ec_step1.helps.responsableEc: "Responsable de l'EC"
+ec_step1.helps.libelle: "N'est modifiable que par le responsable de la formation"
+ec_step1.helps.libelleAnglais: "Précisez la version anglaise du libellé de l'EC"
+ec_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez cette case.'
+ec_step2.helps.description: 'Indiquez ici en 3000 caractères maximum le contenu de l’enseignement et une description détaillée des différents sujets traités dans cet enseignement.'
+ec_step3.helps.objectifs: 'Indiquez ici en 3000 caractères maximum les objectifs de l’enseignement.'
+ec_step4.helps.modaliteEnseignement.help: 'Indiquez les modalités d’enseignement de l’enseignement.'
+ec_step4.helps.ects: "Indiquez le nombre d’ECTS attribués à l'enseignement."
+ec_step4.helps.volumeCmPresentiel: 'Volume horaire en heures de CM en présentiel'
+ec_step4.helps.volumeTdPresentiel: 'Volume horaire en heures de TD en présentiel'
+ec_step4.helps.volumeTpPresentiel: 'Volume horaire en heures de TP en présentiel'
+ec_step4.helps.volumeCmDistanciel: 'Volume horaire en heures de CM à distance'
+ec_step4.helps.volumeTdDistanciel: 'Volume horaire en heures de TD à distance'
+ec_step4.helps.volumeTpDistanciel: 'Volume horaire en heures de TP à distance'
+parcours_step2.helps.modalitesEnseignement.help: parcours_step2.helps.modalitesEnseignement.help
+parcours_step2.helps.hasStage.help: parcours_step2.helps.hasStage.help
+parcours_step2.helps.nbHeuresStages: parcours_step2.helps.nbHeuresStages
+parcours_step2.helps.hasProjet.help: parcours_step2.helps.hasProjet.help
+parcours_step2.helps.nbHeuresProjet: parcours_step2.helps.nbHeuresProjet
+parcours_step2.helps.hasMemoire.help: parcours_step2.helps.hasMemoire.help
+parcours_step8.helps.respParcours: parcours_step8.helps.respParcours

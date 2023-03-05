@@ -14,9 +14,8 @@ class ParcoursStep5Type extends AbstractType
     {
         $builder
             ->add('prerequis', TextareaAutoSaveType::class, [
-                'label' => 'Prérequis recommandés',
                 'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step5#savePrerequis'],
-                'help' => 'Indiquez ici si des prérequis pédagogiques sont conseillés pour réussir dans cette formation',
+                'help' => '-',
             ])
         ;
     }
@@ -25,6 +24,7 @@ class ParcoursStep5Type extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Parcours::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

@@ -18,36 +18,35 @@ class EcStep2Type extends AbstractType
         $builder
 
             ->add('description', TextareaAutoSaveType::class, [
-                'label' => 'Description',
                 'attr' => ['data-action' => 'change->ec--step2#saveDescription', 'maxlength' => 3000, 'rows' => 20, 'class' => 'tinyMce'],
-                'help' => 'Indiquez ici en 3000 caractères maximum le contenu de l’enseignement et une description détaillée des différents sujets traités dans cet enseignement.'
+                'help' => '-'
             ])
             ->add('langueDispense', EntityType::class, [
                 'attr' => ['data-action' => 'change->ec--step2#changeLangue', 'data-ec--step2-type-param' => 'langueDispense' ],
                 'class' => Langue::class,
                 'choice_label' => 'libelle',
-                'label' => 'Enseignement dispensé en : ',
                 'expanded' => true,
                 'multiple' => true,
                 'required' => true,
+                'help' => '-'
             ])
             ->add('langueSupport', EntityType::class, [
                 'attr' => ['data-action' => 'change->ec--step2#changeLangue', 'data-ec--step2-type-param' => 'langueSupport'],
                 'class' => Langue::class,
                 'choice_label' => 'libelle',
-                'label' => 'Support de cours en : ',
                 'expanded' => true,
                 'multiple' => true,
                 'required' => true,
+                'help' => '-'
             ])
             ->add('typeEnseignement', EntityType::class, [
                 'attr' => ['data-action' => 'change->ec--step2#changeTypeEnseignement'],
                 'class' => TypeEnseignement::class,
                 'choice_label' => 'libelle',
-                'label' => 'Enseignement Obligatoire / optionnel ?',
                 'expanded' => true,
                 'multiple' => false,
                 'required' => true,
+                'help' => '-'
             ])
         ;
     }
@@ -56,6 +55,7 @@ class EcStep2Type extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ElementConstitutif::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

@@ -151,7 +151,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
 
         foreach ($mcccs as $mccc) {
             if ($mccc->isSecondeChance()) {
-                $tabMcccs[$mccc->getNumeroSession()]['chance'] = $mccc;
+                $tabMcccs[3]['chance'] = $mccc;
             } elseif ($mccc->isControleContinu() === true && $mccc->isExamenTerminal() === false) {
                 $tabMcccs[$mccc->getNumeroSession()]['cc'] = $mccc;
             } elseif ($mccc->isControleContinu() === false && $mccc->isExamenTerminal() === true) {

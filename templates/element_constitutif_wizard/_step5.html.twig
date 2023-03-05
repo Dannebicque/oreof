@@ -4,9 +4,9 @@
 }) }}
 >
     {% if editable %}
-        {{ include('components/TypeDiplome/mccc/'~templateForm) }}
+        {{ include('typeDiplome/mccc/'~templateForm) }}
 
-        <div class="alert {% if ec.getEtatStep(5) %}alert-success{% else %}alert-warning{% endif %}">
+        <div class="alert {% if ec.getEtatStep(5) %}alert-success{% else %}alert-warning{% endif %} mt-2">
             <input type="checkbox"
                    id="etatStructure"
                    class="form-check-inline"
@@ -17,6 +17,6 @@
                 Cochez cette case si vous avez terminé ...</label>
         </div>
     {% else %}
-        {{ include('components/TypeDiplome/mccc-non-editable/'~templateForm) }}
+        {{ include('typeDiplome/mccc-non-editable/'~templateForm) }}
     {% endif %}
 </div>
