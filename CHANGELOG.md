@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.1](https://github.com/Dannebicque/oreof/compare/v0.8.0...v0.8.1) (2023-03-06)
+
+
+### Features
+
+* Déplacement des compétences, refonte de l'affichage ([f97bdaa](https://github.com/Dannebicque/oreof/commit/f97bdaac3ef922859e67a10102461b136fa66239))
+* Traduction de tous les formulaires ([9cb3d88](https://github.com/Dannebicque/oreof/commit/9cb3d8888d338d9426788b7b8272d42f8831ea29))
+
 ## [0.8.0](https://github.com/Dannebicque/oreof/compare/v0.7.0...v0.8.0) (2023-03-04)
 
 
