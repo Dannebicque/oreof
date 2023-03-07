@@ -47,7 +47,9 @@ class ElementConstitutifController extends AbstractController
         ElementConstitutifRepository $elementConstitutifRepository,
         Ue $ue
     ): Response {
+
         $elementConstitutif = new ElementConstitutif();
+        $elementConstitutif->setModaliteEnseignement($ue->getSemestre()?->getSemestreParcours()->first()->getParcours()?->getModalitesEnseignement());
 
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl('app_element_constitutif_new', ['ue' => $ue->getId()]),

@@ -7,6 +7,10 @@ export default class extends Controller {
     urlSave: String,
   }
 
+  changeModalite(event) {
+
+  }
+
   saveModaliteEnseignement(event) {
     saveData(this.urlSaveValue, {
       action: 'modalitesEnseignement',

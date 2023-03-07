@@ -1,34 +1,50 @@
 {% form_theme form 'communs/form_theme.html.twig' %}
 {{ form_start(form) }}
- {{ form_row(form.modaliteEnseignement) }} {# todo: utile ? peut être différent du parcours ? #}
+<div {{ stimulus_controller('ec--structureparcours') }}>
+    {% if ec.parcours.modalitesEnseignement != null and ec.parcours.modalitesEnseignement.value == 1 %}
+        {{ form_row(form.modaliteEnseignement) }}
+    {% endif %}
+
     {{ form_row(form.ects) }}
 
-{% if ec.parcours.modalitesEnseignement.value != 2  %}
-<h3>Volume Présentiel</h3>
-<div class="row">
-    <div class="col-4">{{ form_row(form.volumeCmPresentiel) }}</div>
-    <div class="col-4">{{ form_row(form.volumeTdPresentiel) }}</div>
-    <div class="col-4">{{ form_row(form.volumeTpPresentiel) }}</div>
-</div>
-{% endif %}
+    {% if ec.parcours.modalitesEnseignement == null %}
+        <div class="alert alert-warning">
+            Vous devez d'abord définir les modalités d'enseignement du parcours
+        </div>
+    {% else %}
 
-{% if ec.parcours.modalitesEnseignement.value != 0 %}
-<h3>Volume Distanciel</h3>
-<div class="row">
-    <div class="col-4">{{ form_row(form.volumeCmDistanciel) }}</div>
-    <div class="col-4">{{ form_row(form.volumeTdDistanciel) }}</div>
-    <div class="col-4">{{ form_row(form.volumeTpDistanciel) }}</div>
-</div>
-{% endif %}
+        {% if ec.parcours.modalitesEnseignement.value != 2 %}
+            <div id="bloc_presentiel">
+                <h3>Volume Présentiel</h3>
+                <div class="row">
+                    <div class="col-4">{{ form_row(form.volumeCmPresentiel) }}</div>
+                    <div class="col-4">{{ form_row(form.volumeTdPresentiel) }}</div>
+                    <div class="col-4">{{ form_row(form.volumeTpPresentiel) }}</div>
+                </div>
+            </div>
+        {% endif %}
 
-<button type="submit" class="btn btn-success"
-        {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
->
-    <i class="fal fa-floppy-disk"></i>
-    Enregistrer
-</button>
+        {% if ec.parcours.modalitesEnseignement.value != 0 %}
+            <div id="bloc_distanciel">
+                <h3>Volume Distanciel</h3>
+                <div class="row">
+                    <div class="col-4">{{ form_row(form.volumeCmDistanciel) }}</div>
+                    <div class="col-4">{{ form_row(form.volumeTdDistanciel) }}</div>
+                    <div class="col-4">{{ form_row(form.volumeTpDistanciel) }}</div>
+                </div>
+            </div>
+        {% endif %}
 
-<div class="alert alert-info mt-2">
-    tous les champs avec un <span class="text-red">*</span> sont obligatoires
+    {% endif %}
+
+    <button type="submit" class="btn btn-success"
+            {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+    >
+        <i class="fal fa-floppy-disk"></i>
+        Enregistrer
+    </button>
+
+    {{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont
+obligatoires'}) }}
 </div>
 {{ form_end(form) }}
