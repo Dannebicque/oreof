@@ -13,6 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 abstract class AbstractTypeDiplome
 {
     private ?TypeDiplomeInterface $typeDiplome;
+    public int $nbSemestres = 0;
+    public int $nbUes = 0;
 
     public function __construct(
         protected EntityManagerInterface $entityManager,

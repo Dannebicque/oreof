@@ -660,22 +660,22 @@ class ElementConstitutif
 
     public function getEtatOnglet1(): EtatRemplissageEnum
     {
-        return $this->getLibelleAnglais() === null && $this->getLibelle() === null && $this->enseignementMutualise === null ? EtatRemplissageEnum::VIDE : (($this->getLibelleAnglais() !== null && $this->getLibelle() !== null && $this->enseignementMutualise !== null) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+        return $this->getLibelleAnglais() === null && $this->getLibelle() === null && $this->enseignementMutualise === null ? EtatRemplissageEnum::VIDE : (($this->getLibelleAnglais() !== null && $this->getLibelle() !== null && $this->enseignementMutualise !== null && $this->getEtatStep(1)) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     public function getEtatOnglet2(): EtatRemplissageEnum
     {
-        return $this->getDescription() === null && $this->getLangueDispense()->count() === 0 && $this->getLangueSupport()->count() === 0 && $this->getTypeEnseignement() === null ? EtatRemplissageEnum::VIDE : (($this->getDescription() !== null && $this->getLangueDispense()->count() > 0 && $this->getLangueSupport()->count() > 0 && $this->getTypeEnseignement() !== null) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+        return $this->getDescription() === null && $this->getLangueDispense()->count() === 0 && $this->getLangueSupport()->count() === 0 && $this->getTypeEnseignement() === null ? EtatRemplissageEnum::VIDE : (($this->getDescription() !== null && $this->getLangueDispense()->count() > 0 && $this->getLangueSupport()->count() > 0 && $this->getTypeEnseignement() !== null && $this->getEtatStep(2)) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     public function getEtatOnglet3(): EtatRemplissageEnum
     {
-        return $this->getObjectifs() === null && $this->getCompetences() === null ? EtatRemplissageEnum::VIDE : (($this->getObjectifs() !== null && $this->getCompetences() !== null) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+        return $this->getObjectifs() === null && $this->getCompetences() === null ? EtatRemplissageEnum::VIDE : (($this->getObjectifs() !== null && $this->getCompetences() !== null && $this->getEtatStep(3)) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     public function getEtatOnglet4(): EtatRemplissageEnum
     {
-        return $this->etatStructure() === 'Non complété' ? EtatRemplissageEnum::VIDE : (($this->etatStructure() === 'Complet') ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+        return $this->etatStructure() === 'Non complété' ? EtatRemplissageEnum::VIDE : (($this->etatStructure() === 'Complet' && $this->getEtatStep(4)) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     public function getEtatOnglet5(): EtatRemplissageEnum

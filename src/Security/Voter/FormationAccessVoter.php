@@ -60,7 +60,7 @@ class FormationAccessVoter extends Voter
 
     }
 
-    private function hasShowOnHisFormation(UserInterface $user, Formation $subject): bool
+    private function hasShowOnHisFormation(UserInterface|User $user, Formation $subject): bool
     {
         /** @var User $user */
         foreach ($user->getUserCentres() as $centre) {
@@ -72,7 +72,7 @@ class FormationAccessVoter extends Voter
         return false;
     }
 
-    private function hasEditOnHisFormation(UserInterface $user, Formation $subject): bool
+    private function hasEditOnHisFormation(UserInterface|User $user, Formation $subject): bool
     {
         foreach ($user->getUserCentres() as $centre) {
             if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0 ) {
@@ -83,7 +83,7 @@ class FormationAccessVoter extends Voter
         return false;
     }
 
-    private function canAddEcFormation(UserInterface $user, mixed $subject): bool
+    private function canAddEcFormation(UserInterface|User $user, mixed $subject): bool
     {
         foreach ($user->getUserCentres() as $centre) {
             if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0 ) {

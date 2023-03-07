@@ -65,7 +65,7 @@ class HasComposanteAccessVoter extends Voter
 
     }
 
-    private function isCentreComposante(UserInterface $user): bool
+    private function isCentreComposante(UserInterface|User $user): bool
     {
         if ($user->getComposanteResponsableDpe()->count() > 0) {
             return true;
@@ -83,7 +83,7 @@ class HasComposanteAccessVoter extends Voter
         return false;
     }
 
-    private function isCentreFormation(UserInterface $user): bool
+    private function isCentreFormation(UserInterface|User $user): bool
     {
         if ($user->getFormationsResponsableMention()->count() > 0) {
             return true;
@@ -102,7 +102,7 @@ class HasComposanteAccessVoter extends Voter
         return false;
     }
 
-    private function hasShowOnAllComposante(UserInterface $user): bool
+    private function hasShowOnAllComposante(UserInterface|User $user): bool
     {
         return count(array_intersect($this->roles, $user->getRoles())) > 0;
     }

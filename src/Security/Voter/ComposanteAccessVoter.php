@@ -59,7 +59,7 @@ class ComposanteAccessVoter extends Voter
 
     }
 
-    private function hasShowOnHisComposante(UserInterface $user, Composante $subject): bool
+    private function hasShowOnHisComposante(UserInterface|User $user, Composante $subject): bool
     {
         /** @var User $user */
         foreach ($user->getUserCentres() as $centre) {
@@ -71,9 +71,7 @@ class ComposanteAccessVoter extends Voter
         return false;
     }
 
-    private function hasEditOnHisComposante(UserInterface $user, Composante $subject): bool
+    private function hasEditOnHisComposante(UserInterface|User $user, Composante $subject): bool
     {
     }
-
-
 }

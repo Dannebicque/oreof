@@ -3,6 +3,7 @@
 namespace App\Components\Questionnaire\DependencyInjection;
 
 use App\TypeDiplome\Source\ButTypeDiplome;
+use App\TypeDiplome\Source\DeustTypeDiplome;
 use App\TypeDiplome\Source\LicenceProfessionnelleTypeDiplome;
 use App\TypeDiplome\Source\LicenceTypeDiplome;
 use App\TypeDiplome\Source\MasterMeefTypeDiplome;
@@ -22,4 +23,5 @@ return static function (ContainerConfigurator $configurator): void {
     $services->set(LicenceProfessionnelleTypeDiplome::class)->tag(TypeDiplomeRegistry::TAG_TYPE_DIPLOME);
     $services->set(MasterTypeDiplome::class)->tag(TypeDiplomeRegistry::TAG_TYPE_DIPLOME);
     $services->set(MasterMeefTypeDiplome::class)->tag(TypeDiplomeRegistry::TAG_TYPE_DIPLOME);
+    $services->set(DeustTypeDiplome::class)->tag(TypeDiplomeRegistry::TAG_TYPE_DIPLOME);
 };

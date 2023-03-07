@@ -59,7 +59,6 @@ class FormationSesType extends AbstractType
                     'Choisir une mention' => null,
                     'Autre mention' => 'autre'
                 ],
-//                'label' => '',
                 'required' => false,
                 'validation_groups' => false,
                 'mapped' => false,
@@ -67,7 +66,6 @@ class FormationSesType extends AbstractType
             ])
             ->add('mentionTexte', TextType::class, [
                 'attr' => ['data-action' => 'change->formation#changeMentionTexte'],
-//                'label' => '',
                 'required' => false,
                 'help' => 'Si la mention existe, veuillez la sélectionner dans la liste déroulante'
             ])
@@ -76,28 +74,23 @@ class FormationSesType extends AbstractType
                 'choice_label' => static function(UnitEnum $choice): string {
                     return $choice->libelle();
                 },
-//                'label' => '',
             ])
             ->add('niveauSortie', EnumType::class, [
                 'class' => NiveauFormationEnum::class,
                 'choice_label' => static function(UnitEnum $choice): string {
                     return $choice->libelle();
                 },
-//                'label' => '',
             ])
             ->add('inRncp', YesNoType::class, [
-//                'label' => '',
                 'attr' => ['data-action' => 'change->formation#changeInscriptionRNCP']
             ])
             ->add('codeRNCP', TextType::class, [
                 'required' => false,
                 'attr' => ['maxlength' => 10],
-//                'label' => ''
             ])
             ->add('responsableMention', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'display',
-//                'label' => 'Responsable de la mention',
                 'attr' => ['data-action' => 'change->formation#changeResponsableMention']
             ])
             ->addEventListener(FormEvents::POST_SUBMIT,

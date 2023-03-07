@@ -59,7 +59,7 @@ class EcAccessVoter extends Voter
 
     }
 
-    private function isReponsableEc(UserInterface $user, ElementConstitutif $subject): bool
+    private function isReponsableEc(UserInterface|User $user, ElementConstitutif $subject): bool
     {
        return $subject->getResponsableEc()?->getId() === $user->getId();
     }
