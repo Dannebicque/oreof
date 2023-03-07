@@ -1,8 +1,7 @@
 <div>
     {% if ec.modaliteEnseignement == null %}
-    <div class="alert alert-danger">
-        Informations sur les modalités d'enseignement non renseignées
-    </div>
+        {{ component('alerte', {type:'danger', message:'Informations sur les modalités d\'enseignement non
+        renseignées.'}) }}
     {% else %}
 
             <dl>
@@ -26,9 +25,7 @@
                 <div class="col-4">{{ ec.volumeTpPresentiel }}</div>
             </div>
         {% else %}
-            <div class="alert alert-info">
-                Formation proposée uniquement en distanciel
-            </div>
+            {{ component('alerte', {type:'info', message:'Formation proposée uniquement en distanciel'}) }}
         {% endif %}
         {% if ec.modaliteEnseignement.value != 0 %}
             <h3 class="mt-2">Volume Distanciel</h3>
@@ -43,9 +40,7 @@
                 <div class="col-4">{{ ec.volumeTpDistanciel }}</div>
             </div>
         {% else %}
-            <div class="alert alert-info">
-                Formation proposée uniquement en présentiel
-            </div>
+            {{ component('alerte', {type:'info', message:'Formation proposée uniquement en présentiel'}) }}
         {% endif %}
     {% endif %}
 </div>

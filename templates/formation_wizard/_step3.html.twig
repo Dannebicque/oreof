@@ -54,11 +54,7 @@
         {% endif %}
 
         <div id="bloc_semestre" {% if formation.hasParcours == false %}class="d-none"{% endif %}>
-            <div class="alert alert-info mt-2">
-                Précisez la structure de la mention/spécialité avec les parcours (semestre de tronc commun ou semestre
-                spécifique au
-                parcours)
-            </div>
+            {{ component('alerte', {type:'info', message:' Précisez la structure de la mention/spécialité avec les parcours (semestre de tronc commun ou semestre spécifique au parcours)'}) }}
             <ul>
 
                 {% for i in formation.semestreDebut..typeDiplome.nbSemestres %}
@@ -92,10 +88,8 @@
                 Générer la structure de base pour la mention/spécialité et ses parcours
             </button>{# todo: modifier le texte  #}
         </div>
-        <div class="alert alert-warning mt-2">
-            <strong>Attention !</strong> Cette action va générer une structure de base
-                                         pour la mention/spécialité et ses parcours selon le paramètrage ci-dessus.
-        </div>
+        {{ component('alerte', {type:'info', message:'<strong>Attention !</strong> Cette action va générer une structure de base
+                                         pour la mention/spécialité et ses parcours selon le paramètrage ci-dessus.'}) }}
     </fieldset>
     <div class="alert {% if formation.getEtatStep(3) %}alert-success{% else %}alert-warning{% endif %}">
         <input type="checkbox"

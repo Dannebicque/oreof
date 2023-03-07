@@ -35,9 +35,8 @@
                 Modifier
             </button>
 
-            <div class="alert alert-info mt-2">
-                Tous les champs avec un <span class="text-red">*</span> sont obligatoires
-            </div>
+            {{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont
+obligatoires'}) }}
             {{ form_end(form) }}
         </div>
     </div>

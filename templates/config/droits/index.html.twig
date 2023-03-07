@@ -1,11 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="alert alert-info mb-2">
-        Le ROLE_ADMIN dispose de l'ensemble des accès.
-    </div>
+    {{ component('alerte', {type:"info", message:'Le ROLE_ADMIN dispose de l\'ensemble des accès.'}) }}
 
-    <div class="card"
+    <div class="card mt-2"
             {{ stimulus_controller('crud', {
                 url: path('app_droits_access_liste')
             }) }}

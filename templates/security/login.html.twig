@@ -16,7 +16,7 @@
     <p class="text-center">OU</p>
 
     {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {{ component('alerte', {type:'danger', message: error.messageKey|trans(error.messageData, 'security') }) }}
     {% endif %}
 
     <form class="tooltip-end-bottom" method="post">

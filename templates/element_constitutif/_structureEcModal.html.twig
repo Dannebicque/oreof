@@ -8,9 +8,8 @@
     {{ form_row(form.ects) }}
 
     {% if ec.parcours.modalitesEnseignement == null %}
-        <div class="alert alert-warning">
-            Vous devez d'abord définir les modalités d'enseignement du parcours
-        </div>
+        {{ component('alerte', {type:'warning', message:'Vous devez d\'abord définir les modalités d\'enseignement du
+parcours.'}) }}
     {% else %}
 
         {% if ec.parcours.modalitesEnseignement.value != 2 %}

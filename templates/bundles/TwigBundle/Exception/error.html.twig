@@ -10,9 +10,9 @@
     <p>Si le problème persiste, merci de contacter les administrateurs du site : <a href="mailto:{{ mail_contact
       }}">{{ mail_contact }}</a> en précisant le message d'erreur ci-dessous.</p>
     <br>
-    <div class="alert alert-warning">
-      {{ exception.message }}
-    </div>
+
+    {{ component('alerte', {type:'warning', message:exception.message}) }}
+
     <br>
     <a href="{{ path(app.request.server.get('http-referer')|default('app_homepage')) }}" class="btn btn-primary">
       <i class="fal fa-arrow-left"></i>
