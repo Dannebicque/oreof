@@ -82,3 +82,5 @@ parcours_step1.labels.rythmeFormationTexte: 'Choisissez un rythme de formation e
 parcours_step1.labels.localisation.label: 'Localisation du parcours'
 None: None
 Reims: Reims
+competence.labels.libelle: Libellé de la compétence
+bloc_competence.labels.libelle: Libellé du bloc de compétences

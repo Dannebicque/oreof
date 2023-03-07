@@ -12,8 +12,8 @@ formation_step2.helps.rythmeFormationTexte: 'Indiquez en 3000 caractères maximu
 parcours_step2.helps.stageText: 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...'
 parcours_step2.helps.projetText: 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...'
 parcours_step2.helps.memoireText: 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...'
-bloc_competence.helps.libelle: bloc_competence.helps.libelle
-competence.helps.libelle: competence.helps.libelle
+bloc_competence.helps.libelle: "Le libellé du bloc de compétences doit commencer par un verbe d'action, et ne doit pas dépasser 255 caractères."
+competence.helps.libelle: "Le libellé de la compétence doit commencer par un verbe d'action, et ne doit pas dépasser 255 caractères. Doit être cohérente avec la fiche RNCP du diplôme."
 parcours_step5.helps.prerequis: 'Indiquez ici si des prérequis pédagogiques sont conseillés pour réussir dans cette formation'
 parcours_step7.helps.poursuitesEtudes: 'Indiquez en 3000 caractères maximum quelles sont les poursuites d’études envisageables.'
 parcours_step7.helps.debouches: 'Indiquez ici les principaux débouchés professionnels accessibles à l’issue de cette formation.'
@@ -45,3 +45,9 @@ parcours_step1.helps.resultatsAttendus: 'Indiquez en 3000 caractères maximum le
 parcours_step1.helps.rythmeFormation: 'Indiquez le rythme du parcours (en heures, en jours, en semaines, en mois, en années, …).'
 parcours_step1.helps.rythmeFormationTexte: 'Indiquez en 3000 caractères maximum le rythme de la formation : temps plein, temps partiel, cours du soir,etc..'
 parcours_step1.helps.localisation.help: 'Choisir les lieux où le parcours est proposé'
+ec_step1.helps.isCmPresentielMutualise.help: ec_step1.helps.isCmPresentielMutualise.help
+ec_step1.helps.isTdPresentielMutualise.help: ec_step1.helps.isTdPresentielMutualise.help
+ec_step1.helps.isTpPresentielMutualise.help: ec_step1.helps.isTpPresentielMutualise.help
+ec_step1.helps.isCmDistancielMutualise.help: ec_step1.helps.isCmDistancielMutualise.help
+ec_step1.helps.isTdDistancielMutualise.help: ec_step1.helps.isTdDistancielMutualise.help
+ec_step1.helps.isTpDistancielMutualise.help: ec_step1.helps.isTpDistancielMutualise.help

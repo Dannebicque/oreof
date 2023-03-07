@@ -15,7 +15,7 @@ class CompetenceType extends AbstractType
         $builder
             ->add('libelle', TextType::class, [
                 'attr' => ['maxlength' => 255],
-                'help' => 'Le libellé de la compétence doit commencer par un verbe d\'action, et ne doit pas dépasser 255 caractères. Doit être cohérente avec la fiche RNCP du diplôme.'
+                'help' => '-'
                 ])
         ;
     }
@@ -24,6 +24,7 @@ class CompetenceType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Competence::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

@@ -16,7 +16,7 @@ class BlocCompetenceType extends AbstractType
         $builder
             ->add('libelle', TextType::class, [
                 'attr' => ['maxlength' => 255],
-                'help' => 'Le libellé du bloc de compétences doit commencer par un verbe d\'action, et ne doit pas dépasser 255 caractères.'
+                'help' => '-'
             ])
         ;
     }
@@ -25,6 +25,7 @@ class BlocCompetenceType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => BlocCompetence::class,
+            'translation_domain' => 'form'
         ]);
     }
 }
