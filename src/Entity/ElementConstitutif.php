@@ -680,7 +680,7 @@ class ElementConstitutif
 
     public function getEtatOnglet5(): EtatRemplissageEnum
     {
-        return EtatRemplissageEnum::VIDE;
+        return $this->etatMccc() === 'Non complété' ? EtatRemplissageEnum::VIDE : (($this->etatMccc() === 'Complet' && $this->getEtatStep(5)) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     /**
