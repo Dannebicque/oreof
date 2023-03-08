@@ -47,33 +47,6 @@ class ElementConstitutifRepository extends ServiceEntityRepository
         }
     }
 
-//    public function findByRoleUser(UserInterface $user): array
-//    {
-//        $roles = $user->getRoles();
-//
-//        if (in_array('ROLE_SES', $roles) || in_array('ROLE_ADMIN', $roles)) {
-//            //tous les droits on affiche tout (trier?)
-//            return $this->findAll();
-//        }
-//
-//        if (in_array('ROLE_RESP_DPE', $roles)) {
-//            //filtrer pour les formations de la composante
-//            return $this->findByComposanteDpe($user);
-//
-//        }
-//
-//        if (in_array('ROLE_RESP_FORMATION', $roles)) {
-//            return $this->findByResponsableFormation($user);
-//        }
-//
-//        if (in_array('ROLE_RESP_EC', $roles)) {
-//            //todo: juste les EC qui me concerne ?
-//            return $this->findBy(['responsableEc' => $user]);
-//        }
-//
-//        return []; //todo: ? est-ce vrai ?
-//    }
-
     public function findByComposanteDpe(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
     {
         return $this->createQueryBuilder('ec')

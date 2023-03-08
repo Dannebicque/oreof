@@ -45,7 +45,8 @@ class EcController extends BaseController
             $ecs = array_merge(...$ecs);
         }
         return $this->render('structure/ec/_liste.html.twig', [
-            'ecs' => $ecs
+            'ecs' => $ecs,
+            'deplacer' => false
         ]);
     }
 
@@ -62,7 +63,8 @@ class EcController extends BaseController
         return $this->render('structure/ec/_liste.html.twig', [
             'ecs' => $ecs,
             'ue' => $ue,
-            'parcours' => $parcours
+            'parcours' => $parcours,
+            'deplacer' => true
         ]);
     }
 }

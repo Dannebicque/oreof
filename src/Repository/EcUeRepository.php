@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Classes\EcOrdre;
 use App\Entity\EcUe;
 use App\Entity\Ue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -43,8 +44,10 @@ class EcUeRepository extends ServiceEntityRepository
     public function findByUe(Ue $ue): array
     {
         return $this->createQueryBuilder('ecUe')
+            ->join('ecUe.ec', 'ec')
             ->where('ecUe.ue = :ue')
             ->setParameter('ue', $ue)
+            ->addOrderBy('ec.ordre', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -58,5 +61,17 @@ class EcUeRepository extends ServiceEntityRepository
             ->setParameter('ue', $ue)
             ->getQuery()
             ->getScalarResult();
+    }
+
+    public function findByUeOrdre(?int $ordreDestination, Ue $ue): ?EcUe
+    {
+        return $this->createQueryBuilder('ecUe')
+            ->join('ecUe.ec', 'ec')
+            ->where('ecUe.ue = :ue')
+            ->andWhere('ec.ordre = :ordreDestination')
+            ->setParameter('ue', $ue->getId())
+            ->setParameter('ordreDestination', $ordreDestination)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

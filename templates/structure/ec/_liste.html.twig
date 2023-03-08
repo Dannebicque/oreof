@@ -9,6 +9,9 @@
             <th>Etat</th>
             <th>Heures</th>
             <th>Mcc</th>
+            {% if deplacer == true %}
+            <th></th>
+            {% endif %}
             <th></th>
         </tr>
         </thead>
@@ -119,12 +122,38 @@
                         </button>
                     {% endif %}
                 </td>
+                {% if deplacer == true %}
+                <td {{ stimulus_controller('ec--liste') }}>
+                    {% if ((is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and  (workflow_can(ec,
+                        'valider_ec') or workflow_can(ec,
+                        'initialiser'))) or (is_granted
+                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
+                        'valider_ec')) %}
 
+                        {% if not loop.first %}
+                            <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
+                                'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
+                                    ec.id, ue:ue.id})}) }}><i class="fal fa-circle-up"></i></button>
+                        {% else %}
+                            <button class="btn btn-sm btn-outline-info" disabled><i class="fal fa-circle-up"></i></button>
+                        {% endif %}
+                        {% if not loop.last %}
+                            <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
+                                'click', {url: path('app_element_constitutif_deplacer',{sens: 'down', id:
+                                    ec.id, ue:ue.id})}) }}><i class="fal fa-circle-down"></i></button>
+                        {% else %}
+                            <button class="btn btn-sm btn-outline-info" disabled><i class="fal fa-circle-down"></i></button>
+                        {% endif %}
+
+                    {% endif %}
+
+                </td>
+                {% endif %}
             </tr>
         {% endfor %}
         {% if parcours is defined and is_granted('ROLE_EC_ADD_MY', parcours.formation) and ue is defined %}
             <tr>
-                <td colspan="7">
+                <td colspan="{% if deplacer == true %}9{% else %}8{% endif %}">
 
                     <button
                             {{ stimulus_controller('modal', {

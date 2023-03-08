@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 
+use App\Entity\ElementConstitutif;
 use App\Entity\Ue;
 use App\Repository\EcUeRepository;
 use App\Repository\ElementConstitutifRepository;
@@ -10,10 +11,10 @@ use Doctrine\ORM\EntityManagerInterface;
 class EcOrdre
 {
 
-    public function __construct(private EntityManagerInterface $entityManager,
-        private EcUeRepository $ecUeRepository,
-        private ElementConstitutifRepository $elementConstitutifRepository)
-    {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private EcUeRepository $ecUeRepository
+    ) {
     }
 
 
@@ -24,29 +25,39 @@ class EcOrdre
         return $ordreMax[0]['ordreMax'] === null ? 1 : ++$ordreMax[0]['ordreMax'];
     }
 
-//    public function deplaceSae(ApcSae $apcSae, int $position)
-//    {
-//        //modifie l'ordre de la ressource
-//        $ordreInitial = $apcSae->getOrdre();
-//
-//        //récupère toutes les ressources à déplacer
-//        return $this->inverse($ordreInitial, $ordreInitial + $position, $apcSae);
-//    }
-//
-//    private function inverse(?int $ordreInitial, ?int $ordreDestination, ApcSae $apcSae): bool
-//    {
-//        $sae = $this->apcSaeRepository->findOneBy([
-//            'ordre' => $ordreDestination,
-//            'semestre' => $apcSae->getSemestre()->getId()
-//        ]);
-//        $apcSae->setOrdre($ordreDestination);
-//
-//        if ($sae !== null) {
-//            $sae->setOrdre($ordreInitial);
-//        }
-//
-//        $this->entityManager->flush();
-//
-//        return true;
-//    }
+    public function deplacerElementConstitutif(ElementConstitutif $elementConstitutif, string $sens, Ue $ue)
+    {
+        //modifie l'ordre de la ressource
+        $ordreInitial = $elementConstitutif->getOrdre();
+
+        if ($sens === 'up') {
+            $ordreDestination = $ordreInitial - 1;
+        } else {
+            $ordreDestination = $ordreInitial + 1;
+        }
+
+        //récupère toutes les ressources à déplacer
+        return $this->inverseEc($ordreInitial, $ordreDestination, $elementConstitutif, $ue);
+    }
+
+    private function inverseEc(
+        ?int $ordreInitial,
+        ?int $ordreDestination,
+        ElementConstitutif $elementConstitutif,
+        Ue $ue
+    ): bool {
+        $ecs = $this->ecUeRepository->findByUeOrdre($ordreDestination, $ue);
+        $elementConstitutif->setOrdre($ordreDestination);
+        $elementConstitutif->genereCode();
+
+
+        if ($ecs !== null) {
+            $ecs->getEc()->setOrdre($ordreInitial);
+            $ecs->getEc()->genereCode();
+        }
+
+        $this->entityManager->flush();
+
+        return true;
+    }
 }

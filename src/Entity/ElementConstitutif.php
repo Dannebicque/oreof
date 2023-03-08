@@ -746,4 +746,8 @@ class ElementConstitutif
 
         return $this;
     }
+
+    public function genereCode(): void {
+        $this->setCode('EC'.$this->ordre);
+    }
 }

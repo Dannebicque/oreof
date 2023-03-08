@@ -132,7 +132,8 @@
                         <div id="detail_ue_{{ ue.id }}_{{ parcours.id }}" class="d-none detail_ue ms-4">
                             <div class="row">
                                 <div class="col-12" {{ stimulus_target('structure--ue', 'detail') }}
-                                     data-action="base:refreshListeEc@window->structure--ue#refreshListeEc"
+                                     data-action="base:refreshListeEc@window->structure--ue#refreshListeEc
+                                     ec--liste:refreshListeEc@window->structure--ue#refreshListeEc"
                                      data-structure--ue-url-param="{{ path('structure_ec_detail_ue', {ue:ue.id,
                                          parcours: parcours.id}) }}"
                                      data-structure--ue-ue-param="{{ ue.id }}"

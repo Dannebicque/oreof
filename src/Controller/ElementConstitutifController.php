@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Classes\Bcc;
 use App\Classes\EcOrdre;
+use App\Entity\BlocCompetence;
 use App\Entity\EcUe;
 use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
@@ -59,7 +61,7 @@ class ElementConstitutifController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $lastEc = $ecOrdre->getOrdreSuivant($ue);
-            $elementConstitutif->setCode('EC ' . $lastEc);
+            $elementConstitutif->genereCode();
             $elementConstitutif->setOrdre($lastEc);
             $ueEc = new EcUe($ue, $elementConstitutif);
             $ecUeRepository->save($ueEc, true);
@@ -250,6 +252,18 @@ class ElementConstitutifController extends AbstractController
             'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
             'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
         ]);
+    }
+
+    #[Route('/{id}/{ue}/deplacer/{sens}', name: 'app_element_constitutif_deplacer', methods: ['GET'])]
+    public function deplacer(
+        EcOrdre $ecOrdre,
+        ElementConstitutif $elementConstitutif,
+        Ue $ue,
+        string $sens
+    ): Response {
+
+        $ecOrdre->deplacerElementConstitutif($elementConstitutif, $sens, $ue);
+        return $this->json(true);
     }
 
     #[Route('/{id}', name: 'app_element_constitutif_delete', methods: ['POST'])]
