@@ -3,28 +3,21 @@
 }) }}>
     {% form_theme form 'communs/form_theme.html.twig' %}
     {{ form_start(form) }}
-    {{ form_row(form.modaliteEnseignement) }} {# todo: utile ? peut être différent du parcours ? #}
-    {{ form_row(form.ects) }}
-
-    {% if ec.parcours.modalitesEnseignement.value == 0 or ec.parcours.modalitesEnseignement.value == 1 %}
-    <h3>Volume Présentiel</h3>
-    <div class="row">
-        <div class="col-4">{{ form_row(form.volumeCmPresentiel) }}</div>
-        <div class="col-4">{{ form_row(form.volumeTdPresentiel) }}</div>
-        <div class="col-4">{{ form_row(form.volumeTpPresentiel) }}</div>
-    </div>
-    {% endif %}
-
-    {% if ec.parcours.modalitesEnseignement.value == 2 or ec.parcours.modalitesEnseignement.value == 1 %}
-    <h3>Volume Distanciel</h3>
-    <div class="row">
-        <div class="col-4">{{ form_row(form.volumeCmDistanciel) }}</div>
-        <div class="col-4">{{ form_row(form.volumeTdDistanciel) }}</div>
-        <div class="col-4">{{ form_row(form.volumeTpDistanciel) }}</div>
-    </div>
-    {% endif %}
+    {{ include('element_constitutif/_structure_ec_formulaire.html.twig') }}
 
     {{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont
 obligatoires'}) }}
     {{ form_end(form) }}
+    {% if validateStep is defined and validateStep == true %}
+        <div class="alert {% if ec.getEtatStep(4) %}alert-success{% else %}alert-warning{% endif %} mt-2">
+            <input type="checkbox"
+                   id="etatStructure"
+                   class="form-check-inline"
+                   {% if ec.getEtatStep(4) %}checked{% endif %}
+                    {{ stimulus_action('ec--structure', 'etatStep', 'change') }}
+
+            ><label for="etatStructure">
+                Cochez cette case si vous avez terminé ...</label>
+        </div>
+    {% endif %}
 </div>

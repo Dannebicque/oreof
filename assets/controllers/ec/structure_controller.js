@@ -7,19 +7,37 @@ export default class extends Controller {
     urlSave: String,
   }
 
-  changeModalite(event) {
-
-  }
-
   saveModaliteEnseignement(event) {
-    saveData(this.urlSaveValue, {
+    const valeur = event.target.value
+    this._save({
       action: 'modalitesEnseignement',
-      value: event.target.value,
+      value: valeur,
     })
+
+    const blocPresentiel = document.getElementById('bloc_presentiel')
+    const blocDistanciel = document.getElementById('bloc_distanciel')
+
+    if (valeur === '0') {
+      // présentiel
+      blocPresentiel.style.display = 'block'
+      blocDistanciel.style.display = 'none'
+    }
+
+    if (valeur === '1') {
+      // hybride
+      blocPresentiel.style.display = 'block'
+      blocDistanciel.style.display = 'block'
+    }
+
+    if (valeur === '2') {
+      // distanciel
+      blocPresentiel.style.display = 'none'
+      blocDistanciel.style.display = 'block'
+    }
   }
 
   saveEcts(event) {
-    saveData(this.urlSaveValue, {
+    this._save({
       field: 'ects',
       action: 'float',
       value: event.target.value,
@@ -27,7 +45,7 @@ export default class extends Controller {
   }
 
   saveVolume(event) {
-    saveData(this.urlSaveValue, {
+    this._save({
       field: event.params.type,
       action: 'float',
       value: event.target.value,
@@ -38,5 +56,24 @@ export default class extends Controller {
     await saveData(this.urlSaveValue, options).then(async () => {
       await updateEtatOnglet(this.urlSaveValue, 'onglet4', 'ec')
     })
+  }
+
+  async etatStep(event) {
+    this._save({
+      action: 'etatStep',
+      value: 4,
+      isChecked: event.target.checked,
+    })
+
+    const parent = event.target.closest('.alert')
+    if (event.target.checked) {
+      parent.classList.remove('alert-warning')
+      parent.classList.add('alert-success')
+    } else {
+      parent.classList.remove('alert-success')
+      parent.classList.add('alert-warning')
+    }
+
+    await updateEtatOnglet(this.urlSaveValue, 'onglet4', 'ec')
   }
 }

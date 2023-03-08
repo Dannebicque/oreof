@@ -1,0 +1,32 @@
+{% if ec.parcours.modalitesEnseignement == null %}
+    {{ component('alerte', {type:'warning', message:'Vous devez d\'abord définir les modalités d\'enseignement du
+parcours.'}) }}
+{% else %}
+    {% if ec.parcours.modalitesEnseignement != null and ec.parcours.modalitesEnseignement.value == 1 %}
+        {{ form_row(form.modaliteEnseignement) }}
+    {% endif %}
+
+    {{ form_row(form.ects) }}
+
+        <div id="bloc_presentiel"  style="display:{% if ec.modaliteEnseignement.value != 2 %}block{% else
+%}none{% endif %}">
+            <h3>Volume Présentiel</h3>
+            <div class="row">
+                <div class="col-4">{{ form_row(form.volumeCmPresentiel) }}</div>
+                <div class="col-4">{{ form_row(form.volumeTdPresentiel) }}</div>
+                <div class="col-4">{{ form_row(form.volumeTpPresentiel) }}</div>
+            </div>
+        </div>
+
+
+        <div id="bloc_distanciel" style="display:{% if ec.modaliteEnseignement.value != 0 %}block{% else
+%}none{% endif %}">
+            <h3>Volume Distanciel</h3>
+            <div class="row">
+                <div class="col-4">{{ form_row(form.volumeCmDistanciel) }}</div>
+                <div class="col-4">{{ form_row(form.volumeTdDistanciel) }}</div>
+                <div class="col-4">{{ form_row(form.volumeTpDistanciel) }}</div>
+            </div>
+        </div>
+
+{% endif %}

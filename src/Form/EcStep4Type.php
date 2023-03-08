@@ -16,8 +16,9 @@ class EcStep4Type extends AbstractType
     {
         $isModal = $options['isModal'];
         $modalites = $options['data']->getModaliteEnseignement();
+        $modalitesParcours = $options['data']->getParcours()->getModalitesEnseignement();
 
-        if ($modalites !== null && $modalites === ModaliteEnseignementEnum::HYBRIDE) {
+        if ($modalites !== null && $modalitesParcours === ModaliteEnseignementEnum::HYBRIDE) {
             $builder->add('modaliteEnseignement', EnumType::class, [
                 'help' => '-',
                 'class' => ModaliteEnseignementEnum::class,
@@ -37,7 +38,6 @@ class EcStep4Type extends AbstractType
                 'attr' => ['data-action' => !$isModal ? 'change->ec--structure#saveEcts' : ''],
             ]);
 
-        if ($modalites !== null && $modalites !== ModaliteEnseignementEnum::DISTANCIELLE) {
             $builder->add('volumeCmPresentiel', NumberType::class, [
                 'help' => '-',
                 'attr' => [
@@ -58,12 +58,11 @@ class EcStep4Type extends AbstractType
                         'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                         'data-ec--structure-type-param' => 'volumeTpPresentiel'
                     ],
-                ]);
-        }
+                ])
 
-        if ($modalites !== null && $modalites !== ModaliteEnseignementEnum::PRESENTIELLE) {
 
-            $builder->add('volumeCmDistanciel', NumberType::class, [
+
+            ->add('volumeCmDistanciel', NumberType::class, [
                 'help' => '-',
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
@@ -84,7 +83,7 @@ class EcStep4Type extends AbstractType
                         'data-ec--structure-type-param' => 'volumeTpDistanciel'
                     ],
                 ]);
-        }
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
