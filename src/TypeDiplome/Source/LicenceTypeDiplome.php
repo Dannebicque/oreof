@@ -126,7 +126,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         $mccc = new Mccc();
         $mccc->setEc($elementConstitutif);
         $mccc->setLibelle('2éme chance');
-        $mccc->setNumeroSession(1);
+        $mccc->setNumeroSession(3);
         $mccc->setSecondeChance(true);
         $mccc->setControleContinu(true);
         $mccc->setExamenTerminal(false);

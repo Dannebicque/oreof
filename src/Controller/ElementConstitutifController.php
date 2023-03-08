@@ -40,6 +40,7 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/new/{ue}', name: 'app_element_constitutif_new', methods: ['GET', 'POST'])]
     public function new(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
         EcOrdre $ecOrdre,
         EcUeRepository $ecUeRepository,
         LangueRepository $langueRepository,
@@ -63,6 +64,12 @@ class ElementConstitutifController extends AbstractController
             $ueEc = new EcUe($ue, $elementConstitutif);
             $ecUeRepository->save($ueEc, true);
 
+            $formation = $ue->getSemestre()?->getSemestreParcours()->first()->getParcours()?->getFormation();
+            if ($formation === null) {
+                throw new RuntimeException('Formation non trouvée');
+            }
+            $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+            $typeDiplome->initMcccs($elementConstitutif);
 
             $langueFr = $langueRepository->findOneBy(['codeIso' => 'fr']);
             if ($langueFr !== null) {
