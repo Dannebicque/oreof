@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.9.0](https://github.com/Dannebicque/oreof/compare/v0.8.1...v0.9.0) (2023-03-08)
+
+
+### Features
+
+* Ajout du DEUST ([ce51b5d](https://github.com/Dannebicque/oreof/commit/ce51b5d1c8e7de666c9e97992990e15dbf41fc80))
+* Componnent Alerte et CSS ([43e4e21](https://github.com/Dannebicque/oreof/commit/43e4e2173aefb71ebb99587b4077add27ef1df23))
+* EC => filtre selon le type d'enseignement ([48ac49c](https://github.com/Dannebicque/oreof/commit/48ac49cbbc2a360e21e161a9536849999942994d))
+* Mutualisation des EC ([a3a0eb2](https://github.com/Dannebicque/oreof/commit/a3a0eb253bc673b63317fcf3a178fbd0de0e0c0b))
+* Ordre des EC + code des EC ([910956f](https://github.com/Dannebicque/oreof/commit/910956f0aa959257676d7276bfefec97c3be55c4))
+
+
+### Bug Fixes
+
+* EC structure + etat onglet ([38275d9](https://github.com/Dannebicque/oreof/commit/38275d9f20c928ebd203ccad79557090425ae6b0))
+* Etat MCC sur la liste des EC ([79ed065](https://github.com/Dannebicque/oreof/commit/79ed065c39925694669e2011f3b2ac02fb0bea23))
+* Etat onglet 5 EC ([db8ee56](https://github.com/Dannebicque/oreof/commit/db8ee569c0bc2cdf2bd8409b6a99f47b3f9125b1))
+* Traduction ([8a20324](https://github.com/Dannebicque/oreof/commit/8a2032479e734e74a8a4b0c223af74c46a58721d))
+* Traduction BCC et C ([e1a2890](https://github.com/Dannebicque/oreof/commit/e1a2890f41652a8e46a24169d31751ab18be86d5))
+
 ### [0.8.1](https://github.com/Dannebicque/oreof/compare/v0.8.0...v0.8.1) (2023-03-06)
 
 
