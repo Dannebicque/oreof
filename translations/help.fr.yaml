@@ -51,3 +51,6 @@ ec_step1.helps.isTpPresentielMutualise.help: ec_step1.helps.isTpPresentielMutual
 ec_step1.helps.isCmDistancielMutualise.help: ec_step1.helps.isCmDistancielMutualise.help
 ec_step1.helps.isTdDistancielMutualise.help: ec_step1.helps.isTdDistancielMutualise.help
 ec_step1.helps.isTpDistancielMutualise.help: ec_step1.helps.isTpDistancielMutualise.help
+ec_step2.helps.langueDispense.help: ec_step2.helps.langueDispense.help
+ec_step2.helps.langueSupport.help: ec_step2.helps.langueSupport.help
+ec_step2.helps.typeEnseignement.help: ec_step2.helps.typeEnseignement.help
