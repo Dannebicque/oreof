@@ -1,14 +1,61 @@
 import { Controller } from '@hotwired/stimulus'
+import { Modal } from 'bootstrap'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
+import callOut from '../../js/callOut'
 
 export default class extends Controller {
   static targets = [
     'content',
+    'zoneMutualise',
   ]
 
   static values = {
     url: String,
+    urlMutualise: String,
+  }
+
+  connect() {
+    this._loadMutualise()
+  }
+
+  refreshListe() {
+    this._loadMutualise()
+  }
+
+  async _loadMutualise() {
+    this.zoneMutualiseTarget.innerHTML = window.da.loaderStimulus
+    const response = await fetch(this.urlMutualiseValue)
+    this.zoneMutualiseTarget.innerHTML = await response.text()
+  }
+
+  delete(event) {
+    event.preventDefault()
+    const { url } = event.params
+    const { ue } = event.params
+    let modal = new Modal(document.getElementById('modal-delete'))
+    modal.show()
+    const btn = document.getElementById('btn-confirm-supprimer')
+    btn.replaceWith(btn.cloneNode(true));
+    document.getElementById('btn-confirm-supprimer').addEventListener('click', async () => {
+      const body = {
+        method: 'DELETE',
+        body: JSON.stringify({
+          field: 'delete',
+          ue,
+        }),
+      }
+      modal = null
+      await fetch(url, body).then((e) => {
+        if (e.status === 200) {
+          callOut('Suppression effectuée', 'success')
+          this._loadMutualise()
+        } else {
+          callOut('Erreur lors de la suppression', 'danger')
+        }
+      })
+    })
+    modal = null
   }
 
   changeResponsableEc(event) {
@@ -46,6 +93,7 @@ export default class extends Controller {
     })
     if (parseInt(event.target.value, 10) === 1) {
       document.getElementById('coursMutualises').style.display = 'block'
+      this._loadMutualise()
     } else {
       document.getElementById('coursMutualises').style.display = 'none'
     }

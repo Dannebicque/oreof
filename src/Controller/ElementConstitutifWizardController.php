@@ -2,15 +2,23 @@
 
 namespace App\Controller;
 
+use App\Entity\EcUe;
 use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
 use App\Form\EcStep1Type;
 use App\Form\EcStep2Type;
 use App\Form\EcStep3Type;
 use App\Form\EcStep4Type;
+use App\Repository\ComposanteRepository;
 use App\Repository\ElementConstitutifRepository;
+use App\Repository\FormationRepository;
+use App\Repository\ParcoursRepository;
+use App\Repository\SemestreRepository;
 use App\Repository\TypeEpreuveRepository;
+use App\Repository\UeRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Utils\JsonRequest;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,6 +63,118 @@ class ElementConstitutifWizardController extends AbstractController
             'parcours' => $parcours,
             'ec' => $ec,
         ]);
+    }
+
+    #[Route('/{ec}/{parcours}/mutualise', name: 'app_ec_wizard_step_1_mutualise', methods: ['GET'])]
+    public function mutualise(ElementConstitutif $ec, Parcours $parcours): Response
+    {
+        $mutualises = [];
+
+        foreach ($ec->getEcUes() as $ue) {
+            foreach ($ue->getUe()->getSemestre()->getSemestreParcours() as $parc) {
+                    $mutualises[] = [
+                        'parcours' => $parc->getParcours(),
+                        'semestre' => $ue->getUe()->getSemestre(),
+                        'ue' => $ue->getUe()
+                    ];
+            }
+        }
+
+        return $this->render('element_constitutif_wizard/_step1_mutualise.html.twig', [
+            'parcours' => $parcours,
+            'ec' => $ec,
+            'mutualises' => $mutualises
+        ]);
+    }
+
+    #[Route('/{ec}/{parcours}/mutualise/add', name: 'app_ec_wizard_step_1_mutualise_add', methods: ['GET'])]
+    public function mutualiseAdd(
+        ComposanteRepository $composanteRepository,
+        ElementConstitutif $ec, Parcours $parcours): Response
+    {
+        $composantes = $composanteRepository->findAll();
+
+        return $this->render('element_constitutif_wizard/_step1_mutualise_add.html.twig', [
+            'parcours' => $parcours,
+            'ec' => $ec,
+            'composantes' => $composantes
+        ]);
+    }
+
+    #[Route('/{ec}/{parcours}/mutualise/ajax', name: 'app_ec_wizard_step_1_mutualise_add_ajax', methods: ['POST','DELETE'])]
+    public function mutualiseAjax(
+        EntityManagerInterface $entityManager,
+        Request $request,
+        FormationRepository $formationRepository,
+        ParcoursRepository $parcoursRepository,
+        ComposanteRepository $composanteRepository,
+        SemestreRepository $semestreRepository,
+        UeRepository $ueRepository,
+        ElementConstitutif $ec, Parcours $parcours): Response
+    {
+        $data = JsonRequest::getFromRequest($request);
+        $t = [];
+        switch($data['field'])
+        {
+            case 'formation':
+                $formations = $formationRepository->findBy(['composantePorteuse' => $data['value']]);
+                foreach ($formations as $formation) {
+                    $t[] = [
+                        'id' => $formation->getId(),
+                        'libelle' => $formation->display()
+                    ];
+                }
+                break;
+            case 'parcours':
+                $parcours = $parcoursRepository->findBy(['formation' => $data['value']]);
+                foreach ($parcours as $parcour) {
+                    $t[] = [
+                        'id' => $parcour->getId(),
+                        'libelle' => $parcour->getLibelle()
+                    ];
+                }
+                break;
+            case 'semestre':
+                $parcours = $parcoursRepository->find($data['value']);
+                $semestres = $parcours->getSemestreParcours();
+                foreach ($semestres as $semestre) {
+                    $t[] = [
+                        'id' => $semestre->getId(),
+                        'libelle' => $semestre->getSemestre()->display()
+                    ];
+                }
+                break;
+            case 'ue':
+                $semestre = $semestreRepository->find($data['value']);
+                $ues = $semestre->getUes();
+                foreach ($ues as $ue) {
+                    $t[] = [
+                        'id' => $ue->getId(),
+                        'libelle' => $ue->display()
+                    ];
+                }
+                break;
+            case 'save':
+                $ue = $ueRepository->find($data['value']);
+                $ecUe = new EcUe($ue, $ec);
+                $entityManager->persist($ecUe);
+                $ec->addEcUe($ecUe);
+                $entityManager->flush();
+                return $this->json(true);
+            case 'delete':
+                $ues = $ec->getEcUes();
+                foreach ($ues as $ue) {
+                    if ($ue !== null && $ue->getUe()->getId() === (int) $data['ue']) {
+                        $ec->removeEcUe($ue);
+                        $entityManager->remove($ue);
+                    }
+                }
+                $entityManager->flush();
+                return $this->json(true);
+
+        }
+
+        return $this->json($t);
     }
 
     #[Route('/{ec}/{parcours}/2', name: 'app_ec_wizard_step_2', methods: ['GET'])]
