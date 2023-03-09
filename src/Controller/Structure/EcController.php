@@ -46,7 +46,7 @@ class EcController extends BaseController
         }
         return $this->render('structure/ec/_liste.html.twig', [
             'ecs' => $ecs,
-            'deplacer' => false
+            'deplacer' => false,
         ]);
     }
 
@@ -64,7 +64,7 @@ class EcController extends BaseController
             'ecs' => $ecs,
             'ue' => $ue,
             'parcours' => $parcours,
-            'deplacer' => true
+            'deplacer' => true,
         ]);
     }
 }

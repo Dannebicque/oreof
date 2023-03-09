@@ -6,6 +6,12 @@ import callOut from '../../js/callOut'
 export default class extends Controller {
   static targets = ['detail']
 
+  static values = {
+    ue: Number,
+    parcours: Number,
+    url: String,
+  }
+
   detail(event) {
     if (event.target.dataset.state === 'open') {
       document.getElementById(`detail_ue_${event.params.ue}_${event.params.parcours}`).classList.add('d-none')
@@ -21,8 +27,27 @@ export default class extends Controller {
     }
   }
 
-  refreshListeEc(event) {
-    this._listeEc(event)
+  async refreshListeEc(event) { // l'event pourrait emetre le numéro d'UE et de parcours
+    if (event.detail.ue === this.ueValue && event.detail.parcours === this.parcoursValue) {
+      this._listeEc(event)
+      // mise à jour des ECTS de l'UE et du Semestre
+      const response = await fetch(this.urlValue)
+      const data = await response.json()
+      const ectsUe = document.getElementById(`ects_ue_${event.detail.ue}_${event.detail.parcours}`)
+      const ectsSemestre = document.getElementById(`ects_semestre_${data.idSemestre}_${event.detail.parcours}`)
+      if (data.ue > 0 && data.ue < 30) {
+        // todo: vérifier les valeurs avec le type de diplôme (6 pour les L par exemple)
+        ectsUe.innerHTML = `<span class="badge bg-success me-2">${data.ue} ECTS</span>`
+      } else {
+        ectsUe.innerHTML = `<span class="badge bg-danger me-2">${data.ue} ECTS</span>`
+      }
+
+      if (data.semestre === 30) {
+        ectsSemestre.innerHTML = `<span class="badge bg-success me-2">${data.semestre} ECTS</span>`
+      } else {
+        ectsSemestre.innerHTML = `<span class="badge bg-danger me-2">${data.semestre} ECTS</span>`
+      }
+    }
   }
 
   async _listeEc(event) {

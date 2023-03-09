@@ -10,6 +10,8 @@ export default class extends Controller {
 
   nomEvenement = 'refreshListe'
 
+  details = { }
+
   sauvegardeFormModal(event) {
     event.preventDefault()
 
@@ -22,7 +24,7 @@ export default class extends Controller {
       .then(async () => {
         callOut('Sauvegarde effectuée', 'success')
         this.modal.hide()
-        this.dispatch(this.nomEvenement)
+        this.dispatch(this.nomEvenement, { detail: this.details })
       })
   }
 
@@ -31,6 +33,7 @@ export default class extends Controller {
     this.modalTitleTarget.innerHTML = event.detail.title
     this.btnCloseTarget.innerHTML = event.detail.btnClose
     this.nomEvenement = event.detail.nomEvenement
+    this.details = event.detail.details
     if (event.detail.form === true) {
       document.getElementById('btn_modal_submit').classList.remove('d-none')
       this.element.getElementsByTagName('form')[0].action = event.detail.formAction

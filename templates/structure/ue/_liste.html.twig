@@ -31,7 +31,11 @@
             </div>
             <div>{# class="scroll-out" #}
                 {% for ue in ues %}
-                    <div {{ stimulus_controller('structure--ue') }}>
+                    <div {{ stimulus_controller('structure--ue', {
+                        ue:ue.id,
+                        parcours:parcours.id,
+                        url: path('api_ects_ue', {ue: ue.id, parcours: parcours.id}),
+                    }) }}>
                         <div class="card mb-2 sh-19 sh-md-8">
                             <div class="card-body pt-0 pb-0 h-100">
                                 <div class="row g-0 h-100 align-content-center">
@@ -68,13 +72,14 @@
                                     mb-md-0">
                                         <div class="text-muted text-small d-md-none">ue</div>
                                         {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) %}
-                                            <label for="detail_ue_obligatoire_{{ ue.id }}" class="sr-only">Obligatoire ?</label>
+                                            <label for="detail_ue_obligatoire_{{ ue.id }}" class="sr-only">Obligatoire
+                                                                                                           ?</label>
                                             <select class="form-select form-select-sm ms-2"
                                                     id="detail_ue_obligatoire_{{ ue.id }}"
                                                     {{ stimulus_action('structure--ue', 'changeUeObligatoire',
                                                         'change', {
-                                                        url: path('structure_ue_change_ue_obligatoire', {ue: ue.id})
-                                                    }) }}
+                                                            url: path('structure_ue_change_ue_obligatoire', {ue: ue.id})
+                                                        }) }}
                                             >
                                                 <option value="">Choisir</option>
                                                 {% for typeEnseignement in typeEnseignements %}
@@ -95,8 +100,10 @@
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center
                                     align-items-md-end mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
+                                        <span id="ects_ue_{{ ue.id }}_{{ parcours.id }}">
                                         {{ ue.totalEctsUe|badgeEctsUe(6) }} {# todo: injecter le type de diplôme pour
                                          avoir le nb ects par UE max #}
+                                            </span>
                                     </div>
 
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center

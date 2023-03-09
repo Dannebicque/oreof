@@ -7,7 +7,7 @@ export default class extends Controller {
     const { url } = event.params
     await fetch(url).then(() => {
       callOut('EC déplacé', 'success')
-      this.dispatch('refreshListeEc')
+      this.dispatch('refreshListeEc', { detail: { ue: event.params.ue, parcours: event.params.parcours } })
     })
   }
 }

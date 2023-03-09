@@ -10,6 +10,7 @@ export default class extends Controller {
   static values = {
     modalUrl: String,
     nomEvenement: { type: String, default: 'refreshListe' },
+    details: { type: Object, default: {} },
     modalTitle: String,
     formAction: String,
     size: { type: String, default: 'md' },
@@ -26,6 +27,7 @@ export default class extends Controller {
         formAction: this.formActionValue,
         form: this.formValue,
         nomEvenement: this.nomEvenementValue,
+        details: this.detailsValue,
         size: this.sizeValue,
         btnClose: this.btnCloseValue,
         params: this.paramsValue,
