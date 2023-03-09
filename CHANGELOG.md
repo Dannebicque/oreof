@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0](https://github.com/Dannebicque/oreof/compare/v0.9.0...v0.10.0) (2023-03-09)
+
+
+### Features
+
+* Mise à jour des ECTS si modification d'un EC ([a699ee5](https://github.com/Dannebicque/oreof/commit/a699ee5f63be8e5b675ad597cb5e95cb590c76f2))
+* Proposition pour les strutures (non fonctionnel) ([019cc2b](https://github.com/Dannebicque/oreof/commit/019cc2b143a63e7aa7e4fcbbb58b71e6398de1db))
+
 ## [0.9.0](https://github.com/Dannebicque/oreof/compare/v0.8.1...v0.9.0) (2023-03-08)
 
 
