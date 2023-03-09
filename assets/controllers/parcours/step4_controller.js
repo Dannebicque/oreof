@@ -1,6 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
+import callOut from '../../js/callOut'
 
 export default class extends Controller {
   static targets = ['detail']
@@ -12,6 +13,39 @@ export default class extends Controller {
 
   connect() {
     this._loadParcours()
+  }
+
+  recopieStructure() {
+    const elt = document.getElementById('parcoursSource')
+    const nameParcours = elt.options[elt.selectedIndex].text
+    if (confirm(`Voulez-vous vraiment recopier la structure du parcours "${nameParcours}" ? Cela effacera les données présentes. `)) {
+      this._save({
+        action: 'recopieStructure',
+        value: document.getElementById('parcoursSource').value,
+      })
+      callOut('Recopie effectuée.', 'success')
+      this._updateListe()
+    }
+  }
+
+  reinitialiseStructure() {
+    if (confirm('Voulez-vous vraiment réinitialiser le semestre ? Cela effacera les données présentes. ')) {
+      this._save({
+        action: 'reinitialiseStructure',
+      })
+      callOut('Recopie effectuée.', 'success')
+      this._updateListe()
+    }
+  }
+
+  genereStructure() {
+    if (confirm('Voulez-vous vraiment recopier générer la structure du semestre ? ')) {
+      this._save({
+        action: 'genereStructure',
+      })
+      callOut('Recopie effectuée.', 'success')
+      this._updateListe()
+    }
   }
 
   async _loadParcours() {

@@ -71,10 +71,12 @@ class ParcoursWizardController extends AbstractController
     }
 
     #[Route('/{parcours}/4', name: 'app_parcours_wizard_step_4', methods: ['GET'])]
-    public function step4(Parcours $parcours): Response
+    public function step4(ParcoursRepository $parcoursRepository,Parcours $parcours): Response
     {
+        $listeParcours = $parcoursRepository->findBy(['formation' => $parcours->getFormation()]);
         return $this->render('parcours_wizard/_step4.html.twig', [
             'parcours' => $parcours,
+            'listeParcours' => $listeParcours,
         ]);
     }
 

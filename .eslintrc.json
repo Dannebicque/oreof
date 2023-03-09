@@ -14,7 +14,8 @@
         "semi": 0,
         "no-underscore-dangle": 0,
         "no-param-reassign": 0,
-        "class-methods-use-this": "off"
+        "class-methods-use-this": "off",
+        "no-restricted-globals": "off"
     },
     "ignorePatterns": ["assets/js/vendor/", "assets/js/base/"]
 }
