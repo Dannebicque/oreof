@@ -20,6 +20,12 @@ export default class extends Controller {
     this._updateListe({ q: event.target.value })
   }
 
+  effaceFiltre(event) {
+    event.preventDefault()
+    document.getElementById('filtre_crud').value = ''
+    this._updateListe()
+  }
+
   delete(event) {
     event.preventDefault()
     const { url } = event.params

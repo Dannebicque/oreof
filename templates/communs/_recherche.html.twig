@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col-8"></div>
+    <div class="col-4">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="filtre_label">Rechercher</span>
+            <input type="text"
+                   id="filtre_crud"
+                   class="form-control" placeholder="Saisir les premières lettres..."
+                   aria-label="Rechercher"
+                    {{ stimulus_action('crud', 'rechercher', 'keyup') }}
+                   aria-describedby="filtre_label">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2"
+                    {{ stimulus_action('crud', 'effaceFiltre', 'click') }}
+            >
+                <i class="far fa-times"></i>
+                Effacer
+            </button>
+        </div>
+    </div>
+</div>
