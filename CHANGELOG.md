@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.0](https://github.com/Dannebicque/oreof/compare/v0.10.0...v0.11.0) (2023-03-10)
+
+
+### Features
+
+* Ajout d'un filtre sur les user et d'une recherche sur user et formation ([af55d5f](https://github.com/Dannebicque/oreof/commit/af55d5f7fe87f50fc4e557bfc2e61f69897b8057))
+
 ## [0.10.0](https://github.com/Dannebicque/oreof/compare/v0.9.0...v0.10.0) (2023-03-09)
 
 
