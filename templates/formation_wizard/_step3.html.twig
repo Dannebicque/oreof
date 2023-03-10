@@ -26,7 +26,7 @@
         </div>
     </fieldset>
     <fieldset class="mb-3">
-        <legend class="col-form-label required">Générer la structure de la formation</legend><br>
+        <legend class="col-form-label required">Préciser l'intitulé des parcours</legend><br>
         <div id="liste_Parcours" {% if formation.hasParcours == false or formation.hasParcours == null %}class="d-none"{% endif %}>
             <div {{ stimulus_target('formation--step3', 'liste') }}>
 
@@ -53,8 +53,8 @@
             //todo: options du master MEEF 2D
         {% endif %}
 
-        <div id="bloc_semestre" {% if formation.hasParcours == false %}class="d-none"{% endif %}>
-            {{ component('alerte', {type:'info', message:' Précisez la structure de la mention/spécialité avec les parcours (semestre de tronc commun ou semestre spécifique au parcours)'}) }}
+        <div id="bloc_semestre mt-2" {% if formation.hasParcours == false %}class="d-none"{% endif %}>
+            Précisez la structure de la mention/spécialité avec les parcours (semestre de tronc commun ou semestre spécifique au parcours
             <ul>
 
                 {% for i in formation.semestreDebut..typeDiplome.nbSemestres %}
