@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.11.2](https://github.com/Dannebicque/oreof/compare/v0.11.1...v0.11.2) (2023-03-10)
+
+
+### Bug Fixes
+
+* [Recherche] Effacer filtre + refactorisation ([75f7979](https://github.com/Dannebicque/oreof/commit/75f79791d3debc23de23a17c3c55ae65f2f3700b))
+
 ### [0.11.1](https://github.com/Dannebicque/oreof/compare/v0.11.0...v0.11.1) (2023-03-10)
 
 
