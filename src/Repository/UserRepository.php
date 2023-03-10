@@ -88,10 +88,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     ): array {
         return $this->createQueryBuilder('u')
             ->where('u.isEnable = :isEnable')
-            ->andWhere('u.dateDemande IS NOT NULL')
-            ->andWhere('u.isValideAdministration = :isValideAdministration')
             ->setParameter('isEnable', true)
-            ->setParameter('isValideAdministration', true)
             ->addOrderBy('u.' . $sort, $direction)
             ->getQuery()
             ->getResult();
@@ -104,11 +101,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     ) {
         return $this->createQueryBuilder('u')
             ->where('u.isEnable = :isEnable')
-            ->andWhere('u.dateDemande IS NOT NULL')
-            ->andWhere('u.isValideAdministration = :isValideAdministration')
             ->andWhere('u.nom LIKE :q OR u.prenom LIKE :q OR u.email LIKE :q OR u.username LIKE :q')
             ->setParameter('isEnable', true)
-            ->setParameter('isValideAdministration', true)
             ->setParameter('q', '%' . $q . '%')
             ->addOrderBy('u.' . $sort, $direction)
             ->getQuery()
