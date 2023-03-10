@@ -7,7 +7,22 @@
             }) }}
          data-action="base:refreshListe@window->crud#refreshListe"
     >
-        <div class="card-body" {{ stimulus_target('crud', 'liste') }}>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-8"></div>
+                <div class="col-4">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="filtre">Rechercher</span>
+                        <input type="text" class="form-control" placeholder="Saisir les premières lettres..."
+                               aria-label="Rechercher"
+                                {{ stimulus_action('crud', 'rechercher', 'keyup') }}
+                               aria-describedby="filtre">
+                    </div>
+                </div>
+            </div>
+            <div {{ stimulus_target('crud', 'liste') }}>
+
+            </div>
         </div>
     </div>
 {% endblock %}

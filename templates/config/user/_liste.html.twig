@@ -1,10 +1,51 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Nom</th>
-        <th>Prénom</th>
-        <th>Email</th>
-        <th>Login URCA</th>
+
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'nom',
+                        'direction': getDirection('nom', sort, direction)
+                    }) }}
+            >
+                Nom
+                {{ displaySort('nom', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'prenom',
+                        'direction': getDirection('prenom', sort, direction)
+                    }) }}
+            >
+                Prénom
+                {{ displaySort('prenom', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'email',
+                        'direction': getDirection('email', sort, direction)
+                    }) }}
+            >
+                Email
+                {{ displaySort('email', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'username',
+                        'direction': getDirection('email', sort, direction)
+                    }) }}
+            >
+                Login URCA
+                {{ displaySort('username', sort, direction) }}
+            </a>
+        </th>
         <th>Droits</th>
         <th>Validé?</th>
         <th>Centre</th>

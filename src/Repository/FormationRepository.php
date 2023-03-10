@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\AnneeUniversitaire;
 use App\Entity\Composante;
 use App\Entity\Formation;
+use App\Entity\Mention;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -57,5 +58,23 @@ class FormationRepository extends ServiceEntityRepository
 
         return $query->getQuery()
             ->getResult();
+    }
+
+    public function findBySearch(
+        string|null $q,
+        AnneeUniversitaire $anneeUniversitaire,
+        string|null $sort,
+        string|null $direction
+    ) {
+        return $this->createQueryBuilder('f')
+            ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
+            ->where('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('m.libelle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q ')
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('q', '%' . $q . '%')
+            ->orderBy('f.' . $sort, $direction)
+            ->getQuery()
+            ->getResult();
+
     }
 }

@@ -33,7 +33,6 @@ class UserController extends AbstractController
     }
 
     #[Route('/attente-validation', name: 'app_user_attente', methods: ['GET'])]
-
     public function attente(UserRepository $repository): Response
     {
         //todo: gérer par le responsable de DPE ?? pour affecter les droits et "pré-valider" les utilisateurs
@@ -45,10 +44,24 @@ class UserController extends AbstractController
     }
 
     #[Route('/liste', name: 'app_user_liste', methods: ['GET'])]
-    public function liste(UserRepository $userRepository): Response
+    public function liste(
+        Request $request,
+        UserRepository $userRepository): Response
     {
+        $sort = $request->query->get('sort') ?? 'nom';
+        $direction = $request->query->get('direction') ?? 'asc';
+        $q = $request->query->get('q') ?? null;
+
+        if ($q) {
+            $users = $userRepository->findEnableBySearch($q, $sort, $direction);
+        } else {
+            $users = $userRepository->findEnable($sort, $direction);
+        }
+
         return $this->render('config/user/_liste.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $users,
+            'sort' => $sort,
+            'direction' => $direction
         ]);
     }
 

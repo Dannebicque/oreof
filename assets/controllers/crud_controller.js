@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
+import { useDebounce } from 'stimulus-use'
 import callOut from '../js/callOut'
 
 export default class extends Controller {
@@ -7,8 +8,16 @@ export default class extends Controller {
 
   static values = { url: String }
 
+  static debounces = ['rechercher'];
+
   connect() {
+    useDebounce(this)
     this._updateListe()
+  }
+
+  rechercher(event) {
+    event.preventDefault()
+    this._updateListe({ q: event.target.value })
   }
 
   delete(event) {
