@@ -172,6 +172,7 @@ class FormationController extends BaseController
      */
     #[Route('/{id}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
     public function edit(
+        Request $request,
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Formation $formation): Response
     {
@@ -180,7 +181,7 @@ class FormationController extends BaseController
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
         return $this->render('formation/edit.html.twig', [
             'formation' => $formation,
-            'step' => 1,
+            'selectedStep' => $request->query->get('step', 1),
             'typeDiplome' => $typeDiplome
         ]);
     }

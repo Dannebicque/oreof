@@ -38,4 +38,31 @@ class LicenceProfessionnelleTypeDiplome extends AbstractTypeDiplome implements T
     {
         // TODO: Implement saveMcccs() method.
     }
+
+    public function genereStructure(Parcours $parcours, Formation $formation): void
+    {
+        $this->deleteStructure($parcours);
+        //semestres
+        $semestres = $formation->getStructureSemestres();
+
+        if ($formation->isHasParcours() === false) {
+            if ($formation->getParcours()->count() === 0) {
+                $parcours = new Parcours($formation); //parcours par défaut
+                $parcours->setLibelle('Parcours par défaut');
+                $semestres = [];
+
+                $formation->addParcour($parcours);
+                $parcours->setFormation($formation);
+                $this->entityManager->persist($parcours);
+            }
+
+            for ($i = $formation->getSemestreDebut(); $i <= $this->nbSemestres; $i++) {
+                $semestres[$i] = 'tronc_commun';
+            }
+        }
+
+        $this->abstractGenereStructure($parcours, $semestres);
+
+        $this->entityManager->flush();
+    }
 }

@@ -10,11 +10,19 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 #[AsTwigComponent('notifications')]
 final class NotificationsComponent extends AbstractController
 {
-    public array $notifs = [];
     public ?UserInterface $user = null;
 
-    public function __construct(NotificationRepository $notificationRepository)
+    public function __construct(private NotificationRepository $notificationRepository)
     {
-        $this->notifs = $notificationRepository->findBy(['destinataire' => $this->user], ['created' => 'DESC']);
+    }
+
+    public function getNotifs(): array
+    {
+        return $this->notificationRepository->findBy(['destinataire' => $this->user], ['created' => 'DESC']);
+    }
+
+    public function getNotifsNonLu(): int
+    {
+        return $this->notificationRepository->count(['destinataire' => $this->user, 'lu' => false]);
     }
 }

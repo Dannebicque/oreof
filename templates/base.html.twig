@@ -30,9 +30,8 @@
                 <a href="{{ path('app_homepage') }}">
                     <div class="logo-but">
                         <i class="fa-duotone fa-pencil-ruler" style="--fa-primary-color: var(--complementaire);
-"></i>&nbsp;{{ product_name }} /
-
-                        {% if is_granted('ROLE_ADMIN') %}Administration{% endif %}
+"></i>&nbsp;{{ product_name }}
+                        {% if is_granted('ROLE_ADMIN') %} / Administration{% endif %}
                     </div>
                 </a>
 
@@ -63,10 +62,10 @@
                         <div class="col-12 ps-1 pe-1">
                             <ul class="list-unstyled">
                                 <li>
-                                    <a href="#">Mes informations</a>
+                                    <a href="{{ path('app_user_mes_informations') }}">Mes informations</a>
                                 </li>
                                 <li>
-                                    <a href="#">Mes notifications</a>
+                                    <a href="{{ path('app_user_mes_notifications') }}">Mes notifications</a>
                                 </li>
                             </ul>
                         </div>
@@ -113,15 +112,16 @@
                             <span class="label">E.C.</span>
                         </a>
                     </li>
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SES', app.user) %}
                     <li>
                         <a href="{{ path('app_formation_index') }}">
                             <i class="fal fa-book icon"></i>
                             <span class="label">Offre de formation</span>
                         </a>
                     </li>
+                    {% endif %}
 
-
-                    {% if is_granted('ROLE_ADMIN') %}
+                    {% if is_granted('ROLE_ADMIN')%}
                         <li class="mega">
                             <a href="#administration" data-href="administration">
                                 <i class="fal fa-wrench icon"></i>
@@ -230,6 +230,39 @@
                                         <li>
                                             <a href="{{ path('app_rythme_formation_index') }}">
                                                 <span class="label">Rythmes de formation</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+
+                    {% if is_granted('ROLE_COMPOSANTE', app.user) %}
+                        <li class="mega">
+                            <a href="#administration" data-href="administration">
+                                <i class="fal fa-wrench icon"></i>
+                                <span class="label">Administration</span>
+                            </a>
+                            <ul id="administration">
+                                <li>
+                                    <a href="#utilisateurs">
+                                        <span class="label">Utilisateurs et droits</span>
+                                    </a>
+                                    <ul id="utilisateurs">
+                                        <li>
+                                            <a href="{{ path('app_user_attente') }}">
+                                                <span class="label">Utilisateurs en attente</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_user_index') }}">
+                                                <span class="label">Utilisateurs</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_droits_access') }}">
+                                                <span class="label">Droits</span>
                                             </a>
                                         </li>
                                     </ul>

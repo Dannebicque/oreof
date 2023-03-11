@@ -19,6 +19,7 @@ class FormationParcoursController extends AbstractController
         $parcours = $parcoursRepository->findByFormation($formation);
         return $this->render('formation_parcours/_liste.html.twig', [
             'parcours' => $parcours,
+            'formation' => $formation
         ]);
     }
 }

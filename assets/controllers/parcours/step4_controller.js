@@ -9,6 +9,7 @@ export default class extends Controller {
   static values = {
     url: String,
     urlSave: String,
+    urlGenereStructure: String,
   }
 
   connect() {
@@ -19,32 +20,29 @@ export default class extends Controller {
     const elt = document.getElementById('parcoursSource')
     const nameParcours = elt.options[elt.selectedIndex].text
     if (confirm(`Voulez-vous vraiment recopier la structure du parcours "${nameParcours}" ? Cela effacera les données présentes. `)) {
-      this._save({
+      this._structure({
         action: 'recopieStructure',
         value: document.getElementById('parcoursSource').value,
       })
       callOut('Recopie effectuée.', 'success')
-      this._updateListe()
     }
   }
 
   reinitialiseStructure() {
     if (confirm('Voulez-vous vraiment réinitialiser le semestre ? Cela effacera les données présentes. ')) {
-      this._save({
+      this._structure({
         action: 'reinitialiseStructure',
       })
       callOut('Recopie effectuée.', 'success')
-      this._updateListe()
     }
   }
 
   genereStructure() {
     if (confirm('Voulez-vous vraiment recopier générer la structure du semestre ? ')) {
-      this._save({
+      this._structure({
         action: 'genereStructure',
       })
       callOut('Recopie effectuée.', 'success')
-      this._updateListe()
     }
   }
 
@@ -68,6 +66,12 @@ export default class extends Controller {
       parent.classList.remove('alert-success')
       parent.classList.add('alert-warning')
     }
+  }
+
+  async _structure(options) {
+    await saveData(this.urlGenereStructureValue, options).then(async () => {
+      this._loadParcours()
+    })
   }
 
   async _save(options) {

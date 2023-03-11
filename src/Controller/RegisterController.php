@@ -40,7 +40,7 @@ class RegisterController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $existUser = $userRepository->findOneBy(['email' => $user->getEmail()]);
             if ($existUser === null) {
-                $username = null; //$ldap->getUsername($user->getEmail());
+                $username = $ldap->getUsername($user->getEmail());
                 $user->setUsername($username ?? $user->getEmail());
                 $user->setDateDemande(new DateTime());
                 $userRepository->save($user, true);

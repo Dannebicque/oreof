@@ -48,7 +48,7 @@ export default class extends Controller {
   }
 
   refreshListe() {
-    this._refreshListe()
+    window.location = this.urlGenereStructreValue
   }
 
   changeSemestre(event) {

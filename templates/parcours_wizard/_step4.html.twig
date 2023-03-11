@@ -2,13 +2,14 @@
 <div {{ stimulus_controller('parcours--step4', {
     url: path('structure_parcours_detail_formation_parcours', {parcours: parcours.id}),
     urlSave: path('app_parcours_save', {parcours:parcours.id}),
+    urlGenereStructure: path('app_formation_genere_structure', {parcours:parcours.id}),
 }) }}
 >
     <div class="row">
         <div class="col-8">
 
 
-            {% if listeParcours|length > 1 and parcours.semestreParcours|length > 0 %}
+            {% if listeParcours|length > 1 %}
                 <div class="alert alert-info mb-2 mt-2">
                     Vous pouvez récupérer la structure des semestres d'un autre parcours en cliquant sur le bouton
                     ci-dessous.
@@ -28,7 +29,7 @@
                         </div>
                         <div class="col-sm-6 d-grid">
                             <br>
-                            <button {{ stimulus_action('parcours--step3', 'recopieStructure') }} class="btn btn-sm
+                            <button {{ stimulus_action('parcours--step4', 'recopieStructure') }} class="btn btn-sm
                     btn-outline-primary
                 d-block">
                                 Récupérer les compétences du parcours selectionné
@@ -42,7 +43,7 @@
             <div class="alert alert-info mb-2 mt-2">
                 {% if parcours.semestreParcours|length == 0 %}
                     Générer la structure du parcours en cliquant sur le bouton ci-dessous.
-                    <button {{ stimulus_action('parcours--step3', 'genereStructure') }} class="btn btn-sm
+                    <button {{ stimulus_action('parcours--step4', 'genereStructure') }} class="btn btn-sm
                     btn-outline-primary
                 d-block">
                         Générer la structure
@@ -50,7 +51,7 @@
                 {% else %}
                     Réinitialiser la structure du parcours en cliquant sur le bouton ci-dessous. Cela effacer toutes
                     les données du parcours.
-                    <button {{ stimulus_action('parcours--step3', 'reinitialiseStructure') }} class="btn btn-sm
+                    <button {{ stimulus_action('parcours--step4', 'reinitialiseStructure') }} class="btn btn-sm
                     btn-outline-primary
                 d-block">
                         Réinitialiser la structure

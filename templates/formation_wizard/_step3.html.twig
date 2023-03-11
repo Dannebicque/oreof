@@ -1,11 +1,11 @@
 <h2>Semestres & Parcours</h2>
 <div {{ stimulus_controller('formation--step3', {
     url: path('app_formation_save', {formation:formation.id}),
-    urlGenereStructre: path('app_formation_genere_structure', {formation:formation.id}),
+    urlGenereStructre: path('app_formation_refresh', {formation:formation.id}),
     urlListeParcours: path('app_formation_liste_parcours', {formation:formation.id}),
     hasParcours: formation.hasParcours
 }) }}
-        data-action="base:refreshListe@window->formation--step3#refreshListe"
+        data-action="base:parcoursAdded@window->formation--step3#refreshListe"
 >
     <fieldset class="mb-3">
         <legend class="col-form-label required">Formation avec parcours ?</legend>
@@ -31,22 +31,6 @@
             <div {{ stimulus_target('formation--step3', 'liste') }}>
 
             </div>
-
-            <button
-                    {{ stimulus_controller('modal', {
-                        size: 'lg',
-                        modalTitle: 'Ajouter un parcours',
-                        modalUrl: path('app_parcours_new', {formation:formation.id}) }) }}
-                    data-action="click->modal#openModal"
-                    class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 mt-4"
-                    data-size="lg"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="bottom"
-                    title="Ajouter un parcours"
-            >
-                <i class="{{ iconAdd }}"></i>
-                <span> Ajouter un parcours</span>
-            </button>
         </div>
 
         {% if typeDiplome == 'Master MEEF' %}
@@ -82,14 +66,14 @@
             </ul>
         </div>
 
-        <div class="d-grid">
-            <button type="button" {{ stimulus_action('formation--step3', 'initStructure') }}
-                    class="btn d-block btn-outline-warning">
-                Générer la structure de base pour la mention/spécialité et ses parcours
-            </button>{# todo: modifier le texte  #}
-        </div>
-        {{ component('alerte', {type:'info', message:'<strong>Attention !</strong> Cette action va générer une structure de base
-                                         pour la mention/spécialité et ses parcours selon le paramètrage ci-dessus.'}) }}
+{#        <div class="d-grid">#}
+{#            <button type="button" {{ stimulus_action('formation--step3', 'initStructure') }}#}
+{#                    class="btn d-block btn-outline-warning">#}
+{#                Générer la structure de base pour la mention/spécialité et ses parcours#}
+{#            </button>#}{# todo: modifier le texte  #}
+{#        </div>#}
+{#        {{ component('alerte', {type:'info', message:'<strong>Attention !</strong> Cette action va générer une structure de base#}
+{#                                         pour la mention/spécialité et ses parcours selon le paramètrage ci-dessus.'}) }}#}
     </fieldset>
     <div class="alert {% if formation.getEtatStep(3) %}alert-success{% else %}alert-warning{% endif %}">
         <input type="checkbox"

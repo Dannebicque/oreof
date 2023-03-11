@@ -16,6 +16,7 @@ class ComposanteAccessVoter extends Voter
 
     public const ROLE_COMPOSANTE_EDIT_MY = 'ROLE_COMPOSANTE_EDIT_MY';
     public const ROLE_COMPOSANTE_SHOW_MY = 'ROLE_COMPOSANTE_SHOW_MY';
+    public const ROLE_COMPOSANTE_MANAGE_MY = 'ROLE_COMPOSANTE_MANAGE_MY';
 
     private array $roles;
 
@@ -33,7 +34,7 @@ class ComposanteAccessVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::ROLE_COMPOSANTE_EDIT_MY, self::ROLE_COMPOSANTE_SHOW_MY], true)
+        return in_array($attribute, [self::ROLE_COMPOSANTE_EDIT_MY, self::ROLE_COMPOSANTE_SHOW_MY, self::ROLE_COMPOSANTE_MANAGE_MY], true)
             && $subject instanceof Composante;
     }
 
@@ -54,6 +55,7 @@ class ComposanteAccessVoter extends Voter
         return match ($attribute) {
             self::ROLE_COMPOSANTE_SHOW_MY => $this->hasShowOnHisComposante($user, $subject),
             self::ROLE_COMPOSANTE_EDIT_MY => $this->hasEditOnHisComposante($user, $subject),
+            self::ROLE_COMPOSANTE_MANAGE_MY => $this->hasManageOnHisComposante($user, $subject),
             default => false,
         };
 
@@ -64,6 +66,18 @@ class ComposanteAccessVoter extends Voter
         /** @var User $user */
         foreach ($user->getUserCentres() as $centre) {
             if ($centre->getComposante() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0 ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function hasManageOnHisComposante(UserInterface|User $user, Composante $subject): bool
+    {
+        /** @var User $user */
+        foreach ($user->getUserCentres() as $centre) {
+            if ($centre->getComposante() === $subject && in_array('ROLE_COMPOSANTE_MANAGE_MY', $this->roles) ) {
                 return true;
             }
         }

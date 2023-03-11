@@ -17,7 +17,6 @@ class HasComposanteAccessVoter extends Voter
     public const ROLE_COMPOSANTE_SHOW_ALL = 'ROLE_COMPOSANTE_SHOW_ALL';
     public const ROLE_FORMATION_ADD_ALL = 'ROLE_FORMATION_ADD_ALL';
 
-
     public const ROLE_FORMATION = 'ROLE_FORMATION';
 
     private array $roles;
