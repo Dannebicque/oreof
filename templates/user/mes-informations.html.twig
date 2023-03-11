@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h2 class="small-title">Vos centres et droits d'accès</h2>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Type de centre</th>
+                        <th scope="col">Centre</th>
+                        <th scope="col">Droits</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for centre in centres %}
+                        <tr>
+                            <td>{{ centre.typeCentre.libelle }}</td>
+                            <td>{{ centre.displaySimple }}</td>
+                            <td>
+                                {% for droit in centre.droits %}
+                                    {{ droit }}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="3">Aucun centre</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block header %}
+    Mes informations
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+
+{% endblock %}

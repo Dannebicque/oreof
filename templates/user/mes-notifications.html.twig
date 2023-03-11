@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h2 class="small-title">Vos notifications par email</h2>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                {{ component('alerte', {
+                    'type': 'info',
+                    'message': 'Vous pouvez gérer les emails que vous recevez.'
+                }) }}
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Type de centre</th>
+                        <th scope="col">Centre</th>
+                        <th scope="col">Droits</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block header %}
+    Mes notifications
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+
+{% endblock %}
