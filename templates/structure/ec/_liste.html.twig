@@ -1,10 +1,13 @@
 <div>
-    <table class="table table-striped table-bordered table-hover table-condensed">
+    <table class="table table-striped {% if mode == 'detail' %}table-bordered table-condensed{% endif%} table-hover ">
         <thead>
         <tr>
+            {% if mode == 'liste' %}
+                <th>Mention/spécialité/Parcours</th>
+                <th>UE</th>
+            {% endif %}
             <th>Libellé</th>
             <th>Référent</th>
-            <th>Mention/spécialité/Parcours</th>
             <th>Remplissage</th>
             <th>Etat</th>
             <th>Heures</th>
@@ -21,9 +24,12 @@
                 {% set ec = ec.ec %}
             {% endif %}
             <tr>
+                {% if mode == 'liste' %}
+                    <td>{{ ec.formationLibelle }}</td>
+                    <td>UE...</td>
+                {% endif %}
                 <td>{{ ec.code }} {{ ec.libelle }}</td>
                 <td>{{ ec.responsableEc != null ? ec.responsableEc.display : 'Non défini' }}</td>
-                <td>{{ ec.formationLibelle }}</td>
                 <td>{{ ec.remplissage|remplissage }}</td>
                 <td>{{ ec.etatEc|badgeEc }}</td>
                 <td>
@@ -59,18 +65,18 @@
                     <button
                             {% if deplacer is defined and deplacer == true %}
 
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                nomEvenement: 'refreshListeEc',
-                                details: {ue: ue.id, parcours: parcours.id},
-                                modalTitle: 'Modalités de Contrôle des Connaissances',
-                                modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
+                                {{ stimulus_controller('modal', {
+                                    size: 'lg',
+                                    nomEvenement: 'refreshListeEc',
+                                    details: {ue: ue.id, parcours: parcours.id},
+                                    modalTitle: 'Modalités de Contrôle des Connaissances',
+                                    modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
                             {% else %}
                                 {{ stimulus_controller('modal', {
                                     size: 'lg',
                                     modalTitle: 'Modalités de Contrôle des Connaissances',
                                     modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
-                                {% endif %}
+                            {% endif %}
                             data-action="click->modal#openModal"
                             class="btn btn-sm btn-outline-info"
                             data-size="lg"
@@ -168,6 +174,11 @@
 
                     </td>
                 {% endif %}
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="{% if mode == 'liste' %}9{% else %}7{% endif %}" class="bg-warning">Aucun
+                                                                                                            EC</td>
             </tr>
         {% endfor %}
         {% if parcours is defined and is_granted('ROLE_EC_ADD_MY', parcours.formation) and ue is defined %}

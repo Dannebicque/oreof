@@ -236,9 +236,7 @@
                                 </li>
                             </ul>
                         </li>
-                    {% endif %}
-
-                    {% if is_granted('ROLE_COMPOSANTE', app.user) %}
+                    {% elseif is_granted('ROLE_COMPOSANTE', app.user) %}
                         <li class="mega">
                             <a href="#administration" data-href="administration">
                                 <i class="fal fa-wrench icon"></i>

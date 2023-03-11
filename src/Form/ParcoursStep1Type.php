@@ -25,11 +25,11 @@ class ParcoursStep1Type extends AbstractType
         $builder
             ->add('contenuFormation', TextareaAutoSaveType::class, [
                 'help' => '-',
-                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'click->parcours--step1#saveContenu'],
+                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveContenu'],
             ])
             ->add('resultatsAttendus', TextareaAutoSaveType::class, [
                 'help' => '-',
-                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'click->parcours--step1#saveResultats'],
+                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveResultats'],
             ])
             ->add('rythmeFormation', EntityType::class, [
                 'placeholder' => 'Choisissez un rythme de formation ou complétez le champ ci-dessous',
@@ -42,12 +42,13 @@ class ParcoursStep1Type extends AbstractType
             ->add('rythmeFormationTexte', TextareaAutoSaveType::class, [
                 'required' => false,
                 'help' => '-',
-                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'click->parcours--step1#saveRythme'],
+                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveRythme'],
             ])
             ->add('localisation', ChoiceType::class, [
                 'required' => false,
                 'expanded' => true,
                 'choices' => $villes,
+                'data' => $options['data']->getLocalisation()->getId() ?? 0,
                 'help' => '-',
                 'attr' => ['data-action' => 'change->parcours--step1#changeLocalisation'],
             ])

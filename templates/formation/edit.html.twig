@@ -2,8 +2,9 @@
 
 {% block content %}
         {% if constant('SOURCE',typeDiplome) == constant
-            ('App\\TypeDiplome\\Source\\LicenceProfessionnelleTypeDiplome::SOURCE') %}
+            ('App\\TypeDiplome\\Source\\LicenceProfessionnelleTypeDiplome::SOURCE') and selectedStep == 1 %}
             {% set step = 0 %}
+            {% set selectedStep = 0 %}
         {% else %}
             {% set step = 1 %}
         {% endif %}
@@ -22,8 +23,8 @@
                     <a class="nav-link {% if selectedStep == 0 %}active{% endif %}" data-bs-toggle="tab" href="#"
                        role="tab"
                             {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 0}) }}
-                       aria-selected="true">Début de la
-                                            mention/spécialité {{ formation.onglets|etatRemplissage(0, 'formation') }}</a>
+                       aria-selected="true">
+                        Début de la mention/spécialité {{ formation.onglets|etatRemplissage(0, 'formation') }}</a>
                 </li>
             {% endif %}
             <li class="nav-item" role="presentation">

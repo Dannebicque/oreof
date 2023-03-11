@@ -45,7 +45,7 @@ class AppExtension extends AbstractExtension
            return '<i class="fal fa-caret-'.($direction === 'asc' ? 'up' : 'down').' fa-lg"></i>';
        }
 
-       return '';
+       return '<i class="fal fa-sort fa-lg"></i>';
     }
 
     public function getDirection(string $field, ?string $sort, ?string $direction): ?string

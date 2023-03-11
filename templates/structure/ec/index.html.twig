@@ -3,11 +3,15 @@
 {% block content %}
     <div class="card"
             {{ stimulus_controller('crud', {
-                url: path('structure_ec_liste')
+                url: path('structure_ec_liste'),
             }) }}
          data-action="base:refreshListe@window->crud#refreshListe base:modalClose@window->crud#refreshListe"
     >
-        <div class="card-body" {{ stimulus_target('crud', 'liste') }}>
+        <div class="card-body">
+            {{ include('communs/_recherche.html.twig') }}
+            <div {{ stimulus_target('crud', 'liste') }}>
+
+            </div>
         </div>
     </div>
 {% endblock %}

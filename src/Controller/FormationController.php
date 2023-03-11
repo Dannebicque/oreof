@@ -61,6 +61,7 @@ class FormationController extends BaseController
     #[Route('/new', name: 'app_formation_new', methods: ['GET', 'POST'])]
     public function new(
         RoleRepository $roleRepository,
+        MentionRepository $mentionRepository,
         UserCentreRepository $userCentreRepository,
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request, FormationRepository $formationRepository): Response
@@ -75,6 +76,12 @@ class FormationController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
+            if ($request->request->all()['formation_ses']['mention'] !== null) {
+                $mention = $mentionRepository->find($request->request->all()['formation_ses']['mention']);
+                $formation->setMentionTexte(null);
+                $formation->setMention($mention);
+            }
+
             $formation->addComposantesInscription($formation->getComposantePorteuse());
             $formationRepository->save($formation, true);
 

@@ -24,9 +24,7 @@ class EcController extends BaseController
         return $this->render('structure/ec/index.html.twig');
     }
 
-    #[
-        Route('/liste', name: 'liste')
-    ]
+    #[Route('/liste', name: 'liste')]
     public function liste(ElementConstitutifRepository $elementConstitutifRepository): Response
     {
         if ($this->isGranted('ROLE_ADMIN') ||
@@ -47,6 +45,7 @@ class EcController extends BaseController
         return $this->render('structure/ec/_liste.html.twig', [
             'ecs' => $ecs,
             'deplacer' => false,
+            'mode' => 'liste',
         ]);
     }
 
@@ -65,6 +64,7 @@ class EcController extends BaseController
             'ue' => $ue,
             'parcours' => $parcours,
             'deplacer' => true,
+            'mode' => 'detail'
         ]);
     }
 }

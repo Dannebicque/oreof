@@ -101,7 +101,7 @@ class Formation
     #[ORM\Column(nullable: true)]
     private ?array $etatDpe = [];
 
-    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: UserCentre::class)]
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: UserCentre::class, cascade: ['persist', 'remove'])]
     private Collection $userCentres;
 
     #[ORM\Column(length: 10)]
@@ -581,8 +581,7 @@ class Formation
 
     public function getEtatOnglet0(): EtatRemplissageEnum
     {
-        //todo: ajouter les vérifs?
-        return $this->getEtatStep(3) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
+        return ($this->getEtatStep(0) && $this->semestreDebut !== 0) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
     public function getEtatOnglet1(): EtatRemplissageEnum

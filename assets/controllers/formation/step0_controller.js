@@ -22,7 +22,6 @@ export default class extends Controller {
       parent.classList.remove('alert-success')
       parent.classList.add('alert-warning')
     }
-    updateEtatOnglet(this.urlValue, 'onglet0')
   }
 
   changeSemestreDebut(event) {
@@ -32,5 +31,11 @@ export default class extends Controller {
       value: event.target.value,
     })
     updateEtatOnglet(this.urlValue, 'onglet0')
+  }
+
+  async _save(options) {
+    await saveData(this.urlValue, options).then(async () => {
+      await updateEtatOnglet(this.urlValue, 'onglet0', 'formation')
+    })
   }
 }
