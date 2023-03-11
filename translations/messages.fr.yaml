@@ -39,3 +39,11 @@ ECTS: ECTS
 'Volume TD': 'Volume TD'
 'Volume TP': 'Volume TP'
 Sigle: Sigle
+Prénom: Prénom
+Nom: Nom
+'Email URCA': 'Email URCA'
+register.labels.centreDemande: register.labels.centreDemande
+'Indiquez un centre de gestion': 'Indiquez un centre de gestion'
+Etablissement: Etablissement
+Composante: Composante
+Formation: Formation

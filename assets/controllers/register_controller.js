@@ -2,20 +2,21 @@ import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
   static values = {
-    urlFormation: String,
     urlComposante: String,
   }
 
-  changeCentre(event) {
-    const val = event.target.value
+  connect() {
+    console.log('register_controller connected')
+  }
 
-    if (val === 'cg_etablissement') {
+  changeCentre(event) {
+    console.log('changeCentre')
+    const val = event.target.value
+    console.log(val)
+    if (val === 'cg_etablissement' || val == 1) {
       document.getElementById('selectListe').classList.add('d-none')
-    } else if (val === 'cg_composante') {
+    } else if (val === 'cg_composante' || val == 0) {
       this._updateSelect(this.urlComposanteValue)
-      document.getElementById('selectListe').classList.remove('d-none')
-    } else if (val === 'cg_formation') {
-      this._updateSelect(this.urlFormationValue)
       document.getElementById('selectListe').classList.remove('d-none')
     }
   }

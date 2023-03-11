@@ -41,12 +41,8 @@ class UserAccesSubscriber implements EventSubscriberInterface
             if ($comp !== null && $comp->getResponsableDpe() !== null) {
                 $valid = $comp->getResponsableDpe();
             }
-        } elseif ($event->getCentre() === CentreGestionEnum::CENTRE_GESTION_FORMATION) {
-            $formation = $event->getFormation();
-            if ($formation !== null && $formation->getResponsableMention() !== null) {
-                $valid = $formation->getResponsableMention();
-            }
         }
+
 
         if ($valid !== null) {
             $this->myMailer->initEmail();

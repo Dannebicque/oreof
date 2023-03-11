@@ -27,7 +27,6 @@ class RegisterController extends AbstractController
         EtablissementRepository $etablissementRepository,
         UserCentreRepository $userCentreRepository,
         ComposanteRepository $composanteRepository,
-        FormationRepository $formationRepository,
         Ldap $ldap,
         EventDispatcherInterface $eventDispatcher,
         UserRepository $userRepository,
@@ -41,7 +40,7 @@ class RegisterController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $existUser = $userRepository->findOneBy(['email' => $user->getEmail()]);
             if ($existUser === null) {
-                $username = $ldap->getUsername($user->getEmail());
+                $username = null; //$ldap->getUsername($user->getEmail());
                 $user->setUsername($username ?? $user->getEmail());
                 $user->setDateDemande(new DateTime());
                 $userRepository->save($user, true);
@@ -49,13 +48,6 @@ class RegisterController extends AbstractController
                 $centre = $form['centreDemande']->getData();
                 $userEvent = new UserRegisterEvent($user, $centre);
                 switch ($centre) {
-                    case CentreGestionEnum::CENTRE_GESTION_FORMATION:
-                        $formation = $formationRepository->find($request->request->get('selectListe'));
-                        $centreUser = new UserCentre();
-                        $centreUser->setUser($user);
-                        $centreUser->setFormation($formation);
-                        $userEvent->setFormation($formation);
-                        break;
                     case CentreGestionEnum::CENTRE_GESTION_COMPOSANTE:
                         $composante = $composanteRepository->find($request->request->get('selectListe'));
                         $centreUser = new UserCentre();
@@ -75,7 +67,6 @@ class RegisterController extends AbstractController
                 if (isset($centreUser)) {
                     $userCentreRepository->save($centreUser, true);
                     $this->addFlash('success', 'Votre demande a bien été prise en compte');
-
 
                     $eventDispatcher->dispatch($userEvent, UserRegisterEvent::USER_DEMANDE_ACCES);
 

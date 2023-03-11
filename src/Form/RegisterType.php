@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use App\Enums\CentreGestionEnum;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,25 +20,23 @@ class RegisterType extends AbstractType
         $builder
             ->add('nom',TextType::class, [
                 'required' => true,
-                'label' => 'Nom',
             ])
             ->add('prenom',TextType::class, [
                 'required' => true,
-                'label' => 'Prénom',
             ])
             ->add('email', EmailType::class, [
                 'required' => true,
-                'label' => 'Email URCA',
-                'help' => 'Email URCA valide'
+                'help' => '-'
             ])
-            ->add('centreDemande', EnumType::class, [
-                'class' => CentreGestionEnum::class,
-                'choice_label' => static function (UnitEnum $choice): string {
-                    return $choice->libelle();
-                },
+            ->add('centreDemande', ChoiceType::class, [
+                'choices' => [
+                    'Composante' => CentreGestionEnum::CENTRE_GESTION_COMPOSANTE,
+                    'Etablissement' => CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT,
+                ],
                 'placeholder' => 'Indiquez un centre de gestion',
                 'required' => true,
                 'mapped' => false,
+                'help' => '-',
                 'attr' => ['data-action' => 'change->register#changeCentre']
             ])
         ;
@@ -47,6 +46,7 @@ class RegisterType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'translation_domain' => 'form',
         ]);
     }
 }

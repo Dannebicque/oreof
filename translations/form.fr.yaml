@@ -80,7 +80,16 @@ parcours_step1.labels.resultatsAttendus: 'Résultats attendus du parcours'
 parcours_step1.labels.rythmeFormation: 'Rythme du parcours'
 parcours_step1.labels.rythmeFormationTexte: 'Choisissez un rythme de formation et/ou complétez le champ ci-dessous'
 parcours_step1.labels.localisation.label: 'Localisation du parcours'
-None: None
+None: Aucun
 Reims: Reims
 competence.labels.libelle: 'Libellé de la compétence'
 bloc_competence.labels.libelle: 'Libellé du bloc de compétences'
+register.labels.prenom: Prénom
+register.labels.nom: Nom
+register.labels.email: 'Email URCA'
+register.labels.centreDemande: 'Centre demandé'
+'Indiquez un centre de gestion': 'Indiquez un centre de gestion'
+Etablissement: Etablissement
+Composante: Composante
+Formation: Formation
+Etbalissement: Etbalissement

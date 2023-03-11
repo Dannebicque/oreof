@@ -54,3 +54,5 @@ ec_step1.helps.isTpDistancielMutualise.help: ec_step1.helps.isTpDistancielMutual
 ec_step2.helps.langueDispense.help: ec_step2.helps.langueDispense.help
 ec_step2.helps.langueSupport.help: ec_step2.helps.langueSupport.help
 ec_step2.helps.typeEnseignement.help: ec_step2.helps.typeEnseignement.help
+register.helps.email: 'Email URCA valide. Permettra de faire le lien avec vos accès CAS'
+register.helps.centreDemande: "Précisez le centre souhaité. Le responsable du centre précisera vos droits d'accès."
