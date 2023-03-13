@@ -37,7 +37,7 @@
             //todo: options du master MEEF 2D
         {% endif %}
 
-        <div id="bloc_semestre mt-2" {% if formation.hasParcours == false %}class="d-none"{% endif %}>
+        <div id="bloc_semestre" class="{% if formation.hasParcours == false %}d-none{% endif %} mt-2">
             Précisez la structure de la mention/spécialité avec les parcours (semestre de tronc commun ou semestre spécifique au parcours
             <ul>
 
