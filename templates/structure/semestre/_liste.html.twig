@@ -48,8 +48,9 @@
                                     </div>
                                     <div class="col-6 col-md-3 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
-                                        <span id="ects_semestre_{{ semestre.id }}_{{ parcours.id }}">
-                                            {{ semestre.semestre.totalEctsSemestre|badgeEctsSemestre }}
+                                        <span id="ects_semestre_{{ semestre.semestre.id }}_{{ parcours.id }}">
+                                            {{ semestre.semestre.totalEctsSemestre|badgeEctsSemestre }} / {{ semestre
+                                            .id }} / {{ parcours.id }}
                                         </span>
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center

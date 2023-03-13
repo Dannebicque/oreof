@@ -8,6 +8,7 @@ use App\Form\ParcoursType;
 use App\Repository\ParcoursRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -94,11 +95,18 @@ class ParcoursController extends AbstractController
      * @throws \JsonException
      */
     #[Route('/{id}', name: 'app_parcours_delete', methods: ['DELETE'])]
-    public function delete(Request $request, Parcours $parcour, ParcoursRepository $parcoursRepository): Response
+    public function delete(
+        EntityManagerInterface $entityManager,
+        Request $request, Parcours $parcour, ParcoursRepository $parcoursRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $parcour->getId(), JsonRequest::getValueFromRequest($request, 'csrf'))) {
+            foreach ($parcour->getSemestreParcours() as $sp) {
+                $entityManager->remove($sp);
+            }
+
             $parcoursRepository->remove($parcour, true);
-            //todo: supprimer BCC, semestres, UE ? (ou les liens)
+
+            //todo: supprimer semestres, UE ? (ou les liens, attention si EC mutualisé ou sur semestres communs
             return $this->json(true);
         }
 

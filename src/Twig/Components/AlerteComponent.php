@@ -19,7 +19,7 @@ final class AlerteComponent extends AbstractController
             'info' => 'fa-info-circle',
             'success' => 'fa-check-circle',
             'warning' => 'fa-exclamation-circle',
-            'danger' => 'fas fa-times-circle',
+            'danger' => 'fa-times-circle',
         };
     }
 }

@@ -21,7 +21,7 @@ class Semestre
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: Ue::class)]
     private Collection $ues;
 
-    #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: SemestreParcours::class)]
+    #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: SemestreParcours::class, cascade: ['persist', 'remove'])]
     private Collection $semestreParcours;
 
     #[ORM\Column]

@@ -48,7 +48,7 @@ class ParcoursStep1Type extends AbstractType
                 'required' => false,
                 'expanded' => true,
                 'choices' => $villes,
-                'data' => $options['data']->getLocalisation()->getId() ?? 0,
+                'data' => $options['data']->getLocalisation()?->getId() ?? 0,
                 'help' => '-',
                 'attr' => ['data-action' => 'change->parcours--step1#changeLocalisation'],
             ])

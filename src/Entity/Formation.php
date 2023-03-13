@@ -669,4 +669,16 @@ class Formation
 
         return $this;
     }
+
+    public function valideStep(mixed $value)
+    {
+        switch ((int) $value) {
+            case 0:
+                return true;
+            case 1:
+                return false;
+            case 2:
+                return false;
+        }
+    }
 }

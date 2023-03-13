@@ -3,6 +3,7 @@ import { Modal } from 'bootstrap'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import callOut from '../../js/callOut'
+import { etatStep } from '../../js/etatStep'
 
 export default class extends Controller {
   static targets = [
@@ -108,20 +109,22 @@ export default class extends Controller {
   }
 
   etatStep(event) {
-    this._save({
-      action: 'etatStep',
-      value: 1,
-      isChecked: event.target.checked,
-    })
+    etatStep(this.urlValue, 1, event, 'ec')
 
-    const parent = event.target.closest('.alert')
-    if (event.target.checked) {
-      parent.classList.remove('alert-warning')
-      parent.classList.add('alert-success')
-    } else {
-      parent.classList.remove('alert-success')
-      parent.classList.add('alert-warning')
-    }
+    // this._save({
+    //   action: 'etatStep',
+    //   value: 1,
+    //   isChecked: event.target.checked,
+    // })
+    //
+    // const parent = event.target.closest('.alert')
+    // if (event.target.checked) {
+    //   parent.classList.remove('alert-warning')
+    //   parent.classList.add('alert-success')
+    // } else {
+    //   parent.classList.remove('alert-success')
+    //   parent.classList.add('alert-warning')
+    // }
   }
 
   async _save(options) {

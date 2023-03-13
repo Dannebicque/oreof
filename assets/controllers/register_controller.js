@@ -1,18 +1,13 @@
 import { Controller } from '@hotwired/stimulus'
+import TomSelect from 'tom-select'
 
 export default class extends Controller {
   static values = {
     urlComposante: String,
   }
 
-  connect() {
-    console.log('register_controller connected')
-  }
-
   changeCentre(event) {
-    console.log('changeCentre')
     const val = event.target.value
-    console.log(val)
     if (val === 'cg_etablissement' || val == 1) {
       document.getElementById('selectListe').classList.add('d-none')
     } else if (val === 'cg_composante' || val == 0) {
@@ -40,6 +35,10 @@ export default class extends Controller {
           option.text = mention.libelle
           selectMention.appendChild(option)
         })
+        selectMention.classList.remove('form-select')
+        selectMention.classList.add('form-control')
+
+        new TomSelect(selectMention)
       },
     )
   }

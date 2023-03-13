@@ -33,6 +33,7 @@ export default class extends Controller {
       // mise à jour des ECTS de l'UE et du Semestre
       const response = await fetch(this.urlValue)
       const data = await response.json()
+      console.log(data)
       const ectsUe = document.getElementById(`ects_ue_${event.detail.ue}_${event.detail.parcours}`)
       const ectsSemestre = document.getElementById(`ects_semestre_${data.idSemestre}_${event.detail.parcours}`)
       if (data.ue > 0 && data.ue < 30) {

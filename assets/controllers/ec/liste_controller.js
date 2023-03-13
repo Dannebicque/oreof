@@ -3,6 +3,7 @@ import callOut from '../../js/callOut'
 
 export default class extends Controller {
   async deplacerEc(event) {
+    console.log(event.params)
     event.preventDefault()
     const { url } = event.params
     await fetch(url).then(() => {

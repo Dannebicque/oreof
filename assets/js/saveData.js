@@ -8,11 +8,12 @@ export const saveData = async (url, options) => {
     ),
   }
 
-  await fetch(url, body).then((response) => response.json()).then((data) => {
+  return fetch(url, body).then((response) => response.json()).then((data) => {
     if (data === true) {
       callOut('Sauvegarde effectuée', 'success')
-    } else {
+    } else if (data === false) {
       callOut('Erreur lors de la sauvegarde', 'danger')
     }
+    return data
   })
 }

@@ -1,6 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
+import { etatStep } from '../../js/etatStep'
 
 export default class extends Controller {
   static values = {
@@ -59,21 +60,22 @@ export default class extends Controller {
   }
 
   async etatStep(event) {
-    this._save({
-      action: 'etatStep',
-      value: 4,
-      isChecked: event.target.checked,
-    })
-
-    const parent = event.target.closest('.alert')
-    if (event.target.checked) {
-      parent.classList.remove('alert-warning')
-      parent.classList.add('alert-success')
-    } else {
-      parent.classList.remove('alert-success')
-      parent.classList.add('alert-warning')
-    }
-
-    await updateEtatOnglet(this.urlSaveValue, 'onglet4', 'ec')
+    etatStep(this.urlSaveValue, 4, event, 'ec')
+    // this._save({
+    //   action: 'etatStep',
+    //   value: 4,
+    //   isChecked: event.target.checked,
+    // })
+    //
+    // const parent = event.target.closest('.alert')
+    // if (event.target.checked) {
+    //   parent.classList.remove('alert-warning')
+    //   parent.classList.add('alert-success')
+    // } else {
+    //   parent.classList.remove('alert-success')
+    //   parent.classList.add('alert-warning')
+    // }
+    //
+    // await updateEtatOnglet(this.urlSaveValue, 'onglet4', 'ec')
   }
 }

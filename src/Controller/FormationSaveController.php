@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classes\UpdateEntity;
+use App\Classes\verif\FormationState;
 use App\Entity\Formation;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\ComposanteRepository;
@@ -27,6 +28,7 @@ class FormationSaveController extends BaseController
         VilleRepository $villeRepository,
         ComposanteRepository $composanteRepository,
         Request $request,
+        FormationState $formationState,
         Formation $formation
     ): Response {
         //todo: check si bonne formation...
@@ -84,14 +86,21 @@ class FormationSaveController extends BaseController
 
                 return $this->json(true);
             case 'etatStep':
-                $etatSteps = $formation->getEtatSteps();
-                $step = $data['value'];
-                $etatSteps[$step] = $data['isChecked'];
-                $formation->setEtatSteps($etatSteps);
+                //todo: a reprendre dans EC et Parcours
+                $valideState = (bool)$data['isChecked'] == true ? $formationState->valideStep($data['value'],
+                    $formation) : true;
+                if ($valideState === true) {
+                    $etatSteps = $formation->getEtatSteps();
+                    $step = $data['value'];
+                    $etatSteps[$step] = $data['isChecked'];
+                    $formation->setEtatSteps($etatSteps);
 
-                $em->flush();
+                    $em->flush();
 
-                return $this->json(true);
+                    return $this->json(true);
+                }
+
+                return $this->json($valideState);
             case 'array':
                 if ($data['isChecked'] === true) {
                     $rep = $updateEntity->addToArray($formation, $data['field'], $data['value']);

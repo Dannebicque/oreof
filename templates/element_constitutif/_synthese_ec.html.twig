@@ -27,8 +27,11 @@
                     bg-danger">Erreur !</span>')
                         : '<span class="badge bg-danger">Erreur !</span>' }}</dd>
                     <dt>UE</dt>
-                    <dd>{{ ec.ecUes[0].ue != null ? ec.ecUes[0].ue.display : '<span class="badge bg-danger">Erreur !</span>'
+                    <dd>{{ ec.ecUes[0].ue != null ? ec.ecUes[0].ue.ordre : '<span class="badge bg-danger">Erreur
+                    !</span>'
                         }}</dd>
+                    <dt>EC</dt>
+                    <dd>{{ ec.ordre }} (code : {{ ec.code }})</dd>
                 </dl>
             </div>
             <div class="col-12">
