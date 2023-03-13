@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.12.0](https://github.com/Dannebicque/oreof/compare/v0.11.2...v0.12.0) (2023-03-13)
+
+
+### Features
+
+* [Notification] Gestion de la page notification admin. ([65152bf](https://github.com/Dannebicque/oreof/commit/65152bf7e0d838ed8b3f5eb77ee8e1a9cb182c8a))
+* [profil] Page profil utilisateur ([7104f88](https://github.com/Dannebicque/oreof/commit/7104f884080cfcd06558d35e2bfa0a26291520bc))
+* [structure] Refonte, génération depuis le parcours. ([bdee645](https://github.com/Dannebicque/oreof/commit/bdee645ec8d77ab7ecb0096bb329bbcb3f281f9a))
+
+
+### Bug Fixes
+
+* [coméptence] ordre des compétences ([6b8bf38](https://github.com/Dannebicque/oreof/commit/6b8bf38aab41eedab3a9a6272215d6c713128f97))
+* [Demande acces] refonte demande accès, suppression du niveau formation ([b9ec2f4](https://github.com/Dannebicque/oreof/commit/b9ec2f41b704b1eb2002bc4a1f2e712761c9b559))
+* [formation] lisibilité des textes ([fba6f3c](https://github.com/Dannebicque/oreof/commit/fba6f3c2e19bd46790cb54ef4d3428df0701f4e1))
+* [formation/composante] harmonisation / suppression des titres ([42bb936](https://github.com/Dannebicque/oreof/commit/42bb9363175cfebdc2340c904521b07b05633083))
+* [formation/parcours] fix, corrections, améliorations ([de27681](https://github.com/Dannebicque/oreof/commit/de276810d46fec23696323e82dffe4b38ca6cb40))
+* [formation/parcours] lisibilité des textes ([fc5b751](https://github.com/Dannebicque/oreof/commit/fc5b751cabd3d320c2c4d909d35dab41f651f75f))
+* [formation/parcours] modifications de textes ([c37cb03](https://github.com/Dannebicque/oreof/commit/c37cb03a9c9b450ee498fbd59d158ae45a90f544))
+* [mails] typos ([f99419b](https://github.com/Dannebicque/oreof/commit/f99419b14986a2ad1269f83d0838b74a32530cf2))
+* [parcours] typos ([af533bd](https://github.com/Dannebicque/oreof/commit/af533bd16cbb098f3736fcc627df2e7636b58050))
+
 ### [0.11.2](https://github.com/Dannebicque/oreof/compare/v0.11.1...v0.11.2) (2023-03-10)
 
 
