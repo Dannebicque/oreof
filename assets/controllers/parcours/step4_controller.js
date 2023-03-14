@@ -2,7 +2,7 @@ import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import callOut from '../../js/callOut'
-import { etatStep } from '../../js/etatStep'
+import { calculEtatStep } from '../../js/calculEtatStep'
 
 export default class extends Controller {
   static targets = ['detail']
@@ -53,21 +53,7 @@ export default class extends Controller {
   }
 
   etatStep(event) {
-    etatStep(this.urlSaveValue, 4, event, 'parcours')
-    // this._save({
-    //   action: 'etatStep',
-    //   value: 4,
-    //   isChecked: event.target.checked,
-    // })
-    //
-    // const parent = event.target.closest('.alert')
-    // if (event.target.checked) {
-    //   parent.classList.remove('alert-warning')
-    //   parent.classList.add('alert-success')
-    // } else {
-    //   parent.classList.remove('alert-success')
-    //   parent.classList.add('alert-warning')
-    // }
+    calculEtatStep(this.urlSaveValue, 4, event, 'parcours')
   }
 
   async _structure(options) {

@@ -31,12 +31,12 @@
         </div>
     </div>
 
-    <div class="alert {% if ec.getEtatStep(1) %}alert-success{% else %}alert-warning{% endif %}">
+    <div class="alert {% if ec.getEtatStep(1) %}alert-success{% else %}alert-warning{% endif %}" id="alertEtatStructure">
         <input type="checkbox"
                id="etatStructure"
                class="form-check-inline"
                {% if ec.getEtatStep(1) %}checked{% endif %}
-                {{ stimulus_action('ec--step1', 'etatStep', 'change') }}
+                {{ stimulus_action('ec--step1', 'calculEtatStep', 'change') }}
 
         ><label for="etatStructure">
             Cochez cette case si vous avez terminé ...</label>

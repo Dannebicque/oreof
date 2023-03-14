@@ -6,7 +6,6 @@ use App\Classes\Bcc;
 use App\Classes\UpdateEntity;
 use App\Entity\Parcours;
 use App\Enums\ModaliteEnseignementEnum;
-use App\Enums\RythmeFormationEnum;
 use App\Repository\RythmeFormationRepository;
 use App\Repository\UserRepository;
 use App\Repository\VilleRepository;
@@ -37,6 +36,7 @@ class ParcoursSaveController extends AbstractController
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
             case 'stateOnglet':
+                //todo: fusionner avec le case 'etatStep' ?
                 $method = 'getEtat' . ucfirst($data['onglet']);
                 $val = $parcours->$method();
 

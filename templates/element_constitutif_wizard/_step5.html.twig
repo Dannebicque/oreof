@@ -6,12 +6,12 @@
     {% if editable %}
         {{ include('typeDiplome/mccc/'~templateForm) }}
 
-        <div class="alert {% if ec.getEtatStep(5) %}alert-success{% else %}alert-warning{% endif %} mt-2">
+        <div class="alert {% if ec.getEtatStep(5) %}alert-success{% else %}alert-warning{% endif %} mt-2" id="alertEtatStructure">
             <input type="checkbox"
                    id="etatStructure"
                    class="form-check-inline"
                    {% if ec.getEtatStep(5) %}checked{% endif %}
-                    {{ stimulus_action('ec--step5', 'etatStep', 'change') }}
+                    {{ stimulus_action('ec--step5', 'calculEtatStep', 'change') }}
 
             ><label for="etatStructure">
                 Cochez cette case si vous avez terminé ...</label>

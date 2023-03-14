@@ -3,7 +3,7 @@ import { Modal } from 'bootstrap'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import callOut from '../../js/callOut'
-import { etatStep } from '../../js/etatStep'
+import { calculEtatStep } from '../../js/calculEtatStep'
 
 export default class extends Controller {
   static targets = [
@@ -109,7 +109,7 @@ export default class extends Controller {
   }
 
   etatStep(event) {
-    etatStep(this.urlValue, 1, event, 'ec')
+    calculEtatStep(this.urlValue, 1, event, 'ec')
 
     // this._save({
     //   action: 'etatStep',

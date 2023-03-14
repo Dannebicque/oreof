@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
-import { etatStep } from '../../js/etatStep'
+import { calculEtatStep } from '../../js/calculEtatStep'
 
 export default class extends Controller {
   static targets = [
@@ -22,7 +22,7 @@ export default class extends Controller {
   }
 
   etatStep(event) {
-    etatStep(this.urlValue, 5, event, 'ec')
+    calculEtatStep(this.urlValue, 5, event, 'ec')
 
     // this._save({
     //   action: 'etatStep',

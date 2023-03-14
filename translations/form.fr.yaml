@@ -94,3 +94,9 @@ Composante: Composante
 Formation: Formation
 Etbalissement: Etbalissement
 deust: deust
+FI: 'Formation initiale'
+FI_APPRENTISSAGE: 'Formation initiale en apprentissage'
+FC: 'Formation continue'
+FC_CONTRAT_PRO: 'Formation continue en contrat pro'
+formation_step2.labels.objectifsFormation: 'Objectifs de la formation'
+parcours_step1.labels.objectifsParcours: 'Objectifs du parcours'

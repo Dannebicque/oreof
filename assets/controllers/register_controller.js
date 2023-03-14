@@ -4,14 +4,28 @@ import TomSelect from 'tom-select'
 export default class extends Controller {
   static values = {
     urlComposante: String,
+    urlFormation: String,
+  }
+
+  selectMention = null;
+
+  connect() {
+    this.selectMention = document.getElementById('selectListe')
+    const tom = new TomSelect(this.selectMention)
   }
 
   changeCentre(event) {
     const val = event.target.value
-    if (val === 'cg_etablissement' || val == 1) {
+    if (val === 'cg_etablissement' || parseInt(val, 10) === 1) {
+      const tom = this.selectMention.tomselect
+      tom.clear()
+      tom.disable()
       document.getElementById('selectListe').classList.add('d-none')
-    } else if (val === 'cg_composante' || val == 0) {
+    } else if (val === 'cg_composante' || parseInt(val, 10) === 0) {
       this._updateSelect(this.urlComposanteValue)
+      document.getElementById('selectListe').classList.remove('d-none')
+    } else if (val === 'cg_formation') {
+      this._updateSelect(this.urlFormationValue)
       document.getElementById('selectListe').classList.remove('d-none')
     }
   }
@@ -20,25 +34,20 @@ export default class extends Controller {
     await fetch(url).then((response) => response.json()).then(
       (data) => {
         const items = data
-        const selectMention = document.getElementById('selectListe')
-        selectMention.innerHTML = ''
-
-        let option = document.createElement('option')
-        option.value = null
-        option.text = 'Choisir dans la liste'
-        option.selected = true
-        selectMention.appendChild(option)
+        const tom = this.selectMention.tomselect
+        const tab = []
 
         items.forEach((mention) => {
-          option = document.createElement('option')
-          option.value = mention.id
-          option.text = mention.libelle
-          selectMention.appendChild(option)
+          tab.push({ value: mention.id, text: mention.libelle })
         })
-        selectMention.classList.remove('form-select')
-        selectMention.classList.add('form-control')
 
-        new TomSelect(selectMention)
+        tom.clear()
+        tom.clearOptions()
+        tom.enable()
+
+        tom.addOptions(tab)
+        tom.settings.placeholder = 'Choisir dans la liste'
+        tom.inputState();
       },
     )
   }
