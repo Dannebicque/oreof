@@ -1,14 +1,14 @@
-formation_ses.helps.composantePorteuse: 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation'
+formation_ses.helps.composantePorteuse: 'Indiquez la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation'
 formation_ses.helps.mention: 'Si la mention n''existe pas, veuillez la créer dans la section "Autre mention"'
 formation_ses.helps.mentionTexte: 'Si la mention existe, veuillez la sélectionner dans la liste déroulante'
 formation_step1.helps.localisationMention.help: 'Plusieurs choix possibles'
-formation_step1.helps.modalitesAlternance: 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.'
-formation_step1.helps.composantesInscription.help: "Composante d'inscription"
+formation_step1.helps.modalitesAlternance: 'Indiquez en 3000 caractères maximum les périodes et les durées en centre de formation ou en entreprise.'
+formation_step1.helps.composantesInscription.help: "Composante(s) d'inscription"
 formation_step1.helps.regimeInscription.help: "Régime d'inscription"
-formation_step2.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation et une description détaillée des différents sujets traités dans la formation.'
-formation_step2.helps.resultatsAttendus: 'Indiquez en 3000 caractères maximum les résultats attendus de la formation (titre, diplôme, certificat, attestation, …) et précise les modalités de reconnaissance ou de validation. De la même manière que pour l’élément “intitule-formation”, les diplômes, titres ou certifications devraient utiliser des dénominations conformes aux tables de l’Éducation Nationale ou au Répertoire National des Certifications Professionnelles (RNCP).'
+formation_step2.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différents sujets traités dans la formation, en fonction des objectifs pédagogiques définis précédemment.'
+formation_step2.helps.resultatsAttendus: "Indiquez en 3000 caractères maximum les objectifs pédagogiques visées par la formation (compétences à acquérir, à améliorer ou à entretenir).\nLa description de chaque objectif doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que « savoir, maitriser, être capable de… ». "
 formation_step2.helps.rythmeFormation: 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir,etc.).'
-formation_step2.helps.rythmeFormationTexte: 'Indiquez en 3000 caractères maximum le rythme de la formation : temps plein, temps partiel, cours du soir,etc..'
+formation_step2.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (en heures, en jours, en semaines, en mois, en années, …).'
 parcours_step2.helps.stageText: 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...'
 parcours_step2.helps.projetText: 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...'
 parcours_step2.helps.memoireText: 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...'
@@ -40,11 +40,11 @@ parcours_step2.helps.nbHeuresProjet: parcours_step2.helps.nbHeuresProjet
 parcours_step2.helps.hasMemoire.help: parcours_step2.helps.hasMemoire.help
 parcours_step8.helps.respParcours: parcours_step8.helps.respParcours
 parcours.helps.sigle: parcours.helps.sigle
-parcours_step1.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation et une description détaillée des différents sujets traités dans la formation.'
-parcours_step1.helps.resultatsAttendus: 'Indiquez en 3000 caractères maximum les résultats attendus de la formation (titre, diplôme, certificat, attestation, …) et précise les modalités de reconnaissance ou de validation. De la même manière que pour l’élément “intitule-formation”, les diplômes, titres ou certifications devraient utiliser des dénominations conformes aux tables de l’Éducation Nationale ou au Répertoire National des Certifications Professionnelles (RNCP).'
-parcours_step1.helps.rythmeFormation: 'Indiquez le rythme du parcours (en heures, en jours, en semaines, en mois, en années, …).'
-parcours_step1.helps.rythmeFormationTexte: 'Indiquez en 3000 caractères maximum le rythme de la formation : temps plein, temps partiel, cours du soir,etc..'
-parcours_step1.helps.localisation.help: 'Choisir les lieux où le parcours est proposé'
+parcours_step1.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différents sujets traités dans le parcours, en fonction des objectifs pédagogiques définis précédemment.'
+parcours_step1.helps.resultatsAttendus: "Indiquez en 3000 caractères maximum les objectifs pédagogiques visées par la formation (compétences à acquérir, à améliorer ou à entretenir).\nLa description de chaque objectif doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que « savoir, maitriser, être capable de… ». "
+parcours_step1.helps.rythmeFormation: 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir,etc.).'
+parcours_step1.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (en heures, en jours, en semaines, en mois, en années, …).'
+parcours_step1.helps.localisation.help: 'Choisissez les lieux où le parcours est proposé'
 ec_step1.helps.isCmPresentielMutualise.help: ec_step1.helps.isCmPresentielMutualise.help
 ec_step1.helps.isTdPresentielMutualise.help: ec_step1.helps.isTdPresentielMutualise.help
 ec_step1.helps.isTpPresentielMutualise.help: ec_step1.helps.isTpPresentielMutualise.help

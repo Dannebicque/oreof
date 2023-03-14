@@ -18,31 +18,31 @@ Non: Non
 formation_ses.labels.typeDiplome: 'Type de diplôme'
 formation_ses.labels.domaine: Domaine
 formation_ses.labels.mention: Mention
-formation_ses.labels.composantePorteuse: 'Composante porteuse'
+formation_ses.labels.composantePorteuse: "Composante porteuse de l'enseignement"
 formation_ses.labels.mentionTexte: 'Autre mention'
-formation_ses.labels.niveauEntree: 'Niveau d\''entrée en formation'
+formation_ses.labels.niveauEntree: "Niveau d'entrée en formation"
 formation_ses.labels.codeRNCP: 'Code RNCP'
 formation_ses.labels.niveauSortie: 'Niveau de sortie de la formation'
-formation_ses.labels.inRncp.label: 'Inscription au RNCP ?'
+formation_ses.labels.inRncp.label: 'La formation est-elle inscrite au RNCP ?'
 formation_ses.labels.responsableMention: 'Responsable de la mention'
 formation_step1.labels.localisationMention.label: 'Localisation(s) de la formation'
 formation_step1.labels.composantesInscription.label: "Composante d'inscription"
 formation_step1.labels.regimeInscription.label: "Régime d'inscription"
 formation_step1.labels.modalitesAlternance: "Modalités de l'alternance"
-ec_step1.labels.responsableEc: "Responsable de l'EC"
-ec_step1.labels.libelle: Libellé
+ec_step1.labels.responsableEc: "Responsable de l'enseignement"
+ec_step1.labels.libelle: "Libellé de l'enseignement"
 ec_step1.labels.libelleAnglais: 'Libellé anglais'
-ec_step1.labels.enseignementMutualise.label: 'Enseignement mutualisé ?'
-ec_step1.labels.isCmPresentielMutualise.label: 'Les CM présentiels sont-ils mutualisés'
-ec_step1.labels.isTdPresentielMutualise.label: 'Les TD présentiels sont-ils mutualisés'
-ec_step1.labels.isTpPresentielMutualise.label: 'Les TP présentiels sont-ils mutualisés'
-ec_step1.labels.isCmDistancielMutualise.label: 'Les CM distanciels sont-ils mutualisés'
-ec_step1.labels.isTdDistancielMutualise.label: 'Les TD distanciels sont-ils mutualisés'
-ec_step1.labels.isTpDistancielMutualise.label: 'Les TP distanciels sont-ils mutualisés'
+ec_step1.labels.enseignementMutualise.label: "L'enseignement est-il mutualisé ?"
+ec_step1.labels.isCmPresentielMutualise.label: 'Les CM présentiels sont-ils mutualisés ?'
+ec_step1.labels.isTdPresentielMutualise.label: 'Les TD présentiels sont-ils mutualisés ?'
+ec_step1.labels.isTpPresentielMutualise.label: 'Les TP présentiels sont-ils mutualisés ?'
+ec_step1.labels.isCmDistancielMutualise.label: 'Les CM distanciels sont-ils mutualisés ?'
+ec_step1.labels.isTdDistancielMutualise.label: 'Les TD distanciels sont-ils mutualisés ?'
+ec_step1.labels.isTpDistancielMutualise.label: 'Les TP distanciels sont-ils mutualisés ?'
 ec_step2.labels.description: Description
 ec_step2.labels.langueDispense.label: 'Enseignement dispensé en'
 ec_step2.labels.langueSupport.label: 'Support de cours en'
-ec_step2.labels.typeEnseignement.label: 'Enseignement Obligatoire / optionnel ?'
+ec_step2.labels.typeEnseignement.label: 'Enseignement est-il Obligatoire / optionnel ?'
 ec_step3.labels.objectifs: "Objectifs de l'enseignement"
 ec_step4.labels.modaliteEnseignement.label: "Modalité d'enseignement"
 ec_step4.labels.ects: ECTS
@@ -55,12 +55,12 @@ ec_step4.labels.volumeTpDistanciel: 'Volume TP distanciel'
 'En présentiel': 'En présentiel'
 'En distanciel': 'En distanciel'
 Hybride: Hybride
-'Choisissez un rythme de formation ou complétez le champ ci-dessous': ''
+'Choisissez un rythme de formation ou complétez le champ ci-dessous': 'Choisissez un rythme de formation ou complétez le champ suivant'
 'Compléments sur le rythme de formation': 'Compléments sur le rythme de formation'
 formation_step2.labels.contenuFormation: 'Contenu de la formation'
 formation_step2.labels.resultatsAttendus: 'Résultats attendus de la formation'
-formation_step2.labels.rythmeFormation: 'Rythme de la formation'
-formation_step2.labels.rythmeFormationTexte: 'Choisissez un rythme de formation et/ou complétez le champ ci-dessous'
+formation_step2.labels.rythmeFormation: 'Choisissez un rythme de formation et/ou complétez le champ ci-dessous'
+formation_step2.labels.rythmeFormationTexte: 'Précisez le rythme de formation'
 parcours_step2.labels.modalitesEnseignement.label: "Modalités d'enseignement du parcours"
 parcours_step2.labels.hasStage.label: 'Stage ?'
 parcours_step2.labels.nbHeuresStages: "Nombre d'heures de stage prévu"
@@ -77,9 +77,9 @@ parcours_step8.labels.respParcours: 'Responsable du parcours (si existant)'
 parcours_step8.labels.coordSecretariat: 'Coordonnées du secrétariat'
 parcours_step1.labels.contenuFormation: 'Contenu du parcours'
 parcours_step1.labels.resultatsAttendus: 'Résultats attendus du parcours'
-parcours_step1.labels.rythmeFormation: 'Rythme du parcours'
-parcours_step1.labels.rythmeFormationTexte: 'Choisissez un rythme de formation et/ou complétez le champ ci-dessous'
-parcours_step1.labels.localisation.label: 'Localisation du parcours'
+parcours_step1.labels.rythmeFormation: 'Choisissez un rythme de formation et/ou complétez le champ suivant'
+parcours_step1.labels.rythmeFormationTexte: 'Précisez le rythme de formation'
+parcours_step1.labels.localisation.label: 'Localisation(s) du parcours'
 None: Aucun
 Reims: Reims
 competence.labels.libelle: 'Libellé de la compétence'
@@ -88,7 +88,7 @@ register.labels.prenom: Prénom
 register.labels.nom: Nom
 register.labels.email: 'Email URCA'
 register.labels.centreDemande: 'Centre demandé'
-'Indiquez un centre de gestion': 'Indiquez un centre de gestion'
+'Indiquez un centre de gestion': 'Indiquer un centre de gestion'
 Etablissement: Etablissement
 Composante: Composante
 Formation: Formation
