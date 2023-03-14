@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-        {% if constant('SOURCE',typeDiplome) == constant
-            ('App\\TypeDiplome\\Source\\LicenceProfessionnelleTypeDiplome::SOURCE') and selectedStep == 1 %}
-            {% set step = 0 %}
-            {% set selectedStep = 0 %}
-        {% else %}
-            {% set step = 1 %}
-        {% endif %}
+    {% if constant('SOURCE',typeDiplome) == constant
+        ('App\\TypeDiplome\\Source\\LicenceProfessionnelleTypeDiplome::SOURCE') and selectedStep == 1 %}
+        {% set step = 0 %}
+        {% set selectedStep = 0 %}
+    {% else %}
+        {% set step = 1 %}
+    {% endif %}
     {{ include('formation/_synthese_formation.html.twig') }}
     <div class="mt-3"
             {{ stimulus_controller('formation_wizard', {
@@ -28,7 +28,7 @@
                 </li>
             {% endif %}
             <li class="nav-item" role="presentation">
-                <a class="nav-link     {% if selectedStep == 1 %}active{% endif %}"
+                <a class="nav-link {% if selectedStep == 1 %}active{% endif %}"
                    data-bs-toggle="tab" href="#" role="tab" {% if step == 1 %}aria-selected="true"{% endif %}
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 1}) }}
                 >
@@ -49,7 +49,10 @@
             </li>
             {% for parcours in formation.parcours %}
                 <li class="nav-item" role="presentation" id="tab_parcours_{{ parcours.id }}">
-                    <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
+                    <a class="nav-link" data-bs-toggle="tab" href="#"
+                       {# todo:  if formation.hasParcours == false and loop.first and selectedStep == 4
+                       active{% endif %}#}
+                       role="tab" aria-selected="false"
                             {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 4, parcours:
                                 parcours.id}) }}
                     >

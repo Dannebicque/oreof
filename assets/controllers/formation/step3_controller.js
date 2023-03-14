@@ -12,7 +12,7 @@ export default class extends Controller {
   static values = {
     url: String,
     urlListeParcours: String,
-    urlRefreshValue: String,
+    urlRefresh: String,
     urlGenereStructure: String,
     hasParcours: Boolean,
   }
@@ -95,12 +95,8 @@ export default class extends Controller {
     if (confirm('Voulez-vous vraiment recopier générer la structure de la formation ? ')) {
       await saveData(this.urlGenereStructureValue)
       callOut('Structure générée.', 'success')
-    }
-  }
-
-  initStructure() {
-    if (confirm('Voulez-vous vraiment initialiser la structure ? Si des parcours ont déjà été initialisés, toutes les données associées seront supprimées.')) {
-      window.location = this.urlRefreshValue
+      this.refreshListe()
+      console.log('ok')
     }
   }
 

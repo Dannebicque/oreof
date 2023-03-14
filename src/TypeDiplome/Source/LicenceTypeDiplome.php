@@ -164,8 +164,6 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
 
     public function genereStructure(Formation $formation, bool|Parcours|null $parcours = null): void
     {
-        dump($parcours);
-
         if ($parcours !== null && $parcours instanceof Parcours) {
             $this->deleteStructure($parcours);
         }

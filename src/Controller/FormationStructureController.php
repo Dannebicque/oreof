@@ -19,6 +19,9 @@ class FormationStructureController extends BaseController
     public function index(
         Formation $formation
     ): Response {
+        if ($formation->isHasParcours() === false) {
+            return $this->redirectToRoute('app_formation_edit', ['id' => $formation->getId(), 'step' => 4]);
+        }
         return $this->redirectToRoute('app_formation_edit', ['id' => $formation->getId(), 'step' => 3]);
     }
 
