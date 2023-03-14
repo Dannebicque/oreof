@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.14.0](https://github.com/Dannebicque/oreof/compare/v0.13.0...v0.14.0) (2023-03-14)
+
+
+### Features
+
+* [Formation] Contrôle sur la structure. ([99b6dbc](https://github.com/Dannebicque/oreof/commit/99b6dbc2c2be074706888455a0ab076e8b7431ed))
+* [Formation/Parcours] Ajout de l'entrée objectifs ([6c9950c](https://github.com/Dannebicque/oreof/commit/6c9950c694ff0686e95350c4225444ea870bdf5c))
+* [MCCC] MCCC des LP ([18cac48](https://github.com/Dannebicque/oreof/commit/18cac48402e767b77c73c5848b119b9852417191))
+
+
+### Bug Fixes
+
+* [Step3] type sur l'ID ([5917f8d](https://github.com/Dannebicque/oreof/commit/5917f8d658761450100821825fba904526924b27))
+
 ## [0.13.0](https://github.com/Dannebicque/oreof/compare/v0.12.0...v0.13.0) (2023-03-13)
 
 
