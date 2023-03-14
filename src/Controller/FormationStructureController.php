@@ -22,6 +22,21 @@ class FormationStructureController extends BaseController
         return $this->redirectToRoute('app_formation_edit', ['id' => $formation->getId(), 'step' => 3]);
     }
 
+    #[Route('/formation/structure/pas-parcours/{formation}', name: 'app_formation_genere_structure_pas_parcours')]
+    public function genereStructurePasParcours(
+        Request $request,
+        FormationStructure $formationStructure,
+        Formation $formation
+    ): Response {
+
+        $formationStructure->genereStructrePasParcours($formation);
+
+        $this->addFlashBag('success', 'La structure de la formation a été générée');
+
+        return $this->json(true);
+
+    }
+
     #[Route('/formation/structure/{parcours}', name: 'app_formation_genere_structure')]
     public function genereStructure(
         Request $request,

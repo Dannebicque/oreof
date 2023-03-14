@@ -37,9 +37,12 @@ class DeustTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterfa
         // TODO: Implement saveMcccs() method.
     }
 
-    public function genereStructure(Parcours $parcours, Formation $formation): void
+    public function genereStructure(Formation $formation, bool|Parcours|null $parcours = null): void
     {
-        $this->deleteStructure($parcours);
+        if ($parcours !== null) {
+            $this->deleteStructure($parcours);
+        }
+
         //semestres
         $semestres = $formation->getStructureSemestres();
 

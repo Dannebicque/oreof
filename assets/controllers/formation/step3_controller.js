@@ -12,7 +12,8 @@ export default class extends Controller {
   static values = {
     url: String,
     urlListeParcours: String,
-    urlGenereStructre: String,
+    urlRefreshValue: String,
+    urlGenereStructure: String,
     hasParcours: Boolean,
   }
 
@@ -49,7 +50,7 @@ export default class extends Controller {
   }
 
   refreshListe() {
-    window.location = this.urlGenereStructreValue
+    window.location = this.urlRefreshValue
   }
 
   changeSemestre(event) {
@@ -72,11 +73,13 @@ export default class extends Controller {
     const data = event.target.value
 
     if (parseInt(data, 10) === 1) {
-      document.getElementById('liste_Parcours').classList.remove('d-none');
-      document.getElementById('bloc_semestre').classList.remove('d-none');
+      document.getElementById('liste_Parcours').classList.remove('d-none')
+      document.getElementById('bloc_semestre').classList.remove('d-none')
+      document.getElementById('bloc_pas_parcours').classList.add('d-none')
     } else {
-      document.getElementById('liste_Parcours').classList.add('d-none');
-      document.getElementById('bloc_semestre').classList.add('d-none');
+      document.getElementById('liste_Parcours').classList.add('d-none')
+      document.getElementById('bloc_semestre').classList.add('d-none')
+      document.getElementById('bloc_pas_parcours').classList.remove('d-none')
     }
 
     this._save({
@@ -88,9 +91,16 @@ export default class extends Controller {
     this._refreshListe()
   }
 
+  async genereStructurePasParcours() {
+    if (confirm('Voulez-vous vraiment recopier générer la structure de la formation ? ')) {
+      await saveData(this.urlGenereStructureValue)
+      callOut('Structure générée.', 'success')
+    }
+  }
+
   initStructure() {
     if (confirm('Voulez-vous vraiment initialiser la structure ? Si des parcours ont déjà été initialisés, toutes les données associées seront supprimées.')) {
-      window.location = this.urlGenereStructreValue
+      window.location = this.urlRefreshValue
     }
   }
 

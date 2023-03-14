@@ -25,4 +25,14 @@ class FormationStructure
         $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
         $typeDiplome->genereStructure($parcours, $formation);
     }
+
+    public function genereStructrePasParcours(Formation $formation): void
+    {
+        if ($formation === null) {
+            throw new \Exception('La formation n\'est pas définie');
+        }
+
+        $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+        $typeDiplome->genereStructure($formation, $formation->getParcours()->first());
+    }
 }

@@ -37,9 +37,12 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         // TODO: Implement saveMcccs() method.
     }
 
-    public function genereStructure(Parcours $parcours, Formation $formation): void
+    public function genereStructure(Formation $formation, Parcours|bool $parcours = null): void
     {
-        $this->deleteStructure($parcours);
+        if ($parcours !== null) {
+            $this->deleteStructure($parcours);
+        }
+
         //semestres
         $semestres = $formation->getStructureSemestres();
 

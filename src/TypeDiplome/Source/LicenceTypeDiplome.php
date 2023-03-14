@@ -162,9 +162,14 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         return $tabMcccs;
     }
 
-    public function genereStructure(Parcours $parcours, Formation $formation): void
+    public function genereStructure(Formation $formation, bool|Parcours|null $parcours = null): void
     {
-        $this->deleteStructure($parcours);
+        dump($parcours);
+
+        if ($parcours !== null && $parcours instanceof Parcours) {
+            $this->deleteStructure($parcours);
+        }
+
         //semestres
         $semestres = $formation->getStructureSemestres();
 

@@ -30,7 +30,7 @@ export default class extends Controller {
   }
 
   reinitialiseStructure() {
-    if (confirm('Voulez-vous vraiment réinitialiser le semestre ? Cela effacera les données présentes. ')) {
+    if (confirm('Voulez-vous vraiment réinitialiser le parcours ? Cela effacera les données présentes. ')) {
       this._structure({
         action: 'reinitialiseStructure',
       })
@@ -39,11 +39,11 @@ export default class extends Controller {
   }
 
   genereStructure() {
-    if (confirm('Voulez-vous vraiment recopier générer la structure du semestre ? ')) {
+    if (confirm('Voulez-vous vraiment recopier générer la structure du parcours ? ')) {
       this._structure({
         action: 'genereStructure',
       })
-      callOut('Recopie effectuée.', 'success')
+      callOut('Génération effectuée.', 'success')
     }
   }
 

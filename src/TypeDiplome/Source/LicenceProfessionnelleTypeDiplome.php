@@ -165,9 +165,12 @@ class LicenceProfessionnelleTypeDiplome extends AbstractTypeDiplome implements T
     }
 
 
-    public function genereStructure(Parcours $parcours, Formation $formation): void
+    public function genereStructure(Formation $formation, bool|Parcours|null $parcours = null): void
     {
-        $this->deleteStructure($parcours);
+        if ($parcours !== null) {
+            $this->deleteStructure($parcours);
+        }
+
         //semestres
         $semestres = $formation->getStructureSemestres();
 

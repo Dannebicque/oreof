@@ -72,7 +72,7 @@ class Parcours
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $memoireText = null;
 
-    #[ORM\Column(type: Types::INTEGER,  nullable: true, enumType: ModaliteEnseignementEnum::class)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true, enumType: ModaliteEnseignementEnum::class)]
     private ?ModaliteEnseignementEnum $modalitesEnseignement = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -558,7 +558,7 @@ class Parcours
 
     public function getEtatOnglet0(): EtatRemplissageEnum
     {
-        //todo: ajouter les vérifs?
+        //todo: ajouter les vérifs? Existe?
         return $this->getEtatStep(0) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
@@ -570,7 +570,13 @@ class Parcours
     public function getEtatOnglet2(): EtatRemplissageEnum
     {
         //todo: ajouter les vérifs?
-        return $this->getEtatStep(2) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
+        $stage = ($this->isHasStage() === true && $this->getStageText() !== null && trim($this->getStageText()) !== '' && $this->getNbHeuresStages() > 0) || $this->isHasStage() === false;
+        $projet = ($this->isHasProjet() === true && $this->getProjetText() !== null && trim($this->getProjetText()) !== '' && $this->getNbHeuresProjet() > 0) || $this->isHasProjet() === false;
+        $memoire = ($this->isHasMemoire() === true && $this->getMemoireText() !== null && trim($this->getMemoireText()) !== '') || $this->isHasProjet() === false;
+
+
+        return $stage === false && $projet === false && $memoire === false ? EtatRemplissageEnum::VIDE : (
+            $stage === true && $projet === true && $memoire === true && $this->getEtatStep(2) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     public function getEtatOnglet3(): EtatRemplissageEnum
@@ -614,6 +620,7 @@ class Parcours
         if (array_key_exists($step, $this->getEtatSteps())) {
             return $this->getEtatSteps()[$step];
         }
+
         return false;
     }
 
