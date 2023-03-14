@@ -10,7 +10,5 @@ FI: 'Formation initiale'
 FI_APPRENTISSAGE: 'Formation initiale en apprentissage'
 FC: 'Formation continue'
 FC_CONTRAT_PRO: 'Formation continue en contrat pro'
-'    formation_ses.labels.typeDiplome': formation_ses.labels.typeDiplome
-formation_ses.labels.typeDiplome: 'Type de diplôme'
 "Régime d'inscription": "Régime d'inscription"
 formation_step1.labels.regimeInscription.label: "Régime d'inscription"
