@@ -1,5 +1,7 @@
 import * as bootstrap from 'bootstrap'
 
+import Trix from 'trix'
+
 import callOut from './js/callOut'
 import './styles/app.scss';
 
@@ -24,5 +26,8 @@ window.addEventListener('load', () => { // le dom est chargé
   // toast
   toasts.forEach((toast) => {
     callOut(toast.text, toast.type)
+  })
+
+  document.addEventListener('trix-before-initialize', () => {
   })
 })

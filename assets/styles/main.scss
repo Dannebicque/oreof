@@ -167,3 +167,11 @@
   background-color: var(--danger);
 }
 
+.trix-button--icon-strike,
+.trix-button--icon-quote,
+.trix-button--icon-code,
+.trix-button-group.trix-button-group--file-tools,
+.trix-button--icon-attach {
+  display: none;
+}
+

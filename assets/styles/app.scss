@@ -7,6 +7,7 @@
 @import "@fortawesome/fontawesome-pro/css/brands.min.css";
 
 @import "tom-select/dist/css/tom-select.bootstrap5.min.css";
+@import "trix/dist/trix.css";
 
 $variable-prefix:             bs- !default; // Deprecated in v5.2.0 for the shorter `$prefix`
 $prefix:                      $variable-prefix !default;

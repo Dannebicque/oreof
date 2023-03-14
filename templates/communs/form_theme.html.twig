@@ -1,6 +1,12 @@
 {% use "bootstrap_5_layout.html.twig" %}
 {% trans_default_domain 'form' %}
 
+{% block trix_widget %}
+    <input id="trix-input-{{ trixId }}" value="{{ value }}" type="hidden" name="{{ full_name }}">
+    <trix-editor input="trix-input-{{ trixId }}"></trix-editor>
+{% endblock %}
+
+
 {% macro form_parent_name(form, prefix) %}
     {% apply spaceless %}
         {% import _self as macros %}
@@ -121,7 +127,6 @@
     </{{ element|default('label') }}>
 {%- endblock form_label %}
 
-
 {% block textarea_with_save_widget %}
     <div class="row">
         <div class="col-11">
@@ -144,7 +149,9 @@
 {% endblock %}
 
 {% block textarea_auto_save_widget %}
-    {{ block('textarea_widget') }}
+{#    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>#}
+    <input id="trix-input-{{ trixId }}" value="{{ value }}" type="hidden" name="{{ full_name }}">
+    <trix-editor input="trix-input-{{ trixId }}" {{ block('widget_attributes') }}></trix-editor>
 {% endblock %}
 
 {% block textarea_auto_save_row %}
@@ -152,14 +159,16 @@
     {%- if help is not empty -%}
         {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
     {%- endif -%}
-    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %} {{ stimulus_controller('textarea') }} class="mb-3">
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %} {{ stimulus_controller('textarea', {
+        'maxLength': maxLength,
+    }) }}
+            class="mb-3">
         {{- form_label(form) -}}
         {{- form_errors(form) -}}
         {{- form_widget(form, widget_attr) -}}
         {%- if help is not empty -%}
             {%- set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' text-small')|trim}) -%}
             <div id="{{ id }}_help"{% with { attr: help_attr } %}{{ block('attributes') }}{% endwith %}>
-                {#                {{- block('form_help_content') -}}. #}
                 <span {{ stimulus_target('textarea', 'texte') }} class="text-secondary"></span>
             </div>
         {%- endif -%}
