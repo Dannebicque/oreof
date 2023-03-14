@@ -29,7 +29,38 @@ class ParcoursState
 
     private function etatOnglet2(): bool|array
     {
-        return true; //todo: test à ajouter
+        $tab['error'] = [];
+
+        if ($this->parcours->getModalitesEnseignement() === null) {
+            $tab['error'][] = 'Vous devez indiquer la modalité des enseignements.';
+        }
+
+        if ($this->parcours->isHasStage() === true) {
+            if ($this->parcours->getStageText() === null && trim($this->parcours->getStageText()) === '') {
+                $tab['error'][] = 'Vous devez indiquer la modalité des stages.';
+            }
+            if ($this->parcours->getNbHeuresStages() === 0) {
+                $tab['error'][] = 'Vous devez indiquer le nombre d\'heures de stages.';
+            }
+        }
+
+        if ($this->parcours->isHasProjet() === true) {
+            if ($this->parcours->getProjetText() === null && trim($this->parcours->getProjetText()) === '') {
+                $tab['error'][] = 'Vous devez indiquer la modalité des projets tutorés.';
+            }
+            if ($this->parcours->getNbHeuresProjet() === 0) {
+                $tab['error'][] = 'Vous devez indiquer le nombre d\'heures de projet tutorés.';
+            }
+        }
+
+        if ($this->parcours->isHasMemoire() === true) {
+            if ($this->parcours->getMemoireText() === null && trim($this->parcours->getMemoireText()) === '') {
+                $tab['error'][] = 'Vous devez indiquer la modalité des mémoires/TER.';
+            }
+        }
+
+        return count($tab['error']) > 0 ? $tab : true;
+
     }
 
     private function etatOnglet3(): bool|array

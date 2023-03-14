@@ -10,7 +10,7 @@
                id="etatStructure"
                class="form-check-inline"
                {% if parcours.getEtatStep(5) %}checked{% endif %}
-                {{ stimulus_action('parcours--step5', 'calculEtatStep', 'change') }}
+                {{ stimulus_action('parcours--step5', 'etatStep', 'change') }}
 
         ><label for="etatStructure">
             Cochez cette case si vous avez terminé ...</label>

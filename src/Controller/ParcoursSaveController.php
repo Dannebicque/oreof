@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Classes\Bcc;
 use App\Classes\UpdateEntity;
+use App\Classes\verif\ParcoursState;
 use App\Entity\Parcours;
+use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\RythmeFormationRepository;
 use App\Repository\UserRepository;
@@ -24,11 +26,13 @@ class ParcoursSaveController extends AbstractController
     #[Route('/parcours/save/{parcours}', name: 'app_parcours_save')]
     public function save(
         Bcc $bcc,
+        EntityManagerInterface $em,
         UserRepository $userRepository,
         EntityManagerInterface $entityManager,
         VilleRepository $villeRepository,
         RythmeFormationRepository $rythmeFormationRepository,
         UpdateEntity $updateEntity,
+        ParcoursState $parcoursState,
         Request $request,
         Parcours $parcours
     ): Response {
@@ -36,9 +40,17 @@ class ParcoursSaveController extends AbstractController
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
             case 'stateOnglet':
-                //todo: fusionner avec le case 'etatStep' ?
                 $method = 'getEtat' . ucfirst($data['onglet']);
                 $val = $parcours->$method();
+
+                //if $val => en-cours ou vide => désactiver le checkbox
+                if ($val === EtatRemplissageEnum::EN_COURS || $val === EtatRemplissageEnum::VIDE) {
+                    $etatSteps = $parcours->getEtatSteps();
+                    $ong = substr($data['onglet'], 6);
+                    $etatSteps[$ong] = false;
+                    $parcours->setEtatSteps($etatSteps);
+                    $em->flush();
+                }
 
                 return $this->json($val->badge());
             case 'yesNo':
@@ -83,14 +95,20 @@ class ParcoursSaveController extends AbstractController
 
                 return $this->json($rep);
             case 'etatStep':
-                $etatSteps = $parcours->getEtatSteps();
-                $step = $data['value'];
-                $etatSteps[$step] = $data['isChecked'];
-                $parcours->setEtatSteps($etatSteps);
+                $valideState = (bool)$data['isChecked'] === true ? $parcoursState->valideStep($data['value'],
+                    $parcours) : true;
+                if ($valideState === true) {
+                    $etatSteps = $parcours->getEtatSteps();
+                    $step = $data['value'];
+                    $etatSteps[$step] = $data['isChecked'];
+                    $parcours->setEtatSteps($etatSteps);
 
-                $entityManager->flush();
+                    $em->flush();
 
-                return $this->json(true);
+                    return $this->json(true);
+                }
+
+                return $this->json($valideState);
             case 'array':
                 if ($data['isChecked'] === true) {
                     $rep = $updateEntity->addToArray($parcours, $data['field'], $data['value']);

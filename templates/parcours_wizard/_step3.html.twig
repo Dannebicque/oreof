@@ -42,7 +42,7 @@
                id="etatCompetence"
                class="form-check-inline"
                {% if parcours.getEtatStep(3) %}checked{% endif %}
-                {{ stimulus_action('parcours--step3', 'calculEtatStep', 'change') }}
+                {{ stimulus_action('parcours--step3', 'etatStep', 'change') }}
 
         ><label for="etatCompetence">
             Cochez cette case si vous avez terminé de définir les compétences. Cela permet de mettre à jour
