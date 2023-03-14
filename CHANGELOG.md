@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.15.0](https://github.com/Dannebicque/oreof/compare/v0.14.0...v0.15.0) (2023-03-14)
+
+
+### Features
+
+* [Formation] retour si génération parcours ([ff48cee](https://github.com/Dannebicque/oreof/commit/ff48cee392cca04832faf2f77a4f968a2be86f4c))
+* [Parcours] Vérification sur step 2 et 3 ([c9dbc3d](https://github.com/Dannebicque/oreof/commit/c9dbc3de1273440debbd7d6c257400ac2a98a055))
+* [Structure] Lisiblité noutons ([ffcd350](https://github.com/Dannebicque/oreof/commit/ffcd3504ddeaa58d01c2784e211ae59eb922312b))
+* [Trix] Ajout d'un éditeur wysiwyg. A déployer sur autres steps ([6af537c](https://github.com/Dannebicque/oreof/commit/6af537c985fb2cef69bbc7d1e22fd09584ece184))
+
 ## [0.14.0](https://github.com/Dannebicque/oreof/compare/v0.13.0...v0.14.0) (2023-03-14)
 
 
