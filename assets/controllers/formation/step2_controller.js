@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
-import { etatStep } from '../../js/etatStep'
+import { calculEtatStep } from '../../js/calculEtatStep'
 
 export default class extends Controller {
   static targets = [
@@ -44,23 +44,16 @@ export default class extends Controller {
     })
   }
 
-  etatStep(event) {
-    etatStep(this.urlValue, 2, event, 'formation')
+  saveObjectifsFormation() {
+    this._save({
+      field: 'objectifsFormation',
+      action: 'textarea',
+      value: document.getElementById('formation_step2_objectifsFormation').value,
+    })
+  }
 
-    // this._save({
-    //   action: 'etatStep',
-    //   value: 2,
-    //   isChecked: event.target.checked,
-    // })
-    //
-    // const parent = event.target.closest('.alert')
-    // if (event.target.checked) {
-    //   parent.classList.remove('alert-warning')
-    //   parent.classList.add('alert-success')
-    // } else {
-    //   parent.classList.remove('alert-success')
-    //   parent.classList.add('alert-warning')
-    // }
+  etatStep(event) {
+    calculEtatStep(this.urlValue, 2, event, 'formation')
   }
 
   async _save(options) {

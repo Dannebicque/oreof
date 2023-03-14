@@ -43,7 +43,7 @@ class FormationStep1Type extends AbstractType
             ->add('regimeInscription', EnumType::class, [
                 'help' => 'Régime d\'inscription',
                 'class' => RegimeInscriptionEnum::class,
-                'translation_domain' => 'enum',
+                'translation_domain' => 'form',
                 'multiple' => true,
                 'expanded' => true,
                 'attr' => ['data-action' => 'change->formation--step1#changeRegimeInscription']

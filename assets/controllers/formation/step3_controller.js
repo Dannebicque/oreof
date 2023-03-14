@@ -2,7 +2,7 @@ import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import callOut from '../../js/callOut'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
-import { etatStep } from '../../js/etatStep'
+import { calculEtatStep } from '../../js/calculEtatStep'
 
 export default class extends Controller {
   static targets = [
@@ -71,7 +71,7 @@ export default class extends Controller {
   changeHasParcours(event) {
     const data = event.target.value
 
-    if (data == 1) {
+    if (parseInt(data, 10) === 1) {
       document.getElementById('liste_Parcours').classList.remove('d-none');
       document.getElementById('bloc_semestre').classList.remove('d-none');
     } else {
@@ -95,21 +95,7 @@ export default class extends Controller {
   }
 
   etatStep(event) {
-    etatStep(this.urlValue, 3, event, 'formation')
-    // this._save({
-    //   action: 'etatStep',
-    //   value: 3,
-    //   isChecked: event.target.checked,
-    // })
-    //
-    // const parent = event.target.closest('.alert')
-    // if (event.target.checked) {
-    //   parent.classList.remove('alert-warning')
-    //   parent.classList.add('alert-success')
-    // } else {
-    //   parent.classList.remove('alert-success')
-    //   parent.classList.add('alert-warning')
-    // }
+    calculEtatStep(this.urlValue, 3, event, 'formation')
   }
 
   async _save(options) {
