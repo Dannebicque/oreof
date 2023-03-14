@@ -23,14 +23,19 @@ class ParcoursStep1Type extends AbstractType
         }
 
         $builder
+            ->add('objectifsParcours', TextareaAutoSaveType::class, [
+                'help' => '-',
+                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveObjectifsParcours'],
+            ])
+            ->add('resultatsAttendus', TextareaAutoSaveType::class, [
+                'help' => '-',
+                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveResultats'],
+            ])
             ->add('contenuFormation', TextareaAutoSaveType::class, [
                 'help' => '-',
                 'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveContenu'],
             ])
-            ->add('resultatsAttendus', TextareaAutoSaveType::class, [
-                'help' => '-',
-                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveResultats'],
-            ])
+
             ->add('rythmeFormation', EntityType::class, [
                 'placeholder' => 'Choisissez un rythme de formation ou complétez le champ ci-dessous',
                 'required' => false,

@@ -37,6 +37,9 @@ class Parcours
     private ?string $contenuFormation = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $objectifsParcours = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $resultatsAttendus = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -622,6 +625,18 @@ class Parcours
     public function setEtatSteps(array $etatSteps): self
     {
         $this->etatSteps = $etatSteps;
+
+        return $this;
+    }
+
+    public function getObjectifsParcours(): ?string
+    {
+        return $this->objectifsParcours;
+    }
+
+    public function setObjectifsParcours(?string $objectifsParcours): self
+    {
+        $this->objectifsParcours = $objectifsParcours;
 
         return $this;
     }

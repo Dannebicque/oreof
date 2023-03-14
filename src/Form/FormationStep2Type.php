@@ -15,15 +15,18 @@ class FormationStep2Type extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('contenuFormation', TextareaAutoSaveType::class, [
+            ->add('objectifsFormation', TextareaAutoSaveType::class, [
                 'help' => '-',
-                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->formation--step2#saveContenu'],
+                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->formation--step2#saveObjectifsFormation'],
             ])
             ->add('resultatsAttendus', TextareaAutoSaveType::class, [
                 'help' => '-',
                 'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->formation--step2#saveResultats'],
             ])
-
+            ->add('contenuFormation', TextareaAutoSaveType::class, [
+                'help' => '-',
+                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->formation--step2#saveContenu'],
+            ])
             ->add('rythmeFormation', EntityType::class, [
                 'placeholder' => 'Choisissez un rythme de formation ou complétez le champ ci-dessous',
                 'required' => false,
