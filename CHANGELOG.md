@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.16.0](https://github.com/Dannebicque/oreof/compare/v0.15.0...v0.16.0) (2023-03-15)
+
+
+### Bug Fixes
+
+* [Structure] Réorganisation du menu, des pages parcours, formations. ([218a18a](https://github.com/Dannebicque/oreof/commit/218a18a9848e248869ba40b258d025ba61a2910f))
+* [trad] Fusion des trads ([bfa791e](https://github.com/Dannebicque/oreof/commit/bfa791e2d05ecfa022eaf8faae5c0771f20ee49a))
+* [Trix] Type de diplôme ([65dd22e](https://github.com/Dannebicque/oreof/commit/65dd22e9d00d33a6f0598a2ddeecef3fda3afb1e))
+
 ## [0.15.0](https://github.com/Dannebicque/oreof/compare/v0.14.0...v0.15.0) (2023-03-14)
 
 
