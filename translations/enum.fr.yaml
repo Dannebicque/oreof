@@ -9,6 +9,6 @@ master: Master
 FI: 'Formation initiale'
 FI_APPRENTISSAGE: 'Formation initiale en apprentissage'
 FC: 'Formation continue'
-FC_CONTRAT_PRO: 'Formation continue en contrat pro'
+FC_CONTRAT_PRO: 'Formation continue en contrat de professionnalisation'
 "Régime d'inscription": "Régime d'inscription"
 formation_step1.labels.regimeInscription.label: "Régime d'inscription"
