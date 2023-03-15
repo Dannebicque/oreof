@@ -2,6 +2,7 @@ import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import { calculEtatStep } from '../../js/calculEtatStep'
+import trixEditor from '../../js/trixEditor'
 
 export default class extends Controller {
   static targets = [
@@ -17,6 +18,7 @@ export default class extends Controller {
   }
 
   connect() {
+    document.getElementById('parcours_step6_modalitesAlternance').addEventListener('trix-blur', this.saveModalitesAlternance.bind(this))
     this._checkIfAlternance()
   }
 
@@ -59,7 +61,7 @@ export default class extends Controller {
     this._save({
       field: 'modalitesAlternance',
       action: 'textarea',
-      value: document.getElementById('parcours_step6_modalitesAlternance').value,
+      value: trixEditor('parcours_step6_modalitesAlternance'),
     })
   }
 

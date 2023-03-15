@@ -76,7 +76,7 @@ class FormationController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            if ($request->request->all()['formation_ses']['mention'] !== null) {
+            if (array_key_exists('mention', $request->request->all()['formation_ses']) && $request->request->all()['formation_ses']['mention'] !== null) {
                 $mention = $mentionRepository->find($request->request->all()['formation_ses']['mention']);
                 $formation->setMentionTexte(null);
                 $formation->setMention($mention);
@@ -117,7 +117,7 @@ class FormationController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {//todo: si validate le choice de mention ne fonctionne pas
-            if ($request->request->all()['formation_ses']['mention'] !== null) {
+            if (array_key_exists('mention', $request->request->all()['formation_ses']) && $request->request->all()['formation_ses']['mention'] !== null) {
                 $mention = $mentionRepository->find($request->request->all()['formation_ses']['mention']);
                 $formation->setMentionTexte(null);
                 $formation->setMention($mention);

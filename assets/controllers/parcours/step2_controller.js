@@ -2,6 +2,7 @@ import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import { calculEtatStep } from '../../js/calculEtatStep'
+import trixEditor from '../../js/trixEditor'
 
 export default class extends Controller {
   static targets = [
@@ -10,6 +11,12 @@ export default class extends Controller {
 
   static values = {
     url: String,
+  }
+
+  connect() {
+    document.getElementById('parcours_step2_stageText').addEventListener('trix-blur', this.saveStageText.bind(this))
+    document.getElementById('parcours_step2_projetText').addEventListener('trix-blur', this.saveProjetText.bind(this))
+    document.getElementById('parcours_step2_memoireText').addEventListener('trix-blur', this.saveMemoireText.bind(this))
   }
 
   etatStep(event) {
@@ -41,7 +48,7 @@ export default class extends Controller {
     this._save({
       field: 'stageText',
       action: 'textarea',
-      value: document.getElementById('parcours_step2_stageText').value,
+      value: trixEditor('parcours_step2_stageText'),
     })
   }
 
@@ -71,7 +78,7 @@ export default class extends Controller {
     this._save({
       field: 'projetText',
       action: 'textarea',
-      value: document.getElementById('parcours_step2_projetText').value,
+      value: trixEditor('parcours_step2_projetText'),
     })
   }
 
@@ -109,7 +116,7 @@ export default class extends Controller {
     this._save({
       field: 'memoireText',
       action: 'textarea',
-      value: document.getElementById('parcours_step2_memoireText').value,
+      value: trixEditor('parcours_step2_memoireText'),
     })
   }
 

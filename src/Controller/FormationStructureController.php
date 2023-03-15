@@ -12,18 +12,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FormationStructureController extends BaseController
 {
-    /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-     */
-    #[Route('/formation/refresh/{formation}', name: 'app_formation_refresh')]
-    public function index(
-        Formation $formation
-    ): Response {
-        if ($formation->isHasParcours() === false) {
-            return $this->redirectToRoute('app_formation_edit', ['id' => $formation->getId(), 'step' => 4]);
-        }
-        return $this->redirectToRoute('app_formation_edit', ['id' => $formation->getId(), 'step' => 3]);
-    }
+//    /**
+//     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+//     */
+//    #[Route('/formation/refresh/{formation}', name: 'app_formation_refresh')]
+//    public function index(
+//        Formation $formation
+//    ): Response {
+//        if ($formation->isHasParcours() === false) {
+//            return $this->redirectToRoute('app_formation_edit', ['id' => $formation->getId(), 'step' => 4]);
+//        }
+//        return $this->redirectToRoute('app_formation_edit', ['id' => $formation->getId(), 'step' => 3]);
+//    }
 
     #[Route('/formation/structure/pas-parcours/{formation}', name: 'app_formation_genere_structure_pas_parcours')]
     public function genereStructurePasParcours(

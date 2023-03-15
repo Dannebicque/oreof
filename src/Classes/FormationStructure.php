@@ -23,7 +23,7 @@ class FormationStructure
         }
 
         $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
-        $typeDiplome->genereStructure($parcours, $formation);
+        $typeDiplome->genereStructure($formation, $parcours);
     }
 
     public function genereStructrePasParcours(Formation $formation): void

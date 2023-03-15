@@ -1,15 +1,21 @@
 <h2>Semestres & Parcours</h2>
 <div {{ stimulus_controller('formation--step3', {
     url: path('app_formation_save', {formation:formation.id}),
-    urlRefresh: path('app_formation_refresh', {formation:formation.id}),
     urlGenereStructure: path('app_formation_genere_structure_pas_parcours', {formation:formation.id}),
     urlListeParcours: path('app_formation_liste_parcours', {formation:formation.id}),
     hasParcours: formation.hasParcours
 }) }}
-        data-action="base:parcoursAdded@window->formation--step3#refreshListe"
+        data-action="base:parcoursAdded@window->formation--step3#_refreshListe"
 >
     <fieldset class="mb-3">
-        <legend class="col-form-label required">Formation avec parcours ?</legend>
+        <legend class="col-form-label required">
+            {{ 'formation_step3.labels.hasParcours'|trans({}, 'form') }}
+            <i class="fal fa-question-circle ms-1"
+               data-controller="tooltip"
+               data-tooltip-placement-value="bottom"
+               aria-label="{{ 'formation_step3.helps.hasParcours.help'|trans({}, 'help') }}"
+               data-bs-original-title="{{ 'formation_step3.helps.hasParcours.help'|trans({}, 'help') }}"></i>
+        </legend>
         <div>
             <div class="form-check">
                 <input type="radio" id="formation_parcours_1" name="formation_parcours" required="required"
@@ -22,13 +28,12 @@
                        class="form-check-input" value="0" {{ stimulus_action('formation--step3', 'changeHasParcours', 'click') }}>
                 <label class="form-check-label" for="formation_parcours_0">Non</label></div>
         </div>
-        <div class="form-text mb-0 help-text">
-            Indiquez si la formation comporte des parcours
-        </div>
     </fieldset>
     <div id="bloc_semestre" class="{% if formation.hasParcours == false %}d-none{% endif %} mt-2">
         <fieldset class="mb-3">
-            <legend class="col-form-label required">Préciser l'intitulé des parcours</legend>
+            <legend class="col-form-label required">
+                {{ 'formation_step3.labels.libelleParcours'|trans({}, 'form') }}
+            </legend>
             <br>
             <div id="liste_Parcours" {% if formation.hasParcours == false or formation.hasParcours == null %}class="d-none"{% endif %}>
                 <div {{ stimulus_target('formation--step3', 'liste') }}>
@@ -41,8 +46,13 @@
             {% endif %}
 
             <div>
-                Précisez la structure de la mention/spécialité avec les parcours (semestre de tronc commun ou semestre
-                spécifique au parcours
+                {{ 'formation_step3.labels.structureFormation'|trans({}, 'form') }}
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="{{ 'formation_step3.helps.structureFormation.help'|trans({}, 'help') }}"
+                   data-bs-original-title="{{ 'formation_step3.helps.libelleParcours.help'|trans({}, 'help') }}"></i>
+
                 <ul>
 
                     {% for i in formation.semestreDebut..typeDiplome.nbSemestres %}
@@ -73,13 +83,18 @@
     </div>
 
     <div id="bloc_pas_parcours" class="{% if formation.hasParcours == true %}d-none{% endif %} d-grid mt-2 mb-2">
-        {# todo: regarder si c'est généré ou pas ? #}
-        Générer la structure de la formation en cliquant sur le bouton ci-dessous.
-        <button {{ stimulus_action('formation--step3', 'genereStructurePasParcours') }} class="btn btn-sm
+        {% if formation.parcours[0] != null %}
+        <a href="{{ path('app_parcours_edit', {id: formation.parcours[0].id}) }}" class="text-warning">
+            <i class="fas fa-pencil"></i>
+            Editer le parcours par défaut de la mention</a>
+        {% else %}
+            Générer la structure de la formation en cliquant sur le bouton ci-dessous.
+            <button {{ stimulus_action('formation--step3', 'genereStructurePasParcours') }} class="btn btn-sm
                     btn-outline-primary
                 d-block">
-            Générer la structure de la formation
-        </button>
+                Générer la structure de la formation
+            </button>
+        {% endif %}
     </div>
 
 

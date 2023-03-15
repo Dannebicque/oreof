@@ -2,6 +2,7 @@ import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import { calculEtatStep } from '../../js/calculEtatStep'
+import trixEditor from '../../js/trixEditor'
 
 export default class extends Controller {
   static targets = [
@@ -10,6 +11,10 @@ export default class extends Controller {
 
   static values = {
     url: String,
+  }
+
+  connect() {
+    document.getElementById('parcours_step8_coordSecretariat').addEventListener('trix-blur', this.coordSecretariat.bind(this))
   }
 
   respParcours() {
@@ -23,7 +28,7 @@ export default class extends Controller {
     this._save({
       field: 'coordSecretariat',
       action: 'textarea',
-      value: document.getElementById('parcours_step8_coordSecretariat').value,
+      value: trixEditor('parcours_step8_coordSecretariat'),
     })
   }
 

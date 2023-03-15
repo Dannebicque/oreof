@@ -2,6 +2,7 @@
     <thead>
     <tr>
         <td>Libellé du parcours</td>
+        <td>Référent</td>
         <td>Sigle</td>
         <td></td>
     </tr>
@@ -12,11 +13,15 @@
             <td>
                 {{ parcour.libelle }}
             </td>
+            <td>
+                {{ parcour.respParcours != null ? parcour.respParcours.display : 'Non défini' }}
+            </td>
             <td>{{ parcour.sigle }}</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
+                            nomEvenement: 'parcoursAdded',
                             modalTitle: 'Ajouter un parcours',
                             modalUrl: path('app_parcours_edit_modal', {parcours:parcour.id}) }) }}
                         data-action="click->modal#openModal"
@@ -27,8 +32,14 @@
                         title="Modifier un parcours"
                 >
                     <i class="{{ iconEdit }}"></i>
-                    <span> Modifier</span>
+                    <span> Modifier le libéllé/référent</span>
                 </button>
+                <a href="{{ path('app_parcours_edit', {id:parcour.id}) }}"
+                class="btn btn-sm text-warning btn-icon"
+                >
+                    <i class="{{ iconEdit }}"></i>
+                    Editer la fiche du parcours
+                </a>
 
                 <button {{ stimulus_action('formation--step3', 'deleteParcours', 'click', {
                     url:path('app_parcours_delete',{'id': parcour.id}),
@@ -41,11 +52,11 @@
         </tr>
     {% else %}
         <tr>
-            <td colspan="3" class="text-center bg-warning">Aucun parcours, veuillez en ajouter au moins un.</td>
+            <td colspan="4" class="text-center bg-warning">Aucun parcours, veuillez en ajouter au moins un.</td>
         </tr>
     {% endfor %}
     <tr>
-       <td colspan="3">
+       <td colspan="4">
            <button
                    {{ stimulus_controller('modal', {
                        size: 'lg',

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ block('header')|raw }} - {{ product_name }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <link rel="preconnect" href="https://fonts.gstatic.com"/>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet"/>
@@ -90,7 +90,36 @@
             <div class="menu-container flex-grow-1">
                 <ul id="menu" class="menu">
 
-                    {% if is_granted('ROLE_COMPOSANTE', app.user) %}
+                    <li>
+                        <a href="{{ path('app_homepage') }}">
+                            <i class="fal fa-home icon"></i>
+                            <span class="label">Tableau <br>de bord</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ path('app_formation_index') }}">
+                            <i class="fal fa-book icon"></i>
+                            <span class="label">Détails des<br> mentions/<br>spécialité</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ path('app_parcours_index') }}">
+                            <i class="fal fa-shuffle icon"></i>
+                            <span class="label">Détails des<br> parcours</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ path('structure_ec_index') }}">
+                            <i class="fal fa-person-chalkboard icon"></i>
+                            <span class="label">Détails <br>des E.C.</span>
+                        </a>
+                    </li>
+
+
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SES', app.user) %}
                         <li>
                             <a href="{{ path('structure_composante_index') }}">
                                 <i class="fal fa-school icon"></i>
@@ -99,29 +128,16 @@
                         </li>
                     {% endif %}
 
-                    <li>
-                        <a href="{{ path('structure_formation_index') }}">
-                            <i class="fal fa-screen-users icon"></i>
-                            <span class="label">Formations</span>
-                        </a>
-                    </li>
+                    {#                    <li> #}
+                    {#                        <a href="{{ path('structure_formation_index') }}"> #}
+                    {#                            <i class="fal fa-screen-users icon"></i> #}
+                    {#                            <span class="label">Formations</span> #}
+                    {#                        </a> #}
+                    {#                    </li> #}
 
-                    <li>
-                        <a href="{{ path('structure_ec_index') }}">
-                            <i class="fal fa-person-chalkboard icon"></i>
-                            <span class="label">E.C.</span>
-                        </a>
-                    </li>
-                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SES', app.user) %}
-                    <li>
-                        <a href="{{ path('app_formation_index') }}">
-                            <i class="fal fa-book icon"></i>
-                            <span class="label">Offre de formation</span>
-                        </a>
-                    </li>
-                    {% endif %}
 
-                    {% if is_granted('ROLE_ADMIN')%}
+
+                    {% if is_granted('ROLE_ADMIN') %}
                         <li class="mega">
                             <a href="#administration" data-href="administration">
                                 <i class="fal fa-wrench icon"></i>

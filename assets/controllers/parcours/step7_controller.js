@@ -3,6 +3,7 @@ import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import callOut from '../../js/callOut'
 import { calculEtatStep } from '../../js/calculEtatStep'
+import trixEditor from '../../js/trixEditor'
 
 export default class extends Controller {
   static targets = [
@@ -16,6 +17,9 @@ export default class extends Controller {
   }
 
   connect() {
+    document.getElementById('parcours_step7_poursuitesEtudes').addEventListener('trix-blur', this.savePoursuitesEtudes.bind(this))
+    document.getElementById('parcours_step7_debouches').addEventListener('trix-blur', this.saveDebouches.bind(this))
+
     this._loadRome()
   }
 
@@ -75,7 +79,7 @@ export default class extends Controller {
     this._save({
       field: 'poursuitesEtudes',
       action: 'textarea',
-      value: document.getElementById('parcours_step7_poursuitesEtudes').value,
+      value: trixEditor('parcours_step7_poursuitesEtudes'),
     })
   }
 
@@ -83,7 +87,7 @@ export default class extends Controller {
     this._save({
       field: 'debouches',
       action: 'textarea',
-      value: document.getElementById('parcours_step7_debouches').value,
+      value: trixEditor('parcours_step7_debouches'),
     })
   }
 

@@ -2,6 +2,7 @@ import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import { calculEtatStep } from '../../js/calculEtatStep'
+import trixEditor from '../../js/trixEditor'
 
 export default class extends Controller {
   static targets = [
@@ -12,6 +13,10 @@ export default class extends Controller {
     url: String,
   }
 
+  connect() {
+    document.getElementById('parcours_step5_prerequis').addEventListener('trix-blur', this.savePrerequis.bind(this))
+  }
+
   etatStep(event) {
     calculEtatStep(this.urlValue, 5, event, 'parcours')
   }
@@ -20,7 +25,7 @@ export default class extends Controller {
     this._save({
       field: 'prerequis',
       action: 'textarea',
-      value: document.getElementById('parcours_step5_prerequis').value,
+      value: trixEditor('parcours_step5_prerequis'),
     })
   }
 

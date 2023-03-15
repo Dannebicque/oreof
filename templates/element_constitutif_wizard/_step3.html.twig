@@ -6,10 +6,16 @@
     {{ form_start(form) }}
     {{ form_row(form.objectifs) }}
     <div>
-        <p>Compétences</p>
-        <span class="form-text mb-0 help-text">Indiquez les compétences concernées par cet élément constitutif. Choisir le/les BCC pour
-                         accéder
-              aux compétences.</span>
+        <p>
+            {{ 'ec_step3.labels.competence'|trans({}, 'form') }}
+            <i class="fal fa-question-circle ms-1"
+               data-controller="tooltip"
+               data-tooltip-placement-value="bottom"
+               aria-label="{{ 'ec_step3.labels.competence'|trans({}, 'help') }}"
+               data-bs-original-title="{{ 'ec_step3.labels.competence'|trans({}, 'help') }}"></i>
+            </legend>
+
+        </p>
         {% for bcc in bccs %}
             <div class=" mb-2">
                 <input type="checkbox" name="ec[bccs][]" value="{{ bcc.id }}" id="bcc_{{ bcc.id }}"

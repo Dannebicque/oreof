@@ -2,6 +2,7 @@ import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import { calculEtatStep } from '../../js/calculEtatStep'
+import trixEditor from '../../js/trixEditor'
 
 export default class extends Controller {
   static targets = [
@@ -12,6 +13,13 @@ export default class extends Controller {
     url: String,
   }
 
+  connect() {
+    document.getElementById('parcours_step1_contenuFormation').addEventListener('trix-blur', this.saveContenu.bind(this))
+    document.getElementById('parcours_step1_objectifsParcours').addEventListener('trix-blur', this.saveObjectifsParcours.bind(this))
+    document.getElementById('parcours_step1_resultatsAttendus').addEventListener('trix-blur', this.saveResultats.bind(this))
+    document.getElementById('parcours_step1_rythmeFormationTexte').addEventListener('trix-blur', this.saveRythme.bind(this))
+  }
+
   etatStep(event) {
     calculEtatStep(this.urlValue, 1, event, 'parcours')
   }
@@ -20,7 +28,7 @@ export default class extends Controller {
     this._save({
       field: 'contenuFormation',
       action: 'textarea',
-      value: document.getElementById('parcours_step1_contenuFormation').value,
+      value: trixEditor('parcours_step1_contenuFormation'),
     })
   }
 
@@ -28,7 +36,7 @@ export default class extends Controller {
     this._save({
       field: 'objectifsParcours',
       action: 'textarea',
-      value: document.getElementById('parcours_step1_objectifsParcours').value,
+      value: trixEditor('parcours_step1_objectifsParcours'),
     })
   }
 
@@ -36,7 +44,7 @@ export default class extends Controller {
     this._save({
       field: 'resultatsAttendus',
       action: 'textarea',
-      value: document.getElementById('parcours_step1_resultatsAttendus').value,
+      value: trixEditor('parcours_step1_resultatsAttendus'),
     })
   }
 
@@ -60,7 +68,7 @@ export default class extends Controller {
     this._save({
       field: 'rythmeFormationTexte',
       action: 'textarea',
-      value: document.getElementById('parcours_step1_rythmeFormationTexte').value,
+      value: trixEditor('parcours_step1_rythmeFormationTexte'),
     })
   }
 

@@ -12,7 +12,6 @@ export default class extends Controller {
   static values = {
     url: String,
     urlListeParcours: String,
-    urlRefresh: String,
     urlGenereStructure: String,
     hasParcours: Boolean,
   }
@@ -47,10 +46,6 @@ export default class extends Controller {
     this.listeTarget.innerHTML = window.da.loaderStimulus
     const response = await fetch(this.urlListeParcoursValue)
     this.listeTarget.innerHTML = await response.text()
-  }
-
-  refreshListe() {
-    window.location = this.urlRefreshValue
   }
 
   changeSemestre(event) {
@@ -95,8 +90,7 @@ export default class extends Controller {
     if (confirm('Voulez-vous vraiment recopier générer la structure de la formation ? ')) {
       await saveData(this.urlGenereStructureValue)
       callOut('Structure générée.', 'success')
-      this.refreshListe()
-      console.log('ok')
+      // todo: afficher le lien pour afficher le parcours par défaut
     }
   }
 

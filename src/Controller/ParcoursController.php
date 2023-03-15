@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Form\ParcoursType;
+use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
@@ -17,6 +18,29 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/parcours')]
 class ParcoursController extends AbstractController
 {
+    #[Route('/', name: 'app_parcours_index', methods: ['GET'])]
+    public function index(): Response
+    {
+        return $this->render('parcours/index.html.twig');
+    }
+
+    #[Route('/liste', name: 'app_parcours_liste', methods: ['GET'])]
+    public function liste(
+        ParcoursRepository $parcoursRepository,
+        Request $request
+    ): Response
+    {
+        $sort = $request->query->get('sort') ?? 'typeDiplome';
+        $direction = $request->query->get('direction') ?? 'asc';
+        $q = $request->query->get('q') ?? null;
+
+        return $this->render('parcours/_liste.html.twig', [
+            'parcours' => $parcoursRepository->findAll(),
+            'sort' => $sort,
+            'direction' => $direction
+        ]);
+    }
+
     #[Route('/new/{formation}', name: 'app_parcours_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,

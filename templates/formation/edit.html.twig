@@ -47,24 +47,6 @@
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 3}) }}
                 >Semestre & Parcours {{ formation.onglets|etatRemplissage(3, 'formation') }}</a>
             </li>
-            {% for parcours in formation.parcours %}
-                <li class="nav-item" role="presentation" id="tab_parcours_{{ parcours.id }}">
-                    <a class="nav-link" data-bs-toggle="tab" href="#"
-                       {# todo:  if formation.hasParcours == false and loop.first and selectedStep == 4
-                       active{% endif %}#}
-                       role="tab" aria-selected="false"
-                            {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 4, parcours:
-                                parcours.id}) }}
-                    >
-                        {% if formation.hasParcours == false and loop.first %}
-                            Structure de la maquette {{ formation.onglets|etatRemplissage(4, 'formation') }}
-                        {% else %}
-                            Parcours : {{ parcours.libelle }} {{ formation.onglets|etatRemplissage(4, 'formation' ,
-                            parcours.id) }}
-                        {% endif %}
-                    </a>
-                </li>
-            {% endfor %}
 
             <!-- An empty list to put overflowed links -->
             <li class="nav-item dropdown ms-auto pe-0 d-none responsive-tab-dropdown">

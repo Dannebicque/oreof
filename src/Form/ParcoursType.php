@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Parcours;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,6 +18,12 @@ class ParcoursType extends AbstractType
             ->add('libelle', TextType::class, [
                 'label' => 'Libellé',
                 'required' => true,
+            ])
+            ->add('respParcours', EntityType::class, [
+                'label' => 'Responsable du parcours',
+                'required' => false,
+                'class' => User::class,
+                'choice_label' => 'display', //todo: filtrer sur centre de le formation ? ou ajouter un user
             ])
             ->add('sigle', TextType::class, [
                 'label' => 'Sigle',

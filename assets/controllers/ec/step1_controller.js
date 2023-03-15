@@ -4,6 +4,7 @@ import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import callOut from '../../js/callOut'
 import { calculEtatStep } from '../../js/calculEtatStep'
+import trixEditor from '../../js/trixEditor'
 
 export default class extends Controller {
   static targets = [
@@ -17,6 +18,8 @@ export default class extends Controller {
   }
 
   connect() {
+    document.getElementById('ec_step1_libelle').addEventListener('trix-blur', this.saveContenuFr.bind(this))
+    document.getElementById('ec_step1_libelleAnglais').addEventListener('trix-blur', this.saveContenuEn.bind(this))
     this._loadMutualise()
   }
 
@@ -74,7 +77,7 @@ export default class extends Controller {
     this._save({
       field: 'libelle',
       action: 'textarea',
-      value: document.getElementById('ec_step1_libelle').value,
+      value: trixEditor('ec_step1_libelle'),
     })
   }
 
@@ -82,7 +85,7 @@ export default class extends Controller {
     this._save({
       field: 'libelleAnglais',
       action: 'textarea',
-      value: document.getElementById('ec_step1_libelleAnglais').value,
+      value: trixEditor('ec_step1_libelleAnglais'),
     })
   }
 

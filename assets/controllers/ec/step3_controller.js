@@ -2,6 +2,7 @@ import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import { calculEtatStep } from '../../js/calculEtatStep'
+import trixEditor from '../../js/trixEditor'
 
 export default class extends Controller {
   static targets = [
@@ -12,11 +13,15 @@ export default class extends Controller {
     url: String,
   }
 
+  connect() {
+    document.getElementById('ec_step3_objectifs').addEventListener('trix-blur', this.saveObjectifs.bind(this))
+  }
+
   saveObjectifs() {
     this._save({
       field: 'objectifs',
       action: 'textarea',
-      value: document.getElementById('ec_step3_objectifs').value,
+      value: trixEditor('ec_step3_objectifs'),
     })
   }
 

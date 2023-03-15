@@ -117,7 +117,7 @@
     {{- block('form_label_content') -}}
     {% import _self as macros %}
 
-    {% if help is defined and help != '' %}
+    {% if help is defined and help != '' and help|trim|trans({}, 'help') != '-' %}
         {% set help = macros.form_parent_help_name(form) %}
     <i class="fal fa-question-circle ms-1"
             {{ stimulus_controller('tooltip', {

@@ -1,0 +1,25 @@
+{% set formation = parcours.formation %}
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-4">
+                <dl>
+                    <dt>Domaine</dt>
+                    <dd>{{ formation.domaine ? formation.domaine.libelle : 'Non défini' }}</dd>
+                </dl>
+            </div>
+            <div class="col-4">
+                <dl>
+                    <dt>Composante</dt>
+                    <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'Non définie'
+                        }}</dd>
+                    <dt>Mention/spécialité</dt>
+                    <dd>{{ formation.display }}</dd>
+                </dl>
+            </div>
+            <div class="col-4">
+
+            </div>
+        </div>
+    </div>
+</div>
