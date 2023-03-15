@@ -1,5 +1,5 @@
 'Localisation(s) de la formation': 'Localisation(s) de la formation'
-"Composante d'inscription": "Composante d'inscription"
+"Composante d'inscription": "Composante(s) d'inscription"
 "Modalités de l'alternance": "Modalités de l'alternance"
 'Contenu de la formation': 'Contenu de la formation'
 'Résultats attendus de la formation': 'Résultats attendus de la formation'
@@ -32,7 +32,7 @@ Débouchés: Débouchés
 'Coordonnées du secrétariat': 'Coordonnées du secrétariat'
 "Modalité d'enseignement": "Modalité d'enseignement"
 PRESENTIELLE: PRESENTIELLE
-DISTANCIELLE: DISTANCIELLE
+DISTANCIELLE: Distancielle
 HYBRIDE: HYBRIDE
 ECTS: ECTS
 'Volume CM': 'Volume CM'
@@ -47,3 +47,16 @@ register.labels.centreDemande: register.labels.centreDemande
 Etablissement: Etablissement
 Composante: Composante
 Formation: Formation
+Login: Login
+Civilité: Civilité
+'Indiquez votre civilité': 'Indiquez votre civilité'
+Monsieur: Monsieur
+Madame: Madame
+'Adresse email': 'Adresse email'
+'Téléphone fixe': 'Téléphone fixe'
+'Téléphone portable': 'Téléphone portable'
+Droits: Droits
+'Indiquez les droits accordés': 'Indiquez les droits accordés'
+ROLE_ADMIN: ROLE_ADMIN
+ROLE_VP: ROLE_VP
+'Responsable du parcours': 'Responsable du parcours'

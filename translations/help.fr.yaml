@@ -3,10 +3,10 @@ formation_ses.helps.mention: 'Si la mention n''existe pas, veuillez la créer da
 formation_ses.helps.mentionTexte: 'Si la mention existe, veuillez la sélectionner dans la liste déroulante'
 formation_step1.helps.localisationMention.help: 'Plusieurs choix possibles'
 formation_step1.helps.modalitesAlternance: 'Indiquez en 3000 caractères maximum les périodes et les durées en centre de formation ou en entreprise.'
-formation_step1.helps.composantesInscription.help: "Composante(s) d'inscription"
-formation_step1.helps.regimeInscription.help: "Régime d'inscription"
+formation_step1.helps.composantesInscription.help: 'Plusieurs choix possibles'
+formation_step1.helps.regimeInscription.help: 'Plusieurs choix possibles'
 formation_step2.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différents sujets traités dans la formation, en fonction des objectifs pédagogiques définis précédemment.'
-formation_step2.helps.resultatsAttendus: "Indiquez en 3000 caractères maximum les objectifs pédagogiques visées par la formation (compétences à acquérir, à améliorer ou à entretenir).\nLa description de chaque objectif doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que « savoir, maitriser, être capable de… ». "
+formation_step2.helps.resultatsAttendus: "Indiquez en 3000 caractères maximum les objectifs pédagogiques visées par la formation (compétences à acquérir, à améliorer ou à entretenir).\nLa description de chaque objectif doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que \"savoir, maitriser, être capable de…\"."
 formation_step2.helps.rythmeFormation: 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir,etc.).'
 formation_step2.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (en heures, en jours, en semaines, en mois, en années, …).'
 parcours_step2.helps.stageText: 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...'
@@ -21,40 +21,56 @@ parcours_step8.helps.coordSecretariat: 'Indiquez ici les coordonnées postales e
 ec_step1.helps.responsableEc: "Responsable de l'EC"
 ec_step1.helps.libelle: "N'est modifiable que par le responsable de la formation"
 ec_step1.helps.libelleAnglais: "Précisez la version anglaise du libellé de l'EC"
-ec_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez cette case.'
-ec_step2.helps.description: 'Indiquez ici en 3000 caractères maximum le contenu de l’enseignement et une description détaillée des différents sujets traités dans cet enseignement.'
+ec_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez "oui".'
+ec_step2.helps.description: 'Indiquez ici en 3000 caractères maximum le contenu de l’enseignement. Faites une description détaillée des différents sujets traités dans cet enseignement.'
 ec_step3.helps.objectifs: 'Indiquez ici en 3000 caractères maximum les objectifs de l’enseignement.'
-ec_step4.helps.modaliteEnseignement.help: 'Indiquez les modalités d’enseignement de l’enseignement.'
-ec_step4.helps.ects: "Indiquez le nombre d’ECTS attribués à l'enseignement."
-ec_step4.helps.volumeCmPresentiel: 'Volume horaire en heures de CM en présentiel'
-ec_step4.helps.volumeTdPresentiel: 'Volume horaire en heures de TD en présentiel'
-ec_step4.helps.volumeTpPresentiel: 'Volume horaire en heures de TP en présentiel'
-ec_step4.helps.volumeCmDistanciel: 'Volume horaire en heures de CM à distance'
-ec_step4.helps.volumeTdDistanciel: 'Volume horaire en heures de TD à distance'
-ec_step4.helps.volumeTpDistanciel: 'Volume horaire en heures de TP à distance'
-parcours_step2.helps.modalitesEnseignement.help: parcours_step2.helps.modalitesEnseignement.help
-parcours_step2.helps.hasStage.help: parcours_step2.helps.hasStage.help
-parcours_step2.helps.nbHeuresStages: parcours_step2.helps.nbHeuresStages
-parcours_step2.helps.hasProjet.help: parcours_step2.helps.hasProjet.help
-parcours_step2.helps.nbHeuresProjet: parcours_step2.helps.nbHeuresProjet
-parcours_step2.helps.hasMemoire.help: parcours_step2.helps.hasMemoire.help
+ec_step4.helps.modaliteEnseignement.help: "Indiquez les modalités d’enseignement de l'EC."
+ec_step4.helps.ects: '"'
+ec_step4.helps.volumeCmPresentiel: '"'
+ec_step4.helps.volumeTdPresentiel: '"'
+ec_step4.helps.volumeTpPresentiel: '"'
+ec_step4.helps.volumeCmDistanciel: '"'
+ec_step4.helps.volumeTdDistanciel: '"'
+ec_step4.helps.volumeTpDistanciel: '"'
+parcours_step2.helps.modalitesEnseignement.help: "Précisez les modalités d'enseignement"
+parcours_step2.helps.hasStage.help: 'Décrivez en quoi consiste le stage'
+parcours_step2.helps.nbHeuresStages: "Précisez le nombre d'heures du projet tuteuré prévu"
+parcours_step2.helps.hasProjet.help: 'Décrivez en quoi consiste le projet professionnel'
+parcours_step2.helps.nbHeuresProjet: "Précisez le nombre d'heures du projet tuteuré prévu"
+parcours_step2.helps.hasMemoire.help: 'Décrivez en quoi consiste le mémoire'
 parcours_step8.helps.respParcours: parcours_step8.helps.respParcours
 parcours.helps.sigle: parcours.helps.sigle
-parcours_step1.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différents sujets traités dans le parcours, en fonction des objectifs pédagogiques définis précédemment.'
-parcours_step1.helps.resultatsAttendus: "Indiquez en 3000 caractères maximum les objectifs pédagogiques visées par la formation (compétences à acquérir, à améliorer ou à entretenir).\nLa description de chaque objectif doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que « savoir, maitriser, être capable de… ». "
-parcours_step1.helps.rythmeFormation: 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir,etc.).'
-parcours_step1.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (en heures, en jours, en semaines, en mois, en années, …).'
-parcours_step1.helps.localisation.help: 'Choisissez les lieux où le parcours est proposé'
-ec_step1.helps.isCmPresentielMutualise.help: ec_step1.helps.isCmPresentielMutualise.help
-ec_step1.helps.isTdPresentielMutualise.help: ec_step1.helps.isTdPresentielMutualise.help
-ec_step1.helps.isTpPresentielMutualise.help: ec_step1.helps.isTpPresentielMutualise.help
-ec_step1.helps.isCmDistancielMutualise.help: ec_step1.helps.isCmDistancielMutualise.help
-ec_step1.helps.isTdDistancielMutualise.help: ec_step1.helps.isTdDistancielMutualise.help
-ec_step1.helps.isTpDistancielMutualise.help: ec_step1.helps.isTpDistancielMutualise.help
-ec_step2.helps.langueDispense.help: ec_step2.helps.langueDispense.help
-ec_step2.helps.langueSupport.help: ec_step2.helps.langueSupport.help
-ec_step2.helps.typeEnseignement.help: ec_step2.helps.typeEnseignement.help
+parcours_step1.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différents sujets traités dans la formation, en fonction des objectifs pédagogiques définis précédemment.'
+parcours_step1.helps.resultatsAttendus: "Indiquez en 3000 caractères maximum les objectifs pédagogiques visées par la formation (compétences à acquérir, à améliorer ou à entretenir).\nLa description de chaque objectif doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que \"savoir, maitriser, être capable de…\"."
+parcours_step1.helps.rythmeFormation: 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir, etc.).'
+parcours_step1.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (en heures, en jours, en semaines, en mois, etc.).'
+parcours_step1.helps.localisation.help: 'Choisissez le(s) lieu(x) où le parcours est proposé'
+ec_step1.helps.isCmPresentielMutualise.help: '"'
+ec_step1.helps.isTdPresentielMutualise.help: '"'
+ec_step1.helps.isTpPresentielMutualise.help: '"'
+ec_step1.helps.isCmDistancielMutualise.help: '"'
+ec_step1.helps.isTdDistancielMutualise.help: '"'
+ec_step1.helps.isTpDistancielMutualise.help: '"'
+ec_step2.helps.langueDispense.help: '"'
+ec_step2.helps.langueSupport.help: '"'
+ec_step2.helps.typeEnseignement.help: '"'
 register.helps.email: 'Email URCA valide. Permettra de faire le lien avec vos accès CAS'
 register.helps.centreDemande: "Précisez le centre souhaité. Le responsable du centre précisera vos droits d'accès."
-formation_step2.helps.objectifsFormation: 'Décrivez en 3000 caractères maximum les objectifs de la formation.'
-parcours_step1.helps.objectifsParcours: 'Décrivez en 3000 caractères maximum les objectifs du parcours.'
+formation_step2.helps.objectifsFormation: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu. \nL'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : \"A la fin de la formation, le diplômé sera capable de...\" et peut être rédigé selon 3 axes :\n•\tle savoir et la connaissance\n•\tle savoir-faire et la compétence professionnelle\n•\tle savoir-être et la capacité d'adaptation à différentes situations"
+parcours_step1.helps.objectifsParcours: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu. \nL'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : \"A la fin de la formation, le diplômé sera capable de...\" et peut être rédigé selon 3 axes :\n•\tle savoir et la connaissance\n•\tle savoir-faire et la compétence professionnelle\n•\tle savoir-être et la capacité d'adaptation à différentes situations"
+parcours_step2.helps.nbHeuresSituationPro: "Précisez le nombre d'heures de mise en situation professionnelle prévu"
+user.helps.username: user.helps.username
+user.helps.email: user.helps.email
+formation_step3.helps.hasParcours.help: 'Indiquez si la formation comporte des parcours'
+formation_step3.helps.libelleParcours.help: help
+formation_step3.helps.structureFormation.help: help
+'-': '-'
+'Plusieurs choix possibles': 'Plusieurs choix possibles'
+"Régime d'inscription": "Régime d'inscription"
+'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.': 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.'
+ec_step3.labels.competence: 'Indiquez les compétences concernées par cet élément constitutif. Choisir le/les BCC pour accéder aux compétences.'
+'Optionnel, sigle/code ou appelation courte du parcours': 'Optionnel, sigle/code ou appelation courte du parcours'
+'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation': 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation'
+'Si la mention n''existe pas, veuillez la créer dans la section "Autre mention"': 'Si la mention n''existe pas, veuillez la créer dans la section "Autre mention"'
+'Si la mention existe, veuillez la sélectionner dans la liste déroulante': 'Si la mention existe, veuillez la sélectionner dans la liste déroulante'
+
