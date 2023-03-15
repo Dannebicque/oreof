@@ -42,7 +42,7 @@ class MasterTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterf
 
     public function genereStructure(Formation $formation, bool|Parcours|null $parcours = null): void
     {
-        if ($parcours !== null) {
+        if ($parcours !== null && $parcours instanceof Parcours) {
             $this->deleteStructure($parcours);
         }
 

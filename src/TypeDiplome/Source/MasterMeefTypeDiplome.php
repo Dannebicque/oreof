@@ -42,7 +42,7 @@ class MasterMeefTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeIn
 
     public function genereStructure(Formation $formation, bool|Parcours|null $parcours = null): void
     {
-        if ($parcours !== null) {
+        if ($parcours !== null && $parcours instanceof Parcours) {
             $this->deleteStructure($parcours);
         }
 

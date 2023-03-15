@@ -39,7 +39,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 
     public function genereStructure(Formation $formation, Parcours|bool $parcours = null): void
     {
-        if ($parcours !== null) {
+        if ($parcours !== null && $parcours instanceof Parcours) {
             $this->deleteStructure($parcours);
         }
 
