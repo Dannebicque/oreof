@@ -93,29 +93,37 @@
                     <li>
                         <a href="{{ path('app_homepage') }}">
                             <i class="fal fa-home icon"></i>
-                            <span class="label">Tableau <br>de bord</span>
+                            <span class="label">Tableau de bord</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="{{ path('app_formation_index') }}">
-                            <i class="fal fa-book icon"></i>
-                            <span class="label">Détails des<br> mentions/<br>spécialité</span>
+                        <a href="#offre_formation" data-href="offre_formation">
+                            <i class="fal fa-chalkboard-user icon"></i>
+                            <span class="label">Offre de formation</span>
                         </a>
-                    </li>
+                        <ul id="offre_formation">
+                            <li>
+                                <a href="{{ path('app_formation_index') }}">
+                                    <i class="fal fa-book icon"></i>
+                                    <span class="label">Détails des<br> mentions/<br>spécialité</span>
+                                </a>
+                            </li>
 
-                    <li>
-                        <a href="{{ path('app_parcours_index') }}">
-                            <i class="fal fa-shuffle icon"></i>
-                            <span class="label">Détails des<br> parcours</span>
-                        </a>
-                    </li>
+                            <li>
+                                <a href="{{ path('app_parcours_index') }}">
+                                    <i class="fal fa-shuffle icon"></i>
+                                    <span class="label">Détails des<br> parcours</span>
+                                </a>
+                            </li>
 
-                    <li>
-                        <a href="{{ path('structure_ec_index') }}">
-                            <i class="fal fa-person-chalkboard icon"></i>
-                            <span class="label">Détails <br>des E.C.</span>
-                        </a>
+                            <li>
+                                <a href="{{ path('structure_ec_index') }}">
+                                    <i class="fal fa-person-chalkboard icon"></i>
+                                    <span class="label">Détails <br>des E.C.</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
 
 
