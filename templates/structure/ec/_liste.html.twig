@@ -16,6 +16,7 @@
                 <th></th>
             {% endif %}
             <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -115,16 +116,6 @@
                         ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
                         'valider_ec')) %}
                         <a
-                                href="{{ path('app_ec_etat_valide',{'id': ec.id, parcours:ec.parcours.id}) }}"
-                                class="btn btn-sm text-warning"
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="bottom"
-                                title="Valider un EC"
-                        >
-                            <i class="{{ iconValidate }}"></i>
-                            <span> valider</span>
-                        </a>
-                        <a
                                 href="{{ path('app_element_constitutif_edit',{'id': ec.id, parcours:ec.parcours.id}) }}"
                                 class="btn btn-sm text-warning"
                                 data-bs-toggle="tooltip"
@@ -174,11 +165,29 @@
                         {% endif %}
 
                     </td>
+                    <td>
+                        {% if ((is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and  (workflow_can(ec,
+                            'valider_ec') or workflow_can(ec,
+                            'initialiser'))) or (is_granted
+                            ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
+                            'valider_ec')) %}
+                        <a
+                                href="{{ path('app_ec_etat_valide',{'id': ec.id, parcours:ec.parcours.id}) }}"
+                                class="btn btn-sm text-warning"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="bottom"
+                                title="Valider un EC"
+                        >
+                            <i class="{{ iconValidate }}"></i>
+                            <span> valider</span>
+                        </a>
+                        {% endif %}
+                    </td>
                 {% endif %}
             </tr>
             {% else %}
             <tr>
-                <td colspan="{% if mode == 'liste' %}9{% else %}7{% endif %}" class="bg-warning">Aucun
+                <td colspan="{% if mode == 'liste' %}10{% else %}8{% endif %}" class="bg-warning">Aucun
                                                                                                             EC</td>
             </tr>
         {% endfor %}

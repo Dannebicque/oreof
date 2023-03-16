@@ -43,8 +43,11 @@ class FormationRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByComposanteDpe(UserInterface $user, AnneeUniversitaire $anneeUniversitaire, array $sorts = []): array
-    {
+    public function findByComposanteDpe(
+        UserInterface $user,
+        AnneeUniversitaire $anneeUniversitaire,
+        array $sorts = []
+    ): array {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
             ->where('c.responsableDpe = :user')
@@ -64,16 +67,23 @@ class FormationRepository extends ServiceEntityRepository
         string|null $q,
         AnneeUniversitaire $anneeUniversitaire,
         string|null $sort,
-        string|null $direction
+        string|null $direction,
+        Composante|null $composante,
     ) {
-        return $this->createQueryBuilder('f')
+        $query = $this->createQueryBuilder('f')
             ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
             ->where('f.anneeUniversitaire = :anneeUniversitaire')
             ->andWhere('m.libelle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q ')
             ->setParameter('anneeUniversitaire', $anneeUniversitaire)
             ->setParameter('q', '%' . $q . '%')
-            ->orderBy('f.' . $sort, $direction)
-            ->getQuery()
+            ->orderBy('f.' . $sort, $direction);
+
+        if ($composante !== null) {
+            $query->andWhere('f.composantePorteuse = :composante')
+                ->setParameter('composante', $composante);
+        }
+
+        return $query->getQuery()
             ->getResult();
 
     }

@@ -58,12 +58,13 @@
 
                                         <button class="ms-2 btn btn-sm btn-outline-primary"
                                                 {{ stimulus_action('structure--composante', 'detail', 'click',
-                                                    {composante:composante.id, url: path('structure_formation_detail_composante', {composante:composante.id})}
+                                                    {composante:composante.id, url: path
+                                                        ('app_formation_liste_composante',
+                                                        {composante:composante.id})}
                                                 ) }}
                                         >
                                             <i class="fal fa-caret-right"></i> Détails
                                         </button>
-
                                     </div>
                                     <div class="col-6 col-md-3 d-flex flex-column justify-content-end
                                     align-items-md-end mb-1 mb-md-0">
@@ -77,11 +78,10 @@
                         </div>
                         <div id="detail_composante_{{ composante.id }}" class="d-none detail_composante ms-4">
                             <div class="row">
-                                <div class="col-12" {{ stimulus_target('structure--composante', 'detail') }}></div>
+                                <div class="col-12 bg-white" {{ stimulus_target('structure--composante', 'detail') }}></div>
                             </div>
                         </div>
                     </div>
-
                 {% endfor %}
             </div>
         </section>
