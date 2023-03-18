@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Twig/StructureExtension.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 10/02/2023 23:19
+ */
 
 namespace App\Twig;
 
@@ -11,8 +18,16 @@ class StructureExtension extends AbstractExtension
     {
         return [
             new TwigFilter('badgeEctsSemestre', [$this, 'badgeEctsSemestre'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeEctsUe', [$this, 'badgeEctsUe'], ['is_safe' => ['html']])
+            new TwigFilter('badgeEctsUe', [$this, 'badgeEctsUe'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeNb', [$this, 'badgeNb'], ['is_safe' => ['html']])
         ];
+    }
+
+    public function badgeNb(int $nb): string
+    {
+        $color = $nb <= 0 ? 'danger' : 'primary';
+        $badge = '<span class="badge bg-'.$color.' me-2">%s</span>';
+        return sprintf($badge, $nb);
     }
 
     public function badgeEctsSemestre(float $ects, float $max = 30): string

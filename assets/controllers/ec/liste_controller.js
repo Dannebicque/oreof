@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/assets/controllers/ec/liste_controller.js
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 12/03/2023 16:08
+ */
+
 import { Controller } from '@hotwired/stimulus'
 import callOut from '../../js/callOut'
 

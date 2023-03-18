@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Config/TypeUeController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Config;
 
@@ -32,7 +39,9 @@ class TypeUeController extends AbstractController
     #[Route('/new', name: 'app_type_ue_new', methods: ['GET', 'POST'])]
     public function new(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        Request $request, TypeUeRepository $typeUeRepository): Response
+        Request $request,
+        TypeUeRepository $typeUeRepository
+    ): Response
     {
         $typeUe = new TypeUe();
         $form = $this->createForm(TypeUeType::class, $typeUe, [
@@ -65,7 +74,10 @@ class TypeUeController extends AbstractController
     #[Route('/{id}/edit', name: 'app_type_ue_edit', methods: ['GET', 'POST'])]
     public function edit(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        Request $request, TypeUe $typeUe, TypeUeRepository $typeUeRepository): Response
+        Request $request,
+        TypeUe $typeUe,
+        TypeUeRepository $typeUeRepository
+    ): Response
     {
         $form = $this->createForm(TypeUeType::class, $typeUe, [
             'action' => $this->generateUrl('app_type_ue_edit', ['id' => $typeUe->getId()]),
@@ -106,8 +118,10 @@ class TypeUeController extends AbstractController
         TypeUe $typeUe,
         TypeUeRepository $typeUeRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $typeUe->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $typeUe->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             $typeUeRepository->remove($typeUe, true);
 
             return $this->json(true);

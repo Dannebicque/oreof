@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/DataFixtures/StructureEtablissementFixtures.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\DataFixtures;
 
@@ -14,7 +21,6 @@ class StructureEtablissementFixtures extends Fixture implements DependentFixture
 {
     public function load(ObjectManager $manager): void
     {
-
         $etablissement = new Etablissement();
         $etablissement->setLibelle('Université de Reims Champagne-Ardenne');
         $manager->persist($etablissement);

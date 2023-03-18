@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Config/ComposanteController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Config;
 
@@ -31,7 +38,9 @@ class ComposanteController extends AbstractController
     #[Route('/new', name: 'app_composante_new', methods: ['GET', 'POST'])]
     public function new(
         AddUser $addUser,
-        Request $request, ComposanteRepository $composanteRepository): Response
+        Request $request,
+        ComposanteRepository $composanteRepository
+    ): Response
     {
         $composante = new Composante();
         $form = $this->createForm(ComposanteType::class, $composante, [
@@ -39,7 +48,7 @@ class ComposanteController extends AbstractController
         ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() ) {//&& $form->isValid()
+        if ($form->isSubmitted()) {//&& $form->isValid()
             //dump($form);
             if ($composante->getDirecteur() === null) {
                 $usr = $addUser->addUser($request->request->get('directeur_toAdd'));
@@ -79,14 +88,14 @@ class ComposanteController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_composante_edit', methods: ['GET', 'POST'])]
-    public function edit( AddUser $addUser, Request $request, Composante $composante, ComposanteRepository $composanteRepository): Response
+    public function edit(AddUser $addUser, Request $request, Composante $composante, ComposanteRepository $composanteRepository): Response
     {
         $form = $this->createForm(ComposanteType::class, $composante, [
             'action' => $this->generateUrl('app_composante_edit', ['id' => $composante->getId()]),
         ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() ) { //&& $form->isValid()
+        if ($form->isSubmitted()) { //&& $form->isValid()
             if ($composante->getDirecteur() === null) {
                 $usr = $addUser->addUser($request->request->get('directeur_toAdd'));
                 if ($usr !== null) {

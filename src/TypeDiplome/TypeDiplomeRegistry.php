@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/TypeDiplome/TypeDiplomeRegistry.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 07/03/2023 17:40
+ */
 
 namespace App\TypeDiplome;
 

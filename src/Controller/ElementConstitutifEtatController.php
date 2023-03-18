@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/ElementConstitutifEtatController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -20,8 +27,10 @@ class ElementConstitutifEtatController extends BaseController
     public function sendOuverture(
         ElementConstitutifRepository $elementConstitutifRepository
     ): Response {
-        $ecs = $elementConstitutifRepository->findByResponsableFormation($this->getUser(),
-            $this->getAnneeUniversitaire());
+        $ecs = $elementConstitutifRepository->findByResponsableFormation(
+            $this->getUser(),
+            $this->getAnneeUniversitaire()
+        );
 
         foreach ($ecs as $ec) {
             if ($this->ecWorkflow->can($ec, 'initialiser')) {
@@ -40,7 +49,6 @@ class ElementConstitutifEtatController extends BaseController
         ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif $ec,
     ): Response {
-
         if ($this->ecWorkflow->can($ec, 'valider_ec')) {
             $this->ecWorkflow->apply($ec, 'valider_ec');
             $elementConstitutifRepository->save($ec, true);

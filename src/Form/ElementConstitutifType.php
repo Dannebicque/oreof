@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Form/ElementConstitutifType.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 21:42
+ */
 
 namespace App\Form;
 
@@ -16,14 +23,12 @@ class ElementConstitutifType extends AbstractType
     {
         $builder
             ->add('libelle', TextType::class, [
-                'label' => 'Libellé',
                 'required' => true,
                 'attr' => ['maxlength' => 250],
             ])
             ->add('responsableEc', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'display',
-                'label' => 'Responsable de l\'EC',
                 'required' => false,
             ])
         ;
@@ -33,6 +38,7 @@ class ElementConstitutifType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ElementConstitutif::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Config/MentionController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Config;
 
@@ -32,7 +39,9 @@ class MentionController extends AbstractController
     #[Route('/new', name: 'app_mention_new', methods: ['GET', 'POST'])]
     public function new(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        Request $request, MentionRepository $mentionRepository): Response
+        Request $request,
+        MentionRepository $mentionRepository
+    ): Response
     {
         $mention = new Mention();
         $form = $this->createForm(MentionType::class, $mention, [
@@ -63,7 +72,10 @@ class MentionController extends AbstractController
     #[Route('/{id}/edit', name: 'app_mention_edit', methods: ['GET', 'POST'])]
     public function edit(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        Request $request, Mention $mention, MentionRepository $mentionRepository): Response
+        Request $request,
+        Mention $mention,
+        MentionRepository $mentionRepository
+    ): Response
     {
         $form = $this->createForm(MentionType::class, $mention, [
             'action' => $this->generateUrl('app_mention_edit', ['id' => $mention->getId()]),
@@ -103,8 +115,10 @@ class MentionController extends AbstractController
         Mention $mention,
         MentionRepository $mentionRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $mention->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $mention->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             $mentionRepository->remove($mention, true);
 
             return $this->json(true);

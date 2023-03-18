@@ -1,35 +1,41 @@
-<h2>Début de la mention/spécialité</h2>
-<div {{ stimulus_controller('formation--step0', {
-    url: path('app_formation_save', {formation:formation.id})
-}) }}
->
-        <fieldset class="mb-3">
-            <legend class="col-form-label required">Semestre de début de la formation</legend>
-            <div>
-                {% for i in 1..6 %}
-                <div class="form-check">
-                    <input type="radio" id="formation_semestreDebut_{{ i }}" name="formation_semestreDebut"
-                           required="required"
-                           {% if formation.semestreDebut == i %}checked{% endif %}
-                           class="form-check-input" value="{{ i }}" {{ stimulus_action('formation--step0',
-                        'changeSemestreDebut', 'click') }}>
-                    <label class="form-check-label required" for="formation_semestreDebut_{{ i }}">Semestre {{ i }}</label>
-                </div>
-                {% endfor %}
-            </div>
-            <div class="form-text mb-0 help-text">
-                Indiquez le semestre de début de la formation
-            </div>
-        </fieldset>
+{#<h2>Début de la mention/spécialité</h2>#}
+{#<div {{ stimulus_controller('formation--step0', {#}
+{#    url: path('app_formation_save', {formation:formation.id})#}
+{#}) }}#}
+{#>#}
+{#        <fieldset class="mb-3">#}
+{#            <legend class="col-form-label required">#}
+{#            {{ 'formation_step3.labels.semestreDebut'|trans({}, 'form') }}</legend>#}
+{#            <i class="fal fa-question-circle ms-1"#}
+{#               data-controller="tooltip"#}
+{#               data-tooltip-placement-value="bottom"#}
+{#               aria-label="{{ 'formation_step3.helps.semestreDebut.help'|trans({}, 'help') }}"#}
+{#               data-bs-original-title="{{ 'formation_step3.helps.semestreDebut.help'|trans({}, 'help') }}"></i>#}
+{#            <div>#}
+{#                {% for i in 1..6 %}#}
+{#                <div class="form-check">#}
+{#                    <input type="radio" id="formation_semestreDebut_{{ i }}" name="formation_semestreDebut"#}
+{#                           required="required"#}
+{#                           {% if formation.semestreDebut == i %}checked{% endif %}#}
+{#                           class="form-check-input" value="{{ i }}" {{ stimulus_action('formation--step0',#}
+{#                        'changeSemestreDebut', 'click') }}>#}
+{#                    <label class="form-check-label required" for="formation_semestreDebut_{{ i }}">Semestre {{ i }}</label>#}
+{#                </div>#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#            <div class="form-text mb-0 help-text">#}
 
-    <div class="alert {% if formation.getEtatStep(0) %}alert-success{% else %}alert-warning{% endif %}" id="alertEtatStructure">
-        <input type="checkbox"
-               id="etatStructure"
-               class="form-check-inline"
-               {% if formation.getEtatStep(0) %}checked{% endif %}
-                {{ stimulus_action('formation--step0', 'etatStep', 'change') }}
+{#            </div>#}
+{#        </fieldset>#}
 
-        ><label for="etatStructure">
-            Cochez cette case si vous avez terminé ...</label>
-    </div>
-</div>
+{#    <div class="alert {% if formation.getEtatStep(0) %}alert-success{% else %}alert-warning{% endif %}" id="alertEtatStructure">#}
+{#        <input type="checkbox"#}
+{#               id="etatStructure"#}
+{#               class="form-check-inline"#}
+{#               {% if formation.getEtatStep(0) %}checked{% endif %}#}
+{#                {{ stimulus_action('formation--step0', 'etatStep', 'change') }}#}
+
+{#        ><label for="etatStructure">#}
+{#            Cochez cette case si vous avez terminé ...</label>#}
+{#    </div>#}
+{#</div>#}

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/ElementConstitutifSaveController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -68,9 +75,13 @@ class ElementConstitutifSaveController extends BaseController
 
                 return $this->json($rep);
             case 'langue':
-                $rep = $updateEntity->saveCheckbox($ec, $data['field'], $data['value'],
+                $rep = $updateEntity->saveCheckbox(
+                    $ec,
+                    $data['field'],
+                    $data['value'],
                     $data['isChecked'],
-                    $langueRepository);
+                    $langueRepository
+                );
 
                 return $this->json($rep);
             case 'typeEnseignement':
@@ -84,8 +95,11 @@ class ElementConstitutifSaveController extends BaseController
 
                 return $this->json($rep);
             case 'modalitesEnseignement':
-                $rep = $updateEntity->saveField($ec, 'modaliteEnseignement',
-                    ModaliteEnseignementEnum::from($data['value']));
+                $rep = $updateEntity->saveField(
+                    $ec,
+                    'modaliteEnseignement',
+                    ModaliteEnseignementEnum::from($data['value'])
+                );
 
                 return $this->json($rep);
             case 'int':
@@ -120,7 +134,6 @@ class ElementConstitutifSaveController extends BaseController
                     $rep = $updateEntity->addToArray($ec, $data['field'], $data['value']);
                 } else {
                     $rep = $updateEntity->removeToArray($ec, $data['field'], $data['value']);
-
                 }
 
                 return $this->json($rep);
@@ -136,8 +149,5 @@ class ElementConstitutifSaveController extends BaseController
         }
 
         return $this->json(['error' => 'action inconnue']);
-
     }
-
-
 }

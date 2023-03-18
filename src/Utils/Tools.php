@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Utils/Tools.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 22/02/2023 09:06
+ */
 
 namespace App\Utils;
 

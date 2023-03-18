@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Twig/BadgeDpeExtension.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Twig;
 
@@ -74,7 +81,7 @@ class BadgeDpeExtension extends AbstractExtension
         $etatsDpe = array_keys($etatsDpe);
         $html = '';
         foreach ($etatsDpe as $etatDpe) {
-                $html .= '<span class="badge bg-'.EtatDpeEnum::from(strtolower($etatDpe))->badge().' me-1">' . EtatDpeEnum::from(strtolower($etatDpe))->libelle() . '</span>';
+            $html .= '<span class="badge bg-'.EtatDpeEnum::from(strtolower($etatDpe))->badge().' me-1">' . EtatDpeEnum::from(strtolower($etatDpe))->libelle() . '</span>';
         }
 
         return $html;

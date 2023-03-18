@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Form/FormationStep1Type.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Form;
 
@@ -25,7 +32,7 @@ class FormationStep1Type extends AbstractType
                 'expanded' => true,
                 'required' => true,
                 'help' => 'Plusieurs choix possibles',
-                'choice_attr' => function() {
+                'choice_attr' => function () {
                     return ['data-action' => 'change->formation--step1#changeVille'];
                 },
             ])
@@ -35,7 +42,7 @@ class FormationStep1Type extends AbstractType
                 'help' => 'Plusieurs choix possibles',
                 'multiple' => true,
                 'expanded' => true,
-                'choice_attr' => function() {
+                'choice_attr' => function () {
                     return ['data-action' => 'change->formation--step1#changeComposanteInscription'];
                 },
                 'attr' => ['data-action' => 'change->formation--step6#changeComposanteInscription']

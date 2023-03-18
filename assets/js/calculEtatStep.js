@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/assets/js/calculEtatStep.js
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 13/03/2023 22:38
+ */
+
 import { saveData } from './saveData'
 import { updateEtatOnglet } from './updateEtatOnglet'
 

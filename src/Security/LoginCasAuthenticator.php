@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Security/LoginCasAuthenticator.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Security;
 
@@ -48,8 +55,11 @@ class LoginCasAuthenticator extends AbstractAuthenticator
         $client_service_name = $this->parameterBag->get('CAS_CLIENT_SERVICE_NAME');
         phpCAS::setVerbose(true);
         phpCAS::client(CAS_VERSION_3_0, $cas_host, $cas_port, $cas_context, $client_service_name);
-        phpCAS::setFixedServiceURL($this->urlGenerator->generate('cas_return', [],
-            UrlGeneratorInterface::ABSOLUTE_URL));
+        phpCAS::setFixedServiceURL($this->urlGenerator->generate(
+            'cas_return',
+            [],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        ));
         phpCAS::setNoCasServerValidation();
         phpCAS::forceAuthentication();
 

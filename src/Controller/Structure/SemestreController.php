@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Structure/SemestreController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Structure;
 
@@ -13,13 +20,13 @@ use Symfony\Component\Routing\Annotation\Route;
 ]
 class SemestreController extends AbstractController
 {
-
     #[
         Route('/detail/parcours/{parcours}', name: 'detail_parcours')
     ]
     public function detailParcours(
         SemestreParcoursRepository $semestreRepository,
-        Parcours $parcours): Response
+        Parcours $parcours
+    ): Response
     {
         $semestres = $semestreRepository->findBy(['parcours' => $parcours]);//todo: filtrer selon droits // ajouter le tronc commun
 

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/ParcoursSaveController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -8,6 +15,7 @@ use App\Classes\verif\ParcoursState;
 use App\Entity\Parcours;
 use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
+use App\Repository\ComposanteRepository;
 use App\Repository\RythmeFormationRepository;
 use App\Repository\UserRepository;
 use App\Repository\VilleRepository;
@@ -28,6 +36,7 @@ class ParcoursSaveController extends AbstractController
         Bcc $bcc,
         EntityManagerInterface $em,
         UserRepository $userRepository,
+        ComposanteRepository $composanteRepository,
         EntityManagerInterface $entityManager,
         VilleRepository $villeRepository,
         RythmeFormationRepository $rythmeFormationRepository,
@@ -71,8 +80,11 @@ class ParcoursSaveController extends AbstractController
 
                 return $this->json(true);
             case 'modalitesEnseignement':
-                $rep = $updateEntity->saveField($parcours, 'modalitesEnseignement',
-                    ModaliteEnseignementEnum::from($data['value']));
+                $rep = $updateEntity->saveField(
+                    $parcours,
+                    'modalitesEnseignement',
+                    ModaliteEnseignementEnum::from($data['value'])
+                );
 
                 return $this->json($rep);
             case 'rythmeFormation':
@@ -90,13 +102,20 @@ class ParcoursSaveController extends AbstractController
                 $rep = $updateEntity->saveField($parcours, 'localisation', $ville);
 
                 return $this->json($rep);
+                case 'composanteInscription':
+                $composante = $composanteRepository->find($data['value']);
+                $rep = $updateEntity->saveField($parcours, 'composanteInscription', $composante);
+
+                return $this->json($rep);
             case 'int':
                 $rep = $updateEntity->saveField($parcours, $data['field'], (int)$data['value']);
 
                 return $this->json($rep);
             case 'etatStep':
-                $valideState = (bool)$data['isChecked'] === true ? $parcoursState->valideStep($data['value'],
-                    $parcours) : true;
+                $valideState = (bool)$data['isChecked'] === true ? $parcoursState->valideStep(
+                    $data['value'],
+                    $parcours
+                ) : true;
                 if ($valideState === true) {
                     $etatSteps = $parcours->getEtatSteps();
                     $step = $data['value'];
@@ -114,7 +133,6 @@ class ParcoursSaveController extends AbstractController
                     $rep = $updateEntity->addToArray($parcours, $data['field'], $data['value']);
                 } else {
                     $rep = $updateEntity->removeToArray($parcours, $data['field'], $data['value']);
-
                 }
 
                 return $this->json($rep);

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/ElementConstitutifController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -50,7 +57,6 @@ class ElementConstitutifController extends AbstractController
         ElementConstitutifRepository $elementConstitutifRepository,
         Ue $ue
     ): Response {
-
         $elementConstitutif = new ElementConstitutif();
         $elementConstitutif->setModaliteEnseignement($ue->getSemestre()?->getSemestreParcours()->first()->getParcours()?->getModalitesEnseignement());
 
@@ -130,14 +136,17 @@ class ElementConstitutifController extends AbstractController
         ElementConstitutif $elementConstitutif,
         Parcours $parcours
     ): Response {
-
         //(is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) or is_granted
         //                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
         //                        'valider_ec')
 
-        $access = (($this->isGranted('ROLE_EC_EDIT_MY',
-                    $elementConstitutif) && $this->ecWorkflow->can($elementConstitutif, 'valider_ec')) || ($this->isGranted('ROLE_FORMATION_EDIT_MY',
-                    $parcours->getFormation())) || ($this->ecWorkflow->can($elementConstitutif, 'valider_ec') || $this->ecWorkflow->can($elementConstitutif, 'initialiser')) || $this->isGranted('ROLE_ADMIN'));
+        $access = (($this->isGranted(
+            'ROLE_EC_EDIT_MY',
+            $elementConstitutif
+        ) && $this->ecWorkflow->can($elementConstitutif, 'valider_ec')) || ($this->isGranted(
+                'ROLE_FORMATION_EDIT_MY',
+                $parcours->getFormation()
+            )) || ($this->ecWorkflow->can($elementConstitutif, 'valider_ec') || $this->ecWorkflow->can($elementConstitutif, 'initialiser')) || $this->isGranted('ROLE_ADMIN'));
 
         if (!$access) {
             throw new AccessDeniedException();
@@ -157,12 +166,16 @@ class ElementConstitutifController extends AbstractController
         ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif $elementConstitutif
     ): Response {
-        if ($this->isGranted('ROLE_FORMATION_EDIT_MY',
-            $elementConstitutif->getParcours()->getFormation())) { //todo: ajouter le workflow...
+        if ($this->isGranted(
+            'ROLE_FORMATION_EDIT_MY',
+            $elementConstitutif->getParcours()->getFormation()
+        )) { //todo: ajouter le workflow...
             $form = $this->createForm(EcStep4Type::class, $elementConstitutif, [
                 'isModal' => true,
-                'action' => $this->generateUrl('app_element_constitutif_structure',
-                    ['id' => $elementConstitutif->getId()]),
+                'action' => $this->generateUrl(
+                    'app_element_constitutif_structure',
+                    ['id' => $elementConstitutif->getId()]
+                ),
             ]);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
@@ -198,10 +211,10 @@ class ElementConstitutifController extends AbstractController
             throw new RuntimeException('Formation non trouvée');
         }
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
-        if ($this->isGranted('ROLE_FORMATION_EDIT_MY',
-            $elementConstitutif->getParcours()->getFormation())) { //todo: ajouter le workflow...
-
-
+        if ($this->isGranted(
+            'ROLE_FORMATION_EDIT_MY',
+            $elementConstitutif->getParcours()->getFormation()
+        )) { //todo: ajouter le workflow...
             if ($elementConstitutif->getMcccs()->count() === 0) {
                 $typeDiplome->initMcccs($elementConstitutif);
             }
@@ -220,7 +233,6 @@ class ElementConstitutifController extends AbstractController
                 'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
                 'wizard' => false
             ]);
-
         }
 
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
@@ -229,7 +241,6 @@ class ElementConstitutifController extends AbstractController
             'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
             'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
         ]);
-
     }
 
     /**
@@ -261,7 +272,6 @@ class ElementConstitutifController extends AbstractController
         Ue $ue,
         string $sens
     ): Response {
-
         $ecOrdre->deplacerElementConstitutif($elementConstitutif, $sens, $ue);
         return $this->json(true);
     }

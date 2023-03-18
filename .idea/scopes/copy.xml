@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="copy" pattern="file[oreof]:src//*||file[oreof]:assets/components//*||file[oreof]:assets/controllers//*||file[oreof]:assets/js//*||file[oreof]:assets/styles//*||file:assets/app.js" />
+</component>

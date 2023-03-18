@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/assets/controllers/structure/ue_controller.js
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 12/03/2023 16:12
+ */
+
 import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
 import { saveData } from '../../js/saveData'

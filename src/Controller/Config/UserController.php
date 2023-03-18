@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Config/UserController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Config;
 
@@ -46,7 +53,8 @@ class UserController extends AbstractController
     #[Route('/liste', name: 'app_user_liste', methods: ['GET'])]
     public function liste(
         Request $request,
-        UserRepository $userRepository): Response
+        UserRepository $userRepository
+    ): Response
     {
         $sort = $request->query->get('sort') ?? 'nom';
         $direction = $request->query->get('direction') ?? 'asc';
@@ -74,9 +82,10 @@ class UserController extends AbstractController
         FormationRepository $formationRepository,
         Ldap $ldap,
         EventDispatcherInterface $eventDispatcher,
-        Request $request, UserRepository $userRepository): Response
+        Request $request,
+        UserRepository $userRepository
+    ): Response
     {
-
         $user = new User();
         $form = $this->createForm(UserLdapType::class, $user, [
             'action' => $this->generateUrl('app_user_new_ldap'),
@@ -130,7 +139,6 @@ class UserController extends AbstractController
             $this->addFlash('error', 'Erreur lors de l\'ajout de l\'utilisateur');
 
             return $this->json(false);
-
         }
 
         return $this->render('config/user/new-ldap.html.twig', [
@@ -141,7 +149,8 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(
         RoleRepository $roleRepository,
-        User $user): Response
+        User $user
+    ): Response
     {
         return $this->render('config/user/show.html.twig', [
             'user' => $user,
@@ -156,7 +165,8 @@ class UserController extends AbstractController
     public function changeRole(
         Request $request,
         UserRepository $userRepository,
-        User $user): Response
+        User $user
+    ): Response
     {
         $data = JsonRequest::getFromRequest($request);
         $roles = $user->getRoles();
@@ -176,10 +186,13 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function edit(Request $request, User $user, UserRepository $userRepository): Response
     {
-        $form = $this->createForm(UserType::class, $user,
+        $form = $this->createForm(
+            UserType::class,
+            $user,
             [
                 'action' => $this->generateUrl('app_user_edit', ['id' => $user->getId()]),
-            ]);
+            ]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

@@ -20,4 +20,5 @@ yarn-error.log
 /oreof.mwb
 /oreof.mwb.bak
 /tools
+.php-cs-fixer.cache
 

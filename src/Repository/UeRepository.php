@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Repository/UeRepository.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 25/01/2023 20:32
+ */
 
 namespace App\Repository;
 

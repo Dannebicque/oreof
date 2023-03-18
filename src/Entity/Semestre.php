@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Entity/Semestre.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 12/03/2023 21:20
+ */
 
 namespace App\Entity;
 

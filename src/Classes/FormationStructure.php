@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Classes/FormationStructure.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:10
+ */
 
 namespace App\Classes;
 
@@ -10,7 +17,8 @@ class FormationStructure
 {
     public function __construct(
         private readonly TypeDiplomeRegistry $typeDiplomeRegistry
-    ){}
+    ) {
+    }
 
     /**
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
@@ -19,7 +27,7 @@ class FormationStructure
     {
         $formation = $parcours->getFormation();
         if ($formation === null) {
-            throw new \Exception('La formation n\'est pas définie');
+            throw new \RuntimeException('La formation n\'est pas définie');
         }
 
         $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
@@ -28,10 +36,6 @@ class FormationStructure
 
     public function genereStructrePasParcours(Formation $formation): void
     {
-        if ($formation === null) {
-            throw new \Exception('La formation n\'est pas définie');
-        }
-
         $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
         $typeDiplome->genereStructure($formation, $formation->getParcours()->first());
     }

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/FormationWizardController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 14:22
+ */
 
 namespace App\Controller;
 
@@ -20,14 +27,14 @@ class FormationWizardController extends AbstractController
         return $this->render('formation/index.html.twig');
     }
 
-    #[Route('/{formation}/0', name: 'app_formation_wizard_step_0', methods: ['GET'])]
-    public function step0(Formation $formation): Response
-    {
-
-        return $this->render('formation_wizard/_step0.html.twig', [
-            'formation' => $formation,
-        ]);
-    }
+//    #[Route('/{formation}/0', name: 'app_formation_wizard_step_0', methods: ['GET'])]
+//    public function step0(Formation $formation): Response
+//    {
+//
+//        return $this->render('formation_wizard/_step0.html.twig', [
+//            'formation' => $formation,
+//        ]);
+//    }
 
     #[Route('/{formation}/1', name: 'app_formation_wizard_step_1', methods: ['GET'])]
     public function step1(Formation $formation): Response

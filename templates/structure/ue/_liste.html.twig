@@ -11,12 +11,16 @@
                         <div class="col-12 col-md-3 d-flex align-items-center mb-2 text-secondary mb-md-0 text-small">
                             Type UE
                         </div>
-                        <div class="col-12 col-md-3 d-flex align-items-center mb-2 text-secondary mb-md-0 text-small">
+                        <div class="col-12 col-md-2 d-flex align-items-center mb-2 text-secondary mb-md-0 text-small">
                             Obligatoire ?
                         </div>
                         <div class="col-6 col-md-1 d-flex align-items-center
                         justify-content-end text-secondary text-small">
                             ECTS
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center
+                        justify-content-end text-secondary text-small">
+                            Nb. EC
                         </div>
                         <div class="col-6 col-md-2 d-flex align-items-center
                         justify-content-end text-secondary text-small">
@@ -65,7 +69,6 @@
                                             </select>
                                         {% else %}
                                             {{ ue.typeUe != null ? ue.typeUe.libelle : 'erreur' }}
-                                            {# todo: gérer le cas autre ? #}
                                         {% endif %}
                                     </div>
                                     <div class="col-12 col-md-3 d-flex flex-column justify-content-center mb-1
@@ -94,16 +97,20 @@
                                             </select>
                                         {% else %}
                                             {{ ue.ueObligatoire != null ? ue.ueObligatoire.libelle : 'erreur' }}
-                                            {# todo: gérer le cas autre ? #}
                                         {% endif %}
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center
                                     align-items-md-end mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
                                         <span id="ects_ue_{{ ue.id }}_{{ parcours.id }}">
-                                        {{ ue.totalEctsUe|badgeEctsUe(6) }} {# todo: injecter le type de diplôme pour
-                                         avoir le nb ects par UE max #}
+                                        {{ ue.totalEctsUe|badgeEctsUe(typeDiplome.nbEctsUeMax) }}
                                             </span>
+                                    </div>
+
+                                    <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0
+                                     ms-2">
+                                        <div class="text-muted text-small d-md-none">NB. EC</div>
+                                        {{ ue.ecUes|length|badgeNb }}
                                     </div>
 
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center
@@ -155,7 +162,7 @@
                     <button
                             {{ stimulus_controller('modal', {
                                 size: 'lg',
-                                modalTitle: 'Ajouter une UE au semestre',
+                                modalTitle: 'Ajouter une UE au semestre ' ~ semestre.ordre,
                                 modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
                             }) }}
                             data-action="click->modal#openModal"

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/EventSubscriber/UserAccesSubscriber.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\EventSubscriber;
 
@@ -29,8 +36,10 @@ class UserAccesSubscriber implements EventSubscriberInterface
         $admins = $this->userRepository->findByRole('ROLE_ADMIN');
         $user = $event->getUser();
         $this->myMailer->initEmail();
-        $this->myMailer->setTemplate('mails/user/confirm_demande.txt.twig',
-            ['user' => $user]);
+        $this->myMailer->setTemplate(
+            'mails/user/confirm_demande.txt.twig',
+            ['user' => $user]
+        );
         $this->myMailer->sendMessage([$user->getEmail()], '[ORéOF] Confirmation demande accès');
 
         $valid = null;
@@ -46,19 +55,27 @@ class UserAccesSubscriber implements EventSubscriberInterface
 
         if ($valid !== null) {
             $this->myMailer->initEmail();
-            $this->myMailer->setTemplate('mails/user/demande_en_attente_dpe.txt.twig',
-                ['user' => $user, 'dpe' => $valid]);
-            $this->myMailer->sendMessage([$valid->getEmail()],
-                '[ORéOF]  Une demande d\'accès est en attente de validation');
+            $this->myMailer->setTemplate(
+                'mails/user/demande_en_attente_dpe.txt.twig',
+                ['user' => $user, 'dpe' => $valid]
+            );
+            $this->myMailer->sendMessage(
+                [$valid->getEmail()],
+                '[ORéOF]  Une demande d\'accès est en attente de validation'
+            );
         }
 
         //si centre : Etablissement
         foreach ($admins as $admin) {
             $this->myMailer->initEmail();
-            $this->myMailer->setTemplate('mails/user/demande_en_attente_admin.txt.twig',
-                ['user' => $user, 'admin' => $admin]);
-            $this->myMailer->sendMessage([$admin->getEmail()],
-                '[ORéOF] Une demande d\'accès est en attente de validation');
+            $this->myMailer->setTemplate(
+                'mails/user/demande_en_attente_admin.txt.twig',
+                ['user' => $user, 'admin' => $admin]
+            );
+            $this->myMailer->sendMessage(
+                [$admin->getEmail()],
+                '[ORéOF] Une demande d\'accès est en attente de validation'
+            );
         }
     }
 
@@ -73,8 +90,10 @@ class UserAccesSubscriber implements EventSubscriberInterface
     {
         $user = $event->getUser();
         $this->myMailer->initEmail();
-        $this->myMailer->setTemplate('mails/user/acces_valide.txt.twig',
-            ['user' => $user]);
+        $this->myMailer->setTemplate(
+            'mails/user/acces_valide.txt.twig',
+            ['user' => $user]
+        );
         $this->myMailer->sendMessage([$user->getEmail()], '[ORéOF] Validation demande accès');
     }
 
@@ -89,8 +108,10 @@ class UserAccesSubscriber implements EventSubscriberInterface
 
         foreach ($admins as $admin) {
             $this->myMailer->initEmail();
-            $this->myMailer->setTemplate('mails/user/acces_valide_dpe.txt.twig',
-                ['user' => $user, 'admin' => $admin]);
+            $this->myMailer->setTemplate(
+                'mails/user/acces_valide_dpe.txt.twig',
+                ['user' => $user, 'admin' => $admin]
+            );
             $this->myMailer->sendMessage([$admin->getEmail()], '[ORéOF] Validation demande accès par le centre');
         }
     }
@@ -113,8 +134,10 @@ class UserAccesSubscriber implements EventSubscriberInterface
     {
         $user = $event->getUser();
         $this->myMailer->initEmail();
-        $this->myMailer->setTemplate('mails/user/acces_ajoute.txt.twig',
-            ['user' => $user]);
+        $this->myMailer->setTemplate(
+            'mails/user/acces_ajoute.txt.twig',
+            ['user' => $user]
+        );
         $this->myMailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
     }
 }

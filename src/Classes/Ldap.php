@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Classes/Ldap.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Classes;
 
@@ -14,8 +21,10 @@ class Ldap
 
     public function connect(): void
     {
-        $this->ds = \Symfony\Component\Ldap\Ldap::create('ext_ldap',
-            ['connection_string' => $this->parameterBag->get('LDAP_HOST'), 'version' => 3]);
+        $this->ds = \Symfony\Component\Ldap\Ldap::create(
+            'ext_ldap',
+            ['connection_string' => $this->parameterBag->get('LDAP_HOST'), 'version' => 3]
+        );
         $this->ds->bind($this->parameterBag->get('LDAP_LOGIN'), $this->parameterBag->get('LDAP_PASSWORD'));
     }
 
@@ -23,8 +32,11 @@ class Ldap
     {
         $this->connect();
 
-        $query = $this->ds->query($this->parameterBag->get('LDAP_BASE_DN'), '(mail='.$email.')',
-            ['filter' => ['uid']]);
+        $query = $this->ds->query(
+            $this->parameterBag->get('LDAP_BASE_DN'),
+            '(mail='.$email.')',
+            ['filter' => ['uid']]
+        );
         $results = $query->execute()->toArray();
 
         if (1 === count($results)) {
@@ -38,8 +50,11 @@ class Ldap
     {
         $this->connect();
 
-        $query = $this->ds->query($this->parameterBag->get('LDAP_BASE_DN'), '(mail='.$email.')',
-            ['filter' => ['uid','sn', 'givenName']]);
+        $query = $this->ds->query(
+            $this->parameterBag->get('LDAP_BASE_DN'),
+            '(mail='.$email.')',
+            ['filter' => ['uid','sn', 'givenName']]
+        );
         $results = $query->execute()->toArray();
         $t = [];
         if (1 === count($results)) {

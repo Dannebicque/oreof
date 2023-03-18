@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/assets/controllers/centre_controller.js
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 16/02/2023 08:50
+ */
+
 import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
 import callOut from '../js/callOut'

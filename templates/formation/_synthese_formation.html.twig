@@ -20,10 +20,9 @@
             </div>
             <div class="col-4">
                 <dl>
-                    <dt>Niveau à l'entrée en formation</dt>
-                    <dd>{{ formation.niveauEntree.libelle }}</dd>
-                    <dt>Niveau en sortie de formation</dt>
-                    <dd>{{ formation.niveauSortie.libelle }}</dd>
+                    <dt>Responsable de la mention/spécialité</dt>
+                    <dd>{{ formation.responsableMention != null ? formation.responsableMention.display : 'Non défini'
+                        }}</dd>
                 </dl>
             </div>
             {% if is_granted('ROLE_ADMIN') %}

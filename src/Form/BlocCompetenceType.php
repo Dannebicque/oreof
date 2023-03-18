@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Form/BlocCompetenceType.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 07/03/2023 20:42
+ */
 
 namespace App\Form;
 

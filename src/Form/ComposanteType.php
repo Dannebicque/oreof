@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Form/ComposanteType.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 22/02/2023 10:54
+ */
 
 namespace App\Form;
 

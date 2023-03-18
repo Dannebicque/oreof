@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Classes/EcOrdre.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:10
+ */
 
 namespace App\Classes;
 
@@ -10,7 +17,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class EcOrdre
 {
-
     public function __construct(
         private EntityManagerInterface $entityManager,
         private EcUeRepository $ecUeRepository
@@ -25,7 +31,7 @@ class EcOrdre
         return $ordreMax[0]['ordreMax'] === null ? 1 : ++$ordreMax[0]['ordreMax'];
     }
 
-    public function deplacerElementConstitutif(ElementConstitutif $elementConstitutif, string $sens, Ue $ue)
+    public function deplacerElementConstitutif(ElementConstitutif $elementConstitutif, string $sens, Ue $ue): bool
     {
         //modifie l'ordre de la ressource
         $ordreInitial = $elementConstitutif->getOrdre();

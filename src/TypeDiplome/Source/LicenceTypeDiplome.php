@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/TypeDiplome/Source/LicenceTypeDiplome.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\TypeDiplome\Source;
 
@@ -17,6 +24,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
     public string $libelle = 'Licence';
     public int $nbSemestres = 6;
     public int $nbUes = 5;
+    public int $nbEctsUeMax = 6;
 
     public function saveMcccs(ElementConstitutif $elementConstitutif, InputBag $request): void
     {
@@ -48,7 +56,6 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         $mcccs[2]['et']->setTypeEpreuve([$request->get('typeEpreuve_s2_et')]);
 
         $this->entityManager->flush();
-
     }
 
     public function saveMccc(ElementConstitutif $elementConstitutif, string $field, mixed $value): void
@@ -71,7 +78,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 break;
             case 'typeEpreuve_s1_et':
                 $mcccs[1]['et']->setTypeEpreuve([$value]);
-                if (count( $mcccs[1]['et']->getTypeEpreuve())> 0) {
+                if (count($mcccs[1]['et']->getTypeEpreuve())> 0) {
                     $mcccs[1]['et']->setNbEpreuves(1);
                 }
                 break;
@@ -85,7 +92,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 break;
             case 'typeEpreuve_s1_chance':
                 $mcccs[3]['chance']->setTypeEpreuve($value);//est un tableau
-                if (count( $mcccs[3]['chance']->getTypeEpreuve())> 0) {
+                if (count($mcccs[3]['chance']->getTypeEpreuve())> 0) {
                     $mcccs[3]['chance']->setNbEpreuves(count($value));
                 }
                 break;
@@ -97,7 +104,6 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         }
 
         $this->entityManager->flush();
-
     }
 
 
@@ -191,6 +197,4 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
 
         $this->entityManager->flush();
     }
-
 }
-

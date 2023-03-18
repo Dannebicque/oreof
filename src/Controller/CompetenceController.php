@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/CompetenceController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -42,8 +49,11 @@ class CompetenceController extends AbstractController
     #[Route('/{id}/edit', name: 'app_competence_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Competence $competence, CompetenceRepository $competenceRepository): Response
     {
-        $form = $this->createForm(CompetenceType::class, $competence,
-            ['action' => $this->generateUrl('app_competence_edit', ['id' => $competence->getId()])]);
+        $form = $this->createForm(
+            CompetenceType::class,
+            $competence,
+            ['action' => $this->generateUrl('app_competence_edit', ['id' => $competence->getId()])]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -78,7 +88,6 @@ class CompetenceController extends AbstractController
         Competence $competence,
         string $sens
     ): Response {
-
         $bcc->deplacerCompetence($competence, $sens);
         return $this->json(true);
     }
@@ -92,8 +101,10 @@ class CompetenceController extends AbstractController
         Competence $competence,
         CompetenceRepository $competenceRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $competence->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $competence->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             $competenceRepository->remove($competence, true);
 
             return $this->json(true);

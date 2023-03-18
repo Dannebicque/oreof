@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/EventSubscriber/WorkflowDpeNotificationSubscriber.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\EventSubscriber;
 
@@ -10,7 +17,6 @@ use Symfony\Component\Workflow\Event\Event;
 
 class WorkflowDpeNotificationSubscriber implements EventSubscriberInterface
 {
-
     public function __construct(
         protected NotificationRepository $notificationRepository
     ) {
@@ -33,7 +39,5 @@ class WorkflowDpeNotificationSubscriber implements EventSubscriberInterface
         $notification->setDestinataire($formation->getResponsableMention());
         $notification->setCodeNotification('workflow.dpe.transition.initialiser');
         $this->notificationRepository->save($notification, true);
-
     }
-
 }

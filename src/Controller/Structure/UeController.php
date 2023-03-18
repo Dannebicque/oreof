@@ -1,9 +1,18 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Structure/UeController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Structure;
 
 use App\Entity\Parcours;
 use App\Entity\Semestre;
+use App\Entity\TypeEnseignement;
+use App\Entity\TypeUe;
 use App\Entity\Ue;
 use App\Form\UeType;
 use App\Repository\TypeEnseignementRepository;
@@ -55,6 +64,7 @@ class UeController extends AbstractController
         Route('/add-ue/semestre/{semestre}/{parcours}', name: 'add_ue_semestre')
     ]
     public function addUe(
+        TypeEnseignementRepository $typeEnseignementRepository,
         TypeUeRepository $typeUeRepository,
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request,
@@ -76,8 +86,26 @@ class UeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $tu = $typeUeRepository->find($form->get('typeUe')->getData());
-            $ue->setTypeUe($tu);
+            if ($form->get('typeUe')->getData() !== null) {
+                $tu = $typeUeRepository->find($form->get('typeUe')->getData());
+                $ue->setTypeUe($tu);
+            }
+
+            if ($form->get('typeUeTexte')->getData() !== null && $form->get('typeUe')->getData() === null) {
+                $tu = new TypeUe();
+                $tu->setLibelle($form->get('typeUeTexte')->getData());
+                $tu->setTypeDiplome([$typeDiplome::class]);
+                $typeUeRepository->save($tu, true);
+                $ue->setTypeUe($tu);
+            }
+
+            if ($form->get('ueObligatoireTexte')->getData() !== null && $form->get('ueObligatoire')->getData() === null) {
+                $tu = new TypeEnseignement();
+                $tu->setLibelle($form->get('ueObligatoireTexte')->getData());
+                $typeEnseignementRepository->save($tu, true);
+                $ue->setUeObligatoire($tu);
+            }
+
             $ueRepository->save($ue, true);
 
             return $this->json(true);
@@ -110,7 +138,6 @@ class UeController extends AbstractController
         $ueRepository->save($ue, true);
 
         return $this->json(true);
-
     }
 
     /**
@@ -145,8 +172,10 @@ class UeController extends AbstractController
         Ue $ue,
         UeRepository $ueRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $ue->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $ue->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             //todo: supprimer les EC
             $ueRepository->remove($ue, true);
 

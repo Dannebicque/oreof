@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Structure/ComposanteController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Structure;
 
@@ -25,8 +32,7 @@ class ComposanteController extends AbstractController
     ]
     public function liste(
         ComposanteRepository $composanteRepository
-    ): Response
-    {
+    ): Response {
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_COMPOSANTE_SHOW_ALL', $this->getUser())) {
             $composantes = $composanteRepository->findAll();
         } else {

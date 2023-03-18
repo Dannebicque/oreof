@@ -1,4 +1,3 @@
-<h2>Structure et Organisation pédagogique</h2>
 {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) %}
         {{ include('element_constitutif/_structureEc.html.twig', {validateStep:true}) }}
 {% else %}

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Form/UeType.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 21:36
+ */
 
 namespace App\Form;
 
@@ -22,20 +29,30 @@ class UeType extends AbstractType
 
         $builder
             ->add('ordre', TextType::class, [
-                'label' => 'Numéro de l\'UE',
             ])
             ->add('typeUe', ChoiceType::class, [
                 'choices' => $choices,
                 'required' => false,
-                'mapped' => false,
-            ])//todo: ajouter un champ texte si l'UE n'est pas dans la liste + bouton autre ?
+                'mapped' =>  false,
+            ])
             ->add('typeUeTexte', TextType::class, [
-                'label' => 'Type d\'UE si non présent dans la liste',
+                'attr' => [
+                    'maxlength' => 100,
+                ],
                 'required' => false,
+                'mapped' => false,
             ])
             ->add('ueObligatoire', EntityType::class, [
                 'class' => TypeEnseignement::class,
                 'choice_label' => 'libelle',
+                'required' => false,
+            ])
+            ->add('ueObligatoireTexte', TextType::class, [
+                'attr' => [
+                    'maxlength' => 100,
+                ],
+                'required' => false,
+                'mapped' => false,
             ])
         ;
     }
@@ -44,6 +61,7 @@ class UeType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Ue::class,
+            'translation_domain' => 'form',
             'choices' => [],
         ]);
     }

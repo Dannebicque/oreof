@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Config/RythmeFormationController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Config;
 
@@ -100,8 +107,10 @@ class RythmeFormationController extends AbstractController
         RythmeFormation $rythmeFormation,
         RythmeFormationRepository $rythmeFormationRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $rythmeFormation->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $rythmeFormation->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             $rythmeFormationRepository->remove($rythmeFormation, true);
 
             return $this->json(true);

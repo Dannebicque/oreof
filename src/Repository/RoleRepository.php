@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Repository/RoleRepository.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 16/02/2023 09:30
+ */
 
 namespace App\Repository;
 

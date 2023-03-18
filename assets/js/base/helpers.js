@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/assets/js/base/helpers.js
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 21/01/2023 19:40
+ */
+
 /**
  *
  * Helpers

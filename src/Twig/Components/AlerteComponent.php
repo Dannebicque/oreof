@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Twig/Components/AlerteComponent.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 11/03/2023 23:10
+ */
 
 namespace App\Twig\Components;
 

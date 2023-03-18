@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/ParcoursController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -28,8 +35,7 @@ class ParcoursController extends AbstractController
     public function liste(
         ParcoursRepository $parcoursRepository,
         Request $request
-    ): Response
-    {
+    ): Response {
         $sort = $request->query->get('sort') ?? 'typeDiplome';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
@@ -121,7 +127,10 @@ class ParcoursController extends AbstractController
     #[Route('/{id}', name: 'app_parcours_delete', methods: ['DELETE'])]
     public function delete(
         EntityManagerInterface $entityManager,
-        Request $request, Parcours $parcour, ParcoursRepository $parcoursRepository): Response
+        Request $request,
+        Parcours $parcour,
+        ParcoursRepository $parcoursRepository
+    ): Response
     {
         if ($this->isCsrfTokenValid('delete' . $parcour->getId(), JsonRequest::getValueFromRequest($request, 'csrf'))) {
             foreach ($parcour->getSemestreParcours() as $sp) {

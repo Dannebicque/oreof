@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Entity/TypeEpreuve.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 20/02/2023 14:23
+ */
 
 namespace App\Entity;
 

@@ -1,15 +1,23 @@
-{% form_theme form 'communs/form_theme.html.twig' %}
-{{ form_start(form) }}
-<div {{ stimulus_controller('ec--structureparcours') }}>
-    {{ include('element_constitutif/_structure_ec_formulaire.html.twig') }}
-    <button type="submit" class="btn btn-success"
-            {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
-    >
-        <i class="fal fa-floppy-disk"></i>
-        Enregistrer
-    </button>
+{% if ec.parcours.modalitesEnseignement == null %}
+    {{ component('alerte', {type:'warning', message:'Vous devez d\'abord définir les modalités d\'enseignement du
+parcours.'}) }}
+{% else %}
 
-    {{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont
+    {% form_theme form 'communs/form_theme.html.twig' %}
+    {{ form_start(form) }}
+    <div {{ stimulus_controller('ec--structureparcours') }}>
+
+        {{ include('element_constitutif/_structure_ec_formulaire.html.twig') }}
+
+        <button type="submit" class="btn btn-success"
+                {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+        >
+            <i class="fal fa-floppy-disk"></i>
+            Enregistrer
+        </button>
+
+        {{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont
 obligatoires'}) }}
-</div>
-{{ form_end(form) }}
+    </div>
+    {{ form_end(form) }}
+{% endif %}

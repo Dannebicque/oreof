@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/assets/app.js
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 14/03/2023 22:21
+ */
+
 import * as bootstrap from 'bootstrap'
 
 import Trix from 'trix'

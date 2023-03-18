@@ -11,9 +11,14 @@
             <td>{{ rome.code }}</td>
             <td>
                 <button class="btn btn-danger"
-                {{ stimulus_action('parcours--step7', 'removeCode', 'click',{code: rome.code}) }}
-                >Supprimer</button>
+                        {{ stimulus_action('parcours--step7', 'removeCode', 'click',{code: rome.code}) }}
+                >Supprimer
+                </button>
             </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="2" class="bg-warning">Aucun code rome n'a été ajouté</td>
         </tr>
     {% endfor %}
     </tbody>
@@ -25,8 +30,9 @@
         </td>
         <td>
             <button class="btn btn-success"
-            {{ stimulus_action('parcours--step7', 'addCode') }}
-            >Ajouter le code</button>
+                    {{ stimulus_action('parcours--step7', 'addCode') }}
+            >Ajouter le code
+            </button>
         </td>
     </tr>
     </tfoot>

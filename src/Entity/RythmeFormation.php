@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Entity/RythmeFormation.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 10/02/2023 22:12
+ */
 
 namespace App\Entity;
 

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/EventSubscriber/WorkflowEcMailSubscriber.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\EventSubscriber;
 
@@ -12,7 +19,6 @@ use Symfony\Component\Workflow\Event\Event;
 
 class WorkflowEcMailSubscriber implements EventSubscriberInterface
 {
-
     public function __construct(
         protected UserRepository $userRepository,
         protected ComposanteRepository $composanteRepository,
@@ -39,11 +45,14 @@ class WorkflowEcMailSubscriber implements EventSubscriberInterface
         if ($ec->getResponsableEc() !== null) {
             //todo: check si le responsable de EC accepte le mail
             $this->myMailer->initEmail();
-            $this->myMailer->setTemplate('mails/ec/ouverture_redaction_ec.txt.twig',
-                ['ec' => $ec, 'responsable' => $ec->getResponsableEc(), 'formation' => $ec->getParcours()->getFormation()]);
-            $this->myMailer->sendMessage([$ec->getResponsableEc()?->getEmail()],
-                '[ORéOF]  Un élément constitutif est ouvert pour la rédaction/modification');
+            $this->myMailer->setTemplate(
+                'mails/ec/ouverture_redaction_ec.txt.twig',
+                ['ec' => $ec, 'responsable' => $ec->getResponsableEc(), 'formation' => $ec->getParcours()->getFormation()]
+            );
+            $this->myMailer->sendMessage(
+                [$ec->getResponsableEc()?->getEmail()],
+                '[ORéOF]  Un élément constitutif est ouvert pour la rédaction/modification'
+            );
         }
     }
-
 }

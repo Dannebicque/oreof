@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Form/FormationSesType.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Form;
 
@@ -34,7 +41,6 @@ class FormationSesType extends AbstractType
         $typeDiplomeRegistry = $this->typeDiplomeRegistry;
         $mentionRepository = $this->mentionRepository;
 
-
         $builder
             ->add('typeDiplome', ChoiceType::class, [
                 'choices' => $options['typesDiplomes'],
@@ -49,7 +55,6 @@ class FormationSesType extends AbstractType
                 'attr' => ['placeholder' => 'Choisir la composante porteuse du projet', 'data-action' => 'change->formation#changeComposante'],
                 'class' => Composante::class,
                 'choice_label' => 'libelle',
-//                'label' => '',
                 'required' => true,
                 'help' => 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation'
             ])
@@ -71,13 +76,13 @@ class FormationSesType extends AbstractType
             ])
             ->add('niveauEntree', EnumType::class, [
                 'class' => NiveauFormationEnum::class,
-                'choice_label' => static function(UnitEnum $choice): string {
+                'choice_label' => static function (UnitEnum $choice): string {
                     return $choice->libelle();
                 },
             ])
             ->add('niveauSortie', EnumType::class, [
                 'class' => NiveauFormationEnum::class,
-                'choice_label' => static function(UnitEnum $choice): string {
+                'choice_label' => static function (UnitEnum $choice): string {
                     return $choice->libelle();
                 },
             ])
@@ -93,8 +98,9 @@ class FormationSesType extends AbstractType
                 'choice_label' => 'display',
                 'attr' => ['data-action' => 'change->formation#changeResponsableMention']
             ])
-            ->addEventListener(FormEvents::POST_SUBMIT,
-                static function(FormEvent $event) use ($mentionRepository) {
+            ->addEventListener(
+                FormEvents::POST_SUBMIT,
+                static function (FormEvent $event) use ($mentionRepository) {
                     $formation = $event->getData();
                     $form = $event->getForm();
                     $mention = $form->get('mention')->getData();
@@ -104,15 +110,19 @@ class FormationSesType extends AbstractType
                     } else {
                         $formation->setMention(null);
                     }
-                })
-            ->addEventListener(FormEvents::PRE_SET_DATA,
-                static function(FormEvent $event) use ($typeDiplomeRegistry, $mentionRepository) {
+                }
+            )
+            ->addEventListener(
+                FormEvents::PRE_SET_DATA,
+                static function (FormEvent $event) use ($typeDiplomeRegistry, $mentionRepository) {
                     $formation = $event->getData();
                     if ($formation->getDomaine() !== null && $formation->getTypeDiplome() !== null) {
                         $form = $event->getForm();
                         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
-                        $tabMentions = $mentionRepository->findByDomaineAndTypeDiplome($formation->getDomaine(),
-                            $typeDiplome);
+                        $tabMentions = $mentionRepository->findByDomaineAndTypeDiplome(
+                            $formation->getDomaine(),
+                            $typeDiplome
+                        );
                         $tabMentions['Autre'] = 'autre';
                         $tabMentions[''] = null;
 
@@ -125,9 +135,8 @@ class FormationSesType extends AbstractType
                             'help' => 'Si la mention n\'existe pas, veuillez la créer dans la section "Autre mention"'
                         ]);
                     }
-                });
-
-
+                }
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -1,8 +1,10 @@
-// Copyright (c) 2021. | David Annebicque | IUT de Troyes  - All Rights Reserved
-// @file /Users/davidannebicque/htdocs/intranetV3/assets/controllers/modal_controller.js
-// @author davidannebicque
-// @project intranetV3
-// @lastUpdate 11/10/2021 21:49
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/assets/controllers/modal_controller.js
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 08/03/2023 14:53
+ */
 
 import { Controller } from '@hotwired/stimulus'
 

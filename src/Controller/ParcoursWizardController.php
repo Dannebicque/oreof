@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/ParcoursWizardController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -43,7 +50,8 @@ class ParcoursWizardController extends AbstractController
     #[Route('/{parcours}/2', name: 'app_parcours_wizard_step_2', methods: ['GET'])]
     public function step2(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        Parcours $parcours): Response
+        Parcours $parcours
+    ): Response
     {
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome());
         $form = $this->createForm(ParcoursStep2Type::class, $parcours, [
@@ -60,7 +68,8 @@ class ParcoursWizardController extends AbstractController
     #[Route('/{parcours}/3', name: 'app_parcours_wizard_step_3', methods: ['GET'])]
     public function step3(
         ParcoursRepository $parcoursRepository,
-        Parcours $parcours): Response
+        Parcours $parcours
+    ): Response
     {
         $listeParcours = $parcoursRepository->findBy(['formation' => $parcours->getFormation()]);
         return $this->render('parcours_wizard/_step3.html.twig', [
@@ -71,7 +80,7 @@ class ParcoursWizardController extends AbstractController
     }
 
     #[Route('/{parcours}/4', name: 'app_parcours_wizard_step_4', methods: ['GET'])]
-    public function step4(ParcoursRepository $parcoursRepository,Parcours $parcours): Response
+    public function step4(ParcoursRepository $parcoursRepository, Parcours $parcours): Response
     {
         $listeParcours = $parcoursRepository->findBy(['formation' => $parcours->getFormation()]);
         return $this->render('parcours_wizard/_step4.html.twig', [
@@ -91,16 +100,16 @@ class ParcoursWizardController extends AbstractController
         ]);
     }
 
-    #[Route('/{parcours}/6', name: 'app_parcours_wizard_step_6', methods: ['GET'])]
-    public function step6(Parcours $parcours): Response
-    {
-        $form = $this->createForm(ParcoursStep6Type::class, $parcours);
-
-        return $this->render('parcours_wizard/_step6.html.twig', [
-            'form' => $form->createView(),
-            'parcours' => $parcours,
-        ]);
-    }
+//    #[Route('/{parcours}/6', name: 'app_parcours_wizard_step_6', methods: ['GET'])]
+//    public function step6(Parcours $parcours): Response
+//    {
+//        $form = $this->createForm(ParcoursStep6Type::class, $parcours);
+//
+//        return $this->render('parcours_wizard/_step6.html.twig', [
+//            'form' => $form->createView(),
+//            'parcours' => $parcours,
+//        ]);
+//    }
 
     #[Route('/{parcours}/7', name: 'app_parcours_wizard_step_7', methods: ['GET'])]
     public function step7(Parcours $parcours): Response
@@ -128,7 +137,8 @@ class ParcoursWizardController extends AbstractController
     public function codeRomeGere(
         ParcoursRepository $parcoursRepository,
         Request $request,
-        Parcours $parcours): Response
+        Parcours $parcours
+    ): Response
     {
         $action = JsonRequest::getValueFromRequest($request, 'action');
         $code = JsonRequest::getValueFromRequest($request, 'code');
@@ -158,16 +168,14 @@ class ParcoursWizardController extends AbstractController
         return $this->json(false);
     }
 
-    #[Route('/{parcours}/8', name: 'app_parcours_wizard_step_8', methods: ['GET'])]
-    public function step8(Parcours $parcours): Response
-    {
-        $form = $this->createForm(ParcoursStep8Type::class, $parcours);
-
-        return $this->render('parcours_wizard/_step8.html.twig', [
-            'form' => $form->createView(),
-            'parcours' => $parcours,
-        ]);
-    }
-
-
+//    #[Route('/{parcours}/8', name: 'app_parcours_wizard_step_8', methods: ['GET'])]
+//    public function step8(Parcours $parcours): Response
+//    {
+//        $form = $this->createForm(ParcoursStep8Type::class, $parcours);
+//
+//        return $this->render('parcours_wizard/_step8.html.twig', [
+//            'form' => $form->createView(),
+//            'parcours' => $parcours,
+//        ]);
+//    }
 }

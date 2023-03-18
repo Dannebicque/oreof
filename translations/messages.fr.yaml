@@ -60,3 +60,12 @@ Droits: Droits
 ROLE_ADMIN: ROLE_ADMIN
 ROLE_VP: ROLE_VP
 'Responsable du parcours': 'Responsable du parcours'
+"Numéro de l'UE": "Numéro de l'UE"
+ue.labels.typeUe: ue.labels.typeUe
+"Type d'UE si non présent dans la liste": "Type d'UE si non présent dans la liste"
+ue.labels.ueObligatoire: ue.labels.ueObligatoire
+'Libellé du parcours': 'Libellé du parcours'
+Disciplinaire: Disciplinaire
+Ouverture: Ouverture
+'TER – travail d’étude et de recherche': 'TER – travail d’étude et de recherche'
+"Libellé de l'EC": "Libellé de l'EC"

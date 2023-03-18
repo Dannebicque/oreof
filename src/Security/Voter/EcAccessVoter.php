@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Security/Voter/EcAccessVoter.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Security\Voter;
 
@@ -13,7 +20,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class EcAccessVoter extends Voter
 {
-
     public const ROLE_EC_EDIT_MY = 'ROLE_EC_EDIT_MY';
 
     private array $roles;
@@ -21,8 +27,7 @@ class EcAccessVoter extends Voter
     public function __construct(
         private readonly Security $security,
         private readonly RoleRepository $roleRepository,
-    )
-    {
+    ) {
     }
 
     public function supportsType(string $subjectType): bool
@@ -32,14 +37,12 @@ class EcAccessVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-
         return in_array($attribute, [self::ROLE_EC_EDIT_MY], true)
             && $subject instanceof ElementConstitutif;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
-
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
         if (!$user instanceof UserInterface) {
@@ -56,11 +59,10 @@ class EcAccessVoter extends Voter
             self::ROLE_EC_EDIT_MY => $this->isReponsableEc($user, $subject),
             default => false,
         };
-
     }
 
     private function isReponsableEc(UserInterface|User $user, ElementConstitutif $subject): bool
     {
-       return $subject->getResponsableEc()?->getId() === $user->getId();
+        return $subject->getResponsableEc()?->getId() === $user->getId();
     }
 }

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Security/Voter/FormationAccessVoter.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Security\Voter;
 
@@ -12,7 +19,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class FormationAccessVoter extends Voter
 {
-
     public const ROLE_FORMATION_EDIT_MY = 'ROLE_FORMATION_EDIT_MY';
     public const ROLE_FORMATION_SHOW_MY = 'ROLE_FORMATION_SHOW_MY';
     public const ROLE_EC_ADD_MY = 'ROLE_EC_ADD_MY';
@@ -22,8 +28,7 @@ class FormationAccessVoter extends Voter
     public function __construct(
         private readonly Security $security,
         private readonly RoleRepository $roleRepository,
-    )
-    {
+    ) {
     }
 
     public function supportsType(string $subjectType): bool
@@ -57,14 +62,13 @@ class FormationAccessVoter extends Voter
             self::ROLE_EC_ADD_MY => $this->canAddEcFormation($user, $subject),
             default => false,
         };
-
     }
 
     private function hasShowOnHisFormation(UserInterface|User $user, Formation $subject): bool
     {
         /** @var User $user */
         foreach ($user->getUserCentres() as $centre) {
-            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0 ) {
+            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
                 return true;
             }
         }
@@ -75,7 +79,7 @@ class FormationAccessVoter extends Voter
     private function hasEditOnHisFormation(UserInterface|User $user, Formation $subject): bool
     {
         foreach ($user->getUserCentres() as $centre) {
-            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0 ) {
+            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
                 return true;
             }
         }
@@ -86,13 +90,11 @@ class FormationAccessVoter extends Voter
     private function canAddEcFormation(UserInterface|User $user, mixed $subject): bool
     {
         foreach ($user->getUserCentres() as $centre) {
-            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0 ) {
+            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
                 return true;
             }
         }
 
         return false;
     }
-
-
 }

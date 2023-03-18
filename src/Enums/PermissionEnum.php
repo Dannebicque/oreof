@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Enums/PermissionEnum.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Enums;
 
@@ -15,7 +22,7 @@ enum PermissionEnum: string
 
     public function libelle(): string
     {
-        return match($this) {
+        return match ($this) {
             self::CREATE => 'Créer (et modifier)',
             self::EDIT => 'Modifier (sans droit de création)',
             self::DELETE => 'Supprimer',
@@ -24,7 +31,6 @@ enum PermissionEnum: string
             self::SUBMIT => 'Soumettre (et passer à l\'étape suivante)',
             self::MANAGE => 'Gérer les droits',
             self::EXPORT => 'Exporter',
-
         };
     }
 }

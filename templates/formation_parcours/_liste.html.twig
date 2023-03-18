@@ -2,8 +2,7 @@
     <thead>
     <tr>
         <td>Libellé du parcours</td>
-        <td>Référent</td>
-        <td>Sigle</td>
+        <td>Responsable du parcours</td>
         <td></td>
     </tr>
     </thead>
@@ -16,13 +15,12 @@
             <td>
                 {{ parcour.respParcours != null ? parcour.respParcours.display : 'Non défini' }}
             </td>
-            <td>{{ parcour.sigle }}</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
                             nomEvenement: 'parcoursAdded',
-                            modalTitle: 'Ajouter un parcours',
+                            modalTitle: 'Modifier un parcours',
                             modalUrl: path('app_parcours_edit_modal', {parcours:parcour.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm text-warning btn-icon"
@@ -32,7 +30,7 @@
                         title="Modifier un parcours"
                 >
                     <i class="{{ iconEdit }}"></i>
-                    <span> Modifier le libéllé/référent</span>
+                    <span> Modifier le libellé/Responsable du parcours</span>
                 </button>
                 <a href="{{ path('app_parcours_edit', {id:parcour.id}) }}"
                 class="btn btn-sm text-warning btn-icon"

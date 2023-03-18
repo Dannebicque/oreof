@@ -7,7 +7,8 @@
         }) }}
 >
 
-    <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs" id="lineTitleTabsContainer" role="tablist">
+    <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs" id="lineTitleTabsContainer"
+        role="tablist">
         {% if parcours.formation.isHasParcours == true %}
         <li class="nav-item" role="presentation">
             <a class="nav-link active" data-bs-toggle="tab" href="#" role="tab" aria-selected="true"
@@ -45,18 +46,18 @@
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 5}) }}
             >
-                Admission {{ parcours.onglets|etatRemplissage(5, 'parcours') }}
+                Admission & inscription {{ parcours.onglets|etatRemplissage(5, 'parcours') }}
             </a>
         </li>
-        {% if parcours.formation.isHasParcours == true %}
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                        {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 6}) }}
-                >
-                    Inscription {{ parcours.onglets|etatRemplissage(6, 'parcours') }}
-                </a>
-            </li>
-        {% endif %}
+{#        {% if parcours.formation.isHasParcours == true %}#}
+{#            <li class="nav-item" role="presentation">#}
+{#                <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"#}
+{#                        {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 6}) }}#}
+{#                >#}
+{#                    Inscription {{ parcours.onglets|etatRemplissage(6, 'parcours') }}#}
+{#                </a>#}
+{#            </li>#}
+{#        {% endif %}#}
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 7}) }}
@@ -64,13 +65,13 @@
                 Et après... {{ parcours.onglets|etatRemplissage(7, 'parcours') }}
             </a>
         </li>
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                    {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 8}) }}
-            >
-                Contacts pédagogiques {{ parcours.onglets|etatRemplissage(8, 'parcours') }}
-            </a>
-        </li>
+{#        <li class="nav-item" role="presentation">#}
+{#            <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"#}
+{#                    {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 8}) }}#}
+{#            >#}
+{#                Contacts pédagogiques {{ parcours.onglets|etatRemplissage(8, 'parcours') }}#}
+{#            </a>#}
+{#        </li>#}
 
         <!-- An empty list to put overflowed links -->
         <li class="nav-item dropdown ms-auto pe-0 d-none responsive-tab-dropdown">

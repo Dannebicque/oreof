@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/EventSubscriber/WorkflowDpeMailSubscriber.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\EventSubscriber;
 
@@ -12,7 +19,6 @@ use Symfony\Component\Workflow\Event\Event;
 
 class WorkflowDpeMailSubscriber implements EventSubscriberInterface
 {
-
     public function __construct(
         protected UserRepository $userRepository,
         protected ComposanteRepository $composanteRepository,
@@ -38,10 +44,13 @@ class WorkflowDpeMailSubscriber implements EventSubscriberInterface
         $formation = $event->getSubject();
         //todo: check si le responsable de formation accepte le mail
         $this->myMailer->initEmail();
-        $this->myMailer->setTemplate('mails/dpe/ouverture_redaction_formation.txt.twig',
-            ['formation' => $formation, 'responsable' => $formation->getResponsableMention()]);
-        $this->myMailer->sendMessage([$formation->getResponsableMention()?->getEmail()],
-            '[ORéOF]  Une formation est ouverte pour la rédaction/modification');
+        $this->myMailer->setTemplate(
+            'mails/dpe/ouverture_redaction_formation.txt.twig',
+            ['formation' => $formation, 'responsable' => $formation->getResponsableMention()]
+        );
+        $this->myMailer->sendMessage(
+            [$formation->getResponsableMention()?->getEmail()],
+            '[ORéOF]  Une formation est ouverte pour la rédaction/modification'
+        );
     }
-
 }

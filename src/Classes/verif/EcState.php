@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Classes/verif/EcState.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 11/03/2023 23:19
+ */
 
 namespace App\Classes\verif;
 

@@ -6,6 +6,21 @@
     <trix-editor input="trix-input-{{ trixId }}"></trix-editor>
 {% endblock %}
 
+{%- block form_widget_simple -%}
+    {% if input_prefix is defined or input_suffix is defined %}
+        <div class="input-group mb-3">
+            {% if input_prefix %}
+                {{ input_prefix | raw }}
+            {% endif %}
+            {{- parent() -}}
+            {% if input_suffix %}
+                {{ input_suffix | raw }}
+            {% endif %}
+        </div>
+    {% else %}
+        {{- parent() -}}
+    {% endif %}
+{%- endblock form_widget_simple -%}
 
 {% macro form_parent_name(form, prefix) %}
     {% apply spaceless %}
@@ -117,13 +132,13 @@
     {{- block('form_label_content') -}}
     {% import _self as macros %}
 
-    {% if help is defined and help != '' and help|trim|trans({}, 'help') != '-' %}
-        {% set help = macros.form_parent_help_name(form) %}
+    {#    {% if help is defined and help != '' %} #}
+    {% set help = macros.form_parent_help_name(form) %}
     <i class="fal fa-question-circle ms-1"
             {{ stimulus_controller('tooltip', {
                 'placement': 'bottom',
             }) }}
-       title="{{ help|trim|trans({}, 'help') }}"></i>{% endif %}
+       title="{{ help|trim|trans({}, 'help') }}"></i>
     </{{ element|default('label') }}>
 {%- endblock form_label %}
 
@@ -149,7 +164,7 @@
 {% endblock %}
 
 {% block textarea_auto_save_widget %}
-{#    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>#}
+    {#    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea> #}
     <input id="trix-input-{{ trixId }}" value="{{ value }}" type="hidden" name="{{ full_name }}">
     <trix-editor input="trix-input-{{ trixId }}" {{ block('widget_attributes') }}></trix-editor>
 {% endblock %}

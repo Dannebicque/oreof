@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/assets/controllers/formation_wizard_controller.js
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 10/02/2023 22:20
+ */
+
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {

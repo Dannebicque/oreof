@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/ElementConstitutifWizardController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -42,8 +49,7 @@ class ElementConstitutifWizardController extends AbstractController
         TypeDiplomeRegistry $typeDiplomeRegistry,
         ElementConstitutif $elementConstitutif,
         Parcours $parcours
-    ): Response
-    {
+    ): Response {
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome());
 
         return $this->render('element_constitutif/_synthese_ec.html.twig', [
@@ -72,11 +78,11 @@ class ElementConstitutifWizardController extends AbstractController
 
         foreach ($ec->getEcUes() as $ue) {
             foreach ($ue->getUe()->getSemestre()->getSemestreParcours() as $parc) {
-                    $mutualises[] = [
-                        'parcours' => $parc->getParcours(),
-                        'semestre' => $ue->getUe()->getSemestre(),
-                        'ue' => $ue->getUe()
-                    ];
+                $mutualises[] = [
+                    'parcours' => $parc->getParcours(),
+                    'semestre' => $ue->getUe()->getSemestre(),
+                    'ue' => $ue->getUe()
+                ];
             }
         }
 
@@ -90,7 +96,9 @@ class ElementConstitutifWizardController extends AbstractController
     #[Route('/{ec}/{parcours}/mutualise/add', name: 'app_ec_wizard_step_1_mutualise_add', methods: ['GET'])]
     public function mutualiseAdd(
         ComposanteRepository $composanteRepository,
-        ElementConstitutif $ec, Parcours $parcours): Response
+        ElementConstitutif $ec,
+        Parcours $parcours
+    ): Response
     {
         $composantes = $composanteRepository->findAll();
 
@@ -110,12 +118,13 @@ class ElementConstitutifWizardController extends AbstractController
         ComposanteRepository $composanteRepository,
         SemestreRepository $semestreRepository,
         UeRepository $ueRepository,
-        ElementConstitutif $ec, Parcours $parcours): Response
+        ElementConstitutif $ec,
+        Parcours $parcours
+    ): Response
     {
         $data = JsonRequest::getFromRequest($request);
         $t = [];
-        switch($data['field'])
-        {
+        switch($data['field']) {
             case 'formation':
                 $formations = $formationRepository->findBy(['composantePorteuse' => $data['value']]);
                 foreach ($formations as $formation) {
@@ -171,7 +180,6 @@ class ElementConstitutifWizardController extends AbstractController
                 }
                 $entityManager->flush();
                 return $this->json(true);
-
         }
 
         return $this->json($t);
@@ -179,7 +187,9 @@ class ElementConstitutifWizardController extends AbstractController
 
     #[Route('/{ec}/{parcours}/2', name: 'app_ec_wizard_step_2', methods: ['GET'])]
     public function step2(
-        ElementConstitutif $ec, Parcours $parcours): Response
+        ElementConstitutif $ec,
+        Parcours $parcours
+    ): Response
     {
         $form = $this->createForm(EcStep2Type::class, $ec);
 
@@ -193,7 +203,8 @@ class ElementConstitutifWizardController extends AbstractController
 
     #[Route('/{ec}/{parcours}/3', name: 'app_ec_wizard_step_3', methods: ['GET'])]
     public function step3(
-        ElementConstitutif $ec, Parcours $parcours
+        ElementConstitutif $ec,
+        Parcours $parcours
     ): Response {
         $form = $this->createForm(EcStep3Type::class, $ec);
 
@@ -217,7 +228,8 @@ class ElementConstitutifWizardController extends AbstractController
 
     #[Route('/{ec}/{parcours}/4', name: 'app_ec_wizard_step_4', methods: ['GET'])]
     public function step4(
-        ElementConstitutif $ec, Parcours $parcours
+        ElementConstitutif $ec,
+        Parcours $parcours
     ): Response {
         $form = $this->createForm(EcStep4Type::class, $ec);//tood: le formulaire si les droits du responsable de formation ou plus ?
         //pas si responsable EC
@@ -236,41 +248,40 @@ class ElementConstitutifWizardController extends AbstractController
     public function step5(
         TypeEpreuveRepository $typeEpreuveRepository,
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        ElementConstitutif $ec, Parcours $parcours
+        ElementConstitutif $ec,
+        Parcours $parcours
     ): Response {
-
         $formation = $ec->getParcours()->getFormation();
         if ($formation === null) {
             throw new Exception('Formation non trouvée');
         }
-            $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
-            if ($this->isGranted('ROLE_FORMATION_EDIT_MY',
-                $ec->getParcours()->getFormation())) { //todo: ajouter le workflow...
-
-
-                if ($ec->getMcccs()->count() === 0) {
-                    $typeDiplome->initMcccs($ec);
-                }
-
-                return $this->render('element_constitutif_wizard/_step5.html.twig', [
-                    'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
-                    'ec' => $ec,
-                    'parcours' => $parcours,
-                    'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
-                    'mcccs' => $typeDiplome->getMcccs($ec),
-                    'editable' => true,
-                    'wizard' => true
-                ]);
-
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+        if ($this->isGranted(
+            'ROLE_FORMATION_EDIT_MY',
+            $ec->getParcours()->getFormation()
+        )) { //todo: ajouter le workflow...
+            if ($ec->getMcccs()->count() === 0) {
+                $typeDiplome->initMcccs($ec);
             }
 
             return $this->render('element_constitutif_wizard/_step5.html.twig', [
+                'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
                 'ec' => $ec,
                 'parcours' => $parcours,
-                'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
                 'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
                 'mcccs' => $typeDiplome->getMcccs($ec),
-                'editable' => false,
+                'editable' => true,
+                'wizard' => true
             ]);
+        }
+
+        return $this->render('element_constitutif_wizard/_step5.html.twig', [
+            'ec' => $ec,
+            'parcours' => $parcours,
+            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+            'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
+            'mcccs' => $typeDiplome->getMcccs($ec),
+            'editable' => false,
+        ]);
     }
 }

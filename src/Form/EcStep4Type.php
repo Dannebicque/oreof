@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Form/EcStep4Type.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Form;
 
@@ -18,11 +25,11 @@ class EcStep4Type extends AbstractType
         $modalites = $options['data']->getModaliteEnseignement();
         $modalitesParcours = $options['data']->getParcours()->getModalitesEnseignement();
 
-        if ($modalites !== null && $modalitesParcours === ModaliteEnseignementEnum::HYBRIDE) {
+        if ($modalitesParcours === ModaliteEnseignementEnum::HYBRIDE) {
             $builder->add('modaliteEnseignement', EnumType::class, [
                 'help' => '-',
                 'class' => ModaliteEnseignementEnum::class,
-                'choice_label' => fn($choice) => match ($choice) {
+                'choice_label' => fn ($choice) => match ($choice) {
                     modaliteEnseignementEnum::PRESENTIELLE => 'En présentiel',
                     modaliteEnseignementEnum::DISTANCIELLE => 'En distanciel',
                     modaliteEnseignementEnum::HYBRIDE => 'Hybride',
@@ -34,56 +41,59 @@ class EcStep4Type extends AbstractType
 
         $builder
             ->add('ects', NumberType::class, [
-                'help' => '-',
+                'html5' => true,
+                'scale' => 0,
                 'attr' => ['data-action' => !$isModal ? 'change->ec--structure#saveEcts' : ''],
             ]);
 
-            $builder->add('volumeCmPresentiel', NumberType::class, [
-                'help' => '-',
+        $builder->add('volumeCmPresentiel', NumberType::class, [
+            'html5' => true,
+            'scale' => 1,
+            'attr' => [
+                'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
+                'data-ec--structure-type-param' => 'volumeCmPresentiel'
+            ],
+        ])
+            ->add('volumeTdPresentiel', NumberType::class, [
+                'html5' => true,
+                'scale' => 1,
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
-                    'data-ec--structure-type-param' => 'volumeCmPresentiel'
+                    'data-ec--structure-type-param' => 'volumeTdPresentiel'
                 ],
             ])
-                ->add('volumeTdPresentiel', NumberType::class, [
-                    'help' => '-',
-                    'attr' => [
-                        'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
-                        'data-ec--structure-type-param' => 'volumeTdPresentiel'
-                    ],
-                ])
-                ->add('volumeTpPresentiel', NumberType::class, [
-                    'help' => '-',
-                    'attr' => [
-                        'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
-                        'data-ec--structure-type-param' => 'volumeTpPresentiel'
-                    ],
-                ])
-
-
-
+            ->add('volumeTpPresentiel', NumberType::class, [
+                'html5' => true,
+                'scale' => 1,
+                'attr' => [
+                    'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
+                    'data-ec--structure-type-param' => 'volumeTpPresentiel'
+                ],
+            ])
             ->add('volumeCmDistanciel', NumberType::class, [
-                'help' => '-',
+                'html5' => true,
+                'scale' => 1,
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
-                    'data-ec--structure-type-param' => 'volumeCmDistanciel'
+                    'data-ec--structure-type-param' => 'volumeCmDistanciel',
                 ],
             ])
-                ->add('volumeTdDistanciel', NumberType::class, [
-                    'help' => '-',
-                    'attr' => [
-                        'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
-                        'data-ec--structure-type-param' => 'volumeTdDistanciel'
-                    ],
-                ])
-                ->add('volumeTpDistanciel', NumberType::class, [
-                    'help' => '-',
-                    'attr' => [
-                        'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
-                        'data-ec--structure-type-param' => 'volumeTpDistanciel'
-                    ],
-                ]);
-
+            ->add('volumeTdDistanciel', NumberType::class, [
+                'html5' => true,
+                'scale' => 1,
+                'attr' => [
+                    'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
+                    'data-ec--structure-type-param' => 'volumeTdDistanciel'
+                ],
+            ])
+            ->add('volumeTpDistanciel', NumberType::class, [
+                'html5' => true,
+                'scale' => 1,
+                'attr' => [
+                    'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
+                    'data-ec--structure-type-param' => 'volumeTpDistanciel'
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

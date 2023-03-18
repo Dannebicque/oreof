@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/TypeDiplome/DependencyInjection/TypeDiplomeCompilerPass.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 27/01/2023 19:20
+ */
 
 namespace App\TypeDiplome\DependencyInjection;
 

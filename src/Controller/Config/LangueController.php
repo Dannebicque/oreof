@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Config/LangueController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Config;
 
@@ -97,8 +104,10 @@ class LangueController extends AbstractController
         Langue $langue,
         LangueRepository $langueRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $langue->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $langue->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             $langueRepository->remove($langue, true);
 
             return $this->json(true);

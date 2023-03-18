@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/TypeDiplome/Source/AbstractTypeDiplome.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\TypeDiplome\Source;
 
@@ -32,7 +39,6 @@ abstract class AbstractTypeDiplome
                 }
 
                 $this->entityManager->remove($ue);
-
             }
             $this->entityManager->remove($semestre->getSemestre());
             $this->entityManager->remove($semestre);
@@ -50,7 +56,6 @@ abstract class AbstractTypeDiplome
             $semestre = null;
             if ($format === 'tronc_commun') {
                 if (array_key_exists($key, $tSemestres) === false) {
-
                     $semestre = new Semestre();
                     $semestre->setOrdre($key);
                     $semestre->setTroncCommun(true);
@@ -61,9 +66,7 @@ abstract class AbstractTypeDiplome
                 } else {
                     $semestre = $tSemestres[$key];
                 }
-
             } else {
-
                 $semestre = new Semestre();
                 $semestre->setOrdre($key);
                 $this->entityManager->persist($semestre);
@@ -74,7 +77,6 @@ abstract class AbstractTypeDiplome
             $parcours->addSemestreParcour($sp);
             $semestre->addSemestreParcour($sp);
         }
-
     }
 
     private function generesUe(Semestre $semestre): void
@@ -86,5 +88,4 @@ abstract class AbstractTypeDiplome
             $this->entityManager->persist($ue);
         }
     }
-
 }

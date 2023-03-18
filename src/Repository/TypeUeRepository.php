@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Repository/TypeUeRepository.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 25/02/2023 23:24
+ */
 
 namespace App\Repository;
 
@@ -63,4 +70,6 @@ class TypeUeRepository extends ServiceEntityRepository
 
         return $tab;
     }
+
+
 }

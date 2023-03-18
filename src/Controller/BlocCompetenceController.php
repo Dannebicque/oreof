@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/BlocCompetenceController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -42,8 +49,11 @@ class BlocCompetenceController extends AbstractController
     ): Response {
         $blocCompetence = new BlocCompetence();
         $blocCompetence->setParcours($parcours);
-        $form = $this->createForm(BlocCompetenceType::class, $blocCompetence,
-            ['action' => $this->generateUrl('app_bloc_competence_new_parcours', ['parcours' => $parcours->getId()])]);
+        $form = $this->createForm(
+            BlocCompetenceType::class,
+            $blocCompetence,
+            ['action' => $this->generateUrl('app_bloc_competence_new_parcours', ['parcours' => $parcours->getId()])]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -95,10 +105,13 @@ class BlocCompetenceController extends AbstractController
         BlocCompetence $blocCompetence,
         BlocCompetenceRepository $blocCompetenceRepository
     ): Response {
-        $form = $this->createForm(BlocCompetenceType::class, $blocCompetence,
+        $form = $this->createForm(
+            BlocCompetenceType::class,
+            $blocCompetence,
             [
                 'action' => $this->generateUrl('app_bloc_competence_edit', ['id' => $blocCompetence->getId()]),
-            ]);
+            ]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -140,7 +153,6 @@ class BlocCompetenceController extends AbstractController
         BlocCompetence $blocCompetence,
         string $sens
     ): Response {
-
         $bcc->deplacerBlocCompetence($blocCompetence, $sens);
         return $this->json(true);
     }
@@ -155,8 +167,10 @@ class BlocCompetenceController extends AbstractController
         BlocCompetenceRepository $blocCompetenceRepository
     ): Response {
         //todo: tester s'il y a des compétences dans le bloc
-        if ($this->isCsrfTokenValid('delete' . $blocCompetence->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $blocCompetence->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             $blocCompetenceRepository->remove($blocCompetence, true);
 
             return $this->json(true);

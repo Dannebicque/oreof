@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Entity/ElementConstitutif.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Entity;
 
@@ -40,29 +47,29 @@ class ElementConstitutif
     #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'elementConstitutifs')]
     private Collection $competences;
 
-    #[ORM\Column(length: 30, nullable: true, enumType: ModaliteEnseignementEnum::class )]
+    #[ORM\Column(length: 30, nullable: true, enumType: ModaliteEnseignementEnum::class)]
     private ?ModaliteEnseignementEnum $modaliteEnseignement = null;
 
     #[ORM\Column]
-    private ?float $ects = 0;
+    private ?float $ects;
 
     #[ORM\Column]
-    private ?float $volumeCmPresentiel = 0;
+    private ?float $volumeCmPresentiel;
 
     #[ORM\Column]
-    private ?float $volumeTdPresentiel = 0;
+    private ?float $volumeTdPresentiel;
 
     #[ORM\Column]
-    private ?float $volumeTpPresentiel = 0;
+    private ?float $volumeTpPresentiel;
 
     #[ORM\Column]
-    private ?float $volumeCmDistanciel = 0;
+    private ?float $volumeCmDistanciel;
 
     #[ORM\Column]
-    private ?float $volumeTdDistanciel = 0;
+    private ?float $volumeTdDistanciel;
 
     #[ORM\Column]
-    private ?float $volumeTpDistanciel = 0;
+    private ?float $volumeTpDistanciel;
 
     #[ORM\Column]
     private ?bool $isCmPresentielMutualise = true;
@@ -401,11 +408,11 @@ class ElementConstitutif
             return 'Pas d\'heures';
         }
 
-        if ($this->ects === 0.0){
+        if ($this->ects === 0.0) {
             return 'Pas d\'ECTS';
         }
 
-        if ($this->modaliteEnseignement === null ) {
+        if ($this->modaliteEnseignement === null) {
             return 'Modalité d\'enseignement non renseignée';
         }
 
@@ -609,14 +616,12 @@ class ElementConstitutif
     {
         //todo: à revoir, pourquoi first et pas autre ?
         return $this->getEcUes()->first()->getUe()?->getSemestre()?->getSemestreParcours()->first()->getParcours();
-
     }
 
     public function getAllParcours(): Collection
     {
         //todo: à revoir, pourquoi first et pas autre ?
         return $this->getEcUes()->first()->getUe()?->getSemestre()?->getSemestreParcours();
-
     }
 
     public function getEtatEc(): array
@@ -747,7 +752,8 @@ class ElementConstitutif
         return $this;
     }
 
-    public function genereCode(): void {
+    public function genereCode(): void
+    {
         $this->setCode('EC'.$this->ordre);
     }
 }

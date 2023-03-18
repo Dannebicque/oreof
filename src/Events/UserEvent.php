@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Events/UserEvent.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 09/02/2023 07:56
+ */
 
 namespace App\Events;
 

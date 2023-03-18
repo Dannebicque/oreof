@@ -64,7 +64,6 @@ user.helps.email: user.helps.email
 formation_step3.helps.hasParcours.help: 'Indiquez si la formation comporte des parcours'
 formation_step3.helps.libelleParcours.help: help
 formation_step3.helps.structureFormation.help: help
-'-': '-'
 'Plusieurs choix possibles': 'Plusieurs choix possibles'
 "Régime d'inscription": "Régime d'inscription"
 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.': 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.'
@@ -73,4 +72,26 @@ ec_step3.labels.competence: 'Indiquez les compétences concernées par cet élé
 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation': 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation'
 'Si la mention n''existe pas, veuillez la créer dans la section "Autre mention"': 'Si la mention n''existe pas, veuillez la créer dans la section "Autre mention"'
 'Si la mention existe, veuillez la sélectionner dans la liste déroulante': 'Si la mention existe, veuillez la sélectionner dans la liste déroulante'
-
+formation_step3.helps.semestreDebut.help: 'Indiquez le semestre de début de la formation'
+parcours_step6.helps.modalitesAlternance: parcours_step6.helps.modalitesAlternance
+ec_step1.helps.preciserMutualisation.help: 'Précisez les mutualisations'
+ue.helps.ordre: ue.helps.ordre
+ue.helps.typeUe: ue.helps.typeUe
+ue.helps.typeUeTexte: ue.helps.typeUeTexte
+ue.helps.ueObligatoire: ue.helps.ueObligatoire
+ue.helps.ueObligatoireTexte: ue.helps.ueObligatoireTexte
+formation_ses.helps.typeDiplome: formation_ses.helps.typeDiplome
+formation_ses.helps.domaine: formation_ses.helps.domaine
+formation_ses.helps.niveauEntree: formation_ses.helps.niveauEntree
+formation_ses.helps.niveauSortie: formation_ses.helps.niveauSortie
+formation_ses.helps.inRncp.help: formation_ses.helps.inRncp.help
+formation_ses.helps.codeRNCP: formation_ses.helps.codeRNCP
+formation_ses.helps.responsableMention: formation_ses.helps.responsableMention
+parcours_step5.helps.composanteInscription.help: parcours_step5.helps.composanteInscription.help
+parcours_step5.helps.regimeInscription.help: parcours_step5.helps.regimeInscription.help
+parcours_step5.helps.modalitesAlternance: parcours_step5.helps.modalitesAlternance
+parcours_step5.helps.coordSecretariat: parcours_step5.helps.coordSecretariat
+element_constitutif.helps.libelle: element_constitutif.helps.libelle
+element_constitutif.helps.responsableEc: element_constitutif.helps.responsableEc
+parcours_step2.helps.hasSituationPro.help: parcours_step2.helps.hasSituationPro.help
+parcours_step2.helps.situationProText: parcours_step2.helps.situationProText

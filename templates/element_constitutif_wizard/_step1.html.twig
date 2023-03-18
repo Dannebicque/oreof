@@ -1,4 +1,3 @@
-<h2>Identité de l'enseignement</h2>
 <div {{ stimulus_controller('ec--step1', {
     url: path('app_ec_save', {ec:ec.id}),
     urlMutualise: path('app_ec_wizard_step_1_mutualise', {ec:ec.id, parcours:parcours.id}),
@@ -24,6 +23,16 @@
                 {{ form_row(form.isTpDistancielMutualise) }}
             </div>
         </div>
+
+        <div class="col-form-label required">
+            {{ 'ec_step1.labels.previserMutualisation'|trans({}, 'form') }}
+            <i class="fal fa-question-circle ms-1"
+               data-controller="tooltip"
+               data-tooltip-placement-value="bottom"
+               aria-label="{{ 'ec_step1.helps.preciserMutualisation.help'|trans({}, 'help') }}"
+               data-bs-original-title="{{ 'ec_step1.helps.preciserMutualisation.help'|trans({}, 'help') }}"></i>
+        </div>
+
         <div class="row" {{ stimulus_target('ec--step1','zoneMutualise') }}
              data-action="ec--mutualise:refreshListe@window->ec--step1#refreshListe"
         >

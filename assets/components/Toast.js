@@ -1,8 +1,10 @@
-// Copyright (c) 2022. | David Annebicque | IUT de Troyes  - All Rights Reserved
-// @file /Users/davidannebicque/Sites/intranetV3/assets/components/Toast.js
-// @author davidannebicque
-// @project intranetV3
-// @lastUpdate 24/10/2022 18:18
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/assets/components/Toast.js
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 10/02/2023 21:33
+ */
 
 import { Toast as ToastBs } from 'bootstrap'
 

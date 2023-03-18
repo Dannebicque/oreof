@@ -1,4 +1,3 @@
-<h2>Semestres & Parcours</h2>
 <div {{ stimulus_controller('formation--step3', {
     url: path('app_formation_save', {formation:formation.id}),
     urlGenereStructure: path('app_formation_genere_structure_pas_parcours', {formation:formation.id}),
@@ -7,6 +6,35 @@
 }) }}
         data-action="base:parcoursAdded@window->formation--step3#_refreshListe"
 >
+    {% if constant('SOURCE',typeDiplome) == constant
+        ('App\\TypeDiplome\\Source\\LicenceProfessionnelleTypeDiplome::SOURCE') %}
+        <fieldset class="mb-3">
+            <legend class="col-form-label required">
+                {{ 'formation_step3.labels.semestreDebut'|trans({}, 'form') }}
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="{{ 'formation_step3.helps.semestreDebut.help'|trans({}, 'help') }}"
+                   data-bs-original-title="{{ 'formation_step3.helps.semestreDebut.help'|trans({}, 'help') }}"></i>
+            </legend>
+            <div>
+                {% for i in 1..6 %}
+                    <div class="form-check">
+                        <input type="radio" id="formation_semestreDebut_{{ i }}" name="formation_semestreDebut"
+                               required="required"
+                               {% if formation.semestreDebut == i %}checked{% endif %}
+                               class="form-check-input" value="{{ i }}" {{ stimulus_action('formation--step3',
+                            'changeSemestreDebut', 'click') }}>
+                        <label class="form-check-label required" for="formation_semestreDebut_{{ i }}">Semestre {{ i }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="form-text mb-0 help-text">
+
+            </div>
+        </fieldset>
+    {% endif %}
+
     <fieldset class="mb-3">
         <legend class="col-form-label required">
             {{ 'formation_step3.labels.hasParcours'|trans({}, 'form') }}
@@ -51,7 +79,7 @@
                    data-controller="tooltip"
                    data-tooltip-placement-value="bottom"
                    aria-label="{{ 'formation_step3.helps.structureFormation.help'|trans({}, 'help') }}"
-                   data-bs-original-title="{{ 'formation_step3.helps.libelleParcours.help'|trans({}, 'help') }}"></i>
+                   data-bs-original-title="{{ 'formation_step3.helps.structureFormation.help'|trans({}, 'help') }}"></i>
 
                 <ul>
 
@@ -83,17 +111,18 @@
     </div>
 
     <div id="bloc_pas_parcours" class="{% if formation.hasParcours == true %}d-none{% endif %} d-grid mt-2 mb-2">
-        {% if formation.parcours[0] != null %}
-        <a href="{{ path('app_parcours_edit', {id: formation.parcours[0].id}) }}" class="text-warning">
-            <i class="fas fa-pencil"></i>
-            Editer le parcours par défaut de la mention</a>
+        {% if formation.parcours.first != null %}
+            <a href="{{ path('app_parcours_edit', {id: formation.parcours[0].id}) }}" class="text-warning">
+                <i class="fas fa-pencil"></i>
+                Editer le parcours par défaut de la mention</a>
         {% else %}
-            Générer la structure de la formation en cliquant sur le bouton ci-dessous.
-            <button {{ stimulus_action('formation--step3', 'genereStructurePasParcours') }} class="btn btn-sm
+            <div class="alert alert-info">
+                <button {{ stimulus_action('formation--step3', 'genereStructurePasParcours') }} class="btn btn-sm
                     btn-outline-primary
                 d-block">
-                Générer la structure de la formation
-            </button>
+                    Confirmer que la formation ne dispose pas de parcours pour poursuivre le paramétrage
+                </button>
+            </div>
         {% endif %}
     </div>
 

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/FormationParcoursController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -14,8 +21,7 @@ class FormationParcoursController extends AbstractController
     public function liste(
         ParcoursRepository  $parcoursRepository,
         Formation $formation
-    ): Response
-    {
+    ): Response {
         $parcours = $parcoursRepository->findByFormation($formation);
         return $this->render('formation_parcours/_liste.html.twig', [
             'parcours' => $parcours,

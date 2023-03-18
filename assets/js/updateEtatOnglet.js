@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/assets/js/updateEtatOnglet.js
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 14/03/2023 10:11
+ */
+
 export const updateEtatOnglet = async (url, onglet, prefix) => {
   const body = {
     method: 'POST',

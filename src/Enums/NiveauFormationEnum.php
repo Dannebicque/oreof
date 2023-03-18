@@ -1,10 +1,17 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Enums/NiveauFormationEnum.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Enums;
 
 enum NiveauFormationEnum: int
 {
-//http://lheo.gouv.fr/2.3/lheo/dict-niveaux.html#dict-niveaux
+    //http://lheo.gouv.fr/2.3/lheo/dict-niveaux.html#dict-niveaux
     case  NON_COMMUNIQUE = 0;
     case  SANS_NIVEAU = 1;
     //case  NIVEAU_VI = 2;
@@ -17,7 +24,7 @@ enum NiveauFormationEnum: int
 
     public function libelle(): string
     {
-        return match($this) {
+        return match ($this) {
             self::NON_COMMUNIQUE => 'Information non communiquée',
             self::SANS_NIVEAU => 'Sans niveau spécifique',
             //self::NIVEAU_VI => 'niveau VI (illettrisme, analphabétisme)',

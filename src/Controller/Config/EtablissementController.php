@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Config/EtablissementController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Config;
 
@@ -62,10 +69,13 @@ class EtablissementController extends BaseController
         Etablissement $etablissement,
         EtablissementRepository $etablissementRepository
     ): Response {
-        $form = $this->createForm(EtablissementType::class, $etablissement,
+        $form = $this->createForm(
+            EtablissementType::class,
+            $etablissement,
             [
                 'action' => $this->generateUrl('app_etablissement_edit', ['id' => $etablissement->getId()]),
-            ]);
+            ]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

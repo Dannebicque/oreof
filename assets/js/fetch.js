@@ -1,8 +1,10 @@
-// Copyright (c) 2021. | David Annebicque | IUT de Troyes  - All Rights Reserved
-// @file /Users/davidannebicque/htdocs/intranetV3/assets/js/fetch.js
-// @author davidannebicque
-// @project intranetV3
-// @lastUpdate 10/06/2021 17:23
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/assets/js/fetch.js
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 03/02/2023 08:59
+ */
 
 const request = (url, params = {}, method = 'GET') => {
   const options = {

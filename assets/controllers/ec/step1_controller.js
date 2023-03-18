@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/assets/controllers/ec/step1_controller.js
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 15/03/2023 21:14
+ */
+
 import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
 import { saveData } from '../../js/saveData'

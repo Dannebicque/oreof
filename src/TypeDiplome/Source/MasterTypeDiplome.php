@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/TypeDiplome/Source/MasterTypeDiplome.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 15/03/2023 13:41
+ */
 
 namespace App\TypeDiplome\Source;
 
@@ -18,7 +25,7 @@ class MasterTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterf
 
     public int $nbSemestres = 4;
     public int $nbUes = 0;
-
+    public int $nbEctsUeMax = 0;
 
     public function getMcccs(ElementConstitutif $elementConstitutif): array|Collection
     {

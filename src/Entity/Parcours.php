@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Entity/Parcours.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Entity;
 
@@ -6,6 +13,7 @@ use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\EtatDpeEnum;
 use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
+use App\Enums\RegimeInscriptionEnum;
 use App\Repository\ParcoursRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -48,14 +56,14 @@ class Parcours
     #[ORM\ManyToOne]
     private ?Ville $ville = null;
 
-    #[ORM\Column]
-    private ?bool $hasStage = false;
+    #[ORM\Column(nullable: true)]
+    private ?bool $hasStage = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $stageText = null;
 
     #[ORM\Column(nullable: true)]
-    private ?float $nbHeuresStages = 0;
+    private ?float $nbHeuresStages;
 
     #[ORM\Column]
     private ?bool $hasProjet = false;
@@ -64,7 +72,7 @@ class Parcours
     private ?string $projetText = null;
 
     #[ORM\Column]
-    private ?float $nbHeuresProjet = 0;
+    private ?float $nbHeuresProjet;
 
     #[ORM\Column]
     private ?bool $hasMemoire = false;
@@ -107,6 +115,12 @@ class Parcours
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $coordSecretariat = null;
+
+    #[ORM\Column]
+    private ?bool $hasSituationPro = false;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $situationProText = null;
 
     #[ORM\Column(nullable: true)]
     private ?float $nbHeuresSituationPro = null;
@@ -242,7 +256,7 @@ class Parcours
         return $this->hasStage;
     }
 
-    public function setHasStage(bool $hasStage): self
+    public function setHasStage(?bool $hasStage): self
     {
         $this->hasStage = $hasStage;
 
@@ -471,7 +485,12 @@ class Parcours
 
     public function getRegimeInscription(): array
     {
-        return $this->regimeInscription ?? [];
+        $t = [];
+        foreach ($this->regimeInscription as $value) {
+            $t[] = RegimeInscriptionEnum::from($value);
+        }
+
+        return$t;
     }
 
     public function setRegimeInscription(?array $regimeInscription): self
@@ -549,9 +568,9 @@ class Parcours
         $onglets[3] = $this->getEtatOnglet3();
         $onglets[4] = $this->getEtatOnglet4();
         $onglets[5] = $this->getEtatOnglet5();
-        $onglets[6] = $this->getEtatOnglet6();
+      //  $onglets[6] = $this->getEtatOnglet6();
         $onglets[7] = $this->getEtatOnglet7();
-        $onglets[8] = $this->getEtatOnglet8();
+       // $onglets[8] = $this->getEtatOnglet8();
 
         return $onglets;
     }
@@ -576,7 +595,8 @@ class Parcours
 
 
         return $stage === false && $projet === false && $memoire === false ? EtatRemplissageEnum::VIDE : (
-            $stage === true && $projet === true && $memoire === true && $this->getEtatStep(2) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+            $stage === true && $projet === true && $memoire === true && $this->getEtatStep(2) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS
+        );
     }
 
     public function getEtatOnglet3(): EtatRemplissageEnum
@@ -597,11 +617,11 @@ class Parcours
         return $this->getEtatStep(5) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
-    public function getEtatOnglet6(): EtatRemplissageEnum
-    {
-        //todo: ajouter les vérifs?
-        return $this->getEtatStep(6) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
-    }
+//    public function getEtatOnglet6(): EtatRemplissageEnum
+//    {
+//        //todo: ajouter les vérifs?
+//        return $this->getEtatStep(6) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
+//    }
 
     public function getEtatOnglet7(): EtatRemplissageEnum
     {
@@ -609,11 +629,11 @@ class Parcours
         return $this->getEtatStep(7) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
-    public function getEtatOnglet8(): EtatRemplissageEnum
-    {
-        //todo: ajouter les vérifs?
-        return $this->getEtatStep(8) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
-    }
+//    public function getEtatOnglet8(): EtatRemplissageEnum
+//    {
+//        //todo: ajouter les vérifs?
+//        return $this->getEtatStep(8) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
+//    }
 
     public function getEtatStep(int $step): bool
     {
@@ -644,6 +664,30 @@ class Parcours
     public function setObjectifsParcours(?string $objectifsParcours): self
     {
         $this->objectifsParcours = $objectifsParcours;
+
+        return $this;
+    }
+
+    public function isHasSituationPro(): ?bool
+    {
+        return $this->hasSituationPro;
+    }
+
+    public function setHasSituationPro(bool $hasSituationPro): self
+    {
+        $this->hasSituationPro = $hasSituationPro;
+
+        return $this;
+    }
+
+    public function getSituationProText(): ?string
+    {
+        return $this->situationProText;
+    }
+
+    public function setSituationProText(?string $situationProText): self
+    {
+        $this->situationProText = $situationProText;
 
         return $this;
     }

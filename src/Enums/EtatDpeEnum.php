@@ -1,8 +1,15 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Enums/EtatDpeEnum.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Enums;
 
-enum EtatDpeEnum : string
+enum EtatDpeEnum: string
 {
     /*
      *     - 'initialisation_dpe'
@@ -48,7 +55,7 @@ enum EtatDpeEnum : string
 
     public function libelle(): string
     {
-        return match($this) {
+        return match ($this) {
             self::initialisation_dpe => 'Initialisation DPE',
             self::initialisation_ec => 'Initialisation EC',
             self::en_cours_redaction => 'En cours de rédaction',
@@ -74,7 +81,7 @@ enum EtatDpeEnum : string
 
     public function badge(): string
     {
-        return match($this) {
+        return match ($this) {
             self::initialisation_dpe, self::initialisation_ec => 'secondary',
             self::en_cours_redaction => 'warning',
             self::soumis_rf, self::soumis_ec, self::soumis_dpe_composante, self::soumis_conseil, self::soumis_central, self::soumis_vp, self::soumis_cfvu, self::soumis_conseil_reserve => 'info',

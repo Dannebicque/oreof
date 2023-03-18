@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/FormationController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -38,18 +45,25 @@ class FormationController extends BaseController
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
 
-        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_COMPOSANTE_SHOW_ALL',
-                $this->getUser()) || $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser())) {
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted(
+            'ROLE_COMPOSANTE_SHOW_ALL',
+            $this->getUser()
+        ) || $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser())) {
             if ($q) {
                 $formations = $formationRepository->findBySearch($q, $this->getAnneeUniversitaire(), $sort, $direction);
             } else {
-                $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()],
-                    [$sort => $direction]);
+                $formations = $formationRepository->findBy(
+                    ['anneeUniversitaire' => $this->getAnneeUniversitaire()],
+                    [$sort => $direction]
+                );
             }
         } else {
             $formations = [];
-            $formations[] = $formationRepository->findByComposanteDpe($this->getUser(), $this->getAnneeUniversitaire(),
-                [$sort => $direction]);
+            $formations[] = $formationRepository->findByComposanteDpe(
+                $this->getUser(),
+                $this->getAnneeUniversitaire(),
+                [$sort => $direction]
+            );
             $formations[] = $formationRepository->findBy([
                 'responsableMention' => $this->getUser(),
                 'anneeUniversitaire' => $this->getAnneeUniversitaire()
@@ -76,10 +90,12 @@ class FormationController extends BaseController
 
 
         if ($q) {
-            $formations = $formationRepository->findBySearch($q, $this->getAnneeUniversitaire(), $sort, $direction,$composante);
+            $formations = $formationRepository->findBySearch($q, $this->getAnneeUniversitaire(), $sort, $direction, $composante);
         } else {
-            $formations = $formationRepository->findBy(['composantePorteuse' => $composante->getId(), 'anneeUniversitaire' => $this->getAnneeUniversitaire()],
-                [$sort => $direction]);
+            $formations = $formationRepository->findBy(
+                ['composantePorteuse' => $composante->getId(), 'anneeUniversitaire' => $this->getAnneeUniversitaire()],
+                [$sort => $direction]
+            );
         }
 
 
@@ -109,8 +125,10 @@ class FormationController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            if (array_key_exists('mention',
-                    $request->request->all()['formation_ses']) && $request->request->all()['formation_ses']['mention'] !== null) {
+            if (array_key_exists(
+                'mention',
+                $request->request->all()['formation_ses']
+            ) && $request->request->all()['formation_ses']['mention'] !== null && $request->request->all()['formation_ses']['mention'] !== 'autre') {
                 $mention = $mentionRepository->find($request->request->all()['formation_ses']['mention']);
                 $formation->setMentionTexte(null);
                 $formation->setMention($mention);
@@ -157,8 +175,10 @@ class FormationController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {//todo: si validate le choice de mention ne fonctionne pas
-            if (array_key_exists('mention',
-                    $request->request->all()['formation_ses']) && $request->request->all()['formation_ses']['mention'] !== null) {
+            if (array_key_exists(
+                'mention',
+                $request->request->all()['formation_ses']
+            ) && $request->request->all()['formation_ses']['mention'] !== null && $request->request->all()['formation_ses']['mention'] !== 'autre') {
                 $mention = $mentionRepository->find($request->request->all()['formation_ses']['mention']);
                 $formation->setMentionTexte(null);
                 $formation->setMention($mention);
@@ -243,8 +263,10 @@ class FormationController extends BaseController
         Formation $formation,
         FormationRepository $formationRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $formation->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $formation->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             foreach ($formation->getParcours() as $parcours) {
                 foreach ($parcours->getBlocCompetences() as $blocs) {
                     $entityManager->remove($blocs);

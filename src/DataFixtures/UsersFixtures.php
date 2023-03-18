@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/DataFixtures/UsersFixtures.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\DataFixtures;
 
@@ -93,6 +100,5 @@ class UsersFixtures extends Fixture
         $manager->flush();
 
         $this->addReference(self::RESPONSABLE_DPE_COMPOSANTE, $userDpe);
-
     }
 }

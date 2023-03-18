@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Config/TypeEpreuveController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Config;
 
@@ -32,7 +39,9 @@ class TypeEpreuveController extends AbstractController
     #[Route('/new', name: 'app_type_epreuve_new', methods: ['GET', 'POST'])]
     public function new(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        Request $request, TypeEpreuveRepository $typeEpreuveRepository): Response
+        Request $request,
+        TypeEpreuveRepository $typeEpreuveRepository
+    ): Response
     {
         $typeEpreuve = new TypeEpreuve();
         $form = $this->createForm(TypeEpreuveType::class, $typeEpreuve, [
@@ -65,7 +74,10 @@ class TypeEpreuveController extends AbstractController
     #[Route('/{id}/edit', name: 'app_type_epreuve_edit', methods: ['GET', 'POST'])]
     public function edit(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        Request $request, TypeEpreuve $typeEpreuve, TypeEpreuveRepository $typeEpreuveRepository): Response
+        Request $request,
+        TypeEpreuve $typeEpreuve,
+        TypeEpreuveRepository $typeEpreuveRepository
+    ): Response
     {
         $form = $this->createForm(TypeEpreuveType::class, $typeEpreuve, [
             'action' => $this->generateUrl('app_type_epreuve_edit', ['id' => $typeEpreuve->getId()]),
@@ -106,8 +118,10 @@ class TypeEpreuveController extends AbstractController
         TypeEpreuve $typeEpreuve,
         TypeEpreuveRepository $typeEpreuveRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $typeEpreuve->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $typeEpreuve->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             $typeEpreuveRepository->remove($typeEpreuve, true);
 
             return $this->json(true);

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Structure/EcController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Structure;
 
@@ -34,12 +41,18 @@ class EcController extends BaseController
             $ecs = $elementConstitutifRepository->findByAllAnneUniversitaire($this->getAnneeUniversitaire());
         } else {
             $ecs = [];
-            $ecs[] = $elementConstitutifRepository->findByComposanteDpe($this->getUser(),
-                $this->getAnneeUniversitaire());
-            $ecs[] = $elementConstitutifRepository->findByResponsableFormation($this->getUser(),
-                $this->getAnneeUniversitaire());
-            $ecs[] = $elementConstitutifRepository->findByResponsableEc($this->getUser(),
-                $this->getAnneeUniversitaire());
+            $ecs[] = $elementConstitutifRepository->findByComposanteDpe(
+                $this->getUser(),
+                $this->getAnneeUniversitaire()
+            );
+            $ecs[] = $elementConstitutifRepository->findByResponsableFormation(
+                $this->getUser(),
+                $this->getAnneeUniversitaire()
+            );
+            $ecs[] = $elementConstitutifRepository->findByResponsableEc(
+                $this->getUser(),
+                $this->getAnneeUniversitaire()
+            );
             $ecs = array_merge(...$ecs);
         }
         return $this->render('structure/ec/_liste.html.twig', [

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/FormationSaveController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -51,15 +58,23 @@ class FormationSaveController extends BaseController
 
                 return $this->json($val->badge());
             case 'ville':
-                $rep = $updateEntity->saveCheckbox($formation, 'localisationMention', $data['value'],
+                $rep = $updateEntity->saveCheckbox(
+                    $formation,
+                    'localisationMention',
+                    $data['value'],
                     $data['isChecked'],
-                    $villeRepository);
+                    $villeRepository
+                );
 
                 return $this->json($rep);
             case 'composanteInscription':
-                $rep = $updateEntity->saveCheckbox($formation, 'composantesInscription', $data['value'],
+                $rep = $updateEntity->saveCheckbox(
+                    $formation,
+                    'composantesInscription',
+                    $data['value'],
                     $data['isChecked'],
-                    $composanteRepository);
+                    $composanteRepository
+                );
 
                 return $this->json($rep);
             case 'yesNo':
@@ -80,8 +95,11 @@ class FormationSaveController extends BaseController
 
                 return $this->json($rep);
             case 'modalitesEnseignement':
-                $rep = $updateEntity->saveField($formation, 'modalitesEnseignement',
-                    ModaliteEnseignementEnum::from($data['value']));
+                $rep = $updateEntity->saveField(
+                    $formation,
+                    'modalitesEnseignement',
+                    ModaliteEnseignementEnum::from($data['value'])
+                );
 
                 return $this->json($rep);
             case 'rythmeFormation':
@@ -98,8 +116,10 @@ class FormationSaveController extends BaseController
                 return $this->json(true);
             case 'etatStep':
                 //todo: a reprendre dans EC et Parcours
-                $valideState = (bool)$data['isChecked'] === true ? $formationState->valideStep($data['value'],
-                    $formation) : true;
+                $valideState = (bool)$data['isChecked'] === true ? $formationState->valideStep(
+                    $data['value'],
+                    $formation
+                ) : true;
                 if ($valideState === true) {
                     $etatSteps = $formation->getEtatSteps();
                     $step = $data['value'];
@@ -117,15 +137,11 @@ class FormationSaveController extends BaseController
                     $rep = $updateEntity->addToArray($formation, $data['field'], $data['value']);
                 } else {
                     $rep = $updateEntity->removeToArray($formation, $data['field'], $data['value']);
-
                 }
 
                 return $this->json($rep);
         }
 
         return $this->json(['error' => 'action inconnue']);
-
     }
-
-
 }

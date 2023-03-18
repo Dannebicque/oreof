@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Classes/Bcc.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:09
+ */
 
 namespace App\Classes;
 
@@ -46,7 +53,7 @@ class Bcc
         return false;
     }
 
-    public function deplacerBlocCompetence(BlocCompetence $blocCompetence, string $sens)
+    public function deplacerBlocCompetence(BlocCompetence $blocCompetence, string $sens): bool
     {
         //modifie l'ordre de la ressource
         $ordreInitial = $blocCompetence->getOrdre();
@@ -61,7 +68,7 @@ class Bcc
         return $this->inverseBcc($ordreInitial, $ordreDestination, $blocCompetence);
     }
 
-    public function deplacerCompetence(Competence $competence, string $sens)
+    public function deplacerCompetence(Competence $competence, string $sens): bool
     {
         $ordreInitial = $competence->getOrdre();
 

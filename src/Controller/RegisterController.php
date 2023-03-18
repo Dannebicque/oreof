@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/RegisterController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -30,7 +37,8 @@ class RegisterController extends AbstractController
         Ldap $ldap,
         EventDispatcherInterface $eventDispatcher,
         UserRepository $userRepository,
-        Request $request): Response
+        Request $request
+    ): Response
     {
         $user = new User();
         $form = $this->createForm(RegisterType::class, $user);

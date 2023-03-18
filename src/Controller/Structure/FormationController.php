@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Structure/FormationController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Structure;
 
@@ -28,13 +35,12 @@ class FormationController extends BaseController
     ]
     public function liste(
         FormationRepository $formationRepository
-    ): Response
-    {
+    ): Response {
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_COMPOSANTE_SHOW_ALL', $this->getUser()) || $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser())) {
             $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()]);
         } else {
             $formations = [];
-            $formations[] = $formationRepository->findByComposanteDpe($this->getUser(),$this->getAnneeUniversitaire());
+            $formations[] = $formationRepository->findByComposanteDpe($this->getUser(), $this->getAnneeUniversitaire());
             $formations[] = $formationRepository->findBy(['responsableMention' => $this->getUser(), 'anneeUniversitaire' => $this->getAnneeUniversitaire()]);
             $formations = array_merge(...$formations);
         }
@@ -49,7 +55,8 @@ class FormationController extends BaseController
     ]
     public function detailComposante(
         FormationRepository $formationRepository,
-        Composante $composante): Response
+        Composante $composante
+    ): Response
     {
         $formations = $formationRepository->findBy(['composantePorteuse' => $composante]);//todo: filtrer selon droits ? Ajouter les co-portées ? avec une mise en valeur et sans édition ? si resp DPE
 
@@ -61,7 +68,8 @@ class FormationController extends BaseController
 
     #[Route('/validation/{formation}', name: 'modal_validation')]
     public function validation(
-        Formation $formation): Response
+        Formation $formation
+    ): Response
     {
         //check des différents droits
         //check si la formation est valide
@@ -75,12 +83,12 @@ class FormationController extends BaseController
     #[Route('/validate/{formation}', name: 'modal_validate')]
     public function validate(
         FormationRepository $formationRepository,
-        Formation $formation): Response
+        Formation $formation
+    ): Response
     {
         //avance le workflow
         //écouter l'évent pour envoyer un mail
         //changer l'état de la formation avec le workflow
         //bloquer la modif
-
     }
 }

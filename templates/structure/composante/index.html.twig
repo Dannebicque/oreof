@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block header %}
-    Gestion des composantes
+    Gestion de l'offre de formation
 {% endblock %}
 
 {% block breadcrumb %}
@@ -20,5 +20,24 @@
 {% endblock %}
 
 {% block bouton_header %}
-
+    {% if is_granted('ROLE_SES') or is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_formation_etat_send_ouverture') }}"
+           class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Ouvrir les formations"
+        >
+            <i class="{{ iconAdd }}"></i>
+            <span> Ouvrir les formations</span>
+        </a>
+        <a href="{{ path('app_formation_new') }}"
+           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Ajouter une formation"
+        >
+            <i class="{{ iconAdd }}"></i>
+            <span> Ajouter une formation</span>
+        </a>
+    {% endif %}
 {% endblock %}

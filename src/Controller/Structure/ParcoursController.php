@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Structure/ParcoursController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Structure;
 
@@ -36,7 +43,8 @@ class ParcoursController extends AbstractController
     ]
     public function detailFormation(
         ParcoursRepository $parcoursRepository,
-        Formation $formation): Response
+        Formation $formation
+    ): Response
     {
         $parcours = $parcoursRepository->findBy(['formation' => $formation]);//todo: filtrer selon droits ? Ajouter les co-portées ? avec une mise en valeur et sans édition ? si resp DPE
 
@@ -49,7 +57,8 @@ class ParcoursController extends AbstractController
     #[Route('/detail/parcours/{parcours}', name: 'detail_formation_parcours')]
     public function detailFormationTroncCommun(
         SemestreParcoursRepository $semestreRepository,
-        Parcours $parcours): Response
+        Parcours $parcours
+    ): Response
     {
         $semestres = $semestreRepository->findByParcours($parcours);
 

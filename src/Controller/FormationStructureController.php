@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/FormationStructureController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -31,13 +38,11 @@ class FormationStructureController extends BaseController
         FormationStructure $formationStructure,
         Formation $formation
     ): Response {
-
         $formationStructure->genereStructrePasParcours($formation);
 
         $this->addFlashBag('success', 'La structure de la formation a été générée');
 
         return $this->json(true);
-
     }
 
     #[Route('/formation/structure/{parcours}', name: 'app_formation_genere_structure')]
@@ -64,6 +69,5 @@ class FormationStructureController extends BaseController
         $this->addFlashBag('success', 'La structure de la formation a été générée');
 
         return $this->json(true);
-
     }
 }

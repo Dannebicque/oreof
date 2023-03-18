@@ -1,10 +1,21 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Form/ParcoursStep5Type.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 05/03/2023 17:44
+ */
 
 namespace App\Form;
 
+use App\Entity\Composante;
 use App\Entity\Parcours;
+use App\Enums\RegimeInscriptionEnum;
 use App\Form\Type\TextareaAutoSaveType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,6 +26,33 @@ class ParcoursStep5Type extends AbstractType
         $builder
             ->add('prerequis', TextareaAutoSaveType::class, [
                 'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step5#savePrerequis'],
+                'help' => '-',
+            ])
+            ->add('composanteInscription', EntityType::class, [
+                'class' => Composante::class,
+                'choice_label' => 'libelle',
+                //'label' => 'Composante d\'inscription',
+                'multiple' => false,
+                'expanded' => true,
+                'choice_attr' => function () {
+                    return ['data-action' => 'change->parcours--step5#changeComposanteInscription'];
+                },
+            ])//todo: faire une liste avec un "+" pour ajouter une composante d'inscription et un "-" pour retirer...
+            ->add('regimeInscription', EnumType::class, [
+                //  'label' => 'Régime d\'inscription',
+                'class' => RegimeInscriptionEnum::class,
+                'translation_domain' => 'enum',
+                'multiple' => true,
+                'expanded' => true,
+                'attr' => ['data-action' => 'change->parcours--step5#changeRegimeInscription']
+            ])
+            ->add('modalitesAlternance', TextareaAutoSaveType::class, [
+                // 'label' => 'Modalités de l\'alternance',
+                'help' => 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.',
+                'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->parcours--step5#saveModalitesAlternance'],
+            ])
+            ->add('coordSecretariat', TextareaAutoSaveType::class, [
+                'attr' => ['rows' => 5, 'maxlength' => 3000, 'data-action' => 'change->parcours--step5#coordSecretariat'],
                 'help' => '-',
             ])
         ;

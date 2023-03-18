@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Config/TypeEnseignementController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Config;
 
@@ -99,8 +106,10 @@ class TypeEnseignementController extends AbstractController
         TypeEnseignement $typeEnseignement,
         TypeEnseignementRepository $typeEnseignementRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $typeEnseignement->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $typeEnseignement->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             $typeEnseignementRepository->remove($typeEnseignement, true);
 
             return $this->json(true);

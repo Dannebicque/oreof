@@ -1,4 +1,3 @@
-<h2>Descriptif du parcours</h2>
 <div {{ stimulus_controller('parcours--step2', {
     url: path('app_parcours_save', {parcours:parcours.id}),
 }) }}>
@@ -23,10 +22,12 @@
         {{ form_row(form.memoireText) }}
     </div>
 
+    {{ form_row(form.hasSituationPro) }}
     {% if constant('SOURCE',typeDiplome) == constant
         ('App\\TypeDiplome\\Source\\ButTypeDiplome::SOURCE') or constant('SOURCE',typeDiplome) == constant
         ('App\\TypeDiplome\\Source\\LicenceProfessionnelleTypeDiplome::SOURCE') %}
         {{ form_row(form.nbHeuresSituationPro) }}
+        {{ form_row(form.situationProText) }}
     {% endif %}
     {{ form_end(form) }}
 

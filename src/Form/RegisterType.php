@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Form/RegisterType.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Form;
 
@@ -18,10 +25,10 @@ class RegisterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom',TextType::class, [
+            ->add('nom', TextType::class, [
                 'required' => true,
             ])
-            ->add('prenom',TextType::class, [
+            ->add('prenom', TextType::class, [
                 'required' => true,
             ])
             ->add('email', EmailType::class, [

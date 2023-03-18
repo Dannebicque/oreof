@@ -108,3 +108,25 @@ formation_step3.labels.structureFormation: 'Précisez la structure de la mention
 ec_step3.labels.competence: Compétences
 Mention: Mention
 Autre: Autre
+formation_step3.labels.semestreDebut: 'Semestre de début de la formation'
+"Composante d'inscription": "Composante d'inscription"
+"Modalités de l'alternance": "Modalités de l'alternance"
+ec_step1.labels.preciserMutualisation: 'Précisez les mutualisations'
+0: '0'
+'Libellé du parcours': 'Libellé du parcours'
+'Responsable du parcours': 'Responsable du parcours'
+Sigle: Sigle
+ec_step1.labels.previserMutualisation: ec_step1.labels.previserMutualisation
+ue.labels.ordre: "Numéro de l'UE"
+ue.labels.typeUe: "Type d'enseignement"
+ue.labels.typeUeTexte: "Type d'UE si non présent dans la liste"
+ue.labels.ueObligatoire: 'UE Obligatoire/Optionnelle'
+ue.labels.ueObligatoireTexte: 'UE Obligatoire/Optionnelle si non présent dans la liste'
+parcours_step5.labels.composanteInscription.label: parcours_step5.labels.composanteInscription.label
+parcours_step5.labels.modalitesAlternance: parcours_step5.labels.modalitesAlternance
+parcours_step5.labels.coordSecretariat: parcours_step5.labels.coordSecretariat
+test: test
+element_constitutif.labels.libelle: element_constitutif.labels.libelle
+element_constitutif.labels.responsableEc: element_constitutif.labels.responsableEc
+parcours_step2.labels.hasSituationPro.label: parcours_step2.labels.hasSituationPro.label
+parcours_step2.labels.situationProText: parcours_step2.labels.situationProText

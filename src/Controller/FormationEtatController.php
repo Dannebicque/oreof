@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/FormationEtatController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -11,12 +18,12 @@ use Symfony\Component\Workflow\WorkflowInterface;
 class FormationEtatController extends BaseController
 {
     public function __construct(private readonly WorkflowInterface $dpeWorkflow)
-    {}
+    {
+    }
     #[Route('/send/ouverture', name: 'app_formation_etat_send_ouverture')]
     public function sendOuverture(
         FormationRepository $formationRepository
-    ): Response
-    {
+    ): Response {
         $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()]);
         $listeFormationsOuvrables = [];
         foreach ($formations as $formation) {

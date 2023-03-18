@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Entity/Ue.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 21:19
+ */
 
 namespace App\Entity;
 
@@ -23,9 +30,6 @@ class Ue
 
     #[ORM\ManyToOne]
     private ?TypeUe $typeUe = null;
-
-    #[ORM\Column(length: 100, nullable: true)]
-    private ?string $typeUeTexte = null;
 
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: EcUe::class)]
     private Collection $ecUes;

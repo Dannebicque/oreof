@@ -1,10 +1,10 @@
 <?php
 /*
- * Copyright (c) 2022. | David Annebicque | IUT de Troyes  - All Rights Reserved
- * @file /Users/davidannebicque/Sites/intranetV3/src/Classes/Pdf/MyPDF.php
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Classes/MyPDF.php
  * @author davidannebicque
- * @project intranetV3
- * @lastUpdate 25/05/2022 21:23
+ * @project oreof
+ * @lastUpdate 22/02/2023 09:40
  */
 
 namespace App\Classes;

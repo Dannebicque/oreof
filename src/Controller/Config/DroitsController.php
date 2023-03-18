@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Config/DroitsController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Config;
 
@@ -119,8 +126,10 @@ class DroitsController extends AbstractController
         Role $role,
         RoleRepository $roleRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $role->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $role->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             $roleRepository->remove($role, true);
 
             return $this->json(true);

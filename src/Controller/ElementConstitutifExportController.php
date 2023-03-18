@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/ElementConstitutifExportController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -14,7 +21,8 @@ class ElementConstitutifExportController extends AbstractController
 {
     public function __construct(
         private readonly TypeDiplomeRegistry $typeDiplomeRegistry,
-        private readonly MyPDF $myPdf)
+        private readonly MyPDF $myPdf
+    )
     {
     }
 
@@ -43,7 +51,8 @@ class ElementConstitutifExportController extends AbstractController
 
         $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
 
-        return $this->myPdf::generePdf('pdf/ec.html.twig',
+        return $this->myPdf::generePdf(
+            'pdf/ec.html.twig',
             [
                 'elementConstitutif' => $elementConstitutif,
                 'template' => $typeDiplome::TEMPLATE,
@@ -51,6 +60,8 @@ class ElementConstitutifExportController extends AbstractController
                 'typeDiplome' => $typeDiplome,
                 'bccs' => $bccs
 
-            ], 'dpe_ec_'.$elementConstitutif->getLibelle());
+            ],
+            'dpe_ec_'.$elementConstitutif->getLibelle()
+        );
     }
 }

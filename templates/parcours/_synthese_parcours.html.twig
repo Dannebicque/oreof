@@ -6,19 +6,25 @@
                 <dl>
                     <dt>Domaine</dt>
                     <dd>{{ formation.domaine ? formation.domaine.libelle : 'Non défini' }}</dd>
+                    <dt>Type de formation</dt>
+                    <dd>{{ typeDiplome.libelle }}</dd>
                 </dl>
             </div>
             <div class="col-4">
                 <dl>
                     <dt>Composante</dt>
-                    <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'Non définie'
-                        }}</dd>
+                    <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'Non définie' }}</dd>
                     <dt>Mention/spécialité</dt>
                     <dd>{{ formation.display }}</dd>
                 </dl>
             </div>
             <div class="col-4">
-
+                <dl>
+                    <dt>Responsable de la mention/spécialité</dt>
+                    <dd>{{ formation.responsableMention != null ? formation.responsableMention.display : 'Non défini' }}</dd>
+                    <dt>Responsable du parcours</dt>
+                    <dd>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</dd>
+                </dl>
             </div>
         </div>
     </div>

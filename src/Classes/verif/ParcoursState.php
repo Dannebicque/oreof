@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Classes/verif/ParcoursState.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Classes\verif;
 
@@ -60,7 +67,6 @@ class ParcoursState
         }
 
         return count($tab['error']) > 0 ? $tab : true;
-
     }
 
     private function etatOnglet3(): bool|array

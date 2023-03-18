@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/DataFixtures/RythmeFormationFixtures.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 02/02/2023 11:36
+ */
 
 namespace App\DataFixtures;
 

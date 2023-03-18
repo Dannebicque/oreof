@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Classes/UpdateEntity.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Classes;
 
@@ -102,13 +109,12 @@ class UpdateEntity
         if (method_exists($formation, $setMethod) && method_exists($formation, $getMethod)) {
             $t = $formation->$getMethod();
             if (is_array($t)) {
-
                 foreach ($t as $key => $v) {
                     if (is_object($v)) {
                         if ($v->value === $value) {
                             unset($t[$key]);
                         }
-                    } else if ($v === $value) {
+                    } elseif ($v === $value) {
                         unset($t[$key]);
                     }
                 }
@@ -122,6 +128,4 @@ class UpdateEntity
 
         return false;
     }
-
-
 }

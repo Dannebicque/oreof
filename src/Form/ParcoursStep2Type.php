@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Form/ParcoursStep2Type.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Form;
 
@@ -43,42 +50,60 @@ class ParcoursStep2Type extends AbstractType
                 'help' => '-',
             ])
             ->add('nbHeuresStages', NumberType::class, [
-                'help' => '-',
-                'attr' => ['data-action' => 'change->parcours--step2#changeNbHeuresStages'],
+                'html5' => true,
+                'scale' => 1,
+                'input_suffix_text' => 'heure(s)',
+                'attr' => [
+                    'data-action' => 'change->parcours--step2#changeNbHeuresStages',
+                ],
+                'row_attr' => [
+                    'class' => 'col-sm-3',
+                ],
             ])
             //alors zone de saisi
             //si L ou M, nombre d'heures
             ->add('hasProjet', YesNoType::class, [
-                'help' => '-',
                 'attr' => ['data-action' => 'change->parcours--step2#changeProjet'],
             ])
             ->add('projetText', TextareaAutoSaveType::class, [
                 'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step2#saveProjetText'],
-                'help' => '-',
             ])
             ->add('nbHeuresProjet', NumberType::class, [
-                'help' => '-',
+                'html5' => true,
+                'scale' => 1,
+                'input_suffix_text' => 'heure(s)',
                 'attr' => ['data-action' => 'change->parcours--step2#changeNbHeuresProjet'],
+                'row_attr' => [
+                    'class' => 'col-sm-3',
+                ],
             ])
 
             ->add('hasMemoire', YesNoType::class, [
-                'help' => '-',
                 'attr' => ['data-action' => 'change->parcours--step2#changeMemoire'],
             ])
             ->add('memoireText', TextareaAutoSaveType::class, [
                 'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step2#saveMemoireText'],
-                'help' => '-',
+            ])
+            ->add('hasSituationPro', YesNoType::class, [
+                'attr' => ['data-action' => 'change->parcours--step2#changeSituationPro'],
+                'disabled' => $typeDiplome::SOURCE === ButTypeDiplome::SOURCE || $typeDiplome::SOURCE === LicenceProfessionnelleTypeDiplome::SOURCE,
+                'data' => $typeDiplome::SOURCE === ButTypeDiplome::SOURCE || $typeDiplome::SOURCE === LicenceProfessionnelleTypeDiplome::SOURCE,
             ]);
 
-            if ($typeDiplome::SOURCE === ButTypeDiplome::SOURCE || $typeDiplome::SOURCE === LicenceProfessionnelleTypeDiplome::SOURCE)
-            {
-                $builder->add('nbHeuresSituationPro', NumberType::class, [
-//                    'label' => 'Nombre d\'heures de situation professionnelle prévu',
-                    'help' => '-',
-                    'attr' => ['data-action' => 'change->parcours--step2#changeNbHeuresSituationPro'],
-                ]);
-            }
-
+        if ($typeDiplome::SOURCE === ButTypeDiplome::SOURCE || $typeDiplome::SOURCE === LicenceProfessionnelleTypeDiplome::SOURCE) {
+            $builder->add('nbHeuresSituationPro', NumberType::class, [
+                'html5' => true,
+                'scale' => 1,
+                'input_suffix_text' => 'heure(s)',
+                'attr' => ['data-action' => 'change->parcours--step2#changeNbHeuresSituationPro'],
+                'row_attr' => [
+                    'class' => 'col-sm-3',
+                ],
+            ])
+            ->add('situationProText', TextareaAutoSaveType::class, [
+                'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step2#saveSituationProText'],
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void

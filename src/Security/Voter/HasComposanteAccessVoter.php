@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Security/Voter/HasComposanteAccessVoter.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Security\Voter;
 
@@ -24,8 +31,7 @@ class HasComposanteAccessVoter extends Voter
     public function __construct(
         private readonly Security $security,
         private readonly RoleRepository $roleRepository,
-    )
-    {
+    ) {
     }
 
     public function supportsType(string $subjectType): bool
@@ -35,7 +41,7 @@ class HasComposanteAccessVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute ,[self::ROLE_COMPOSANTE, self::ROLE_FORMATION, self::ROLE_FORMATION_ADD_ALL], true)
+        return in_array($attribute, [self::ROLE_COMPOSANTE, self::ROLE_FORMATION, self::ROLE_FORMATION_ADD_ALL], true)
             && $subject instanceof User;
     }
 
@@ -61,7 +67,6 @@ class HasComposanteAccessVoter extends Voter
             self::ROLE_COMPOSANTE_SHOW_ALL => $this->hasShowOnAllComposante($user),
             default => false,
         };
-
     }
 
     private function isCentreComposante(UserInterface|User $user): bool

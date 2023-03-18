@@ -12,3 +12,4 @@ FC: 'Formation continue'
 FC_CONTRAT_PRO: 'Formation continue en contrat de professionnalisation'
 "Régime d'inscription": "Régime d'inscription"
 formation_step1.labels.regimeInscription.label: "Régime d'inscription"
+parcours_step5.labels.regimeInscription.label: parcours_step5.labels.regimeInscription.label

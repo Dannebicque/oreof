@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/FormationExportController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -13,7 +20,8 @@ class FormationExportController extends AbstractController
 {
     public function __construct(
         private readonly TypeDiplomeRegistry $typeDiplomeRegistry,
-        private readonly MyPDF $myPdf)
+        private readonly MyPDF $myPdf
+    )
     {
     }
 
@@ -33,6 +41,5 @@ class FormationExportController extends AbstractController
             'typeDiplome' => $typeDiplome,
             'template' => $typeDiplome::TEMPLATE,
         ], 'dpe_formation_'.$formation->display());
-
     }
 }

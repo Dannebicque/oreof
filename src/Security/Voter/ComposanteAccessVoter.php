@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Security/Voter/ComposanteAccessVoter.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Security\Voter;
 
@@ -13,7 +20,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ComposanteAccessVoter extends Voter
 {
-
     public const ROLE_COMPOSANTE_EDIT_MY = 'ROLE_COMPOSANTE_EDIT_MY';
     public const ROLE_COMPOSANTE_SHOW_MY = 'ROLE_COMPOSANTE_SHOW_MY';
     public const ROLE_COMPOSANTE_MANAGE_MY = 'ROLE_COMPOSANTE_MANAGE_MY';
@@ -23,8 +29,7 @@ class ComposanteAccessVoter extends Voter
     public function __construct(
         private readonly Security $security,
         private readonly RoleRepository $roleRepository,
-    )
-    {
+    ) {
     }
 
     public function supportsType(string $subjectType): bool
@@ -58,14 +63,13 @@ class ComposanteAccessVoter extends Voter
             self::ROLE_COMPOSANTE_MANAGE_MY => $this->hasManageOnHisComposante($user, $subject),
             default => false,
         };
-
     }
 
     private function hasShowOnHisComposante(UserInterface|User $user, Composante $subject): bool
     {
         /** @var User $user */
         foreach ($user->getUserCentres() as $centre) {
-            if ($centre->getComposante() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0 ) {
+            if ($centre->getComposante() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
                 return true;
             }
         }
@@ -77,7 +81,7 @@ class ComposanteAccessVoter extends Voter
     {
         /** @var User $user */
         foreach ($user->getUserCentres() as $centre) {
-            if ($centre->getComposante() === $subject && in_array('ROLE_COMPOSANTE_MANAGE_MY', $this->roles) ) {
+            if ($centre->getComposante() === $subject && in_array('ROLE_COMPOSANTE_MANAGE_MY', $this->roles)) {
                 return true;
             }
         }

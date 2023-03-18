@@ -8,7 +8,7 @@ parcours.'}) }}
 
     {{ form_row(form.ects) }}
 
-        <div id="bloc_presentiel"  style="display:{% if ec.modaliteEnseignement.value != 2 %}block{% else
+        <div id="bloc_presentiel"  style="display:{% if ec.modaliteEnseignement != null and ec.modaliteEnseignement.value != 2 %}block{% else
 %}none{% endif %}">
             <h3>Volume Présentiel</h3>
             <div class="row">
@@ -19,7 +19,7 @@ parcours.'}) }}
         </div>
 
 
-        <div id="bloc_distanciel" style="display:{% if ec.modaliteEnseignement.value != 0 %}block{% else
+        <div id="bloc_distanciel" style="display:{% if ec.modaliteEnseignement != null and ec.modaliteEnseignement.value != 0 %}block{% else
 %}none{% endif %}">
             <h3>Volume Distanciel</h3>
             <div class="row">

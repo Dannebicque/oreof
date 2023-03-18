@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/assets/controllers/ec/structureparcours_controller.js
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 07/03/2023 20:38
+ */
+
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {

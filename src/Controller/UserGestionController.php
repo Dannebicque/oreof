@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/UserGestionController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller;
 
@@ -81,7 +88,8 @@ class UserGestionController extends BaseController
     #[IsGranted('ROLE_ADMIN')]
     public function gestionDroits(
         RoleRepository $roleRepository,
-        User $user): Response
+        User $user
+    ): Response
     {
         return $this->render('user/_gestion_droits.html.twig', [
             'user' => $user,
@@ -93,7 +101,8 @@ class UserGestionController extends BaseController
     #[IsGranted('ROLE_ADMIN')]
     public function gestionCentre(
         RoleRepository $roleRepository,
-        User $user): Response
+        User $user
+    ): Response
     {
         return $this->render('user/_gestion_centre.html.twig', [
             'user' => $user,
@@ -125,7 +134,9 @@ class UserGestionController extends BaseController
         ComposanteRepository $composanteRepository,
         EtablissementRepository $etablissementRepository,
         FormationRepository $formationRepository,
-        Request $request, User $user): Response
+        Request $request,
+        User $user
+    ): Response
     {
         $data = JsonRequest::getFromRequest($request);
         $nCentre = new UserCentre();
@@ -174,8 +185,10 @@ class UserGestionController extends BaseController
         UserCentre $userCentre,
         UserCentreRepository $userCentreRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $userCentre->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $userCentre->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             $userCentreRepository->remove($userCentre, true);
 
             return $this->json(true);

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Twig/AppExtension.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Twig;
 
@@ -41,11 +48,11 @@ class AppExtension extends AbstractExtension
 
     public function displaySort(string $field, ?string $sort, ?string $direction): ?string
     {
-       if ($field === $sort) {
-           return '<i class="fal fa-caret-'.($direction === 'asc' ? 'up' : 'down').' fa-lg"></i>';
-       }
+        if ($field === $sort) {
+            return '<i class="fal fa-caret-'.($direction === 'asc' ? 'up' : 'down').' fa-lg"></i>';
+        }
 
-       return '<i class="fal fa-sort fa-lg"></i>';
+        return '<i class="fal fa-sort fa-lg"></i>';
     }
 
     public function getDirection(string $field, ?string $sort, ?string $direction): ?string

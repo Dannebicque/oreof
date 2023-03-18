@@ -8,13 +8,17 @@
                         <div class="col-12 col-md-2 d-flex align-items-center mb-2 text-secondary mb-md-0 text-small">
                             Semestre
                         </div>
-                        <div class="col-6 col-md-3 d-flex align-items-center
+                        <div class="col-6 col-md-2 d-flex align-items-center
                         text-secondary text-small">
                             Commun ?
                         </div>
-                        <div class="col-6 col-md-3 d-flex align-items-center
+                        <div class="col-6 col-md-2 d-flex align-items-center
                         text-secondary text-small">
                             ECTS
+                        </div>
+                        <div class="col-6 col-md-2 d-flex align-items-center
+                        text-secondary text-small">
+                            Nb UE
                         </div>
                         <div class="col-6 col-md-2 d-flex align-items-center
                         text-secondary text-small">
@@ -37,7 +41,7 @@
                                         <div class="text-muted text-small d-md-none">Semestre</div>
                                         {{ semestre.semestre.display }}
                                     </div>
-                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Commun ?</div>
                                             {% if semestre.semestre.troncCommun == true %}
                                                 <span class="badge bg-info me-2">Tronc Commun</span>
@@ -46,12 +50,15 @@
                                             <span class="badge bg-secondary me-2">Parcours</span>
                                                 {% endif %}
                                     </div>
-                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
                                         <span id="ects_semestre_{{ semestre.semestre.id }}_{{ parcours.id }}">
-                                            {{ semestre.semestre.totalEctsSemestre|badgeEctsSemestre }} / {{ semestre
-                                            .id }} / {{ parcours.id }}
+                                            {{ semestre.semestre.totalEctsSemestre|badgeEctsSemestre }}
                                         </span>
+                                    </div>
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                        <div class="text-muted text-small d-md-none">Nb UE</div>
+                                            {{ semestre.semestre.ues|length|badgeNb }}
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center
                                             mb-1 mb-md-0">

@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Classes/AddUser.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Classes;
 
@@ -7,7 +14,6 @@ use App\Entity\User;
 use App\Entity\UserCentre;
 use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class AddUser
@@ -15,8 +21,8 @@ class AddUser
     public function __construct(
         private readonly UserCentreRepository $userCentreRepository,
         private readonly UserRepository $userRepository,
-        private readonly Ldap $ldap)
-    {
+        private readonly Ldap $ldap
+    ) {
     }
 
     public function addUser(string $email): ?UserInterface

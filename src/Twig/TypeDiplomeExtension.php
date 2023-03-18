@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Twig/TypeDiplomeExtension.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Twig;
 
@@ -8,7 +15,6 @@ use Twig\TwigFilter;
 
 class TypeDiplomeExtension extends AbstractExtension
 {
-
     public function __construct(private readonly TypeDiplomeRegistry $typeDiplomeRegistry)
     {
     }

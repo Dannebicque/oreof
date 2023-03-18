@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/TypeDiplome/Source/ButTypeDiplome.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 15/03/2023 13:41
+ */
 
 namespace App\TypeDiplome\Source;
 
@@ -16,6 +23,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 
     public string $libelle = 'Bachelor Universitaire de Technologie (B.U.T.)';
     public int $nbSemestres = 6;
+    public int $nbEctsUeMax = 0;
 
     public function getMcccs(ElementConstitutif $elementConstitutif): array|Collection
     {

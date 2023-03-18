@@ -1,4 +1,11 @@
 <?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/Config/AnneeUniversitaireController.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 17/03/2023 22:08
+ */
 
 namespace App\Controller\Config;
 
@@ -32,8 +39,11 @@ class AnneeUniversitaireController extends AbstractController
     public function new(Request $request, AnneeUniversitaireRepository $anneeUniversitaireRepository): Response
     {
         $anneeUniversitaire = new AnneeUniversitaire();
-        $form = $this->createForm(AnneeUniversitaireType::class, $anneeUniversitaire,
-            ['action' => $this->generateUrl('app_annee_universitaire_new')]);
+        $form = $this->createForm(
+            AnneeUniversitaireType::class,
+            $anneeUniversitaire,
+            ['action' => $this->generateUrl('app_annee_universitaire_new')]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -62,12 +72,15 @@ class AnneeUniversitaireController extends AbstractController
         AnneeUniversitaire $anneeUniversitaire,
         AnneeUniversitaireRepository $anneeUniversitaireRepository
     ): Response {
-        $form = $this->createForm(AnneeUniversitaireType::class, $anneeUniversitaire,
+        $form = $this->createForm(
+            AnneeUniversitaireType::class,
+            $anneeUniversitaire,
             [
                 'action' => $this->generateUrl('app_annee_universitaire_edit', [
                     'id' => $anneeUniversitaire->getId()
                 ])
-            ]);
+            ]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -102,8 +115,10 @@ class AnneeUniversitaireController extends AbstractController
         AnneeUniversitaire $anneeUniversitaire,
         AnneeUniversitaireRepository $anneeUniversitaireRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $anneeUniversitaire->getId(),
-            JsonRequest::getValueFromRequest($request, 'csrf'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $anneeUniversitaire->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             $anneeUniversitaireRepository->remove($anneeUniversitaire, true);
 
             return $this->json(true);
