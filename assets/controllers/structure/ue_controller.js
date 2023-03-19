@@ -20,6 +20,16 @@ export default class extends Controller {
     url: String,
   }
 
+  async deplacerUe(event) {
+    console.log(event.params)
+    event.preventDefault()
+    const { url } = event.params
+    await fetch(url).then(() => {
+      callOut('UE déplacée', 'success')
+      this.dispatch('refreshListe')
+    })
+  }
+
   detail(event) {
     if (event.target.dataset.state === 'open') {
       document.getElementById(`detail_ue_${event.params.ue}_${event.params.parcours}`).classList.add('d-none')

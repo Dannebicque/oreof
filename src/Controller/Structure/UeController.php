@@ -9,6 +9,9 @@
 
 namespace App\Controller\Structure;
 
+use App\Classes\EcOrdre;
+use App\Classes\UeOrdre;
+use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\TypeEnseignement;
@@ -44,7 +47,7 @@ class UeController extends AbstractController
         Semestre $semestre,
         Parcours $parcours
     ): Response {
-        $ues = $ueRepository->findBy(['semestre' => $semestre]);
+        $ues = $ueRepository->findBy(['semestre' => $semestre], ['ordre' => 'ASC']);
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome());
 
         return $this->render('structure/ue/_liste.html.twig', [
@@ -162,6 +165,17 @@ class UeController extends AbstractController
 
         return $this->json(true);
     }
+
+    #[Route('/deplacer/{ue}/{sens}', name: 'deplacer', methods: ['GET'])]
+    public function deplacer(
+        UeOrdre $ueOrdre,
+        Ue $ue,
+        string $sens
+    ): Response {
+        $ueOrdre->deplacerUe($ue, $sens);
+        return $this->json(true);
+    }
+
 
     /**
      * @throws \JsonException

@@ -46,28 +46,14 @@ class UeRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Ue[] Returns an array of Ue objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Ue
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findBySemestreOrdre(?int $ordreDestination, ?\App\Entity\Semestre $getSemestre)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.semestre = :semestre')
+            ->andWhere('u.ordre = :ordre')
+            ->setParameter('semestre', $getSemestre)
+            ->setParameter('ordre', $ordreDestination)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

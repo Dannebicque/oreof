@@ -50,44 +50,44 @@ class ElementConstitutif
     #[ORM\Column(length: 30, nullable: true, enumType: ModaliteEnseignementEnum::class)]
     private ?ModaliteEnseignementEnum $modaliteEnseignement = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $ects;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $volumeCmPresentiel;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $volumeTdPresentiel;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $volumeTpPresentiel;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $volumeCmDistanciel;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $volumeTdDistanciel;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $volumeTpDistanciel;
 
-    #[ORM\Column]
-    private ?bool $isCmPresentielMutualise = true;
+    #[ORM\Column(nullable: true)]
+    private ?bool $isCmPresentielMutualise;
 
-    #[ORM\Column]
-    private ?bool $isTdPresentielMutualise = true;
+    #[ORM\Column(nullable: true)]
+    private ?bool $isTdPresentielMutualise;
 
-    #[ORM\Column]
-    private ?bool $isTpPresentielMutualise = true;
+    #[ORM\Column(nullable: true)]
+    private ?bool $isTpPresentielMutualise;
 
-    #[ORM\Column]
-    private ?bool $isCmDistancielMutualise = true;
+    #[ORM\Column(nullable: true)]
+    private ?bool $isCmDistancielMutualise;
 
-    #[ORM\Column]
-    private ?bool $isTdDistancielMutualise = true;
+    #[ORM\Column(nullable: true)]
+    private ?bool $isTdDistancielMutualise;
 
-    #[ORM\Column]
-    private ?bool $isTpDistancielMutualise = true;
+    #[ORM\Column(nullable: true)]
+    private ?bool $isTpDistancielMutualise;
 
     #[ORM\ManyToOne]
     private ?User $responsableEc = null;

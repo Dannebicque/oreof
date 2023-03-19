@@ -11,6 +11,7 @@ namespace App\Form;
 
 use App\Entity\ElementConstitutif;
 use App\Enums\ModaliteEnseignementEnum;
+use App\Form\Type\FloatType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -46,7 +47,7 @@ class EcStep4Type extends AbstractType
                 'attr' => ['data-action' => !$isModal ? 'change->ec--structure#saveEcts' : ''],
             ]);
 
-        $builder->add('volumeCmPresentiel', NumberType::class, [
+        $builder->add('volumeCmPresentiel', FloatType::class, [
             'html5' => true,
             'scale' => 1,
             'attr' => [
@@ -54,7 +55,7 @@ class EcStep4Type extends AbstractType
                 'data-ec--structure-type-param' => 'volumeCmPresentiel'
             ],
         ])
-            ->add('volumeTdPresentiel', NumberType::class, [
+            ->add('volumeTdPresentiel', FloatType::class, [
                 'html5' => true,
                 'scale' => 1,
                 'attr' => [
@@ -62,7 +63,7 @@ class EcStep4Type extends AbstractType
                     'data-ec--structure-type-param' => 'volumeTdPresentiel'
                 ],
             ])
-            ->add('volumeTpPresentiel', NumberType::class, [
+            ->add('volumeTpPresentiel', FloatType::class, [
                 'html5' => true,
                 'scale' => 1,
                 'attr' => [
@@ -70,7 +71,7 @@ class EcStep4Type extends AbstractType
                     'data-ec--structure-type-param' => 'volumeTpPresentiel'
                 ],
             ])
-            ->add('volumeCmDistanciel', NumberType::class, [
+            ->add('volumeCmDistanciel', FloatType::class, [
                 'html5' => true,
                 'scale' => 1,
                 'attr' => [
@@ -78,7 +79,7 @@ class EcStep4Type extends AbstractType
                     'data-ec--structure-type-param' => 'volumeCmDistanciel',
                 ],
             ])
-            ->add('volumeTdDistanciel', NumberType::class, [
+            ->add('volumeTdDistanciel', FloatType::class, [
                 'html5' => true,
                 'scale' => 1,
                 'attr' => [
@@ -86,7 +87,7 @@ class EcStep4Type extends AbstractType
                     'data-ec--structure-type-param' => 'volumeTdDistanciel'
                 ],
             ])
-            ->add('volumeTpDistanciel', NumberType::class, [
+            ->add('volumeTpDistanciel', FloatType::class, [
                 'html5' => true,
                 'scale' => 1,
                 'attr' => [

@@ -46,4 +46,12 @@ abstract class Tools
     {
         return (new AsciiSlugger())->slug($texte);
     }
+
+    public static function convertToFloat(mixed $value): ?float
+    {
+        $value = trim($value);
+        $value = str_replace([',', '.'], '.', $value);
+
+        return (float) $value;
+    }
 }
