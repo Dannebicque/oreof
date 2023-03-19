@@ -95,7 +95,7 @@ bouton pour valider/invalide les étapes successives #}
             </td>
         </tr>
         {% set hasBoucle = false %}
-        {% for parcours in formation.parcours|filter(parcours => parcours.libelle != 'Parcours par défaut') %}
+        {% for parcours in formation.parcours|filter(parcours => not parcours.isParcoursDefaut) %}
             {% if loop.first %}
                 {% set hasBoucle = true %}
                 <tr>

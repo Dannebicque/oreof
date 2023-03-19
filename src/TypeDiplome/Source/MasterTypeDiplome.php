@@ -59,7 +59,7 @@ class MasterTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterf
         if ($formation->isHasParcours() === false) {
             if ($formation->getParcours()->count() === 0) {
                 $parcours = new Parcours($formation); //parcours par défaut
-                $parcours->setLibelle('Parcours par défaut');
+                $parcours->setLibelle(Parcours::PARCOURS_DEFAUT);
                 $semestres = [];
 
                 $formation->addParcour($parcours);

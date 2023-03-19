@@ -26,6 +26,8 @@ class Parcours
 {
     use LifeCycleTrait;
 
+    public const PARCOURS_DEFAUT = 'Parcours par défaut';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -705,5 +707,10 @@ class Parcours
         $this->etatParcours = $etatParcours;
 
         return $this;
+    }
+
+    public function isParcoursDefaut(): bool
+    {
+        return $this->libelle === self::PARCOURS_DEFAUT;
     }
 }

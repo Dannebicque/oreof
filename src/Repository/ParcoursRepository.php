@@ -63,7 +63,7 @@ class ParcoursRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('p')
             ->where('p.libelle <> :libelle')
-            ->setParameter('libelle', 'Parcours par défaut')
+            ->setParameter('libelle', Parcours::PARCOURS_DEFAUT)
             ->innerJoin('p.formation', 'f')
             ->andWhere('f.anneeUniversitaire = :annee')
             ->setParameter('annee', $anneeUniversitaire);
