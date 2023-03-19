@@ -1,3 +1,22 @@
+formation_step3.labels.semestreDebut: 'Semestre de début de la formation'
+ec_step1.labels.preciserMutualisation: 'Précisez les mutualisations'
+'Libellé du parcours': 'Libellé du parcours'
+'Responsable du parcours': 'Responsable du parcours'
+Sigle: Sigle
+ec_step1.labels.previserMutualisation: ec_step1.labels.previserMutualisation
+ue.labels.ordre: "Numéro de l'UE"
+ue.labels.typeUe: "Type d'enseignement"
+ue.labels.typeUeTexte: "Type d'UE si non présent dans la liste"
+ue.labels.ueObligatoire: 'UE Obligatoire/Optionnelle'
+ue.labels.ueObligatoireTexte: 'UE Obligatoire/Optionnelle si non présent dans la liste'
+parcours_step5.labels.composanteInscription.label: parcours_step5.labels.composanteInscription.label
+parcours_step5.labels.modalitesAlternance: parcours_step5.labels.modalitesAlternance
+parcours_step5.labels.coordSecretariat: parcours_step5.labels.coordSecretariat
+test: test
+element_constitutif.labels.libelle: element_constitutif.labels.libelle
+element_constitutif.labels.responsableEc: element_constitutif.labels.responsableEc
+parcours_step2.labels.hasSituationPro.label: parcours_step2.labels.hasSituationPro.label
+parcours_step2.labels.situationProText: parcours_step2.labels.situationProText
 but: 'Bachelor Universitaire de Technologie'
 licence_professionnelle: 'Licence professionnelle'
 licence: Licence
@@ -18,20 +37,20 @@ Non: Non
 formation_ses.labels.typeDiplome: 'Type de diplôme'
 formation_ses.labels.domaine: Domaine
 formation_ses.labels.mention: Mention
-formation_ses.labels.composantePorteuse: "Composante porteuse de l'enseignement"
+formation_ses.labels.composantePorteuse: 'Composante porteuse de la formation'
 formation_ses.labels.mentionTexte: 'Autre mention'
 formation_ses.labels.niveauEntree: "Niveau d'entrée en formation"
 formation_ses.labels.codeRNCP: 'Code RNCP'
 formation_ses.labels.niveauSortie: 'Niveau de sortie de la formation'
 formation_ses.labels.inRncp.label: 'La formation est-elle inscrite au RNCP ?'
-formation_ses.labels.responsableMention: 'Responsable de la mention'
+formation_ses.labels.responsableMention: 'Responsable de la formation'
 formation_step1.labels.localisationMention.label: 'Localisation(s) de la formation'
 formation_step1.labels.composantesInscription.label: "Composante(s) d'inscription"
 formation_step1.labels.regimeInscription.label: "Régime(s) d'inscription"
 formation_step1.labels.modalitesAlternance: "Précisez les modalités de l'alternance"
 ec_step1.labels.responsableEc: "Responsable de l'enseignement"
 ec_step1.labels.libelle: "Libellé de l'enseignement"
-ec_step1.labels.libelleAnglais: 'Libellé anglais'
+ec_step1.labels.libelleAnglais: "Libellé de l'enseignement en anglais"
 ec_step1.labels.enseignementMutualise.label: "L'enseignement est-il mutualisé ?"
 ec_step1.labels.isCmPresentielMutualise.label: 'Les CM présentiels sont-ils mutualisés ?'
 ec_step1.labels.isTdPresentielMutualise.label: 'Les TD présentiels sont-ils mutualisés ?'
@@ -59,27 +78,27 @@ Hybride: Hybride
 'Compléments sur le rythme de formation': 'Si besoin, précisez le rythme de formation'
 formation_step2.labels.contenuFormation: 'Contenu de la formation'
 formation_step2.labels.resultatsAttendus: 'Résultats attendus de la formation'
-formation_step2.labels.rythmeFormation: 'Quel est le rythme de la formation ?'
+formation_step2.labels.rythmeFormation: 'Choisissez un rythme de formation et/ou complétez le champ suivant'
 formation_step2.labels.rythmeFormationTexte: 'Si besoin, précisez le rythme de formation'
 parcours_step2.labels.modalitesEnseignement.label: "Précisez les modalités d'enseignement du parcours"
 parcours_step2.labels.hasStage.label: 'La formation prévoit-elle un/des stage(s) ?'
 parcours_step2.labels.nbHeuresStages: "Nombre d'heures de stage(s) prévu"
 parcours_step2.labels.stageText: 'Description du/des stage(s)'
-parcours_step2.labels.hasProjet.label: 'La formation prévoit-elle un/des projet(s) tuteuré(s) ?'
+parcours_step2.labels.hasProjet.label: 'La formation prévoit-elle un/des projet(s) tutoré(s) ?'
 parcours_step2.labels.nbHeuresProjet: "Nombre d'heures de projet(s) tutoré(s) prévu"
-parcours_step2.labels.projetText: 'Description du/des projet(s) tuteuré(s)'
+parcours_step2.labels.projetText: 'Description du/des projet(s) tutoré(s)'
 parcours_step2.labels.hasMemoire.label: 'La formation prévoit-elle un TER/Mémoire ?'
 parcours_step2.labels.memoireText: 'Description TER/Mémoire'
 parcours_step5.labels.prerequis: 'Prérequis recommandés'
 parcours_step7.labels.poursuitesEtudes: "Poursuites d'études envisageables"
 parcours_step7.labels.debouches: Débouchés
-parcours_step8.labels.respParcours: 'Responsable du parcours (si existant)'
+parcours_step8.labels.respParcours: 'Responsable du parcours'
 parcours_step8.labels.coordSecretariat: 'Coordonnées du secrétariat'
 parcours_step1.labels.contenuFormation: 'Contenu du parcours'
 parcours_step1.labels.resultatsAttendus: 'Résultats attendus du parcours'
-parcours_step1.labels.rythmeFormation: 'Quel est le rythme de la formation ?'
+parcours_step1.labels.rythmeFormation: 'Choisissez un rythme de formation et/ou complétez le champ suivant'
 parcours_step1.labels.rythmeFormationTexte: 'Si besoin, précisez le rythme de formation'
-parcours_step1.labels.localisation.label: 'Localisation(s) du parcours'
+parcours_step1.labels.localisation.label: 'Localisation du parcours'
 None: Aucun
 Reims: Reims
 competence.labels.libelle: 'Libellé de la compétence'
@@ -102,31 +121,20 @@ formation_step2.labels.objectifsFormation: 'Objectif de la formation'
 parcours_step1.labels.objectifsParcours: 'Objectifs du parcours'
 Troyes: Troyes
 parcours_step2.labels.nbHeuresSituationPro: "Nombre d'heures de mise en situation professionnelle prévu"
-formation_step3.labels.hasParcours: "La formation propose t'elle un ou des parcours ?"
-formation_step3.labels.libelleParcours: "Préciser l'intitulé des parcours"
-formation_step3.labels.structureFormation: 'Précisez la structure de la mention/spécialité avec les parcours (semestre de tronc commun ou semestre spécifique au parcours'
+formation_step3.labels.hasParcours: "La formation propose-t'elle un ou des parcours ?"
+formation_step3.labels.libelleParcours: "Précisez l'intitulé de chaque parcours"
+formation_step3.labels.structureFormation: "Précisez l'organisation de la formation"
 ec_step3.labels.competence: Compétences
 Mention: Mention
 Autre: Autre
-formation_step3.labels.semestreDebut: 'Semestre de début de la formation'
+'Châlons en Champagne': 'Châlons en Champagne'
 "Composante d'inscription": "Composante d'inscription"
 "Modalités de l'alternance": "Modalités de l'alternance"
-ec_step1.labels.preciserMutualisation: 'Précisez les mutualisations'
 0: '0'
-'Libellé du parcours': 'Libellé du parcours'
-'Responsable du parcours': 'Responsable du parcours'
-Sigle: Sigle
-ec_step1.labels.previserMutualisation: ec_step1.labels.previserMutualisation
-ue.labels.ordre: "Numéro de l'UE"
-ue.labels.typeUe: "Type d'enseignement"
-ue.labels.typeUeTexte: "Type d'UE si non présent dans la liste"
-ue.labels.ueObligatoire: 'UE Obligatoire/Optionnelle'
-ue.labels.ueObligatoireTexte: 'UE Obligatoire/Optionnelle si non présent dans la liste'
-parcours_step5.labels.composanteInscription.label: parcours_step5.labels.composanteInscription.label
-parcours_step5.labels.modalitesAlternance: parcours_step5.labels.modalitesAlternance
-parcours_step5.labels.coordSecretariat: parcours_step5.labels.coordSecretariat
-test: test
-element_constitutif.labels.libelle: element_constitutif.labels.libelle
-element_constitutif.labels.responsableEc: element_constitutif.labels.responsableEc
-parcours_step2.labels.hasSituationPro.label: parcours_step2.labels.hasSituationPro.label
-parcours_step2.labels.situationProText: parcours_step2.labels.situationProText
+1: '1'
+2: '2'
+3: '3'
+4: '4'
+5: '5'
+6: '6'
+7: '7'
