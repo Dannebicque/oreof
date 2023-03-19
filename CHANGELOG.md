@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.17.0](https://github.com/Dannebicque/oreof/compare/v0.16.0...v0.17.0) (2023-03-19)
+
+
+### Features
+
+* [Composante] Amélioration affichage ([58bb665](https://github.com/Dannebicque/oreof/commit/58bb665b4faed21a852b5dc68bf5b0e776062c58))
+* [Home] Nouveau menu ([c1ac9d2](https://github.com/Dannebicque/oreof/commit/c1ac9d26a4f046e0328a2ca43b3c08be22282a01))
+
 ## [0.16.0](https://github.com/Dannebicque/oreof/compare/v0.15.0...v0.16.0) (2023-03-15)
 
 
