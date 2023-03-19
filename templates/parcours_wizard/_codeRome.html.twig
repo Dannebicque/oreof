@@ -10,9 +10,11 @@
         <tr>
             <td>{{ rome.code }}</td>
             <td>
-                <button class="btn btn-danger"
+                <button class="btn text-danger"
                         {{ stimulus_action('parcours--step7', 'removeCode', 'click',{code: rome.code}) }}
-                >Supprimer
+                >
+                    <i class="{{ iconDelete }}"></i>
+                    Supprimer
                 </button>
             </td>
         </tr>

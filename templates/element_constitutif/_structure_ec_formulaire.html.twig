@@ -2,7 +2,8 @@
     {{ component('alerte', {type:'warning', message:'Vous devez d\'abord définir les modalités d\'enseignement du
 parcours.'}) }}
 {% else %}
-    {% if ec.parcours.modalitesEnseignement != null and ec.parcours.modalitesEnseignement.value == 1 %}
+    {% if (ec.parcours.modalitesEnseignement != null and ec.parcours.modalitesEnseignement.value == 1) or ec
+    .modaliteEnseignement == null %}
         {{ form_row(form.modaliteEnseignement) }}
     {% endif %}
 

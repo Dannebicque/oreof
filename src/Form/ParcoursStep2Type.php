@@ -34,11 +34,12 @@ class ParcoursStep2Type extends AbstractType
                 'help' => '-',
                 'attr' => ['data-action' => 'change->parcours--step2#changeModaliteEnseignement'],
                 'choice_label' => fn ($choice) => match ($choice) {
+                    modaliteEnseignementEnum::NON_DEFINI => 'Choisissez une modalité d\'enseignement',
                     modaliteEnseignementEnum::PRESENTIELLE => 'En présentiel',
                     modaliteEnseignementEnum::DISTANCIELLE => 'En distanciel',
                     modaliteEnseignementEnum::HYBRIDE  => 'Hybride',
                 },
-                'expanded' => true,
+                'expanded' => false,
             ])
             ->add('hasStage', YesNoType::class, [
                 'help' => '-',

@@ -29,17 +29,16 @@ class ParcoursStep5Type extends AbstractType
                 'help' => '-',
             ])
             ->add('composanteInscription', EntityType::class, [
+                'placeholder' => 'Choisissez une composante d\'inscription',
                 'class' => Composante::class,
                 'choice_label' => 'libelle',
-                //'label' => 'Composante d\'inscription',
                 'multiple' => false,
-                'expanded' => true,
+                'expanded' => false,
                 'choice_attr' => function () {
                     return ['data-action' => 'change->parcours--step5#changeComposanteInscription'];
                 },
             ])//todo: faire une liste avec un "+" pour ajouter une composante d'inscription et un "-" pour retirer...
             ->add('regimeInscription', EnumType::class, [
-                //  'label' => 'Régime d\'inscription',
                 'class' => RegimeInscriptionEnum::class,
                 'translation_domain' => 'enum',
                 'multiple' => true,
@@ -47,7 +46,6 @@ class ParcoursStep5Type extends AbstractType
                 'attr' => ['data-action' => 'change->parcours--step5#changeRegimeInscription']
             ])
             ->add('modalitesAlternance', TextareaAutoSaveType::class, [
-                // 'label' => 'Modalités de l\'alternance',
                 'help' => 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.',
                 'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->parcours--step5#saveModalitesAlternance'],
             ])

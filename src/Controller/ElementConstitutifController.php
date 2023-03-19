@@ -67,6 +67,7 @@ class ElementConstitutifController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $lastEc = $ecOrdre->getOrdreSuivant($ue);
+            $elementConstitutif->setModaliteEnseignement($ue->getSemestre()?->getSemestreParcours()->first()->getParcours()?->getModalitesEnseignement());
             $elementConstitutif->setOrdre($lastEc);
             $elementConstitutif->genereCode();
             $ueEc = new EcUe($ue, $elementConstitutif);

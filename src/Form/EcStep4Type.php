@@ -25,16 +25,16 @@ class EcStep4Type extends AbstractType
         $modalites = $options['data']->getModaliteEnseignement();
         $modalitesParcours = $options['data']->getParcours()->getModalitesEnseignement();
 
-        if ($modalitesParcours === ModaliteEnseignementEnum::HYBRIDE) {
+        if ($modalitesParcours === ModaliteEnseignementEnum::HYBRIDE || $modalites === null || $modalites === ModaliteEnseignementEnum::NON_DEFINI) {
             $builder->add('modaliteEnseignement', EnumType::class, [
-                'help' => '-',
                 'class' => ModaliteEnseignementEnum::class,
                 'choice_label' => fn ($choice) => match ($choice) {
+                    modaliteEnseignementEnum::NON_DEFINI => 'Choisir une modalité',
                     modaliteEnseignementEnum::PRESENTIELLE => 'En présentiel',
                     modaliteEnseignementEnum::DISTANCIELLE => 'En distanciel',
                     modaliteEnseignementEnum::HYBRIDE => 'Hybride',
                 },
-                'expanded' => true,
+                'expanded' => false,
                 'attr' => ['data-action' => !$isModal ? 'change->ec--structure#saveModaliteEnseignement' : 'change->ec--structureparcours#changeModalite'],
             ]);
         }

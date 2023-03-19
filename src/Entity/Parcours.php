@@ -83,7 +83,7 @@ class Parcours
     private ?string $memoireText = null;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true, enumType: ModaliteEnseignementEnum::class)]
-    private ?ModaliteEnseignementEnum $modalitesEnseignement = null;
+    private ?ModaliteEnseignementEnum $modalitesEnseignement = ModaliteEnseignementEnum::NON_DEFINI;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $prerequis = null;

@@ -56,6 +56,7 @@ class FormationSesType extends AbstractType
                 'class' => Composante::class,
                 'choice_label' => 'libelle',
                 'required' => true,
+                'autocomplete' => true,
                 'help' => 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation'
             ])
             ->add('mention', ChoiceType::class, [
@@ -67,6 +68,7 @@ class FormationSesType extends AbstractType
                 'required' => false,
                 'validation_groups' => false,
                 'mapped' => false,
+                'autocomplete' => true,
                 'help' => 'Si la mention n\'existe pas, veuillez la créer dans la section "Autre mention"'
             ])
             ->add('mentionTexte', TextType::class, [
@@ -96,6 +98,7 @@ class FormationSesType extends AbstractType
             ->add('responsableMention', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'display',
+                'autocomplete' => true,
                 'attr' => ['data-action' => 'change->formation#changeResponsableMention']
             ])
             ->addEventListener(

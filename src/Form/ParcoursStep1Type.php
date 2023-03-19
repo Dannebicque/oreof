@@ -57,12 +57,13 @@ class ParcoursStep1Type extends AbstractType
                 'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveRythme'],
             ])
             ->add('localisation', ChoiceType::class, [
-                'required' => false,
-                'expanded' => true,
+                'placeholder' => 'Choisissez une ville',
+                'expanded' => false,
                 'choices' => $villes,
                 'data' => $options['data']->getLocalisation()?->getId() ?? 0,
-                'help' => '-',
-                'attr' => ['data-action' => 'change->parcours--step1#changeLocalisation'],
+                'attr' => [
+                    'data-action' => 'change->parcours--step1#changeLocalisation',
+                    ]
             ])
         ;
     }

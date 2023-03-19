@@ -7,6 +7,15 @@
     {{ form_start(form) }}
     {{ form_row(form.poursuitesEtudes) }}
     {{ form_row(form.debouches) }}
+
+    <label class="col-form-label required">
+        {{ 'parcours_step7.labels.codeRome'|trans({}, 'form') }}
+        <i class="fal fa-question-circle ms-1"
+           data-controller="tooltip"
+           data-tooltip-placement-value="bottom"
+           aria-label="{{ 'parcours_step7.helps.codeRome.help'|trans({}, 'help') }}"
+           data-bs-original-title="{{ 'parcours_step7.helps.codeRome.help'|trans({}, 'help') }}"></i>
+    </label>
     <div {{ stimulus_target('parcours--step7', 'listeCodes') }}>
 
     </div>

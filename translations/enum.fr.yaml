@@ -15,3 +15,4 @@ formation_step1.labels.regimeInscription.label: "Régime d'inscription"
 parcours_step5.labels.regimeInscription.label: parcours_step5.labels.regimeInscription.label
 'Type de diplôme': 'Type de diplôme'
 deust: deust
+parcours_step5.labels.regimeInscription: parcours_step5.labels.regimeInscription

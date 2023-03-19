@@ -11,7 +11,6 @@ namespace App\Form;
 
 use App\Entity\ElementConstitutif;
 use App\Entity\User;
-use App\Form\Type\TextareaAutoSaveType;
 use App\Form\Type\YesNoType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -39,6 +38,7 @@ class EcStep1Type extends AbstractType
             ->add('responsableEc', EntityType::class, [
                 'help' => '-',
                 'class' => User::class,
+'autocomplete' => true,
 //                'query_builder' => function ($er) use ($options) {
 //                    return $er->createQueryBuilder('u')
 //                        ->join('u.roles', 'r')

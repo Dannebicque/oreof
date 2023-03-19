@@ -47,10 +47,11 @@ class EcStep2Type extends AbstractType
                 'help' => '-'
             ])
             ->add('typeEnseignement', EntityType::class, [
+                'placeholder' => 'Choisissez un type d\'enseignement',
                 'attr' => ['data-action' => 'change->ec--step2#changeTypeEnseignement'],
                 'class' => TypeEnseignement::class,
                 'choice_label' => 'libelle',
-                'expanded' => true,
+                'expanded' => false,
                 'multiple' => false,
                 'required' => true,
                 'help' => '-'

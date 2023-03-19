@@ -138,3 +138,17 @@ Autre: Autre
 5: '5'
 6: '6'
 7: '7'
+formation_step3.labels.semestreDebut.option.vide: 'Veuillez choisir le semestre de début de la formation'
+parcours_step1.labels.localisation: parcours_step1.labels.localisation
+'Choisissez une ville': 'Choisissez une ville'
+'Veuillez choisir la localisation du parcours': 'Veuillez choisir la localisation du parcours'
+parcours_step2.labels.modalitesEnseignement: parcours_step2.labels.modalitesEnseignement
+"Choisissez une modalité d'enseignement": "Choisissez une modalité d'enseignement"
+parcours_step5.labels.composanteInscription: parcours_step5.labels.composanteInscription
+"Choisissez une composante d'inscription": "Choisissez une composante d'inscription"
+parcours_step7.labels.codeRome: 'Ajouter les codes ROME'
+'Choisir une modalité': 'Choisir une modalité'
+ec_step4.labels.modaliteEnseignement: ec_step4.labels.modaliteEnseignement
+ec_step2.labels.typeEnseignement: ec_step2.labels.typeEnseignement
+"Choisissez un type d'enseignement": "Choisissez un type d'enseignement"
+ec_step3.alerte.no_bcc: ec_step3.alerte.no_bcc
