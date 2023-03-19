@@ -26,6 +26,7 @@ class Semestre
     private ?int $ordre = null;
 
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: Ue::class)]
+    #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ues;
 
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: SemestreParcours::class, cascade: ['persist', 'remove'])]

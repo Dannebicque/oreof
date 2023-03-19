@@ -2,7 +2,7 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-4">
+            <div class="col-3">
                 <dl>
                     <dt>Domaine</dt>
                     <dd>{{ formation.domaine ? formation.domaine.libelle : 'Non défini' }}</dd>
@@ -10,7 +10,7 @@
                     <dd>{{ typeDiplome.libelle }}</dd>
                 </dl>
             </div>
-            <div class="col-4">
+            <div class="col-3">
                 <dl>
                     <dt>Composante</dt>
                     <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'Non définie' }}</dd>
@@ -18,13 +18,23 @@
                     <dd>{{ formation.display }}</dd>
                 </dl>
             </div>
-            <div class="col-4">
+            <div class="col-3">
                 <dl>
                     <dt>Responsable de la mention/spécialité</dt>
                     <dd>{{ formation.responsableMention != null ? formation.responsableMention.display : 'Non défini' }}</dd>
                     <dt>Responsable du parcours</dt>
                     <dd>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</dd>
                 </dl>
+            </div>
+            <div class="col-3 d-grid">
+                <a class="btn btn-outline-primary d-block" href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">
+                    Contrôler les BCC
+                </a>
+                <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_mccc', {parcours:parcours
+                .id}) }}">
+                    Contrôler les MCCC
+                </a>
+                {#                <button class="btn btn-outline-primary d-block mt-1">Contrôler les BCC</button> #}
             </div>
         </div>
     </div>

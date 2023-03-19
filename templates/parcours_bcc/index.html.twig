@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            {% for semestre in parcours.semestreParcours %}
+                <h2>{{ semestre.semestre.display }}</h2>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th colspan="2" rowspan="2">&nbsp;</th>
+                        {% for ue in semestre.semestre.ues %}
+                            <th colspan="{{ ue.ecUes|length }}">{{ ue.display }}</th>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        {% for ue in semestre.semestre.ues %}
+                            {% for ec in ue.ecUes %}
+                                <th>{{ ec.ec.code }}</th>
+                            {% endfor %}
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for bcc in parcours.blocCompetences %}
+                        {% for competence in bcc.competences %}
+                            <tr>
+                                {% if loop.first %}
+                                <td rowspan="{{ bcc.competences|length }}">{{ bcc.display }}</td>
+                                {% endif %}
+                                <td>{{ competence.display }}</td>
+                                {% for ue in semestre.semestre.ues %}
+                                    {% for ec in ue.ecUes %}
+                                        <td>
+                                            {% if competence.elementConstitutifs.contains(ec.ec) %}
+                                                <i class="fa fa-check"></i>
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block header %}
+    BCC pour le parcours {{ parcours.libelle }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('app_parcours_index'), title: 'Liste des parcours'},
+        {href: path('app_formation_edit', {id:parcours.formation.id}), title: 'Formation : '~parcours.formation
+        .display},
+        {href: path('app_parcours_edit', {id:parcours.id}), title: 'Parcours : '~parcours.libelle},
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+
+{% endblock %}
