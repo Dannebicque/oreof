@@ -111,11 +111,7 @@
     </div>
 
     <div id="bloc_pas_parcours" class="{% if formation.hasParcours == true %}d-none{% endif %} d-grid mt-2 mb-2">
-        {% if formation.parcours.first != null %}
-            <a href="{{ path('app_parcours_edit', {id: formation.parcours[0].id}) }}" class="text-warning">
-                <i class="fas fa-pencil"></i>
-                Editer le parcours par défaut de la mention</a>
-        {% else %}
+        {% if formation.parcours.first == null %}
             <div class="alert alert-info">
                 <button {{ stimulus_action('formation--step3', 'genereStructurePasParcours') }} class="btn btn-sm
                     btn-outline-primary

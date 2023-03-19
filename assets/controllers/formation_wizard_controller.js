@@ -15,6 +15,7 @@ export default class extends Controller {
 
   static values = {
     url: String,
+    urlParcours: String,
     formation: String,
     step: String,
   }
@@ -37,7 +38,7 @@ export default class extends Controller {
   }
 
   async _loadStepParcours(step, parcours) {
-    const response = await fetch(`${this.urlValue + this.formationValue}/${parcours}/${step}`)
+    const response = await fetch(`${this.urlParcoursValue + parcours}/${step}`)
     this.contentTarget.innerHTML = await response.text()
   }
 }
