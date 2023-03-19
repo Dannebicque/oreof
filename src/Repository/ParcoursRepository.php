@@ -9,6 +9,7 @@
 
 namespace App\Repository;
 
+use App\Entity\AnneeUniversitaire;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -56,5 +57,21 @@ class ParcoursRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function findParcours(AnneeUniversitaire $anneeUniversitaire, array $options): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.libelle <> :libelle')
+            ->setParameter('libelle', 'Parcours par défaut')
+            ->innerJoin('p.formation', 'f')
+            ->andWhere('f.anneeUniversitaire = :annee')
+            ->setParameter('annee', $anneeUniversitaire);
+
+        foreach ($options as $key => $value) {
+            $qb->addOrderBy('p.' . $key, $value);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }

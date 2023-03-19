@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/parcours')]
-class ParcoursController extends AbstractController
+class ParcoursController extends BaseController
 {
     #[Route('/', name: 'app_parcours_index', methods: ['GET'])]
     public function index(): Response
@@ -36,12 +36,18 @@ class ParcoursController extends AbstractController
         ParcoursRepository $parcoursRepository,
         Request $request
     ): Response {
-        $sort = $request->query->get('sort') ?? 'typeDiplome';
+        $sort = $request->query->get('sort') ?? 'libelle';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
 
+        if ($q !== null) {
+            $parcours = $parcoursRepository->search($q);
+        } else {
+            $parcours = $parcoursRepository->findParcours($this->getAnneeUniversitaire(), [$sort => $direction]);
+        }
+
         return $this->render('parcours/_liste.html.twig', [
-            'parcours' => $parcoursRepository->findAll(),
+            'parcours' => $parcours,
             'sort' => $sort,
             'direction' => $direction
         ]);

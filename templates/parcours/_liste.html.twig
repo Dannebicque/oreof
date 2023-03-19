@@ -1,0 +1,114 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            <a href="#"
+            {{ stimulus_action('crud', 'sort', 'click', {
+                'sort': 'libelle',
+                'direction': getDirection('libelle', sort, direction)
+            }) }}
+            >
+            Parcours
+
+            {{ displaySort('libelle', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'typeDiplome',
+                        'direction': getDirection('typeDiplome', sort, direction)
+                    }) }}
+            >
+                Type de diplôme
+
+                {{ displaySort('typeDiplome', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'domaine',
+                        'direction': getDirection('domaine', sort, direction)
+                    }) }}
+            >
+                Domaine
+
+                {{ displaySort('domaine', sort, direction) }}
+            </a>
+        </th>
+        <th>Mention/spécialité</th>
+        <th>Composante</th>
+        <th>Etat</th>
+        <th>Remplissage</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for parcour in parcours %}
+        <tr>
+            <td>{{ parcour.libelle }}</td>
+            <td>
+                {{ parcour.formation.typeDiplome|typeDiplome }}
+            </td>
+            <td>
+                {% if parcour.formation.mention != null or parcour.formation.mentionTexte != null %}
+                    {{ parcour.formation.display }}
+                {% else %}
+                    <span class="badge bg-danger">Non définie</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if parcour.formation.composantePorteuse != null %}
+                    {{ parcour.formation.composantePorteuse.libelle }}
+                {% else %}
+                    <span class="badge bg-danger">Non définie</span>
+                {% endif %}
+            </td>
+            <td>
+                {{ parcour.etatParcours|badgeDpe }}
+            </td>
+            <td>
+                {{ parcour.remplissage|remplissage }}
+            </td>
+            <td>
+                <a href=""
+                   class="btn btn-sm text-info"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom"
+                   title="Voir une formation"
+                >
+                    <i class="{{ iconShow }}"></i>
+                    <span> voir</span>
+                </a>
+
+                {% if is_granted('ROLE_PARCOURS_EDIT_MY', parcour) or is_granted('ROLE_ADMIN') %} {# todo: filtrer
+                sur ROLE_SES => Parcours Edit #}
+                    <a href="{{ path('app_parcours_edit',{'id': parcour.id}) }}"
+                       class="btn btn-sm text-warning"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="Modifier la fiche d'identité du parcours"
+                    >
+                        <i class="{{ iconEdit }}"></i>
+                        <span> modifier</span>
+                    </a>
+                {% endif %}
+
+                {% if is_granted('ROLE_FORMATION_DELETE_MY') %}
+                    <button {{ stimulus_action('crud', 'delete', 'click', {
+                        url:path('app_parcours_delete',{'id': parcour.id}),
+                        csrf: csrf_token('delete' ~ parcour.id)
+                    }) }} class="btn btn-sm text-danger">
+                        <i class="{{ iconDelete }}"></i> Supprimer
+                    </button>
+                {% endif %}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="8" class="bg-warning">Aucun enregistrement trouvé</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
