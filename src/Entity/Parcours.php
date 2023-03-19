@@ -134,6 +134,9 @@ class Parcours
     #[ORM\Column]
     private ?array $etatSteps = [];
 
+    #[ORM\Column(nullable: true)]
+    private ?array $etatParcours = [];
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -688,6 +691,18 @@ class Parcours
     public function setSituationProText(?string $situationProText): self
     {
         $this->situationProText = $situationProText;
+
+        return $this;
+    }
+
+    public function getEtatParcours(): array
+    {
+        return $this->etatParcours ?? [];
+    }
+
+    public function setEtatParcours(?array $etatParcours): self
+    {
+        $this->etatParcours = $etatParcours;
 
         return $this;
     }

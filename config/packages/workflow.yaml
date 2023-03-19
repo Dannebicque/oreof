@@ -10,6 +10,7 @@ framework:
             initial_marking: 'initialisation_dpe'
             places:
                 - 'initialisation_dpe'
+                - 'autorisation_saisie'
                 - 'en_cours_redaction'
                 - 'soumis_rf'
                 - 'soumis_dpe_composante'
@@ -30,7 +31,10 @@ framework:
                 initialiser:
                     guard: "is_granted('ROLE_ADMIN')"
                     from: 'initialisation_dpe'
-                    to: 'en_cours_redaction' #evoi mail aux responsable de formation et aux responsable DPE
+                    to: 'autorisation_saisie' #evoi mail aux responsable de formation et aux responsable DPE
+                autoriser:
+                    from: 'autorisation_saisie'
+                    to: 'en_cours_redaction' # dès qu'un champs est modifié
                 valide_rf:
                     from: 'en_cours_redaction'
                     to: 'soumis_dpe_composante'
@@ -101,6 +105,35 @@ framework:
                 publier:
                     from: 'valie_a_publier'
                     to: 'publie'
+        parcours:
+            type: 'workflow'
+            marking_store:
+                type: 'method'
+                property: 'etatParcours'
+            supports:
+                - App\Entity\Parcours
+            initial_marking: 'initialisation_parcours'
+            places:
+                - 'initialisation_parcours'
+                - 'autorisation_saisie'
+                - 'en_cours_redaction'
+                - 'soumis_parcours'
+                - 'refuse_parcours'
+            transitions:
+                initialiser:
+                    #guard: "is_granted('ROLE_FORMATION')"
+                    from: 'initialisation_parcours'
+                    to: 'autorisation_saisie'
+                autoriser:
+                    #guard: "is_granted('ROLE_FORMATION')"
+                    from: 'autorisation_saisie'
+                    to: 'en_cours_redaction'
+                valider_ec:
+                    from: 'en_cours_redaction'
+                    to: 'soumis_parcours'
+                refuser_ec:
+                    from: 'en_cours_redaction'
+                    to: 'refuse_parcours'
         ec:
             type: 'workflow'
             marking_store:
@@ -111,6 +144,7 @@ framework:
             initial_marking: 'initialisation_ec'
             places:
                 - 'initialisation_ec'
+                - 'autorisation_saisie'
                 - 'en_cours_redaction'
                 - 'soumis_ec'
                 - 'refuse_ec'
@@ -118,6 +152,10 @@ framework:
                 initialiser:
                     #guard: "is_granted('ROLE_FORMATION')"
                     from: 'initialisation_ec'
+                    to: 'autorisation_saisie'
+                autoriser:
+                    #guard: "is_granted('ROLE_FORMATION')"
+                    from: 'autorisation_saisie'
                     to: 'en_cours_redaction'
                 valider_ec:
                     from: 'en_cours_redaction'
