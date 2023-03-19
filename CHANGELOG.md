@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.17.2](https://github.com/Dannebicque/oreof/compare/v0.17.1...v0.17.2) (2023-03-19)
+
+
+### Features
+
+* Affichage des parcours ([a9052b0](https://github.com/Dannebicque/oreof/commit/a9052b01be64fe68d75f9fe895a11ddeffa272c8))
+* Ajout d'étapes dans le worflow ([176bf46](https://github.com/Dannebicque/oreof/commit/176bf467b3ac1acf511938f3268323b1f7c50c5e))
+* Ajout d'un tableau sur la page d'accueil ([0b11e67](https://github.com/Dannebicque/oreof/commit/0b11e67f9284feb447920128536a8893de6b2041))
+* méthode pour savoir si parcours par défaut. Refactoring en conséquence ([0876ace](https://github.com/Dannebicque/oreof/commit/0876aced9deea750b709b91ac54dfb7c87bbee70))
+* Onglets d'un parcours par défaut au même niveau ([6af728d](https://github.com/Dannebicque/oreof/commit/6af728d5019264677788d38ece2f90ad699891e7))
+* textes ([643267e](https://github.com/Dannebicque/oreof/commit/643267edba31f97990b6c96de851925fe0e12176))
+* Vérification des listes; choix; choix par défaut ([1ddc42f](https://github.com/Dannebicque/oreof/commit/1ddc42fcdb21ee1d01be05f41983499a24504cf5))
+
 ### [0.17.1](https://github.com/Dannebicque/oreof/compare/v0.17.0...v0.17.1) (2023-03-19)
 
 
