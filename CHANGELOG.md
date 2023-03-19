@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.17.3](https://github.com/Dannebicque/oreof/compare/v0.17.2...v0.17.3) (2023-03-19)
+
+
+### Features
+
+* Ordre UE, gestion des "," tet "." ([2677cfe](https://github.com/Dannebicque/oreof/commit/2677cfe3a11f388eb3083a417f37bf8f21b0d0f5))
+
 ### [0.17.2](https://github.com/Dannebicque/oreof/compare/v0.17.1...v0.17.2) (2023-03-19)
 
 
