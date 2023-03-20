@@ -1,6 +1,21 @@
 <table class="table">
     <thead>
     <tr>
+        <th>Composante</th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'typeDiplome',
+                        'direction': getDirection('typeDiplome', sort, direction)
+                    }) }}
+            >
+                Type de formation
+
+                {{ displaySort('typeDiplome', sort, direction) }}
+            </a>
+        </th>
+        <th>Mention/spécialité</th>
+
         <th>
             <a href="#"
             {{ stimulus_action('crud', 'sort', 'click', {
@@ -13,32 +28,21 @@
             {{ displaySort('libelle', sort, direction) }}
             </a>
         </th>
-        <th>
-            <a href="#"
-                    {{ stimulus_action('crud', 'sort', 'click', {
-                        'sort': 'typeDiplome',
-                        'direction': getDirection('typeDiplome', sort, direction)
-                    }) }}
-            >
-                Type de diplôme
+        <th>Lieu</th>
 
-                {{ displaySort('typeDiplome', sort, direction) }}
-            </a>
-        </th>
-        <th>
-            <a href="#"
-                    {{ stimulus_action('crud', 'sort', 'click', {
-                        'sort': 'domaine',
-                        'direction': getDirection('domaine', sort, direction)
-                    }) }}
-            >
-                Domaine
+{#        <th>#}
+{#            <a href="#"#}
+{#                    {{ stimulus_action('crud', 'sort', 'click', {#}
+{#                        'sort': 'domaine',#}
+{#                        'direction': getDirection('domaine', sort, direction)#}
+{#                    }) }}#}
+{#            >#}
+{#                Domaine#}
 
-                {{ displaySort('domaine', sort, direction) }}
-            </a>
-        </th>
-        <th>Mention/spécialité</th>
-        <th>Composante</th>
+{#                {{ displaySort('domaine', sort, direction) }}#}
+{#            </a>#}
+{#        </th>#}
+
         <th>Etat</th>
         <th>Remplissage</th>
         <th></th>
@@ -47,17 +51,6 @@
     <tbody>
     {% for parcour in parcours %}
         <tr>
-            <td>{{ parcour.libelle }}</td>
-            <td>
-                {{ parcour.formation.typeDiplome|typeDiplome }}
-            </td>
-            <td>
-                {% if parcour.formation.mention != null or parcour.formation.mentionTexte != null %}
-                    {{ parcour.formation.display }}
-                {% else %}
-                    <span class="badge bg-danger">Non définie</span>
-                {% endif %}
-            </td>
             <td>
                 {% if parcour.formation.composantePorteuse != null %}
                     {{ parcour.formation.composantePorteuse.libelle }}
@@ -65,6 +58,20 @@
                     <span class="badge bg-danger">Non définie</span>
                 {% endif %}
             </td>
+            <td>
+                {{ parcour.formation.typeDiplome|typeDiplome }}
+            </td>
+
+
+            <td>
+                {% if parcour.formation.mention != null or parcour.formation.mentionTexte != null %}
+                    {{ parcour.formation.display }}
+                {% else %}
+                    <span class="badge bg-danger">Non définie</span>
+                {% endif %}
+            </td>
+            <td>{{ parcour.libelle }}</td>
+            <td>{{ parcour.localisation != null ? parcour.localisation.libelle : 'Non défini' }}</td>
             <td>
                 {{ parcour.etatParcours|badgeDpe }}
             </td>

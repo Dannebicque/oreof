@@ -3,6 +3,7 @@ bouton pour valider/invalide les étapes successives #}
 <table class="table">
     <thead>
     <tr>
+        <th>Composante</th>
         <th>
             <a href="#"
                     {{ stimulus_action('crud', 'sort', 'click', {
@@ -10,25 +11,25 @@ bouton pour valider/invalide les étapes successives #}
                         'direction': getDirection('typeDiplome', sort, direction)
                     }) }}
             >
-                Type de diplôme
+                Type de formation
 
                 {{ displaySort('typeDiplome', sort, direction) }}
             </a>
         </th>
-        <th>
-            <a href="#"
-                    {{ stimulus_action('crud', 'sort', 'click', {
-                        'sort': 'domaine',
-                        'direction': getDirection('domaine', sort, direction)
-                    }) }}
-            >
-                Domaine
+{#        <th>#}
+{#            <a href="#"#}
+{#                    {{ stimulus_action('crud', 'sort', 'click', {#}
+{#                        'sort': 'domaine',#}
+{#                        'direction': getDirection('domaine', sort, direction)#}
+{#                    }) }}#}
+{#            >#}
+{#                Domaine#}
 
-                {{ displaySort('domaine', sort, direction) }}
-            </a>
-        </th>
+{#                {{ displaySort('domaine', sort, direction) }}#}
+{#            </a>#}
+{#        </th>#}
         <th>Mention/spécialité</th>
-        <th>Composante</th>
+
         <th>Etat</th>
         <th>Remplissage</th>
         <th></th>
@@ -38,9 +39,16 @@ bouton pour valider/invalide les étapes successives #}
     {% for formation in formations %}
         <tr>
             <td>
+                {% if formation.composantePorteuse != null %}
+                    {{ formation.composantePorteuse.libelle }}
+                {% else %}
+                    <span class="badge bg-danger">Non définie</span>
+                {% endif %}
+            </td>
+            <td>
                 {{ formation.typeDiplome|typeDiplome }}
             </td>
-            <td>{{ formation.domaine != null ? formation.domaine.libelle : 'Non définie' }}</td>
+{#            <td>{{ formation.domaine != null ? formation.domaine.libelle : 'Non définie' }}</td>#}
             <td>
                 {% if formation.mention != null or formation.mentionTexte != null %}
                     {{ formation.display }}
@@ -48,13 +56,7 @@ bouton pour valider/invalide les étapes successives #}
                     <span class="badge bg-danger">Non définie</span>
                 {% endif %}
             </td>
-            <td>
-                {% if formation.composantePorteuse != null %}
-                    {{ formation.composantePorteuse.libelle }}
-                {% else %}
-                    <span class="badge bg-danger">Non définie</span>
-                {% endif %}
-            </td>
+
             <td>
                 {{ formation.etatDpe|badgeDpe }}
             </td>
@@ -104,6 +106,7 @@ bouton pour valider/invalide les étapes successives #}
                 <thead>
                 <tr>
                     <th>Parcours</th>
+                    <th>Lieu</th>
                     <th>Responsable</th>
                     <th>Etat</th>
                     <th>Remplissage</th>
@@ -115,6 +118,7 @@ bouton pour valider/invalide les étapes successives #}
 
             <tr>
                 <td>{{ parcours.libelle }}</td>
+                <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
                 <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
                 <td>{{ parcours.etatParcours|badgeDpe }}</td>
                 <td>{{ parcours.remplissage|remplissage }}</td>

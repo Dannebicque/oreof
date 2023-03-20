@@ -1,5 +1,5 @@
 <div>
-    <table class="table table-striped {% if mode == 'detail' %}table-bordered table-condensed{% endif%} table-hover ">
+    <table class="table table-striped {% if mode == 'detail' %}table-bordered table-condensed{% endif %} table-hover ">
         <thead>
         <tr>
             {% if mode == 'liste' %}
@@ -17,6 +17,7 @@
             {% endif %}
             <th></th>
             <th></th>
+
         </tr>
         </thead>
         <tbody>
@@ -147,7 +148,8 @@
                             {% if not loop.first %}
                                 <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
                                     'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
-                                        ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}><i class="fal fa-circle-up"></i></button>
+                                        ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
+                                    <i class="fal fa-circle-up"></i></button>
                             {% else %}
                                 <button class="btn btn-sm btn-outline-info" disabled><i class="fal fa-circle-up"></i>
                                 </button>
@@ -171,24 +173,25 @@
                             'initialiser'))) or (is_granted
                             ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
                             'valider_ec')) %}
-                        <a
-                                href="{{ path('app_ec_etat_valide',{'id': ec.id, parcours:ec.parcours.id}) }}"
-                                class="btn btn-sm text-warning"
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="bottom"
-                                title="Valider un EC"
-                        >
-                            <i class="{{ iconValidate }}"></i>
-                            <span> valider</span>
-                        </a>
+                            <a
+                                    href="{{ path('app_ec_etat_valide',{'id': ec.id, parcours:ec.parcours.id}) }}"
+                                    class="btn btn-sm text-warning"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"
+                                    title="Valider un EC"
+                            >
+                                <i class="{{ iconValidate }}"></i>
+                                <span> valider</span>
+                            </a>
                         {% endif %}
                     </td>
                 {% endif %}
             </tr>
-            {% else %}
+        {% else %}
             <tr>
                 <td colspan="{% if mode == 'liste' %}10{% else %}8{% endif %}" class="bg-warning">Aucun
-                                                                                                            EC</td>
+                                                                                                  EC
+                </td>
             </tr>
         {% endfor %}
         {% if parcours is defined and is_granted('ROLE_EC_ADD_MY', parcours.formation) and ue is defined %}
