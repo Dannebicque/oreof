@@ -30,6 +30,7 @@ class RythmeFormationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => RythmeFormation::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

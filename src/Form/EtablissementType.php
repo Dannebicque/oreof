@@ -30,6 +30,7 @@ class EtablissementType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Etablissement::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

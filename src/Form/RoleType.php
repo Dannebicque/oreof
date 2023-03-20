@@ -35,6 +35,7 @@ class RoleType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Role::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

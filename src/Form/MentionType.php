@@ -50,7 +50,8 @@ class MentionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Mention::class,
-            'typesDiplomes' => []
+            'typesDiplomes' => [],
+            'translation_domain' => 'form'
         ]);
     }
 }

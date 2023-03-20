@@ -35,6 +35,7 @@ class DomaineType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Domaine::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

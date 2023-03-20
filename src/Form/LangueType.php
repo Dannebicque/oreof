@@ -38,6 +38,7 @@ class LangueType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Langue::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

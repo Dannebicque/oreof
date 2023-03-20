@@ -84,6 +84,7 @@ class ComposanteType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Composante::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

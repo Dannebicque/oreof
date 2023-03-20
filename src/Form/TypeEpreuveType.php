@@ -39,7 +39,8 @@ class TypeEpreuveType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => TypeEpreuve::class,
-            'typesDiplomes' => []
+            'typesDiplomes' => [],
+            'translation_domain' => 'form'
         ]);
     }
 }

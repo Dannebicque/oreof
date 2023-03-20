@@ -72,6 +72,7 @@ class AnneeUniversitaireType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => AnneeUniversitaire::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

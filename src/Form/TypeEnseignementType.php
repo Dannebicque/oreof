@@ -27,6 +27,7 @@ class TypeEnseignementType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => TypeEnseignement::class,
+            'translation_domain' => 'form'
         ]);
     }
 }

@@ -38,7 +38,8 @@ class TypeUeType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => TypeUe::class,
-            'typesDiplomes' => []
+            'typesDiplomes' => [],
+            'translation_domain' => 'form'
         ]);
     }
 }
