@@ -59,6 +59,7 @@ enum EtatDpeEnum: string
         return match ($this) {
             self::initialisation_dpe => 'Initialisation DPE',
             self::initialisation_ec => 'Initialisation EC',
+            self::autorisation_saisie => 'Saisie autorisée',
             self::en_cours_redaction => 'En cours de rédaction',
             self::soumis_rf => 'Soumis RF',
             self::soumis_ec => 'Soumis EC',
