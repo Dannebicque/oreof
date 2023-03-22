@@ -20,7 +20,11 @@ class TypeDiplomeType extends AbstractType
             ->add('nbUeMax')
             ->add('nbEctsMaxUe')
             ->add('ModeleMcc')
-            ->add('debutSemestreFlexible');
+            ->add('debutSemestreFlexible')
+            ->add('hasMemoire')
+            ->add('hasStage')
+            ->add('hasSituationPro')
+            ->add('hasProjet');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

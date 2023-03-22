@@ -58,16 +58,16 @@ class TypeDiplome
     private ?bool $debutSemestreFlexible = null;
 
     #[ORM\Column]
-    private ?bool $hasStage = null;
+    private ?bool $hasStage = true;
 
     #[ORM\Column]
-    private ?bool $hasProjet = null;
+    private ?bool $hasProjet = true;
 
     #[ORM\Column]
-    private ?bool $hasSituationPro = null;
+    private ?bool $hasSituationPro = false;
 
     #[ORM\Column]
-    private ?bool $hasMemoire = null;
+    private ?bool $hasMemoire = true;
 
     public function __construct()
     {
