@@ -33,6 +33,7 @@ enum EtatDpeEnum: string
 
     case initialisation_dpe = 'initialisation_dpe';
     case initialisation_ec = 'initialisation_ec';
+    case autorisation_saisie = 'autorisation_saisie';
     case en_cours_redaction = 'en_cours_redaction';
     case soumis_rf = 'soumis_rf';
     case soumis_ec = 'soumis_ec';
