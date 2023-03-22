@@ -87,11 +87,11 @@ class ParcoursStep2Type extends AbstractType
             ])
             ->add('hasSituationPro', YesNoType::class, [
                 'attr' => ['data-action' => 'change->parcours--step2#changeSituationPro'],
-                'disabled' => $typeDiplome::SOURCE === ButTypeDiplome::SOURCE || $typeDiplome::SOURCE === LicenceProfessionnelleTypeDiplome::SOURCE,
-                'data' => $typeDiplome::SOURCE === ButTypeDiplome::SOURCE || $typeDiplome::SOURCE === LicenceProfessionnelleTypeDiplome::SOURCE,
+                'disabled' => !$typeDiplome?->isHasSituationPro(),
+                'data' => (bool)$typeDiplome?->isHasSituationPro(),
             ]);
 
-        if ($typeDiplome::SOURCE === ButTypeDiplome::SOURCE || $typeDiplome::SOURCE === LicenceProfessionnelleTypeDiplome::SOURCE) {
+        if ($typeDiplome !== null && $typeDiplome->isHasSituationPro()) {
             $builder->add('nbHeuresSituationPro', NumberType::class, [
                 'html5' => true,
                 'scale' => 1,

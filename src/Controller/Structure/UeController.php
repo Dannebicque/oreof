@@ -9,19 +9,16 @@
 
 namespace App\Controller\Structure;
 
-use App\Classes\EcOrdre;
 use App\Classes\UeOrdre;
-use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
-use App\Entity\TypeEnseignement;
+use App\Entity\NatureUeEc;
 use App\Entity\TypeUe;
 use App\Entity\Ue;
 use App\Form\UeType;
-use App\Repository\TypeEnseignementRepository;
+use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeUeRepository;
 use App\Repository\UeRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,28 +30,24 @@ use Symfony\Component\Routing\Annotation\Route;
 ]
 class UeController extends AbstractController
 {
-    /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-     */
     #[
         Route('/detail/semestre/{semestre}/{parcours}', name: 'detail_semestre')
     ]
     public function detailComposante(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         UeRepository $ueRepository,
         TypeUeRepository $typeUeRepository,
-        TypeEnseignementRepository $typeEnseignementRepository,
+        NatureUeEcRepository $natureUeEcRepository,
         Semestre $semestre,
         Parcours $parcours
     ): Response {
         $ues = $ueRepository->findBy(['semestre' => $semestre], ['ordre' => 'ASC']);
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome());
+        $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         return $this->render('structure/ue/_liste.html.twig', [
             'ues' => $ues,
             'semestre' => $semestre,
-            'typeUes' => $typeUeRepository->findByTypeDiplome($typeDiplome),
-            'typeEnseignements' => $typeEnseignementRepository->findAll(),
+            'typeUes' => $typeDiplome?->getTypeUes(),
+            'natureUeEcs' => $natureUeEcRepository->findAll(),
             'parcours' => $parcours,
             'typeDiplome' => $typeDiplome,
         ]);
@@ -67,9 +60,8 @@ class UeController extends AbstractController
         Route('/add-ue/semestre/{semestre}/{parcours}', name: 'add_ue_semestre')
     ]
     public function addUe(
-        TypeEnseignementRepository $typeEnseignementRepository,
+        NatureUeEcRepository $natureUeEcRepository,
         TypeUeRepository $typeUeRepository,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request,
         UeRepository $ueRepository,
         Semestre $semestre,
@@ -77,18 +69,25 @@ class UeController extends AbstractController
     ): Response {
         $ue = new Ue();
         $ue->setSemestre($semestre);
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome());
+        $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
+
+        if ($typeDiplome === null) {
+            throw new \Exception('Type de diplôme non trouvé');
+        }
         $form = $this->createForm(UeType::class, $ue, [
             'action' => $this->generateUrl('structure_ue_add_ue_semestre', [
                 'semestre' => $semestre->getId(),
                 'parcours' => $parcours->getId()
             ]),
-            'choices' => $typeUeRepository->findByTypeDiplome($typeDiplome),
+            'choices' => $typeDiplome?->getTypeUes(),
         ]);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $ordre = $ueRepository->getMaxOrdre($semestre);
+            $ue->setOrdre($ordre + 1);
+
             if ($form->get('typeUe')->getData() !== null) {
                 $tu = $typeUeRepository->find($form->get('typeUe')->getData());
                 $ue->setTypeUe($tu);
@@ -97,16 +96,16 @@ class UeController extends AbstractController
             if ($form->get('typeUeTexte')->getData() !== null && $form->get('typeUe')->getData() === null) {
                 $tu = new TypeUe();
                 $tu->setLibelle($form->get('typeUeTexte')->getData());
-                $tu->setTypeDiplome([$typeDiplome::class]);
+                $tu->addTypeDiplome($typeDiplome);
                 $typeUeRepository->save($tu, true);
                 $ue->setTypeUe($tu);
             }
 
-            if ($form->get('ueObligatoireTexte')->getData() !== null && $form->get('ueObligatoire')->getData() === null) {
-                $tu = new TypeEnseignement();
-                $tu->setLibelle($form->get('ueObligatoireTexte')->getData());
-                $typeEnseignementRepository->save($tu, true);
-                $ue->setUeObligatoire($tu);
+            if ($form->get('natureUeEcTexte')->getData() !== null && $form->get('natureUeEc')->getData() === null) {
+                $tu = new NatureUeEc();
+                $tu->setLibelle($form->get('natureUeEcTexte')->getData());
+                $natureUeEcRepository->save($tu, true);
+                $ue->setNatureUeEc($tu);
             }
 
             $ueRepository->save($ue, true);
@@ -150,15 +149,15 @@ class UeController extends AbstractController
     public function updateUeObligatoire(
         Request $request,
         UeRepository $ueRepository,
-        TypeEnseignementRepository $typeEnseignementRepository,
+        NatureUeEcRepository $natureUeEcRepository,
         Ue $ue,
     ): Response {
         $typeUe = JsonRequest::getValueFromRequest($request, 'value');
         if ($typeUe !== '') {
-            $typeUe = $typeEnseignementRepository->find($typeUe);
-            $ue->setUeObligatoire($typeUe);
+            $typeUe = $natureUeEcRepository->find($typeUe);
+            $ue->setTypeUe($typeUe);
         } else {
-            $ue->setUeObligatoire(null);
+            $ue->setNatureUeEc(null);//todo: gérer ??
         }
 
         $ueRepository->save($ue, true);
@@ -173,6 +172,7 @@ class UeController extends AbstractController
         string $sens
     ): Response {
         $ueOrdre->deplacerUe($ue, $sens);
+
         return $this->json(true);
     }
 

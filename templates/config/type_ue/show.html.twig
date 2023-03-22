@@ -7,7 +7,7 @@
     <tr>
         <th>Type de diplôme</th>
         <td>
-            {% for typeDip in type_ue.typeDiplome %}
+            {% for typeDip in type_ue.typeDiplomes %}
                 {{ typeDip|typeDiplome }}
                 {% if loop.last == false %}
                     ,

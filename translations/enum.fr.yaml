@@ -14,5 +14,6 @@ FC_CONTRAT_PRO: 'Formation continue en contrat de professionnalisation'
 formation_step1.labels.regimeInscription.label: "Régime d'inscription"
 parcours_step5.labels.regimeInscription.label: parcours_step5.labels.regimeInscription.label
 'Type de diplôme': 'Type de diplôme'
-deust: deust
+deust: DEUST
 parcours_step5.labels.regimeInscription: parcours_step5.labels.regimeInscription
+"Type(s) de diplôme proposant ce type d'UE": "Type(s) de diplôme proposant ce type d'UE"

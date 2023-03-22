@@ -9,16 +9,12 @@
 
 namespace App\Twig;
 
-use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Entity\TypeDiplome;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
 class TypeDiplomeExtension extends AbstractExtension
 {
-    public function __construct(private readonly TypeDiplomeRegistry $typeDiplomeRegistry)
-    {
-    }
-
     public function getFilters(): array
     {
         return [
@@ -26,12 +22,8 @@ class TypeDiplomeExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-     */
-    public function typeDiplome(string $value): string
+    public function typeDiplome(?TypeDiplome $value): string
     {
-        $typeD = $this->typeDiplomeRegistry->getTypeDiplome($value);
-        return $typeD !== null ? $typeD->libelle : 'Non défini';
+        return $value !== null ? $value->getLibelle() : '<span class="badge bg-warning">Non défini</span>';
     }
 }

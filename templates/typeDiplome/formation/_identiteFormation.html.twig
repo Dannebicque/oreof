@@ -2,7 +2,7 @@
     <div class="col-md-6 col-sm-12">
         <dl>
             <dt>Type de diplôme</dt>
-            <dd>{{ typeDiplome.libelle }}</dd>
+            <dd>{{ typeDiplome|typeDiplome }}</dd>
             <dt>Domaine</dt>
             <dd>{{ formation.domaine != null ? formation.domaine.libelle : 'erreur' }}</dd>
             <dt>Niveau à l'entrée de la formation</dt>

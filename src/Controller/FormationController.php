@@ -17,15 +17,13 @@ use App\Repository\DomaineRepository;
 use App\Repository\FormationRepository;
 use App\Repository\MentionRepository;
 use App\Repository\RoleRepository;
+use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserCentreRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Workflow\WorkflowInterface;
 
 #[Route('/formation')]
 class FormationController extends BaseController
@@ -111,7 +109,6 @@ class FormationController extends BaseController
         RoleRepository $roleRepository,
         MentionRepository $mentionRepository,
         UserCentreRepository $userCentreRepository,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request,
         FormationRepository $formationRepository
     ): Response {
@@ -120,7 +117,6 @@ class FormationController extends BaseController
         $formation = new Formation($this->getAnneeUniversitaire());
         $form = $this->createForm(FormationSesType::class, $formation, [
             'action' => $this->generateUrl('app_formation_new'),
-            'typesDiplomes' => $typeDiplomeRegistry->getChoices(),
         ]);
         $form->handleRequest($request);
 
@@ -163,14 +159,12 @@ class FormationController extends BaseController
     #[Route('/edit/formation/{formation}', name: 'app_formation_edit_modal', methods: ['GET', 'POST'])]
     public function editModal(
         MentionRepository $mentionRepository,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request,
         FormationRepository $formationRepository,
         Formation $formation
     ): Response {
         $form = $this->createForm(FormationSesType::class, $formation, [
             'action' => $this->generateUrl('app_formation_edit_modal', ['formation' => $formation->getId()]),
-            'typesDiplomes' => $typeDiplomeRegistry->getChoices(),
         ]);
         $form->handleRequest($request);
 
@@ -200,7 +194,7 @@ class FormationController extends BaseController
     #[Route('/api', name: 'app_formation_api', methods: ['GET'])]
     public function api(
         MentionRepository $mentionRepository,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
+        TypeDiplomeRepository $typeDiplomeRepository,
         DomaineRepository $domaineRepository,
         Request $request
     ): Response {
@@ -212,7 +206,7 @@ class FormationController extends BaseController
             ]);
         }
 
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($request->query->get('typeDiplome'));
+        $typeDiplome = $typeDiplomeRepository->find($request->query->get('typeDiplome'));
 
         return $this->json([
             'mentions' => $mentionRepository->findByDomaineAndTypeDiplomeArray($domaine, $typeDiplome),
@@ -224,10 +218,9 @@ class FormationController extends BaseController
      */
     #[Route('/{id}', name: 'app_formation_show', methods: ['GET'])]
     public function show(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Formation $formation
     ): Response {
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+        $typeDiplome = $formation->getTypeDiplome();
 
         return $this->render('formation/show.html.twig', [
             'template' => $typeDiplome::TEMPLATE,
@@ -242,17 +235,14 @@ class FormationController extends BaseController
     #[Route('/{id}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Formation $formation
     ): Response {
         //todo: tester les droits et si on est en place "en_cours_redaction" => voter
 
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
-
         return $this->render('formation/edit.html.twig', [
             'formation' => $formation,
             'selectedStep' => $request->query->get('step', 1),
-            'typeDiplome' => $typeDiplome
+            'typeDiplome' => $formation->getTypeDiplome()
         ]);
     }
 

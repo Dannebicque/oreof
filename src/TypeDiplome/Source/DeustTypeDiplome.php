@@ -22,7 +22,7 @@ class DeustTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterfa
     public const TEMPLATE_FORM_MCCC = 'deust.html.twig';
 
     public string $libelle = 'DEUST';
-    public int $nbSemestres = 6;
+    public int $nbSemestres = 4;
     public int $nbEctsUeMax = 0;
 
 

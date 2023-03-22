@@ -35,7 +35,7 @@ class Ue
     private Collection $ecUes;
 
     #[ORM\ManyToOne]
-    private ?TypeEnseignement $ueObligatoire = null;
+    private ?NatureUeEc $natureUeEc = null;
 
     public function __construct()
     {
@@ -138,14 +138,14 @@ class Ue
         return $this;
     }
 
-    public function getUeObligatoire(): ?TypeEnseignement
+    public function getNatureUeEc(): ?NatureUeEc
     {
-        return $this->ueObligatoire;
+        return $this->natureUeEc;
     }
 
-    public function setUeObligatoire(?TypeEnseignement $ueObligatoire): self
+    public function setNatureUeEc(?NatureUeEc $natureUeEc): self
     {
-        $this->ueObligatoire = $ueObligatoire;
+        $this->natureUeEc = $natureUeEc;
 
         return $this;
     }

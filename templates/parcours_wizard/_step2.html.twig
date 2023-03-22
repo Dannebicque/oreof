@@ -23,9 +23,7 @@
     </div>
 
     {{ form_row(form.hasSituationPro) }}
-    {% if constant('SOURCE',typeDiplome) == constant
-        ('App\\TypeDiplome\\Source\\ButTypeDiplome::SOURCE') or constant('SOURCE',typeDiplome) == constant
-        ('App\\TypeDiplome\\Source\\LicenceProfessionnelleTypeDiplome::SOURCE') %}
+    {% if typeDiplome != null and typeDiplome.isHasSituationPro %}
         {{ form_row(form.nbHeuresSituationPro) }}
         {{ form_row(form.situationProText) }}
     {% endif %}

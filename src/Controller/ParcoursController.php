@@ -12,12 +12,9 @@ namespace App\Controller;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Form\ParcoursType;
-use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -116,9 +113,9 @@ class ParcoursController extends BaseController
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
     #[Route('/{id}/edit', name: 'app_parcours_edit', methods: ['GET', 'POST'])]
-    public function edit(Parcours $parcour, TypeDiplomeRegistry $typeDiplomeRegistry): Response
+    public function edit(Parcours $parcour): Response
     {
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcour->getFormation()?->getTypeDiplome());
+        $typeDiplome = $parcour->getFormation()?->getTypeDiplome();
 
         return $this->render('parcours/edit.html.twig', [
             'parcours' => $parcour,

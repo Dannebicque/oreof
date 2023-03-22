@@ -11,7 +11,6 @@ namespace App\Controller;
 
 use App\Classes\MyPDF;
 use App\Entity\Formation;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,7 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class FormationExportController extends AbstractController
 {
     public function __construct(
-        private readonly TypeDiplomeRegistry $typeDiplomeRegistry,
         private readonly MyPDF $myPdf
     )
     {
@@ -34,12 +32,12 @@ class FormationExportController extends AbstractController
     #[Route('/formation/export/{formation}', name: 'app_formation_export')]
     public function export(Formation $formation): Response
     {
-        $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+        $typeDiplome = $formation->getTypeDiplome();
 
         return $this->myPdf::generePdf('pdf/formation.html.twig', [
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
-            'template' => $typeDiplome::TEMPLATE,
+            'template' => $typeDiplome::TEMPLATE,//todo: template générique finalement ?
         ], 'dpe_formation_'.$formation->display());
     }
 }

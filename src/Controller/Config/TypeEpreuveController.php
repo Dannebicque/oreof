@@ -12,7 +12,6 @@ namespace App\Controller\Config;
 use App\Entity\TypeEpreuve;
 use App\Form\TypeEpreuveType;
 use App\Repository\TypeEpreuveRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +37,6 @@ class TypeEpreuveController extends AbstractController
 
     #[Route('/new', name: 'app_type_epreuve_new', methods: ['GET', 'POST'])]
     public function new(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request,
         TypeEpreuveRepository $typeEpreuveRepository
     ): Response
@@ -46,8 +44,6 @@ class TypeEpreuveController extends AbstractController
         $typeEpreuve = new TypeEpreuve();
         $form = $this->createForm(TypeEpreuveType::class, $typeEpreuve, [
             'action' => $this->generateUrl('app_type_epreuve_new'),
-            'typesDiplomes' => $typeDiplomeRegistry->getChoices(),
-
         ]);
         $form->handleRequest($request);
 
@@ -73,7 +69,6 @@ class TypeEpreuveController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_type_epreuve_edit', methods: ['GET', 'POST'])]
     public function edit(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request,
         TypeEpreuve $typeEpreuve,
         TypeEpreuveRepository $typeEpreuveRepository
@@ -81,8 +76,6 @@ class TypeEpreuveController extends AbstractController
     {
         $form = $this->createForm(TypeEpreuveType::class, $typeEpreuve, [
             'action' => $this->generateUrl('app_type_epreuve_edit', ['id' => $typeEpreuve->getId()]),
-            'typesDiplomes' => $typeDiplomeRegistry->getChoices(),
-
         ]);
         $form->handleRequest($request);
 

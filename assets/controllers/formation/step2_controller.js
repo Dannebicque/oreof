@@ -23,9 +23,9 @@ export default class extends Controller {
 
   connect() {
     document.getElementById('formation_step2_objectifsFormation').addEventListener('trix-blur', this.saveObjectifsFormation.bind(this))
-    document.getElementById('formation_step2_contenuFormation').addEventListener('trix-blur', this.saveObjectifsFormation.bind(this))
-    document.getElementById('formation_step2_resultatsAttendus').addEventListener('trix-blur', this.saveObjectifsFormation.bind(this))
-    document.getElementById('formation_step2_rythmeFormationTexte').addEventListener('trix-blur', this.saveObjectifsFormation.bind(this))
+    document.getElementById('formation_step2_contenuFormation').addEventListener('trix-blur', this.saveContenu.bind(this))
+    document.getElementById('formation_step2_resultatsAttendus').addEventListener('trix-blur', this.saveResultats.bind(this))
+    document.getElementById('formation_step2_rythmeFormationTexte').addEventListener('trix-blur', this.saveRythme.bind(this))
   }
 
   saveContenu() {

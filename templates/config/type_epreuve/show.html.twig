@@ -8,7 +8,7 @@
     <tr>
         <th>Type de diplôme</th>
         <td>
-            {% for typeDip in type_epreuve.typeDiplome %}
+            {% for typeDip in type_epreuve.typeDiplomes %}
                 {{ typeDip|typeDiplome }}
                 {% if loop.last == false %}
                     ,

@@ -1,0 +1,74 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Libellé</th>
+        <th>Type(s) diplôme</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for type_ec in type_ecs %}
+        <tr>
+            <td>{{ type_ec.libelle }}</td>
+            <td>
+                {% for typeDip in type_ec.typeDiplomes %}
+                    {{ typeDip|typeDiplome }}
+                    {% if loop.last == false %}
+                        ,
+                    {% endif %}
+                {% endfor %}
+            </td>
+            <td class="text-end">
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Voir un type d\'unité d\'enseignement',
+                            modalUrl: path('app_type_ec_show',{'id': type_ec.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-info"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Voir un type d\'unité d\'enseignement"
+                >
+                    <i class="{{ iconShow }}"></i>
+                    <span> voir</span>
+                </button>
+
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Modifier un type d\'unité d\'enseignement',
+                            modalUrl: path('app_type_ec_edit',{'id': type_ec.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-warning"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Modifier un type d\'unité d\'enseignement"
+                >
+                    <i class="{{ iconEdit }}"></i>
+                    <span> modifier</span>
+                </button>
+
+                <button {{ stimulus_action('crud', 'duplicate', 'click', {
+                    url:path('app_type_ec_duplicate',{'id': type_ec.id})
+                }) }} class="btn btn-sm text-success">
+                    <i class="{{ iconDuplicate }}"></i> Dupliqecr
+                </button>
+                <button {{ stimulus_action('crud', 'delete', 'click', {
+                    url:path('app_type_ec_delete',{'id': type_ec.id}),
+                    csrf: csrf_token('delete' ~ type_ec.id)
+                }) }} class="btn btn-sm text-danger">
+                    <i class="{{ iconDelete }}"></i> Supprimer
+                </button>
+            </td>
+
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="3">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

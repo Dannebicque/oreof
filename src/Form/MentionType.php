@@ -11,6 +11,7 @@ namespace App\Form;
 
 use App\Entity\Domaine;
 use App\Entity\Mention;
+use App\Entity\TypeDiplome;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -24,9 +25,9 @@ class MentionType extends AbstractType
     {
         //todo: fitlrer par établissement du connecté...
         $builder
-            ->add('typeDiplome', ChoiceType::class, [
-                'choices' => $options['typesDiplomes'],
-                'translation_domain' => 'enum',
+            ->add('typeDiplome', EntityType::class, [
+                'class' => TypeDiplome::class,
+                'choice_label' => 'libelle',
                 'label' => 'Type de diplôme',
                 'attr' => ['data-action' => 'change->formation#changeTypeDiplome']
             ])
@@ -50,7 +51,6 @@ class MentionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Mention::class,
-            'typesDiplomes' => [],
             'translation_domain' => 'form'
         ]);
     }

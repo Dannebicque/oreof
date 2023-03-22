@@ -29,24 +29,6 @@ class ElementConstitutif
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 250)]
-    private ?string $libelle = null;
-
-    #[ORM\Column(length: 250, nullable: true)]
-    private ?string $libelleAnglais = null;
-
-    #[ORM\Column]
-    private ?bool $enseignementMutualise = false;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $description = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $objectifs = null;
-
-    #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'elementConstitutifs')]
-    private Collection $competences;
-
     #[ORM\Column(length: 30, nullable: true, enumType: ModaliteEnseignementEnum::class)]
     private ?ModaliteEnseignementEnum $modaliteEnseignement = null;
 
@@ -90,24 +72,10 @@ class ElementConstitutif
     private ?bool $isTpDistancielMutualise;
 
     #[ORM\ManyToOne]
-    private ?User $responsableEc = null;
-
-    #[ORM\ManyToMany(targetEntity: Langue::class, inversedBy: 'elementConstitutifs')]
-    #[ORM\JoinTable(name: 'element_constitutif_langue_dispense')]
-    private Collection $langueDispense;
-
-    #[ORM\ManyToMany(targetEntity: Langue::class, inversedBy: 'languesSupportsEcs')]
-    #[ORM\JoinTable(name: 'element_constitutif_langue_support')]
-    private Collection $langueSupport;
-
-    #[ORM\ManyToOne]
-    private ?TypeEnseignement $typeEnseignement = null;
+    private ?NatureUeEc $natureUeEc = null;
 
     #[ORM\OneToMany(mappedBy: 'ec', targetEntity: EcUe::class)]
     private Collection $ecUes;
-
-    #[ORM\Column(nullable: true)]
-    private ?array $etatEc = [];
 
     #[ORM\OneToMany(mappedBy: 'ec', targetEntity: Mccc::class)]
     private Collection $mcccs;
@@ -116,119 +84,23 @@ class ElementConstitutif
     private ?string $code = null;
 
     #[ORM\Column]
-    private ?array $etatSteps = [];
-
-    #[ORM\Column]
     private ?int $ordre = null;
+
+    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
+    private ?FicheMatiere $ficheMatiere = null;
+
+    #[ORM\ManyToOne()]
+    private ?Parcours $parcours = null;
 
     public function __construct()
     {
-        $this->competences = new ArrayCollection();
-        $this->langueDispense = new ArrayCollection();
-        $this->langueSupport = new ArrayCollection();
         $this->ecUes = new ArrayCollection();
         $this->mcccs = new ArrayCollection();
-
-        for ($i = 1; $i <= 5; $i++) {
-            $this->etatSteps[$i] = false;
-        }
-    }
-
-    public function getEtatStep(int $step): bool
-    {
-        if (array_key_exists($step, $this->getEtatSteps())) {
-            return $this->getEtatSteps()[$step];
-        }
-        return false;
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getLibelle(): ?string
-    {
-        return $this->libelle;
-    }
-
-    public function setLibelle(string $libelle): self
-    {
-        $this->libelle = $libelle;
-
-        return $this;
-    }
-
-    public function getLibelleAnglais(): ?string
-    {
-        return $this->libelleAnglais;
-    }
-
-    public function setLibelleAnglais(?string $libelleAnglais): self
-    {
-        $this->libelleAnglais = $libelleAnglais;
-
-        return $this;
-    }
-
-    public function isEnseignementMutualise(): ?bool
-    {
-        return $this->enseignementMutualise;
-    }
-
-    public function setEnseignementMutualise(bool $enseignementMutualise): self
-    {
-        $this->enseignementMutualise = $enseignementMutualise;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    public function getObjectifs(): ?string
-    {
-        return $this->objectifs;
-    }
-
-    public function setObjectifs(?string $objectifs): self
-    {
-        $this->objectifs = $objectifs;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Competence>
-     */
-    public function getCompetences(): Collection
-    {
-        return $this->competences;
-    }
-
-    public function addCompetence(Competence $competence): self
-    {
-        if (!$this->competences->contains($competence)) {
-            $this->competences->add($competence);
-        }
-
-        return $this;
-    }
-
-    public function removeCompetence(Competence $competence): self
-    {
-        $this->competences->removeElement($competence);
-
-        return $this;
     }
 
     public function getModaliteEnseignement(): ?ModaliteEnseignementEnum
@@ -239,6 +111,18 @@ class ElementConstitutif
     public function setModaliteEnseignement(?ModaliteEnseignementEnum $modaliteEnseignement): self
     {
         $this->modaliteEnseignement = $modaliteEnseignement;
+
+        return $this;
+    }
+
+    public function getParcours(): ?Parcours
+    {
+        return $this->parcours;
+    }
+
+    public function setParcours(?Parcours $parcours): self
+    {
+        $this->parcours = $parcours;
 
         return $this;
     }
@@ -327,75 +211,6 @@ class ElementConstitutif
         return $this;
     }
 
-    public function getResponsableEc(): ?User
-    {
-        return $this->responsableEc;
-    }
-
-    public function setResponsableEc(?User $responsableEc): self
-    {
-        $this->responsableEc = $responsableEc;
-
-        return $this;
-    }
-
-    public function remplissage(): float
-    {
-        //calcul un remplissage de l'entité en fonction des champs obligatoires
-        $nbChampsRemplis = 0;
-
-        if ($this->langueDispense->isEmpty() === false) {
-            $nbChampsRemplis++;
-        }
-
-        if ($this->typeEnseignement !== null) {
-            $nbChampsRemplis++;
-        }
-
-        if ($this->libelle !== null) {
-            $nbChampsRemplis++;
-        }
-
-        if ($this->libelleAnglais !== null) {
-            $nbChampsRemplis++;
-        }
-
-        if ($this->enseignementMutualise !== null) {
-            $nbChampsRemplis++;
-        }
-
-        if ($this->description !== null) {
-            $nbChampsRemplis++;
-        }
-
-        if ($this->objectifs !== null) {
-            $nbChampsRemplis++;
-        }
-
-        if ($this->competences->isEmpty() === false) {
-            $nbChampsRemplis++;
-        }
-
-
-        $nbHeures = $this->volumeCmPresentiel + $this->volumeTdPresentiel + $this->volumeTpPresentiel + $this->volumeCmDistanciel + $this->volumeTdDistanciel + $this->volumeTpDistanciel;
-
-        if ($nbHeures > 0.0) {
-            $nbChampsRemplis++;
-        }
-
-        if ($this->modaliteEnseignement !== null) {
-            $nbChampsRemplis++;
-        }
-
-        if ($this->ects > 0.0) {
-            $nbChampsRemplis++;
-        }
-
-        $nbChampsObligatoires = 11;
-
-        return round($nbChampsRemplis / $nbChampsObligatoires * 100, 2);
-    }
-
     public function etatStructure(): string
     {
         $nbHeures = $this->volumeCmPresentiel + $this->volumeTdPresentiel + $this->volumeTpPresentiel + $this->volumeCmDistanciel + $this->volumeTdDistanciel + $this->volumeTpDistanciel;
@@ -450,54 +265,6 @@ class ElementConstitutif
         }
 
         return $pourcentageOK && $nbNotesOK ? 'Complet' : 'Non complet';
-    }
-
-    /**
-     * @return Collection<int, Langue>
-     */
-    public function getLangueDispense(): Collection
-    {
-        return $this->langueDispense;
-    }
-
-    public function addLangueDispense(Langue $langueDispense): self
-    {
-        if (!$this->langueDispense->contains($langueDispense)) {
-            $this->langueDispense->add($langueDispense);
-        }
-
-        return $this;
-    }
-
-    public function removeLangueDispense(Langue $langueDispense): self
-    {
-        $this->langueDispense->removeElement($langueDispense);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Langue>
-     */
-    public function getLangueSupport(): Collection
-    {
-        return $this->langueSupport;
-    }
-
-    public function addLangueSupport(Langue $langueSupport): self
-    {
-        if (!$this->langueSupport->contains($langueSupport)) {
-            $this->langueSupport->add($langueSupport);
-        }
-
-        return $this;
-    }
-
-    public function removeLangueSupport(Langue $langueSupport): self
-    {
-        $this->langueSupport->removeElement($langueSupport);
-
-        return $this;
     }
 
     public function isIsCmPresentielMutualise(): ?bool
@@ -572,14 +339,14 @@ class ElementConstitutif
         return $this;
     }
 
-    public function getTypeEnseignement(): ?TypeEnseignement
+    public function getNatureUeEc(): ?NatureUeEc
     {
-        return $this->typeEnseignement;
+        return $this->natureUeEc;
     }
 
-    public function setTypeEnseignement(?TypeEnseignement $typeEnseignement): self
+    public function setNatureUeEc(?NatureUeEc $natureUeEc): self
     {
-        $this->typeEnseignement = $typeEnseignement;
+        $this->natureUeEc = $natureUeEc;
 
         return $this;
     }
@@ -610,82 +377,6 @@ class ElementConstitutif
         }
 
         return $this;
-    }
-
-    public function getParcours(): Parcours
-    {
-        //todo: à revoir, pourquoi first et pas autre ?
-        return $this->getEcUes()->first()->getUe()?->getSemestre()?->getSemestreParcours()->first()->getParcours();
-    }
-
-    public function getAllParcours(): Collection
-    {
-        //todo: à revoir, pourquoi first et pas autre ?
-        return $this->getEcUes()->first()->getUe()?->getSemestre()?->getSemestreParcours();
-    }
-
-    public function getEtatEc(): array
-    {
-        return $this->etatEc ?? [];
-    }
-
-    public function setEtatEc(?array $etatEc): self
-    {
-        $this->etatEc = $etatEc;
-
-        return $this;
-    }
-
-    public function domaineLibelle(): ?string
-    {
-        return $this->getParcours()->getFormation()?->getDomaine()?->getLibelle();
-    }
-
-    public function formationLibelle(): ?string
-    {
-        return $this->getParcours()->getFormation()?->display();
-    }
-
-    public function etatRemplissageOnglets(): array
-    {
-        // Onglet 1 : Identité de l'enseignement
-        // Onglet 2 : Présentation
-        // Onglet 3 : Objectifs et compétences
-        // Onglet 4 : Structure et organisation pédagogiques
-        // Onglet 5 : Modalités d'évaluation
-
-        $onglets[1] = $this->getEtatOnglet1();
-        $onglets[2] = $this->getEtatOnglet2();
-        $onglets[3] = $this->getEtatOnglet3(); //todo: ajouter un flag pour savoir si les compétences sont complètes
-        $onglets[4] = $this->getEtatOnglet4();
-        $onglets[5] = $this->getEtatOnglet5();
-
-        return $onglets;
-    }
-
-    public function getEtatOnglet1(): EtatRemplissageEnum
-    {
-        return $this->getLibelleAnglais() === null && $this->getLibelle() === null && $this->enseignementMutualise === null ? EtatRemplissageEnum::VIDE : (($this->getLibelleAnglais() !== null && $this->getLibelle() !== null && $this->enseignementMutualise !== null && $this->getEtatStep(1)) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
-    }
-
-    public function getEtatOnglet2(): EtatRemplissageEnum
-    {
-        return $this->getDescription() === null && $this->getLangueDispense()->count() === 0 && $this->getLangueSupport()->count() === 0 && $this->getTypeEnseignement() === null ? EtatRemplissageEnum::VIDE : (($this->getDescription() !== null && $this->getLangueDispense()->count() > 0 && $this->getLangueSupport()->count() > 0 && $this->getTypeEnseignement() !== null && $this->getEtatStep(2)) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
-    }
-
-    public function getEtatOnglet3(): EtatRemplissageEnum
-    {
-        return $this->getObjectifs() === null && $this->getCompetences() === null ? EtatRemplissageEnum::VIDE : (($this->getObjectifs() !== null && $this->getCompetences() !== null && $this->getEtatStep(3)) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
-    }
-
-    public function getEtatOnglet4(): EtatRemplissageEnum
-    {
-        return $this->etatStructure() === 'Non complété' ? EtatRemplissageEnum::VIDE : (($this->etatStructure() === 'Complet' && $this->getEtatStep(4)) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
-    }
-
-    public function getEtatOnglet5(): EtatRemplissageEnum
-    {
-        return $this->etatMccc() === 'Non complété' ? EtatRemplissageEnum::VIDE : (($this->etatMccc() === 'Complet' && $this->getEtatStep(5)) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     /**
@@ -728,18 +419,6 @@ class ElementConstitutif
         return $this;
     }
 
-    public function getEtatSteps(): array
-    {
-        return $this->etatSteps ?? [];
-    }
-
-    public function setEtatSteps(array $etatSteps): self
-    {
-        $this->etatSteps = $etatSteps;
-
-        return $this;
-    }
-
     public function getOrdre(): ?int
     {
         return $this->ordre;
@@ -755,5 +434,17 @@ class ElementConstitutif
     public function genereCode(): void
     {
         $this->setCode('EC'.$this->ordre);
+    }
+
+    public function getFicheMatiere(): ?FicheMatiere
+    {
+        return $this->ficheMatiere;
+    }
+
+    public function setFicheMatiere(?FicheMatiere $ficheMatiere): self
+    {
+        $this->ficheMatiere = $ficheMatiere;
+
+        return $this;
     }
 }

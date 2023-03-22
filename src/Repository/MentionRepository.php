@@ -11,6 +11,7 @@ namespace App\Repository;
 
 use App\Entity\Domaine;
 use App\Entity\Mention;
+use App\Entity\TypeDiplome;
 use App\TypeDiplome\Source\TypeDiplomeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -52,13 +53,13 @@ class MentionRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByDomaineAndTypeDiplome(Domaine $domaine, TypeDiplomeInterface $typeDiplome): array
+    public function findByDomaineAndTypeDiplome(Domaine $domaine, TypeDiplome $typeDiplome): array
     {
         $qb = $this->createQueryBuilder('m')
             ->where('m.domaine = :domaine')
             ->andWhere('m.typeDiplome = :typeDiplome')
             ->setParameter('domaine', $domaine)
-            ->setParameter('typeDiplome', $typeDiplome::class)
+            ->setParameter('typeDiplome', $typeDiplome)
             ->orderBy('m.libelle', 'ASC');
 
         return $qb->getQuery()->getResult();

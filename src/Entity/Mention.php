@@ -26,11 +26,14 @@ class Mention
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $sigle = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $typeDiplome = null;
+//    #[ORM\Column(length: 255)]
+//    private ?string $typeDiplome = null;
 
     #[ORM\ManyToOne(inversedBy: 'mentions')]
     private ?Domaine $domaine = null;
+
+    #[ORM\ManyToOne(inversedBy: 'mentions')]
+    private ?TypeDiplome $typeDiplome = null;
 
     public function getId(): ?int
     {
@@ -61,17 +64,17 @@ class Mention
         return $this;
     }
 
-    public function getTypeDiplome(): ?string
-    {
-        return $this->typeDiplome;
-    }
-
-    public function setTypeDiplome(?string $typeDiplome): self
-    {
-        $this->typeDiplome = $typeDiplome;
-
-        return $this;
-    }
+//    public function getTypeDiplome(): ?string
+//    {
+//        return $this->typeDiplome;
+//    }
+//
+//    public function setTypeDiplome(?string $typeDiplome): self
+//    {
+//        $this->typeDiplome = $typeDiplome;
+//
+//        return $this;
+//    }
 
     public function getDomaine(): ?Domaine
     {
@@ -81,6 +84,18 @@ class Mention
     public function setDomaine(?Domaine $domaine): self
     {
         $this->domaine = $domaine;
+
+        return $this;
+    }
+
+    public function getTypeDiplome(): ?TypeDiplome
+    {
+        return $this->typeDiplome;
+    }
+
+    public function setTypeDiplome(?TypeDiplome $typeDiplome): self
+    {
+        $this->typeDiplome = $typeDiplome;
 
         return $this;
     }

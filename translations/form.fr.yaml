@@ -13,8 +13,8 @@ parcours_step5.labels.composanteInscription.label: parcours_step5.labels.composa
 parcours_step5.labels.modalitesAlternance: parcours_step5.labels.modalitesAlternance
 parcours_step5.labels.coordSecretariat: parcours_step5.labels.coordSecretariat
 test: test
-element_constitutif.labels.libelle: element_constitutif.labels.libelle
-element_constitutif.labels.responsableEc: element_constitutif.labels.responsableEc
+element_constitutif.labels.libelle: fiche_matiere.labels.libelle
+element_constitutif.labels.responsableEc: fiche_matiere.labels.responsableEc
 parcours_step2.labels.hasSituationPro.label: parcours_step2.labels.hasSituationPro.label
 parcours_step2.labels.situationProText: parcours_step2.labels.situationProText
 but: 'Bachelor Universitaire de Technologie'
@@ -152,3 +152,38 @@ ec_step4.labels.modaliteEnseignement: ec_step4.labels.modaliteEnseignement
 ec_step2.labels.typeEnseignement: ec_step2.labels.typeEnseignement
 "Choisissez un type d'enseignement": "Choisissez un type d'enseignement"
 ec_step3.alerte.no_bcc: ec_step3.alerte.no_bcc
+Libellé: Libellé
+'Code ISO': 'Code ISO'
+type_diplome.labels.libelle: type_diplome.labels.libelle
+type_diplome.labels.libelle_court: type_diplome.labels.libelle_court
+type_diplome.labels.semestreDebut: type_diplome.labels.semestreDebut
+type_diplome.labels.semestreFin: type_diplome.labels.semestreFin
+type_diplome.labels.nbUeMin: type_diplome.labels.nbUeMin
+type_diplome.labels.nbUeMax: type_diplome.labels.nbUeMax
+type_diplome.labels.nbEctsMaxUe: type_diplome.labels.nbEctsMaxUe
+type_diplome.labels.ModeleMcc: type_diplome.labels.ModeleMcc
+"Type(s) de diplôme proposant ce type d'UE": "Type(s) de diplôme proposant ce type d'UE"
+"Type(s) de diplôme proposant ce type d'EC": "Type(s) de diplôme proposant ce type d'EC"
+"Type(s) de diplôme proposant ce type d'épreuve": "Type(s) de diplôme proposant ce type d'épreuve"
+ue.labels.natureUeEc: ue.labels.natureUeEc
+ue.labels.natureUeEcTexte: ue.labels.natureUeEcTexte
+element_constitutif.labels.ficheMatiere: element_constitutif.labels.ficheMatiere
+element_constitutif.labels.natureUeEc: element_constitutif.labels.natureUeEc
+fiche_matiere.labels.libelle: fiche_matiere.labels.libelle
+fiche_matiere.labels.responsableFicheMatiere: fiche_matiere.labels.responsableFicheMatiere
+fiche_matiere_step1.labels.libelle: fiche_matiere_step1.labels.libelle
+fiche_matiere_step1.labels.libelleAnglais: fiche_matiere_step1.labels.libelleAnglais
+fiche_matiere_step1.labels.enseignementMutualise.label: fiche_matiere_step1.labels.enseignementMutualise.label
+fiche_matiere_step1.labels.isCmPresentielMutualise.label: fiche_matiere_step1.labels.isCmPresentielMutualise.label
+fiche_matiere_step1.labels.isTdPresentielMutualise.label: fiche_matiere_step1.labels.isTdPresentielMutualise.label
+fiche_matiere_step1.labels.isTpPresentielMutualise.label: fiche_matiere_step1.labels.isTpPresentielMutualise.label
+fiche_matiere_step1.labels.isCmDistancielMutualise.label: fiche_matiere_step1.labels.isCmDistancielMutualise.label
+fiche_matiere_step1.labels.isTdDistancielMutualise.label: fiche_matiere_step1.labels.isTdDistancielMutualise.label
+fiche_matiere_step1.labels.isTpDistancielMutualise.label: fiche_matiere_step1.labels.isTpDistancielMutualise.label
+fiche_matiere_step1.labels.previserMutualisation: fiche_matiere_step1.labels.previserMutualisation
+parcours_step6.labels.poursuitesEtudes: parcours_step6.labels.poursuitesEtudes
+parcours_step6.labels.debouches: parcours_step6.labels.debouches
+parcours_step6.labels.codeRome: parcours_step6.labels.codeRome
+parcours.labels.libelle: parcours.labels.libelle
+parcours.labels.respParcours: parcours.labels.respParcours
+parcours.labels.sigle: parcours.labels.sigle

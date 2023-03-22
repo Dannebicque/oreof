@@ -58,8 +58,8 @@
                                             >
                                                 <option value="">Choisir un type</option>
                                                 {% for key, typeUe in typeUes %}
-                                                    <option value="{{ typeUe }}"
-                                                            {% if ue.typeUe != null and ue.typeUe.id == typeUe %}
+                                                    <option value="{{ typeUe.id }}"
+                                                            {% if ue.typeUe != null and ue.typeUe.id == typeUe.id %}
                                                                 selected
                                                             {% endif %}
                                                     >
@@ -85,25 +85,26 @@
                                                         }) }}
                                             >
                                                 <option value="">Choisir</option>
-                                                {% for typeEnseignement in typeEnseignements %}
-                                                    <option value="{{ typeEnseignement.id }}"
-                                                            {% if ue.ueObligatoire != null and ue.ueObligatoire.id == typeEnseignement.id %}
+                                                {% for natureUeEc in natureUeEcs %}
+                                                    <option value="{{ natureUeEc.id }}"
+                                                            {% if ue.natureUeEc != null and ue.natureUeEc.id ==
+                                                                natureUeEc.id %}
                                                                 selected
                                                             {% endif %}
                                                     >
-                                                        {{ typeEnseignement.libelle }}
+                                                        {{ natureUeEc.libelle }}
                                                     </option>
                                                 {% endfor %}
                                             </select>
                                         {% else %}
-                                            {{ ue.ueObligatoire != null ? ue.ueObligatoire.libelle : 'erreur' }}
+                                            {{ ue.natureUeEc != null ? ue.natureUeEc.libelle : 'erreur' }}
                                         {% endif %}
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center
                                     align-items-md-end mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
                                         <span id="ects_ue_{{ ue.id }}_{{ parcours.id }}">
-                                        {{ ue.totalEctsUe|badgeEctsUe(typeDiplome.nbEctsUeMax) }}
+                                        {{ ue.totalEctsUe|badgeEctsUe(typeDiplome.nbEctsMaxUe) }}
                                             </span>
                                     </div>
 
@@ -130,8 +131,7 @@
                                     <div class="col-6 col-md-3 d-flex justify-content-center text-end
                                             align-items-md-end mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Actions</div>
-                                        {% if constant('SOURCE',typeDiplome) != constant
-                                            ('App\\TypeDiplome\\Source\\LicenceTypeDiplome::SOURCE') or ue.ordre > 5 %}
+                                        {% if typeDiplome.nbUeMax != 0 or ue.ordre > typeDiplome.nbUeMax %}
                                             <button {{ stimulus_action('structure--ue', 'delete', 'click', {
                                                 url:path('structure_ue_delete',{'id': ue.id}),
                                                 csrf: csrf_token('delete' ~ ue.id)

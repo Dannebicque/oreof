@@ -9,6 +9,7 @@
 
 namespace App\Repository;
 
+use App\Entity\TypeDiplome;
 use App\Entity\TypeEpreuve;
 use App\TypeDiplome\Source\TypeDiplomeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -51,21 +52,14 @@ class TypeEpreuveRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByTypeDiplome(TypeDiplomeInterface $typeDiplome): array
+    public function findByTypeDiplome(TypeDiplome $typeDiplome): array
     {
-        $typeDiplomes = $this->createQueryBuilder('t')
-            ->orderBy('t.libelle', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
-
+        $typeDiplomes = $typeDiplome->getTypeEpreuves();
         $tab = [];
 
         //filtre selon le type de diplome
         foreach ($typeDiplomes as $td) {
-            if (in_array($typeDiplome::class, $td->getTypeDiplome())) {
-                $tab[$td->getId()] = $td;
-            }
+            $tab[$td->getId()] = $td;
         }
 
         return $tab;

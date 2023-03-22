@@ -46,7 +46,6 @@ export default class extends Controller {
 
   _checkIfAlternance() {
     let hasAlternance = false
-
     document.querySelectorAll('input[name="formation_step1[regimeInscription][]"]').forEach((element) => {
       if (element.checked) {
         if (element.value === 'Formation Initiale en apprentissage' || element.value === 'Formation Continue Contrat Professionnalisation') {
@@ -55,11 +54,12 @@ export default class extends Controller {
       }
     })
 
-    if (hasAlternance) {
-      document.getElementById('formation_step1_modalitesAlternance').disabled = false
-    } else {
-      document.getElementById('formation_step1_modalitesAlternance').disabled = true
-    }
+    // const trix = document.getElementById('formation_step1_modalitesAlternance')
+    // const _trixEditor = trix.editor
+    // _trixEditor.element.disabled = true
+    // console.log(_trixEditor)
+
+    document.getElementById('formation_step1_modalitesAlternance').disabled = !hasAlternance;
   }
 
   changeComposanteInscription(event) {
@@ -80,13 +80,10 @@ export default class extends Controller {
 
   async etatStep(event) {
     event.preventDefault()
-    console.log('---d---')
     await calculEtatStep(this.urlValue, 1, event, 'formation')
-    console.log('---e---')
   }
 
   async _save(options) {
-    console.log('---f---')
     await saveData(this.urlValue, options).then(async () => {
       await updateEtatOnglet(this.urlValue, 'onglet1', 'formation')
     })

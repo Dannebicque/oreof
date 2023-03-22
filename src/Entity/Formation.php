@@ -29,9 +29,9 @@ class Formation
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $typeDiplome = null;
+//
+//    #[ORM\Column(length: 255)]
+//    private ?string $typeDiplome = null;
 
     #[ORM\ManyToOne]
     private ?Domaine $domaine = null;
@@ -126,6 +126,9 @@ class Formation
     #[ORM\Column]
     private ?array $etatSteps = [];
 
+    #[ORM\ManyToOne(inversedBy: 'formations')]
+    private ?TypeDiplome $typeDiplome = null;
+
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
         $this->anneeUniversitaire = $anneeUniversitaire;
@@ -154,17 +157,17 @@ class Formation
         return $this->id;
     }
 
-    public function getTypeDiplome(): ?string
-    {
-        return $this->typeDiplome;
-    }
-
-    public function setTypeDiplome(string $typeDiplome): self
-    {
-        $this->typeDiplome = $typeDiplome;
-
-        return $this;
-    }
+//    public function getTypeDiplome(): ?string
+//    {
+//        return $this->typeDiplome;
+//    }
+//
+//    public function setTypeDiplome(string $typeDiplome): self
+//    {
+//        $this->typeDiplome = $typeDiplome;
+//
+//        return $this;
+//    }
 
     public function getDomaine(): ?Domaine
     {
@@ -700,6 +703,18 @@ class Formation
     public function setObjectifsFormation(?string $objectifsFormation): self
     {
         $this->objectifsFormation = $objectifsFormation;
+
+        return $this;
+    }
+
+    public function getTypeDiplome(): ?TypeDiplome
+    {
+        return $this->typeDiplome;
+    }
+
+    public function setTypeDiplome(?TypeDiplome $typeDiplome): self
+    {
+        $this->typeDiplome = $typeDiplome;
 
         return $this;
     }

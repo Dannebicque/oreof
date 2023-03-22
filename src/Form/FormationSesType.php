@@ -12,6 +12,7 @@ namespace App\Form;
 use App\Entity\Composante;
 use App\Entity\Domaine;
 use App\Entity\Formation;
+use App\Entity\TypeDiplome;
 use App\Entity\User;
 use App\Enums\NiveauFormationEnum;
 use App\Form\Type\YesNoType;
@@ -31,19 +32,18 @@ use UnitEnum;
 class FormationSesType extends AbstractType
 {
     public function __construct(
-        private readonly TypeDiplomeRegistry $typeDiplomeRegistry,
         private readonly MentionRepository $mentionRepository
     ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $typeDiplomeRegistry = $this->typeDiplomeRegistry;
         $mentionRepository = $this->mentionRepository;
 
         $builder
-            ->add('typeDiplome', ChoiceType::class, [
-                'choices' => $options['typesDiplomes'],
+            ->add('typeDiplome', EntityType::class, [
+                'class' => TypeDiplome::class,
+                'choice_label' => 'libelle',
                 'attr' => ['data-action' => 'change->formation#changeTypeDiplome']
             ])
             ->add('domaine', EntityType::class, [
@@ -117,14 +117,13 @@ class FormationSesType extends AbstractType
             )
             ->addEventListener(
                 FormEvents::PRE_SET_DATA,
-                static function (FormEvent $event) use ($typeDiplomeRegistry, $mentionRepository) {
+                static function (FormEvent $event) use ($mentionRepository) {
                     $formation = $event->getData();
                     if ($formation->getDomaine() !== null && $formation->getTypeDiplome() !== null) {
                         $form = $event->getForm();
-                        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
                         $tabMentions = $mentionRepository->findByDomaineAndTypeDiplome(
                             $formation->getDomaine(),
-                            $typeDiplome
+                            $formation->getTypeDiplome()
                         );
                         $tabMentions['Autre'] = 'autre';
                         $tabMentions[''] = null;

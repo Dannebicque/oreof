@@ -73,7 +73,7 @@ class Parcours
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $projetText = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $nbHeuresProjet;
 
     #[ORM\Column]
@@ -139,6 +139,9 @@ class Parcours
     #[ORM\Column(nullable: true)]
     private ?array $etatParcours = [];
 
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: FicheMatiere::class)]
+    private Collection $ficheMatieres;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -148,6 +151,7 @@ class Parcours
         for ($i = 1; $i <= 8; $i++) {
             $this->etatSteps[$i] = false;
         }
+        $this->ficheMatieres = new ArrayCollection();
     }
 
 
@@ -573,9 +577,7 @@ class Parcours
         $onglets[3] = $this->getEtatOnglet3();
         $onglets[4] = $this->getEtatOnglet4();
         $onglets[5] = $this->getEtatOnglet5();
-      //  $onglets[6] = $this->getEtatOnglet6();
-        $onglets[7] = $this->getEtatOnglet7();
-       // $onglets[8] = $this->getEtatOnglet8();
+        $onglets[6] = $this->getEtatOnglet6();
 
         return $onglets;
     }
@@ -622,23 +624,11 @@ class Parcours
         return $this->getEtatStep(5) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
-//    public function getEtatOnglet6(): EtatRemplissageEnum
-//    {
-//        //todo: ajouter les vérifs?
-//        return $this->getEtatStep(6) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
-//    }
-
-    public function getEtatOnglet7(): EtatRemplissageEnum
+    public function getEtatOnglet6(): EtatRemplissageEnum
     {
         //todo: ajouter les vérifs?
-        return $this->getEtatStep(7) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
+        return $this->getEtatStep(6) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
-
-//    public function getEtatOnglet8(): EtatRemplissageEnum
-//    {
-//        //todo: ajouter les vérifs?
-//        return $this->getEtatStep(8) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
-//    }
 
     public function getEtatStep(int $step): bool
     {
@@ -712,5 +702,40 @@ class Parcours
     public function isParcoursDefaut(): bool
     {
         return $this->libelle === self::PARCOURS_DEFAUT;
+    }
+
+    public function getTypeDiplome(): ?TypeDiplome
+    {
+        return $this->getFormation()?->getTypeDiplome();
+    }
+
+    /**
+     * @return Collection<int, FicheMatiere>
+     */
+    public function getFicheMatieres(): Collection
+    {
+        return $this->ficheMatieres;
+    }
+
+    public function addFicheMatiere(FicheMatiere $ficheMatiere): self
+    {
+        if (!$this->ficheMatieres->contains($ficheMatiere)) {
+            $this->ficheMatieres->add($ficheMatiere);
+            $ficheMatiere->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFicheMatiere(FicheMatiere $ficheMatiere): self
+    {
+        if ($this->ficheMatieres->removeElement($ficheMatiere)) {
+            // set the owning side to null (unless already changed)
+            if ($ficheMatiere->getParcours() === $this) {
+                $ficheMatiere->setParcours(null);
+            }
+        }
+
+        return $this;
     }
 }

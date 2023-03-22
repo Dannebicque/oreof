@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block header %}
-    Gestion des types d'unités d'enseignements
+    Gestion des types d'UE
 {% endblock %}
 
 {% block breadcrumb %}
@@ -29,16 +29,16 @@
     <button
             {{ stimulus_controller('modal', {
                 size: 'lg',
-                modalTitle: 'Ajouter un type d\'unité d\'enseignement',
+                modalTitle: 'Ajouter un type d\'unité d\'enseignement (UE)',
                 modalUrl: path('app_type_ue_new') }) }}
             data-action="click->modal#openModal"
             class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
             data-size="lg"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
-            title="Ajouter un type d'unité d'enseignement"
+            title="Ajouter un type d'unité d'enseignement (UE)"
     >
         <i class="{{ iconAdd }}"></i>
-        <span> Ajouter un type d'unité d'enseignement</span>
+        <span> Ajouter un type d'unité d'enseignement (UE)</span>
     </button>
 {% endblock %}

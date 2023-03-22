@@ -31,8 +31,8 @@ class Competence
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
-    #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'competences')]
-    private Collection $elementConstitutifs;
+    #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'competences')]
+    private Collection $ficheMatieres;
 
     #[ORM\Column]
     private ?int $ordre = null;
@@ -41,7 +41,7 @@ class Competence
     public function __construct(BlocCompetence $blocCompetence)
     {
         $this->blocCompetence = $blocCompetence;
-        $this->elementConstitutifs = new ArrayCollection();
+        $this->ficheMatieres = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -85,27 +85,27 @@ class Competence
     }
 
     /**
-     * @return Collection<int, ElementConstitutif>
+     * @return Collection<int, FicheMatiere>
      */
-    public function getElementConstitutifs(): Collection
+    public function getFicheMatieress(): Collection
     {
-        return $this->elementConstitutifs;
+        return $this->ficheMatieres;
     }
 
-    public function addElementConstitutif(ElementConstitutif $elementConstitutif): self
+    public function addFicheMatiere(FicheMatiere $ficheMatiere): self
     {
-        if (!$this->elementConstitutifs->contains($elementConstitutif)) {
-            $this->elementConstitutifs->add($elementConstitutif);
-            $elementConstitutif->addCompetence($this);
+        if (!$this->ficheMatieres->contains($ficheMatiere)) {
+            $this->ficheMatieres->add($ficheMatiere);
+            $ficheMatiere->addCompetence($this);
         }
 
         return $this;
     }
 
-    public function removeElementConstitutif(ElementConstitutif $elementConstitutif): self
+    public function removeFicheMatiere(FicheMatiere $ficheMatiere): self
     {
-        if ($this->elementConstitutifs->removeElement($elementConstitutif)) {
-            $elementConstitutif->removeCompetence($this);
+        if ($this->ficheMatieres->removeElement($ficheMatiere)) {
+            $ficheMatiere->removeCompetence($this);
         }
 
         return $this;

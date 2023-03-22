@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
- * @file /Users/davidannebicque/Sites/oreof/src/Controller/ElementConstitutifController.php
+ * @file /Users/davidannebicque/Sites/oreof/src/Controller/FicheMatiereController.php
  * @author davidannebicque
  * @project oreof
  * @lastUpdate 17/03/2023 22:08
@@ -14,6 +14,7 @@ use App\Classes\EcOrdre;
 use App\Entity\BlocCompetence;
 use App\Entity\EcUe;
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Entity\Ue;
 use App\Enums\EtatRemplissageEnum;
@@ -21,6 +22,7 @@ use App\Form\EcStep4Type;
 use App\Form\ElementConstitutifType;
 use App\Repository\EcUeRepository;
 use App\Repository\ElementConstitutifRepository;
+use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
@@ -40,24 +42,23 @@ class ElementConstitutifController extends AbstractController
     }
 
     #[Route('/', name: 'app_element_constitutif_index', methods: ['GET'])]
-    public function index(ElementConstitutifRepository $elementConstitutifRepository): Response
+    public function index(FicheMatiereRepository $ficheMatiereRepository): Response
     {
         return $this->render('element_constitutif/index.html.twig', [
-            'element_constitutifs' => $elementConstitutifRepository->findAll(),
+            'element_constitutifs' => $ficheMatiereRepository->findAll(),
         ]);
     }
 
     #[Route('/new/{ue}', name: 'app_element_constitutif_new', methods: ['GET', 'POST'])]
     public function new(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         EcOrdre $ecOrdre,
         EcUeRepository $ecUeRepository,
-        LangueRepository $langueRepository,
         Request $request,
         ElementConstitutifRepository $elementConstitutifRepository,
         Ue $ue
     ): Response {
         $elementConstitutif = new ElementConstitutif();
+        $elementConstitutif->setParcours($ue->getSemestre()?->getSemestreParcours()->first()->getParcours());
         $elementConstitutif->setModaliteEnseignement($ue->getSemestre()?->getSemestreParcours()->first()->getParcours()?->getModalitesEnseignement());
 
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
@@ -77,16 +78,16 @@ class ElementConstitutifController extends AbstractController
             if ($formation === null) {
                 throw new RuntimeException('Formation non trouvée');
             }
-            $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
-            $typeDiplome->initMcccs($elementConstitutif);
+//            $typeDiplome = $formation->getTypeDiplome();
+//            $typeDiplome->initMcccs($ficheMatiere); //todo: revoir pour appeler le type de diplome
 
-            $langueFr = $langueRepository->findOneBy(['codeIso' => 'fr']);
-            if ($langueFr !== null) {
-                $elementConstitutif->addLangueDispense($langueFr);
-                $langueFr->addElementConstitutif($elementConstitutif);
-                $elementConstitutif->addLangueSupport($langueFr);
-                $langueFr->addLanguesSupportsEc($elementConstitutif);
-            }
+//            $langueFr = $langueRepository->findOneBy(['codeIso' => 'fr']);
+//            if ($langueFr !== null) {
+//                $ficheMatiere->addLangueDispense($langueFr);
+//                $langueFr->addFicheMatiere($ficheMatiere);
+//                $ficheMatiere->addLangueSupport($langueFr);
+//                $langueFr->addLanguesSupportsEc($ficheMatiere);
+//            }
 
             $elementConstitutifRepository->save($elementConstitutif, true);
 
@@ -104,16 +105,15 @@ class ElementConstitutifController extends AbstractController
      */
     #[Route('/{id}', name: 'app_element_constitutif_show', methods: ['GET'])]
     public function show(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
-        ElementConstitutif $elementConstitutif
+        FicheMatiere $ficheMatiere
     ): Response {
-        $formation = $elementConstitutif->getParcours()->getFormation();
+        $formation = $ficheMatiere->getParcours()->getFormation();
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
         }
 
         $bccs = [];
-        foreach ($elementConstitutif->getCompetences() as $competence) {
+        foreach ($ficheMatiere->getCompetences() as $competence) {
             if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
                 $bccs[$competence->getBlocCompetence()?->getId()]['bcc'] = $competence->getBlocCompetence();
                 $bccs[$competence->getBlocCompetence()?->getId()]['competences'] = [];
@@ -121,11 +121,11 @@ class ElementConstitutifController extends AbstractController
             $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
         }
 
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+        $typeDiplome = $formation->getTypeDiplome();
 
         return $this->render('element_constitutif/show.html.twig', [
-            'elementConstitutif' => $elementConstitutif,
-            'template' => $typeDiplome::TEMPLATE,
+            'ficheMatiere' => $ficheMatiere,
+            'template' => $typeDiplome::TEMPLATE,//todo: revoir pour appeler le template global ?
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
             'bccs' => $bccs
@@ -134,7 +134,7 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
     public function edit(
-        ElementConstitutif $elementConstitutif,
+        FicheMatiere $ficheMatiere,
         Parcours $parcours
     ): Response {
         //(is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) or is_granted
@@ -143,11 +143,11 @@ class ElementConstitutifController extends AbstractController
 
         $access = (($this->isGranted(
             'ROLE_EC_EDIT_MY',
-            $elementConstitutif
-        ) && $this->ecWorkflow->can($elementConstitutif, 'valider_ec')) || ($this->isGranted(
+            $ficheMatiere
+        ) && $this->ecWorkflow->can($ficheMatiere, 'valider_ec')) || ($this->isGranted(
                 'ROLE_FORMATION_EDIT_MY',
                 $parcours->getFormation()
-            )) || ($this->ecWorkflow->can($elementConstitutif, 'valider_ec') || $this->ecWorkflow->can($elementConstitutif, 'initialiser')) || $this->isGranted('ROLE_ADMIN'));
+            )) || ($this->ecWorkflow->can($ficheMatiere, 'valider_ec') || $this->ecWorkflow->can($ficheMatiere, 'initialiser')) || $this->isGranted('ROLE_ADMIN'));
 
         if (!$access) {
             throw new AccessDeniedException();
@@ -155,22 +155,22 @@ class ElementConstitutifController extends AbstractController
 
 
         return $this->render('element_constitutif/edit.html.twig', [
-            'ec' => $elementConstitutif,
+            'ec' => $ficheMatiere,
             'parcours' => $parcours,
-            'onglets' => $elementConstitutif->etatRemplissageOnglets(),
+            'onglets' => $ficheMatiere->etatRemplissageOnglets(),
         ]);
     }
 
     #[Route('/{id}/structure-ec', name: 'app_element_constitutif_structure', methods: ['GET', 'POST'])]
     public function structureEc(
         Request $request,
-        ElementConstitutifRepository $elementConstitutifRepository,
+        FicheMatiereRepository $ficheMatiereRepository,
         ElementConstitutif $elementConstitutif
     ): Response {
-        if ($this->isGranted(
-            'ROLE_FORMATION_EDIT_MY',
-            $elementConstitutif->getParcours()->getFormation()
-        )) { //todo: ajouter le workflow...
+//        if ($this->isGranted(
+//            'ROLE_FORMATION_EDIT_MY',
+//            $elementConstitutif->getParcours()->getFormation()
+//        )) { //todo: ajouter le workflow...
             $form = $this->createForm(EcStep4Type::class, $elementConstitutif, [
                 'isModal' => true,
                 'action' => $this->generateUrl(
@@ -180,7 +180,7 @@ class ElementConstitutifController extends AbstractController
             ]);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $elementConstitutifRepository->save($elementConstitutif, true);
+                $ficheMatiereRepository->save($elementConstitutif, true);
 
                 return $this->json(true);
             }
@@ -189,11 +189,11 @@ class ElementConstitutifController extends AbstractController
                 'ec' => $elementConstitutif,
                 'form' => $form->createView(),
             ]);
-        }
-
-        return $this->render('element_constitutif/_structureEcNonEditable.html.twig', [
-            'ec' => $elementConstitutif,
-        ]);
+       // }
+//
+//        return $this->render('element_constitutif/_structureEcNonEditable.html.twig', [
+//            'ec' => $elementConstitutif,
+//        ]);
     }
 
     /**
@@ -202,27 +202,26 @@ class ElementConstitutifController extends AbstractController
     #[Route('/{id}/mccc-ec', name: 'app_element_constitutif_mccc', methods: ['GET', 'POST'])]
     public function mcccEc(
         TypeEpreuveRepository $typeEpreuveRepository,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request,
-        ElementConstitutifRepository $elementConstitutifRepository,
+        FicheMatiereRepository $ficheMatiereRepository,
         ElementConstitutif $elementConstitutif
     ): Response {
         $formation = $elementConstitutif->getParcours()->getFormation();
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
         }
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+        $typeDiplome = $formation->getTypeDiplome();
         if ($this->isGranted(
             'ROLE_FORMATION_EDIT_MY',
             $elementConstitutif->getParcours()->getFormation()
         )) { //todo: ajouter le workflow...
             if ($elementConstitutif->getMcccs()->count() === 0) {
-                $typeDiplome->initMcccs($elementConstitutif);
+                $typeDiplome->initMcccs($elementConstitutif);//todo: appeler les mcc du bon diplôme
             }
 
             if ($request->isMethod('POST')) {
-                $typeDiplome->saveMcccs($elementConstitutif, $request->request);
-                $elementConstitutifRepository->save($elementConstitutif, true);
+                $typeDiplome->saveMcccs($elementConstitutif, $request->request);//todo: appeler les mcc du bon diplôme
+                $ficheMatiereRepository->save($elementConstitutif, true);
 
                 return $this->json(true);
             }
@@ -230,17 +229,17 @@ class ElementConstitutifController extends AbstractController
             return $this->render('element_constitutif/_mcccEcModal.html.twig', [
                 'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
                 'ec' => $elementConstitutif,
-                'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
-                'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
+                'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC, //todo: appeler les mcc du bon diplôme
+                'mcccs' => $typeDiplome->getMcccs($elementConstitutif), //todo: appeler les mcc du bon diplôme
                 'wizard' => false
             ]);
         }
 
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
-            'ec' => $elementConstitutif,
+            'ec' => $ficheMatiere,
             'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
             'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
-            'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
+            'mcccs' => $typeDiplome->getMcccs($ficheMatiere),
         ]);
     }
 
@@ -249,42 +248,41 @@ class ElementConstitutifController extends AbstractController
      */
     public function displayMcccEc(
         TypeEpreuveRepository $typeEpreuveRepository,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
-        ElementConstitutif $elementConstitutif
+        FicheMatiere $ficheMatiere
     ): Response {
-        $formation = $elementConstitutif->getParcours()->getFormation();
+        $formation = $ficheMatiere->getParcours()->getFormation();
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
         }
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome());
+        $typeDiplome = $formation->getTypeDiplome();
 
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
-            'ec' => $elementConstitutif,
+            'ec' => $ficheMatiere,
             'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
-            'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
-            'mcccs' => $typeDiplome->getMcccs($elementConstitutif),
+            'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,//todo: appeler les mcc du bon diplôme
+            'mcccs' => $typeDiplome->getMcccs($ficheMatiere),//todo: appeler les mcc du bon diplôme
         ]);
     }
 
     #[Route('/{id}/{ue}/deplacer/{sens}', name: 'app_element_constitutif_deplacer', methods: ['GET'])]
     public function deplacer(
         EcOrdre $ecOrdre,
-        ElementConstitutif $elementConstitutif,
+        FicheMatiere $ficheMatiere,
         Ue $ue,
         string $sens
     ): Response {
-        $ecOrdre->deplacerElementConstitutif($elementConstitutif, $sens, $ue);
+        $ecOrdre->deplacerFicheMatiere($ficheMatiere, $sens, $ue);
         return $this->json(true);
     }
 
     #[Route('/{id}', name: 'app_element_constitutif_delete', methods: ['POST'])]
     public function delete(
         Request $request,
-        ElementConstitutif $elementConstitutif,
-        ElementConstitutifRepository $elementConstitutifRepository
+        FicheMatiere $ficheMatiere,
+        FicheMatiereRepository $ficheMatiereRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $elementConstitutif->getId(), $request->request->get('_token'))) {
-            $elementConstitutifRepository->remove($elementConstitutif, true);
+        if ($this->isCsrfTokenValid('delete' . $ficheMatiere->getId(), $request->request->get('_token'))) {
+            $ficheMatiereRepository->remove($ficheMatiere, true);
         }
 
         return $this->redirectToRoute('app_element_constitutif_index', [], Response::HTTP_SEE_OTHER);

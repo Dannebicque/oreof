@@ -49,29 +49,14 @@
                 Admission & inscription {{ parcours.onglets|etatRemplissage(5, 'parcours') }}
             </a>
         </li>
-{#        {% if parcours.formation.isHasParcours == true %}#}
-{#            <li class="nav-item" role="presentation">#}
-{#                <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"#}
-{#                        {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 6}) }}#}
-{#                >#}
-{#                    Inscription {{ parcours.onglets|etatRemplissage(6, 'parcours') }}#}
-{#                </a>#}
-{#            </li>#}
-{#        {% endif %}#}
+
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                    {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 7}) }}
+                    {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 6}) }}
             >
-                Et après... {{ parcours.onglets|etatRemplissage(7, 'parcours') }}
+                Et après... {{ parcours.onglets|etatRemplissage(6, 'parcours') }}
             </a>
         </li>
-{#        <li class="nav-item" role="presentation">#}
-{#            <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"#}
-{#                    {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 8}) }}#}
-{#            >#}
-{#                Contacts pédagogiques {{ parcours.onglets|etatRemplissage(8, 'parcours') }}#}
-{#            </a>#}
-{#        </li>#}
 
         <!-- An empty list to put overflowed links -->
         <li class="nav-item dropdown ms-auto pe-0 d-none responsive-tab-dropdown">

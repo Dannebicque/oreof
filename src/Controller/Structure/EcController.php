@@ -14,7 +14,7 @@ use App\Entity\Parcours;
 use App\Entity\Ue;
 use App\Repository\EcUeRepository;
 use App\Repository\ElementConstitutifRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\FicheMatiereRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -29,37 +29,6 @@ class EcController extends BaseController
     public function index(): Response
     {
         return $this->render('structure/ec/index.html.twig');
-    }
-
-    #[Route('/liste', name: 'liste')]
-    public function liste(ElementConstitutifRepository $elementConstitutifRepository): Response
-    {
-        if ($this->isGranted('ROLE_ADMIN') ||
-            $this->isGranted('ROLE_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
-            $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser()) ||
-            $this->isGranted('ROLE_EC_SHOW_ALL', $this->getUser())) {
-            $ecs = $elementConstitutifRepository->findByAllAnneUniversitaire($this->getAnneeUniversitaire());
-        } else {
-            $ecs = [];
-            $ecs[] = $elementConstitutifRepository->findByComposanteDpe(
-                $this->getUser(),
-                $this->getAnneeUniversitaire()
-            );
-            $ecs[] = $elementConstitutifRepository->findByResponsableFormation(
-                $this->getUser(),
-                $this->getAnneeUniversitaire()
-            );
-            $ecs[] = $elementConstitutifRepository->findByResponsableEc(
-                $this->getUser(),
-                $this->getAnneeUniversitaire()
-            );
-            $ecs = array_merge(...$ecs);
-        }
-        return $this->render('structure/ec/_liste.html.twig', [
-            'ecs' => $ecs,
-            'deplacer' => false,
-            'mode' => 'liste',
-        ]);
     }
 
     #[

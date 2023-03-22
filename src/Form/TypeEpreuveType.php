@@ -9,8 +9,10 @@
 
 namespace App\Form;
 
+use App\Entity\TypeDiplome;
 use App\Entity\TypeEpreuve;
 use App\Entity\TypeUe;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -25,10 +27,10 @@ class TypeEpreuveType extends AbstractType
             ->add('libelle', TextType::class, [
                 'label' => 'Libellé',
             ])
-            ->add('typeDiplome', ChoiceType::class, [
-                'choices' => $options['typesDiplomes'],
-                'translation_domain' => 'enum',
-                'label' => 'Type(s) de diplôme proposant ce type d\'UE',
+            ->add('typeDiplomes', EntityType::class, [
+                'class' =>TypeDiplome::class,
+                'choice_label' => 'libelle',
+                'label' => 'Type(s) de diplôme proposant ce type d\'épreuve',
                 'multiple' => true,
                 'expanded' => true,
             ])

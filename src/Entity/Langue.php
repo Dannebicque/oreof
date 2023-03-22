@@ -25,18 +25,18 @@ class Langue
     #[ORM\Column(length: 50)]
     private ?string $libelle = null;
 
-    #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'langueDispense')]
-    private Collection $elementConstitutifs;
+    #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'langueDispense')]
+    private Collection $ficheMatieres;
 
-    #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'langueSupport')]
-    private Collection $languesSupportsEcs;
+    #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'langueSupport')]
+    private Collection $languesSupportsFicheMatieres;
 
     #[ORM\Column(length: 2)]
     private ?string $codeIso = null;
 
     public function __construct()
     {
-        $this->elementConstitutifs = new ArrayCollection();
+        $this->ficheMatieres = new ArrayCollection();
         $this->languesSupportsEcs = new ArrayCollection();
     }
 
@@ -58,53 +58,53 @@ class Langue
     }
 
     /**
-     * @return Collection<int, ElementConstitutif>
+     * @return Collection<int, FicheMatiere>
      */
-    public function getElementConstitutifs(): Collection
+    public function getFicheMatieres(): Collection
     {
-        return $this->elementConstitutifs;
+        return $this->ficheMatieres;
     }
 
-    public function addElementConstitutif(ElementConstitutif $elementConstitutif): self
+    public function addFicheMatiere(FicheMatiere $ficheMatiere): self
     {
-        if (!$this->elementConstitutifs->contains($elementConstitutif)) {
-            $this->elementConstitutifs->add($elementConstitutif);
-            $elementConstitutif->addLangueDispense($this);
+        if (!$this->ficheMatieres->contains($ficheMatiere)) {
+            $this->ficheMatieres->add($ficheMatiere);
+            $ficheMatiere->addLangueDispense($this);
         }
 
         return $this;
     }
 
-    public function removeElementConstitutif(ElementConstitutif $elementConstitutif): self
+    public function removeFicheMatiere(FicheMatiere $ficheMatiere): self
     {
-        if ($this->elementConstitutifs->removeElement($elementConstitutif)) {
-            $elementConstitutif->removeLangueDispense($this);
+        if ($this->ficheMatieres->removeElement($ficheMatiere)) {
+            $ficheMatiere->removeLangueDispense($this);
         }
 
         return $this;
     }
 
     /**
-     * @return Collection<int, ElementConstitutif>
+     * @return Collection<int, FicheMatiere>
      */
     public function getLanguesSupportsEcs(): Collection
     {
         return $this->languesSupportsEcs;
     }
 
-    public function addLanguesSupportsEc(ElementConstitutif $languesSupportsEc): self
+    public function addLanguesSupportsFicheMatiere(FicheMatiere $languesSupportsFicheMatiere): self
     {
-        if (!$this->languesSupportsEcs->contains($languesSupportsEc)) {
-            $this->languesSupportsEcs->add($languesSupportsEc);
-            $languesSupportsEc->addLangueSupport($this);
+        if (!$this->languesSupportsFicheMatieres->contains($languesSupportsFicheMatiere)) {
+            $this->languesSupportsFicheMatieres->add($languesSupportsFicheMatiere);
+            $languesSupportsFicheMatiere->addLangueSupport($this);
         }
 
         return $this;
     }
 
-    public function removeLanguesSupportsEc(ElementConstitutif $languesSupportsEc): self
+    public function removeLanguesSupportsEc(FicheMatiere $languesSupportsEc): self
     {
-        if ($this->languesSupportsEcs->removeElement($languesSupportsEc)) {
+        if ($this->languesSupportsFicheMatieres->removeElement($languesSupportsEc)) {
             $languesSupportsEc->removeLangueSupport($this);
         }
 

@@ -9,10 +9,8 @@
 
 namespace App\Form;
 
-use App\Entity\TypeEnseignement;
-use App\Entity\TypeUe;
+use App\Entity\NatureUeEc;
 use App\Entity\Ue;
-use App\Repository\TypeUeRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -28,8 +26,6 @@ class UeType extends AbstractType
 
 
         $builder
-            ->add('ordre', TextType::class, [
-            ])
             ->add('typeUe', ChoiceType::class, [
                 'choices' => $choices,
                 'required' => false,
@@ -42,12 +38,12 @@ class UeType extends AbstractType
                 'required' => false,
                 'mapped' => false,
             ])
-            ->add('ueObligatoire', EntityType::class, [
-                'class' => TypeEnseignement::class,
+            ->add('natureUeEc', EntityType::class, [
+                'class' => NatureUeEc::class,
                 'choice_label' => 'libelle',
                 'required' => false,
             ])
-            ->add('ueObligatoireTexte', TextType::class, [
+            ->add('natureUeEcTexte', TextType::class, [
                 'attr' => [
                     'maxlength' => 100,
                 ],

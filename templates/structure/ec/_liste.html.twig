@@ -2,11 +2,8 @@
     <table class="table table-striped {% if mode == 'detail' %}table-bordered table-condensed{% endif %} table-hover ">
         <thead>
         <tr>
-            {% if mode == 'liste' %}
-                <th>Mention/spécialité/Parcours</th>
-                <th>UE</th>
-            {% endif %}
             <th>Libellé</th>
+            <th>Matière</th>
             <th>Référent</th>
             <th>Remplissage</th>
             <th>Etat</th>
@@ -26,14 +23,11 @@
                 {% set ec = ec.ec %}
             {% endif %}
             <tr>
-                {% if mode == 'liste' %}
-                    <td>{{ ec.formationLibelle }}</td>
-                    <td>UE...</td>
-                {% endif %}
-                <td>{{ ec.code }} {{ ec.libelle }}</td>
-                <td>{{ ec.responsableEc != null ? ec.responsableEc.display : 'Non défini' }}</td>
-                <td>{{ ec.remplissage|remplissage }}</td>
-                <td>{{ ec.etatEc|badgeEc }}</td>
+                <td>{{ ec.code }}</td>
+                <td>{{ ec.ficheMatiere.libelle }}</td>
+                <td>{{ ec.ficheMatiere.responsableFicheMatiere != null ? ec.ficheMatiere.responsableFicheMatiere.display : 'Non défini' }}</td>
+                <td>{{ ec.ficheMatiere.remplissage|remplissage }}</td>
+                <td>{{ ec.ficheMatiere.etatFicheMatiere|badgeEc }}</td>
                 <td>
                     <button
                             {% if deplacer is defined and deplacer == true %}
@@ -94,9 +88,9 @@
                     </button>
                 </td>
                 <td class="text-end">
-                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) or is_granted
-                        ('ROLE_EC_EDIT_MY', ec)) and  (not workflow_can(ec,
-                        'initialiser') ) %}
+{#                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or is_granted#}
+{#                        ('ROLE_EC_EDIT_MY', ec)) and  (not workflow_can(ec,#}
+{#                        'initialiser') ) %}#}
                         <a
                                 href="{{ path('app_element_constitutif_show',{'id': ec.id}) }}"
                                 class="btn btn-sm text-info"
@@ -108,16 +102,16 @@
                             <i class="{{ iconShow }}"></i>
                             <span> voir</span>
                         </a>
-                    {% endif %}
+{#                    {% endif %}#}
 
 
-                    {% if ((is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and  (workflow_can(ec,
-                        'valider_ec') or workflow_can(ec,
-                        'initialiser'))) or (is_granted
-                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
-                        'valider_ec')) %}
+{#                    {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) and  (workflow_can(ec,#}
+{#                        'valider_ec') or workflow_can(ec,#}
+{#                        'initialiser'))) or (is_granted#}
+{#                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,#}
+{#                        'valider_ec')) %}#}
                         <a
-                                href="{{ path('app_element_constitutif_edit',{'id': ec.id, parcours:ec.parcours.id}) }}"
+                                href="{{ path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }}"
                                 class="btn btn-sm text-warning"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -127,23 +121,23 @@
                             <i class="{{ iconEdit }}"></i>
                             <span> modifier</span>
                         </a>
-                    {% endif %}
-                    {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and workflow_can(ec,
-                        'valider_ec') %}
+{#                    {% endif %}#}
+{#                    {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) and workflow_can(ec,#}
+{#                        'valider_ec') %}#}
                         <button {{ stimulus_action('crud', 'delete', 'click', {
                             url:path('app_element_constitutif_delete',{'id': ec.id})
                         }) }} class="btn btn-sm text-danger">
                             <i class="{{ iconDelete }}"></i> Supprimer
                         </button>
-                    {% endif %}
+{#                    {% endif %}#}
                 </td>
                 {% if deplacer == true %}
                     <td {{ stimulus_controller('ec--liste') }}>
-                        {% if ((is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and  (workflow_can(ec,
-                            'valider_ec') or workflow_can(ec,
-                            'initialiser'))) or (is_granted
-                            ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
-                            'valider_ec')) %}
+{#                        {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) and  (workflow_can(ec,#}
+{#                            'valider_ec') or workflow_can(ec,#}
+{#                            'initialiser'))) or (is_granted#}
+{#                            ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,#}
+{#                            'valider_ec')) %}#}
 
                             {% if not loop.first %}
                                 <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
@@ -164,17 +158,17 @@
                                 </button>
                             {% endif %}
 
-                        {% endif %}
+{#                        {% endif %}#}
 
                     </td>
                     <td>
-                        {% if ((is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and  (workflow_can(ec,
-                            'valider_ec') or workflow_can(ec,
-                            'initialiser'))) or (is_granted
-                            ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
-                            'valider_ec')) %}
+{#                        {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) and  (workflow_can(ec,#}
+{#                            'valider_ec') or workflow_can(ec,#}
+{#                            'initialiser'))) or (is_granted#}
+{#                            ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,#}
+{#                            'valider_ec')) %}#}
                             <a
-                                    href="{{ path('app_ec_etat_valide',{'id': ec.id, parcours:ec.parcours.id}) }}"
+                                    href="{{ path('app_ec_etat_valide',{'id': ec.id, parcours:parcours.id}) }}"
                                     class="btn btn-sm text-warning"
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="bottom"
@@ -183,7 +177,7 @@
                                 <i class="{{ iconValidate }}"></i>
                                 <span> valider</span>
                             </a>
-                        {% endif %}
+{#                        {% endif %}#}
                     </td>
                 {% endif %}
             </tr>
@@ -194,7 +188,7 @@
                 </td>
             </tr>
         {% endfor %}
-        {% if parcours is defined and is_granted('ROLE_EC_ADD_MY', parcours.formation) and ue is defined %}
+{#        {% if parcours is defined and is_granted('ROLE_EC_ADD_MY', parcours.formation) and ue is defined %}#}
             <tr>
                 <td colspan="{% if deplacer == true %}9{% else %}8{% endif %}">
 
@@ -213,11 +207,28 @@
                             title="Ajouter un élément constitutif (matière)"
                     >
                         <i class="{{ iconAdd }}"></i>
-                        <span>Ajouter un élément constitutif (matière)</span>
+                        <span>Ajouter un élément constitutif</span>
+                    </button>
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Ajouter une fiche matière',
+                                nomEvenement: 'refreshListeEc',
+                                details: {ue: ue.id, parcours: parcours.id},
+                                modalUrl: path('app_fiche_matiere_new', {ue: ue.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Ajouter une fiche matière"
+                    >
+                        <i class="{{ iconAdd }}"></i>
+                        <span>Ajouter une fiche matière</span>
                     </button>
                 </td>
             </tr>
-        {% endif %}
+{#        {% endif %}#}
         </tbody>
     </table>
 </div>

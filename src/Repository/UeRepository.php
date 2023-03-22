@@ -9,6 +9,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Semestre;
 use App\Entity\Ue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -46,7 +47,7 @@ class UeRepository extends ServiceEntityRepository
         }
     }
 
-    public function findBySemestreOrdre(?int $ordreDestination, ?\App\Entity\Semestre $getSemestre)
+    public function findBySemestreOrdre(?int $ordreDestination, ?Semestre $getSemestre): ?Ue
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.semestre = :semestre')
@@ -55,5 +56,15 @@ class UeRepository extends ServiceEntityRepository
             ->setParameter('ordre', $ordreDestination)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function getMaxOrdre(Semestre $semestre): int
+    {
+        return $this->createQueryBuilder('u')
+            ->select('MAX(u.ordre)')
+            ->andWhere('u.semestre = :semestre')
+            ->setParameter('semestre', $semestre)
+            ->getQuery()
+            ->getSingleScalarResult() ?? 0;
     }
 }

@@ -10,6 +10,8 @@
 namespace App\Entity;
 
 use App\Repository\TypeUeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -23,9 +25,17 @@ class TypeUe
 
     #[ORM\Column(length: 100)]
     private ?string $libelle = null;
+//
+//    #[ORM\Column(type: Types::JSON, nullable: true)]
+//    private ?array $typeDiplome = [];
 
-    #[ORM\Column(type: Types::JSON, nullable: true)]
-    private ?array $typeDiplome = [];
+    #[ORM\ManyToMany(targetEntity: TypeDiplome::class, inversedBy: 'typeUes')]
+    private Collection $typeDiplomes;
+
+    public function __construct()
+    {
+        $this->typeDiplomes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -44,14 +54,38 @@ class TypeUe
         return $this;
     }
 
-    public function getTypeDiplome(): array
+//    public function getTypeDiplome(): array
+//    {
+//        return $this->typeDiplome ?? [];
+//    }
+//
+//    public function setTypeDiplome(?array $typeDiplome): self
+//    {
+//        $this->typeDiplome = $typeDiplome;
+//
+//        return $this;
+//    }
+
+    /**
+     * @return Collection<int, TypeDiplome>
+     */
+    public function getTypeDiplomes(): Collection
     {
-        return $this->typeDiplome ?? [];
+        return $this->typeDiplomes;
     }
 
-    public function setTypeDiplome(?array $typeDiplome): self
+    public function addTypeDiplome(TypeDiplome $typeDiplome): self
     {
-        $this->typeDiplome = $typeDiplome;
+        if (!$this->typeDiplomes->contains($typeDiplome)) {
+            $this->typeDiplomes->add($typeDiplome);
+        }
+
+        return $this;
+    }
+
+    public function removeTypeDiplome(TypeDiplome $typeDiplome): self
+    {
+        $this->typeDiplomes->removeElement($typeDiplome);
 
         return $this;
     }
