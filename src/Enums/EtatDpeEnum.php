@@ -85,7 +85,7 @@ enum EtatDpeEnum: string
     {
         return match ($this) {
             self::initialisation_dpe, self::initialisation_ec => 'secondary',
-            self::en_cours_redaction => 'warning',
+            self::autorisation_saisie, self::en_cours_redaction => 'warning',
             self::soumis_rf, self::soumis_ec, self::soumis_dpe_composante, self::soumis_conseil, self::soumis_central, self::soumis_vp, self::soumis_cfvu, self::soumis_conseil_reserve => 'info',
             self::refuse_rf, self::refuse_ec, self::refuse_dpe_composante, self::refuse_conseil, self::refuse_central, self::refuse_definitif_cfvu => 'danger',
             self::valie_a_publier, self::publie, self::valide_pour_publication => 'success',
