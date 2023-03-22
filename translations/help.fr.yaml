@@ -1,142 +1,141 @@
 formation_step2.helps.objectifsFormation: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu.  L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : \"A la fin de la formation, le diplômé sera capable de...\" et peut être rédigé selon 3 axes : •\tle savoir et la connaissance •\tle savoir-faire et la compétence professionnelle •\tle savoir-être et la capacité d'adaptation à différentes situations"
 parcours_step1.helps.objectifsParcours: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu.  L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : \"A la fin de la formation, le diplômé sera capable de...\" et peut être rédigé selon 3 axes : •\tle savoir et la connaissance •\tle savoir-faire et la compétence professionnelle •\tle savoir-être et la capacité d'adaptation à différentes situations"
-parcours_step2.helps.nbHeuresSituationPro: "Précisez le nombre d'heures de mise en situation professionnelle prévu"
+parcours_step2.helps.nbHeuresSituationPro: "Précisez le nombre d'heures de mise en situation professionnelle prévu."
 user.helps.username: user.helps.username
 user.helps.email: user.helps.email
 formation_step3.helps.hasParcours.help: 'Indiquez si la formation comporte des parcours'
 formation_step3.helps.libelleParcours.help: help
-formation_step3.helps.structureFormation.help: help
+formation_step3.helps.structureFormation.help: 'Précisez la structure de la formation (semestre en tronc commun ou semestre spécifique au parcours).'
 'Plusieurs choix possibles': 'Plusieurs choix possibles'
 "Régime d'inscription": "Régime d'inscription"
 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.': 'Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.'
-ec_step3.labels.competence: 'Indiquez les compétences concernées par cet élément constitutif. Choisir le/les BCC pour accéder aux compétences.'
+ec_step3.labels.competence: "Choisissez d'abord le/les bloc(s) de compétences pour accéder aux compétences associées."
 'Optionnel, sigle/code ou appelation courte du parcours': 'Optionnel, sigle/code ou appelation courte du parcours'
 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation': 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation'
-'Si la mention n''existe pas, veuillez la créer dans la section "Autre mention"': 'Si la mention n''existe pas, veuillez la créer dans la section "Autre mention"'
-'Si la mention existe, veuillez la sélectionner dans la liste déroulante': 'Si la mention existe, veuillez la sélectionner dans la liste déroulante'
+'Si la mention n''existe pas, veuillez la créer dans la section "Autre mention"': '"'
+'Si la mention existe, veuillez la sélectionner dans la liste déroulante': '"'
 formation_step3.helps.semestreDebut.help: 'Indiquez le semestre de début de la formation'
 parcours_step6.helps.modalitesAlternance: parcours_step6.helps.modalitesAlternance
-ec_step1.helps.preciserMutualisation.help: 'Précisez les mutualisations'
-ue.helps.ordre: ue.helps.ordre
-ue.helps.typeUe: ue.helps.typeUe
-ue.helps.typeUeTexte: ue.helps.typeUeTexte
-ue.helps.ueObligatoire: ue.helps.ueObligatoire
-ue.helps.ueObligatoireTexte: ue.helps.ueObligatoireTexte
-formation_ses.helps.typeDiplome: formation_ses.helps.typeDiplome
-formation_ses.helps.domaine: formation_ses.helps.domaine
-formation_ses.helps.niveauEntree: formation_ses.helps.niveauEntree
-formation_ses.helps.niveauSortie: formation_ses.helps.niveauSortie
-formation_ses.helps.inRncp.help: formation_ses.helps.inRncp.help
-formation_ses.helps.codeRNCP: formation_ses.helps.codeRNCP
-formation_ses.helps.responsableMention: formation_ses.helps.responsableMention
+ec_step1.helps.preciserMutualisation.help: 'Indiquez toutes les formations avec lesquelles cet enseignement est mutualisé'
+ue.helps.ordre: '"'
+ue.helps.typeUe: '"'
+ue.helps.typeUeTexte: "Précisez le type d'UE si il n'est pas présent dans la liste déroulante du champ précédent."
+ue.helps.ueObligatoire: '"'
+ue.helps.ueObligatoireTexte: "Précisez la nature de l'UE si elle n'est pas présente dans la liste déroulante du champ précédent."
+formation_ses.helps.typeDiplome: '"'
+formation_ses.helps.domaine: '"'
+formation_ses.helps.niveauEntree: '"'
+formation_ses.helps.niveauSortie: '"'
+formation_ses.helps.inRncp.help: '"'
+formation_ses.helps.codeRNCP: 'Indiquez le code RNCP (cf. www.francecompetences.fr).'
+formation_ses.helps.responsableMention: 'Indiquez le porteur du projet de formation (futur responsable de formation), qui aura en charge le dépôt de la demande de création de la formation.'
 parcours_step5.helps.composanteInscription.help: parcours_step5.helps.composanteInscription.help
-parcours_step5.helps.regimeInscription.help: parcours_step5.helps.regimeInscription.help
-parcours_step5.helps.modalitesAlternance: parcours_step5.helps.modalitesAlternance
-parcours_step5.helps.coordSecretariat: parcours_step5.helps.coordSecretariat
-element_constitutif.helps.libelle: fiche_matiere.helps.libelle
-element_constitutif.helps.responsableEc: fiche_matiere.helps.responsableEc
-parcours_step2.helps.hasSituationPro.help: parcours_step2.helps.hasSituationPro.help
-parcours_step2.helps.situationProText: parcours_step2.helps.situationProText
+parcours_step5.helps.regimeInscription.help: 'Plusieurs choix possibles.'
+parcours_step5.helps.modalitesAlternance: "Indiquez en 3000 caractères maximum le rythme de l'alternance c'est à dire les périodes et les durées en centre de formation ou en entreprise (en nombre de semaines). Par exemple : 1 semaine en centre de formation et 3 semaines en entreprise."
+parcours_step5.helps.coordSecretariat: 'Indiquez les coordonnées postales et téléphoniques du secrétariat ainsi que son adresse mail générique.'
+element_constitutif.helps.libelle: "Indiquez le libellé exact de l'EC."
+element_constitutif.helps.responsableEc: element_constitutif.helps.responsableEc
+parcours_step2.helps.hasSituationPro.help: '"'
+parcours_step2.helps.situationProText: 'Décrivez en quoi consiste la mise en situation professionnelle.'
 formation_ses.helps.composantePorteuse: 'Indiquez la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation.'
-formation_ses.helps.mention: 'Si la mention n''existe pas, veuillez la créer dans la section "Autre mention".'
-formation_ses.helps.mentionTexte: 'Si la mention existe, veuillez la sélectionner dans la liste déroulante.'
+formation_ses.helps.mention: "Si l'intitulé existe, veuillez le sélectionner dans la liste déroulante. Si l'intitulé n'existe pas, veuillez le créer dans la section \"Autre mention\"."
+formation_ses.helps.mentionTexte: "Précisez le libellé de la mention/spécialité si il n'est pas présent dans la liste déroulante du champ précédent."
 formation_step1.helps.localisationMention.help: 'Plusieurs choix possibles.'
-formation_step1.helps.modalitesAlternance: 'Indiquez en 3000 caractères maximum les périodes et les durées en centre de formation ou en entreprise.'
+formation_step1.helps.modalitesAlternance: "Indiquez en 3000 caractères maximum le rythme de l'alternance c'est à dire les périodes et les durées en centre de formation ou en entreprise (en nombre de semaines). Par exemple : 1 semaine en centre de formation et 3 semaines en entreprise."
 formation_step1.helps.composantesInscription.help: 'Plusieurs choix possibles.'
 formation_step1.helps.regimeInscription.help: 'Plusieurs choix possibles.'
-formation_step2.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différents sujets traités dans la formation, en fonction des objectifs pédagogiques définis précédemment.'
-formation_step2.helps.resultatsAttendus: 'Indiquez en 3000 caractères maximum les objectifs pédagogiques visées par la formation (compétences à acquérir, à améliorer ou à entretenir). La description de chaque objectif doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que "savoir, maitriser, être capable de…".'
+formation_step2.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différentes thématiques traitées dans la formation, en fonction des objectifs pédagogiques définis précédemment.'
+formation_step2.helps.resultatsAttendus: 'Indiquez en 3000 caractères maximum les compétences acquises via la formation (compétences à acquérir, à améliorer ou à entretenir). La description des compétences doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que "savoir, maitriser, être capable de…".'
 formation_step2.helps.rythmeFormation: 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir,etc.).'
-formation_step2.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (en heures, en jours, en semaines, en mois, en années, …).'
-parcours_step2.helps.stageText: 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...'
-parcours_step2.helps.projetText: 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...'
-parcours_step2.helps.memoireText: 'Indiquez ici le nombre, sur quel semestre ils sont prévus, les modalités...'
-bloc_competence.helps.libelle: "Le libellé du bloc de compétences doit commencer par un verbe d'action, et ne doit pas dépasser 255 caractères."
+formation_step2.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (déroulé, calendrier, périodes.etc.).'
+parcours_step2.helps.stageText: 'Indiquez en quoi consiste le stage (nombre, sur quel(s) semestre(s) ils sont prévus, les modalités, etc.).'
+parcours_step2.helps.projetText: 'Indiquez en quoi consiste le projet tutoré (nombre, sur quel(s) semestre(s) ils sont prévus, les modalités, etc.).'
+parcours_step2.helps.memoireText: 'Décrivez en quoi consiste le TER/mémoire.'
+bloc_competence.helps.libelle: 'Indiquez le libellé du bloc de compétences.'
 competence.helps.libelle: "Le libellé de la compétence doit commencer par un verbe d'action, et ne doit pas dépasser 255 caractères. Doit être cohérente avec la fiche RNCP du diplôme."
-parcours_step5.helps.prerequis: 'Indiquez ici si des prérequis pédagogiques sont conseillés pour réussir dans cette formation.'
+parcours_step5.helps.prerequis: 'Indiquez si des prérequis pédagogiques sont conseillés pour réussir dans cette formation.'
 parcours_step7.helps.poursuitesEtudes: 'Indiquez en 3000 caractères maximum quelles sont les poursuites d’études envisageables.'
-parcours_step7.helps.debouches: 'Indiquez ici les principaux débouchés professionnels accessibles à l’issue de cette formation.'
-parcours_step8.helps.coordSecretariat: 'Indiquez ici les coordonnées postales et téléphoniques du secrétariat ainsi que son adresse mail générique.'
-ec_step1.helps.responsableEc: "Indiquez le responsable de l'EC."
+parcours_step7.helps.debouches: 'Indiquez les principaux débouchés professionnels accessibles à l’issue de cette formation.'
+parcours_step8.helps.coordSecretariat: 'Indiquez les coordonnées postales et téléphoniques du secrétariat ainsi que son adresse mail générique.'
+ec_step1.helps.responsableEc: '"'
 ec_step1.helps.libelle: "N'est modifiable que par le responsable de la formation."
 ec_step1.helps.libelleAnglais: "Précisez la version anglaise du libellé de l'EC."
 ec_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez "oui".'
-ec_step2.helps.description: 'Indiquez ici en 3000 caractères maximum le contenu de l’enseignement. Faites une description détaillée des différents sujets traités dans cet enseignement.'
-ec_step3.helps.objectifs: 'Indiquez ici en 3000 caractères maximum les objectifs de l’enseignement.'
+ec_step2.helps.description: 'Indiquez en 3000 caractères maximum le contenu de l’enseignement. Faites une description détaillée des différents sujets traités dans cet enseignement.'
+ec_step3.helps.objectifs: 'Indiquez en 3000 caractères maximum les objectifs de l’enseignement'
 ec_step4.helps.modaliteEnseignement.help: "Indiquez les modalités d’enseignement de l'EC."
-ec_step4.helps.ects: ''
-ec_step4.helps.volumeCmPresentiel: ''
-ec_step4.helps.volumeTdPresentiel: ''
-ec_step4.helps.volumeTpPresentiel: ''
-ec_step4.helps.volumeCmDistanciel: ''
-ec_step4.helps.volumeTdDistanciel: ''
-ec_step4.helps.volumeTpDistanciel: ''
+ec_step4.helps.ects: '"'
+ec_step4.helps.volumeCmPresentiel: '"'
+ec_step4.helps.volumeTdPresentiel: '"'
+ec_step4.helps.volumeTpPresentiel: '"'
+ec_step4.helps.volumeCmDistanciel: '"'
+ec_step4.helps.volumeTdDistanciel: '"'
+ec_step4.helps.volumeTpDistanciel: '"'
 parcours_step2.helps.modalitesEnseignement.help: "Précisez les modalités d'enseignement."
-parcours_step2.helps.hasStage.help: 'Décrivez en quoi consiste le stage.'
-parcours_step2.helps.nbHeuresStages: "Précisez le nombre d'heures du projet tutoré prévu."
-parcours_step2.helps.hasProjet.help: 'Décrivez en quoi consiste le projet professionnel.'
+parcours_step2.helps.hasStage.help: '"'
+parcours_step2.helps.nbHeuresStages: "Précisez le nombre d'heures de stage prévu."
+parcours_step2.helps.hasProjet.help: '"'
 parcours_step2.helps.nbHeuresProjet: "Précisez le nombre d'heures du projet tutoré prévu."
-parcours_step2.helps.hasMemoire.help: 'Décrivez en quoi consiste le mémoire.'
+parcours_step2.helps.hasMemoire.help: '"'
 parcours_step8.helps.respParcours: 'Indiquez le responsable de parcours.'
-parcours.helps.sigle: parcours.helps.sigle
-parcours_step1.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différents sujets traités dans la formation, en fonction des objectifs pédagogiques définis précédemment.'
-parcours_step1.helps.resultatsAttendus: 'Indiquez en 3000 caractères maximum les objectifs pédagogiques visées par la formation (compétences à acquérir, à améliorer ou à entretenir). La description de chaque objectif doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que "savoir, maitriser, être capable de…".'
+parcours.helps.sigle: 'Le cas échéant, indiquez le sigle utilisé pour ce parcours.'
+parcours_step1.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différentes thématiques traitées dans la formation, en fonction des objectifs pédagogiques définis précédemment.'
+parcours_step1.helps.resultatsAttendus: 'Indiquez en 3000 caractères maximum les compétences acquises via la  formation (compétences à acquérir, à améliorer ou à entretenir). La description des compétences doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que "savoir, maitriser, être capable de…".'
 parcours_step1.helps.rythmeFormation: 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir, etc.).'
-parcours_step1.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (en heures, en jours, en semaines, en mois, etc.).'
+parcours_step1.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (déroulé, calendrier, périodes, etc.).'
 parcours_step1.helps.localisation.help: 'Choisissez le lieu où le parcours est proposé. Si le parcours est dispensé sur plusieurs sites, créer autant de parcours que de lieux de formation.'
-ec_step1.helps.isCmPresentielMutualise.help: ''
-ec_step1.helps.isTdPresentielMutualise.help: ''
-ec_step1.helps.isTpPresentielMutualise.help: ''
-ec_step1.helps.isCmDistancielMutualise.help: ''
-ec_step1.helps.isTdDistancielMutualise.help: ''
-ec_step1.helps.isTpDistancielMutualise.help: ''
+ec_step1.helps.isCmPresentielMutualise.help: '"'
+ec_step1.helps.isTdPresentielMutualise.help: '"'
+ec_step1.helps.isTpPresentielMutualise.help: '"'
+ec_step1.helps.isCmDistancielMutualise.help: '"'
+ec_step1.helps.isTdDistancielMutualise.help: '"'
+ec_step1.helps.isTpDistancielMutualise.help: '"'
 ec_step2.helps.langueDispense.help: 'Plusieurs choix possibles.'
 ec_step2.helps.langueSupport.help: 'Plusieurs choix possibles.'
-ec_step2.helps.typeEnseignement.help: ''
+ec_step2.helps.typeEnseignement.help: ec_step2.helps.typeEnseignement.help
 register.helps.email: 'Email URCA valide. Permettra de faire le lien avec vos accès CAS'
 register.helps.centreDemande: "Précisez le centre souhaité. Le responsable du centre précisera vos droits d'accès."
-parcours_step1.helps.localisation: parcours_step1.helps.localisation
-parcours_step2.helps.modalitesEnseignement: parcours_step2.helps.modalitesEnseignement
-parcours_step5.helps.composanteInscription: parcours_step5.helps.composanteInscription
+parcours_step1.helps.localisation: 'Choisissez le lieu où le parcours est proposé. Si le parcours est dispensé sur plusieurs sites, créer autant de parcours que de lieux de formation.'
+parcours_step2.helps.modalitesEnseignement: '"'
+parcours_step5.helps.composanteInscription: '"'
 parcours_step5.helps.regimeInscription: parcours_step5.helps.regimeInscription
-parcours_step7.helps.codeRome.help: parcours_step7.helps.codeRome.help
+parcours_step7.helps.codeRome.help: 'Ajoutez les codes ROME pour préciser les métiers accessibles aux diplômés (cf. https://www.pole-emploi.fr/employeur/vos-recrutements/le-rome-et-les-fiches-metiers.html).'
 ec_step4.helps.modaliteEnseignement: ec_step4.helps.modaliteEnseignement
-ec_step2.helps.typeEnseignement: ec_step2.helps.typeEnseignement
-langue.helps.libelle: langue.helps.libelle
-langue.helps.codeIso: langue.helps.codeIso
-type_ec.helps.libelle: type_ec.helps.libelle
-type_ec.helps.typeDiplome.help: type_ec.helps.typeDiplome.help
-type_diplome.helps.libelle: type_diplome.helps.libelle
-type_diplome.helps.libelle_court: type_diplome.helps.libelle_court
-type_diplome.helps.semestreDebut: type_diplome.helps.semestreDebut
-type_diplome.helps.semestreFin: type_diplome.helps.semestreFin
-type_diplome.helps.nbUeMin: type_diplome.helps.nbUeMin
-type_diplome.helps.nbUeMax: type_diplome.helps.nbUeMax
-type_diplome.helps.nbEctsMaxUe: type_diplome.helps.nbEctsMaxUe
-type_diplome.helps.ModeleMcc: type_diplome.helps.ModeleMcc
-type_ue.helps.libelle: type_ue.helps.libelle
-type_ue.helps.typeDiplomes.help: type_ue.helps.typeDiplomes.help
-type_ec.helps.typeDiplomes.help: type_ec.helps.typeDiplomes.help
+ec_step2.helps.typeEnseignement: "Précisez si l'enseignement est obligatoire / facultatif ou s'il fait partie d'une liste d'éléments à choisir."
+langue.helps.libelle: 'Indiquez le libellé exact de la la langue.'
+langue.helps.codeIso: "2 caractères, selon la norme ISO 639-1 (cf. https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1).\n"
+type_enseignement.helps.libelle: type_enseignement.helps.libelle
+type_ue.helps.libelle: "Indiquez le libellé exact du type d'UE."
+type_ue.helps.typeDiplome.help: "Sélectionnez les diplômes concernés par ce type d'UE."
+rythme_formation.helps.libelle: rythme_formation.helps.libelle
+parcours.helps.libelle: 'Indiquez le libellé exact de ce parcours.'
+parcours.helps.respParcours: 'Indiquez le responsable de ce parcours.'
+mention.helps.typeDiplome: '"'
+mention.helps.libelle: 'Indiquez le libellé exact de la mention/spécialité.'
+mention.helps.sigle: 'Le cas échéant, indiquez le sigle utilisé pour cette mention/spécialité.'
+mention.helps.domaine: '"'
+domaine.helps.libelle: 'Indiquez le libellé exacte du domaine de formation.'
+domaine.helps.sigle: 'Indiquez le sigle utilisé pour ce domaine.'
+composante.helps.libelle: 'Indiquez le libellé exact de la composante.'
+composante.helps.sigle: 'Le cas échéant, indiquez le sigle utilisé pour cette composante.'
+composante.helps.directeur: '"'
+composante.helps.responsableDpe: "Indiquez le nom de la personne en charge de l'administration de ORéOF dans la composante."
+composante.helps.adresse.help: '"'
+composante.helps.adresse.adresse1: '"'
+composante.helps.adresse.adresse2: '"'
+composante.helps.adresse.codePostal: '"'
+composante.helps.adresse.ville: '"'
+composante.helps.telStandard: "Indiquez le numéro de téléphone de l'accueil de la composante."
+composante.helps.telComplementaire: '"'
+composante.helps.mailContact: "Indiquez l'adresse mail générique de l'accueil de la composante."
+composante.helps.urlSite: 'Indiquez le lien court vers le mini-site de la composante.'
+ville.helps.libelle: '"'
+ville.helps.etablissement: '"'
+etablissement.helps.libelle: '"'
+etablissement.helps.adresse.help: '"'
+etablissement.helps.adresse.adresse1: '"'
+etablissement.helps.adresse.adresse2: '"'
+etablissement.helps.adresse.codePostal: '"'
+etablissement.helps.adresse.ville: '"'
 type_epreuve.helps.libelle: type_epreuve.helps.libelle
-type_epreuve.helps.typeDiplomes.help: type_epreuve.helps.typeDiplomes.help
-ue.helps.natureUeEc: ue.helps.natureUeEc
-ue.helps.natureUeEcTexte: ue.helps.natureUeEcTexte
-element_constitutif.helps.ficheMatiere: element_constitutif.helps.ficheMatiere
-element_constitutif.helps.natureUeEc: element_constitutif.helps.natureUeEc
-fiche_matiere.helps.libelle: fiche_matiere.helps.libelle
-fiche_matiere.helps.responsableFicheMatiere: fiche_matiere.helps.responsableFicheMatiere
-fiche_matiere_step1.helps.libelle: fiche_matiere_step1.helps.libelle
-fiche_matiere_step1.helps.libelleAnglais: fiche_matiere_step1.helps.libelleAnglais
-fiche_matiere_step1.helps.enseignementMutualise.help: fiche_matiere_step1.helps.enseignementMutualise.help
-fiche_matiere_step1.helps.isCmPresentielMutualise.help: fiche_matiere_step1.helps.isCmPresentielMutualise.help
-fiche_matiere_step1.helps.isTdPresentielMutualise.help: fiche_matiere_step1.helps.isTdPresentielMutualise.help
-fiche_matiere_step1.helps.isTpPresentielMutualise.help: fiche_matiere_step1.helps.isTpPresentielMutualise.help
-fiche_matiere_step1.helps.isCmDistancielMutualise.help: fiche_matiere_step1.helps.isCmDistancielMutualise.help
-fiche_matiere_step1.helps.isTdDistancielMutualise.help: fiche_matiere_step1.helps.isTdDistancielMutualise.help
-fiche_matiere_step1.helps.isTpDistancielMutualise.help: fiche_matiere_step1.helps.isTpDistancielMutualise.help
-fiche_matiere_step1.helps.preciserMutualisation.help: fiche_matiere_step1.helps.preciserMutualisation.help
-parcours_step6.helps.poursuitesEtudes: parcours_step6.helps.poursuitesEtudes
-parcours_step6.helps.debouches: parcours_step6.helps.debouches
-parcours_step6.helps.codeRome.help: parcours_step6.helps.codeRome.help
-parcours.helps.libelle: parcours.helps.libelle
-parcours.helps.respParcours: parcours.helps.respParcours
+type_epreuve.helps.typeDiplome.help: type_epreuve.helps.typeDiplome.help
