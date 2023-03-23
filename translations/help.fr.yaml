@@ -1,8 +1,8 @@
 formation_step2.helps.objectifsFormation: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu.  L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : \"A la fin de la formation, le diplômé sera capable de...\" et peut être rédigé selon 3 axes : •\tle savoir et la connaissance •\tle savoir-faire et la compétence professionnelle •\tle savoir-être et la capacité d'adaptation à différentes situations"
 parcours_step1.helps.objectifsParcours: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu.  L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : \"A la fin de la formation, le diplômé sera capable de...\" et peut être rédigé selon 3 axes : •\tle savoir et la connaissance •\tle savoir-faire et la compétence professionnelle •\tle savoir-être et la capacité d'adaptation à différentes situations"
 parcours_step2.helps.nbHeuresSituationPro: "Précisez le nombre d'heures de mise en situation professionnelle prévu."
-user.helps.username: user.helps.username
-user.helps.email: user.helps.email
+user.helps.username: "Indiquez le login URCA de l'utilisateur."
+user.helps.email: "Indiquez l'adresse mail professionnelle."
 formation_step3.helps.hasParcours.help: 'Indiquez si la formation comporte des parcours'
 formation_step3.helps.libelleParcours.help: help
 formation_step3.helps.structureFormation.help: 'Précisez la structure de la formation (semestre en tronc commun ou semestre spécifique au parcours).'
@@ -93,7 +93,7 @@ ec_step1.helps.isTpDistancielMutualise.help: '"'
 ec_step2.helps.langueDispense.help: 'Plusieurs choix possibles.'
 ec_step2.helps.langueSupport.help: 'Plusieurs choix possibles.'
 ec_step2.helps.typeEnseignement.help: ec_step2.helps.typeEnseignement.help
-register.helps.email: 'Email URCA valide. Permettra de faire le lien avec vos accès CAS'
+register.helps.email: 'Email URCA valide. Permettra de faire le lien avec vos accès CAS.'
 register.helps.centreDemande: "Précisez le centre souhaité. Le responsable du centre précisera vos droits d'accès."
 parcours_step1.helps.localisation: 'Choisissez le lieu où le parcours est proposé. Si le parcours est dispensé sur plusieurs sites, créer autant de parcours que de lieux de formation.'
 parcours_step2.helps.modalitesEnseignement: '"'
@@ -106,15 +106,15 @@ langue.helps.libelle: 'Indiquez le libellé exact de la la langue.'
 langue.helps.codeIso: "2 caractères, selon la norme ISO 639-1 (cf. https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1).\n"
 type_enseignement.helps.libelle: type_enseignement.helps.libelle
 type_ue.helps.libelle: "Indiquez le libellé exact du type d'UE."
-type_ue.helps.typeDiplome.help: "Sélectionnez les diplômes concernés par ce type d'UE."
-rythme_formation.helps.libelle: rythme_formation.helps.libelle
+type_ue.helps.typeDiplome.help: '"'
+rythme_formation.helps.libelle: 'Indiquez le libellé exact du rythme de formation.'
 parcours.helps.libelle: 'Indiquez le libellé exact de ce parcours.'
 parcours.helps.respParcours: 'Indiquez le responsable de ce parcours.'
 mention.helps.typeDiplome: '"'
 mention.helps.libelle: 'Indiquez le libellé exact de la mention/spécialité.'
 mention.helps.sigle: 'Le cas échéant, indiquez le sigle utilisé pour cette mention/spécialité.'
 mention.helps.domaine: '"'
-domaine.helps.libelle: 'Indiquez le libellé exacte du domaine de formation.'
+domaine.helps.libelle: 'Indiquez le libellé exact du domaine de formation.'
 domaine.helps.sigle: 'Indiquez le sigle utilisé pour ce domaine.'
 composante.helps.libelle: 'Indiquez le libellé exact de la composante.'
 composante.helps.sigle: 'Le cas échéant, indiquez le sigle utilisé pour cette composante.'
@@ -137,5 +137,39 @@ etablissement.helps.adresse.adresse1: '"'
 etablissement.helps.adresse.adresse2: '"'
 etablissement.helps.adresse.codePostal: '"'
 etablissement.helps.adresse.ville: '"'
-type_epreuve.helps.libelle: type_epreuve.helps.libelle
-type_epreuve.helps.typeDiplome.help: type_epreuve.helps.typeDiplome.help
+type_epreuve.helps.libelle: "Indiquez le libellé exact du type d'épreuve."
+type_epreuve.helps.typeDiplome.help: '"'
+type_diplome.helps.libelle: 'Indiquez le libellé exact du type de diplôme.'
+type_diplome.helps.libelle_court: 'Le cas échéant, indiquez le libellé court du type de diplôme.'
+type_diplome.helps.semestreDebut: type_diplome.helps.semestreDebut
+type_diplome.helps.semestreFin: type_diplome.helps.semestreFin
+type_diplome.helps.nbUeMin: type_diplome.helps.nbUeMin
+type_diplome.helps.nbUeMax: type_diplome.helps.nbUeMax
+type_diplome.helps.nbEctsMaxUe: type_diplome.helps.nbEctsMaxUe
+type_diplome.helps.ModeleMcc: type_diplome.helps.ModeleMcc
+nature_ue_ec.helps.libelle: "Indiquez le libellé exact de la nature d'UE/EC."
+nature_ue_ec.helps.choix.help: '"'
+type_ec.helps.libelle: "Indiquez le libellé exact du type d'EC."
+type_ec.helps.typeDiplomes.help: "Sélectionnez les diplômes concernés par ce type d'EC."
+type_ue.helps.typeDiplomes.help: "Sélectionnez les diplômes concernés par ce type d'UE."
+type_epreuve.helps.typeDiplomes.help: "Sélectionnez les diplômes concernés par ce type d'épreuve."
+user_ldap.helps.email: '"'
+user_ldap.helps.role.help: "Définissez le rôle de l'utilisateur (et donc ses droits d'accès)."
+user_ldap.helps.centreDemande: "Définissez le périmètre d’action et/ou de visualisation de l'utilisateur."
+role.helps.libelle: 'Indiquez le libellé exact du rôle.'
+role.helps.code_role: 'Indiquez le signe du rôle.'
+role.helps.porte.help: 'Indiquez si le périmètre en action et visualisation accordé au rôle.'
+user.helps.civilite: '"'
+user.helps.nom: '"'
+user.helps.prenom: '"'
+user.helps.telFixe: '"'
+user.helps.telPortable: '"'
+user.helps.role: "Définissez le rôle de l'utilisateur (et donc ses droits d'accès)."
+annee_universitaire.helps.libelle: '"'
+annee_universitaire.helps.annee: '"'
+annee_universitaire.helps.defaut.help: '"'
+annee_universitaire.helps.dateOuvertureDpe: "Correspond à la date de début de la période d'enrichissement des projets de DPE."
+annee_universitaire.helps.dateClotureDpe: '"'
+annee_universitaire.helps.dateTransmissionSes: "Correspond à la date de fin de la période d'enrichissement des projets de DPE."
+annee_universitaire.helps.dateCfvu: '"'
+annee_universitaire.helps.datePublication: '"'
