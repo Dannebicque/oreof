@@ -12,7 +12,7 @@
                             Type UE
                         </div>
                         <div class="col-12 col-md-2 d-flex align-items-center mb-2 text-secondary mb-md-0 text-small">
-                            Obligatoire ?
+                            Nature UE
                         </div>
                         <div class="col-6 col-md-1 d-flex align-items-center
                         justify-content-end text-secondary text-small">
@@ -57,13 +57,13 @@
                                                     }) }}
                                             >
                                                 <option value="">Choisir un type</option>
-                                                {% for key, typeUe in typeUes %}
+                                                {% for typeUe in typeUes %}
                                                     <option value="{{ typeUe.id }}"
                                                             {% if ue.typeUe != null and ue.typeUe.id == typeUe.id %}
                                                                 selected
                                                             {% endif %}
                                                     >
-                                                        {{ key }}
+                                                        {{ typeUe.libelle }}
                                                     </option>
                                                 {% endfor %}
                                             </select>
@@ -75,8 +75,9 @@
                                     mb-md-0">
                                         <div class="text-muted text-small d-md-none">ue</div>
                                         {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) %}
-                                            <label for="detail_ue_obligatoire_{{ ue.id }}" class="sr-only">Obligatoire
-                                                                                                           ?</label>
+                                            <label for="detail_ue_obligatoire_{{ ue.id }}" class="sr-only">
+                                                Nature UE
+                                            </label>
                                             <select class="form-select form-select-sm ms-2"
                                                     id="detail_ue_obligatoire_{{ ue.id }}"
                                                     {{ stimulus_action('structure--ue', 'changeUeObligatoire',

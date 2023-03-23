@@ -24,16 +24,16 @@ class ElementConstitutifType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('natureUeEc', EntityType::class, [
+                'class' => NatureUeEc::class,
+                'choice_label' => 'libelle',
+                'required' => true,
+            ])
             ->add('ficheMatiere', EntityType::class, [
                 'class' => FicheMatiere::class,
                 'choice_label' => 'libelle',
                 'required' => true,
                 'attr' => ['maxlength' => 250],
-            ])
-            ->add('natureUeEc', EntityType::class, [
-                'class' => NatureUeEc::class,
-                'choice_label' => 'libelle',
-                'required' => true,
             ]);
     }
 
