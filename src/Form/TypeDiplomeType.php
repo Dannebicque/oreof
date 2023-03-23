@@ -19,6 +19,7 @@ class TypeDiplomeType extends AbstractType
             ->add('nbUeMin')
             ->add('nbUeMax')
             ->add('nbEctsMaxUe')
+            ->add('nbEcParUe')
             ->add('ModeleMcc')
             ->add('debutSemestreFlexible')
             ->add('hasMemoire')

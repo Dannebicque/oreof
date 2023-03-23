@@ -110,22 +110,20 @@ export default class extends Controller {
         const selectMention = document.getElementById('formation_ses_mention')
         selectMention.innerHTML = ''
 
-        let option = document.createElement('option')
-        option.value = null
-        option.text = ''
-        selectMention.appendChild(option)
-
-        option = document.createElement('option')
-        option.value = 'autre'
-        option.text = 'Mention hors nomenclature, je complète la zone de saisie'
-        selectMention.appendChild(option)
+        const tom = selectMention.tomselect
+        const tab = []
 
         mentions.forEach((mention) => {
-          option = document.createElement('option')
-          option.value = mention.id
-          option.text = mention.libelle
-          selectMention.appendChild(option)
+          tab.push({ value: mention.id, text: mention.libelle })
         })
+
+        tom.clear()
+        tom.clearOptions()
+        tom.enable()
+
+        tom.addOptions(tab)
+        tom.settings.placeholder = 'Choisir dans la liste'
+        tom.inputState();
       },
     )
   }

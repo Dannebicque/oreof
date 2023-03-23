@@ -69,6 +69,9 @@ class TypeDiplome
     #[ORM\Column]
     private ?bool $hasMemoire = true;
 
+    #[ORM\Column]
+    private ?int $nbEcParUe = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -376,6 +379,18 @@ class TypeDiplome
     public function setHasMemoire(bool $hasMemoire): self
     {
         $this->hasMemoire = $hasMemoire;
+
+        return $this;
+    }
+
+    public function getNbEcParUe(): ?int
+    {
+        return $this->nbEcParUe;
+    }
+
+    public function setNbEcParUe(int $nbEcParUe): self
+    {
+        $this->nbEcParUe = $nbEcParUe;
 
         return $this;
     }

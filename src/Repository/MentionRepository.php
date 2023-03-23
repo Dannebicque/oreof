@@ -65,7 +65,7 @@ class MentionRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findByDomaineAndTypeDiplomeArray(Domaine $domaine, mixed $typeDiplome): array
+    public function findByDomaineAndTypeDiplomeArray(Domaine $domaine, TypeDiplome $typeDiplome): array
     {
         $data = $this->findByDomaineAndTypeDiplome($domaine, $typeDiplome);
 
