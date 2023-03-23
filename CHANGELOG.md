@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.18.5](https://github.com/Dannebicque/oreof/compare/v0.18.4...v0.18.5) (2023-03-23)
+
+
+### Bug Fixes
+
+* Typos ([ca21f8f](https://github.com/Dannebicque/oreof/commit/ca21f8fed40fcd6b14195d31d19b423b318aca81))
+* Typos, filtre sur tomselect ([554e4ca](https://github.com/Dannebicque/oreof/commit/554e4ca3c0bfe3d52098445400224f121d2e4c14))
+
 ### [0.18.4](https://github.com/Dannebicque/oreof/compare/v0.18.3...v0.18.4) (2023-03-23)
 
 
