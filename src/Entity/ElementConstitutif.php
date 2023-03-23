@@ -74,9 +74,6 @@ class ElementConstitutif
     #[ORM\ManyToOne]
     private ?NatureUeEc $natureUeEc = null;
 
-    #[ORM\OneToMany(mappedBy: 'ec', targetEntity: EcUe::class)]
-    private Collection $ecUes;
-
     #[ORM\OneToMany(mappedBy: 'ec', targetEntity: Mccc::class)]
     private Collection $mcccs;
 
@@ -92,9 +89,14 @@ class ElementConstitutif
     #[ORM\ManyToOne()]
     private ?Parcours $parcours = null;
 
+    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
+    private ?Ue $ue = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $subOrdre = null;
+
     public function __construct()
     {
-        $this->ecUes = new ArrayCollection();
         $this->mcccs = new ArrayCollection();
     }
 
@@ -352,34 +354,6 @@ class ElementConstitutif
     }
 
     /**
-     * @return Collection<int, EcUe>
-     */
-    public function getEcUes(): Collection
-    {
-        return $this->ecUes;
-    }
-
-    public function addEcUe(EcUe $ecUe): self
-    {
-        if (!$this->ecUes->contains($ecUe)) {
-            $this->ecUes->add($ecUe);
-            $ecUe->setEc($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEcUe(EcUe $ecUe): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->ecUes->removeElement($ecUe) && $ecUe->getEc() === $this) {
-            $ecUe->setEc(null);
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Mccc>
      */
     public function getMcccs(): Collection
@@ -433,7 +407,11 @@ class ElementConstitutif
 
     public function genereCode(): void
     {
-        $this->setCode('EC'.$this->ordre);
+        if ($this->subOrdre === null) {
+            $this->setCode('EC' . $this->ordre);
+        } else {
+            $this->setCode('EC' . $this->ordre . '.' . chr($this->subOrdre + 64));
+        }
     }
 
     public function getFicheMatiere(): ?FicheMatiere
@@ -444,6 +422,30 @@ class ElementConstitutif
     public function setFicheMatiere(?FicheMatiere $ficheMatiere): self
     {
         $this->ficheMatiere = $ficheMatiere;
+
+        return $this;
+    }
+
+    public function getUe(): ?Ue
+    {
+        return $this->ue;
+    }
+
+    public function setUe(?Ue $ue): self
+    {
+        $this->ue = $ue;
+
+        return $this;
+    }
+
+    public function getSubOrdre(): ?int
+    {
+        return $this->subOrdre;
+    }
+
+    public function setSubOrdre(?int $subOrdre): self
+    {
+        $this->subOrdre = $subOrdre;
 
         return $this;
     }

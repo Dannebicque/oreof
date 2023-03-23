@@ -31,15 +31,20 @@ class Ue
     #[ORM\ManyToOne]
     private ?TypeUe $typeUe = null;
 
-    #[ORM\OneToMany(mappedBy: 'ue', targetEntity: EcUe::class)]
-    private Collection $ecUes;
 
     #[ORM\ManyToOne]
     private ?NatureUeEc $natureUeEc = null;
 
+    #[ORM\OneToMany(mappedBy: 'ue', targetEntity: ElementConstitutif::class)]
+    private Collection $elementConstitutifs;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $subOrdre = null;
+
     public function __construct()
     {
         $this->ecUes = new ArrayCollection();
+        $this->elementConstitutifs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -103,39 +108,11 @@ class Ue
     public function totalEctsUe(): int
     {
         $total = 0;
-        foreach ($this->getEcUes() as $ecUe) {
-            $total += $ecUe->getEc()?->getEcts();
+        foreach ($this->getElementConstitutifs() as $ec) {
+            $total += $ec->getEcts();
         }
 
         return $total;
-    }
-
-    /**
-     * @return Collection<int, EcUe>
-     */
-    public function getEcUes(): Collection
-    {
-        return $this->ecUes;
-    }
-
-    public function addEcUe(EcUe $ecUe): self
-    {
-        if (!$this->ecUes->contains($ecUe)) {
-            $this->ecUes->add($ecUe);
-            $ecUe->setUe($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEcUe(EcUe $ecUe): self
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->ecUes->removeElement($ecUe) && $ecUe->getUe() === $this) {
-            $ecUe->setUe(null);
-        }
-
-        return $this;
     }
 
     public function getNatureUeEc(): ?NatureUeEc
@@ -146,6 +123,48 @@ class Ue
     public function setNatureUeEc(?NatureUeEc $natureUeEc): self
     {
         $this->natureUeEc = $natureUeEc;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ElementConstitutif>
+     */
+    public function getElementConstitutifs(): Collection
+    {
+        return $this->elementConstitutifs;
+    }
+
+    public function addElementConstitutif(ElementConstitutif $elementConstitutif): self
+    {
+        if (!$this->elementConstitutifs->contains($elementConstitutif)) {
+            $this->elementConstitutifs->add($elementConstitutif);
+            $elementConstitutif->setUe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeElementConstitutif(ElementConstitutif $elementConstitutif): self
+    {
+        if ($this->elementConstitutifs->removeElement($elementConstitutif)) {
+            // set the owning side to null (unless already changed)
+            if ($elementConstitutif->getUe() === $this) {
+                $elementConstitutif->setUe(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSubOrdre(): ?int
+    {
+        return $this->subOrdre;
+    }
+
+    public function setSubOrdre(?int $subOrdre): self
+    {
+        $this->subOrdre = $subOrdre;
 
         return $this;
     }

@@ -22,14 +22,14 @@
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
-                            modalTitle: 'Voir un type d\'unité d\'enseignement',
+                            modalTitle: 'Voir un type d\'élément constitutif',
                             modalUrl: path('app_type_ec_show',{'id': type_ec.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm text-info"
                         data-size="lg"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
-                        title="Voir un type d\'unité d\'enseignement"
+                        title="Voir un type d\'élément constitutif"
                 >
                     <i class="{{ iconShow }}"></i>
                     <span> voir</span>
@@ -38,14 +38,14 @@
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
-                            modalTitle: 'Modifier un type d\'unité d\'enseignement',
+                            modalTitle: 'Modifier un type d\'élément constitutif',
                             modalUrl: path('app_type_ec_edit',{'id': type_ec.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm text-warning"
                         data-size="lg"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
-                        title="Modifier un type d\'unité d\'enseignement"
+                        title="Modifier un type d\'élément constitutif"
                 >
                     <i class="{{ iconEdit }}"></i>
                     <span> modifier</span>

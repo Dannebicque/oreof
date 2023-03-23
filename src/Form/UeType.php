@@ -10,6 +10,7 @@
 namespace App\Form;
 
 use App\Entity\NatureUeEc;
+use App\Entity\TypeUe;
 use App\Entity\Ue;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -26,10 +27,11 @@ class UeType extends AbstractType
 
 
         $builder
-            ->add('typeUe', ChoiceType::class, [
-                'choices' => $choices,
+            ->add('typeUe', EntityType::class, [
+                'class' => TypeUe::class,
+                'choice_label' => 'libelle', //todo: filtrer sur diplôme
                 'required' => false,
-                'mapped' =>  false,
+                'mapped' => false,
             ])
             ->add('typeUeTexte', TextType::class, [
                 'attr' => [
@@ -49,8 +51,7 @@ class UeType extends AbstractType
                 ],
                 'required' => false,
                 'mapped' => false,
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

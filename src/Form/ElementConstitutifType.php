@@ -27,14 +27,21 @@ class ElementConstitutifType extends AbstractType
             ->add('natureUeEc', EntityType::class, [
                 'class' => NatureUeEc::class,
                 'choice_label' => 'libelle',
-                'required' => true,
+                'required' => false,
+                'placeholder' => 'Choisissez une nature...',
+                'choice_attr' => function ($choice, $key, $value) {
+                    // adds a class like attending_yes, attending_no, etc
+                    return ['data-choix' => $choice->isChoix() ? 'true' : 'false'];
+                },
+                'attr' => ['data-action' => 'change->ec--manage#changeNatureEc'],
             ])
-            ->add('ficheMatiere', EntityType::class, [
-                'class' => FicheMatiere::class,
-                'choice_label' => 'libelle',
-                'required' => true,
-                'attr' => ['maxlength' => 250],
-            ]);
+//            ->add('ficheMatiere', EntityType::class, [
+//                'class' => FicheMatiere::class,
+//                'choice_label' => 'libelle',
+//                'required' => true,
+//                'attr' => ['maxlength' => 250],
+//            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

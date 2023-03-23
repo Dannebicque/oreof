@@ -121,4 +121,14 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findLastEc(Ue $ue): int
+    {
+        return $this->createQueryBuilder('ec')
+            ->select('MAX(ec.ordre)')
+            ->andWhere('ec.ue = :ue')
+            ->setParameter('ue', $ue)
+            ->getQuery()
+            ->getSingleScalarResult() ?? 0;
+    }
 }

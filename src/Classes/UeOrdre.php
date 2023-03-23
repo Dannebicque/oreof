@@ -9,10 +9,7 @@
 
 namespace App\Classes;
 
-use App\Entity\ElementConstitutif;
 use App\Entity\Ue;
-use App\Repository\EcUeRepository;
-use App\Repository\ElementConstitutifRepository;
 use App\Repository\UeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 

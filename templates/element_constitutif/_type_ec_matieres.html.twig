@@ -1,0 +1,55 @@
+<table class="table" id="tableFiches">
+    <thead>
+    <tr>
+        <th>
+            Place
+        </th>
+        <th>
+            Libellé
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div id="modele_matiere">
+    <div>
+        <label for="ficheMatiere">{{ 'ec_manage.labels.fiche_matiere_label'|trans({}, 'form') }}
+            <i class="fal fa-question-circle ms-1"
+               data-controller="tooltip"
+               data-tooltip-placement-value="bottom"
+               aria-label="{{ 'ec_manage.helps.fiche_matiere.help'|trans({}, 'help') }}"
+               data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere.help'|trans({}, 'help') }}"></i>
+        </label>
+        <select id="ficheMatiere" name="ficheMatiere" class="form-select">
+            <option value="">Choisir dans la liste une matière</option>
+            {% for matiere in matieres %}
+                <option value="{{ matiere.id }}">{{ matiere.libelle }}</option>
+            {% endfor %}
+        </select>
+        <button {{ stimulus_action('ec--manage', 'addFromListe') }} class="btn btn-primary">
+            Ajouter la fiche matière selectionnée
+        </button>
+    </div>
+    OU
+    <div class="mt-2">
+        <label for="ficheMatiereLibelle">
+            {{ 'ec_manage.labels.fiche_matiere_libelle_label'|trans({}, 'form') }}
+            <i class="fal fa-question-circle ms-1"
+               data-controller="tooltip"
+               data-tooltip-placement-value="bottom"
+               aria-label="{{ 'ec_manage.helps.fiche_matiere_libelle.help'|trans({}, 'help') }}"
+               data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_libelle.help'|trans({}, 'help') }}"></i>
+        </label>
+        <input type="text" id="ficheMatiereLibelle" name="ficheMatiereLibelle" class="form-control" placeholder="Saisir une matière">
+
+        <button {{ stimulus_action('ec--manage', 'addNewFiche') }} class="btn btn-primary">
+            Créer et ajouter la fiche matière
+        </button>
+    </div>
+</div>
+
+

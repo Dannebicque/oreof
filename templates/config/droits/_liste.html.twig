@@ -13,14 +13,14 @@
                     <button
                             {{ stimulus_controller('modal', {
                                 size: 'lg',
-                                modalTitle: 'Modifier les droits d\'accès',
+                                modalTitle: 'Modifier le rôle',
                                 modalUrl: path('app_droits_access_edit',{'id': role.id}) }) }}
                             data-action="click->modal#openModal"
                             class="btn btn-sm text-warning"
                             data-size="lg"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            title="Modifier les droits d'accès"
+                            title="Modifier le rôle"
                     >
                         <i class="{{ iconEdit }}"></i>
                         <span> modifier</span>

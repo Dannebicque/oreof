@@ -1,3 +1,27 @@
-{{ include('communs/_form.html.twig', {
-    isModal:true,
+<div {{ stimulus_controller('ec--manage', {
+    url:path('app_element_constitutif_type_ec'),
+    ue:ue.id,
+    parcours:parcours.id,
 }) }}
+        data-action="base#modalHide@window->ec--manage:modaleHide"
+>
+    {% form_theme form 'communs/form_theme.html.twig' %}
+    {{ form_start(form, {
+        'attr': {
+            'id': 'formEc'}
+    }) }}
+    {{ form_widget(form) }}
+
+    <div {{ stimulus_target('ec--manage', 'matieres') }}></div>
+
+    <button class="btn btn-success"
+            {{ stimulus_action('ec--manage', 'valider') }}
+    >
+        <i class="fal fa-floppy-disk"></i>
+        Enregistrer
+    </button>
+
+    {{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont
+obligatoires'}) }}
+    {{ form_end(form) }}
+</div>

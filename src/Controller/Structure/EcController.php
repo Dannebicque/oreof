@@ -12,9 +12,7 @@ namespace App\Controller\Structure;
 use App\Controller\BaseController;
 use App\Entity\Parcours;
 use App\Entity\Ue;
-use App\Repository\EcUeRepository;
 use App\Repository\ElementConstitutifRepository;
-use App\Repository\FicheMatiereRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -35,11 +33,11 @@ class EcController extends BaseController
         Route('/detail/ue/{ue}/{parcours}', name: 'detail_ue')
     ]
     public function detailComposante(
-        EcUeRepository $ecUeRepository,
+        ElementConstitutifRepository $elementConstitutifRepository,
         Ue $ue,
         Parcours $parcours
     ): Response {
-        $ecs = $ecUeRepository->findByUe($ue);
+        $ecs = $elementConstitutifRepository->findByUe($ue);
 
         return $this->render('structure/ec/_liste.html.twig', [
             'ecs' => $ecs,

@@ -22,7 +22,7 @@
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
-                            modalTitle: 'Voir un type d\'unité d\'enseignement',
+                            modalTitle: 'Voir un type d\'épreuve',
                             modalUrl: path('app_type_epreuve_show',{'id': type_epreuve.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm text-info"
@@ -38,7 +38,7 @@
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
-                            modalTitle: 'Modifier un type d\'unité d\'enseignement',
+                            modalTitle: 'Modifier un type d\'épreuve',
                             modalUrl: path('app_type_epreuve_edit',{'id': type_epreuve.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm text-warning"

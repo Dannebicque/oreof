@@ -11,7 +11,6 @@ namespace App\Classes;
 
 use App\Entity\ElementConstitutif;
 use App\Entity\Ue;
-use App\Repository\EcUeRepository;
 use App\Repository\ElementConstitutifRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -19,16 +18,14 @@ class EcOrdre
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private EcUeRepository $ecUeRepository
+        private ElementConstitutifRepository $elementConstitutifRepository
     ) {
     }
 
 
     public function getOrdreSuivant(Ue $ue): int
     {
-        $ordreMax = $this->ecUeRepository->findLastEc($ue);
-
-        return $ordreMax[0]['ordreMax'] === null ? 1 : ++$ordreMax[0]['ordreMax'];
+        return $this->elementConstitutifRepository->findLastEc($ue) + 1;
     }
 
     public function deplacerElementConstitutif(ElementConstitutif $elementConstitutif, string $sens, Ue $ue): bool
@@ -52,7 +49,7 @@ class EcOrdre
         ElementConstitutif $elementConstitutif,
         Ue $ue
     ): bool {
-        $ecs = $this->ecUeRepository->findByUeOrdre($ordreDestination, $ue);
+        $ecs = $this->elementConstitutifRepository->findByUeOrdre($ordreDestination, $ue);
         $elementConstitutif->setOrdre($ordreDestination);
         $elementConstitutif->genereCode();
 

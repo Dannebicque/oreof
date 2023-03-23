@@ -9,23 +9,18 @@
 
 namespace App\Controller;
 
-use App\Classes\Bcc;
 use App\Classes\EcOrdre;
-use App\Entity\BlocCompetence;
-use App\Entity\EcUe;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Entity\Ue;
-use App\Enums\EtatRemplissageEnum;
 use App\Form\EcStep4Type;
 use App\Form\ElementConstitutifType;
-use App\Repository\EcUeRepository;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
+use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeEpreuveRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,17 +44,41 @@ class ElementConstitutifController extends AbstractController
         ]);
     }
 
+    #[Route('/type-ec', name: 'app_element_constitutif_type_ec', methods: ['GET'])]
+    public function typeEc(
+        Request $request,
+        FicheMatiereRepository $ficheMatiereRepository,
+        NatureUeEcRepository $natureUeEcRepository
+    ): Response
+    {
+        $natureEc = $natureUeEcRepository->find($request->query->get('choix'));
+        if ($natureEc !== null) {
+            if ($natureEc->isChoix() === true) {
+                return $this->render('element_constitutif/_type_ec_matieres.html.twig', [
+                    'matieres' => $ficheMatiereRepository->findAll()
+                ]);
+            }
+
+            return $this->render('element_constitutif/_type_ec_matiere.html.twig', [
+                'matieres' => $ficheMatiereRepository->findAll()
+            ]);
+        }
+
+        throw new RuntimeException('Nature EC non trouvée');
+    }
+
     #[Route('/new/{ue}', name: 'app_element_constitutif_new', methods: ['GET', 'POST'])]
     public function new(
         EcOrdre $ecOrdre,
-        EcUeRepository $ecUeRepository,
         Request $request,
+        FicheMatiereRepository $ficheMatiereRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
         Ue $ue
     ): Response {
         $elementConstitutif = new ElementConstitutif();
-        $elementConstitutif->setParcours($ue->getSemestre()?->getSemestreParcours()->first()->getParcours());
-        $elementConstitutif->setModaliteEnseignement($ue->getSemestre()?->getSemestreParcours()->first()->getParcours()?->getModalitesEnseignement());
+        $parcours = $ue->getSemestre()?->getSemestreParcours()->first()->getParcours();
+        $elementConstitutif->setModaliteEnseignement($parcours?->getModalitesEnseignement());
+        $elementConstitutif->setUe($ue);
 
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl('app_element_constitutif_new', ['ue' => $ue->getId()]),
@@ -67,12 +86,53 @@ class ElementConstitutifController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $lastEc = $ecOrdre->getOrdreSuivant($ue);
-            $elementConstitutif->setModaliteEnseignement($ue->getSemestre()?->getSemestreParcours()->first()->getParcours()?->getModalitesEnseignement());
-            $elementConstitutif->setOrdre($lastEc);
-            $elementConstitutif->genereCode();
-            $ueEc = new EcUe($ue, $elementConstitutif);
-            $ecUeRepository->save($ueEc, true);
+            if ($elementConstitutif->getNatureUeEc()?->isChoix() === false) {
+                if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
+                    $ficheMatiere = $ficheMatiereRepository->find((int)str_replace('id_', '', $request->request->get('ficheMatiere')));
+                } else {
+                    $ficheMatiere = new FicheMatiere();
+                    $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
+                    $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
+                    $ficheMatiereRepository->save($ficheMatiere, true);
+                }
+                $lastEc = $ecOrdre->getOrdreSuivant($ue);
+                $elementConstitutif->setFicheMatiere($ficheMatiere);
+                $elementConstitutif->setOrdre($lastEc);
+                $elementConstitutif->genereCode();
+                $elementConstitutifRepository->save($elementConstitutif, true);
+            } else {
+                $lastEc = $ecOrdre->getOrdreSuivant($ue);
+                $subOrdre = 1;
+                //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
+                $matieres = explode(',', $request->request->get('matieres'));
+                foreach ($matieres as $matiere) {
+                    $ec = new ElementConstitutif();
+                    $parcours = $ue->getSemestre()?->getSemestreParcours()->first()->getParcours();
+                    //  $elementConstitutif->setParcours($ue->getSemestre()?->getSemestreParcours()->first()->getParcours());
+                    $ec->setModaliteEnseignement($parcours?->getModalitesEnseignement());
+                    $ec->setUe($ue);
+                    $ec->setNatureUeEc($elementConstitutif->getNatureUeEc());
+
+                    if (str_starts_with($matiere, 'id_')) {
+                        $ficheMatiere = $ficheMatiereRepository->find((int)str_replace('id_', '', $matiere));
+                    } else {
+                        $ficheMatiere = new FicheMatiere();
+                        $ficheMatiere->setLibelle(str_replace('ac_', '', $matiere));
+                        $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
+                        $ficheMatiereRepository->save($ficheMatiere, true);
+                    }
+
+                    $ec->setFicheMatiere($ficheMatiere);
+                    $ec->setOrdre($lastEc);
+                    $ec->setSubOrdre($subOrdre);
+                    $ec->genereCode();
+                    $subOrdre++;
+                    $elementConstitutifRepository->save($ec, true);
+                }
+            }
+
+
+
 
             $formation = $ue->getSemestre()?->getSemestreParcours()->first()->getParcours()?->getFormation();
             if ($formation === null) {
@@ -89,7 +149,7 @@ class ElementConstitutifController extends AbstractController
 //                $langueFr->addLanguesSupportsEc($ficheMatiere);
 //            }
 
-            $elementConstitutifRepository->save($elementConstitutif, true);
+//
 
             return $this->json(true);
         }
@@ -97,6 +157,8 @@ class ElementConstitutifController extends AbstractController
         return $this->render('element_constitutif/new.html.twig', [
             'element_constitutif' => $elementConstitutif,
             'form' => $form->createView(),
+            'ue' => $ue,
+            'parcours' => $parcours,
         ]);
     }
 
@@ -145,9 +207,9 @@ class ElementConstitutifController extends AbstractController
             'ROLE_EC_EDIT_MY',
             $ficheMatiere
         ) && $this->ecWorkflow->can($ficheMatiere, 'valider_ec')) || ($this->isGranted(
-                'ROLE_FORMATION_EDIT_MY',
-                $parcours->getFormation()
-            )) || ($this->ecWorkflow->can($ficheMatiere, 'valider_ec') || $this->ecWorkflow->can($ficheMatiere, 'initialiser')) || $this->isGranted('ROLE_ADMIN'));
+            'ROLE_FORMATION_EDIT_MY',
+            $parcours->getFormation()
+        )) || ($this->ecWorkflow->can($ficheMatiere, 'valider_ec') || $this->ecWorkflow->can($ficheMatiere, 'initialiser')) || $this->isGranted('ROLE_ADMIN'));
 
         if (!$access) {
             throw new AccessDeniedException();
@@ -171,25 +233,25 @@ class ElementConstitutifController extends AbstractController
 //            'ROLE_FORMATION_EDIT_MY',
 //            $elementConstitutif->getParcours()->getFormation()
 //        )) { //todo: ajouter le workflow...
-            $form = $this->createForm(EcStep4Type::class, $elementConstitutif, [
-                'isModal' => true,
-                'action' => $this->generateUrl(
-                    'app_element_constitutif_structure',
-                    ['id' => $elementConstitutif->getId()]
-                ),
-            ]);
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $ficheMatiereRepository->save($elementConstitutif, true);
+        $form = $this->createForm(EcStep4Type::class, $elementConstitutif, [
+            'isModal' => true,
+            'action' => $this->generateUrl(
+                'app_element_constitutif_structure',
+                ['id' => $elementConstitutif->getId()]
+            ),
+        ]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ficheMatiereRepository->save($elementConstitutif, true);
 
-                return $this->json(true);
-            }
+            return $this->json(true);
+        }
 
-            return $this->render('element_constitutif/_structureEcModal.html.twig', [
-                'ec' => $elementConstitutif,
-                'form' => $form->createView(),
-            ]);
-       // }
+        return $this->render('element_constitutif/_structureEcModal.html.twig', [
+            'ec' => $elementConstitutif,
+            'form' => $form->createView(),
+        ]);
+        // }
 //
 //        return $this->render('element_constitutif/_structureEcNonEditable.html.twig', [
 //            'ec' => $elementConstitutif,

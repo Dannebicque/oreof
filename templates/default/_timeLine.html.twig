@@ -10,10 +10,7 @@
                 </div>
                 <p class="mb-0 lh-1">Ouverture de la campagne de collecte</p>
                 <p class="cta-3 mb-0 text-primary">
-                    {{ user_data.anneeUniversitaire != null ? user_data.anneeUniversitaire.dateOuvertureDpe|date
-                        ('d/m') :
-                    'Non renseigné' }} au {{ user_data.anneeUniversitaire != null ? user_data.anneeUniversitaire
-                    .dateClotureDpe|dateFr :
+                    {{ user_data.anneeUniversitaire != null ? user_data.anneeUniversitaire.dateOuvertureDpe|dateFr :
                     'Non renseigné' }}
                 </p>
             </div>
