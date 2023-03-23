@@ -164,18 +164,79 @@ Mémoire: Mémoire
 Ouverture: Ouverture
 'TER – travail d’étude et de recherche': 'TER – travail d’étude et de recherche'
 Libellé: Libellé
-mention.labels.domaine: mention.labels.domaine
+mention.labels.domaine: 'Domaine de formation'
 type_enseignement.labels.libelle: type_enseignement.labels.libelle
 'Directeur de composante': 'Directeur de composante'
 'Choisir dans la liste ou choisir "+" pour ajouter un nouveau directeur': 'Choisir dans la liste ou choisir "+" pour ajouter un nouveau directeur'
-'Responsable "DPE" de la composante': 'Responsable "DPE" de la composante'
+'Responsable "DPE" de la composante': 'Responsable DPE de la composante'
 'Choisir dans la liste ou choisir "+" pour ajouter un nouveau responsable': 'Choisir dans la liste ou choisir "+" pour ajouter un nouveau responsable'
 'Adresse du site principal de la composante': 'Adresse du site principal de la composante'
 Adresse: Adresse
 "Complément d'adresse": "Complément d'adresse"
 'Code postal': 'Code postal'
 Ville: Ville
-'Téléphone standard de la composante': 'Téléphone standard de la composante'
+'Téléphone standard de la composante': "Téléphone de l'accueil de la composante"
 'Autre téléphone de la composante': 'Autre téléphone de la composante'
 'Adresse mail de contact de la composante': 'Adresse mail de contact de la composante'
-'URL du site de la composante': 'URL du site de la composante'
+'URL du site de la composante': 'Site internet de la composante'
+type_diplome.labels.libelle: 'Libellé long'
+type_diplome.labels.libelle_court: 'Libellé court'
+type_diplome.labels.semestreDebut: 'N° du semestre de début de formation'
+type_diplome.labels.semestreFin: 'N° du semestre de fin de formation'
+type_diplome.labels.nbUeMin: "Nombre minimum d'UE par semestre"
+type_diplome.labels.nbUeMax: "Nombre maximum d'UE par semestre"
+type_diplome.labels.nbEctsMaxUe: "Nombre maximum d'ECTS par UE"
+type_diplome.labels.ModeleMcc: 'Modèle de MCC prédéfini'
+type_diplome.labels.debutSemestreFlexible: 'Le semestre de début de formation est flexible'
+type_diplome.labels.hasMemoire: 'Le diplôme prévoit un/des mémoire(s)/TER'
+type_diplome.labels.hasStage: 'Le diplôme prévoit un/des stage(s)'
+type_diplome.labels.hasSituationPro: 'Le diplôme prévoit de la mise en situation professionnelle'
+type_diplome.labels.hasProjet: 'Le diplôme prévoit un/des projet tutoré(s)'
+'Type de diplôme': 'Type de diplôme'
+nature_ue_ec.labels.libelle: Libellé
+nature_ue_ec.labels.choix.label: "Précisez si l'élément est à choix :"
+"Type(s) de diplôme proposant ce type d'EC": "Type(s) de diplôme proposant ce type d'EC"
+'Libellé de la ville': 'Libellé de la ville'
+etablissement.labels.libelle: Libellé
+"Adresse du siège de l'établissement": "Adresse du siège de l'établissement"
+"Type(s) de diplôme proposant ce type d'UE": "Type(s) de diplôme proposant ce type d'UE"
+"Type(s) de diplôme proposant ce type d'épreuve": "Type(s) de diplôme proposant ce type d'épreuve"
+'Adresse email': 'Adresse email'
+Droits: Rôle
+ROLE_ADMIN: ROLE_ADMIN
+ROLE_VP: ROLE_VP
+user_ldap.labels.centreDemande: 'Centre de gestion'
+"Envoyer un email de conformation à l'utilisateur": "Envoyer un email de conformation à l'utilisateur"
+role.labels.libelle: Libellé
+role.labels.code_role: Sigle
+role.labels.porte.label: 'Périmètre du rôle'
+'Tous les éléments': 'Tous les éléments'
+'Uniquement les éléments dont on a la propriété': "Uniquement les éléments dont l'utilisateur a la propriété"
+Login: Login
+Civilité: Civilité
+'Indiquez votre civilité': 'Indiquez la civilité'
+Monsieur: Monsieur
+Madame: Madame
+Nom: Nom
+Prénom: Prénom
+'Téléphone fixe': 'Téléphone fixe'
+'Téléphone portable': 'Téléphone portable'
+'Indiquez les droits accordés': 'Indiquez le rôle accordé'
+'Libellé Année Universitaire': 'Année universitaire concernée par les projets de DPE'
+'Ex: 2019-2020': 'Ex: 2019-2020'
+Année: 'Année de collecte'
+2023: '2023'
+2024: '2024'
+2025: '2025'
+2026: '2026'
+2027: '2027'
+2028: '2028'
+2029: '2029'
+2030: '2030'
+'Campagne de collecte DPE active ?': 'La campagne de collecte des projets de DPE est-elle active ?'
+"Date d'ouverture du DPE": "Date d'ouverture de la campagne de collecte des projets de DPE"
+'Date de clôture du DPE': 'Date de clôture de la campagne de collecte des projets de DPE'
+'Date limite de transmission des dossiers': 'Date limite de transmission des projets de DPE'
+'Date de la CFVU': 'Date prévue de passage des projets de DPE en CFVU'
+'Date de publication': 'Date de publication des DPE'
+'Code ISO': 'Code ISO'
