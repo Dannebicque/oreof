@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block header %}
-    Gestion des types d'enseignements
+    Gestion des Natures d'UE ou d'EC
 {% endblock %}
 
 {% block breadcrumb %}
@@ -29,16 +29,16 @@
     <button
             {{ stimulus_controller('modal', {
                 size: 'lg',
-                modalTitle: 'Ajouter un type d\'unité d\'enseignement',
+                modalTitle: 'Ajouter un type d\'UE ou  d\'EC',
                 modalUrl: path('app_nature_ue_ec_new') }) }}
             data-action="click->modal#openModal"
             class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
             data-size="lg"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
-            title="Ajouter un type d'unité d'enseignement"
+            title="Ajouter un type d'UE ou d'EC"
     >
         <i class="{{ iconAdd }}"></i>
-        <span> Ajouter un type d'unité d'enseignement</span>
+        <span> Ajouter un type d'UE ou d'EC</span>
     </button>
 {% endblock %}
