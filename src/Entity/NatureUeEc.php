@@ -23,6 +23,9 @@ class NatureUeEc
     #[ORM\Column(length: 100)]
     private ?string $libelle = null;
 
+    #[ORM\Column]
+    private ?bool $choix = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -36,6 +39,18 @@ class NatureUeEc
     public function setLibelle(string $libelle): self
     {
         $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    public function isChoix(): ?bool
+    {
+        return $this->choix;
+    }
+
+    public function setChoix(bool $choix): self
+    {
+        $this->choix = $choix;
 
         return $this;
     }
