@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.19.0](https://github.com/Dannebicque/oreof/compare/v0.18.6...v0.19.0) (2023-03-23)
+
+
+### Features
+
+* EC à choix ([40fba53](https://github.com/Dannebicque/oreof/commit/40fba5313a81a7c4d68f91fc3c6142e76ae40925))
+
 ### [0.18.6](https://github.com/Dannebicque/oreof/compare/v0.18.5...v0.18.6) (2023-03-23)
 
 
