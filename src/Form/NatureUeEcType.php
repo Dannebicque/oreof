@@ -23,6 +23,7 @@ class NatureUeEcType extends AbstractType
         $builder
             ->add('libelle', TextType::class)
             ->add('choix', YesNoType::class)
+            ->add('libre', YesNoType::class)
         ;
     }
 

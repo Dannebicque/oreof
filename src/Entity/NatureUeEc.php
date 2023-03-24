@@ -26,6 +26,9 @@ class NatureUeEc
     #[ORM\Column]
     private ?bool $choix = null;
 
+    #[ORM\Column]
+    private ?bool $libre = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +54,18 @@ class NatureUeEc
     public function setChoix(bool $choix): self
     {
         $this->choix = $choix;
+
+        return $this;
+    }
+
+    public function isLibre(): ?bool
+    {
+        return $this->libre;
+    }
+
+    public function setLibre(bool $libre): self
+    {
+        $this->libre = $libre;
 
         return $this;
     }

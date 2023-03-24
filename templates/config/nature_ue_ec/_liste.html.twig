@@ -3,6 +3,7 @@
     <tr>
         <th>Libellé</th>
         <th>A choix ?</th>
+        <th>Libre ?</th>
         <th></th>
     </tr>
     </thead>
@@ -11,6 +12,7 @@
         <tr>
             <td>{{ nature_ue_ec.libelle }}</td>
             <td>{{ nature_ue_ec.choix == true ? 'Oui' : 'Non' }}</td>
+            <td>{{ nature_ue_ec.libre == true ? 'Oui' : 'Non' }}</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {

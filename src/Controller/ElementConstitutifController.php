@@ -60,6 +60,11 @@ class ElementConstitutifController extends AbstractController
                 ]);
             }
 
+            if ($natureEc->isLibre() === true) {
+                return $this->render('element_constitutif/_type_ec_matieres_libre.html.twig', [
+                ]);
+            }
+
             return $this->render('element_constitutif/_type_ec_matiere.html.twig', [
                 'matieres' => $ficheMatiereRepository->findAll()
             ]);
@@ -87,7 +92,7 @@ class ElementConstitutifController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($elementConstitutif->getNatureUeEc()?->isChoix() === false) {
+            if ($elementConstitutif->getNatureUeEc()?->isChoix() === false and $elementConstitutif->getNatureUeEc()?->isLibre() === false) {
                 if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
                     $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
                         'id_',
@@ -105,7 +110,7 @@ class ElementConstitutifController extends AbstractController
                 $elementConstitutif->setOrdre($lastEc);
                 $elementConstitutif->genereCode();
                 $elementConstitutifRepository->save($elementConstitutif, true);
-            } else {
+            } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() === true) {
                 $lastEc = $ecOrdre->getOrdreSuivant($ue);
                 $subOrdre = 1;
                 //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
@@ -134,6 +139,13 @@ class ElementConstitutifController extends AbstractController
                     $subOrdre++;
                     $elementConstitutifRepository->save($ec, true);
                 }
+            } else {
+                $lastEc = $ecOrdre->getOrdreSuivant($ue);
+                $elementConstitutif->setTexteEcLibre($request->request->get('ficheMatiereLibre'));
+                $elementConstitutif->setOrdre($lastEc);
+                $elementConstitutif->setSubOrdre(0);
+                $elementConstitutif->genereCode();
+                $elementConstitutifRepository->save($elementConstitutif, true);
             }
 
 
@@ -168,7 +180,8 @@ class ElementConstitutifController extends AbstractController
     /**
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
-    #[Route('/{id}', name: 'app_element_constitutif_show', methods: ['GET'])]
+    #[
+        Route('/{id}', name: 'app_element_constitutif_show', methods: ['GET'])]
     public function show(
         FicheMatiere $ficheMatiere
     ): Response {
@@ -207,15 +220,15 @@ class ElementConstitutifController extends AbstractController
         //                        'valider_ec')
 
         $access = (($this->isGranted(
-            'ROLE_EC_EDIT_MY',
-            $ficheMatiere
-        ) && $this->ecWorkflow->can($ficheMatiere, 'valider_ec')) || ($this->isGranted(
-            'ROLE_FORMATION_EDIT_MY',
-            $parcours->getFormation()
-        )) || ($this->ecWorkflow->can($ficheMatiere, 'valider_ec') || $this->ecWorkflow->can(
-            $ficheMatiere,
-            'initialiser'
-        )) || $this->isGranted('ROLE_ADMIN'));
+                    'ROLE_EC_EDIT_MY',
+                    $ficheMatiere
+                ) && $this->ecWorkflow->can($ficheMatiere, 'valider_ec')) || ($this->isGranted(
+                'ROLE_FORMATION_EDIT_MY',
+                $parcours->getFormation()
+            )) || ($this->ecWorkflow->can($ficheMatiere, 'valider_ec') || $this->ecWorkflow->can(
+                    $ficheMatiere,
+                    'initialiser'
+                )) || $this->isGranted('ROLE_ADMIN'));
 
         if (!$access) {
             throw new AccessDeniedException();

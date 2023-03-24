@@ -23,10 +23,15 @@
             {% endif %}
             <tr {{ stimulus_controller('ec--liste') }}>
                 <td>{{ ec.code }}</td>
-                <td>{{ ec.ficheMatiere.libelle }}</td>
-                <td>{{ ec.ficheMatiere.responsableFicheMatiere != null ? ec.ficheMatiere.responsableFicheMatiere.display : 'Non défini' }}</td>
-                <td>{{ ec.ficheMatiere.remplissage|remplissage }}</td>
-                <td>{{ ec.ficheMatiere.etatFicheMatiere|badgeEc }}</td>
+                {% if ec.ficheMatiere != null %}
+                    <td>{{ ec.display }}</td>
+                    <td>{{ ec.ficheMatiere.responsableFicheMatiere != null ? ec.ficheMatiere
+                        .responsableFicheMatiere.display : 'Non défini' }}</td>
+                    <td>{{ ec.ficheMatiere.remplissage|remplissage }}</td>
+                    <td>{{ ec.ficheMatiere.etatFicheMatiere|badgeEc }}</td>
+                {% else %}
+                    <td colspan="4">{{ ec.texteEcLibre }} (EC Libre)</td>
+                {% endif %}
                 <td>
                     <button
                             {% if deplacer is defined and deplacer == true %}

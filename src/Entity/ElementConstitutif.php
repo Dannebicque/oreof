@@ -95,6 +95,9 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?int $subOrdre = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $texteEcLibre = null;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -407,11 +410,19 @@ class ElementConstitutif
 
     public function genereCode(): void
     {
-        if ($this->subOrdre === null) {
+        if ($this->subOrdre === null || $this->subOrdre === 0) {
             $this->setCode('EC' . $this->ordre);
         } else {
             $this->setCode('EC' . $this->ordre . '.' . chr($this->subOrdre + 64));
         }
+    }
+
+    public function display() {
+        if ($this->ficheMatiere !== null) {
+            return $this->ficheMatiere->getLibelle();
+        }
+
+        return $this->texteEcLibre;
     }
 
     public function getFicheMatiere(): ?FicheMatiere
@@ -446,6 +457,18 @@ class ElementConstitutif
     public function setSubOrdre(?int $subOrdre): self
     {
         $this->subOrdre = $subOrdre;
+
+        return $this;
+    }
+
+    public function getTexteEcLibre(): ?string
+    {
+        return $this->texteEcLibre;
+    }
+
+    public function setTexteEcLibre(?string $texteEcLibre): self
+    {
+        $this->texteEcLibre = $texteEcLibre;
 
         return $this;
     }
