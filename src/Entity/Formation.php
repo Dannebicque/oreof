@@ -136,7 +136,7 @@ class Formation
         $this->userCentres = new ArrayCollection();
         $this->formationsAnterieures = new ArrayCollection();
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             $this->etatSteps[$i] = false;
         }
     }
@@ -566,11 +566,9 @@ class Formation
 
     public function onglets(): array
     {
-        $onglets[0] = $this->getEtatOnglet0();
         $onglets[1] = $this->getEtatOnglet1();
         $onglets[2] = $this->getEtatOnglet2();
         $onglets[3] = $this->getEtatOnglet3();
-        $onglets[4] = $this->getEtatOnglet4();
 
         return $onglets;
     }
@@ -593,7 +591,7 @@ class Formation
     public function getEtatOnglet3(): EtatRemplissageEnum
     {
         //todo: ajouter les vérifs?
-        return $this->getEtatStep(3) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
+        return $this->isHasParcours() === null ? EtatRemplissageEnum::VIDE : ($this->getEtatStep(3) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     public function getEtatOnglet4(): EtatRemplissageEnum

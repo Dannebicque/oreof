@@ -8,7 +8,7 @@
 >
     {% if typeDiplome.isDebutSemestreFlexible %}
         <fieldset class="mb-3">
-            <label class="col-form-label required">
+            <label class="col-form-label required" for="formation_semestreDebut">
                 {{ 'formation_step3.labels.semestreDebut'|trans({}, 'form') }}
                 <i class="fal fa-question-circle ms-1"
                    data-controller="tooltip"
@@ -19,6 +19,7 @@
             <div>
                 <select class="form-select"
                         name="formation_semestreDebut"
+                        id="formation_semestreDebut"
                         required="required"
                         {{ stimulus_action('formation--step3', 'changeSemestreDebut', 'change') }}>
                     <option value="">{{ 'formation_step3.labels.semestreDebut.option.vide'|trans({}, 'form') }}</option>
@@ -27,19 +28,6 @@
                             Semestre {{ i }}</option>
                     {% endfor %}
                 </select>
-                {#                {% for i in 1..6 %} #}
-                {#                    <div class="form-check"> #}
-                {#                        <input type="radio" id="formation_semestreDebut_{{ i }}" name="formation_semestreDebut" #}
-                {#                               required="required" #}
-                {#                               {% if formation.semestreDebut == i %}checked{% endif %} #}
-                {#                               class="form-check-input" value="{{ i }}" {{ stimulus_action('formation--step3', #}
-                {#                            'changeSemestreDebut', 'click') }}> #}
-                {#                        <label class="form-check-label required" for="formation_semestreDebut_{{ i }}">Semestre {{ i }}</label> #}
-                {#                    </div> #}
-                {#                {% endfor %} #}
-            </div>
-            <div class="form-text mb-0 help-text">
-
             </div>
         </fieldset>
     {% endif %}
@@ -61,12 +49,13 @@
                 <label class="form-check-label" for="formation_parcours_1">Oui</label></div>
             <div class="form-check">
                 <input type="radio" id="formation_parcours_0" name="formation_parcours" required="required"
-                       {% if formation.hasParcours == false %}checked{% endif %}
+                       {% if formation.hasParcours is same as(false) %}checked{% endif %}
                        class="form-check-input" value="0" {{ stimulus_action('formation--step3', 'changeHasParcours', 'click') }}>
                 <label class="form-check-label" for="formation_parcours_0">Non</label></div>
         </div>
     </fieldset>
-    <div id="bloc_semestre" class="{% if formation.hasParcours == false %}d-none{% endif %} mt-2">
+    <div id="bloc_semestre" class="{% if formation.hasParcours == false %}d-none{%
+        endif %} mt-2">
         <fieldset class="mb-3">
             <legend class="col-form-label required">
                 {{ 'formation_step3.labels.libelleParcours'|trans({}, 'form') }}
