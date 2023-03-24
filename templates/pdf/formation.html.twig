@@ -1,5 +1,7 @@
 {% extends 'pdf/base-pdf.html.twig' %}
 
 {% block content %}
-    {{ include('typeDiplome/formation/pdf/'~template) }}
+    <div class="row">
+        {{ include('typeDiplome/formation/common/_licence.html.twig') }}
+    </div>
 {% endblock %}

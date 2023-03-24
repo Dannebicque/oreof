@@ -223,7 +223,6 @@ class FormationController extends BaseController
         $typeDiplome = $formation->getTypeDiplome();
 
         return $this->render('formation/show.html.twig', [
-            'template' => $typeDiplome::TEMPLATE,
             'formation' => $formation,
             'typeDiplome' => $typeDiplome
         ]);

@@ -29,9 +29,6 @@ class Formation
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-//
-//    #[ORM\Column(length: 255)]
-//    private ?string $typeDiplome = null;
 
     #[ORM\ManyToOne]
     private ?Domaine $domaine = null;
@@ -93,8 +90,8 @@ class Formation
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $rythmeFormationTexte = null;
 
-    #[ORM\Column]
-    private ?bool $hasParcours = false;
+    #[ORM\Column(nullable: true)]
+    private ?bool $hasParcours = null;
 
     #[ORM\Column(nullable: true)]
     private ?array $structureSemestres = [];
@@ -156,18 +153,6 @@ class Formation
     {
         return $this->id;
     }
-
-//    public function getTypeDiplome(): ?string
-//    {
-//        return $this->typeDiplome;
-//    }
-//
-//    public function setTypeDiplome(string $typeDiplome): self
-//    {
-//        $this->typeDiplome = $typeDiplome;
-//
-//        return $this;
-//    }
 
     public function getDomaine(): ?Domaine
     {
@@ -438,7 +423,7 @@ class Formation
         return $this->hasParcours;
     }
 
-    public function setHasParcours(bool $hasParcours): self
+    public function setHasParcours(?bool $hasParcours): self
     {
         $this->hasParcours = $hasParcours;
 
@@ -516,8 +501,6 @@ class Formation
     public function remplissage(): float
     {
         $total = 0;
-        $total += $this->getMention() === null ? 0 : 1;
-        $total += $this->getMentionTexte() === null ? 0 : 1;
         $total += count($this->getRegimeInscription()) === 0 ? 0 : 1;
         $total += $this->getContenuFormation() === null ? 0 : 1;
         $total += $this->getResultatsAttendus() === null ? 0 : 1;
@@ -525,8 +508,8 @@ class Formation
         $total += $this->getRythmeFormationTexte() === null ? 0 : 1;
         $total += $this->isHasParcours() === null ? 0 : 1;
         $total += count($this->getStructureSemestres()) === 0 ? 0 : 1;
-
-        return $total / 9 * 100;
+//todo: ajouter le remplissage des parcours et des matières ?
+        return $total / 7 * 100;
     }
 
     public function getRythmeFormation(): ?RythmeFormation
@@ -683,17 +666,17 @@ class Formation
         return $this;
     }
 
-    public function valideStep(mixed $value)
-    {
-        switch ((int) $value) {
-            case 0:
-                return true;
-            case 1:
-                return false;
-            case 2:
-                return false;
-        }
-    }
+//    public function valideStep(mixed $value)
+//    {
+//        switch ((int) $value) {
+//            case 0:
+//                return true;
+//            case 1:
+//                return false;
+//            case 2:
+//                return false;
+//        }
+//    }
 
     public function getObjectifsFormation(): ?string
     {

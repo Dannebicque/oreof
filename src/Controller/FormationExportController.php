@@ -37,7 +37,6 @@ class FormationExportController extends AbstractController
         return $this->myPdf::generePdf('pdf/formation.html.twig', [
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
-            'template' => $typeDiplome::TEMPLATE,//todo: template générique finalement ?
         ], 'dpe_formation_'.$formation->display());
     }
 }

@@ -26,8 +26,7 @@
             </div>
         </div>
     </section>
-    {% if formation.isHasParcours == false %}
-
+    {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
         <section class="scroll-section" id="descriptif">
             <h2 class="small-title">Descriptif</h2>
             <div class="card mb-5">

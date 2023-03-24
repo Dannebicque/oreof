@@ -138,7 +138,7 @@
             {{ stimulus_controller('tooltip', {
                 'placement': 'bottom',
             }) }}
-       title="{{ help|trim|trans({}, 'help') }}"></i>
+       title="{{ help|trim|trans({}, 'help')|raw }}"></i>
     </{{ element|default('label') }}>
 {%- endblock form_label %}
 
