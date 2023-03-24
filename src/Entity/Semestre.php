@@ -140,4 +140,15 @@ class Semestre
 
         return $this;
     }
+
+    public function nbUes(): int
+    {
+        $tabUes = [];
+
+        foreach ($this->getUes() as $ue) {
+            $tabUes[$ue->getOrdre()] = 1;
+        }
+
+        return count($tabUes);
+    }
 }

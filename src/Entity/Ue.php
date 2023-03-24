@@ -174,4 +174,15 @@ class Ue
 
         return $this;
     }
+
+    public function nbElementConstitutifs(): int
+    {
+        $tabElement = [];
+
+        foreach ($this->getElementConstitutifs() as $elementConstitutif) {
+            $tabElement[$elementConstitutif->getOrdre()] = 1;
+        }
+
+        return count($tabElement);
+    }
 }
