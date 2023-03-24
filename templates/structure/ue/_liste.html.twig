@@ -41,7 +41,9 @@
                         url: path('api_ects_ue', {ue: ue.id, parcours: parcours.id}),
                     }) }}>
                         <div class="card mb-2 sh-19 sh-md-8">
-                            <div class="card-body pt-0 pb-0 h-100">
+                            <div class="card-body pt-0 pb-0 h-100 {% if ue.subOrdre != null and ue.subOrdre != 0
+                            %}border-left-sousUe border-left-sousUe-{{ ue.ordre }}{%
+                                endif %}">
                                 <div class="row g-0 h-100 align-content-center">
                                     <div class="col-12 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ue</div>
@@ -75,19 +77,20 @@
                                     mb-md-0">
                                         <div class="text-muted text-small d-md-none">ue</div>
                                         {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) %}
-                                            <label for="detail_ue_obligatoire_{{ ue.id }}" class="sr-only">
+                                            <label for="detail_nature_ue_{{ ue.id }}" class="sr-only">
                                                 Nature UE
                                             </label>
                                             <select class="form-select form-select-sm ms-2"
-                                                    id="detail_ue_obligatoire_{{ ue.id }}"
-                                                    {{ stimulus_action('structure--ue', 'changeUeObligatoire',
+                                                    id="detail_nature_ue_{{ ue.id }}"
+                                                    {{ stimulus_action('structure--ue', 'changeNatureUe',
                                                         'change', {
-                                                            url: path('structure_ue_change_ue_obligatoire', {ue: ue.id})
+                                                            url: path('structure_ue_change_nature_ue', {ue: ue.id})
                                                         }) }}
                                             >
                                                 <option value="">Choisir</option>
                                                 {% for natureUeEc in natureUeEcs %}
                                                     <option value="{{ natureUeEc.id }}"
+                                                            data-choix="{{ natureUeEc.choix == true ? 'true' : 'false' }}"
                                                             {% if ue.natureUeEc != null and ue.natureUeEc.id ==
                                                                 natureUeEc.id %}
                                                                 selected

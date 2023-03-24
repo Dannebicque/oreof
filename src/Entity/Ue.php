@@ -78,7 +78,13 @@ class Ue
 
     public function display(): string
     {
-        return 'UE ' . $this->getSemestre()?->getOrdre() .'.'.$this->getOrdre();
+        if ($this->subOrdre === null || $this->subOrdre === 0) {
+            $ordreue =  $this->ordre;
+        } else {
+            $ordreue = $this->ordre . '.' . chr($this->subOrdre + 64);
+        }
+
+        return 'UE ' . $this->getSemestre()?->getOrdre() .'.'.$ordreue;
     }
 
     public function getTypeUe(): ?TypeUe

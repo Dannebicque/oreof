@@ -108,6 +108,8 @@ class UeController extends AbstractController
                 $ue->setNatureUeEc($tu);
             }
 
+            //todo: gérer le cas ou la nature d'UE est multiple ????
+
             $ueRepository->save($ue, true);
 
             return $this->json(true);
@@ -145,17 +147,25 @@ class UeController extends AbstractController
     /**
      * @throws \JsonException
      */
-    #[Route('/ue/update/obligatoire/{ue}', name: 'change_ue_obligatoire', methods: ['POST'])]
-    public function updateUeObligatoire(
+    #[Route('/ue/update/nature/{ue}', name: 'change_nature_ue', methods: ['POST'])]
+    public function updateNatureUe(
         Request $request,
         UeRepository $ueRepository,
         NatureUeEcRepository $natureUeEcRepository,
         Ue $ue,
     ): Response {
-        $typeUe = JsonRequest::getValueFromRequest($request, 'value');
-        if ($typeUe !== '') {
-            $typeUe = $natureUeEcRepository->find($typeUe);
-            $ue->setTypeUe($typeUe);
+        $idNatureUe = JsonRequest::getValueFromRequest($request, 'value');
+        if ($idNatureUe !== '') {
+            $natureUe = $natureUeEcRepository->find($idNatureUe);
+            if ($natureUe !== null) {
+                $ue->setNatureUeEc($natureUe);
+                if ($natureUe->isChoix() === true) {
+                    $ue->setSubOrdre(1);
+                    $ue2 = clone $ue;
+                    $ue2->setSubOrdre(2);
+                    $ueRepository->save($ue2, true);
+                }
+            }
         } else {
             $ue->setNatureUeEc(null);//todo: gérer ??
         }

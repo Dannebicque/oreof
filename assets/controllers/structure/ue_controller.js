@@ -21,7 +21,6 @@ export default class extends Controller {
   }
 
   async deplacerUe(event) {
-    console.log(event.params)
     event.preventDefault()
     const { url } = event.params
     await fetch(url).then(() => {
@@ -51,7 +50,6 @@ export default class extends Controller {
       // mise à jour des ECTS de l'UE et du Semestre
       const response = await fetch(this.urlValue)
       const data = await response.json()
-      console.log(data)
       const ectsUe = document.getElementById(`ects_ue_${event.detail.ue}_${event.detail.parcours}`)
       const ectsSemestre = document.getElementById(`ects_semestre_${data.idSemestre}_${event.detail.parcours}`)
       if (data.ue > 0 && data.ue < 30) {
@@ -75,11 +73,25 @@ export default class extends Controller {
     document.getElementById(`detail_ue_${event.params.ue}_${event.params.parcours}`).classList.remove('d-none')
   }
 
-  changeUeObligatoire(event) {
-    saveData(event.params.url, {
-      actions: 'changeUeObligatoire',
-      value: event.target.value,
-    })
+  changeNatureUe(event) {
+    // récupérer data-choix sur la balise option selectionnée
+
+    const { choix } = event.target.options[event.target.selectedIndex].dataset
+    if (choix === 'true') {
+      if (confirm('Attention, vous allez changer la nature de l\'UE pour une UE impliquant plusieurs choix. Vous devez définir au moins deux UE de choix. Souhaitez-vous continuer ?')) {
+        saveData(event.params.url, {
+          actions: 'changeNatureUe',
+          value: event.target.value,
+        })
+        // todo: et bouton pour en ajouter d'autres ??? en dessous ? Mettre un code couleur en bordure left pour le mettre en évidence ? Gérer le déplacement dans l'ordre sans le dépasser, gérer la supprssion...
+        // todo: problème de refresh de la liste des UE...
+      }
+    } else {
+      saveData(event.params.url, {
+        actions: 'changeNatureUe',
+        value: event.target.value,
+      })
+    }
   }
 
   changeTypeUe(event) {
