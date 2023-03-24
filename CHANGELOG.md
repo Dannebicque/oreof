@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.19.5](https://github.com/Dannebicque/oreof/compare/v0.19.4...v0.19.5) (2023-03-24)
+
+
+### Bug Fixes
+
+* affichage formation ([8e67285](https://github.com/Dannebicque/oreof/commit/8e67285007a01e39f1b8cb24a7bba434c75911a9))
+* disabled trix si pas d'alternance ([5eb27cd](https://github.com/Dannebicque/oreof/commit/5eb27cd97db8490187e9ab5caa67097eea187a2f))
+* ECTS ([83b388a](https://github.com/Dannebicque/oreof/commit/83b388a056d1164d202fbe8769afe0a5c43228c9))
+* Footer, pages spéciales ([d84a3a4](https://github.com/Dannebicque/oreof/commit/d84a3a4fd71d8be8cd518dec7de8063b1bcf66d2))
+* Formation : remplissage plus step par défaut vides ([471666c](https://github.com/Dannebicque/oreof/commit/471666c4e01d1d848e0c8efffffe44066b3a148f))
+* Logo URCA ([c15d3ba](https://github.com/Dannebicque/oreof/commit/c15d3ba3dc45e30fddfa80b11f9b53cc4f3b0a24))
+* PDF + Show formation ([2ef4b1f](https://github.com/Dannebicque/oreof/commit/2ef4b1f16269ee394660bde2dee1841ddf946177))
+* rechargement + verif sur formatio ([dd9f312](https://github.com/Dannebicque/oreof/commit/dd9f312715881bb1c9898afc25c1904fe37fc762))
+* Suppression balises dans title ([a1fa3f5](https://github.com/Dannebicque/oreof/commit/a1fa3f5d6f56aaf7a92ab5c0a01b72ef26445b29))
+* timeline ([a09548c](https://github.com/Dannebicque/oreof/commit/a09548c0b10d7fa8a9695020228b193c9421e545))
+
 ### [0.19.4](https://github.com/Dannebicque/oreof/compare/v0.19.3...v0.19.4) (2023-03-24)
 
 
