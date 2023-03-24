@@ -37,7 +37,7 @@ class EcController extends BaseController
         Ue $ue,
         Parcours $parcours
     ): Response {
-        $ecs = $elementConstitutifRepository->findByUe($ue);
+        $ecs = $elementConstitutifRepository->findBy(['ue' => $ue],['ordre' => 'ASC', 'subOrdre' => 'ASC']);
 
         return $this->render('structure/ec/_liste.html.twig', [
             'ecs' => $ecs,
