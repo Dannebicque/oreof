@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.19.4](https://github.com/Dannebicque/oreof/compare/v0.19.3...v0.19.4) (2023-03-24)
+
+
+### Features
+
+* Couleurs EC/UE ([83a49f9](https://github.com/Dannebicque/oreof/commit/83a49f913345946d531a7d8d2933b43bed3e6ab6))
+
+
+### Bug Fixes
+
+* Nombres UE/EC ([654f0e7](https://github.com/Dannebicque/oreof/commit/654f0e7f0d7360d93791b64ed949d46a91269643))
+* Ordre UE / EC ([f573699](https://github.com/Dannebicque/oreof/commit/f5736998ac17e531db0e04bf52631a1852b385a8))
+
 ### [0.19.3](https://github.com/Dannebicque/oreof/compare/v0.19.2...v0.19.3) (2023-03-24)
 
 
