@@ -261,6 +261,11 @@ class FormationController extends BaseController
                 foreach ($parcours->getBlocCompetences() as $blocs) {
                     $entityManager->remove($blocs);
                 }
+
+                foreach ($parcours->getFicheMatieres() as $fiche) {
+                    $parcours->removeFicheMatiere($fiche);
+                }
+                $entityManager->flush();
                 $entityManager->remove($parcours);
             }
             foreach ($formation->getBlocCompetences() as $blocs) {

@@ -3,7 +3,18 @@ bouton pour valider/invalide les étapes successives #}
 <table class="table">
     <thead>
     <tr>
-        <th>Composante</th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'composantePorteuse',
+                        'direction': getDirection('composantePorteuse', sort, direction)
+                    }) }}
+            >
+                Composante
+
+                {{ displaySort('composantePorteuse', sort, direction) }}
+            </a>
+        </th>
         <th>
             <a href="#"
                     {{ stimulus_action('crud', 'sort', 'click', {
@@ -16,20 +27,7 @@ bouton pour valider/invalide les étapes successives #}
                 {{ displaySort('typeDiplome', sort, direction) }}
             </a>
         </th>
-{#        <th>#}
-{#            <a href="#"#}
-{#                    {{ stimulus_action('crud', 'sort', 'click', {#}
-{#                        'sort': 'domaine',#}
-{#                        'direction': getDirection('domaine', sort, direction)#}
-{#                    }) }}#}
-{#            >#}
-{#                Domaine#}
-
-{#                {{ displaySort('domaine', sort, direction) }}#}
-{#            </a>#}
-{#        </th>#}
         <th>Mention/spécialité</th>
-
         <th>Etat</th>
         <th>Remplissage</th>
         <th></th>
@@ -48,7 +46,6 @@ bouton pour valider/invalide les étapes successives #}
             <td>
                 {{ formation.typeDiplome|typeDiplome }}
             </td>
-{#            <td>{{ formation.domaine != null ? formation.domaine.libelle : 'Non définie' }}</td>#}
             <td>
                 {% if formation.mention != null or formation.mentionTexte != null %}
                     {{ formation.display }}
@@ -63,7 +60,7 @@ bouton pour valider/invalide les étapes successives #}
             <td>
                 {{ formation.remplissage|remplissage }}
             </td>
-            <td>
+            <td class="text-end">
                 <a href="{{ path('app_formation_show',{'id': formation.id}) }}"
                    class="btn btn-sm text-info"
                    data-bs-toggle="tooltip"
@@ -86,7 +83,7 @@ bouton pour valider/invalide les étapes successives #}
                     </a>
                 {% endif %}
 
-                {% if is_granted('ROLE_FORMATION_DELETE_MY') %}
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SES') %}
                     <button {{ stimulus_action('crud', 'delete', 'click', {
                         url:path('app_formation_delete',{'id': formation.id}),
                         csrf: csrf_token('delete' ~ formation.id)
@@ -122,7 +119,7 @@ bouton pour valider/invalide les étapes successives #}
                 <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
                 <td>{{ parcours.etatParcours|badgeDpe }}</td>
                 <td>{{ parcours.remplissage|remplissage }}</td>
-                <td>
+                <td class="text-end">
                     <a href=""
                        class="btn btn-sm text-info"
                        data-bs-toggle="tooltip"
@@ -146,7 +143,7 @@ bouton pour valider/invalide les étapes successives #}
                         </a>
                     {% endif %}
 
-                    {% if is_granted('ROLE_FORMATION_DELETE_MY') %}
+                    {% if is_granted('ROLE_FORMATION_DELETE_MY') or is_granted('ROLE_ADMIN') %}
                         <button {{ stimulus_action('crud', 'delete', 'click', {
                             url:path('app_parcours_delete',{'id': parcours.id}),
                             csrf: csrf_token('delete' ~ parcours.id)

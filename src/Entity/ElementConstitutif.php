@@ -74,7 +74,7 @@ class ElementConstitutif
     #[ORM\ManyToOne]
     private ?NatureUeEc $natureUeEc = null;
 
-    #[ORM\OneToMany(mappedBy: 'ec', targetEntity: Mccc::class)]
+    #[ORM\OneToMany(mappedBy: 'ec', targetEntity: Mccc::class, cascade: ['persist', 'remove'], orphanRemoval: true  )]
     private Collection $mcccs;
 
     #[ORM\Column(length: 5)]

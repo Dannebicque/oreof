@@ -35,7 +35,7 @@ class Ue
     #[ORM\ManyToOne]
     private ?NatureUeEc $natureUeEc = null;
 
-    #[ORM\OneToMany(mappedBy: 'ue', targetEntity: ElementConstitutif::class)]
+    #[ORM\OneToMany(mappedBy: 'ue', targetEntity: ElementConstitutif::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $elementConstitutifs;
 
     #[ORM\Column(nullable: true)]
