@@ -58,6 +58,19 @@ class UeRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findBySemestreSubOrdre(?int $ordreDestination, ?Semestre $getSemestre, int $ordreUe): ?Ue
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.semestre = :semestre')
+            ->andWhere('u.ordre = :ordre')
+            ->andWhere('u.subOrdre = :subOrdre')
+            ->setParameter('semestre', $getSemestre)
+            ->setParameter('ordre', $ordreUe)
+            ->setParameter('subOrdre', $ordreDestination)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function getMaxOrdre(Semestre $semestre): int
     {
         return $this->createQueryBuilder('u')

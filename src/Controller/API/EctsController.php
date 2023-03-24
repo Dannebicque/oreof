@@ -26,18 +26,18 @@ class EctsController extends AbstractController
         $totalEctsUe = 0;
         $ectsSemestre = 0;
 
-        $ecsInUe = $ue->getEcUes();
+        $ecsInUe = $ue->getElementConstitutifs();
         foreach ($ecsInUe as $ec) {
-            $totalEctsUe += $ec->getEc()?->getEcts();
+            $totalEctsUe += $ec->getEcts();
         }
 
         $semestre = $ue->getSemestre();
         $uesInSemestre = $semestre->getUes();
 
         foreach ($uesInSemestre as $u) {
-            $ecsInUe = $u->getEcUes();
+            $ecsInUe = $u->getElementConstitutifs();
             foreach ($ecsInUe as $ec) {
-                $ectsSemestre += $ec->getEc()?->getEcts();
+                $ectsSemestre += $ec->getEcts();
             }
         }
 

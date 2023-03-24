@@ -129,6 +129,7 @@
                     {#                        'initialiser'))) or (is_granted #}
                     {#                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
                     {#                        'valider_ec')) %} #}
+                    {# todo: filtrer les liens si subordre ou pas... #}
                     <button
                             {% if deplacer is defined and deplacer == true %}
 

@@ -26,6 +26,10 @@ class UeOrdre
         //modifie l'ordre de la ressource
         $ordreInitial = $ue->getOrdre();
 
+        if ($ordreInitial === 1 && $sens === 'up') {
+            return false;
+        }
+
         if ($sens === 'up') {
             $ordreDestination = $ordreInitial - 1;
         } else {
@@ -41,14 +45,22 @@ class UeOrdre
         ?int $ordreDestination,
         Ue $ue,
     ): bool {
-        $ues = $this->ueRepository->findBySemestreOrdre($ordreDestination, $ue->getSemestre());
-        $ue->setOrdre($ordreDestination);
-        //$ue->genereCode();
-        //todo: mettre à jour les EC
+        if ($ue->getSubOrdre() === null) {
+            $ues = $this->ueRepository->findBySemestreOrdre($ordreDestination, $ue->getSemestre());
+            $ue->setOrdre($ordreDestination);
+            //todo: mettre à jour les EC
 
-        if ($ues !== null) {
-            $ues->setOrdre($ordreInitial);
-            //$ues->genereCode();
+            if ($ues !== null) {
+                $ues->setOrdre($ordreInitial);
+                //todo: mettre à jour les EC
+            }
+        } else {
+            // on inverse les sous-ordres
+            $ue->setSubOrdre($ordreDestination);
+            $ues = $this->ueRepository->findBySemestreSubOrdre($ordreDestination, $ue->getSemestre(), $ue->getOrdre());
+            if ($ues !== null) {
+                $ues->setSubOrdre($ordreInitial);
+            }
             //todo: mettre à jour les EC
         }
 

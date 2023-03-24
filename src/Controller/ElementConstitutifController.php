@@ -284,7 +284,7 @@ class ElementConstitutifController extends AbstractController
     public function mcccEc(
         TypeEpreuveRepository $typeEpreuveRepository,
         Request $request,
-        FicheMatiereRepository $ficheMatiereRepository,
+        ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif $elementConstitutif
     ): Response {
         $formation = $elementConstitutif->getParcours()->getFormation();
@@ -302,7 +302,7 @@ class ElementConstitutifController extends AbstractController
 
             if ($request->isMethod('POST')) {
                 $typeDiplome->saveMcccs($elementConstitutif, $request->request);//todo: appeler les mcc du bon diplôme
-                $ficheMatiereRepository->save($elementConstitutif, true);
+                $elementConstitutifRepository->save($elementConstitutif, true);
 
                 return $this->json(true);
             }
@@ -348,11 +348,12 @@ class ElementConstitutifController extends AbstractController
     #[Route('/{id}/{ue}/deplacer/{sens}', name: 'app_element_constitutif_deplacer', methods: ['GET'])]
     public function deplacer(
         EcOrdre $ecOrdre,
-        FicheMatiere $ficheMatiere,
+        ElementConstitutif $elementConstitutif,
         Ue $ue,
         string $sens
     ): Response {
-        $ecOrdre->deplacerFicheMatiere($ficheMatiere, $sens, $ue);
+        //todo: récupérer si déplacement subordre ou pas (idem UE). Comment gérer le déplacement d'un bloc EC complet.
+        $ecOrdre->deplacerElementConstitutif($elementConstitutif, $sens, $ue);
 
         return $this->json(true);
     }
