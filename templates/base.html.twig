@@ -18,7 +18,7 @@
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
 </head>
-<body class="logobackground">
+<body>
 <!-- Content Container Start -->
 <div id="root">
 
@@ -26,12 +26,18 @@
     <div id="nav" class="nav-container d-flex">
         <div class="nav-content d-flex">
             <!-- Logo Start -->
+            <div class="logo-univ">
+                <img src="{{ asset('images/logo_urca_quadri.png') }}"
+                     alt="Logo de l'URCA"
+                     width="75px"/>
+            </div>
             <div class="logo position-relative">
                 <a href="{{ path('app_homepage') }}">
+
                     <div class="logo-but">
                         <i class="fa-duotone fa-pencil-ruler" style="--fa-primary-color: var(--complementaire);
 "></i>&nbsp;{{ product_name }}
-                        {% if is_granted('ROLE_ADMIN') %} / Administration{% endif %}
+                        {% if is_granted('ROLE_ADMIN') %} / Adm.{% endif %}
                     </div>
                 </a>
 
