@@ -7,12 +7,11 @@
             <th>Référent</th>
             <th>Remplissage</th>
             <th>Etat</th>
-            <th>Heures</th>
-            <th>Mcc</th>
-            {% if deplacer == true %}
-                <th></th>
-            {% endif %}
+            <th>Volumes Horaires</th>
+            <th>MCCC</th>
             <th></th>
+            <th></th>
+            <th>Déplacer</th>
             <th></th>
 
         </tr>
@@ -22,7 +21,7 @@
             {% if not ec|isElementConstitutif %}
                 {% set ec = ec.ec %}
             {% endif %}
-            <tr>
+            <tr {{ stimulus_controller('ec--liste') }}>
                 <td>{{ ec.code }}</td>
                 <td>{{ ec.ficheMatiere.libelle }}</td>
                 <td>{{ ec.ficheMatiere.responsableFicheMatiere != null ? ec.ficheMatiere.responsableFicheMatiere.display : 'Non défini' }}</td>
@@ -51,7 +50,6 @@
                             title="Volumes Horaires"
                     >
                         <i class="fal fa-clock"></i>
-                        Volumes Horaires
                         <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
                             {{ ec.etatStructure }}
                         </span>
@@ -65,12 +63,12 @@
                                     size: 'lg',
                                     nomEvenement: 'refreshListeEc',
                                     details: {ue: ue.id, parcours: parcours.id},
-                                    modalTitle: 'Modalités de Contrôle des Connaissances',
+                                    modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
                                     modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
                             {% else %}
                                 {{ stimulus_controller('modal', {
                                     size: 'lg',
-                                    modalTitle: 'Modalités de Contrôle des Connaissances',
+                                    modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
                                     modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
                             {% endif %}
                             data-action="click->modal#openModal"
@@ -78,106 +76,136 @@
                             data-size="lg"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            title="Modalités de Contrôle des Connaissances"
+                            title="Modalités de Contrôle des Connaissances et des Compétences"
                     >
                         <i class="fal fa-marker"></i>
-                        MCCC
                         <span class="badge bg-{% if ec.etatMccc == 'Complet' %}success{% else %}warning{% endif %}">
                             {{ ec.etatMccc }}
                         </span>
                     </button>
                 </td>
                 <td class="text-end">
-{#                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or is_granted#}
-{#                        ('ROLE_EC_EDIT_MY', ec)) and  (not workflow_can(ec,#}
-{#                        'initialiser') ) %}#}
+                    {#                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or is_granted #}
+                    {#                        ('ROLE_EC_EDIT_MY', ec)) and  (not workflow_can(ec, #}
+                    {#                        'initialiser') ) %} #}
+                    {% if ec.ficheMatiere != null %}
                         <a
-                                href="{{ path('app_element_constitutif_show',{'id': ec.id}) }}"
+                                href="{{ path('app_fiche_matiere_show',{'id': ec.ficheMatiere.id}) }}"
                                 class="btn btn-sm text-info"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
-                                title="Voir un EC"
+                                title="Voir la fiche matière"
                                 target="_blank"
                         >
                             <i class="{{ iconShow }}"></i>
-                            <span> voir</span>
+                            <span> Voir la fiche matière</span>
                         </a>
-{#                    {% endif %}#}
-
-
-{#                    {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) and  (workflow_can(ec,#}
-{#                        'valider_ec') or workflow_can(ec,#}
-{#                        'initialiser'))) or (is_granted#}
-{#                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,#}
-{#                        'valider_ec')) %}#}
                         <a
-                                href="{{ path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }}"
+                                href="{{ path('app_fiche_matiere_edit',{'id': ec.ficheMatiere.id}) }}"
                                 class="btn btn-sm text-warning"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
+                                title="Modifier la fiche matière"
                                 target="_blank"
-                                title="Modifier un EC"
                         >
-                            <i class="{{ iconEdit }}"></i>
-                            <span> modifier</span>
+                            <i class="{{ iconShow }}"></i>
+                            <span> Modifier la fiche matière</span>
                         </a>
-{#                    {% endif %}#}
-{#                    {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) and workflow_can(ec,#}
-{#                        'valider_ec') %}#}
-                        <button {{ stimulus_action('crud', 'delete', 'click', {
-                            url:path('app_element_constitutif_delete',{'id': ec.id})
-                        }) }} class="btn btn-sm text-danger">
-                            <i class="{{ iconDelete }}"></i> Supprimer
-                        </button>
-{#                    {% endif %}#}
+                    {% endif %}
+                </td>
+                <td>
+                    {#                    {% endif %} #}
+
+
+                    {#                    {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) and  (workflow_can(ec, #}
+                    {#                        'valider_ec') or workflow_can(ec, #}
+                    {#                        'initialiser'))) or (is_granted #}
+                    {#                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
+                    {#                        'valider_ec')) %} #}
+                    <button
+                            {% if deplacer is defined and deplacer == true %}
+
+                                {{ stimulus_controller('modal', {
+                                    size: 'lg',
+                                    nomEvenement: 'refreshListeEc',
+                                    details: {ue: ue.id, parcours: parcours.id},
+                                    modalTitle: 'Modifier un élément constitutif',
+                                    modalUrl: path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }) }}
+                            {% else %}
+                                {{ stimulus_controller('modal', {
+                                    size: 'lg',
+                                    modalTitle: 'Modifier un élément constitutif',
+                                    modalUrl: path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }) }}
+                            {% endif %}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm text-warning"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Modifier un élément constitutif"
+                    >
+                        <i class="{{ iconEdit }}"></i>
+                        <span> modifier un EC</span>
+                    </button>
+
+                    {#                    {% endif %} #}
+                    {#                    {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) and workflow_can(ec, #}
+                    {#                        'valider_ec') %} #}
+                    <button {{ stimulus_action('ec--liste', 'delete', 'click', {
+                        url:path('app_element_constitutif_delete',{'id': ec.id}),
+                        csrf: csrf_token('delete' ~ ec.id)
+                    }) }} class="btn btn-sm text-danger">
+                        <i class="{{ iconDelete }}"></i> Supprimer EC
+                    </button>
+                    {#                    {% endif %} #}
                 </td>
                 {% if deplacer == true %}
-                    <td {{ stimulus_controller('ec--liste') }}>
-{#                        {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) and  (workflow_can(ec,#}
-{#                            'valider_ec') or workflow_can(ec,#}
-{#                            'initialiser'))) or (is_granted#}
-{#                            ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,#}
-{#                            'valider_ec')) %}#}
+                    <td>
+                        {#                        {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) and  (workflow_can(ec, #}
+                        {#                            'valider_ec') or workflow_can(ec, #}
+                        {#                            'initialiser'))) or (is_granted #}
+                        {#                            ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
+                        {#                            'valider_ec')) %} #}
 
-                            {% if not loop.first %}
-                                <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
-                                    'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
-                                        ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
-                                    <i class="fal fa-circle-up"></i></button>
-                            {% else %}
-                                <button class="btn btn-sm btn-outline-info" disabled><i class="fal fa-circle-up"></i>
-                                </button>
-                            {% endif %}
-                            {% if not loop.last %}
-                                <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
-                                    'click', {url: path('app_element_constitutif_deplacer',{sens: 'down', id:
-                                        ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}><i class="fal
+                        {% if not loop.first %}
+                            <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
+                                'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
+                                    ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
+                                <i class="fal fa-circle-up"></i></button>
+                        {% else %}
+                            <button class="btn btn-sm btn-outline-info" disabled><i class="fal fa-circle-up"></i>
+                            </button>
+                        {% endif %}
+                        {% if not loop.last %}
+                            <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
+                                'click', {url: path('app_element_constitutif_deplacer',{sens: 'down', id:
+                                    ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}><i class="fal
                                         fa-circle-down"></i></button>
-                            {% else %}
-                                <button class="btn btn-sm btn-outline-info" disabled><i class="fal fa-circle-down"></i>
-                                </button>
-                            {% endif %}
+                        {% else %}
+                            <button class="btn btn-sm btn-outline-info" disabled><i class="fal fa-circle-down"></i>
+                            </button>
+                        {% endif %}
 
-{#                        {% endif %}#}
+                        {#                        {% endif %} #}
 
                     </td>
                     <td>
-{#                        {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) and  (workflow_can(ec,#}
-{#                            'valider_ec') or workflow_can(ec,#}
-{#                            'initialiser'))) or (is_granted#}
-{#                            ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,#}
-{#                            'valider_ec')) %}#}
-                            <a
-                                    href="{{ path('app_ec_etat_valide',{'id': ec.id, parcours:parcours.id}) }}"
-                                    class="btn btn-sm text-warning"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="bottom"
-                                    title="Valider un EC"
-                            >
-                                <i class="{{ iconValidate }}"></i>
-                                <span> valider</span>
-                            </a>
-{#                        {% endif %}#}
+                        {#                        {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) and  (workflow_can(ec, #}
+                        {#                            'valider_ec') or workflow_can(ec, #}
+                        {#                            'initialiser'))) or (is_granted #}
+                        {#                            ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
+                        {#                            'valider_ec')) %} #}
+                        <a
+                                href="{{ path('app_ec_etat_valide',{'id': ec.id, parcours:parcours.id}) }}"
+                                class="btn btn-sm text-warning"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="bottom"
+                                title="Valider un EC"
+                        >
+                            <i class="{{ iconValidate }}"></i>
+                            <span> valider</span>
+                        </a>
+                        {#                        {% endif %} #}
                     </td>
                 {% endif %}
             </tr>
@@ -188,47 +216,47 @@
                 </td>
             </tr>
         {% endfor %}
-{#        {% if parcours is defined and is_granted('ROLE_EC_ADD_MY', parcours.formation) and ue is defined %}#}
-            <tr>
-                <td colspan="{% if deplacer == true %}9{% else %}8{% endif %}">
+        {#        {% if parcours is defined and is_granted('ROLE_EC_ADD_MY', parcours.formation) and ue is defined %} #}
+        <tr>
+            <td colspan="{% if deplacer == true %}9{% else %}8{% endif %}">
 
-                    <button
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                modalTitle: 'Ajouter un élément constitutif (matière)',
-                                nomEvenement: 'refreshListeEc',
-                                details: {ue: ue.id, parcours: parcours.id},
-                                modalUrl: path('app_element_constitutif_new', {ue: ue.id}) }) }}
-                            data-action="click->modal#openModal"
-                            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-                            data-size="lg"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Ajouter un élément constitutif (matière)"
-                    >
-                        <i class="{{ iconAdd }}"></i>
-                        <span>Ajouter un élément constitutif</span>
-                    </button>
-                    <button
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                modalTitle: 'Ajouter une fiche matière',
-                                nomEvenement: 'refreshListeEc',
-                                details: {ue: ue.id, parcours: parcours.id},
-                                modalUrl: path('app_fiche_matiere_new', {ue: ue.id}) }) }}
-                            data-action="click->modal#openModal"
-                            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-                            data-size="lg"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Ajouter une fiche matière"
-                    >
-                        <i class="{{ iconAdd }}"></i>
-                        <span>Ajouter une fiche matière</span>
-                    </button>
-                </td>
-            </tr>
-{#        {% endif %}#}
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Ajouter un élément constitutif (matière)',
+                            nomEvenement: 'refreshListeEc',
+                            details: {ue: ue.id, parcours: parcours.id},
+                            modalUrl: path('app_element_constitutif_new', {ue: ue.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Ajouter un élément constitutif (matière)"
+                >
+                    <i class="{{ iconAdd }}"></i>
+                    <span>Ajouter un élément constitutif</span>
+                </button>
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Ajouter une fiche matière',
+                            nomEvenement: 'refreshListeEc',
+                            details: {ue: ue.id, parcours: parcours.id},
+                            modalUrl: path('app_fiche_matiere_new', {ue: ue.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Ajouter une fiche matière"
+                >
+                    <i class="{{ iconAdd }}"></i>
+                    <span>Ajouter une fiche matière</span>
+                </button>
+            </td>
+        </tr>
+        {#        {% endif %} #}
         </tbody>
     </table>
 </div>

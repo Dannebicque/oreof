@@ -88,8 +88,8 @@ export default class extends Controller {
       .then((response) => response.json())
       .then(async () => {
         callOut('Sauvegarde effectuée', 'success')
-        this.dispatch('modalHide')
-        this.dispatch('refreshListeEc', { detail: { ue: this.ueValue.id, parcours: this.parcoursValue.id } })
+        this.dispatch('modalHide', { detail: { ue: this.ueValue.id, parcours: this.parcoursValue.id } })
+        // todo: le dispatch ne remonte pas jusque la structure ??? problème de filtre sur ue/parcours ?
       })
   }
 }

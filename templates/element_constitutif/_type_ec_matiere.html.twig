@@ -1,9 +1,9 @@
-<label for="ficheMatiere">{{ 'ec_manage.labels.fiche_matiere_label'|trans({}, 'form') }}
+<label for="ficheMatiere">{{ 'ec_manage.labels.fiche_matiere_unique.label'|trans({}, 'form') }}
     <i class="fal fa-question-circle ms-1"
        data-controller="tooltip"
        data-tooltip-placement-value="bottom"
-       aria-label="{{ 'ec_manage.helps.fiche_matiere_label.help'|trans({}, 'help') }}"
-       data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_label.help'|trans({}, 'help') }}"></i>
+       aria-label="{{ 'ec_manage.helps.fiche_matiere_unique.help'|trans({}, 'help') }}"
+       data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_unique.help'|trans({}, 'help') }}"></i>
 </label>
 <select id="ficheMatiere" name="ficheMatiere" class="form-select">
     <option value="">Choisir dans la liste une matière</option>
@@ -14,12 +14,12 @@
 OU
 <div class="mt-2">
     <label for="ficheMatiereLibelle">
-        {{ 'ec_manage.labels.fiche_matiere_libelle_label'|trans({}, 'form') }}
+        {{ 'ec_manage.labels.fiche_matiere_libelle_unique.label'|trans({}, 'form') }}
         <i class="fal fa-question-circle ms-1"
            data-controller="tooltip"
            data-tooltip-placement-value="bottom"
-           aria-label="{{ 'ec_manage.helps.fiche_matiere_libelle.help'|trans({}, 'help') }}"
-           data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_libelle.help'|trans({}, 'help') }}"></i>
+           aria-label="{{ 'ec_manage.helps.fiche_matiere_libelle_unique.help'|trans({}, 'help') }}"
+           data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_libelle_unique.help'|trans({}, 'help') }}"></i>
     </label>
-    <input type="text" id="ficheMatiereLibelle" name="ficheMatiereLibelle" class="form-control" placeholder="Saisir une matière">
+    <input type="text" id="ficheMatiereLibelle" name="ficheMatiereLibelle" class="form-control">
 </div>

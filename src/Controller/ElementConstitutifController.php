@@ -21,6 +21,8 @@ use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
 use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeEpreuveRepository;
+use App\Repository\UeRepository;
+use App\Utils\JsonRequest;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,8 +51,7 @@ class ElementConstitutifController extends AbstractController
         Request $request,
         FicheMatiereRepository $ficheMatiereRepository,
         NatureUeEcRepository $natureUeEcRepository
-    ): Response
-    {
+    ): Response {
         $natureEc = $natureUeEcRepository->find($request->query->get('choix'));
         if ($natureEc !== null) {
             if ($natureEc->isChoix() === true) {
@@ -88,7 +89,11 @@ class ElementConstitutifController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($elementConstitutif->getNatureUeEc()?->isChoix() === false) {
                 if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
-                    $ficheMatiere = $ficheMatiereRepository->find((int)str_replace('id_', '', $request->request->get('ficheMatiere')));
+                    $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
+                        'id_',
+                        '',
+                        $request->request->get('ficheMatiere')
+                    ));
                 } else {
                     $ficheMatiere = new FicheMatiere();
                     $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
@@ -130,8 +135,6 @@ class ElementConstitutifController extends AbstractController
                     $elementConstitutifRepository->save($ec, true);
                 }
             }
-
-
 
 
             $formation = $ue->getSemestre()?->getSemestreParcours()->first()->getParcours()?->getFormation();
@@ -209,7 +212,10 @@ class ElementConstitutifController extends AbstractController
         ) && $this->ecWorkflow->can($ficheMatiere, 'valider_ec')) || ($this->isGranted(
             'ROLE_FORMATION_EDIT_MY',
             $parcours->getFormation()
-        )) || ($this->ecWorkflow->can($ficheMatiere, 'valider_ec') || $this->ecWorkflow->can($ficheMatiere, 'initialiser')) || $this->isGranted('ROLE_ADMIN'));
+        )) || ($this->ecWorkflow->can($ficheMatiere, 'valider_ec') || $this->ecWorkflow->can(
+            $ficheMatiere,
+            'initialiser'
+        )) || $this->isGranted('ROLE_ADMIN'));
 
         if (!$access) {
             throw new AccessDeniedException();
@@ -334,19 +340,27 @@ class ElementConstitutifController extends AbstractController
         string $sens
     ): Response {
         $ecOrdre->deplacerFicheMatiere($ficheMatiere, $sens, $ue);
+
         return $this->json(true);
     }
 
-    #[Route('/{id}', name: 'app_element_constitutif_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_element_constitutif_delete', methods: ['DELETE'])]
     public function delete(
         Request $request,
-        FicheMatiere $ficheMatiere,
-        FicheMatiereRepository $ficheMatiereRepository
+        ElementConstitutif $elementConstitutif,
+        ElementConstitutifRepository $elementConstitutifRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $ficheMatiere->getId(), $request->request->get('_token'))) {
-            $ficheMatiereRepository->remove($ficheMatiere, true);
+        if ($this->isCsrfTokenValid(
+            'delete' . $elementConstitutif->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
+            //todo: supprimer les autres enfants ???
+            $elementConstitutifRepository->remove($elementConstitutif, true);
+
+            //todo: remettre à jour tous les codes ???
+            return $this->json(true);
         }
 
-        return $this->redirectToRoute('app_element_constitutif_index', [], Response::HTTP_SEE_OTHER);
+        return $this->json(false, 500);
     }
 }
