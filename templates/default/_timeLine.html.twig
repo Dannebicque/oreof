@@ -2,7 +2,6 @@
 <h2 class="small-title">Processus de la campagne de collecte des projets de DPE</h2>
 <div class="row gy-2">
     <div class="col-2 p-0">
-
         <div class="card me-2 sh-20 hover-border-primary">
             <div class="h-100 p-4 text-center align-items-center d-flex flex-column justify-content-between">
                 <div class="d-flex flex-column justify-content-center align-items-center sh-5 sw-5 rounded-xl bg-gradient-light mb-2">
@@ -11,6 +10,23 @@
                 <p class="mb-0 lh-1">Ouverture de la campagne de collecte</p>
                 <p class="cta-3 mb-0 text-primary">
                     {{ user_data.anneeUniversitaire != null ? user_data.anneeUniversitaire.dateOuvertureDpe|dateFr :
+                    'Non renseigné' }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-2 p-0">
+        <div class="card me-2 sh-20 hover-border-primary">
+            <div class="h-100 p-4 text-center align-items-center d-flex flex-column justify-content-between">
+                <div class="d-flex flex-column justify-content-center align-items-center sh-5 sw-5 rounded-xl bg-gradient-light mb-2">
+                    <i class="fal fa-pencil fa-2x"></i>
+                </div>
+                <p class="mb-0 lh-1">Période d'enrichissement des projets de DPE</p>
+                <p class="cta-3 mb-0 text-primary">
+                    {{ user_data.anneeUniversitaire != null ? user_data.anneeUniversitaire.dateOuvertureDpe|dateFr :
+                    'Non renseigné' }} au {{ user_data.anneeUniversitaire != null ? user_data.anneeUniversitaire
+                    .dateClotureDpe|dateFr :
                     'Non renseigné' }}
                 </p>
             </div>
