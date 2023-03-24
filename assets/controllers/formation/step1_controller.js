@@ -54,12 +54,17 @@ export default class extends Controller {
       }
     })
 
-    // const trix = document.getElementById('formation_step1_modalitesAlternance')
-    // const _trixEditor = trix.editor
-    // _trixEditor.element.disabled = true
-    // console.log(_trixEditor)
+    const trix = document.getElementById('formation_step1_modalitesAlternance')
+    const _trixEditor = trix.editor
+    if (!hasAlternance) {
+      _trixEditor.element.removeAttribute('contentEditable')
+      _trixEditor.element.classList.add('disabled')
+    } else {
+      _trixEditor.element.setAttribute('contentEditable', true)
+      _trixEditor.element.classList.remove('disabled')
+    }
 
-    document.getElementById('formation_step1_modalitesAlternance').disabled = !hasAlternance;
+    document.getElementById('formation_step1_modalitesAlternance').disabled = !hasAlternance
   }
 
   changeComposanteInscription(event) {

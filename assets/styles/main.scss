@@ -7,7 +7,7 @@
  */
 
 .border-left-sousUe {
-    border-left: 2px solid var(--primary);
+  border-left: 2px solid var(--primary);
 }
 
 .border-left-sousEc {
@@ -193,5 +193,11 @@
 .trix-button-group.trix-button-group--file-tools,
 .trix-button--icon-attach {
   display: none;
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: default;
+  background-color: #dddddd;
 }
 
