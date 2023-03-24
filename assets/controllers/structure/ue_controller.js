@@ -83,8 +83,9 @@ export default class extends Controller {
           actions: 'changeNatureUe',
           value: event.target.value,
         })
-        // todo: et bouton pour en ajouter d'autres ??? en dessous ? Mettre un code couleur en bordure left pour le mettre en évidence ? Gérer le déplacement dans l'ordre sans le dépasser, gérer la supprssion...
+        // todo: et bouton pour en ajouter d'autres ??? en dessous ? Gérer le déplacement dans l'ordre sans le dépasser, gérer la supprssion...
         // todo: problème de refresh de la liste des UE...
+        this.dispatch('refreshListe')
       }
     } else {
       saveData(event.params.url, {

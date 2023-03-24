@@ -14,7 +14,16 @@
   border-left: 2px solid var(--primary) !important;
 }
 
+/* Boucle pour génerer 15 couleurs de bordure */
+@for $i from 1 through 15 {
+  .border-left-sousUe-#{$i} {
+    border-left-color: var(--color-#{$i}) !important;
+  }
 
+  .border-left-sousEc-#{$i} {
+    border-left-color: var(--color-#{$i}) !important;
+  }
+}
 
 .logo-but {
   font-size: 20px;

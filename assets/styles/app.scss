@@ -17,21 +17,37 @@
 @import "tom-select/dist/css/tom-select.bootstrap5.min.css";
 @import "trix/dist/trix.css";
 
-$variable-prefix:             bs- !default; // Deprecated in v5.2.0 for the shorter `$prefix`
-$prefix:                      $variable-prefix !default;
+$variable-prefix: bs- !default; // Deprecated in v5.2.0 for the shorter `$prefix`
+$prefix: $variable-prefix !default;
 body {
   --avatar-size: 2rem;
   --avatar-size-md: 4rem;
   --avatar-size-xxl: 6rem;
   --color-avatar: #007bff;
-  --complementaire:#BE5219;
+  --complementaire: #BE5219;
   --secondary: #BE5219;
   --alternate: #112A46;
   --warningText: #112A46;
   --info: #1F7B89;
   --success: #39832F;
-  --primary:#187BB9;
+  --primary: #187BB9;
+  --color-1: #187BB9;
+  --color-2: #BE5219;
+  --color-3: #1F7B89;
+  --color-4: #39832F;
+  --color-5: #112A46;
+  --color-6: #007bff;
+  --color-7: #6f42c1;
+  --color-8: #e83e8c;
+  --color-9: #dc3545;
+  --color-10: #fd7e14;
+  --color-11: #ffc107;
+  --color-12: #28a745;
+  --color-13: #20c997;
+  --color-14: #17a2b8;
+  --color-15: #6c757d;
 }
+
 @import "./styles.css";
 @import "./main.scss";
 
