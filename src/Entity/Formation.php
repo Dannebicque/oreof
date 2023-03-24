@@ -585,7 +585,7 @@ class Formation
 
     public function getEtatOnglet2(): EtatRemplissageEnum
     {
-        return $this->getObjectifsFormation() === null && $this->getContenuFormation() === null && $this->getResultatsAttendus() === null && $this->getRythmeFormation() === null ? EtatRemplissageEnum::VIDE : ($this->getEtatStep(2) && $this->getObjectifsFormation() !== null && $this->getContenuFormation() !== null && $this->getResultatsAttendus() !== null && $this->getRythmeFormation() !== null ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
+        return $this->getObjectifsFormation() === null && $this->getContenuFormation() === null && $this->getResultatsAttendus() === null && $this->getRythmeFormation() === null ? EtatRemplissageEnum::VIDE : ($this->getEtatStep(2) && $this->getObjectifsFormation() !== null && $this->getContenuFormation() !== null && $this->getResultatsAttendus() !== null && ($this->getRythmeFormation() !== null || $this->getRythmeFormationTexte() !== null ) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
     }
 
     public function getEtatOnglet3(): EtatRemplissageEnum

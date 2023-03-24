@@ -21,6 +21,7 @@ export default class extends Controller {
     url: String,
     urlListeParcours: String,
     urlGenereStructure: String,
+    urlReload: String,
     hasParcours: Boolean,
   }
 
@@ -99,6 +100,8 @@ export default class extends Controller {
       await saveData(this.urlGenereStructureValue)
       callOut('Structure générée.', 'success')
       // todo: afficher le lien pour afficher le parcours par défaut
+      // rediriger vers le parcours par défaut
+      window.location.href = `${this.urlReloadValue}?step=3`
     }
   }
 

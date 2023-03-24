@@ -25,14 +25,6 @@ class FormationState
         return $this->$method();
     }
 
-    private function etatOnglet0(): bool|array
-    {
-        if ($this->formation->getSemestreDebut() === 0) {
-            return ['error' => 'Vous devez indiquer le semestre de début de la formation.'];
-        }
-        return true;
-    }
-
     private function etatOnglet1(): bool|array
     {
         $tab['error'] = [];
@@ -82,6 +74,10 @@ class FormationState
 
     private function etatOnglet3(): bool|array
     {
+        if ($this->formation->getTypeDiplome()->isDebutSemestreFlexible() == true && $this->formation->getSemestreDebut() === 0) {
+            return ['error' => 'Vous devez indiquer le semestre de début de la formation.'];
+        }
+
         if ($this->formation->isHasParcours() === null) {
             return ['error' => 'Vous devez indiquez s\'il y a des parcours.'];
         }
