@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.19.2](https://github.com/Dannebicque/oreof/compare/v0.19.1...v0.19.2) (2023-03-24)
+
+
+### Features
+
+* EC Libre ([b6f7463](https://github.com/Dannebicque/oreof/commit/b6f7463ac8774020af9cf426cb18b35665091ce5))
+
 ### [0.19.1](https://github.com/Dannebicque/oreof/compare/v0.19.0...v0.19.1) (2023-03-24)
 
 
