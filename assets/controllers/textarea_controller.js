@@ -20,10 +20,14 @@ export default class extends Controller {
   connect() {
     this.update()
     this.inputTarget.addEventListener('input', this.update)
+    this.inputTarget.addEventListener('change', this.update)
+    this.inputTarget.addEventListener('paste', this.update)
   }
 
   disconnect() {
     this.inputTarget.removeEventListener('input', this.update)
+    this.inputTarget.removeEventListener('change', this.update)
+    this.inputTarget.removeEventListener('paste', this.update)
   }
 
   update() {
@@ -32,6 +36,6 @@ export default class extends Controller {
 
   get count() {
     const value = this.inputTarget.value.length
-    return Math.max(this.maxLengthValue - value, 0)
+    return this.maxLengthValue - value
   }
 }
