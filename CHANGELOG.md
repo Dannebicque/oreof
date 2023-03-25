@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.19.6](https://github.com/Dannebicque/oreof/compare/v0.19.5...v0.19.6) (2023-03-25)
+
+
+### Bug Fixes
+
+* Suppression des console.log ([4a53d2f](https://github.com/Dannebicque/oreof/commit/4a53d2f4fa7aa0441be8ef3d339ce7247482a720))
+* Traductions + typos ([405c453](https://github.com/Dannebicque/oreof/commit/405c45310a7bb61783e818148e0add7ff3a64e9b))
+* Validation des parcours et des formations, refactoring du code pour éviter les doublons, correctifs CSS/JS ([767051d](https://github.com/Dannebicque/oreof/commit/767051d4af8fe5cc900e66a16a1a2578888763f6))
+
 ### [0.19.5](https://github.com/Dannebicque/oreof/compare/v0.19.4...v0.19.5) (2023-03-24)
 
 
