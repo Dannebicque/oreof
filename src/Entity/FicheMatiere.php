@@ -45,7 +45,7 @@ class FicheMatiere
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $objectifs = null;
 
-    #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'ficheMatieres')]
+    #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'ficheMatieres', cascade: ['persist', 'remove'])]
     private Collection $competences;
 
     #[ORM\Column(length: 30, nullable: true, enumType: ModaliteEnseignementEnum::class)]
@@ -72,11 +72,11 @@ class FicheMatiere
     #[ORM\ManyToOne]
     private ?User $responsableFicheMatiere = null;
 
-    #[ORM\ManyToMany(targetEntity: Langue::class, inversedBy: 'ficheMatieres')]
+    #[ORM\ManyToMany(targetEntity: Langue::class, inversedBy: 'ficheMatieres', cascade: ['persist', 'remove'])]
     #[ORM\JoinTable(name: 'fiche_matiere_langue_dispense')]
     private Collection $langueDispense;
 
-    #[ORM\ManyToMany(targetEntity: Langue::class, inversedBy: 'languesSupportsFicheMatieres')]
+    #[ORM\ManyToMany(targetEntity: Langue::class, inversedBy: 'languesSupportsFicheMatieres', cascade: ['persist', 'remove'])]
     #[ORM\JoinTable(name: 'fiche_matiere_langue_support')]
     private Collection $langueSupport;
 
@@ -86,7 +86,7 @@ class FicheMatiere
     #[ORM\Column]
     private ?array $etatSteps = [];
 
-    #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: ElementConstitutif::class)]
+    #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: ElementConstitutif::class, cascade: ['persist', 'remove'])]
     private Collection $elementConstitutifs;
 
     #[ORM\ManyToOne(inversedBy: 'ficheMatieres')]

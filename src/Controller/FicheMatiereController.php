@@ -20,6 +20,7 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
 use App\Repository\TypeEpreuveRepository;
+use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -290,16 +291,21 @@ class FicheMatiereController extends AbstractController
         return $this->json(true);
     }
 
-    #[Route('/{id}', name: 'app_fiche_matiere_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_fiche_matiere_delete', methods: ['DELETE'])]
     public function delete(
         Request $request,
         FicheMatiere $ficheMatiere,
         FicheMatiereRepository $ficheMatiereRepository
     ): Response {
-        if ($this->isCsrfTokenValid('delete' . $ficheMatiere->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $ficheMatiere->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
             $ficheMatiereRepository->remove($ficheMatiere, true);
+
+            return $this->json(true);
         }
 
-        return $this->redirectToRoute('app_fiche_matiere_index', [], Response::HTTP_SEE_OTHER);
+        return $this->json(false);
     }
 }
