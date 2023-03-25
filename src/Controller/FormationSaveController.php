@@ -116,10 +116,9 @@ class FormationSaveController extends BaseController
                 return $this->json(true);
             case 'etatStep':
                 //todo: a reprendre dans EC et Parcours
+                $formationState->setFormation($formation);
                 $valideState = (bool)$data['isChecked'] === true ? $formationState->valideStep(
-                    $data['value'],
-                    $formation
-                ) : true;
+                    $data['value']) : true;
                 if ($valideState === true) {
                     $etatSteps = $formation->getEtatSteps();
                     $step = $data['value'];

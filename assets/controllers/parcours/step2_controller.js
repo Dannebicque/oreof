@@ -25,6 +25,9 @@ export default class extends Controller {
     document.getElementById('parcours_step2_stageText').addEventListener('trix-blur', this.saveStageText.bind(this))
     document.getElementById('parcours_step2_projetText').addEventListener('trix-blur', this.saveProjetText.bind(this))
     document.getElementById('parcours_step2_memoireText').addEventListener('trix-blur', this.saveMemoireText.bind(this))
+    if (document.getElementById('parcours_step2_memoireText')) { // todo: situationPro
+
+    }
   }
 
   etatStep(event) {

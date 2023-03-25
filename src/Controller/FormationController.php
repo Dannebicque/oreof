@@ -9,6 +9,8 @@
 
 namespace App\Controller;
 
+use App\Classes\verif\FormationState;
+use App\Classes\verif\ParcoursState;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\UserCentre;
@@ -233,15 +235,21 @@ class FormationController extends BaseController
      */
     #[Route('/{id}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
     public function edit(
+        ParcoursState $parcoursState,
+        FormationState $formationState,
         Request $request,
         Formation $formation
     ): Response {
         //todo: tester les droits et si on est en place "en_cours_redaction" => voter
+        $formationState->setFormation($formation);
+        $parcoursState->setParcours($formation->getParcours()?->first());
 
         return $this->render('formation/edit.html.twig', [
             'formation' => $formation,
             'selectedStep' => $request->query->get('step', 1),
-            'typeDiplome' => $formation->getTypeDiplome()
+            'typeDiplome' => $formation->getTypeDiplome(),
+            'parcoursState' => $parcoursState,
+            'formationState' => $formationState
         ]);
     }
 

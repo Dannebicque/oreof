@@ -10,16 +10,52 @@
 namespace App\Classes\verif;
 
 use App\Entity\Formation;
+use App\Enums\EtatRemplissageEnum;
 use App\Enums\RegimeInscriptionEnum;
 
 class FormationState
 {
-    //todo: comment exploiter dans Formation ?
     private Formation $formation;
 
-    public function valideStep(mixed $value, Formation $formation): bool|array
+    public function setFormation(Formation $formation): void
     {
         $this->formation = $formation;
+    }
+
+    public function onglets(): array
+    {
+        for ($i=1; $i<=3; $i++) {
+            $methodEmpty = 'isEmptyOnglet' . $i;
+            if ($this->$methodEmpty() === true) {
+                $onglets[$i] = EtatRemplissageEnum::VIDE;
+            } else {
+                $method = 'etatOnglet' . $i;
+                $onglets[$i] = $this->$method() === true && $this->formation->getEtatStep($i) === true ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
+            }
+        }
+
+        return $onglets;
+    }
+
+    public function isEmptyOnglet1(): bool
+    {
+        return $this->formation->getLocalisationMention()->count() === 0 &&
+            $this->formation->getComposantesInscription()->count() === 0 &&
+            count($this->formation->getRegimeInscription()) === 0;
+    }
+
+    public function isEmptyOnglet2(): bool
+    {
+        return $this->formation->getParcours()->count() === 0;
+    }
+
+    public function isEmptyOnglet3(): bool
+    {
+        return $this->formation->getParcours()->count() === 0;
+    }
+
+    public function valideStep(mixed $value): bool|array
+    {
         $method = 'etatOnglet' . ucfirst($value);
 
         return $this->$method();

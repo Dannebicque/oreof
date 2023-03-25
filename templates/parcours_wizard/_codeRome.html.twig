@@ -11,7 +11,7 @@
             <td>{{ rome.code }}</td>
             <td>
                 <button class="btn text-danger"
-                        {{ stimulus_action('parcours--step7', 'removeCode', 'click',{code: rome.code}) }}
+                        {{ stimulus_action('parcours--step6', 'removeCode', 'click',{code: rome.code}) }}
                 >
                     <i class="{{ iconDelete }}"></i>
                     Supprimer
@@ -32,7 +32,7 @@
         </td>
         <td>
             <button class="btn btn-success"
-                    {{ stimulus_action('parcours--step7', 'addCode') }}
+                    {{ stimulus_action('parcours--step6', 'addCode') }}
             >Ajouter le code
             </button>
         </td>

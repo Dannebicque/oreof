@@ -564,42 +564,6 @@ class Formation
         return $this;
     }
 
-    public function onglets(): array
-    {
-        $onglets[1] = $this->getEtatOnglet1();
-        $onglets[2] = $this->getEtatOnglet2();
-        $onglets[3] = $this->getEtatOnglet3();
-
-        return $onglets;
-    }
-
-    public function getEtatOnglet0(): EtatRemplissageEnum
-    {
-        return ($this->getEtatStep(0) && $this->semestreDebut !== 0) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
-    }
-
-    public function getEtatOnglet1(): EtatRemplissageEnum
-    {
-        return $this->getLocalisationMention()->count() === 0 && $this->getComposantesInscription()->count() === 0 && count($this->getRegimeInscription()) === 0 ? EtatRemplissageEnum::VIDE : ($this->getEtatStep(1) && $this->getLocalisationMention()->count() > 0 && $this->getComposantesInscription()->count() > 0 && count($this->getRegimeInscription()) > 0 ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS); //todo: gérer la zone de saisie selon le type de rythme choisit
-    }
-
-    public function getEtatOnglet2(): EtatRemplissageEnum
-    {
-        return $this->getObjectifsFormation() === null && $this->getContenuFormation() === null && $this->getResultatsAttendus() === null && $this->getRythmeFormation() === null ? EtatRemplissageEnum::VIDE : ($this->getEtatStep(2) && $this->getObjectifsFormation() !== null && $this->getContenuFormation() !== null && $this->getResultatsAttendus() !== null && ($this->getRythmeFormation() !== null || $this->getRythmeFormationTexte() !== null ) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
-    }
-
-    public function getEtatOnglet3(): EtatRemplissageEnum
-    {
-        //todo: ajouter les vérifs?
-        return $this->isHasParcours() === null ? EtatRemplissageEnum::VIDE : ($this->getEtatStep(3) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
-    }
-
-    public function getEtatOnglet4(): EtatRemplissageEnum
-    {
-        //todo: ajouter les vérifs?
-        return $this->getEtatStep(4) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
-    }
-
     public function getVersion(): ?string
     {
         return $this->version;

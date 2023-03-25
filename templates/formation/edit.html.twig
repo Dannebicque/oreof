@@ -18,20 +18,20 @@
                    data-bs-toggle="tab" href="#" role="tab" {% if step == 1 %}aria-selected="true"{% endif %}
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 1}) }}
                 >
-                    Localisation de la formation {{ formation.onglets|etatRemplissage(1, 'formation') }}
+                    Localisation de la formation {{ formationState.onglets|etatRemplissage(1, 'formation') }}
                 </a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link {% if selectedStep == 2 %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 2}) }}
                    aria-selected="false">Présentation de la
-                                         formation {{ formation.onglets|etatRemplissage(2, 'formation') }}</a>
+                                         formation {{ formationState.onglets|etatRemplissage(2, 'formation') }}</a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link {% if selectedStep == 3 %}active{% endif %}" data-bs-toggle="tab" href="#"
                    role="tab" aria-selected="false"
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 3}) }}
-                >Structure et organistion de la formation {{ formation.onglets|etatRemplissage(3, 'formation') }}</a>
+                >Structure et organistion de la formation {{ formationState.onglets|etatRemplissage(3, 'formation') }}</a>
             </li>
             {% if formation.parcours[0] is defined and formation.parcours[0].isParcoursDefaut %}
                 {% set parcours = formation.parcours[0] %}
@@ -41,35 +41,36 @@
                             {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 2,
                                 parcours:parcours.id}) }}
                     >
-                        Descriptif {{ parcours.onglets|etatRemplissage(2, 'parcours') }}
+                        Descriptif {{ parcoursState.onglets|etatRemplissage(2, 'parcours') }}
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                             {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 3,parcours:parcours.id}) }}
                     >
-                        Compétences {{ parcours.onglets|etatRemplissage(3, 'parcours') }}
+                        Compétences {{ parcoursState.onglets|etatRemplissage(3, 'parcours') }}
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                             {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 4,parcours:parcours.id}) }}
                     >
-                        Structure de la maquette {{ parcours.onglets|etatRemplissage(4, 'parcours') }}
+                        Structure de la maquette {{ parcoursState.onglets|etatRemplissage(4, 'parcours') }}
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                             {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 5,parcours:parcours.id}) }}
                     >
-                        Admission & inscription {{ parcours.onglets|etatRemplissage(5, 'parcours') }}
+                        Admission & inscription {{ parcoursState.onglets|etatRemplissage(5, 'parcours') }}
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                            {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 7,parcours:parcours.id}) }}
+                            {{ stimulus_action('formation_wizard', 'changeStepParcours', 'click', {step: 6,
+                                parcours:parcours.id}) }}
                     >
-                        Et après... {{ parcours.onglets|etatRemplissage(7, 'parcours') }}
+                        Et après... {{ parcoursState.onglets|etatRemplissage(6, 'parcours') }}
                     </a>
                 </li>
             {% endif %}

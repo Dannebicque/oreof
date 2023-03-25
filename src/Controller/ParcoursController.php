@@ -57,6 +57,7 @@ class ParcoursController extends BaseController
         Formation $formation
     ): Response {
         $parcour = new Parcours($formation);
+        $parcour->setModalitesEnseignement(null);
         $form = $this->createForm(ParcoursType::class, $parcour, [
             'action' => $this->generateUrl('app_parcours_new', [
                 'formation' => $formation->getId(),

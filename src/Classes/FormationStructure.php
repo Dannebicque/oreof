@@ -62,6 +62,7 @@ class FormationStructure
             if ($formation->getParcours()->count() === 0) {
                 $parcours = new Parcours($formation); //parcours par défaut
                 $parcours->setLibelle(Parcours::PARCOURS_DEFAUT);
+                $parcours->setModalitesEnseignement(null);
                 $semestres = [];
 
                 $formation->addParcour($parcours);

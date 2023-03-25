@@ -47,15 +47,15 @@ class ParcoursSaveController extends AbstractController
     ): Response {
         //todo: check si bonne parcours...
         $data = JsonRequest::getFromRequest($request);
+        $parcoursState->setParcours($parcours);
+
         switch ($data['action']) {
             case 'stateOnglet':
-                $method = 'getEtat' . ucfirst($data['onglet']);
-                $val = $parcours->$method();
-
+                $ong = substr($data['onglet'], 6);
+                $val = $parcoursState->onglets()[$ong];
                 //if $val => en-cours ou vide => désactiver le checkbox
                 if ($val === EtatRemplissageEnum::EN_COURS || $val === EtatRemplissageEnum::VIDE) {
                     $etatSteps = $parcours->getEtatSteps();
-                    $ong = substr($data['onglet'], 6);
                     $etatSteps[$ong] = false;
                     $parcours->setEtatSteps($etatSteps);
                     $em->flush();
@@ -102,7 +102,7 @@ class ParcoursSaveController extends AbstractController
                 $rep = $updateEntity->saveField($parcours, 'localisation', $ville);
 
                 return $this->json($rep);
-                case 'composanteInscription':
+            case 'composanteInscription':
                 $composante = $composanteRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'composanteInscription', $composante);
 
@@ -112,10 +112,11 @@ class ParcoursSaveController extends AbstractController
 
                 return $this->json($rep);
             case 'etatStep':
+                $parcoursState->setParcours($parcours);
                 $valideState = (bool)$data['isChecked'] === true ? $parcoursState->valideStep(
-                    $data['value'],
-                    $parcours
+                    $data['value']
                 ) : true;
+
                 if ($valideState === true) {
                     $etatSteps = $parcours->getEtatSteps();
                     $step = $data['value'];

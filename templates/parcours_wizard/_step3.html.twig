@@ -36,12 +36,12 @@
 
     <div class="alert {% if parcours.getEtatStep(3) %}alert-success{% else %}alert-warning{% endif %} mt-2" id="alertEtatStructure">
         <input type="checkbox"
-               id="etatCompetence"
+               id="etatStructure"
                class="form-check-inline"
                {% if parcours.getEtatStep(3) %}checked{% endif %}
                 {{ stimulus_action('parcours--step3', 'etatStep', 'change') }}
 
-        ><label for="etatCompetence">
+        ><label for="etatStructure">
             Cochez cette case si vous avez terminé de définir les compétences. Cela permet de mettre à jour
             l'indicateur de l'onglet.</label>
     </div>

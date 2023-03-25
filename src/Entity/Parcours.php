@@ -67,8 +67,8 @@ class Parcours
     #[ORM\Column(nullable: true)]
     private ?float $nbHeuresStages;
 
-    #[ORM\Column]
-    private ?bool $hasProjet = false;
+    #[ORM\Column(nullable: true)]
+    private ?bool $hasProjet = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $projetText = null;
@@ -76,8 +76,8 @@ class Parcours
     #[ORM\Column(nullable: true)]
     private ?float $nbHeuresProjet;
 
-    #[ORM\Column]
-    private ?bool $hasMemoire = false;
+    #[ORM\Column(nullable: true)]
+    private ?bool $hasMemoire = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $memoireText = null;
@@ -118,8 +118,8 @@ class Parcours
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $coordSecretariat = null;
 
-    #[ORM\Column]
-    private ?bool $hasSituationPro = false;
+    #[ORM\Column(nullable: true)]
+    private ?bool $hasSituationPro = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $situationProText = null;
@@ -148,7 +148,7 @@ class Parcours
         $this->blocCompetences = new ArrayCollection();
         $this->semestreParcours = new ArrayCollection();
 
-        for ($i = 1; $i <= 8; $i++) {
+        for ($i = 1; $i <= 6; $i++) {
             $this->etatSteps[$i] = false;
         }
         $this->ficheMatieres = new ArrayCollection();
@@ -301,7 +301,7 @@ class Parcours
         return $this->hasProjet;
     }
 
-    public function setHasProjet(bool $hasProjet): self
+    public function setHasProjet(?bool $hasProjet): self
     {
         $this->hasProjet = $hasProjet;
 
@@ -337,7 +337,7 @@ class Parcours
         return $this->hasMemoire;
     }
 
-    public function setHasMemoire(bool $hasMemoire): self
+    public function setHasMemoire(?bool $hasMemoire): self
     {
         $this->hasMemoire = $hasMemoire;
 
@@ -567,67 +567,6 @@ class Parcours
         $this->sigle = $sigle;
 
         return $this;
-    }
-
-    public function onglets(): array
-    {
-        $onglets[0] = $this->getEtatOnglet0();
-        $onglets[1] = $this->getEtatOnglet1();
-        $onglets[2] = $this->getEtatOnglet2();
-        $onglets[3] = $this->getEtatOnglet3();
-        $onglets[4] = $this->getEtatOnglet4();
-        $onglets[5] = $this->getEtatOnglet5();
-        $onglets[6] = $this->getEtatOnglet6();
-
-        return $onglets;
-    }
-
-    public function getEtatOnglet0(): EtatRemplissageEnum
-    {
-        //todo: ajouter les vérifs? Existe?
-        return $this->getEtatStep(0) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
-    }
-
-    public function getEtatOnglet1(): EtatRemplissageEnum
-    {
-        return $this->getContenuFormation() === null && $this->getResultatsAttendus() === null && $this->getRythmeFormation() === null ? EtatRemplissageEnum::VIDE : ($this->getEtatStep(1) && $this->getContenuFormation() !== null && $this->getResultatsAttendus() !== null && $this->getRythmeFormation() !== null ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
-    }
-
-    public function getEtatOnglet2(): EtatRemplissageEnum
-    {
-        //todo: ajouter les vérifs?
-        $stage = ($this->isHasStage() === true && $this->getStageText() !== null && trim($this->getStageText()) !== '' && $this->getNbHeuresStages() > 0) || $this->isHasStage() === false;
-        $projet = ($this->isHasProjet() === true && $this->getProjetText() !== null && trim($this->getProjetText()) !== '' && $this->getNbHeuresProjet() > 0) || $this->isHasProjet() === false;
-        $memoire = ($this->isHasMemoire() === true && $this->getMemoireText() !== null && trim($this->getMemoireText()) !== '') || $this->isHasProjet() === false;
-
-
-        return $stage === false && $projet === false && $memoire === false ? EtatRemplissageEnum::VIDE : (
-            $stage === true && $projet === true && $memoire === true && $this->getEtatStep(2) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS
-        );
-    }
-
-    public function getEtatOnglet3(): EtatRemplissageEnum
-    {
-        return $this->getBlocCompetences()->count() === 0 ? EtatRemplissageEnum::VIDE :
-            ($this->getEtatStep(3) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
-    }
-
-    public function getEtatOnglet4(): EtatRemplissageEnum
-    {
-        return $this->getSemestreParcours()->count() === 0 ? EtatRemplissageEnum::VIDE :
-            ($this->getEtatStep(4) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
-    }
-
-    public function getEtatOnglet5(): EtatRemplissageEnum
-    {
-        //todo: ajouter les vérifs?
-        return $this->getEtatStep(5) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
-    }
-
-    public function getEtatOnglet6(): EtatRemplissageEnum
-    {
-        //todo: ajouter les vérifs?
-        return $this->getEtatStep(6) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS;
     }
 
     public function getEtatStep(int $step): bool
