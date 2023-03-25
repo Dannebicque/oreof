@@ -12,21 +12,21 @@ formation_step3.helps.structureFormation.help: 'Précisez la structure de la for
 ec_step3.labels.competence: "Choisissez d'abord le/les bloc(s) de compétences pour accéder aux compétences associées."
 'Optionnel, sigle/code ou appelation courte du parcours': 'Optionnel, sigle/code ou appelation courte du parcours'
 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation': 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation'
-'Si la mention n''existe pas, veuillez la créer dans la section "Autre mention"': '"'
-'Si la mention existe, veuillez la sélectionner dans la liste déroulante': '"'
+'Si la mention n''existe pas, veuillez la créer dans la section "Autre mention"': ''
+'Si la mention existe, veuillez la sélectionner dans la liste déroulante': ''
 formation_step3.helps.semestreDebut.help: 'Indiquez le semestre de début de la formation.'
 parcours_step6.helps.modalitesAlternance: parcours_step6.helps.modalitesAlternance
 ec_step1.helps.preciserMutualisation.help: 'Indiquez toutes les formations avec lesquelles cet enseignement est mutualisé'
-ue.helps.ordre: '"'
-ue.helps.typeUe: '"'
+ue.helps.ordre: ''
+ue.helps.typeUe: ''
 ue.helps.typeUeTexte: "Précisez le type d'UE si il n'est pas présent dans la liste déroulante du champ précédent."
-ue.helps.ueObligatoire: '"'
+ue.helps.ueObligatoire: ''
 ue.helps.ueObligatoireTexte: "Précisez la nature de l'UE si elle n'est pas présente dans la liste déroulante du champ précédent."
-formation_ses.helps.typeDiplome: '"'
-formation_ses.helps.domaine: '"'
-formation_ses.helps.niveauEntree: '"'
-formation_ses.helps.niveauSortie: '"'
-formation_ses.helps.inRncp.help: '"'
+formation_ses.helps.typeDiplome: ''
+formation_ses.helps.domaine: ''
+formation_ses.helps.niveauEntree: ''
+formation_ses.helps.niveauSortie: ''
+formation_ses.helps.inRncp.help: ''
 formation_ses.helps.codeRNCP: 'Indiquez le code RNCP (cf. www.francecompetences.fr).'
 formation_ses.helps.responsableMention: 'Indiquez le porteur du projet de formation (futur responsable de formation), qui aura en charge le dépôt de la demande de création de la formation.'
 parcours_step5.helps.composanteInscription.help: parcours_step5.helps.composanteInscription.help
@@ -35,7 +35,7 @@ parcours_step5.helps.modalitesAlternance: "Indiquez en 3000 caractères maximum 
 parcours_step5.helps.coordSecretariat: 'Indiquez les coordonnées postales et téléphoniques du secrétariat ainsi que son adresse mail générique.'
 element_constitutif.helps.libelle: "Indiquez le libellé exact de l'EC."
 element_constitutif.helps.responsableEc: element_constitutif.helps.responsableEc
-parcours_step2.helps.hasSituationPro.help: '"'
+parcours_step2.helps.hasSituationPro.help: ''
 parcours_step2.helps.situationProText: 'Décrivez en quoi consiste la mise en situation professionnelle.'
 formation_ses.helps.composantePorteuse: 'Indiquez la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation.'
 formation_ses.helps.mention: "Si l'intitulé existe, veuillez le sélectionner dans la liste déroulante. Si l'intitulé n'existe pas, veuillez le créer dans la section \"Autre mention\"."
@@ -54,29 +54,29 @@ parcours_step2.helps.memoireText: 'Décrivez en quoi consiste le TER/mémoire.'
 bloc_competence.helps.libelle: 'Indiquez le libellé du bloc de compétences.'
 competence.helps.libelle: "Le libellé de la compétence doit commencer par un verbe d'action, et ne doit pas dépasser 255 caractères. Doit être cohérente avec la fiche RNCP du diplôme."
 parcours_step5.helps.prerequis: 'Indiquez si des prérequis pédagogiques sont conseillés pour réussir dans cette formation.'
-parcours_step7.helps.poursuitesEtudes: '"'
-parcours_step7.helps.debouches: '"'
+parcours_step7.helps.poursuitesEtudes: ''
+parcours_step7.helps.debouches: ''
 parcours_step8.helps.coordSecretariat: 'Indiquez les coordonnées postales et téléphoniques du secrétariat ainsi que son adresse mail générique.'
-ec_step1.helps.responsableEc: '"'
+ec_step1.helps.responsableEc: ''
 ec_step1.helps.libelle: "N'est modifiable que par le responsable de la formation."
 ec_step1.helps.libelleAnglais: "Précisez la version anglaise du libellé de l'EC."
 ec_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez "oui".'
 ec_step2.helps.description: 'Indiquez en 3000 caractères maximum le contenu de l’enseignement. Faites une description détaillée des différents sujets traités dans cet enseignement.'
 ec_step3.helps.objectifs: 'Indiquez en 3000 caractères maximum les objectifs de l’enseignement'
 ec_step4.helps.modaliteEnseignement.help: "Indiquez les modalités d’enseignement de l'EC."
-ec_step4.helps.ects: '"'
-ec_step4.helps.volumeCmPresentiel: '"'
-ec_step4.helps.volumeTdPresentiel: '"'
-ec_step4.helps.volumeTpPresentiel: '"'
-ec_step4.helps.volumeCmDistanciel: '"'
-ec_step4.helps.volumeTdDistanciel: '"'
-ec_step4.helps.volumeTpDistanciel: '"'
+ec_step4.helps.ects: ''
+ec_step4.helps.volumeCmPresentiel: ''
+ec_step4.helps.volumeTdPresentiel: ''
+ec_step4.helps.volumeTpPresentiel: ''
+ec_step4.helps.volumeCmDistanciel: ''
+ec_step4.helps.volumeTdDistanciel: ''
+ec_step4.helps.volumeTpDistanciel: ''
 parcours_step2.helps.modalitesEnseignement.help: "Précisez les modalités d'enseignement."
-parcours_step2.helps.hasStage.help: '"'
+parcours_step2.helps.hasStage.help: ''
 parcours_step2.helps.nbHeuresStages: "Précisez le nombre d'heures de stage prévu."
-parcours_step2.helps.hasProjet.help: '"'
+parcours_step2.helps.hasProjet.help: ''
 parcours_step2.helps.nbHeuresProjet: "Précisez le nombre d'heures du projet tutoré prévu."
-parcours_step2.helps.hasMemoire.help: '"'
+parcours_step2.helps.hasMemoire.help: ''
 parcours_step8.helps.respParcours: 'Indiquez le responsable de parcours.'
 parcours.helps.sigle: 'Le cas échéant, indiquez le sigle utilisé pour ce parcours.'
 parcours_step1.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différentes thématiques traitées dans la formation, en fonction des objectifs pédagogiques définis précédemment.'
@@ -84,114 +84,117 @@ parcours_step1.helps.resultatsAttendus: 'Indiquez en 3000 caractères maximum le
 parcours_step1.helps.rythmeFormation: 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir, etc.).'
 parcours_step1.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (déroulé, calendrier, périodes, etc.).'
 parcours_step1.helps.localisation.help: 'Choisissez le lieu où le parcours est proposé. Si le parcours est dispensé sur plusieurs sites, créer autant de parcours que de lieux de formation.'
-ec_step1.helps.isCmPresentielMutualise.help: '"'
-ec_step1.helps.isTdPresentielMutualise.help: '"'
-ec_step1.helps.isTpPresentielMutualise.help: '"'
-ec_step1.helps.isCmDistancielMutualise.help: '"'
-ec_step1.helps.isTdDistancielMutualise.help: '"'
-ec_step1.helps.isTpDistancielMutualise.help: '"'
+ec_step1.helps.isCmPresentielMutualise.help: ''
+ec_step1.helps.isTdPresentielMutualise.help: ''
+ec_step1.helps.isTpPresentielMutualise.help: ''
+ec_step1.helps.isCmDistancielMutualise.help: ''
+ec_step1.helps.isTdDistancielMutualise.help: ''
+ec_step1.helps.isTpDistancielMutualise.help: ''
 ec_step2.helps.langueDispense.help: 'Plusieurs choix possibles.'
 ec_step2.helps.langueSupport.help: 'Plusieurs choix possibles.'
 ec_step2.helps.typeEnseignement.help: ec_step2.helps.typeEnseignement.help
 register.helps.email: 'Email URCA valide. Permettra de faire le lien avec vos accès CAS.'
 register.helps.centreDemande: "Précisez le centre souhaité. Le responsable du centre précisera vos droits d'accès."
 parcours_step1.helps.localisation: 'Choisissez le lieu où le parcours est proposé. Si le parcours est dispensé sur plusieurs sites, créer autant de parcours que de lieux de formation.'
-parcours_step2.helps.modalitesEnseignement: '"'
-parcours_step5.helps.composanteInscription: '"'
-parcours_step5.helps.regimeInscription: '"'
-parcours_step7.helps.codeRome.help: '"'
+parcours_step2.helps.modalitesEnseignement: ''
+parcours_step5.helps.composanteInscription: ''
+parcours_step5.helps.regimeInscription: ''
+parcours_step7.helps.codeRome.help: ''
 ec_step4.helps.modaliteEnseignement: ec_step4.helps.modaliteEnseignement
 ec_step2.helps.typeEnseignement: "Précisez si l'enseignement est obligatoire / facultatif ou s'il fait partie d'une liste d'éléments à choisir."
 langue.helps.libelle: 'Indiquez le libellé exact de la langue à ajouter.'
 langue.helps.codeIso: "2 caractères, selon la norme ISO 639-1   (cf. https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1).\n"
 type_enseignement.helps.libelle: type_enseignement.helps.libelle
 type_ue.helps.libelle: "Indiquez le libellé exact du type d'UE."
-type_ue.helps.typeDiplome.help: '"'
+type_ue.helps.typeDiplome.help: ''
 rythme_formation.helps.libelle: 'Indiquez le libellé exact du rythme de formation.'
 parcours.helps.libelle: 'Indiquez le libellé exact de ce parcours.'
 parcours.helps.respParcours: 'Indiquez le responsable de ce parcours.'
-mention.helps.typeDiplome: '"'
+mention.helps.typeDiplome: ''
 mention.helps.libelle: 'Indiquez le libellé exact de la mention/spécialité.'
 mention.helps.sigle: 'Le cas échéant, indiquez le sigle utilisé pour cette mention/spécialité.'
-mention.helps.domaine: '"'
+mention.helps.domaine: ''
 domaine.helps.libelle: 'Indiquez le libellé exact du domaine de formation.'
 domaine.helps.sigle: 'Indiquez le sigle utilisé pour ce domaine.'
 composante.helps.libelle: 'Indiquez le libellé exact de la composante.'
 composante.helps.sigle: 'Le cas échéant, indiquez le sigle utilisé pour cette composante.'
-composante.helps.directeur: '"'
+composante.helps.directeur: ''
 composante.helps.responsableDpe: "Indiquez le nom de la personne en charge de l'administration de ORéOF dans la composante."
-composante.helps.adresse.help: '"'
-composante.helps.adresse.adresse1: '"'
-composante.helps.adresse.adresse2: '"'
-composante.helps.adresse.codePostal: '"'
-composante.helps.adresse.ville: '"'
+composante.helps.adresse.help: ''
+composante.helps.adresse.adresse1: ''
+composante.helps.adresse.adresse2: ''
+composante.helps.adresse.codePostal: ''
+composante.helps.adresse.ville: ''
 composante.helps.telStandard: "Indiquez le numéro de téléphone de l'accueil de la composante."
-composante.helps.telComplementaire: '"'
+composante.helps.telComplementaire: ''
 composante.helps.mailContact: "Indiquez l'adresse mail générique de l'accueil de la composante."
 composante.helps.urlSite: 'Indiquez le lien court vers le mini-site de la composante.'
-ville.helps.libelle: '"'
-ville.helps.etablissement: '"'
-etablissement.helps.libelle: '"'
-etablissement.helps.adresse.help: '"'
-etablissement.helps.adresse.adresse1: '"'
-etablissement.helps.adresse.adresse2: '"'
-etablissement.helps.adresse.codePostal: '"'
-etablissement.helps.adresse.ville: '"'
+ville.helps.libelle: ''
+ville.helps.etablissement: ''
+etablissement.helps.libelle: ''
+etablissement.helps.adresse.help: ''
+etablissement.helps.adresse.adresse1: ''
+etablissement.helps.adresse.adresse2: ''
+etablissement.helps.adresse.codePostal: ''
+etablissement.helps.adresse.ville: ''
 type_epreuve.helps.libelle: "Indiquez le libellé exact du type d'épreuve."
-type_epreuve.helps.typeDiplome.help: '"'
+type_epreuve.helps.typeDiplome.help: ''
 type_diplome.helps.libelle: 'Indiquez le libellé exact du type de diplôme.'
 type_diplome.helps.libelle_court: 'Le cas échéant, indiquez le libellé court du type de diplôme.'
 type_diplome.helps.semestreDebut: "Le semestre de début d'un diplôme est toujours 1 sauf dans le cas des LP."
-type_diplome.helps.semestreFin: '"'
+type_diplome.helps.semestreFin: ''
 type_diplome.helps.nbUeMin: 'Précisez la contrainte. Si pas de contrainte, mettre "0".'
 type_diplome.helps.nbUeMax: 'Précisez la contrainte. Si pas de contrainte, mettre "0".'
 type_diplome.helps.nbEctsMaxUe: 'Précisez la contrainte. Si pas de contrainte, mettre "0".'
 type_diplome.helps.ModeleMcc: 'Indiquez si le diplôme est cadré par un modèle prédéfini de MCC (ex. BUT).'
 nature_ue_ec.helps.libelle: "Indiquez le libellé exact de la nature d'UE/EC."
-nature_ue_ec.helps.choix.help: '"'
+nature_ue_ec.helps.choix.help: ''
 type_ec.helps.libelle: "Indiquez le libellé exact du type d'EC."
 type_ec.helps.typeDiplomes.help: "Sélectionnez les diplômes concernés par ce type d'EC."
 type_ue.helps.typeDiplomes.help: "Sélectionnez les diplômes concernés par ce type d'UE."
 type_epreuve.helps.typeDiplomes.help: "Sélectionnez les diplômes concernés par ce type d'épreuve."
-user_ldap.helps.email: '"'
+user_ldap.helps.email: ''
 user_ldap.helps.role.help: "Définissez le rôle de l'utilisateur (et donc ses droits d'accès)."
 user_ldap.helps.centreDemande: "Définissez le périmètre d’action et/ou de visualisation de l'utilisateur."
 role.helps.libelle: 'Indiquez le libellé exact du rôle.'
 role.helps.code_role: 'Indiquez le signe du rôle.'
 role.helps.porte.help: 'Indiquez si le périmètre en action et visualisation accordé au rôle.'
-user.helps.civilite: '"'
-user.helps.nom: '"'
-user.helps.prenom: '"'
-user.helps.telFixe: '"'
-user.helps.telPortable: '"'
+user.helps.civilite: ''
+user.helps.nom: ''
+user.helps.prenom: ''
+user.helps.telFixe: ''
+user.helps.telPortable: ''
 user.helps.role: "Définissez le rôle de l'utilisateur (et donc ses droits d'accès)."
-annee_universitaire.helps.libelle: '"'
-annee_universitaire.helps.annee: '"'
-annee_universitaire.helps.defaut.help: '"'
+annee_universitaire.helps.libelle: ''
+annee_universitaire.helps.annee: ''
+annee_universitaire.helps.defaut.help: ''
 annee_universitaire.helps.dateOuvertureDpe: "Correspond à la date de début de la période d'enrichissement des projets de DPE."
-annee_universitaire.helps.dateClotureDpe: '"'
+annee_universitaire.helps.dateClotureDpe: ''
 annee_universitaire.helps.dateTransmissionSes: "Correspond à la date de fin de la période d'enrichissement des projets de DPE."
-annee_universitaire.helps.dateCfvu: '"'
-annee_universitaire.helps.datePublication: '"'
+annee_universitaire.helps.dateCfvu: ''
+annee_universitaire.helps.datePublication: ''
+ec_manage.helps.fiche_matiere_label.help: ec_manage.helps.fiche_matiere_label.help
+register.helps.prenom: register.helps.prenom
+register.helps.nom: register.helps.nom
 type_diplome.helps.nbEcParUe: 'Précisez la contrainte. Si pas de contrainte, mettre "0".'
 ue.helps.natureUeEc: "Indiquez le libellé exact de la nature de l'UE"
 ue.helps.natureUeEcTexte: "Précisez la nature de l'UE si elle n'est pas présente dans la liste déroulante du champ précédent."
 parcours_step6.helps.poursuitesEtudes: 'Indiquez en 3000 caractères maximum quelles sont les poursuites d’études envisageables.'
 parcours_step6.helps.debouches: 'Indiquez les principaux débouchés professionnels accessibles à l’issue de cette formation.'
 parcours_step6.helps.codeRome.help: 'Ajoutez les codes ROME pour préciser les métiers accessibles aux diplômés     (cf. https://www.pole-emploi.fr/employeur/vos-recrutements/le-rome-et-les-fiches-metiers.html).'
-element_constitutif.helps.natureUeEc: '"'
+element_constitutif.helps.natureUeEc: ''
 element_constitutif.helps.ficheMatiere: element_constitutif.helps.ficheMatiere
 fiche_matiere.helps.libelle: "Indiquez le libellé exact de l'enseignement"
 fiche_matiere.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."
 fiche_matiere_step1.helps.libelle: "Indiquez le libellé exact de l'enseignement."
 fiche_matiere_step1.helps.libelleAnglais: "Précisez la version anglaise du libellé de l'enseignement."
 fiche_matiere_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez "oui".'
-fiche_matiere_step1.helps.isCmPresentielMutualise.help: '"'
-fiche_matiere_step1.helps.isTdPresentielMutualise.help: '"'
-fiche_matiere_step1.helps.isTpPresentielMutualise.help: '"'
-fiche_matiere_step1.helps.isCmDistancielMutualise.help: '"'
-fiche_matiere_step1.helps.isTdDistancielMutualise.help: '"'
-fiche_matiere_step1.helps.isTpDistancielMutualise.help: '"'
+fiche_matiere_step1.helps.isCmPresentielMutualise.help: ''
+fiche_matiere_step1.helps.isTdPresentielMutualise.help: ''
+fiche_matiere_step1.helps.isTpPresentielMutualise.help: ''
+fiche_matiere_step1.helps.isCmDistancielMutualise.help: ''
+fiche_matiere_step1.helps.isTdDistancielMutualise.help: ''
+fiche_matiere_step1.helps.isTpDistancielMutualise.help: ''
 fiche_matiere_step1.helps.preciserMutualisation.help: fiche_matiere_step1.helps.preciserMutualisation.help
 ec_manage.helps.fiche_matiere.help: ec_manage.helps.fiche_matiere.help
 ec_manage.helps.fiche_matiere_libelle.help: ec_manage.helps.fiche_matiere_libelle.help
