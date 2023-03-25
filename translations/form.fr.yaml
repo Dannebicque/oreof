@@ -260,3 +260,6 @@ ec_manage.labels.fiche_matiere_unique.label: 'Choisissez la fiche EC/matière à
 ec_manage.labels.fiche_matiere_libelle_unique.label: 'Si non existant, précisez le libellé de la fiche EC/matière  à raccrocher à cet EC '
 parcours_step5.labels.regimeInscription.label: "Régime(s) d'inscription"
 fiche_matiere_step1.labels.responsableFicheMatiere: "Référent de l'enseignement"
+fiche_matiere.step1_collegue_manquant.title: fiche_matiere.step1_collegue_manquant.title
+fiche_matiere.step1_collegue_manquant.label: fiche_matiere.step1_collegue_manquant.label
+user.add_missing.email.label: user.add_missing.email.label

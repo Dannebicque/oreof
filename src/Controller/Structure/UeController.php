@@ -195,6 +195,17 @@ class UeController extends AbstractController
         return $this->json(true);
     }
 
+    #[Route('/deplacer_sub/{ue}/{sens}', name: 'deplacer_sub', methods: ['GET'])]
+    public function deplacerSub(
+        UeOrdre $ueOrdre,
+        Ue $ue,
+        string $sens
+    ): Response {
+        $ueOrdre->deplacerSubUe($ue, $sens);
+
+        return $this->json(true);
+    }
+
 
     /**
      * @throws \JsonException

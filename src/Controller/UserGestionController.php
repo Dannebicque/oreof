@@ -9,13 +9,17 @@
 
 namespace App\Controller;
 
+use App\Classes\Ldap;
 use App\Entity\User;
 use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
 use App\Events\UserEvent;
+use App\Form\UserAddType;
 use App\Repository\ComposanteRepository;
 use App\Repository\EtablissementRepository;
+use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
+use App\Repository\ParcoursRepository;
 use App\Repository\RoleRepository;
 use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
@@ -34,6 +38,106 @@ class UserGestionController extends BaseController
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly UserRepository $userRepository,
     ) {
+    }
+
+    #[Route('/ajout/utilisateur', name: 'app_user_missing')]
+    public function ajoutUtilisateur(
+        Ldap $ldap,
+        ParcoursRepository $parcoursRepository,
+        FicheMatiereRepository $ficheMatiereRepository,
+        FormationRepository $formationRepository,
+        UserRepository $userRepository,
+        Request $request
+    ): Response {
+        $user = new  User();
+
+        $form = $this->createForm(UserAddType::class, $user, [
+            'action' => $this->generateUrl(
+                'app_user_missing_ldap',
+                ['action' => $request->query->get('action'), 'id' => $request->query->get('id')]
+            ),
+            'method' => 'POST',
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $email = $form->get('email')->getData();
+            //Vérifier qu'il n'existe pas
+            $exist = $userRepository->findOneBy(['email' => $email]);
+            if ($exist !== null) {
+                $this->json('Cet utilisateur existe déjà !', 500);
+            }
+
+            //récupération depuis le LDAP
+            $ldapUser = $ldap->getDatas($email);
+            if ($ldapUser === null) {
+                $this->json('Cet utilisateur n\'existe pas dans le LDAP !', 500);
+            }
+
+            //ajout des données
+            $user->setNom($ldapUser['nom']);
+            $user->setPrenom($ldapUser['prenom']);
+            $user->setUsername($ldapUser['username']);
+
+            //ajout des droits et du centre
+            $erreur = false;
+            switch ($request->query->get('action')) {
+                case 'responsableFicheMatiere':
+                    $fiche = $ficheMatiereRepository->find($request->query->get('id'));
+                    //pas besoin d'envoyer un mail dans ce cas
+                    if ($fiche !== null) {
+                        $fiche->setResponsableFicheMatiere($user);
+                        $ficheMatiereRepository->save($fiche, true);
+                    } else {
+                        $erreur = true;
+                    }
+                    break;
+                case 'responsableParcours':
+                    $parcours = $parcoursRepository->find($request->query->get('id'));
+                    //pas besoin d'envoyer un mail dans ce cas
+                    if ($parcours !== null) {
+                        $parcours->setRespParcours($user);
+                        $parcoursRepository->save($parcours, true);
+                        //todo: construire l'objet event...
+                    } else {
+                        $erreur = true;
+                    }
+                    break;
+                case 'responsableFormation':
+                    $formation = $formationRepository->find($request->query->get('id'));
+                    //pas besoin d'envoyer un mail dans ce cas
+                    if ($formation !== null) {
+                        $formation->setResponsableMention($user);
+                        $formationRepository->save($formation, true);
+                        //todo: construire l'objet event...
+                    } else {
+                        $erreur = true;
+                    }
+                    break;
+            }
+
+            //raffraichir.
+            if ($erreur === false) {
+                $this->userRepository->save($user, true);
+                //todo: event pour prevenir l'utilisateur
+                return $this->json(true);
+            }
+
+            return $this->json('Une erreur est survenue !', 500);
+        }
+
+
+        return $this->render('user/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/ajout/utilisateur/verification', name: 'app_user_missing_ldap')]
+    public function ajoutLdap(): Response
+    {
+        return $this->render('user/add.html.twig', [
+        ]);
     }
 
     #[Route('/valid/admin/{user}', name: 'app_user_gestion_valid_admin')]
@@ -89,8 +193,7 @@ class UserGestionController extends BaseController
     public function gestionDroits(
         RoleRepository $roleRepository,
         User $user
-    ): Response
-    {
+    ): Response {
         return $this->render('user/_gestion_droits.html.twig', [
             'user' => $user,
             'roles' => $roleRepository->findByAll()
@@ -102,8 +205,7 @@ class UserGestionController extends BaseController
     public function gestionCentre(
         RoleRepository $roleRepository,
         User $user
-    ): Response
-    {
+    ): Response {
         return $this->render('user/_gestion_centre.html.twig', [
             'user' => $user,
             'centres' => CentreGestionEnum::cases(),
@@ -136,8 +238,7 @@ class UserGestionController extends BaseController
         FormationRepository $formationRepository,
         Request $request,
         User $user
-    ): Response
-    {
+    ): Response {
         $data = JsonRequest::getFromRequest($request);
         $nCentre = new UserCentre();
         $nCentre->setUser($user);
@@ -173,6 +274,7 @@ class UserGestionController extends BaseController
         }
 
         $userCentreRepository->save($nCentre, true);
+
         return $this->json(['success' => 'Centre ajouté avec succès']);
     }
 

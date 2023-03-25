@@ -44,7 +44,7 @@ class FicheMatiereWizardController extends AbstractController
     ): Response {
 
         return $this->render('fiche_matiere/_synthese_ec.html.twig', [
-            'ec' => $ficheMatiere,
+            'ficheMatiere' => $ficheMatiere,
         ]);
     }
 

@@ -210,3 +210,6 @@ fiche_matiere_step2.helps.langueSupport.help: fiche_matiere_step2.helps.langueSu
 fiche_matiere_step3.helps.objectifs: fiche_matiere_step3.helps.objectifs
 fiche_matiere_step3.labels.competence: fiche_matiere_step3.labels.competence
 fiche_matiere_step1.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."
+user.add_missing.email.help: user.add_missing.email.help
+form.helps.email: form.helps.email
+user_add.helps.email: user_add.helps.email

@@ -146,7 +146,7 @@ class FicheMatiere
         return $this->enseignementMutualise;
     }
 
-    public function setEnseignementMutualise(bool $enseignementMutualise): self
+    public function setEnseignementMutualise(?bool $enseignementMutualise): self
     {
         $this->enseignementMutualise = $enseignementMutualise;
 

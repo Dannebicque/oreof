@@ -29,4 +29,6 @@ class UserController extends AbstractController
         return $this->render('user/mes-notifications.html.twig', [
         ]);
     }
+
+
 }
