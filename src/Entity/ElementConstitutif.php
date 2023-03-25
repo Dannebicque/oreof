@@ -77,7 +77,7 @@ class ElementConstitutif
     #[ORM\OneToMany(mappedBy: 'ec', targetEntity: Mccc::class, cascade: ['persist', 'remove'], orphanRemoval: true  )]
     private Collection $mcccs;
 
-    #[ORM\Column(length: 5)]
+    #[ORM\Column(length: 15)]
     private ?string $code = null;
 
     #[ORM\Column]
@@ -410,10 +410,20 @@ class ElementConstitutif
 
     public function genereCode(): void
     {
-        if ($this->subOrdre === null || $this->subOrdre === 0) {
-            $this->setCode('EC' . $this->ordre);
+        if ($this->getUe() === null) {
+            return;
+        }
+
+        if ($this->getUe()->getSubOrdre() !== null) {
+            $codeUe = $this->getUe()->getOrdre() . '.' . chr($this->getUe()->getSubOrdre() + 64);
         } else {
-            $this->setCode('EC' . $this->ordre . '.' . chr($this->subOrdre + 64));
+            $codeUe = $this->getUe()->getOrdre();
+        }
+
+        if ($this->subOrdre === null || $this->subOrdre === 0) {
+            $this->setCode('EC'.$codeUe.'.' . $this->ordre);
+        } else {
+            $this->setCode('EC'.$codeUe.'.' . $this->ordre . '.' . chr($this->subOrdre + 64));
         }
     }
 

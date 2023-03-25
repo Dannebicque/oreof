@@ -352,8 +352,19 @@ class ElementConstitutifController extends AbstractController
         Ue $ue,
         string $sens
     ): Response {
-        //todo: récupérer si déplacement subordre ou pas (idem UE). Comment gérer le déplacement d'un bloc EC complet.
         $ecOrdre->deplacerElementConstitutif($elementConstitutif, $sens, $ue);
+
+        return $this->json(true);
+    }
+
+    #[Route('/{id}/{ue}/deplacer_sub/{sens}', name: 'app_element_constitutif_deplacer_subordre', methods: ['GET'])]
+    public function deplacerSub(
+        EcOrdre $ecOrdre,
+        ElementConstitutif $elementConstitutif,
+        Ue $ue,
+        string $sens
+    ): Response {
+        $ecOrdre->deplacerSubElementConstitutif($elementConstitutif, $sens, $ue);
 
         return $this->json(true);
     }

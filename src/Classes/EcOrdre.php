@@ -30,7 +30,6 @@ class EcOrdre
 
     public function deplacerElementConstitutif(ElementConstitutif $elementConstitutif, string $sens, Ue $ue): bool
     {
-        //todo: params pour savoir si subordre ou pas le déplacement..
         //modifie l'ordre de la ressource
         $ordreInitial = $elementConstitutif->getOrdre();
 
@@ -48,34 +47,61 @@ class EcOrdre
         return $this->inverseEc($ordreInitial, $ordreDestination, $elementConstitutif, $ue);
     }
 
+    public function deplacerSubElementConstitutif(ElementConstitutif $elementConstitutif, string $sens, Ue $ue): bool
+    {
+        //modifie l'ordre de la ressource
+        $ordreInitial = $elementConstitutif->getSubOrdre();
+
+        if ($ordreInitial === 1 && $sens === 'up') {
+            return false;
+        }
+
+        if ($sens === 'up') {
+            $ordreDestination = $ordreInitial - 1;
+        } else {
+            $ordreDestination = $ordreInitial + 1;
+        }
+
+        //récupère toutes les ressources à déplacer
+        return $this->inverseSubOrdreEc($ordreInitial, $ordreDestination, $elementConstitutif, $ue);
+    }
+
     private function inverseEc(
         ?int $ordreInitial,
         ?int $ordreDestination,
         ElementConstitutif $elementConstitutif,
         Ue $ue
     ): bool {
-        if ($elementConstitutif->getSubOrdre() === null) {
-            $ec = $this->elementConstitutifRepository->findByUeOrdre($ordreDestination, $ue);
-            $elementConstitutif->setOrdre($ordreDestination);
-            $elementConstitutif->genereCode();
+        $ecs = $this->elementConstitutifRepository->findByUeOrdre($ordreDestination, $ue);
+        $elementConstitutif->setOrdre($ordreDestination);
+        $elementConstitutif->genereCode();
 
-            if ($ec !== null) {
-                $ec->setOrdre($ordreInitial);
-                $ec->genereCode();
-            }
-        } else {
-            // on inverse les sous-ordres
-            $elementConstitutif->setSubOrdre($ordreDestination);
-            $elementConstitutif->genereCode();
-            $ec = $this->elementConstitutifRepository->findByUeSubOrdre(
-                $ordreDestination,
-                $ue,
-                $elementConstitutif->getOrdre()
-            );
-            if ($ec !== null) {
-                $ec->setSubOrdre($ordreInitial);
-                $ec->genereCode();
-            }
+        foreach ($ecs as $ec) {
+            $ec->setOrdre($ordreInitial);
+            $ec->genereCode();
+        }
+
+        $this->entityManager->flush();
+
+        return true;
+    }
+
+    private function inverseSubOrdreEc(
+        ?int $ordreInitial,
+        ?int $ordreDestination,
+        ElementConstitutif $elementConstitutif,
+        Ue $ue
+    ): bool {
+        $elementConstitutif->setSubOrdre($ordreDestination);
+        $elementConstitutif->genereCode();
+        $ec = $this->elementConstitutifRepository->findByUeSubOrdre(
+            $ordreDestination,
+            $ue,
+            $elementConstitutif->getOrdre()
+        );
+        if ($ec !== null) {
+            $ec->setSubOrdre($ordreInitial);
+            $ec->genereCode();
         }
 
         $this->entityManager->flush();
