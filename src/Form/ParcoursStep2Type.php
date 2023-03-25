@@ -25,6 +25,7 @@ class ParcoursStep2Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var \App\Entity\TypeDiplome $typeDiplome */
         $typeDiplome = $options['typeDiplome'];
 
         $builder
@@ -37,62 +38,84 @@ class ParcoursStep2Type extends AbstractType
                     modaliteEnseignementEnum::NON_DEFINI => 'Choisissez une modalité d\'enseignement',
                     modaliteEnseignementEnum::PRESENTIELLE => 'En présentiel',
                     modaliteEnseignementEnum::DISTANCIELLE => 'En distanciel',
-                    modaliteEnseignementEnum::HYBRIDE  => 'Hybride',
+                    modaliteEnseignementEnum::HYBRIDE => 'Hybride',
                 },
                 'expanded' => false,
-            ])
-            ->add('hasStage', YesNoType::class, [
+            ]);
+
+        if ($typeDiplome->isHasStage() === true) {
+            $builder->add('hasStage', YesNoType::class, [
                 'help' => '-',
                 'attr' => ['data-action' => 'change->parcours--step2#changeStage'],
             ])
-            //si oui...
-            ->add('stageText', TextareaAutoSaveType::class, [
-                'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step2#saveStageText'],
-                'help' => '-',
-            ])
-            ->add('nbHeuresStages', NumberType::class, [
-                'html5' => true,
-                'scale' => 1,
-                'input_suffix_text' => 'heure(s)',
-                'attr' => [
-                    'data-action' => 'change->parcours--step2#changeNbHeuresStages',
-                ],
-                'row_attr' => [
-                    'class' => 'col-sm-3',
-                ],
-            ])
-            //alors zone de saisi
-            //si L ou M, nombre d'heures
-            ->add('hasProjet', YesNoType::class, [
+                ->add('stageText', TextareaAutoSaveType::class, [
+                    'attr' => [
+                        'rows' => 15,
+                        'maxlength' => 3000,
+                        'data-action' => 'change->parcours--step2#saveStageText'
+                    ],
+                    'help' => '-',
+                ])
+                ->add('nbHeuresStages', NumberType::class, [
+                    'html5' => true,
+                    'scale' => 1,
+                    'input_suffix_text' => 'heure(s)',
+                    'attr' => [
+                        'data-action' => 'change->parcours--step2#changeNbHeuresStages',
+                    ],
+                    'row_attr' => [
+                        'class' => 'col-sm-3',
+                    ],
+                ]);
+        }
+
+        //alors zone de saisi
+        //si L ou M, nombre d'heures
+        if ($typeDiplome->isHasStage() === true) {
+            $builder->
+            add('hasProjet', YesNoType::class, [
                 'attr' => ['data-action' => 'change->parcours--step2#changeProjet'],
             ])
-            ->add('projetText', TextareaAutoSaveType::class, [
-                'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step2#saveProjetText'],
-            ])
-            ->add('nbHeuresProjet', NumberType::class, [
-                'html5' => true,
-                'scale' => 1,
-                'input_suffix_text' => 'heure(s)',
-                'attr' => ['data-action' => 'change->parcours--step2#changeNbHeuresProjet'],
-                'row_attr' => [
-                    'class' => 'col-sm-3',
-                ],
-            ])
+                ->add('projetText', TextareaAutoSaveType::class, [
+                    'attr' => [
+                        'rows' => 15,
+                        'maxlength' => 3000,
+                        'data-action' => 'change->parcours--step2#saveProjetText'
+                    ],
+                ])
+                ->add('nbHeuresProjet', NumberType::class, [
+                    'html5' => true,
+                    'scale' => 1,
+                    'input_suffix_text' => 'heure(s)',
+                    'attr' => ['data-action' => 'change->parcours--step2#changeNbHeuresProjet'],
+                    'row_attr' => [
+                        'class' => 'col-sm-3',
+                    ],
+                ]);
+        }
 
-            ->add('hasMemoire', YesNoType::class, [
+        if ($typeDiplome->isHasStage() === true) {
+            $builder->add('hasMemoire', YesNoType::class, [
                 'attr' => ['data-action' => 'change->parcours--step2#changeMemoire'],
             ])
-            ->add('memoireText', TextareaAutoSaveType::class, [
-                'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step2#saveMemoireText'],
-            ])
+                ->add('memoireText', TextareaAutoSaveType::class, [
+                    'attr' => [
+                        'rows' => 15,
+                        'maxlength' => 3000,
+                        'data-action' => 'change->parcours--step2#saveMemoireText'
+                    ],
+                ]);
+        }
+
+        $builder
             ->add('hasSituationPro', YesNoType::class, [
                 'attr' => ['data-action' => 'change->parcours--step2#changeSituationPro'],
                 'disabled' => !$typeDiplome?->isHasSituationPro(),
                 'data' => (bool)$typeDiplome?->isHasSituationPro(),
             ]);
-
         if ($typeDiplome !== null && $typeDiplome->isHasSituationPro()) {
-            $builder->add('nbHeuresSituationPro', NumberType::class, [
+            $builder
+                ->add('nbHeuresSituationPro', NumberType::class, [
                 'html5' => true,
                 'scale' => 1,
                 'input_suffix_text' => 'heure(s)',
@@ -101,9 +124,13 @@ class ParcoursStep2Type extends AbstractType
                     'class' => 'col-sm-3',
                 ],
             ])
-            ->add('situationProText', TextareaAutoSaveType::class, [
-                'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step2#saveSituationProText'],
-            ]);
+                ->add('situationProText', TextareaAutoSaveType::class, [
+                    'attr' => [
+                        'rows' => 15,
+                        'maxlength' => 3000,
+                        'data-action' => 'change->parcours--step2#saveSituationProText'
+                    ],
+                ]);
         }
     }
 
