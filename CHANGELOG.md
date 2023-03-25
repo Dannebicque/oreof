@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.19.8](https://github.com/Dannebicque/oreof/compare/v0.19.7...v0.19.8) (2023-03-25)
+
+
+### Features
+
+* Ajout d'utilisateur depuis les pages ([5eb6634](https://github.com/Dannebicque/oreof/commit/5eb66346960f3541b5b0b231e684b7dc24eb4ce3))
+* ordre des UE et sous UE ([9ee861a](https://github.com/Dannebicque/oreof/commit/9ee861a8ea7034a5d1169095e253f96d3832c9c1))
+* ordre des UE et sous UE ([72a2105](https://github.com/Dannebicque/oreof/commit/72a2105fe173562f3f692dd91d530b7a2d72dee0))
+
+
+### Bug Fixes
+
+* description parcours selon type de diplôme ([ee39298](https://github.com/Dannebicque/oreof/commit/ee39298bfee49f6b12ae9f1b7995a6e6e7aa9785))
+* dispatch event depuis l'ajout d'un EC ([df45a2f](https://github.com/Dannebicque/oreof/commit/df45a2f85b91896acdda9afae9cefb615194bb88))
+
 ### [0.19.7](https://github.com/Dannebicque/oreof/compare/v0.19.6...v0.19.7) (2023-03-25)
 
 
