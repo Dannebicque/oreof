@@ -49,7 +49,6 @@ export default class extends Controller {
     cell2.innerHTML = matiereLibelle
     cell3.innerHTML = '<button class="text-danger"><i class="fas fa-trash"></i></button>'
     this.code++
-    console.log(this.matieres)
   }
 
   addNewFiche(event) {
@@ -66,7 +65,6 @@ export default class extends Controller {
     cell2.innerHTML = `${matiereLibelle} <i>(a créer)</i>`
     cell3.innerHTML = '<button class="text-danger"><i class="fas fa-trash"></i></button>'
     this.code++
-    console.log(this.matieres)
   }
 
   valider(event) {

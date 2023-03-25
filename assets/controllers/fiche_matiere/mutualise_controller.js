@@ -19,9 +19,8 @@ export default class extends Controller {
   }
 
   async ajouter() {
-    console.log('ajouter')
     const ue = document.getElementById('ue').value
-    const response = await fetch(this.urlValue, {
+    await fetch(this.urlValue, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

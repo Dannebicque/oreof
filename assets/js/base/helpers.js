@@ -34,7 +34,6 @@ export default class Helpers {
   // Checks the given array and returns a value plus one from the greatest prop value
   static NextId(data, prop) {
     if (!data) {
-      console.error('NextId data is null');
       return;
     }
     const max = data.reduce(function (prev, current) {

@@ -14,10 +14,6 @@ export default class extends Controller {
     url: String,
   }
 
-  connect() {
-    console.log('Hello, Stimulus!', this.element)
-  }
-
   async change(event) {
     const body = {
       method: 'POST',

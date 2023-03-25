@@ -16,7 +16,6 @@ export const updateEtatOnglet = async (url, onglet, prefix) => {
   }
 
   await fetch(url, body).then((response) => response.json()).then((data) => {
-    console.log(data)
     document.getElementById(`${prefix}_${onglet}`).classList.remove('state-complete')
     document.getElementById(`${prefix}_${onglet}`).classList.remove('state-en-cours')
     document.getElementById(`${prefix}_${onglet}`).classList.remove('state-vide')

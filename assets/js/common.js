@@ -43,39 +43,33 @@ class Common {
 
   // Bootstrap tooltips
   _initTooltips() {
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl, {
-        delay: {show: 1000, hide: 0},
-      });
-    });
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    const tooltipList = tooltipTriggerList.map((tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl, {
+      delay: { show: 1000, hide: 0 },
+    }));
 
-    var tooltipTriggerListNoDelay = [].slice.call(document.querySelectorAll('.no-delay[data-bs-toggle="tooltip"][data-bs-delay="0"]'));
-    var tooltipListNoDelay = tooltipTriggerListNoDelay.map(function (tooltipTriggerElNoDelay) {
-      return new bootstrap.Tooltip(tooltipTriggerElNoDelay, {
-        delay: {show: 0, hide: 0},
-      });
-    });
+    const tooltipTriggerListNoDelay = [].slice.call(document.querySelectorAll('.no-delay[data-bs-toggle="tooltip"][data-bs-delay="0"]'));
+    const tooltipListNoDelay = tooltipTriggerListNoDelay.map((tooltipTriggerElNoDelay) => new bootstrap.Tooltip(tooltipTriggerElNoDelay, {
+      delay: { show: 0, hide: 0 },
+    }));
   }
 
   // Bootstrap popovers
   _initPopovers() {
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-      return new bootstrap.Popover(popoverTriggerEl);
-    });
+    const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    const popoverList = popoverTriggerList.map((popoverTriggerEl) => new bootstrap.Popover(popoverTriggerEl));
   }
 
   // Clamp plugin
   _initClamp() {
     if (typeof $clamp !== 'undefined') {
       document.querySelectorAll('.clamp').forEach((el) => {
-        $clamp(el, {clamp: 'auto'});
+        $clamp(el, { clamp: 'auto' });
       });
       document.querySelectorAll('.clamp-line').forEach((el) => {
         const line = el.getAttribute('data-line');
         if (line) {
-          $clamp(el, {clamp: parseInt(line)});
+          $clamp(el, { clamp: parseInt(line) });
         }
       });
     }
@@ -93,26 +87,25 @@ class Common {
     if (typeof OverlayScrollbars !== 'undefined') {
       const tempScrolls = [];
       OverlayScrollbars(document.querySelectorAll('.scroll'), {
-        scrollbars: {autoHide: 'leave', autoHideDelay: 600},
-        overflowBehavior: {x: 'hidden', y: 'scroll'},
+        scrollbars: { autoHide: 'leave', autoHideDelay: 600 },
+        overflowBehavior: { x: 'hidden', y: 'scroll' },
       });
       OverlayScrollbars(document.querySelectorAll('.scroll-horizontal'), {
-        scrollbars: {autoHide: 'leave', autoHideDelay: 600},
-        overflowBehavior: {x: 'scroll', y: 'hidden'},
+        scrollbars: { autoHide: 'leave', autoHideDelay: 600 },
+        overflowBehavior: { x: 'scroll', y: 'hidden' },
       });
       OverlayScrollbars(document.querySelectorAll('.data-table-rows .table-container'), {
-        overflowBehavior: {x: 'scroll', y: 'hidden'},
+        overflowBehavior: { x: 'scroll', y: 'hidden' },
       });
-      OverlayScrollbars(document.querySelectorAll('.scroll-track-visible'), {overflowBehavior: {x: 'hidden', y: 'scroll'}});
+      OverlayScrollbars(document.querySelectorAll('.scroll-track-visible'), { overflowBehavior: { x: 'hidden', y: 'scroll' } });
       OverlayScrollbars(document.querySelectorAll('.scroll-horizontal-track-visible'), {
-        overflowBehavior: {x: 'scroll', y: 'hidden'},
+        overflowBehavior: { x: 'scroll', y: 'hidden' },
       });
       document.querySelectorAll('.scroll-by-count').forEach((el) => {
         if (typeof ScrollbarByCount === 'undefined') {
-          console.log('ScrollbarByCount is undefined!');
           return;
         }
-        let scrollByCount = new ScrollbarByCount(el);
+        const scrollByCount = new ScrollbarByCount(el);
       });
     }
   }
@@ -124,14 +117,14 @@ class Common {
     document.querySelectorAll('.dropdown-as-select .dropdown-menu a').forEach((element) => {
       element.addEventListener('click', (event) => {
         event.preventDefault();
-        const currentTarget = event.currentTarget;
+        const { currentTarget } = event;
         const selText = currentTarget.textContent;
         const parent = currentTarget.closest('.dropdown-as-select');
         let childSelector = '';
         if (parent.getAttribute('data-childSelector')) {
-          childSelector = ' ' + parent.getAttribute('data-childSelector');
+          childSelector = ` ${parent.getAttribute('data-childSelector')}`;
         }
-        parent.querySelector('[data-bs-toggle="dropdown"]' + childSelector).innerHTML = selText;
+        parent.querySelector(`[data-bs-toggle="dropdown"]${childSelector}`).innerHTML = selText;
         parent.querySelectorAll('a').forEach((anchor) => {
           anchor.classList.remove('active');
         });
@@ -143,9 +136,9 @@ class Common {
     document.querySelectorAll('.dropdown-as-select').forEach((element) => {
       let childSelector = '';
       if (element.getAttribute('data-childSelector')) {
-        childSelector = ' ' + element.getAttribute('data-childSelector');
+        childSelector = ` ${element.getAttribute('data-childSelector')}`;
       }
-      element.querySelector('[data-bs-toggle="dropdown"]' + childSelector).innerHTML = element.querySelector('.dropdown-menu a.active').textContent;
+      element.querySelector(`[data-bs-toggle="dropdown"]${childSelector}`).innerHTML = element.querySelector('.dropdown-menu a.active').textContent;
     });
   }
 
@@ -156,8 +149,8 @@ class Common {
       '<div id="paddingModal" class="modal"> <div class="modal-dialog d-none"><div class="modal-content"></div></div> </div>',
     );
     const myModalEl = document.getElementById('paddingModal');
-    const paddingModal = new bootstrap.Modal(myModalEl, {backdrop: false});
-    myModalEl.addEventListener('shown.bs.modal', function (event) {
+    const paddingModal = new bootstrap.Modal(myModalEl, { backdrop: false });
+    myModalEl.addEventListener('shown.bs.modal', (event) => {
       const rightPadding = document.body.style.paddingRight;
       document.body.setAttribute('data-bs-padding', rightPadding);
       paddingModal.hide();
@@ -166,7 +159,7 @@ class Common {
 
     document.querySelectorAll('.modal').forEach((el) => {
       // Adding the stored padding to horizontal nav to prevent unnecessary movement of content when any modal is opened
-      el.addEventListener('show.bs.modal', function (event) {
+      el.addEventListener('show.bs.modal', (event) => {
         const rightPadding = document.body.getAttribute('data-bs-padding');
         if (document.querySelector('html[data-placement="horizontal"] .nav-container .nav-content')) {
           document.querySelector('html[data-placement="horizontal"] .nav-container .nav-content').style.paddingRight = rightPadding;
@@ -174,7 +167,7 @@ class Common {
       });
 
       // Removing padding when any modal is closed
-      el.addEventListener('hidden.bs.modal', function (event) {
+      el.addEventListener('hidden.bs.modal', (event) => {
         if (document.querySelector('.nav-container .nav-content')) {
           document.querySelector('.nav-container .nav-content').style.paddingRight = 0;
         }
@@ -183,7 +176,7 @@ class Common {
 
     document.querySelectorAll('.offcanvas').forEach((el) => {
       // Adding the stored padding to horizontal nav to prevent unnecessary movement of content when any offcanvas is opened
-      el.addEventListener('show.bs.offcanvas', function (event) {
+      el.addEventListener('show.bs.offcanvas', (event) => {
         const rightPadding = document.body.getAttribute('data-bs-padding');
         if (document.querySelector('html[data-placement="horizontal"] .nav-container .nav-content')) {
           document.querySelector('html[data-placement="horizontal"] .nav-container .nav-content').style.paddingRight = rightPadding;
@@ -191,7 +184,7 @@ class Common {
       });
 
       // Removing padding when any offcanvas is closed
-      el.addEventListener('hidden.bs.offcanvas', function (event) {
+      el.addEventListener('hidden.bs.offcanvas', (event) => {
         if (document.querySelector('.nav-container .nav-content')) {
           document.querySelector('.nav-container .nav-content').style.paddingRight = 0;
         }
@@ -221,16 +214,16 @@ class Common {
     if (jQuery.notify) {
       jQuery.notifyDefaults({
         template:
-          '<div data-notify="container" class="col-10 col-sm-6 col-xl-3 alert  alert-{0} " role="alert">' +
-          '<button type="button" aria-hidden="true" class="btn-close" data-notify="dismiss"></button>' +
-          '<span data-notify="icon"></span> ' +
-          '<span data-notify="title">{1}</span> ' +
-          '<span data-notify="message">{2}</span>' +
-          '<div class="progress" data-notify="progressbar">' +
-          '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-          '</div>' +
-          '<a href="{3}" target="{4}" data-notify="url"></a>' +
-          '</div>',
+          '<div data-notify="container" class="col-10 col-sm-6 col-xl-3 alert  alert-{0} " role="alert">'
+          + '<button type="button" aria-hidden="true" class="btn-close" data-notify="dismiss"></button>'
+          + '<span data-notify="icon"></span> '
+          + '<span data-notify="title">{1}</span> '
+          + '<span data-notify="message">{2}</span>'
+          + '<div class="progress" data-notify="progressbar">'
+          + '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>'
+          + '</div>'
+          + '<a href="{3}" target="{4}" data-notify="url"></a>'
+          + '</div>',
       });
     }
   }
@@ -248,7 +241,7 @@ class Common {
       jQuery.validator.setDefaults({
         ignore: [],
         errorElement: 'div',
-        errorPlacement: function (error, element) {
+        errorPlacement(error, element) {
           // Adding error in the parent if the element is checkbox or radio
           if (element.attr('class').indexOf('form-check-input') != -1) {
             error.insertAfter(element.parent());
@@ -259,11 +252,11 @@ class Common {
           if (element.parents('.tooltip-label-end').length > 0) {
             if (element.parents('.form-group').find('.form-label').length > 0) {
               // Standard form element with a form-label
-              let width = Math.round(element.parents('.form-group').find('.form-label').width()) + 10;
+              const width = Math.round(element.parents('.form-group').find('.form-label').width()) + 10;
               jQuery(error).css('left', width);
             } else {
               // Form element withou a form-label such as single checkbox
-              let width = Math.round(element.parents('.form-group').find('label').width()) + 40;
+              const width = Math.round(element.parents('.form-group').find('label').width()) + 40;
               jQuery(error).css('left', width);
             }
           }
