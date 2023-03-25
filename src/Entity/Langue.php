@@ -37,7 +37,7 @@ class Langue
     public function __construct()
     {
         $this->ficheMatieres = new ArrayCollection();
-        $this->languesSupportsEcs = new ArrayCollection();
+        $this->languesSupportsFicheMatieres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -87,9 +87,9 @@ class Langue
     /**
      * @return Collection<int, FicheMatiere>
      */
-    public function getLanguesSupportsEcs(): Collection
+    public function getLanguesSupportsFicheMatieres(): Collection
     {
-        return $this->languesSupportsEcs;
+        return $this->languesSupportsFicheMatieres;
     }
 
     public function addLanguesSupportsFicheMatiere(FicheMatiere $languesSupportsFicheMatiere): self
@@ -102,7 +102,7 @@ class Langue
         return $this;
     }
 
-    public function removeLanguesSupportsEc(FicheMatiere $languesSupportsEc): self
+    public function removeLanguesSupportsFicheMatiere(FicheMatiere $languesSupportsEc): self
     {
         if ($this->languesSupportsFicheMatieres->removeElement($languesSupportsEc)) {
             $languesSupportsEc->removeLangueSupport($this);
