@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.19.7](https://github.com/Dannebicque/oreof/compare/v0.19.6...v0.19.7) (2023-03-25)
+
+
+### Bug Fixes
+
+* Fiche Matiere, les 3 étapes et les vérifications ([b28dd57](https://github.com/Dannebicque/oreof/commit/b28dd57fd31940f10c8cb2ae387dcb5d39bb84ec))
+
 ### [0.19.6](https://github.com/Dannebicque/oreof/compare/v0.19.5...v0.19.6) (2023-03-25)
 
 
