@@ -16,6 +16,7 @@ use App\Entity\Parcours;
 use App\Entity\Ue;
 use App\Form\EcStep4Type;
 use App\Form\FicheMatiereType;
+use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
 use App\Repository\TypeEpreuveRepository;
@@ -33,14 +34,6 @@ class FicheMatiereController extends AbstractController
 {
     public function __construct(private readonly WorkflowInterface $ecWorkflow)
     {
-    }
-
-    #[Route('/', name: 'app_fiche_matiere_index', methods: ['GET'])]
-    public function index(FicheMatiereRepository $ficheMatiereRepository): Response
-    {
-        return $this->render('fiche_matiere/index.html.twig', [
-            'fiche_matieres' => $ficheMatiereRepository->findAll(),
-        ]);
     }
 
     #[Route('/new/{ue}', name: 'app_fiche_matiere_new', methods: ['GET', 'POST'])]
@@ -146,6 +139,40 @@ class FicheMatiereController extends AbstractController
             'fiche_matiere' => $ficheMatiere,
             'ficheMatiereState' => $ficheMatiereState,
         ]);
+    }
+
+    #[Route('/{id}/dupliquer', name: 'app_fiche_matiere_dupliquer', methods: ['GET'])]
+    public function dupliquer(
+        FicheMatiere $ficheMatiere,
+        ElementConstitutifRepository $elementConstitutifRepository,
+        EntityManagerInterface $entityManager,
+    ): Response {
+        $newFicheMatiere = clone $ficheMatiere;
+        $newFicheMatiere->setLibelle($ficheMatiere->getLibelle() . '-copie');
+        $entityManager->persist($newFicheMatiere);
+        $entityManager->flush();
+
+        foreach ($ficheMatiere->getElementConstitutifs() as $elementConstitutif) {
+            $newElementConstitutif = clone $elementConstitutif;
+            $newElementConstitutif->setFicheMatiere($newFicheMatiere);
+
+            if ($elementConstitutif->getSubOrdre() === 0) {
+                $ordreMax = $elementConstitutifRepository->findLastEcSubOrdre(
+                    $elementConstitutif->getUe(),
+                    $elementConstitutif->getOrdre()
+                );
+                $newElementConstitutif->setOrdre($elementConstitutif->getOrdre());
+                $newElementConstitutif->setSubOrdre($ordreMax + 1);
+            } else {
+                $ordreMax = $elementConstitutifRepository->findLastEc($elementConstitutif->getUe());
+                $newElementConstitutif->setOrdre($ordreMax + 1);
+            }
+            $newElementConstitutif->genereCode();
+            $entityManager->persist($newElementConstitutif);
+            $entityManager->flush();
+        }
+
+        return $this->json(true);
     }
 
     #[Route('/{id}/structure-ec', name: 'app_fiche_matiere_structure', methods: ['GET', 'POST'])]
@@ -259,6 +286,7 @@ class FicheMatiereController extends AbstractController
         string $sens
     ): Response {
         $ecOrdre->deplacerFicheMatiere($ficheMatiere, $sens, $ue);
+
         return $this->json(true);
     }
 

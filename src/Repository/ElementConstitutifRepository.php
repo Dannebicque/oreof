@@ -155,4 +155,16 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findLastEcSubOrdre(?Ue $ue, ?int $ordre): int
+    {
+        return $this->createQueryBuilder('ec')
+            ->select('MAX(ec.subOrdre)')
+            ->andWhere('ec.ordre = :ordre')
+            ->andWhere('ec.ue = :ue')
+            ->setParameter('ue', $ue)
+            ->setParameter('ordre', $ordre)
+            ->getQuery()
+            ->getSingleScalarResult() ?? 0;
+    }
 }

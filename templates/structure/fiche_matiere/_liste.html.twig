@@ -4,16 +4,11 @@
         <tr>
             {% if mode == 'liste' %}
                 <th>Mention/spécialité/Parcours</th>
-                <th>UE</th>
             {% endif %}
             <th>Libellé</th>
             <th>Référent</th>
             <th>Remplissage</th>
             <th>Etat</th>
-            {% if deplacer == true %}
-                <th></th>
-            {% endif %}
-            <th></th>
             <th></th>
 
         </tr>
@@ -21,6 +16,7 @@
         <tbody>
         {% for ficheMatiere in ficheMatieres %}
         <tr>
+            <td></td>
             <td>{{ ficheMatiere.libelle }}</td>
             <td>{{ ficheMatiere.responsableFicheMatiere != null ? ficheMatiere.responsableFicheMatiere.display : 'Non défini' }}</td>
             <td>{{ ficheMatiere.remplissage|remplissage }}</td>
@@ -54,12 +50,18 @@
                         class="btn btn-sm text-warning"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
-                        target="_blank"
                         title="Modifier une fiche EC/matière"
                 >
                     <i class="{{ iconEdit }}"></i>
                     <span> modifier</span>
                 </a>
+                <button {{ stimulus_action('crud', 'duplicate', 'click', {
+                    url:path('app_fiche_matiere_dupliquer',{'id': ficheMatiere.id})
+                }) }} class="btn btn-sm text-primary">
+                    <i class="{{ iconDuplicate }}"></i>
+                    <span> dupliquer</span>
+                </button>
+
 {#                {% endif %}#}
                 {#                    {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and workflow_can(ec, #}
                 {#                        'valider_ec') %} #}
