@@ -5,8 +5,8 @@ ec_step1.labels.preciserMutualisation: 'Précisez les mutualisations'
 Sigle: Sigle
 ec_step1.labels.previserMutualisation: 'Précisez les mutualisations'
 ue.labels.ordre: "Numéro de l'UE"
-ue.labels.typeUe: "Type d'UE"
-ue.labels.typeUeTexte: "Type d'UE si non présent dans la liste"
+ue.labels.typeUe: "Type de l'UE"
+ue.labels.typeUeTexte: "Type de l'UE si non présent dans la liste"
 ue.labels.ueObligatoire: "Nature de l'UE"
 ue.labels.ueObligatoireTexte: "Nature de l'UE si non présent dans la liste"
 parcours_step5.labels.composanteInscription.label: "Régime(s) d'inscription"
@@ -240,3 +240,34 @@ Année: 'Année de collecte'
 'Date de la CFVU': 'Date prévue de passage des projets de DPE en CFVU'
 'Date de publication': 'Date de publication des DPE'
 'Code ISO': 'Code ISO'
+type_diplome.labels.nbEcParUe: "Nombre maximum d'EC par UE"
+ue.labels.natureUeEc: "Nature de l'UE"
+ue.labels.natureUeEcTexte: "Nature de l'UE si non présente dans la liste"
+parcours_step6.labels.poursuitesEtudes: "Poursuites d'études envisageables"
+parcours_step6.labels.debouches: Débouchés
+parcours_step6.labels.codeRome: 'Code(s) ROME'
+element_constitutif.labels.natureUeEc: "Nature de l'EC"
+element_constitutif.labels.ficheMatiere: element_constitutif.labels.ficheMatiere
+fiche_matiere.labels.libelle: "Libellé de l'enseignement"
+fiche_matiere.labels.responsableFicheMatiere: "Référent de l'enseignement"
+SES: SES
+fiche_matiere_step1.labels.libelle: "Libellé de l'enseignement"
+fiche_matiere_step1.labels.libelleAnglais: "Libellé de l'enseignement en anglais"
+fiche_matiere_step1.labels.enseignementMutualise.label: "L'enseignement est-il mutualisé ?"
+fiche_matiere_step1.labels.isCmPresentielMutualise.label: 'Les CM présentiels sont-ils mutualisés ?'
+fiche_matiere_step1.labels.isTdPresentielMutualise.label: 'Les CM présentiels sont-ils mutualisés ?'
+fiche_matiere_step1.labels.isTpPresentielMutualise.label: 'Les TP présentiels sont-ils mutualisés ?'
+fiche_matiere_step1.labels.isCmDistancielMutualise.label: 'Les CM distanciels sont-ils mutualisés ?'
+fiche_matiere_step1.labels.isTdDistancielMutualise.label: 'Les TD distanciels sont-ils mutualisés ?'
+fiche_matiere_step1.labels.isTpDistancielMutualise.label: 'Les TP distanciels sont-ils mutualisés ?'
+fiche_matiere_step1.labels.previserMutualisation: fiche_matiere_step1.labels.previserMutualisation
+'Choisissez une nature...': 'Choisissez une nature...'
+ec_manage.labels.fiche_matiere_label: ec_manage.labels.fiche_matiere_label
+ec_manage.labels.fiche_matiere_libelle_label: ec_manage.labels.fiche_matiere_libelle_label
+nature_ue_ec.labels.libre.label: 'Pour les éléments à choix, précisez si celui-ci est libre :'
+ec_manage.labels.fiche_matiere_libelle_libre.label: 'Décrivez les choix possibles pour cet EC'
+ec_manage.labels.fiche_matiere_multiple.label: 'Choisissez la fiche EC/matière à raccrocher à cet EC '
+ec_manage.labels.fiche_matiere_libelle_multiple.label: 'Si non existant, précisez le libellé de la fiche EC/matière à raccrocher à cet EC'
+ec_manage.labels.fiche_matiere_unique.label: 'Choisissez la fiche EC/matière à raccrocher à cet EC '
+ec_manage.labels.fiche_matiere_libelle_unique.label: 'Si non existant, précisez le libellé de la fiche EC/matière  à raccrocher à cet EC '
+parcours_step5.labels.regimeInscription.label: "Régime(s) d'inscription"

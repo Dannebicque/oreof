@@ -14,7 +14,7 @@ ec_step3.labels.competence: "Choisissez d'abord le/les bloc(s) de compétences p
 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation': 'Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation'
 'Si la mention n''existe pas, veuillez la créer dans la section "Autre mention"': '"'
 'Si la mention existe, veuillez la sélectionner dans la liste déroulante': '"'
-formation_step3.helps.semestreDebut.help: 'Indiquez le semestre de début de la formation'
+formation_step3.helps.semestreDebut.help: 'Indiquez le semestre de début de la formation.'
 parcours_step6.helps.modalitesAlternance: parcours_step6.helps.modalitesAlternance
 ec_step1.helps.preciserMutualisation.help: 'Indiquez toutes les formations avec lesquelles cet enseignement est mutualisé'
 ue.helps.ordre: '"'
@@ -54,8 +54,8 @@ parcours_step2.helps.memoireText: 'Décrivez en quoi consiste le TER/mémoire.'
 bloc_competence.helps.libelle: 'Indiquez le libellé du bloc de compétences.'
 competence.helps.libelle: "Le libellé de la compétence doit commencer par un verbe d'action, et ne doit pas dépasser 255 caractères. Doit être cohérente avec la fiche RNCP du diplôme."
 parcours_step5.helps.prerequis: 'Indiquez si des prérequis pédagogiques sont conseillés pour réussir dans cette formation.'
-parcours_step7.helps.poursuitesEtudes: 'Indiquez en 3000 caractères maximum quelles sont les poursuites d’études envisageables.'
-parcours_step7.helps.debouches: 'Indiquez les principaux débouchés professionnels accessibles à l’issue de cette formation.'
+parcours_step7.helps.poursuitesEtudes: '"'
+parcours_step7.helps.debouches: '"'
 parcours_step8.helps.coordSecretariat: 'Indiquez les coordonnées postales et téléphoniques du secrétariat ainsi que son adresse mail générique.'
 ec_step1.helps.responsableEc: '"'
 ec_step1.helps.libelle: "N'est modifiable que par le responsable de la formation."
@@ -98,12 +98,12 @@ register.helps.centreDemande: "Précisez le centre souhaité. Le responsable du 
 parcours_step1.helps.localisation: 'Choisissez le lieu où le parcours est proposé. Si le parcours est dispensé sur plusieurs sites, créer autant de parcours que de lieux de formation.'
 parcours_step2.helps.modalitesEnseignement: '"'
 parcours_step5.helps.composanteInscription: '"'
-parcours_step5.helps.regimeInscription: parcours_step5.helps.regimeInscription
-parcours_step7.helps.codeRome.help: 'Ajoutez les codes ROME pour préciser les métiers accessibles aux diplômés (cf. https://www.pole-emploi.fr/employeur/vos-recrutements/le-rome-et-les-fiches-metiers.html).'
+parcours_step5.helps.regimeInscription: '"'
+parcours_step7.helps.codeRome.help: '"'
 ec_step4.helps.modaliteEnseignement: ec_step4.helps.modaliteEnseignement
 ec_step2.helps.typeEnseignement: "Précisez si l'enseignement est obligatoire / facultatif ou s'il fait partie d'une liste d'éléments à choisir."
-langue.helps.libelle: 'Indiquez le libellé exact de la la langue.'
-langue.helps.codeIso: "2 caractères, selon la norme ISO 639-1 (cf. https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1).\n"
+langue.helps.libelle: 'Indiquez le libellé exact de la langue à ajouter.'
+langue.helps.codeIso: "2 caractères, selon la norme ISO 639-1   (cf. https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1).\n"
 type_enseignement.helps.libelle: type_enseignement.helps.libelle
 type_ue.helps.libelle: "Indiquez le libellé exact du type d'UE."
 type_ue.helps.typeDiplome.help: '"'
@@ -141,12 +141,12 @@ type_epreuve.helps.libelle: "Indiquez le libellé exact du type d'épreuve."
 type_epreuve.helps.typeDiplome.help: '"'
 type_diplome.helps.libelle: 'Indiquez le libellé exact du type de diplôme.'
 type_diplome.helps.libelle_court: 'Le cas échéant, indiquez le libellé court du type de diplôme.'
-type_diplome.helps.semestreDebut: type_diplome.helps.semestreDebut
-type_diplome.helps.semestreFin: type_diplome.helps.semestreFin
-type_diplome.helps.nbUeMin: type_diplome.helps.nbUeMin
-type_diplome.helps.nbUeMax: type_diplome.helps.nbUeMax
-type_diplome.helps.nbEctsMaxUe: type_diplome.helps.nbEctsMaxUe
-type_diplome.helps.ModeleMcc: type_diplome.helps.ModeleMcc
+type_diplome.helps.semestreDebut: "Le semestre de début d'un diplôme est toujours 1 sauf dans le cas des LP."
+type_diplome.helps.semestreFin: '"'
+type_diplome.helps.nbUeMin: 'Précisez la contrainte. Si pas de contrainte, mettre "0".'
+type_diplome.helps.nbUeMax: 'Précisez la contrainte. Si pas de contrainte, mettre "0".'
+type_diplome.helps.nbEctsMaxUe: 'Précisez la contrainte. Si pas de contrainte, mettre "0".'
+type_diplome.helps.ModeleMcc: 'Indiquez si le diplôme est cadré par un modèle prédéfini de MCC (ex. BUT).'
 nature_ue_ec.helps.libelle: "Indiquez le libellé exact de la nature d'UE/EC."
 nature_ue_ec.helps.choix.help: '"'
 type_ec.helps.libelle: "Indiquez le libellé exact du type d'EC."
@@ -173,3 +173,31 @@ annee_universitaire.helps.dateClotureDpe: '"'
 annee_universitaire.helps.dateTransmissionSes: "Correspond à la date de fin de la période d'enrichissement des projets de DPE."
 annee_universitaire.helps.dateCfvu: '"'
 annee_universitaire.helps.datePublication: '"'
+type_diplome.helps.nbEcParUe: 'Précisez la contrainte. Si pas de contrainte, mettre "0".'
+ue.helps.natureUeEc: "Indiquez le libellé exact de la nature de l'UE"
+ue.helps.natureUeEcTexte: "Précisez la nature de l'UE si elle n'est pas présente dans la liste déroulante du champ précédent."
+parcours_step6.helps.poursuitesEtudes: 'Indiquez en 3000 caractères maximum quelles sont les poursuites d’études envisageables.'
+parcours_step6.helps.debouches: 'Indiquez les principaux débouchés professionnels accessibles à l’issue de cette formation.'
+parcours_step6.helps.codeRome.help: 'Ajoutez les codes ROME pour préciser les métiers accessibles aux diplômés     (cf. https://www.pole-emploi.fr/employeur/vos-recrutements/le-rome-et-les-fiches-metiers.html).'
+element_constitutif.helps.natureUeEc: '"'
+element_constitutif.helps.ficheMatiere: element_constitutif.helps.ficheMatiere
+fiche_matiere.helps.libelle: "Indiquez le libellé exact de l'enseignement"
+fiche_matiere.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."
+fiche_matiere_step1.helps.libelle: "Indiquez le libellé exact de l'enseignement."
+fiche_matiere_step1.helps.libelleAnglais: "Précisez la version anglaise du libellé de l'enseignement."
+fiche_matiere_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez "oui".'
+fiche_matiere_step1.helps.isCmPresentielMutualise.help: '"'
+fiche_matiere_step1.helps.isTdPresentielMutualise.help: '"'
+fiche_matiere_step1.helps.isTpPresentielMutualise.help: '"'
+fiche_matiere_step1.helps.isCmDistancielMutualise.help: '"'
+fiche_matiere_step1.helps.isTdDistancielMutualise.help: '"'
+fiche_matiere_step1.helps.isTpDistancielMutualise.help: '"'
+fiche_matiere_step1.helps.preciserMutualisation.help: fiche_matiere_step1.helps.preciserMutualisation.help
+ec_manage.helps.fiche_matiere.help: ec_manage.helps.fiche_matiere.help
+ec_manage.helps.fiche_matiere_libelle.help: ec_manage.helps.fiche_matiere_libelle.help
+nature_ue_ec.helps.libre.help: nature_ue_ec.helps.libre.help
+ec_manage.helps.fiche_matiere_libelle_libre.help: "par exemple : valorisation de l'engagement étudiant OU UET OU Option libre de la composante X  OU une matière supplémentaire du S6  "
+ec_manage.helps.fiche_matiere_multiple.help: 'Si la fiche EC/matière est déjà créée.'
+ec_manage.helps.fiche_matiere_libelle_multiple.help: "Seulement si la fiche EC/matière n'est pas présente dans la liste déroulante du champ précédent."
+ec_manage.helps.fiche_matiere_unique.help: 'Si la fiche EC/matière est déjà créée.'
+ec_manage.helps.fiche_matiere_libelle_unique.help: "Seulement si la fiche EC/matière n'est pas présente dans la liste déroulante du champ précédent."
