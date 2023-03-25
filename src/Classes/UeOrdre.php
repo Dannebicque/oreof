@@ -40,28 +40,68 @@ class UeOrdre
         return $this->inverseUe($ordreInitial, $ordreDestination, $ue);
     }
 
+    public function deplacerSubUe(Ue $ue, string $sens): bool
+    {
+        //modifie l'ordre de la ressource
+        $ordreInitial = $ue->getSubOrdre();
+
+        if ($ordreInitial === 1 && $sens === 'up') {
+            return false;
+        }
+
+        if ($sens === 'up') {
+            $ordreDestination = $ordreInitial - 1;
+        } else {
+            $ordreDestination = $ordreInitial + 1;
+        }
+
+        //récupère toutes les ressources à déplacer
+        return $this->inverseSubOrdreUe($ordreInitial, $ordreDestination, $ue);
+    }
+
     private function inverseUe(
         ?int $ordreInitial,
         ?int $ordreDestination,
         Ue $ue,
     ): bool {
-        if ($ue->getSubOrdre() === null) {
-            $ues = $this->ueRepository->findBySemestreOrdre($ordreDestination, $ue->getSemestre());
-            $ue->setOrdre($ordreDestination);
-            //todo: mettre à jour les EC
+        // on inverse les sous-ordres
+        $ue->setOrdre($ordreDestination);
+        $ues = $this->ueRepository->findBySemestreOrdre($ordreDestination, $ue->getSemestre());
+        foreach ($ues as $u) {
+            $u->setOrdre($ordreInitial);
+            foreach ($u->getElementConstitutifs() as $ec) {
+                $ec->genereCode();
+            }
+        }
 
-            if ($ues !== null) {
-                $ues->setOrdre($ordreInitial);
-                //todo: mettre à jour les EC
+        //mise à jour des EC de l'UE de destination
+        foreach ($ue->getElementConstitutifs() as $ec) {
+            $ec->genereCode();
+        }
+
+        $this->entityManager->flush();
+
+        return true;
+    }
+
+    private function inverseSubOrdreUe(
+        ?int $ordreInitial,
+        ?int $ordreDestination,
+        Ue $ue,
+    ): bool {
+        // on inverse les sous-ordres
+        $ues = $this->ueRepository->findBySemestreSubOrdre($ordreDestination, $ue->getSemestre(), $ue->getOrdre());
+        $ue->setSubOrdre($ordreDestination);
+
+        if ($ues !== null) {
+            $ues->setSubOrdre($ordreInitial);
+            foreach ($ues->getElementConstitutifs() as $ec) {
+                $ec->genereCode();
             }
-        } else {
-            // on inverse les sous-ordres
-            $ue->setSubOrdre($ordreDestination);
-            $ues = $this->ueRepository->findBySemestreSubOrdre($ordreDestination, $ue->getSemestre(), $ue->getOrdre());
-            if ($ues !== null) {
-                $ues->setSubOrdre($ordreInitial);
-            }
-            //todo: mettre à jour les EC
+        }
+
+        foreach ($ue->getElementConstitutifs() as $ec) {
+            $ec->genereCode();
         }
 
         $this->entityManager->flush();
