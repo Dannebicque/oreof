@@ -204,3 +204,9 @@ ec_manage.helps.fiche_matiere_multiple.help: 'Si la fiche EC/matière est déjà
 ec_manage.helps.fiche_matiere_libelle_multiple.help: "Seulement si la fiche EC/matière n'est pas présente dans la liste déroulante du champ précédent."
 ec_manage.helps.fiche_matiere_unique.help: 'Si la fiche EC/matière est déjà créée.'
 ec_manage.helps.fiche_matiere_libelle_unique.help: "Seulement si la fiche EC/matière n'est pas présente dans la liste déroulante du champ précédent."
+fiche_matiere_step2.helps.description: fiche_matiere_step2.helps.description
+fiche_matiere_step2.helps.langueDispense.help: fiche_matiere_step2.helps.langueDispense.help
+fiche_matiere_step2.helps.langueSupport.help: fiche_matiere_step2.helps.langueSupport.help
+fiche_matiere_step3.helps.objectifs: fiche_matiere_step3.helps.objectifs
+fiche_matiere_step3.labels.competence: fiche_matiere_step3.labels.competence
+fiche_matiere_step1.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."

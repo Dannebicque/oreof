@@ -2,9 +2,6 @@
     <thead>
     <tr>
         <th>
-            Place
-        </th>
-        <th>
             Libellé
         </th>
         <th>
@@ -12,7 +9,6 @@
         </th>
     </tr>
     </thead>
-    <tbody></tbody>
 </table>
 
 <div id="modele_matiere">
@@ -25,13 +21,13 @@
                data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_multiple.help'|trans({}, 'help') }}"></i>
         </label>
         <select id="ficheMatiere" name="ficheMatiere" class="form-select">
-            <option value="">Choisir dans la liste une fiche matière</option>
+            <option value="">Choisir dans la liste une fiche EC/matière</option>
             {% for matiere in matieres %}
                 <option value="{{ matiere.id }}">{{ matiere.libelle }}</option>
             {% endfor %}
         </select>
         <button {{ stimulus_action('ec--manage', 'addFromListe') }} class="btn btn-primary">
-            Ajouter la fiche matière selectionnée
+            Ajouter la fiche EC/matière selectionnée
         </button>
     </div>
     OU
@@ -44,10 +40,11 @@
                aria-label="{{ 'ec_manage.helps.fiche_matiere_libelle_multiple.help'|trans({}, 'help') }}"
                data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_libelle_multiple.help'|trans({}, 'help') }}"></i>
         </label>
-        <input type="text" id="ficheMatiereLibelle" name="ficheMatiereLibelle" class="form-control" placeholder="Saisir une matière">
+        <input type="text" id="ficheMatiereLibelle" name="ficheMatiereLibelle" class="form-control"
+               placeholder="Saisir le libellé d'une fiche EC/matière">
 
         <button {{ stimulus_action('ec--manage', 'addNewFiche') }} class="btn btn-primary">
-            Créer et ajouter la fiche matière
+            Créer et ajouter la fiche EC/matière
         </button>
     </div>
 </div>

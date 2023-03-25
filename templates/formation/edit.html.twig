@@ -31,7 +31,8 @@
                 <a class="nav-link {% if selectedStep == 3 %}active{% endif %}" data-bs-toggle="tab" href="#"
                    role="tab" aria-selected="false"
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 3}) }}
-                >Structure et organistion de la formation {{ formationState.onglets|etatRemplissage(3, 'formation') }}</a>
+                >Structure et organisation de la formation {{ formationState.onglets|etatRemplissage(3, 'formation')
+                    }}</a>
             </li>
             {% if formation.parcours[0] is defined and formation.parcours[0].isParcoursDefaut %}
                 {% set parcours = formation.parcours[0] %}

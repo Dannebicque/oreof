@@ -9,7 +9,7 @@
 
 namespace App\Form;
 
-use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 use App\Entity\Langue;
 use App\Entity\NatureUeEc;
 use App\Form\Type\TextareaAutoSaveType;
@@ -25,11 +25,11 @@ class FicheMatiereStep2Type extends AbstractType
         $builder
 
             ->add('description', TextareaAutoSaveType::class, [
-                'attr' => ['data-action' => 'change->ec--step2#saveDescription', 'maxlength' => 3000, 'rows' => 20, 'class' => 'tinyMce'],
+                'attr' => ['data-action' => 'change->fichematiere--step2#saveDescription', 'maxlength' => 3000, 'rows' => 20],
                 'help' => '-'
             ])
             ->add('langueDispense', EntityType::class, [
-                'attr' => ['data-action' => 'change->ec--step2#changeLangue', 'data-ec--step2-type-param' => 'langueDispense' ],
+                'attr' => ['data-action' => 'change->fichematiere--step2#changeLangue', 'data-fichematiere--step2-type-param' => 'langueDispense' ],
                 'class' => Langue::class,
                 'choice_label' => 'libelle',
                 'expanded' => true,
@@ -38,21 +38,11 @@ class FicheMatiereStep2Type extends AbstractType
                 'help' => '-'
             ])
             ->add('langueSupport', EntityType::class, [
-                'attr' => ['data-action' => 'change->ec--step2#changeLangue', 'data-ec--step2-type-param' => 'langueSupport'],
+                'attr' => ['data-action' => 'change->fichematiere--step2#changeLangue', 'data-fichematiere--step2-type-param' => 'langueSupport'],
                 'class' => Langue::class,
                 'choice_label' => 'libelle',
                 'expanded' => true,
                 'multiple' => true,
-                'required' => true,
-                'help' => '-'
-            ])
-            ->add('typeEnseignement', EntityType::class, [
-                'placeholder' => 'Choisissez un type d\'enseignement',
-                'attr' => ['data-action' => 'change->ec--step2#changeNatureUeEc'],
-                'class' => NatureUeEc::class,
-                'choice_label' => 'libelle',
-                'expanded' => false,
-                'multiple' => false,
                 'required' => true,
                 'help' => '-'
             ])
@@ -62,7 +52,7 @@ class FicheMatiereStep2Type extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ElementConstitutif::class,
+            'data_class' => FicheMatiere::class,
             'translation_domain' => 'form'
         ]);
     }

@@ -246,14 +246,4 @@ class ParcoursState
 
         return count($tab['error']) > 0 ? $tab : true;
     }
-
-    private function etatOnglet7(): bool|array
-    {
-        return true; //todo: test à ajouter
-    }
-
-    private function etatOnglet8(): bool|array
-    {
-        return true; //todo: test à ajouter
-    }
 }

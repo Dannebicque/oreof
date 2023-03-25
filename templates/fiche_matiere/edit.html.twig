@@ -18,18 +18,18 @@
                     <a class="nav-link active" data-bs-toggle="tab" href="#" role="tab" aria-selected="true"
                             {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 1}) }}
                     >
-                        Identité de l'enseignement {{ onglets|etatRemplissage(1, 'ec') }}
+                        Identité de l'enseignement {{ ficheMatiereState.onglets|etatRemplissage(1, 'ec') }}
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-bs-toggle="tab" href="#" role="tab"
                             {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 2}) }}
-                       aria-selected="false">Présentation  {{ onglets|etatRemplissage(2, 'ec') }}</a>
+                       aria-selected="false">Présentation  {{ ficheMatiereState.onglets|etatRemplissage(2, 'ec') }}</a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                             {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 3}) }}
-                    >Objectifs et Compétences  {{ onglets|etatRemplissage(3, 'ec') }}</a>
+                    >Objectifs et Compétences  {{ ficheMatiereState.onglets|etatRemplissage(3, 'ec') }}</a>
                 </li>
 
 
@@ -63,12 +63,12 @@
 {% endblock %}
 
 {% block header %}
-    Élément constitutif <strong>{{ fiche_matiere.libelle }}</strong>
+    Fiche EC/matière <strong>{{ fiche_matiere.libelle }}</strong>
 {% endblock %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
-        {href: path('structure_fiche_matiere_index'), title: 'Liste des fiches matières'},
+        {href: path('structure_fiche_matiere_index'), title: 'Liste des fiches EC/matières'},
     ]}) }}
 {% endblock %}
 
@@ -78,9 +78,9 @@
        class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"
        data-bs-placement="bottom"
-       title="Retour à la liste des fiches matières"
+       title="Retour à la liste des fiches EC/matières"
     >
         <i class="{{ iconBack }}"></i>
-        <span> Retour à la liste des fiches matières</span>
+        <span> Retour à la liste des fiches EC/matières</span>
     </a>
 {% endblock %}

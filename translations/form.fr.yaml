@@ -1,9 +1,9 @@
 formation_step3.labels.semestreDebut: 'Semestre de début de la formation'
-ec_step1.labels.preciserMutualisation: 'Précisez les mutualisations'
+fiche_matiere_step1.labels.preciserMutualisation: 'Précisez les mutualisations'
 'Libellé du parcours': 'Libellé du parcours'
 'Responsable du parcours': 'Responsable du parcours'
 Sigle: Sigle
-ec_step1.labels.previserMutualisation: 'Précisez les mutualisations'
+fiche_matiere_step1.labels.previserMutualisation: 'Précisez les mutualisations'
 ue.labels.ordre: "Numéro de l'UE"
 ue.labels.typeUe: "Type de l'UE"
 ue.labels.typeUeTexte: "Type de l'UE si non présent dans la liste"
@@ -48,21 +48,11 @@ formation_step1.labels.localisationMention.label: 'Localisation(s) de la formati
 formation_step1.labels.composantesInscription.label: "Composante(s) d'inscription"
 formation_step1.labels.regimeInscription.label: "Régime(s) d'inscription"
 formation_step1.labels.modalitesAlternance: "Précisez les modalités de l'alternance"
-ec_step1.labels.responsableEc: "Responsable de l'enseignement"
-ec_step1.labels.libelle: "Libellé de l'enseignement"
-ec_step1.labels.libelleAnglais: "Libellé de l'enseignement en anglais"
-ec_step1.labels.enseignementMutualise.label: "L'enseignement est-il mutualisé ?"
-ec_step1.labels.isCmPresentielMutualise.label: 'Les CM présentiels sont-ils mutualisés ?'
-ec_step1.labels.isTdPresentielMutualise.label: 'Les TD présentiels sont-ils mutualisés ?'
-ec_step1.labels.isTpPresentielMutualise.label: 'Les TP présentiels sont-ils mutualisés ?'
-ec_step1.labels.isCmDistancielMutualise.label: 'Les CM distanciels sont-ils mutualisés ?'
-ec_step1.labels.isTdDistancielMutualise.label: 'Les TD distanciels sont-ils mutualisés ?'
-ec_step1.labels.isTpDistancielMutualise.label: 'Les TP distanciels sont-ils mutualisés ?'
-ec_step2.labels.description: "Description de l'enseignement"
-ec_step2.labels.langueDispense.label: 'Enseignement dispensé en :'
-ec_step2.labels.langueSupport.label: 'Support de cours en :'
-ec_step2.labels.typeEnseignement.label: ec_step2.labels.typeEnseignement.label
-ec_step3.labels.objectifs: "Objectifs de l'enseignement"
+fiche_matiere_step1.labels.responsableEc: "Responsable de l'enseignement"
+fiche_matiere_step2.labels.description: "Description de l'enseignement"
+fiche_matiere_step2.labels.langueDispense.label: 'Enseignement dispensé en :'
+fiche_matiere_step2.labels.langueSupport.label: 'Support de cours en :'
+fiche_matiere_step3.labels.objectifs: "Objectifs de l'enseignement"
 ec_step4.labels.modaliteEnseignement.label: "Modalité(s) d'enseignement"
 ec_step4.labels.ects: "Indiquez le nombre d’ECTS attribués à l'enseignement"
 ec_step4.labels.volumeCmPresentiel: 'Volume horaire CM présentiel'
@@ -124,7 +114,7 @@ parcours_step2.labels.nbHeuresSituationPro: "Nombre d'heures de mise en situatio
 formation_step3.labels.hasParcours: 'La formation propose-t-elle un ou des parcours ?'
 formation_step3.labels.libelleParcours: 'Précisez le libellé de chaque parcours'
 formation_step3.labels.structureFormation: "Précisez l'organisation de la formation"
-ec_step3.labels.competence: "Compétences travaillées dans l'enseignement"
+fiche_matiere_step3.labels.competence: "Compétences travaillées dans l'enseignement"
 Mention: Mention
 Autre: Autre
 'Châlons en Champagne': 'Châlons en Champagne'
@@ -148,10 +138,9 @@ parcours_step5.labels.composanteInscription: "Composante d'inscription"
 "Choisissez une composante d'inscription": '-'
 parcours_step7.labels.codeRome: 'Code(s) ROME'
 'Choisir une modalité': 'Choisir une modalité'
-ec_step4.labels.modaliteEnseignement: ec_step4.labels.modaliteEnseignement
-ec_step2.labels.typeEnseignement: "Précisez la nature de l'enseignement"
+fiche_matiere_step2.labels.typeEnseignement: "Précisez la nature de l'enseignement"
 "Choisissez un type d'enseignement": '-'
-ec_step3.alerte.no_bcc: ec_step3.alerte.no_bcc
+fiche_matiere_step3.alerte.no_bcc: fiche_matiere_step3.alerte.no_bcc
 parcours.labels.libelle: 'Libellé du parcours'
 parcours.labels.respParcours: 'Responsable de parcours'
 parcours.labels.sigle: 'Sigle du parcours'
@@ -260,7 +249,6 @@ fiche_matiere_step1.labels.isTpPresentielMutualise.label: 'Les TP présentiels s
 fiche_matiere_step1.labels.isCmDistancielMutualise.label: 'Les CM distanciels sont-ils mutualisés ?'
 fiche_matiere_step1.labels.isTdDistancielMutualise.label: 'Les TD distanciels sont-ils mutualisés ?'
 fiche_matiere_step1.labels.isTpDistancielMutualise.label: 'Les TP distanciels sont-ils mutualisés ?'
-fiche_matiere_step1.labels.previserMutualisation: fiche_matiere_step1.labels.previserMutualisation
 'Choisissez une nature...': 'Choisissez une nature...'
 ec_manage.labels.fiche_matiere_label: ec_manage.labels.fiche_matiere_label
 ec_manage.labels.fiche_matiere_libelle_label: ec_manage.labels.fiche_matiere_libelle_label
@@ -271,3 +259,4 @@ ec_manage.labels.fiche_matiere_libelle_multiple.label: 'Si non existant, précis
 ec_manage.labels.fiche_matiere_unique.label: 'Choisissez la fiche EC/matière à raccrocher à cet EC '
 ec_manage.labels.fiche_matiere_libelle_unique.label: 'Si non existant, précisez le libellé de la fiche EC/matière  à raccrocher à cet EC '
 parcours_step5.labels.regimeInscription.label: "Régime(s) d'inscription"
+fiche_matiere_step1.labels.responsableFicheMatiere: "Référent de l'enseignement"

@@ -38,7 +38,6 @@ class FicheMatiereStep1Type extends AbstractType
         $access = true;
         $builder
             ->add('responsableFicheMatiere', EntityType::class, [
-                'help' => '-',
                 'class' => User::class,
 'autocomplete' => true,
 //                'query_builder' => function ($er) use ($options) {
@@ -52,61 +51,55 @@ class FicheMatiereStep1Type extends AbstractType
 //                        ->addOrderBy('u.prenom', 'ASC');
 //                },//todo: filtrer par user dans le centre
                 'disabled' => !$access,
-                'attr' => ['data-action' => 'change->ec--step1#changeResponsableEc'],
+                'attr' => ['data-action' => 'change->fichematiere--step1#changeResponsableEc'],
                 'choice_label' => 'display',
             ])
             ->add('libelle', TextType::class, [
                 'disabled' => !$access,
-                'attr' => ['data-action' => 'change->ec--step1#saveContenuFr', 'maxlength' => 250],
-                'help' => '-',
+                'attr' => ['data-action' => 'change->fichematiere--step1#saveContenuFr', 'maxlength' => 250],
             ])
             ->add('libelleAnglais', TextType::class, [
-                'attr' => ['data-action' => 'change->ec--step1#saveContenuEn', 'maxlength' => 250],
-                'help' => '-',
+                'attr' => ['data-action' => 'change->fichematiere--step1#saveContenuEn', 'maxlength' => 250],
             ])
             ->add('enseignementMutualise', YesNoType::class, [
-                'attr' => ['data-action' => 'change->ec--step1#changeEnseignementMutualise'],
-                'help' => '-',
+                'attr' => ['data-action' => 'change->fichematiere--step1#changeEnseignementMutualise'],
             ])
             ->add('isCmPresentielMutualise', YesNoType::class, [
                 'attr' => [
-                    'data-action' => 'change->ec--step1#isMutualise',
-                    'data-ec--step1-type-param' => 'isCmPresentielMutualise'
+                    'data-action' => 'change->fichematiere--step1#isMutualise',
+                    'data-fichematiere--step1-type-param' => 'isCmPresentielMutualise'
                 ],
-                'help' => '-'
             ])
             ->add('isTdPresentielMutualise', YesNoType::class, [
                 'attr' => [
-                    'data-action' => 'change->ec--step1#isMutualise',
-                    'data-ec--step1-type-param' => 'isTdPresentielMutualise'
+                    'data-action' => 'change->fichematiere--step1#isMutualise',
+                    'data-fichematiere--step1-type-param' => 'isTdPresentielMutualise'
                 ],
-                'help' => '-'
             ])
             ->add('isTpPresentielMutualise', YesNoType::class, [
                 'attr' => [
-                    'data-action' => 'change->ec--step1#isMutualise',
-                    'data-ec--step1-type-param' => 'isTpPresentielMutualise'
+                    'data-action' => 'change->fichematiere--step1#isMutualise',
+                    'data-fichematiere--step1-type-param' => 'isTpPresentielMutualise'
                 ],
-                'help' => '-'
             ])
             ->add('isCmDistancielMutualise', YesNoType::class, [
                 'attr' => [
-                    'data-action' => 'change->ec--step1#isMutualise',
-                    'data-ec--step1-type-param' => 'isCmDistancielMutualise'
+                    'data-action' => 'change->fichematiere--step1#isMutualise',
+                    'data-fichematiere--step1-type-param' => 'isCmDistancielMutualise'
                 ],
                 'help' => '-'
             ])
             ->add('isTdDistancielMutualise', YesNoType::class, [
                 'attr' => [
-                    'data-action' => 'change->ec--step1#isMutualise',
-                    'data-ec--step1-type-param' => 'isTdDistancielMutualise'
+                    'data-action' => 'change->fichematiere--step1#isMutualise',
+                    'data-fichematiere--step1-type-param' => 'isTdDistancielMutualise'
                 ],
                 'help' => '-'
             ])
             ->add('isTpDistancielMutualise', YesNoType::class, [
                 'attr' => [
-                    'data-action' => 'change->ec--step1#isMutualise',
-                    'data-ec--step1-type-param' => 'isTpDistancielMutualise'
+                    'data-action' => 'change->fichematiere--step1#isMutualise',
+                    'data-fichematiere--step1-type-param' => 'isTpDistancielMutualise'
                 ],
                 'help' => '-'
             ]);

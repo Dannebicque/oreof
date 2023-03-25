@@ -41,13 +41,27 @@ export default class extends Controller {
 
     const matiereLibelle = option.text
     const table = document.getElementById('tableFiches')
-    const row = table.insertRow(-1)
-    const cell1 = row.insertCell(0)
-    const cell2 = row.insertCell(1)
-    const cell3 = row.insertCell(2)
-    cell1.innerHTML = String.fromCharCode((this.code + 1) + 64)
+    let tbody = table.getElementsByTagName('tbody')[0]; // sélectionne le tbody (ou crée-le s'il n'existe pas)
+    if (!tbody) {
+      tbody = document.createElement('tbody'); // crée le tbody s'il n'existe pas
+      table.appendChild(tbody); // ajoute le tbody à la table
+    }
+    const row = tbody.insertRow()
+    const cell2 = row.insertCell(0)
+    const cell3 = row.insertCell(1)
     cell2.innerHTML = matiereLibelle
-    cell3.innerHTML = '<button class="text-danger"><i class="fas fa-trash"></i></button>'
+    cell3.innerHTML = '<button class="btn text-danger"><i class="fas fa-trash"></i> Supprimer</button>'
+
+    // ajouter un écouteur sur le bouton supprimer
+    cell3.addEventListener('click', (ev) => {
+      ev.preventDefault()
+      const index = this.matieres.indexOf(`id_${option.value}`)
+      if (index > -1) {
+        this.matieres.splice(index, 1)
+      }
+      table.deleteRow(row.rowIndex)
+    })
+
     this.code++
   }
 
@@ -55,15 +69,30 @@ export default class extends Controller {
     event.preventDefault()
     const matiereLibelle = document.getElementById('ficheMatiereLibelle').value
     const table = document.getElementById('tableFiches')
-    const row = table.insertRow(-1)
-    const cell1 = row.insertCell(0)
-    const cell2 = row.insertCell(1)
-    const cell3 = row.insertCell(2)
+    let tbody = table.getElementsByTagName('tbody')[0]; // sélectionne le tbody (ou crée-le s'il n'existe pas)
+    if (!tbody) {
+      tbody = document.createElement('tbody'); // crée le tbody s'il n'existe pas
+      table.appendChild(tbody); // ajoute le tbody à la table
+    }
+    const row = tbody.insertRow()
+    const cell2 = row.insertCell(0)
+    const cell3 = row.insertCell(1)
+
     this.matieres.push(`ac_${matiereLibelle}`)
 
-    cell1.innerHTML = String.fromCharCode((this.code + 1) + 64)
     cell2.innerHTML = `${matiereLibelle} <i>(a créer)</i>`
-    cell3.innerHTML = '<button class="text-danger"><i class="fas fa-trash"></i></button>'
+    cell3.innerHTML = '<button class="btn text-danger"><i class="fas fa-trash"></i> Supprimer</button>'
+
+    // ajouter un écouteur sur le bouton supprimer
+    cell3.addEventListener('click', (ev) => {
+      ev.preventDefault()
+      const index = this.matieres.indexOf(`ac_${matiereLibelle}`)
+      if (index > -1) {
+        this.matieres.splice(index, 1)
+      }
+      table.deleteRow(row.rowIndex)
+    })
+
     this.code++
   }
 

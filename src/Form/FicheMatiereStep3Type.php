@@ -9,7 +9,7 @@
 
 namespace App\Form;
 
-use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 use App\Form\Type\TextareaAutoSaveType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,7 +22,7 @@ class FicheMatiereStep3Type extends AbstractType
         $builder
 
             ->add('objectifs', TextareaAutoSaveType::class, [
-                'attr' => ['data-action' => 'change->ec--step3#saveObjectifs', 'maxlength' => 3000, 'rows' => 20, 'class' => 'tinyMce'],
+                'attr' => ['data-action' => 'change->fichematiere--step3#saveObjectifs', 'maxlength' => 3000, 'rows' => 20],
                 'help' => '-'
             ])
         ;
@@ -31,7 +31,7 @@ class FicheMatiereStep3Type extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ElementConstitutif::class,
+            'data_class' => FicheMatiere::class,
             'translation_domain' => 'form'
         ]);
     }

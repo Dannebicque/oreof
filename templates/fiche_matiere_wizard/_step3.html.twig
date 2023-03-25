@@ -1,23 +1,23 @@
-<div {{ stimulus_controller('ec--step3', {
-    url: path('app_ec_save', {ec:ec.id}),
+<div {{ stimulus_controller('fichematiere--step3', {
+    url: path('app_fiche_matiere_save', {ficheMatiere:ficheMatiere.id}),
 }) }}>
     {% form_theme form 'communs/form_theme.html.twig' %}
     {{ form_start(form) }}
     {{ form_row(form.objectifs) }}
     <div>
         <p>
-            {{ 'ec_step3.labels.competence'|trans({}, 'form') }}
+            {{ 'fiche_matiere_step3.labels.competence'|trans({}, 'form') }}
             <i class="fal fa-question-circle ms-1"
                data-controller="tooltip"
                data-tooltip-placement-value="bottom"
-               aria-label="{{ 'ec_step3.labels.competence'|trans({}, 'help') }}"
-               data-bs-original-title="{{ 'ec_step3.labels.competence'|trans({}, 'help') }}"></i>
+               aria-label="{{ 'fiche_matiere_step3.labels.competence'|trans({}, 'help') }}"
+               data-bs-original-title="{{ 'fiche_matiere_step3.labels.competence'|trans({}, 'help') }}"></i>
         </p>
         {% for bcc in bccs %}
             <div class=" mb-2">
                 <input type="checkbox" name="ec[bccs][]" value="{{ bcc.id }}" id="bcc_{{ bcc.id }}"
                        {% if ecBccs[bcc.id] is defined %}checked{% endif %}
-                        {{ stimulus_action('ec--step3', 'changeBcc', 'change', {id:bcc.id}) }}
+                        {{ stimulus_action('fichematiere--step3', 'changeBcc', 'change', {id:bcc.id}) }}
                 >
                 <label for="bcc_{{ bcc.id }}"><strong>{{ bcc.display }}</strong></label>
                 <div id="bcc_{{ bcc.id }}_competence" class="{% if ecBccs[bcc.id] is not defined %}d-none {%
@@ -29,7 +29,7 @@
                                    value="{{ competence.id }}"
                                    id="competence_{{ competence.id }}"
                                    class="bcc_{{ bcc.id }}"
-                                    {{ stimulus_action('ec--step3', 'changeCompetence', 'change', {id:competence.id}) }}
+                                    {{ stimulus_action('fichematiere--step3', 'changeCompetence', 'change', {id:competence.id}) }}
                             >
                             <label for="competence_{{ competence.id }}">{{ competence.display }}</label>
                         </div>
@@ -39,18 +39,19 @@
             {% else %}
             {{ component('alerte', {
                 type: 'warning',
-                message: 'ec_step3.alerte.no_bcc'|trans({}, 'form')
+                message: 'fiche_matiere.alerte.no_bcc'|trans({}, 'form')
             }) }}
         {% endfor %}
     </div>
     {{ form_end(form) }}
 
-    <div class="alert {% if ec.getEtatStep(3) %}alert-success{% else %}alert-warning{% endif %}" id="alertEtatStructure">
+    <div class="alert {% if ficheMatiere.getEtatStep(3) %}alert-success{% else %}alert-warning{% endif %}"
+         id="alertEtatStructure">
         <input type="checkbox"
                id="etatStructure"
                class="form-check-inline"
-               {% if ec.getEtatStep(3) %}checked{% endif %}
-                {{ stimulus_action('ec--step3', 'calculEtatStep', 'change') }}
+               {% if ficheMatiere.getEtatStep(3) %}checked{% endif %}
+                {{ stimulus_action('fichematiere--step3', 'etatStep', 'change') }}
 
         ><label for="etatStructure">
             Cochez cette case si vous avez terminé ...</label>

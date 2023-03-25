@@ -6,7 +6,7 @@
        data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_unique.help'|trans({}, 'help') }}"></i>
 </label>
 <select id="ficheMatiere" name="ficheMatiere" class="form-select">
-    <option value="">Choisir dans la liste une matière</option>
+    <option value="">Choisir dans la liste une fiche EC/matière</option>
     {% for matiere in matieres %}
         <option value="id_{{ matiere.id }}">{{ matiere.libelle }}</option>
     {% endfor %}

@@ -5,17 +5,17 @@
 {% endblock %}
 
 {% block header %}
-    Détail de l'élément constitutif : {{ elementConstitutif.libelle }}
+    Détail de la fiche EC/matière : {{ ficheMatiere.libelle }}
 {% endblock %}
 
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
-        {href: path('app_element_constitutif_index'), title: 'Liste des éléments constitutifs'},
+        {href: path('app_fiche_matiere_index'), title: 'Liste des fiches EC/matières'},
     ]}) }}
 {% endblock %}
 
 {% block bouton_header %}
-    <a href="{{ path('app_element_constitutif_export', {elementConstitutif:elementConstitutif.id})  }}"
+    <a href="{{ path('app_fiche_matiere_export', {ficheMatiere:ficheMatiere.id})  }}"
        class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"
        data-bs-placement="bottom"
@@ -24,13 +24,13 @@
         <i class="{{ iconDownload }}"></i>
         <span> Télécharger en PDF</span>
     </a>
-    <a href="{{ path('structure_ec_index')  }}"
+    <a href="{{ path('structure_fiche_matiere_index')  }}"
        class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"
        data-bs-placement="bottom"
-       title="Retour à la liste des éléments constitutifs"
+       title="Retour à la liste des fiches EC/matières"
     >
         <i class="{{ iconBack }}"></i>
-        <span> Retour à la liste des éléments constitutifs</span>
+        <span> Retour à la liste des fiches EC/matières</span>
     </a>
 {% endblock %}

@@ -22,14 +22,14 @@ export default class extends Controller {
   }
 
   connect() {
-    document.getElementById('ec_step3_objectifs').addEventListener('trix-blur', this.saveObjectifs.bind(this))
+    document.getElementById('fiche_matiere_step3_objectifs').addEventListener('trix-blur', this.saveObjectifs.bind(this))
   }
 
   saveObjectifs() {
     this._save({
       field: 'objectifs',
       action: 'textarea',
-      value: trixEditor('ec_step3_objectifs'),
+      value: trixEditor('fiche_matiere_step3_objectifs'),
     })
   }
 
@@ -51,20 +51,6 @@ export default class extends Controller {
 
   etatStep(event) {
     calculEtatStep(this.urlValue, 3, event, 'ec')
-    // this._save({
-    //   action: 'etatStep',
-    //   value: 3,
-    //   isChecked: event.target.checked,
-    // })
-    //
-    // const parent = event.target.closest('.alert')
-    // if (event.target.checked) {
-    //   parent.classList.remove('alert-warning')
-    //   parent.classList.add('alert-success')
-    // } else {
-    //   parent.classList.remove('alert-success')
-    //   parent.classList.add('alert-warning')
-    // }
   }
 
   async _save(options) {

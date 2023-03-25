@@ -36,8 +36,8 @@ class FicheMatiere
     #[ORM\Column(length: 250, nullable: true)]
     private ?string $libelleAnglais = null;
 
-    #[ORM\Column]
-    private ?bool $enseignementMutualise = false;
+    #[ORM\Column(nullable: true)]
+    private ?bool $enseignementMutualise = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
@@ -52,22 +52,22 @@ class FicheMatiere
     private ?ModaliteEnseignementEnum $modaliteEnseignement = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isCmPresentielMutualise;
+    private ?bool $isCmPresentielMutualise = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isTdPresentielMutualise;
+    private ?bool $isTdPresentielMutualise = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isTpPresentielMutualise;
+    private ?bool $isTpPresentielMutualise = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isCmDistancielMutualise;
+    private ?bool $isCmDistancielMutualise = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isTdDistancielMutualise;
+    private ?bool $isTdDistancielMutualise = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $isTpDistancielMutualise;
+    private ?bool $isTpDistancielMutualise = null;
 
     #[ORM\ManyToOne]
     private ?User $responsableFicheMatiere = null;
@@ -316,34 +316,6 @@ class FicheMatiere
         return $this;
     }
 
-    public function etatRemplissageOnglets(): array
-    {
-        // Onglet 1 : Identité de l'enseignement
-        // Onglet 2 : Présentation
-        // Onglet 3 : Objectifs et compétences
-
-        $onglets[1] = $this->getEtatOnglet1();
-        $onglets[2] = $this->getEtatOnglet2();
-        $onglets[3] = $this->getEtatOnglet3(); //todo: ajouter un flag pour savoir si les compétences sont complètes
-
-        return $onglets;
-    }
-
-    public function getEtatOnglet1(): EtatRemplissageEnum
-    {
-        return $this->getLibelleAnglais() === null && $this->getLibelle() === null && $this->enseignementMutualise === null ? EtatRemplissageEnum::VIDE : (($this->getLibelleAnglais() !== null && $this->getLibelle() !== null && $this->enseignementMutualise !== null && $this->getEtatStep(1)) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
-    }
-
-    public function getEtatOnglet2(): EtatRemplissageEnum
-    {
-        return $this->getDescription() === null && $this->getLangueDispense()->count() === 0 && $this->getLangueSupport()->count() === 0 && $this->getNatureUeEc() === null ? EtatRemplissageEnum::VIDE : (($this->getDescription() !== null && $this->getLangueDispense()->count() > 0 && $this->getLangueSupport()->count() > 0 && $this->getNatureUeEc() !== null && $this->getEtatStep(2)) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
-    }
-
-    public function getEtatOnglet3(): EtatRemplissageEnum
-    {
-        return $this->getObjectifs() === null && $this->getCompetences() === null ? EtatRemplissageEnum::VIDE : (($this->getObjectifs() !== null && $this->getCompetences() !== null && $this->getEtatStep(3)) ? EtatRemplissageEnum::COMPLETE : EtatRemplissageEnum::EN_COURS);
-    }
-
     public function getEtatSteps(): array
     {
         return $this->etatSteps ?? [];
@@ -398,12 +370,12 @@ class FicheMatiere
         return $this;
     }
 
-    public function getModaliteEnseignement(): ?int
+    public function getModaliteEnseignement(): ?ModaliteEnseignementEnum
     {
         return $this->modaliteEnseignement;
     }
 
-    public function setModaliteEnseignement(?int $modaliteEnseignement): self
+    public function setModaliteEnseignement(?ModaliteEnseignementEnum $modaliteEnseignement): self
     {
         $this->modaliteEnseignement = $modaliteEnseignement;
 

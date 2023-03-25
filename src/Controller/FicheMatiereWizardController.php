@@ -9,24 +9,18 @@
 
 namespace App\Controller;
 
-use App\Entity\EcUe;
-use App\Entity\ElementConstitutif;
+use App\Classes\verif\FicheMatiereState;
 use App\Entity\FicheMatiere;
-use App\Entity\Parcours;
 use App\Form\FicheMatiereStep1Type;
 use App\Form\FicheMatiereStep2Type;
 use App\Form\FicheMatiereStep3Type;
-use App\Form\EcStep4Type;
 use App\Repository\ComposanteRepository;
-use App\Repository\ElementConstitutifRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\SemestreRepository;
-use App\Repository\TypeEpreuveRepository;
 use App\Repository\UeRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,7 +59,7 @@ class FicheMatiereWizardController extends AbstractController
         ]);
     }
 
-    #[Route('/{ficheMatiere}/mutualise', name: 'app_ec_wizard_step_1_mutualise', methods: ['GET'])]
+    #[Route('/{ficheMatiere}/mutualise', name: 'app_fiche_matiere_wizard_step_1_mutualise', methods: ['GET'])]
     public function mutualise(FicheMatiere $ficheMatiere): Response
     {
         $mutualises = [];
@@ -81,7 +75,7 @@ class FicheMatiereWizardController extends AbstractController
 //        }
 
         return $this->render('fiche_matiere_wizard/_step1_mutualise.html.twig', [
-            'fiche_matiere' => $ficheMatiere,
+            'ficheMatiere' => $ficheMatiere,
             'mutualises' => $mutualises
         ]);
     }
@@ -185,7 +179,7 @@ class FicheMatiereWizardController extends AbstractController
 
         return $this->render('fiche_matiere_wizard/_step2.html.twig', [
             'form' => $form->createView(),
-            'fiche_matiere' => $ficheMatiere,
+            'ficheMatiere' => $ficheMatiere,
         ]);
     }
 
@@ -204,7 +198,7 @@ class FicheMatiereWizardController extends AbstractController
         }
 
         return $this->render('fiche_matiere_wizard/_step3.html.twig', [
-            'fiche_matiere' => $ficheMatiere,
+            'ficheMatiere' => $ficheMatiere,
             'form' => $form->createView(),
             'bccs' => $ficheMatiere->getParcours()?->getBlocCompetences(),
             'ecBccs' => array_flip(array_unique($ecBccs)),

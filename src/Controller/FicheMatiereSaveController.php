@@ -10,7 +10,10 @@
 namespace App\Controller;
 
 use App\Classes\UpdateEntity;
+use App\Classes\verif\FicheMatiereState;
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
+use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\BlocCompetenceRepository;
 use App\Repository\CompetenceRepository;
@@ -31,49 +34,57 @@ class FicheMatiereSaveController extends BaseController
      */
     #[Route('/fiche_matiere/save/{ficheMatiere}', name: 'app_fiche_matiere_save')]
     public function save(
+        FicheMatiereState $ficheMatiereState,
         EntityManagerInterface $entityManager,
         CompetenceRepository $competenceRepository,
-        NatureUeEcRepository $natureUeEcRepository,
         UserRepository $userRepository,
         LangueRepository $langueRepository,
         UpdateEntity $updateEntity,
         Request $request,
-        ElementConstitutif $ec
+        FicheMatiere $ficheMatiere
     ): Response {
+        $ficheMatiereState->setFicheMatiere($ficheMatiere);
         //todo: check si bonne formation...
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
             case 'stateOnglet':
-                $method = 'getEtat' . ucfirst($data['onglet']);
-                $val = $ec->$method();
+                $ong = substr($data['onglet'], 6);
+                $val = $ficheMatiereState->onglets()[$ong];
+                //if $val => en-cours ou vide => désactiver le checkbox
+                if ($val === EtatRemplissageEnum::EN_COURS || $val === EtatRemplissageEnum::VIDE) {
+                    $etatSteps = $ficheMatiere->getEtatSteps();
+                    $etatSteps[$ong] = false;
+                    $ficheMatiere->setEtatSteps($etatSteps);
+                    $entityManager->flush();
+                }
 
                 return $this->json($val->badge());
             case 'yesNo':
-                $rep = $updateEntity->saveYesNo($ec, $data['field'], $data['value']);
+                $rep = $updateEntity->saveYesNo($ficheMatiere, $data['field'], $data['value']);
 
                 return $this->json($rep);
-            case 'mcccs':
-                $formation = $ec->getParcours()->getFormation();
-                if ($formation === null) {
-                    return $this->json(false);
-                }
-                $typeDiplome = $formation->getTypeDiplome();
-                $typeDiplome->saveMccc($ec, $data['field'], $data['value']);//todo: récupérer le bon MCCC
-
-                return $this->json(true);
+//            case 'mcccs':
+//                $formation = $ficheMatiere->getParcours()->getFormation();
+//                if ($formation === null) {
+//                    return $this->json(false);
+//                }
+//                $typeDiplome = $formation->getTypeDiplome();
+//                $typeDiplome->saveMccc($ec, $data['field'], $data['value']);//todo: récupérer le bon MCCC
+//
+//                return $this->json(true);
 
             case 'textarea':
             case 'selectWithoutEntity':
-                $rep = $updateEntity->saveField($ec, $data['field'], $data['value']);
+                $rep = $updateEntity->saveField($ficheMatiere, $data['field'], $data['value']);
 
                 return $this->json($rep);
             case 'float':
-                $rep = $updateEntity->saveField($ec, $data['field'], (float)$data['value']);
+                $rep = $updateEntity->saveField($ficheMatiere, $data['field'], (float)$data['value']);
 
                 return $this->json($rep);
             case 'langue':
                 $rep = $updateEntity->saveCheckbox(
-                    $ec,
+                    $ficheMatiere,
                     $data['field'],
                     $data['value'],
                     $data['isChecked'],
@@ -81,35 +92,35 @@ class FicheMatiereSaveController extends BaseController
                 );
 
                 return $this->json($rep);
-            case 'typeEnseignement':
-                $rythme = $natureUeEcRepository->find($data['value']);
-                $rep = $updateEntity->saveField($ec, 'typeEnseignement', $rythme);
-
-                return $this->json($rep);
-            case 'responsableEc':
-                $responsableEc = $userRepository->find($data['value']);
-                $rep = $updateEntity->saveField($ec, 'responsableEc', $responsableEc);
+//            case 'typeEnseignement':
+//                $rythme = $natureUeEcRepository->find($data['value']);
+//                $rep = $updateEntity->saveField($ec, 'typeEnseignement', $rythme);
+//
+//                return $this->json($rep);
+            case 'responsableFicheMatiere':
+                $responsableFicheMatiere = $userRepository->find($data['value']);
+                $rep = $updateEntity->saveField($ficheMatiere, 'responsableFicheMatiere', $responsableFicheMatiere);
 
                 return $this->json($rep);
             case 'modalitesEnseignement':
                 $rep = $updateEntity->saveField(
-                    $ec,
+                    $ficheMatiere,
                     'modaliteEnseignement',
                     ModaliteEnseignementEnum::from($data['value'])
                 );
 
                 return $this->json($rep);
             case 'int':
-                $rep = $updateEntity->saveField($ec, $data['field'], (int)$data['value']);
+                $rep = $updateEntity->saveField($ficheMatiere, $data['field'], (int)$data['value']);
 
                 return $this->json($rep);
             case 'removeBcc':
-                $competences = $ec->getCompetences();
+                $competences = $ficheMatiere->getCompetences();
 
                 foreach ($competences as $competence) {
                     if ($competence->getBlocCompetence()?->getId() === $data['value']) {
-                        $competence->removeElementConstitutif($ec);
-                        $ec->removeCompetence($competence);
+                        $competence->removeFicheMatiere($ficheMatiere);
+                        $ficheMatiere->removeCompetence($competence);
                     }
                 }
                 $entityManager->flush();
@@ -118,8 +129,8 @@ class FicheMatiereSaveController extends BaseController
             case 'addCompetence':
                 $competence = $competenceRepository->find($data['value']);
                 if ($competence !== null) {
-                    $ec->addCompetence($competence);
-                    $competence->addElementConstitutif($ec);
+                    $ficheMatiere->addCompetence($competence);
+                    $competence->addFicheMatiere($ficheMatiere);
                     $entityManager->flush();
 
                     return $this->json(true);
@@ -128,21 +139,29 @@ class FicheMatiereSaveController extends BaseController
                 return $this->json(false);
             case 'array':
                 if ($data['isChecked'] === true) {
-                    $rep = $updateEntity->addToArray($ec, $data['field'], $data['value']);
+                    $rep = $updateEntity->addToArray($ficheMatiere, $data['field'], $data['value']);
                 } else {
-                    $rep = $updateEntity->removeToArray($ec, $data['field'], $data['value']);
+                    $rep = $updateEntity->removeToArray($ficheMatiere, $data['field'], $data['value']);
                 }
 
                 return $this->json($rep);
             case 'etatStep':
-                $etatSteps = $ec->getEtatSteps();
-                $step = $data['value'];
-                $etatSteps[$step] = $data['isChecked'];
-                $ec->setEtatSteps($etatSteps);
+                $valideState = (bool)$data['isChecked'] === true ? $ficheMatiereState->valideStep(
+                    $data['value']
+                ) : true;
 
-                $entityManager->flush();
+                if ($valideState === true) {
+                    $etatSteps = $ficheMatiere->getEtatSteps();
+                    $step = $data['value'];
+                    $etatSteps[$step] = $data['isChecked'];
+                    $ficheMatiere->setEtatSteps($etatSteps);
 
-                return $this->json(true);
+                    $entityManager->flush();
+
+                    return $this->json(true);
+                }
+
+                return $this->json($valideState);
         }
 
         return $this->json(['error' => 'action inconnue']);

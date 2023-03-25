@@ -101,22 +101,22 @@
                                 class="btn btn-sm text-info"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
-                                title="Voir la fiche matière"
+                                title="Voir la fiche EC/matière"
                                 target="_blank"
                         >
                             <i class="{{ iconShow }}"></i>
-                            <span> Voir la fiche matière</span>
+                            <span> Voir la fiche EC/matière</span>
                         </a>
                         <a
                                 href="{{ path('app_fiche_matiere_edit',{'id': ec.ficheMatiere.id}) }}"
                                 class="btn btn-sm text-warning"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
-                                title="Modifier la fiche matière"
+                                title="Modifier la fiche EC/matière"
                                 target="_blank"
                         >
                             <i class="{{ iconShow }}"></i>
-                            <span> Modifier la fiche matière</span>
+                            <span> Modifier la fiche EC/matière</span>
                         </a>
                     {% endif %}
                 </td>
@@ -248,7 +248,7 @@
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
-                            modalTitle: 'Ajouter une fiche matière',
+                            modalTitle: 'Ajouter une fiche EC/matière',
                             nomEvenement: 'refreshListeEc',
                             details: {ue: ue.id, parcours: parcours.id},
                             modalUrl: path('app_fiche_matiere_new', {ue: ue.id}) }) }}
@@ -257,10 +257,10 @@
                         data-size="lg"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
-                        title="Ajouter une fiche matière"
+                        title="Ajouter une fiche EC/matière"
                 >
                     <i class="{{ iconAdd }}"></i>
-                    <span>Ajouter une fiche matière</span>
+                    <span>Ajouter une fiche EC/matière</span>
                 </button>
             </td>
         </tr>

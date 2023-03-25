@@ -10,6 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\EcOrdre;
+use App\Classes\verif\FicheMatiereState;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Entity\Ue;
@@ -18,6 +19,7 @@ use App\Form\FicheMatiereType;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
 use App\Repository\TypeEpreuveRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,7 +45,7 @@ class FicheMatiereController extends AbstractController
 
     #[Route('/new/{ue}', name: 'app_fiche_matiere_new', methods: ['GET', 'POST'])]
     public function new(
-        //todo: passer le parcours ?
+        EntityManagerInterface $entityManager,
         LangueRepository $langueRepository,
         Request $request,
         FicheMatiereRepository $ficheMatiereRepository,
@@ -59,8 +61,6 @@ class FicheMatiereController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $ficheMatiere->setParcours($ue->getSemestre()?->getSemestreParcours()->first()->getParcours());
-//            $ueEc = new EcUe($ue, $ficheMatiere);
-//            $ecUeRepository->save($ueEc, true);
 
             $formation = $ue->getSemestre()?->getSemestreParcours()->first()->getParcours()?->getFormation();
             if ($formation === null) {
@@ -76,7 +76,8 @@ class FicheMatiereController extends AbstractController
                 $langueFr->addLanguesSupportsFicheMatiere($ficheMatiere);
             }
 
-            $ficheMatiereRepository->save($ficheMatiere, true);
+            $entityManager->persist($ficheMatiere);
+            $entityManager->flush();
 
             return $this->json(true);
         }
@@ -122,8 +123,9 @@ class FicheMatiereController extends AbstractController
     #[Route('/{id}/edit', name: 'app_fiche_matiere_edit', methods: ['GET', 'POST'])]
     public function edit(
         FicheMatiere $ficheMatiere,
-//        Parcours $parcours
+        FicheMatiereState $ficheMatiereState,
     ): Response {
+        $ficheMatiereState->setFicheMatiere($ficheMatiere);
         //(is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) or is_granted
         //                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
         //                        'valider_ec')
@@ -143,7 +145,7 @@ class FicheMatiereController extends AbstractController
 
         return $this->render('fiche_matiere/edit.html.twig', [
             'fiche_matiere' => $ficheMatiere,
-            'onglets' => $ficheMatiere->etatRemplissageOnglets(),
+            'ficheMatiereState' => $ficheMatiereState,
         ]);
     }
 

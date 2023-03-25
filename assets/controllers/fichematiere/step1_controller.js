@@ -26,8 +26,6 @@ export default class extends Controller {
   }
 
   connect() {
-    document.getElementById('ec_step1_libelle').addEventListener('trix-blur', this.saveContenuFr.bind(this))
-    document.getElementById('ec_step1_libelleAnglais').addEventListener('trix-blur', this.saveContenuEn.bind(this))
     this._loadMutualise()
   }
 
@@ -72,8 +70,8 @@ export default class extends Controller {
 
   changeResponsableEc(event) {
     this._save({
-      field: 'responsableEc',
-      action: 'responsableEc',
+      field: 'responsableFicheMatiere',
+      action: 'responsableFicheMatiere',
       value: event.target.value,
     }).then(() => {
       // dispatch pour mettre à jour le bloc de la page
@@ -85,7 +83,7 @@ export default class extends Controller {
     this._save({
       field: 'libelle',
       action: 'textarea',
-      value: trixEditor('ec_step1_libelle'),
+      value: document.getElementById('fiche_matiere_step1_libelle').value,
     })
   }
 
@@ -93,7 +91,7 @@ export default class extends Controller {
     this._save({
       field: 'libelleAnglais',
       action: 'textarea',
-      value: trixEditor('ec_step1_libelleAnglais'),
+      value: document.getElementById('fiche_matiere_step1_libelleAnglais').value,
     })
   }
 
@@ -121,21 +119,6 @@ export default class extends Controller {
 
   etatStep(event) {
     calculEtatStep(this.urlValue, 1, event, 'ec')
-
-    // this._save({
-    //   action: 'etatStep',
-    //   value: 1,
-    //   isChecked: event.target.checked,
-    // })
-    //
-    // const parent = event.target.closest('.alert')
-    // if (event.target.checked) {
-    //   parent.classList.remove('alert-warning')
-    //   parent.classList.add('alert-success')
-    // } else {
-    //   parent.classList.remove('alert-success')
-    //   parent.classList.add('alert-warning')
-    // }
   }
 
   async _save(options) {
