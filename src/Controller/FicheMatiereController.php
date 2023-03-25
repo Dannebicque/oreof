@@ -48,7 +48,6 @@ class FicheMatiereController extends AbstractController
         EntityManagerInterface $entityManager,
         LangueRepository $langueRepository,
         Request $request,
-        FicheMatiereRepository $ficheMatiereRepository,
         Ue $ue
     ): Response {
         $ficheMatiere = new FicheMatiere();

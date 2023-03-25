@@ -3,12 +3,19 @@
 namespace App\Form;
 
 use App\Entity\TypeDiplome;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TypeDiplomeType extends AbstractType
 {
+    public function __construct(
+        private TypeDiplomeRegistry $typeDiplomeRegistry
+    )
+    {
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -20,7 +27,9 @@ class TypeDiplomeType extends AbstractType
             ->add('nbUeMax')
             ->add('nbEctsMaxUe')
             ->add('nbEcParUe')
-            ->add('ModeleMcc')
+            ->add('ModeleMcc', ChoiceType::class, [
+                'choices' => $this->typeDiplomeRegistry->getChoices(),
+            ])
             ->add('debutSemestreFlexible')
             ->add('hasMemoire')
             ->add('hasStage')

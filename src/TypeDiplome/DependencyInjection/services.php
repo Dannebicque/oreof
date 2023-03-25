@@ -27,8 +27,4 @@ return static function (ContainerConfigurator $configurator): void {
 
     $services->set(ButTypeDiplome::class)->tag(TypeDiplomeRegistry::TAG_TYPE_DIPLOME);
     $services->set(LicenceTypeDiplome::class)->tag(TypeDiplomeRegistry::TAG_TYPE_DIPLOME);
-    $services->set(LicenceProfessionnelleTypeDiplome::class)->tag(TypeDiplomeRegistry::TAG_TYPE_DIPLOME);
-    $services->set(MasterTypeDiplome::class)->tag(TypeDiplomeRegistry::TAG_TYPE_DIPLOME);
-    $services->set(MasterMeefTypeDiplome::class)->tag(TypeDiplomeRegistry::TAG_TYPE_DIPLOME);
-    $services->set(DeustTypeDiplome::class)->tag(TypeDiplomeRegistry::TAG_TYPE_DIPLOME);
 };

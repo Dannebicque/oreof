@@ -18,13 +18,9 @@ use Symfony\Component\HttpFoundation\InputBag;
 class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 {
     public const SOURCE = 'licence';
-    public const TEMPLATE = 'licence.html.twig';
     public const TEMPLATE_FORM_MCCC = 'licence.html.twig';
 
     public string $libelle = 'Licence';
-    public int $nbSemestres = 6;
-    public int $nbUes = 5;
-    public int $nbEctsUeMax = 6;
 
     public function saveMcccs(ElementConstitutif $elementConstitutif, InputBag $request): void
     {
@@ -166,35 +162,5 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         }
 
         return $tabMcccs;
-    }
-
-    public function genereStructure(Formation $formation, bool|Parcours|null $parcours = null): void
-    {
-        if ($parcours !== null && $parcours instanceof Parcours) {
-            $this->deleteStructure($parcours);
-        }
-
-        //semestres
-        $semestres = $formation->getStructureSemestres();
-
-        if ($formation->isHasParcours() === false) {
-            if ($formation->getParcours()->count() === 0) {
-                $parcours = new Parcours($formation); //parcours par défaut
-                $parcours->setLibelle(Parcours::PARCOURS_DEFAUT);
-                $semestres = [];
-
-                $formation->addParcour($parcours);
-                $parcours->setFormation($formation);
-                $this->entityManager->persist($parcours);
-            }
-
-            for ($i = $formation->getSemestreDebut(); $i <= $this->nbSemestres; $i++) {
-                $semestres[$i] = 'tronc_commun';
-            }
-        }
-
-        $this->abstractGenereStructure($parcours, $semestres);
-
-        $this->entityManager->flush();
     }
 }

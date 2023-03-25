@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\InputBag;
 
 interface TypeDiplomeInterface
 {
-    public function genereStructure(Formation $formation, bool|Parcours|null $parcours = null): void;
     public function getMcccs(ElementConstitutif $elementConstitutif): array|Collection;
     public function initMcccs(ElementConstitutif $elementConstitutif): void;
     public function saveMccc(ElementConstitutif $elementConstitutif, string $field, mixed $value): void;

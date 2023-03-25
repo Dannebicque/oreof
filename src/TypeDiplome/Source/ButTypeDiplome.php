@@ -10,20 +10,15 @@
 namespace App\TypeDiplome\Source;
 
 use App\Entity\ElementConstitutif;
-use App\Entity\Formation;
-use App\Entity\Parcours;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\InputBag;
 
 class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 {
     public const SOURCE = 'but';
-    public const TEMPLATE = 'but.html.twig';
     public const TEMPLATE_FORM_MCCC = 'but.html.twig';
 
     public string $libelle = 'Bachelor Universitaire de Technologie (B.U.T.)';
-    public int $nbSemestres = 6;
-    public int $nbEctsUeMax = 0;
 
     public function getMcccs(ElementConstitutif $elementConstitutif): array|Collection
     {
@@ -43,35 +38,5 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
     public function saveMcccs(ElementConstitutif $elementConstitutif, InputBag $request): void
     {
         // TODO: Implement saveMcccs() method.
-    }
-
-    public function genereStructure(Formation $formation, Parcours|bool $parcours = null): void
-    {
-        if ($parcours !== null && $parcours instanceof Parcours) {
-            $this->deleteStructure($parcours);
-        }
-
-        //semestres
-        $semestres = $formation->getStructureSemestres();
-
-        if ($formation->isHasParcours() === false) {
-            if ($formation->getParcours()->count() === 0) {
-                $parcours = new Parcours($formation); //parcours par défaut
-                $parcours->setLibelle(Parcours::PARCOURS_DEFAUT);
-                $semestres = [];
-
-                $formation->addParcour($parcours);
-                $parcours->setFormation($formation);
-                $this->entityManager->persist($parcours);
-            }
-
-            for ($i = $formation->getSemestreDebut(); $i <= $this->nbSemestres; $i++) {
-                $semestres[$i] = 'tronc_commun';
-            }
-        }
-
-        $this->abstractGenereStructure($parcours, $semestres);
-
-        $this->entityManager->flush();
     }
 }
