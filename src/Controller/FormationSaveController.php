@@ -41,16 +41,14 @@ class FormationSaveController extends BaseController
     ): Response {
         //todo: check si bonne formation...
         $data = JsonRequest::getFromRequest($request);
+        $formationState->setFormation($formation);
         switch ($data['action']) {
             case 'stateOnglet':
-                //todo: fusionner avec le case 'etatStep' ? Exploiter FormationState pour valider les états. Mais ajouter une méthode de "traduction" entre les erreurs et le true ?? Permettra de supprimer le code getEtatOnglet1... des entités ? utilisé ailleurs ?
-                $method = 'getEtat' . ucfirst($data['onglet']);
-                $val = $formation->$method();
-
+                $ong = substr($data['onglet'], 6);
+                $val = $formationState->onglets()[$ong];
                 //if $val => en-cours ou vide => désactiver le checkbox
                 if ($val === EtatRemplissageEnum::EN_COURS || $val === EtatRemplissageEnum::VIDE) {
                     $etatSteps = $formation->getEtatSteps();
-                    $ong = substr($data['onglet'], 6);
                     $etatSteps[$ong] = false;
                     $formation->setEtatSteps($etatSteps);
                     $em->flush();
@@ -115,10 +113,10 @@ class FormationSaveController extends BaseController
 
                 return $this->json(true);
             case 'etatStep':
-                //todo: a reprendre dans EC et Parcours
-                $formationState->setFormation($formation);
                 $valideState = (bool)$data['isChecked'] === true ? $formationState->valideStep(
-                    $data['value']) : true;
+                    $data['value']
+                ) : true;
+
                 if ($valideState === true) {
                     $etatSteps = $formation->getEtatSteps();
                     $step = $data['value'];

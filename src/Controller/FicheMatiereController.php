@@ -157,7 +157,7 @@ class FicheMatiereController extends AbstractController
             $newElementConstitutif = clone $elementConstitutif;
             $newElementConstitutif->setFicheMatiere($newFicheMatiere);
 
-            if ($elementConstitutif->getSubOrdre() === 0) {
+            if ($elementConstitutif->getSubOrdre() !== null) {
                 $ordreMax = $elementConstitutifRepository->findLastEcSubOrdre(
                     $elementConstitutif->getUe(),
                     $elementConstitutif->getOrdre()

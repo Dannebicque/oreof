@@ -222,14 +222,6 @@ class FicheMatiere
             $nbChampsRemplis++;
         }
 
-//        if ($this->natureUeEc !== null) {
-//            $nbChampsRemplis++;
-//        }
-
-        if ($this->libelle !== null) {
-            $nbChampsRemplis++;
-        }
-
         if ($this->libelleAnglais !== null) {
             $nbChampsRemplis++;
         }
@@ -250,7 +242,7 @@ class FicheMatiere
             $nbChampsRemplis++;
         }
 
-        $nbChampsObligatoires = 11;
+        $nbChampsObligatoires = 6;
 
         return round($nbChampsRemplis / $nbChampsObligatoires * 100, 2);
     }

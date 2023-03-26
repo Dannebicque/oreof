@@ -171,7 +171,7 @@
                         {#                            'initialiser'))) or (is_granted #}
                         {#                            ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
                         {#                            'valider_ec')) %} #}
-                        {% if ec.subordre == 0 %}
+                        {% if ec.subordre == 0 or ec.subordre == null %}
                             {% if not loop.first %}
                                 <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
                                     'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
@@ -236,14 +236,14 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="{% if mode == 'liste' %}10{% else %}8{% endif %}" class="bg-warning">Aucun
-                                                                                                  EC
+                <td colspan="11" class="bg-warning">
+                    Aucun EC
                 </td>
             </tr>
         {% endfor %}
         {#        {% if parcours is defined and is_granted('ROLE_EC_ADD_MY', parcours.formation) and ue is defined %} #}
         <tr>
-            <td colspan="{% if deplacer == true %}9{% else %}8{% endif %}">
+            <td colspan="11">
 
                 <button
                         {{ stimulus_controller('modal', {
@@ -268,7 +268,7 @@
                             modalTitle: 'Ajouter une fiche EC/matière',
                             nomEvenement: 'refreshListeEc',
                             details: {ue: ue.id, parcours: parcours.id},
-                            modalUrl: path('app_fiche_matiere_new', {ue: ue.id}) }) }}
+                            modalUrl: path('app_fiche_matiere_new', {ue: ue.id, parcours:parcours.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
                         data-size="lg"

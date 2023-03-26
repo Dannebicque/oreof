@@ -14,7 +14,7 @@
             <a class="nav-link active" data-bs-toggle="tab" href="#" role="tab" aria-selected="true"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 1}) }}
             >
-                Présentation du parcours {{ parcours.onglets|etatRemplissage(1, 'parcours') }}
+                Présentation du parcours {{ parcoursState.onglets|etatRemplissage(1, 'parcours') }}
             </a>
         </li>
         {% endif %}
@@ -25,28 +25,28 @@
                 false %}true{% endif %}"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 2}) }}
             >
-                Descriptif {{ parcours.onglets|etatRemplissage(2, 'parcours') }}
+                Descriptif {{ parcoursState.onglets|etatRemplissage(2, 'parcours') }}
             </a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 3}) }}
             >
-                Compétences {{ parcours.onglets|etatRemplissage(3, 'parcours') }}
+                Compétences {{ parcoursState.onglets|etatRemplissage(3, 'parcours') }}
             </a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 4}) }}
             >
-                Structure de la maquette {{ parcours.onglets|etatRemplissage(4, 'parcours') }}
+                Structure de la maquette {{ parcoursState.onglets|etatRemplissage(4, 'parcours') }}
             </a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 5}) }}
             >
-                Admission & inscription {{ parcours.onglets|etatRemplissage(5, 'parcours') }}
+                Admission & inscription {{ parcoursState.onglets|etatRemplissage(5, 'parcours') }}
             </a>
         </li>
 
@@ -54,7 +54,7 @@
             <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 6}) }}
             >
-                Et après... {{ parcours.onglets|etatRemplissage(6, 'parcours') }}
+                Et après... {{ parcoursState.onglets|etatRemplissage(6, 'parcours') }}
             </a>
         </li>
 

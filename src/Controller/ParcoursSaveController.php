@@ -112,7 +112,6 @@ class ParcoursSaveController extends AbstractController
 
                 return $this->json($rep);
             case 'etatStep':
-                $parcoursState->setParcours($parcours);
                 $valideState = (bool)$data['isChecked'] === true ? $parcoursState->valideStep(
                     $data['value']
                 ) : true;

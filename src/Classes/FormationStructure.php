@@ -23,6 +23,7 @@ class FormationStructure
         protected EntityManagerInterface $entityManager
     ) {
     }
+
     /**
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
@@ -52,7 +53,7 @@ class FormationStructure
         }
 
         //todo: tester si debut semestre flexible
-        $nbSemestres = $formation->getTypeDiplome()->getSemestreFin() - $formation->getSemestreDebut()+1;
+        $nbSemestres = $formation->getTypeDiplome()->getSemestreFin() - $formation->getSemestreDebut() + 1;
         $nbUes = $formation->getTypeDiplome()->getNbUeMax();
 
         //semestres
@@ -102,6 +103,20 @@ class FormationStructure
     {
         $tSemestres = [];
 
+        //récupérer les semestres de tronc commun existants pour les autres parcours de la formation
+        if ($parcours->getFormation()->isHasParcours() === true) {
+            foreach ($parcours->getFormation()->getParcours() as $parcoursFormation) {
+                if ($parcoursFormation->getId() !== $parcours->getId()) {
+                    foreach ($parcoursFormation->getSemestreParcours() as $semestreParcours) {
+                        $semestre = $semestreParcours->getSemestre();
+                        if ($semestre !== null && $semestre->isTroncCommun()) {
+                            $tSemestres[$semestre?->getOrdre()] = $semestre;
+                        }
+                    }
+                }
+            }
+        }
+
         foreach ($semestres as $key => $format) {
             $semestre = null;
             if ($format === 'tronc_commun') {
@@ -112,7 +127,7 @@ class FormationStructure
 
                     $this->entityManager->persist($semestre);
                     $tSemestres[$key] = $semestre;
-                    $this->generesUe($semestre,$nbUes);
+                    $this->generesUe($semestre, $nbUes);
                 } else {
                     $semestre = $tSemestres[$key];
                 }
@@ -120,7 +135,7 @@ class FormationStructure
                 $semestre = new Semestre();
                 $semestre->setOrdre($key);
                 $this->entityManager->persist($semestre);
-                $this->generesUe($semestre,$nbUes);
+                $this->generesUe($semestre, $nbUes);
             }
             $sp = new SemestreParcours($semestre, $parcours);
             $this->entityManager->persist($sp);
@@ -138,5 +153,4 @@ class FormationStructure
             $this->entityManager->persist($ue);
         }
     }
-
 }

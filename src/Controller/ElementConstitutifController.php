@@ -85,12 +85,13 @@ class ElementConstitutifController extends AbstractController
         Parcours $parcours
     ): Response {
         $elementConstitutif = new ElementConstitutif();
+        $elementConstitutif->setParcours($parcours);
 
         $elementConstitutif->setModaliteEnseignement($parcours?->getModalitesEnseignement());
         $elementConstitutif->setUe($ue);
 
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
-            'action' => $this->generateUrl('app_element_constitutif_new', ['ue' => $ue->getId()]),
+            'action' => $this->generateUrl('app_element_constitutif_new', ['ue' => $ue->getId(), 'parcours' => $parcours->getId()]),
         ]);
         $form->handleRequest($request);
 
@@ -120,6 +121,7 @@ class ElementConstitutifController extends AbstractController
                 $matieres = explode(',', $request->request->get('matieres'));
                 foreach ($matieres as $matiere) {
                     $ec = new ElementConstitutif();
+                    $ec->setParcours($parcours);
                     $ec->setModaliteEnseignement($parcours?->getModalitesEnseignement());
                     $ec->setUe($ue);
                     $ec->setNatureUeEc($elementConstitutif->getNatureUeEc());
@@ -144,7 +146,7 @@ class ElementConstitutifController extends AbstractController
                 $lastEc = $ecOrdre->getOrdreSuivant($ue);
                 $elementConstitutif->setTexteEcLibre($request->request->get('ficheMatiereLibre'));
                 $elementConstitutif->setOrdre($lastEc);
-                $elementConstitutif->setSubOrdre(0);
+                $elementConstitutif->setSubOrdre(null);
                 $elementConstitutif->genereCode();
                 $elementConstitutifRepository->save($elementConstitutif, true);
             }

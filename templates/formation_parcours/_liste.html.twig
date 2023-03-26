@@ -4,6 +4,7 @@
         <td>Libellé du parcours</td>
         <td>Responsable du parcours</td>
         <td></td>
+        <td></td>
     </tr>
     </thead>
     <tbody>
@@ -14,6 +15,9 @@
             </td>
             <td>
                 {{ parcour.respParcours != null ? parcour.respParcours.display : 'Non défini' }}
+            </td>
+            <td style="width:20%">
+                {{ parcour.remplissage|remplissage }}
             </td>
             <td class="text-end">
                 <button
@@ -38,6 +42,12 @@
                     <i class="{{ iconEdit }}"></i>
                     Editer la fiche du parcours
                 </a>
+
+                <button {{ stimulus_action('formation--step3', 'dupliquerParcours', 'click', {
+                    url:path('app_parcours_dupliquer',{'id': parcour.id}),
+                    id: parcour.id}) }} class="btn btn-sm text-primary">
+                    <i class="{{ iconDuplicate }}"></i> Dupliquer
+                </button>
 
                 <button {{ stimulus_action('formation--step3', 'deleteParcours', 'click', {
                     url:path('app_parcours_delete',{'id': parcour.id}),

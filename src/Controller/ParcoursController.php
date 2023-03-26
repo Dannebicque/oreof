@@ -9,8 +9,10 @@
 
 namespace App\Controller;
 
+use App\Classes\verif\ParcoursState;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Entity\SemestreParcours;
 use App\Form\ParcoursType;
 use App\Repository\ParcoursRepository;
 use App\Utils\JsonRequest;
@@ -114,15 +116,65 @@ class ParcoursController extends BaseController
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
     #[Route('/{id}/edit', name: 'app_parcours_edit', methods: ['GET', 'POST'])]
-    public function edit(Parcours $parcour): Response
+    public function edit(
+        ParcoursState $parcoursState,
+        Parcours $parcour): Response
     {
+        $parcoursState->setParcours($parcour);
         $typeDiplome = $parcour->getFormation()?->getTypeDiplome();
 
         return $this->render('parcours/edit.html.twig', [
             'parcours' => $parcour,
             'typeDiplome' => $typeDiplome,
             'formation' => $parcour->getFormation(),
+            'parcoursState' => $parcoursState,
         ]);
+    }
+
+    #[Route('/{id}/dupliquer', name: 'app_parcours_dupliquer', methods: ['GET'])]
+    public function dupliquer(
+        EntityManagerInterface $entityManager,
+        Parcours $parcour,
+    ): Response
+    {
+        $formation = $parcour->getFormation();
+        $newParcours = clone $parcour;
+        $newParcours->setLibelle($parcour->getLibelle() . ' (copie)');
+        $entityManager->persist($newParcours);
+
+        foreach ($parcour->getSemestreParcours() as $sp) {
+            if ($sp->getSemestre()->isTroncCommun()) {
+                //tronc commun, on duplique uniquement la liaison.
+                $newSp = clone $sp;
+                $newSp->setParcours($newParcours);
+                $entityManager->persist($newSp);
+            } else {
+                //Pas tronc commun, on duplique semestre, UE et EC
+                $newSemestre = clone $sp->getSemestre();
+                $entityManager->persist($newSemestre);
+                $newSp = new SemestreParcours($newSemestre,$newParcours);
+                $entityManager->persist($newSp);
+
+                foreach ($sp->getSemestre()->getUes() as $ue)
+                {
+                    $newUe = clone $ue;
+                    $newUe->setSemestre($newSemestre);
+                    $entityManager->persist($newUe);
+
+                    //dupliquer les EC des ue
+                    foreach ($ue->getElementConstitutifs() as $ec)
+                    {
+                        $newEc = clone $ec;
+                        $newEc->setUe($newUe);
+                        $newEc->setParcours($newParcours);
+                        $entityManager->persist($newEc);
+                    }
+                }
+            }
+        }
+        $entityManager->flush();
+
+        return $this->json(true);
     }
 
     /**

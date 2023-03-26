@@ -31,10 +31,20 @@ export default class extends Controller {
     }
   }
 
+  async dupliquerParcours(event) {
+    event.preventDefault()
+    if (confirm('Voulez-vous vraiment dupliquer ce parcours et toutes les informations associées ?')) {
+      const { url } = event.params
+      await fetch(url).then(() => {
+        callOut('Duplication effectuée', 'success')
+        this._refreshListe()
+      })
+    }
+  }
+
   async deleteParcours(event) {
     event.preventDefault()
     if (confirm('Voulez-vous vraiment supprimer ce parcours et toutes les informations associées ?')) {
-      const { id } = event.params
       const { url } = event.params
       const { csrf } = event.params
       const body = {
@@ -46,7 +56,6 @@ export default class extends Controller {
       await fetch(url, body).then(() => {
         callOut('Suppression effectuée', 'success')
         this._refreshListe()
-        document.getElementById(`tab_parcours_${id}`).remove()
       })
     }
   }

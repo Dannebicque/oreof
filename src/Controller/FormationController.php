@@ -90,7 +90,13 @@ class FormationController extends BaseController
 
 
         if ($q) {
-            $formations = $formationRepository->findBySearch($q, $this->getAnneeUniversitaire(), $sort, $direction, $composante);
+            $formations = $formationRepository->findBySearch(
+                $q,
+                $this->getAnneeUniversitaire(),
+                $sort,
+                $direction,
+                $composante
+            );
         } else {
             $formations = $formationRepository->findBy(
                 ['composantePorteuse' => $composante->getId(), 'anneeUniversitaire' => $this->getAnneeUniversitaire()],
@@ -242,7 +248,9 @@ class FormationController extends BaseController
     ): Response {
         //todo: tester les droits et si on est en place "en_cours_redaction" => voter
         $formationState->setFormation($formation);
-        $parcoursState->setParcours($formation->getParcours()?->first());
+        if ($formation->getParcours()?->first() !== false) {
+            $parcoursState->setParcours($formation->getParcours()?->first());
+        }
 
         return $this->render('formation/edit.html.twig', [
             'formation' => $formation,
