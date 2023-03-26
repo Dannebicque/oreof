@@ -113,14 +113,6 @@ class FicheMatiereController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/export', name: 'app_fiche_matiere_export', methods: ['GET', 'POST'])]
-    public function export(
-        FicheMatiere $ficheMatiere,
-        FicheMatiereState $ficheMatiereState,
-    ): Response {
-
-    }
-
     #[Route('/{id}/edit', name: 'app_fiche_matiere_edit', methods: ['GET', 'POST'])]
     public function edit(
         FicheMatiere $ficheMatiere,

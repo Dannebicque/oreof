@@ -11,6 +11,7 @@ namespace App\Controller;
 
 use App\Classes\MyPDF;
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,16 +31,16 @@ class FicheMatiereExportController extends AbstractController
      * @throws \Twig\Error\LoaderError
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
-    #[Route('/element/constitutif/export/{elementConstitutif}', name: 'app_element_constitutif_export')]
-    public function export(ElementConstitutif $elementConstitutif): Response
+    #[Route('/fiche-matiere/export/{id}', name: 'app_fiche_matiere_export')]
+    public function export(FicheMatiere $ficheMatiere): Response
     {
-        $formation = $elementConstitutif->getParcours()->getFormation();
+        $formation = $ficheMatiere->getParcours()?->getFormation();
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
         }
 
         $bccs = [];
-        foreach ($elementConstitutif->getCompetences() as $competence) {
+        foreach ($ficheMatiere->getCompetences() as $competence) {
             if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
                 $bccs[$competence->getBlocCompetence()?->getId()]['bcc'] = $competence->getBlocCompetence();
                 $bccs[$competence->getBlocCompetence()?->getId()]['competences'] = [];
@@ -47,19 +48,17 @@ class FicheMatiereExportController extends AbstractController
             $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
         }
 
-        $typeDiplome =$formation->getTypeDiplome();
+        $typeDiplome = $formation->getTypeDiplome();
 
         return $this->myPdf::generePdf(
             'pdf/ec.html.twig',
             [
-                'elementConstitutif' => $elementConstitutif,
-                'template' => $typeDiplome::TEMPLATE,//todo: template générique finalement ?
+                'ficheMatiere' => $ficheMatiere,
                 'formation' => $formation,
                 'typeDiplome' => $typeDiplome,
                 'bccs' => $bccs
-
             ],
-            'dpe_ec_'.$elementConstitutif->getLibelle()
+            'dpe_fiche_matiere_'.$ficheMatiere->getLibelle()
         );
     }
 }
