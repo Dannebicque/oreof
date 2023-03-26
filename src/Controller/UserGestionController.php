@@ -53,7 +53,7 @@ class UserGestionController extends BaseController
 
         $form = $this->createForm(UserAddType::class, $user, [
             'action' => $this->generateUrl(
-                'app_user_missing_ldap',
+                'app_user_missing',
                 ['action' => $request->query->get('action'), 'id' => $request->query->get('id')]
             ),
             'method' => 'POST',
@@ -95,7 +95,6 @@ class UserGestionController extends BaseController
                     break;
                 case 'responsableParcours':
                     $parcours = $parcoursRepository->find($request->query->get('id'));
-                    //pas besoin d'envoyer un mail dans ce cas
                     if ($parcours !== null) {
                         $parcours->setRespParcours($user);
                         $parcoursRepository->save($parcours, true);
@@ -106,7 +105,6 @@ class UserGestionController extends BaseController
                     break;
                 case 'responsableFormation':
                     $formation = $formationRepository->find($request->query->get('id'));
-                    //pas besoin d'envoyer un mail dans ce cas
                     if ($formation !== null) {
                         $formation->setResponsableMention($user);
                         $formationRepository->save($formation, true);
