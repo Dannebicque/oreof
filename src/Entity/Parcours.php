@@ -424,8 +424,18 @@ class Parcours
 
     public function remplissage(): float
     {
-        //todo: a gérer
-        return 20;
+        $total = 0;
+        $total += count($this->getRegimeInscription()) === 0 ? 0 : 1;
+        $total += $this->getContenuFormation() === null ? 0 : 1;
+        $total += $this->getDebouches() === null ? 0 : 1;
+        $total += $this->getResultatsAttendus() === null ? 0 : 1;
+        $total += $this->getRythmeFormation() === null ? 0 : 1;
+        $total += $this->getLocalisation() === null ? 0 : 1;
+        $total += $this->getObjectifsParcours() === null ? 0 : 1;
+        $total += $this->getPoursuitesEtudes() === null ? 0 : 1;
+        $total += $this->getCoordSecretariat() === null ? 0 : 1;
+        $total += count($this->getCodesRome()) === 0 ? 0 : 1;
+        return $total / 10 * 100;
     }
 
     public function getRythmeFormation(): ?RythmeFormation
