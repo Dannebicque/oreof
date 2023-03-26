@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.19.10](https://github.com/Dannebicque/oreof/compare/v0.19.9...v0.19.10) (2023-03-26)
+
+
+### Features
+
+* Ajout/modification des UE ([7951e19](https://github.com/Dannebicque/oreof/commit/7951e19e67ca254a8df8de23dd656abcd951ccb8))
+* delete une fiche matière ([948cd22](https://github.com/Dannebicque/oreof/commit/948cd220c7bdaf9a2ddc88fb88aa06e3d464a8a7))
+* Dupliquer un parcours + fix génération structure sur tronc commun ([33eba46](https://github.com/Dannebicque/oreof/commit/33eba46e853385ea42da0d0806d93a71ae189f29))
+* dupliquer une fiche matière ([54c2506](https://github.com/Dannebicque/oreof/commit/54c2506190b7b2fc20666e81317448c8c9144326))
+* MCCC + Structures selon modele MCC choisi ([f907cfa](https://github.com/Dannebicque/oreof/commit/f907cfae97d67b8f8b747d042d4db3da8a053e83))
+
 ### [0.19.9](https://github.com/Dannebicque/oreof/compare/v0.19.8...v0.19.9) (2023-03-25)
 
 
