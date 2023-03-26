@@ -41,6 +41,9 @@ class Ue
     #[ORM\Column(nullable: true)]
     private ?int $subOrdre = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $libelle = null;
+
     public function __construct()
     {
         $this->ecUes = new ArrayCollection();
@@ -184,5 +187,17 @@ class Ue
         }
 
         return count($tabElement);
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(?string $libelle): self
+    {
+        $this->libelle = $libelle;
+
+        return $this;
     }
 }

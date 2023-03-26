@@ -1,4 +1,43 @@
-{{ include('communs/_form.html.twig', {
-    isModal:true,
-}) }}
+{% form_theme form 'communs/form_theme.html.twig' %}
+
+{{ form_start(form) }}
+<div
+        {{ stimulus_controller('ue') }}
+>
+    {{ form_row(form.libelle) }}
+    <div>
+        {{ form_row(form.typeUe, {'row_attr' : {'id' : 'typeUe' }}) }}
+        <button class="btn text-info"
+                {{ stimulus_action('ue','ajoutTypeUe', 'click') }}
+        >
+            <i class="{{ iconAdd }}"></i>
+            Absent de la liste, ajouter un type d'UE
+        </button>
+    </div>
+
+    {{ form_row(form.typeUeTexte, {'row_attr' : {'class' : 'd-none', 'id' : 'typeUeTexte' }, 'attr' :
+        {'data-action' : 'keyup->ue#changeTypeUeTexte'}}) }}
+    <div>
+        {{ form_row(form.natureUeEc, {'row_attr' : {'id' : 'natureUeEc' }}) }}
+        <button class="btn text-info"
+                {{ stimulus_action('ue','ajoutNatureUeEc', 'click') }}
+        >
+            <i class="{{ iconAdd }}"></i>
+            Absent de la liste, ajouter une nature d'UE
+        </button>
+        <br>
+    </div>
+    {{ form_row(form.natureUeEcTexte, {'row_attr' : {'class' : 'd-none', 'id' : 'natureUeEcTexte' }, 'attr' :
+        {'data-action' : 'keyup->ue#changeNatureUeEcTexte'}}) }}
+</div>
+<button type="submit" class="btn btn-success"
+        {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+>
+    <i class="fal fa-floppy-disk"></i>
+    Enregistrer
+</button>
+
+{{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont
+obligatoires'}) }}
+{{ form_end(form) }}
 

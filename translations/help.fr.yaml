@@ -213,3 +213,4 @@ fiche_matiere_step1.helps.responsableFicheMatiere: "Indiquez le référent de l'
 user.add_missing.email.help: user.add_missing.email.help
 form.helps.email: form.helps.email
 user_add.helps.email: user_add.helps.email
+ue.helps.libelle: ue.helps.libelle

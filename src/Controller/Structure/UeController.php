@@ -79,7 +79,7 @@ class UeController extends AbstractController
                 'semestre' => $semestre->getId(),
                 'parcours' => $parcours->getId()
             ]),
-            'choices' => $typeDiplome?->getTypeUes(),
+            'typeDiplome' => $typeDiplome,
         ]);
 
         $form->handleRequest($request);
@@ -87,11 +87,6 @@ class UeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $ordre = $ueRepository->getMaxOrdre($semestre);
             $ue->setOrdre($ordre + 1);
-
-            if ($form->get('typeUe')->getData() !== null) {
-                $tu = $typeUeRepository->find($form->get('typeUe')->getData());
-                $ue->setTypeUe($tu);
-            }
 
             if ($form->get('typeUeTexte')->getData() !== null && $form->get('typeUe')->getData() === null) {
                 $tu = new TypeUe();
@@ -206,6 +201,62 @@ class UeController extends AbstractController
         return $this->json(true);
     }
 
+    #[Route('/{id}/{parcours}/modifier', name: 'edit', methods: ['GET','POST'])]
+    public function edit(
+        NatureUeEcRepository $natureUeEcRepository,
+        TypeUeRepository $typeUeRepository,
+        Request $request,
+        Ue $ue,
+        Parcours $parcours,
+        UeRepository $ueRepository
+    ): Response {
+        $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
+
+        if ($typeDiplome === null) {
+            throw new \Exception('Type de diplôme non trouvé');
+        }
+        $form = $this->createForm(UeType::class, $ue, [
+            'action' => $this->generateUrl('structure_ue_edit', [
+                'id' => $ue->getId(),
+                'parcours' => $parcours->getId()
+            ]),
+            'typeDiplome' => $typeDiplome,
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('typeUeTexte')->getData() !== null && $form->get('typeUe')->getData() === null) {
+                $tu = new TypeUe();
+                $tu->setLibelle($form->get('typeUeTexte')->getData());
+                $tu->addTypeDiplome($typeDiplome);
+                $typeUeRepository->save($tu, true);
+                $ue->setTypeUe($tu);
+            }
+
+            if ($form->get('natureUeEcTexte')->getData() === null && $form->get('natureUeEc')->getData() !== null) {
+                if ($form->get('natureUeEc')->getData()->isChoix() === true) {
+                    $ue->setSubOrdre(1);
+                    $ue2 = clone $ue;
+                    $ue2->setSubOrdre(2);
+                    $ueRepository->save($ue2, true);
+                }
+            }
+
+            if ($form->get('natureUeEcTexte')->getData() !== null && $form->get('natureUeEc')->getData() === null) {
+                $tu = new NatureUeEc();
+                $tu->setLibelle($form->get('natureUeEcTexte')->getData());
+                $natureUeEcRepository->save($tu, true);
+                $ue->setNatureUeEc($tu);
+            }
+            $ueRepository->save($ue, true);
+            return $this->json(true);
+        }
+
+        return $this->render('structure/ue/_new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
     /**
      * @throws \JsonException

@@ -1,6 +1,28 @@
 {% use "bootstrap_5_layout.html.twig" %}
 {% trans_default_domain 'form' %}
 
+{%- block form_row -%}
+    {%- if compound is defined and compound -%}
+        {%- set element = 'fieldset' -%}
+    {%- endif -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    {%- set row_class = row_class|default(row_attr.class|default('mb-1')|trim) -%}
+    <{{ element|default('div') }}{% with {attr: row_attr|merge({class: row_class})} %}{{ block('attributes') }}{% endwith %}>
+    {%- if 'form-floating' in row_class -%}
+        {{- form_widget(form, widget_attr) -}}
+        {{- form_label(form) -}}
+    {%- else -%}
+        {{- form_label(form) -}}
+        {{- form_widget(form, widget_attr) -}}
+    {%- endif -%}
+    {{- form_help(form) -}}
+    {{- form_errors(form) -}}
+    </{{ element|default('div') }}>
+{%- endblock form_row %}
+
 {% block trix_widget %}
     <input id="trix-input-{{ trixId }}" value="{{ value }}" type="hidden" name="{{ full_name }}">
     <trix-editor input="trix-input-{{ trixId }}"></trix-editor>
@@ -8,7 +30,7 @@
 
 {%- block form_widget_simple -%}
     {% if input_prefix is defined or input_suffix is defined %}
-        <div class="input-group mb-3">
+        <div class="input-group">
             {% if input_prefix %}
                 {{ input_prefix | raw }}
             {% endif %}
@@ -99,7 +121,8 @@
     {%- if help is not empty -%}
         {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
     {%- endif -%}
-    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %} {% if button_disabled == false %}{{ stimulus_controller('textarea') }}{% endif %} class="mb-3">
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %} {% if button_disabled == false %}{{
+    stimulus_controller('textarea') }}{% endif %} class="mt-3">
         {{- form_label(form) -}}
         {{- form_errors(form) -}}
         {{- form_widget(form, widget_attr) -}}
@@ -177,7 +200,7 @@
     <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %} {{ stimulus_controller('textarea', {
         'maxLength': maxLength,
     }) }}
-            class="mb-3">
+            class="mt-3">
         {{- form_label(form) -}}
         {{- form_errors(form) -}}
         {{- form_widget(form, widget_attr) -}}

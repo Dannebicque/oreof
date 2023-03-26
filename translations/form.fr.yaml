@@ -263,3 +263,4 @@ fiche_matiere_step1.labels.responsableFicheMatiere: "Référent de l'enseignemen
 fiche_matiere.step1_collegue_manquant.title: fiche_matiere.step1_collegue_manquant.title
 fiche_matiere.step1_collegue_manquant.label: fiche_matiere.step1_collegue_manquant.label
 user.add_missing.email.label: user.add_missing.email.label
+ue.labels.libelle: ue.labels.libelle

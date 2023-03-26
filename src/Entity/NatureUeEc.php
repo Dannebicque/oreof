@@ -24,7 +24,7 @@ class NatureUeEc
     private ?string $libelle = null;
 
     #[ORM\Column]
-    private ?bool $choix = null;
+    private ?bool $choix = false;
 
     #[ORM\Column]
     private ?bool $libre = false;

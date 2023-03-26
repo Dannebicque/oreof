@@ -49,58 +49,14 @@
                                     </div>
                                     <div class="col-12 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ue</div>
-                                        {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) %}
-                                            <label for="detail_ue_{{ ue.id }}" class="sr-only">Type Ue</label>
-                                            <select class="form-select form-select-sm" id="detail_ue_{{ ue.id }}"
-                                                    {{ stimulus_action('structure--ue', 'changeTypeUe', 'change', {
-                                                        url: path('structure_ue_change_type_ue', {ue: ue.id})
-                                                    }) }}
-                                            >
-                                                <option value="">Choisir un type</option>
-                                                {% for typeUe in typeUes %}
-                                                    <option value="{{ typeUe.id }}"
-                                                            {% if ue.typeUe != null and ue.typeUe.id == typeUe.id %}
-                                                                selected
-                                                            {% endif %}
-                                                    >
-                                                        {{ typeUe.libelle }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                        {% else %}
-                                            {{ ue.typeUe != null ? ue.typeUe.libelle : 'erreur' }}
-                                        {% endif %}
+                                        {{ ue.typeUe != null ? ue.typeUe.libelle|badge('success') :
+                                        'Erreur, à compléter'|badge('danger') }}
                                     </div>
                                     <div class="col-12 col-md-2 d-flex flex-column justify-content-center mb-1
                                     mb-md-0">
                                         <div class="text-muted text-small d-md-none">ue</div>
-                                        {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) %}
-                                            <label for="detail_nature_ue_{{ ue.id }}" class="sr-only">
-                                                Nature UE
-                                            </label>
-                                            <select class="form-select form-select-sm ms-2"
-                                                    id="detail_nature_ue_{{ ue.id }}"
-                                                    {{ stimulus_action('structure--ue', 'changeNatureUe',
-                                                        'change', {
-                                                            url: path('structure_ue_change_nature_ue', {ue: ue.id})
-                                                        }) }}
-                                            >
-                                                <option value="">Choisir</option>
-                                                {% for natureUeEc in natureUeEcs %}
-                                                    <option value="{{ natureUeEc.id }}"
-                                                            data-choix="{{ natureUeEc.choix == true ? 'true' : 'false' }}"
-                                                            {% if ue.natureUeEc != null and ue.natureUeEc.id ==
-                                                                natureUeEc.id %}
-                                                                selected
-                                                            {% endif %}
-                                                    >
-                                                        {{ natureUeEc.libelle }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                        {% else %}
-                                            {{ ue.natureUeEc != null ? ue.natureUeEc.libelle : 'erreur' }}
-                                        {% endif %}
+                                        {{ ue.natureUeEc != null ? ue.natureUeEc.libelle|badge('success') :
+                                        'Erreur à compléter'|badge('danger') }}
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center
                                     align-items-md-end mb-1 mb-md-0">
@@ -130,9 +86,27 @@
                                         </button>
 
                                     </div>
-                                    <div class="col-6 col-md-3 d-flex justify-content-center text-end
+                                    <div class="col-6 col-md-3 d-flex text-end
                                             align-items-md-end mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Actions</div>
+                                        <button
+                                                {{ stimulus_controller('modal', {
+                                                    size: 'lg',
+                                                    modalTitle: 'Modifier l\'UE ' ~ ue.display,
+                                                    modalUrl: path('structure_ue_edit', {id:ue.id, parcours: parcours
+                                                    .id})
+                                                }) }}
+                                                data-action="click->modal#openModal"
+                                                class="btn btn-sm text-warning me-1"
+                                                data-size="lg"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom"
+                                                title="Modifier l'UE {{ ue.display }}"
+                                        >
+                                            <i class="{{ iconEdit }}"></i>
+                                            <span> Modifier l'UE</span>
+                                        </button>
+
                                         {% if typeDiplome.nbUeMax != 0 or ue.ordre > typeDiplome.nbUeMax %}
                                             <button {{ stimulus_action('structure--ue', 'delete', 'click', {
                                                 url:path('structure_ue_delete',{'id': ue.id}),
@@ -175,7 +149,7 @@
                                                         ('structure--ue', 'deplacerUe',
                                                         'click', {url: path('structure_ue_deplacer_sub',{sens: 'up',
                                                             ue:ue
-                                                        .id}), ue:ue.id, parcours:parcours.id}) }}>
+                                                            .id}), ue:ue.id, parcours:parcours.id}) }}>
                                                         <i class="fal fa-circle-up"></i></button>
                                                 {% else %}
                                                     <button class="btn btn-sm btn-outline-info" disabled>

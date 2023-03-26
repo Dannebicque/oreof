@@ -9,9 +9,11 @@
 
 namespace App\Repository;
 
+use App\Entity\TypeDiplome;
 use App\Entity\TypeUe;
 use App\TypeDiplome\Source\TypeDiplomeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -51,25 +53,12 @@ class TypeUeRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByTypeDiplome(TypeDiplomeInterface $typeDiplome): array
+    public function findByTypeDiplome(TypeDiplome $typeDiplome): QueryBuilder
     {
-        $typeDiplomes = $this->createQueryBuilder('t')
-            ->orderBy('t.libelle', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
-
-        $tab = [];
-
-        //filtre selon le type de diplome
-        foreach ($typeDiplomes as $td) {
-            if (in_array($typeDiplome::class, $td->getTypeDiplome())) {
-                $tab[$td->getLibelle()] = $td->getId();
-            }
-        }
-
-        return $tab;
+        return $this->createQueryBuilder('t')
+            ->join('t.typeDiplomes', 'td')
+            ->where('td.id = :typeDiplome')
+            ->setParameter('typeDiplome', $typeDiplome->getId())
+            ->orderBy('t.libelle', 'ASC');
     }
-
-
 }

@@ -12,6 +12,7 @@ namespace App\Form;
 use App\Entity\NatureUeEc;
 use App\Entity\TypeUe;
 use App\Entity\Ue;
+use App\Repository\TypeUeRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -23,16 +24,23 @@ class UeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $choices = $options['choices'];
+        $typeDiplome = $options['typeDiplome'];
 
 
         $builder
+            ->add('libelle', TextType::class, [
+                'attr' => [
+                    'maxlength' => 255,
+                ],
+                'required' => false
+            ])
             ->add('typeUe', EntityType::class, [
                 'class' => TypeUe::class,
-                'choice_label' => 'libelle', //todo: filtrer sur diplôme
+                'choice_label' => 'libelle',
+                'query_builder' => fn(TypeUeRepository $typeUeRepository) => $typeUeRepository->findByTypeDiplome($typeDiplome),
                 'required' => false,
-                'mapped' => false,
             ])
+
             ->add('typeUeTexte', TextType::class, [
                 'attr' => [
                     'maxlength' => 100,
@@ -59,7 +67,7 @@ class UeType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Ue::class,
             'translation_domain' => 'form',
-            'choices' => [],
+            'typeDiplome' => null,
         ]);
     }
 }
