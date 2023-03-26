@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.19.13](https://github.com/Dannebicque/oreof/compare/v0.19.12...v0.19.13) (2023-03-26)
+
+
+### Bug Fixes
+
+* Affichage fiche matière ([af31a32](https://github.com/Dannebicque/oreof/commit/af31a325246bfbe03a449bef0c4f65a58d259573))
+* Etats des onglets ([fa54413](https://github.com/Dannebicque/oreof/commit/fa544138856f3734c1d6c34757e6183621f669b2))
+* Génération des semestres en LP ([a88bcf8](https://github.com/Dannebicque/oreof/commit/a88bcf8dd664a21f525d287cc0f102e66130e729))
+
 ### [0.19.12](https://github.com/Dannebicque/oreof/compare/v0.19.11...v0.19.12) (2023-03-26)
 
 
