@@ -3,7 +3,7 @@
         <dl>
             <dt>Description de l’enseignement</dt>
             <dd>
-                <p>{{ elementConstitutif.description|raw }}</p>
+                <p>{{ ficheMatiere.description|raw }}</p>
             </dd>
         </dl>
     </div>
@@ -12,7 +12,7 @@
             <dt>Enseignement dispensé en</dt>
             <dd>
                 <ul>
-                    {% for langue in elementConstitutif.langueDispense %}
+                    {% for langue in ficheMatiere.langueDispense %}
                     <li>{{ langue.libelle }}</li>
                     {% endfor %}
                 </ul>
@@ -24,22 +24,22 @@
             <dt>Support de cours en</dt>
             <dd>
                 <ul>
-                    {% for langue in elementConstitutif.langueSupport %}
+                    {% for langue in ficheMatiere.langueSupport %}
                     <li>{{ langue.libelle }}</li>
                     {% endfor %}
                 </ul>
             </dd>
         </dl>
     </div>
-    <div class="col-sm-12">
-        <dl>
-            <dt>Type d'enseignement</dt>
-            <dd>{{ elementConstitutif.ecUes[0].ue.typeUe != null ? elementConstitutif.ecUes[0].ue.typeUe.libelle :
-                'erreur'
-                }}</dd>
-            <dt>Enseignement Obligatoire / Optionnel</dt>
-            <dd>{{ elementConstitutif.ecUes[0].ue.ueObligatoire != null ? elementConstitutif.ecUes[0].ue
-                .ueObligatoire.libelle : 'erreur'}}</dd>
-        </dl>
-    </div>
+{#    <div class="col-sm-12">#}
+{#        <dl>#}
+{#            <dt>Type d'enseignement</dt>#}
+{#            <dd>{{ ficheMatiere.ues.typeUe != null ? ficheMatiere.ue.typeUe.libelle :#}
+{#                'erreur'#}
+{#                }}</dd>#}
+{#            <dt>Enseignement Obligatoire / Optionnel</dt>#}
+{#            <dd>{{ elementConstitutif.ecUes[0].ue.ueObligatoire != null ? elementConstitutif.ecUes[0].ue#}
+{#                .ueObligatoire.libelle : 'erreur'}}</dd>#}
+{#        </dl>#}
+{#    </div>#}
 </div>

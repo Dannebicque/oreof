@@ -6,7 +6,7 @@
             <dt>Domaine</dt>
             <dd>{{ formation.domaine != null ? formation.domaine.libelle : 'erreur' }}</dd>
             <dt>Parcours</dt>
-            <dd>{{ elementConstitutif.parcours != null ? elementConstitutif.parcours.libelle : 'erreur' }}</dd>
+            <dd>{{ ficheMatiere.parcours != null ? ficheMatiere.parcours.libelle : 'erreur' }}</dd>
         </dl>
     </div>
     <div class="col-md-6 col-sm-12">
@@ -20,12 +20,12 @@
     <div class="col-12">
         <dl>
             <dt>Intitulé de l'EC</dt>
-            <dd>{{ elementConstitutif.libelle }}</dd>
+            <dd>{{ ficheMatiere.libelle }}</dd>
             <dt>Intitulé de l'EC en anglais</dt>
-            <dd>{{ elementConstitutif.libelleAnglais }}</dd>
+            <dd>{{ ficheMatiere.libelleAnglais }}</dd>
             <dt>Enseignement mutualisé ?</dt>
-            <dd>{{ elementConstitutif.enseignementMutualise == true ? 'Oui' : 'Non' }}</dd>
-            {% if elementConstitutif.enseignementMutualise == true %}
+            <dd>{{ ficheMatiere.enseignementMutualise == true ? 'Oui' : 'Non' }}</dd>
+            {% if ficheMatiere.enseignementMutualise == true %}
             <dt>Formation(s) partageant l’enseignement mutualisé</dt>
             <dd></dd>
             {% endif %}

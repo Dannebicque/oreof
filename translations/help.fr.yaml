@@ -210,7 +210,7 @@ fiche_matiere_step2.helps.langueSupport.help: fiche_matiere_step2.helps.langueSu
 fiche_matiere_step3.helps.objectifs: fiche_matiere_step3.helps.objectifs
 fiche_matiere_step3.labels.competence: fiche_matiere_step3.labels.competence
 fiche_matiere_step1.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."
-user.add_missing.email.help: user.add_missing.email.help
+user.add_missing.email.help: 'Indiquez un email valide du collègue à ajouter pour récupérer ses informations'
 form.helps.email: form.helps.email
-user_add.helps.email: user_add.helps.email
-ue.helps.libelle: ue.helps.libelle
+user_add.helps.email: 'Indiquez un email valide du collègue à ajouter pour récupérer ses informations'
+ue.helps.libelle: 'Vous pouvez indiquer un libellé pour une UE, notamment si elle est à choix pour expliquer les modalités'
