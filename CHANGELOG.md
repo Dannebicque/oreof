@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.19.11](https://github.com/Dannebicque/oreof/compare/v0.19.10...v0.19.11) (2023-03-26)
+
+
+### Features
+
+* droits ([28f24d5](https://github.com/Dannebicque/oreof/commit/28f24d5e1ba080f98b4c640265c3caddd3f24f91))
+* Remplissage parcours ([e3f0dfd](https://github.com/Dannebicque/oreof/commit/e3f0dfd278a8381e47d9bc97c48341b9e8f53b4a))
+
 ### [0.19.10](https://github.com/Dannebicque/oreof/compare/v0.19.9...v0.19.10) (2023-03-26)
 
 
