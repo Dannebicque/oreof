@@ -53,7 +53,11 @@ class FormationStructure
         }
 
         //todo: tester si debut semestre flexible
-        $nbSemestres = $formation->getTypeDiplome()->getSemestreFin() - $formation->getSemestreDebut() + 1;
+        if ($formation->getTypeDiplome()->isDebutSemestreFlexible() === false) {
+            $semestreDebut = $formation->getTypeDiplome()->getSemestreDebut();
+        } else {
+            $semestreDebut = $formation->getSemestreDebut();
+        }
         $nbUes = $formation->getTypeDiplome()->getNbUeMax();
 
         //semestres
@@ -71,7 +75,7 @@ class FormationStructure
                 $this->entityManager->persist($parcours);
             }
 
-            for ($i = $formation->getSemestreDebut(); $i <= $nbSemestres; $i++) {
+            for ($i = $semestreDebut; $i <= $formation->getTypeDiplome()->getSemestreFin(); $i++) {
                 $semestres[$i] = 'tronc_commun';
             }
         }
@@ -85,9 +89,8 @@ class FormationStructure
     {
         foreach ($parcours->getSemestreParcours() as $semestre) {
             foreach ($semestre->getSemestre()?->getUes() as $ue) {
-                foreach ($ue->getEcUes() as $ecUe) {
-                    $this->entityManager->remove($ecUe->getUe());
-                    $this->entityManager->remove($ecUe);
+                foreach ($ue->getElementConstitutifs() as $ec) {
+                    $this->entityManager->remove($ec);
                 }
 
                 $this->entityManager->remove($ue);
