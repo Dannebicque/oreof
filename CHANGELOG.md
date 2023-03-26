@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.19.14](https://github.com/Dannebicque/oreof/compare/v0.19.13...v0.19.14) (2023-03-26)
+
+
+### Features
+
+* Ajout LDAP ([bfcdcb4](https://github.com/Dannebicque/oreof/commit/bfcdcb4741c4417a277671237874c2287ce4c6a5))
+* Export PDF fiche matière ([d4ea8d3](https://github.com/Dannebicque/oreof/commit/d4ea8d38df24fbd3c0d34a980b49cbeb26c3aed4))
+
 ### [0.19.13](https://github.com/Dannebicque/oreof/compare/v0.19.12...v0.19.13) (2023-03-26)
 
 
