@@ -51,9 +51,13 @@ export default class extends Controller {
 
     this.modal = new Modal(this.modalTarget)
     this.modal.show()
-
-    const params = new URLSearchParams(event.detail.params)
-    const response = await fetch(`${event.detail.url}?${params.toString()}`)
+    let response = null
+    if (event.detail.params.lenth > 0) {
+      const params = new URLSearchParams(event.detail.params)
+      response = await fetch(`${event.detail.url}?${params.toString()}`)
+    } else {
+      response = await fetch(`${event.detail.url}`)
+    }
     this.modalBodyTarget.innerHTML = await response.text()
   }
 
