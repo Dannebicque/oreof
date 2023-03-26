@@ -12,6 +12,7 @@ namespace App\Controller;
 use App\Classes\FormationStructure;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Repository\ParcoursRepository;
 use App\Utils\JsonRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,6 +35,7 @@ class FormationStructureController extends BaseController
 
     #[Route('/formation/structure/{parcours}', name: 'app_formation_genere_structure')]
     public function genereStructure(
+        ParcoursRepository $parcoursRepository,
         Request $request,
         FormationStructure $formationStructure,
         Parcours $parcours
@@ -42,7 +44,8 @@ class FormationStructureController extends BaseController
 
         switch ($action) {
             case 'recopieStructure':
-                $formationStructure->addParcours($parcours);
+                $parcoursOriginal = $parcoursRepository->find(JsonRequest::getValueFromRequest($request, 'value'));
+                $formationStructure->recopieParcours($parcours, $parcoursOriginal);
                 break;
             case 'reinitialiseStructure':
                 $formationStructure->genereStructre($parcours);

@@ -47,7 +47,7 @@ class FormationState
     public function isEmptyOnglet2(): bool
     {
         return ($this->formation->getObjectifsFormation() === null || trim($this->formation->getContenuFormation()) === '') &&
-        ($this->formation->getResultatsAttendus() === null || trim($this->formation->getResultatsAttendus()) === '')
+        ($this->formation->getResultatsAttendus() === null || trim($this->formation->getResultatsAttendus()) === '') &&
         ($this->formation->getRythmeFormation() === null || trim($this->formation->getRythmeFormationTexte()) === '');
     }
 

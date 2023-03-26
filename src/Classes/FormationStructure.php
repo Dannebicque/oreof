@@ -156,4 +156,41 @@ class FormationStructure
             $this->entityManager->persist($ue);
         }
     }
+
+    public function recopieParcours(Parcours $parcours, ?Parcours $parcoursOriginal)
+    {
+        if ($parcoursOriginal !== null && $parcours !== null && $parcours instanceof Parcours) {
+            $this->deleteStructure($parcours);
+        }
+
+        foreach ($parcoursOriginal->getSemestreParcours() as $semestreParcour) {
+            if ($semestreParcour->getSemestre()->isTroncCommun()) {
+                $spNew = new SemestreParcours($semestreParcour->getSemestre(), $parcours);
+                $this->entityManager->persist($spNew);
+            } else {
+                //Pas tronc commun, on duplique semestre, UE et EC
+                $newSemestre = clone $semestreParcour->getSemestre();
+                $this->entityManager->persist($newSemestre);
+                $newSp = new SemestreParcours($newSemestre, $parcours);
+                $this->entityManager->persist($newSp);
+
+                foreach ($semestreParcour->getSemestre()->getUes() as $ue) {
+                    $newUe = clone $ue;
+                    $newUe->setSemestre($newSemestre);
+                    $this->entityManager->persist($newUe);
+
+                    //dupliquer les EC des ue
+                    foreach ($ue->getElementConstitutifs() as $ec) {
+                        $newEc = clone $ec;
+                        $newEc->setUe($newUe);
+                        $newEc->setParcours($parcours);
+                        $this->entityManager->persist($newEc);
+                    }
+                }
+            }
+
+            $this->entityManager->flush();
+        }
+
+    }
 }
