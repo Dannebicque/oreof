@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.20.0](https://github.com/Dannebicque/oreof/compare/v0.19.14...v0.20.0) (2023-03-26)
+
+
+### Features
+
+* Ajout LDAP ([150fd43](https://github.com/Dannebicque/oreof/commit/150fd43e175602858cd725b6331999a7a0bf302c))
+* Ajout LDAP ([c06c4de](https://github.com/Dannebicque/oreof/commit/c06c4de1a10260810c32d156c4bf414c72aa7496))
+* Recopie parcours ([c320072](https://github.com/Dannebicque/oreof/commit/c320072213dfa09763e1e927717d686f57887681))
+
 ### [0.19.14](https://github.com/Dannebicque/oreof/compare/v0.19.13...v0.19.14) (2023-03-26)
 
 
