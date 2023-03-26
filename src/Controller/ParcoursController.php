@@ -45,8 +45,22 @@ class ParcoursController extends BaseController
             $parcours = $parcoursRepository->findParcours($this->getAnneeUniversitaire(), [$sort => $direction]);
         }
 
+        $tParcours = [];
+
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_PARCOURS_SHOW_ALL')) {
+            $tParcours = $parcours;
+        } else {
+            foreach ($parcours as $p) {
+                if ($this->isGranted('ROLE_FORMATION_EDIT_MY',
+                        $p->getFormation()) || $this->isGranted('ROLE_FORMATION_SHOW_MY', $p->getFormation())) {
+                    $tParcours[] = $p;
+                }
+            }
+        }
+
+
         return $this->render('parcours/_liste.html.twig', [
-            'parcours' => $parcours,
+            'parcours' => $tParcours,
             'sort' => $sort,
             'direction' => $direction
         ]);
@@ -118,8 +132,8 @@ class ParcoursController extends BaseController
     #[Route('/{id}/edit', name: 'app_parcours_edit', methods: ['GET', 'POST'])]
     public function edit(
         ParcoursState $parcoursState,
-        Parcours $parcour): Response
-    {
+        Parcours $parcour
+    ): Response {
         $parcoursState->setParcours($parcour);
         $typeDiplome = $parcour->getFormation()?->getTypeDiplome();
 
@@ -135,8 +149,7 @@ class ParcoursController extends BaseController
     public function dupliquer(
         EntityManagerInterface $entityManager,
         Parcours $parcour,
-    ): Response
-    {
+    ): Response {
         $formation = $parcour->getFormation();
         $newParcours = clone $parcour;
         $newParcours->setLibelle($parcour->getLibelle() . ' (copie)');
@@ -152,18 +165,16 @@ class ParcoursController extends BaseController
                 //Pas tronc commun, on duplique semestre, UE et EC
                 $newSemestre = clone $sp->getSemestre();
                 $entityManager->persist($newSemestre);
-                $newSp = new SemestreParcours($newSemestre,$newParcours);
+                $newSp = new SemestreParcours($newSemestre, $newParcours);
                 $entityManager->persist($newSp);
 
-                foreach ($sp->getSemestre()->getUes() as $ue)
-                {
+                foreach ($sp->getSemestre()->getUes() as $ue) {
                     $newUe = clone $ue;
                     $newUe->setSemestre($newSemestre);
                     $entityManager->persist($newUe);
 
                     //dupliquer les EC des ue
-                    foreach ($ue->getElementConstitutifs() as $ec)
-                    {
+                    foreach ($ue->getElementConstitutifs() as $ec) {
                         $newEc = clone $ec;
                         $newEc->setUe($newUe);
                         $newEc->setParcours($newParcours);
@@ -186,8 +197,7 @@ class ParcoursController extends BaseController
         Request $request,
         Parcours $parcour,
         ParcoursRepository $parcoursRepository
-    ): Response
-    {
+    ): Response {
         if ($this->isCsrfTokenValid('delete' . $parcour->getId(), JsonRequest::getValueFromRequest($request, 'csrf'))) {
             foreach ($parcour->getSemestreParcours() as $sp) {
                 $entityManager->remove($sp);

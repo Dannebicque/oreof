@@ -1,2 +1,1 @@
-workflow.dpe.transition.initialiser: workflow.dpe.transition.initialiser
-workflow.ec.transition.initialiser: workflow.ec.transition.initialiser
+workflow.dpe.transition.initialiser: "Nouvelle formation initialisée"
