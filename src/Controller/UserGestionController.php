@@ -25,6 +25,7 @@ use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,6 +44,7 @@ class UserGestionController extends BaseController
     #[Route('/ajout/utilisateur', name: 'app_user_missing')]
     public function ajoutUtilisateur(
         Ldap $ldap,
+        EntityManagerInterface $entityManager,
         ParcoursRepository $parcoursRepository,
         FicheMatiereRepository $ficheMatiereRepository,
         FormationRepository $formationRepository,
@@ -79,7 +81,7 @@ class UserGestionController extends BaseController
             $user->setNom($ldapUser['nom']);
             $user->setPrenom($ldapUser['prenom']);
             $user->setUsername($ldapUser['username']);
-
+            $entityManager->persist($user);
             //ajout des droits et du centre
             $erreur = false;
             switch ($request->query->get('action')) {
@@ -88,7 +90,6 @@ class UserGestionController extends BaseController
                     //pas besoin d'envoyer un mail dans ce cas
                     if ($fiche !== null) {
                         $fiche->setResponsableFicheMatiere($user);
-                        $ficheMatiereRepository->save($fiche, true);
                     } else {
                         $erreur = true;
                     }
@@ -97,7 +98,6 @@ class UserGestionController extends BaseController
                     $parcours = $parcoursRepository->find($request->query->get('id'));
                     if ($parcours !== null) {
                         $parcours->setRespParcours($user);
-                        $parcoursRepository->save($parcours, true);
                         //todo: construire l'objet event...
                     } else {
                         $erreur = true;
@@ -107,7 +107,6 @@ class UserGestionController extends BaseController
                     $formation = $formationRepository->find($request->query->get('id'));
                     if ($formation !== null) {
                         $formation->setResponsableMention($user);
-                        $formationRepository->save($formation, true);
                         //todo: construire l'objet event...
                     } else {
                         $erreur = true;
@@ -117,7 +116,7 @@ class UserGestionController extends BaseController
 
             //raffraichir.
             if ($erreur === false) {
-                $this->userRepository->save($user, true);
+                $entityManager->flush();
                 //todo: event pour prevenir l'utilisateur
                 return $this->json(true);
             }
