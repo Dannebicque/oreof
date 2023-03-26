@@ -46,12 +46,14 @@ class FormationState
 
     public function isEmptyOnglet2(): bool
     {
-        return $this->formation->getParcours()->count() === 0;
+        return ($this->formation->getObjectifsFormation() === null || trim($this->formation->getContenuFormation()) === '') &&
+        ($this->formation->getResultatsAttendus() === null || trim($this->formation->getResultatsAttendus()) === '')
+        ($this->formation->getRythmeFormation() === null || trim($this->formation->getRythmeFormationTexte()) === '');
     }
 
     public function isEmptyOnglet3(): bool
     {
-        return $this->formation->getParcours()->count() === 0;
+        return $this->formation->isHasParcours() === null && $this->formation->getParcours()->count() === 0;
     }
 
     public function valideStep(mixed $value): bool|array

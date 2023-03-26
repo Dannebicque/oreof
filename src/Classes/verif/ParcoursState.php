@@ -52,12 +52,13 @@ class ParcoursState
 
     public function isEmptyOnglet1(): bool
     {
-        return $this->parcours->getContenuFormation() === null && $this->parcours->getResultatsAttendus() === null && $this->parcours->getRythmeFormation() === null;
+        return ($this->parcours->getContenuFormation() === null || trim($this->parcours->getContenuFormation()) === '') &&
+            ($this->parcours->getResultatsAttendus() === null || trim($this->parcours->getResultatsAttendus()) === '')
+            ($this->parcours->getRythmeFormation() === null || trim($this->parcours->getRythmeFormation()) === '');
     }
 
     public function isEmptyOnglet2(): bool
     {
-        //todo: ajouter les vérifs?
         $stage = ($this->parcours->isHasStage() === true && $this->parcours->getStageText() !== null && trim($this->parcours->getStageText()) !== '' && $this->parcours->getNbHeuresStages() > 0) || $this->parcours->isHasStage() === false;
         $projet = ($this->parcours->isHasProjet() === true && $this->parcours->getProjetText() !== null && trim($this->parcours->getProjetText()) !== '' && $this->parcours->getNbHeuresProjet() > 0) || $this->parcours->isHasProjet() === false;
         $memoire = ($this->parcours->isHasMemoire() === true && $this->parcours->getMemoireText() !== null && trim($this->parcours->getMemoireText()) !== '') || $this->parcours->isHasProjet() === false;

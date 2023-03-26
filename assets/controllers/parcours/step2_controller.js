@@ -25,8 +25,8 @@ export default class extends Controller {
     document.getElementById('parcours_step2_stageText').addEventListener('trix-blur', this.saveStageText.bind(this))
     document.getElementById('parcours_step2_projetText').addEventListener('trix-blur', this.saveProjetText.bind(this))
     document.getElementById('parcours_step2_memoireText').addEventListener('trix-blur', this.saveMemoireText.bind(this))
-    if (document.getElementById('parcours_step2_memoireText')) { // todo: situationPro
-
+    if (document.getElementById('parcours_step2_situationProText')) { // todo: situationPro
+      document.getElementById('parcours_step2_situationProText').addEventListener('trix-blur', this.saveSituationProText.bind(this))
     }
   }
 
@@ -98,6 +98,27 @@ export default class extends Controller {
       field: 'nbHeuresProjet',
       action: 'float',
       value: event.target.value,
+    })
+  }
+
+  changeSituationPro(event) {
+    this._save({
+      field: 'hasSituationPro',
+      action: 'yesNo',
+      value: event.target.value,
+    })
+    if (event.target.value == 1) {
+      document.getElementById('blocSituationPro').style.display = 'block';
+    } else {
+      document.getElementById('blocSituationPro').style.display = 'none';
+    }
+  }
+
+  saveSituationProText() {
+    this._save({
+      field: 'situationProText',
+      action: 'textarea',
+      value: trixEditor('parcours_step2_situationProText'),
     })
   }
 
