@@ -53,8 +53,8 @@ class ParcoursState
     public function isEmptyOnglet1(): bool
     {
         return ($this->parcours->getContenuFormation() === null || trim($this->parcours->getContenuFormation()) === '') &&
-            ($this->parcours->getResultatsAttendus() === null || trim($this->parcours->getResultatsAttendus()) === '')
-            ($this->parcours->getRythmeFormation() === null || trim($this->parcours->getRythmeFormation()) === '');
+            ($this->parcours->getResultatsAttendus() === null || trim($this->parcours->getResultatsAttendus()) === '') &&
+            ($this->parcours->getRythmeFormation() === null || trim($this->parcours->getRythmeFormationTexte()) === '');
     }
 
     public function isEmptyOnglet2(): bool
