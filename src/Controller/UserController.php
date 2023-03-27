@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Repository\NotificationListeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,13 +21,17 @@ class UserController extends AbstractController
     {
         return $this->render('user/mes-informations.html.twig', [
             'centres' => $this->getUser()->getUserCentres(),
+
         ]);
     }
 
     #[Route('/utilisateur/mes-notifications', name: 'app_user_mes_notifications')]
-    public function mesNotifications(): Response
+    public function mesNotifications(
+        NotificationListeRepository $notificationListeRepository
+    ): Response
     {
         return $this->render('user/mes-notifications.html.twig', [
+            'notifications' => $notificationListeRepository->findAll(),
         ]);
     }
 
