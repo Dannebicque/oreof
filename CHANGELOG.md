@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.3](https://github.com/Dannebicque/oreof/compare/v0.20.2...v0.20.3) (2023-03-27)
+
+
+### Bug Fixes
+
+* Modals ([0b694f0](https://github.com/Dannebicque/oreof/commit/0b694f046f500ef9cd9f51f16b988b15b38ad4e2))
+
 ### [0.20.2](https://github.com/Dannebicque/oreof/compare/v0.20.1...v0.20.2) (2023-03-27)
 
 
