@@ -507,9 +507,9 @@ class Formation
         $total += $this->getRythmeFormation() === null ? 0 : 1;
         $total += $this->getRythmeFormationTexte() === null ? 0 : 1;
         $total += $this->isHasParcours() === null ? 0 : 1;
-        $total += count($this->getStructureSemestres()) === 0 ? 0 : 1;
+       // $total += count($this->getStructureSemestres()) === 0 ? 0 : 1;
 //todo: ajouter le remplissage des parcours et des matières ?
-        return $total / 7 * 100;
+        return $total / 6 * 100;
     }
 
     public function getRythmeFormation(): ?RythmeFormation
