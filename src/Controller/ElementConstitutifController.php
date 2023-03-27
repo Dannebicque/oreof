@@ -35,10 +35,6 @@ use Symfony\Component\Workflow\WorkflowInterface;
 #[Route('/element/constitutif')]
 class ElementConstitutifController extends AbstractController
 {
-    public function __construct(private readonly WorkflowInterface $ecWorkflow)
-    {
-    }
-
     #[Route('/', name: 'app_element_constitutif_index', methods: ['GET'])]
     public function index(FicheMatiereRepository $ficheMatiereRepository): Response
     {

@@ -142,6 +142,9 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: FicheMatiere::class)]
     private Collection $ficheMatieres;
 
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: FicheMatiereParcours::class)]
+    private Collection $ficheMatiereParcours;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -152,6 +155,7 @@ class Parcours
             $this->etatSteps[$i] = false;
         }
         $this->ficheMatieres = new ArrayCollection();
+        $this->ficheMatiereParcours = new ArrayCollection();
     }
 
 
@@ -682,6 +686,36 @@ class Parcours
             // set the owning side to null (unless already changed)
             if ($ficheMatiere->getParcours() === $this) {
                 $ficheMatiere->setParcours(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FicheMatiereParcours>
+     */
+    public function getFicheMatiereParcours(): Collection
+    {
+        return $this->ficheMatiereParcours;
+    }
+
+    public function addFicheMatiereParcour(FicheMatiereParcours $ficheMatiereParcour): self
+    {
+        if (!$this->ficheMatiereParcours->contains($ficheMatiereParcour)) {
+            $this->ficheMatiereParcours->add($ficheMatiereParcour);
+            $ficheMatiereParcour->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFicheMatiereParcour(FicheMatiereParcours $ficheMatiereParcour): self
+    {
+        if ($this->ficheMatiereParcours->removeElement($ficheMatiereParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($ficheMatiereParcour->getParcours() === $this) {
+                $ficheMatiereParcour->setParcours(null);
             }
         }
 

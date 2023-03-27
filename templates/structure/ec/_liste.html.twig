@@ -6,14 +6,12 @@
             <th>Matière</th>
             <th>Référent</th>
             <th>Remplissage</th>
-            <th>Etat</th>
+{#            <th>Etat</th>#}
             <th>Volumes Horaires</th>
             <th>MCCC</th>
             <th></th>
             <th></th>
             <th>Déplacer</th>
-            <th></th>
-
         </tr>
         </thead>
         <tbody>
@@ -28,9 +26,8 @@
                     <td>{{ ec.ficheMatiere.responsableFicheMatiere != null ? ec.ficheMatiere
                         .responsableFicheMatiere.display : 'Non défini' }}</td>
                     <td>{{ ec.ficheMatiere.remplissage|remplissage }}</td>
-                    <td>{{ ec.ficheMatiere.etatFicheMatiere|badgeEc }}</td>
                 {% else %}
-                    <td colspan="4">{{ ec.texteEcLibre }} (EC Libre)</td>
+                    <td colspan="3">{{ ec.texteEcLibre }} (EC Libre)</td>
                 {% endif %}
                 <td>
                     <button
@@ -213,24 +210,6 @@
 
                         {#                        {% endif %} #}
 
-                    </td>
-                    <td>
-                        {#                        {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) and  (workflow_can(ec, #}
-                        {#                            'valider_ec') or workflow_can(ec, #}
-                        {#                            'initialiser'))) or (is_granted #}
-                        {#                            ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
-                        {#                            'valider_ec')) %} #}
-                        <a
-                                href="{{ path('app_ec_etat_valide',{'id': ec.id, parcours:parcours.id}) }}"
-                                class="btn btn-sm text-warning"
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="bottom"
-                                title="Valider un EC"
-                        >
-                            <i class="{{ iconValidate }}"></i>
-                            <span> valider</span>
-                        </a>
-                        {#                        {% endif %} #}
                     </td>
                 {% endif %}
             </tr>

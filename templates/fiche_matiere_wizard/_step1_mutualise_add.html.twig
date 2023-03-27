@@ -1,10 +1,10 @@
-<div {{ stimulus_controller('ec--mutualise', {
-    url: path('app_ec_wizard_step_1_mutualise_add_ajax', {ec:ec.id, parcours:parcours.id})
+<div {{ stimulus_controller('fichematiere--mutualise', {
+    url: path('app_fiche_matiere_wizard_step_1_mutualise_add_ajax', {ficheMatiere:ficheMatiere.id})
 }) }}>
     <div class="row">
         <div class="col-12">
             <label for="composante">Choisir une composante</label>
-            <select class="form-select" id="composante" name="composante" {{ stimulus_action('ec--mutualise',
+            <select class="form-select" id="composante" name="composante" {{ stimulus_action('fichematiere--mutualise',
                 'changeComposante') }}>
                 <option value="0">Choisir une composante</option>
                 {% for composante in composantes %}
@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-12">
             <label for="formation">Choisir une formation</label>
-            <select class="form-select" id="formation" name="formation" {{ stimulus_action('ec--mutualise',
+            <select class="form-select" id="formation" name="formation" {{ stimulus_action('fichematiere--mutualise',
                 'changeFormation') }}>
                 <option value="0">Choisir d'abord une composante</option>
             </select>
@@ -25,28 +25,13 @@
     <div class="row">
         <div class="col-12">
             <label for="parcours">Choisir un parcours</label>
-            <select class="form-select" id="parcours" name="parcours" {{ stimulus_action('ec--mutualise',
-                'changeParcours') }}>
+            <select class="form-select" id="parcours" name="parcours">
                 <option value="0">Choisir d'abord une formation</option>
             </select>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <label for="semestre">Choisir un semestre</label>
-            <select class="form-select" id="semestre" name="semestre" {{ stimulus_action('ec--mutualise',
-                'changeSemestre') }}>
-                <option value="0">Choisir d'abord un parcours</option>
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <label for="ue">Choisir une UE</label>
-            <select class="form-select" id="ue" name="ue">
-                <option value="0">Choisir d'abord un semestre</option>
-            </select>
-        </div>
-    </div>
-        <button class="btn btn-success mt-2" data-action="ec--mutualise#ajouter base#modalClose" data-bs-dismiss="modal">Ajouter</button>
+
+    <button class="btn btn-success mt-2" data-action="fichematiere--mutualise#ajouter base#modalClose" data-bs-dismiss="modal">
+        Ajouter
+    </button>
 </div>

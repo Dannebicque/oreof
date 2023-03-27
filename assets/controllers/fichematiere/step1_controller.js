@@ -12,7 +12,6 @@ import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import callOut from '../../js/callOut'
 import { calculEtatStep } from '../../js/calculEtatStep'
-import trixEditor from '../../js/trixEditor'
 
 export default class extends Controller {
   static targets = [
@@ -42,7 +41,7 @@ export default class extends Controller {
   delete(event) {
     event.preventDefault()
     const { url } = event.params
-    const { ue } = event.params
+    const { fiche } = event.params
     let modal = new Modal(document.getElementById('modal-delete'))
     modal.show()
     const btn = document.getElementById('btn-confirm-supprimer')
@@ -52,7 +51,7 @@ export default class extends Controller {
         method: 'DELETE',
         body: JSON.stringify({
           field: 'delete',
-          ue,
+          fiche,
         }),
       }
       modal = null

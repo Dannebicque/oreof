@@ -4,48 +4,48 @@
         <th>Composante</th>
         <th>Formation</th>
         <th>Parcours</th>
-        <th>Semestre / UE</th>
+        <th>Présent EC ?</th>
         <th></th>
     </tr>
     </thead>
     <tbody>
-    {% for mutualise in mutualises %}
-{#        <tr>#}
-{#            <td>{{ mutualise.parcours.formation.composantePorteuse.libelle }}</td>#}
-{#            <td>{{ mutualise.parcours.formation.display }}</td>#}
-{#            <td>{{ mutualise.parcours.libelle }}</td>#}
-{#            <td>{{ mutualise.semestre.display }} | {{ mutualise.ue.display }}</td>#}
-{#            <td>#}
-{#                <button {{ stimulus_action('ec--step1', 'delete', 'click', {#}
-{#                    url:path('app_fiche_matiere_wizard_step_1_mutualise_add_ajax', {ficheMatiere:ficheMatiere.id,#}
-{#                        parcours:parcours.id}),#}
-{#                    ue: mutualise.ue.id,#}
-{#                }) }} class="btn btn-sm text-danger">#}
-{#                    <i class="{{ iconDelete }}"></i> Supprimer#}
-{#                </button>#}
-{#            </td>#}
-{#        </tr>#}
+    {% for fiche in ficheMatiere.ficheMatiereParcours %}
+        <tr>
+            <td>{{ fiche.parcours.formation.composantePorteuse.libelle }}</td>
+            <td>{{ fiche.parcours.formation.display }}</td>
+            <td>{{ fiche.parcours.libelle }}</td>
+            <td>{{ ficheMatiere|hasParcours(fiche.parcours) == true ? '<span class="badge bg-success">Oui</span>' :
+                '<span class="badge bg-danger">Non</span>'
+                }}</td>
+            <td class="text-end">
+                <button {{ stimulus_action('fichematiere--step1', 'delete', 'click', {
+                    url:path('app_fiche_matiere_wizard_step_1_mutualise_add_ajax', {ficheMatiere:ficheMatiere.id,
+                        }),fiche:fiche.id
+                }) }} class="btn btn-sm text-danger">
+                    <i class="{{ iconDelete }}"></i> Supprimer
+                </button>
+            </td>
+        </tr>
     {% endfor %}
     </tbody>
     <tfoot>
     <tr>
         <td colspan="5">
-{#            <button#}
-{#                    {{ stimulus_controller('modal', {#}
-{#                        size: 'lg',#}
-{#                        modalTitle: 'Ajouter une formation pour la mutualisation',#}
-{#                        modalUrl: path('app_fiche_matiere_wizard_step_1_mutualise_add', {ficheMatiere:ficheMatiere.id,#}
-{#                            parcours:parcours.id}) }) }}#}
-{#                    data-action="click->modal#openModal"#}
-{#                    class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"#}
-{#                    data-size="lg"#}
-{#                    data-bs-toggle="tooltip"#}
-{#                    data-bs-placement="bottom"#}
-{#                    title="Ajouter une formation pour la mutualisation"#}
-{#            >#}
-{#                <i class="{{ iconAdd }}"></i>#}
-{#                <span> Ajouter une formation pour la mutualisation</span>#}
-{#            </button>#}
+            <button
+                    {{ stimulus_controller('modal', {
+                        size: 'lg',
+                        modalTitle: 'Ajouter une formation/un parcours pour la mutualisation',
+                        modalUrl: path('app_fiche_matiere_wizard_step_1_mutualise_add', {ficheMatiere:ficheMatiere.id}) }) }}
+                    data-action="click->modal#openModal"
+                    class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                    data-size="lg"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="Ajouter une formation/un parcours pour la mutualisation"
+            >
+                <i class="{{ iconAdd }}"></i>
+                <span> Ajouter une formation/un parcours pour la mutualisation</span>
+            </button>
         </td>
     </tfoot>
 </table>

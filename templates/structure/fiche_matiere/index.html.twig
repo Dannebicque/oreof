@@ -26,14 +26,19 @@
 {% endblock %}
 
 {% block bouton_header %}
-    {# todo: faire un ajout avec le choix de l'UE... #}
-    {#    <a href="{{ path('app_fiche_matiere_new') }}" #}
-    {#       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2" #}
-    {#       data-bs-toggle="tooltip" #}
-    {#       data-bs-placement="bottom" #}
-    {#       title="Ajouter une fiche EC/matière" #}
-    {#    > #}
-    {#        <i class="{{ iconAdd }}"></i> #}
-    {#        <span>Ajouter une fiche EC/matière</span> #}
-    {#    </a> #}
+    <button
+            {{ stimulus_controller('modal', {
+                size: 'lg',
+                modalTitle: 'Ajouter une fiche EC/matière',
+                modalUrl: path('app_fiche_matiere_new') }) }}
+            data-action="click->modal#openModal"
+            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-size="lg"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Ajouter une fiche EC/matière"
+    >
+        <i class="{{ iconAdd }}"></i>
+        <span> Ajouter une fiche EC/matière</span>
+    </button>
 {% endblock %}

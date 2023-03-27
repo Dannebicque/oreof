@@ -11,10 +11,12 @@ namespace App\Controller;
 
 use App\Classes\verif\FicheMatiereState;
 use App\Entity\FicheMatiere;
+use App\Entity\FicheMatiereParcours;
 use App\Form\FicheMatiereStep1Type;
 use App\Form\FicheMatiereStep2Type;
 use App\Form\FicheMatiereStep3Type;
 use App\Repository\ComposanteRepository;
+use App\Repository\FicheMatiereParcoursRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\SemestreRepository;
@@ -42,14 +44,13 @@ class FicheMatiereWizardController extends AbstractController
     public function synthese(
         FicheMatiere $ficheMatiere,
     ): Response {
-
         return $this->render('fiche_matiere/_synthese_ec.html.twig', [
             'ficheMatiere' => $ficheMatiere,
         ]);
     }
 
     #[Route('/{ficheMatiere}/1', name: 'app_fiche_matiere_wizard_step_1', methods: ['GET'])]
-    public function step1(FicheMatiere $ficheMatiere,): Response
+    public function step1(FicheMatiere $ficheMatiere): Response
     {
         $form = $this->createForm(FicheMatiereStep1Type::class, $ficheMatiere);
 
@@ -62,21 +63,8 @@ class FicheMatiereWizardController extends AbstractController
     #[Route('/{ficheMatiere}/mutualise', name: 'app_fiche_matiere_wizard_step_1_mutualise', methods: ['GET'])]
     public function mutualise(FicheMatiere $ficheMatiere): Response
     {
-        $mutualises = [];
-
-//        foreach ($ec->getEcUes() as $ue) {
-//            foreach ($ue->getUe()->getSemestre()->getSemestreParcours() as $parc) {
-//                $mutualises[] = [
-//                    'parcours' => $parc->getParcours(),
-//                    'semestre' => $ue->getUe()->getSemestre(),
-//                    'ue' => $ue->getUe()
-//                ];
-//            }
-//        }
-
         return $this->render('fiche_matiere_wizard/_step1_mutualise.html.twig', [
             'ficheMatiere' => $ficheMatiere,
-            'mutualises' => $mutualises
         ]);
     }
 
@@ -84,31 +72,30 @@ class FicheMatiereWizardController extends AbstractController
     public function mutualiseAdd(
         ComposanteRepository $composanteRepository,
         FicheMatiere $ficheMatiere,
-    ): Response
-    {
-        $composantes = $composanteRepository->findAll();
+    ): Response {
+        $composantes = $composanteRepository->findAll();//todo: filtrer dans les formations
 
         return $this->render('fiche_matiere_wizard/_step1_mutualise_add.html.twig', [
-            'fiche_matiere' => $ficheMatiere,
+            'ficheMatiere' => $ficheMatiere,
             'composantes' => $composantes
         ]);
     }
 
-    #[Route('/{ficheMatiere}/mutualise/ajax', name: 'app_fiche_matiere_wizard_step_1_mutualise_add_ajax', methods: ['POST','DELETE'])]
+    #[Route('/{ficheMatiere}/mutualise/ajax', name: 'app_fiche_matiere_wizard_step_1_mutualise_add_ajax', methods: [
+        'POST',
+        'DELETE'
+    ])]
     public function mutualiseAjax(
         EntityManagerInterface $entityManager,
         Request $request,
         FormationRepository $formationRepository,
         ParcoursRepository $parcoursRepository,
-        ComposanteRepository $composanteRepository,
-        SemestreRepository $semestreRepository,
-        UeRepository $ueRepository,
+        FicheMatiereParcoursRepository $ficheMatiereParcoursRepository,
         FicheMatiere $ficheMatiere,
-    ): Response
-    {
+    ): Response {
         $data = JsonRequest::getFromRequest($request);
         $t = [];
-        switch($data['field']) {
+        switch ($data['field']) {
             case 'formation':
                 $formations = $formationRepository->findBy(['composantePorteuse' => $data['value']]);
                 foreach ($formations as $formation) {
@@ -127,42 +114,30 @@ class FicheMatiereWizardController extends AbstractController
                     ];
                 }
                 break;
-            case 'semestre':
-                $parcours = $parcoursRepository->find($data['value']);
-                $semestres = $parcours->getSemestreParcours();
-                foreach ($semestres as $semestre) {
-                    $t[] = [
-                        'id' => $semestre->getId(),
-                        'libelle' => $semestre->getSemestre()->display()
-                    ];
-                }
-                break;
-            case 'ue':
-                $semestre = $semestreRepository->find($data['value']);
-                $ues = $semestre->getUes();
-                foreach ($ues as $ue) {
-                    $t[] = [
-                        'id' => $ue->getId(),
-                        'libelle' => $ue->display()
-                    ];
-                }
-                break;
             case 'save':
-                $ue = $ueRepository->find($data['value']);
-                $ecUe = new EcUe($ue, $ec);
-                $entityManager->persist($ecUe);
-                $ec->addEcUe($ecUe);
-                $entityManager->flush();
+                $parcours = $parcoursRepository->find($data['parcours']);
+                $exist = $ficheMatiereParcoursRepository->findOneBy([
+                    'ficheMatiere' => $ficheMatiere,
+                    'parcours' => $parcours
+                ]);
+
+                if ($exist === null) {
+                    $ficheMatiereParcours = new FicheMatiereParcours();
+                    $ficheMatiereParcours->setFicheMatiere($ficheMatiere);
+                    $ficheMatiereParcours->setParcours($parcours);
+                    $entityManager->persist($ficheMatiereParcours);
+                    $entityManager->flush();
+                }
+
                 return $this->json(true);
             case 'delete':
-                $ues = $ec->getEcUes();
-                foreach ($ues as $ue) {
-                    if ($ue !== null && $ue->getUe()->getId() === (int) $data['ue']) {
-                        $ec->removeEcUe($ue);
-                        $entityManager->remove($ue);
-                    }
+                $fiche = $ficheMatiereParcoursRepository->find($data['fiche']);
+                if ($fiche !== null) {
+                    $entityManager->remove($fiche);
+                    $entityManager->flush();
                 }
-                $entityManager->flush();
+                //todo: supprimer les EC qui utilisent ?
+
                 return $this->json(true);
         }
 
@@ -172,8 +147,7 @@ class FicheMatiereWizardController extends AbstractController
     #[Route('/{ficheMatiere}/2', name: 'app_fiche_matiere_wizard_step_2', methods: ['GET'])]
     public function step2(
         FicheMatiere $ficheMatiere,
-    ): Response
-    {
+    ): Response {
         $form = $this->createForm(FicheMatiereStep2Type::class, $ficheMatiere);
 
 

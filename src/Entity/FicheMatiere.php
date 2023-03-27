@@ -80,9 +80,6 @@ class FicheMatiere
     #[ORM\JoinTable(name: 'fiche_matiere_langue_support')]
     private Collection $langueSupport;
 
-    #[ORM\Column(nullable: true)]
-    private ?array $etatFicheMatiere = [];
-
     #[ORM\Column]
     private ?array $etatSteps = [];
 
@@ -91,6 +88,9 @@ class FicheMatiere
 
     #[ORM\ManyToOne(inversedBy: 'ficheMatieres')]
     private ?Parcours $parcours = null;
+
+    #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereParcours::class)]
+    private Collection $ficheMatiereParcours;
 
     public function __construct()
     {
@@ -102,6 +102,7 @@ class FicheMatiere
             $this->etatSteps[$i] = false;
         }
         $this->elementConstitutifs = new ArrayCollection();
+        $this->ficheMatiereParcours = new ArrayCollection();
     }
 
     public function getEtatStep(int $step): bool
@@ -295,19 +296,6 @@ class FicheMatiere
         return $this;
     }
 
-
-    public function getEtatFicheMatiere(): array
-    {
-        return $this->etatFicheMatiere ?? [];
-    }
-
-    public function setEtatFicheMatiere(?array $etatFicheMatiere): self
-    {
-        $this->etatFicheMatiere = $etatFicheMatiere;
-
-        return $this;
-    }
-
     public function getEtatSteps(): array
     {
         return $this->etatSteps ?? [];
@@ -442,6 +430,36 @@ class FicheMatiere
     public function setIsTpDistancielMutualise(?bool $isTpDistancielMutualise): self
     {
         $this->isTpDistancielMutualise = $isTpDistancielMutualise;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FicheMatiereParcours>
+     */
+    public function getFicheMatiereParcours(): Collection
+    {
+        return $this->ficheMatiereParcours;
+    }
+
+    public function addFicheMatiereParcour(FicheMatiereParcours $ficheMatiereParcour): self
+    {
+        if (!$this->ficheMatiereParcours->contains($ficheMatiereParcour)) {
+            $this->ficheMatiereParcours->add($ficheMatiereParcour);
+            $ficheMatiereParcour->setFicheMatiere($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFicheMatiereParcour(FicheMatiereParcours $ficheMatiereParcour): self
+    {
+        if ($this->ficheMatiereParcours->removeElement($ficheMatiereParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($ficheMatiereParcour->getFicheMatiere() === $this) {
+                $ficheMatiereParcour->setFicheMatiere(null);
+            }
+        }
 
         return $this;
     }

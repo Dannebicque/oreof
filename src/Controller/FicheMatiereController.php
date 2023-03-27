@@ -20,6 +20,7 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
 use App\Repository\TypeEpreuveRepository;
+use App\Repository\UeRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,34 +35,27 @@ use Symfony\Component\Workflow\WorkflowInterface;
 #[Route('/fiche/matiere')]
 class FicheMatiereController extends AbstractController
 {
-    public function __construct(private readonly WorkflowInterface $ecWorkflow)
-    {
-    }
-
-    #[Route('/new/{ue}', name: 'app_fiche_matiere_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_fiche_matiere_new', methods: ['GET', 'POST'])]
     public function new(
+        UeRepository $ueRepository,
         EntityManagerInterface $entityManager,
         LangueRepository $langueRepository,
         Request $request,
-        Ue $ue
     ): Response {
         $ficheMatiere = new FicheMatiere();
+        if ($request->query->has('ue')) {
+            $ue = $ueRepository->find($request->query->get('ue'));
+            $ficheMatiere->setParcours($ue->getSemestre()?->getSemestreParcours()->first()->getParcours());
+        }
+
         //todo: initialiser les modalités par rapport au parcours
 
         $form = $this->createForm(FicheMatiereType::class, $ficheMatiere, [
-            'action' => $this->generateUrl('app_fiche_matiere_new', ['ue' => $ue->getId()]),
+            'action' => $this->generateUrl('app_fiche_matiere_new'),
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $ficheMatiere->setParcours($ue->getSemestre()?->getSemestreParcours()->first()->getParcours());
-
-            $formation = $ue->getSemestre()?->getSemestreParcours()->first()->getParcours()?->getFormation();
-            if ($formation === null) {
-                throw new RuntimeException('Formation non trouvée');
-            }
-
-
             $langueFr = $langueRepository->findOneBy(['codeIso' => 'fr']);
             if ($langueFr !== null) {
                 $ficheMatiere->addLangueDispense($langueFr);

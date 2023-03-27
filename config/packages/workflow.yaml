@@ -134,35 +134,6 @@ framework:
                 refuser_ec:
                     from: 'en_cours_redaction'
                     to: 'refuse_parcours'
-        ec:
-            type: 'workflow'
-            marking_store:
-                type: 'method'
-                property: 'etatEc'
-            supports:
-                - App\Entity\ElementConstitutif
-            initial_marking: 'initialisation_ec'
-            places:
-                - 'initialisation_ec'
-                - 'autorisation_saisie'
-                - 'en_cours_redaction'
-                - 'soumis_ec'
-                - 'refuse_ec'
-            transitions:
-                initialiser:
-                    #guard: "is_granted('ROLE_FORMATION')"
-                    from: 'initialisation_ec'
-                    to: 'autorisation_saisie'
-                autoriser:
-                    #guard: "is_granted('ROLE_FORMATION')"
-                    from: 'autorisation_saisie'
-                    to: 'en_cours_redaction'
-                valider_ec:
-                    from: 'en_cours_redaction'
-                    to: 'soumis_ec'
-                refuser_ec:
-                    from: 'en_cours_redaction'
-                    to: 'refuse_ec'
         composante:
             type: 'workflow'
             marking_store:

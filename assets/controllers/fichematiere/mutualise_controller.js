@@ -19,14 +19,16 @@ export default class extends Controller {
   }
 
   async ajouter() {
-    const ue = document.getElementById('ue').value
+    const formation = document.getElementById('formation').value
+    const parcours = document.getElementById('parcours').value
     await fetch(this.urlValue, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        value: ue,
+        formation,
+        parcours,
         field: 'save',
       }),
     }).then(() => {
@@ -37,14 +39,6 @@ export default class extends Controller {
 
   changeFormation(event) {
     this._getData(event.target.value, 'parcours')
-  }
-
-  changeParcours(event) {
-    this._getData(event.target.value, 'semestre')
-  }
-
-  changeSemestre(event) {
-    this._getData(event.target.value, 'ue')
   }
 
   async _getData(value, field) {
@@ -89,12 +83,6 @@ export default class extends Controller {
       // une seule valeur, on actualise la suivante
       if (field === 'formation') {
         this._getData(data[0].id, 'parcours')
-      }
-      if (field === 'parcours') {
-        this._getData(data[0].id, 'semestre')
-      }
-      if (field === 'semestre') {
-        this._getData(data[0].id, 'ue')
       }
     }
   }
