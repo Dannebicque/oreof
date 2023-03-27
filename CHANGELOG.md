@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.4](https://github.com/Dannebicque/oreof/compare/v0.20.3...v0.20.4) (2023-03-27)
+
+
+### Bug Fixes
+
+* Suppression état fiche matière, plus de sens ([21a6ce4](https://github.com/Dannebicque/oreof/commit/21a6ce4b6d56908344874a95a2591204f968d133))
+
 ### [0.20.3](https://github.com/Dannebicque/oreof/compare/v0.20.2...v0.20.3) (2023-03-27)
 
 
