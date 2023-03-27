@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.1](https://github.com/Dannebicque/oreof/compare/v0.20.0...v0.20.1) (2023-03-27)
+
+
+### Bug Fixes
+
+* suspension temporaire de la seconde chance ([74c96cc](https://github.com/Dannebicque/oreof/commit/74c96cce33f56d85c5f59c4a160e2df7c58adde6))
+
 ## [0.20.0](https://github.com/Dannebicque/oreof/compare/v0.19.14...v0.20.0) (2023-03-26)
 
 
