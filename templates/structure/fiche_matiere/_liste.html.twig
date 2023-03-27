@@ -8,7 +8,7 @@
             <th>Libellé</th>
             <th>Référent</th>
             <th>Remplissage</th>
-            <th>Etat</th>
+{#            <th>Etat</th>#}
             <th></th>
 
         </tr>
@@ -20,7 +20,7 @@
             <td>{{ ficheMatiere.libelle }}</td>
             <td>{{ ficheMatiere.responsableFicheMatiere != null ? ficheMatiere.responsableFicheMatiere.display : 'Non défini' }}</td>
             <td>{{ ficheMatiere.remplissage|remplissage }}</td>
-            <td>{{ ficheMatiere.etatFicheMatiere|badgeEc }}</td>
+{#            <td>{{ ficheMatiere.etatFicheMatiere|badgeEc }}</td>#}
 
             <td class="text-end">
                 {#                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', ficheMatiere.parcours.formation) or is_granted #}
