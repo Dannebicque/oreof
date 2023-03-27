@@ -38,14 +38,14 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
             $mcccs[1]['et']->setTypeEpreuve([]);
         }
 
-        $mcccs[3]['chance']->setPourcentage((float)$request->get('pourcentage_s1_chance'));
-        if ((float)$request->get('pourcentage_s1_chance') > 0) {
-            $mcccs[3]['chance']->setNbEpreuves(count($request->all()['typeEpreuve_s1_chance']));
-            $mcccs[3]['chance']->setTypeEpreuve($request->all()['typeEpreuve_s1_chance']);
-        } else {
-            $mcccs[3]['chance']->setNbEpreuves(0);
-            $mcccs[3]['chance']->setTypeEpreuve([]);
-        }
+//        $mcccs[3]['chance']->setPourcentage((float)$request->get('pourcentage_s1_chance'));
+//        if ((float)$request->get('pourcentage_s1_chance') > 0) {
+//            $mcccs[3]['chance']->setNbEpreuves(count($request->all()['typeEpreuve_s1_chance']));
+//            $mcccs[3]['chance']->setTypeEpreuve($request->all()['typeEpreuve_s1_chance']);
+//        } else {
+//            $mcccs[3]['chance']->setNbEpreuves(0);
+//            $mcccs[3]['chance']->setTypeEpreuve([]);
+//        }
 
         $mcccs[2]['et']->setPourcentage(100);
         $mcccs[2]['et']->setNbEpreuves(1);
@@ -79,19 +79,19 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 }
                 break;
 
-            case 'pourcentage_s1_chance':
-                $mcccs[3]['chance']->setPourcentage((float)$value);
-                if ((float)$value <= 0) {
-                    $mcccs[3]['chance']->setNbEpreuves(0);
-                    $mcccs[3]['chance']->setTypeEpreuve([]);
-                }
-                break;
-            case 'typeEpreuve_s1_chance':
-                $mcccs[3]['chance']->setTypeEpreuve($value);//est un tableau
-                if (count($mcccs[3]['chance']->getTypeEpreuve())> 0) {
-                    $mcccs[3]['chance']->setNbEpreuves(count($value));
-                }
-                break;
+//            case 'pourcentage_s1_chance':
+//                $mcccs[3]['chance']->setPourcentage((float)$value);
+//                if ((float)$value <= 0) {
+//                    $mcccs[3]['chance']->setNbEpreuves(0);
+//                    $mcccs[3]['chance']->setTypeEpreuve([]);
+//                }
+//                break;
+//            case 'typeEpreuve_s1_chance':
+//                $mcccs[3]['chance']->setTypeEpreuve($value);//est un tableau
+//                if (count($mcccs[3]['chance']->getTypeEpreuve())> 0) {
+//                    $mcccs[3]['chance']->setNbEpreuves(count($value));
+//                }
+//                break;
             case 'typeEpreuve_s2_et':
                 $mcccs[2]['et']->setTypeEpreuve([$value]);
                 $mcccs[2]['et']->setNbEpreuves(1);
@@ -125,14 +125,14 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         $this->entityManager->persist($mccc);
 
         //2eme Chance, première session
-        $mccc = new Mccc();
-        $mccc->setEc($elementConstitutif);
-        $mccc->setLibelle('2éme chance');
-        $mccc->setNumeroSession(3);
-        $mccc->setSecondeChance(true);
-        $mccc->setControleContinu(true);
-        $mccc->setExamenTerminal(false);
-        $this->entityManager->persist($mccc);
+//        $mccc = new Mccc();
+//        $mccc->setEc($elementConstitutif);
+//        $mccc->setLibelle('2éme chance');
+//        $mccc->setNumeroSession(3);
+//        $mccc->setSecondeChance(true);
+//        $mccc->setControleContinu(true);
+//        $mccc->setExamenTerminal(false);
+//        $this->entityManager->persist($mccc);
 
         //2eme session
         $mccc = new Mccc();
