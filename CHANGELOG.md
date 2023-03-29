@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.8](https://github.com/Dannebicque/oreof/compare/v0.20.7...v0.20.8) (2023-03-29)
+
+
+### Bug Fixes
+
+* Ordre des natures UE/EC ([228b05b](https://github.com/Dannebicque/oreof/commit/228b05bfa4850e79c04b899d08656b43e9cb6f9e))
+
 ### [0.20.7](https://github.com/Dannebicque/oreof/compare/v0.20.6...v0.20.7) (2023-03-29)
 
 
