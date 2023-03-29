@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.5](https://github.com/Dannebicque/oreof/compare/v0.20.4...v0.20.5) (2023-03-29)
+
+
+### Features
+
+* Fiches matières mutualisées ([f67ddc4](https://github.com/Dannebicque/oreof/commit/f67ddc47f87ecdc7425d043cd9780da41f88c993))
+
+
+### Bug Fixes
+
+* Delete de formation ([b410502](https://github.com/Dannebicque/oreof/commit/b4105026f47a3773217efd76288f74b391b307da))
+
 ### [0.20.4](https://github.com/Dannebicque/oreof/compare/v0.20.3...v0.20.4) (2023-03-27)
 
 
