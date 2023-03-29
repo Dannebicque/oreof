@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.6](https://github.com/Dannebicque/oreof/compare/v0.20.5...v0.20.6) (2023-03-29)
+
+
+### Bug Fixes
+
+* Pré-selection de la mention sur la modification ([f732d84](https://github.com/Dannebicque/oreof/commit/f732d840f365f63544f7669a95967c10a3e61341))
+* type sur compétences et BCC ([a555b85](https://github.com/Dannebicque/oreof/commit/a555b85283533b53dd0a0330cd28153ed5499dbf))
+
 ### [0.20.5](https://github.com/Dannebicque/oreof/compare/v0.20.4...v0.20.5) (2023-03-29)
 
 
