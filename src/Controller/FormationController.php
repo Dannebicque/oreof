@@ -277,8 +277,27 @@ class FormationController extends BaseController
                     $entityManager->remove($blocs);
                 }
 
-                foreach ($parcours->getFicheMatieres() as $fiche) {
-                    $parcours->removeFicheMatiere($fiche);
+                foreach ($parcours->getSemestreParcours() as $semestreParcour) {
+                    $semestre = $semestreParcour->getSemestre();
+                    if ($semestre !== null) {
+                        foreach ($semestre->getUes() as $ue) {
+                            foreach ($ue->getElementConstitutifs() as $ec) {
+                                $entityManager->remove($ec);
+                            }
+                            if ($semestre->isTroncCommun() === false) {
+                                $entityManager->remove($ue);
+                            }
+                        }
+                        if ($semestre->isTroncCommun() === false) {
+                            $entityManager->remove($semestre);
+                        }
+                    }
+
+                    $entityManager->remove($semestreParcour);
+                }
+
+                foreach ($parcours->getFicheMatiereParcours() as $fiche) {
+                    $entityManager->remove($fiche);
                 }
                 $entityManager->flush();
                 $entityManager->remove($parcours);
