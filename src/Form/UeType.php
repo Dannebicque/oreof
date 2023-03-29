@@ -12,7 +12,10 @@ namespace App\Form;
 use App\Entity\NatureUeEc;
 use App\Entity\TypeUe;
 use App\Entity\Ue;
+use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeUeRepository;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -37,10 +40,11 @@ class UeType extends AbstractType
             ->add('typeUe', EntityType::class, [
                 'class' => TypeUe::class,
                 'choice_label' => 'libelle',
-                'query_builder' => fn(TypeUeRepository $typeUeRepository) => $typeUeRepository->findByTypeDiplome($typeDiplome),
+                'query_builder' => fn (
+                    TypeUeRepository $typeUeRepository
+                ) => $typeUeRepository->findByTypeDiplome($typeDiplome),
                 'required' => false,
             ])
-
             ->add('typeUeTexte', TextType::class, [
                 'attr' => [
                     'maxlength' => 100,
@@ -51,6 +55,10 @@ class UeType extends AbstractType
             ->add('natureUeEc', EntityType::class, [
                 'class' => NatureUeEc::class,
                 'choice_label' => 'libelle',
+                'query_builder' => function (EntityRepository $qb) {
+                    return $qb->createQueryBuilder('n')
+                        ->orderBy('n.libelle', 'ASC');
+                },
                 'required' => false,
             ])
             ->add('natureUeEcTexte', TextType::class, [
