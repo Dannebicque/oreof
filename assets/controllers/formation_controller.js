@@ -124,6 +124,8 @@ export default class extends Controller {
           tab.push({ value: mention.id, text: mention.libelle })
         })
 
+        tab.push({ value: 'autre', text: 'Autre' })
+
         tom.clear()
         tom.clearOptions()
         tom.enable()
