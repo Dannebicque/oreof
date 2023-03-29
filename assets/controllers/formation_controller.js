@@ -104,9 +104,16 @@ export default class extends Controller {
   }
 
   async _updateListeMention(typeDiplome, domaine) {
-    await fetch(`${this.urlValue}?typeDiplome=${typeDiplome}&domaine=${domaine}`).then((response) => response.json()).then(
+    let url = ''
+    if (this.urlValue.includes('?')) {
+      url = `${this.urlValue}&typeDiplome=${typeDiplome}&domaine=${domaine}`
+    } else {
+      url = `${this.urlValue}?typeDiplome=${typeDiplome}&domaine=${domaine}`
+    }
+    await fetch(url).then((response) => response.json()).then(
       (data) => {
         const { mentions } = data
+        const { selectedMention } = data
         const selectMention = document.getElementById('formation_ses_mention')
         selectMention.innerHTML = ''
 
@@ -122,6 +129,7 @@ export default class extends Controller {
         tom.enable()
 
         tom.addOptions(tab)
+        tom.setValue(selectedMention)
         tom.settings.placeholder = 'Choisir dans la liste'
         tom.inputState();
       },

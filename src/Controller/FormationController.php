@@ -218,6 +218,7 @@ class FormationController extends BaseController
 
         return $this->json([
             'mentions' => $mentionRepository->findByDomaineAndTypeDiplomeArray($domaine, $typeDiplome),
+            'selectedMention' => $request->query->get('mention')
         ]);
     }
 
