@@ -116,7 +116,7 @@
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
-                            modalTitle: 'Ajouter une compétence dans le bloc de compétence '~
+                            modalTitle: 'Ajouter une compétence dans le bloc de compétences '~
                             blocCompetence.libelle,
                             modalUrl: path('app_competence_new', {bcc:blocCompetence.id}) }) }}
                         data-action="click->modal#openModal"
@@ -124,7 +124,7 @@
                         data-size="lg"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
-                        title=" Ajouter une compétence dans le bloc de compétence
+                        title=" Ajouter une compétence dans le bloc de compétences
                 {{ blocCompetence.libelle }}"
                 >
                     <i class="{{ iconAdd }}"></i>
