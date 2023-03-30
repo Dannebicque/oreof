@@ -241,7 +241,7 @@
                         <button class="btn text-success btn-sm"
                                 {{ stimulus_controller('modal', {
                                     size: 'lg',
-                                    modalTitle: 'Ajouter une UE après l\''~ ue.displayBouton,
+                                    modalTitle: 'Ajouter une UE',
                                     modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
                                 }) }}
                                 data-action="click->modal#openModal"
