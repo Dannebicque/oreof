@@ -89,8 +89,8 @@
                     <span> voir</span>
                 </a>
 
-                {% if is_granted('ROLE_PARCOURS_EDIT_MY', parcour) or is_granted('ROLE_ADMIN') %} {# todo: filtrer
-                sur ROLE_SES => Parcours Edit #}
+{#                {% if is_granted('ROLE_PARCOURS_EDIT_MY', parcour) or is_granted('ROLE_ADMIN') %} #}{# todo: filtrer#}
+{#                sur ROLE_SES => Parcours Edit #}
                     <a href="{{ path('app_parcours_edit',{'id': parcour.id}) }}"
                        class="btn btn-sm text-warning"
                        data-bs-toggle="tooltip"
@@ -100,7 +100,7 @@
                         <i class="{{ iconEdit }}"></i>
                         <span> modifier</span>
                     </a>
-                {% endif %}
+{#                {% endif %}#}
 
                 {% if is_granted('ROLE_FORMATION_DELETE_MY') %}
                     <button {{ stimulus_action('crud', 'delete', 'click', {
