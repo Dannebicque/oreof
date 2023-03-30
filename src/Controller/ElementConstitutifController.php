@@ -88,6 +88,7 @@ class ElementConstitutifController extends AbstractController
 
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl('app_element_constitutif_new', ['ue' => $ue->getId(), 'parcours' => $parcours->getId()]),
+            'typeDiplome' => $parcours->getFormation()->getTypeDiplome(),
         ]);
         $form->handleRequest($request);
 

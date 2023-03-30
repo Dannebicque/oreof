@@ -13,9 +13,12 @@ use App\Classes\verif\FormationState;
 use App\Classes\verif\ParcoursState;
 use App\Entity\Composante;
 use App\Entity\Formation;
+use App\Entity\FormationDemande;
 use App\Entity\UserCentre;
+use App\Form\FormationDemandeType;
 use App\Form\FormationSesType;
 use App\Repository\DomaineRepository;
+use App\Repository\FormationDemandeRepository;
 use App\Repository\FormationRepository;
 use App\Repository\MentionRepository;
 use App\Repository\RoleRepository;
@@ -109,6 +112,56 @@ class FormationController extends BaseController
             'formations' => $formations,
             'sort' => $sort,
             'direction' => $direction
+        ]);
+    }
+
+    #[Route('/demande', name: 'app_formation_demande_new', methods: ['GET', 'POST'])]
+    public function demande(
+        RoleRepository $roleRepository,
+        MentionRepository $mentionRepository,
+        UserCentreRepository $userCentreRepository,
+        Request $request,
+        FormationRepository $formationRepository
+    ): Response {
+        $formationDemande = new FormationDemande();
+        $form = $this->createForm(FormationDemandeType::class, $formationDemande, [
+            'action' => $this->generateUrl('app_formation_demande_new'),
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if (array_key_exists(
+                    'mention',
+                    $request->request->all()['formation_ses']
+                ) && $request->request->all()['formation_ses']['mention'] !== null && $request->request->all()['formation_ses']['mention'] !== 'autre') {
+                $mention = $mentionRepository->find($request->request->all()['formation_ses']['mention']);
+                $formation->setMentionTexte(null);
+                $formation->setMention($mention);
+            }
+
+            $formation->addComposantesInscription($formation->getComposantePorteuse());
+            $formationRepository->save($formation, true);
+
+            //on vérifie si le responsable de formation à le centre
+            $hasCentre = $userCentreRepository->findOneBy([
+                'user' => $formation->getResponsableMention(),
+                'formation' => $formation->getId()
+            ]);
+            if ($hasCentre === null) {
+                $role = $roleRepository->findOneBy(['code_role' => 'ROLE_RESP_FORMATION']);
+                $uc = new UserCentre();
+                $uc->setUser($formation->getResponsableMention());
+                $uc->setFormation($formation);
+                $uc->addRole($role);
+                $userCentreRepository->save($uc, true);
+            }
+
+            return $this->redirectToRoute('app_formation_index');
+        }
+
+        return $this->render('formation/new.html.twig', [
+            'formationDemande' => $formationDemande,
+            'form' => $form->createView()
         ]);
     }
 
