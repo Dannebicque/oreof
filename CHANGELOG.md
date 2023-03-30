@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.12](https://github.com/Dannebicque/oreof/compare/v0.20.11...v0.20.12) (2023-03-30)
+
+
+### Bug Fixes
+
+* Navigation et ajout d'UE, demande de nouveau ([e0ab7d6](https://github.com/Dannebicque/oreof/commit/e0ab7d6a1f1001d7a910593114bf9411df62229c))
+* Navigation et ajout d'UE, demande de nouveau ([4e1a56b](https://github.com/Dannebicque/oreof/commit/4e1a56bed9863e22faea7153ca0f7b13d1bd4b60))
+
 ### [0.20.11](https://github.com/Dannebicque/oreof/compare/v0.20.10...v0.20.11) (2023-03-30)
 
 
