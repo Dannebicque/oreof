@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.9](https://github.com/Dannebicque/oreof/compare/v0.20.8...v0.20.9) (2023-03-30)
+
+
+### Bug Fixes
+
+* Modifier sur la liste des parcours ([f8dc38c](https://github.com/Dannebicque/oreof/commit/f8dc38c1de22f367e317b2db7820c7c093fdcd43))
+
 ### [0.20.8](https://github.com/Dannebicque/oreof/compare/v0.20.7...v0.20.8) (2023-03-29)
 
 
