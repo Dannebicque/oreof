@@ -45,5 +45,22 @@
             <i class="{{ iconAdd }}"></i>
             <span> Ajouter une formation</span>
         </a>
+    {% else %}
+        <button
+                {{ stimulus_controller('modal', {
+                    size: 'lg',
+                    modalTitle: 'Demander l\'ajout d\'une mention',
+                    modalUrl: path('app_formation_demande_new') }) }}
+                data-action="click->modal#openModal"
+                class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                data-size="lg"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Demander l'ajout d'une mention"
+        >
+            <i class="{{ iconAdd }}"></i>
+            <span> Demander l'ajout d'une mention</span>
+        </button>
     {% endif %}
+
 {% endblock %}

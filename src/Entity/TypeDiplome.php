@@ -72,6 +72,9 @@ class TypeDiplome
     #[ORM\Column]
     private ?int $nbEcParUe = null;
 
+    #[ORM\OneToMany(mappedBy: 'typeDiplome', targetEntity: FormationDemande::class)]
+    private Collection $formationDemandes;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -79,6 +82,7 @@ class TypeDiplome
         $this->typeEcs = new ArrayCollection();
         $this->typeUes = new ArrayCollection();
         $this->typeEpreuves = new ArrayCollection();
+        $this->formationDemandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -391,6 +395,36 @@ class TypeDiplome
     public function setNbEcParUe(int $nbEcParUe): self
     {
         $this->nbEcParUe = $nbEcParUe;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FormationDemande>
+     */
+    public function getFormationDemandes(): Collection
+    {
+        return $this->formationDemandes;
+    }
+
+    public function addFormationDemande(FormationDemande $formationDemande): self
+    {
+        if (!$this->formationDemandes->contains($formationDemande)) {
+            $this->formationDemandes->add($formationDemande);
+            $formationDemande->setTypeDiplome($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormationDemande(FormationDemande $formationDemande): self
+    {
+        if ($this->formationDemandes->removeElement($formationDemande)) {
+            // set the owning side to null (unless already changed)
+            if ($formationDemande->getTypeDiplome() === $this) {
+                $formationDemande->setTypeDiplome(null);
+            }
+        }
 
         return $this;
     }

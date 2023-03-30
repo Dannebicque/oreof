@@ -208,3 +208,57 @@
 .form-label {
   font-weight: bold;
 }
+
+.text-divider {
+  --text-divider-gap: 1rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.9375rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.text-divider::before, .text-divider::after {
+  content: '';
+  height: 1px;
+  background-color: silver;
+  flex-grow: 1;
+}
+
+.text-divider::before {
+  margin-right: var(--text-divider-gap);
+}
+
+.text-divider::after {
+  margin-left: var(--text-divider-gap);
+}
+
+//@for $i from 1 through 15 {
+//  .text-divider-color-#{$i} {
+//    --text-divider-gap: 1rem;
+//    display: flex;
+//    align-items: center;
+//    font-size: 0.9375rem;
+//    text-transform: uppercase;
+//    letter-spacing: 0.1em;
+//  }
+//
+//  .text-divider-color-#{$i} {
+//    background-color: var(--color-#{$i}) !important;
+//  }
+//
+//  .text-divider-color-#{$i}::before, .text-divider-color-#{$i}::after {
+//    content: '';
+//    height: 1px;
+//    background-color: silver;
+//    flex-grow: 1;
+//  }
+//
+//  .text-divider-color-#{$i}::before {
+//    margin-right: var(--text-divider-gap);
+//  }
+//
+//  .text-divider-color-#{$i}::after {
+//    margin-left: var(--text-divider-gap);
+//  }
+//}

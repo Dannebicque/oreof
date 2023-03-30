@@ -26,15 +26,16 @@ class TypeEc
     #[ORM\Column(length: 100)]
     private ?string $libelle = null;
 
-//    #[ORM\Column(type: Types::JSON, nullable: true)]
-//    private ?array $typeDiplome = [];
-
     #[ORM\ManyToMany(targetEntity: TypeDiplome::class, inversedBy: 'typeEcs')]
     private Collection $typeDiplomes;
+
+    #[ORM\OneToMany(mappedBy: 'typeEc', targetEntity: ElementConstitutif::class)]
+    private Collection $elementConstitutifs;
 
     public function __construct()
     {
         $this->typeDiplomes = new ArrayCollection();
+        $this->elementConstitutifs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,6 +87,36 @@ class TypeEc
     public function removeTypeDiplome(TypeDiplome $typeDiplome): self
     {
         $this->typeDiplomes->removeElement($typeDiplome);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ElementConstitutif>
+     */
+    public function getElementConstitutifs(): Collection
+    {
+        return $this->elementConstitutifs;
+    }
+
+    public function addElementConstitutif(ElementConstitutif $elementConstitutif): self
+    {
+        if (!$this->elementConstitutifs->contains($elementConstitutif)) {
+            $this->elementConstitutifs->add($elementConstitutif);
+            $elementConstitutif->setTypeEc($this);
+        }
+
+        return $this;
+    }
+
+    public function removeElementConstitutif(ElementConstitutif $elementConstitutif): self
+    {
+        if ($this->elementConstitutifs->removeElement($elementConstitutif)) {
+            // set the owning side to null (unless already changed)
+            if ($elementConstitutif->getTypeEc() === $this) {
+                $elementConstitutif->setTypeEc(null);
+            }
+        }
 
         return $this;
     }

@@ -189,25 +189,77 @@
                             </div>
                         </div>
                     </div>
+                    {% if ue.subOrdre != 0 %}
+
+                        <div class="text-divider" style="padding-left: 20px">
+                            <button class="btn text-success btn-sm"
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        modalTitle: 'Ajouter une UE à choix supplémentaire pour l\''~ue
+                                        .displayBouton,
+                                        modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
+                                    }) }}
+                                    data-action="click->modal#openModal"
+                            >
+                                <i class="{{ iconAdd }}"></i>
+                                Ajouter une UE à choix supplémentaire pour l'{{ ue.displayBouton }}
+                            </button>
+                        </div>
+
+                    {% else %}
+                        <div class="text-divider">
+                            <button class="btn text-success btn-sm"
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        modalTitle: 'Ajouter une UE après l\'' ~ue.displayBouton,
+                                        modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
+                                    }) }}
+                                    data-action="click->modal#openModal"
+                            >
+                                <i class="{{ iconAdd }}"></i>
+                                Ajouter une UE après l'{{ ue.displayBouton }}
+                            </button>
+                        </div>
+                    {% endif %}
+                    {% if loop.last %}
+                        <button class="btn text-success btn-sm"
+                                {{ stimulus_controller('modal', {
+                                    size: 'lg',
+                                    modalTitle: 'Ajouter une UE après l\''~ ue.displayBouton,
+                                    modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
+                                }) }}
+                                data-action="click->modal#openModal"
+                        >
+                            <i class="{{ iconAdd }}"></i>
+                            Ajouter une UE aprés l'{{ ue.displayBouton }}
+                        </button>
+                    {% endif %}
                 {% endfor %}
-                <div class="card mb-2 sh-19 sh-md-8">
-                    <button
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                modalTitle: 'Ajouter une UE au semestre ' ~ semestre.ordre,
-                                modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
-                            }) }}
-                            data-action="click->modal#openModal"
-                            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 mt-4"
-                            data-size="lg"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Ajouter une UE"
-                    >
+                <div class="text-divider">
+                    <button class="btn text-success btn-sm"
+                           >
                         <i class="{{ iconAdd }}"></i>
-                        <span> Ajouter une UE</span>
+                        Ajouter une UE après l'UE 5.6
                     </button>
                 </div>
+{#                <div class="card mb-2 sh-19 sh-md-8">#}
+{#                    <button#}
+{#                            {{ stimulus_controller('modal', {#}
+{#                                size: 'lg',#}
+{#                                modalTitle: 'Ajouter une UE au semestre ' ~ semestre.ordre,#}
+{#                                modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})#}
+{#                            }) }}#}
+{#                            data-action="click->modal#openModal"#}
+{#                            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 mt-4"#}
+{#                            data-size="lg"#}
+{#                            data-bs-toggle="tooltip"#}
+{#                            data-bs-placement="bottom"#}
+{#                            title="Ajouter une UE"#}
+{#                    >#}
+{#                        <i class="{{ iconAdd }}"></i>#}
+{#                        <span> Ajouter une UE</span>#}
+{#                    </button>#}
+{#                </div>#}
             </div>
         </section>
     </div>

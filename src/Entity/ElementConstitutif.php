@@ -96,6 +96,12 @@ class ElementConstitutif
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $texteEcLibre = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $libelle = null;
+
+    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
+    private ?TypeEc $typeEc = null;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -231,7 +237,7 @@ class ElementConstitutif
         }
 
         if ($this->modaliteEnseignement === null) {
-            return 'Modalité d\'enseignement non renseignée';
+            return 'Volumes horaires non renseignés';
         }
 
         return 'Complet';
@@ -477,6 +483,30 @@ class ElementConstitutif
     public function setTexteEcLibre(?string $texteEcLibre): self
     {
         $this->texteEcLibre = $texteEcLibre;
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(?string $libelle): self
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    public function getTypeEc(): ?TypeEc
+    {
+        return $this->typeEc;
+    }
+
+    public function setTypeEc(?TypeEc $typeEc): self
+    {
+        $this->typeEc = $typeEc;
 
         return $this;
     }

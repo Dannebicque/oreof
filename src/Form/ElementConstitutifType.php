@@ -12,7 +12,9 @@ namespace App\Form;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\NatureUeEc;
+use App\Entity\TypeEc;
 use App\Entity\User;
+use App\Repository\TypeEcRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -23,24 +25,31 @@ class ElementConstitutifType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $typeDiplome = $options['typeDiplome'];
+
         $builder
+            ->add('libelle', TextType::class, [
+                'attr' => ['maxlength' => 255],
+                'required' => false
+            ])
+            ->add('typeEc', EntityType::class, [
+                'class' => TypeEc::class,
+                'choice_label' => 'libelle',
+                'query_builder' => fn (
+                    TypeEcRepository $typeEcRepository
+                ) => $typeEcRepository->findByTypeDiplome($typeDiplome),
+                'required' => false,
+            ])
             ->add('natureUeEc', EntityType::class, [
                 'class' => NatureUeEc::class,
                 'choice_label' => 'libelle',
                 'required' => false,
                 'placeholder' => 'Choisissez une nature...',
                 'choice_attr' => function ($choice, $key, $value) {
-                    // adds a class like attending_yes, attending_no, etc
                     return ['data-choix' => $choice->isChoix() ? 'true' : 'false'];
                 },
                 'attr' => ['data-action' => 'change->ec--manage#changeNatureEc'],
             ])
-//            ->add('ficheMatiere', EntityType::class, [
-//                'class' => FicheMatiere::class,
-//                'choice_label' => 'libelle',
-//                'required' => true,
-//                'attr' => ['maxlength' => 250],
-//            ])
         ;
     }
 
@@ -48,7 +57,9 @@ class ElementConstitutifType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ElementConstitutif::class,
-            'translation_domain' => 'form'
+            'translation_domain' => 'form',
+            'typeDiplome' => null,
+
         ]);
     }
 }
