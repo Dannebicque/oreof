@@ -236,6 +236,20 @@
                             </button>
                         </div>
                     {% endif %}
+                {% else %}
+                    <div class="text-divider">
+                        <button class="btn text-success btn-sm"
+                                {{ stimulus_controller('modal', {
+                                    size: 'lg',
+                                    modalTitle: 'Ajouter une UE après l\''~ ue.displayBouton,
+                                    modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
+                                }) }}
+                                data-action="click->modal#openModal"
+                        >
+                            <i class="{{ iconAdd }}"></i>
+                            Ajouter une UE
+                        </button>
+                    </div>
                 {% endfor %}
 
                 {#                <div class="card mb-2 sh-19 sh-md-8"> #}
