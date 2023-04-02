@@ -34,7 +34,7 @@
                 >Structure et organisation de la formation {{ formationState.onglets|etatRemplissage(3, 'formation')
                     }}</a>
             </li>
-            {% if formation.parcours[0] is defined and formation.parcours[0].isParcoursDefaut %}
+            {% if formation.parcours[0] is defined and formation.hasParcours == false %}
                 {% set parcours = formation.parcours[0] %}
                 <li class="nav-item" role="presentation">
                     <a class="nav-link"
