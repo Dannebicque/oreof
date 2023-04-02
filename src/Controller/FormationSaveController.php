@@ -77,7 +77,14 @@ class FormationSaveController extends BaseController
                 return $this->json($rep);
             case 'yesNo':
                 $rep = $updateEntity->saveYesNo($formation, $data['field'], $data['value']);
-
+                if ($data['field'] === 'hasParcours') {
+                    foreach ($formation->getParcours() as $parcours) {
+                        if ($parcours->isParcoursDefaut()) {
+                            $parcours->setLibelle('[A renomer] ' .$parcours->getLibelle());
+                        }
+                    }
+                    $em->flush();
+                }
                 return $this->json($rep);
             case 'textarea':
             case 'selectWithoutEntity':

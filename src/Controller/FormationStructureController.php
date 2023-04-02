@@ -22,7 +22,6 @@ class FormationStructureController extends BaseController
 {
     #[Route('/formation/structure/pas-parcours/{formation}', name: 'app_formation_genere_structure_pas_parcours')]
     public function genereStructurePasParcours(
-        Request $request,
         FormationStructure $formationStructure,
         Formation $formation
     ): Response {

@@ -19,16 +19,7 @@
         {'data-action' : 'keyup->ue#changeTypeUeTexte'}}) }}
     <div>
         {{ form_row(form.natureUeEc, {'row_attr' : {'id' : 'natureUeEc' }}) }}
-        <button class="btn text-info"
-                {{ stimulus_action('ue','ajoutNatureUeEc', 'click') }}
-        >
-            <i class="{{ iconAdd }}"></i>
-            Absent de la liste, ajouter une nature d'UE
-        </button>
-        <br>
     </div>
-    {{ form_row(form.natureUeEcTexte, {'row_attr' : {'class' : 'd-none', 'id' : 'natureUeEcTexte' }, 'attr' :
-        {'data-action' : 'keyup->ue#changeNatureUeEcTexte'}}) }}
 </div>
 <button type="submit" class="btn btn-success"
         {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
