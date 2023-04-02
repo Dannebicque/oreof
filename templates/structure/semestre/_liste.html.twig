@@ -33,72 +33,78 @@
             </div>
             <div>{# class="scroll-out" #}
                 {% for semestre in semestres %}
-                    <div {{ stimulus_controller('structure--semestre') }}>
-                        <div class="card mb-2 sh-19 sh-md-8">
-                            <div class="card-body pt-0 pb-0 h-100">
-                                <div class="row g-0 h-100 align-content-center">
-                                    <div class="col-12 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Semestre</div>
-                                        {{ semestre.semestre.display }}
-                                    </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Commun ?</div>
-                                            {% if semestre.semestre.troncCommun == true %}
-                                                <span class="badge bg-info me-2">Tronc Commun</span>
+                <div {{ stimulus_controller('structure--semestre') }}>
+                    <div class="card mb-2 sh-19 sh-md-8">
+                        <div class="card-body pt-0 pb-0 h-100">
+                            <div class="row g-0 h-100 align-content-center">
+                                <div class="col-12 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted text-small d-md-none">Semestre</div>
+                                    {{ semestre.semestre.display }}
+                                </div>
+                                <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted text-small d-md-none">Commun ?</div>
+                                    {% if semestre.semestre.troncCommun == true %}
+                                        <span class="badge bg-info me-2">Tronc Commun</span>
 
-                                            {% else %}
-                                            <span class="badge bg-secondary me-2">Parcours</span>
-                                                {% endif %}
-                                    </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">ECTS</div>
-                                        <span id="ects_semestre_{{ semestre.semestre.id }}_{{ parcours.id }}">
+                                    {% else %}
+                                        <span class="badge bg-secondary me-2">Parcours</span>
+                                    {% endif %}
+                                </div>
+                                <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted text-small d-md-none">ECTS</div>
+                                    <span id="ects_semestre_{{ semestre.semestre.id }}_{{ parcours.id }}">
                                             {{ semestre.semestre.totalEctsSemestre|badgeEctsSemestre }}
                                         </span>
-                                    </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Nb UE</div>
-                                            {{ semestre.semestre.nbUes|badgeNb }}
-                                    </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center
-                                            mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Voir les UE</div>
-                                        <button class="btn btn-sm btn-outline-primary"
-                                                {{ stimulus_action('structure--semestre', 'detail', 'click',
-                                                    {semestre:semestre.semestre.id, url: path
-                                                        ('structure_ue_detail_semestre', {semestre:semestre.semestre
-                                                        .id, parcours: parcours.id})}
-                                                ) }}
-                                        >
-                                            <i class="fal fa-caret-right"></i> Voir les UE
-                                        </button>
-                                    </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center
-                                            align-items-md-end mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Actions</div>
-                                        <button class="btn btn-outline-info btn-sm">Boutons à définir ?</button>
-                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div id="detail_semestre_{{ semestre.semestre.id }}" class="d-none detail_semestre">
-                            <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-11" {{ stimulus_target('structure--semestre', 'detail') }}
-                                     data-action="base:refreshListe@window->structure--semestre#refreshListe
-                                     structure--ue:refreshListe@window->structure--semestre#refreshListe"
-                                     data-structure--semestre-semestre-param="{{ semestre.semestre.id }}"
-                                     data-structure--semestre-url-param="{{ path
-                                    ('structure_ue_detail_semestre', {semestre:semestre.semestre.id, parcours: parcours.id}) }}"
-                                >
-
+                                <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted text-small d-md-none">Nb UE</div>
+                                    {{ semestre.semestre.nbUes|badgeNb }}
+                                </div>
+                                <div class="col-6 col-md-2 d-flex flex-column justify-content-center
+                                            mb-1 mb-md-0">
+                                    <div class="text-muted text-small d-md-none">Voir les UE</div>
+                                    <button class="btn btn-sm btn-outline-primary"
+                                            {{ stimulus_action('structure--semestre', 'detail', 'click',
+                                                {semestre:semestre.semestre.id, url: path
+                                                    ('structure_ue_detail_semestre', {semestre:semestre.semestre
+                                                    .id, parcours: parcours.id})}
+                                            ) }}
+                                    >
+                                        <i class="fal fa-caret-right"></i> Voir les UE
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-2 d-flex flex-column justify-content-center
+                                            align-items-md-end mb-1 mb-md-0">
+                                    <div class="text-muted text-small d-md-none">Actions</div>
+                                    <button class="btn btn-outline-info btn-sm">Boutons à définir ?</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div id="detail_semestre_{{ semestre.semestre.id }}" class="d-none detail_semestre">
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <div class="col-11" {{ stimulus_target('structure--semestre', 'detail') }}
+                                 data-action="base:refreshListe@window->structure--semestre#refreshListe
+                                     structure--ue:refreshListe@window->structure--semestre#refreshListe"
+                                 data-structure--semestre-semestre-param="{{ semestre.semestre.id }}"
+                                 data-structure--semestre-url-param="{{ path
+                                     ('structure_ue_detail_semestre', {semestre:semestre.semestre.id, parcours: parcours.id}) }}"
+                            >
 
-                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="card mb-2">
+                <div class="card-body bg-warning">
+                    Ce parcours n'a pas encore de structure. Vous pouvez soit générer une structure automatiquement,
+                    soit reprendre une structure existante d'un autre parcours de la mention/spécialité.
+                </div>
             </div>
-        </section>
+            {% endfor %}
     </div>
+    </section>
+</div>
 </div>
