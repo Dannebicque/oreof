@@ -40,12 +40,12 @@ class EcStep4Type extends AbstractType
             ]);
         }
 
-        $builder
-            ->add('ects', NumberType::class, [
-                'html5' => true,
-                'scale' => 0,
-                'attr' => ['data-action' => !$isModal ? 'change->ec--structure#saveEcts' : ''],
-            ]);
+//        $builder
+//            ->add('ects', NumberType::class, [
+//                'html5' => true,
+//                'scale' => 0,
+//                'attr' => ['data-action' => !$isModal ? 'change->ec--structure#saveEcts' : ''],
+//            ]);
 
         $builder->add('volumeCmPresentiel', FloatType::class, [
             'html5' => true,

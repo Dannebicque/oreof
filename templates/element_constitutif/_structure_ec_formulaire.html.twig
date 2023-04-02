@@ -6,9 +6,6 @@ parcours.'}) }}
     .modaliteEnseignement == null %}
         {{ form_row(form.modaliteEnseignement) }}
     {% endif %}
-
-    {{ form_row(form.ects) }}
-
         <div id="bloc_presentiel"  style="display:{% if ec.modaliteEnseignement != null and ec.modaliteEnseignement.value != 2 %}block{% else
 %}none{% endif %}">
             <h3>Volume Présentiel</h3>

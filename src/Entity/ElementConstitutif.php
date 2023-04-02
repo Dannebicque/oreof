@@ -232,10 +232,6 @@ class ElementConstitutif
             return 'Pas d\'heures';
         }
 
-        if ($this->ects === 0.0) {
-            return 'Pas d\'ECTS';
-        }
-
         if ($this->modaliteEnseignement === null) {
             return 'Volumes horaires non renseignés';
         }
@@ -247,6 +243,11 @@ class ElementConstitutif
     {
         $totalPourcentage = [];
         $nbNotes = [];
+
+        if ($this->ects === 0.0) {
+            return 'Pas d\'ECTS';
+        }
+
         foreach ($this->getMcccs() as $mccc) {
             if (!isset($totalPourcentage[$mccc->getNumeroSession()])) {
                 $totalPourcentage[$mccc->getNumeroSession()] = 0;
