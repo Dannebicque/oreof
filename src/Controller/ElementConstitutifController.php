@@ -13,6 +13,7 @@ use App\Classes\EcOrdre;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
+use App\Entity\TypeEc;
 use App\Entity\Ue;
 use App\Form\EcStep4Type;
 use App\Form\ElementConstitutifType;
@@ -20,6 +21,7 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
 use App\Repository\NatureUeEcRepository;
+use App\Repository\TypeEcRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\Repository\UeRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
@@ -75,6 +77,7 @@ class ElementConstitutifController extends AbstractController
         TypeDiplomeRegistry $typeDiplomeRegistry,
         EcOrdre $ecOrdre,
         Request $request,
+        TypeEcRepository $typeEcRepository,
         FicheMatiereRepository $ficheMatiereRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
         Ue $ue,
@@ -85,14 +88,28 @@ class ElementConstitutifController extends AbstractController
 
         $elementConstitutif->setModaliteEnseignement($parcours?->getModalitesEnseignement());
         $elementConstitutif->setUe($ue);
+        $typeDiplome = $parcours->getFormation()->getTypeDiplome();
+
+        if ($typeDiplome === null) {
+            throw new RuntimeException('Type de diplôme non trouvé');
+        }
 
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl('app_element_constitutif_new', ['ue' => $ue->getId(), 'parcours' => $parcours->getId()]),
-            'typeDiplome' => $parcours->getFormation()->getTypeDiplome(),
+            'typeDiplome' => $typeDiplome,
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if ($form->get('typeEcTexte')->getData() !== null && $form->get('typeEc')->getData() === null) {
+                $tu = new TypeEc();
+                $tu->setLibelle($form->get('typeEcTexte')->getData());
+                $tu->addTypeDiplome($typeDiplome);
+                $typeEcRepository->save($tu, true);
+                $elementConstitutif->setTypeEc($tu);
+            }
+
             if ($elementConstitutif->getNatureUeEc()?->isChoix() === false and $elementConstitutif->getNatureUeEc()?->isLibre() === false) {
                 if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
                     $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(

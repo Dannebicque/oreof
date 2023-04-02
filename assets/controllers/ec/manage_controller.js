@@ -30,6 +30,16 @@ export default class extends Controller {
     this.matieresTarget.innerHTML = await response.text()
   }
 
+  ajoutTypeEc(event) {
+    event.preventDefault()
+    document.getElementById('typeEcTexte').classList.remove('d-none')
+  }
+
+  changeTypeEcTexte(event) {
+    event.preventDefault()
+    document.getElementById('element_constitutif_typeEc').disabled = event.currentTarget.value.length > 0
+  }
+
   addFromListe(event) {
     // ne pas soumettre le formulaire
     event.preventDefault()

@@ -96,22 +96,6 @@ class UeController extends AbstractController
                 $ue->setTypeUe($tu);
             }
 
-            if ($form->get('natureUeEcTexte')->getData() === null && $form->get('natureUeEc')->getData() !== null) {
-                if ($form->get('natureUeEc')->getData()->isChoix() === true) {
-                    $ue->setSubOrdre(1);
-                    $ue2 = clone $ue;
-                    $ue2->setSubOrdre(2);
-                    $ueRepository->save($ue2, true);
-                }
-            }
-
-            if ($form->get('natureUeEcTexte')->getData() !== null && $form->get('natureUeEc')->getData() === null) {
-                $tu = new NatureUeEc();
-                $tu->setLibelle($form->get('natureUeEcTexte')->getData());
-                $natureUeEcRepository->save($tu, true);
-                $ue->setNatureUeEc($tu);
-            }
-
             //todo: gérer le cas ou la nature d'UE est multiple ????
 
             $ueRepository->save($ue, true);

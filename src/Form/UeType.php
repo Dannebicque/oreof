@@ -60,13 +60,6 @@ class UeType extends AbstractType
                         ->orderBy('n.libelle', 'ASC');
                 },
                 'required' => false,
-            ])
-            ->add('natureUeEcTexte', TextType::class, [
-                'attr' => [
-                    'maxlength' => 100,
-                ],
-                'required' => false,
-                'mapped' => false,
             ]);
     }
 

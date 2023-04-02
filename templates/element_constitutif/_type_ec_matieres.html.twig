@@ -26,7 +26,7 @@
                 <option value="{{ matiere.id }}">{{ matiere.libelle }}</option>
             {% endfor %}
         </select>
-        <button {{ stimulus_action('ec--manage', 'addFromListe') }} class="btn btn-primary">
+        <button {{ stimulus_action('ec--manage', 'addFromListe') }} class="btn btn-primary mt-2">
             Ajouter la fiche EC/matière selectionnée
         </button>
     </div>
@@ -43,7 +43,7 @@
         <input type="text" id="ficheMatiereLibelle" name="ficheMatiereLibelle" class="form-control"
                placeholder="Saisir le libellé d'une fiche EC/matière">
 
-        <button {{ stimulus_action('ec--manage', 'addNewFiche') }} class="btn btn-primary">
+        <button {{ stimulus_action('ec--manage', 'addNewFiche') }} class="btn btn-primary mt-2">
             Créer et ajouter la fiche EC/matière
         </button>
     </div>

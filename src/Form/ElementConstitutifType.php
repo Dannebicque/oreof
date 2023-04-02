@@ -40,6 +40,13 @@ class ElementConstitutifType extends AbstractType
                 ) => $typeEcRepository->findByTypeDiplome($typeDiplome),
                 'required' => false,
             ])
+            ->add('typeEcTexte', TextType::class, [
+                'attr' => [
+                    'maxlength' => 100,
+                ],
+                'required' => false,
+                'mapped' => false,
+            ])
             ->add('natureUeEc', EntityType::class, [
                 'class' => NatureUeEc::class,
                 'choice_label' => 'libelle',
