@@ -37,7 +37,13 @@ export default class extends Controller {
 
   changeTypeEcTexte(event) {
     event.preventDefault()
-    document.getElementById('element_constitutif_typeEc').disabled = event.currentTarget.value.length > 0
+    if (document.getElementById('element_constitutif_typeEc')) {
+      document.getElementById('element_constitutif_typeEc').disabled = event.currentTarget.value.length > 0
+    }
+
+    if (document.getElementById('element_constitutif_edit_typeEc')) {
+      document.getElementById('element_constitutif_edit_typeEc').disabled = event.currentTarget.value.length > 0
+    }
   }
 
   addFromListe(event) {

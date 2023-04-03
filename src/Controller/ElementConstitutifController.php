@@ -16,6 +16,7 @@ use App\Entity\Parcours;
 use App\Entity\TypeEc;
 use App\Entity\Ue;
 use App\Form\EcStep4Type;
+use App\Form\ElementConstitutifEditType;
 use App\Form\ElementConstitutifType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
@@ -172,18 +173,6 @@ class ElementConstitutifController extends AbstractController
                 $elementConstitutifRepository->save($elementConstitutif, true);
             }
 
-
-//            $formation = $parcours->getFormation();
-//            if ($formation === null) {
-//                throw new RuntimeException('Formation non trouvée');
-//            }
-//            $typeDiplome = $formation->getTypeDiplome();
-//            if ($typeDiplome === null) {
-//                throw new RuntimeException('Type de diplome non trouvé');
-//            }
-            //  $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-            //  $typeD->initMcccs($elementConstitutif);
-
             return $this->json(true);
         }
 
@@ -230,12 +219,47 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
     public function edit(
+        Request $request,
+        ElementConstitutifRepository $elementConstitutifRepository,
+        TypeEcRepository $typeEcRepository,
         ElementConstitutif $elementConstitutif,
         Parcours $parcours
     ): Response {
+        $typeDiplome = $parcours->getFormation()->getTypeDiplome();
+
+        if ($typeDiplome === null) {
+            throw new RuntimeException('Type de diplôme non trouvé');
+        }
+
+        $form = $this->createForm(ElementConstitutifEditType::class, $elementConstitutif, [
+            'action' => $this->generateUrl(
+                'app_element_constitutif_edit',
+                ['id' => $elementConstitutif->getId(), 'parcours' => $parcours->getId()]
+            ),
+            'typeDiplome' => $typeDiplome,
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('typeEcTexte')->getData() !== null && $form->get('typeEc')->getData() === null) {
+                $tu = new TypeEc();
+                $tu->setLibelle($form->get('typeEcTexte')->getData());
+                $tu->addTypeDiplome($typeDiplome);
+                $typeEcRepository->save($tu, true);
+                $elementConstitutif->setTypeEc($tu);
+            }
+
+            $elementConstitutifRepository->save($elementConstitutif, true);
+
+            return $this->json(true);
+        }
+
         return $this->render('element_constitutif/edit.html.twig', [
             'elementConstitutif' => $elementConstitutif,
             'form' => $form->createView(),
+            'ue' => $elementConstitutif->getUe(),
+            'parcours' => $parcours,
         ]);
     }
 
