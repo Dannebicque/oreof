@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.13](https://github.com/Dannebicque/oreof/compare/v0.20.12...v0.20.13) (2023-04-03)
+
+
+### Features
+
+* Déplaceement des ECTS dans la partie MCCC ([d83f495](https://github.com/Dannebicque/oreof/commit/d83f49515231c6424f1d6b95aad9a7607299cb44))
+* Suppression de l'édition de natureUE/EC. Ajout de type EC ([c310ac4](https://github.com/Dannebicque/oreof/commit/c310ac47b2f87be3b2459e56ca5bfd452f5da803))
+* Texte si pas de structure ([fb41dc0](https://github.com/Dannebicque/oreof/commit/fb41dc028a920f0d06605f69005e56e6af77a42e))
+* Texte si pas de structure ([a6baf16](https://github.com/Dannebicque/oreof/commit/a6baf161f93ee2bca4a6c0a88379208094749b88))
+
+
+### Bug Fixes
+
+* Parcours par défaut ([c61c53b](https://github.com/Dannebicque/oreof/commit/c61c53b6bf45e6086c743b3838b20b021ff5298d))
+* Textes ([b8a3b49](https://github.com/Dannebicque/oreof/commit/b8a3b4925828afbbbcf8e7216b2c6fa87cc98415))
+* typo, ECTS dans MCCC ([e118ebb](https://github.com/Dannebicque/oreof/commit/e118ebb72636e97c56938e80296617c8dc29887a))
+
 ### [0.20.12](https://github.com/Dannebicque/oreof/compare/v0.20.11...v0.20.12) (2023-03-30)
 
 
