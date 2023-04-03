@@ -27,12 +27,36 @@ class CompetenceController extends AbstractController
     public function new(Request $request, CompetenceRepository $competenceRepository, BlocCompetence $bcc): Response
     {
         $competence = new Competence($bcc);
-        $form = $this->createForm(CompetenceType::class, $competence, ['action' => $this->generateUrl('app_competence_new', ['bcc' => $bcc->getId()])]);
+        $form = $this->createForm(
+            CompetenceType::class,
+            $competence,
+            [
+                'action' => $this->generateUrl(
+                    'app_competence_new',
+                    [
+                        'bcc' => $bcc->getId(),
+                        'ordre' => $request->query->get('ordre'),
+                    ]
+                )
+            ]
+        );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $ordre = $competenceRepository->getMaxOrdreBlocCompetence($bcc);
-            $competence->setOrdre($ordre + 1);
+            if ($request->query->get('ordre') === null) {
+                //pas d'ordre donc on ajoute à la fin
+                $ordre = $competenceRepository->getMaxOrdreBlocCompetence($bcc);
+                $competence->setOrdre($ordre + 1);
+            } else {
+                //on décale les autres compétences
+                $competenceRepository->decaleCompetence(
+                    $bcc,
+                    $request->query->get('ordre'),
+                );
+                $competence->setOrdre($request->query->get('ordre'));
+            }
+
+
             $competence->genereCode();
             $competenceRepository->save($competence, true);
 
@@ -79,6 +103,7 @@ class CompetenceController extends AbstractController
         $competenceNew->setOrdre($ordre + 1);
         $competenceNew->genereCode();
         $competenceRepository->save($competenceNew, true);
+
         return $this->json(true);
     }
 
@@ -89,6 +114,7 @@ class CompetenceController extends AbstractController
         string $sens
     ): Response {
         $bcc->deplacerCompetence($competence, $sens);
+
         return $this->json(true);
     }
 

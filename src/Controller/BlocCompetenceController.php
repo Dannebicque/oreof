@@ -52,13 +52,38 @@ class BlocCompetenceController extends AbstractController
         $form = $this->createForm(
             BlocCompetenceType::class,
             $blocCompetence,
-            ['action' => $this->generateUrl('app_bloc_competence_new_parcours', ['parcours' => $parcours->getId()])]
+            [
+                'action' => $this->generateUrl('app_bloc_competence_new_parcours', ['parcours' => $parcours->getId(),'ordre' => $request->query->get('ordre')]),]
         );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $ordre = $blocCompetenceRepository->getMaxOrdreParcours($parcours);
-            $blocCompetence->setOrdre($ordre + 1);
+            if ($request->query->get('ordre') === null) {
+                //pas d'ordre donc on ajoute à la fin
+                $ordre = $blocCompetenceRepository->getMaxOrdreParcours($parcours);
+                $blocCompetence->setOrdre($ordre + 1);
+            } else {
+                //on décale les autres compétences
+                $bccs = $blocCompetenceRepository->decaleCompetence(
+                    $parcours,
+                    $request->query->get('ordre'),
+                );
+
+                // décaler les blocs de compétences et recalculer les codes
+                foreach ($bccs as $bcc) {
+                    $bcc->setOrdre($bcc->getOrdre() + 1);
+                    $bcc->genereCode();
+                    $blocCompetenceRepository->save($bcc, true);
+                    foreach ($bcc->getCompetences() as $competence) {
+                        $competence->genereCode();
+                        $blocCompetenceRepository->save($competence, true);
+                    }
+                }
+
+
+                $blocCompetence->setOrdre($request->query->get('ordre'));
+            }
+
             $blocCompetence->genereCode();
             $blocCompetenceRepository->save($blocCompetence, true);
 

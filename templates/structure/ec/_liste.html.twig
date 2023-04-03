@@ -199,7 +199,7 @@
                                     data-action="click->modal#openModal"
                             >
                                 <i class="{{ iconAdd }}"></i>
-                                Ajouter un EC avant l'EC {{ ec.code }}
+                                Ajouter un EC avant l'<strong>{{ ec.code }}</strong>
                             </button>
                         </div>
                     </td>
@@ -372,7 +372,7 @@
                                     </button>
                                 {% endif %}
                             {% else %}
-                                {% if not ec.subOrdre == 0 %}
+                                {% if not loop.first %}
                                     <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
                                         'click', {url: path('app_element_constitutif_deplacer_subordre',{sens: 'up', id:
                                             ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
@@ -414,7 +414,7 @@
                                     data-action="click->modal#openModal"
                             >
                                 <i class="{{ iconAdd }}"></i>
-                                Ajouter un EC avant l'EC {{ ec.ecEnfants[0].code }}
+                                Ajouter un EC avant l'<strong>{{ ec.ecEnfants[0].code }}</strong>
                             </button>
                         </div>
                     </td>
@@ -561,7 +561,7 @@
                                                     data-action="click->modal#openModal"
                                             >
                                                 <i class="{{ iconAdd }}"></i>
-                                                Ajouter un EC après l'EC {{ ece.code }}
+                                                Ajouter un EC après l'<strong>{{ ece.code }}</strong>
                                             </button>
                                         </div>
                                     </td>

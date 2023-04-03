@@ -128,4 +128,19 @@ class Bcc
 
         return true;
     }
+
+    public function resetBcc(Parcours $parcours): void
+    {
+        //on supprime les BCC et les compétences du parcours et des fiches matières
+        foreach ($parcours->getBlocCompetences() as $bcc) {
+            foreach ($bcc->getCompetences() as $comp) {
+                foreach ($comp->getFicheMatieress() as $fm) {
+                    $fm->removeCompetence($comp);
+                }
+                $this->entityManager->remove($comp);
+            }
+            $this->entityManager->remove($bcc);
+        }
+        $this->entityManager->flush();
+    }
 }

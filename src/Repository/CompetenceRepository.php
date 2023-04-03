@@ -60,4 +60,21 @@ class CompetenceRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function decaleCompetence(BlocCompetence $bcc, int $ordre): void
+    {
+        $competences = $this->createQueryBuilder('c')
+            ->andWhere('c.blocCompetence = :bcc')
+            ->andWhere('c.ordre >= :ordre')
+            ->setParameter('bcc', $bcc)
+            ->setParameter('ordre', $ordre)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($competences as $competence) {
+            $competence->setOrdre($competence->getOrdre() + 1);
+            $competence->genereCode();
+            $this->save($competence, true);
+        }
+    }
 }

@@ -96,6 +96,17 @@ export default class extends Controller {
     }
   }
 
+  resetBcc() {
+    if (confirm('Voulez-vous vraiment supprimer les BCC et les compétences du parcours ? ')) {
+      this._save({
+        action: 'resetBcc',
+      }).then(() => {
+        callOut('Réinitialisation des BCC effectuée.', 'success')
+        this._updateListe()
+      })
+    }
+  }
+
   async _updateListe() {
     this.listeTarget.innerHTML = window.da.loaderStimulus
     const response = await fetch(this.urlListeValue)

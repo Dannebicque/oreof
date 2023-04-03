@@ -79,6 +79,10 @@ class ParcoursSaveController extends AbstractController
                 $bcc->recopieBcc($parcours, $data['value']);
 
                 return $this->json(true);
+            case 'resetBcc':
+                $bcc->resetBcc($parcours);
+
+                return $this->json(true);
             case 'modalitesEnseignement':
                 $rep = $updateEntity->saveField(
                     $parcours,
