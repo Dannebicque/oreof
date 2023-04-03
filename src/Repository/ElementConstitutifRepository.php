@@ -167,4 +167,15 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult() ?? 0;
     }
+
+    public function findByUeOrdreSup(?int $ordre, ?Ue $ue): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.ue = :ue')
+            ->andWhere('e.ordre >= :ordre')
+            ->setParameter('ue', $ue)
+            ->setParameter('ordre', $ordre)
+            ->getQuery()
+            ->getResult();
+    }
 }

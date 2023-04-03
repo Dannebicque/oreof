@@ -108,4 +108,15 @@ class EcOrdre
 
         return true;
     }
+
+    public function removeElementConstitutif(?int $ordre, ?Ue $ue): void
+    {
+        //récupérer les EC à décaler
+        $ecs = $this->elementConstitutifRepository->findByUeOrdreSup($ordre, $ue);
+        foreach ($ecs as $ec) {
+            $ec->setOrdre($ec->getOrdre() - 1);
+            $ec->genereCode();
+        }
+        $this->entityManager->flush();
+    }
 }

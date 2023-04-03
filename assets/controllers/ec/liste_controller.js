@@ -39,7 +39,7 @@ export default class extends Controller {
       await fetch(url, body).then((e) => {
         if (e.status === 200) { // todo, tester aussi la réponse...
           callOut('Suppression effectuée', 'success')
-          // todo: dispatch
+          this.dispatch('refreshListeEc', { detail: { ue: event.params.ue, parcours: event.params.parcours } })
         } else {
           callOut('Erreur lors de la suppression', 'danger')
         }

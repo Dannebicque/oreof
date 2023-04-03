@@ -26,6 +26,7 @@ use App\Repository\TypeEpreuveRepository;
 use App\Repository\UeRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
+use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -74,7 +75,6 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/new/{ue}/{parcours}', name: 'app_element_constitutif_new', methods: ['GET', 'POST'])]
     public function new(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
         EcOrdre $ecOrdre,
         Request $request,
         TypeEcRepository $typeEcRepository,
@@ -95,13 +95,15 @@ class ElementConstitutifController extends AbstractController
         }
 
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
-            'action' => $this->generateUrl('app_element_constitutif_new', ['ue' => $ue->getId(), 'parcours' => $parcours->getId()]),
+            'action' => $this->generateUrl(
+                'app_element_constitutif_new',
+                ['ue' => $ue->getId(), 'parcours' => $parcours->getId()]
+            ),
             'typeDiplome' => $typeDiplome,
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             if ($form->get('typeEcTexte')->getData() !== null && $form->get('typeEc')->getData() === null) {
                 $tu = new TypeEc();
                 $tu->setLibelle($form->get('typeEcTexte')->getData());
@@ -130,11 +132,16 @@ class ElementConstitutifController extends AbstractController
                 $elementConstitutifRepository->save($elementConstitutif, true);
             } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() === true) {
                 $lastEc = $ecOrdre->getOrdreSuivant($ue);
+                $elementConstitutif->setFicheMatiere(null);
+                $elementConstitutif->setOrdre($lastEc);
+                $elementConstitutif->genereCode();
+                $elementConstitutifRepository->save($elementConstitutif, true);
                 $subOrdre = 1;
                 //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
                 $matieres = explode(',', $request->request->get('matieres'));
                 foreach ($matieres as $matiere) {
                     $ec = new ElementConstitutif();
+                    $ec->setEcParent($elementConstitutif);
                     $ec->setParcours($parcours);
                     $ec->setModaliteEnseignement($parcours?->getModalitesEnseignement());
                     $ec->setUe($ue);
@@ -166,16 +173,16 @@ class ElementConstitutifController extends AbstractController
             }
 
 
-            $formation = $parcours->getFormation();
-            if ($formation === null) {
-                throw new RuntimeException('Formation non trouvée');
-            }
-            $typeDiplome = $formation->getTypeDiplome();
-            if ($typeDiplome === null) {
-                throw new RuntimeException('Type de diplome non trouvé');
-            }
-            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-            $typeD->initMcccs($elementConstitutif);
+//            $formation = $parcours->getFormation();
+//            if ($formation === null) {
+//                throw new RuntimeException('Formation non trouvée');
+//            }
+//            $typeDiplome = $formation->getTypeDiplome();
+//            if ($typeDiplome === null) {
+//                throw new RuntimeException('Type de diplome non trouvé');
+//            }
+            //  $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+            //  $typeD->initMcccs($elementConstitutif);
 
             return $this->json(true);
         }
@@ -223,11 +230,11 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
     public function edit(
-        FicheMatiere $ficheMatiere,
+        ElementConstitutif $elementConstitutif,
         Parcours $parcours
     ): Response {
         return $this->render('element_constitutif/edit.html.twig', [
-            'ficheMatiere' => $ficheMatiere,
+            'elementConstitutif' => $elementConstitutif,
             'form' => $form->createView(),
         ]);
     }
@@ -287,6 +294,10 @@ class ElementConstitutifController extends AbstractController
             throw new RuntimeException('Type de diplome non trouvé');
         }
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+
+        if ($elementConstitutif->getMcccs()->count() === 0) {
+            $typeD->initMcccs($elementConstitutif);
+        }
 
         if ($this->isGranted(
             'ROLE_FORMATION_EDIT_MY',
@@ -375,6 +386,8 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/{id}', name: 'app_element_constitutif_delete', methods: ['DELETE'])]
     public function delete(
+        EcOrdre $ecOrdre,
+        EntityManagerInterface $entityManager,
         Request $request,
         ElementConstitutif $elementConstitutif,
         ElementConstitutifRepository $elementConstitutifRepository
@@ -383,10 +396,19 @@ class ElementConstitutifController extends AbstractController
             'delete' . $elementConstitutif->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf')
         )) {
-            //todo: supprimer les autres enfants ???
-            $elementConstitutifRepository->remove($elementConstitutif, true);
+            foreach ($elementConstitutif->getMcccs() as $mccc) {
+                $elementConstitutif->removeMccc($mccc);
+                $entityManager->remove($mccc);
+            }
 
-            //todo: remettre à jour tous les codes ???
+            foreach ($elementConstitutif->getEcEnfants() as $enfant) {
+                $entityManager->remove($enfant);
+            }
+            $ordre = $elementConstitutif->getOrdre();
+            $ue = $elementConstitutif->getUe();
+            $elementConstitutifRepository->remove($elementConstitutif, true);
+            $ecOrdre->removeElementConstitutif($ordre, $ue);
+
             return $this->json(true);
         }
 

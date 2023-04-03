@@ -2,10 +2,10 @@
 <form method="post" action="{{ path('app_element_constitutif_mccc', {id:ec.id}) }}" {{ stimulus_controller('ec--structureparcours') }}>
     <div class="mb-2">
         <label for="ec_step4_ects" class="form-label">
-        {{ 'ec_step4.labels.ects'|trans({}, 'form')}}
+            {{ 'ec_step4.labels.ects'|trans({}, 'form') }}
             <span class="required"></span>
             <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
-               title="{{ 'ec_step4.helps.ects'|trans({}, 'help')}}"></i>
+               title="{{ 'ec_step4.helps.ects'|trans({}, 'help') }}"></i>
         </label>
         <div class="input-group">
             <input type="number" id="ec_step4_ects" name="ec_step4[ects]"
@@ -15,6 +15,7 @@
     </div>
 
     {{ include('typeDiplome/mccc/'~templateForm) }}
+
     <button type="submit" class="btn btn-success"
             {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
     >

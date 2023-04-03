@@ -102,9 +102,16 @@ class ElementConstitutif
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?TypeEc $typeEc = null;
 
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ecEnfants')]
+    private ?self $ecParent = null;
+
+    #[ORM\OneToMany(mappedBy: 'ecParent', targetEntity: self::class)]
+    private Collection $ecEnfants;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
+        $this->ecEnfants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -222,9 +229,9 @@ class ElementConstitutif
 
     public function etatStructure(): string
     {
-        $nbHeures = $this->volumeCmPresentiel + $this->volumeTdPresentiel + $this->volumeTpPresentiel + $this->volumeCmDistanciel + $this->volumeTdDistanciel + $this->volumeTpDistanciel;
+        $nbHeures = $this->volumeCmPresentiel ?? 0.0 + $this->volumeTdPresentiel ?? 0.0 + $this->volumeTpPresentiel ?? 0.0 + $this->volumeCmDistanciel ?? 0.0 + $this->volumeTdDistanciel ?? 0.0 + $this->volumeTpDistanciel ?? 0.0;
 
-        if ($nbHeures === 0.0 && $this->modaliteEnseignement === null && $this->ects === 0.0) {
+        if ($nbHeures === 0.0 && $this->modaliteEnseignement === null) {
             return 'Non complété';
         }
 
@@ -508,6 +515,48 @@ class ElementConstitutif
     public function setTypeEc(?TypeEc $typeEc): self
     {
         $this->typeEc = $typeEc;
+
+        return $this;
+    }
+
+    public function getEcParent(): ?self
+    {
+        return $this->ecParent;
+    }
+
+    public function setEcParent(?self $ecParent): self
+    {
+        $this->ecParent = $ecParent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getEcEnfants(): Collection
+    {
+        return $this->ecEnfants;
+    }
+
+    public function addEcEnfant(self $ecEnfant): self
+    {
+        if (!$this->ecEnfants->contains($ecEnfant)) {
+            $this->ecEnfants->add($ecEnfant);
+            $ecEnfant->setEcParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEcEnfant(self $ecEnfant): self
+    {
+        if ($this->ecEnfants->removeElement($ecEnfant)) {
+            // set the owning side to null (unless already changed)
+            if ($ecEnfant->getEcParent() === $this) {
+                $ecEnfant->setEcParent(null);
+            }
+        }
 
         return $this;
     }
