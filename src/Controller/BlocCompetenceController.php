@@ -15,6 +15,7 @@ use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Form\BlocCompetenceType;
 use App\Repository\BlocCompetenceRepository;
+use App\Repository\CompetenceRepository;
 use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,6 +46,7 @@ class BlocCompetenceController extends AbstractController
     public function newParcours(
         Request $request,
         BlocCompetenceRepository $blocCompetenceRepository,
+        CompetenceRepository $competenceRepository,
         Parcours $parcours
     ): Response {
         $blocCompetence = new BlocCompetence();
@@ -76,7 +78,7 @@ class BlocCompetenceController extends AbstractController
                     $blocCompetenceRepository->save($bcc, true);
                     foreach ($bcc->getCompetences() as $competence) {
                         $competence->genereCode();
-                        $blocCompetenceRepository->save($competence, true);
+                        $competenceRepository->save($competence, true);
                     }
                 }
 
