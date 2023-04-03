@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.14](https://github.com/Dannebicque/oreof/compare/v0.20.13...v0.20.14) (2023-04-03)
+
+
+### Features
+
+* modifier EC (seulement libellé et type EC), si besoin de plus supprimer ([b9c17f8](https://github.com/Dannebicque/oreof/commit/b9c17f83f4116cc28bf14b619ff271e109875916))
+* Remise en forme de la partie compétences, ordre / init ([8e0febf](https://github.com/Dannebicque/oreof/commit/8e0febf7348e64696a0baf9bd491f3ffacea4276))
+
 ### [0.20.13](https://github.com/Dannebicque/oreof/compare/v0.20.12...v0.20.13) (2023-04-03)
 
 
