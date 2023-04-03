@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.16](https://github.com/Dannebicque/oreof/compare/v0.20.15...v0.20.16) (2023-04-03)
+
+
+### Features
+
+* Préparation menus mutualisés ([d9ba660](https://github.com/Dannebicque/oreof/commit/d9ba660059cd76e9bdec8a8c7f87f6c4e17c18e1))
+
 ### [0.20.15](https://github.com/Dannebicque/oreof/compare/v0.20.14...v0.20.15) (2023-04-03)
 
 
