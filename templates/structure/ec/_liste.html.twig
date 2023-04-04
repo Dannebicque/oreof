@@ -421,10 +421,10 @@
                 </tr>
                 <tr>
                     <td colspan="11">
-                        <table class="table">
+                        <table class="table border-left-sousEc border-left-sousEc-{{ ec.ordre }}">
                             {% for ece in ec.ecEnfants %}
                                 {# Les EC enfants #}
-                                <tr {{ stimulus_controller('ec--liste') }} class="border-left-sousEc border-left-sousEc-{{ ec.ordre }}">
+                                <tr {{ stimulus_controller('ec--liste') }} >
                                     <td>{{ ece.code }}</td>
                                     <td>{{ ece.display }}</td>
                                     <td>{{ ece.ficheMatiere.responsableFicheMatiere != null ? ec.ficheMatiere
