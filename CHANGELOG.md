@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.18](https://github.com/Dannebicque/oreof/compare/v0.20.17...v0.20.18) (2023-04-04)
+
+
+### Bug Fixes
+
+* Suppression parcours ([369a2c8](https://github.com/Dannebicque/oreof/commit/369a2c862ab768528220989156b1c6ba551a61e5))
+
 ### [0.20.17](https://github.com/Dannebicque/oreof/compare/v0.20.16...v0.20.17) (2023-04-04)
 
 
