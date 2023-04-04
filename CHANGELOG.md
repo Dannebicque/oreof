@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.19](https://github.com/Dannebicque/oreof/compare/v0.20.18...v0.20.19) (2023-04-04)
+
+
+### Features
+
+* Ajout d'un utilisateur. ([5356d30](https://github.com/Dannebicque/oreof/commit/5356d30d1bfb23277d345a763ede1119f53a0ebf))
+* MCCC init à la construction ([9064f44](https://github.com/Dannebicque/oreof/commit/9064f44708453f6fc28ce20b0173425ad8ccf005))
+* Semestre mutualisable ([ee7aeee](https://github.com/Dannebicque/oreof/commit/ee7aeeeb3b4c12261dd8b6f183754fd5090319f3))
+
+
+### Bug Fixes
+
+* cosmétique EC ([2ff4fa3](https://github.com/Dannebicque/oreof/commit/2ff4fa33c8f098b74c4f65c73b6637c0dd4bb3c0))
+
 ### [0.20.18](https://github.com/Dannebicque/oreof/compare/v0.20.17...v0.20.18) (2023-04-04)
 
 
