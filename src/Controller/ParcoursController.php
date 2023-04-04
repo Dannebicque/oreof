@@ -47,7 +47,9 @@ class ParcoursController extends BaseController
 
         $tParcours = [];
 
-        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_PARCOURS_SHOW_ALL')) {
+        if ($this->isGranted('ROLE_ADMIN')  ||
+            $this->isGranted('ROLE_SES') ||
+            $this->isGranted('ROLE_PARCOURS_SHOW_ALL')) {
             $tParcours = $parcours;
         } else {
             foreach ($parcours as $p) {
@@ -203,9 +205,22 @@ class ParcoursController extends BaseController
                 $entityManager->remove($sp);
             }
 
+            foreach ($parcour->getSemestreParcours() as $semestreParcour) {
+                if ($semestreParcour->getSemestre()->isTroncCommun() === false) {
+                    //todo: supprimer le tronc commun s'il n'est plus utilisé
+                    foreach ($semestreParcour->getSemestre()->getUes() as $ue) {
+                        foreach ($ue->getElementConstitutifs() as $ec) {
+                            $entityManager->remove($ec);
+                        }
+                        $entityManager->remove($ue);
+                    }
+                    $entityManager->remove($semestreParcour->getSemestre());
+                    $entityManager->remove($semestreParcour);
+                }
+            }
+
             $parcoursRepository->remove($parcour, true);
 
-            //todo: supprimer semestres, UE ? (ou les liens, attention si EC mutualisé ou sur semestres communs
             return $this->json(true);
         }
 
