@@ -95,6 +95,8 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $dataUsers = $ldap->getDatas($user->getEmail());
             $user->setUsername($dataUsers['username']);
+            $user->setIsEnable(true);
+            $user->setIsValideAdministration(true);
             $user->setNom($dataUsers['nom']);
             $user->setPrenom($dataUsers['prenom']);
             $user->setRoles([strtoupper($request->request->all()['user_ldap']['role'])]);
