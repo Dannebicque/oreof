@@ -139,7 +139,7 @@
                     </li>
 
 
-                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SES', app.user) %}
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SES') %}
                         <li>
                             <a href="{{ path('structure_composante_index') }}">
                                 <i class="fal fa-school icon"></i>
