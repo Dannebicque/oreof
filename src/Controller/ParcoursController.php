@@ -14,6 +14,7 @@ use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
 use App\Form\ParcoursType;
+use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -195,6 +196,7 @@ class ParcoursController extends BaseController
      */
     #[Route('/{id}', name: 'app_parcours_delete', methods: ['DELETE'])]
     public function delete(
+        ElementConstitutifRepository $elementConstitutifRepository,
         EntityManagerInterface $entityManager,
         Request $request,
         Parcours $parcour,
@@ -217,6 +219,20 @@ class ParcoursController extends BaseController
                     $entityManager->remove($semestreParcour->getSemestre());
                     $entityManager->remove($semestreParcour);
                 }
+
+                foreach ($parcour->getFicheMatieres() as $ficheMatiere) {
+                    //todo: gérer si la fiche est mutualisée
+                    $entityManager->remove($ficheMatiere);
+                }
+            }
+
+            $ecs = $elementConstitutifRepository->findByParcours($parcour);
+            foreach ($ecs as $ec) {
+                foreach ($ec->getEcEnfants() as $ece) {
+                    $entityManager->remove($ece);
+                }
+
+                $entityManager->remove($ec);
             }
 
             $parcoursRepository->remove($parcour, true);
