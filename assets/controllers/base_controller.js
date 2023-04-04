@@ -71,4 +71,10 @@ export default class extends Controller {
     this.modalBodyTarget.innerHTML = ''
     this.dispatch('modalClose')
   }
+
+  async refreshModale(event) {
+    this.modalBodyTarget.innerHTML = ''
+    const response = await fetch(`${event.detail.url}`)
+    this.modalBodyTarget.innerHTML = await response.text()
+  }
 }

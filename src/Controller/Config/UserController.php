@@ -54,8 +54,7 @@ class UserController extends AbstractController
     public function liste(
         Request $request,
         UserRepository $userRepository
-    ): Response
-    {
+    ): Response {
         $sort = $request->query->get('sort') ?? 'nom';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
@@ -73,87 +72,53 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/ajouter-ldap', name: 'app_user_new_ldap', methods: ['GET', 'POST'])]
+    #[Route('/ajouter-ldap', name: 'app_user_new_ldap', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function newLdap(
-        EtablissementRepository $etablissementRepository,
-        UserCentreRepository $userCentreRepository,
-        ComposanteRepository $composanteRepository,
-        FormationRepository $formationRepository,
-        Ldap $ldap,
-        EventDispatcherInterface $eventDispatcher,
-        Request $request,
-        UserRepository $userRepository
-    ): Response
-    {
+    public function newLdap(): Response {
         $user = new User();
         $form = $this->createForm(UserLdapType::class, $user, [
             'action' => $this->generateUrl('app_user_new_ldap'),
         ]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $dataUsers = $ldap->getDatas($user->getEmail());
-            $user->setUsername($dataUsers['username']);
-            $user->setIsEnable(true);
-            $user->setIsValideAdministration(true);
-            $user->setNom($dataUsers['nom']);
-            $user->setPrenom($dataUsers['prenom']);
-            $user->setRoles([strtoupper($request->request->all()['user_ldap']['role'])]);
-            $userRepository->save($user, true);
-
-            //todo: fusionner avec Register
-            $centre = $form['centreDemande']->getData();
-            switch ($centre) {
-                case CentreGestionEnum::CENTRE_GESTION_FORMATION:
-                    $formation = $formationRepository->find($request->request->get('selectListe'));
-                    $centreUser = new UserCentre();
-                    $centreUser->setUser($user);
-                    $centreUser->setFormation($formation);
-                    break;
-                case CentreGestionEnum::CENTRE_GESTION_COMPOSANTE:
-                    $composante = $composanteRepository->find($request->request->get('selectListe'));
-                    $centreUser = new UserCentre();
-                    $centreUser->setUser($user);
-                    $centreUser->setComposante($composante);
-                    break;
-                case CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT:
-                    $etablissement = $etablissementRepository->find(1);//todo: imposé car juste URCA
-                    $centreUser = new UserCentre();
-                    $centreUser->setUser($user);
-                    $centreUser->setEtablissement($etablissement);
-                    break;
-            }
-
-            if (isset($centreUser)) {
-                $userCentreRepository->save($centreUser, true);
-
-                $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');
-
-                if ($form['sendMail']->getData()) {
-                    $userEvent = new UserEvent($user);
-                    $eventDispatcher->dispatch($userEvent, UserEvent::USER_AJOUTE);
-                }
-
-                return $this->json(true);
-            }
-
-            $this->addFlash('error', 'Erreur lors de l\'ajout de l\'utilisateur');
-
-            return $this->json(false);
-        }
 
         return $this->render('config/user/new-ldap.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
-    #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
+    #[Route('/ajouter-ldap', name: 'app_user_new_ldap_valide', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function saveLdap(
+        Ldap $ldap,
+        Request $request,
+        UserRepository $userRepository
+    ): Response {
+        $email = $request->request->get('user_ldap_email');
+        $user = new User();
+
+        $dataUsers = $ldap->getDatas($user->getEmail());
+        $user->setUsername($dataUsers['username']);
+        $user->setEmail($email);
+        $user->setIsEnable(true);
+        $user->setIsValideAdministration(true);
+        $user->setNom($dataUsers['nom']);
+        $user->setPrenom($dataUsers['prenom']);
+        $userRepository->save($user, true);
+
+        $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');
+
+        return $this->json([
+            'success' => true,
+            'url' => $this->generateUrl('app_user_gestion_centre', ['user' => $user->getId()])
+        ]);
+    }
+
+
+    #[
+        Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(
         RoleRepository $roleRepository,
         User $user
-    ): Response
-    {
+    ): Response {
         return $this->render('config/user/show.html.twig', [
             'user' => $user,
             'roles' => $roleRepository->findByAll()
@@ -168,8 +133,7 @@ class UserController extends AbstractController
         Request $request,
         UserRepository $userRepository,
         User $user
-    ): Response
-    {
+    ): Response {
         $data = JsonRequest::getFromRequest($request);
         $roles = $user->getRoles();
 

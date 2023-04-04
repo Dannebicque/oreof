@@ -15,7 +15,7 @@ export default class extends Controller {
     urlFormation: String,
   }
 
-  selectMention = null;
+  selectMention = null
 
   connect() {
     this.selectMention = document.getElementById('selectListe')
@@ -55,8 +55,28 @@ export default class extends Controller {
 
         tom.addOptions(tab)
         tom.settings.placeholder = 'Choisir dans la liste'
-        tom.inputState();
+        tom.inputState()
       },
     )
+  }
+
+  async sauvegardeFormModal(event) {
+    event.preventDefault()
+    const { url } = event.params
+
+    // submit des data
+    const data = new FormData()
+    data.append('user_ldap_email', document.getElementById('user_ldap_email').value)
+
+    // fetch
+    const response = await fetch(url, {
+      method: 'POST',
+      body: data,
+    }).then((reponse) => reponse.json())
+
+    if (response.success) {
+      // fermer la modale
+      this.dispatch('refreshModale', { detail: { url: response.url } })
+    }
   }
 }
