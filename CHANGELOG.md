@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.17](https://github.com/Dannebicque/oreof/compare/v0.20.16...v0.20.17) (2023-04-04)
+
+
+### Bug Fixes
+
+* Accès SES ([b76fa3c](https://github.com/Dannebicque/oreof/commit/b76fa3c4fb3c0054b3f4d6845d137bdbd796df70))
+* Droits SES sur menu gestion offre de formation ([124b3f5](https://github.com/Dannebicque/oreof/commit/124b3f5e6458bb328e6e47ca305a02d8c2909300))
+* supprimer les parcours ([e170302](https://github.com/Dannebicque/oreof/commit/e17030225790453ca966172b016a9fce75f735c8))
+* User activé par défaut si ajouté par admin ([ae6c433](https://github.com/Dannebicque/oreof/commit/ae6c4338e26539eccac1952f6d3cd5f11f4b8783))
+
 ### [0.20.16](https://github.com/Dannebicque/oreof/compare/v0.20.15...v0.20.16) (2023-04-03)
 
 
