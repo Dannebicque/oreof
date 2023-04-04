@@ -1,0 +1,30 @@
+<div {{ stimulus_controller('semestre', {
+    url: path('structure_semestre_data', {semestre: semestre.id, parcours: parcours.id}),
+}) }}>
+    <div class="mb-1">
+        <label class="form-label" for="semestre_mutualise">
+            {{ 'semestre.type_semestre.label'|trans({}, 'form') }}
+            <span class="required"></span>
+            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'semestre.type_semestre.helps'|trans({}, 'help') }}"></i>
+        </label>
+        <select id="semestre_mutualise"
+                name="semestre_mutualise"
+                required="required"
+                class="form-select"
+                {{ stimulus_action('semestre', 'changeTypeSemestre') }}
+        >
+            <option value="standard" selected="selected">
+                {{ 'semestre.choix.semestre_standard.label'|trans({}, 'form') }}
+            </option>
+            <option value="mutualise" selected="selected">
+                {{ 'semestre.choix.semestre_mutualise.label'|trans({}, 'form') }}
+            </option>
+            <option value="reutilise" selected="selected">
+                {{ 'semestre.choix.semestre_reutilise.label'|trans({}, 'form') }}
+            </option>
+        </select>
+    </div>
+    <div {{ stimulus_target('semestre', 'zone') }}>
+        ...
+    </div>
+</div>

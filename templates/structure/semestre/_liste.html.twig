@@ -76,7 +76,23 @@
                                 <div class="col-6 col-md-2 d-flex flex-column justify-content-center
                                             align-items-md-end mb-1 mb-md-0">
                                     <div class="text-muted text-small d-md-none">Actions</div>
-                                    <button class="btn btn-outline-info btn-sm">Boutons à définir ?</button>
+                                    <button
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                modalTitle: 'Modifier le semestre ' ~ semestre.semestre.display,
+                                                modalUrl: path('structure_semestre_edit', {semestre:semestre.semestre
+                                                .id, parcours: parcours.id})
+                                            }) }}
+                                            data-action="click->modal#openModal"
+                                            class="btn btn-sm text-warning me-1"
+                                            data-size="lg"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            title="Modifier le semestre {{ semestre.semestre.display }}"
+                                    >
+                                        <i class="{{ iconEdit }}"></i>
+                                        <span> Modifier le semestre</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>

@@ -1,0 +1,17 @@
+<div class="mb-1">
+    <label class="form-label" for="reutilise">
+        {{ 'semestre.reutilise.label'|trans({}, 'form') }}
+        <span class="required"></span>
+        <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'semestre.reutilise.helps'|trans({}, 'help') }}"></i>
+    </label>
+    <select id="reutilise"
+            name="reutilise"
+            required="required"
+            class="form-select"
+    >
+        ...
+    </select>
+</div>
+<button class="btn btn-outline-success" {{ stimulus_action('semestre', 'valideReutilise') }}>
+    Confirmer la réutilisation de ce semestre
+</button>
