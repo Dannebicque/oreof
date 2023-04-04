@@ -55,7 +55,6 @@
         {% for competence in blocCompetence.competences %}
             {% if loop.first %}
             <tr>
-
                     <td rowspan="{{ (blocCompetence.competences|length * 2) + 1 }}" class="text-center fw-bold
                     align-middle">
                         &nbsp;
@@ -66,7 +65,7 @@
                                     {{ stimulus_controller('modal', {
                                         size: 'lg',
                                         modalTitle: 'Ajouter une compétence dans le bloc de compétences '~
-                                        blocCompetence.libelle,
+                                        blocCompetence.code,
                                         modalUrl: path('app_competence_new', {bcc:blocCompetence.id, ordre:competence
                                         .ordre}) }) }}
                                     data-action="click->modal#openModal"
@@ -75,12 +74,12 @@
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="bottom"
                                     title=" Ajouter une compétence dans le bloc de compétences
-                {{ blocCompetence.libelle }} avant la compétence <strong>{{ competence.libelle }}</strong>"
+                {{ blocCompetence.code }} avant la compétence <strong>{{ competence.code }}</strong>"
                             >
                                 <i class="{{ iconAdd }}"></i>
                                 Ajouter une compétence dans le bloc de compétences
-                                <strong>{{ blocCompetence.libelle }}</strong> avant la compétence
-                                <strong>{{ competence.libelle }}</strong>
+                                <strong>{{ blocCompetence.code }}</strong> avant la compétence
+                                <strong>{{ competence.code }}</strong>
                             </button>
                         </div>
                     </td>
@@ -146,7 +145,7 @@
                                 {{ stimulus_controller('modal', {
                                     size: 'lg',
                                     modalTitle: 'Ajouter une compétence dans le bloc de compétences '~
-                                    blocCompetence.libelle,
+                                    blocCompetence.code,
                                     modalUrl: path('app_competence_new', {bcc:blocCompetence.id, ordre:competence
                                     .ordre+1}) }) }}
                                 data-action="click->modal#openModal"
@@ -155,12 +154,12 @@
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
                                 title=" Ajouter une compétence dans le bloc de compétences
-                {{ blocCompetence.libelle }} après la compétence <strong>{{ competence.libelle }}</strong>"
+                {{ blocCompetence.code }} après la compétence <strong>{{ competence.code }}</strong>"
                         >
                             <i class="{{ iconAdd }}"></i>
                             Ajouter une compétence dans le bloc de compétences
-                            <strong>{{ blocCompetence.libelle }}</strong> après la compétence <strong>{{ competence
-                                .libelle }}</strong>
+                            <strong>{{ blocCompetence.code }}</strong> après la compétence <strong>{{ competence
+                                .code }}</strong>
                         </button>
                     </div>
                 </td>
@@ -174,7 +173,7 @@
                                 {{ stimulus_controller('modal', {
                                     size: 'lg',
                                     modalTitle: 'Ajouter une compétence dans le bloc de compétences '~
-                                    blocCompetence.libelle,
+                                    blocCompetence.code,
                                     modalUrl: path('app_competence_new', {bcc:blocCompetence.id}) }) }}
                                 data-action="click->modal#openModal"
                                 class="btn btn-sm text-success"
@@ -182,41 +181,17 @@
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
                                 title=" Ajouter une compétence dans le bloc de compétences
-                {{ blocCompetence.libelle }}"
+                {{ blocCompetence.code }}"
                         >
                             <i class="{{ iconAdd }}"></i>
                             Ajouter une compétence dans le bloc de compétences
-                            <strong>{{ blocCompetence.libelle }}</strong>
+                            <strong>{{ blocCompetence.code }}</strong>
                         </button>
                     </div>
                 </td>
             </tr>
         {% endfor %}
 
-        {#        <tr> #}
-        {#            <td colspan="4"> #}
-        {#                <div class="text-divider"> #}
-        {#                    <button #}
-        {#                            {{ stimulus_controller('modal', { #}
-        {#                                size: 'lg', #}
-        {#                                modalTitle: 'Ajouter une compétence dans le bloc de compétences ' ~#}
-        {#                                blocCompetence.libelle, #}
-        {#                                modalUrl: path('app_competence_new', {bcc:blocCompetence.id}) }) }} #}
-        {#                            data-action="click->modal#openModal" #}
-        {#                            class="btn btn-sm text-success" #}
-        {#                            data-size="lg" #}
-        {#                            data-bs-toggle="tooltip" #}
-        {#                            data-bs-placement="bottom" #}
-        {#                            title=" Ajouter une compétence dans le bloc de compétences #}
-        {#                {{ blocCompetence.libelle }}" #}
-        {#                    > #}
-        {#                        <i class="{{ iconAdd }}"></i> #}
-        {#                        Ajouter une compétence dans le bloc de compétences : #}
-        {#                        <strong>{{ blocCompetence.libelle }}</strong> #}
-        {#                    </button> #}
-        {#                </div> #}
-        {#            </td> #}
-        {#        </tr> #}
         <tr>
             <td colspan="5">
                 <div class="text-divider">
@@ -234,7 +209,7 @@
                             title="Ajouter un bloc de compétences"
                     >
                         <i class="{{ iconAdd }}"></i>
-                        <span> Ajouter un bloc de compétences après le bloc <strong>{{ blocCompetence.libelle }}</strong></span>
+                        <span> Ajouter un bloc de compétences après le bloc <strong>{{ blocCompetence.code }}</strong></span>
                     </button>
                 </div>
             </td>
