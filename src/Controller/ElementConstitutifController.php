@@ -78,6 +78,7 @@ class ElementConstitutifController extends AbstractController
     public function new(
         EcOrdre $ecOrdre,
         Request $request,
+        TypeDiplomeRegistry $typeDiplomeRegistry,
         TypeEcRepository $typeEcRepository,
         FicheMatiereRepository $ficheMatiereRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
@@ -94,6 +95,8 @@ class ElementConstitutifController extends AbstractController
         if ($typeDiplome === null) {
             throw new RuntimeException('Type de diplôme non trouvé');
         }
+
+        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl(
@@ -171,6 +174,10 @@ class ElementConstitutifController extends AbstractController
                 $elementConstitutif->setSubOrdre(null);
                 $elementConstitutif->genereCode();
                 $elementConstitutifRepository->save($elementConstitutif, true);
+            }
+
+            if ($elementConstitutif->getMcccs()->count() === 0) {
+                $typeD->initMcccs($elementConstitutif);
             }
 
             return $this->json(true);
@@ -318,10 +325,6 @@ class ElementConstitutifController extends AbstractController
             throw new RuntimeException('Type de diplome non trouvé');
         }
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-
-        if ($elementConstitutif->getMcccs()->count() === 0) {
-            $typeD->initMcccs($elementConstitutif);
-        }
 
         if ($this->isGranted(
             'ROLE_FORMATION_EDIT_MY',
