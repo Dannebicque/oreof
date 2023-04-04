@@ -41,7 +41,7 @@ class HasComposanteAccessVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::ROLE_COMPOSANTE, self::ROLE_FORMATION, self::ROLE_FORMATION_ADD_ALL], true)
+        return in_array($attribute, [self::ROLE_COMPOSANTE, self::ROLE_FORMATION, self::ROLE_COMPOSANTE_SHOW_ALL, self::ROLE_FORMATION_ADD_ALL], true)
             && $subject instanceof User;
     }
 
@@ -61,10 +61,10 @@ class HasComposanteAccessVoter extends Voter
 
 
         return match ($attribute) {
+            self::ROLE_COMPOSANTE_SHOW_ALL => $this->hasShowOnAllComposante($user),
+            self::ROLE_FORMATION_ADD_ALL => $this->isCentreFormation($user),
             self::ROLE_COMPOSANTE => $this->isCentreComposante($user),
             self::ROLE_FORMATION => $this->isCentreFormation($user),
-            self::ROLE_FORMATION_ADD_ALL => $this->isCentreFormation($user),
-            self::ROLE_COMPOSANTE_SHOW_ALL => $this->hasShowOnAllComposante($user),
             default => false,
         };
     }
@@ -108,6 +108,8 @@ class HasComposanteAccessVoter extends Voter
 
     private function hasShowOnAllComposante(UserInterface|User $user): bool
     {
+        //todo: à revoir, car jamais dans les rôles directement de l'utilisateur
+        //todo: vérifier sur établissement
         return count(array_intersect($this->roles, $user->getRoles())) > 0;
     }
 }

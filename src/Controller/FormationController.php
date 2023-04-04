@@ -48,10 +48,10 @@ class FormationController extends BaseController
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
 
-        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted(
-            'ROLE_COMPOSANTE_SHOW_ALL',
-            $this->getUser()
-        ) || $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser())) {
+        if ($this->isGranted('ROLE_ADMIN') ||
+            $this->isGranted('ROLE_SES') ||
+            $this->isGranted('ROLE_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
+            $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser())) {
             if ($q) {
                 $formations = $formationRepository->findBySearch($q, $this->getAnneeUniversitaire(), $sort, $direction);
             } else {
