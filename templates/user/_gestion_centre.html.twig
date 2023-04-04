@@ -5,6 +5,10 @@
     urlListe: path('app_user_gestion_liste', {user:user.id}),
     urlAdd: path('app_user_gestion_add_centre', {user:user.id}),
 }) }}>
+    <div class="alert alert-info mb-2">
+        Nom : {{ user.nom }} <br>
+        Prénom : {{ user.prenom }}
+    </div>
     <div {{ stimulus_target('centre', 'liste') }}>
 
     </div>
