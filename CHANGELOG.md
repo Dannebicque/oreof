@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.21.0](https://github.com/Dannebicque/oreof/compare/v0.20.22...v0.21.0) (2023-04-05)
+
+
+### Features
+
+* Affichage des éléments mutualisés Admin et SES ([eb00d01](https://github.com/Dannebicque/oreof/commit/eb00d0198c8a76abb2759c538cd789355a6305bd))
+* Entités pour la mutualisation ([5fd4d9d](https://github.com/Dannebicque/oreof/commit/5fd4d9d75d8b8edb0de6e5a11b5cc13411a02449))
+* gestion des semestres mutualisés (liste et parcours) ([8a217fb](https://github.com/Dannebicque/oreof/commit/8a217fb6507e4f0586bc0702c0bad2926d539693))
+* gestion des ues mutualisés (liste et parcours) ([d13112e](https://github.com/Dannebicque/oreof/commit/d13112e3509a5939d4b1818fbcfb7d441c6fe29d))
+
+
+### Bug Fixes
+
+* gestion matières mutualisées ([ab55d58](https://github.com/Dannebicque/oreof/commit/ab55d58cc21553b674366e67e4661fbf97f7a91e))
+* typo EC ([fdc1d1d](https://github.com/Dannebicque/oreof/commit/fdc1d1d056e7eb32eafc8d31da935e6d503f32a4))
+
 ### [0.20.22](https://github.com/Dannebicque/oreof/compare/v0.20.21...v0.20.22) (2023-04-05)
 
 
