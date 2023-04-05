@@ -1,0 +1,27 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Composante</th>
+        <th>Mention/Spécialité</th>
+        <th>Parcours</th>
+        <th>UE utilisé ?</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for u in ues %}
+        <tr>
+            <td>{{ u.parcours.formation.composantePorteuse.libelle }}</td>
+            <td>{{ u.parcours.formation.display }}</td>
+            <td>{{ u.parcours.libelle }}</td>
+            <td></td>
+            <td class="text-end">
+                <button {{ stimulus_action('ue--mutualise', 'delete', 'click', {ue:u.id}) }} class="btn
+                    btn-sm text-danger">
+                    <i class="{{ iconDelete }}"></i> Supprimer
+                </button>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

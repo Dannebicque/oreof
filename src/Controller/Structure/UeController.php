@@ -15,11 +15,17 @@ use App\Entity\Semestre;
 use App\Entity\NatureUeEc;
 use App\Entity\TypeUe;
 use App\Entity\Ue;
+use App\Entity\UeMutualisable;
 use App\Form\UeType;
+use App\Repository\ComposanteRepository;
+use App\Repository\FormationRepository;
 use App\Repository\NatureUeEcRepository;
+use App\Repository\ParcoursRepository;
 use App\Repository\TypeUeRepository;
+use App\Repository\UeMutualisableRepository;
 use App\Repository\UeRepository;
 use App\Utils\JsonRequest;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -263,4 +269,104 @@ class UeController extends AbstractController
 
         return $this->json(false);
     }
+
+    #[
+        Route('/mutualiser/{ue}/{semestre}', name: 'mutualiser')
+    ]
+    public function mutualiser(
+        ComposanteRepository $composanteRepository,
+        Ue $ue,
+        Semestre $semestre
+    ): Response {
+        return $this->render('structure/ue/_mutualiser.html.twig', [
+            'semestre' => $semestre,
+            'ue' => $ue,
+            'composantes' => $composanteRepository->findAll()
+        ]);
+    }
+
+    #[Route('/{ue}/mutualise/ajax', name: 'mutualise_add_ajax', methods: [
+        'POST',
+        'DELETE'
+    ])]
+    public function mutualiseAjax(
+        EntityManagerInterface $entityManager,
+        Request $request,
+        FormationRepository $formationRepository,
+        ParcoursRepository $parcoursRepository,
+        UeMutualisableRepository $ueMutualisableRepository,
+        Ue $ue,
+    ): Response {
+        $data = JsonRequest::getFromRequest($request);
+        $t = [];
+        switch ($data['field']) {
+            case 'liste':
+                return $this->render('structure/ue/_liste_mutualise.html.twig', [
+                    'ues' => $ueMutualisableRepository->findBy(['ue' => $ue]),
+                    'ue' => $ue
+                ]);
+            case 'formation':
+                $formations = $formationRepository->findBy(['composantePorteuse' => $data['value']]);
+                foreach ($formations as $formation) {
+                    $t[] = [
+                        'id' => $formation->getId(),
+                        'libelle' => $formation->display()
+                    ];
+                }
+                break;
+            case 'parcours':
+                $parcours = $parcoursRepository->findBy(['formation' => $data['value']]);
+                foreach ($parcours as $parcour) {
+                    $t[] = [
+                        'id' => $parcour->getId(),
+                        'libelle' => $parcour->getLibelle()
+                    ];
+                }
+                break;
+            case 'save':
+                $parcours = $parcoursRepository->find($data['parcours']);
+                $exist = $ueMutualisableRepository->findOneBy([
+                    'parcours' => $parcours,
+                    'ue' => $ue
+                ]);
+
+                if ($exist === null) {
+                    $ueMutualise = new UeMutualisable();
+                    $ueMutualise->setUe($ue);
+                    $ueMutualise->setParcours($parcours);
+                    $ueMutualise->setIsPorteur(false);
+                    $entityManager->persist($ueMutualise);
+                    $entityManager->flush();
+                }
+
+                return $this->json(true);
+            case 'delete':
+                $sem = $ueMutualisableRepository->find($data['ue']);
+                //todo: vérifier si pas utilisé
+
+                if ($sem !== null) {
+                    $entityManager->remove($sem);
+                    $entityManager->flush();
+                }
+
+                return $this->json(true);
+        }
+
+        return $this->json($t);
+    }
+
+    #[
+        Route('/raccrocher/{ue}/{semestre}', name: 'raccrocher')
+    ]
+    public function raccrocher(
+        UeMutualisableRepository $ueMutualisableRepository,
+        Semestre $semestre,
+        Ue $ue
+    ): Response {
+        return $this->render('structure/ue/_raccrocher.html.twig', [
+            'ue' => $ue,
+            'semestre' => $semestre
+        ]);
+    }
+
 }

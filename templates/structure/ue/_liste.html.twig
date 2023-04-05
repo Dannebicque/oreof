@@ -113,18 +113,19 @@
                                             </div>
                                             <div class="col-4">
                                                 <button
-                                                        {#                                                {{ stimulus_controller('modal', { #}
-                                                        {#                                                    size: 'lg', #}
-                                                        {#                                                    modalTitle: 'Modifier le semestre ' ~ semestre.semestre.display, #}
-                                                        {#                                                    modalUrl: path('structure_semestre_edit', {semestre:semestre.semestre #}
-                                                        {#                                                    .id, parcours: parcours.id}) #}
-                                                        {#                                                }) }} #}
+                                                        {{ stimulus_controller('modal', {
+                                                            size: 'lg',
+                                                            modalTitle: 'Mutualiser l\'UE ' ~ ue.display,
+                                                            modalUrl:
+                                                            path
+                                                                ('structure_ue_mutualiser', {semestre:semestre.id, ue: ue.id})
+                                                        }) }}
                                                         data-action="click->modal#openModal"
                                                         class="btn btn-sm text-quaternary me-1"
                                                         data-size="lg"
                                                         data-bs-toggle="tooltip"
                                                         data-bs-placement="bottom"
-                                                        {#                                                title="Modifier le semestre {{ semestre.semestre.display }}" #}
+                                                        title="Modifier l\'UE {{ ue.display }}"
                                                 >
                                                     <i class="fal fa-share-nodes"></i>
                                                     <span> Mutualiser l'UE</span>
