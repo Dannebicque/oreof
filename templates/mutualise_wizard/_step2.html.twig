@@ -1,1 +1,26 @@
-UE
+<table class="table">
+    <thead>
+        <tr>
+            <th>Code UE</th>
+            <th>Formation porteuse</th>
+            <th>Type UE</th>
+            <th>Composante</th>
+            <th>Mention/spécialité</th>
+            <th>Parcours</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for ue in ues %}
+        <tr>
+            <td>{{ ue.ue.display }}</td>
+            <td>{{ ue.ue.semestre.semestreParcours[0].parcours.formation.display }}</td>
+            <td>{{ ue.ue.typeUe.libelle }}</td>
+            <td>{{ ue.parcours.formation.composantePorteuse.libelle }}</td>
+            <td>{{ ue.parcours.formation.display }}</td>
+            <td>{{ ue.parcours.libelle }}</td>
+            <td>Voir ?</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

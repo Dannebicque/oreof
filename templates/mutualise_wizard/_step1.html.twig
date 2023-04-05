@@ -1,1 +1,24 @@
-Fiches Matièeres
+<table class="table">
+    <thead>
+    <tr>
+        <th>Libellé</th>
+        <th>Formation porteuse</th>
+        <th>Composante</th>
+        <th>Mention/spécialité</th>
+        <th>Parcours</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for fiche in fiches %}
+        <tr>
+            <td>{{ fiche.ficheMatiere.libelle }}</td>
+            <td>{{ fiche.ficheMatiere.parcours.formation.display }}</td>
+            <td>{{ fiche.parcours.formation.composantePorteuse.libelle }}</td>
+            <td>{{ fiche.parcours.formation.display }}</td>
+            <td>{{ fiche.parcours.libelle }}</td>
+            <td>Voir ?</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

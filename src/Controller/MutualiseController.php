@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FicheMatiereRepository;
+use App\Repository\SemestreMutualisableRepository;
 use App\Repository\SemestreRepository;
+use App\Repository\UeMutualisableRepository;
 use App\Repository\UeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,29 +23,47 @@ class MutualiseController extends AbstractController
     }
 
     #[Route('/1', name: 'step1')]
-    public function step1(FicheMatiereRepository $ficheMatiereRepository): Response
+    public function step1(FicheMatiereMutualisableRepository $ficheMatiereRepository): Response
     {
-        //fiches matières mutualisées avec les éléments dont je suis responsable
-        return $this->render('mutualise_wizard/_step1.html.twig', [
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
+            //pas de filtre, toutes les UE
+            $fiches = $ficheMatiereRepository->findAll();
+        } else {
+            //filtre selon mes parcours
+        }
 
+        return $this->render('mutualise_wizard/_step1.html.twig', [
+            'fiches' => $fiches
         ]);
     }
 
     #[Route('/2', name: 'step2')]
-    public function step2(UeRepository $ueRepository): Response
+    public function step2(UeMutualisableRepository $ueRepository): Response
     {
-        //UE mutualisées avec les éléments dont je suis responsable
-        return $this->render('mutualise_wizard/_step2.html.twig', [
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
+            //pas de filtre, toutes les UE
+            $ues = $ueRepository->findAll();
+        } else {
+            //filtre selon mes parcours
+        }
 
+        return $this->render('mutualise_wizard/_step2.html.twig', [
+            'ues' => $ues
         ]);
     }
 
     #[Route('/3', name: 'step3')]
-    public function step3(SemestreRepository $semestreRepository): Response
+    public function step3(SemestreMutualisableRepository $semestreRepository): Response
     {
-        //semestres mutualisés avec les éléments dont je suis responsable
-        return $this->render('mutualise_wizard/_step3.html.twig', [
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
+            //pas de filtre, toutes les UE
+            $semestres = $semestreRepository->findAll();
+        } else {
+            //filtre selon mes parcours
+        }
 
+        return $this->render('mutualise_wizard/_step3.html.twig', [
+            'semestres' => $semestres
         ]);
     }
 }
