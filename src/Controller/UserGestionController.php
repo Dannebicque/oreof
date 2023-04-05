@@ -185,17 +185,17 @@ class UserGestionController extends BaseController
         return $this->redirectToRoute('app_user_attente');
     }
 
-    #[Route('/droits/{user}', name: 'app_user_gestion_droits')]
-    #[IsGranted('ROLE_ADMIN')]
-    public function gestionDroits(
-        RoleRepository $roleRepository,
-        User $user
-    ): Response {
-        return $this->render('user/_gestion_droits.html.twig', [
-            'user' => $user,
-            'roles' => $roleRepository->findByAll()
-        ]);
-    }
+//    #[Route('/droits/{user}', name: 'app_user_gestion_droits')]
+//    #[IsGranted('ROLE_ADMIN')]
+//    public function gestionDroits(
+//        RoleRepository $roleRepository,
+//        User $user
+//    ): Response {
+//        return $this->render('user/_gestion_droits.html.twig', [
+//            'user' => $user,
+//            'roles' => $roleRepository->findByAll()
+//        ]);
+//    }
 
     #[Route('/gestion/centre/{user}', name: 'app_user_gestion_centre')]
     #[IsGranted('ROLE_ADMIN')]

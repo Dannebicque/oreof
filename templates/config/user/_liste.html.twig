@@ -46,9 +46,8 @@
                 {{ displaySort('username', sort, direction) }}
             </a>
         </th>
-        <th>Droits</th>
         <th>Validé?</th>
-        <th>Centre</th>
+        <th>Centre & droits</th>
         <th></th>
     </tr>
     </thead>
@@ -59,40 +58,11 @@
             <td>{{ user.prenom }}</td>
             <td>{{ user.email|mailto }}</td>
             <td>{{ user.username }}</td>
-            <td>{{ user.roles|badgeDroits }} <button
-                        {{ stimulus_controller('modal', {
-                            size: 'lg',
-                            modalTitle: 'Modifier les droits',
-                            modalUrl: path('app_user_gestion_droits',{'user': user.id}) }) }}
-                        data-action="click->modal#openModal"
-                        class="btn btn-sm text-warning"
-                        data-size="lg"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Modifier les droits"
-                >
-                    <i class="{{ iconEdit }}"></i>
-                </button>
-            </td>
             <td>{{ user.isEnable|badgeBoolean }}</td>
             <td>
                 {% for centre in user.userCentres %}
                 {{ centre|badgeCentre }}
                 {% endfor %}
-                <button
-                        {{ stimulus_controller('modal', {
-                            size: 'lg',
-                            modalTitle: 'Gestion des centres de <strong>'~ user.display ~'</strong>',
-                            modalUrl: path('app_user_gestion_centre',{'user': user.id}) }) }}
-                        data-action="click->modal#openModal"
-                        class="btn btn-sm text-warning"
-                        data-size="lg"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Gestion des centres de <strong>{{ user.display }}</strong>"
-                >
-                    <i class="{{ iconEdit }}"></i>
-                </button>
             </td>
             <td class="text-end">
                 <button
@@ -108,9 +78,23 @@
                         title="Voir un utilisateur"
                 >
                     <i class="{{ iconShow }}"></i>
-                    <span> voir</span>
+                    <span> Voir</span>
                 </button>
-
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Gestion des centres de <strong>'~ user.display ~'</strong>',
+                            modalUrl: path('app_user_gestion_centre',{'user': user.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-warning"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Gestion des centres de <strong>{{ user.display }}</strong>"
+                >
+                    <i class="{{ iconEdit }}"></i>
+                    <span> Gestion des centres</span>
+                </button>
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
@@ -124,7 +108,7 @@
                         title="Modifier un utilisateur"
                 >
                     <i class="{{ iconEdit }}"></i>
-                    <span> modifier</span>
+                    <span> Modifier l'utilisateur</span>
                 </button>
 
                 <button {{ stimulus_action('crud', 'delete', 'click', {
