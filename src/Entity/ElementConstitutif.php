@@ -422,20 +422,10 @@ class ElementConstitutif
 
     public function genereCode(): void
     {
-        if ($this->getUe() === null) {
-            return;
-        }
-
-        if ($this->getUe()->getSubOrdre() !== null) {
-            $codeUe = $this->getUe()->getOrdre() . '.' . chr($this->getUe()->getSubOrdre() + 64);
-        } else {
-            $codeUe = $this->getUe()->getOrdre();
-        }
-
         if ($this->subOrdre === null || $this->subOrdre === 0) {
-            $this->setCode('EC'.$codeUe.'.' . $this->ordre);
+            $this->setCode('EC ' . $this->ordre);
         } else {
-            $this->setCode('EC'.$codeUe.'.' . $this->ordre . '.' . chr($this->subOrdre + 64));
+            $this->setCode('EC ' . $this->ordre . '.' . chr($this->subOrdre + 64));
         }
     }
 
