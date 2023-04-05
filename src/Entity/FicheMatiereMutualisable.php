@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\FicheMatiereParcoursRepository;
+use App\Repository\FicheMatiereMutualisableRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: FicheMatiereParcoursRepository::class)]
-class FicheMatiereParcours
+#[ORM\Entity(repositoryClass: FicheMatiereMutualisableRepository::class)]
+class FicheMatiereMutualisable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,6 +18,9 @@ class FicheMatiereParcours
 
     #[ORM\ManyToOne(inversedBy: 'ficheMatiereParcours')]
     private ?Parcours $parcours = null;
+
+    #[ORM\Column]
+    private ?bool $isPorteur = null;
 
     public function getId(): ?int
     {
@@ -44,6 +47,18 @@ class FicheMatiereParcours
     public function setParcours(?Parcours $parcours): self
     {
         $this->parcours = $parcours;
+
+        return $this;
+    }
+
+    public function isIsPorteur(): ?bool
+    {
+        return $this->isPorteur;
+    }
+
+    public function setIsPorteur(bool $isPorteur): self
+    {
+        $this->isPorteur = $isPorteur;
 
         return $this;
     }

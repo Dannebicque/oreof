@@ -142,8 +142,14 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: FicheMatiere::class)]
     private Collection $ficheMatieres;
 
-    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: FicheMatiereParcours::class)]
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: FicheMatiereMutualisable::class)]
     private Collection $ficheMatiereParcours;
+
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: SemestreMutualisable::class)]
+    private Collection $semestreMutualisables;
+
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: UeMutualisable::class)]
+    private Collection $ueMutualisables;
 
     public function __construct(Formation $formation)
     {
@@ -156,6 +162,8 @@ class Parcours
         }
         $this->ficheMatieres = new ArrayCollection();
         $this->ficheMatiereParcours = new ArrayCollection();
+        $this->semestreMutualisables = new ArrayCollection();
+        $this->ueMutualisables = new ArrayCollection();
     }
 
 
@@ -693,14 +701,14 @@ class Parcours
     }
 
     /**
-     * @return Collection<int, FicheMatiereParcours>
+     * @return Collection<int, FicheMatiereMutualisable>
      */
     public function getFicheMatiereParcours(): Collection
     {
         return $this->ficheMatiereParcours;
     }
 
-    public function addFicheMatiereParcour(FicheMatiereParcours $ficheMatiereParcour): self
+    public function addFicheMatiereParcour(FicheMatiereMutualisable $ficheMatiereParcour): self
     {
         if (!$this->ficheMatiereParcours->contains($ficheMatiereParcour)) {
             $this->ficheMatiereParcours->add($ficheMatiereParcour);
@@ -710,12 +718,72 @@ class Parcours
         return $this;
     }
 
-    public function removeFicheMatiereParcour(FicheMatiereParcours $ficheMatiereParcour): self
+    public function removeFicheMatiereParcour(FicheMatiereMutualisable $ficheMatiereParcour): self
     {
         if ($this->ficheMatiereParcours->removeElement($ficheMatiereParcour)) {
             // set the owning side to null (unless already changed)
             if ($ficheMatiereParcour->getParcours() === $this) {
                 $ficheMatiereParcour->setParcours(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SemestreMutualisable>
+     */
+    public function getSemestreMutualisables(): Collection
+    {
+        return $this->semestreMutualisables;
+    }
+
+    public function addSemestreMutualisable(SemestreMutualisable $semestreMutualisable): self
+    {
+        if (!$this->semestreMutualisables->contains($semestreMutualisable)) {
+            $this->semestreMutualisables->add($semestreMutualisable);
+            $semestreMutualisable->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSemestreMutualisable(SemestreMutualisable $semestreMutualisable): self
+    {
+        if ($this->semestreMutualisables->removeElement($semestreMutualisable)) {
+            // set the owning side to null (unless already changed)
+            if ($semestreMutualisable->getParcours() === $this) {
+                $semestreMutualisable->setParcours(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UeMutualisable>
+     */
+    public function getUeMutualisables(): Collection
+    {
+        return $this->ueMutualisables;
+    }
+
+    public function addUeMutualisable(UeMutualisable $ueMutualisable): self
+    {
+        if (!$this->ueMutualisables->contains($ueMutualisable)) {
+            $this->ueMutualisables->add($ueMutualisable);
+            $ueMutualisable->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUeMutualisable(UeMutualisable $ueMutualisable): self
+    {
+        if ($this->ueMutualisables->removeElement($ueMutualisable)) {
+            // set the owning side to null (unless already changed)
+            if ($ueMutualisable->getParcours() === $this) {
+                $ueMutualisable->setParcours(null);
             }
         }
 

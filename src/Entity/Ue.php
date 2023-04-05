@@ -47,10 +47,14 @@ class Ue
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelle = null;
 
+    #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class)]
+    private Collection $ueMutualisables;
+
     public function __construct()
     {
         $this->ecUes = new ArrayCollection();
         $this->elementConstitutifs = new ArrayCollection();
+        $this->ueMutualisables = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -206,6 +210,36 @@ class Ue
     public function setLibelle(?string $libelle): self
     {
         $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UeMutualisable>
+     */
+    public function getUeMutualisables(): Collection
+    {
+        return $this->ueMutualisables;
+    }
+
+    public function addUeMutualisable(UeMutualisable $ueMutualisable): self
+    {
+        if (!$this->ueMutualisables->contains($ueMutualisable)) {
+            $this->ueMutualisables->add($ueMutualisable);
+            $ueMutualisable->setUe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUeMutualisable(UeMutualisable $ueMutualisable): self
+    {
+        if ($this->ueMutualisables->removeElement($ueMutualisable)) {
+            // set the owning side to null (unless already changed)
+            if ($ueMutualisable->getUe() === $this) {
+                $ueMutualisable->setUe(null);
+            }
+        }
 
         return $this;
     }

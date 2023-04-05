@@ -35,10 +35,14 @@ class Semestre
     #[ORM\Column]
     private ?bool $troncCommun = false;
 
+    #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: SemestreMutualisable::class)]
+    private Collection $semestreMutualisables;
+
     public function __construct()
     {
         $this->ues = new ArrayCollection();
         $this->semestreParcours = new ArrayCollection();
+        $this->semestreMutualisables = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -150,5 +154,35 @@ class Semestre
         }
 
         return count($tabUes);
+    }
+
+    /**
+     * @return Collection<int, SemestreMutualisable>
+     */
+    public function getSemestreMutualisables(): Collection
+    {
+        return $this->semestreMutualisables;
+    }
+
+    public function addSemestreMutualisable(SemestreMutualisable $semestreMutualisable): self
+    {
+        if (!$this->semestreMutualisables->contains($semestreMutualisable)) {
+            $this->semestreMutualisables->add($semestreMutualisable);
+            $semestreMutualisable->setSemestre($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSemestreMutualisable(SemestreMutualisable $semestreMutualisable): self
+    {
+        if ($this->semestreMutualisables->removeElement($semestreMutualisable)) {
+            // set the owning side to null (unless already changed)
+            if ($semestreMutualisable->getSemestre() === $this) {
+                $semestreMutualisable->setSemestre(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -89,7 +89,7 @@ class FicheMatiere
     #[ORM\ManyToOne(inversedBy: 'ficheMatieres')]
     private ?Parcours $parcours = null;
 
-    #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereParcours::class)]
+    #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereMutualisable::class)]
     private Collection $ficheMatiereParcours;
 
     public function __construct()
@@ -435,14 +435,14 @@ class FicheMatiere
     }
 
     /**
-     * @return Collection<int, FicheMatiereParcours>
+     * @return Collection<int, FicheMatiereMutualisable>
      */
     public function getFicheMatiereParcours(): Collection
     {
         return $this->ficheMatiereParcours;
     }
 
-    public function addFicheMatiereParcour(FicheMatiereParcours $ficheMatiereParcour): self
+    public function addFicheMatiereParcour(FicheMatiereMutualisable $ficheMatiereParcour): self
     {
         if (!$this->ficheMatiereParcours->contains($ficheMatiereParcour)) {
             $this->ficheMatiereParcours->add($ficheMatiereParcour);
@@ -452,7 +452,7 @@ class FicheMatiere
         return $this;
     }
 
-    public function removeFicheMatiereParcour(FicheMatiereParcours $ficheMatiereParcour): self
+    public function removeFicheMatiereParcour(FicheMatiereMutualisable $ficheMatiereParcour): self
     {
         if ($this->ficheMatiereParcours->removeElement($ficheMatiereParcour)) {
             // set the owning side to null (unless already changed)

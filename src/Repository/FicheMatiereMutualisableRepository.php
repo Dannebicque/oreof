@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\FicheMatiereParcours;
+use App\Entity\FicheMatiereMutualisable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<FicheMatiereParcours>
+ * @extends ServiceEntityRepository<FicheMatiereMutualisable>
  *
- * @method FicheMatiereParcours|null find($id, $lockMode = null, $lockVersion = null)
- * @method FicheMatiereParcours|null findOneBy(array $criteria, array $orderBy = null)
- * @method FicheMatiereParcours[]    findAll()
- * @method FicheMatiereParcours[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method FicheMatiereMutualisable|null find($id, $lockMode = null, $lockVersion = null)
+ * @method FicheMatiereMutualisable|null findOneBy(array $criteria, array $orderBy = null)
+ * @method FicheMatiereMutualisable[]    findAll()
+ * @method FicheMatiereMutualisable[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class FicheMatiereParcoursRepository extends ServiceEntityRepository
+class FicheMatiereMutualisableRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, FicheMatiereParcours::class);
+        parent::__construct($registry, FicheMatiereMutualisable::class);
     }
 
-    public function save(FicheMatiereParcours $entity, bool $flush = false): void
+    public function save(FicheMatiereMutualisable $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class FicheMatiereParcoursRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(FicheMatiereParcours $entity, bool $flush = false): void
+    public function remove(FicheMatiereMutualisable $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
