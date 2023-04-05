@@ -1,0 +1,27 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Composante</th>
+        <th>Mention/Spécialité</th>
+        <th>Parcours</th>
+        <th>Semestre utilisé ?</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for sem in semestres %}
+        <tr>
+            <td>{{ sem.parcours.formation.composantePorteuse.libelle }}</td>
+            <td>{{ sem.parcours.formation.display }}</td>
+            <td>{{ sem.parcours.libelle }}</td>
+            <td></td>
+            <td class="text-end">
+                <button {{ stimulus_action('semestre--mutualise', 'delete', 'click', {sem:sem.id}) }} class="btn
+                    btn-sm text-danger">
+                    <i class="{{ iconDelete }}"></i> Supprimer
+                </button>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

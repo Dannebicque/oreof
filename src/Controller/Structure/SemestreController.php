@@ -10,10 +10,19 @@
 namespace App\Controller\Structure;
 
 use _PHPStan_59e3e945c\Nette\Utils\Json;
+use App\Entity\FicheMatiere;
+use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
+use App\Entity\SemestreMutualisable;
+use App\Repository\ComposanteRepository;
+use App\Repository\FicheMatiereMutualisableRepository;
+use App\Repository\FormationRepository;
+use App\Repository\ParcoursRepository;
+use App\Repository\SemestreMutualisableRepository;
 use App\Repository\SemestreParcoursRepository;
 use App\Utils\JsonRequest;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,8 +39,7 @@ class SemestreController extends AbstractController
     public function detailParcours(
         SemestreParcoursRepository $semestreRepository,
         Parcours $parcours
-    ): Response
-    {
+    ): Response {
         $semestres = $semestreRepository->findBy(['parcours' => $parcours]);//todo: filtrer selon droits // ajouter le tronc commun
 
         return $this->render('structure/semestre/_liste.html.twig', [
@@ -44,15 +52,85 @@ class SemestreController extends AbstractController
         Route('/mutualiser/{semestre}/{parcours}', name: 'mutualiser')
     ]
     public function mutualiser(
-        SemestreParcoursRepository $semestreRepository,
+        ComposanteRepository $composanteRepository,
         Semestre $semestre,
         Parcours $parcours
-    ): Response
-    {
+    ): Response {
         return $this->render('structure/semestre/_mutualiser.html.twig', [
             'semestre' => $semestre,
-            'parcours' => $parcours
+            'parcours' => $parcours,
+            'composantes' => $composanteRepository->findAll()
         ]);
+    }
+
+    #[Route('/{semestre}/mutualise/ajax', name: 'mutualise_add_ajax', methods: [
+        'POST',
+        'DELETE'
+    ])]
+    public function mutualiseAjax(
+        EntityManagerInterface $entityManager,
+        Request $request,
+        FormationRepository $formationRepository,
+        ParcoursRepository $parcoursRepository,
+        SemestreMutualisableRepository $semestreMutualisableRepository,
+        Semestre $semestre,
+    ): Response {
+        $data = JsonRequest::getFromRequest($request);
+        $t = [];
+        switch ($data['field']) {
+            case 'liste':
+                return $this->render('structure/semestre/_liste_mutualise.html.twig', [
+                    'semestres' => $semestreMutualisableRepository->findBy(['semestre' => $semestre]),
+                    'semestre' => $semestre
+                ]);
+            case 'formation':
+                $formations = $formationRepository->findBy(['composantePorteuse' => $data['value']]);
+                foreach ($formations as $formation) {
+                    $t[] = [
+                        'id' => $formation->getId(),
+                        'libelle' => $formation->display()
+                    ];
+                }
+                break;
+            case 'parcours':
+                $parcours = $parcoursRepository->findBy(['formation' => $data['value']]);
+                foreach ($parcours as $parcour) {
+                    $t[] = [
+                        'id' => $parcour->getId(),
+                        'libelle' => $parcour->getLibelle()
+                    ];
+                }
+                break;
+            case 'save':
+                $parcours = $parcoursRepository->find($data['parcours']);
+                $exist = $semestreMutualisableRepository->findOneBy([
+                    'semestre' => $semestre,
+                    'parcours' => $parcours
+                ]);
+
+                if ($exist === null) {
+                    $semestreMutualise = new SemestreMutualisable();
+                    $semestreMutualise->setSemestre($semestre);
+                    $semestreMutualise->setParcours($parcours);
+                    $semestreMutualise->setIsPorteur(false);
+                    $entityManager->persist($semestreMutualise);
+                    $entityManager->flush();
+                }
+
+                return $this->json(true);
+            case 'delete':
+                $sem = $semestreMutualisableRepository->find($data['sem']);
+                //todo: vérifier si pas utilisé
+
+                if ($sem !== null) {
+                    $entityManager->remove($sem);
+                    $entityManager->flush();
+                }
+
+                return $this->json(true);
+        }
+
+        return $this->json($t);
     }
 
     #[
@@ -62,8 +140,7 @@ class SemestreController extends AbstractController
         SemestreParcoursRepository $semestreRepository,
         Semestre $semestre,
         Parcours $parcours
-    ): Response
-    {
+    ): Response {
         return $this->render('structure/semestre/_raccrocher.html.twig', [
             'semestre' => $semestre,
             'parcours' => $parcours
@@ -78,11 +155,10 @@ class SemestreController extends AbstractController
         SemestreParcoursRepository $semestreRepository,
         Semestre $semestre,
         Parcours $parcours
-    ): Response
-    {
+    ): Response {
         $data = JsonRequest::getFromRequest($request);
 
-        switch($data['action']) {
+        switch ($data['action']) {
             case 'mutualise':
                 return $this->render('structure/semestre/_mutualise.html.twig', [
                     'semestre' => $semestre,

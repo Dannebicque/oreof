@@ -1,4 +1,5 @@
-<div {{ stimulus_controller('fichematiere--mutualise', {
+<div {{ stimulus_controller('semestre--mutualise', {
+    url: path('structure_semestre_mutualise_add_ajax', {semestre:semestre.id})
 }) }}>
 
     <label class="form-label" for="mutualiser">
@@ -8,54 +9,24 @@
            title="{{ 'semestre.mutualiser.helps'|trans({}, 'help') }}"></i>
     </label>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Composante</th>
-            <th>Mention/Spécialité</th>
-            <th>Parcours</th>
-            <th>Semestre utilisé ?</th>
-            <th></th>
-        </tr>
-        </thead>
-        {#    <tbody> #}
-        {#    {% for fiche in ficheMatiere.ficheMatiereParcours %} #}
-        {#        <tr> #}
-        {#            <td>{{ fiche.parcours.formation.composantePorteuse.libelle }}</td> #}
-        {#            <td>{{ fiche.parcours.formation.display }}</td> #}
-        {#            <td>{{ fiche.parcours.libelle }}</td> #}
-        {#            <td>{{ ficheMatiere|hasParcours(fiche.parcours) == true ? '<span class="badge bg-success">Oui</span>' : #}
-        {#                '<span class="badge bg-danger">Non</span>' #}
-        {#                }}</td> #}
-        {#            <td class="text-end"> #}
-        {#                <button {{ stimulus_action('fichematiere--step1', 'delete', 'click', { #}
-        {#                    url:path('app_fiche_matiere_wizard_step_1_mutualise_add_ajax', {ficheMatiere:ficheMatiere.id, #}
-        {#                    }),fiche:fiche.id #}
-        {#                }) }} class="btn btn-sm text-danger"> #}
-        {#                    <i class="{{ iconDelete }}"></i> Supprimer #}
-        {#                </button> #}
-        {#            </td> #}
-        {#        </tr> #}
-        {#    {% endfor %} #}
-        {#    </tbody> #}
-    </table>
+   <div {{ stimulus_target('semestre--mutualise', 'liste') }}></div>
 
     <div class="row">
         <div class="col-12">
             <label for="composante">Choisir une composante</label>
-            <select class="form-select" id="composante" name="composante" {{ stimulus_action('fichematiere--mutualise',
+            <select class="form-select" id="composante" name="composante" {{ stimulus_action('semestre--mutualise',
                 'changeComposante') }}>
                 <option value="0">Choisir une composante</option>
-                {#                {% for composante in composantes %} #}
-                {#                    <option value="{{ composante.id }}">{{ composante.libelle }}</option> #}
-                {#                {% endfor %} #}
+                {% for composante in composantes %}
+                    <option value="{{ composante.id }}">{{ composante.libelle }}</option>
+                {% endfor %}
             </select>
         </div>
     </div>
     <div class="row">
         <div class="col-12">
             <label for="formation">Choisir une mention/spécialité</label>
-            <select class="form-select" id="formation" name="formation" {{ stimulus_action('fichematiere--mutualise',
+            <select class="form-select" id="formation" name="formation" {{ stimulus_action('semestre--mutualise',
                 'changeFormation') }}>
                 <option value="0">Choisir d'abord une composante</option>
             </select>
@@ -70,7 +41,7 @@
         </div>
     </div>
 
-    <button class="btn btn-success mt-2" data-action="fichematiere--mutualise#ajouter base#modalClose" data-bs-dismiss="modal">
+    <button class="btn btn-success mt-2" data-action="semestre--mutualise#ajouter">
         Ajouter
     </button>
 </div>
