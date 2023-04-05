@@ -41,15 +41,30 @@ class SemestreController extends AbstractController
     }
 
     #[
-        Route('/edit/{semestre}/{parcours}', name: 'edit')
+        Route('/mutualiser/{semestre}/{parcours}', name: 'mutualiser')
     ]
-    public function edit(
+    public function mutualiser(
         SemestreParcoursRepository $semestreRepository,
         Semestre $semestre,
         Parcours $parcours
     ): Response
     {
-        return $this->render('structure/semestre/_edit.html.twig', [
+        return $this->render('structure/semestre/_mutualiser.html.twig', [
+            'semestre' => $semestre,
+            'parcours' => $parcours
+        ]);
+    }
+
+    #[
+        Route('/raccrocher/{semestre}/{parcours}', name: 'raccrocher')
+    ]
+    public function raccrocher(
+        SemestreParcoursRepository $semestreRepository,
+        Semestre $semestre,
+        Parcours $parcours
+    ): Response
+    {
+        return $this->render('structure/semestre/_raccrocher.html.twig', [
             'semestre' => $semestre,
             'parcours' => $parcours
         ]);

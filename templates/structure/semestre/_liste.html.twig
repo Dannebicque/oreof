@@ -79,19 +79,37 @@
                                     <button
                                             {{ stimulus_controller('modal', {
                                                 size: 'lg',
-                                                modalTitle: 'Modifier le semestre ' ~ semestre.semestre.display,
-                                                modalUrl: path('structure_semestre_edit', {semestre:semestre.semestre
-                                                .id, parcours: parcours.id})
+                                                modalTitle: 'Mutualiser le semestre ' ~ semestre.semestre.display,
+                                                modalUrl: path('structure_semestre_mutualiser', {semestre:semestre
+                                                .semestre.id, parcours: parcours.id})
                                             }) }}
                                             data-action="click->modal#openModal"
-                                            class="btn btn-sm text-warning me-1"
+                                            class="btn btn-sm text-quaternary me-1"
                                             data-size="lg"
                                             data-bs-toggle="tooltip"
                                             data-bs-placement="bottom"
-                                            title="Modifier le semestre {{ semestre.semestre.display }}"
+                                            title="Mutualiser le semestre {{ semestre.semestre.display }}"
                                     >
-                                        <i class="{{ iconEdit }}"></i>
-                                        <span> Modifier le semestre</span>
+                                        <i class="fal fa-share-nodes"></i>
+                                        <span> Mutualiser le semestre</span>
+                                    </button>
+                                    <button
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                modalTitle: 'Raccrocher un semestre mutualisé au semestre ' ~ semestre
+                                                .semestre.display,
+                                                modalUrl: path('structure_semestre_raccrocher', {semestre:semestre
+                                                .semestre.id, parcours: parcours.id})
+                                            }) }}
+                                            data-action="click->modal#openModal"
+                                            class="btn btn-sm text-quaternary me-1"
+                                            data-size="lg"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            title="Raccrocher un semestre mutualisé au semestre {{ semestre.semestre.display }}"
+                                    >
+                                        <i class="fal fa-down-to-bracket"></i>
+                                        <span> Raccrocher un semestre</span>
                                     </button>
                                 </div>
                             </div>
