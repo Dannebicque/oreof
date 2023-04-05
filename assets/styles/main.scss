@@ -233,6 +233,14 @@
   margin-left: var(--text-divider-gap);
 }
 
+.detail_semestre {
+  border-left: 2px solid var(--primary);
+}
+
+.detail_ue {
+  border-left: 2px solid var(--primary);
+}
+
 //@for $i from 1 through 15 {
 //  .text-divider-color-#{$i} {
 //    --text-divider-gap: 1rem;
