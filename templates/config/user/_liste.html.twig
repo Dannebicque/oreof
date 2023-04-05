@@ -61,7 +61,7 @@
             <td>{{ user.isEnable|badgeBoolean }}</td>
             <td>
                 {% for centre in user.userCentres %}
-                {{ centre|badgeCentre }}
+                {{ centre|badgeCentre }}<br>
                 {% endfor %}
             </td>
             <td class="text-end">
