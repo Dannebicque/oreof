@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.21](https://github.com/Dannebicque/oreof/compare/v0.20.20...v0.20.21) (2023-04-05)
+
+
+### Features
+
+* Refonte affichage maquette ([1c538c3](https://github.com/Dannebicque/oreof/commit/1c538c37f5076c00afd00146a0d2a69e0f20e821))
+
+
+### Bug Fixes
+
+* Affichage des boutons sur semestre ([4ba1580](https://github.com/Dannebicque/oreof/commit/4ba1580efba29659023f9ecd3b402a06a7093fac))
+* Ajout de l'utilisateur sur l'affichage du centre ([83f96f9](https://github.com/Dannebicque/oreof/commit/83f96f98c777f54936dfccda07fc152a6faf94dd))
+* Codification des EC ([316379e](https://github.com/Dannebicque/oreof/commit/316379ebf0d655be3930990082573fa5b34d2843))
+* type sur EC ([36f17a0](https://github.com/Dannebicque/oreof/commit/36f17a0e414a8231377dda36d0a39f46c090764b))
+
 ### [0.20.20](https://github.com/Dannebicque/oreof/compare/v0.20.19...v0.20.20) (2023-04-04)
 
 
