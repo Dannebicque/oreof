@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.20.22](https://github.com/Dannebicque/oreof/compare/v0.20.21...v0.20.22) (2023-04-05)
+
+
+### Features
+
+* Affichage des EC et "sous EC" ([ed139ff](https://github.com/Dannebicque/oreof/commit/ed139ffc451af5aff61e87fc8e2ca8a14a76536b))
+* Affichage des utilisateurs ([448979b](https://github.com/Dannebicque/oreof/commit/448979b2e8aabebc782d99ca74b2784790e881db))
+* Menu utilisateur pour le SES ([abc7a38](https://github.com/Dannebicque/oreof/commit/abc7a38f1459089d5258ea5a6d5b2be5d44a2c9f))
+
+
+### Bug Fixes
+
+* droits sur liste utilisateurs ([6e23068](https://github.com/Dannebicque/oreof/commit/6e23068df78caa80d927d654b88e9532040fdff3))
+
 ### [0.20.21](https://github.com/Dannebicque/oreof/compare/v0.20.20...v0.20.21) (2023-04-05)
 
 
