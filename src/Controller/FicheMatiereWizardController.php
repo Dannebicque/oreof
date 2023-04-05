@@ -11,12 +11,12 @@ namespace App\Controller;
 
 use App\Classes\verif\FicheMatiereState;
 use App\Entity\FicheMatiere;
-use App\Entity\FicheMatiereParcours;
+use App\Entity\FicheMatiereMutualisable;
 use App\Form\FicheMatiereStep1Type;
 use App\Form\FicheMatiereStep2Type;
 use App\Form\FicheMatiereStep3Type;
 use App\Repository\ComposanteRepository;
-use App\Repository\FicheMatiereParcoursRepository;
+use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\SemestreRepository;
@@ -90,7 +90,7 @@ class FicheMatiereWizardController extends AbstractController
         Request $request,
         FormationRepository $formationRepository,
         ParcoursRepository $parcoursRepository,
-        FicheMatiereParcoursRepository $ficheMatiereParcoursRepository,
+        FicheMatiereMutualisableRepository $ficheMatiereParcoursRepository,
         FicheMatiere $ficheMatiere,
     ): Response {
         $data = JsonRequest::getFromRequest($request);
@@ -122,9 +122,10 @@ class FicheMatiereWizardController extends AbstractController
                 ]);
 
                 if ($exist === null) {
-                    $ficheMatiereParcours = new FicheMatiereParcours();
+                    $ficheMatiereParcours = new FicheMatiereMutualisable();
                     $ficheMatiereParcours->setFicheMatiere($ficheMatiere);
                     $ficheMatiereParcours->setParcours($parcours);
+                    $ficheMatiereParcours->setIsPorteur(false);
                     $entityManager->persist($ficheMatiereParcours);
                     $entityManager->flush();
                 }
