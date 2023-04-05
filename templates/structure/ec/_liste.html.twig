@@ -12,11 +12,11 @@
 
                         <div class="col-12 col-md-1 d-flex align-items-center mb-2 justify-content-center
                         text-secondary mb-md-0 text-small">
-                            Matière
+                            fiche EC/matière associée
                         </div>
                         <div class="col-12 col-md-1 d-flex align-items-center mb-2 justify-content-center
                         text-secondary mb-md-0 text-small">
-                            Remplissage
+                            % Remplissage
                         </div>
                         <div class="col-6 col-md-2 d-flex align-items-center justify-content-center
                         text-secondary text-small">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            <div>{# class="scroll-out" #}
+            <div>
                 {% for ec in ecs|filter(ec => ec.ecParent == null) %}
                     <div {{ stimulus_controller('ec--liste') }}>
                         {% if ec.ecEnfants|length == 0 %}
