@@ -283,6 +283,45 @@
                                 </li>
                             </ul>
                         </li>
+                    {% elseif is_granted('ROLE_SES') %}
+                        <li class="mega">
+                            <a href="#administration" data-href="administration">
+                                <i class="fal fa-wrench icon"></i>
+                                <span class="label">Administration</span>
+                            </a>
+                            <ul id="administration">
+                                <li>
+                                    <a href="#struct_formation">
+                                        <span class="label">Structure de formation</span>
+                                    </a>
+                                    <ul id="struct_formation">
+                                        <li>
+                                            <a href="{{ path('app_mention_index') }}">
+                                                <span class="label">Mentions</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li>
+                                    <a href="#utilisateurs">
+                                        <span class="label">Utilisateurs et droits</span>
+                                    </a>
+                                    <ul id="utilisateurs">
+                                        <li>
+                                            <a href="{{ path('app_user_attente') }}">
+                                                <span class="label">Utilisateurs en attente</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('app_user_index') }}">
+                                                <span class="label">Utilisateurs</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
                     {% elseif is_granted('ROLE_COMPOSANTE', app.user) %}
                         <li class="mega">
                             <a href="#administration" data-href="administration">
@@ -303,11 +342,6 @@
                                         <li>
                                             <a href="{{ path('app_user_index') }}">
                                                 <span class="label">Utilisateurs</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_droits_access') }}">
-                                                <span class="label">Droits</span>
                                             </a>
                                         </li>
                                     </ul>
