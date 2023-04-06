@@ -125,7 +125,6 @@ class FicheMatiereWizardController extends AbstractController
                     $ficheMatiereParcours = new FicheMatiereMutualisable();
                     $ficheMatiereParcours->setFicheMatiere($ficheMatiere);
                     $ficheMatiereParcours->setParcours($parcours);
-                    $ficheMatiereParcours->setIsPorteur(false);
                     $entityManager->persist($ficheMatiereParcours);
                     $entityManager->flush();
                 }
