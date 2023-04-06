@@ -38,6 +38,7 @@
                         <i class="fa-duotone fa-pencil-ruler" style="--fa-primary-color: var(--complementaire);
 "></i>&nbsp;{{ product_name }}
                         {% if is_granted('ROLE_ADMIN') %} / Adm.{% endif %}
+                        {% if is_granted('ROLE_SES') %} / SES.{% endif %}
                     </div>
                 </a>
 
@@ -139,7 +140,7 @@
                     </li>
 
 
-                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SES') %}
+                    {% if is_granted('ROLE_SES') %}
                         <li>
                             <a href="{{ path('structure_composante_index') }}">
                                 <i class="fal fa-school icon"></i>

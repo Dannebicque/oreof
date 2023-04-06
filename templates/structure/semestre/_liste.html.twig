@@ -126,64 +126,37 @@
                                                 </button>
                                             </div>
                                             <div class="col-4">
-                                                <button class="btn btn-sm btn-outline-info">
-                                                    <i class="fal fa-circle-up"></i></button>
-                                                <button class="btn btn-sm btn-outline-info">
-                                                    <i class="fal fa-circle-down"></i></button>
-                                                {#                                            {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation)) %} #}{#  and #}
-                                                {#                                        (workflow_can(ec, #}
-                                                {#                                            'valider_parcours') or workflow_can(ec, #}
-                                                {#                                            'initialiser'))) or (is_granted #}
-                                                {#                                            ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
-                                                {#                                            'valider_ec')) #}
-                                                {#                                                {% if ue.subOrdre == 0 %} #}
-                                                {#                                                    {% if not loop.first %} #}
-                                                {#                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action #}
-                                                {#                                                            ('structure--ue', 'deplacerUe', #}
-                                                {#                                                            'click', {url: path('structure_ue_deplacer',{sens: 'up', ue:ue #}
-                                                {#                                                            .id}), ue:ue.id, parcours:parcours.id}) }}> #}
-                                                {#                                                            <i class="fal fa-circle-up"></i></button> #}
-                                                {#                                                    {% else %} #}
-                                                {#                                                        <button class="btn btn-sm btn-outline-info" disabled> #}
-                                                {#                                                            <i class="fal fa-circle-up"></i> #}
-                                                {#                                                        </button> #}
-                                                {#                                                    {% endif %} #}
-                                                {#                                                    {% if not loop.last %} #}
-                                                {#                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action('structure--ue', 'deplacerUe', #}
-                                                {#                                                            'click', {url: path('structure_ue_deplacer',{sens: 'down', ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}> #}
-                                                {#                                                            <i class="fal #}
-                                                {#                                        fa-circle-down"></i></button> #}
-                                                {#                                                    {% else %} #}
-                                                {#                                                        <button class="btn btn-sm btn-outline-info" disabled> #}
-                                                {#                                                            <i class="fal fa-circle-down"></i> #}
-                                                {#                                                        </button> #}
-                                                {#                                                    {% endif %} #}
-                                                {#                                                {% else %} #}
-                                                {#                                                    {% if not ue.subOrdre == 1 %} #}
-                                                {#                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action #}
-                                                {#                                                            ('structure--ue', 'deplacerUe', #}
-                                                {#                                                            'click', {url: path('structure_ue_deplacer_sub',{sens: 'up', #}
-                                                {#                                                                ue:ue #}
-                                                {#                                                                .id}), ue:ue.id, parcours:parcours.id}) }}> #}
-                                                {#                                                            <i class="fal fa-circle-up"></i></button> #}
-                                                {#                                                    {% else %} #}
-                                                {#                                                        <button class="btn btn-sm btn-outline-info" disabled> #}
-                                                {#                                                            <i class="fal fa-circle-up"></i> #}
-                                                {#                                                        </button> #}
-                                                {#                                                    {% endif %} #}
-                                                {#                                                    {% if not loop.last %} #}
-                                                {#                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action('structure--ue', 'deplacerUe', #}
-                                                {#                                                            'click', {url: path('structure_ue_deplacer_sub',{sens: 'down', ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}> #}
-                                                {#                                                            <i class="fal #}
-                                                {#                                        fa-circle-down"></i></button> #}
-                                                {#                                                    {% else %} #}
-                                                {#                                                        <button class="btn btn-sm btn-outline-info" disabled> #}
-                                                {#                                                            <i class="fal fa-circle-down"></i> #}
-                                                {#                                                        </button> #}
-                                                {#                                                    {% endif %} #}
-                                                {#                                                {% endif %} #}
 
-                                                {#                                            {% endif %} #}
+                                                {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation)) %}
+                                                    {#                                                    and #}
+                                                    {#                                                    (workflow_can(ec, 'valider_parcours') or workflow_can(ec, #}
+                                                    {#                                                    'initialiser'))) or (is_granted #}
+                                                    {#                                                    ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
+                                                    {#                                                    'valider_ec')) #}
+                                                    {% if not loop.first %}
+                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action
+                                                            ('structure--semestre', 'deplacerSemestre',
+                                                            'click', {url: path('structure_semestre_deplacer',{sens:
+                                                                'up', semestre:semestre
+                                                                .id,parcours:parcours.id}), semestre:semestre.id, parcours:parcours.id}) }}>
+                                                            <i class="fal fa-circle-up"></i></button>
+                                                    {% else %}
+                                                        <button class="btn btn-sm btn-outline-info" disabled>
+                                                            <i class="fal fa-circle-up"></i>
+                                                        </button>
+                                                    {% endif %}
+                                                    {% if not loop.last %}
+                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action('structure--semestre', 'deplacerUe',
+                                                            'click', {url: path('structure_semestre_deplacer',{sens:
+                                                                'down', semestre:semestre.id,parcours:parcours.id}), semestre:semestre.id, parcours:parcours.id}) }}>
+                                                            <i class="fal
+                                                                                        fa-circle-down"></i></button>
+                                                    {% else %}
+                                                        <button class="btn btn-sm btn-outline-info" disabled>
+                                                            <i class="fal fa-circle-down"></i>
+                                                        </button>
+                                                    {% endif %}
+                                                {% endif %}
                                             </div>
                                         </div>
 

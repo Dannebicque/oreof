@@ -18,9 +18,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class EcAccessVoter extends Voter
+class UserAccessVoter extends Voter
 {
-    public const ROLE_EC_EDIT_MY = 'ROLE_EC_EDIT_MY';
+    public const CAN_EDIT_CENTRE = 'CAN_EDIT_CENTRE';
 
     private array $roles;
 
@@ -30,15 +30,9 @@ class EcAccessVoter extends Voter
     ) {
     }
 
-    public function supportsType(string $subjectType): bool
-    {
-        return is_a($subjectType, ElementConstitutif::class, true);
-    }
-
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::ROLE_EC_EDIT_MY], true)
-            && $subject instanceof ElementConstitutif;
+        return in_array($attribute, [self::CAN_EDIT_CENTRE], true);
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -56,13 +50,14 @@ class EcAccessVoter extends Voter
         $this->roles = $this->roleRepository->findByPermission($attribute);
 
         return match ($attribute) {
-            self::ROLE_EC_EDIT_MY => $this->isReponsableEc($user, $subject),
+            self::CAN_EDIT_CENTRE => $this->canEditCentre($user, $subject),
             default => false,
         };
     }
 
-    private function isReponsableEc(UserInterface|User $user, ElementConstitutif $subject): bool
+    private function canEditCentre(UserInterface|User $user, mixed $subject): bool
     {
+        //todo: tester si subjet est composante et si je suis DPE avec les droits
         return $subject->getResponsableEc()?->getId() === $user->getId();
     }
 }

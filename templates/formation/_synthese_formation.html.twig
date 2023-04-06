@@ -25,7 +25,7 @@
                         }}</dd>
                 </dl>
             </div>
-            {% if is_granted('ROLE_ADMIN') %}
+            {% if is_granted('ROLE_SES') %}
             <div class="col-12 text-end">
                     <a href="{{ path('app_formation_edit_modal',{'formation': formation.id}) }}"
                        class="btn btn-sm text-warning "

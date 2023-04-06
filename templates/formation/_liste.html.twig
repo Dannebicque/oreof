@@ -83,7 +83,7 @@ bouton pour valider/invalide les étapes successives #}
                     </a>
                 {% endif %}
 
-                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_SES') %}
+                {% if is_granted('ROLE_SES') %}
                     <button {{ stimulus_action('crud', 'delete', 'click', {
                         url:path('app_formation_delete',{'id': formation.id}),
                         csrf: csrf_token('delete' ~ formation.id)
@@ -130,7 +130,7 @@ bouton pour valider/invalide les étapes successives #}
                         <span> voir</span>
                     </a>
 
-                    {% if is_granted('ROLE_PARCOURS_EDIT_MY', parcours) or is_granted('ROLE_ADMIN') %} {# todo: filtrer
+                    {% if is_granted('ROLE_PARCOURS_EDIT_MY', parcours) or is_granted('ROLE_SES') %} {# todo: filtrer
                 sur ROLE_SES => Parcours Edit #}
                         <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
                            class="btn btn-sm text-warning"
@@ -143,7 +143,7 @@ bouton pour valider/invalide les étapes successives #}
                         </a>
                     {% endif %}
 
-                    {% if is_granted('ROLE_FORMATION_DELETE_MY') or is_granted('ROLE_ADMIN') %}
+                    {% if is_granted('ROLE_FORMATION_DELETE_MY') or is_granted('ROLE_SES') %}
                         <button {{ stimulus_action('crud', 'delete', 'click', {
                             url:path('app_parcours_delete',{'id': parcours.id}),
                             csrf: csrf_token('delete' ~ parcours.id)
