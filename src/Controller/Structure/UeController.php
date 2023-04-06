@@ -334,7 +334,6 @@ class UeController extends AbstractController
                     $ueMutualise = new UeMutualisable();
                     $ueMutualise->setUe($ue);
                     $ueMutualise->setParcours($parcours);
-                    $ueMutualise->setIsPorteur(false);
                     $entityManager->persist($ueMutualise);
                     $entityManager->flush();
                 }

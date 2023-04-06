@@ -10,6 +10,7 @@
 namespace App\Controller\Structure;
 
 use _PHPStan_59e3e945c\Nette\Utils\Json;
+use App\Classes\SemestreOrdre;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Parcours;
@@ -112,7 +113,6 @@ class SemestreController extends AbstractController
                     $semestreMutualise = new SemestreMutualisable();
                     $semestreMutualise->setSemestre($semestre);
                     $semestreMutualise->setParcours($parcours);
-                    $semestreMutualise->setIsPorteur(false);
                     $entityManager->persist($semestreMutualise);
                     $entityManager->flush();
                 }
@@ -145,6 +145,18 @@ class SemestreController extends AbstractController
             'semestre' => $semestre,
             'parcours' => $parcours
         ]);
+    }
+
+    #[Route('/deplacer/{semestre}/{parcours}/{sens}', name: 'deplacer', methods: ['GET'])]
+    public function deplacer(
+        SemestreOrdre $semestreOrdre,
+        Semestre $semestre,
+        Parcours $parcours,
+        string $sens
+    ): Response {
+        $semestreOrdre->deplacerSemestre($semestre, $parcours, $sens);
+
+        return $this->json(true);
     }
 
     #[

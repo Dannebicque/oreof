@@ -146,7 +146,8 @@
                                                         </button>
                                                     {% endif %}
                                                     {% if not loop.last %}
-                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action('structure--semestre', 'deplacerUe',
+                                                        <button class="btn btn-sm btn-outline-info" {{
+                                                        stimulus_action('structure--semestre', 'deplacerSemestre',
                                                             'click', {url: path('structure_semestre_deplacer',{sens:
                                                                 'down', semestre:semestre.id,parcours:parcours.id}), semestre:semestre.id, parcours:parcours.id}) }}>
                                                             <i class="fal
