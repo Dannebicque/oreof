@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.5](https://github.com/Dannebicque/oreof/compare/v0.21.4...v0.21.5) (2023-04-06)
+
+
+### Bug Fixes
+
+* Deplacer Semestre ([cc031ed](https://github.com/Dannebicque/oreof/commit/cc031ed49ef7cbea7b7668125bade385dfc53b49))
+* Deplacer Semestre ([7f74666](https://github.com/Dannebicque/oreof/commit/7f746661a03e3211826d542973717ed9f8a172dd))
+* Deplacer Semestre ([ea0327a](https://github.com/Dannebicque/oreof/commit/ea0327ab0eb2831d189f8d99273478d056a28c1a))
+
 ### [0.21.4](https://github.com/Dannebicque/oreof/compare/v0.21.3...v0.21.4) (2023-04-06)
 
 
