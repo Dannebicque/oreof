@@ -55,4 +55,18 @@ class SemestreParcoursRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findByParcoursOrdre(?int $ordreDestination, Parcours $parcours): ?SemestreParcours
+    {
+        return $this->createQueryBuilder('sp')
+            ->where('sp.parcours = :parcours')
+            ->andWhere('sp.ordre = :ordre')
+            ->setParameter('parcours', $parcours)
+            ->setParameter('ordre', $ordreDestination)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
