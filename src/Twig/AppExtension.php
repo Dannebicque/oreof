@@ -92,10 +92,11 @@ class AppExtension extends AbstractExtension
 
     public function badgeCentre(UserCentre $userCentre): string
     {
+        $droit = count($userCentre->getDroits()) > 0 ? $userCentre->getDroits()[0] : 'Erreur';
         return match ($userCentre->typeCentre()) {
-            CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => '<span class="badge bg-success me-1">' . $userCentre->displaySimple() . ' ('.count($userCentre->getDroits()) > 0 ? $userCentre->getDroits()[0] : 'Erreur'.')</span>',
-            CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => '<span class="badge bg-warning me-1">' . $userCentre->displaySimple() . ' ('.count($userCentre->getDroits()) > 0 ? $userCentre->getDroits()[0] : 'Erreur'.')</span>',
-            CentreGestionEnum::CENTRE_GESTION_FORMATION => '<span class="badge bg-info me-1">' . $userCentre->displaySimple() . ' ('.count($userCentre->getDroits()) > 0 ? $userCentre->getDroits()[0] : 'Erreur'.')</span>',
+            CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => '<span class="badge bg-success me-1">' . $userCentre->displaySimple() . ' ('.$droit.')</span>',
+            CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => '<span class="badge bg-warning me-1">' . $userCentre->displaySimple() . ' ('.$droit.')</span>',
+            CentreGestionEnum::CENTRE_GESTION_FORMATION => '<span class="badge bg-info me-1">' . $userCentre->displaySimple() . ' ('.$droit.')</span>',
             default => '<span class="badge bg-danger me-1">Inconnu</span>',
         };
     }
