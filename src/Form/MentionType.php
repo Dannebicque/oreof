@@ -23,7 +23,6 @@ class MentionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        //todo: fitlrer par établissement du connecté...
         $builder
             ->add('typeDiplome', EntityType::class, [
                 'class' => TypeDiplome::class,

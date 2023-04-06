@@ -37,7 +37,7 @@ class ParcoursStep5Type extends AbstractType
                 'choice_attr' => function () {
                     return ['data-action' => 'change->parcours--step5#changeComposanteInscription'];
                 },
-            ])//todo: faire une liste avec un "+" pour ajouter une composante d'inscription et un "-" pour retirer...
+            ])
             ->add('regimeInscription', EnumType::class, [
                 'class' => RegimeInscriptionEnum::class,
                 'translation_domain' => 'enum',

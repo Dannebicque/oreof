@@ -37,7 +37,7 @@ export default class extends Controller {
       }
       modal = null
       await fetch(url, body).then((e) => {
-        if (e.status === 200) { // todo, tester aussi la réponse...
+        if (e.status === 200) {
           callOut('Suppression effectuée', 'success')
           this.dispatch('refreshListeEc', { detail: { ue: event.params.ue, parcours: event.params.parcours } })
         } else {

@@ -33,23 +33,32 @@ export default class extends Controller {
 
   addCentre(event) {
     event.preventDefault()
-    fetch(this.urlAddValue, {
-      method: 'POST',
-      body: JSON.stringify({
-        centreType: document.getElementById('typeCentre').value,
-        centreId: document.getElementById('selectListe').value,
-        role: document.getElementById('droits').value,
-      }),
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        if (json.success) {
-          callOut('Centre ajouté', 'success')
-          this._updateListe()
-        } else {
-          callOut(json.error, 'error')
-        }
+
+    const centreType = document.getElementById('typeCentre').value
+    const centreId = document.getElementById('selectListe').value
+    const role = document.getElementById('droits').value
+
+    if (role === '' || centreType === '' || (centreType !== 'etablissement' && centreId === '')) {
+      callOut('Veuillez sélectionner un centre et un rôle', 'error')
+    } else {
+      fetch(this.urlAddValue, {
+        method: 'POST',
+        body: JSON.stringify({
+          centreType,
+          centreId,
+          role,
+        }),
       })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.success) {
+            callOut('Centre ajouté', 'success')
+            this._updateListe()
+          } else {
+            callOut(json.error, 'error')
+          }
+        })
+    }
   }
 
   delete(event) {

@@ -428,12 +428,6 @@ class Parcours
         return $this;
     }
 
-    public function etat(): array
-    {
-        //todo: a gérer wordlgow ?
-        return [];
-    }
-
     public function remplissage(): float
     {
         $total = 0;

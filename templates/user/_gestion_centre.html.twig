@@ -15,8 +15,10 @@
     <div>
         <h3>Ajouter un centre</h3>
         <div>
-            <label class="form-label" for="typeCentre">Type de centre</label>
-            <select id="typeCentre" class="form-select" {{ stimulus_action('register', 'changeCentre') }}>
+            <label class="form-label required" for="typeCentre">Type de centre</label>
+            <select id="typeCentre" class="form-select" {{ stimulus_action('register', 'changeCentre') }}
+            required
+            >
                 {% for centre in centres %}
                     <option value="{{ centre.value }}">{{ centre.libelle }}</option>
                 {% endfor %}
@@ -29,8 +31,8 @@
             </select>
         </div>
         <div>
-            <label for="droits" class="form-label">Droits sur ce centre ?</label>
-            <select class="form-select" name="droits" id="droits">
+            <label for="droits" class="form-label required">Droits sur ce centre ?</label>
+            <select class="form-select" name="droits" id="droits" required>
                 <option value="">Choisissez un centre</option>
                 {% for role in roles %}
                     <option value="{{ role.id }}">{{ role.libelle }}</option>

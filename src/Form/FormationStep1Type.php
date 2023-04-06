@@ -46,7 +46,7 @@ class FormationStep1Type extends AbstractType
                     return ['data-action' => 'change->formation--step1#changeComposanteInscription'];
                 },
                 'attr' => ['data-action' => 'change->formation--step6#changeComposanteInscription']
-            ])//todo: faire une liste avec un "+" pour ajouter une composante d'inscription et un "-" pour retirer...
+            ])
             ->add('regimeInscription', EnumType::class, [
                 'help' => 'Régime d\'inscription',
                 'class' => RegimeInscriptionEnum::class,
