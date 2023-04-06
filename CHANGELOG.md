@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.3](https://github.com/Dannebicque/oreof/compare/v0.21.2...v0.21.3) (2023-04-06)
+
+
+### Bug Fixes
+
+* Droits Admin qui hérite de SES. ([2fd8734](https://github.com/Dannebicque/oreof/commit/2fd87345987b9aad71ea5e51da934f30f40c0fc8))
+* Droits gestion des utilisateurs ([bc84781](https://github.com/Dannebicque/oreof/commit/bc84781112f34cb8a2fd0571d227b5a00abc69c3))
+* Suppression du champs rôle dans l'édition d'un USer ([cc5b8c3](https://github.com/Dannebicque/oreof/commit/cc5b8c3f060368cfcfe5686b0b8f8ef729aac167))
+* UE, Semestre, Fiches Mutualisales ([46011c0](https://github.com/Dannebicque/oreof/commit/46011c0708c2e90b5815bbfb1993a0137b844173))
+
 ### [0.21.2](https://github.com/Dannebicque/oreof/compare/v0.21.1...v0.21.2) (2023-04-06)
 
 
