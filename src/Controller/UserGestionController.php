@@ -158,9 +158,10 @@ class UserGestionController extends BaseController
     }
 
     #[Route('/valid/dpe/{user}', name: 'app_user_gestion_valid_dpe')]
-    #[IsGranted('ROLE_RESP_DPE')]
     public function validDpe(User $user): Response
     {
+        $this->denyAccessUnlessGranted('CAN_EDIT_CENTRE');
+
         $user->setDateValideDpe(new DateTime());
         $user->setIsValidDpe(true);
         $user->setDateValideAdministration(new DateTime());
@@ -185,24 +186,13 @@ class UserGestionController extends BaseController
         return $this->redirectToRoute('app_user_attente');
     }
 
-//    #[Route('/droits/{user}', name: 'app_user_gestion_droits')]
-//    #[IsGranted('ROLE_ADMIN')]
-//    public function gestionDroits(
-//        RoleRepository $roleRepository,
-//        User $user
-//    ): Response {
-//        return $this->render('user/_gestion_droits.html.twig', [
-//            'user' => $user,
-//            'roles' => $roleRepository->findByAll()
-//        ]);
-//    }
-
     #[Route('/gestion/centre/{user}', name: 'app_user_gestion_centre')]
-    #[IsGranted('ROLE_ADMIN')]
     public function gestionCentre(
         RoleRepository $roleRepository,
         User $user
     ): Response {
+        $this->denyAccessUnlessGranted('CAN_EDIT_CENTRE');
+
         return $this->render('user/_gestion_centre.html.twig', [
             'user' => $user,
             'centres' => CentreGestionEnum::cases(),
@@ -212,7 +202,6 @@ class UserGestionController extends BaseController
     }
 
     #[Route('/liste/centre/{user}', name: 'app_user_gestion_liste')]
-    #[IsGranted('ROLE_ADMIN')]
     public function listeCentre(User $user): Response
     {
         return $this->render('user/_liste_centre.html.twig', [
@@ -226,7 +215,6 @@ class UserGestionController extends BaseController
      * @throws \JsonException
      */
     #[Route('/add/centre/{user}', name: 'app_user_gestion_add_centre')]
-    #[IsGranted('ROLE_ADMIN')]
     public function addCentre(
         RoleRepository $roleRepository,
         UserCentreRepository $userCentreRepository,
