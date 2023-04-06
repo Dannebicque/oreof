@@ -47,6 +47,11 @@ class RegisterController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $existUser = $userRepository->findOneBy(['email' => $user->getEmail()]);
+            if (!str_ends_with($user->getEmail(), '@univ-reims.fr')) {
+                return $this->render('register/erreur_compte.html.twig', [
+                    'user' => $existUser,
+                ]);
+            }
             if ($existUser === null) {
                 $username = $ldap->getUsername($user->getEmail());
                 $user->setUsername($username ?? $user->getEmail());
