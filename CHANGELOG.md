@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.7](https://github.com/Dannebicque/oreof/compare/v0.21.6...v0.21.7) (2023-04-06)
+
+
+### Features
+
+* accès interdit si pas mail URCA ([cf7f5f9](https://github.com/Dannebicque/oreof/commit/cf7f5f9c9f81dc112f03b368f6895f65ad093d29))
+* Vérifiction de champs non vide sur les centres ([ace7d30](https://github.com/Dannebicque/oreof/commit/ace7d303da26d5bdb6a52b2c765ac3736bad887f))
+
 ### [0.21.6](https://github.com/Dannebicque/oreof/compare/v0.21.5...v0.21.6) (2023-04-06)
 
 
