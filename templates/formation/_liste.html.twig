@@ -1,169 +1,183 @@
 {# todo: reprendre cette page comme le bilan des formations pour le SES, DPE ou Admin avec état, remplissage et
 bouton pour valider/invalide les étapes successives #}
-<table class="table">
-    <thead>
-    <tr>
-        <th>
-            <a href="#"
-                    {{ stimulus_action('crud', 'sort', 'click', {
-                        'sort': 'composantePorteuse',
-                        'direction': getDirection('composantePorteuse', sort, direction)
-                    }) }}
-            >
-                Composante
+<div {{ stimulus_controller('structure--formation') }}>
 
-                {{ displaySort('composantePorteuse', sort, direction) }}
-            </a>
-        </th>
-        <th>
-            <a href="#"
-                    {{ stimulus_action('crud', 'sort', 'click', {
-                        'sort': 'typeDiplome',
-                        'direction': getDirection('typeDiplome', sort, direction)
-                    }) }}
-            >
-                Type de formation
 
-                {{ displaySort('typeDiplome', sort, direction) }}
-            </a>
-        </th>
-        <th>Mention/spécialité</th>
-        <th>Etat</th>
-        <th>Remplissage</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for formation in formations %}
+    <table class="table">
+        <thead>
         <tr>
-            <td>
-                {% if formation.composantePorteuse != null %}
-                    {{ formation.composantePorteuse.libelle }}
-                {% else %}
-                    <span class="badge bg-danger">Non définie</span>
-                {% endif %}
-            </td>
-            <td>
-                {{ formation.typeDiplome|typeDiplome }}
-            </td>
-            <td>
-                {% if formation.mention != null or formation.mentionTexte != null %}
-                    {{ formation.display }}
-                {% else %}
-                    <span class="badge bg-danger">Non définie</span>
-                {% endif %}
-            </td>
-
-            <td>
-                {{ formation.etatDpe|badgeDpe }}
-            </td>
-            <td>
-                {{ formation.remplissage|remplissage }}
-            </td>
-            <td class="text-end">
-                <a href="{{ path('app_formation_show',{'id': formation.id}) }}"
-                   class="btn btn-sm text-info"
-                   data-bs-toggle="tooltip"
-                   data-bs-placement="bottom"
-                   title="Voir une formation"
+            <th>
+                <a href="#"
+                        {{ stimulus_action('crud', 'sort', 'click', {
+                            'sort': 'composantePorteuse',
+                            'direction': getDirection('composantePorteuse', sort, direction)
+                        }) }}
                 >
-                    <i class="{{ iconShow }}"></i>
-                    <span> voir</span>
+                    Composante
+
+                    {{ displaySort('composantePorteuse', sort, direction) }}
                 </a>
+            </th>
+            <th>
+                <a href="#"
+                        {{ stimulus_action('crud', 'sort', 'click', {
+                            'sort': 'typeDiplome',
+                            'direction': getDirection('typeDiplome', sort, direction)
+                        }) }}
+                >
+                    Type de formation
 
-                {% if is_granted('ROLE_FORMATION_EDIT_MY', formation) %}
-                    <a href="{{ path('app_formation_edit',{'id': formation.id}) }}"
-                       class="btn btn-sm text-warning"
-                       data-bs-toggle="tooltip"
-                       data-bs-placement="bottom"
-                       title="Modifier la fiche d'identité de la formation"
-                    >
-                        <i class="{{ iconEdit }}"></i>
-                        <span> modifier</span>
-                    </a>
-                {% endif %}
-
-                {% if is_granted('ROLE_SES') %}
-                    <button {{ stimulus_action('crud', 'delete', 'click', {
-                        url:path('app_formation_delete',{'id': formation.id}),
-                        csrf: csrf_token('delete' ~ formation.id)
-                    }) }} class="btn btn-sm text-danger">
-                        <i class="{{ iconDelete }}"></i> Supprimer
-                    </button>
-                {% endif %}
-            </td>
+                    {{ displaySort('typeDiplome', sort, direction) }}
+                </a>
+            </th>
+            <th>Mention/spécialité</th>
+            <th>Etat</th>
+            <th>Remplissage</th>
+            <th></th>
         </tr>
-        {% set hasBoucle = false %}
-        {% for parcours in formation.parcours|filter(parcours => not parcours.isParcoursDefaut) %}
-            {% if loop.first %}
-                {% set hasBoucle = true %}
-                <tr>
-                <td colspan="7">
-                <table class="table" style="border-left: 2px solid var(--secondary)">
-                <thead>
-                <tr>
-                    <th>Parcours</th>
-                    <th>Lieu</th>
-                    <th>Responsable</th>
-                    <th>Etat</th>
-                    <th>Remplissage</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-            {% endif %}
-
+        </thead>
+        <tbody>
+        {% for formation in formations %}
             <tr>
-                <td>{{ parcours.libelle }}</td>
-                <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
-                <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
-                <td>{{ parcours.etatParcours|badgeDpe }}</td>
-                <td>{{ parcours.remplissage|remplissage }}</td>
+                <td>
+                    {% if formation.composantePorteuse != null %}
+                        {{ formation.composantePorteuse.libelle }}
+                    {% else %}
+                        <span class="badge bg-danger">Non définie</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {{ formation.typeDiplome|typeDiplome }}
+                </td>
+                <td>
+                    {% if formation.mention != null or formation.mentionTexte != null %}
+                        {{ formation.display }}
+                    {% else %}
+                        <span class="badge bg-danger">Non définie</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {{ formation.etatDpe|badgeDpe }}
+                </td>
+                <td>
+                    {{ formation.remplissage|remplissage }}
+                </td>
                 <td class="text-end">
-                    <a href=""
+                    {% if formation.hasParcours and formation.parcours|length > 0 %}
+                        <button class="btn text-info btn-sm"
+                        {{ stimulus_action('structure--formation', 'afficherParcours', 'click',
+                            {formation:formation.id}) }}
+                        >
+                            <i class="fas fa-eye"></i>
+                            Afficher les parcours
+                        </button>
+                    {% endif %}
+
+                    <a href="{{ path('app_formation_show',{'id': formation.id}) }}"
                        class="btn btn-sm text-info"
                        data-bs-toggle="tooltip"
                        data-bs-placement="bottom"
                        title="Voir une formation"
                     >
                         <i class="{{ iconShow }}"></i>
-                        <span> voir</span>
+                        <span> Voir</span>
                     </a>
 
-                    {% if is_granted('ROLE_PARCOURS_EDIT_MY', parcours) or is_granted('ROLE_SES') %} {# todo: filtrer
-                sur ROLE_SES => Parcours Edit #}
-                        <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
+                    {% if is_granted('ROLE_FORMATION_EDIT_MY', formation) %}
+                        <a href="{{ path('app_formation_edit',{'id': formation.id}) }}"
                            class="btn btn-sm text-warning"
                            data-bs-toggle="tooltip"
                            data-bs-placement="bottom"
-                           title="Modifier la fiche d'identité du parcours"
+                           title="Modifier la fiche d'identité de la formation"
                         >
                             <i class="{{ iconEdit }}"></i>
-                            <span> modifier</span>
+                            <span> Modifier</span>
                         </a>
                     {% endif %}
 
-                    {% if is_granted('ROLE_FORMATION_DELETE_MY') or is_granted('ROLE_SES') %}
+                    {% if is_granted('ROLE_SES') %}
                         <button {{ stimulus_action('crud', 'delete', 'click', {
-                            url:path('app_parcours_delete',{'id': parcours.id}),
-                            csrf: csrf_token('delete' ~ parcours.id)
+                            url:path('app_formation_delete',{'id': formation.id}),
+                            csrf: csrf_token('delete' ~ formation.id)
                         }) }} class="btn btn-sm text-danger">
                             <i class="{{ iconDelete }}"></i> Supprimer
                         </button>
                     {% endif %}
                 </td>
             </tr>
-        {% endfor %}
-        {% if hasBoucle %}
-            </tbody>
-            </table>
-            </td>
+            {% set hasBoucle = false %}
+            {% for parcours in formation.parcours|filter(parcours => parcours.formation.hasParcours) %}
+                {% if loop.first %}
+                    {% set hasBoucle = true %}
+                    <tr class="d-none" id="parcours_{{ formation.id }}">
+                    <td colspan="7">
+                    <table class="table" style="border-left: 2px solid var(--secondary)">
+                    <thead>
+                    <tr>
+                        <th>Parcours</th>
+                        <th>Lieu</th>
+                        <th>Responsable</th>
+                        <th>Etat</th>
+                        <th>Remplissage</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                {% endif %}
+
+                <tr>
+                    <td>{{ parcours.libelle }}</td>
+                    <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
+                    <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
+                    <td>{{ parcours.etatParcours|badgeDpe }}</td>
+                    <td>{{ parcours.remplissage|remplissage }}</td>
+                    <td class="text-end">
+                        <a href=""
+                           class="btn btn-sm text-info"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Voir une formation"
+                        >
+                            <i class="{{ iconShow }}"></i>
+                            <span> voir</span>
+                        </a>
+
+                        {% if is_granted('ROLE_PARCOURS_EDIT_MY', parcours) or is_granted('ROLE_SES') %} {# todo: filtrer
+                sur ROLE_SES => Parcours Edit #}
+                            <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
+                               class="btn btn-sm text-warning"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="bottom"
+                               title="Modifier la fiche d'identité du parcours"
+                            >
+                                <i class="{{ iconEdit }}"></i>
+                                <span> modifier</span>
+                            </a>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_FORMATION_DELETE_MY') or is_granted('ROLE_SES') %}
+                            <button {{ stimulus_action('crud', 'delete', 'click', {
+                                url:path('app_parcours_delete',{'id': parcours.id}),
+                                csrf: csrf_token('delete' ~ parcours.id)
+                            }) }} class="btn btn-sm text-danger">
+                                <i class="{{ iconDelete }}"></i> Supprimer
+                            </button>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            {% if hasBoucle %}
+                </tbody>
+                </table>
+                </td>
+                </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="7" class="bg-warning">Aucun enregistrement trouvé</td>
             </tr>
-        {% endif %}
-    {% else %}
-        <tr>
-            <td colspan="7" class="bg-warning">Aucun enregistrement trouvé</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

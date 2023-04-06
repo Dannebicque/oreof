@@ -27,4 +27,8 @@ export default class extends Controller {
       event.target.firstElementChild.classList.add('fa-caret-down')
     }
   }
+
+  afficherParcours(event) {
+    document.getElementById(`parcours_${event.params.formation}`).classList.toggle('d-none')
+  }
 }
