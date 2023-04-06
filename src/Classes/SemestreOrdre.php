@@ -11,14 +11,15 @@ namespace App\Classes;
 
 use App\Entity\Parcours;
 use App\Entity\Semestre;
+use App\Repository\SemestreParcoursRepository;
 use App\Repository\SemestreRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class SemestreOrdre
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private SemestreRepository $semestreRepository
+        private readonly EntityManagerInterface $entityManager,
+        private readonly SemestreParcoursRepository $semestreParcoursRepository
     ) {
     }
 
@@ -49,9 +50,9 @@ class SemestreOrdre
     ): bool {
         // on inverse les sous-ordres
         $semestre->setOrdre($ordreDestination);
-        $semestres = $this->semestreRepository->findByParcoursOrdre($ordreDestination, $parcours);
-        foreach ($semestres as $u) {
-            $u->setOrdre($ordreInitial);
+        $semestreOld = $this->semestreParcoursRepository->findByParcoursOrdre($ordreDestination, $parcours);
+        if ($semestreOld !== null) {
+            $semestreOld->setOrdre($ordreInitial);
         }
 
         $this->entityManager->flush();

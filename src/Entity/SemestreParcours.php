@@ -38,6 +38,7 @@ class SemestreParcours
     {
         $this->setSemestre($semestre);
         $this->setParcours($parcours);
+        $this->setOrdre($semestre->getOrdre());
     }
 
     public function getId(): ?int

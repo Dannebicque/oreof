@@ -52,7 +52,6 @@ class FormationStructure
             $this->deleteStructure($parcours);
         }
 
-        //todo: tester si debut semestre flexible
         if ($formation->getTypeDiplome()->isDebutSemestreFlexible() === false) {
             $semestreDebut = $formation->getTypeDiplome()->getSemestreDebut();
         } else {

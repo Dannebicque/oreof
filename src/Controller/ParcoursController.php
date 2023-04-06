@@ -216,6 +216,7 @@ class ParcoursController extends BaseController
                         }
                         $entityManager->remove($ue);
                     }
+                    //todo: supprimer le semestre s'il n'est plus utilisé
                     $entityManager->remove($semestreParcour->getSemestre());
                     $entityManager->remove($semestreParcour);
                 }

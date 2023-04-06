@@ -68,7 +68,16 @@
 
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Commun ?</div>
-                                        <span class="badge bg-secondary me-2">Mutualisé</span>
+                                        {% if semestre.semestreRaccroche != null %}
+                                            <span class="badge bg-warning me-2">Raccroché</span>
+                                        {% else %}
+                                            {% if semestre.semestre.semestreMutualisables|length > 0 %}
+                                                <span class="badge bg-secondary me-2">Mutualisé</span>
+                                            {% else %}
+                                                <span class="badge bg-primary me-2">Classique</span>
+                                            {% endif %}
+                                        {% endif %}
+
                                     </div>
 
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center
@@ -146,8 +155,7 @@
                                                         </button>
                                                     {% endif %}
                                                     {% if not loop.last %}
-                                                        <button class="btn btn-sm btn-outline-info" {{
-                                                        stimulus_action('structure--semestre', 'deplacerSemestre',
+                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action('structure--semestre', 'deplacerSemestre',
                                                             'click', {url: path('structure_semestre_deplacer',{sens:
                                                                 'down', semestre:semestre.id,parcours:parcours.id}), semestre:semestre.id, parcours:parcours.id}) }}>
                                                             <i class="fal
