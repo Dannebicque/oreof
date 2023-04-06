@@ -22,16 +22,6 @@ use UnitEnum;
 
 class UserType extends AbstractType
 {
-    private array $choices;
-    public function __construct(RoleRepository $roleRepository)
-    {
-        $this->choices = [];
-        $roles = $roleRepository->findByAll();
-        foreach ($roles as $role) {
-            $this->choices[$role->getCodeRole()] = $role->getLibelle();
-        }
-    }
-
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -77,14 +67,6 @@ class UserType extends AbstractType
                 'required' => false,
                 'label' => 'Téléphone portable',
                 'attr' => ['maxlength' => 10]
-            ])
-
-            ->add('role', ChoiceType::class, [
-                'choices' => $this->choices,
-                'label' => 'Droits',
-                'placeholder' => 'Indiquez les droits accordés',
-                'required' => true,
-                'mapped' => false,
             ])
         ;
     }
