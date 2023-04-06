@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.6](https://github.com/Dannebicque/oreof/compare/v0.21.5...v0.21.6) (2023-04-06)
+
+
+### Features
+
+* Afficher/masquer les parcours ([a0e6509](https://github.com/Dannebicque/oreof/commit/a0e650999153e7751f5186d041cc9773f0fd034a))
+* Badges EC ([506fb57](https://github.com/Dannebicque/oreof/commit/506fb572256f2c82bbd7c964f89317f3c7a08772))
+* base ([2f2aebf](https://github.com/Dannebicque/oreof/commit/2f2aebf38bc0c05ba84e5ba1fbe02cb753638dab))
+* ordre semestre ([70a209c](https://github.com/Dannebicque/oreof/commit/70a209c87031653515562e43cdd483a6d6c583d5))
+* Ordre semestre ([4e2c24b](https://github.com/Dannebicque/oreof/commit/4e2c24bd264e87f6991ac566c152eed5115714cb))
+* Sécurisation accès parcours et formation ([e4b2640](https://github.com/Dannebicque/oreof/commit/e4b2640e1cac58c702e0ab663fd0c659bca6020e))
+
 ### [0.21.5](https://github.com/Dannebicque/oreof/compare/v0.21.4...v0.21.5) (2023-04-06)
 
 
