@@ -37,8 +37,11 @@
                     <div class="logo-but">
                         <i class="fa-duotone fa-pencil-ruler" style="--fa-primary-color: var(--complementaire);
 "></i>&nbsp;{{ product_name }}
-                        {% if is_granted('ROLE_ADMIN') %} / Adm.{% endif %}
-                        {% if is_granted('ROLE_SES') %} / SES.{% endif %}
+                        {% if is_granted('ROLE_ADMIN') %} / Adm.
+                        {% else %}
+                            {% if is_granted('ROLE_SES') %} / SES.
+                            {% endif %}
+                        {% endif %}
                     </div>
                 </a>
 
