@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SemestreMutualisableRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SemestreMutualisableRepository::class)]
@@ -19,8 +21,13 @@ class SemestreMutualisable
     #[ORM\ManyToOne(inversedBy: 'semestreMutualisables')]
     private ?Parcours $parcours = null;
 
-    #[ORM\Column]
-    private ?bool $isPorteur = null;
+    #[ORM\OneToMany(mappedBy: 'semestreRaccroche', targetEntity: SemestreParcours::class)]
+    private Collection $semestreParcours;
+
+    public function __construct()
+    {
+        $this->semestreParcours = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -51,14 +58,32 @@ class SemestreMutualisable
         return $this;
     }
 
-    public function isIsPorteur(): ?bool
+    /**
+     * @return Collection<int, SemestreParcours>
+     */
+    public function getSemestreParcours(): Collection
     {
-        return $this->isPorteur;
+        return $this->semestreParcours;
     }
 
-    public function setIsPorteur(bool $isPorteur): self
+    public function addSemestreParcour(SemestreParcours $semestreParcour): self
     {
-        $this->isPorteur = $isPorteur;
+        if (!$this->semestreParcours->contains($semestreParcour)) {
+            $this->semestreParcours->add($semestreParcour);
+            $semestreParcour->setSemestreRaccroche($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSemestreParcour(SemestreParcours $semestreParcour): self
+    {
+        if ($this->semestreParcours->removeElement($semestreParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($semestreParcour->getSemestreRaccroche() === $this) {
+                $semestreParcour->setSemestreRaccroche(null);
+            }
+        }
 
         return $this;
     }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UeMutualisableRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UeMutualisableRepository::class)]
@@ -19,8 +21,13 @@ class UeMutualisable
     #[ORM\ManyToOne(inversedBy: 'ueMutualisables')]
     private ?Parcours $parcours = null;
 
-    #[ORM\Column]
-    private ?bool $isPorteur = null;
+    #[ORM\OneToMany(mappedBy: 'ueRaccrochee', targetEntity: Ue::class)]
+    private Collection $ues;
+
+    public function __construct()
+    {
+        $this->ues = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -51,14 +58,32 @@ class UeMutualisable
         return $this;
     }
 
-    public function isIsPorteur(): ?bool
+    /**
+     * @return Collection<int, Ue>
+     */
+    public function getUes(): Collection
     {
-        return $this->isPorteur;
+        return $this->ues;
     }
 
-    public function setIsPorteur(bool $isPorteur): self
+    public function addUe(Ue $ue): self
     {
-        $this->isPorteur = $isPorteur;
+        if (!$this->ues->contains($ue)) {
+            $this->ues->add($ue);
+            $ue->setUeRaccrochee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUe(Ue $ue): self
+    {
+        if ($this->ues->removeElement($ue)) {
+            // set the owning side to null (unless already changed)
+            if ($ue->getUeRaccrochee() === $this) {
+                $ue->setUeRaccrochee(null);
+            }
+        }
 
         return $this;
     }

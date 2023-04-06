@@ -50,6 +50,9 @@ class Ue
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class)]
     private Collection $ueMutualisables;
 
+    #[ORM\ManyToOne(inversedBy: 'ues')]
+    private ?UeMutualisable $ueRaccrochee = null;
+
     public function __construct()
     {
         $this->ecUes = new ArrayCollection();
@@ -240,6 +243,18 @@ class Ue
                 $ueMutualisable->setUe(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUeRaccrochee(): ?UeMutualisable
+    {
+        return $this->ueRaccrochee;
+    }
+
+    public function setUeRaccrochee(?UeMutualisable $ueRaccrochee): self
+    {
+        $this->ueRaccrochee = $ueRaccrochee;
 
         return $this;
     }

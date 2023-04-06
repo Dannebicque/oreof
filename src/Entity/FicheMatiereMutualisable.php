@@ -19,9 +19,6 @@ class FicheMatiereMutualisable
     #[ORM\ManyToOne(inversedBy: 'ficheMatiereParcours')]
     private ?Parcours $parcours = null;
 
-    #[ORM\Column]
-    private ?bool $isPorteur = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -47,18 +44,6 @@ class FicheMatiereMutualisable
     public function setParcours(?Parcours $parcours): self
     {
         $this->parcours = $parcours;
-
-        return $this;
-    }
-
-    public function isIsPorteur(): ?bool
-    {
-        return $this->isPorteur;
-    }
-
-    public function setIsPorteur(bool $isPorteur): self
-    {
-        $this->isPorteur = $isPorteur;
 
         return $this;
     }

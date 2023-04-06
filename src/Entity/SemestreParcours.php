@@ -25,6 +25,15 @@ class SemestreParcours
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
     private ?Parcours $parcours = null;
 
+    #[ORM\Column]
+    private ?int $ordre = 0;
+
+    #[ORM\Column]
+    private ?bool $porteur = false;
+
+    #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
+    private ?SemestreMutualisable $semestreRaccroche = null;
+
     public function __construct(Semestre $semestre, Parcours $parcours)
     {
         $this->setSemestre($semestre);
@@ -56,6 +65,42 @@ class SemestreParcours
     public function setParcours(?Parcours $parcours): self
     {
         $this->parcours = $parcours;
+
+        return $this;
+    }
+
+    public function getOrdre(): ?int
+    {
+        return $this->ordre;
+    }
+
+    public function setOrdre(int $ordre): self
+    {
+        $this->ordre = $ordre;
+
+        return $this;
+    }
+
+    public function isPorteur(): ?bool
+    {
+        return $this->porteur;
+    }
+
+    public function setPorteur(bool $porteur): self
+    {
+        $this->porteur = $porteur;
+
+        return $this;
+    }
+
+    public function getSemestreRaccroche(): ?SemestreMutualisable
+    {
+        return $this->semestreRaccroche;
+    }
+
+    public function setSemestreRaccroche(?SemestreMutualisable $semestreRaccroche): self
+    {
+        $this->semestreRaccroche = $semestreRaccroche;
 
         return $this;
     }
