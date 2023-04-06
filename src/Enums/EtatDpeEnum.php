@@ -52,6 +52,7 @@ enum EtatDpeEnum: string
     case publie = 'publie';
     case valide_pour_publication = 'valide_pour_publication';
     case soumis_conseil_reserve = 'soumis_conseil_reserve';
+    case initialisation_parcours = 'initialisation_parcours';
 
 
     public function libelle(): string
@@ -59,6 +60,7 @@ enum EtatDpeEnum: string
         return match ($this) {
             self::initialisation_dpe => 'Initialisation DPE',
             self::initialisation_ec => 'Initialisation EC',
+            self::initialisation_parcours => 'Initialisation Parcours',
             self::autorisation_saisie => 'Saisie autorisée',
             self::en_cours_redaction => 'En cours de rédaction',
             self::soumis_rf => 'Soumis RF',
@@ -84,7 +86,7 @@ enum EtatDpeEnum: string
     public function badge(): string
     {
         return match ($this) {
-            self::initialisation_dpe, self::initialisation_ec => 'secondary',
+            self::initialisation_dpe, self::initialisation_ec, self::initialisation_parcours => 'secondary',
             self::autorisation_saisie, self::en_cours_redaction => 'warning',
             self::soumis_rf, self::soumis_ec, self::soumis_dpe_composante, self::soumis_conseil, self::soumis_central, self::soumis_vp, self::soumis_cfvu, self::soumis_conseil_reserve => 'info',
             self::refuse_rf, self::refuse_ec, self::refuse_dpe_composante, self::refuse_conseil, self::refuse_central, self::refuse_definitif_cfvu => 'danger',

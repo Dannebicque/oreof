@@ -121,14 +121,12 @@ framework:
                 - 'refuse_parcours'
             transitions:
                 initialiser:
-                    #guard: "is_granted('ROLE_FORMATION')"
                     from: 'initialisation_parcours'
                     to: 'autorisation_saisie'
                 autoriser:
-                    #guard: "is_granted('ROLE_FORMATION')"
                     from: 'autorisation_saisie'
                     to: 'en_cours_redaction'
-                valider_ec:
+                valider_parcours:
                     from: 'en_cours_redaction'
                     to: 'soumis_parcours'
                 refuser_ec:

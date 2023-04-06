@@ -25,9 +25,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 class ParcoursSaveController extends AbstractController
 {
+    public function __construct(private WorkflowInterface $parcoursWorkflow)
+    {
+    }
+
+
     /**
      * @throws \JsonException
      */
@@ -37,7 +43,6 @@ class ParcoursSaveController extends AbstractController
         EntityManagerInterface $em,
         UserRepository $userRepository,
         ComposanteRepository $composanteRepository,
-        EntityManagerInterface $entityManager,
         VilleRepository $villeRepository,
         RythmeFormationRepository $rythmeFormationRepository,
         UpdateEntity $updateEntity,
@@ -45,7 +50,19 @@ class ParcoursSaveController extends AbstractController
         Request $request,
         Parcours $parcours
     ): Response {
-        //todo: check si bonne parcours...
+        $this->denyAccessUnlessGranted('ROLE_PARCOURS_EDIT_MY', $parcours);
+
+        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
+            $parcours, 'autoriser')) && !$this->isGranted('ROLE_SES')) {
+            //si on est pas dans un état qui permet de modifier la formation
+            return $this->json('Vous ne pouvez plus modifier cette formation', Response::HTTP_FORBIDDEN);
+        }
+
+        if ($this->parcoursWorkflow->can($parcours, 'autoriser')) {
+            //un champ est modifié, on met à jour l'état
+            $this->parcoursWorkflow->apply($parcours, 'autoriser');
+        }
+
         $data = JsonRequest::getFromRequest($request);
         $parcoursState->setParcours($parcours);
 

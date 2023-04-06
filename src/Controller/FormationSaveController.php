@@ -22,9 +22,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 class FormationSaveController extends BaseController
 {
+    public function __construct(private WorkflowInterface $dpeWorkflow)
+    {
+    }
+
+
     /**
      * @throws \JsonException
      */
@@ -39,7 +45,18 @@ class FormationSaveController extends BaseController
         FormationState $formationState,
         Formation $formation
     ): Response {
-        //todo: check si bonne formation...
+        $this->denyAccessUnlessGranted('ROLE_FORMATION_EDIT_MY', $formation);
+
+        if (!($this->dpeWorkflow->can($formation, 'valide_rf') || $this->dpeWorkflow->can($formation, 'autoriser'))&& !$this->isGranted('ROLE_SES')) {
+            //si on est pas dans un état qui permet de modifier la formation
+            return $this->json('Vous ne pouvez plus modifier cette formation', Response::HTTP_FORBIDDEN);
+        }
+
+        if ($this->dpeWorkflow->can($formation, 'autoriser')) {
+            //un champ est modifié, on met à jour l'état
+            $this->dpeWorkflow->apply($formation, 'autoriser');
+        }
+
         $data = JsonRequest::getFromRequest($request);
         $formationState->setFormation($formation);
         switch ($data['action']) {
@@ -80,11 +97,12 @@ class FormationSaveController extends BaseController
                 if ($data['field'] === 'hasParcours') {
                     foreach ($formation->getParcours() as $parcours) {
                         if ($parcours->isParcoursDefaut()) {
-                            $parcours->setLibelle('[A renomer] ' .$parcours->getLibelle());
+                            $parcours->setLibelle('[A renomer] ' . $parcours->getLibelle());
                         }
                     }
                     $em->flush();
                 }
+
                 return $this->json($rep);
             case 'textarea':
             case 'selectWithoutEntity':

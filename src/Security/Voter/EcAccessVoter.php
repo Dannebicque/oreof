@@ -10,6 +10,7 @@
 namespace App\Security\Voter;
 
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\User;
 use App\Repository\RoleRepository;
@@ -32,13 +33,13 @@ class EcAccessVoter extends Voter
 
     public function supportsType(string $subjectType): bool
     {
-        return is_a($subjectType, ElementConstitutif::class, true);
+        return is_a($subjectType, FicheMatiere::class, true);
     }
 
     protected function supports(string $attribute, mixed $subject): bool
     {
         return in_array($attribute, [self::ROLE_EC_EDIT_MY], true)
-            && $subject instanceof ElementConstitutif;
+            && $subject instanceof FicheMatiere;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -56,13 +57,14 @@ class EcAccessVoter extends Voter
         $this->roles = $this->roleRepository->findByPermission($attribute);
 
         return match ($attribute) {
-            self::ROLE_EC_EDIT_MY => $this->isReponsableEc($user, $subject),
+            self::ROLE_EC_EDIT_MY => $this->isReponsableFiche($user, $subject),
             default => false,
         };
     }
 
-    private function isReponsableEc(UserInterface|User $user, ElementConstitutif $subject): bool
+    private function isReponsableFiche(UserInterface|User $user, FicheMatiere $subject): bool
     {
-        return $subject->getResponsableEc()?->getId() === $user->getId();
+        //todo: responsable fiche, parcours (si parcours d'origine), formation (si parcours d'origine de la fiche)
+        return $subject->getResponsableFicheMatiere()?->getId() === $user->getId();
     }
 }
