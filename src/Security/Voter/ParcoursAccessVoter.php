@@ -86,7 +86,7 @@ class ParcoursAccessVoter extends Voter
         return true;
     }
 
-    private function hasEditOnHisParcours(UserInterface|User $user, Formation $subject): bool
+    private function hasEditOnHisParcours(UserInterface|User $user, Parcours $subject): bool
     {
 //        //todo: A faire droit sur parcours ou sur la formation
 //        foreach ($user->getUserCentres() as $centre) {
