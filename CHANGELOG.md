@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.12](https://github.com/Dannebicque/oreof/compare/v0.21.11...v0.21.12) (2023-04-07)
+
+
+### Bug Fixes
+
+* voter ([5417902](https://github.com/Dannebicque/oreof/commit/54179020de47b1deb2e2a6f070362f2160a69f6c))
+* voter ([d3a159f](https://github.com/Dannebicque/oreof/commit/d3a159fbe10b6df1e7837ea19449f9a34c0f45a5))
+
 ### [0.21.11](https://github.com/Dannebicque/oreof/compare/v0.21.10...v0.21.11) (2023-04-07)
 
 
