@@ -55,13 +55,13 @@ class ParcoursAccessVoter extends Voter
             return true;
         }
 
-        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
-                $parcours,
-                'autoriser'
-            ))) {
-            //si on est pas dans un état qui permet de modifier la formation
-            return false;
-        }
+//        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
+//                $parcours,
+//                'autoriser'
+//            ))) {
+//            //si on est pas dans un état qui permet de modifier la formation
+//            return false;
+//        }
 
         $this->roles = $this->roleRepository->findByPermission($attribute);
 
