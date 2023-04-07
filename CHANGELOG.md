@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.9](https://github.com/Dannebicque/oreof/compare/v0.21.8...v0.21.9) (2023-04-07)
+
+
+### Features
+
+* raccrocher une UE ([5576a79](https://github.com/Dannebicque/oreof/commit/5576a79a3e4bae671766e52f6452b5e97fb0a2e6))
+
 ### [0.21.8](https://github.com/Dannebicque/oreof/compare/v0.21.7...v0.21.8) (2023-04-07)
 
 
