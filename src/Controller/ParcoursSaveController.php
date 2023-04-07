@@ -52,16 +52,16 @@ class ParcoursSaveController extends AbstractController
     ): Response {
         $this->denyAccessUnlessGranted('ROLE_PARCOURS_EDIT_MY', $parcours);
 
-        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
-            $parcours, 'autoriser')) && !$this->isGranted('ROLE_SES')) {
-            //si on est pas dans un état qui permet de modifier la formation
-            return $this->json('Vous ne pouvez plus modifier cette formation', Response::HTTP_FORBIDDEN);
-        }
-
-        if ($this->parcoursWorkflow->can($parcours, 'autoriser')) {
-            //un champ est modifié, on met à jour l'état
-            $this->parcoursWorkflow->apply($parcours, 'autoriser');
-        }
+//        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
+//            $parcours, 'autoriser')) && !$this->isGranted('ROLE_SES')) {
+//            //si on est pas dans un état qui permet de modifier la formation
+//            return $this->json('Vous ne pouvez plus modifier cette formation', Response::HTTP_FORBIDDEN);
+//        }
+//
+//        if ($this->parcoursWorkflow->can($parcours, 'autoriser')) {
+//            //un champ est modifié, on met à jour l'état
+//            $this->parcoursWorkflow->apply($parcours, 'autoriser');
+//        }
 
         $data = JsonRequest::getFromRequest($request);
         $parcoursState->setParcours($parcours);
