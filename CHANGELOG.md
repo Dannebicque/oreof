@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.8](https://github.com/Dannebicque/oreof/compare/v0.21.7...v0.21.8) (2023-04-07)
+
+
+### Bug Fixes
+
+* suspension temporaire des droits sur parcours/formation ([ca603ac](https://github.com/Dannebicque/oreof/commit/ca603ac52d3fdf930f94c0952336fbf2883c6466))
+
 ### [0.21.7](https://github.com/Dannebicque/oreof/compare/v0.21.6...v0.21.7) (2023-04-06)
 
 
