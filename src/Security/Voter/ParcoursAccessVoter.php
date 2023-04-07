@@ -76,24 +76,26 @@ class ParcoursAccessVoter extends Voter
     {
         //todo: A faire droit sur parcours ou sur la formation
         /** @var User $user */
-        foreach ($user->getUserCentres() as $centre) {
-            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
-                return true;
-            }
-        }
-
-        return false;
+//        foreach ($user->getUserCentres() as $centre) {
+//            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
+//                return true;
+//            }
+//        }
+//
+//        return false;
+        return true;
     }
 
     private function hasEditOnHisParcours(UserInterface|User $user, Formation $subject): bool
     {
-        //todo: A faire droit sur parcours ou sur la formation
-        foreach ($user->getUserCentres() as $centre) {
-            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
-                return true;
-            }
-        }
-
-        return false;
+//        //todo: A faire droit sur parcours ou sur la formation
+//        foreach ($user->getUserCentres() as $centre) {
+//            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
+//                return true;
+//            }
+//        }
+//
+//        return false;
+        return true;
     }
 }

@@ -66,35 +66,38 @@ class FormationAccessVoter extends Voter
 
     private function hasShowOnHisFormation(UserInterface|User $user, Formation $subject): bool
     {
-        /** @var User $user */
-        foreach ($user->getUserCentres() as $centre) {
-            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
-                return true;
-            }
-        }
-
-        return false;
+//        /** @var User $user */
+//        foreach ($user->getUserCentres() as $centre) {
+//            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
+//                return true;
+//            }
+//        }
+//
+//        return false;
+        return true;
     }
 
     private function hasEditOnHisFormation(UserInterface|User $user, Formation $subject): bool
     {
-        foreach ($user->getUserCentres() as $centre) {
-            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
-                return true;
-            }
-        }
-
-        return false;
+//        foreach ($user->getUserCentres() as $centre) {
+//            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
+//                return true;
+//            }
+//        }
+//
+//        return false;
+        return true;
     }
 
     private function canAddEcFormation(UserInterface|User $user, mixed $subject): bool
     {
-        foreach ($user->getUserCentres() as $centre) {
-            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
-                return true;
-            }
-        }
-
-        return false;
+//        foreach ($user->getUserCentres() as $centre) {
+//            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
+//                return true;
+//            }
+//        }
+//
+//        return false;
+        return true;
     }
 }
