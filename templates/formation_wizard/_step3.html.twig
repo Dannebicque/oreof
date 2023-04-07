@@ -58,27 +58,15 @@
     <div id="bloc_semestre" class="{% if formation.hasParcours == false %}d-none{%
         endif %} mt-2">
         <fieldset class="mb-3">
-            <legend class="col-form-label required">
-                {{ 'formation_step3.labels.libelleParcours'|trans({}, 'form') }}
-            </legend>
-            <br>
-            <div id="liste_Parcours" {% if formation.hasParcours == false or formation.hasParcours == null %}class="d-none"{% endif %}>
-                <div {{ stimulus_target('formation--step3', 'liste') }}>
-
-                </div>
-            </div>
-
-            {% if typeDiplome == 'Master MEEF' %}
-                //todo: options du master MEEF 2D
-            {% endif %}
-
             <div>
+                <legend class="col-form-label required">
                 {{ 'formation_step3.labels.structureFormation'|trans({}, 'form') }}
                 <i class="fal fa-question-circle ms-1"
                    data-controller="tooltip"
                    data-tooltip-placement-value="bottom"
                    aria-label="{{ 'formation_step3.helps.structureFormation.help'|trans({}, 'help') }}"
                    data-bs-original-title="{{ 'formation_step3.helps.structureFormation.help'|trans({}, 'help') }}"></i>
+                </legend>
 
                 <ul>
 
@@ -106,6 +94,22 @@
                     {% endfor %}
                 </ul>
             </div>
+
+            <legend class="col-form-label required">
+                {{ 'formation_step3.labels.libelleParcours'|trans({}, 'form') }}
+            </legend>
+            <br>
+            <div id="liste_Parcours" {% if formation.hasParcours == false or formation.hasParcours == null %}class="d-none"{% endif %}>
+                <div {{ stimulus_target('formation--step3', 'liste') }}>
+
+                </div>
+            </div>
+
+            {% if typeDiplome == 'Master MEEF' %}
+                //todo: options du master MEEF 2D
+            {% endif %}
+
+
         </fieldset>
     </div>
 
