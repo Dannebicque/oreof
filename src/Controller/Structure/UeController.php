@@ -355,16 +355,16 @@ class UeController extends AbstractController
     }
 
     #[
-        Route('/raccrocher/{ue}/{semestre}', name: 'raccrocher')
+        Route('/raccrocher/{ue}/{parcours}', name: 'raccrocher')
     ]
     public function raccrocher(
         UeMutualisableRepository $ueMutualisableRepository,
-        Semestre $semestre,
+        Parcours $parcours,
         Ue $ue
     ): Response {
         return $this->render('structure/ue/_raccrocher.html.twig', [
             'ue' => $ue,
-            'semestre' => $semestre
+            'parcours' => $parcours
         ]);
     }
 

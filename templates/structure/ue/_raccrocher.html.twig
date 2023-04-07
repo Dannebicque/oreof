@@ -1,8 +1,8 @@
 <div class="mb-1">
     <label class="form-label" for="raccrocher">
-        {{ 'semestre.raccrocher.label'|trans({}, 'form') }}
+        {{ 'ue.raccrocher.label'|trans({}, 'form') }}
         <span class="required"></span>
-        <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'semestre.raccrocher.helps'|trans({}, 'help') }}"></i>
+        <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'ue.raccrocher.helps'|trans({}, 'help') }}"></i>
     </label>
     <select id="raccrocher"
             name="raccrocher"
@@ -12,6 +12,6 @@
         ...
     </select>
 </div>
-<button class="btn btn-outline-success" {{ stimulus_action('semestre', 'valideReutilise') }}>
-    {{ 'semestre.raccrocher.bouton'|trans({}, 'form') }}
+<button class="btn btn-outline-success" {{ stimulus_action('ue', 'valideReutilise') }}>
+    {{ 'ue.raccrocher.bouton'|trans({}, 'form') }}
 </button>

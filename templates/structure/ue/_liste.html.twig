@@ -132,12 +132,12 @@
                                                 </button>
                                                 <br>
                                                 <button
-                                                        {#                                                {{ stimulus_controller('modal', { #}
-                                                        {#                                                    size: 'lg', #}
-                                                        {#                                                    modalTitle: 'Modifier le semestre ' ~ semestre.semestre.display, #}
-                                                        {#                                                    modalUrl: path('structure_semestre_edit', {semestre:semestre.semestre #}
-                                                        {#                                                    .id, parcours: parcours.id}) #}
-                                                        {#                                                }) }} #}
+                                                        {{ stimulus_controller('modal', {
+                                                            size: 'lg',
+                                                            modalTitle: 'Raccrocher une UE mutualisé pour l\'UE ' ~
+                                                            ue.display,
+                                                            modalUrl: path('structure_ue_raccrocher', {ue:ue.id, parcours: parcours.id})
+                                                        }) }}
                                                         data-action="click->modal#openModal"
                                                         class="btn btn-sm text-quaternary me-1"
                                                         data-size="lg"
