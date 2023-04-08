@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.13](https://github.com/Dannebicque/oreof/compare/v0.21.12...v0.21.13) (2023-04-08)
+
+
+### Features
+
+* UE raccrocher ([0987cfb](https://github.com/Dannebicque/oreof/commit/0987cfbe2b36b7dacac613d9d6b900b2aa9a6465))
+
+
+### Bug Fixes
+
+* footer ([f91f590](https://github.com/Dannebicque/oreof/commit/f91f5909bd4ee9e1b703897a95588bb7edcbf3eb))
+* ordre des box dans les steps de parcours ([28b1dc9](https://github.com/Dannebicque/oreof/commit/28b1dc9da10ddaceec788f6029a8a4b7087e60ba))
+* step 3 ordre des champs ([260ebe3](https://github.com/Dannebicque/oreof/commit/260ebe3847f4c6060acb791ab2c1300d2fcddb5a))
+
 ### [0.21.12](https://github.com/Dannebicque/oreof/compare/v0.21.11...v0.21.12) (2023-04-07)
 
 
