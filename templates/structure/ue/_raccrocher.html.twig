@@ -1,17 +1,26 @@
-<div class="mb-1">
-    <label class="form-label" for="raccrocher">
-        {{ 'ue.raccrocher.label'|trans({}, 'form') }}
-        <span class="required"></span>
-        <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'ue.raccrocher.helps'|trans({}, 'help') }}"></i>
-    </label>
-    <select id="raccrocher"
-            name="raccrocher"
-            required="required"
-            class="form-select"
-    >
-        ...
-    </select>
+<div {{ stimulus_controller('ue--raccrocher', {
+    url: path('structure_ue_mutualise_add_ajax', {ue:ue.id})
+}) }}
+        data-action="ue--raccrocher:modalHide@window->base#modalHide"
+>
+    <div class="mb-1">
+        <label class="form-label" for="raccrocher">
+            {{ 'ue.raccrocher.label'|trans({}, 'form') }}
+            <span class="required"></span>
+            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'ue.raccrocher.helps'|trans({}, 'help') }}"></i>
+        </label>
+        <select id="raccrocher"
+                name="raccrocher"
+                required="required"
+                class="form-select"
+        >
+            <option value="">Choisir une UE mutualisée</option>
+            {% for ue in ues %}
+                <option value="{{ ue.id }}">{{ ue.ue.display }} - {{ ue.ue.libelle }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button class="btn btn-outline-success" {{ stimulus_action('ue--raccrocher', 'valideReutilise') }}>
+        {{ 'ue.raccrocher.bouton'|trans({}, 'form') }}
+    </button>
 </div>
-<button class="btn btn-outline-success" {{ stimulus_action('ue', 'valideReutilise') }}>
-    {{ 'ue.raccrocher.bouton'|trans({}, 'form') }}
-</button>

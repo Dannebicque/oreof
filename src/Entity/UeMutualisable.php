@@ -87,4 +87,9 @@ class UeMutualisable
 
         return $this;
     }
+
+    public function display(): string
+    {
+        return $this->getUe()->display() . ' - ' . $this->getParcours()->getLibelle();
+    }
 }

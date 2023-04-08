@@ -300,6 +300,20 @@ class UeController extends AbstractController
         $data = JsonRequest::getFromRequest($request);
         $t = [];
         switch ($data['field']) {
+            case 'raccrocher':
+                $uem = $ueMutualisableRepository->find($data['value']);
+                if ($uem !== null) {
+                    $ue->setUeRaccrochee($uem);
+                    $entityManager->flush();
+                    return $this->json(true);
+                }
+
+                return $this->json(
+                    ['error' => 'UE non trouvée'],
+                    500
+                );
+
+                break;
             case 'liste':
                 return $this->render('structure/ue/_liste_mutualise.html.twig', [
                     'ues' => $ueMutualisableRepository->findBy(['ue' => $ue]),
@@ -362,9 +376,13 @@ class UeController extends AbstractController
         Parcours $parcours,
         Ue $ue
     ): Response {
+        $ues = $ueMutualisableRepository->findBy(['parcours' => $parcours]);
+
+
         return $this->render('structure/ue/_raccrocher.html.twig', [
             'ue' => $ue,
-            'parcours' => $parcours
+            'parcours' => $parcours,
+            'ues' => $ues
         ]);
     }
 

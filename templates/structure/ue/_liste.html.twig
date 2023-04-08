@@ -46,7 +46,12 @@
                                 <div class="row g-0 h-100 align-content-center">
                                     <div class="col-md-1 d-flex flex-column justify-content-center">
                                         <div class="text-muted text-small d-md-none">ue</div>
-                                        {{ ue.display }}
+                                        <p>{{ ue.display }} {% if ue.ueRaccrochee != null %}
+                                            <i class="fal fa-link"
+                                               data-controller="tooltip"
+                                               data-tooltip-placement-value="bottom"
+                                               title="Raccrochée à l'UE {{ ue.ueRaccrochee.display }}"></i>{% endif %}
+                                        </p>
                                     </div>
                                     <div class="col-md-1 d-flex flex-column justify-content-center">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
@@ -84,31 +89,38 @@
                                         <div class="text-muted text-small d-md-none">Actions</div>
                                         <div class="row">
                                             <div class="col-4">
-                                                <button
-                                                        {{ stimulus_controller('modal', {
-                                                            size: 'lg',
-                                                            modalTitle: 'Modifier l\'UE ' ~ ue.display,
-                                                            modalUrl: path('structure_ue_edit', {id:ue.id, parcours: parcours
-                                                            .id})
-                                                        }) }}
-                                                        data-action="click->modal#openModal"
-                                                        class="btn btn-sm text-warning me-1"
-                                                        data-size="lg"
-                                                        data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom"
-                                                        title="Modifier l'UE {{ ue.display }}"
-                                                >
-                                                    <i class="{{ iconEdit }}"></i>
-                                                    <span> Modifier l'UE</span>
-                                                </button>
-                                                <br>
-                                                {% if typeDiplome.nbUeMax != 0 or ue.ordre > typeDiplome.nbUeMax %}
-                                                    <button {{ stimulus_action('structure--ue', 'delete', 'click', {
-                                                        url:path('structure_ue_delete',{'id': ue.id}),
-                                                        csrf: csrf_token('delete' ~ ue.id)
-                                                    }) }} class="btn btn-sm text-danger">
-                                                        <i class="{{ iconDelete }}"></i> Supprimer
+                                                {% if ue.ueRaccrochee == null or ue.ueRaccrochee.parcours.id ==
+                                                    parcours.id %}
+                                                    <button
+                                                            {{ stimulus_controller('modal', {
+                                                                size: 'lg',
+                                                                modalTitle: 'Modifier l\'UE ' ~ ue.display,
+                                                                modalUrl: path('structure_ue_edit', {id:ue.id, parcours: parcours
+                                                                .id})
+                                                            }) }}
+                                                            data-action="click->modal#openModal"
+                                                            class="btn btn-sm text-warning me-1"
+                                                            data-size="lg"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom"
+                                                            title="Modifier l'UE {{ ue.display }}"
+                                                    >
+                                                        <i class="{{ iconEdit }}"></i>
+                                                        <span> Modifier l'UE</span>
                                                     </button>
+                                                    <br>
+                                                    {% if typeDiplome.nbUeMax != 0 or ue.ordre > typeDiplome.nbUeMax %}
+                                                        <button {{ stimulus_action('structure--ue', 'delete', 'click', {
+                                                            url:path('structure_ue_delete',{'id': ue.id}),
+                                                            csrf: csrf_token('delete' ~ ue.id)
+                                                        }) }} class="btn btn-sm text-danger">
+                                                            <i class="{{ iconDelete }}"></i> Supprimer
+                                                        </button>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <p class="ms-1">
+                                                        UE modifiable uniquement par le parcours {{ ue.ueRaccrochee
+                                                        .parcours.libelle }}</p>
                                                 {% endif %}
                                             </div>
                                             <div class="col-4">

@@ -20,6 +20,7 @@ export default class extends Controller {
     url: String,
     ue: Number,
     parcours: Number,
+    enfant: Boolean,
   }
 
   connect() {
