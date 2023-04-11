@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.14](https://github.com/Dannebicque/oreof/compare/v0.21.13...v0.21.14) (2023-04-11)
+
+
+### Bug Fixes
+
+* Gestion des ordres des EC ([d9fdee8](https://github.com/Dannebicque/oreof/commit/d9fdee803a3bc51466f259319ce493f2327b4001))
+* saisie EC ([327ee55](https://github.com/Dannebicque/oreof/commit/327ee55539a5d33cc84e4a6bd7459ad510f9dd5c))
+* saisie EC ([4563d7e](https://github.com/Dannebicque/oreof/commit/4563d7e4f09d4d9efb6d70034c1a8ad23c98eab8))
+* Typo ([4d3d51f](https://github.com/Dannebicque/oreof/commit/4d3d51f2009c4a779f2d35bcc12f8fe8d402b3fc))
+
 ### [0.21.13](https://github.com/Dannebicque/oreof/compare/v0.21.12...v0.21.13) (2023-04-08)
 
 
