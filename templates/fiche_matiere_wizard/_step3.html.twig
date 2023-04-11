@@ -4,9 +4,9 @@
     {% form_theme form 'communs/form_theme.html.twig' %}
     {{ form_start(form) }}
     {{ form_row(form.objectifs) }}
-    <div>
+    <div class="mt-2">
         <p>
-            {{ 'fiche_matiere_step3.labels.competence'|trans({}, 'form') }}
+            <strong>{{ 'fiche_matiere_step3.labels.competence'|trans({}, 'form') }}</strong>
             <i class="fal fa-question-circle ms-1"
                data-controller="tooltip"
                data-tooltip-placement-value="bottom"
