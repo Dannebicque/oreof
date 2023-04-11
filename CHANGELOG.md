@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.15](https://github.com/Dannebicque/oreof/compare/v0.21.14...v0.21.15) (2023-04-11)
+
+
+### Bug Fixes
+
+* Init d'un parcours ([470fb6f](https://github.com/Dannebicque/oreof/commit/470fb6fd25541aaf20a4d739ff48ecd71645383c))
+
 ### [0.21.14](https://github.com/Dannebicque/oreof/compare/v0.21.13...v0.21.14) (2023-04-11)
 
 
