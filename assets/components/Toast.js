@@ -44,7 +44,7 @@ class Toast {
   }
 
   warning(text, title = null, options = {}) {
-    this.createAndShow('warning', text, 'fa-exclamation-circle', title, options)
+    this.createAndShow('warning', text, 'fas fa-exclamation-circle', title, options)
   }
 
   success(text, title = null, options = {}) {

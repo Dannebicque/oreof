@@ -23,6 +23,8 @@ export default class extends Controller {
     enfant: Boolean,
   }
 
+  natureEc = null
+
   connect() {
   }
 
@@ -58,10 +60,10 @@ export default class extends Controller {
 
     const matiereLibelle = option.text
     const table = document.getElementById('tableFiches')
-    let tbody = table.getElementsByTagName('tbody')[0]; // sélectionne le tbody (ou crée-le s'il n'existe pas)
+    let tbody = table.getElementsByTagName('tbody')[0] // sélectionne le tbody (ou crée-le s'il n'existe pas)
     if (!tbody) {
-      tbody = document.createElement('tbody'); // crée le tbody s'il n'existe pas
-      table.appendChild(tbody); // ajoute le tbody à la table
+      tbody = document.createElement('tbody') // crée le tbody s'il n'existe pas
+      table.appendChild(tbody) // ajoute le tbody à la table
     }
     const row = tbody.insertRow()
     const cell2 = row.insertCell(0)
@@ -86,10 +88,10 @@ export default class extends Controller {
     event.preventDefault()
     const matiereLibelle = document.getElementById('ficheMatiereLibelle').value
     const table = document.getElementById('tableFiches')
-    let tbody = table.getElementsByTagName('tbody')[0]; // sélectionne le tbody (ou crée-le s'il n'existe pas)
+    let tbody = table.getElementsByTagName('tbody')[0] // sélectionne le tbody (ou crée-le s'il n'existe pas)
     if (!tbody) {
-      tbody = document.createElement('tbody'); // crée le tbody s'il n'existe pas
-      table.appendChild(tbody); // ajoute le tbody à la table
+      tbody = document.createElement('tbody') // crée le tbody s'il n'existe pas
+      table.appendChild(tbody) // ajoute le tbody à la table
     }
     const row = tbody.insertRow()
     const cell2 = row.insertCell(0)
@@ -116,14 +118,28 @@ export default class extends Controller {
   valider(event) {
     event.preventDefault()
 
-    // ajouter le tableau matieres aux données du formulaire
-
+    const isChoixEc = document.getElementById('element_constitutif_choixEc').value
     const form = document.getElementById('formEc')
-    const input = document.createElement('input')
-    input.type = 'hidden'
-    input.name = 'matieres'
-    input.value = this.matieres.join(',')
-    form.appendChild(input)
+    if (isChoixEc === 'true') {
+      // choix multiple
+      if (this.matieres.length === 0) {
+        callOut('Vous devez choisir ou créer au moins une matière', 'warning')
+        return
+      }
+      const input = document.createElement('input')
+      input.type = 'hidden'
+      input.name = 'matieres'
+      input.value = this.matieres.join(',')
+      form.appendChild(input)
+    } else if (isChoixEc === 'false') {
+      // choix unique
+      if (document.getElementById('ficheMatiere').value === '' && document.getElementById('ficheMatiereLibelle').value === '') {
+        callOut('Vous devez choisir une matière ou créer en indiquant un libellé', 'error')
+        return
+      }
+    }
+
+    // ajouter le tableau matieres aux données du formulaire
 
     fetch(form.action, {
       method: form.method,
@@ -134,5 +150,16 @@ export default class extends Controller {
         callOut('Sauvegarde effectuée', 'success')
         this.dispatch('modalHide', { detail: { ue: this.ueValue, parcours: this.parcoursValue } })
       })
+  }
+
+  nouvelleFiche(event) {
+    event.preventDefault()
+    if (document.getElementById('ficheMatiereLibelle').value !== '') {
+      if (confirm(`Voulez-vous créer une nouvelle fiche de matière ${document.getElementById('ficheMatiereLibelle').value} ? Il faudra ensuite compléter les éléments de cette fiche EC/matière.`)) {
+        document.getElementById('ficheMatiereLibelle').value = `${document.getElementById('ficheMatiereLibelle').value} (à créer)`
+      }
+    } else {
+      callOut('Vous devez indiquer un libellé pour créer une nouvelle fiche de matière', 'warning')
+    }
   }
 }

@@ -380,8 +380,8 @@
                                             modalTitle: 'Ajouter un élément constitutif',
                                             nomEvenement: 'refreshListeEc',
                                             details: {ue: ue.id, parcours: parcours.id},
-                                            modalUrl: path('app_element_constitutif_new', {ue: ue.id, parcours:parcours.id, ec:ec
-                                            .id})
+                                            modalUrl: path('app_element_constitutif_new_enfant', {ue: ue.id,
+                                                parcours:parcours.id, ec:ec.ecEnfants[0].id})
                                         }) }}
                                         data-action="click->modal#openModal"
                                 >
@@ -466,12 +466,14 @@
                                                                                 nomEvenement: 'refreshListeEc',
                                                                                 details: {ue: ue.id, parcours: parcours.id},
                                                                                 modalTitle: 'Modifier un élément constitutif',
-                                                                                modalUrl: path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }) }}
+                                                                                modalUrl: path
+                                                                                    ('app_element_constitutif_edit',{'id': ece.id, parcours:parcours.id}) }) }}
                                                                         {% else %}
                                                                             {{ stimulus_controller('modal', {
                                                                                 size: 'lg',
                                                                                 modalTitle: 'Modifier un élément constitutif',
-                                                                                modalUrl: path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }) }}
+                                                                                modalUrl: path
+                                                                                    ('app_element_constitutif_edit',{'id': ece.id, parcours:parcours.id}) }) }}
                                                                         {% endif %}
                                                                         data-action="click->modal#openModal"
                                                                         class="btn btn-sm text-warning"
@@ -487,8 +489,9 @@
                                                             {% endif %}
                                                             {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) %}
                                                                 <button {{ stimulus_action('ec--liste', 'delete', 'click', {
-                                                                    url:path('app_element_constitutif_delete',{'id': ec.id}),
-                                                                    csrf: csrf_token('delete' ~ ec.id),
+                                                                    url:path('app_element_constitutif_delete',{'id':
+                                                                        ece.id}),
+                                                                    csrf: csrf_token('delete' ~ ece.id),
                                                                     ue: ue.id,
                                                                     parcours: parcours.id
                                                                 }) }} class="btn btn-sm text-danger">
@@ -502,7 +505,8 @@
                                                                 {% if not loop.first %}
                                                                     <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
                                                                         'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
-                                                                            ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
+                                                                            ece.id, ue:ue.id}), ue:ue.id,
+                                                                            parcours:parcours.id}) }}>
                                                                         <i class="fal fa-circle-up"></i></button>
                                                                 {% else %}
                                                                     <button class="btn btn-sm btn-outline-info" disabled>
@@ -512,7 +516,8 @@
                                                                 {% if not loop.last %}
                                                                     <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
                                                                         'click', {url: path('app_element_constitutif_deplacer',{sens: 'down', id:
-                                                                            ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
+                                                                            ece.id, ue:ue.id}), ue:ue.id,
+                                                                            parcours:parcours.id}) }}>
                                                                         <i class="fal
                                                         fa-circle-down"></i></button>
                                                                 {% else %}
@@ -534,8 +539,8 @@
                                                     modalTitle: 'Ajouter un élément constitutif',
                                                     nomEvenement: 'refreshListeEc',
                                                     details: {ue: ue.id, parcours: parcours.id},
-                                                    modalUrl: path('app_element_constitutif_new', {ue: ue.id, parcours:parcours.id, ec:ec
-                                                    .id})
+                                                    modalUrl: path('app_element_constitutif_new_enfant', {ue: ue.id,
+                                                        parcours:parcours.id, ec:ece.id})
                                                 }) }}
                                                 data-action="click->modal#openModal"
                                         >
