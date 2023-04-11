@@ -48,7 +48,8 @@ class EcController extends BaseController
             'ue' => $ue,
             'parcours' => $parcours,
             'deplacer' => true,
-            'mode' => 'detail'
+            'mode' => 'detail',
+            'editable' => $ue->getUeRaccrochee() === null ? true: false,
         ]);
     }
 }

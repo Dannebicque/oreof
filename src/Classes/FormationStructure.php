@@ -16,11 +16,13 @@ use App\Entity\SemestreParcours;
 use App\Entity\Ue;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 class FormationStructure
 {
     public function __construct(
-        protected EntityManagerInterface $entityManager
+        protected EntityManagerInterface $entityManager,
+        protected WorkflowInterface $parcoursWorkflow,
     ) {
     }
 
@@ -66,7 +68,9 @@ class FormationStructure
             if ($formation->getParcours()->count() === 0) {
                 $parcours = new Parcours($formation); //parcours par défaut
                 $parcours->setLibelle(Parcours::PARCOURS_DEFAUT);
+                $parcours->setRespParcours($formation->getResponsableMention());
                 $parcours->setModalitesEnseignement(null);
+                $this->parcoursWorkflow->apply($parcours, 'autoriser');
                 $semestres = [];
 
                 $formation->addParcour($parcours);

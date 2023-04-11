@@ -21,10 +21,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 #[Route('/parcours')]
 class ParcoursController extends BaseController
 {
+    public function __construct(
+        private WorkflowInterface $parcoursWorkflow
+    ) {
+    }
+
     #[Route('/', name: 'app_parcours_index', methods: ['GET'])]
     public function index(): Response
     {
@@ -76,6 +82,7 @@ class ParcoursController extends BaseController
         Formation $formation
     ): Response {
         $parcour = new Parcours($formation);
+
         $parcour->setModalitesEnseignement(null);
         $form = $this->createForm(ParcoursType::class, $parcour, [
             'action' => $this->generateUrl('app_parcours_new', [
@@ -85,6 +92,7 @@ class ParcoursController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->parcoursWorkflow->apply($parcour, 'initialiser');
             $parcoursRepository->save($parcour, true);
 
             return $this->json(true);

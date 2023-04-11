@@ -24,6 +24,9 @@
     {{ form_row(form.typeEcTexte, {'row_attr' : {'class' : 'd-none', 'id' : 'typeEcTexte' }, 'attr' :
         {'data-action' : 'keyup->ec--manage#changeTypeEcTexte'}}) }}
 
+    {{ form_row(form.natureUeEc) }}
+
+
     <div {{ stimulus_target('ec--manage', 'matieres') }}></div>
 
     <button class="btn btn-success mt-2"
