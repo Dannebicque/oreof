@@ -17,8 +17,8 @@ use Doctrine\ORM\EntityManagerInterface;
 class EcOrdre
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private ElementConstitutifRepository $elementConstitutifRepository
+        private readonly EntityManagerInterface $entityManager,
+        private readonly ElementConstitutifRepository $elementConstitutifRepository
     ) {
     }
 
@@ -42,28 +42,12 @@ class EcOrdre
         } else {
             $ordreDestination = $ordreInitial + 1;
         }
-
-        //récupère toutes les ressources à déplacer
-        return $this->inverseEc($ordreInitial, $ordreDestination, $elementConstitutif, $ue);
-    }
-
-    public function deplacerSubElementConstitutif(ElementConstitutif $elementConstitutif, string $sens, Ue $ue): bool
-    {
-        //modifie l'ordre de la ressource
-        $ordreInitial = $elementConstitutif->getSubOrdre();
-
-        if ($ordreInitial === 1 && $sens === 'up') {
-            return false;
-        }
-
-        if ($sens === 'up') {
-            $ordreDestination = $ordreInitial - 1;
+        if ($elementConstitutif->getEcParent() === null) {
+            return $this->inverseEc($ordreInitial, $ordreDestination, $elementConstitutif, $ue);
         } else {
-            $ordreDestination = $ordreInitial + 1;
+            return $this->inverseEcEnfant($ordreInitial, $ordreDestination, $elementConstitutif);
         }
 
-        //récupère toutes les ressources à déplacer
-        return $this->inverseSubOrdreEc($ordreInitial, $ordreDestination, $elementConstitutif, $ue);
     }
 
     private function inverseEc(
@@ -73,12 +57,19 @@ class EcOrdre
         Ue $ue
     ): bool {
         $ecs = $this->elementConstitutifRepository->findByUeOrdre($ordreDestination, $ue);
+
         $elementConstitutif->setOrdre($ordreDestination);
+        foreach ($elementConstitutif->getEcEnfants() as $ecEnfant) {
+            $ecEnfant->genereCode();
+        }
         $elementConstitutif->genereCode();
 
         foreach ($ecs as $ec) {
             $ec->setOrdre($ordreInitial);
             $ec->genereCode();
+            foreach ($ec->getEcEnfants() as $ecEnfant) {
+                $ecEnfant->genereCode();
+            }
         }
 
         $this->entityManager->flush();
@@ -86,21 +77,21 @@ class EcOrdre
         return true;
     }
 
-    private function inverseSubOrdreEc(
+    private function inverseEcEnfant(
         ?int $ordreInitial,
         ?int $ordreDestination,
         ElementConstitutif $elementConstitutif,
-        Ue $ue
     ): bool {
-        $elementConstitutif->setSubOrdre($ordreDestination);
-        $elementConstitutif->genereCode();
-        $ec = $this->elementConstitutifRepository->findByUeSubOrdre(
+        $ecs = $this->elementConstitutifRepository->findByUeSubOrdre(
             $ordreDestination,
-            $ue,
-            $elementConstitutif->getOrdre()
+            $elementConstitutif->getEcParent()
         );
-        if ($ec !== null) {
-            $ec->setSubOrdre($ordreInitial);
+
+        $elementConstitutif->setOrdre($ordreDestination);
+        $elementConstitutif->genereCode();
+
+        foreach ($ecs as $ec) {
+            $ec->setOrdre($ordreInitial);
             $ec->genereCode();
         }
 
@@ -118,5 +109,20 @@ class EcOrdre
             $ec->genereCode();
         }
         $this->entityManager->flush();
+    }
+
+    public function decalerEnfant(?ElementConstitutif $ecParent)
+    {
+        $ecs = $this->elementConstitutifRepository->findByEcEnfantADecaler($ecParent);
+        foreach ($ecs as $ec) {
+            $ec->setOrdre($ec->getOrdre() + 1);
+            $ec->genereCode();
+        }
+        $this->entityManager->flush();
+    }
+
+    public function getOrdreEnfantSuivant(ElementConstitutif $elementConstitutif)
+    {
+        return $this->elementConstitutifRepository->findLastEcEnfant($elementConstitutif) + 1;
     }
 }

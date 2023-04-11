@@ -17,6 +17,7 @@ use App\Entity\TypeEc;
 use App\Entity\Ue;
 use App\Form\EcStep4Type;
 use App\Form\ElementConstitutifEditType;
+use App\Form\ElementConstitutifEnfantType;
 use App\Form\ElementConstitutifType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
@@ -145,6 +146,7 @@ class ElementConstitutifController extends AbstractController
                 $matieres = explode(',', $request->request->get('matieres'));
                 foreach ($matieres as $matiere) {
                     $ec = new ElementConstitutif();
+                    $nextSousEc = $ecOrdre->getOrdreEnfantSuivant($elementConstitutif);
                     $ec->setEcParent($elementConstitutif);
                     $ec->setParcours($parcours);
                     $ec->setModaliteEnseignement($parcours?->getModalitesEnseignement());
@@ -161,17 +163,14 @@ class ElementConstitutifController extends AbstractController
                     }
 
                     $ec->setFicheMatiere($ficheMatiere);
-                    $ec->setOrdre($lastEc);
-                    $ec->setSubOrdre($subOrdre);
+                    $ec->setOrdre($nextSousEc);
                     $ec->genereCode();
-                    $subOrdre++;
                     $elementConstitutifRepository->save($ec, true);
                 }
             } else {
                 $lastEc = $ecOrdre->getOrdreSuivant($ue);
                 $elementConstitutif->setTexteEcLibre($request->request->get('ficheMatiereLibre'));
                 $elementConstitutif->setOrdre($lastEc);
-                $elementConstitutif->setSubOrdre(null);
                 $elementConstitutif->genereCode();
                 $elementConstitutifRepository->save($elementConstitutif, true);
             }
@@ -188,6 +187,78 @@ class ElementConstitutifController extends AbstractController
             'form' => $form->createView(),
             'ue' => $ue,
             'parcours' => $parcours,
+        ]);
+    }
+
+    #[Route('/new-enfant/{ue}/{parcours}', name: 'app_element_constitutif_new_enfant', methods: ['GET', 'POST'])]
+    public function newEnfant(
+        EcOrdre $ecOrdre,
+        Request $request,
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        TypeEcRepository $typeEcRepository,
+        FicheMatiereRepository $ficheMatiereRepository,
+        ElementConstitutifRepository $elementConstitutifRepository,
+        Ue $ue,
+        Parcours $parcours
+    ): Response {
+        $ecParent = $elementConstitutifRepository->find($request->query->get('ec'));
+        $elementConstitutif = new ElementConstitutif();
+        $elementConstitutif->setParcours($parcours);
+
+        $elementConstitutif->setModaliteEnseignement($parcours?->getModalitesEnseignement());
+        $elementConstitutif->setUe($ue);
+        $typeDiplome = $parcours->getFormation()->getTypeDiplome();
+
+        if ($typeDiplome === null) {
+            throw new RuntimeException('Type de diplôme non trouvé');
+        }
+
+        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+
+        $form = $this->createForm(ElementConstitutifEnfantType::class, $elementConstitutif, [
+            'action' => $this->generateUrl(
+                'app_element_constitutif_new_enfant',
+                ['ue' => $ue->getId(), 'parcours' => $parcours->getId(), 'ec' => $request->query->get('ec')]
+            )
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
+                $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
+                    'id_',
+                    '',
+                    $request->request->get('ficheMatiere')
+                ));
+            } else {
+                $ficheMatiere = new FicheMatiere();
+                $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
+                $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
+                $ficheMatiereRepository->save($ficheMatiere, true);
+            }
+            $nextEnfant = $ecOrdre->getOrdreEnfantSuivant($ecParent);
+            $elementConstitutif->setFicheMatiere($ficheMatiere);
+            $elementConstitutif->setEcParent($ecParent->getEcParent());
+            $elementConstitutif->setOrdre($nextEnfant);
+            $ecOrdre->decalerEnfant($ecParent);
+            $elementConstitutif->genereCode();
+
+            $elementConstitutifRepository->save($elementConstitutif, true);
+
+            return $this->json(true);
+        }
+
+//        if ($elementConstitutif->getMcccs()->count() === 0) {
+//            $typeD->initMcccs($elementConstitutif);
+//        }
+
+        return $this->render('element_constitutif/new_enfant.html.twig', [
+            'element_constitutif' => $elementConstitutif,
+            'form' => $form->createView(),
+            'ue' => $ue,
+            'parcours' => $parcours,
+            'matieres' => $ficheMatiereRepository->findAll()
         ]);
     }
 
@@ -238,7 +309,7 @@ class ElementConstitutifController extends AbstractController
             throw new RuntimeException('Type de diplôme non trouvé');
         }
 
-        $form = $this->createForm(ElementConstitutifEditType::class, $elementConstitutif, [
+        $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl(
                 'app_element_constitutif_edit',
                 ['id' => $elementConstitutif->getId(), 'parcours' => $parcours->getId()]
@@ -394,19 +465,8 @@ class ElementConstitutifController extends AbstractController
         Ue $ue,
         string $sens
     ): Response {
+
         $ecOrdre->deplacerElementConstitutif($elementConstitutif, $sens, $ue);
-
-        return $this->json(true);
-    }
-
-    #[Route('/{id}/{ue}/deplacer_sub/{sens}', name: 'app_element_constitutif_deplacer_subordre', methods: ['GET'])]
-    public function deplacerSub(
-        EcOrdre $ecOrdre,
-        ElementConstitutif $elementConstitutif,
-        Ue $ue,
-        string $sens
-    ): Response {
-        $ecOrdre->deplacerSubElementConstitutif($elementConstitutif, $sens, $ue);
 
         return $this->json(true);
     }

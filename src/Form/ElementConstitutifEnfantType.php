@@ -21,31 +21,15 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ElementConstitutifEditType extends AbstractType
+class ElementConstitutifEnfantType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $typeDiplome = $options['typeDiplome'];
 
         $builder
             ->add('libelle', TextType::class, [
                 'attr' => ['maxlength' => 255],
                 'required' => false
-            ])
-            ->add('typeEc', EntityType::class, [
-                'class' => TypeEc::class,
-                'choice_label' => 'libelle',
-                'query_builder' => fn (
-                    TypeEcRepository $typeEcRepository
-                ) => $typeEcRepository->findByTypeDiplome($typeDiplome),
-                'required' => false,
-            ])
-            ->add('typeEcTexte', TextType::class, [
-                'attr' => [
-                    'maxlength' => 100,
-                ],
-                'required' => false,
-                'mapped' => false,
             ])
         ;
     }
@@ -55,8 +39,6 @@ class ElementConstitutifEditType extends AbstractType
         $resolver->setDefaults([
             'data_class' => ElementConstitutif::class,
             'translation_domain' => 'form',
-            'typeDiplome' => null,
-
         ]);
     }
 }

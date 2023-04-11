@@ -151,13 +151,9 @@ class FicheMatiereController extends AbstractController
             $newElementConstitutif = clone $elementConstitutif;
             $newElementConstitutif->setFicheMatiere($newFicheMatiere);
 
-            if ($elementConstitutif->getSubOrdre() !== null) {
-                $ordreMax = $elementConstitutifRepository->findLastEcSubOrdre(
-                    $elementConstitutif->getUe(),
-                    $elementConstitutif->getOrdre()
-                );
-                $newElementConstitutif->setOrdre($elementConstitutif->getOrdre());
-                $newElementConstitutif->setSubOrdre($ordreMax + 1);
+            if ($elementConstitutif->getEcParent() !== null) {
+                $ordreMax = $elementConstitutifRepository->findLastEcEnfant($elementConstitutif);
+                $newElementConstitutif->setOrdre($ordreMax);
             } else {
                 $ordreMax = $elementConstitutifRepository->findLastEc($elementConstitutif->getUe());
                 $newElementConstitutif->setOrdre($ordreMax + 1);
@@ -203,92 +199,6 @@ class FicheMatiereController extends AbstractController
 //        return $this->render('fiche_matiere/_structureEcNonEditable.html.twig', [
 //            'ec' => $ficheMatiere,
 //        ]);
-//    }
-
-//    /**
-//     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-//     */
-//    #[Route('/{id}/mccc-ec', name: 'app_fiche_matiere_mccc', methods: ['GET', 'POST'])]
-//    public function mcccEc(
-//        TypeDiplomeRegistry $typeDiplomeRegistry,
-//        TypeEpreuveRepository $typeEpreuveRepository,
-//        Request $request,
-//        FicheMatiereRepository $ficheMatiereRepository,
-//        FicheMatiere $ficheMatiere
-//    ): Response {
-//        $formation = $ficheMatiere->getParcours()->getFormation();
-//        if ($formation === null) {
-//            throw new RuntimeException('Formation non trouvée');
-//        }
-//        $typeDiplome = $formation->getTypeDiplome();
-//        if ($typeDiplome === null) {
-//            throw new RuntimeException('Type de diplôme non trouvé');
-//        }
-//
-//        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-//        if ($this->isGranted(
-//            'ROLE_FORMATION_EDIT_MY',
-//            $ficheMatiere->getParcours()->getFormation()
-//        )) { //todo: ajouter le workflow...
-//            if ($ficheMatiere->getMcccs()->count() === 0) {
-//                $typeD->initMcccs($ficheMatiere);//todo: appeler les mcc du bon diplôme
-//            }
-//
-//            if ($request->isMethod('POST')) {
-//                $typeDiplome->saveMcccs($ficheMatiere, $request->request);//todo: appeler les mcc du bon diplôme
-//                $ficheMatiereRepository->save($ficheMatiere, true);
-//
-//                return $this->json(true);
-//            }
-//
-//            return $this->render('fiche_matiere/_mcccEcModal.html.twig', [
-//                'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
-//                'ec' => $ficheMatiere,
-//                'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC, //todo: appeler les mcc du bon diplôme
-//                'mcccs' => $typeDiplome->getMcccs($ficheMatiere), //todo: appeler les mcc du bon diplôme
-//                'wizard' => false
-//            ]);
-//        }
-//
-//        return $this->render('fiche_matiere/_mcccEcNonEditable.html.twig', [
-//            'ec' => $ficheMatiere,
-//            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
-//            'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,
-//            'mcccs' => $typeDiplome->getMcccs($ficheMatiere),
-//        ]);
-//    }
-
-    /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-     */
-//    public function displayMcccEc(
-//        TypeEpreuveRepository $typeEpreuveRepository,
-//        FicheMatiere $ficheMatiere
-//    ): Response {
-//        $formation = $ficheMatiere->getParcours()->getFormation();
-//        if ($formation === null) {
-//            throw new RuntimeException('Formation non trouvée');
-//        }
-//        $typeDiplome = $formation->getTypeDiplome();
-//
-//        return $this->render('fiche_matiere/_mcccEcNonEditable.html.twig', [
-//            'ec' => $ficheMatiere,
-//            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
-//            'templateForm' => $typeDiplome::TEMPLATE_FORM_MCCC,//todo: appeler les mcc du bon diplôme
-//            'mcccs' => $typeDiplome->getMcccs($ficheMatiere),//todo: appeler les mcc du bon diplôme
-//        ]);
-//    }
-
-//    #[Route('/{id}/{ue}/deplacer/{sens}', name: 'app_fiche_matiere_deplacer', methods: ['GET'])]
-//    public function deplacer(
-//        EcOrdre $ecOrdre,
-//        FicheMatiere $ficheMatiere,
-//        Ue $ue,
-//        string $sens
-//    ): Response {
-//        $ecOrdre->deplacerFicheMatiere($ficheMatiere, $sens, $ue);
-//
-//        return $this->json(true);
 //    }
 
     #[Route('/{id}', name: 'app_fiche_matiere_delete', methods: ['DELETE'])]

@@ -90,9 +90,6 @@ class ElementConstitutif
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?Ue $ue = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $subOrdre = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $texteEcLibre = null;
 
@@ -106,6 +103,7 @@ class ElementConstitutif
     private ?self $ecParent = null;
 
     #[ORM\OneToMany(mappedBy: 'ecParent', targetEntity: self::class)]
+    #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ecEnfants;
 
     public function __construct()
@@ -422,10 +420,10 @@ class ElementConstitutif
 
     public function genereCode(): void
     {
-        if ($this->subOrdre === null || $this->subOrdre === 0) {
+        if ($this->ecParent === null) {
             $this->setCode('EC ' . $this->ordre);
         } else {
-            $this->setCode('EC ' . $this->ordre . '.' . chr($this->subOrdre + 64));
+            $this->setCode('EC ' . $this->ecParent->getOrdre() . '.' . chr($this->ordre + 64));
         }
     }
 
@@ -457,18 +455,6 @@ class ElementConstitutif
     public function setUe(?Ue $ue): self
     {
         $this->ue = $ue;
-
-        return $this;
-    }
-
-    public function getSubOrdre(): ?int
-    {
-        return $this->subOrdre;
-    }
-
-    public function setSubOrdre(?int $subOrdre): self
-    {
-        $this->subOrdre = $subOrdre;
 
         return $this;
     }

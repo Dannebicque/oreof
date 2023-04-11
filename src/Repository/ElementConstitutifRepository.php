@@ -136,6 +136,7 @@ class ElementConstitutifRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('e')
             ->andWhere('e.ue = :ue')
+            ->andWhere('e.ecParent IS NULL')
             ->andWhere('e.ordre = :ordre')
             ->setParameter('ue', $ue)
             ->setParameter('ordre', $ordreDestination)
@@ -143,29 +144,15 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByUeSubOrdre(?int $ordreDestination, ?Ue $ue, int $ordreEc): ?ElementConstitutif
+    public function findByUeSubOrdre(?int $ordreDestination,  ElementConstitutif $elementConstitutif): ?array
     {
         return $this->createQueryBuilder('e')
-            ->andWhere('e.ue = :ue')
+            ->andWhere('e.ecParent = :ec')
             ->andWhere('e.ordre = :ordre')
-            ->andWhere('e.subOrdre = :subOrdre')
-            ->setParameter('ue', $ue)
-            ->setParameter('ordre', $ordreEc)
-            ->setParameter('subOrdre', $ordreDestination)
+            ->setParameter('ec', $elementConstitutif)
+            ->setParameter('ordre', $ordreDestination)
             ->getQuery()
-            ->getOneOrNullResult();
-    }
-
-    public function findLastEcSubOrdre(?Ue $ue, ?int $ordre): int
-    {
-        return $this->createQueryBuilder('ec')
-            ->select('MAX(ec.subOrdre)')
-            ->andWhere('ec.ordre = :ordre')
-            ->andWhere('ec.ue = :ue')
-            ->setParameter('ue', $ue)
-            ->setParameter('ordre', $ordre)
-            ->getQuery()
-            ->getSingleScalarResult() ?? 0;
+            ->getResult();
     }
 
     public function findByUeOrdreSup(?int $ordre, ?Ue $ue): array
@@ -177,5 +164,26 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->setParameter('ordre', $ordre)
             ->getQuery()
             ->getResult();
+    }
+
+    public function findByEcEnfantADecaler(ElementConstitutif $ecParent): array
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.ecParent = :ecParent')
+            ->andWhere('e.ordre >= :ordre')
+            ->setParameter('ecParent', $ecParent->getEcParent())
+            ->setParameter('ordre', $ecParent->getOrdre())
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findLastEcEnfant(ElementConstitutif $elementConstitutif): int
+    {
+        return $this->createQueryBuilder('e')
+            ->select('MAX(e.ordre)')
+            ->andWhere('e.ecParent = :ecParent')
+            ->setParameter('ecParent', $elementConstitutif)
+            ->getQuery()
+            ->getSingleScalarResult() ?? 0;
     }
 }

@@ -224,7 +224,7 @@ class UeController extends AbstractController
                 $ue->setTypeUe($tu);
             }
 
-            if ($form->get('natureUeEcTexte')->getData() === null && $form->get('natureUeEc')->getData() !== null) {
+            if ($form->get('natureUeEc')->getData() !== null) {
                 if ($form->get('natureUeEc')->getData()->isChoix() === true) {
                     $ue->setSubOrdre(1);
                     $ue2 = clone $ue;
@@ -233,12 +233,6 @@ class UeController extends AbstractController
                 }
             }
 
-            if ($form->get('natureUeEcTexte')->getData() !== null && $form->get('natureUeEc')->getData() === null) {
-                $tu = new NatureUeEc();
-                $tu->setLibelle($form->get('natureUeEcTexte')->getData());
-                $natureUeEcRepository->save($tu, true);
-                $ue->setNatureUeEc($tu);
-            }
             $ueRepository->save($ue, true);
             return $this->json(true);
         }
