@@ -1,3 +1,4 @@
+<input type="hidden" id="element_constitutif_choixEc" value="true">
 <table class="table" id="tableFiches">
     <thead>
     <tr>
@@ -13,7 +14,7 @@
 
 <div id="modele_matiere">
     <div>
-        <label for="ficheMatiere">{{ 'ec_manage.labels.fiche_matiere_multiple.label'|trans({}, 'form') }}
+        <label for="ficheMatiere" class="form-label">{{ 'ec_manage.labels.fiche_matiere_multiple.label'|trans({}, 'form') }}
             <i class="fal fa-question-circle ms-1"
                data-controller="tooltip"
                data-tooltip-placement-value="bottom"
@@ -32,7 +33,7 @@
     </div>
     OU
     <div class="mt-2">
-        <label for="ficheMatiereLibelle">
+        <label for="ficheMatiereLibelle" class="form-label">
             {{ 'ec_manage.labels.fiche_matiere_libelle_multiple.label'|trans({}, 'form') }}
             <i class="fal fa-question-circle ms-1"
                data-controller="tooltip"

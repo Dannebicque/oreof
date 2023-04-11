@@ -1,4 +1,6 @@
-<label for="ficheMatiere">{{ 'ec_manage.labels.fiche_matiere_unique.label'|trans({}, 'form') }}
+<input type="hidden" id="element_constitutif_choixEc" value="false">
+
+<label for="ficheMatiere" class="form-label">{{ 'ec_manage.labels.fiche_matiere_unique.label'|trans({}, 'form') }}
     <i class="fal fa-question-circle ms-1"
        data-controller="tooltip"
        data-tooltip-placement-value="bottom"
@@ -13,7 +15,7 @@
 </select>
 OU
 <div class="mt-2">
-    <label for="ficheMatiereLibelle">
+    <label for="ficheMatiereLibelle" class="form-label">
         {{ 'ec_manage.labels.fiche_matiere_libelle_unique.label'|trans({}, 'form') }}
         <i class="fal fa-question-circle ms-1"
            data-controller="tooltip"
@@ -22,4 +24,7 @@ OU
            data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_libelle_unique.help'|trans({}, 'help') }}"></i>
     </label>
     <input type="text" id="ficheMatiereLibelle" name="ficheMatiereLibelle" class="form-control">
+    <button class="btn btn-primary mt-2" {{ stimulus_action('ec--manage', 'nouvelleFiche') }}>
+        Créer la fiche EC/matière
+    </button>
 </div>
