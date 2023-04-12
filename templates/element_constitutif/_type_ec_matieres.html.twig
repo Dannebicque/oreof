@@ -1,4 +1,16 @@
 <input type="hidden" id="element_constitutif_choixEc" value="true">
+<div class="mt-2">
+    <label for="ficheMatiereLibre" class="form-label">
+        {{ 'ec_manage.labels.fiche_matieres_libelle_choix.label'|trans({}, 'form') }}
+        <i class="fal fa-question-circle ms-1"
+           data-controller="tooltip"
+           data-tooltip-placement-value="bottom"
+           aria-label="{{ 'ec_manage.helps.fiche_matieres_libelle_choix.help'|trans({}, 'help') }}"
+           data-bs-original-title="{{ 'ec_manage.helps.fiche_matieres_libelle_choix.help'|trans({}, 'help') }}"></i>
+    </label>
+    <textarea maxlength="255" type="text" id="ficheMatiereLibre" name="ficheMatiereLibre" class="form-control"></textarea>
+</div>
+
 <table class="table" id="tableFiches">
     <thead>
     <tr>

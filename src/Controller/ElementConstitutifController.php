@@ -137,6 +137,7 @@ class ElementConstitutifController extends AbstractController
                 $elementConstitutifRepository->save($elementConstitutif, true);
             } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() === true) {
                 $lastEc = $ecOrdre->getOrdreSuivant($ue);
+                $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibre'));
                 $elementConstitutif->setFicheMatiere(null);
                 $elementConstitutif->setOrdre($lastEc);
                 $elementConstitutif->genereCode();
@@ -224,7 +225,6 @@ class ElementConstitutifController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
                 $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
                     'id_',
@@ -465,7 +465,6 @@ class ElementConstitutifController extends AbstractController
         Ue $ue,
         string $sens
     ): Response {
-
         $ecOrdre->deplacerElementConstitutif($elementConstitutif, $sens, $ue);
 
         return $this->json(true);

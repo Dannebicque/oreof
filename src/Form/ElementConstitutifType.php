@@ -10,10 +10,8 @@
 namespace App\Form;
 
 use App\Entity\ElementConstitutif;
-use App\Entity\FicheMatiere;
 use App\Entity\NatureUeEc;
 use App\Entity\TypeEc;
-use App\Entity\User;
 use App\Repository\TypeEcRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -28,10 +26,6 @@ class ElementConstitutifType extends AbstractType
         $typeDiplome = $options['typeDiplome'];
 
         $builder
-            ->add('libelle', TextType::class, [
-                'attr' => ['maxlength' => 255],
-                'required' => false
-            ])
             ->add('typeEc', EntityType::class, [
                 'class' => TypeEc::class,
                 'choice_label' => 'libelle',
@@ -52,7 +46,7 @@ class ElementConstitutifType extends AbstractType
                 'choice_label' => 'libelle',
                 'required' => false,
                 'placeholder' => 'Choisissez une nature...',
-                'choice_attr' => function ($choice, $key, $value) {
+                'choice_attr' => function ($choice) {
                     return ['data-choix' => $choice->isChoix() ? 'true' : 'false'];
                 },
                 'attr' => ['data-action' => 'change->ec--manage#changeNatureEc'],

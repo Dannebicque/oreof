@@ -10,13 +10,13 @@
                             EC
                         </div>
 
-                        <div class="col-12 col-md-1 d-flex align-items-center mb-2 justify-content-center
+                        <div class="col-12 col-md-2 d-flex align-items-center mb-2 justify-content-center
                         text-secondary mb-md-0 text-small">
                             fiche EC/matière associée
                         </div>
-                        <div class="col-12 col-md-1 d-flex align-items-center mb-2 justify-content-center
+                        <div class="col-12 col-md-2 d-flex align-items-center mb-2 justify-content-center
                         text-secondary mb-md-0 text-small">
-                            % Remplissage
+                            Etat fiche EC/matière
                         </div>
                         <div class="col-6 col-md-2 d-flex align-items-center justify-content-center
                         text-secondary text-small">
@@ -26,7 +26,7 @@
                         text-secondary text-small">
                             Volumes Horaires
                         </div>
-                        <div class="col-6 col-md-5 d-flex align-items-center justify-content-center
+                        <div class="col-6 col-md-3 d-flex align-items-center justify-content-center
                         text-secondary text-small">
                             Actions
                         </div>
@@ -37,350 +37,368 @@
                 {% for ec in ecs|filter(ec => ec.ecParent == null) %}
                     <div {{ stimulus_controller('ec--liste') }}>
                         {% if ec.ecEnfants|length == 0 %}
-                            <div class="card mb-2 sh-19 sh-md-8">
-                                <div class="card-body pt-0 pb-0 h-100 {% if ue.subOrdre != null and ue.subOrdre != 0 %}border-left-sousUe border-left-sousUe-{{ ue.ordre }}{% endif %}">
-                                    <div class="row g-0 h-100 align-content-center">
-                                        <div class="col-12 col-md-1 d-flex flex-column justify-content-center">
-                                            <div class="text-muted text-small d-md-none">ec</div>
-                                            {{ ec.code }}
-                                        </div>
-                                        <div class="col-12 col-md-1 d-flex flex-column justify-content-center">
-                                            <div class="text-muted text-small d-md-none">Matière</div>
-                                            {% if ec.ficheMatiere != null %}
-                                                {{ ec.display }}
-                                            {% else %}
-                                                {{ ec.texteEcLibre }} (EC Libre)
-                                            {% endif %}
-                                        </div>
-                                        <div class="col-12 col-md-1 d-flex flex-column justify-content-center">
-                                            <div class="text-muted text-small d-md-none">Remplissage</div>
-                                            {% if ec.ficheMatiere != null %}
-                                                {{ ec.ficheMatiere.remplissage|remplissage }}
-                                            {% else %}
-                                                {{ ec.texteEcLibre }} (EC Libre)
-                                            {% endif %}
-                                        </div>
-                                        <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
-                                            <div class="text-muted text-small d-md-none">mccc</div>
-                                            <button
-                                                    {% if deplacer is defined and deplacer == true and editable ==
-                                                        true %}
-                                                        {{ stimulus_controller('modal', {
-                                                            size: 'lg',
-                                                            nomEvenement: 'refreshListeEc',
-                                                            details: {ue: ue.id, parcours: parcours.id},
-                                                            modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-                                                            modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
-                                                    {% else %}
-                                                        {{ stimulus_controller('modal', {
-                                                            size: 'lg',
-                                                            modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-                                                            modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
-                                                    {% endif %}
-                                                    data-action="click->modal#openModal"
-                                                    class="btn btn-sm btn-outline-info me-1 ms-1"
-                                                    data-size="lg"
+                        <div class="card mb-2 sh-19 sh-md-8">
+                            <div class="card-body pt-0 pb-0 h-100 {% if ue.subOrdre != null and ue.subOrdre != 0 %}border-left-sousUe border-left-sousUe-{{ ue.ordre }}{% endif %}">
+                                <div class="row g-0 h-100 align-content-center">
+                                    <div class="col-12 col-md-1 d-flex flex-column justify-content-center">
+                                        <div class="text-muted text-small d-md-none">ec</div>
+                                        {{ ec.code }}
+                                    </div>
+                                    <div class="col-12 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="text-muted text-small d-md-none">Matière</div>
+                                        {% if ec.ficheMatiere != null %}
+                                            {{ ec.display }}
+                                        {% else %}
+                                            {{ ec.texteEcLibre }} (EC Libre)
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-12 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="text-muted text-small d-md-none">Remplissage</div>
+                                        {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or is_granted
+                                            ('ROLE_EC_EDIT_MY', ec)) %}
+                                            {% if ec.ficheMatiere != null and editable == true %}
+                                            <a
+                                                    href="{{ path('app_fiche_matiere_edit',{'id': ec.ficheMatiere.id}) }}"
+                                                    class="btn btn-sm btn-outline-info"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom"
-                                                    title="Modalités de Contrôle des Connaissances et des Compétences"
+                                                    title="Modifier la fiche EC/matière"
+                                                    target="_blank"
                                             >
-                                                <i class="fal fa-marker"></i>
-                                                <span class="badge bg-{% if ec.etatMccc == 'Complet' %}success{% else %}warning{% endif %}">
+                                                <i class="fal fa-file"></i>
+                                                {% if ec.ficheMatiere.remplissage == 100 %}
+                                                    <span class="badge bg-success"> Complet</span>
+
+                                                {% else %}
+                                                    <span class="badge bg-warning"> Non complété</span>
+                                                {% endif %}
+                                            </a>
+                                            {% else %}
+                                                {{ ec.texteEcLibre }} (EC Libre)
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="text-muted text-small d-md-none">mccc</div>
+                                        <button
+                                                {% if deplacer is defined and deplacer == true and editable ==
+                                                    true %}
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        nomEvenement: 'refreshListeEc',
+                                                        details: {ue: ue.id, parcours: parcours.id},
+                                                        modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
+                                                        modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
+                                                {% else %}
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
+                                                        modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
+                                                {% endif %}
+                                                data-action="click->modal#openModal"
+                                                class="btn btn-sm btn-outline-info me-1 ms-1"
+                                                data-size="lg"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom"
+                                                title="Modalités de Contrôle des Connaissances et des Compétences"
+                                        >
+                                            <i class="fal fa-marker"></i>
+                                            <span class="badge bg-{% if ec.etatMccc == 'Complet' %}success{% else %}warning{% endif %}">
                             {{ ec.etatMccc }}
                         </span>
-                                            </button>
-                                        </div>
-                                        <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
-                                            <div class="text-muted text-small d-md-none">Volumes Horaires</div>
-                                            <button
-                                                    {% if deplacer is defined and deplacer == true and editable ==
-                                                        true %}
-                                                        {{ stimulus_controller('modal', {
-                                                            size: 'lg',
-                                                            modalTitle: 'Volumes Horaires',
-                                                            nomEvenement: 'refreshListeEc' ,
-                                                            details: {ue: ue.id, parcours: parcours.id},
-                                                            modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
-                                                    {% else %}
-                                                        {{ stimulus_controller('modal', {
-                                                            size: 'lg',
-                                                            modalTitle: 'Volumes Horaires',
-                                                            modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
-                                                    {% endif %}
-                                                    data-action="click->modal#openModal"
-                                                    class="btn btn-sm btn-outline-info me-1"
-                                                    data-size="lg"
-                                                    data-bs-toggle="tooltip"
-                                                    data-bs-placement="bottom"
-                                                    title="Volumes Horaires"
-                                            >
-                                                <i class="fal fa-clock"></i>
-                                                <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
+                                        </button>
+                                    </div>
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="text-muted text-small d-md-none">Volumes Horaires</div>
+                                        <button
+                                                {% if deplacer is defined and deplacer == true and editable ==
+                                                    true %}
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        modalTitle: 'Volumes Horaires',
+                                                        nomEvenement: 'refreshListeEc' ,
+                                                        details: {ue: ue.id, parcours: parcours.id},
+                                                        modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
+                                                {% else %}
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        modalTitle: 'Volumes Horaires',
+                                                        modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
+                                                {% endif %}
+                                                data-action="click->modal#openModal"
+                                                class="btn btn-sm btn-outline-info me-1"
+                                                data-size="lg"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom"
+                                                title="Volumes Horaires"
+                                        >
+                                            <i class="fal fa-clock"></i>
+                                            <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
                             {{ ec.etatStructure }}
                         </span>
-                                            </button>
+                                        </button>
 
-                                        </div>
-                                        <div class="col-6 col-md-5 d-flex flex-column justify-content-center">
-                                            <div class="text-muted text-small d-md-none">Actions</div>
-                                            <div class="row">
-                                                <div class="col-4">
-                                                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or is_granted
-                                                        ('ROLE_EC_EDIT_MY', ec)) %}
-                                                        {% if ec.ficheMatiere != null and editable == true %}
-                                                            <a
-                                                                    href="{{ path('app_fiche_matiere_show',{'id': ec.ficheMatiere.id}) }}"
-                                                                    class="btn btn-sm text-info"
-                                                                    data-bs-toggle="tooltip"
-                                                                    data-bs-placement="bottom"
-                                                                    title="Voir la fiche EC/matière"
-                                                                    target="_blank"
-                                                            >
-                                                                <i class="{{ iconShow }}"></i>
-                                                                <span> Voir la fiche EC/matière</span>
-                                                            </a><br>
-                                                            <a
-                                                                    href="{{ path('app_fiche_matiere_edit',{'id': ec.ficheMatiere.id}) }}"
-                                                                    class="btn btn-sm text-warning"
-                                                                    data-bs-toggle="tooltip"
-                                                                    data-bs-placement="bottom"
-                                                                    title="Modifier la fiche EC/matière"
-                                                                    target="_blank"
-                                                            >
-                                                                <i class="{{ iconEdit }}"></i>
-                                                                <span> Modifier la fiche EC/matière</span>
-                                                            </a>
-                                                        {% endif %}
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-4">
-                                                    {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
-                                                        ('ROLE_EC_EDIT_MY', ec)) )) %}
-                                                        <button
-                                                                {% if deplacer is defined and deplacer == true and
-                                                                    editable == true %}
+                                    </div>
+                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-center">
+                                        <div class="text-muted text-small d-md-none">Actions</div>
+                                        <div class="row">
+                                            {#                                                <div class="col-4"> #}
+                                            {#                                                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or is_granted #}
+                                            {#                                                        ('ROLE_EC_EDIT_MY', ec)) %} #}
+                                            {#                                                        {% if ec.ficheMatiere != null and editable == true %} #}
+                                            {#                                                            <a #}
+                                            {#                                                                    href="{{ path('app_fiche_matiere_show',{'id': ec.ficheMatiere.id}) }}" #}
+                                            {#                                                                    class="btn btn-sm text-info" #}
+                                            {#                                                                    data-bs-toggle="tooltip" #}
+                                            {#                                                                    data-bs-placement="bottom" #}
+                                            {#                                                                    title="Voir la fiche EC/matière" #}
+                                            {#                                                                    target="_blank" #}
+                                            {#                                                            > #}
+                                            {#                                                                <i class="{{ iconShow }}"></i> #}
+                                            {#                                                                <span> Voir la fiche EC/matière</span> #}
+                                            {#                                                            </a><br> #}
+                                            {#                                                            <a #}
+                                            {#                                                                    href="{{ path('app_fiche_matiere_edit',{'id': ec.ficheMatiere.id}) }}" #}
+                                            {#                                                                    class="btn btn-sm text-warning" #}
+                                            {#                                                                    data-bs-toggle="tooltip" #}
+                                            {#                                                                    data-bs-placement="bottom" #}
+                                            {#                                                                    title="Modifier la fiche EC/matière" #}
+                                            {#                                                                    target="_blank" #}
+                                            {#                                                            > #}
+                                            {#                                                                <i class="{{ iconEdit }}"></i> #}
+                                            {#                                                                <span> Modifier la fiche EC/matière</span> #}
+                                            {#                                                            </a> #}
+                                            {#                                                        {% endif %} #}
+                                            {#                                                    {% endif %} #}
+                                            {#                                                </div> #}
+                                            <div class="col-6">
+                                                {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
+                                                    ('ROLE_EC_EDIT_MY', ec)) )) %}
+                                                    <button
+                                                            {% if deplacer is defined and deplacer == true and
+                                                                editable == true %}
 
-                                                                    {{ stimulus_controller('modal', {
-                                                                        size: 'lg',
-                                                                        nomEvenement: 'refreshListeEc',
-                                                                        details: {ue: ue.id, parcours: parcours.id},
-                                                                        modalTitle: 'Modifier un élément constitutif',
-                                                                        modalUrl: path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }) }}
-                                                                {% else %}
-                                                                    {{ stimulus_controller('modal', {
-                                                                        size: 'lg',
-                                                                        modalTitle: 'Modifier un élément constitutif',
-                                                                        modalUrl: path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }) }}
-                                                                {% endif %}
-                                                                data-action="click->modal#openModal"
-                                                                class="btn btn-sm text-warning"
-                                                                data-size="lg"
-                                                                data-bs-toggle="tooltip"
-                                                                data-bs-placement="bottom"
-                                                                title="Modifier un élément constitutif"
-                                                        >
-                                                            <i class="{{ iconEdit }}"></i>
-                                                            <span> Modifier l'EC</span>
+                                                                {{ stimulus_controller('modal', {
+                                                                    size: 'lg',
+                                                                    nomEvenement: 'refreshListeEc',
+                                                                    details: {ue: ue.id, parcours: parcours.id},
+                                                                    modalTitle: 'Modifier un élément constitutif',
+                                                                    modalUrl: path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }) }}
+                                                            {% else %}
+                                                                {{ stimulus_controller('modal', {
+                                                                    size: 'lg',
+                                                                    modalTitle: 'Modifier un élément constitutif',
+                                                                    modalUrl: path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }) }}
+                                                            {% endif %}
+                                                            data-action="click->modal#openModal"
+                                                            class="btn btn-sm text-warning"
+                                                            data-size="lg"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom"
+                                                            title="Modifier un élément constitutif"
+                                                    >
+                                                        <i class="{{ iconEdit }}"></i>
+                                                        <span> Modifier l'EC</span>
+                                                    </button>
+
+                                                {% endif %}
+                                                {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation)
+                                                    and editable == true %}
+                                                    <button {{ stimulus_action('ec--liste', 'delete', 'click', {
+                                                        url:path('app_element_constitutif_delete',{'id': ec.id}),
+                                                        csrf: csrf_token('delete' ~ ec.id),
+                                                        ue: ue.id,
+                                                        parcours: parcours.id
+                                                    }) }} class="btn btn-sm text-danger">
+                                                        <i class="{{ iconDelete }}"></i> Supprimer l'EC
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
+                                                    ('ROLE_EC_EDIT_MY', ec)) and editable == true) %}
+                                                    {% if not loop.first %}
+                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
+                                                            'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
+                                                                ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
+                                                            <i class="fal fa-circle-up"></i></button>
+                                                    {% else %}
+                                                        <button class="btn btn-sm btn-outline-info" disabled>
+                                                            <i class="fal fa-circle-up"></i>
                                                         </button>
-
                                                     {% endif %}
-                                                    {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation)
-                                                        and editable == true %}
-                                                        <button {{ stimulus_action('ec--liste', 'delete', 'click', {
-                                                            url:path('app_element_constitutif_delete',{'id': ec.id}),
-                                                            csrf: csrf_token('delete' ~ ec.id),
-                                                            ue: ue.id,
-                                                            parcours: parcours.id
-                                                        }) }} class="btn btn-sm text-danger">
-                                                            <i class="{{ iconDelete }}"></i> Supprimer l'EC
-                                                        </button>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-4 text-end">
-                                                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
-                                                        ('ROLE_EC_EDIT_MY', ec)) and editable == true) %}
-                                                        {% if not loop.first %}
-                                                            <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
-                                                                'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
-                                                                    ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
-                                                                <i class="fal fa-circle-up"></i></button>
-                                                        {% else %}
-                                                            <button class="btn btn-sm btn-outline-info" disabled>
-                                                                <i class="fal fa-circle-up"></i>
-                                                            </button>
-                                                        {% endif %}
-                                                        {% if not loop.last %}
-                                                            <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
-                                                                'click', {url: path('app_element_constitutif_deplacer',{sens: 'down', id:
-                                                                    ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
-                                                                <i class="fal
+                                                    {% if not loop.last %}
+                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
+                                                            'click', {url: path('app_element_constitutif_deplacer',{sens: 'down', id:
+                                                                ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
+                                                            <i class="fal
                                                         fa-circle-down"></i></button>
-                                                        {% else %}
-                                                            <button class="btn btn-sm btn-outline-info" disabled>
-                                                                <i class="fal fa-circle-down"></i>
-                                                            </button>
-                                                        {% endif %}
+                                                    {% else %}
+                                                        <button class="btn btn-sm btn-outline-info" disabled>
+                                                            <i class="fal fa-circle-down"></i>
+                                                        </button>
                                                     {% endif %}
-                                                </div>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        {% else %}
-                            <div class="card mb-2 sh-19 sh-md-8">
-                                <div class="card-body pt-0 pb-0 h-100 {% if ue.subOrdre != null and ue.subOrdre != 0 %}border-left-sousUe border-left-sousUe-{{ ue.ordre }}{% endif %}">
-                                    <div class="row g-0 h-100 align-content-center">
-                                        <div class="col-12 col-md-1 d-flex flex-column justify-content-center">
-                                            <div class="text-muted text-small d-md-none">ec</div>
-                                            {{ ec.code }}
-                                        </div>
-                                        <div class="col-12 col-md-2 d-flex flex-column justify-content-center">
-                                            <div class="text-muted text-small d-md-none">Matière</div>
-                                            {{ ec.libelle }} <span class="badge bg-info">(EC à choix restreint)</span>
-                                        </div>
+                        </div>
+                    {% else %}
+                        <div class="card mb-2 sh-19 sh-md-8">
+                            <div class="card-body pt-0 pb-0 h-100 {% if ue.subOrdre != null and ue.subOrdre != 0 %}border-left-sousUe border-left-sousUe-{{ ue.ordre }}{% endif %}">
+                                <div class="row g-0 h-100 align-content-center">
+                                    <div class="col-12 col-md-1 d-flex flex-column justify-content-center">
+                                        <div class="text-muted text-small d-md-none">ec</div>
+                                        {{ ec.code }}
+                                    </div>
+                                    <div class="col-12 col-md-4 d-flex flex-column justify-content-center">
+                                        <div class="text-muted text-small d-md-none">Matière</div>
+                                        {{ ec.libelle }} <span class="badge bg-info">(EC à choix restreint)</span>
+                                    </div>
 
-                                        <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
-                                            <div class="text-muted text-small d-md-none">mccc</div>
-                                            <button
-                                                    {% if deplacer is defined and deplacer == true and editable ==
-                                                        true %}
-                                                        {{ stimulus_controller('modal', {
-                                                            size: 'lg',
-                                                            nomEvenement: 'refreshListeEc',
-                                                            details: {ue: ue.id, parcours: parcours.id},
-                                                            modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-                                                            modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
-                                                    {% else %}
-                                                        {{ stimulus_controller('modal', {
-                                                            size: 'lg',
-                                                            modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-                                                            modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
-                                                    {% endif %}
-                                                    data-action="click->modal#openModal"
-                                                    class="btn btn-sm btn-outline-info me-1 ms-1"
-                                                    data-size="lg"
-                                                    data-bs-toggle="tooltip"
-                                                    data-bs-placement="bottom"
-                                                    title="Modalités de Contrôle des Connaissances et des Compétences"
-                                            >
-                                                <i class="fal fa-marker"></i>
-                                                <span class="badge bg-{% if ec.etatMccc == 'Complet' %}success{% else %}warning{% endif %}">
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="text-muted text-small d-md-none">mccc</div>
+                                        <button
+                                                {% if deplacer is defined and deplacer == true and editable ==
+                                                    true %}
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        nomEvenement: 'refreshListeEc',
+                                                        details: {ue: ue.id, parcours: parcours.id},
+                                                        modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
+                                                        modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
+                                                {% else %}
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
+                                                        modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
+                                                {% endif %}
+                                                data-action="click->modal#openModal"
+                                                class="btn btn-sm btn-outline-info me-1 ms-1"
+                                                data-size="lg"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom"
+                                                title="Modalités de Contrôle des Connaissances et des Compétences"
+                                        >
+                                            <i class="fal fa-marker"></i>
+                                            <span class="badge bg-{% if ec.etatMccc == 'Complet' %}success{% else %}warning{% endif %}">
                             {{ ec.etatMccc }}
                         </span>
-                                            </button>
-                                        </div>
-                                        <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
-                                            <div class="text-muted text-small d-md-none">Volumes Horaires</div>
-                                            <button
-                                                    {% if deplacer is defined and deplacer == true and editable ==
-                                                        true %}
-                                                        {{ stimulus_controller('modal', {
-                                                            size: 'lg',
-                                                            modalTitle: 'Volumes Horaires',
-                                                            nomEvenement: 'refreshListeEc' ,
-                                                            details: {ue: ue.id, parcours: parcours.id},
-                                                            modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
-                                                    {% else %}
-                                                        {{ stimulus_controller('modal', {
-                                                            size: 'lg',
-                                                            modalTitle: 'Volumes Horaires',
-                                                            modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
-                                                    {% endif %}
-                                                    data-action="click->modal#openModal"
-                                                    class="btn btn-sm btn-outline-info me-1"
-                                                    data-size="lg"
-                                                    data-bs-toggle="tooltip"
-                                                    data-bs-placement="bottom"
-                                                    title="Volumes Horaires"
-                                            >
-                                                <i class="fal fa-clock"></i>
-                                                <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
+                                        </button>
+                                    </div>
+                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="text-muted text-small d-md-none">Volumes Horaires</div>
+                                        <button
+                                                {% if deplacer is defined and deplacer == true and editable ==
+                                                    true %}
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        modalTitle: 'Volumes Horaires',
+                                                        nomEvenement: 'refreshListeEc' ,
+                                                        details: {ue: ue.id, parcours: parcours.id},
+                                                        modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
+                                                {% else %}
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        modalTitle: 'Volumes Horaires',
+                                                        modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
+                                                {% endif %}
+                                                data-action="click->modal#openModal"
+                                                class="btn btn-sm btn-outline-info me-1"
+                                                data-size="lg"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="bottom"
+                                                title="Volumes Horaires"
+                                        >
+                                            <i class="fal fa-clock"></i>
+                                            <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
                             {{ ec.etatStructure }}
                         </span>
-                                            </button>
+                                        </button>
 
-                                        </div>
-                                        <div class="col-6 col-md-5 d-flex flex-column justify-content-center">
-                                            <div class="text-muted text-small d-md-none">Actions</div>
-                                            <div class="row">
-                                                <div class="col-4">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="col-4">
-                                                    {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
-                                                        ('ROLE_EC_EDIT_MY', ec)) ) and editable == true) %}
-                                                        <button
-                                                                {% if deplacer is defined and deplacer == true %}
+                                    </div>
+                                    <div class="col-6 col-md-3 d-flex flex-column justify-content-center">
+                                        <div class="text-muted text-small d-md-none">Actions</div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;
+                                            </div>
+                                            <div class="col-4">
+                                                {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
+                                                    ('ROLE_EC_EDIT_MY', ec)) ) and editable == true) %}
+                                                    <button
+                                                            {% if deplacer is defined and deplacer == true %}
 
-                                                                    {{ stimulus_controller('modal', {
-                                                                        size: 'lg',
-                                                                        nomEvenement: 'refreshListeEc',
-                                                                        details: {ue: ue.id, parcours: parcours.id},
-                                                                        modalTitle: 'Modifier un élément constitutif',
-                                                                        modalUrl: path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }) }}
-                                                                {% else %}
-                                                                    {{ stimulus_controller('modal', {
-                                                                        size: 'lg',
-                                                                        modalTitle: 'Modifier un élément constitutif',
-                                                                        modalUrl: path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }) }}
-                                                                {% endif %}
-                                                                data-action="click->modal#openModal"
-                                                                class="btn btn-sm text-warning"
-                                                                data-size="lg"
-                                                                data-bs-toggle="tooltip"
-                                                                data-bs-placement="bottom"
-                                                                title="Modifier un élément constitutif"
-                                                        >
-                                                            <i class="{{ iconEdit }}"></i>
-                                                            <span> Modifier l'EC</span>
+                                                                {{ stimulus_controller('modal', {
+                                                                    size: 'lg',
+                                                                    nomEvenement: 'refreshListeEc',
+                                                                    details: {ue: ue.id, parcours: parcours.id},
+                                                                    modalTitle: 'Modifier un élément constitutif',
+                                                                    modalUrl: path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }) }}
+                                                            {% else %}
+                                                                {{ stimulus_controller('modal', {
+                                                                    size: 'lg',
+                                                                    modalTitle: 'Modifier un élément constitutif',
+                                                                    modalUrl: path('app_element_constitutif_edit',{'id': ec.id, parcours:parcours.id}) }) }}
+                                                            {% endif %}
+                                                            data-action="click->modal#openModal"
+                                                            class="btn btn-sm text-warning"
+                                                            data-size="lg"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom"
+                                                            title="Modifier un élément constitutif"
+                                                    >
+                                                        <i class="{{ iconEdit }}"></i>
+                                                        <span> Modifier l'EC</span>
+                                                    </button>
+
+                                                {% endif %}
+                                                {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation)
+                                                    and editable == true %}
+                                                    <button {{ stimulus_action('ec--liste', 'delete', 'click', {
+                                                        url:path('app_element_constitutif_delete',{'id': ec.id}),
+                                                        csrf: csrf_token('delete' ~ ec.id),
+                                                        ue: ue.id,
+                                                        parcours: parcours.id
+                                                    }) }} class="btn btn-sm text-danger">
+                                                        <i class="{{ iconDelete }}"></i> Supprimer l'EC
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-4 text-end">
+                                                {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
+                                                    ('ROLE_EC_EDIT_MY', ec))) %}
+                                                    {% if not loop.first %}
+                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
+                                                            'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
+                                                                ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
+                                                            <i class="fal fa-circle-up"></i></button>
+                                                    {% else %}
+                                                        <button class="btn btn-sm btn-outline-info" disabled>
+                                                            <i class="fal fa-circle-up"></i>
                                                         </button>
-
                                                     {% endif %}
-                                                    {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation)
-                                                        and editable == true %}
-                                                        <button {{ stimulus_action('ec--liste', 'delete', 'click', {
-                                                            url:path('app_element_constitutif_delete',{'id': ec.id}),
-                                                            csrf: csrf_token('delete' ~ ec.id),
-                                                            ue: ue.id,
-                                                            parcours: parcours.id
-                                                        }) }} class="btn btn-sm text-danger">
-                                                            <i class="{{ iconDelete }}"></i> Supprimer l'EC
-                                                        </button>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-4 text-end">
-                                                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
-                                                        ('ROLE_EC_EDIT_MY', ec))) %}
-                                                        {% if not loop.first %}
-                                                            <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
-                                                                'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
-                                                                    ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
-                                                                <i class="fal fa-circle-up"></i></button>
-                                                        {% else %}
-                                                            <button class="btn btn-sm btn-outline-info" disabled>
-                                                                <i class="fal fa-circle-up"></i>
-                                                            </button>
-                                                        {% endif %}
-                                                        {% if not loop.last %}
-                                                            <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
-                                                                'click', {url: path('app_element_constitutif_deplacer',{sens: 'down', id:
-                                                                    ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
-                                                                <i class="fal
+                                                    {% if not loop.last %}
+                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
+                                                            'click', {url: path('app_element_constitutif_deplacer',{sens: 'down', id:
+                                                                ec.id, ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
+                                                            <i class="fal
                                                         fa-circle-down"></i></button>
-                                                        {% else %}
-                                                            <button class="btn btn-sm btn-outline-info" disabled>
-                                                                <i class="fal fa-circle-down"></i>
-                                                            </button>
-                                                        {% endif %}
+                                                    {% else %}
+                                                        <button class="btn btn-sm btn-outline-info" disabled>
+                                                            <i class="fal fa-circle-down"></i>
+                                                        </button>
                                                     {% endif %}
-                                                </div>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            {% if editable == true %}
+                        </div>
+                        {% if editable == true %}
                             <div class="text-divider">
                                 <button class="btn text-success btn-sm"
                                         {{ stimulus_controller('modal', {
@@ -397,152 +415,172 @@
                                     Ajouter un EC avant l'<strong>{{ ec.ecEnfants[0].code }}</strong>
                                 </button>
                             </div>
-                                {% endif %}
-                            <div>
-                                {% for ece in ec.ecEnfants %}
-                                    <div class="card mb-2 sh-19 sh-md-8 border-left-sousEc border-left-sousEc-{{ ec.ordre }}">
-                                        <div class="card-body pt-0 pb-0 h-100 {% if ue.subOrdre != null and ue.subOrdre != 0 %}border-left-sousUe border-left-sousUe-{{ ue.ordre }}{% endif %}">
-                                            <div class="row g-0 h-100 align-content-center">
-                                                <div class="col-12 col-md-1 d-flex flex-column justify-content-center">
-                                                    <div class="text-muted text-small d-md-none">ec</div>
-                                                    {{ ece.code }}
-                                                </div>
-                                                <div class="col-12 col-md-1 d-flex flex-column justify-content-center">
-                                                    <div class="text-muted text-small d-md-none">Matière</div>
-                                                    {% if ece.ficheMatiere != null %}
-                                                        {{ ece.display }}
-                                                    {% else %}
-                                                        {{ ece.texteEcLibre }} <span class="badge bg-info">(EC Libre)</span>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-12 col-md-1 d-flex flex-column justify-content-center">
-                                                    <div class="text-muted text-small d-md-none">Remplissage</div>
-                                                    {% if ece.ficheMatiere != null %}
-                                                        {{ ece.ficheMatiere.remplissage|remplissage }}
-                                                    {% else %}
-                                                        {{ ece.texteEcLibre }} <span class="badge bg-info">(EC Libre)</span>
-                                                    {% endif %}
-                                                </div>
-                                                <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
-                                                    &nbsp;
-                                                </div>
-                                                <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
-                                                    <div class="text-muted text-small d-md-none">Volumes Horaires</div>
-                                                    &nbsp;
-                                                </div>
-                                                <div class="col-6 col-md-5 d-flex flex-column justify-content-center">
-                                                    <div class="text-muted text-small d-md-none">Actions</div>
-                                                    <div class="row">
-                                                        <div class="col-4">
-                                                            {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or is_granted
-                                                                ('ROLE_EC_EDIT_MY', ece) and editable == true) %}
-                                                                {% if ece.ficheMatiere != null %}
-                                                                    <a
-                                                                            href="{{ path('app_fiche_matiere_show',
-                                                                                {'id': ece.ficheMatiere.id}) }}"
-                                                                            class="btn btn-sm text-info"
-                                                                            data-bs-toggle="tooltip"
-                                                                            data-bs-placement="bottom"
-                                                                            title="Voir la fiche EC/matière"
-                                                                            target="_blank"
-                                                                    >
-                                                                        <i class="{{ iconShow }}"></i>
-                                                                        <span> Voir la fiche EC/matière</span>
-                                                                    </a><br>
-                                                                    <a
-                                                                            href="{{ path('app_fiche_matiere_edit',
-                                                                                {'id': ece.ficheMatiere.id}) }}"
-                                                                            class="btn btn-sm text-warning"
-                                                                            data-bs-toggle="tooltip"
-                                                                            data-bs-placement="bottom"
-                                                                            title="Modifier la fiche EC/matière"
-                                                                            target="_blank"
-                                                                    >
-                                                                        <i class="{{ iconEdit }}"></i>
-                                                                        <span> Modifier la fiche EC/matière</span>
-                                                                    </a>
-                                                                {% endif %}
-                                                            {% endif %}
-                                                        </div>
-                                                        <div class="col-4">
-                                                            {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
-                                                                ('ROLE_EC_EDIT_MY', ec)) ) and editable == true) %}
-                                                                <button
-                                                                        {% if deplacer is defined and deplacer == true %}
+                        {% endif %}
+                        <div>
+                            {% for ece in ec.ecEnfants %}
+                                <div class="card mb-2 sh-19 sh-md-8 border-left-sousEc border-left-sousEc-{{ ec.ordre }}">
+                                    <div class="card-body pt-0 pb-0 h-100 {% if ue.subOrdre != null and ue.subOrdre != 0 %}border-left-sousUe border-left-sousUe-{{ ue.ordre }}{% endif %}">
+                                        <div class="row g-0 h-100 align-content-center">
+                                            <div class="col-12 col-md-1 d-flex flex-column justify-content-center">
+                                                <div class="text-muted text-small d-md-none">ec</div>
+                                                {{ ece.code }}
+                                            </div>
+                                            <div class="col-12 col-md-2 d-flex flex-column justify-content-center">
+                                                <div class="text-muted text-small d-md-none">Matière</div>
+                                                {% if ece.ficheMatiere != null %}
+                                                    {{ ece.display }}
+                                                {% else %}
+                                                    {{ ece.texteEcLibre }}
+                                                    <span class="badge bg-info">(EC Libre)</span>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-12 col-md-2 d-flex flex-column justify-content-center">
+                                                <div class="text-muted text-small d-md-none">Remplissage</div>
+                                                {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or is_granted
+                                                    ('ROLE_EC_EDIT_MY', ece)) %}
+                                                    {% if ece.ficheMatiere != null and editable == true %}
+                                                        <a
+                                                                href="{{ path('app_fiche_matiere_edit',{'id': ece
+                                                                .ficheMatiere.id}) }}"
+                                                                class="btn btn-sm btn-outline-info"
+                                                                data-bs-toggle="tooltip"
+                                                                data-bs-placement="bottom"
+                                                                title="Modifier la fiche EC/matière"
+                                                                target="_blank"
+                                                        >
+                                                            <i class="fal fa-file"></i>
+                                                            {% if ece.ficheMatiere.remplissage == 100 %}
+                                                                <span class="badge bg-success"> Complet</span>
 
-                                                                            {{ stimulus_controller('modal', {
-                                                                                size: 'lg',
-                                                                                nomEvenement: 'refreshListeEc',
-                                                                                details: {ue: ue.id, parcours: parcours.id},
-                                                                                modalTitle: 'Modifier un élément constitutif',
-                                                                                modalUrl: path
-                                                                                    ('app_element_constitutif_edit',{'id': ece.id, parcours:parcours.id}) }) }}
-                                                                        {% else %}
-                                                                            {{ stimulus_controller('modal', {
-                                                                                size: 'lg',
-                                                                                modalTitle: 'Modifier un élément constitutif',
-                                                                                modalUrl: path
-                                                                                    ('app_element_constitutif_edit',{'id': ece.id, parcours:parcours.id}) }) }}
-                                                                        {% endif %}
-                                                                        data-action="click->modal#openModal"
-                                                                        class="btn btn-sm text-warning"
-                                                                        data-size="lg"
-                                                                        data-bs-toggle="tooltip"
-                                                                        data-bs-placement="bottom"
-                                                                        title="Modifier un élément constitutif"
-                                                                >
-                                                                    <i class="{{ iconEdit }}"></i>
-                                                                    <span> Modifier l'EC</span>
-                                                                </button>
+                                                            {% else %}
+                                                                <span class="badge bg-warning"> Non complété</span>
+                                                            {% endif %}
+                                                        </a>
+                                                    {% else %}
+                                                        {{ ece.texteEcLibre }} (EC Libre)
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
+                                                &nbsp;
+                                            </div>
+                                            <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
+                                                <div class="text-muted text-small d-md-none">Volumes Horaires</div>
+                                                &nbsp;
+                                            </div>
+                                            <div class="col-6 col-md-3 d-flex flex-column justify-content-center">
+                                                <div class="text-muted text-small d-md-none">Actions</div>
+                                                <div class="row">
+                                                    {#                                                        <div class="col-4"> #}
+                                                    {#                                                            {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or is_granted #}
+                                                    {#                                                                ('ROLE_EC_EDIT_MY', ece) and editable == true) %} #}
+                                                    {#                                                                {% if ece.ficheMatiere != null %} #}
+                                                    {#                                                                    <a #}
+                                                    {#                                                                            href="{{ path('app_fiche_matiere_show', #}
+                                                    {#                                                                                {'id': ece.ficheMatiere.id}) }}" #}
+                                                    {#                                                                            class="btn btn-sm text-info" #}
+                                                    {#                                                                            data-bs-toggle="tooltip" #}
+                                                    {#                                                                            data-bs-placement="bottom" #}
+                                                    {#                                                                            title="Voir la fiche EC/matière" #}
+                                                    {#                                                                            target="_blank" #}
+                                                    {#                                                                    > #}
+                                                    {#                                                                        <i class="{{ iconShow }}"></i> #}
+                                                    {#                                                                        <span> Voir la fiche EC/matière</span> #}
+                                                    {#                                                                    </a><br> #}
+                                                    {#                                                                    <a #}
+                                                    {#                                                                            href="{{ path('app_fiche_matiere_edit', #}
+                                                    {#                                                                                {'id': ece.ficheMatiere.id}) }}" #}
+                                                    {#                                                                            class="btn btn-sm text-warning" #}
+                                                    {#                                                                            data-bs-toggle="tooltip" #}
+                                                    {#                                                                            data-bs-placement="bottom" #}
+                                                    {#                                                                            title="Modifier la fiche EC/matière" #}
+                                                    {#                                                                            target="_blank" #}
+                                                    {#                                                                    > #}
+                                                    {#                                                                        <i class="{{ iconEdit }}"></i> #}
+                                                    {#                                                                        <span> Modifier la fiche EC/matière</span> #}
+                                                    {#                                                                    </a> #}
+                                                    {#                                                                {% endif %} #}
+                                                    {#                                                            {% endif %} #}
+                                                    {#                                                        </div> #}
+                                                    <div class="col-6">
+                                                        {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
+                                                            ('ROLE_EC_EDIT_MY', ec)) ) and editable == true) %}
+                                                            <button
+                                                                    {% if deplacer is defined and deplacer == true %}
 
-                                                            {% endif %}
-                                                            {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours
-                                                            .formation) and editable == true %}
-                                                                <button {{ stimulus_action('ec--liste', 'delete', 'click', {
-                                                                    url:path('app_element_constitutif_delete',{'id':
-                                                                        ece.id}),
-                                                                    csrf: csrf_token('delete' ~ ece.id),
-                                                                    ue: ue.id,
-                                                                    parcours: parcours.id
-                                                                }) }} class="btn btn-sm text-danger">
-                                                                    <i class="{{ iconDelete }}"></i> Supprimer l'EC
+                                                                        {{ stimulus_controller('modal', {
+                                                                            size: 'lg',
+                                                                            nomEvenement: 'refreshListeEc',
+                                                                            details: {ue: ue.id, parcours: parcours.id},
+                                                                            modalTitle: 'Modifier un élément constitutif',
+                                                                            modalUrl: path
+                                                                                ('app_element_constitutif_edit',{'id': ece.id, parcours:parcours.id}) }) }}
+                                                                    {% else %}
+                                                                        {{ stimulus_controller('modal', {
+                                                                            size: 'lg',
+                                                                            modalTitle: 'Modifier un élément constitutif',
+                                                                            modalUrl: path
+                                                                                ('app_element_constitutif_edit',{'id': ece.id, parcours:parcours.id}) }) }}
+                                                                    {% endif %}
+                                                                    data-action="click->modal#openModal"
+                                                                    class="btn btn-sm text-warning"
+                                                                    data-size="lg"
+                                                                    data-bs-toggle="tooltip"
+                                                                    data-bs-placement="bottom"
+                                                                    title="Modifier un élément constitutif"
+                                                            >
+                                                                <i class="{{ iconEdit }}"></i>
+                                                                <span> Modifier l'EC</span>
+                                                            </button>
+
+                                                        {% endif %}
+                                                        {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours
+                                                        .formation) and editable == true %}
+                                                            <button {{ stimulus_action('ec--liste', 'delete', 'click', {
+                                                                url:path('app_element_constitutif_delete',{'id':
+                                                                    ece.id}),
+                                                                csrf: csrf_token('delete' ~ ece.id),
+                                                                ue: ue.id,
+                                                                parcours: parcours.id
+                                                            }) }} class="btn btn-sm text-danger">
+                                                                <i class="{{ iconDelete }}"></i> Supprimer l'EC
+                                                            </button>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
+                                                            ('ROLE_EC_EDIT_MY', ec)) and editable == true ) %}
+                                                            {% if not loop.first %}
+                                                                <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
+                                                                    'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
+                                                                        ece.id, ue:ue.id}), ue:ue.id,
+                                                                        parcours:parcours.id}) }}>
+                                                                    <i class="fal fa-circle-up"></i></button>
+                                                            {% else %}
+                                                                <button class="btn btn-sm btn-outline-info" disabled>
+                                                                    <i class="fal fa-circle-up"></i>
                                                                 </button>
                                                             {% endif %}
-                                                        </div>
-                                                        <div class="col-4 text-end">
-                                                            {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
-                                                                ('ROLE_EC_EDIT_MY', ec)) and editable == true ) %}
-                                                                {% if not loop.first %}
-                                                                    <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
-                                                                        'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
-                                                                            ece.id, ue:ue.id}), ue:ue.id,
-                                                                            parcours:parcours.id}) }}>
-                                                                        <i class="fal fa-circle-up"></i></button>
-                                                                {% else %}
-                                                                    <button class="btn btn-sm btn-outline-info" disabled>
-                                                                        <i class="fal fa-circle-up"></i>
-                                                                    </button>
-                                                                {% endif %}
-                                                                {% if not loop.last %}
-                                                                    <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
-                                                                        'click', {url: path('app_element_constitutif_deplacer',{sens: 'down', id:
-                                                                            ece.id, ue:ue.id}), ue:ue.id,
-                                                                            parcours:parcours.id}) }}>
-                                                                        <i class="fal
+                                                            {% if not loop.last %}
+                                                                <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
+                                                                    'click', {url: path('app_element_constitutif_deplacer',{sens: 'down', id:
+                                                                        ece.id, ue:ue.id}), ue:ue.id,
+                                                                        parcours:parcours.id}) }}>
+                                                                    <i class="fal
                                                         fa-circle-down"></i></button>
-                                                                {% else %}
-                                                                    <button class="btn btn-sm btn-outline-info" disabled>
-                                                                        <i class="fal fa-circle-down"></i>
-                                                                    </button>
-                                                                {% endif %}
+                                                            {% else %}
+                                                                <button class="btn btn-sm btn-outline-info" disabled>
+                                                                    <i class="fal fa-circle-down"></i>
+                                                                </button>
                                                             {% endif %}
-                                                        </div>
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    {% if editable == true %}
+                                </div>
+                                {% if editable == true %}
                                     <div class="text-divider">
                                         <button class="btn text-success btn-sm"
                                                 {{ stimulus_controller('modal', {
@@ -559,46 +597,46 @@
                                             Ajouter un EC après l'<strong>{{ ece.code }}</strong>
                                         </button>
                                     </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
                         {% endif %}
                     </div>
                     {% if editable == true %}
-                    <div class="text-divider">
-                        <button class="btn text-success btn-sm"
-                                {{ stimulus_controller('modal', {
-                                    size: 'lg',
-                                    modalTitle: 'Ajouter un élément constitutif',
-                                    nomEvenement: 'refreshListeEc',
-                                    details: {ue: ue.id, parcours: parcours.id},
-                                    modalUrl: path('app_element_constitutif_new', {ue: ue.id, parcours:parcours.id, ec:ec
-                                    .id})
-                                }) }}
-                                data-action="click->modal#openModal"
-                        >
-                            <i class="{{ iconAdd }}"></i>
-                            Ajouter un EC après l'<strong>{{ ec.code }}</strong>
-                        </button>
-                    </div>
+                        <div class="text-divider">
+                            <button class="btn text-success btn-sm"
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        modalTitle: 'Ajouter un élément constitutif',
+                                        nomEvenement: 'refreshListeEc',
+                                        details: {ue: ue.id, parcours: parcours.id},
+                                        modalUrl: path('app_element_constitutif_new', {ue: ue.id, parcours:parcours.id, ec:ec
+                                        .id})
+                                    }) }}
+                                    data-action="click->modal#openModal"
+                            >
+                                <i class="{{ iconAdd }}"></i>
+                                Ajouter un EC après l'<strong>{{ ec.code }}</strong>
+                            </button>
+                        </div>
                     {% endif %}
                 {% else %}
                     {% if editable == true %}
-                    <div class="text-divider">
-                        <button class="btn text-success btn-sm"
-                                {{ stimulus_controller('modal', {
-                                    size: 'lg',
-                                    modalTitle: 'Ajouter un élément constitutif',
-                                    nomEvenement: 'refreshListeEc',
-                                    details: {ue: ue.id, parcours: parcours.id},
-                                    modalUrl: path('app_element_constitutif_new', {ue: ue.id, parcours:parcours.id})
-                                }) }}
-                                data-action="click->modal#openModal"
-                        >
-                            <i class="{{ iconAdd }}"></i>
-                            Ajouter un EC
-                        </button>
-                    </div>
+                        <div class="text-divider">
+                            <button class="btn text-success btn-sm"
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        modalTitle: 'Ajouter un élément constitutif',
+                                        nomEvenement: 'refreshListeEc',
+                                        details: {ue: ue.id, parcours: parcours.id},
+                                        modalUrl: path('app_element_constitutif_new', {ue: ue.id, parcours:parcours.id})
+                                    }) }}
+                                    data-action="click->modal#openModal"
+                            >
+                                <i class="{{ iconAdd }}"></i>
+                                Ajouter un EC
+                            </button>
+                        </div>
                     {% endif %}
                 {% endfor %}
             </div>
