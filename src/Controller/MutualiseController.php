@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\BlocCompetenceRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\SemestreMutualisableRepository;
@@ -64,6 +65,16 @@ class MutualiseController extends AbstractController
 
         return $this->render('mutualise_wizard/_step3.html.twig', [
             'semestres' => $semestres
+        ]);
+    }
+
+    #[Route('/4', name: 'step4')]
+    public function step4(BlocCompetenceRepository $blocCompetenceRepository): Response
+    {
+        $bccs = $blocCompetenceRepository->findBy(['parcours' => null]);
+
+        return $this->render('mutualise_wizard/_step4.html.twig', [
+            'bloc_competences' => $bccs
         ]);
     }
 }

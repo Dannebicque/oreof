@@ -86,8 +86,16 @@ class BlocCompetenceRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\NoResultException
      */
-    public function getMaxOrdreParcours(Parcours $parcours): ?int
+    public function getMaxOrdreParcours(?Parcours $parcours): ?int
     {
+        if ($parcours === null) {
+            return $this->createQueryBuilder('b')
+                ->select('MAX(b.ordre)')
+                ->andWhere('b.parcours IS NULL')
+                ->getQuery()
+                ->getSingleScalarResult();
+        }
+
         return $this->createQueryBuilder('b')
             ->select('MAX(b.ordre)')
             ->andWhere('b.parcours = :parcours')
@@ -96,8 +104,16 @@ class BlocCompetenceRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function decaleCompetence(Parcours $parcours, int $ordre): array
+    public function decaleCompetence(?Parcours $parcours = null, int $ordre): array
     {
+        if ($parcours === null) {
+            return $this->createQueryBuilder('b')
+                ->andWhere('b.parcours IS NULL')
+                ->andWhere('b.ordre >= :ordre')
+                ->setParameter('ordre', $ordre)
+                ->getQuery()
+                ->getResult();
+        }
         return $this->createQueryBuilder('b')
             ->andWhere('b.parcours = :parcours')
             ->andWhere('b.ordre >= :ordre')

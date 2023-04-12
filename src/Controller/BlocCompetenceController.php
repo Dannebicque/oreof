@@ -34,20 +34,30 @@ class BlocCompetenceController extends AbstractController
     }
 
     #[Route('/liste/parcours/{parcours}', name: 'app_bloc_competence_liste_parcours', methods: ['GET'])]
-    public function listeParcours(BlocCompetenceRepository $blocCompetenceRepository, Parcours $parcours): Response
+    public function listeParcours(BlocCompetenceRepository $blocCompetenceRepository, ?Parcours $parcours = null): Response
     {
+        if ($parcours === null) {
+            return $this->render('bloc_competence/_liste.html.twig', [
+                'bloc_competences' => $blocCompetenceRepository->findBy(['parcours' => null]),
+            ]);
+        }
+
         return $this->render('bloc_competence/_liste.html.twig', [
             'bloc_competences' => $blocCompetenceRepository->findByParcours($parcours),
             'parcours' => $parcours,
         ]);
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
+     */
     #[Route('/new/parcours/{parcours}', name: 'app_bloc_competence_new_parcours', methods: ['GET', 'POST'])]
     public function newParcours(
         Request $request,
         BlocCompetenceRepository $blocCompetenceRepository,
         CompetenceRepository $competenceRepository,
-        Parcours $parcours
+        ?Parcours $parcours = null
     ): Response {
         $blocCompetence = new BlocCompetence();
         $blocCompetence->setParcours($parcours);
@@ -55,7 +65,7 @@ class BlocCompetenceController extends AbstractController
             BlocCompetenceType::class,
             $blocCompetence,
             [
-                'action' => $this->generateUrl('app_bloc_competence_new_parcours', ['parcours' => $parcours->getId(),'ordre' => $request->query->get('ordre')]),]
+                'action' => $this->generateUrl('app_bloc_competence_new_parcours', ['parcours' => $parcours?->getId(),'ordre' => $request->query->get('ordre')]),]
         );
         $form->handleRequest($request);
 
@@ -68,7 +78,7 @@ class BlocCompetenceController extends AbstractController
                 //on décale les autres compétences
                 $bccs = $blocCompetenceRepository->decaleCompetence(
                     $parcours,
-                    $request->query->get('ordre'),
+                    (int)$request->query->get('ordre'),
                 );
 
                 // décaler les blocs de compétences et recalculer les codes
@@ -82,8 +92,7 @@ class BlocCompetenceController extends AbstractController
                     }
                 }
 
-
-                $blocCompetence->setOrdre($request->query->get('ordre'));
+                $blocCompetence->setOrdre((int)$request->query->get('ordre'));
             }
 
             $blocCompetence->genereCode();
@@ -97,34 +106,6 @@ class BlocCompetenceController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-//    #[Route('/new/formation/{formation}', name: 'app_bloc_competence_new_formation', methods: ['GET', 'POST'])]
-//    public function newFormation(
-//        Request $request,
-//        BlocCompetenceRepository $blocCompetenceRepository,
-//        Formation $formation
-//    ): Response {
-//        $blocCompetence = new BlocCompetence();
-//        $blocCompetence->setFormation($formation);
-//        $form = $this->createForm(BlocCompetenceType::class, $blocCompetence, [
-//            'action' => $this->generateUrl('app_bloc_competence_new_formation', ['formation' => $formation->getId()])
-//        ]);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $ordre = $blocCompetenceRepository->getMaxOrdre($formation);
-//            $blocCompetence->setOrdre($ordre + 1);
-//            $blocCompetence->genereCode();
-//            $blocCompetenceRepository->save($blocCompetence, true);
-//
-//            return $this->json(true);
-//        }
-//
-//        return $this->render('bloc_competence/new.html.twig', [
-//            'bloc_competence' => $blocCompetence,
-//            'form' => $form->createView(),
-//        ]);
-//    }
 
     #[Route('/{id}/edit', name: 'app_bloc_competence_edit', methods: ['GET', 'POST'])]
     public function edit(
@@ -153,6 +134,10 @@ class BlocCompetenceController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
+     */
     #[Route('/{id}/duplicate', name: 'app_bloc_competence_duplicate', methods: ['GET'])]
     public function duplicate(
         BlocCompetenceRepository $blocCompetenceRepository,

@@ -1,0 +1,12 @@
+<div class="alert alert-info">
+    Vous trouverez ci-dessous les compétences communes à l'ensemble des mentions.
+</div>
+<div {{ stimulus_controller('parcours--step3', {
+    urlListe: path('app_bloc_competence_liste_parcours', {parcours:null}),
+}) }}
+        data-action="base:refreshListe@window->parcours--step3#refreshListe"
+>
+    <div {{ stimulus_target('parcours--step3', 'liste') }}>
+
+    </div>
+</div>
