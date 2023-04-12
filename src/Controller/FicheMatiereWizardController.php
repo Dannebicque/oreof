@@ -15,6 +15,7 @@ use App\Entity\FicheMatiereMutualisable;
 use App\Form\FicheMatiereStep1Type;
 use App\Form\FicheMatiereStep2Type;
 use App\Form\FicheMatiereStep3Type;
+use App\Repository\BlocCompetenceRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
@@ -159,6 +160,7 @@ class FicheMatiereWizardController extends AbstractController
 
     #[Route('/{ficheMatiere}/3', name: 'app_fiche_matiere_wizard_step_3', methods: ['GET'])]
     public function step3(
+        BlocCompetenceRepository $blocCompetenceRepository,
         FicheMatiere $ficheMatiere,
     ): Response {
         $form = $this->createForm(FicheMatiereStep3Type::class, $ficheMatiere);
@@ -171,10 +173,16 @@ class FicheMatiereWizardController extends AbstractController
             $ecBccs[] = $competence->getBlocCompetence()?->getId();
         }
 
+        if ($ficheMatiere->getParcours() !== null) {
+            $bccs = $blocCompetenceRepository->findByParcours($ficheMatiere->getParcours());
+        } else {
+            $bccs = $blocCompetenceRepository->findBy(['parcours' => null]);
+        }
+
         return $this->render('fiche_matiere_wizard/_step3.html.twig', [
             'ficheMatiere' => $ficheMatiere,
             'form' => $form->createView(),
-            'bccs' => $ficheMatiere->getParcours()?->getBlocCompetences(),
+            'bccs' => $bccs ,
             'ecBccs' => array_flip(array_unique($ecBccs)),
             'ecComps' => array_flip($ecComps),
         ]);

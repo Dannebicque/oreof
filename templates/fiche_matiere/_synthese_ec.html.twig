@@ -1,23 +1,37 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-6">
+            <div class="col-4">
                 <dl>
-
-{#                    <dt>Type de diplôme</dt>#}
-{#                    <dd>{{ typeDiplome.libelle }}</dd>#}
-                    <dt>Parcours</dt>
+                    <dt>Parcours porteur</dt>
                     <dd>
-                        {% for ec in ficheMatiere.elementConstitutifs %}
-                            {{ ec.parcours!= null ? ec.parcours.libelle : 'non défini' }}<br>
-                        {% endfor %}
+                        {% if ficheMatiere.parcours != null %}
+                            {{ ficheMatiere.parcours.formation.display }}
+                            {% if ficheMatiere.parcours.formation.hasParcours == true %}
+                                / {{ ficheMatiere.parcours.libelle }}
+                            {% endif %}
+                        {% else %}
+                            Sans parcours
+                        {% endif %}
                     </dd>
                 </dl>
             </div>
-            <div class="col-6">
+            <div class="col-4">
                 <dl>
-                    <dt>fiche matière/EC</dt>
+                    <dt>fiche EC/matière</dt>
                     <dd>{{ ficheMatiere.libelle }}</dd>
+                </dl>
+            </div>
+            <div class="col-4">
+                <dl>
+                    <dt>Mention mobilisant la fiche EC/matière</dt>
+                    <dd>
+                        {% for ec in ficheMatiere.elementConstitutifs %}
+                            {{ ec.parcours != null ? ec.parcours.libelle : 'non défini' }}<br>
+                        {% else %}
+                            Non utilisée
+                        {% endfor %}
+                    </dd>
                 </dl>
             </div>
             <div class="col-12">

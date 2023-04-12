@@ -8,73 +8,82 @@
             <th>Libellé</th>
             <th>Référent</th>
             <th>Remplissage</th>
-{#            <th>Etat</th>#}
+            {#            <th>Etat</th> #}
             <th></th>
 
         </tr>
         </thead>
         <tbody>
         {% for ficheMatiere in ficheMatieres %}
-        <tr>
-            <td></td>
-            <td>{{ ficheMatiere.libelle }}</td>
-            <td>{{ ficheMatiere.responsableFicheMatiere != null ? ficheMatiere.responsableFicheMatiere.display : 'Non défini' }}</td>
-            <td>{{ ficheMatiere.remplissage|remplissage }}</td>
-{#            <td>{{ ficheMatiere.etatFicheMatiere|badgeEc }}</td>#}
+            <tr>
+                <td>
+                    {% if ficheMatiere.parcours != null %}
+                        {{ ficheMatiere.parcours.formation.display }}
+                        {% if ficheMatiere.parcours.formation.hasParcours == true %}
+                            / {{ ficheMatiere.parcours.libelle }}
+                        {% endif %}
+                    {% else %}
+                        Sans parcours
+                    {% endif %}
+                </td>
+                <td>{{ ficheMatiere.libelle }}</td>
+                <td>{{ ficheMatiere.responsableFicheMatiere != null ? ficheMatiere.responsableFicheMatiere.display : 'Non défini' }}</td>
+                <td>{{ ficheMatiere.remplissage|remplissage }}</td>
+                {#            <td>{{ ficheMatiere.etatFicheMatiere|badgeEc }}</td> #}
 
-            <td class="text-end">
-                {#                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', ficheMatiere.parcours.formation) or is_granted #}
-                {#                        ('ROLE_PARCOURS_EDIT_MY', ficheMatiere)) and  (not workflow_can(ec, #}
-                {#                        'initialiser') ) %} #}
-                <a
-                        href="{{ path('app_fiche_matiere_show',{'id': ficheMatiere.id}) }}"
-                        class="btn btn-sm text-info"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Voir une fiche EC/matière"
-                        target="_blank"
-                >
-                    <i class="{{ iconShow }}"></i>
-                    <span> voir</span>
-                </a>
-                {#                    {% endif %} #}
+                <td class="text-end">
+                    {#                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', ficheMatiere.parcours.formation) or is_granted #}
+                    {#                        ('ROLE_PARCOURS_EDIT_MY', ficheMatiere)) and  (not workflow_can(ec, #}
+                    {#                        'initialiser') ) %} #}
+                    <a
+                            href="{{ path('app_fiche_matiere_show',{'id': ficheMatiere.id}) }}"
+                            class="btn btn-sm text-info"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Voir une fiche EC/matière"
+                            target="_blank"
+                    >
+                        <i class="{{ iconShow }}"></i>
+                        <span> voir</span>
+                    </a>
+                    {#                    {% endif %} #}
 
 
-                {#                    {% if ((is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and  (workflow_can(ec, #}
-                {#                        'valider_ec') or workflow_can(ec, #}
-                {#                        'initialiser'))) or (is_granted #}
-                {#                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
-                {#                        'valider_ec')) %} #}
-                <a
-                        href="{{ path('app_fiche_matiere_edit',{'id': ficheMatiere.id}) }}"
-                        class="btn btn-sm text-warning"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Modifier une fiche EC/matière"
-                >
-                    <i class="{{ iconEdit }}"></i>
-                    <span> modifier</span>
-                </a>
-                <button {{ stimulus_action('crud', 'duplicate', 'click', {
-                    url:path('app_fiche_matiere_dupliquer',{'id': ficheMatiere.id})
-                }) }} class="btn btn-sm text-primary">
-                    <i class="{{ iconDuplicate }}"></i>
-                    <span> dupliquer</span>
-                </button>
+                    {#                    {% if ((is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and  (workflow_can(ec, #}
+                    {#                        'valider_ec') or workflow_can(ec, #}
+                    {#                        'initialiser'))) or (is_granted #}
+                    {#                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
+                    {#                        'valider_ec')) %} #}
+                    <a
+                            href="{{ path('app_fiche_matiere_edit',{'id': ficheMatiere.id}) }}"
+                            class="btn btn-sm text-warning"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Modifier une fiche EC/matière"
+                    >
+                        <i class="{{ iconEdit }}"></i>
+                        <span> modifier</span>
+                    </a>
+                    <button {{ stimulus_action('crud', 'duplicate', 'click', {
+                        url:path('app_fiche_matiere_dupliquer',{'id': ficheMatiere.id})
+                    }) }} class="btn btn-sm text-primary">
+                        <i class="{{ iconDuplicate }}"></i>
+                        <span> dupliquer</span>
+                    </button>
 
-{#                {% endif %}#}
-                {#                    {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and workflow_can(ec, #}
-                {#                        'valider_ec') %} #}
+                    {#                {% endif %} #}
+                    {#                    {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and workflow_can(ec, #}
+                    {#                        'valider_ec') %} #}
 
-                <button {{ stimulus_action('crud', 'delete', 'click', {
-                    url:path('app_fiche_matiere_delete',{'id': ficheMatiere.id}),
-                    csrf: csrf_token('delete' ~ ficheMatiere.id)
-                }) }} class="btn btn-sm text-danger">
-                    <i class="{{ iconDelete }}"></i> Supprimer
-                </button>
-                {#                    {% endif %} #}
-            </td>
-        </tr>
+                    <button {{ stimulus_action('crud', 'delete', 'click', {
+                        url:path('app_fiche_matiere_delete',{'id': ficheMatiere.id}),
+                        csrf: csrf_token('delete' ~ ficheMatiere.id)
+                    }) }} class="btn btn-sm text-danger">
+                        <i class="{{ iconDelete }}"></i> Supprimer
+                    </button>
+                    {#                    {% endif %} #}
+                </td>
+            </tr>
         {% else %}
             <tr>
                 <td colspan="{% if mode == 'liste' %}10{% else %}8{% endif %}" class="bg-warning">
