@@ -88,14 +88,15 @@ class ParcoursAccessVoter extends Voter
 
     private function hasEditOnHisParcours(UserInterface|User $user, Parcours $subject): bool
     {
-//        //todo: A faire droit sur parcours ou sur la formation
-//        foreach ($user->getUserCentres() as $centre) {
-//            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-        return true;
+        //todo: Comment gérer les co-responsable
+        foreach ($user->getUserCentres() as $centre) {
+            if ($centre->getFormation() === $subject->getFormation() &&
+                $subject->getRespParcours()?->getId() === $user->getId() &&
+                count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

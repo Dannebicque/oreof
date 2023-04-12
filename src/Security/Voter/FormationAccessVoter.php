@@ -79,14 +79,13 @@ class FormationAccessVoter extends Voter
 
     private function hasEditOnHisFormation(UserInterface|User $user, Formation $subject): bool
     {
-//        foreach ($user->getUserCentres() as $centre) {
-//            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-        return true;
+        foreach ($user->getUserCentres() as $centre) {
+            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function canAddEcFormation(UserInterface|User $user, mixed $subject): bool
