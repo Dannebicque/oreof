@@ -70,7 +70,7 @@
                                                     <span class="badge bg-success"> Complet</span>
 
                                                 {% else %}
-                                                    <span class="badge bg-warning"> Non complété</span>
+                                                    <span class="badge bg-warning"> À compléter</span>
                                                 {% endif %}
                                             </a>
                                             {% else %}
@@ -317,7 +317,6 @@
                             {{ ec.etatStructure }}
                         </span>
                                         </button>
-
                                     </div>
                                     <div class="col-6 col-md-3 d-flex flex-column justify-content-center">
                                         <div class="text-muted text-small d-md-none">Actions</div>
@@ -451,9 +450,8 @@
                                                             <i class="fal fa-file"></i>
                                                             {% if ece.ficheMatiere.remplissage == 100 %}
                                                                 <span class="badge bg-success"> Complet</span>
-
                                                             {% else %}
-                                                                <span class="badge bg-warning"> Non complété</span>
+                                                                <span class="badge bg-warning"> À compléter</span>
                                                             {% endif %}
                                                         </a>
                                                     {% else %}

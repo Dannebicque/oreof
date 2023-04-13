@@ -230,7 +230,7 @@ class ElementConstitutif
         $nbHeures = $this->volumeCmPresentiel ?? 0.0 + $this->volumeTdPresentiel ?? 0.0 + $this->volumeTpPresentiel ?? 0.0 + $this->volumeCmDistanciel ?? 0.0 + $this->volumeTdDistanciel ?? 0.0 + $this->volumeTpDistanciel ?? 0.0;
 
         if ($nbHeures === 0.0 && $this->modaliteEnseignement === null) {
-            return 'Non complété';
+            return 'À compléter';
         }
 
         if ($nbHeures === 0.0) {
@@ -279,7 +279,7 @@ class ElementConstitutif
             }
         }
 
-        return $pourcentageOK && $nbNotesOK ? 'Complet' : 'Non complet';
+        return $pourcentageOK && $nbNotesOK ? 'Complet' : 'À compléter';
     }
 
     public function isIsCmPresentielMutualise(): ?bool
