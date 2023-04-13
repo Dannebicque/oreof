@@ -9,7 +9,6 @@
                         mb-md-0 text-small justify-content-center">
                             EC
                         </div>
-
                         <div class="col-12 col-md-2 d-flex align-items-center mb-2 justify-content-center
                         text-secondary mb-md-0 text-small">
                             fiche EC/matière associée
@@ -49,7 +48,7 @@
                                         {% if ec.ficheMatiere != null %}
                                             {{ ec.display }}
                                         {% else %}
-                                            {{ ec.texteEcLibre }} (EC Libre)
+                                            {{ ec.texteEcLibre }}
                                         {% endif %}
                                     </div>
                                     <div class="col-12 col-md-2 d-flex flex-column justify-content-center">
@@ -74,7 +73,7 @@
                                                 {% endif %}
                                             </a>
                                             {% else %}
-                                                {{ ec.texteEcLibre }} (EC Libre)
+                                                <span class="badge bg-info">EC Libre</span>
                                             {% endif %}
                                         {% endif %}
                                     </div>
