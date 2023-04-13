@@ -140,35 +140,6 @@
                                     <div class="col-6 col-md-3 d-flex flex-column justify-content-center">
                                         <div class="text-muted text-small d-md-none">Actions</div>
                                         <div class="row">
-                                            {#                                                <div class="col-4"> #}
-                                            {#                                                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or is_granted #}
-                                            {#                                                        ('ROLE_EC_EDIT_MY', ec)) %} #}
-                                            {#                                                        {% if ec.ficheMatiere != null and editable == true %} #}
-                                            {#                                                            <a #}
-                                            {#                                                                    href="{{ path('app_fiche_matiere_show',{'id': ec.ficheMatiere.id}) }}" #}
-                                            {#                                                                    class="btn btn-sm text-info" #}
-                                            {#                                                                    data-bs-toggle="tooltip" #}
-                                            {#                                                                    data-bs-placement="bottom" #}
-                                            {#                                                                    title="Voir la fiche EC/matière" #}
-                                            {#                                                                    target="_blank" #}
-                                            {#                                                            > #}
-                                            {#                                                                <i class="{{ iconShow }}"></i> #}
-                                            {#                                                                <span> Voir la fiche EC/matière</span> #}
-                                            {#                                                            </a><br> #}
-                                            {#                                                            <a #}
-                                            {#                                                                    href="{{ path('app_fiche_matiere_edit',{'id': ec.ficheMatiere.id}) }}" #}
-                                            {#                                                                    class="btn btn-sm text-warning" #}
-                                            {#                                                                    data-bs-toggle="tooltip" #}
-                                            {#                                                                    data-bs-placement="bottom" #}
-                                            {#                                                                    title="Modifier la fiche EC/matière" #}
-                                            {#                                                                    target="_blank" #}
-                                            {#                                                            > #}
-                                            {#                                                                <i class="{{ iconEdit }}"></i> #}
-                                            {#                                                                <span> Modifier la fiche EC/matière</span> #}
-                                            {#                                                            </a> #}
-                                            {#                                                        {% endif %} #}
-                                            {#                                                    {% endif %} #}
-                                            {#                                                </div> #}
                                             <div class="col-6">
                                                 {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
                                                     ('ROLE_EC_EDIT_MY', ec)) )) %}
@@ -466,37 +437,6 @@
                                             <div class="col-6 col-md-3 d-flex flex-column justify-content-center">
                                                 <div class="text-muted text-small d-md-none">Actions</div>
                                                 <div class="row">
-                                                    {#                                                        <div class="col-4"> #}
-                                                    {#                                                            {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or is_granted #}
-                                                    {#                                                                ('ROLE_EC_EDIT_MY', ece) and editable == true) %} #}
-                                                    {#                                                                {% if ece.ficheMatiere != null %} #}
-                                                    {#                                                                    <a #}
-                                                    {#                                                                            href="{{ path('app_fiche_matiere_show', #}
-                                                    {#                                                                                {'id': ece.ficheMatiere.id}) }}" #}
-                                                    {#                                                                            class="btn btn-sm text-info" #}
-                                                    {#                                                                            data-bs-toggle="tooltip" #}
-                                                    {#                                                                            data-bs-placement="bottom" #}
-                                                    {#                                                                            title="Voir la fiche EC/matière" #}
-                                                    {#                                                                            target="_blank" #}
-                                                    {#                                                                    > #}
-                                                    {#                                                                        <i class="{{ iconShow }}"></i> #}
-                                                    {#                                                                        <span> Voir la fiche EC/matière</span> #}
-                                                    {#                                                                    </a><br> #}
-                                                    {#                                                                    <a #}
-                                                    {#                                                                            href="{{ path('app_fiche_matiere_edit', #}
-                                                    {#                                                                                {'id': ece.ficheMatiere.id}) }}" #}
-                                                    {#                                                                            class="btn btn-sm text-warning" #}
-                                                    {#                                                                            data-bs-toggle="tooltip" #}
-                                                    {#                                                                            data-bs-placement="bottom" #}
-                                                    {#                                                                            title="Modifier la fiche EC/matière" #}
-                                                    {#                                                                            target="_blank" #}
-                                                    {#                                                                    > #}
-                                                    {#                                                                        <i class="{{ iconEdit }}"></i> #}
-                                                    {#                                                                        <span> Modifier la fiche EC/matière</span> #}
-                                                    {#                                                                    </a> #}
-                                                    {#                                                                {% endif %} #}
-                                                    {#                                                            {% endif %} #}
-                                                    {#                                                        </div> #}
                                                     <div class="col-6">
                                                         {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
                                                             ('ROLE_EC_EDIT_MY', ec)) ) and editable == true) %}
