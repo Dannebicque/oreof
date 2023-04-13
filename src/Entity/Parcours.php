@@ -428,7 +428,7 @@ class Parcours
         return $this;
     }
 
-    public function remplissage(): float
+    public function remplissageBrut(): int
     {
         $total = 0;
         $total += count($this->getRegimeInscription()) === 0 ? 0 : 1;
@@ -441,7 +441,14 @@ class Parcours
         $total += $this->getPoursuitesEtudes() === null ? 0 : 1;
         $total += $this->getCoordSecretariat() === null ? 0 : 1;
         $total += count($this->getCodesRome()) === 0 ? 0 : 1;
-        return $total / 10 * 100;
+
+        return $total;
+    }
+
+    public function remplissage(): float
+    {
+
+        return $this->remplissageBrut() / 10 * 100;
     }
 
     public function getRythmeFormation(): ?RythmeFormation

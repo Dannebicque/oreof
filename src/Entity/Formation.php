@@ -10,7 +10,6 @@
 namespace App\Entity;
 
 use App\Entity\Traits\LifeCycleTrait;
-use App\Enums\EtatRemplissageEnum;
 use App\Enums\NiveauFormationEnum;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\FormationRepository;
@@ -507,9 +506,14 @@ class Formation
         $total += $this->getRythmeFormation() === null ? 0 : 1;
         $total += $this->getRythmeFormationTexte() === null ? 0 : 1;
         $total += $this->isHasParcours() === null ? 0 : 1;
-       // $total += count($this->getStructureSemestres()) === 0 ? 0 : 1;
-//todo: ajouter le remplissage des parcours et des matières ?
-        return $total / 6 * 100;
+        $max = 6;
+        foreach ($this->getParcours() as $parcours) {
+            $total += $parcours->remplissageBrut();
+            $max += 10;
+        }
+
+        //todo: ajouter le remplissage des matières ?
+        return $total / $max * 100;
     }
 
     public function getRythmeFormation(): ?RythmeFormation
