@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.22](https://github.com/Dannebicque/oreof/compare/v0.21.21...v0.21.22) (2023-04-13)
+
+
+### Features
+
+* Bouton back sur fiche matière selon la source ([3f9bdcf](https://github.com/Dannebicque/oreof/commit/3f9bdcfed72f3e427d9cc63cdde93115ea1c3012))
+* remplissage ([3d9b7fd](https://github.com/Dannebicque/oreof/commit/3d9b7fd50623eea0e4e8daf944fd034759a67ad6))
+* Suppression de l'onglet présentation dans formation. Remise sur parcours ([df5ca89](https://github.com/Dannebicque/oreof/commit/df5ca89f87dff9892ec4ef4dd520e7352b1e8a15))
+
+
+### Bug Fixes
+
+* boutons, textes ([e97f56d](https://github.com/Dannebicque/oreof/commit/e97f56d5b12a8fbe3a2e4d0c44c84e57b58a8d5b))
+* Fiche matière + améliorations JS ([c9563a2](https://github.com/Dannebicque/oreof/commit/c9563a201c1009f4acdd757af12518aacfcd7a46))
+
 ### [0.21.21](https://github.com/Dannebicque/oreof/compare/v0.21.20...v0.21.21) (2023-04-13)
 
 
