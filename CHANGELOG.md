@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.21](https://github.com/Dannebicque/oreof/compare/v0.21.20...v0.21.21) (2023-04-13)
+
+
+### Bug Fixes
+
+* bouton parcours ([a26eb61](https://github.com/Dannebicque/oreof/commit/a26eb613256462ce48d0c4b6a8ea290ac8d04ed0))
+
 ### [0.21.20](https://github.com/Dannebicque/oreof/compare/v0.21.19...v0.21.20) (2023-04-13)
 
 
