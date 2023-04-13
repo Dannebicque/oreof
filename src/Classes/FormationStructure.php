@@ -70,6 +70,7 @@ class FormationStructure
                 $parcours->setLibelle(Parcours::PARCOURS_DEFAUT);
                 $parcours->setRespParcours($formation->getResponsableMention());
                 $parcours->setModalitesEnseignement(null);
+                $this->parcoursWorkflow->apply($parcours, 'initialiser');
                 $this->parcoursWorkflow->apply($parcours, 'autoriser');
                 $semestres = [];
 
