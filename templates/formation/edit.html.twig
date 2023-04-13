@@ -22,12 +22,6 @@
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link {% if selectedStep == 2 %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
-                        {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 2}) }}
-                   aria-selected="false">Présentation de la
-                                         formation {{ formationState.onglets|etatRemplissage(2, 'formation') }}</a>
-            </li>
-            <li class="nav-item" role="presentation">
                 <a class="nav-link {% if selectedStep == 3 %}active{% endif %}" data-bs-toggle="tab" href="#"
                    role="tab" aria-selected="false"
                         {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 3}) }}
@@ -36,6 +30,12 @@
             </li>
             {% if formation.parcours[0] is defined and formation.hasParcours == false %}
                 {% set parcours = formation.parcours[0] %}
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {% if selectedStep == 2 %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
+                            {{ stimulus_action('formation_wizard', 'changeStep', 'click', {step: 2}) }}
+                       aria-selected="false">Présentation de la
+                                             formation {{ formationState.onglets|etatRemplissage(2, 'formation') }}</a>
+                </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link"
                        data-bs-toggle="tab" href="#" role="tab"

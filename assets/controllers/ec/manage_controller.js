@@ -80,7 +80,7 @@ export default class extends Controller {
       }
       table.deleteRow(row.rowIndex)
     })
-
+    select.value = ''
     this.code++
   }
 
@@ -111,7 +111,7 @@ export default class extends Controller {
       }
       table.deleteRow(row.rowIndex)
     })
-
+    document.getElementById('ficheMatiereLibelle').value = ''
     this.code++
   }
 
