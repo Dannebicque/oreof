@@ -16,9 +16,8 @@ export default class extends Controller {
 
   connect() {
     const tooltip = new Tooltip(this.element, {
-      trigger: 'click hover', // mettre hover ?
+      trigger: 'hover', // mettre hover ?
       html: true,
-      delay: { show: 500, hide: 100 },
       placement: this.placementValue,
     })
   }
