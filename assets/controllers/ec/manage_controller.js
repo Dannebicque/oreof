@@ -156,7 +156,7 @@ export default class extends Controller {
     event.preventDefault()
     if (document.getElementById('ficheMatiereLibelle').value !== '') {
       if (confirm(`Voulez-vous créer une nouvelle fiche de matière ${document.getElementById('ficheMatiereLibelle').value} ? Il faudra ensuite compléter les éléments de cette fiche EC/matière.`)) {
-        document.getElementById('ficheMatiereLibelle').value = `${document.getElementById('ficheMatiereLibelle').value} (à créer)`
+        document.getElementById('ficheMatiereLibelle').value = `${document.getElementById('ficheMatiereLibelle').value} (à compléter)`
       }
     } else {
       callOut('Vous devez indiquer un libellé pour créer une nouvelle fiche de matière', 'warning')

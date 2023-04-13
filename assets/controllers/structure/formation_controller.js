@@ -29,6 +29,15 @@ export default class extends Controller {
   }
 
   afficherParcours(event) {
+    const icone = event.target.firstElementChild.classList
+
+    if (icone.contains('fa-caret-right')) {
+      icone.remove('fa-caret-right')
+      icone.add('fa-caret-down')
+    } else {
+      icone.remove('fa-caret-down')
+      icone.add('fa-caret-right')
+    }
     document.getElementById(`parcours_${event.params.formation}`).classList.toggle('d-none')
   }
 }
