@@ -48,7 +48,7 @@ export default class extends Controller {
       action: 'yesNo',
       value: event.target.value,
     })
-    if (event.target.value == 1) {
+    if (parseInt(event.target.value, 10) === 1) {
       document.getElementById('blocStage').style.display = 'block';
     } else {
       document.getElementById('blocStage').style.display = 'none';
@@ -78,7 +78,7 @@ export default class extends Controller {
       action: 'yesNo',
       value: event.target.value,
     })
-    if (event.target.value == 1) {
+    if (parseInt(event.target.value, 10) === 1) {
       document.getElementById('blocProjet').style.display = 'block';
     } else {
       document.getElementById('blocProjet').style.display = 'none';
@@ -107,7 +107,7 @@ export default class extends Controller {
       action: 'yesNo',
       value: event.target.value,
     })
-    if (event.target.value == 1) {
+    if (parseInt(event.target.value, 10) === 1) {
       document.getElementById('blocSituationPro').style.display = 'block';
     } else {
       document.getElementById('blocSituationPro').style.display = 'none';
@@ -137,7 +137,7 @@ export default class extends Controller {
       action: 'yesNo',
       value: event.target.value,
     })
-    if (event.target.value == 1) {
+    if (parseInt(event.target.value, 10) === 1) {
       document.getElementById('blocMemoire').style.display = 'block';
     } else {
       document.getElementById('blocMemoire').style.display = 'none';

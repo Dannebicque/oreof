@@ -12,6 +12,7 @@ namespace App\Form;
 use App\Entity\ElementConstitutif;
 use App\Entity\NatureUeEc;
 use App\Entity\TypeEc;
+use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeEcRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -44,6 +45,9 @@ class ElementConstitutifType extends AbstractType
             ->add('natureUeEc', EntityType::class, [
                 'class' => NatureUeEc::class,
                 'choice_label' => 'libelle',
+                'query_builder' => fn (
+                    NatureUeEcRepository $natureUeEcRepository
+                ) => $natureUeEcRepository->findByBuilder(),
                 'required' => false,
                 'placeholder' => 'Choisissez une nature...',
                 'choice_attr' => function ($choice) {

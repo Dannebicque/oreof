@@ -61,7 +61,7 @@ export default class extends Controller {
     this.modalBodyTarget.innerHTML = await response.text()
   }
 
-  modalHide(event) {
+  modalHide() {
     this.modal.hide()
     this.modalBodyTarget.innerHTML = ''
     this.dispatch('modalClose')

@@ -11,6 +11,7 @@ namespace App\Repository;
 
 use App\Entity\NatureUeEc;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -48,5 +49,11 @@ class NatureUeEcRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findByBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('n')
+            ->orderBy('n.libelle', 'ASC');
     }
 }

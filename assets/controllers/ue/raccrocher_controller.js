@@ -17,7 +17,6 @@ export default class extends Controller {
   valideReutilise(event) {
     event.preventDefault()
     const { value } = document.getElementById('raccrocher')
-    console.log(value)
     if (value !== '') {
       if (confirm('Voulez-vous vraiment réutiliser cette UE ?')) {
         const body = {
