@@ -109,10 +109,23 @@ class FicheMatiereController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_fiche_matiere_edit', methods: ['GET', 'POST'])]
     public function edit(
+        Request $request,
         FicheMatiere $ficheMatiere,
         FicheMatiereState $ficheMatiereState,
     ): Response {
         $ficheMatiereState->setFicheMatiere($ficheMatiere);
+
+        $referer = $request->headers->get('referer');
+
+        if ($referer === null || false === str_contains($referer, 'parcours')) {
+            $source = 'liste';
+        } else {
+            $source = 'parcours';
+            $link = $referer;
+        }
+
+
+
         //(is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) or is_granted
         //                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
         //                        'valider_ec')
@@ -133,6 +146,8 @@ class FicheMatiereController extends AbstractController
         return $this->render('fiche_matiere/edit.html.twig', [
             'fiche_matiere' => $ficheMatiere,
             'ficheMatiereState' => $ficheMatiereState,
+            'source' => $source,
+            'link' => $link ?? null,
         ]);
     }
 

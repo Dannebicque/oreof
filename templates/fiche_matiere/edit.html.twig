@@ -73,7 +73,7 @@
 {% endblock %}
 
 {% block bouton_header %}
-    {# todo: redigier selon la source ? #}
+    {% if source == 'liste' %}
     <a href="{{ path('structure_fiche_matiere_index') }}"
        class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"
@@ -83,4 +83,15 @@
         <i class="{{ iconBack }}"></i>
         <span> Retour à la liste des fiches EC/matières</span>
     </a>
+    {% else %}
+        <a href="{{ link }}"
+           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Retour au parcours"
+        >
+            <i class="{{ iconBack }}"></i>
+            <span> Retour au parcours</span>
+        </a>
+    {% endif %}
 {% endblock %}
