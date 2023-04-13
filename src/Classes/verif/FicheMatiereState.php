@@ -71,7 +71,7 @@ class FicheMatiereState
         }
 
         if ($this->ficheMatiere->getResponsableFicheMatiere() === null) {
-            $tab['error'][] = 'Vous devez indiquer le responsable de la fiche.';
+            $tab['error'][] = 'Vous devez indiquer le responsable de la fiche EC/matière.';
         }
 
         if ($this->ficheMatiere->isEnseignementMutualise() === true) {

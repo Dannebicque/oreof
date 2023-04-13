@@ -44,6 +44,12 @@ class FicheMatiereSaveController extends BaseController
         FicheMatiere $ficheMatiere
     ): Response {
         $ficheMatiereState->setFicheMatiere($ficheMatiere);
+
+        if (str_ends_with($ficheMatiere->getLibelle(), '(à compléter)')) {
+            $ficheMatiere->setLibelle(trim(str_replace('(à compléter)','',$ficheMatiere->getLibelle())));
+            $entityManager->flush();
+        }
+
         //todo: check si bonne formation...
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
@@ -63,16 +69,6 @@ class FicheMatiereSaveController extends BaseController
                 $rep = $updateEntity->saveYesNo($ficheMatiere, $data['field'], $data['value']);
 
                 return $this->json($rep);
-//            case 'mcccs':
-//                $formation = $ficheMatiere->getParcours()->getFormation();
-//                if ($formation === null) {
-//                    return $this->json(false);
-//                }
-//                $typeDiplome = $formation->getTypeDiplome();
-//                $typeDiplome->saveMccc($ec, $data['field'], $data['value']);//todo: récupérer le bon MCCC
-//
-//                return $this->json(true);
-
             case 'textarea':
             case 'selectWithoutEntity':
                 $rep = $updateEntity->saveField($ficheMatiere, $data['field'], $data['value']);
@@ -92,11 +88,6 @@ class FicheMatiereSaveController extends BaseController
                 );
 
                 return $this->json($rep);
-//            case 'typeEnseignement':
-//                $rythme = $natureUeEcRepository->find($data['value']);
-//                $rep = $updateEntity->saveField($ec, 'typeEnseignement', $rythme);
-//
-//                return $this->json($rep);
             case 'responsableFicheMatiere':
                 $responsableFicheMatiere = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($ficheMatiere, 'responsableFicheMatiere', $responsableFicheMatiere);

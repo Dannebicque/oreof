@@ -79,10 +79,14 @@ export default class extends Controller {
   }
 
   saveContenuFr() {
+    const { value } = document.getElementById('fiche_matiere_step1_libelle')
     this._save({
       field: 'libelle',
       action: 'textarea',
-      value: document.getElementById('fiche_matiere_step1_libelle').value,
+      value,
+    }).then(() => {
+      document.getElementById('fiche_matiere_libelle').innerText = value
+      document.getElementById('fiche_matiere_libelle_dd').innerText = value
     })
   }
 

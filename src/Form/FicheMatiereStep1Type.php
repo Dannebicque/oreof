@@ -51,6 +51,7 @@ class FicheMatiereStep1Type extends AbstractType
 //                        ->addOrderBy('u.prenom', 'ASC');
 //                },//todo: filtrer par user dans le centre
                 'disabled' => !$access,
+                'required' => false,
                 'attr' => ['data-action' => 'change->fichematiere--step1#changeResponsableEc'],
                 'choice_label' => 'display',
             ])
