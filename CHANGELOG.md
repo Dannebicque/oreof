@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.18](https://github.com/Dannebicque/oreof/compare/v0.21.17...v0.21.18) (2023-04-13)
+
+
+### Bug Fixes
+
+* À compléter ([52b2c9b](https://github.com/Dannebicque/oreof/commit/52b2c9b762d7d8ecc56e93105ed263b673505a6b))
+* Bouton retour à la formation sur parcours ([8d92520](https://github.com/Dannebicque/oreof/commit/8d925202bbbd816f2ad4f75f8ad15a8d31378db5))
+* Droits SES ([143dd50](https://github.com/Dannebicque/oreof/commit/143dd504024b17c6df075e1ce208b0e572eed570))
+* EVITER DOUBLONS ([81991f0](https://github.com/Dannebicque/oreof/commit/81991f0b77eae81a9cfa1a2ca70370377f8763fb))
+* Suppression target blank ([d0adcb7](https://github.com/Dannebicque/oreof/commit/d0adcb7b5972aa5c044f027d82c084428f0e69dd))
+* Tooltip sans délai. ([624624c](https://github.com/Dannebicque/oreof/commit/624624ca8c2564a8554bd6d19d07a8b67b7edb8f))
+
 ### [0.21.17](https://github.com/Dannebicque/oreof/compare/v0.21.16...v0.21.17) (2023-04-13)
 
 
