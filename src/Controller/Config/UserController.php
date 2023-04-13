@@ -73,7 +73,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/ajouter-ldap', name: 'app_user_new_ldap', methods: ['GET'])]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_SES')]
     public function newLdap(): Response {
         $user = new User();
         $form = $this->createForm(UserLdapType::class, $user, [
@@ -86,7 +86,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/ajouter-ldap', name: 'app_user_new_ldap_valide', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_SES')]
     public function saveLdap(
         Ldap $ldap,
         Request $request,
@@ -149,7 +149,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_SES')]
     public function edit(Request $request, User $user, UserRepository $userRepository): Response
     {
         $form = $this->createForm(
