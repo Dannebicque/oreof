@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.19](https://github.com/Dannebicque/oreof/compare/v0.21.18...v0.21.19) (2023-04-13)
+
+
+### Bug Fixes
+
+* Workflow ([944da2c](https://github.com/Dannebicque/oreof/commit/944da2c6a2652e6fd6b62052ed708b6c9ca5060b))
+
 ### [0.21.18](https://github.com/Dannebicque/oreof/compare/v0.21.17...v0.21.18) (2023-04-13)
 
 
