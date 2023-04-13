@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.16](https://github.com/Dannebicque/oreof/compare/v0.21.15...v0.21.16) (2023-04-13)
+
+
+### Features
+
+* Compétences et BCC sans parcours ([6847824](https://github.com/Dannebicque/oreof/commit/68478247b9b29d2de8b207c74f48e13fa7c2273c))
+* Sécurité parcours/formation ([24c31f5](https://github.com/Dannebicque/oreof/commit/24c31f54541a31bc578dcca927ddbf9862f85e5f))
+
+
+### Bug Fixes
+
+* Affichage des EC et du bouton ([09162f0](https://github.com/Dannebicque/oreof/commit/09162f06f5a0d7928851aa15435fc473555a7d7a))
+* Affichage des fiches EC/matière ([04f0985](https://github.com/Dannebicque/oreof/commit/04f09858e2c97f42e364d065e4f2f03b3f2237d0))
+* mise en page EC des labels ([1976cfe](https://github.com/Dannebicque/oreof/commit/1976cfedf52e64bd7c2e9639d81d6e80d0a03107))
+* Suppression des langues par erreur ([2e8ca95](https://github.com/Dannebicque/oreof/commit/2e8ca9572e984d6012f5367e8ab9e0829da1f74c))
+
 ### [0.21.15](https://github.com/Dannebicque/oreof/compare/v0.21.14...v0.21.15) (2023-04-11)
 
 
