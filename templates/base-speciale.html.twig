@@ -5,7 +5,7 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.gstatic.com"/>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;500&display=swap" rel="stylesheet">
-{#    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>#}
+    {#    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap" rel="stylesheet"/> #}
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet"/>
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
@@ -19,6 +19,7 @@
 <div id="root" class="h-100">
     <!-- Background Start -->
     <div class="fixed-background"></div>
+    <div class="fixed-background-overlay"></div>
     <!-- Background End -->
 
     <div class="container-fluid p-0 h-100 position-relative">
@@ -28,16 +29,14 @@
                 <div class="min-h-100 d-flex align-items-center">
                     <div class="w-100">
                         <div>
-                            <div class="mb-5">
-                                <h1 class="display-3 text-white"><i class="fa-duotone fa-pencil-ruler fa-2x"
-                                                                    style="--fa-primary-color: var(--complementaire);
-"></i> {{ product_name
-                                    }}</h1>
-                                <h2 class="display-3 text-white">
-                                    <span style="color:#000000">O</span>util de<br>
-                                    <span style="color:#000000">Ré</span>daction de l'<br>
-                                    <span style="color:#000000">O</span>ffre de<br/>
-                                    <span style="color:#000000">F</span>ormation<br/>
+                            <div>
+                                <h1 class="display-3 text-white">
+                                    <span class="titre_product">{{ product_name }}</span></h1>
+                                <h2 class="display-3 text-white titre">
+                                    <span class="titre_maj">O</span>util de<br>
+                                    <span class="titre_maj">Ré</span>daction de l'<br>
+                                    <span class="titre_maj">O</span>ffre de<br/>
+                                    <span class="titre_maj">F</span>ormation<br/>
                                 </h2>
                             </div>
                         </div>
@@ -59,8 +58,7 @@
                                 <div class=" col-6">
                                     <div class="logo-special-but pt-2"><i class="fa-duotone fa-pencil-ruler fa-2x"
                                                                           style="--fa-primary-color: var(--complementaire);
-"></i> {{
-                                        product_name }}
+"></i> {{ product_name }}
                                     </div>
                                 </div>
                             </div>
@@ -68,84 +66,86 @@
                         {% block content %}
 
                         {% endblock %}
+                        <footer style="border-top:none" class="mt-4">
+                            <div class="footer-content">
+                                <div class="row">
+                                    <div class="col-12 text-medium">
+
+
+                                        <p class="mb-0 text-muted text-medium">&copy; 2023 David Annebicque // Emeline
+                                                                               Lang-Lannoy -
+                                                                               version {{ user_data.version }}</p>
+                                        <p>
+                                            <a href="#" class="btn-link">Docs</a>
+                                            |
+                                            <a href="#" class="btn-link" data-bs-toggle="modal"
+                                               data-bs-target="#modalUsageDonnees">Usage des données</a>
+                                        </p>
+                                    </div>
+
+                                    <!-- Modal -->
+                                    <div
+                                            class="modal fade modal-close-out"
+                                            id="modalUsageDonnees"
+                                            tabindex="-1"
+                                            role="dialog"
+                                            aria-labelledby="examplemodalUsageDonnees"
+                                            aria-hidden="true"
+                                    >
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="examplemodalUsageDonnees">Usage des
+                                                                                                          données</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Ce site n'enregistre aucune données sur votre utilisation de
+                                                       l'outil.</p>
+                                                    <p>Un seul cookie est utilisé permettant de gérer la connexion
+                                                       (lorsque vous activez
+                                                       l'option "se souvenir de moi" sur la page de connexion.</p>
+                                                    <p>Les fichiers de log (en cas d'erreur ou de problème) sont
+                                                       complètement
+                                                       anonymes et sans informations personnelles vous concernant.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 d-none d-sm-block">
+                                        <ul class="breadcrumb pt-0 pe-0 mb-0 float-end">
+                                            <li class="breadcrumb-item mb-0 text-medium">
+                                                <a href="mailto:david.annebicque@univ-reims.fr" target="_blank" class="btn-link"><i
+                                                            class="text-primary icon-14
+                                    fal fa-envelope"></i></a>
+                                            </li>
+                                            <li class="breadcrumb-item mb-0 text-medium">
+                                                <a href="https://github.com/Dannebicque/oreof" target="_blank"
+                                                   class="btn-link"><i class="text-primary icon-14
+                                    fa-brands fa-github"></i></a>
+                                            </li>
+                                            <li class="breadcrumb-item mb-0 text-medium">
+                                                <a href="https://twitter.com/davidannebicque" target="_blank" class="btn-link">
+                                                    <i class="text-primary icon-14 fa-brands fa-twitter"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </footer>
+
                     </div>
+
                 </div>
+                <!-- Footer Content Start -->
+                <!-- Footer Content End -->
             </div>
             <!-- Right Side End -->
         </div>
     </div>
-    <!-- Footer Content Start -->
-    <footer style="border-top:none">
-        <div class="footer-content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-sm-6">
 
-                        <ul class="breadcrumb pt-0 pe-0 mb-0">
-                            <li class="breadcrumb-item mb-0 text-medium">
-                                <p class="mb-0 text-muted text-medium">&copy; 2023 David Annebicque // Emeline Lang-Lannoy -
-                                                                       version {{ user_data.version }}</p>
-                            </li>
-                            <li class="breadcrumb-item mb-0 text-medium">
-                                <a href="#" class="btn-link">Docs</a>
-                            </li>
-                            <li class="breadcrumb-item mb-0 text-medium">
-                                <a href="#" class="btn-link" data-bs-toggle="modal"
-                                   data-bs-target="#modalUsageDonnees">Usage des données</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Modal -->
-                    <div
-                            class="modal fade modal-close-out"
-                            id="modalUsageDonnees"
-                            tabindex="-1"
-                            role="dialog"
-                            aria-labelledby="examplemodalUsageDonnees"
-                            aria-hidden="true"
-                    >
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="examplemodalUsageDonnees">Usage des données</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Ce site n'enregistre aucune données sur votre utilisation de l'outil.</p>
-                                    <p>Un seul cookie est utilisé permettant de gérer la connexion (lorsque vous activez
-                                       l'option "se souvenir de moi" sur la page de connexion.</p>
-                                    <p>Les fichiers de log (en cas d'erreur ou de problème) sont complètement
-                                       anonymes et sans informations personnelles vous concernant.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 d-none d-sm-block">
-                        <ul class="breadcrumb pt-0 pe-0 mb-0 float-end">
-                            <li class="breadcrumb-item mb-0 text-medium">
-                                <a href="mailto:david.annebicque@univ-reims.fr" target="_blank" class="btn-link"><i
-                                            class="text-primary icon-14
-                                    fal fa-envelope"></i></a>
-                            </li>
-                            <li class="breadcrumb-item mb-0 text-medium">
-                                <a href="https://github.com/Dannebicque/oreof" target="_blank"
-                                   class="btn-link"><i class="text-primary icon-14
-                                    fa-brands fa-github"></i></a>
-                            </li>
-                            <li class="breadcrumb-item mb-0 text-medium">
-                                <a href="https://twitter.com/davidannebicque" target="_blank" class="btn-link">
-                                    <i class="text-primary icon-14 fa-brands fa-twitter"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Footer Content End -->
 </div>
 
 </body>

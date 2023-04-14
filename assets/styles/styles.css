@@ -2298,7 +2298,7 @@ img {
   transform: translate(-50%, 0); }
 
 .fixed-background {
-  background: url("../img/background/background-blue.jpg") no-repeat center center fixed;
+  background: url("../../public/background-blue.jpg") no-repeat center center fixed;
   background-size: cover;
   width: 100%;
   height: 100%;
