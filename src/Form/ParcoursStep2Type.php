@@ -77,6 +77,7 @@ class ParcoursStep2Type extends AbstractType
                 'attr' => ['data-action' => 'change->parcours--step2#changeProjet'],
             ])
                 ->add('projetText', TextareaAutoSaveType::class, [
+                    'help' => '-',
                     'attr' => [
                         'rows' => 15,
                         'maxlength' => 3000,
@@ -99,6 +100,7 @@ class ParcoursStep2Type extends AbstractType
                 'attr' => ['data-action' => 'change->parcours--step2#changeMemoire'],
             ])
                 ->add('memoireText', TextareaAutoSaveType::class, [
+                    'help' => '-',
                     'attr' => [
                         'rows' => 15,
                         'maxlength' => 3000,
@@ -107,14 +109,13 @@ class ParcoursStep2Type extends AbstractType
                 ]);
         }
 
-        $builder
-            ->add('hasSituationPro', YesNoType::class, [
-                'attr' => ['data-action' => 'change->parcours--step2#changeSituationPro'],
-                'disabled' => !$typeDiplome?->isHasSituationPro(),
-                'data' => (bool)$typeDiplome?->isHasSituationPro(),
-            ]);
+
         if ($typeDiplome !== null && $typeDiplome->isHasSituationPro()) {
             $builder
+                ->add('hasSituationPro', YesNoType::class, [
+                    'attr' => ['data-action' => 'change->parcours--step2#changeSituationPro'],
+                    'data' => (bool)$typeDiplome?->isHasSituationPro(),
+                ])
                 ->add('nbHeuresSituationPro', NumberType::class, [
                 'html5' => true,
                 'scale' => 1,
@@ -125,6 +126,7 @@ class ParcoursStep2Type extends AbstractType
                 ],
             ])
                 ->add('situationProText', TextareaAutoSaveType::class, [
+                    'help' => '-',
                     'attr' => [
                         'rows' => 15,
                         'maxlength' => 3000,

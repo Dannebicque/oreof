@@ -11,6 +11,7 @@ import { saveData } from '../../js/saveData'
 import callOut from '../../js/callOut'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import { calculEtatStep } from '../../js/calculEtatStep'
+import trixEditor from '../../js/trixEditor'
 
 export default class extends Controller {
   static targets = [
@@ -26,9 +27,18 @@ export default class extends Controller {
   }
 
   connect() {
+    document.getElementById('form_objectifsFormation').addEventListener('trix-blur', this.saveObjectifsFormation.bind(this))
     if (this.hasParcoursValue === true) {
       this._refreshListe()
     }
+  }
+
+  saveObjectifsFormation() {
+    this._save({
+      field: 'objectifsFormation',
+      action: 'textarea',
+      value: trixEditor('form_objectifsFormation'),
+    })
   }
 
   async dupliquerParcours(event) {

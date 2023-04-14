@@ -13,6 +13,7 @@ use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Form\FormationStep1Type;
 use App\Form\FormationStep2Type;
+use App\Form\Type\TextareaAutoSaveType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -58,9 +59,18 @@ class FormationWizardController extends AbstractController
         Formation $formation
     ): Response {
 
+        $form = $this->createFormBuilder($formation)
+            ->add('objectifsFormation', TextareaAutoSaveType::class, [
+                'required' => true,
+                'attr' => ['maxlength' => 3000, 'data-action' => 'change->formation--step3#saveObjectifsFormation'],
+                'help' => '-'
+            ])
+            ->getForm();
+
         return $this->render('formation_wizard/_step3.html.twig', [
             'formation' => $formation,
             'typeDiplome' => $formation->getTypeDiplome(),
+            'form' => $form->createView(),
         ]);
     }
 

@@ -42,7 +42,8 @@
                         url: path('api_ects_ue', {ue: ue.id, parcours: parcours.id}),
                     }) }}>
                         <div class="card mb-2 sh-19 sh-md-8">
-                            <div class="card-body pt-0 pb-0 h-100 {% if ue.subOrdre != null and ue.subOrdre != 0 %}border-left-sousUe border-left-sousUe-{{ ue.ordre }}{% endif %}">
+                            <div class="card-body pt-0 pb-0 h-100 {% if ue.subOrdre != null and ue.subOrdre != 0
+                            %}border-left-sousUe border-left-sousUe-{{ ue.ordre }}{% endif %}">
                                 <div class="row g-0 h-100 align-content-center">
                                     <div class="col-md-1 d-flex flex-column justify-content-center">
                                         <div class="text-muted text-small d-md-none">ue</div>
@@ -161,7 +162,8 @@
                                                     <span> Raccrocher une UE</span>
                                                 </button>
                                             </div>
-                                            <div class="col-4 text-end">
+                                            <div class="col-4 text-end mt-2">{# todo: boutons non centrés dans la
+                                            ligne #}
                                                 {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation)) %} {#  and
                                         (workflow_can(ec,
                                             'valider_parcours') or workflow_can(ec,

@@ -241,6 +241,10 @@
   border-left: 2px solid var(--primary);
 }
 
+.card{
+  box-shadow: 0 4px 10px rgba(0,0,0,.2)!important;
+}
+
 //@for $i from 1 through 15 {
 //  .text-divider-color-#{$i} {
 //    --text-divider-gap: 1rem;
