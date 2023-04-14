@@ -125,6 +125,9 @@ class Formation
     #[ORM\ManyToOne(inversedBy: 'formations')]
     private ?TypeDiplome $typeDiplome = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $sigle = null;
+
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
         $this->anneeUniversitaire = $anneeUniversitaire;
@@ -360,7 +363,12 @@ class Formation
 
     public function display(): ?string
     {
-        return $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
+        $texte = $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
+        if ($this->sigle !== null && trim($this->sigle) !== '') {
+            $texte .= ' (' . $this->sigle . ')';
+        }
+
+        return $texte;
     }
 
     public function getRegimeInscription(): array
@@ -664,6 +672,18 @@ class Formation
     public function setTypeDiplome(?TypeDiplome $typeDiplome): self
     {
         $this->typeDiplome = $typeDiplome;
+
+        return $this;
+    }
+
+    public function getSigle(): ?string
+    {
+        return $this->sigle;
+    }
+
+    public function setSigle(?string $sigle): self
+    {
+        $this->sigle = $sigle;
 
         return $this;
     }

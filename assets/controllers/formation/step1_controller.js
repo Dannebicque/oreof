@@ -26,6 +26,15 @@ export default class extends Controller {
     this._checkIfAlternance()
   }
 
+  changeSigle(event) {
+    this._save({
+      field: 'sigle',
+      action: 'textarea',
+      value: event.target.value,
+    })
+    // todo: update du bloc synthèse et du titre...
+  }
+
   changeVille(event) {
     this._save({
       action: 'ville',
