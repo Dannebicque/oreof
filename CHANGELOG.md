@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.26](https://github.com/Dannebicque/oreof/compare/v0.21.25...v0.21.26) (2023-04-14)
+
 ### [0.21.25](https://github.com/Dannebicque/oreof/compare/v0.21.24...v0.21.25) (2023-04-14)
 
 
