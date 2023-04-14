@@ -274,3 +274,33 @@
 //    margin-left: var(--text-divider-gap);
 //  }
 //}
+
+.fixed-background-overlay {
+  background-color: rgba(24,123,185, 0.6);
+  #background-color: rgba(33,33,33, 0.6);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.titre {
+  margin-top:40px;
+  font-size:3em;
+  font-weight:600;
+  margin-left: 70px;
+}
+
+.titre_product {
+  color: white;
+  font-size:2em;
+  font-weight:600;
+}
+
+.titre_maj {
+  color: var(--complementaire);
+  font-size:1.3em;
+}
