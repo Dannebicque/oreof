@@ -63,7 +63,8 @@ class FormationWizardController extends AbstractController
             ->add('objectifsFormation', TextareaAutoSaveType::class, [
                 'required' => true,
                 'attr' => ['maxlength' => 3000, 'data-action' => 'change->formation--step3#saveObjectifsFormation'],
-                'help' => '-'
+                'help' => '-',
+                'translation_domain' => 'form',
             ])
             ->getForm();
 

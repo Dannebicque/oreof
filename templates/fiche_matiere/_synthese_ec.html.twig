@@ -24,13 +24,15 @@
             </div>
             <div class="col-4">
                 <dl>
-                    <dt>Mention mobilisant la fiche EC/matière</dt>
+                    <dt>Formation(s) mobilisant la fiche EC/matière</dt>
                     <dd>
+                        {% if ficheMatiere.enseignementMutualise == true %}
                         {% for ec in ficheMatiere.elementConstitutifs %}
                             {{ ec.parcours != null ? ec.parcours.libelle : 'non défini' }}<br>
                         {% else %}
                             Non utilisée
                         {% endfor %}
+                        {% endif %}
                     </dd>
                 </dl>
             </div>
