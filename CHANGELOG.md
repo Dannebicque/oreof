@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.23](https://github.com/Dannebicque/oreof/compare/v0.21.22...v0.21.23) (2023-04-14)
+
+
+### Features
+
+* Texte pour tronc commun ([3d39e72](https://github.com/Dannebicque/oreof/commit/3d39e727a1d81387c92e68b477577e60d10a9e22))
+
 ### [0.21.22](https://github.com/Dannebicque/oreof/compare/v0.21.21...v0.21.22) (2023-04-13)
 
 
