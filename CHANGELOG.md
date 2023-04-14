@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.25](https://github.com/Dannebicque/oreof/compare/v0.21.24...v0.21.25) (2023-04-14)
+
+
+### Features
+
+* Nouvelle image de background ([778466b](https://github.com/Dannebicque/oreof/commit/778466b0940baf96a39034dce0c1a8695f9529af))
+* Nouvelle image de background ([e5c1da5](https://github.com/Dannebicque/oreof/commit/e5c1da59494fd0d0f175999f27257d6d932eb141))
+
 ### [0.21.24](https://github.com/Dannebicque/oreof/compare/v0.21.23...v0.21.24) (2023-04-14)
 
 
