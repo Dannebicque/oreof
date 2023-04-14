@@ -111,7 +111,7 @@ formation_step2.labels.objectifsFormation: 'Objectif de la formation'
 parcours_step1.labels.objectifsParcours: 'Objectif du parcours'
 Troyes: Troyes
 parcours_step2.labels.nbHeuresSituationPro: "Nombre d'heures de mise en situation professionnelle prévu"
-formation_step3.labels.hasParcours: 'La formation propose-t-elle un ou des parcours ?'
+formation_step3.labels.hasParcours: 'La formation propose-t-elle un(des) parcours ?'
 formation_step3.labels.libelleParcours: 'Précisez le libellé de chaque parcours'
 formation_step3.labels.structureFormation: "Précisez l'organisation de la formation"
 fiche_matiere_step3.labels.competence: "Compétences travaillées dans l'enseignement"
@@ -132,7 +132,7 @@ formation_step3.labels.semestreDebut.option.vide: '-'
 parcours_step1.labels.localisation: 'Localisation du parcours'
 'Choisissez une ville': '-'
 'Veuillez choisir la localisation du parcours': '-'
-parcours_step2.labels.modalitesEnseignement: "Précisez les modalités d'enseignement du parcours"
+parcours_step2.labels.modalitesEnseignement: "Précisez les modalités d'enseignement de la formation"
 "Choisissez une modalité d'enseignement": '-'
 parcours_step5.labels.composanteInscription: "Composante d'inscription"
 "Choisissez une composante d'inscription": '-'
@@ -262,5 +262,29 @@ parcours_step5.labels.regimeInscription.label: "Régime(s) d'inscription"
 fiche_matiere_step1.labels.responsableFicheMatiere: "Référent de l'enseignement"
 fiche_matiere.step1_collegue_manquant.title: 'Ajouter un collègue manquant'
 fiche_matiere.step1_collegue_manquant.label: 'Ajouter un collègue manquant'
-user.add_missing.email.label: 'Indiquer l''email URCA du collègue à ajouter'
-ue.labels.libelle: 'Libellé de l''UE'
+user.add_missing.email.label: "Indiquer l'email URCA du collègue à ajouter"
+ue.labels.libelle: "Libellé de l'UE"
+8: '8'
+9: '9'
+10: '10'
+element_constitutif.labels.typeEc: "Type de l'EC"
+fiche_matiere.alerte.no_bcc: fiche_matiere.alerte.no_bcc
+element_constitutif.labels.typeEcTexte: "Type de l'EC si non présent dans la liste"
+ec_step4.labels.modaliteEnseignement: "Modalités d'enseignement de l'enseignement"
+ROLE_SES: ROLE_SES
+semestre.type_semestre.label: 'Le semestre est-il mutualisé ?'
+semestre.choix.semestre_standard.label: 'Semestre standard'
+semestre.choix.semestre_mutualise.label: 'Mutualiser un semestre'
+semestre.choix.semestre_reutilise.label: 'Raccrocher un semestre mutualisé'
+element_constitutif_edit.labels.libelle: "Libellé de l'EC"
+element_constitutif_edit.labels.typeEc: "Type de l'EC"
+element_constitutif_edit.labels.typeEcTexte: "Type d'EC si non présent dans la liste"
+semestre.reutilise.label: 'Précisez le semestre à raccrocher'
+semestre.raccrocher.label: 'Précisez le semestre à raccrocher'
+semestre.raccrocher.bouton: Raccrocher
+semestre.mutualiser.label: 'Précisez les mutualisations'
+ue.mutualiser.label: 'Précisez les mutualisations'
+ue.raccrocher.label: "Précisez l'UE à raccrocher"
+ue.raccrocher.bouton: Raccrocher
+ec_manage.labels.fiche_matieres_libelle_choix.label: "Libellé de l'EC"
+element_constitutif_enfant.labels.libelle: "Libellé de l'EC"

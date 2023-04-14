@@ -70,4 +70,5 @@ Ouverture: Ouverture
 'TER – travail d’étude et de recherche': 'TER – travail d’étude et de recherche'
 "Libellé de l'EC": "Libellé de l'EC"
 form.labels.email: form.labels.email
-user_add.labels.email: 'Indiquer l''email URCA du collègue à ajouter'
+user_add.labels.email: "Indiquer l'email URCA du collègue à ajouter"
+form.labels.objectifsFormation: 'Description générale de la formation'

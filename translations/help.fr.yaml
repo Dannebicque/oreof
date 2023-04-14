@@ -1,4 +1,4 @@
-formation_step2.helps.objectifsFormation: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu.  L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : \"A la fin de la formation, le diplômé sera capable de...\" et peut être rédigé selon 3 axes : •\tle savoir et la connaissance •\tle savoir-faire et la compétence professionnelle •\tle savoir-être et la capacité d'adaptation à différentes situations"
+formation_step2.helps.objectifsFormation: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu.  L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : 'A la fin de la formation, le diplômé sera capable de...' et peut être rédigé selon 3 axes : *le savoir et la connaissance *le savoir-faire et la compétence professionnelle *le savoir-être et la capacité d'adaptation à différentes situations."
 parcours_step1.helps.objectifsParcours: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu.  L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : \"A la fin de la formation, le diplômé sera capable de...\" et peut être rédigé selon 3 axes : •\tle savoir et la connaissance •\tle savoir-faire et la compétence professionnelle •\tle savoir-être et la capacité d'adaptation à différentes situations"
 parcours_step2.helps.nbHeuresSituationPro: "Précisez le nombre d'heures de mise en situation professionnelle prévu."
 user.helps.username: "Indiquez le login URCA de l'utilisateur."
@@ -45,9 +45,9 @@ formation_step1.helps.modalitesAlternance: "Indiquez en 3000 caractères maximum
 formation_step1.helps.composantesInscription.help: 'Plusieurs choix possibles.'
 formation_step1.helps.regimeInscription.help: 'Plusieurs choix possibles.'
 formation_step2.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différentes thématiques traitées dans la formation, en fonction des objectifs pédagogiques définis précédemment.'
-formation_step2.helps.resultatsAttendus: 'Indiquez en 3000 caractères maximum les compétences acquises via la formation (compétences à acquérir, à améliorer ou à entretenir). La description des compétences doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que "savoir, maitriser, être capable de…".'
-formation_step2.helps.rythmeFormation: 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir,etc.).'
-formation_step2.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (déroulé, calendrier, périodes.etc.).'
+formation_step2.helps.resultatsAttendus: "Indiquez en 3000 caractères maximum les compétences acquises via la formation (compétences à acquérir, à améliorer ou à entretenir). La description des compétences doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que 'savoir, maitriser, être capable de…'."
+formation_step2.helps.rythmeFormation: 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir, etc.).'
+formation_step2.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (déroulé, calendrier, périodes, etc.).'
 parcours_step2.helps.stageText: 'Indiquez en quoi consiste le stage (nombre, sur quel(s) semestre(s) ils sont prévus, les modalités, etc.).'
 parcours_step2.helps.projetText: 'Indiquez en quoi consiste le projet tutoré (nombre, sur quel(s) semestre(s) ils sont prévus, les modalités, etc.).'
 parcours_step2.helps.memoireText: 'Décrivez en quoi consiste le TER/mémoire.'
@@ -60,7 +60,7 @@ parcours_step8.helps.coordSecretariat: 'Indiquez les coordonnées postales et t�
 ec_step1.helps.responsableEc: ''
 ec_step1.helps.libelle: "N'est modifiable que par le responsable de la formation."
 ec_step1.helps.libelleAnglais: "Précisez la version anglaise du libellé de l'EC."
-ec_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez "oui".'
+ec_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez oui.'
 ec_step2.helps.description: 'Indiquez en 3000 caractères maximum le contenu de l’enseignement. Faites une description détaillée des différents sujets traités dans cet enseignement.'
 ec_step3.helps.objectifs: 'Indiquez en 3000 caractères maximum les objectifs de l’enseignement'
 ec_step4.helps.modaliteEnseignement.help: "Indiquez les modalités d’enseignement de l'EC."
@@ -148,7 +148,7 @@ type_diplome.helps.nbUeMax: 'Précisez la contrainte. Si pas de contrainte, mett
 type_diplome.helps.nbEctsMaxUe: 'Précisez la contrainte. Si pas de contrainte, mettre "0".'
 type_diplome.helps.ModeleMcc: 'Indiquez si le diplôme est cadré par un modèle prédéfini de MCC (ex. BUT).'
 nature_ue_ec.helps.libelle: "Indiquez le libellé exact de la nature d'UE/EC."
-nature_ue_ec.helps.choix.help: ''
+nature_ue_ec.helps.choix.help: "Indiquez le type d'UE."
 type_ec.helps.libelle: "Indiquez le libellé exact du type d'EC."
 type_ec.helps.typeDiplomes.help: "Sélectionnez les diplômes concernés par ce type d'EC."
 type_ue.helps.typeDiplomes.help: "Sélectionnez les diplômes concernés par ce type d'UE."
@@ -177,25 +177,25 @@ ec_manage.helps.fiche_matiere_label.help: ec_manage.helps.fiche_matiere_label.he
 register.helps.prenom: register.helps.prenom
 register.helps.nom: register.helps.nom
 type_diplome.helps.nbEcParUe: 'Précisez la contrainte. Si pas de contrainte, mettre "0".'
-ue.helps.natureUeEc: "Indiquez le libellé exact de la nature de l'UE"
+ue.helps.natureUeEc: '"'
 ue.helps.natureUeEcTexte: "Précisez la nature de l'UE si elle n'est pas présente dans la liste déroulante du champ précédent."
 parcours_step6.helps.poursuitesEtudes: 'Indiquez en 3000 caractères maximum quelles sont les poursuites d’études envisageables.'
 parcours_step6.helps.debouches: 'Indiquez les principaux débouchés professionnels accessibles à l’issue de cette formation.'
 parcours_step6.helps.codeRome.help: 'Ajoutez les codes ROME pour préciser les métiers accessibles aux diplômés     (cf. https://www.pole-emploi.fr/employeur/vos-recrutements/le-rome-et-les-fiches-metiers.html).'
-element_constitutif.helps.natureUeEc: ''
+element_constitutif.helps.natureUeEc: '"'
 element_constitutif.helps.ficheMatiere: element_constitutif.helps.ficheMatiere
 fiche_matiere.helps.libelle: "Indiquez le libellé exact de l'enseignement"
 fiche_matiere.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."
 fiche_matiere_step1.helps.libelle: "Indiquez le libellé exact de l'enseignement."
 fiche_matiere_step1.helps.libelleAnglais: "Précisez la version anglaise du libellé de l'enseignement."
-fiche_matiere_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez "oui".'
+fiche_matiere_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez oui.'
 fiche_matiere_step1.helps.isCmPresentielMutualise.help: ''
 fiche_matiere_step1.helps.isTdPresentielMutualise.help: ''
 fiche_matiere_step1.helps.isTpPresentielMutualise.help: ''
 fiche_matiere_step1.helps.isCmDistancielMutualise.help: ''
 fiche_matiere_step1.helps.isTdDistancielMutualise.help: ''
 fiche_matiere_step1.helps.isTpDistancielMutualise.help: ''
-fiche_matiere_step1.helps.preciserMutualisation.help: fiche_matiere_step1.helps.preciserMutualisation.help
+fiche_matiere_step1.helps.preciserMutualisation.help: 'Indiquez toutes les formations avec lesquelles cet enseignement est mutualisé.'
 ec_manage.helps.fiche_matiere.help: ec_manage.helps.fiche_matiere.help
 ec_manage.helps.fiche_matiere_libelle.help: ec_manage.helps.fiche_matiere_libelle.help
 nature_ue_ec.helps.libre.help: nature_ue_ec.helps.libre.help
@@ -210,7 +210,21 @@ fiche_matiere_step2.helps.langueSupport.help: fiche_matiere_step2.helps.langueSu
 fiche_matiere_step3.helps.objectifs: fiche_matiere_step3.helps.objectifs
 fiche_matiere_step3.labels.competence: fiche_matiere_step3.labels.competence
 fiche_matiere_step1.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."
-user.add_missing.email.help: 'Indiquez un email valide du collègue à ajouter pour récupérer ses informations'
+user.add_missing.email.help: 'Indiquez un email valide du collègue à ajouter pour récupérer ses informations.'
 form.helps.email: form.helps.email
-user_add.helps.email: 'Indiquez un email valide du collègue à ajouter pour récupérer ses informations'
+user_add.helps.email: 'Indiquez un email valide du collègue à ajouter pour récupérer ses informations.'
 ue.helps.libelle: 'Vous pouvez indiquer un libellé pour une UE, notamment si elle est à choix pour expliquer les modalités'
+element_constitutif.helps.typeEc: '"'
+element_constitutif.helps.typeEcTexte: "Précisez le type d'EC si il n'est pas présent dans la liste déroulante du champ précédent."
+semestre.type_semestre.helps: semestre.type_semestre.helps
+element_constitutif_edit.helps.libelle: "Indiquez le libellé exact de l'EC."
+element_constitutif_edit.helps.typeEc: '"'
+element_constitutif_edit.helps.typeEcTexte: "Précisez le type d'EC si il n'est pas présent dans la liste déroulante du champ précédent."
+semestre.reutilise.helps: semestre.reutilise.helps
+semestre.raccrocher.helps: 'Sélectionnez le semestre mutualisé que vous souhaitez raccrocher à votre maquette.'
+semestre.mutualiser.helps: 'Indiquez toutes les formations avec lesquelles ce semestre est mutualisé.'
+ue.mutualiser.helps: 'Indiquez toutes les formations avec lesquelles cette UE est mutualisée.'
+ue.raccrocher.helps: "Sélectionnez l'UE mutualisée que vous souhaitez raccrocher à votre maquette."
+ec_manage.helps.fiche_matieres_libelle_choix.help: "Indiquez le libellé de l'EC s'il y en a un."
+element_constitutif_enfant.helps.libelle: "Indiquez le libellé exact de l'EC."
+form.helps.objectifsFormation: "Décrivez en 3000 caractères maximum la finalité de la mention ainsi que l'organisation pédagogique de la formation en tronc commun et parcours."
