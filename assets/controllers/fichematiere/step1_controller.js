@@ -78,6 +78,15 @@ export default class extends Controller {
     })
   }
 
+  saveSigle(event) {
+    this._save({
+      field: 'sigle',
+      action: 'textarea',
+      value: event.target.value,
+    })
+    // todo: update du bloc synthèse et du titre...
+  }
+
   saveContenuFr() {
     const { value } = document.getElementById('fiche_matiere_step1_libelle')
     this._save({

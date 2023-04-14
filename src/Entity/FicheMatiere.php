@@ -92,6 +92,9 @@ class FicheMatiere
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereMutualisable::class)]
     private Collection $ficheMatiereParcours;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $sigle = null;
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
@@ -462,5 +465,27 @@ class FicheMatiere
         }
 
         return $this;
+    }
+
+    public function getSigle(): ?string
+    {
+        return $this->sigle;
+    }
+
+    public function setSigle(?string $sigle): self
+    {
+        $this->sigle = $sigle;
+
+        return $this;
+    }
+
+    public function display(): ?string
+    {
+        $texte = $this->getLibelle();
+        if ($this->sigle !== null && trim($this->sigle) !== '') {
+            $texte .= ' (' . $this->sigle . ')';
+        }
+
+        return $texte;
     }
 }

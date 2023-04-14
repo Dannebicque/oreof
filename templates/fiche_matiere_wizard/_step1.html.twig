@@ -24,6 +24,7 @@
     </a>
 
     {{ form_row(form.libelle) }}
+    {{ form_row(form.sigle) }}
     {{ form_row(form.libelleAnglais) }}
     {{ form_row(form.enseignementMutualise) }}
     <div style="{% if ficheMatiere.enseignementMutualise == false %}display:none{% endif %}" id="coursMutualises">

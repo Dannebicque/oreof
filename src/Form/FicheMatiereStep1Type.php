@@ -55,6 +55,10 @@ class FicheMatiereStep1Type extends AbstractType
                 'attr' => ['data-action' => 'change->fichematiere--step1#changeResponsableEc'],
                 'choice_label' => 'display',
             ])
+            ->add('sigle', TextType::class, [
+                'attr' => ['data-action' => 'change->fichematiere--step1#saveSigle', 'maxlength' => 250],
+                'required' => false
+            ])
             ->add('libelle', TextType::class, [
                 'disabled' => !$access,
                 'attr' => ['data-action' => 'change->fichematiere--step1#saveContenuFr', 'maxlength' => 250],
