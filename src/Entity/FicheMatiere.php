@@ -18,6 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FicheMatiereRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -28,27 +29,34 @@ class FicheMatiere
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['fiche_matiere:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 250)]
+    #[Groups(['fiche_matiere:read'])]
     private ?string $libelle = null;
 
     #[ORM\Column(length: 250, nullable: true)]
+    #[Groups(['fiche_matiere:read'])]
     private ?string $libelleAnglais = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['fiche_matiere:read'])]
     private ?bool $enseignementMutualise = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['fiche_matiere:read'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['fiche_matiere:read'])]
     private ?string $objectifs = null;
 
     #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'ficheMatieres', cascade: ['persist'])]
     private Collection $competences;
 
     #[ORM\Column(length: 30, nullable: true, enumType: ModaliteEnseignementEnum::class)]
+    #[Groups(['fiche_matiere:read'])]
     private ?ModaliteEnseignementEnum $modaliteEnseignement = null;
 
     #[ORM\Column(nullable: true)]
@@ -70,6 +78,7 @@ class FicheMatiere
     private ?bool $isTpDistancielMutualise = null;
 
     #[ORM\ManyToOne]
+    #[Groups(['fiche_matiere:read'])]
     private ?User $responsableFicheMatiere = null;
 
     #[ORM\ManyToMany(targetEntity: Langue::class, inversedBy: 'ficheMatieres', cascade: ['persist'])]
@@ -81,6 +90,7 @@ class FicheMatiere
     private Collection $langueSupport;
 
     #[ORM\Column]
+    #[Groups(['fiche_matiere:read'])]
     private ?array $etatSteps = [];
 
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: ElementConstitutif::class, cascade: ['persist', 'remove'])]
@@ -93,6 +103,7 @@ class FicheMatiere
     private Collection $ficheMatiereParcours;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['fiche_matiere:read'])]
     private ?string $sigle = null;
 
     public function __construct()
@@ -479,7 +490,8 @@ class FicheMatiere
         return $this;
     }
 
-    public function display(): ?string
+    #[Groups(['fiche_matiere:read'])]
+    public function getDisplay(): ?string
     {
         $texte = $this->getLibelle();
         if ($this->sigle !== null && trim($this->sigle) !== '') {

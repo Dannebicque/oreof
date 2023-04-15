@@ -17,6 +17,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -48,12 +49,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $formationsResponsableMention;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['fiche_matiere:read'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['fiche_matiere:read'])]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['fiche_matiere:read'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -231,6 +235,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->nom = $nom;
     }
 
+    #[Groups(['fiche_matiere:read'])]
     public function getDisplay(): string
     {
         return $this->getPrenom().' '.$this->getNom();

@@ -27,12 +27,13 @@
                     <dt>Formation(s) mobilisant la fiche EC/matière</dt>
                     <dd>
                         {% if ficheMatiere.enseignementMutualise == true %}
-                        {% for ec in ficheMatiere.elementConstitutifs %}
-                            {{ (ec.parcours != null and ec.parcours.formation != null) ? ec.parcours.formation
-                            .display : 'non défini' }} / {{ ec.parcours != null ? ec.parcours.libelle : 'non défini' }}<br>
-                        {% else %}
-                            Non utilisée
-                        {% endfor %}
+                            {% for ec in ficheMatiere.elementConstitutifs %}
+                                {{ (ec.parcours != null and ec.parcours.formation != null) ? ec.parcours.formation
+                                .display : 'non défini' }} / {{ ec.parcours != null ? ec.parcours.libelle : 'non défini' }}
+                                <br>
+                            {% else %}
+                                Non utilisée
+                            {% endfor %}
                         {% endif %}
                     </dd>
                 </dl>
@@ -40,8 +41,10 @@
             <div class="col-12">
                 <strong>Responsable de la fiche EC/matière</strong><br>
                 {% if ficheMatiere.responsableFicheMatiere != null %}
+                    <span id="fiche_matiere_resp_dd">
                     {{ ficheMatiere.responsableFicheMatiere.display }}<br>
                     <a href="mailto:{{ ficheMatiere.responsableFicheMatiere.email }}">{{ ficheMatiere.responsableFicheMatiere.email }}</a>
+                        </span>
                 {% else %}
                     <span class="badge bg-danger">Erreur !</span>
                 {% endif %}

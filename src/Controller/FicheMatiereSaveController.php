@@ -22,6 +22,7 @@ use App\Repository\NatureUeEcRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,9 +45,9 @@ class FicheMatiereSaveController extends BaseController
         FicheMatiere $ficheMatiere
     ): Response {
         $ficheMatiereState->setFicheMatiere($ficheMatiere);
-
+        $updateEntity->setGroups(['fiche_matiere:read']);
         if (str_ends_with($ficheMatiere->getLibelle(), '(à compléter)')) {
-            $ficheMatiere->setLibelle(trim(str_replace('(à compléter)','',$ficheMatiere->getLibelle())));
+            $ficheMatiere->setLibelle(trim(str_replace('(à compléter)', '', $ficheMatiere->getLibelle())));
             $entityManager->flush();
         }
 
@@ -66,45 +67,33 @@ class FicheMatiereSaveController extends BaseController
 
                 return $this->json($val->badge());
             case 'yesNo':
-                $rep = $updateEntity->saveYesNo($ficheMatiere, $data['field'], $data['value']);
-
-                return $this->json($rep);
+                return $updateEntity->saveYesNo($ficheMatiere, $data['field'], $data['value']);
             case 'textarea':
             case 'selectWithoutEntity':
-                $rep = $updateEntity->saveField($ficheMatiere, $data['field'], $data['value']);
-
-                return $this->json($rep);
+                return $updateEntity->saveField($ficheMatiere, $data['field'], $data['value']);
             case 'float':
-                $rep = $updateEntity->saveField($ficheMatiere, $data['field'], (float)$data['value']);
-
-                return $this->json($rep);
+                return $updateEntity->saveField($ficheMatiere, $data['field'], (float)$data['value']);
             case 'langue':
-                $rep = $updateEntity->saveCheckbox(
+                return $updateEntity->saveCheckbox(
                     $ficheMatiere,
                     $data['field'],
                     $data['value'],
                     $data['isChecked'],
                     $langueRepository
                 );
-
-                return $this->json($rep);
             case 'responsableFicheMatiere':
                 $responsableFicheMatiere = $userRepository->find($data['value']);
-                $rep = $updateEntity->saveField($ficheMatiere, 'responsableFicheMatiere', $responsableFicheMatiere);
 
-                return $this->json($rep);
+                return $updateEntity->saveField($ficheMatiere, 'responsableFicheMatiere', $responsableFicheMatiere);
             case 'modalitesEnseignement':
-                $rep = $updateEntity->saveField(
+                return $updateEntity->saveField(
                     $ficheMatiere,
                     'modaliteEnseignement',
                     ModaliteEnseignementEnum::from($data['value'])
                 );
 
-                return $this->json($rep);
             case 'int':
-                $rep = $updateEntity->saveField($ficheMatiere, $data['field'], (int)$data['value']);
-
-                return $this->json($rep);
+                return $updateEntity->saveField($ficheMatiere, $data['field'], (int)$data['value']);
             case 'removeBcc':
                 $competences = $ficheMatiere->getCompetences();
 
@@ -130,12 +119,11 @@ class FicheMatiereSaveController extends BaseController
                 return $this->json(false);
             case 'array':
                 if ($data['isChecked'] === true) {
-                    $rep = $updateEntity->addToArray($ficheMatiere, $data['field'], $data['value']);
-                } else {
-                    $rep = $updateEntity->removeToArray($ficheMatiere, $data['field'], $data['value']);
+                    return $updateEntity->addToArray($ficheMatiere, $data['field'], $data['value']);
                 }
 
-                return $this->json($rep);
+                return $updateEntity->removeToArray($ficheMatiere, $data['field'], $data['value']);
+
             case 'etatStep':
                 $valideState = (bool)$data['isChecked'] === true ? $ficheMatiereState->valideStep(
                     $data['value']

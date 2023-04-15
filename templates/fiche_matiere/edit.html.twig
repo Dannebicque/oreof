@@ -7,9 +7,7 @@
         step: 'step_1',
         ficheMatiere: fiche_matiere.id,
     }) }}
-            {{ stimulus_action('fiche_matiere_wizard', 'refreshSynthese', 'ec--step1:refreshSynthese@window')
-            |stimulus_action
-            ('fiche_matiere_wizard', 'refreshStep', 'base:refreshStep@window') }}
+            {{ stimulus_action('fiche_matiere_wizard', 'refreshStep', 'base:refreshStep@window') }}
     >
         <div {{ stimulus_target('fiche_matiere_wizard', 'synthese') }}></div>
         <div class="mt-3">

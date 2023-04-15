@@ -34,10 +34,6 @@ export default class extends Controller {
     this.syntheseTarget.innerHTML = await response.text()
   }
 
-  refreshSynthese() {
-    this._loadSynthese()
-  }
-
   changeStep(event) {
     this._loadStep(event.params.step)
   }

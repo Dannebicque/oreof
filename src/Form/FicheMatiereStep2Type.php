@@ -13,6 +13,7 @@ use App\Entity\FicheMatiere;
 use App\Entity\Langue;
 use App\Entity\NatureUeEc;
 use App\Form\Type\TextareaAutoSaveType;
+use App\Repository\LangueRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,6 +32,10 @@ class FicheMatiereStep2Type extends AbstractType
             ->add('langueDispense', EntityType::class, [
                 'attr' => ['data-action' => 'change->fichematiere--step2#changeLangue', 'data-fichematiere--step2-type-param' => 'langueDispense' ],
                 'class' => Langue::class,
+                'query_builder' => function (LangueRepository $lr) {
+                    return $lr->createQueryBuilder('l')
+                        ->orderBy('l.libelle', 'ASC');
+                },
                 'choice_label' => 'libelle',
                 'expanded' => true,
                 'multiple' => true,
@@ -41,6 +46,10 @@ class FicheMatiereStep2Type extends AbstractType
                 'attr' => ['data-action' => 'change->fichematiere--step2#changeLangue', 'data-fichematiere--step2-type-param' => 'langueSupport'],
                 'class' => Langue::class,
                 'choice_label' => 'libelle',
+                'query_builder' => function (LangueRepository $lr) {
+                    return $lr->createQueryBuilder('l')
+                        ->orderBy('l.libelle', 'ASC');
+                },
                 'expanded' => true,
                 'multiple' => true,
                 'required' => true,

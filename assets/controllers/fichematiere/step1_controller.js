@@ -72,9 +72,12 @@ export default class extends Controller {
       field: 'responsableFicheMatiere',
       action: 'responsableFicheMatiere',
       value: event.target.value,
-    }).then(() => {
-      // dispatch pour mettre à jour le bloc de la page
-      this.dispatch('refreshSynthese', { bubbles: true })
+    }).then((data) => {
+      if (data.responsableFicheMatiere !== null) {
+        document.getElementById('fiche_matiere_resp_dd').innerHTML = `${data.responsableFicheMatiere.display}<br><a href="mailto:${data.responsableFicheMatiere.email}">${data.responsableFicheMatiere.email}</a>`
+      } else {
+        document.getElementById('fiche_matiere_resp_dd').innerHTML = '<span class="badge bg-danger">Aucun responsable</span>'
+      }
     })
   }
 
@@ -83,8 +86,10 @@ export default class extends Controller {
       field: 'sigle',
       action: 'textarea',
       value: event.target.value,
+    }).then((data) => {
+      document.getElementById('fiche_matiere_libelle').innerText = data.display
+      document.getElementById('fiche_matiere_libelle_dd').innerText = data.display
     })
-    // todo: update du bloc synthèse et du titre...
   }
 
   saveContenuFr() {
@@ -93,9 +98,9 @@ export default class extends Controller {
       field: 'libelle',
       action: 'textarea',
       value,
-    }).then(() => {
-      document.getElementById('fiche_matiere_libelle').innerText = value
-      document.getElementById('fiche_matiere_libelle_dd').innerText = value
+    }).then((data) => {
+      document.getElementById('fiche_matiere_libelle').innerText = data.display
+      document.getElementById('fiche_matiere_libelle_dd').innerText = data.display
     })
   }
 
@@ -134,8 +139,9 @@ export default class extends Controller {
   }
 
   async _save(options) {
-    await saveData(this.urlValue, options).then(async () => {
+    return saveData(this.urlValue, options).then(async (data) => {
       await updateEtatOnglet(this.urlValue, 'onglet1', 'ec')
+      return data
     })
   }
 }
