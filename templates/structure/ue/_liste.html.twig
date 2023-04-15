@@ -47,7 +47,11 @@
                                 <div class="row g-0 h-100 align-content-center">
                                     <div class="col-md-1 d-flex flex-column justify-content-center">
                                         <div class="text-muted text-small d-md-none">ue</div>
-                                        <p>{{ ue.display }} {% if ue.ueRaccrochee != null %}
+                                        <p>{% if ue.libelle != null %}<abbr title="{{  ue.libelle }}">{% endif %}{{ ue
+                                                .display
+                                                }}{% if ue.libelle != null %}</abbr>{% endif %} {% if ue
+                                            .ueRaccrochee !=
+                                                null %}
                                             <i class="fal fa-link"
                                                data-controller="tooltip"
                                                data-tooltip-placement-value="bottom"
