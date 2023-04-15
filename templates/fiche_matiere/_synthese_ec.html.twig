@@ -28,7 +28,8 @@
                     <dd>
                         {% if ficheMatiere.enseignementMutualise == true %}
                         {% for ec in ficheMatiere.elementConstitutifs %}
-                            {{ ec.parcours != null ? ec.parcours.libelle : 'non défini' }}<br>
+                            {{ (ec.parcours != null and ec.parcours.formation != null) ? ec.parcours.formation
+                            .display : 'non défini' }} / {{ ec.parcours != null ? ec.parcours.libelle : 'non défini' }}<br>
                         {% else %}
                             Non utilisée
                         {% endfor %}
