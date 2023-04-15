@@ -54,4 +54,17 @@ class FicheMatiereRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function findByParcours(Parcours $parcours): array
+    {
+        //soit la fiche est portée par le parcours, soit elle est mutualisée avec ce parcours
+        return $this->createQueryBuilder('f')
+            ->leftJoin('f.parcours', 'p')
+            ->leftJoin('f.ficheMatiereParcours', 'pm')
+            ->where('p = :parcours')
+            ->orWhere('pm = :parcours')
+            ->setParameter('parcours', $parcours)
+            ->getQuery()
+            ->getResult();
+    }
 }

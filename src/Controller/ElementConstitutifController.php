@@ -48,17 +48,19 @@ class ElementConstitutifController extends AbstractController
         ]);
     }
 
-    #[Route('/type-ec', name: 'app_element_constitutif_type_ec', methods: ['GET'])]
+    #[Route('/type-ec/{ue}/{parcours}', name: 'app_element_constitutif_type_ec', methods: ['GET'])]
     public function typeEc(
         Request $request,
         FicheMatiereRepository $ficheMatiereRepository,
-        NatureUeEcRepository $natureUeEcRepository
+        NatureUeEcRepository $natureUeEcRepository,
+        Ue $ue,
+        Parcours $parcours
     ): Response {
         $natureEc = $natureUeEcRepository->find($request->query->get('choix'));
         if ($natureEc !== null) {
             if ($natureEc->isChoix() === true) {
                 return $this->render('element_constitutif/_type_ec_matieres.html.twig', [
-                    'matieres' => $ficheMatiereRepository->findAll()
+                    'matieres' => $ficheMatiereRepository->findByParcours($parcours)
                 ]);
             }
 
@@ -68,7 +70,7 @@ class ElementConstitutifController extends AbstractController
             }
 
             return $this->render('element_constitutif/_type_ec_matiere.html.twig', [
-                'matieres' => $ficheMatiereRepository->findAll()
+                'matieres' => $ficheMatiereRepository->findByParcours($parcours)
             ]);
         }
 

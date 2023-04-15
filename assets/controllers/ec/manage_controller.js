@@ -7,6 +7,7 @@
  */
 
 import { Controller } from '@hotwired/stimulus'
+import TomSelect from 'tom-select'
 import callOut from '../../js/callOut'
 
 export default class extends Controller {
@@ -25,12 +26,17 @@ export default class extends Controller {
 
   natureEc = null
 
+  tom = null
+
   connect() {
   }
 
   async changeNatureEc(event) {
     const response = await fetch(`${this.urlValue}?choix=${event.target.value}`)
     this.matieresTarget.innerHTML = await response.text()
+    if (document.getElementById('ficheMatiere')) {
+      this.tom = new TomSelect('#ficheMatiere')
+    }
   }
 
   ajoutTypeEc(event) {
@@ -81,6 +87,7 @@ export default class extends Controller {
       table.deleteRow(row.rowIndex)
     })
     select.value = ''
+    this.tom.clear()
     this.code++
   }
 

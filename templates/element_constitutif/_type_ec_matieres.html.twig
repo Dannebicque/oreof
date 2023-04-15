@@ -36,11 +36,11 @@
         <select id="ficheMatiere" name="ficheMatiere" class="form-select">
             <option value="">Choisir dans la liste une fiche EC/matière</option>
             {% for matiere in matieres %}
-                <option value="{{ matiere.id }}">{{ matiere.libelle }}</option>
+                <option value="{{ matiere.id }}">{{ matiere.display }}</option>
             {% endfor %}
         </select>
         <button {{ stimulus_action('ec--manage', 'addFromListe') }} class="btn btn-primary mt-2">
-            Ajouter la fiche EC/matière selectionnée
+            Ajouter la fiche EC/matière sélectionnée
         </button>
     </div>
     OU
