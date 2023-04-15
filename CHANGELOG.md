@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.21.27](https://github.com/Dannebicque/oreof/compare/v0.21.24...v0.21.27) (2023-04-15)
+
+
+### Features
+
+* Fiches matières du parcours ou mutualisés + affichage sigle s'il existe ([36d5672](https://github.com/Dannebicque/oreof/commit/36d5672e2b80fa93fcf291885afd5f7cda93e89e))
+* Libellé de l'UE au survol ([a34ff4a](https://github.com/Dannebicque/oreof/commit/a34ff4a579e24092fb4ca756f08046ef9fa6328e))
+* Nouvelle image de background ([b81185b](https://github.com/Dannebicque/oreof/commit/b81185b27de18decdd7424b81307665fdb161d3a))
+* Nouvelle image de background ([ce04714](https://github.com/Dannebicque/oreof/commit/ce0471419e51f53e99e0989277d86193e56f144b))
+* Sigle sur fiche matière ([f12c4ae](https://github.com/Dannebicque/oreof/commit/f12c4ae51316906e156918db135b990037cb895b))
+* Sigle sur formation ([ac96e9b](https://github.com/Dannebicque/oreof/commit/ac96e9baa73e8d7e487d567d70f7e5efef90111c))
+
+
+### Bug Fixes
+
+* Correctif sur fiche matière + amélioration de la récupération de l'objet après validation. Ajout de la sérialisation. ([7faa8f7](https://github.com/Dannebicque/oreof/commit/7faa8f792ffb6090681cc1e55bf7cde3c8952343))
+* Correctif sur formation  + amélioration de la récupération de l'objet après validation. Ajout de la sérialisation sur formation ([2bda969](https://github.com/Dannebicque/oreof/commit/2bda96932277280176d95098b2a80e3c8939f986))
+* CSS titre ([e6d619c](https://github.com/Dannebicque/oreof/commit/e6d619ccad55627290930a88c3e7c4c349d1213e))
+* Libellé complet du parcours ([0ed191f](https://github.com/Dannebicque/oreof/commit/0ed191fa4756a6a39dd87ae076f02bb73658116a))
+* Tri des fiches matières ([1fe5a23](https://github.com/Dannebicque/oreof/commit/1fe5a230e5e7a2778bd96fdd05ccaca646f54ba0))
+
 ### [0.21.26](https://github.com/Dannebicque/oreof/compare/v0.21.25...v0.21.26) (2023-04-14)
 
 ### [0.21.25](https://github.com/Dannebicque/oreof/compare/v0.21.24...v0.21.25) (2023-04-14)
