@@ -45,9 +45,11 @@ class FormationSaveController extends BaseController
         FormationState $formationState,
         Formation $formation
     ): Response {
+        $updateEntity->setGroups(['formation:read']);
         $this->denyAccessUnlessGranted('ROLE_FORMATION_EDIT_MY', $formation);
 
-        if (!($this->dpeWorkflow->can($formation, 'valide_rf') || $this->dpeWorkflow->can($formation, 'autoriser'))&& !$this->isGranted('ROLE_SES')) {
+        if (!($this->dpeWorkflow->can($formation, 'valide_rf') || $this->dpeWorkflow->can($formation,
+                    'autoriser')) && !$this->isGranted('ROLE_SES')) {
             //si on est pas dans un état qui permet de modifier la formation
             return $this->json('Vous ne pouvez plus modifier cette formation', Response::HTTP_FORBIDDEN);
         }
@@ -73,17 +75,15 @@ class FormationSaveController extends BaseController
 
                 return $this->json($val->badge());
             case 'ville':
-                $rep = $updateEntity->saveCheckbox(
+                return $updateEntity->saveCheckbox(
                     $formation,
                     'localisationMention',
                     $data['value'],
                     $data['isChecked'],
                     $villeRepository
                 );
-
-                return $this->json($rep);
             case 'composanteInscription':
-                $rep = $updateEntity->saveCheckbox(
+                return $updateEntity->saveCheckbox(
                     $formation,
                     'composantesInscription',
                     $data['value'],
@@ -91,7 +91,6 @@ class FormationSaveController extends BaseController
                     $composanteRepository
                 );
 
-                return $this->json($rep);
             case 'yesNo':
                 $rep = $updateEntity->saveYesNo($formation, $data['field'], $data['value']);
                 if ($data['field'] === 'hasParcours') {
@@ -103,33 +102,27 @@ class FormationSaveController extends BaseController
                     $em->flush();
                 }
 
-                return $this->json($rep);
+                return $rep;
             case 'textarea':
             case 'selectWithoutEntity':
-                $rep = $updateEntity->saveField($formation, $data['field'], $data['value']);
-
-                return $this->json($rep);
+                return $updateEntity->saveField($formation, $data['field'], $data['value']);
             case 'float':
-                $rep = $updateEntity->saveField($formation, $data['field'], (float)$data['value']);
+                return $updateEntity->saveField($formation, $data['field'], (float)$data['value']);
 
-                return $this->json($rep);
             case 'int':
-                $rep = $updateEntity->saveField($formation, $data['field'], (int)$data['value']);
-
-                return $this->json($rep);
+                return $updateEntity->saveField($formation, $data['field'], (int)$data['value']);
             case 'modalitesEnseignement':
-                $rep = $updateEntity->saveField(
+                return $updateEntity->saveField(
                     $formation,
                     'modalitesEnseignement',
                     ModaliteEnseignementEnum::from($data['value'])
                 );
 
-                return $this->json($rep);
             case 'rythmeFormation':
                 $rythme = $rythmeFormationRepository->find($data['value']);
-                $rep = $updateEntity->saveField($formation, 'rythmeFormation', $rythme);
 
-                return $this->json($rep);
+                return $updateEntity->saveField($formation, 'rythmeFormation', $rythme);
+
             case 'structureSemestres':
                 $tSemestre = $formation->getStructureSemestres();
                 $tSemestre[$data['semestre']] = $data['value'];
@@ -156,12 +149,10 @@ class FormationSaveController extends BaseController
                 return $this->json($valideState);
             case 'array':
                 if ($data['isChecked'] === true) {
-                    $rep = $updateEntity->addToArray($formation, $data['field'], $data['value']);
-                } else {
-                    $rep = $updateEntity->removeToArray($formation, $data['field'], $data['value']);
+                    return $updateEntity->addToArray($formation, $data['field'], $data['value']);
                 }
 
-                return $this->json($rep);
+                return $updateEntity->removeToArray($formation, $data['field'], $data['value']);
         }
 
         return $this->json(['error' => 'action inconnue']);

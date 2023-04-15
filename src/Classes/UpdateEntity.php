@@ -77,7 +77,6 @@ class UpdateEntity
         if (method_exists($formation, $method)) {
             $formation->$method($value);
             $this->entityManager->flush();
-
             return JsonResponse::fromJsonString($this->serialize($formation), 200);
         }
 
@@ -147,7 +146,7 @@ class UpdateEntity
 
         $serializer = new Serializer($normalizers, $encoders);
 
-        return $serializer->serialize($formation, 'json', ['groups' => ['fiche_matiere:read']]);
+        return $serializer->serialize($formation, 'json', ['groups' => array_values($this->groups)]);
     }
 
     public function setGroups(array $array): void

@@ -31,8 +31,11 @@ export default class extends Controller {
       field: 'sigle',
       action: 'textarea',
       value: event.target.value,
+    }).then((data) => {
+      console.log(data)
+      document.getElementById('synthese_formation_libelle').innerText = data.display
+      document.getElementById('synthese_formation_libelle_dd').innerText = data.display
     })
-    // todo: update du bloc synthèse et du titre...
   }
 
   changeVille(event) {
@@ -98,8 +101,9 @@ export default class extends Controller {
   }
 
   async _save(options) {
-    await saveData(this.urlValue, options).then(async () => {
+    return saveData(this.urlValue, options).then(async (data) => {
       await updateEtatOnglet(this.urlValue, 'onglet1', 'formation')
+      return data
     })
   }
 }

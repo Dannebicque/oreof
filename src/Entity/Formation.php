@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -42,6 +43,7 @@ class Formation
     private ?Mention $mention = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['formation:read'])]
     private ?string $mentionTexte = null;
 
     #[ORM\Column(type: Types::INTEGER, enumType: NiveauFormationEnum::class)]
@@ -51,6 +53,7 @@ class Formation
     private ?NiveauFormationEnum $niveauSortie = null;
 
     #[ORM\Column]
+    #[Groups(['formation:read'])]
     private ?bool $inRncp = true;
 
     #[ORM\Column(length: 10, nullable: true)]
@@ -126,6 +129,7 @@ class Formation
     private ?TypeDiplome $typeDiplome = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['formation:read'])]
     private ?string $sigle = null;
 
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
@@ -361,7 +365,8 @@ class Formation
         return $this;
     }
 
-    public function display(): ?string
+    #[Groups(['formation:read'])]
+    public function getDisplay(): ?string
     {
         $texte = $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
         if ($this->sigle !== null && trim($this->sigle) !== '') {
