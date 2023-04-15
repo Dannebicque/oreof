@@ -64,6 +64,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->where('p = :parcours')
             ->orWhere('pm = :parcours')
             ->setParameter('parcours', $parcours)
+            ->orderBy('f.libelle', 'ASC')
             ->getQuery()
             ->getResult();
     }
