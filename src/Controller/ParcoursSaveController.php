@@ -50,6 +50,7 @@ class ParcoursSaveController extends AbstractController
         Request $request,
         Parcours $parcours
     ): Response {
+        $updateEntity->setGroups(['parcours:read']);
         $this->denyAccessUnlessGranted('ROLE_PARCOURS_EDIT_MY', $parcours);
 
         if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(

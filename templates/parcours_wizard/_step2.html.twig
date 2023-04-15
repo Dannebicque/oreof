@@ -22,8 +22,8 @@
         {{ form_row(form.memoireText) }}
     </div>
 
-    {{ form_row(form.hasSituationPro) }}
     {% if typeDiplome != null and typeDiplome.isHasSituationPro %}
+        {{ form_row(form.hasSituationPro) }}
         {{ form_row(form.nbHeuresSituationPro) }}
         {{ form_row(form.situationProText) }}
     {% endif %}

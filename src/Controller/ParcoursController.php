@@ -142,6 +142,7 @@ class ParcoursController extends BaseController
      */
     #[Route('/{id}/edit', name: 'app_parcours_edit', methods: ['GET', 'POST'])]
     public function edit(
+        Request $request,
         ParcoursState $parcoursState,
         Parcours $parcour
     ): Response {
@@ -153,6 +154,7 @@ class ParcoursController extends BaseController
             'typeDiplome' => $typeDiplome,
             'formation' => $parcour->getFormation(),
             'parcoursState' => $parcoursState,
+            'step' => $request->query->get('step') ?? 0,
         ]);
     }
 

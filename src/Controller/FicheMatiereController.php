@@ -121,7 +121,7 @@ class FicheMatiereController extends AbstractController
             $source = 'liste';
         } else {
             $source = 'parcours';
-            $link = $referer;
+            $link = $referer.'?step=4';
         }
 
 
