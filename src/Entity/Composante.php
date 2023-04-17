@@ -31,7 +31,7 @@ class Composante
     #[ORM\ManyToOne(inversedBy: 'composanteResponsableDpe')]
     private ?User $responsableDpe = null;
 
-    #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'composantePorteuse')]
+    #[ORM\OneToMany(targetEntity: Formation::class, mappedBy: 'composantePorteuse')]
     private Collection $formationsPortees;
 
     #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'composantesInscription')]
@@ -272,7 +272,7 @@ class Composante
     {
         if (!$this->formationsPortees->contains($formationsPortee)) {
             $this->formationsPortees->add($formationsPortee);
-            $formationsPortee->addComposantePorteuse($this);
+            $formationsPortee->setComposantePorteuse($this);
         }
 
         return $this;
@@ -281,7 +281,10 @@ class Composante
     public function removeFormationsPortee(Formation $formationsPortee): self
     {
         if ($this->formationsPortees->removeElement($formationsPortee)) {
-            $formationsPortee->removeComposantePorteuse($this);
+            // set the owning side to null (unless already changed)
+            if ($formationsPortee->getComposantePorteuse() === $this) {
+                $formationsPortee->setComposantePorteuse(null);
+            }
         }
 
         return $this;
