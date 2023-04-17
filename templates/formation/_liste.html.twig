@@ -30,7 +30,18 @@ bouton pour valider/invalide les étapes successives #}
                     {{ displaySort('typeDiplome', sort, direction) }}
                 </a>
             </th>
-            <th>Mention/spécialité</th>
+            <th>
+                <a href="#"
+                        {{ stimulus_action('crud', 'sort', 'click', {
+                            'sort': 'mention',
+                            'direction': getDirection('mention', sort, direction)
+                        }) }}
+                >
+                    Mention/spécialité
+
+                    {{ displaySort('mention', sort, direction) }}
+                </a>
+            </th>
             <th>Etat</th>
             <th>Remplissage</th>
             <th></th>

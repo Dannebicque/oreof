@@ -33,7 +33,7 @@ class Formation
     #[ORM\ManyToOne]
     private ?Domaine $domaine = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Composante::class, inversedBy: 'formationsPortees')]
     private ?Composante $composantePorteuse = null;
 
     #[ORM\ManyToOne]

@@ -31,6 +31,9 @@ class Composante
     #[ORM\ManyToOne(inversedBy: 'composanteResponsableDpe')]
     private ?User $responsableDpe = null;
 
+    #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'composantePorteuse')]
+    private Collection $formationsPortees;
+
     #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'composantesInscription')]
     private Collection $formations;
 
@@ -62,6 +65,7 @@ class Composante
     {
         $this->formations = new ArrayCollection();
         $this->userCentres = new ArrayCollection();
+        $this->formationsPortees = new ArrayCollection();
     }
 
     public function getEtatComposante(): array
@@ -252,6 +256,33 @@ class Composante
     public function setSigle(?string $sigle): self
     {
         $this->sigle = $sigle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Formation>
+     */
+    public function getFormationsPortees(): Collection
+    {
+        return $this->formationsPortees;
+    }
+
+    public function addFormationsPortee(Formation $formationsPortee): self
+    {
+        if (!$this->formationsPortees->contains($formationsPortee)) {
+            $this->formationsPortees->add($formationsPortee);
+            $formationsPortee->addComposantePorteuse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormationsPortee(Formation $formationsPortee): self
+    {
+        if ($this->formationsPortees->removeElement($formationsPortee)) {
+            $formationsPortee->removeComposantePorteuse($this);
+        }
 
         return $this;
     }
