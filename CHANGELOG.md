@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.22.5](https://github.com/Dannebicque/oreof/compare/v0.22.4...v0.22.5) (2023-04-17)
+
+
+### Features
+
+* filtre par mention sur les formations ([51a8bec](https://github.com/Dannebicque/oreof/commit/51a8becc9a2848e31087ffb4fd2807dc49bcf005))
+
+
+### Bug Fixes
+
+* mail ([0f70a4d](https://github.com/Dannebicque/oreof/commit/0f70a4d3b8bdc51a34d5b9886feaebf16f3aa8b6))
+* nombre de formation ([15911cf](https://github.com/Dannebicque/oreof/commit/15911cf3db00f7478a1a0db1bbf8abe3284d8205))
+
 ### [0.22.4](https://github.com/Dannebicque/oreof/compare/v0.22.3...v0.22.4) (2023-04-17)
 
 
