@@ -11,8 +11,10 @@
     <tbody>
     {% for sem in semestres %}
         <tr>
-            <td>{{ sem.parcours.formation.composantePorteuse.libelle }}</td>
-            <td>{{ sem.parcours.formation.display }}</td>
+            <td>{{ sem.parcours.formation != null ? sem.parcours.formation.composantePorteuse.libelle : 'Erreur
+            formation' }}</td>
+            <td>{{ sem.parcours.formation != null ? sem.parcours.formation.display : 'Erreur
+            formation' }}</td>
             <td>{{ sem.parcours.libelle }}</td>
             <td></td>
             <td class="text-end">

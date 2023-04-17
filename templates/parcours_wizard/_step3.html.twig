@@ -52,17 +52,17 @@
     <button
             {{ stimulus_controller('modal', {
                 size: 'lg',
-                modalTitle: 'Ajouter des compétences transversale',
+                modalTitle: 'Ajouter des compétences transversales (Référentiel RNCP)',
                 modalUrl: path('app_bloc_competence_liste_transverse') }) }}
             data-action="click->modal#openModal"
             class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
             data-size="lg"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
-            title="Ajouter des compétences transversale"
+            title="Ajouter des compétences transversales (Référentiel RNCP)"
     >
         <i class="{{ iconAdd }}"></i>
-        <span> Ajouter des compétences transversale</span>
+        <span> Ajouter des compétences transversales (Référentiel RNCP)</span>
     </button>
 
     <div {{ stimulus_target('parcours--step3', 'liste') }} class="mt-2">

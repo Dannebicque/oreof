@@ -11,8 +11,8 @@
     <tbody>
     {% for u in ues %}
         <tr>
-            <td>{{ u.parcours.formation.composantePorteuse.libelle }}</td>
-            <td>{{ u.parcours.formation.display }}</td>
+            <td>{{ u.parcours.formation != null ? u.parcours.formation.composantePorteuse.libelle : 'Erreur formation' }}</td>
+            <td>{{ u.parcours.formation != null ? u.parcours.formation.display : 'Erreur formation' }}</td>
             <td>{{ u.parcours.libelle }}</td>
             <td></td>
             <td class="text-end">

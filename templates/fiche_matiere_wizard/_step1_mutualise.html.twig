@@ -11,16 +11,17 @@
     <tbody>
     {% for fiche in ficheMatiere.ficheMatiereParcours %}
         <tr>
-            <td>{{ fiche.parcours.formation.composantePorteuse.libelle }}</td>
-            <td>{{ fiche.parcours.formation.display }}</td>
+            <td>{{ fiche.parcours.formation != null ? fiche.parcours.formation.composantePorteuse.libelle : 'Erreur
+            formation' }}</td>
+            <td>{{ fiche.parcours.formation != null ? fiche.parcours.formation.display : 'Erreur
+            formation' }}</td>
             <td>{{ fiche.parcours.libelle }}</td>
             <td>{{ ficheMatiere|hasParcours(fiche.parcours) == true ? '<span class="badge bg-success">Oui</span>' :
-                '<span class="badge bg-danger">Non</span>'
-                }}</td>
+                '<span class="badge bg-danger">Non</span>' }}</td>
             <td class="text-end">
                 <button {{ stimulus_action('fichematiere--step1', 'delete', 'click', {
                     url:path('app_fiche_matiere_wizard_step_1_mutualise_add_ajax', {ficheMatiere:ficheMatiere.id,
-                        }),fiche:fiche.id
+                    }),fiche:fiche.id
                 }) }} class="btn btn-sm text-danger">
                     <i class="{{ iconDelete }}"></i> Supprimer
                 </button>
