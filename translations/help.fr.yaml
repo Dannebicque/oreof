@@ -228,3 +228,19 @@ ue.raccrocher.helps: "Sélectionnez l'UE mutualisée que vous souhaitez raccroch
 ec_manage.helps.fiche_matieres_libelle_choix.help: "Indiquez le libellé de l'EC s'il y en a un."
 element_constitutif_enfant.helps.libelle: "Indiquez le libellé exact de l'EC."
 form.helps.objectifsFormation: "Décrivez en 3000 caractères maximum la finalité de la mention ainsi que l'organisation pédagogique de la formation en tronc commun et parcours."
+formation_step1.helps.sigle: formation_step1.helps.sigle
+fiche_matiere_step1.helps.sigle: fiche_matiere_step1.helps.sigle
+mccc_licence.helps.choix_type_mccc.help: mccc_licence.helps.choix_type_mccc.help
+mccc_licence.helps.cc_ct.pourcentage_s1_cc.help: mccc_licence.helps.cc_ct.pourcentage_s1_cc.help
+mccc_licence.helps.cc_ct.nbepreuve_s1_cc.help: mccc_licence.helps.cc_ct.nbepreuve_s1_cc.help
+mccc_licence.helps.cc_ct.pourcentage_s1_et.help: mccc_licence.helps.cc_ct.pourcentage_s1_et.help
+mccc_licence.helps.cc_ct.typeEpreuve_s1_et.help: mccc_licence.helps.cc_ct.typeEpreuve_s1_et.help
+mccc_licence.helps.cc_ct.pourcentage_s2_et.help: mccc_licence.helps.cc_ct.pourcentage_s2_et.help
+mccc_licence.helps.cc_ct.typeEpreuve_s2_et.help: mccc_licence.helps.cc_ct.typeEpreuve_s2_et.help
+mccc_licence.helps.ct.pourcentage_s1_et.help: mccc_licence.helps.ct.pourcentage_s1_et.help
+mccc_licence.helps.ct.typeEpreuve_s1_et.help: mccc_licence.helps.ct.typeEpreuve_s1_et.help
+mccc_licence.helps.ct.pourcentage_s2_et.help: mccc_licence.helps.ct.pourcentage_s2_et.help
+mccc_licence.helps.ct.typeEpreuve_s2_et.help: mccc_licence.helps.ct.typeEpreuve_s2_et.help
+mccc_licence.helps.cc.pourcentage_s1_et.help: mccc_licence.helps.cc.pourcentage_s1_et.help
+mccc_licence.helps.cc.typeEpreuve_s1_cc.help: mccc_licence.helps.cc.typeEpreuve_s1_cc.help
+fiche_matiere_step3.labels.competence_transverse: fiche_matiere_step3.labels.competence_transverse

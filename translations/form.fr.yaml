@@ -260,9 +260,9 @@ ec_manage.labels.fiche_matiere_unique.label: 'Choisissez la fiche EC/matière à
 ec_manage.labels.fiche_matiere_libelle_unique.label: 'Si non existant, précisez le libellé de la fiche EC/matière  à raccrocher à cet EC '
 parcours_step5.labels.regimeInscription.label: "Régime(s) d'inscription"
 fiche_matiere_step1.labels.responsableFicheMatiere: "Référent de l'enseignement"
-fiche_matiere.step1_collegue_manquant.title: 'Ajouter un collègue manquant'
-fiche_matiere.step1_collegue_manquant.label: 'Ajouter un collègue manquant'
-user.add_missing.email.label: "Indiquer l'email URCA du collègue à ajouter"
+fiche_matiere.step1_collegue_manquant.title: 'Ajouter un utilisateur manquant'
+fiche_matiere.step1_collegue_manquant.label: 'Ajouter un utilisateur manquant'
+user.add_missing.email.label: "Indiquer l'email URCA de l'utilisateur à ajouter"
 ue.labels.libelle: "Libellé de l'UE"
 8: '8'
 9: '9'
@@ -288,3 +288,13 @@ ue.raccrocher.label: "Précisez l'UE à raccrocher"
 ue.raccrocher.bouton: Raccrocher
 ec_manage.labels.fiche_matieres_libelle_choix.label: "Libellé de l'EC"
 element_constitutif_enfant.labels.libelle: "Libellé de l'EC"
+formation_step1.labels.sigle: formation_step1.labels.sigle
+fiche_matiere_step1.labels.sigle: fiche_matiere_step1.labels.sigle
+form.labels.objectifsFormation: form.labels.objectifsFormation
+mccc_licence.labels.choix_type_mccc.label: mccc_licence.labels.choix_type_mccc.label
+mccc_licence.ct.label: mccc_licence.ct.label
+mccc_licence.cc_ct.label: mccc_licence.cc_ct.label
+mccc_licence.cc.label: mccc_licence.cc.label
+mccc_licence.cci.label: mccc_licence.cci.label
+mccc_licence.placeholder.label: mccc_licence.placeholder.label
+fiche_matiere_step3.labels.competence_transverse: fiche_matiere_step3.labels.competence_transverse

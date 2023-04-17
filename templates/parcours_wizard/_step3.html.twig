@@ -5,9 +5,6 @@
 }) }}
         data-action="base:refreshListe@window->parcours--step3#refreshListe"
 >
-
-
-
     <div class="row">
         <div class="col-md-4">
             <div class="alert alert-info mb-2 mt-2">
@@ -52,8 +49,25 @@
         </div>
 
     </div>
+
+    <button
+            {{ stimulus_controller('modal', {
+                size: 'lg',
+                modalTitle: 'Ajouter des compétences transversale',
+                modalUrl: path('app_bloc_competence_liste_transverse') }) }}
+            data-action="click->modal#openModal"
+            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-size="lg"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Ajouter des compétences transversale"
+    >
+        <i class="{{ iconAdd }}"></i>
+        <strong> Ajouter des compétences transversale</strong>
+    </button>
+
     <input type="checkbox" {{ stimulus_action('parcours--step3', 'bcctransverse', 'click') }}>
-    <label>La formation utilise des BCC transverses  ?</label><br>
+    <label class="form-label">La formation utilise des BCC transverses  ?</label><br>
     <div {{ stimulus_target('parcours--step3', 'bcctransverse') }}>
 
     </div>
