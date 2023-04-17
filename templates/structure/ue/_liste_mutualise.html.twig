@@ -11,9 +11,10 @@
     <tbody>
     {% for u in ues %}
         <tr>
-            <td>{{ u.parcours.formation != null ? u.parcours.formation.composantePorteuse.libelle : 'Erreur formation' }}</td>
-            <td>{{ u.parcours.formation != null ? u.parcours.formation.display : 'Erreur formation' }}</td>
-            <td>{{ u.parcours.libelle }}</td>
+            <td>{{ u.parcours != null  and u.parcours.formation != null ? u.parcours.formation.composantePorteuse.libelle :
+                'Erreur formation' }}</td>
+            <td>{{ u.parcours != null  and u.parcours.formation != null ? u.parcours.formation.display : 'Erreur formation' }}</td>
+            <td>{{ u.parcours != null  and u.parcours.formation != null ? u.parcours.libelle : 'Erreur formation' }}</td>
             <td></td>
             <td class="text-end">
                 <button {{ stimulus_action('ue--mutualise', 'delete', 'click', {ue:u.id}) }} class="btn

@@ -11,11 +11,12 @@
     <tbody>
     {% for sem in semestres %}
         <tr>
-            <td>{{ sem.parcours.formation != null ? sem.parcours.formation.composantePorteuse.libelle : 'Erreur
+            <td>{{ sem.parcours != null and sem.parcours.formation != null ? sem.parcours.formation.composantePorteuse
+                .libelle : 'Erreur
             formation' }}</td>
-            <td>{{ sem.parcours.formation != null ? sem.parcours.formation.display : 'Erreur
+            <td>{{ sem.parcours != null andsem.parcours.formation != null ? sem.parcours.formation.display : 'Erreur
             formation' }}</td>
-            <td>{{ sem.parcours.libelle }}</td>
+            <td>{{ sem.parcours != null ? sem.parcours.libelle : 'Erreur formation' }}</td>
             <td></td>
             <td class="text-end">
                 <button {{ stimulus_action('semestre--mutualise', 'delete', 'click', {sem:sem.id}) }} class="btn
