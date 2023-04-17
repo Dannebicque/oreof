@@ -102,7 +102,7 @@ class FicheMatiereWizardController extends AbstractController
                 foreach ($formations as $formation) {
                     $t[] = [
                         'id' => $formation->getId(),
-                        'libelle' => $formation->display()
+                        'libelle' => $formation->getDisplay()
                     ];
                 }
                 break;
