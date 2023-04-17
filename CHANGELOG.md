@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.22.7](https://github.com/Dannebicque/oreof/compare/v0.22.6...v0.22.7) (2023-04-17)
+
+
+### Features
+
+* BCC ([3626f3c](https://github.com/Dannebicque/oreof/commit/3626f3c0885f7ca3de1bc5f8982798707c8a45c9))
+* Filtres ([51f71e8](https://github.com/Dannebicque/oreof/commit/51f71e83e769a69c9850376448099a9a86cf3578))
+* tris sur UE et Semestre ([ec189d5](https://github.com/Dannebicque/oreof/commit/ec189d5c3739cf3c92bca1717151fe612cf848f5))
+
+
+### Bug Fixes
+
+* affichage si parcours null ([dac30ef](https://github.com/Dannebicque/oreof/commit/dac30ef3a996562c5a4ec1e48126607e13ed0537))
+
 ### [0.22.6](https://github.com/Dannebicque/oreof/compare/v0.22.5...v0.22.6) (2023-04-17)
 
 
