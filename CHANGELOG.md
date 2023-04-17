@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.22.6](https://github.com/Dannebicque/oreof/compare/v0.22.5...v0.22.6) (2023-04-17)
+
+
+### Features
+
+* BCC communs ([eec8908](https://github.com/Dannebicque/oreof/commit/eec890877478ea5dcb99945497ff36bc6472fff1))
+* Filtres ([16764a4](https://github.com/Dannebicque/oreof/commit/16764a457bbba1727266d1bc2036dd96bc14e424))
+* Tris ([c8e90e6](https://github.com/Dannebicque/oreof/commit/c8e90e68792be052e95926ebdbdd0719155b5fc7))
+
+
+### Bug Fixes
+
+* BCC communs ([0a98495](https://github.com/Dannebicque/oreof/commit/0a98495a75072c3fc8969bbad18528dd041d6b25))
+* typos ([b1f9d58](https://github.com/Dannebicque/oreof/commit/b1f9d582f5b325a91cf75f4644fbd7909b166a2b))
+
 ### [0.22.5](https://github.com/Dannebicque/oreof/compare/v0.22.4...v0.22.5) (2023-04-17)
 
 
