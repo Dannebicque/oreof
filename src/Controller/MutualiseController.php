@@ -69,11 +69,10 @@ class MutualiseController extends AbstractController
     {
         $sort = $request->query->get('sort') ?? 'libelle';
         $direction = $request->query->get('direction') ?? 'asc';
-        $q = $request->query->get('q') ?? null;
 
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
             //pas de filtre, toutes les UE
-            $ues = $ueRepository->findAllBy([$sort => $direction], $q);
+            $ues = $ueRepository->findAllBy([$sort => $direction]);
         } else {
             //filtre selon mes parcours
         }
@@ -98,7 +97,7 @@ class MutualiseController extends AbstractController
         Request $request,
         SemestreMutualisableRepository $semestreRepository): Response
     {
-        $sort = $request->query->get('sort') ?? 'libelle';
+        $sort = $request->query->get('sort') ?? 'formation';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
 

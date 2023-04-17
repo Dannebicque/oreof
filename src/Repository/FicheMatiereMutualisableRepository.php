@@ -43,7 +43,7 @@ class FicheMatiereMutualisableRepository extends ServiceEntityRepository
         }
     }
 
-    public function findAllBy(array $options, string|null $q)
+    public function findAllBy(array $options, string|null $q): array
     {
         $qb = $this->createQueryBuilder('f')
             ->join('f.ficheMatiere', 'fm');

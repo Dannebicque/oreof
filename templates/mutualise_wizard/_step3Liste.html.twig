@@ -2,26 +2,19 @@
     <thead>
     <tr>
         <th>
-            <a href="#"
-                    {{ stimulus_action('crud', 'sort', 'click', {
-                        'sort': 'mention',
-                        'direction': getDirection('mention', sort, direction)
-                    }) }}
-            >
+
                 Code Semestre
                 {{ displaySort('mention', sort, direction) }}
-            </a>
-
         </th>
         <th>
             <a href="#"
                     {{ stimulus_action('crud', 'sort', 'click', {
-                        'sort': 'mention',
-                        'direction': getDirection('mention', sort, direction)
+                        'sort': 'formation',
+                        'direction': getDirection('formation', sort, direction)
                     }) }}
             >
                 Formation porteuse
-                {{ displaySort('mention', sort, direction) }}
+                {{ displaySort('formation', sort, direction) }}
             </a>
         </th>
         <th>
