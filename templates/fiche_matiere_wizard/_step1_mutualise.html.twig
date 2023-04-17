@@ -18,7 +18,8 @@
                 'Erreur
             formation' }}</td>
             <td>{{ fiche.parcours != null ? fiche.parcours.libelle : 'Erreur formation' }}</td>
-            <td>{{ ficheMatiere|hasParcours(fiche.parcours) == true ? '<span class="badge bg-success">Oui</span>' :
+            <td>{{ fiche.parcours != null  and ficheMatiere|hasParcours(fiche.parcours) == true ? '<span class="badge
+            bg-success">Oui</span>' :
                 '<span class="badge bg-danger">Non</span>' }}</td>
             <td class="text-end">
                 <button {{ stimulus_action('fichematiere--step1', 'delete', 'click', {
