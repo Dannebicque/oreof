@@ -11,11 +11,13 @@
     <tbody>
     {% for fiche in ficheMatiere.ficheMatiereParcours %}
         <tr>
-            <td>{{ fiche.parcours.formation != null ? fiche.parcours.formation.composantePorteuse.libelle : 'Erreur
+            <td>{{ fiche.parcours != null and fiche.parcours.formation != null ? fiche.parcours.formation
+                .composantePorteuse.libelle : 'Erreur
             formation' }}</td>
-            <td>{{ fiche.parcours.formation != null ? fiche.parcours.formation.display : 'Erreur
+            <td>{{ fiche.parcours != null and fiche.parcours.formation != null ? fiche.parcours.formation.display :
+                'Erreur
             formation' }}</td>
-            <td>{{ fiche.parcours.libelle }}</td>
+            <td>{{ fiche.parcours != null ? fiche.parcours.libelle : 'Erreur formation' }}</td>
             <td>{{ ficheMatiere|hasParcours(fiche.parcours) == true ? '<span class="badge bg-success">Oui</span>' :
                 '<span class="badge bg-danger">Non</span>' }}</td>
             <td class="text-end">
