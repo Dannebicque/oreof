@@ -55,8 +55,8 @@ class FormationController extends BaseController
             if ($q) {
                 $formations = $formationRepository->findBySearch($q, $this->getAnneeUniversitaire(), $sort, $direction);
             } else {
-                $formations = $formationRepository->findBy(
-                    ['anneeUniversitaire' => $this->getAnneeUniversitaire()],
+                $formations = $formationRepository->findByAdmin(
+                    $this->getAnneeUniversitaire(),
                     [$sort => $direction]
                 );
             }
