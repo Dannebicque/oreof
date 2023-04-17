@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.22.2](https://github.com/Dannebicque/oreof/compare/v0.22.1...v0.22.2) (2023-04-17)
+
+
+### Features
+
+* suppression d'une épreuve ([207e6cf](https://github.com/Dannebicque/oreof/commit/207e6cf35912f3a6cdef6f2607352dfbca863bf8))
+
 ### [0.22.1](https://github.com/Dannebicque/oreof/compare/v0.22.0...v0.22.1) (2023-04-17)
 
 
