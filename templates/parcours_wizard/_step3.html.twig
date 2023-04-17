@@ -1,7 +1,6 @@
 <div {{ stimulus_controller('parcours--step3', {
     url: path('app_parcours_save', {parcours:parcours.id}),
-    urlListe: path('app_bloc_competence_liste_parcours', {parcours:parcours.id}),
-    urlListeTransverse: path('app_bloc_competence_liste_transverse'),
+    urlListe: path('app_bloc_competence_liste_parcours', {parcours:parcours.id})
 }) }}
         data-action="base:refreshListe@window->parcours--step3#refreshListe"
 >
@@ -63,14 +62,8 @@
             title="Ajouter des compétences transversale"
     >
         <i class="{{ iconAdd }}"></i>
-        <strong> Ajouter des compétences transversale</strong>
+        <span> Ajouter des compétences transversale</span>
     </button>
-
-    <input type="checkbox" {{ stimulus_action('parcours--step3', 'bcctransverse', 'click') }}>
-    <label class="form-label">La formation utilise des BCC transverses  ?</label><br>
-    <div {{ stimulus_target('parcours--step3', 'bcctransverse') }}>
-
-    </div>
 
     <div {{ stimulus_target('parcours--step3', 'liste') }} class="mt-2">
 

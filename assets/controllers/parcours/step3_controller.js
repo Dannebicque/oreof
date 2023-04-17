@@ -22,11 +22,6 @@ export default class extends Controller {
   static values = {
     url: String,
     urlListe: String,
-    urlListeTransverse: String,
-  }
-
-  bcctransverse(event) {
-    this._updateListeTransverse()
   }
 
   etatStep(event) {
@@ -117,12 +112,6 @@ export default class extends Controller {
     this.listeTarget.innerHTML = window.da.loaderStimulus
     const response = await fetch(this.urlListeValue)
     this.listeTarget.innerHTML = await response.text()
-  }
-
-  async _updateListeTransverse() {
-    this.bcctransverseTarget.innerHTML = window.da.loaderStimulus
-    const response = await fetch(this.urlListeTransverseValue)
-    this.bcctransverseTarget.innerHTML = await response.text()
   }
 
   async _save(options) {

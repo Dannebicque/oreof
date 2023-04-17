@@ -54,7 +54,7 @@ class BlocCompetenceController extends AbstractController
     public function listeTransverse(BlocCompetenceRepository $blocCompetenceRepository): Response
     {
         return $this->render('bloc_competence/_listeTransverse.html.twig', [
-            'bloc_competences' => $blocCompetenceRepository->findBy(['parcours' => null]),
+            'bccs' => $blocCompetenceRepository->findBy(['parcours' => null]),
         ]);
     }
 

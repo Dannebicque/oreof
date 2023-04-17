@@ -1,63 +1,34 @@
-<table class="table table-hover">
-    <tbody>
-    {% for blocCompetence in bloc_competences %}
-        <tr class="table-primary">
-            <th><input type="checkbox"></th>
-            <th colspan="2">
-                {{ blocCompetence.code }} - {{ blocCompetence.libelle }}
-            </th>
-            <th class="text-end">
-                &nbsp;
-            </th>
-            <th class="text-end">
-
-            </th>
-        </tr>
-
-        {% for competence in blocCompetence.competences %}
-
-
-            <tr>
-                <td><input type="checkbox"></td>
-                <td>
-                    {{ competence.code }} - {{ competence.libelle }}
-                </td>
-                <td class="text-end">
-                    &nbsp;
-                </td>
-                <th class="text-end">
-
-                </th>
-            </tr>
-
-        {% else %}
-            <tr>
-                <td>&nbsp;</td>
-                <td colspan="4">
-                    <div class="text-divider">
-                        <button
-                                {{ stimulus_controller('modal', {
-                                    size: 'lg',
-                                    modalTitle: 'Ajouter une compétence dans le bloc de compétences '~
-                                    blocCompetence.code,
-                                    modalUrl: path('app_competence_new', {bcc:blocCompetence.id}) }) }}
-                                data-action="click->modal#openModal"
-                                class="btn btn-sm text-success"
-                                data-size="lg"
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="bottom"
-                                title=" Ajouter une compétence dans le bloc de compétences
-                {{ blocCompetence.code }}"
+<div {{ stimulus_controller('parcours--bcc') }}>
+    {% for bcc in bccs %}
+        <div class=" mb-2">
+            <input type="checkbox" name="ec[bccs][]" value="{{ bcc.id }}" id="bcc_{{ bcc.id }}"
+                   {% if ecBccs[bcc.id] is defined %}checked{% endif %}
+                    {{ stimulus_action('parcours--bcc', 'changeBcc', 'change', {id:bcc.id}) }}
+            >
+            <label for="bcc_{{ bcc.id }}"><strong>{{ bcc.display }}</strong></label>
+            <div id="bcc_{{ bcc.id }}_competence" class="{% if ecBccs[bcc.id] is not defined %}d-none {% endif %} mb-2 ms-3">
+                {% for competence in bcc.competences %}
+                    <div>
+                        <input type="checkbox" name="ec[competences][]"
+                               {% if ecComps[competence.id] is defined %}checked{% endif %}
+                               value="{{ competence.id }}"
+                               id="competence_{{ competence.id }}"
+                               class="bcc_{{ bcc.id }}"
+                                {{ stimulus_action('fichematiere--step3', 'changeCompetence', 'change', {id:competence.id}) }}
                         >
-                            <i class="{{ iconAdd }}"></i>
-                            Ajouter une compétence dans le bloc de compétences
-                            <strong>{{ blocCompetence.code }}</strong>
-                        </button>
+                        <label for="competence_{{ competence.id }}">{{ competence.display }}</label>
                     </div>
-                </td>
-            </tr>
-        {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        {{ component('alerte', {
+            type: 'warning',
+            message: 'fiche_matiere.alerte.no_bcc'|trans({}, 'form')
+        }) }}
     {% endfor %}
 
-    </tbody>
-</table>
+    <button class="btn btn-success mt-2" data-action="fichematiere--mutualise#ajouter base#modalClose" data-bs-dismiss="modal">
+        Sauvegarder
+    </button>
+</div>
