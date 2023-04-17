@@ -1,9 +1,13 @@
 <div {{ stimulus_controller('parcours--step3', {
     url: path('app_parcours_save', {parcours:parcours.id}),
     urlListe: path('app_bloc_competence_liste_parcours', {parcours:parcours.id}),
+    urlListeTransverse: path('app_bloc_competence_liste_transverse'),
 }) }}
         data-action="base:refreshListe@window->parcours--step3#refreshListe"
 >
+
+
+
     <div class="row">
         <div class="col-md-4">
             <div class="alert alert-info mb-2 mt-2">
@@ -48,7 +52,13 @@
         </div>
 
     </div>
-    <div {{ stimulus_target('parcours--step3', 'liste') }}>
+    <input type="checkbox" {{ stimulus_action('parcours--step3', 'bcctransverse', 'click') }}>
+    <label>La formation utilise des BCC transverses  ?</label><br>
+    <div {{ stimulus_target('parcours--step3', 'bcctransverse') }}>
+
+    </div>
+
+    <div {{ stimulus_target('parcours--step3', 'liste') }} class="mt-2">
 
     </div>
 

@@ -1,24 +1,11 @@
-<table class="table">
-    <thead>
-    <tr>
-        <th>Code Semestre</th>
-        <th>Formation porteuse</th>
-        <th>Composante</th>
-        <th>Mention/spécialité</th>
-        <th>Parcours</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for semestre in semestres %}
-        <tr>
-            <td>{{ semestre.semestre.display }}</td>
-            <td>{{ semestre.semestre.semestreParcours[0].parcours.formation.display }}</td>
-            <td>{{ semestre.parcours.formation.composantePorteuse.libelle }}</td>
-            <td>{{ semestre.parcours.formation.display }}</td>
-            <td>{{ semestre.parcours.libelle }}</td>
-            <td>Voir ?</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div
+        {{ stimulus_controller('crud', {
+            url: path('app_mutualise_semestre_liste'),
+        }) }}
+        data-action="base:refreshListe@window->crud#refreshListe base:modalClose@window->crud#refreshListe"
+>
+    {{ include('communs/_recherche.html.twig') }}
+    <div {{ stimulus_target('crud', 'liste') }}>
+
+    </div>
+</div>

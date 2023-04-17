@@ -1,27 +1,11 @@
-<table class="table">
-    <thead>
-        <tr>
-            <th>Code UE</th>
-            <th>Formation porteuse</th>
-            <th>Type UE</th>
-            <th>Composante</th>
-            <th>Mention/spécialité</th>
-            <th>Parcours</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for ue in ues %}
-        <tr>
-            <td>{{ ue.ue.display }}</td>
-            <td>{{ ue.parcours != null ? ue.ue.semestre.semestreParcours[0].parcours
-                .formation.display : 'Pas de formation'}}</td>
-            <td>{{ ue.ue.typeUe.libelle }}</td>
-            <td>{{ ue.parcours != null ? ue.parcours.formation.composantePorteuse.libelle : 'Pas de formation' }}</td>
-            <td>{{ ue.parcours != null ? ue.parcours.formation.display : 'Pas de formation' }}</td>
-            <td>{{ ue.parcours != null ? ue.parcours.libelle : 'Pas de formation' }}</td>
-            <td>Voir ?</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div
+        {{ stimulus_controller('crud', {
+            url: path('app_mutualise_ue_liste'),
+        }) }}
+        data-action="base:refreshListe@window->crud#refreshListe base:modalClose@window->crud#refreshListe"
+>
+    {{ include('communs/_recherche.html.twig') }}
+    <div {{ stimulus_target('crud', 'liste') }}>
+
+    </div>
+</div>

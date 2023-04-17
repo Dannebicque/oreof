@@ -1,0 +1,74 @@
+ <table class="table">
+    <thead>
+    <tr>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'libelle',
+                        'direction': getDirection('libelle', sort, direction)
+                    }) }}
+            >
+                Libellé
+                {{ displaySort('libelle', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'mention',
+                        'direction': getDirection('mention', sort, direction)
+                    }) }}
+            >
+                Formation porteuse
+                {{ displaySort('mention', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'mention',
+                        'direction': getDirection('mention', sort, direction)
+                    }) }}
+            >
+                Composante
+                {{ displaySort('mention', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'mention',
+                        'direction': getDirection('mention', sort, direction)
+                    }) }}
+            >
+                Mention/spécialité
+                {{ displaySort('mention', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'mention',
+                        'direction': getDirection('mention', sort, direction)
+                    }) }}
+            >
+                Parcours
+                {{ displaySort('mention', sort, direction) }}
+            </a>
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for fiche in fiches %}
+        <tr>
+            <td>{{ fiche.ficheMatiere.libelle }}</td>
+            <td>{{ fiche.ficheMatiere.parcours.formation.display }}</td>
+            <td>{{ fiche.parcours.formation.composantePorteuse.libelle }}</td>
+            <td>{{ fiche.parcours.formation.display }}</td>
+            <td>{{ fiche.parcours.libelle }}</td>
+            <td>Voir ?</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+ </table>

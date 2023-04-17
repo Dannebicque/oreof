@@ -39,28 +39,20 @@ class FicheMatiereMutualisableRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return FicheMatiereParcours[] Returns an array of FicheMatiereParcours objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findAllBy(array $options, string|null $q)
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->join('f.ficheMatiere', 'fm');
 
-//    public function findOneBySomeField($value): ?FicheMatiereParcours
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if ($q) {
+            $qb->andWhere('fm.libelle LIKE :q')
+                ->setParameter('q', '%' . $q . '%');
+        }
+
+        foreach ($options as $sort => $direction) {
+            $qb->addOrderBy('fm.' . $sort, $direction);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

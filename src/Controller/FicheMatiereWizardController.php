@@ -181,12 +181,12 @@ class FicheMatiereWizardController extends AbstractController
             $bccs2 = [];
         }
 
-        $bccs = array_merge($bccs2, $bccs1);
 
         return $this->render('fiche_matiere_wizard/_step3.html.twig', [
             'ficheMatiere' => $ficheMatiere,
             'form' => $form->createView(),
-            'bccs' => $bccs ,
+            'bccsTransversaux' => $bccs1 ,
+            'bccs' => $bccs2 ,
             'ecBccs' => array_flip(array_unique($ecBccs)),
             'ecComps' => array_flip($ecComps),
         ]);

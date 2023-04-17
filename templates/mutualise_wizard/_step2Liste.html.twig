@@ -1,0 +1,88 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'mention',
+                        'direction': getDirection('mention', sort, direction)
+                    }) }}
+            >
+                Code UE
+                {{ displaySort('mention', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'mention',
+                        'direction': getDirection('mention', sort, direction)
+                    }) }}
+            >
+                Formation porteuse
+                {{ displaySort('mention', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'mention',
+                        'direction': getDirection('mention', sort, direction)
+                    }) }}
+            >
+                Type UE
+                {{ displaySort('mention', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'mention',
+                        'direction': getDirection('mention', sort, direction)
+                    }) }}
+            >
+                Composante
+                {{ displaySort('mention', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'mention',
+                        'direction': getDirection('mention', sort, direction)
+                    }) }}
+            >
+                Mention/spécialité
+                {{ displaySort('mention', sort, direction) }}
+            </a>
+
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'mention',
+                        'direction': getDirection('mention', sort, direction)
+                    }) }}
+            >
+                Parcours
+                {{ displaySort('mention', sort, direction) }}
+            </a>
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for ue in ues %}
+        <tr>
+            <td>{{ ue.ue.display }}</td>
+            <td>{{ ue.parcours != null ? ue.ue.semestre.semestreParcours[0].parcours
+                .formation.display : 'Pas de formation' }}</td>
+            <td>{{ ue.ue.typeUe.libelle }}</td>
+            <td>{{ ue.parcours != null ? ue.parcours.formation.composantePorteuse.libelle : 'Pas de formation' }}</td>
+            <td>{{ ue.parcours != null ? ue.parcours.formation.display : 'Pas de formation' }}</td>
+            <td>{{ ue.parcours != null ? ue.parcours.libelle : 'Pas de formation' }}</td>
+            <td>Voir ?</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
