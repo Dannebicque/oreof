@@ -68,9 +68,10 @@ export default class extends Controller {
     div.classList.add('row')
     div.classList.add('epreuve')
     div.innerHTML = ` <div class="col-4">
+
             <strong>Epreuve N°${numEp}</strong>
         </div>
-        <div class="col-8">
+        <div class="col-6">
             <label for="pourcentage_s${numEp}_cc">
                 Pourcentage
                 <i class="fal fa-question-circle ms-1"
@@ -88,8 +89,19 @@ export default class extends Controller {
                 >
                 <span class="input-group-text">%</span>
             </div>
-        </div>`
-
+        </div>
+        <div class="col-2">
+        &nbsp;<br>
+        <button type="button" class="btn btn-danger btn-sm" data-action="click->mccc--licence#removeEpreuveCci">
+            <i class="fas fa-trash"></i>
+        </button>
+`
     document.getElementById('epreuve_cci').appendChild(div)
+  }
+
+  removeEpreuveCci(event) {
+    event.preventDefault()
+    const div = event.target.closest('.epreuve')
+    div.remove()
   }
 }
