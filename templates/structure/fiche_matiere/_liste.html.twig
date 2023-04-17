@@ -3,10 +3,41 @@
         <thead>
         <tr>
             {% if mode == 'liste' %}
-                <th>Mention/spécialité/Parcours</th>
+                <th>
+                    <a href="#"
+                            {{ stimulus_action('crud', 'sort', 'click', {
+                                'sort': 'mention',
+                                'direction': getDirection('mention', sort, direction)
+                            }) }}
+                    >
+                        Mention/spécialité/Parcours
+                        {{ displaySort('mention', sort, direction) }}
+                    </a>
+                </th>
             {% endif %}
-            <th>Libellé</th>
-            <th>Référent</th>
+            <th>
+                <a href="#"
+                        {{ stimulus_action('crud', 'sort', 'click', {
+                            'sort': 'libelle',
+                            'direction': getDirection('libelle', sort, direction)
+                        }) }}
+                >
+                    Libellé
+                    {{ displaySort('libelle', sort, direction) }}
+                </a>
+            </th>
+            <th>
+                <a href="#"
+                        {{ stimulus_action('crud', 'sort', 'click', {
+                            'sort': 'responsableFicheMatiere',
+                            'direction': getDirection('responsableFicheMatiere', sort, direction)
+                        }) }}
+                >
+                    Référent
+                    {{ displaySort('responsableFicheMatiere', sort, direction) }}
+                </a>
+
+                </th>
             <th>Remplissage</th>
             {#            <th>Etat</th> #}
             <th></th>

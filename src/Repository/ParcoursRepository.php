@@ -11,6 +11,7 @@ namespace App\Repository;
 
 use App\Entity\AnneeUniversitaire;
 use App\Entity\Formation;
+use App\Entity\Mention;
 use App\Entity\Parcours;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -56,8 +57,7 @@ class ParcoursRepository extends ServiceEntityRepository
             ->setParameter('formation', $formation)
             ->orderBy('p.libelle', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     public function findParcours(AnneeUniversitaire $anneeUniversitaire, array $options): array
@@ -69,8 +69,23 @@ class ParcoursRepository extends ServiceEntityRepository
             ->andWhere('f.anneeUniversitaire = :annee')
             ->setParameter('annee', $anneeUniversitaire);
 
-        foreach ($options as $key => $value) {
-            $qb->addOrderBy('p.' . $key, $value);
+        foreach ($options as $sort => $direction) {
+            if ($sort === 'composante') {
+                $qb->innerJoin('f.composantePorteuse', 'c')
+                    ->addOrderBy('c.libelle', $direction);
+            } elseif ($sort === 'mention') {
+                $qb->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id');
+                $qb->addOrderBy(
+                    'CASE
+                            WHEN f.mention IS NOT NULL THEN m.libelle
+                            WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
+                            ELSE f.mentionTexte
+                            END',
+                    $direction
+                );
+            } else {
+                $qb->addOrderBy('p.' . $sort, $direction);
+            }
         }
 
         return $qb->getQuery()->getResult();

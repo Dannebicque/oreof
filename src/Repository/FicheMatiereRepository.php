@@ -15,9 +15,11 @@ use App\Entity\EcUe;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
+use App\Entity\Mention;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\Ue;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -67,5 +69,44 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->orderBy('f.libelle', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findByAdmin(
+        AnneeUniversitaire $anneeUniversitaire,
+        array $options = [],
+        string|null $q = null
+    ) {
+        $qb = $this->createQueryBuilder('f')
+            ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
+            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
+        ;
+
+        if (null !== $q) {
+            $qb->andWhere('f.libelle LIKE :q')
+                ->setParameter('q', '%' . $q . '%');
+        }
+
+        foreach ($options as $sort => $direction) {
+            if ($sort === 'responsableFicheMatiere') {
+                $qb->addOrderBy('u.nom', $direction);
+                $qb->addOrderBy('u.prenom', $direction);
+            } elseif ($sort === 'mention') {
+
+                $qb->leftJoin(Formation::class, 'fo', 'WITH', 'p.formation = fo.id');
+                $qb->leftJoin(Mention::class, 'm', 'WITH', 'fo.mention = m.id');
+                $qb->addOrderBy(
+                    'CASE
+                            WHEN fo.mention IS NOT NULL THEN m.libelle
+                            WHEN fo.mentionTexte IS NOT NULL THEN fo.mentionTexte
+                            ELSE fo.mentionTexte
+                            END',
+                    $direction
+                );
+            } else {
+                $qb->addOrderBy('f.' . $sort, $direction);
+            }
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }
