@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.22.0](https://github.com/Dannebicque/oreof/compare/v0.21.27...v0.22.0) (2023-04-17)
+
+
+### Features
+
+* gestion des droits sur le responsable de parcours. nouvelles MCCC ([69aedb6](https://github.com/Dannebicque/oreof/commit/69aedb69d9f10c2e5d1ebea5c99dede7080a8185))
+* Retour depuis fiche matiere sur le bon onglet ([2fc0b23](https://github.com/Dannebicque/oreof/commit/2fc0b2373016b1b98e25d2eb068b064a75584e75))
+
 ### [0.21.27](https://github.com/Dannebicque/oreof/compare/v0.21.24...v0.21.27) (2023-04-15)
 
 
