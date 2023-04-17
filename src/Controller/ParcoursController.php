@@ -13,6 +13,7 @@ use App\Classes\verif\ParcoursState;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
+use App\Events\AddCentreParcoursEvent;
 use App\Form\ParcoursType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[Route('/parcours')]
 class ParcoursController extends BaseController
@@ -60,8 +62,10 @@ class ParcoursController extends BaseController
             $tParcours = $parcours;
         } else {
             foreach ($parcours as $p) {
-                if ($this->isGranted('ROLE_FORMATION_EDIT_MY',
-                        $p->getFormation()) || $this->isGranted('ROLE_FORMATION_SHOW_MY', $p->getFormation())) {
+                if ($this->isGranted(
+                    'ROLE_FORMATION_EDIT_MY',
+                    $p->getFormation()
+                ) || $this->isGranted('ROLE_FORMATION_SHOW_MY', $p->getFormation())) {
                     $tParcours[] = $p;
                 }
             }
@@ -77,6 +81,7 @@ class ParcoursController extends BaseController
 
     #[Route('/new/{formation}', name: 'app_parcours_new', methods: ['GET', 'POST'])]
     public function new(
+        EventDispatcherInterface $eventDispatcher,
         Request $request,
         ParcoursRepository $parcoursRepository,
         Formation $formation
@@ -95,6 +100,10 @@ class ParcoursController extends BaseController
             $this->parcoursWorkflow->apply($parcour, 'initialiser');
             $parcoursRepository->save($parcour, true);
 
+            //todo: ajouter le responsable du parcours aux centres et droits et envoyer mail
+            $event = new AddCentreParcoursEvent($parcour, ['ROLE_RESP_PARCOURS']);
+            $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
+
             return $this->json(true);
         }
 
@@ -106,7 +115,9 @@ class ParcoursController extends BaseController
 
     #[Route('/edit/modal/{parcours}', name: 'app_parcours_edit_modal', methods: ['GET', 'POST'])]
     public function editModal(
+        EventDispatcherInterface $eventDispatcher,
         Request $request,
+        EntityManagerInterface $entityManager,
         ParcoursRepository $parcoursRepository,
         Parcours $parcours
     ): Response {
@@ -118,6 +129,19 @@ class ParcoursController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $uow = $entityManager->getUnitOfWork();
+            $uow->computeChangeSets();
+            $changeSet = $uow->getEntityChangeSet($parcours);
+
+            if (isset($changeSet['respParcours'])) {
+                // retirer l'ancien resp des centres et droits et envoyer mail
+                $event = new AddCentreParcoursEvent($parcours, [], $changeSet['respParcours'][0]);
+                $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
+                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $changeSet['respParcours'][1]);
+                $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
+            }
+
             $parcoursRepository->save($parcours, true);
 
             return $this->json(true);

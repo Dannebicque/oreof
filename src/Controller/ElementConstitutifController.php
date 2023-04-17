@@ -426,9 +426,7 @@ class ElementConstitutifController extends AbstractController
 
         return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
             'ec' => $elementConstitutif,
-            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-            'mcccs' => $typeD->getMcccs($elementConstitutif),
         ]);
     }
 

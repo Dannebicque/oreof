@@ -12,6 +12,7 @@ namespace App\Repository;
 use App\Entity\AnneeUniversitaire;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -73,5 +74,19 @@ class ParcoursRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function findRespOtherParcoursInFormation(Parcours $parcours, User $user): array
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.formation', 'f')
+            ->andWhere('f = :formation')
+            ->andWhere('p.respParcours = :user')
+            ->andWhere('p.id <> :parcours')
+            ->setParameter('formation', $parcours->getFormation())
+            ->setParameter('user', $user)
+            ->setParameter('parcours', $parcours)
+            ->getQuery()
+            ->getResult();
     }
 }
