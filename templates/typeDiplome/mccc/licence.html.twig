@@ -12,7 +12,7 @@
     <select id="choix_type_mccc" name="choix_type_mccc" class="form-select"
             {{ stimulus_action('mccc--licence', 'changeType') }}
     >
-        <option value="">Choisir dans la liste une fiche EC/matière</option>
+        <option value="">{{ 'mccc_licence.placeholder.label'|trans({}, 'form') }}</option>
         <option value="ct">{{ 'mccc_licence.ct.label'|trans({}, 'form') }}</option>
         <option value="cc_ct">{{ 'mccc_licence.cc_ct.label'|trans({}, 'form') }}</option>
         <option value="cc">{{ 'mccc_licence.cc.label'|trans({}, 'form') }}</option>

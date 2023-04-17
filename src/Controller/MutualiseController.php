@@ -31,6 +31,7 @@ class MutualiseController extends AbstractController
             $fiches = $ficheMatiereRepository->findAll();
         } else {
             //filtre selon mes parcours
+            $fiches = $ficheMatiereRepository->findByParcours($this->getUser());
         }
 
         return $this->render('mutualise_wizard/_step1.html.twig', [
