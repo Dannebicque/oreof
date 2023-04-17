@@ -34,8 +34,10 @@ class BlocCompetenceController extends AbstractController
     }
 
     #[Route('/liste/parcours/{parcours}', name: 'app_bloc_competence_liste_parcours', methods: ['GET'])]
-    public function listeParcours(BlocCompetenceRepository $blocCompetenceRepository, ?Parcours $parcours = null): Response
-    {
+    public function listeParcours(
+        BlocCompetenceRepository $blocCompetenceRepository,
+        ?Parcours $parcours = null
+    ): Response {
         if ($parcours === null) {
             return $this->render('bloc_competence/_liste.html.twig', [
                 'bloc_competences' => $blocCompetenceRepository->findBy(['parcours' => null]),
@@ -45,6 +47,14 @@ class BlocCompetenceController extends AbstractController
         return $this->render('bloc_competence/_liste.html.twig', [
             'bloc_competences' => $blocCompetenceRepository->findByParcours($parcours),
             'parcours' => $parcours,
+        ]);
+    }
+
+    #[Route('/liste/transverse', name: 'app_bloc_competence_liste_transverse', methods: ['GET'])]
+    public function listeTransverse(BlocCompetenceRepository $blocCompetenceRepository): Response
+    {
+        return $this->render('bloc_competence/_listeTransverse.html.twig', [
+            'bloc_competences' => $blocCompetenceRepository->findBy(['parcours' => null]),
         ]);
     }
 
@@ -65,7 +75,11 @@ class BlocCompetenceController extends AbstractController
             BlocCompetenceType::class,
             $blocCompetence,
             [
-                'action' => $this->generateUrl('app_bloc_competence_new_parcours', ['parcours' => $parcours?->getId(),'ordre' => $request->query->get('ordre')]),]
+                'action' => $this->generateUrl(
+                    'app_bloc_competence_new_parcours',
+                    ['parcours' => $parcours?->getId(), 'ordre' => $request->query->get('ordre')]
+                ),
+            ]
         );
         $form->handleRequest($request);
 
@@ -156,6 +170,7 @@ class BlocCompetenceController extends AbstractController
         $blocCompetenceNew->genereCode();
 
         $blocCompetenceRepository->save($blocCompetenceNew, true);
+
         return $this->json(true);
     }
 
@@ -166,6 +181,7 @@ class BlocCompetenceController extends AbstractController
         string $sens
     ): Response {
         $bcc->deplacerBlocCompetence($blocCompetence, $sens);
+
         return $this->json(true);
     }
 
