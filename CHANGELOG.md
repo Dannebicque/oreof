@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.22.1](https://github.com/Dannebicque/oreof/compare/v0.22.0...v0.22.1) (2023-04-17)
+
+
+### Features
+
+* gestion des droits sur le responsable de parcours. nouvelles MCCC ([6276dc2](https://github.com/Dannebicque/oreof/commit/6276dc2a9f9852437121c79af2d4d37699ced17b))
+
 ## [0.22.0](https://github.com/Dannebicque/oreof/compare/v0.21.27...v0.22.0) (2023-04-17)
 
 
