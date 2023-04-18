@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.1](https://github.com/Dannebicque/oreof/compare/v0.23.0...v0.23.1) (2023-04-18)
+
+
+### Features
+
+* Co responsable de parcours + co responsable de mention + ajout ([1d6d455](https://github.com/Dannebicque/oreof/commit/1d6d455272e7bd4002d0166e0485b27b10d1a139))
+
 ## [0.23.0](https://github.com/Dannebicque/oreof/compare/v0.22.7...v0.23.0) (2023-04-18)
 
 
