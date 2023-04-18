@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.3](https://github.com/Dannebicque/oreof/compare/v0.23.2...v0.23.3) (2023-04-18)
+
+
+### Features
+
+* Changement de responsable ou co-responsable sur les parcours/formation ([377d31f](https://github.com/Dannebicque/oreof/commit/377d31f38722528793a472acb64aebf12e548c50))
+* Co responsable de parcours + co responsable de mention + ajout ([674e4c2](https://github.com/Dannebicque/oreof/commit/674e4c277545ef7dde6e1d8289de5c5d772041c5))
+
 ### [0.23.2](https://github.com/Dannebicque/oreof/compare/v0.23.1...v0.23.2) (2023-04-18)
 
 
