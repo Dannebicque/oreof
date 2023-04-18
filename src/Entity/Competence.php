@@ -22,7 +22,7 @@ class Competence
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'competences')]
+    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'competences')]
     private ?BlocCompetence $blocCompetence;
 
     #[ORM\Column(length: 10)]

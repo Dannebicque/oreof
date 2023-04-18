@@ -20,10 +20,10 @@ use Doctrine\ORM\EntityManagerInterface;
 class Bcc
 {
     public function __construct(
-        private BlocCompetenceRepository $blocCompetenceRepository,
-        private CompetenceRepository $competenceRepository,
-        private ParcoursRepository $parcoursRepository,
-        private EntityManagerInterface $entityManager,
+        private readonly BlocCompetenceRepository $blocCompetenceRepository,
+        private readonly CompetenceRepository $competenceRepository,
+        private readonly ParcoursRepository $parcoursRepository,
+        private readonly EntityManagerInterface $entityManager,
     ) {
     }
 

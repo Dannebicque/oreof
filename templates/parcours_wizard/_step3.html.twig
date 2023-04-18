@@ -2,7 +2,8 @@
     url: path('app_parcours_save', {parcours:parcours.id}),
     urlListe: path('app_bloc_competence_liste_parcours', {parcours:parcours.id})
 }) }}
-        data-action="base:refreshListe@window->parcours--step3#refreshListe"
+        data-action="base:refreshListe@window->parcours--step3#refreshListe
+        base:modalClose@window->parcours--step3#refreshListe"
 >
     <div class="row">
         <div class="col-md-4">
@@ -53,7 +54,7 @@
             {{ stimulus_controller('modal', {
                 size: 'lg',
                 modalTitle: 'Ajouter des compétences transversales (Référentiel RNCP)',
-                modalUrl: path('app_bloc_competence_liste_transverse') }) }}
+                modalUrl: path('app_bloc_competence_liste_transverse', {parcours:parcours.id}) }) }}
             data-action="click->modal#openModal"
             class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
             data-size="lg"

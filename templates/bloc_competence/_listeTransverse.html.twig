@@ -1,34 +1,41 @@
-<div {{ stimulus_controller('parcours--bcc') }}>
-    {% for bcc in bccs %}
-        <div class=" mb-2">
-            <input type="checkbox" name="ec[bccs][]" value="{{ bcc.id }}" id="bcc_{{ bcc.id }}"
-                   {% if ecBccs[bcc.id] is defined %}checked{% endif %}
-                    {{ stimulus_action('parcours--bcc', 'changeBcc', 'change', {id:bcc.id}) }}
-            >
-            <label for="bcc_{{ bcc.id }}"><strong>{{ bcc.display }}</strong></label>
-            <div id="bcc_{{ bcc.id }}_competence" class="{% if ecBccs[bcc.id] is not defined %}d-none {% endif %} mb-2 ms-3">
-                {% for competence in bcc.competences %}
-                    <div>
-                        <input type="checkbox" name="ec[competences][]"
-                               {% if ecComps[competence.id] is defined %}checked{% endif %}
-                               value="{{ competence.id }}"
-                               id="competence_{{ competence.id }}"
-                               class="bcc_{{ bcc.id }}"
-                                {{ stimulus_action('fichematiere--step3', 'changeCompetence', 'change', {id:competence.id}) }}
-                        >
-                        <label for="competence_{{ competence.id }}">{{ competence.display }}</label>
-                    </div>
-                {% endfor %}
+<div {{ stimulus_controller('parcours--bcc') }}
+        data-action="parcours--bcc:modalClose@window->base#modalHide"
+>
+    <form action="{{ path('app_bloc_competence_liste_transverse', {parcours:parcours.id}) }}" method="post">
+        {% for bcc in bccs %}
+            <div class=" mb-2">
+                <input type="checkbox" name="bccs[]" value="{{ bcc.id }}" id="bcc_{{ bcc.id }}"
+                       {% if ecBccs[bcc.id] is defined %}checked{% endif %}
+                        {{ stimulus_action('parcours--bcc', 'changeBcc', 'change', {id:bcc.id}) }}
+                >
+                <label for="bcc_{{ bcc.id }}"><strong>{{ bcc.display }}</strong></label>
+                <div id="bcc_{{ bcc.id }}_competence" class="{% if ecBccs[bcc.id] is not defined %}d-none {% endif %} mb-2 ms-3">
+                    {% for competence in bcc.competences %}
+                        <div>
+                            <input type="checkbox" name="competences[]"
+                                   {% if ecComps[competence.id] is defined %}checked{% endif %}
+                                   value="{{ competence.id }}"
+                                   id="competence_{{ competence.id }}"
+                                   class="bcc_{{ bcc.id }}"
+                                    {{ stimulus_action('fichematiere--step3', 'changeCompetence', 'change', {id:competence.id}) }}
+                            >
+                            <label for="competence_{{ competence.id }}">{{ competence.display }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-    {% else %}
-        {{ component('alerte', {
-            type: 'warning',
-            message: 'fiche_matiere.alerte.no_bcc'|trans({}, 'form')
-        }) }}
-    {% endfor %}
+        {% else %}
+            {{ component('alerte', {
+                type: 'warning',
+                message: 'fiche_matiere.alerte.no_bcc'|trans({}, 'form')
+            }) }}
+        {% endfor %}
 
-    <button class="btn btn-success mt-2" data-action="fichematiere--mutualise#ajouter base#modalClose" data-bs-dismiss="modal">
-        Sauvegarder
-    </button>
+        <button class="btn btn-success"
+                {{ stimulus_action('parcours--bcc','sauvegardeFormModal', 'click') }}
+        >
+            <i class="fal fa-floppy-disk"></i>
+            Enregistrer
+        </button>
+    </form>
 </div>

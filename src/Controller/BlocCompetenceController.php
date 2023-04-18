@@ -50,11 +50,54 @@ class BlocCompetenceController extends AbstractController
         ]);
     }
 
-    #[Route('/liste/transverse', name: 'app_bloc_competence_liste_transverse', methods: ['GET'])]
-    public function listeTransverse(BlocCompetenceRepository $blocCompetenceRepository): Response
-    {
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
+     */
+    #[Route('/liste/transverse/{parcours}', name: 'app_bloc_competence_liste_transverse', methods: ['GET', 'POST'])]
+    public function listeTransverse(
+        Request $request,
+        BlocCompetenceRepository $blocCompetenceRepository,
+        CompetenceRepository $competenceRepository,
+        Parcours $parcours
+    ): Response {
+        if ($request->isMethod('POST')) {
+            $competences = $request->request->all()['competences'];
+            $bccAdd = [];
+            foreach ($competences as $c) {
+                $b = $competenceRepository->find($c);
+                if ($b !== null) {
+                    $bc = $b->getBlocCompetence();
+                    if ($bc !== null) {
+                        if (!array_key_exists($bc->getId(), $bccAdd)) {
+                            $bc = $b->getBlocCompetence();
+                            if ($bc !== null) {
+                                $bcc = clone $bc;
+                                $ordre = $blocCompetenceRepository->getMaxOrdreParcours($parcours);
+                                $bcc->setOrdre($ordre + 1);
+                                $bcc->setParcours($parcours);
+                                $bcc->genereCode();
+                                $blocCompetenceRepository->save($bcc, true);
+                                $bccAdd[$bc->getId()] = $bcc;
+                            }
+                            $cCopie = clone $b;
+                            $cCopie->setBlocCompetence($bccAdd[$bc->getId()]);
+                            $ordre = $competenceRepository->getMaxOrdreBlocCompetence($bccAdd[$bc->getId()]);
+                            $cCopie->setOrdre($ordre + 1);
+                            $cCopie->genereCode();
+                            $competenceRepository->save($cCopie, true);
+                        }
+                    }
+                }
+            }
+
+            return $this->json(true);
+        }
+
+
         return $this->render('bloc_competence/_listeTransverse.html.twig', [
             'bccs' => $blocCompetenceRepository->findBy(['parcours' => null]),
+            'parcours' => $parcours,
         ]);
     }
 
@@ -62,7 +105,8 @@ class BlocCompetenceController extends AbstractController
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\NoResultException
      */
-    #[Route('/new/parcours/{parcours}', name: 'app_bloc_competence_new_parcours', methods: ['GET', 'POST'])]
+    #[
+        Route('/new/parcours/{parcours}', name: 'app_bloc_competence_new_parcours', methods: ['GET', 'POST'])]
     public function newParcours(
         Request $request,
         BlocCompetenceRepository $blocCompetenceRepository,
