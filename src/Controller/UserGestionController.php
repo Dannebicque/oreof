@@ -74,16 +74,16 @@ class UserGestionController extends BaseController
             }
 
             //récupération depuis le LDAP
-//            $ldapUser = $ldap->getDatas($email);
-//            if ($ldapUser === null) {
-//                $this->json('Cet utilisateur n\'existe pas dans le LDAP !', 500);
-//            }
+            $ldapUser = $ldap->getDatas($email);
+            if ($ldapUser === null) {
+                $this->json('Cet utilisateur n\'existe pas dans le LDAP !', 500);
+            }
 
-            $ldapUser = [
-                'nom' => 'testaaa',
-                'prenom' => 'test',
-                'username' => 'test' . md5(random_bytes(10)),
-            ];
+//            $ldapUser = [
+//                'nom' => 'testaaa',
+//                'prenom' => 'test',
+//                'username' => 'test' . md5(random_bytes(10)),
+//            ];
 
             //ajout des données
             $user->setNom($ldapUser['nom']);
