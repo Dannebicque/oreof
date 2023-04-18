@@ -85,10 +85,10 @@ class AddCentreFormationSubscriber implements EventSubscriberInterface
 
         //si oui, on vérifie s'il n'est pas responsable sur un autre parcours de la formation. Si non on supprimer le centre
         if ($existe !== null) {
-            $parcour = $this->formationRepository->findRespOtherParcoursInFormation($formation, $user);
-            if (count($formation) === 0) {
+//            $parcour = $this->formationRepository->findRespOtherParcoursInFormation($formation, $user);
+//            if (count($formation) === 0) {/
                 $this->userCentreRepository->remove($existe, true);
-            }
+//            }
         }
 
         $this->mailer->initEmail();

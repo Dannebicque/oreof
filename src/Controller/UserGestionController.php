@@ -90,6 +90,8 @@ class UserGestionController extends BaseController
             $user->setNom($ldapUser['nom']);
             $user->setPrenom($ldapUser['prenom']);
             $user->setUsername($ldapUser['username']);
+            $user->setIsEnable(true);
+            $user->setIsValideAdministration(true);
             $entityManager->persist($user);
             //ajout des droits et du centre
             $uow = $entityManager->getUnitOfWork();
