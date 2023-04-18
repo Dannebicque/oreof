@@ -54,6 +54,7 @@ class ParcoursState
     {
         return ($this->parcours->getContenuFormation() === null || trim($this->parcours->getContenuFormation()) === '') &&
             ($this->parcours->getResultatsAttendus() === null || trim($this->parcours->getResultatsAttendus()) === '') &&
+            ($this->parcours->getRespParcours() === null) &&
             ($this->parcours->getRythmeFormation() === null || trim($this->parcours->getRythmeFormationTexte()) === '');
     }
 
@@ -97,6 +98,10 @@ class ParcoursState
     private function etatOnglet1(): bool|array
     {
         $tab['error'] = [];
+
+        if ($this->parcours->getRespParcours() === null) {
+            $tab['error'][] = 'Vous devez indiquer un responsable du parcours.';
+        }
 
         if ($this->parcours->getObjectifsParcours() === null || trim($this->parcours->getObjectifsParcours()) === '') {
             $tab['error'][] = 'Vous devez ajouter des objectifs pour le parcours.';
