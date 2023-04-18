@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.23.0](https://github.com/Dannebicque/oreof/compare/v0.22.7...v0.23.0) (2023-04-18)
+
+
+### Features
+
+* Co responsable de parcours + co responsable de mention ([8603a86](https://github.com/Dannebicque/oreof/commit/8603a862e983a7b79826317ddda645030a253d97))
+
+
+### Bug Fixes
+
+* affichage si parcours null ([3fa3284](https://github.com/Dannebicque/oreof/commit/3fa3284bb2bec064b872a01b87fd8ac5d2961090))
+* affichage si parcours null ([81850fc](https://github.com/Dannebicque/oreof/commit/81850fc7ab63d93907afa8d872076ba5c21ffabc))
+* affichage si parcours null ([cd0e1fc](https://github.com/Dannebicque/oreof/commit/cd0e1fc6ed4b27887f4d81242383036f4b4d3f4c))
+* affichage si parcours null ([ddc7802](https://github.com/Dannebicque/oreof/commit/ddc7802464a0f6266633ba5366142c45100fd22c))
+* refactoring getDisplay ([9e57167](https://github.com/Dannebicque/oreof/commit/9e5716760a6e9bfbda548c09f4a764dda8409bff))
+
 ### [0.22.7](https://github.com/Dannebicque/oreof/compare/v0.22.6...v0.22.7) (2023-04-17)
 
 
