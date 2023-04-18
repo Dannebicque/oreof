@@ -65,7 +65,7 @@ class AddCentreFormationSubscriber implements EventSubscriberInterface
 
         $this->mailer->initEmail();
         $this->mailer->setTemplate(
-            'mails/parcours/add_centre_formation.txt.twig',
+            'mails/formation/add_centre_formation.txt.twig',
             ['user' => $user, 'formation' => $formation]
         );
         $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
@@ -93,7 +93,7 @@ class AddCentreFormationSubscriber implements EventSubscriberInterface
 
         $this->mailer->initEmail();
         $this->mailer->setTemplate(
-            'mails/parcours/remove_centre_formation.txt.twig',
+            'mails/formation/remove_centre_formation.txt.twig',
             ['user' => $user, 'formation' => $formation]
         );
         $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');

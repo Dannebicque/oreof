@@ -15,6 +15,7 @@ use App\Classes\verif\ParcoursState;
 use App\Entity\Parcours;
 use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
+use App\Events\AddCentreParcoursEvent;
 use App\Repository\ComposanteRepository;
 use App\Repository\RythmeFormationRepository;
 use App\Repository\UserRepository;
@@ -26,6 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ParcoursSaveController extends AbstractController
 {
@@ -41,6 +43,7 @@ class ParcoursSaveController extends AbstractController
     public function save(
         Bcc $bcc,
         EntityManagerInterface $em,
+        EventDispatcherInterface $eventDispatcher,
         UserRepository $userRepository,
         ComposanteRepository $composanteRepository,
         VilleRepository $villeRepository,
@@ -115,16 +118,20 @@ class ParcoursSaveController extends AbstractController
 
                 return $this->json($rep);
             case 'respParcours':
-                //todo: gérer le changement et les events
+                $event = new AddCentreParcoursEvent($parcours, [],$parcours->getRespParcours());
+                $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'respParcours', $user);
-
+                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $user);
+                $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
                 return $this->json($rep);
             case 'coRespParcours':
-                //todo: gérer le changement et les events
+                $event = new AddCentreParcoursEvent($parcours, [],$parcours->getCoResponsable());
+                $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'coResponsable', $user);
-
+                $event = new AddCentreParcoursEvent($parcours, ['ROLE_CO_RESP_PARCOURS'], $user);
+                $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
                 return $this->json($rep);
             case 'localisation':
                 $ville = $villeRepository->find($data['value']);

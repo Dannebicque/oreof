@@ -14,6 +14,8 @@ use App\Classes\verif\FormationState;
 use App\Entity\Formation;
 use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
+use App\Events\AddCentreFormationEvent;
+use App\Events\AddCentreParcoursEvent;
 use App\Repository\ComposanteRepository;
 use App\Repository\RythmeFormationRepository;
 use App\Repository\UserRepository;
@@ -24,6 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class FormationSaveController extends BaseController
 {
@@ -37,6 +40,7 @@ class FormationSaveController extends BaseController
      */
     #[Route('/formation/save/{formation}', name: 'app_formation_save')]
     public function save(
+        EventDispatcherInterface $eventDispatcher,
         RythmeFormationRepository $rythmeFormationRepository,
         EntityManagerInterface $em,
         UpdateEntity $updateEntity,
@@ -50,8 +54,10 @@ class FormationSaveController extends BaseController
         $updateEntity->setGroups(['formation:read']);
         $this->denyAccessUnlessGranted('ROLE_FORMATION_EDIT_MY', $formation);
 
-        if (!($this->dpeWorkflow->can($formation, 'valide_rf') || $this->dpeWorkflow->can($formation,
-                    'autoriser')) && !$this->isGranted('ROLE_SES')) {
+        if (!($this->dpeWorkflow->can($formation, 'valide_rf') || $this->dpeWorkflow->can(
+            $formation,
+            'autoriser'
+        )) && !$this->isGranted('ROLE_SES')) {
             //si on est pas dans un état qui permet de modifier la formation
             return $this->json('Vous ne pouvez plus modifier cette formation', Response::HTTP_FORBIDDEN);
         }
@@ -133,10 +139,12 @@ class FormationSaveController extends BaseController
 
                 return $this->json(true);
             case 'coRespFormation':
-                //todo: gérer le changement et les events
+                $event = new AddCentreFormationEvent($formation, [], $formation->getCoResponsable());
+                $eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($formation, 'coResponsable', $user);
-
+                $event = new AddCentreFormationEvent($formation, ['ROLE_CO_RESP_FORMATION'], $user);
+                $eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
                 return $this->json($rep);
             case 'etatStep':
                 $valideState = (bool)$data['isChecked'] === true ? $formationState->valideStep(
