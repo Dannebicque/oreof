@@ -11,7 +11,7 @@
                 size: 'lg',
                 modalTitle: 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form'),
                 nomEvenement: 'refreshStep',
-                modalUrl: path('app_user_missing', {action: 'responsableParcours'}) }) }}
+                modalUrl: path('app_user_missing', {action: 'coResponsableMention', id: formation.id}) }) }}
             data-action="click->modal#openModal"
             data-size="lg"
             class="ms-4"

@@ -7,6 +7,7 @@
             step: step,
             parcours: parcours.id,
         }) }}
+        {{ stimulus_action('parcours_wizard', 'refreshStep', 'base:refreshStep@window') }}
 >
 
     <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs" id="lineTitleTabsContainer"
@@ -22,8 +23,7 @@
         {% endif %}
 
         <li class="nav-item" role="presentation">
-            <a class="nav-link {% if parcours.formation.isHasParcours == false %}{% if step == 2 %}active{% endif
-            %}{% endif %}"
+            <a class="nav-link {% if parcours.formation.isHasParcours == false %}{% if step == 2 %}active{% endif %}{% endif %}"
                data-bs-toggle="tab" href="#" role="tab" aria-selected="{% if parcours.formation.isHasParcours ==
                 false %}true{% endif %}"
                     {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 2}) }}

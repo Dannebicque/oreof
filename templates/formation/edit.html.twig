@@ -10,6 +10,8 @@
                 step: selectedStep,
                 formation: formation.id,
             }) }}
+            {{ stimulus_action('formation_wizard', 'refreshStep', 'base:refreshStep@window') }}
+
     >
 
         <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs" id="lineTitleTabsContainer" role="tablist">

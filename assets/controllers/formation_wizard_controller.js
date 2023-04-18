@@ -28,6 +28,11 @@ export default class extends Controller {
     this._loadStep(event.params.step)
   }
 
+  refreshStep() {
+    console.log('refresh step')
+    this._loadStep(1)
+  }
+
   changeStepParcours(event) {
     this._loadStepParcours(event.params.step, event.params.parcours)
   }

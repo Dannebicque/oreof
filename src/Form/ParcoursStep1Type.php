@@ -32,17 +32,16 @@ class ParcoursStep1Type extends AbstractType
 
         $builder
             ->add('respParcours', EntityType::class, [
-                'required' => false,
+                'required' => true,
                 'help' => '',
-                'disabled' => true,
                 'class' => User::class,
-                'choice_label' => 'display', //todo: filtrer sur centre de le formation ? ou ajouter un user
+                'choice_label' => 'display',
             ])
             ->add('coResponsable', EntityType::class, [
                 'required' => false,
                 'help' => '',
                 'class' => User::class,
-                'choice_label' => 'display', //todo: filtrer sur centre de le formation ? ou ajouter un user
+                'choice_label' => 'display',
             ])
             ->add('objectifsParcours', TextareaAutoSaveType::class, [
                 'help' => '-',
