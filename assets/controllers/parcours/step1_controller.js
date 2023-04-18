@@ -72,6 +72,20 @@ export default class extends Controller {
     })
   }
 
+  saveRespParcours(event) {
+    this._save({
+      action: 'respParcours',
+      value: event.target.value,
+    })
+  }
+
+  saveCoRespParcours(event) {
+    this._save({
+      action: 'coRespParcours',
+      value: event.target.value,
+    })
+  }
+
   saveRythme() {
     this._save({
       field: 'rythmeFormationTexte',

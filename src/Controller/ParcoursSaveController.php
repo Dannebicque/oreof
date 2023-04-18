@@ -115,8 +115,15 @@ class ParcoursSaveController extends AbstractController
 
                 return $this->json($rep);
             case 'respParcours':
+                //todo: gérer le changement et les events
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'respParcours', $user);
+
+                return $this->json($rep);
+            case 'coRespParcours':
+                //todo: gérer le changement et les events
+                $user = $userRepository->find($data['value']);
+                $rep = $updateEntity->saveField($parcours, 'coResponsable', $user);
 
                 return $this->json($rep);
             case 'localisation':

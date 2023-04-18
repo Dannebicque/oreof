@@ -36,20 +36,30 @@ class ParcoursStep1Type extends AbstractType
                 'help' => '',
                 'class' => User::class,
                 'choice_label' => 'display',
+                'attr' => ['data-action' => 'change->parcours--step1#saveRespParcours']
             ])
             ->add('coResponsable', EntityType::class, [
                 'required' => false,
                 'help' => '',
                 'class' => User::class,
                 'choice_label' => 'display',
+                'attr' => ['data-action' => 'change->parcours--step1#saveCoRespParcours']
             ])
             ->add('objectifsParcours', TextareaAutoSaveType::class, [
                 'help' => '-',
-                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveObjectifsParcours'],
+                'attr' => [
+                    'rows' => 10,
+                    'maxlength' => 3000,
+                    'data-action' => 'change->parcours--step1#saveObjectifsParcours'
+                ],
             ])
             ->add('objectifsParcours', TextareaAutoSaveType::class, [
                 'help' => '-',
-                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveObjectifsParcours'],
+                'attr' => [
+                    'rows' => 10,
+                    'maxlength' => 3000,
+                    'data-action' => 'change->parcours--step1#saveObjectifsParcours'
+                ],
             ])
             ->add('resultatsAttendus', TextareaAutoSaveType::class, [
                 'help' => '-',
@@ -59,7 +69,6 @@ class ParcoursStep1Type extends AbstractType
                 'help' => '-',
                 'attr' => ['rows' => 20, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveContenu'],
             ])
-
             ->add('rythmeFormation', EntityType::class, [
                 'placeholder' => 'Choisissez un rythme de formation ou complétez le champ ci-dessous',
                 'required' => false,
@@ -80,9 +89,8 @@ class ParcoursStep1Type extends AbstractType
                 'data' => $options['data']->getLocalisation()?->getId() ?? 0,
                 'attr' => [
                     'data-action' => 'change->parcours--step1#changeLocalisation',
-                    ]
-            ])
-        ;
+                ]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

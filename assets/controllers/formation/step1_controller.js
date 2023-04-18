@@ -46,6 +46,13 @@ export default class extends Controller {
     })
   }
 
+  saveCoRespFormation(event) {
+    this._save({
+      action: 'coRespFormation',
+      value: event.target.value,
+    })
+  }
+
   changeRegimeInscription(event) {
     this._save({
       action: 'array',

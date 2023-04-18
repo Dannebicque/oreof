@@ -16,6 +16,7 @@ use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\ComposanteRepository;
 use App\Repository\RythmeFormationRepository;
+use App\Repository\UserRepository;
 use App\Repository\VilleRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -39,6 +40,7 @@ class FormationSaveController extends BaseController
         RythmeFormationRepository $rythmeFormationRepository,
         EntityManagerInterface $em,
         UpdateEntity $updateEntity,
+        UserRepository $userRepository,
         VilleRepository $villeRepository,
         ComposanteRepository $composanteRepository,
         Request $request,
@@ -130,6 +132,12 @@ class FormationSaveController extends BaseController
                 $em->flush();
 
                 return $this->json(true);
+            case 'coRespFormation':
+                //todo: gérer le changement et les events
+                $user = $userRepository->find($data['value']);
+                $rep = $updateEntity->saveField($formation, 'coResponsable', $user);
+
+                return $this->json($rep);
             case 'etatStep':
                 $valideState = (bool)$data['isChecked'] === true ? $formationState->valideStep(
                     $data['value']

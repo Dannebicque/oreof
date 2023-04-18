@@ -32,13 +32,14 @@ class FormationStep1Type extends AbstractType
                 'help' => '',
                 'disabled' => true,
                 'class' => User::class,
-                'choice_label' => 'display', //todo: filtrer sur centre de le formation ? ou ajouter un user
+                'choice_label' => 'display',
             ])
             ->add('coResponsable', EntityType::class, [
                 'required' => false,
                 'help' => '',
                 'class' => User::class,
-                'choice_label' => 'display', //todo: filtrer sur centre de le formation ? ou ajouter un user
+                'attr' => ['data-action' => 'change->formation--step1#saveCoRespFormation'],
+                'choice_label' => 'display',
             ])
             ->add('sigle', TextType::class, [
                 'required' => false,
