@@ -96,6 +96,7 @@ class UserController extends AbstractController
         $user = new User();
 
         $dataUsers = $ldap->getDatas($user->getEmail());
+        dump($dataUsers);
         $user->setUsername($dataUsers['username']);
         $user->setEmail($email);
         $user->setIsEnable(true);
