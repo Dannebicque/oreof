@@ -115,7 +115,7 @@ class FormationRepository extends ServiceEntityRepository
         AnneeUniversitaire $anneeUniversitaire,
         string|null $sort,
         string|null $direction,
-        Composante|null $composante,
+        Composante|null $composante = null,
     ) {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
