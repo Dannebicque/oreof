@@ -28,11 +28,11 @@ use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 #[Route('/administration/user/gestion')]
 class UserGestionController extends BaseController
@@ -45,7 +45,6 @@ class UserGestionController extends BaseController
 
     #[Route('/ajout/utilisateur', name: 'app_user_missing')]
     public function ajoutUtilisateur(
-        EventDispatcherInterface $eventDispatcher,
         Ldap $ldap,
         EntityManagerInterface $entityManager,
         ParcoursRepository $parcoursRepository,
@@ -75,16 +74,16 @@ class UserGestionController extends BaseController
             }
 
             //récupération depuis le LDAP
-            $ldapUser = $ldap->getDatas($email);
-            if ($ldapUser === null) {
-                $this->json('Cet utilisateur n\'existe pas dans le LDAP !', 500);
-            }
+//            $ldapUser = $ldap->getDatas($email);
+//            if ($ldapUser === null) {
+//                $this->json('Cet utilisateur n\'existe pas dans le LDAP !', 500);
+//            }
 
-//            $ldapUser = [
-//                'nom' => 'testaaa',
-//                'prenom' => 'test',
-//                'username' => 'test' . md5(random_bytes(10)),
-//            ];
+            $ldapUser = [
+                'nom' => 'testaaa',
+                'prenom' => 'test',
+                'username' => 'test' . md5(random_bytes(10)),
+            ];
 
             //ajout des données
             $user->setNom($ldapUser['nom']);
@@ -94,8 +93,7 @@ class UserGestionController extends BaseController
             $user->setIsValideAdministration(true);
             $entityManager->persist($user);
             //ajout des droits et du centre
-            $uow = $entityManager->getUnitOfWork();
-            $uow->computeChangeSets();
+
             switch ($request->query->get('action')) {
                 case 'responsableFicheMatiere':
                     $fiche = $ficheMatiereRepository->find($request->query->get('id'));
@@ -112,43 +110,38 @@ class UserGestionController extends BaseController
                 case 'responsableParcours':
                     $parcours = $parcoursRepository->find($request->query->get('id'));
                     if ($parcours !== null) {
-                        $changeSet = $uow->getEntityChangeSet($parcours);
-                        if (isset($changeSet['respParcours'])) {
-                            // retirer l'ancien resp des centres et droits et envoyer mail
-                            $event = new AddCentreParcoursEvent($parcours, [], $changeSet['respParcours'][0]);
-                            $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
-                            // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
-                            $event = new AddCentreParcoursEvent(
-                                $parcours,
-                                ['ROLE_RESP_PARCOURS'],
-                                $changeSet['respParcours'][1]
-                            );
-                            $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
-                        }
+                        // retirer l'ancien resp des centres et droits et envoyer mail
+                        $event = new AddCentreParcoursEvent($parcours, [], $parcours->getRespParcours());
+                        $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                        // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
+                        $event = new AddCentreParcoursEvent(
+                            $parcours,
+                            ['ROLE_RESP_PARCOURS'],
+                            $user
+                        );
+                        $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
+
                         $parcours->setCoResponsable($user);
                         $entityManager->flush();
 
                         return $this->json(true);
                     }
 
-                    // no break
+                    return $this->json('Une erreur est survenue !', 500);
                 case 'responsableFormation':
                     $formation = $formationRepository->find($request->query->get('id'));
                     if ($formation !== null) {
-                        $changeSet = $uow->getEntityChangeSet($formation);
+                        // retirer l'ancien resp des centres et droits et envoyer mail
+                        $event = new AddCentreFormationEvent($formation, [], $formation->getResponsableMention());
+                        $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
+                        // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
+                        $event = new AddCentreFormationEvent(
+                            $formation,
+                            ['ROLE_RESP_FORMATION'],
+                            $user
+                        );
+                        $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
 
-                        if (isset($changeSet['respParcours'])) {
-                            // retirer l'ancien resp des centres et droits et envoyer mail
-                            $event = new AddCentreFormationEvent($formation, [], $changeSet['responsableMention'][0]);
-                            $eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
-                            // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
-                            $event = new AddCentreFormationEvent(
-                                $formation,
-                                ['ROLE_RESP_FORMATION'],
-                                $changeSet['responsableMention'][1]
-                            );
-                            $eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
-                        }
                         $formation->setResponsableMention($user);
                         $entityManager->flush();
 
@@ -159,20 +152,17 @@ class UserGestionController extends BaseController
                 case 'coResponsableParcours':
                     $parcours = $parcoursRepository->find($request->query->get('id'));
                     if ($parcours !== null) {
-                        $changeSet = $uow->getEntityChangeSet($parcours);
+                        // retirer l'ancien resp des centres et droits et envoyer mail
+                        $event = new AddCentreParcoursEvent($parcours, [], $parcours->getCoResponsable());
+                        $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
+                        // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
+                        $event = new AddCentreParcoursEvent(
+                            $parcours,
+                            ['ROLE_CO_RESP_PARCOURS'],
+                            $user
+                        );
+                        $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
 
-                        if (isset($changeSet['coReponsable'])) {
-                            // retirer l'ancien resp des centres et droits et envoyer mail
-                            $event = new AddCentreParcoursEvent($parcours, [], $changeSet['coReponsable'][0]);
-                            $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
-                            // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
-                            $event = new AddCentreParcoursEvent(
-                                $parcours,
-                                ['ROLE_CO_RESP_PARCOURS'],
-                                $changeSet['coReponsable'][1]
-                            );
-                            $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
-                        }
                         $parcours->setCoResponsable($user);
                         $entityManager->flush();
 
@@ -183,39 +173,31 @@ class UserGestionController extends BaseController
                 case 'coResponsableMention':
                     $formation = $formationRepository->find($request->query->get('id'));
                     if ($formation !== null) {
-                        $changeSet = $uow->getEntityChangeSet($formation);
-
-                        if (isset($changeSet['coReponsable'])) {
-                            // retirer l'ancien resp des centres et droits et envoyer mail
-                            $event = new AddCentreFormationEvent($formation, [], $changeSet['coReponsable'][0]);
-                            $eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
-                            // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
-                            $event = new AddCentreFormationEvent(
-                                $formation,
-                                ['ROLE_CO_RESP_FORMATION'],
-                                $changeSet['coReponsable'][1]
-                            );
-                            $eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
-                        }
-                        $formation->setCoResponsable($user);
-                        $entityManager->flush();
-
-                        return $this->json(true);
+                        // retirer l'ancien resp des centres et droits et envoyer mail
+                        $event = new AddCentreFormationEvent($formation, [], $formation->getCoResponsable());
+                        $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
+                        // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
+                        $event = new AddCentreFormationEvent(
+                            $formation,
+                            ['ROLE_CO_RESP_FORMATION'],
+                            $user
+                        );
+                        $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
                     }
+                    $formation->setCoResponsable($user);
+                    $entityManager->flush();
 
-                    return $this->json('Une erreur est survenue !', 500);
+                    return $this->json(true);
             }
 
             return $this->json('Une erreur est survenue !', 500);
         }
 
-
-        return $this->render('user/add.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->render('user/add.html.twig', ['form' => $form->createView(),]);
     }
 
-    #[Route('/ajout/utilisateur/verification', name: 'app_user_missing_ldap')]
+    #[
+        Route('/ajout/utilisateur/verification', name: 'app_user_missing_ldap')]
     public function ajoutLdap(): Response
     {
         return $this->render('user/add.html.twig', [

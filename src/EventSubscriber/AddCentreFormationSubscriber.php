@@ -10,8 +10,6 @@
 namespace App\EventSubscriber;
 
 use App\Classes\Mailer;
-use App\Entity\Parcours;
-use App\Entity\User;
 use App\Entity\UserCentre;
 use App\Events\AddCentreFormationEvent;
 use App\Repository\FormationRepository;
