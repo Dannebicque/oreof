@@ -1,5 +1,6 @@
 <div {{ stimulus_controller('mccc--licence', {
-    url: path('type_diplome_licence_change', {elementConstitutif:ec.id})
+    url: path('type_diplome_licence_change', {elementConstitutif:ec.id}),
+    typeMccc: ec.typeMccc,
 }) }}>
     <label for="choix_type_mccc" class="form-label">{{ 'mccc_licence.labels.choix_type_mccc.label'|trans({},
             'form') }}
@@ -13,10 +14,18 @@
             {{ stimulus_action('mccc--licence', 'changeType') }}
     >
         <option value="">{{ 'mccc_licence.placeholder.label'|trans({}, 'form') }}</option>
-        <option value="ct">{{ 'mccc_licence.ct.label'|trans({}, 'form') }}</option>
-        <option value="cc_ct">{{ 'mccc_licence.cc_ct.label'|trans({}, 'form') }}</option>
-        <option value="cc">{{ 'mccc_licence.cc.label'|trans({}, 'form') }}</option>
-        <option value="cci">{{ 'mccc_licence.cci.label'|trans({}, 'form') }}</option>
+        <option value="ct" {% if ec.typeMccc == 'ct' %}selected{% endif %}>
+            {{ 'mccc_licence.ct.label'|trans({},'form') }}
+        </option>
+        <option value="cc_ct" {% if ec.typeMccc == 'cc_ct' %}selected{% endif %}>
+            {{ 'mccc_licence.cc_ct.label'|trans({}, 'form') }}
+        </option>
+        <option value="cc" {% if ec.typeMccc == 'cc' %}selected{% endif %}>
+            {{ 'mccc_licence.cc.label'|trans({}, 'form') }}
+        </option>
+        <option value="cci" {% if ec.typeMccc == 'cci' %}selected{% endif %}>
+            {{ 'mccc_licence.cci.label'|trans({}, 'form') }}
+        </option>
     </select>
 
     <div {{ stimulus_target('mccc--licence', 'zone') }} class="mt-2"></div>

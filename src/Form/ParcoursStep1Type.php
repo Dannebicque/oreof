@@ -11,6 +11,7 @@ namespace App\Form;
 
 use App\Entity\Parcours;
 use App\Entity\RythmeFormation;
+use App\Entity\User;
 use App\Form\Type\TextareaAutoSaveType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -30,6 +31,23 @@ class ParcoursStep1Type extends AbstractType
         }
 
         $builder
+            ->add('respParcours', EntityType::class, [
+                'required' => false,
+                'help' => '',
+                'disabled' => true,
+                'class' => User::class,
+                'choice_label' => 'display', //todo: filtrer sur centre de le formation ? ou ajouter un user
+            ])
+            ->add('coResponsable', EntityType::class, [
+                'required' => false,
+                'help' => '',
+                'class' => User::class,
+                'choice_label' => 'display', //todo: filtrer sur centre de le formation ? ou ajouter un user
+            ])
+            ->add('objectifsParcours', TextareaAutoSaveType::class, [
+                'help' => '-',
+                'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveObjectifsParcours'],
+            ])
             ->add('objectifsParcours', TextareaAutoSaveType::class, [
                 'help' => '-',
                 'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveObjectifsParcours'],

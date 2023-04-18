@@ -34,6 +34,13 @@ class ParcoursType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'display', //todo: filtrer sur centre de le formation ? ou ajouter un user
             ])
+            ->add('coResponsable', EntityType::class, [
+                //'label' => 'Responsable du parcours',
+                'required' => false,
+                'help' => '',
+                'class' => User::class,
+                'choice_label' => 'display', //todo: filtrer sur centre de le formation ? ou ajouter un user
+            ])
             ->add('sigle', TextType::class, [
               //  'label' => 'Sigle',
                 'help' => 'Optionnel, sigle/code ou appelation courte du parcours',

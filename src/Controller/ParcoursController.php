@@ -104,6 +104,8 @@ class ParcoursController extends BaseController
             $event = new AddCentreParcoursEvent($parcour, ['ROLE_RESP_PARCOURS']);
             $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
 
+            //todo: gérer droits du co responsable du parcours
+
             return $this->json(true);
         }
 

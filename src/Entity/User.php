@@ -96,6 +96,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserCentre::class)]
     private Collection $userCentres;
 
+    #[ORM\OneToMany(mappedBy: 'coResponsable', targetEntity: Parcours::class)]
+    private Collection $coParcours;
+
+    #[ORM\OneToMany(mappedBy: 'coResponsable', targetEntity: Formation::class)]
+    private Collection $coFormations;
+
     public function __construct()
     {
         $this->composantes = new ArrayCollection();
@@ -103,6 +109,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userCentres = new ArrayCollection();
         $this->composanteResponsableDpe = new ArrayCollection();
         $this->formationsResponsableMention = new ArrayCollection();
+        $this->coParcours = new ArrayCollection();
+        $this->coFormations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -485,6 +493,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // set the owning side to null (unless already changed)
         if ($this->formationsResponsableMention->removeElement($formationsResponsableMention) && $formationsResponsableMention->getResponsableMention() === $this) {
             $formationsResponsableMention->setResponsableMention(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Parcours>
+     */
+    public function getCoParcours(): Collection
+    {
+        return $this->coParcours;
+    }
+
+    public function addCoParcour(Parcours $coParcour): self
+    {
+        if (!$this->coParcours->contains($coParcour)) {
+            $this->coParcours->add($coParcour);
+            $coParcour->setCoResponsable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCoParcour(Parcours $coParcour): self
+    {
+        if ($this->coParcours->removeElement($coParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($coParcour->getCoResponsable() === $this) {
+                $coParcour->setCoResponsable(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Formation>
+     */
+    public function getCoFormations(): Collection
+    {
+        return $this->coFormations;
+    }
+
+    public function addCoFormation(Formation $coFormation): self
+    {
+        if (!$this->coFormations->contains($coFormation)) {
+            $this->coFormations->add($coFormation);
+            $coFormation->setCoResponsable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCoFormation(Formation $coFormation): self
+    {
+        if ($this->coFormations->removeElement($coFormation)) {
+            // set the owning side to null (unless already changed)
+            if ($coFormation->getCoResponsable() === $this) {
+                $coFormation->setCoResponsable(null);
+            }
         }
 
         return $this;

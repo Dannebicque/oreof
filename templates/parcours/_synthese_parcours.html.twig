@@ -23,7 +23,13 @@
                     <dt>Responsable de la mention/spécialité</dt>
                     <dd>{{ formation.responsableMention != null ? formation.responsableMention.display : 'Non défini' }}</dd>
                     <dt>Responsable du parcours</dt>
-                    <dd>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</dd>
+                    <dd>
+                        {{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}
+                        {% if parcours.coResponsable != null %}
+                        <i class="fal fa-users" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                           title="Co-responsable : {{ parcours.coResponsable.display }}"></i>
+                        {% endif %}
+                    </dd>
                 </dl>
             </div>
             <div class="col-3 d-grid">

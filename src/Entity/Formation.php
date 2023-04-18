@@ -132,6 +132,9 @@ class Formation
     #[Groups(['formation:read'])]
     private ?string $sigle = null;
 
+    #[ORM\ManyToOne(inversedBy: 'coFormations')]
+    private ?User $coResponsable = null;
+
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
         $this->anneeUniversitaire = $anneeUniversitaire;
@@ -689,6 +692,18 @@ class Formation
     public function setSigle(?string $sigle): self
     {
         $this->sigle = $sigle;
+
+        return $this;
+    }
+
+    public function getCoResponsable(): ?User
+    {
+        return $this->coResponsable;
+    }
+
+    public function setCoResponsable(?User $coResponsable): self
+    {
+        $this->coResponsable = $coResponsable;
 
         return $this;
     }

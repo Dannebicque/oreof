@@ -21,8 +21,13 @@
             <div class="col-4">
                 <dl>
                     <dt>Responsable de la mention/spécialité</dt>
-                    <dd>{{ formation.responsableMention != null ? formation.responsableMention.display : 'Non défini'
-                        }}</dd>
+                    <dd>
+                        {{ formation.responsableMention != null ? formation.responsableMention.display : 'Non défini' }}
+                        {% if formation.coResponsable != null %}
+                            <i class="fal fa-users" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               title="Co-responsable : {{ formation.coResponsable.display }}"></i>
+                        {% endif %}
+                    </dd>
                 </dl>
             </div>
             {% if is_granted('ROLE_SES') %}

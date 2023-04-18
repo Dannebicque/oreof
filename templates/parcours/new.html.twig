@@ -2,25 +2,44 @@
 {{ form_start(form) }}
     {{ form_row(form.libelle) }}
     {{ form_row(form.respParcours) }}
-    <a
-            href="#"
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form'),
-                nomEvenement: 'refreshStep',
-                modalUrl: path('app_user_missing', {action: 'responsableParcours'}) }) }}
-            data-action="click->modal#openModal"
-            data-size="lg"
-            class="ms-4"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="{{ 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form') }}"
-    >
-        <i class="{{ iconAdd }}"></i>
-        <span> {{ 'fiche_matiere.step1_collegue_manquant.label'|trans({}, 'form') }}</span>
-    </a>
+<a
+        href="#"
+        {{ stimulus_controller('modal', {
+            size: 'lg',
+            modalTitle: 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form'),
+            nomEvenement: 'refreshStep',
+            modalUrl: path('app_user_missing', {action: 'responsableParcours'}) }) }}
+        data-action="click->modal#openModal"
+        data-size="lg"
+        class="ms-4"
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        title="{{ 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form') }}"
+>
+    <i class="{{ iconAdd }}"></i>
+    <span> {{ 'fiche_matiere.step1_collegue_manquant.label'|trans({}, 'form') }}</span>
+</a>
+{{ form_row(form.coResponsable) }}
+<a
+        href="#"
+        {{ stimulus_controller('modal', {
+            size: 'lg',
+            modalTitle: 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form'),
+            nomEvenement: 'refreshStep',
+            modalUrl: path('app_user_missing', {action: 'responsableParcours'}) }) }}
+        data-action="click->modal#openModal"
+        data-size="lg"
+        class="ms-4"
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        title="{{ 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form') }}"
+>
+    <i class="{{ iconAdd }}"></i>
+    <span> {{ 'fiche_matiere.step1_collegue_manquant.label'|trans({}, 'form') }}</span>
+</a>
 
-    {{ form_row(form.sigle) }}
+
+{{ form_row(form.sigle) }}
 
 <button type="submit" class="btn btn-success"
         {{ stimulus_action('base','sauvegardeFormModal', 'click') }}

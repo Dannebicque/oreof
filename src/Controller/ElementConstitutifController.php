@@ -403,9 +403,10 @@ class ElementConstitutifController extends AbstractController
             'ROLE_FORMATION_EDIT_MY',
             $formation
         )) { //todo: ajouter le workflow...
-            if ($elementConstitutif->getMcccs()->count() === 0) {
-                $typeD->initMcccs($elementConstitutif);
-            }
+//            if ($elementConstitutif->getMcccs()->count() === 0) {
+            // non pas ici, une fois choisi le type
+//                $typeD->initMcccs($elementConstitutif);
+//            }
 
             if ($request->isMethod('POST')) {
                 $elementConstitutif->setEcts($request->request->all()['ec_step4']['ects']);

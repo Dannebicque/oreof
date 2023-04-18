@@ -13,11 +13,22 @@ export default class extends Controller {
 
   static values = {
     url: String,
+    typeMccc: String,
   }
 
-  async changeType(event) {
+  connect() {
+    if (this.typeMcccValue !== null) {
+      this._loadTypeMccc(this.typeMcccValue)
+    }
+  }
+
+  changeType(event) {
+    this._loadTypeMccc(event.target.value)
+  }
+
+  async _loadTypeMccc(typeMccc) {
     const params = new URLSearchParams()
-    params.append('type', event.target.value)
+    params.append('type', typeMccc)
 
     const response = await fetch(`${this.urlValue}?${params.toString()}`)
     this.zoneTarget.innerHTML = await response.text()

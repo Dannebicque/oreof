@@ -11,6 +11,7 @@ namespace App\Form;
 
 use App\Entity\Composante;
 use App\Entity\Formation;
+use App\Entity\User;
 use App\Entity\Ville;
 use App\Enums\RegimeInscriptionEnum;
 use App\Form\Type\TextareaAutoSaveType;
@@ -26,6 +27,19 @@ class FormationStep1Type extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('responsableMention', EntityType::class, [
+                'required' => false,
+                'help' => '',
+                'disabled' => true,
+                'class' => User::class,
+                'choice_label' => 'display', //todo: filtrer sur centre de le formation ? ou ajouter un user
+            ])
+            ->add('coResponsable', EntityType::class, [
+                'required' => false,
+                'help' => '',
+                'class' => User::class,
+                'choice_label' => 'display', //todo: filtrer sur centre de le formation ? ou ajouter un user
+            ])
             ->add('sigle', TextType::class, [
                 'required' => false,
                 'attr' => ['data-action' => 'change->formation--step1#changeSigle', 'maxlength' => 250],

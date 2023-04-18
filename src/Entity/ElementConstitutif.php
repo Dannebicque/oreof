@@ -106,6 +106,9 @@ class ElementConstitutif
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ecEnfants;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $typeMccc = null;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -533,6 +536,18 @@ class ElementConstitutif
                 $ecEnfant->setEcParent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTypeMccc(): ?string
+    {
+        return $this->typeMccc;
+    }
+
+    public function setTypeMccc(?string $typeMccc): self
+    {
+        $this->typeMccc = $typeMccc;
 
         return $this;
     }

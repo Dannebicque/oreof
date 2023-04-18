@@ -151,6 +151,9 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: UeMutualisable::class)]
     private Collection $ueMutualisables;
 
+    #[ORM\ManyToOne(inversedBy: 'coParcours')]
+    private ?User $coResponsable = null;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -787,6 +790,18 @@ class Parcours
                 $ueMutualisable->setParcours(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCoResponsable(): ?User
+    {
+        return $this->coResponsable;
+    }
+
+    public function setCoResponsable(?User $coResponsable): self
+    {
+        $this->coResponsable = $coResponsable;
 
         return $this;
     }

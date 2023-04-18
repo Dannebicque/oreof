@@ -3,6 +3,7 @@
     <tr>
         <td>Libellé du parcours</td>
         <td>Responsable du parcours</td>
+        <td>Co Responsable du parcours</td>
         <td></td>
         <td></td>
     </tr>
@@ -15,6 +16,9 @@
             </td>
             <td>
                 {{ parcour.respParcours != null ? parcour.respParcours.display : 'Non défini' }}
+            </td>
+            <td>
+                {{ parcour.coResponsable != null ? parcour.coResponsable.display : 'Non défini' }}
             </td>
             <td style="width:20%">
                 {{ parcour.remplissage|remplissage }}

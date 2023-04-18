@@ -173,20 +173,19 @@ class FicheMatiereWizardController extends AbstractController
             $ecBccs[] = $competence->getBlocCompetence()?->getId();
         }
 
-        $bccs1 = $blocCompetenceRepository->findBy(['parcours' => null]);
+
 
         if ($ficheMatiere->getParcours() !== null) {
-            $bccs2 = $blocCompetenceRepository->findByParcours($ficheMatiere->getParcours());
+            $bccs = $blocCompetenceRepository->findByParcours($ficheMatiere->getParcours());
         } else {
-            $bccs2 = [];
+            $bccs = $blocCompetenceRepository->findBy(['parcours' => null]);
         }
 
 
         return $this->render('fiche_matiere_wizard/_step3.html.twig', [
             'ficheMatiere' => $ficheMatiere,
             'form' => $form->createView(),
-            'bccsTransversaux' => $bccs1 ,
-            'bccs' => $bccs2 ,
+            'bccs' => $bccs ,
             'ecBccs' => array_flip(array_unique($ecBccs)),
             'ecComps' => array_flip($ecComps),
         ]);
