@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.4](https://github.com/Dannebicque/oreof/compare/v0.23.3...v0.23.4) (2023-04-18)
+
+
+### Bug Fixes
+
+* Changement depuis edit modal formation ([2f0632a](https://github.com/Dannebicque/oreof/commit/2f0632acb8d8caecb704d96e6e97042aa9f057dd))
+* mails sur les events ([b6aedde](https://github.com/Dannebicque/oreof/commit/b6aedde05af723ad6f9a1bcbca135da1236f6c02))
+* mails sur les events ([aff521f](https://github.com/Dannebicque/oreof/commit/aff521f9f30d6ce89f53b08f345867aaa757b332))
+* recherche ([c3a53e8](https://github.com/Dannebicque/oreof/commit/c3a53e891dea11543cad0ee2d9c86193a34873cf))
+* verif avec responsable de parcours ([0d0751e](https://github.com/Dannebicque/oreof/commit/0d0751ed4758670709c65eb71631df01803dcdf6))
+* verif avec responsable de parcours ([d44eb80](https://github.com/Dannebicque/oreof/commit/d44eb802fc25b30d1798bc1ac6d686beff723960))
+* verif avec responsable de parcours ([5e9f33a](https://github.com/Dannebicque/oreof/commit/5e9f33a0f4496ed4382f07f77a9cdb93da3c2768))
+* verif avec responsable de parcours ([b3a8ca2](https://github.com/Dannebicque/oreof/commit/b3a8ca2a1be1656fe66d177f136b46befa67bf88))
+
 ### [0.23.3](https://github.com/Dannebicque/oreof/compare/v0.23.2...v0.23.3) (2023-04-18)
 
 
