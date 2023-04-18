@@ -15,6 +15,8 @@ use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\FormationDemande;
 use App\Entity\UserCentre;
+use App\Events\AddCentreFormationEvent;
+use App\Events\AddCentreParcoursEvent;
 use App\Form\FormationDemandeType;
 use App\Form\FormationSesType;
 use App\Repository\DomaineRepository;
@@ -26,6 +28,7 @@ use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserCentreRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -219,6 +222,8 @@ class FormationController extends BaseController
 
     #[Route('/edit/formation/{formation}', name: 'app_formation_edit_modal', methods: ['GET', 'POST'])]
     public function editModal(
+        EventDispatcherInterface $eventDispatcher,
+        EntityManagerInterface $entityManager,
         MentionRepository $mentionRepository,
         Request $request,
         FormationRepository $formationRepository,
@@ -238,6 +243,20 @@ class FormationController extends BaseController
                 $formation->setMentionTexte(null);
                 $formation->setMention($mention);
             }
+
+            $uow = $entityManager->getUnitOfWork();
+            $uow->computeChangeSets();
+            $changeSet = $uow->getEntityChangeSet($formation);
+
+            if (isset($changeSet['responsableMention'])) {
+                // retirer l'ancien resp des centres et droits et envoyer mail
+                $event = new AddCentreFormationEvent($formation, [], $changeSet['responsableMention'][0]);
+                $eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
+                // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
+                $event = new AddCentreFormationEvent($formation, ['ROLE_RESP_FORMATION'], $changeSet['responsableMention'][1]);
+                $eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
+            }
+
             $formationRepository->save($formation, true);
 
             return $this->redirectToRoute('app_formation_edit', ['id' => $formation->getId()]);
