@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.6](https://github.com/Dannebicque/oreof/compare/v0.23.5...v0.23.6) (2023-04-24)
+
+
+### Bug Fixes
+
+* Affichage du type de diplôme dans la liste des centres ([20d5b4a](https://github.com/Dannebicque/oreof/commit/20d5b4a6eec78c0eb7803691dd403684deba5dc1))
+
 ### [0.23.5](https://github.com/Dannebicque/oreof/compare/v0.23.4...v0.23.5) (2023-04-18)
 
 
