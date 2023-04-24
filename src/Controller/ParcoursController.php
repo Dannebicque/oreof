@@ -48,24 +48,23 @@ class ParcoursController extends BaseController
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
 
-        if ($q !== null) {
-            $parcours = $parcoursRepository->search($q);
-        } else {
-            $parcours = $parcoursRepository->findParcours($this->getAnneeUniversitaire(), [$sort => $direction]);
-        }
+
+        $parcours = $parcoursRepository->findParcours($this->getAnneeUniversitaire(),
+            [$sort => $direction, 'recherche' => $q]);
+
 
         $tParcours = [];
 
-        if ($this->isGranted('ROLE_ADMIN')  ||
+        if ($this->isGranted('ROLE_ADMIN') ||
             $this->isGranted('ROLE_SES') ||
             $this->isGranted('ROLE_PARCOURS_SHOW_ALL')) {
             $tParcours = $parcours;
         } else {
             foreach ($parcours as $p) {
                 if ($this->isGranted(
-                    'ROLE_FORMATION_EDIT_MY',
-                    $p->getFormation()
-                ) || $this->isGranted('ROLE_FORMATION_SHOW_MY', $p->getFormation())) {
+                        'ROLE_FORMATION_EDIT_MY',
+                        $p->getFormation()
+                    ) || $this->isGranted('ROLE_FORMATION_SHOW_MY', $p->getFormation())) {
                     $tParcours[] = $p;
                 }
             }

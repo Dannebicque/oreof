@@ -70,7 +70,10 @@ class ParcoursRepository extends ServiceEntityRepository
             ->setParameter('annee', $anneeUniversitaire);
 
         foreach ($options as $sort => $direction) {
-            if ($sort === 'composante') {
+            if ($sort === 'recherche' && $direction !== '') {
+                $qb->andWhere('p.libelle LIKE :recherche OR p.sigle LIKE :recherche')
+                    ->setParameter('recherche', '%' . $direction . '%');
+            } elseif ($sort === 'composante') {
                 $qb->innerJoin('f.composantePorteuse', 'c')
                     ->addOrderBy('c.libelle', $direction);
             } elseif ($sort === 'mention') {
