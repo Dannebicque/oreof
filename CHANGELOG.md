@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.7](https://github.com/Dannebicque/oreof/compare/v0.23.6...v0.23.7) (2023-04-24)
+
+
+### Bug Fixes
+
+* Ordre des paramètres sur le repository des BCC ([aaa5a2d](https://github.com/Dannebicque/oreof/commit/aaa5a2d3936662861f7410571b9b1bfae871b04b))
+* recherche sur les parcours ([960f8a4](https://github.com/Dannebicque/oreof/commit/960f8a446d403177a8439a1a316b25bc15b540fe))
+
 ### [0.23.6](https://github.com/Dannebicque/oreof/compare/v0.23.5...v0.23.6) (2023-04-24)
 
 
