@@ -135,8 +135,8 @@ class BlocCompetenceController extends AbstractController
             } else {
                 //on décale les autres compétences
                 $bccs = $blocCompetenceRepository->decaleCompetence(
-                    $parcours,
                     (int)$request->query->get('ordre'),
+                    $parcours,
                 );
 
                 // décaler les blocs de compétences et recalculer les codes

@@ -104,7 +104,7 @@ class BlocCompetenceRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function decaleCompetence(?Parcours $parcours = null, int $ordre): array
+    public function decaleCompetence(int $ordre, ?Parcours $parcours = null): array
     {
         if ($parcours === null) {
             return $this->createQueryBuilder('b')
