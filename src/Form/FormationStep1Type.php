@@ -15,6 +15,7 @@ use App\Entity\User;
 use App\Entity\Ville;
 use App\Enums\RegimeInscriptionEnum;
 use App\Form\Type\TextareaAutoSaveType;
+use App\Repository\VilleRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -47,6 +48,10 @@ class FormationStep1Type extends AbstractType
             ])
             ->add('localisationMention', EntityType::class, [
                 'class' => Ville::class,
+                'query_builder' => function (VilleRepository $villeRepository) {
+                    return $villeRepository->createQueryBuilder('v')
+                        ->orderBy('v.libelle', 'ASC');
+                },
                 'choice_label' => 'libelle',
                 'multiple' => true,
                 'expanded' => true,
