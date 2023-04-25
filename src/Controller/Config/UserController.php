@@ -74,7 +74,8 @@ class UserController extends AbstractController
 
     #[Route('/ajouter-ldap', name: 'app_user_new_ldap', methods: ['GET'])]
     #[IsGranted('ROLE_SES')]
-    public function newLdap(): Response {
+    public function newLdap(): Response
+    {
         $user = new User();
         $form = $this->createForm(UserLdapType::class, $user, [
             'action' => $this->generateUrl('app_user_new_ldap'),
@@ -93,15 +94,23 @@ class UserController extends AbstractController
         UserRepository $userRepository
     ): Response {
         $email = $request->request->get('user_ldap_email');
-        $user = new User();
 
-        $dataUsers = $ldap->getDatas($email);
-        $user->setUsername($dataUsers['username']);
-        $user->setEmail($email);
+        $user = $userRepository->findOneBy(['email' => $email]);
+
+        if ($user !== null) {
+            $user->setIsDeleted(false);
+        } else {
+            $user = new User();
+            $user->setEmail($email);
+            $dataUsers = $ldap->getDatas($email);
+            $user->setUsername($dataUsers['username']);
+            $user->setNom($dataUsers['nom']);
+            $user->setPrenom($dataUsers['prenom']);
+        }
+
+
         $user->setIsEnable(true);
         $user->setIsValideAdministration(true);
-        $user->setNom($dataUsers['nom']);
-        $user->setPrenom($dataUsers['prenom']);
         $userRepository->save($user, true);
 
         $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');
@@ -174,12 +183,27 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
+    /**
+     * @throws \JsonException
+     */
+    #[Route('/{id}', name: 'app_user_delete', methods: ['DELETE'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function delete(Request $request, User $user, UserRepository $userRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
-            $userRepository->remove($user, true);
+    public function delete(
+        Request $request,
+        User $user,
+        UserCentreRepository $userCentreRepository,
+        UserRepository $userRepository
+    ): Response {
+        if ($this->isCsrfTokenValid(
+            'delete' . $user->getId(),
+            JsonRequest::getValueFromRequest($request, 'csrf')
+        )) {
+            foreach ($user->getUserCentres() as $centre) {
+                $userCentreRepository->remove($centre, true);
+            }
+
+            $user->setIsDeleted(true);//on met le flag supprimé à true.
+            $userRepository->save($user, true);
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);

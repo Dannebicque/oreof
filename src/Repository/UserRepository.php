@@ -34,7 +34,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findAll(): array
     {
-        return $this->findBy([], ['nom' => 'ASC', 'prenom' => 'ASC']);
+        return $this->findBy([
+            'isDeleted' => false,
+        ], ['nom' => 'ASC', 'prenom' => 'ASC']);
     }
 
     public function save(User $entity, bool $flush = false): void
@@ -74,6 +76,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $this->createQueryBuilder('u')
             ->where('u.isEnable = :isEnable')
             ->andWhere('u.dateDemande IS NOT NULL')
+            ->andWhere('u.isDeleted = false')
             ->andWhere('u.isValideAdministration = :isValideAdministration')
             ->setParameter('isEnable', false)
             ->setParameter('isValideAdministration', false)
@@ -85,6 +88,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.roles LIKE :role')
+            ->andWhere('u.isDeleted = false')
             ->setParameter('role', '%"' . $role . '"%')
             ->getQuery()
             ->getResult();
@@ -96,6 +100,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     ): array {
         return $this->createQueryBuilder('u')
             ->where('u.isEnable = :isEnable')
+            ->andWhere('u.isDeleted = false')
             ->setParameter('isEnable', true)
             ->addOrderBy('u.' . $sort, $direction)
             ->getQuery()
@@ -110,6 +115,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $this->createQueryBuilder('u')
             ->where('u.isEnable = :isEnable')
             ->andWhere('u.nom LIKE :q OR u.prenom LIKE :q OR u.email LIKE :q OR u.username LIKE :q')
+            ->andWhere('u.isDeleted = false')
             ->setParameter('isEnable', true)
             ->setParameter('q', '%' . $q . '%')
             ->addOrderBy('u.' . $sort, $direction)
