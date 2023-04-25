@@ -409,7 +409,8 @@ class ElementConstitutifController extends AbstractController
 //            }
 
             if ($request->isMethod('POST')) {
-                $elementConstitutif->setEcts($request->request->all()['ec_step4']['ects']);
+                $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
+                $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
                 $typeD->saveMcccs($elementConstitutif, $request->request);
                 $elementConstitutifRepository->save($elementConstitutif, true);
 

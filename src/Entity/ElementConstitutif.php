@@ -149,7 +149,7 @@ class ElementConstitutif
         return $this->ects;
     }
 
-    public function setEcts(float $ects): self
+    public function setEcts(?float $ects): self
     {
         $this->ects = $ects;
 

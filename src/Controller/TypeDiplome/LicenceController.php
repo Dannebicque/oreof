@@ -29,13 +29,16 @@ class LicenceController extends AbstractController
         ElementConstitutif $elementConstitutif
     ) {
         $typeDiplome = $typeDiplomeRepository->findOneBy(['ModeleMcc' => LicenceTypeDiplome::class]);
+
+        if ($typeDiplome === null) {
+            throw new \Exception('Type de diplome non trouvé');
+        }
+
         $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome);
 
 
         switch ($request->query->get('type')) {
             case 'cc':
-
-
                 return $this->render('typeDiplome/mccc/licence/_cc.html.twig', [
                     'mcccs' => $licenceTypeDiplome->getMcccs($elementConstitutif),
                     'typeEpreuves' => $typeEpreuves,
@@ -56,5 +59,8 @@ class LicenceController extends AbstractController
                     'typeEpreuves' => $typeEpreuves,
                 ]);
         }
+
+        return $this->render('typeDiplome/mccc/licence/_vide.html.twig', [
+        ]);
     }
 }
