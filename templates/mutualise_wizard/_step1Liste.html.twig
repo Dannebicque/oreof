@@ -63,7 +63,11 @@
     {% for fiche in fiches %}
         <tr>
             <td>{{ fiche.ficheMatiere.libelle }}</td>
-            <td>{{ fiche.ficheMatiere.parcours.formation.display }}</td>
+            {% if fiche.ficheMatiere != null and fiche.ficheMatiere.parcours != null %}
+                <td>{{ fiche.ficheMatiere.parcours.formation.display }}</td>
+            {% else %}
+                <td>Pas de parcours associé</td>
+            {% endif %}
             {% if fiche.parcours != null and fiche.parcours.formation != null and fiche.parcours.formation.composantePorteuse != null %}
                 <td>{{ fiche.parcours.formation.composantePorteuse.libelle }}</td>
                 <td>{{ fiche.parcours.formation.display }}</td>
