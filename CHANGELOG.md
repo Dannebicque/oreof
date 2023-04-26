@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.8](https://github.com/Dannebicque/oreof/compare/v0.23.7...v0.23.8) (2023-04-26)
+
+
+### Features
+
+* Masquer le login/pass libre sur page d'accès ([40f19ca](https://github.com/Dannebicque/oreof/commit/40f19ca1fd2fdff4fe156462adcc8212911d5f93))
+* MCCC sauvegarde ([606ced5](https://github.com/Dannebicque/oreof/commit/606ced596692efaa2daa0b06fb8050b913a95ed1))
+* tris des sites/villes ([a9c85a0](https://github.com/Dannebicque/oreof/commit/a9c85a0190a59115eeef47a997e4844d1ec890e9))
+
+
+### Bug Fixes
+
+* Absence de parcours sur les fiches ([08c1053](https://github.com/Dannebicque/oreof/commit/08c1053817d07753a8fcc8e0ab84c7fa06ad5eba))
+* Suppression des utilisateurs ([d2136d9](https://github.com/Dannebicque/oreof/commit/d2136d9c703d26cecacd02e1e7866b1bf56e12ec))
+
 ### [0.23.7](https://github.com/Dannebicque/oreof/compare/v0.23.6...v0.23.7) (2023-04-24)
 
 
