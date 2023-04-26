@@ -1,4 +1,4 @@
- <table class="table">
+<table class="table">
     <thead>
     <tr>
         <th>
@@ -64,11 +64,17 @@
         <tr>
             <td>{{ fiche.ficheMatiere.libelle }}</td>
             <td>{{ fiche.ficheMatiere.parcours.formation.display }}</td>
-            <td>{{ fiche.parcours.formation.composantePorteuse.libelle }}</td>
-            <td>{{ fiche.parcours.formation.display }}</td>
-            <td>{{ fiche.parcours.libelle }}</td>
+            {% if fiche.parcours != null and fiche.parcours.formation != null and fiche.parcours.formation.composantePorteuse != null %}
+                <td>{{ fiche.parcours.formation.composantePorteuse.libelle }}</td>
+                <td>{{ fiche.parcours.formation.display }}</td>
+                <td>{{ fiche.parcours.libelle }}</td>
+            {% else %}
+                <td>Pas de parcours associé</td>
+                <td>Pas de parcours associé</td>
+                <td>Pas de parcours associé</td>
+            {% endif %}
             <td>Voir ?</td>
         </tr>
     {% endfor %}
     </tbody>
- </table>
+</table>
