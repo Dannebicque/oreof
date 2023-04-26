@@ -3,48 +3,56 @@
 {% block title %}Log in! | {{ product_name }}{% endblock %}
 
 {% block content %}
-    <div class="mb-2 mt-4">
-        <h2 class="cta-1 mb-0 text-primary">Bienvenue,</h2>
-        <h2 class="cta-1 text-primary">Connectez-vous</h2>
-    </div>
-
-    <div class="d-grid mb-2">
-        <a href="{{ path('cas_return') }}" class="btn btn-lg btn-primary d-block" type="submit">
-            Se connecter avec votre compte URCA
-        </a>
-    </div>
-    <p class="text-center">OU</p>
-
-    {% if error %}
-        {{ component('alerte', {type:'danger', message: error.messageKey|trans(error.messageData, 'security') }) }}
-    {% endif %}
-
-    <form class="tooltip-end-bottom" method="post">
-        <div class="mb-3 filled form-group tooltip-end-top form-floating">
-            <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control"
-                   required autofocus>
-            <label for="inputUsername">Login</label>
-        </div>
-        <div class="mb-3 filled form-group tooltip-end-top form-floating">
-            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-            <label for="inputPassword">Mot de passe</label>
+    <div {{ stimulus_controller('login') }}>
+        <div class="mb-2 mt-4">
+            <h2 class="cta-1 mb-0 text-primary">Bienvenue,</h2>
+            <h2 class="cta-1 text-primary">Connectez-vous</h2>
         </div>
 
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" value="remember-me"> Se souvenir de moi
-            </label>
+        <div class="d-grid mb-2">
+            <a href="{{ path('cas_return') }}" class="btn btn-lg btn-primary d-block" type="submit">
+                Se connecter avec votre compte URCA
+            </a>
         </div>
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
+        <p class="text-center">OU</p>
+
+        {% if error %}
+            {{ component('alerte', {type:'danger', message: error.messageKey|trans(error.messageData, 'security') }) }}
+        {% endif %}
         <div class="d-grid">
-        <button class="btn d-block btn-primary" type="submit">Se connecter</button>
-        {#            <a href="{{ path('app_forgot_password_request') }}">Mot de passe perdu ?</a><br> #}
+            <button class="btn btn-lg text-primary d-block justify-content-center"
+            {{ stimulus_action('login', 'showFormLogin') }}
+            >
+                Se connecter avec login/mot de passe
+            </button>
         </div>
-    </form>
-    <p class="text-center mt-3">OU</p>
-    <div class="d-grid">
-        <a href="{{ path('app_register') }}" class="btn d-block btn-secondary">Demander un accès</a>
+        <form class="tooltip-end-bottom d-none" method="post" id="formLogin">
+            <div class="mb-3 filled form-group tooltip-end-top form-floating">
+                <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control"
+                       required autofocus>
+                <label for="inputUsername">Login</label>
+            </div>
+            <div class="mb-3 filled form-group tooltip-end-top form-floating">
+                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+                <label for="inputPassword">Mot de passe</label>
+            </div>
+
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" value="remember-me"> Se souvenir de moi
+                </label>
+            </div>
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
+            <div class="d-grid">
+                <button class="btn d-block btn-primary" type="submit">Se connecter</button>
+                {#            <a href="{{ path('app_forgot_password_request') }}">Mot de passe perdu ?</a><br> #}
+            </div>
+        </form>
+        <p class="text-center mt-3">OU</p>
+        <div class="d-grid">
+            <a href="{{ path('app_register') }}" class="btn d-block btn-secondary">Demander un accès</a>
+        </div>
     </div>
 {% endblock %}
