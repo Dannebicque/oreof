@@ -10,6 +10,8 @@
 namespace App\Entity;
 
 use App\Repository\MentionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MentionRepository::class)]
@@ -34,6 +36,14 @@ class Mention
 
     #[ORM\ManyToOne(inversedBy: 'mentions')]
     private ?TypeDiplome $typeDiplome = null;
+
+    #[ORM\OneToMany(mappedBy: 'mention', targetEntity: Formation::class)]
+    private Collection $formations;
+
+    public function __construct()
+    {
+        $this->formations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -96,6 +106,36 @@ class Mention
     public function setTypeDiplome(?TypeDiplome $typeDiplome): self
     {
         $this->typeDiplome = $typeDiplome;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Formation>
+     */
+    public function getFormations(): Collection
+    {
+        return $this->formations;
+    }
+
+    public function addFormation(Formation $formation): self
+    {
+        if (!$this->formations->contains($formation)) {
+            $this->formations->add($formation);
+            $formation->setMention($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormation(Formation $formation): self
+    {
+        if ($this->formations->removeElement($formation)) {
+            // set the owning side to null (unless already changed)
+            if ($formation->getMention() === $this) {
+                $formation->setMention(null);
+            }
+        }
 
         return $this;
     }

@@ -4,6 +4,7 @@
         <th>Libellé</th>
         <th>Sigle</th>
         <th>Type de diplôme</th>
+        <th>Utilisé ?</th>
         <th></th>
     </tr>
     </thead>
@@ -12,7 +13,14 @@
         <tr>
             <td>{{ mention.libelle }}</td>
             <td>{{ mention.sigle }}</td>
-            <td>{{ mention.typeDiplome|typeDiplome  }}</td>
+            <td>{{ mention.typeDiplome|typeDiplome }}</td>
+            <td>
+                {% if mention.formations|length > 0 %}
+                    <span class="badge bg-success">Utilisée ({{ mention.formations|length }})</span>
+                {% else %}
+                    <span class="badge bg-warning">Non Utilisée</span>
+                {% endif %}
+            </td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {

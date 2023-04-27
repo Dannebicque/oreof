@@ -39,7 +39,7 @@ class Formation
     #[ORM\ManyToOne]
     private ?AnneeUniversitaire $anneeUniversitaire;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations')]
     private ?Mention $mention = null;
 
     #[ORM\Column(length: 255, nullable: true)]
