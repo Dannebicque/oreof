@@ -298,3 +298,7 @@ mccc_licence.cc.label: mccc_licence.cc.label
 mccc_licence.cci.label: mccc_licence.cci.label
 mccc_licence.placeholder.label: mccc_licence.placeholder.label
 fiche_matiere_step3.labels.competence_transverse: fiche_matiere_step3.labels.competence_transverse
+parcours_step1.labels.respParcours: parcours_step1.labels.respParcours
+parcours_step1.labels.coResponsable: parcours_step1.labels.coResponsable
+formation_step1.labels.responsableMention: formation_step1.labels.responsableMention
+formation_step1.labels.coResponsable: formation_step1.labels.coResponsable

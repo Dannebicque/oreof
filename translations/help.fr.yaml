@@ -244,3 +244,7 @@ mccc_licence.helps.ct.typeEpreuve_s2_et.help: mccc_licence.helps.ct.typeEpreuve_
 mccc_licence.helps.cc.pourcentage_s1_et.help: mccc_licence.helps.cc.pourcentage_s1_et.help
 mccc_licence.helps.cc.typeEpreuve_s1_cc.help: mccc_licence.helps.cc.typeEpreuve_s1_cc.help
 fiche_matiere_step3.labels.competence_transverse: fiche_matiere_step3.labels.competence_transverse
+parcours_step1.helps.respParcours: parcours_step1.helps.respParcours
+parcours_step1.helps.coResponsable: parcours_step1.helps.coResponsable
+formation_step1.helps.responsableMention: formation_step1.helps.responsableMention
+formation_step1.helps.coResponsable: formation_step1.helps.coResponsable
