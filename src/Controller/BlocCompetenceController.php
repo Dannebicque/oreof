@@ -62,30 +62,49 @@ class BlocCompetenceController extends AbstractController
         Parcours $parcours
     ): Response {
         if ($request->isMethod('POST')) {
-            $competences = $request->request->all()['competences'];
             $bccAdd = [];
-            foreach ($competences as $c) {
-                $b = $competenceRepository->find($c);
-                if ($b !== null) {
-                    $bc = $b->getBlocCompetence();
-                    if ($bc !== null) {
-                        if (!array_key_exists($bc->getId(), $bccAdd)) {
-                            $bc = $b->getBlocCompetence();
-                            if ($bc !== null) {
-                                $bcc = clone $bc;
-                                $ordre = $blocCompetenceRepository->getMaxOrdreParcours($parcours);
-                                $bcc->setOrdre($ordre + 1);
-                                $bcc->setParcours($parcours);
-                                $bcc->genereCode();
-                                $blocCompetenceRepository->save($bcc, true);
-                                $bccAdd[$bc->getId()] = $bcc;
+            if ($request->request->has('competences')) {
+                $competences = $request->request->all()['competences'];
+                foreach ($competences as $c) {
+                    $b = $competenceRepository->find($c);
+                    if ($b !== null) {
+                        $bc = $b->getBlocCompetence();
+                        if ($bc !== null) {
+                            if (!array_key_exists($bc->getId(), $bccAdd)) {
+                                $bc = $b->getBlocCompetence();
+                                if ($bc !== null) {
+                                    $bcc = clone $bc;
+                                    $ordre = $blocCompetenceRepository->getMaxOrdreParcours($parcours);
+                                    $bcc->setOrdre($ordre + 1);
+                                    $bcc->setParcours($parcours);
+                                    $bcc->genereCode();
+                                    $blocCompetenceRepository->save($bcc, true);
+                                    $bccAdd[$bc->getId()] = $bcc;
+                                }
+                                $cCopie = clone $b;
+                                $cCopie->setBlocCompetence($bccAdd[$bc->getId()]);
+                                $ordre = $competenceRepository->getMaxOrdreBlocCompetence($bccAdd[$bc->getId()]);
+                                $cCopie->setOrdre($ordre + 1);
+                                $cCopie->genereCode();
+                                $competenceRepository->save($cCopie, true);
                             }
-                            $cCopie = clone $b;
-                            $cCopie->setBlocCompetence($bccAdd[$bc->getId()]);
-                            $ordre = $competenceRepository->getMaxOrdreBlocCompetence($bccAdd[$bc->getId()]);
-                            $cCopie->setOrdre($ordre + 1);
-                            $cCopie->genereCode();
-                            $competenceRepository->save($cCopie, true);
+                        }
+                    }
+                }
+            }
+
+            if ($request->request->has('bccs')) {
+                $bccs = $request->request->all()['bccs'];
+                foreach ($bccs as $bcc) {
+                    if (!array_key_exists($bcc, $bccAdd)) {
+                        $b = $blocCompetenceRepository->find($bcc);
+                        if ($b !== null) {
+                            $bcc = clone $b;
+                            $ordre = $blocCompetenceRepository->getMaxOrdreParcours($parcours);
+                            $bcc->setOrdre($ordre + 1);
+                            $bcc->setParcours($parcours);
+                            $bcc->genereCode();
+                            $blocCompetenceRepository->save($bcc, true);
                         }
                     }
                 }
