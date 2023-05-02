@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.23.9](https://github.com/Dannebicque/oreof/compare/v0.23.8...v0.23.9) (2023-05-02)
+
+
+### Features
+
+* Import des blocs de compétences même si aucune C est selectionnée ([2b0407b](https://github.com/Dannebicque/oreof/commit/2b0407b8709777709ee6108b808d2f72d1279376))
+* Indicateur si la mention est utilisée dans une formation ([d26cdd9](https://github.com/Dannebicque/oreof/commit/d26cdd94bf6bf67cd7a549a26c859cfaf4dbf70c))
+
+
+### Bug Fixes
+
+* Absence de parcours sur les fiches ([f0ded94](https://github.com/Dannebicque/oreof/commit/f0ded94f595d351035df4922af34628b1f56cdba))
+* EC ([eb38e39](https://github.com/Dannebicque/oreof/commit/eb38e3903aed45cef9e59b42016dba915e149be5))
+* liste des compétences ([024dbb3](https://github.com/Dannebicque/oreof/commit/024dbb31b171594c3c2d3ba0013222fa4c45197b))
+* Mutualisation : Affichages ([3755f9e](https://github.com/Dannebicque/oreof/commit/3755f9e110a4a5338d07a1ae403e5189a052818f))
+* Semestre mutualisé ([cbe33f0](https://github.com/Dannebicque/oreof/commit/cbe33f0b841df06790951eb298ca7738cf04f68e))
+
 ### [0.23.8](https://github.com/Dannebicque/oreof/compare/v0.23.7...v0.23.8) (2023-04-26)
 
 
