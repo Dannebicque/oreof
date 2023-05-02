@@ -36,7 +36,7 @@ class Parcours
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
-    #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours')]
+    #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours', fetch: 'EAGER')]
     private ?Formation $formation;
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: BlocCompetence::class, cascade: ['persist', 'remove'])]

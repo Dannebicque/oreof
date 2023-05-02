@@ -21,7 +21,6 @@ class FormationAccessVoter extends Voter
 {
     public const ROLE_FORMATION_EDIT_MY = 'ROLE_FORMATION_EDIT_MY';
     public const ROLE_FORMATION_SHOW_MY = 'ROLE_FORMATION_SHOW_MY';
-    public const ROLE_EC_ADD_MY = 'ROLE_EC_ADD_MY';
 
     private array $roles;
 
@@ -38,7 +37,7 @@ class FormationAccessVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::ROLE_FORMATION_EDIT_MY, self::ROLE_FORMATION_SHOW_MY, self::ROLE_EC_ADD_MY], true)
+        return in_array($attribute, [self::ROLE_FORMATION_EDIT_MY, self::ROLE_FORMATION_SHOW_MY], true)
             && $subject instanceof Formation;
     }
 
@@ -59,26 +58,13 @@ class FormationAccessVoter extends Voter
         return match ($attribute) {
             self::ROLE_FORMATION_SHOW_MY => $this->hasShowOnHisFormation($user, $subject),
             self::ROLE_FORMATION_EDIT_MY => $this->hasEditOnHisFormation($user, $subject),
-            self::ROLE_EC_ADD_MY => $this->canAddEcFormation($user, $subject),
             default => false,
         };
     }
 
     private function hasShowOnHisFormation(UserInterface|User $user, Formation $subject): bool
     {
-//        /** @var User $user */
-//        foreach ($user->getUserCentres() as $centre) {
-//            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-        return true;
-    }
-
-    private function hasEditOnHisFormation(UserInterface|User $user, Formation $subject): bool
-    {
+        /** @var User $user */
         foreach ($user->getUserCentres() as $centre) {
             if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
                 return true;
@@ -88,15 +74,15 @@ class FormationAccessVoter extends Voter
         return false;
     }
 
-    private function canAddEcFormation(UserInterface|User $user, mixed $subject): bool
+    private function hasEditOnHisFormation(UserInterface|User $user, Formation $subject): bool
     {
-//        foreach ($user->getUserCentres() as $centre) {
-//            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-        return true;
+        foreach ($user->getUserCentres() as $centre) {
+            if ($centre->getFormation() === $subject &&
+                count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
