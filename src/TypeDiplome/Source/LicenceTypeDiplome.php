@@ -32,10 +32,23 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         }
         //todo: supprimer les lignes en trop selon le type...
 
+        $isCompleted = null;
+
         switch ($request->get('choix_type_mccc')) {
             case 'cc':
                 //2 session, juste le type d'épreuve de la Session 2
-                $mcccs[2]['et']->setTypeEpreuve([$request->get('typeEpreuve_s2_et')]);
+
+                if ($request->get('typeEpreuve_s2_et') === "") {
+                    $mcccs[2]['et']->setTypeEpreuve(null);
+                } else {
+                    $mcccs[2]['et']->setTypeEpreuve([$request->get('typeEpreuve_s2_et')]);
+                }
+
+
+                if ($mcccs[2]['et']->getTypeEpreuve() !== null && count($mcccs[2]['et']->getTypeEpreuve()) > 0) {
+                    $isCompleted = 'Complet';
+                }
+
                 if (array_key_exists('cc', $mcccs[1])) {
                     $mcccs[1]['cc']->setPourcentage(50);
                     $mcccs[1]['cc']->setNbEpreuves(2);
@@ -77,14 +90,40 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 $mcccs[2]['et']->setPourcentage(100);
                 $mcccs[2]['et']->setNbEpreuves(1);
                 $mcccs[2]['et']->setTypeEpreuve([$request->get('typeEpreuve_s2_et')]);
+
+                if (
+                    $mcccs[1]['cc']->getNbEpreuves() > 0 &&
+                    $mcccs[1]['et']->getTypeEpreuve() !== null &&
+                    $mcccs[2]['et']->getTypeEpreuve() !== null &&
+                    $mcccs[1]['cc']->getPourcentage() + $mcccs[1]['et']->getPourcentage() === 100.00
+                ) {
+                    $isCompleted = 'Complet';
+                }
+
                 break;
             case 'ct':
                 //2 types d'épreuves à sauvegarder
-                $mcccs[1]['et']->setTypeEpreuve([$request->get('typeEpreuve_s1_et')]);
-                $mcccs[2]['et']->setTypeEpreuve([$request->get('typeEpreuve_s2_et')]);
+                if ($request->get('typeEpreuve_s1_et') === "") {
+                    $mcccs[1]['et']->setTypeEpreuve(null);
+                } else {
+                    $mcccs[1]['et']->setTypeEpreuve([$request->get('typeEpreuve_s1_et')]);
+                }
+
+                if ($request->get('typeEpreuve_s2_et') === "") {
+                    $mcccs[2]['et']->setTypeEpreuve(null);
+                } else {
+                    $mcccs[2]['et']->setTypeEpreuve([$request->get('typeEpreuve_s2_et')]);
+                }
+
+                if ($mcccs[1]['et']->getTypeEpreuve() !== null && count($mcccs[1]['et']->getTypeEpreuve()) > 0 &&
+                    $mcccs[2]['et']->getTypeEpreuve() !== null && count($mcccs[2]['et']->getTypeEpreuve()) > 0) {
+                    $isCompleted = 'Complet';
+                }
+
                 break;
         }
 
+        $elementConstitutif->setEtatMccc($isCompleted);
 
         $this->entityManager->flush();
     }
