@@ -33,38 +33,50 @@ class FicheMatiereController extends BaseController
     #[Route('/liste', name: 'liste')]
     public function liste(
         Request $request,
-        FicheMatiereRepository $ficheMatiereRepository): Response
-    {
-
+        FicheMatiereRepository $ficheMatiereRepository
+    ): Response {
         $sort = $request->query->get('sort') ?? 'libelle';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
+//        dump($this->getUser()->getuserCentres());
 
-//        if ($this->isGranted('ROLE_ADMIN') ||
-//            $this->isGranted('ROLE_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
-//            $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser())) {
-//            $ficheMatieres = $ficheMatiereRepository->findByAllAnneUniversitaire($this->getAnneeUniversitaire());
-//        } else {
-//            $ficheMatieres = [];
-//            $ficheMatieres[] = $ficheMatiereRepository->findByComposanteDpe(
-//                $this->getUser(),
-//                $this->getAnneeUniversitaire()
-//            );
-//            $ficheMatieres[] = $ficheMatiereRepository->findByResponsableFormation(
-//                $this->getUser(),
-//                $this->getAnneeUniversitaire()
-//            );
-//            $ficheMatieres[] = $ficheMatiereRepository->findByResponsableEc(
-//                $this->getUser(),
-//                $this->getAnneeUniversitaire()
-//            );
-//            $ficheMatieres = array_merge(...$ficheMatieres);
-//        }
-        $ficheMatieres = $ficheMatiereRepository->findByAdmin(
-            $this->getAnneeUniversitaire(),
-            [$sort => $direction],
-            $q
-        );
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
+            $ficheMatieres = $ficheMatiereRepository->findByAdmin(
+                $this->getAnneeUniversitaire(),
+                [$sort => $direction],
+                $q
+            );
+        } elseif ($this->isGranted('ROLE_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
+            $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser())) {
+            $ficheMatieres = $ficheMatiereRepository->findByComposanteDpe(
+                $this->getUser(),
+                $this->getAnneeUniversitaire(),
+                [$sort => $direction],
+                $q
+            );
+        } elseif ($this->isGranted('ROLE_FORMATION_SHOW_MY', $this->getUser())) {
+            $ficheMatieres = $ficheMatiereRepository->findByResponsableFormation(
+                $this->getUser(),
+                $this->getAnneeUniversitaire(),
+                [$sort => $direction],
+                $q
+            );
+        } elseif ($this->isGranted('ROLE_PARCOURS_SHOW_MY', $this->getUser())) {
+            $ficheMatieres = $ficheMatiereRepository->findByResponsableParcours(
+                $this->getUser(),
+                $this->getAnneeUniversitaire(),
+                [$sort => $direction],
+                $q
+            );
+        } else {
+            $ficheMatieres = $ficheMatiereRepository->findByResponsableFicheMatiere(
+                $this->getUser(),
+                $this->getAnneeUniversitaire(),
+                [$sort => $direction],
+                $q
+            );
+        }
+
         return $this->render('structure/fiche_matiere/_liste.html.twig', [
             'ficheMatieres' => $ficheMatieres,
             'deplacer' => false,

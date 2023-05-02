@@ -72,7 +72,7 @@ class ElementConstitutif
     #[ORM\ManyToOne]
     private ?NatureUeEc $natureUeEc = null;
 
-    #[ORM\OneToMany(mappedBy: 'ec', targetEntity: Mccc::class, cascade: ['persist', 'remove'], orphanRemoval: true  )]
+    #[ORM\OneToMany(mappedBy: 'ec', targetEntity: Mccc::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $mcccs;
 
     #[ORM\Column(length: 15)]
@@ -108,6 +108,9 @@ class ElementConstitutif
 
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $typeMccc = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $etatMccc = null;
 
     public function __construct()
     {
@@ -245,44 +248,6 @@ class ElementConstitutif
         }
 
         return 'Complet';
-    }
-
-    public function etatMccc(): string
-    {
-        $totalPourcentage = [];
-        $nbNotes = [];
-
-        if ($this->ects === 0.0) {
-            return 'Pas d\'ECTS';
-        }
-
-        foreach ($this->getMcccs() as $mccc) {
-            if (!isset($totalPourcentage[$mccc->getNumeroSession()])) {
-                $totalPourcentage[$mccc->getNumeroSession()] = 0;
-            }
-            if (!isset($nbNotes[$mccc->getNumeroSession()])) {
-                $nbNotes[$mccc->getNumeroSession()] = 0;
-            }
-
-            $totalPourcentage[$mccc->getNumeroSession()] += $mccc->getPourcentage();
-            $nbNotes[$mccc->getNumeroSession()] += $mccc->getNbEpreuves();
-        }
-
-        $pourcentageOK = count($totalPourcentage) > 0;
-        foreach ($totalPourcentage as $pourcentage) {
-            if ($pourcentage !== 100.0) {
-                $pourcentageOK = false;
-            }
-        }
-
-        $nbNotesOK = count($nbNotes) > 0;
-        foreach ($nbNotes as $nb) {
-            if ($nb <= 0) {
-                $nbNotesOK = false;
-            }
-        }
-
-        return $pourcentageOK && $nbNotesOK ? 'Complet' : 'À compléter';
     }
 
     public function isIsCmPresentielMutualise(): ?bool
@@ -430,7 +395,8 @@ class ElementConstitutif
         }
     }
 
-    public function display() {
+    public function display(): string
+    {
         if ($this->ficheMatiere !== null) {
             return $this->ficheMatiere->getLibelle();
         }
@@ -548,6 +514,18 @@ class ElementConstitutif
     public function setTypeMccc(?string $typeMccc): self
     {
         $this->typeMccc = $typeMccc;
+
+        return $this;
+    }
+
+    public function getEtatMccc(): ?string
+    {
+        return $this->etatMccc === null ? 'A Compléter' : $this->etatMccc;
+    }
+
+    public function setEtatMccc(?string $etatMccc): self
+    {
+        $this->etatMccc = $etatMccc;
 
         return $this;
     }
