@@ -75,6 +75,8 @@ class MutualiseController extends AbstractController
             $ues = $ueRepository->findAllBy([$sort => $direction]);
         } else {
             //filtre selon mes parcours
+            $ues = $ueRepository->findByParcours($this->getUser(), [$sort => $direction]);
+
         }
 
         return $this->render('mutualise_wizard/_step2Liste.html.twig', [
@@ -106,6 +108,8 @@ class MutualiseController extends AbstractController
             $semestres = $semestreRepository->findAllBy([$sort => $direction], $q);
         } else {
             //filtre selon mes parcours
+            $semestres = $semestreRepository->findByParcours($this->getUser(), [$sort => $direction]);
+
         }
 
         return $this->render('mutualise_wizard/_step3Liste.html.twig', [

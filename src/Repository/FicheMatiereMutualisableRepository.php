@@ -9,6 +9,7 @@ use App\Entity\Mention;
 use App\Entity\Parcours;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<FicheMatiereMutualisable>
@@ -45,6 +46,60 @@ class FicheMatiereMutualisableRepository extends ServiceEntityRepository
 
     public function findAllBy(array $options, string|null $q): array
     {
+        $qb = $this->createQueryBuilder('f')
+            ->join('f.ficheMatiere', 'fm');
+
+        if ($q) {
+            $qb->andWhere('fm.libelle LIKE :q')
+                ->setParameter('q', '%' . $q . '%');
+        }
+
+        foreach ($options as $sort => $direction) {
+            if ($sort === 'mention') {
+                $qb->leftJoin(Parcours::class, 'p', 'WITH', 'fm.parcours = p.id')
+                    ->leftJoin(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+                    ->leftJoin(Mention::class, 'm', 'WITH', 'fo.mention = m.id')
+                    ->addOrderBy(
+                        'CASE
+                            WHEN fo.mention IS NOT NULL THEN m.libelle
+                            WHEN fo.mentionTexte IS NOT NULL THEN fo.mentionTexte
+                            ELSE fo.mentionTexte
+                            END',
+                        $direction
+                    );
+            } elseif ($sort === 'composante') {
+                $qb->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
+                    ->innerJoin(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+                    ->innerJoin(Composante::class, 'co', 'WITH', 'fo.composantePorteuse = co.id')
+                    ->addOrderBy('co.libelle', $direction);
+            } elseif ($sort === 'mentionmutualisable') {
+                $qb->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
+                    ->leftJoin(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+                    ->leftJoin(Mention::class, 'm', 'WITH', 'fo.mention = m.id')
+                    ->addOrderBy(
+                        'CASE
+                            WHEN fo.mention IS NOT NULL THEN m.libelle
+                            WHEN fo.mentionTexte IS NOT NULL THEN fo.mentionTexte
+                            ELSE fo.mentionTexte
+                            END',
+                        $direction
+                    );
+            }elseif ($sort === 'parcours') {
+                $qb->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
+                    ->addOrderBy('p.libelle', $direction);
+            } else {
+                $qb->addOrderBy('fm.' . $sort, $direction);
+            }
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByParcours(
+        ?UserInterface $user,
+        array $options, string|null $q
+    ) {
+        //todo: ajouter les bons parcours uniquement...
         $qb = $this->createQueryBuilder('f')
             ->join('f.ficheMatiere', 'fm');
 

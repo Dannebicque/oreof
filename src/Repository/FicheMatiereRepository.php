@@ -78,9 +78,44 @@ class FicheMatiereRepository extends ServiceEntityRepository
     ) {
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
-            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
-        ;
+            ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+            ->andWhere('fo.anneeUniversitaire = :annee')
+            ->setParameter('annee', $anneeUniversitaire)
+            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id');
 
+        $this->addFiltres($q, $qb, $options);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByResponsableFicheMatiere(
+        User $user,
+        AnneeUniversitaire $anneeUniversitaire,
+        array $options = [],
+        string|null $q = null
+    ): array {
+        $qb = $this->createQueryBuilder('f')
+            ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
+            ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+            ->andWhere('fo.anneeUniversitaire = :annee')
+            ->andWhere('f.responsableFicheMatiere = :user')
+            ->setParameter('user', $user)
+            ->setParameter('annee', $anneeUniversitaire);
+
+        $this->addFiltres($q, $qb, $options);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param string|null                $q
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param array                      $options
+     *
+     * @return void
+     */
+    private function addFiltres(?string $q, \Doctrine\ORM\QueryBuilder $qb, array $options): void
+    {
         if (null !== $q) {
             $qb->andWhere('f.libelle LIKE :q')
                 ->setParameter('q', '%' . $q . '%');
@@ -91,7 +126,6 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 $qb->addOrderBy('u.nom', $direction);
                 $qb->addOrderBy('u.prenom', $direction);
             } elseif ($sort === 'mention') {
-
                 $qb->leftJoin(Formation::class, 'fo', 'WITH', 'p.formation = fo.id');
                 $qb->leftJoin(Mention::class, 'm', 'WITH', 'fo.mention = m.id');
                 $qb->addOrderBy(
@@ -106,7 +140,5 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 $qb->addOrderBy('f.' . $sort, $direction);
             }
         }
-
-        return $qb->getQuery()->getResult();
     }
 }
