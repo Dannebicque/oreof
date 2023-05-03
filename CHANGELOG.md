@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.24.0](https://github.com/Dannebicque/oreof/compare/v0.23.9...v0.24.0) (2023-05-03)
+
+
+### Bug Fixes
+
+* Droits sur les boutons EC ([2102894](https://github.com/Dannebicque/oreof/commit/2102894bad1856af0480f5a95eb9d15612b5ab39))
+* Modification d'un EC ([9e04321](https://github.com/Dannebicque/oreof/commit/9e0432183dc2fc7dec4db0f6b75f4efccc3d3265))
+
 ### [0.23.9](https://github.com/Dannebicque/oreof/compare/v0.23.8...v0.23.9) (2023-05-02)
 
 
