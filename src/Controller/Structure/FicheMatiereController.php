@@ -38,7 +38,6 @@ class FicheMatiereController extends BaseController
         $sort = $request->query->get('sort') ?? 'libelle';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
-//        dump($this->getUser()->getuserCentres());
 
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
             $ficheMatieres = $ficheMatiereRepository->findByAdmin(
