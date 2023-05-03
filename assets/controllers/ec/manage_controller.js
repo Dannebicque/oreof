@@ -22,16 +22,44 @@ export default class extends Controller {
     ue: Number,
     parcours: Number,
     enfant: Boolean,
+    edit: Boolean,
   }
 
   natureEc = null
 
   tom = null
 
-  connect() {
+  async connect() {
+    const natureEc = document.getElementById('element_constitutif_natureUeEc').value
+    if (natureEc !== '') {
+      const response = await fetch(`${this.urlValue}?choix=${natureEc}`)
+      this.matieresTarget.innerHTML = await response.text()
+      if (document.getElementById('ficheMatiere')) {
+        this.tom = new TomSelect('#ficheMatiere')
+      }
+
+      if (document.getElementById('tableFiches')) {
+        // parcourir les lignes de tbody pour ajouter dans matieres
+        const table = document.getElementById('tableFiches')
+        const tbody = table.getElementsByTagName('tbody')[0]
+        const lignes = tbody.getElementsByTagName('tr')
+        for (let i = 0; i < lignes.length; i++) {
+          const { id } = lignes[i].getElementsByTagName('td')[0].dataset
+          this.matieres.push(id)
+        }
+        console.log(this.matieres)
+      }
+    }
   }
 
   async changeNatureEc(event) {
+    if (this.editValue === true) {
+      if (!confirm('Attention, le changement de nature d\'EC va supprimer toutes les données associées à l\'EC  (les fiches EC/matière possibles associées, ...). Voulez vous continuer ?')) {
+        event.preventDefault()
+        return
+      }
+    }
+
     const response = await fetch(`${this.urlValue}?choix=${event.target.value}`)
     this.matieresTarget.innerHTML = await response.text()
     if (document.getElementById('ficheMatiere')) {
@@ -124,7 +152,6 @@ export default class extends Controller {
 
   valider(event) {
     event.preventDefault()
-
     const isChoixEc = document.getElementById('element_constitutif_choixEc').value
     const form = document.getElementById('formEc')
     if (isChoixEc === 'true') {
@@ -145,8 +172,23 @@ export default class extends Controller {
         return
       }
     }
-
+    console.log(this.matieres)
     // ajouter le tableau matieres aux données du formulaire
+
+    fetch(form.action, {
+      method: form.method,
+      body: new URLSearchParams(new FormData(form)),
+    })
+      .then((response) => response.json())
+      .then(async () => {
+        callOut('Sauvegarde effectuée', 'success')
+        this.dispatch('modalHide', { detail: { ue: this.ueValue, parcours: this.parcoursValue } })
+      })
+  }
+
+  validerEnfant(event) {
+    event.preventDefault()
+    const form = document.getElementById('formEc')
 
     fetch(form.action, {
       method: form.method,
@@ -167,6 +209,22 @@ export default class extends Controller {
       }
     } else {
       callOut('Vous devez indiquer un libellé pour créer une nouvelle fiche de matière', 'warning')
+    }
+  }
+
+  async removeEcEnfant(event) {
+    event.preventDefault()
+    console.log(event.params)
+    // suppression dans this.matieres
+    const index = this.matieres.indexOf(`id_${event.params.fichematiere}`)
+    if (index > -1) {
+      this.matieres.splice(index, 1)
+    }
+    console.log(this.matieres)
+
+    if (confirm('Voulez-vous vraiment supprimer cet EC enfant ?')) {
+      await fetch(`${this.urlValue}?delete=${event.params.ecenfant}`)
+      event.target.parentElement.parentElement.remove()
     }
   }
 }

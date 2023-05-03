@@ -307,7 +307,6 @@
                                                     or is_granted('ROLE_EC_EDIT_MY', ec) ) and editable == true %}
                                                     <button
                                                             {% if deplacer is defined and deplacer == true %}
-
                                                                 {{ stimulus_controller('modal', {
                                                                     size: 'lg',
                                                                     nomEvenement: 'refreshListeEc',
@@ -462,13 +461,15 @@
                                                                             details: {ue: ue.id, parcours: parcours.id},
                                                                             modalTitle: 'Modifier un élément constitutif',
                                                                             modalUrl: path
-                                                                                ('app_element_constitutif_edit',{'id': ece.id, parcours:parcours.id}) }) }}
+                                                                                ('app_element_constitutif_edit_enfant',
+                                                                                {'id': ece.id, parcours:parcours.id, ue:ue.id
+                                                                                }) }) }}
                                                                     {% else %}
                                                                         {{ stimulus_controller('modal', {
                                                                             size: 'lg',
                                                                             modalTitle: 'Modifier un élément constitutif',
                                                                             modalUrl: path
-                                                                                ('app_element_constitutif_edit',{'id': ece.id, parcours:parcours.id}) }) }}
+                                                                                ('app_element_constitutif_edit_enfant',{'id': ece.id, parcours:parcours.id, ue:ue.id}) }) }}
                                                                     {% endif %}
                                                                     data-action="click->modal#openModal"
                                                                     class="btn btn-sm text-warning"

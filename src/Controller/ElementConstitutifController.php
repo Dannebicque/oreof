@@ -48,28 +48,39 @@ class ElementConstitutifController extends AbstractController
         ]);
     }
 
-    #[Route('/type-ec/{ue}/{parcours}', name: 'app_element_constitutif_type_ec', methods: ['GET'])]
+    #[Route('/type-ec/{ec}/{ue}/{parcours}', name: 'app_element_constitutif_type_ec', methods: ['GET'])]
     public function typeEc(
+        ElementConstitutifRepository $elementConstitutifRepository,
         Request $request,
         FicheMatiereRepository $ficheMatiereRepository,
         NatureUeEcRepository $natureUeEcRepository,
+        ElementConstitutif $ec,
         Ue $ue,
         Parcours $parcours
     ): Response {
+        if ($request->query->has('delete')) {
+            $ec = $elementConstitutifRepository->find($request->query->get('delete'));
+            $elementConstitutifRepository->remove($ec, true);
+            return $this->json(true);
+        }
+
         $natureEc = $natureUeEcRepository->find($request->query->get('choix'));
         if ($natureEc !== null) {
             if ($natureEc->isChoix() === true) {
                 return $this->render('element_constitutif/_type_ec_matieres.html.twig', [
+                    'ec' => $ec,
                     'matieres' => $ficheMatiereRepository->findByParcours($parcours)
                 ]);
             }
 
             if ($natureEc->isLibre() === true) {
                 return $this->render('element_constitutif/_type_ec_matieres_libre.html.twig', [
+                    'ec' => $ec,
                 ]);
             }
 
             return $this->render('element_constitutif/_type_ec_matiere.html.twig', [
+                'ec' => $ec,
                 'matieres' => $ficheMatiereRepository->findByParcours($parcours)
             ]);
         }
@@ -251,16 +262,13 @@ class ElementConstitutifController extends AbstractController
             return $this->json(true);
         }
 
-//        if ($elementConstitutif->getMcccs()->count() === 0) {
-//            $typeD->initMcccs($elementConstitutif);
-//        }
 
         return $this->render('element_constitutif/new_enfant.html.twig', [
             'element_constitutif' => $elementConstitutif,
             'form' => $form->createView(),
             'ue' => $ue,
             'parcours' => $parcours,
-            'matieres' => $ficheMatiereRepository->findAll()
+            'matieres' => $ficheMatiereRepository->findByParcours($parcours)
         ]);
     }
 
@@ -299,6 +307,9 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
     public function edit(
+        EcOrdre $ecOrdre,
+        FicheMatiereRepository $ficheMatiereRepository,
+        EntityManagerInterface $entityManager,
         Request $request,
         ElementConstitutifRepository $elementConstitutifRepository,
         TypeEcRepository $typeEcRepository,
@@ -330,6 +341,83 @@ class ElementConstitutifController extends AbstractController
                 $elementConstitutif->setTypeEc($tu);
             }
 
+            $uow = $entityManager->getUnitOfWork();
+            $uow->computeChangeSets();
+            $changeSet = $uow->getEntityChangeSet($elementConstitutif);
+
+            if (isset($changeSet['natureUeEc'])) {
+                //die('changement');
+                //initial $changeSet['natureUeEc'][0]
+                if ($changeSet['natureUeEc'][0]->isChoix() === true) {
+                    // c'était une EC à choix, on supprime les choix.
+                    foreach ($elementConstitutif->getEcEnfants() as $ecEnfant) {
+                        $elementConstitutif->removeEcEnfant($ecEnfant);
+                        $entityManager->remove($ecEnfant);
+                    }
+                    $entityManager->flush();
+                }
+
+                if ($changeSet['natureUeEc'][0]->isLibre() === true) {
+                    // c'était une EC libre, on efface le commentaire
+                    $elementConstitutif->setTexteEcLibre(null);
+                }
+            }
+
+            if ($elementConstitutif->getNatureUeEc()?->isChoix() === false and $elementConstitutif->getNatureUeEc()?->isLibre() === false) {
+                if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
+                    $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
+                        'id_',
+                        '',
+                        $request->request->get('ficheMatiere')
+                    ));
+                } else {
+                    $ficheMatiere = new FicheMatiere();
+                    $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
+                    $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
+                    $ficheMatiereRepository->save($ficheMatiere, true);
+                }
+                $elementConstitutif->setFicheMatiere($ficheMatiere);
+            } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() === true) {
+                $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibre'));
+                $elementConstitutif->setFicheMatiere(null);
+                //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
+                $matieres = explode(',', $request->request->get('matieres'));
+                foreach ($matieres as $matiere) {
+                    //on vérifie si pas déjà existant
+                    if (str_starts_with($matiere, 'id_')) {
+                        $ficheMatiere = $ficheMatiereRepository->find((int)str_replace('id_', '', $matiere));
+                    } else {
+                        $ficheMatiere = new FicheMatiere();
+                        $ficheMatiere->setLibelle(str_replace('ac_', '', $matiere));
+                        $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
+                        $ficheMatiereRepository->save($ficheMatiere, true);
+                    }
+
+                    $existe = $elementConstitutifRepository->findOneBy([
+                        'ficheMatiere' => $ficheMatiere,
+                        'ecParent' => $elementConstitutif
+                    ]);
+
+                    if (!$existe) {
+                        //sinon on ajoute
+                        $ec = new ElementConstitutif();
+                        $nextSousEc = $ecOrdre->getOrdreEnfantSuivant($elementConstitutif);
+                        $ec->setEcParent($elementConstitutif);
+                        $ec->setParcours($parcours);
+                        $ec->setModaliteEnseignement($parcours?->getModalitesEnseignement());
+                        $ec->setUe($elementConstitutif->getUe());
+                        $ec->setNatureUeEc($elementConstitutif->getNatureUeEc());
+                        $ec->setFicheMatiere($ficheMatiere);
+                        $ec->setOrdre($nextSousEc);
+                        $ec->genereCode();
+                        $elementConstitutifRepository->save($ec, true);
+                    }
+                }
+            } else {
+                $elementConstitutif->setTexteEcLibre($request->request->get('ficheMatiereLibre'));
+            }
+
+            $elementConstitutif->genereCode();
             $elementConstitutifRepository->save($elementConstitutif, true);
 
             return $this->json(true);
@@ -340,6 +428,56 @@ class ElementConstitutifController extends AbstractController
             'form' => $form->createView(),
             'ue' => $elementConstitutif->getUe(),
             'parcours' => $parcours,
+        ]);
+    }
+
+    #[
+        Route('/{id}/edit-enfant/{parcours}/{ue}', name: 'app_element_constitutif_edit_enfant', methods: [
+            'GET',
+            'POST'
+        ])]
+    public function editEnfant(
+        FicheMatiereRepository $ficheMatiereRepository,
+        Request $request,
+        ElementConstitutifRepository $elementConstitutifRepository,
+        ElementConstitutif $elementConstitutif,
+        Parcours $parcours,
+        Ue $ue
+    ): Response {
+//        $form = $this->createForm(ElementConstitutifEnfantType::class, $elementConstitutif, [
+//            'action' => $this->generateUrl(
+        //                'app_element_constitutif_edit_enfant',
+//                ['id' => $elementConstitutif->getId(), 'parcours' => $parcours->getId(), 'ue' => $ue->getId()]
+//            )
+//        ]);
+//        $form->handleRequest($request);
+
+        if ($request->isMethod('POST')) {
+            if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
+                $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
+                    'id_',
+                    '',
+                    $request->request->get('ficheMatiere')
+                ));
+            } else {
+                $ficheMatiere = new FicheMatiere();
+                $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
+                $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
+                $ficheMatiereRepository->save($ficheMatiere, true);
+            }
+            $elementConstitutif->setFicheMatiere($ficheMatiere);
+
+            $elementConstitutifRepository->save($elementConstitutif, true);
+
+            return $this->json(true);
+        }
+
+
+        return $this->render('element_constitutif/_editEnfant.html.twig', [
+            'element_constitutif' => $elementConstitutif,
+            'parcours' => $parcours,
+            'ue' => $ue,
+            'matieres' => $ficheMatiereRepository->findByParcours($parcours)
         ]);
     }
 

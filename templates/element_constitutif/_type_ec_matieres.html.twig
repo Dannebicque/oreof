@@ -22,6 +22,19 @@
         </th>
     </tr>
     </thead>
+    {% for ecEnfant in ec.ecEnfants %}
+        <tr>
+            <td data-id="id_{{ ecEnfant.ficheMatiere.id }}">
+                {{ ecEnfant.display }}
+            </td>
+            <td>
+                <button class="btn text-danger"
+                {{ stimulus_action('ec--manage', 'removeEcEnfant', 'click', {ecEnfant: ecEnfant.id,
+                    fichematiere:ecEnfant.ficheMatiere.id}) }}
+                ><i class="fas fa-trash"></i> Supprimer</button>
+            </td>
+        </tr>
+    {% endfor %}
 </table>
 
 <div id="modele_matiere">

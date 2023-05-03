@@ -1,0 +1,54 @@
+<div {{ stimulus_controller('ec--manage', {
+    url:path('app_element_constitutif_type_ec', {ue:ue.id, parcours:parcours.id, ec:element_constitutif.id}),
+    ue:ue.id,
+    parcours:parcours.id,
+    enfant:true
+}) }}
+        data-action="ec--manage:modalHide@window->base#modalHide"
+>
+    <form class="form" id="formEc" method="post" action="{{ path('app_element_constitutif_edit_enfant', {
+        id:element_constitutif.id,
+        ue:ue.id,
+        parcours:parcours.id
+    }) }}">
+
+        <label for="ficheMatiere" class="form-label">{{ 'ec_manage.labels.fiche_matiere_unique.label'|trans({}, 'form') }}
+            <i class="fal fa-question-circle ms-1"
+               data-controller="tooltip"
+               data-tooltip-placement-value="bottom"
+               aria-label="{{ 'ec_manage.helps.fiche_matiere_unique.help'|trans({}, 'help') }}"
+               data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_unique.help'|trans({}, 'help') }}"></i>
+        </label>
+        <select id="ficheMatiere" name="ficheMatiere" class="form-select">
+            <option value="">Choisir dans la liste une fiche EC/matière</option>
+            {% for matiere in matieres %}
+                <option value="id_{{ matiere.id }}"
+                {% if matiere.id == element_constitutif.ficheMatiere.id %}selected{% endif %}
+                >{{ matiere.libelle }}</option>
+            {% endfor %}
+        </select>
+        OU
+        <div class="mt-2">
+            <label for="ficheMatiereLibelle" class="form-label">
+                {{ 'ec_manage.labels.fiche_matiere_libelle_unique.label'|trans({}, 'form') }}
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="{{ 'ec_manage.helps.fiche_matiere_libelle_unique.help'|trans({}, 'help') }}"
+                   data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_libelle_unique.help'|trans({}, 'help') }}"></i>
+            </label>
+            <input type="text" id="ficheMatiereLibelle" name="ficheMatiereLibelle" class="form-control">
+        </div>
+
+
+        <button class="btn btn-success mt-2"
+                {{ stimulus_action('ec--manage', 'validerEnfant') }}
+        >
+            <i class="fal fa-floppy-disk"></i>
+            Enregistrer
+        </button>
+
+        {{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont
+obligatoires'}) }}
+    </form>
+</div>
