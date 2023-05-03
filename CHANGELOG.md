@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.25.0](https://github.com/Dannebicque/oreof/compare/v0.24.0...v0.25.0) (2023-05-03)
+
+
+### Features
+
+* Ajout de robots.txt ([c84e36c](https://github.com/Dannebicque/oreof/commit/c84e36c0cde3307b65ea88c5fa5bae7986c5e0f8))
+
 ## [0.24.0](https://github.com/Dannebicque/oreof/compare/v0.23.9...v0.24.0) (2023-05-03)
 
 
