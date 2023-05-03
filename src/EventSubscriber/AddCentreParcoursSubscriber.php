@@ -10,20 +10,11 @@
 namespace App\EventSubscriber;
 
 use App\Classes\Mailer;
-use App\Entity\Parcours;
-use App\Entity\User;
 use App\Entity\UserCentre;
-use App\Enums\CentreGestionEnum;
 use App\Events\AddCentreParcoursEvent;
-use App\Events\UserEvent;
-use App\Events\UserRegisterEvent;
-use App\Repository\ComposanteRepository;
-use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\UserCentreRepository;
-use App\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class AddCentreParcoursSubscriber implements EventSubscriberInterface
 {
@@ -42,6 +33,9 @@ class AddCentreParcoursSubscriber implements EventSubscriberInterface
         ];
     }
 
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
     public function onAddCentreParcours(AddCentreParcoursEvent $event): void
     {
         $user = $event->user ?? $event->parcours->getRespParcours();
@@ -78,9 +72,12 @@ class AddCentreParcoursSubscriber implements EventSubscriberInterface
         $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
     }
 
-    public function onRemoveCentreParcours(AddCentreParcoursEvent $event)
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
+    public function onRemoveCentreParcours(AddCentreParcoursEvent $event): void
     {
-        $user = $event->user !== null ? $event->user : $event->parcours->getRespParcours();
+        $user = $event->user ?? $event->parcours->getRespParcours();
         $parcours = $event->parcours;
 
         if (($user === null) || ($parcours === null)) {
@@ -90,7 +87,7 @@ class AddCentreParcoursSubscriber implements EventSubscriberInterface
         //on vérifie s'il est déjà dans le centre
         $existe = $this->userCentreRepository->findOneBy(['user' => $user, 'formation' => $parcours->getFormation()]);
 
-        //si oui, on vérifie s'il n'est pas responsable sur un autre parcours de la formation. Si non on supprimer le centre
+        //Si oui, on vérifie s'il n'est pas responsable sur un autre parcours de la formation. Sinon, on supprime le centre
         if ($existe !== null) {
             $parcour = $this->parcoursRepository->findRespOtherParcoursInFormation($parcours, $user);
             if (count($parcour) === 0) {
@@ -104,10 +101,5 @@ class AddCentreParcoursSubscriber implements EventSubscriberInterface
             ['user' => $user, 'parcours' => $parcours]
         );
         $this->mailer->sendMessage([$user->getEmail()], '[ORéOF] Accès à l\'application');
-    }
-
-    private function sendMail(User $user, Parcours $parcours)
-    {
-
     }
 }

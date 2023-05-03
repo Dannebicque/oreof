@@ -9,12 +9,9 @@
 
 namespace App\Controller\Config;
 
-use App\Entity\Domaine;
 use App\Entity\Role;
-use App\Enums\CentreGestionEnum;
 use App\Enums\PermissionEnum;
 use App\Enums\RoleNiveauEnum;
-use App\Form\DomaineType;
 use App\Form\RoleType;
 use App\Repository\RoleRepository;
 use App\Utils\JsonRequest;

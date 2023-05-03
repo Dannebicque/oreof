@@ -11,7 +11,6 @@ namespace App\Twig;
 
 use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
-use App\Enums\EtatRemplissageEnum;
 use App\Utils\Tools;
 use DateTimeInterface;
 use Twig\Extension\AbstractExtension;

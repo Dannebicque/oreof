@@ -10,7 +10,6 @@
 namespace App\Repository;
 
 use App\Entity\Composante;
-use App\Entity\User;
 use App\Entity\UserCentre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

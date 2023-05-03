@@ -49,9 +49,6 @@ class DataUserSession
         return $composerData['version'];
     }
 
-    /**
-     * @return string|\Stringable|\Symfony\Component\Security\Core\User\UserInterface
-     */
     public function getUser(): UserInterface|Stringable|string
     {
         return $this->user;
