@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.26.0](https://github.com/Dannebicque/oreof/compare/v0.25.0...v0.26.0) (2023-05-04)
+
+
+### Features
+
+* Gestion des MCCC ([15082e7](https://github.com/Dannebicque/oreof/commit/15082e72eacfa6289435e92fc0c7f3f07244c16c))
+
+
+### Bug Fixes
+
+* Retrait du checkbox sur compétences ([3ccc84a](https://github.com/Dannebicque/oreof/commit/3ccc84a23d7292c6a390e1eb633299435527a493))
+* Texte changement EC ([a483c00](https://github.com/Dannebicque/oreof/commit/a483c00abc6defbd83fbe4803a5da16bf7111082))
+
 ## [0.25.0](https://github.com/Dannebicque/oreof/compare/v0.24.0...v0.25.0) (2023-05-03)
 
 
