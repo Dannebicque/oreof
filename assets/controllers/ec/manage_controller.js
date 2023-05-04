@@ -47,14 +47,13 @@ export default class extends Controller {
           const { id } = lignes[i].getElementsByTagName('td')[0].dataset
           this.matieres.push(id)
         }
-        console.log(this.matieres)
       }
     }
   }
 
   async changeNatureEc(event) {
     if (this.editValue === true) {
-      if (!confirm('Attention, le changement de nature d\'EC va supprimer toutes les données associées à l\'EC  (les fiches EC/matière possibles associées, ...). Voulez vous continuer ?')) {
+      if (!confirm('Attention, le changement de la nature d\'EC va supprimer les données préalablement saisies. Voulez vous continuer ?')) {
         event.preventDefault()
         return
       }
@@ -172,7 +171,6 @@ export default class extends Controller {
         return
       }
     }
-    console.log(this.matieres)
     // ajouter le tableau matieres aux données du formulaire
 
     fetch(form.action, {
@@ -214,13 +212,11 @@ export default class extends Controller {
 
   async removeEcEnfant(event) {
     event.preventDefault()
-    console.log(event.params)
     // suppression dans this.matieres
     const index = this.matieres.indexOf(`id_${event.params.fichematiere}`)
     if (index > -1) {
       this.matieres.splice(index, 1)
     }
-    console.log(this.matieres)
 
     if (confirm('Voulez-vous vraiment supprimer cet EC enfant ?')) {
       await fetch(`${this.urlValue}?delete=${event.params.ecenfant}`)
