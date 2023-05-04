@@ -23,7 +23,9 @@ export default class extends Controller {
   }
 
   changeType(event) {
-    this._loadTypeMccc(event.target.value)
+    if (confirm('Attention, vous allez perdre les données saisies. Êtes-vous sûr ?')) {
+      this._loadTypeMccc(event.target.value)
+    }
   }
 
   async _loadTypeMccc(typeMccc) {
@@ -94,7 +96,7 @@ export default class extends Controller {
             <div class="input-group">
                 <input type="text" class="form-control pourcentage"
                        id="pourcentage_s${numEp}_cc"
-                       name="pourcentage_s${numEp}_cc"
+                       name="pourcentage[${numEp}]"
                        data-action="change@mccc--licence#saveDataCci"
                        value=""
                 >
@@ -106,6 +108,7 @@ export default class extends Controller {
         <button type="button" class="btn btn-danger btn-sm" data-action="click->mccc--licence#removeEpreuveCci">
             <i class="fas fa-trash"></i>
         </button>
+        </div>
 `
     document.getElementById('epreuve_cci').appendChild(div)
   }
@@ -114,5 +117,14 @@ export default class extends Controller {
     event.preventDefault()
     const div = event.target.closest('.epreuve')
     div.remove()
+
+    // renuméroter les épreuves
+    let numEp = 1
+    document.querySelectorAll('.epreuve').forEach((element) => {
+      element.querySelector('strong').innerHTML = `Epreuve N°${numEp}`
+      element.querySelector('input').setAttribute('id', `pourcentage_s${numEp}_cc`)
+      element.querySelector('input').setAttribute('name', `pourcentage[${numEp}]`)
+      numEp++
+    })
   }
 }

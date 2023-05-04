@@ -17,9 +17,9 @@
                 <div class="input-group">
                     <input type="text" class="form-control pourcentage"
                            id="pourcentage_s1_cc"
-                           name="pourcentage_s1_cc"
+                           name="pourcentage[1]"
                             {{ stimulus_action('mccc--licence', 'saveDataCci', 'change') }}
-                           value=""
+                           value="{{ mcccs[1].pourcentage ?? '' }}"
                     >
                     <span class="input-group-text">%</span>
                 </div>
@@ -41,9 +41,9 @@
                 <div class="input-group">
                     <input type="text" class="form-control pourcentage"
                            id="pourcentage_s2_cc"
-                           name="pourcentage_s2_cc"
+                           name="pourcentage[2]"
                             {{ stimulus_action('mccc--licence', 'saveDataCci', 'change') }}
-                           value=""
+                           value="{{ mcccs[2].pourcentage ?? '' }}"
                     >
                     <span class="input-group-text">%</span>
                 </div>
@@ -65,14 +65,49 @@
                 <div class="input-group">
                     <input type="text" class="form-control pourcentage"
                            id="pourcentage_s3_cc"
-                           name="pourcentage_s3_cc"
+                           name="pourcentage[3]"
                             {{ stimulus_action('mccc--licence', 'saveDataCci', 'change') }}
-                           value=""
+                           value="{{ mcccs[3].pourcentage ?? '' }}"
                     >
                     <span class="input-group-text">%</span>
                 </div>
             </div>
         </div>
+        {% if mcccs|length > 3 %}
+            {% for i in 4..mcccs|length %}
+                <div class="row epreuve">
+                    <div class="col-4">
+                        <strong>Epreuve N°{{ i }}</strong>
+                    </div>
+                    <div class="col-6">
+                        <label for="pourcentage_s{{ i }}_cc">
+                            Pourcentage
+                            <i class="fal fa-question-circle ms-1"
+                               data-controller="tooltip"
+                               data-tooltip-placement-value="bottom"
+                               aria-label="{{ 'mccc_licence.helps.cc.pourcentage_s1_et.help'|trans({}, 'help') }}"
+                               data-bs-original-title="{{ 'mccc_licence.helps.cc.pourcentage_s1_et.help'|trans({}, 'help') }}"></i>
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control pourcentage"
+                                   id="pourcentage_s{{ i }}_cc"
+                                   name="pourcentage[{{ i }}]"
+                                    {{ stimulus_action('mccc--licence', 'saveDataCci', 'change') }}
+                                   value="{{ mcccs[i].pourcentage ?? '' }}"
+                            >
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        &nbsp;<br>
+                        <button type="button" class="btn btn-danger btn-sm" data-action="click->mccc--licence#removeEpreuveCci">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
     </div>
     <button class="btn btn-primary mb-2"
             {{ stimulus_action('mccc--licence', 'addEpreuveCci', 'click') }}

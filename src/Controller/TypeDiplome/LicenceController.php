@@ -10,10 +10,12 @@
 namespace App\Controller\TypeDiplome;
 
 use App\Entity\ElementConstitutif;
+use App\Repository\ElementConstitutifRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\Source\LicenceTypeDiplome;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,9 +25,12 @@ class LicenceController extends AbstractController
     #[Route('/type_diplome/change/licence/{elementConstitutif}', name: 'type_diplome_licence_change')]
     public function changeType(
         Request $request,
+        EntityManagerInterface $entityManager,
         LicenceTypeDiplome $licenceTypeDiplome,
+        TypeDiplomeRegistry $typeDiplomeRegistry,
         TypeDiplomeRepository $typeDiplomeRepository,
         TypeEpreuveRepository $typeEpreuveRepository,
+        ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif $elementConstitutif
     ) {
         $typeDiplome = $typeDiplomeRepository->findOneBy(['ModeleMcc' => LicenceTypeDiplome::class]);
@@ -36,6 +41,16 @@ class LicenceController extends AbstractController
 
         $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome);
 
+        if ($request->query->get('type') !== $elementConstitutif->getTypeMccc()) {
+            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+            $elementConstitutif->setTypeMccc($request->query->get('type'));
+            $elementConstitutifRepository->save($elementConstitutif, true);
+            $typeD->clearMcccs($elementConstitutif);
+            $typeD->initMcccs($elementConstitutif);
+            $entityManager->flush();
+            $entityManager->refresh($elementConstitutif);
+
+        }
 
         switch ($request->query->get('type')) {
             case 'cc':

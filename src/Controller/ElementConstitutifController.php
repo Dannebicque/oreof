@@ -541,16 +541,19 @@ class ElementConstitutifController extends AbstractController
             'ROLE_FORMATION_EDIT_MY',
             $formation
         )) { //todo: ajouter le workflow...
-//            if ($elementConstitutif->getMcccs()->count() === 0) {
-            // non pas ici, une fois choisi le type
-//                $typeD->initMcccs($elementConstitutif);
-//            }
 
             if ($request->isMethod('POST')) {
                 $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
-                $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
+
+                if ($request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
+
+                    $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
+                    $elementConstitutifRepository->save($elementConstitutif, true);
+                    $typeD->clearMcccs($elementConstitutif);
+                    $typeD->initMcccs($elementConstitutif);
+                }
+
                 $typeD->saveMcccs($elementConstitutif, $request->request);
-                $elementConstitutifRepository->save($elementConstitutif, true);
 
                 return $this->json(true);
             }

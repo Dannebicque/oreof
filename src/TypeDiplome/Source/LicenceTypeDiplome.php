@@ -30,7 +30,6 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
             $this->entityManager->refresh($elementConstitutif);
             $mcccs = $this->getMcccs($elementConstitutif);
         }
-        //todo: supprimer les lignes en trop selon le type...
 
         $isCompleted = null;
 
@@ -63,15 +62,33 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                     $mcccs[1]['cc'] = $mccc;
                     $this->entityManager->persist($mccc);
                 }
-
-                if (array_key_exists('et', $mcccs[1])) {
-                    //supprimer
-                    $this->entityManager->remove($mcccs[1]['et']);
-                }
-
                 break;
             case 'cci':
+                $pourcentages = $request->all()['pourcentage'];
+                //supprimer les MCCC en trop
+                foreach ($mcccs as $mccc) {
+                    if (!array_key_exists($mccc->getNumeroSession(), $pourcentages)) {
+                        $this->entityManager->remove($mccc);
+                    }
+                }
 
+                $this->entityManager->flush();
+                foreach ($pourcentages as $key => $pourcentage) {
+                    if (array_key_exists($key, $mcccs)) {
+                        $mcccs[$key]->setPourcentage((float)$pourcentage);
+                    } else {
+                        $mccc = new Mccc();
+                        $mccc->setEc($elementConstitutif);
+                        $mccc->setLibelle('Contrôle continu intégral ' . $key);
+                        $mccc->setPourcentage((float)$pourcentage);
+                        $mccc->setNbEpreuves(1);
+                        $mccc->setNumeroSession((int)$key);
+                        $mccc->setControleContinu(true);
+                        $mccc->setExamenTerminal(false);
+                        $mcccs[$key] = $mccc;
+                        $this->entityManager->persist($mccc);
+                    }
+                }
                 break;
             case 'cc_ct':
                 //cas classique
@@ -188,6 +205,35 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 $this->entityManager->persist($mccc);
                 break;
             case 'cci':
+                $mccc = new Mccc();
+                $mccc->setEc($elementConstitutif);
+                $mccc->setLibelle('Contrôle continu intégral 1');
+                $mccc->setControleContinu(true);
+                $mccc->setExamenTerminal(false);
+                $mccc->setNumeroSession(1);
+                $mccc->setNbEpreuves(1);
+                $mccc->setPourcentage(0);
+                $this->entityManager->persist($mccc);
+
+                $mccc = new Mccc();
+                $mccc->setEc($elementConstitutif);
+                $mccc->setLibelle('Contrôle continu intégral 2');
+                $mccc->setControleContinu(true);
+                $mccc->setExamenTerminal(false);
+                $mccc->setNumeroSession(2);
+                $mccc->setNbEpreuves(1);
+                $mccc->setPourcentage(0);
+                $this->entityManager->persist($mccc);
+
+                $mccc = new Mccc();
+                $mccc->setEc($elementConstitutif);
+                $mccc->setLibelle('Contrôle continu intégral 3');
+                $mccc->setControleContinu(true);
+                $mccc->setExamenTerminal(false);
+                $mccc->setNumeroSession(3);
+                $mccc->setNbEpreuves(1);
+                $mccc->setPourcentage(0);
+                $this->entityManager->persist($mccc);
 
                 break;
             case 'cc_ct':
@@ -219,8 +265,6 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 $mccc->setControleContinu(false);
                 $mccc->setExamenTerminal(true);
                 $this->entityManager->persist($mccc);
-
-                $this->entityManager->flush();
                 break;
             case 'ct':
                 //2 types d'épreuves à sauvegarder
@@ -254,16 +298,31 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         $mcccs = $elementConstitutif->getMcccs();
         $tabMcccs = [];
 
-        foreach ($mcccs as $mccc) {
-            if ($mccc->isSecondeChance()) {
-                $tabMcccs[3]['chance'] = $mccc;
-            } elseif ($mccc->isControleContinu() === true && $mccc->isExamenTerminal() === false) {
-                $tabMcccs[$mccc->getNumeroSession()]['cc'] = $mccc;
-            } elseif ($mccc->isControleContinu() === false && $mccc->isExamenTerminal() === true) {
-                $tabMcccs[$mccc->getNumeroSession()]['et'] = $mccc;
+        if ($elementConstitutif->getTypeMccc() === 'cci') {
+            foreach ($mcccs as $mccc) {
+                $tabMcccs[$mccc->getNumeroSession()] = $mccc;
+            }
+        } else {
+            foreach ($mcccs as $mccc) {
+                if ($mccc->isSecondeChance()) {
+                    $tabMcccs[3]['chance'] = $mccc;
+                } elseif ($mccc->isControleContinu() === true && $mccc->isExamenTerminal() === false) {
+                    $tabMcccs[$mccc->getNumeroSession()]['cc'] = $mccc;
+                } elseif ($mccc->isControleContinu() === false && $mccc->isExamenTerminal() === true) {
+                    $tabMcccs[$mccc->getNumeroSession()]['et'] = $mccc;
+                }
             }
         }
 
         return $tabMcccs;
+    }
+
+    public function clearMcccs(ElementConstitutif $elementConstitutif): void
+    {
+        $mcccs = $elementConstitutif->getMcccs();
+        foreach ($mcccs as $mccc) {
+            $this->entityManager->remove($mccc);
+        }
+        $this->entityManager->flush();
     }
 }
