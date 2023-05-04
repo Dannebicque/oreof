@@ -29,7 +29,6 @@ export default class extends Controller {
   }
 
   refreshStep() {
-    console.log('refresh step')
     this._loadStep(1)
   }
 

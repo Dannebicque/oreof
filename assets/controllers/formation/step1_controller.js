@@ -32,7 +32,6 @@ export default class extends Controller {
       action: 'textarea',
       value: event.target.value,
     }).then((data) => {
-      console.log(data)
       document.getElementById('synthese_formation_libelle').innerText = data.display
       document.getElementById('synthese_formation_libelle_dd').innerText = data.display
     })
