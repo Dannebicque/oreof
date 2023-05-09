@@ -144,7 +144,7 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByUeSubOrdre(?int $ordreDestination,  ElementConstitutif $elementConstitutif): ?array
+    public function findByUeSubOrdre(?int $ordreDestination, ElementConstitutif $elementConstitutif): ?array
     {
         return $this->createQueryBuilder('e')
             ->andWhere('e.ecParent = :ec')

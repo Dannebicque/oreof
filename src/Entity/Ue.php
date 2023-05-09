@@ -53,11 +53,19 @@ class Ue
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?UeMutualisable $ueRaccrochee = null;
 
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ueEnfants')]
+    private ?self $ueParent = null;
+
+    #[ORM\OneToMany(mappedBy: 'ueParent', targetEntity: self::class)]
+    #[ORM\OrderBy(['ordre' => 'ASC'])]
+    private Collection $ueEnfants;
+
     public function __construct()
     {
         $this->ecUes = new ArrayCollection();
         $this->elementConstitutifs = new ArrayCollection();
         $this->ueMutualisables = new ArrayCollection();
+        $this->ueEnfants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -91,10 +99,10 @@ class Ue
 
     public function display(): string
     {
-        if ($this->subOrdre === null || $this->subOrdre === 0) {
+        if ($this->ueParent === null) {
             $ordreue = $this->ordre;
         } else {
-            $ordreue = $this->ordre . '.' . chr($this->subOrdre + 64);
+            $ordreue = $this->ueParent->ordre . '.' . chr($this->ordre + 64);
         }
 
         return 'UE ' . $this->getSemestre()?->getOrdre() . '.' . $ordreue;
@@ -102,7 +110,11 @@ class Ue
 
     public function displayBouton(): string
     {
-        $ordreue = $this->ordre;
+        if ($this->ueParent === null) {
+            $ordreue = $this->ordre;
+        } else {
+            $ordreue = $this->ueParent->ordre . '.' . chr($this->ordre + 64);
+        }
         return 'UE ' . $this->getSemestre()?->getOrdre() . '.' . $ordreue;
     }
 
@@ -255,6 +267,48 @@ class Ue
     public function setUeRaccrochee(?UeMutualisable $ueRaccrochee): self
     {
         $this->ueRaccrochee = $ueRaccrochee;
+
+        return $this;
+    }
+
+    public function getUeParent(): ?self
+    {
+        return $this->ueParent;
+    }
+
+    public function setUeParent(?self $ueParent): self
+    {
+        $this->ueParent = $ueParent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ue>
+     */
+    public function getUeEnfants(): Collection
+    {
+        return $this->ueEnfants;
+    }
+
+    public function addUeEnfant(Ue $ueEnfant): self
+    {
+        if (!$this->ueEnfants->contains($ueEnfant)) {
+            $this->ueEnfants->add($ueEnfant);
+            $ueEnfant->setUeParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUeEnfant(Ue $ueEnfant): self
+    {
+        if ($this->ueEnfants->removeElement($ueEnfant)) {
+            // set the owning side to null (unless already changed)
+            if ($ueEnfant->getUeParent() === $this) {
+                $ueEnfant->setUeParent(null);
+            }
+        }
 
         return $this;
     }

@@ -47,17 +47,6 @@ class UeRepository extends ServiceEntityRepository
         }
     }
 
-    public function findBySemestreOrdre(?int $ordreDestination, ?Semestre $getSemestre): ?array
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.semestre = :semestre')
-            ->andWhere('u.ordre = :ordre')
-            ->setParameter('semestre', $getSemestre)
-            ->setParameter('ordre', $ordreDestination)
-            ->getQuery()
-            ->getResult();
-    }
-
     public function findBySemestreSubOrdre(?int $ordreDestination, ?Semestre $getSemestre, int $ordreUe): ?Ue
     {
         return $this->createQueryBuilder('u')
@@ -79,5 +68,28 @@ class UeRepository extends ServiceEntityRepository
             ->setParameter('semestre', $semestre)
             ->getQuery()
             ->getSingleScalarResult() ?? 0;
+    }
+
+    public function findByUeOrdre(?int $ordreDestination, Semestre $semestre): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.semestre = :semestre')
+            ->andWhere('u.ordre = :ordre')
+            ->andWhere('u.ueParent IS NULL')
+            ->setParameter('semestre', $semestre)
+            ->setParameter('ordre', $ordreDestination)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByUeSubOrdre(?int $ordreDestination, ?Ue $ueParent): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.ueParent = :ue')
+            ->andWhere('u.ordre = :ordre')
+            ->setParameter('ue', $ueParent)
+            ->setParameter('ordre', $ordreDestination)
+            ->getQuery()
+            ->getResult();
     }
 }

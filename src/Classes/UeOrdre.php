@@ -9,6 +9,8 @@
 
 namespace App\Classes;
 
+use App\Entity\ElementConstitutif;
+use App\Entity\Semestre;
 use App\Entity\Ue;
 use App\Repository\UeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,8 +18,8 @@ use Doctrine\ORM\EntityManagerInterface;
 class UeOrdre
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private UeRepository $ueRepository
+        private readonly EntityManagerInterface $entityManager,
+        private readonly UeRepository           $ueRepository
     ) {
     }
 
@@ -36,8 +38,11 @@ class UeOrdre
             $ordreDestination = $ordreInitial + 1;
         }
 
-        //récupère toutes les ressources à déplacer
-        return $this->inverseUe($ordreInitial, $ordreDestination, $ue);
+        if ($ue->getUeParent() === null) {
+            return $this->inverseUe($ordreInitial, $ordreDestination, $ue, $ue->getSemestre());
+        }
+
+        return $this->inverseUeEnfant($ordreInitial, $ordreDestination, $ue);
     }
 
     public function deplacerSubUe(Ue $ue, string $sens): bool
@@ -63,26 +68,42 @@ class UeOrdre
         ?int $ordreInitial,
         ?int $ordreDestination,
         Ue $ue,
+        Semestre $semestre
     ): bool {
-        // on inverse les sous-ordres
+        $ues = $this->ueRepository->findByUeOrdre($ordreDestination, $semestre);
+
         $ue->setOrdre($ordreDestination);
-        $ues = $this->ueRepository->findBySemestreOrdre($ordreDestination, $ue->getSemestre());
+
         foreach ($ues as $u) {
             $u->setOrdre($ordreInitial);
-            foreach ($u->getElementConstitutifs() as $ec) {
-                $ec->genereCode();
-            }
-        }
-
-        //mise à jour des EC de l'UE de destination
-        foreach ($ue->getElementConstitutifs() as $ec) {
-            $ec->genereCode();
         }
 
         $this->entityManager->flush();
 
         return true;
     }
+
+    private function inverseUeEnfant(
+        ?int $ordreInitial,
+        ?int $ordreDestination,
+        Ue $ue,
+    ): bool {
+        $ues = $this->ueRepository->findByUeSubOrdre(
+            $ordreDestination,
+            $ue->getUeParent()
+        );
+
+        $ue->setOrdre($ordreDestination);
+
+        foreach ($ues as $u) {
+            $u->setOrdre($ordreInitial);
+        }
+
+        $this->entityManager->flush();
+
+        return true;
+    }
+
 
     private function inverseSubOrdreUe(
         ?int $ordreInitial,

@@ -101,10 +101,29 @@ class UeController extends AbstractController
                 $typeUeRepository->save($tu, true);
                 $ue->setTypeUe($tu);
             }
-
-            //todo: gérer le cas ou la nature d'UE est multiple ????
-
             $ueRepository->save($ue, true);
+
+            if ($ue->getNatureUeEc()?->isChoix() === true) {
+                //on ajoute par défaut deux UE enfants
+                $ueEnfant1 = new Ue();
+                $ueEnfant1->setSemestre($semestre);
+                $ueEnfant1->setNatureUeEc($ue->getNatureUeEc());
+                $ueEnfant1->setOrdre(1);
+                $ueEnfant1->setSubOrdre(1);
+                $ueEnfant1->setUeParent($ue);
+                $ueEnfant1->setLibelle('Choix 1');
+                $ueRepository->save($ueEnfant1, true);
+
+                $ueEnfant2 = new Ue();
+                $ueEnfant2->setSemestre($semestre);
+                $ueEnfant2->setNatureUeEc($ue->getNatureUeEc());
+                $ueEnfant2->setOrdre(2);
+                $ueEnfant2->setSubOrdre(2);
+                $ueEnfant2->setUeParent($ue);
+                $ueEnfant2->setLibelle('Choix 2');
+                $ueRepository->save($ueEnfant2, true);
+            }
+
 
             return $this->json(true);
         }
