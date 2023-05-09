@@ -92,4 +92,29 @@ class UeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findBySemestreSubOrdreAfter(?int $ordreDestination, ?Semestre $getSemestre, Ue $ueParent): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.semestre = :semestre')
+            ->andWhere('u.ueParent = :ueParent')
+            ->andWhere('u.ordre > :ordre')
+            ->setParameter('semestre', $getSemestre)
+            ->setParameter('ordre', $ordreDestination)
+            ->setParameter('ueParent', $ueParent)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findBySemestreOrdreAfter(?int $ordreDestination, ?Semestre $getSemestre): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.semestre = :semestre')
+            ->andWhere('u.ordre > :ordre')
+            ->andWhere('u.ueParent IS NULL')
+            ->setParameter('semestre', $getSemestre)
+            ->setParameter('ordre', $ordreDestination)
+            ->getQuery()
+            ->getResult();
+    }
 }

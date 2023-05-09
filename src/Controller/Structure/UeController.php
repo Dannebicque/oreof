@@ -18,6 +18,7 @@ use App\Entity\Ue;
 use App\Entity\UeMutualisable;
 use App\Form\UeType;
 use App\Repository\ComposanteRepository;
+use App\Repository\ElementConstitutifRepository;
 use App\Repository\FormationRepository;
 use App\Repository\NatureUeEcRepository;
 use App\Repository\ParcoursRepository;
@@ -266,16 +267,29 @@ class UeController extends AbstractController
      */
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(
+        UeOrdre $ueOrdre,
         Request $request,
         Ue $ue,
+        ElementConstitutifRepository $elementConstitutifRepository,
         UeRepository $ueRepository
     ): Response {
         if ($this->isCsrfTokenValid(
             'delete' . $ue->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf')
         )) {
-            //todo: supprimer les EC
+
+            foreach ($ue->getElementConstitutifs() as $ec) {
+                $ue->removeElementConstitutif($ec);
+                $elementConstitutifRepository->remove($ec, true);
+            }
+
             $ueRepository->remove($ue, true);
+
+            if ($ue->getUeParent() !== null) {
+                $ueOrdre->renumeroterSubUE($ue->getOrdre(), $ue->getUeParent(), $ue->getSemestre());
+            } else {
+                $ueOrdre->renumeroterUE($ue->getOrdre(), $ue->getSemestre());
+            }
 
             return $this->json(true);
         }

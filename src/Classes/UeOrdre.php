@@ -129,4 +129,34 @@ class UeOrdre
 
         return true;
     }
+
+    public function renumeroterSubUE(?int $ordre, Ue $ueParent, Semestre $semestre): void
+    {
+        $ues = $this->ueRepository->findBySemestreSubOrdreAfter($ordre, $semestre, $ueParent);
+
+        if ($ues !== null) {
+            $i = $ordre;
+            foreach ($ues as $ue) {
+                $ue->setOrdre($i);
+                ++$i;
+            }
+        }
+
+        $this->entityManager->flush();
+    }
+
+    public function renumeroterUE(?int $ordre, ?Semestre $semestre)
+    {
+        $ues = $this->ueRepository->findBySemestreOrdreAfter($ordre, $semestre);
+
+        if ($ues !== null) {
+            $i = $ordre;
+            foreach ($ues as $ue) {
+                $ue->setOrdre($i);
+                ++$i;
+            }
+        }
+
+        $this->entityManager->flush();
+    }
 }
