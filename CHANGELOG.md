@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.26.1](https://github.com/Dannebicque/oreof/compare/v0.26.0...v0.26.1) (2023-05-09)
+
+
+### Features
+
+* Gestion des UE "parents"/"Enfant" ([95c4e91](https://github.com/Dannebicque/oreof/commit/95c4e9100d513ed2c5e44778964bbc064eec0625))
+* Suppression Ue et renumérotation ([08c3b0d](https://github.com/Dannebicque/oreof/commit/08c3b0d03c5da8020002e960f9c3127d97fea4e8))
+
 ## [0.26.0](https://github.com/Dannebicque/oreof/compare/v0.25.0...v0.26.0) (2023-05-04)
 
 
