@@ -38,6 +38,9 @@ class Semestre
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: SemestreMutualisable::class)]
     private Collection $semestreMutualisables;
 
+    #[ORM\ManyToOne(inversedBy: 'semestres')]
+    private ?SemestreMutualisable $semestreRaccroche = null;
+
     public function __construct()
     {
         $this->ues = new ArrayCollection();
@@ -182,6 +185,18 @@ class Semestre
                 $semestreMutualisable->setSemestre(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSemestreRaccroche(): ?SemestreMutualisable
+    {
+        return $this->semestreRaccroche;
+    }
+
+    public function setSemestreRaccroche(?SemestreMutualisable $semestreRaccroche): self
+    {
+        $this->semestreRaccroche = $semestreRaccroche;
 
         return $this;
     }

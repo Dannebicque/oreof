@@ -15,7 +15,6 @@
                 class="form-select"
         >
             <option value="">Choisir une UE mutualisée</option>
-            <option value="null">Ne plus raccrocher cette UE (supprimer le lien entre les deux UE)</option>
             {% for u in ues %}
                 <option value="{{ u.id }}"
                 {% if ue.ueRaccrochee != null and  ue.ueRaccrochee.id == u.id %}selected{% endif %}
@@ -26,4 +25,9 @@
     <button class="btn btn-outline-success" {{ stimulus_action('ue--raccrocher', 'valideReutilise') }}>
         {{ 'ue.raccrocher.bouton'|trans({}, 'form') }}
     </button>
+    {% if ue.ueRaccrochee != null %}
+    <button class="btn text-danger" {{ stimulus_action('ue--raccrocher', 'valideDecrocher') }}>
+        {{ 'ue.decrocher.bouton'|trans({}, 'form') }}
+    </button>
+    {% endif %}
 </div>

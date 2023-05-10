@@ -39,7 +39,7 @@ class SemestreController extends AbstractController
     ]
     public function detailParcours(
         SemestreParcoursRepository $semestreRepository,
-        Parcours $parcours
+        Parcours                   $parcours
     ): Response {
         $semestres = $semestreRepository->findBy(['parcours' => $parcours]);//todo: filtrer selon droits // ajouter le tronc commun
 
@@ -54,8 +54,8 @@ class SemestreController extends AbstractController
     ]
     public function mutualiser(
         ComposanteRepository $composanteRepository,
-        Semestre $semestre,
-        Parcours $parcours
+        Semestre             $semestre,
+        Parcours             $parcours
     ): Response {
         return $this->render('structure/semestre/_mutualiser.html.twig', [
             'semestre' => $semestre,
@@ -69,16 +69,32 @@ class SemestreController extends AbstractController
         'DELETE'
     ])]
     public function mutualiseAjax(
-        EntityManagerInterface $entityManager,
-        Request $request,
-        FormationRepository $formationRepository,
-        ParcoursRepository $parcoursRepository,
+        EntityManagerInterface         $entityManager,
+        Request                        $request,
+        FormationRepository            $formationRepository,
+        ParcoursRepository             $parcoursRepository,
         SemestreMutualisableRepository $semestreMutualisableRepository,
-        Semestre $semestre,
+        Semestre                       $semestre,
     ): Response {
         $data = JsonRequest::getFromRequest($request);
         $t = [];
         switch ($data['field']) {
+            case 'decrocher':
+                $semestre->setSemestreRaccroche(null);
+                $entityManager->flush();
+                return $this->json(true);
+            case 'raccrocher':
+                $uem = $semestreMutualisableRepository->find($data['value']);
+                if ($uem !== null) {
+                    $semestre->setSemestreRaccroche($uem);
+                    $entityManager->flush();
+                    return $this->json(true);
+                }
+
+                return $this->json(
+                    ['error' => 'Semestre non trouvé'],
+                    500
+                );
             case 'liste':
                 return $this->render('structure/semestre/_liste_mutualise.html.twig', [
                     'semestres' => $semestreMutualisableRepository->findBy(['semestre' => $semestre]),
@@ -137,12 +153,15 @@ class SemestreController extends AbstractController
         Route('/raccrocher/{semestre}/{parcours}', name: 'raccrocher')
     ]
     public function raccrocher(
-        SemestreParcoursRepository $semestreRepository,
-        Semestre $semestre,
-        Parcours $parcours
+        SemestreMutualisableRepository $semestreMutualisableRepository,
+        Semestre                   $semestre,
+        Parcours                   $parcours
     ): Response {
+        $semestres = $semestreMutualisableRepository->findBy(['parcours' => $parcours]);
+
         return $this->render('structure/semestre/_raccrocher.html.twig', [
             'semestre' => $semestre,
+            'semestres' => $semestres,
             'parcours' => $parcours
         ]);
     }
@@ -150,9 +169,9 @@ class SemestreController extends AbstractController
     #[Route('/deplacer/{semestre}/{parcours}/{sens}', name: 'deplacer', methods: ['GET'])]
     public function deplacer(
         SemestreOrdre $semestreOrdre,
-        Semestre $semestre,
-        Parcours $parcours,
-        string $sens
+        Semestre      $semestre,
+        Parcours      $parcours,
+        string        $sens
     ): Response {
         $semestreOrdre->deplacerSemestre($semestre, $parcours, $sens);
 
@@ -163,10 +182,10 @@ class SemestreController extends AbstractController
         Route('/data/{semestre}/{parcours}', name: 'data')
     ]
     public function data(
-        Request $request,
+        Request                    $request,
         SemestreParcoursRepository $semestreRepository,
-        Semestre $semestre,
-        Parcours $parcours
+        Semestre                   $semestre,
+        Parcours                   $parcours
     ): Response {
         $data = JsonRequest::getFromRequest($request);
 

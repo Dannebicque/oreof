@@ -46,7 +46,8 @@ class UeController extends AbstractController
         NatureUeEcRepository $natureUeEcRepository,
         Semestre             $semestre,
         Parcours             $parcours
-    ): Response {
+    ): Response
+    {
         $ues = $ueRepository->findBy(['semestre' => $semestre], ['ordre' => 'ASC']);
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
@@ -73,7 +74,8 @@ class UeController extends AbstractController
         UeRepository         $ueRepository,
         Semestre             $semestre,
         Parcours             $parcours
-    ): Response {
+    ): Response
+    {
         $ue = new Ue();
         $ue->setSemestre($semestre);
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
@@ -141,7 +143,8 @@ class UeController extends AbstractController
         UeRepository     $ueRepository,
         TypeUeRepository $typeUeRepository,
         Ue               $ue,
-    ): Response {
+    ): Response
+    {
         $typeUe = JsonRequest::getValueFromRequest($request, 'value');
 
         if ($typeUe !== '') {
@@ -165,7 +168,8 @@ class UeController extends AbstractController
         UeRepository         $ueRepository,
         NatureUeEcRepository $natureUeEcRepository,
         Ue                   $ue,
-    ): Response {
+    ): Response
+    {
         $idNatureUe = JsonRequest::getValueFromRequest($request, 'value');
         if ($idNatureUe !== '') {
             $natureUe = $natureUeEcRepository->find($idNatureUe);
@@ -192,7 +196,8 @@ class UeController extends AbstractController
         UeOrdre $ueOrdre,
         Ue      $ue,
         string  $sens
-    ): Response {
+    ): Response
+    {
         $ueOrdre->deplacerUe($ue, $sens);
 
         return $this->json(true);
@@ -203,7 +208,8 @@ class UeController extends AbstractController
         UeOrdre $ueOrdre,
         Ue      $ue,
         string  $sens
-    ): Response {
+    ): Response
+    {
         $ueOrdre->deplacerSubUe($ue, $sens);
 
         return $this->json(true);
@@ -217,7 +223,8 @@ class UeController extends AbstractController
         Ue                   $ue,
         Parcours             $parcours,
         UeRepository         $ueRepository
-    ): Response {
+    ): Response
+    {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         if ($typeDiplome === null) {
@@ -270,7 +277,8 @@ class UeController extends AbstractController
         Ue                           $ue,
         ElementConstitutifRepository $elementConstitutifRepository,
         UeRepository                 $ueRepository
-    ): Response {
+    ): Response
+    {
         if ($this->isCsrfTokenValid(
             'delete' . $ue->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf')
@@ -306,7 +314,8 @@ class UeController extends AbstractController
         ComposanteRepository $composanteRepository,
         Ue                   $ue,
         Semestre             $semestre
-    ): Response {
+    ): Response
+    {
         return $this->render('structure/ue/_mutualiser.html.twig', [
             'semestre' => $semestre,
             'ue' => $ue,
@@ -325,17 +334,16 @@ class UeController extends AbstractController
         ParcoursRepository       $parcoursRepository,
         UeMutualisableRepository $ueMutualisableRepository,
         Ue                       $ue,
-    ): Response {
+    ): Response
+    {
         $data = JsonRequest::getFromRequest($request);
         $t = [];
         switch ($data['field']) {
+            case 'decrocher':
+                $ue->setUeRaccrochee(null);
+                $entityManager->flush();
+                return $this->json(true);
             case 'raccrocher':
-                if ($data['value'] === 'null') {
-                    $ue->setUeRaccrochee(null);
-                    $entityManager->flush();
-                    return $this->json(true);
-                }
-
                 $uem = $ueMutualisableRepository->find($data['value']);
                 if ($uem !== null) {
                     $ue->setUeRaccrochee($uem);
@@ -408,7 +416,8 @@ class UeController extends AbstractController
         UeMutualisableRepository $ueMutualisableRepository,
         Parcours                 $parcours,
         Ue                       $ue
-    ): Response {
+    ): Response
+    {
         $ues = $ueMutualisableRepository->findBy(['parcours' => $parcours]);
 
 

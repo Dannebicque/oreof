@@ -44,7 +44,13 @@
                                 <div class="row g-0 h-100 align-content-center">
                                     <div class="col-12 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Semestre</div>
-                                        {{ semestre.semestre.display }}
+                                        <p>{{ semestre.semestre.display }}
+                                        {% if semestre.semestre.semestreRaccroche != null %}
+                                        <i class="fal fa-link"
+                                           data-controller="tooltip"
+                                           data-tooltip-placement-value="bottom"
+                                           title="Raccrochée au semestre {{ semestre.semestre
+                                           .semestreRaccroche.semestre.display }}"></i>{% endif %}</p>
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>

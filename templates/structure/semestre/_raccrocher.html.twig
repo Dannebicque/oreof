@@ -1,17 +1,33 @@
-<div class="mb-1">
-    <label class="form-label" for="raccrocher">
-        {{ 'semestre.raccrocher.label'|trans({}, 'form') }}
-        <span class="required"></span>
-        <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'semestre.raccrocher.helps'|trans({}, 'help') }}"></i>
-    </label>
-    <select id="raccrocher"
-            name="raccrocher"
-            required="required"
-            class="form-select"
-    >
-        ...
-    </select>
+<div {{ stimulus_controller('semestre--raccrocher', {
+    url: path('structure_semestre_mutualise_add_ajax', {semestre:semestre.id})
+}) }}
+        data-action="semestre--raccrocher:modalHide@window->base#modalHide"
+>
+    <div class="mb-1">
+        <label class="form-label" for="raccrocher">
+            {{ 'semestre.raccrocher.label'|trans({}, 'form') }}
+            <span class="required"></span>
+            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'semestre.raccrocher.helps'|trans({}, 'help') }}"></i>
+        </label>
+        <select id="raccrocher"
+                name="raccrocher"
+                required="required"
+                class="form-select"
+        >
+            <option value="">Choisir un semestre mutualisé</option>
+            {% for sem in semestres %}
+                <option value="{{ sem.id }}"
+                        {% if semestre.semestreRaccroche != null and  semestre.semestreRaccroche.id == sem.id %}selected{% endif %}
+                >{{ sem.semestre.display }} - {{ sem.parcours.libelle }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button class="btn btn-outline-success" {{ stimulus_action('semestre--raccrocher', 'valideReutilise') }}>
+        {{ 'semestre.raccrocher.bouton'|trans({}, 'form') }}
+    </button>
+    {% if semestre.semestreRaccroche != null %}
+        <button class="btn text-danger" {{ stimulus_action('semestre--raccrocher', 'valideDecrocher') }}>
+            {{ 'semestre.decrocher.bouton'|trans({}, 'form') }}
+        </button>
+    {% endif %}
 </div>
-<button class="btn btn-outline-success" {{ stimulus_action('semestre', 'valideReutilise') }}>
-    {{ 'semestre.raccrocher.bouton'|trans({}, 'form') }}
-</button>

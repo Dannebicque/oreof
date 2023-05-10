@@ -18,7 +18,7 @@ export default class extends Controller {
     event.preventDefault()
     const { value } = document.getElementById('raccrocher')
     if (value !== '') {
-      if (confirm('Voulez-vous vraiment réutiliser cette UE ?')) {
+      if (confirm('Voulez-vous vraiment réutiliser ce semestre ?')) {
         const body = {
           method: 'POST',
           body: JSON.stringify({
@@ -33,14 +33,14 @@ export default class extends Controller {
         })
       }
     } else {
-      callOut('Vous devez choisir une UE dans la liste', 'warning')
+      callOut('Vous devez choisir un semestre dans la liste', 'warning')
       document.getElementById('raccrocher').classList.add('is-invalid')
     }
   }
 
   valideDecrocher(event) {
     event.preventDefault()
-    if (confirm('Voulez-vous vraiment ne plus utiliser cette UE ?')) {
+    if (confirm('Voulez-vous vraiment ne plus utiliser ce semestre ?')) {
       const body = {
         method: 'POST',
         body: JSON.stringify({
@@ -48,7 +48,7 @@ export default class extends Controller {
         }),
       }
       fetch(this.urlValue, body).then(() => {
-        callOut('L\'UE n\'est plus accrochée à une autre UE', 'success')
+        callOut('Le semestre n\'est plus accroché à un autre semestre', 'success')
         // dispatch modal close
         this.dispatch('modalHide')
       })

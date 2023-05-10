@@ -24,9 +24,13 @@ class SemestreMutualisable
     #[ORM\OneToMany(mappedBy: 'semestreRaccroche', targetEntity: SemestreParcours::class)]
     private Collection $semestreParcours;
 
+    #[ORM\OneToMany(mappedBy: 'semestreRaccroche', targetEntity: Semestre::class)]
+    private Collection $semestres;
+
     public function __construct()
     {
         $this->semestreParcours = new ArrayCollection();
+        $this->semestres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,6 +86,36 @@ class SemestreMutualisable
             // set the owning side to null (unless already changed)
             if ($semestreParcour->getSemestreRaccroche() === $this) {
                 $semestreParcour->setSemestreRaccroche(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Semestre>
+     */
+    public function getSemestres(): Collection
+    {
+        return $this->semestres;
+    }
+
+    public function addSemestre(Semestre $semestre): self
+    {
+        if (!$this->semestres->contains($semestre)) {
+            $this->semestres->add($semestre);
+            $semestre->setSemestreRaccroche($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSemestre(Semestre $semestre): self
+    {
+        if ($this->semestres->removeElement($semestre)) {
+            // set the owning side to null (unless already changed)
+            if ($semestre->getSemestreRaccroche() === $this) {
+                $semestre->setSemestreRaccroche(null);
             }
         }
 
