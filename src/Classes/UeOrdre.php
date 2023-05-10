@@ -47,8 +47,7 @@ class UeOrdre
 
     public function deplacerSubUe(Ue $ue, string $sens): bool
     {
-        //modifie l'ordre de la ressource
-        $ordreInitial = $ue->getSubOrdre();
+        $ordreInitial = $ue->getOrdre();
 
         if ($ordreInitial === 1 && $sens === 'up') {
             return false;
@@ -65,9 +64,9 @@ class UeOrdre
     }
 
     private function inverseUe(
-        ?int $ordreInitial,
-        ?int $ordreDestination,
-        Ue $ue,
+        ?int     $ordreInitial,
+        ?int     $ordreDestination,
+        Ue       $ue,
         Semestre $semestre
     ): bool {
         $ues = $this->ueRepository->findByUeOrdre($ordreDestination, $semestre);
@@ -86,7 +85,7 @@ class UeOrdre
     private function inverseUeEnfant(
         ?int $ordreInitial,
         ?int $ordreDestination,
-        Ue $ue,
+        Ue   $ue,
     ): bool {
         $ues = $this->ueRepository->findByUeSubOrdre(
             $ordreDestination,
@@ -108,21 +107,14 @@ class UeOrdre
     private function inverseSubOrdreUe(
         ?int $ordreInitial,
         ?int $ordreDestination,
-        Ue $ue,
+        Ue   $ue,
     ): bool {
         // on inverse les sous-ordres
-        $ues = $this->ueRepository->findBySemestreSubOrdre($ordreDestination, $ue->getSemestre(), $ue->getOrdre());
-        $ue->setSubOrdre($ordreDestination);
+        $ues = $this->ueRepository->findByUeSubOrdre($ordreDestination, $ue->getUeParent());
+        $ue->setOrdre($ordreDestination);
 
         if ($ues !== null) {
-            $ues->setSubOrdre($ordreInitial);
-            foreach ($ues->getElementConstitutifs() as $ec) {
-                $ec->genereCode();
-            }
-        }
-
-        foreach ($ue->getElementConstitutifs() as $ec) {
-            $ec->genereCode();
+            $ues->setOrdre($ordreInitial);
         }
 
         $this->entityManager->flush();

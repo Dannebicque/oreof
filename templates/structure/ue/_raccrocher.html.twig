@@ -15,8 +15,10 @@
                 class="form-select"
         >
             <option value="">Choisir une UE mutualisée</option>
-            {% for ue in ues %}
-                <option value="{{ ue.id }}">{{ ue.ue.display }} - {{ ue.ue.libelle }}</option>
+            {% for u in ues %}
+                <option value="{{ u.id }}"
+                {% if ue.ueRaccrochee != null and  ue.ueRaccrochee.id == u.id %}selected{% endif %}
+                >{{ u.ue.display }} - {{ u.ue.libelle }}</option>
             {% endfor %}
         </select>
     </div>

@@ -9,6 +9,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Formation;
 use App\Entity\TypeDiplome;
 use App\Entity\TypeEc;
 use App\TypeDiplome\Source\TypeDiplomeInterface;
@@ -59,6 +60,18 @@ class TypeEcRepository extends ServiceEntityRepository
             ->join('t.typeDiplomes', 'td')
             ->where('td.id = :typeDiplome')
             ->setParameter('typeDiplome', $typeDiplome->getId())
+            ->orderBy('t.libelle', 'ASC');
+    }
+
+    public function findByTypeDiplomeAndFormation(TypeDiplome $typeDiplome, Formation $formation)
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.typeDiplomes', 'td')
+            ->where('td.id = :typeDiplome')
+            ->andWhere('t.formation = :formation')
+            ->orWhere('t.formation IS NULL')
+            ->setParameter('typeDiplome', $typeDiplome->getId())
+            ->setParameter('formation', $formation)
             ->orderBy('t.libelle', 'ASC');
     }
 

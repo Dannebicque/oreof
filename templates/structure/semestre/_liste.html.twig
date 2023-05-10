@@ -180,7 +180,8 @@
                             <div class="row" style="margin-left:1px">
                                 <div class="col-12" {{ stimulus_target('structure--semestre', 'detail') }}
                                      data-action="base:refreshListe@window->structure--semestre#refreshListe
-                                     structure--ue:refreshListe@window->structure--semestre#refreshListe"
+                                     structure--ue:refreshListe@window->structure--semestre#refreshListe
+                                     ue--raccrocher:modalHide@window->structure--semestre#refreshListe"
                                      data-structure--semestre-semestre-param="{{ semestre.semestre.id }}"
                                      data-structure--semestre-url-param="{{ path
                                          ('structure_ue_detail_semestre', {semestre:semestre.semestre.id, parcours: parcours.id}) }}"

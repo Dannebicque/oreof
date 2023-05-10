@@ -8,7 +8,8 @@
            aria-label="{{ 'ec_manage.helps.fiche_matieres_libelle_choix.help'|trans({}, 'help') }}"
            data-bs-original-title="{{ 'ec_manage.helps.fiche_matieres_libelle_choix.help'|trans({}, 'help') }}"></i>
     </label>
-    <textarea maxlength="255" type="text" id="ficheMatiereLibre" name="ficheMatiereLibre" class="form-control"></textarea>
+    <textarea maxlength="255" type="text" id="ficheMatiereLibre" name="ficheMatiereLibre"
+              class="form-control"></textarea>
 </div>
 
 <table class="table" id="tableFiches">
@@ -22,24 +23,28 @@
         </th>
     </tr>
     </thead>
-    {% for ecEnfant in ec.ecEnfants %}
-        <tr>
-            <td data-id="id_{{ ecEnfant.ficheMatiere.id }}">
-                {{ ecEnfant.display }}
-            </td>
-            <td>
-                <button class="btn text-danger"
-                {{ stimulus_action('ec--manage', 'removeEcEnfant', 'click', {ecEnfant: ecEnfant.id,
-                    fichematiere:ecEnfant.ficheMatiere.id}) }}
-                ><i class="fas fa-trash"></i> Supprimer</button>
-            </td>
-        </tr>
-    {% endfor %}
+    {% if ec != null %}
+        {% for ecEnfant in ec.ecEnfants %}
+            <tr>
+                <td data-id="id_{{ ecEnfant.ficheMatiere.id }}">
+                    {{ ecEnfant.display }}
+                </td>
+                <td>
+                    <button class="btn text-danger"
+                            {{ stimulus_action('ec--manage', 'removeEcEnfant', 'click', {ecEnfant: ecEnfant.id,
+                                fichematiere:ecEnfant.ficheMatiere.id}) }}
+                    ><i class="fas fa-trash"></i> Supprimer
+                    </button>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
 </table>
 
 <div id="modele_matiere">
     <div>
-        <label for="ficheMatiere" class="form-label">{{ 'ec_manage.labels.fiche_matiere_multiple.label'|trans({}, 'form') }}
+        <label for="ficheMatiere"
+               class="form-label">{{ 'ec_manage.labels.fiche_matiere_multiple.label'|trans({}, 'form') }}
             <i class="fal fa-question-circle ms-1"
                data-controller="tooltip"
                data-tooltip-placement-value="bottom"

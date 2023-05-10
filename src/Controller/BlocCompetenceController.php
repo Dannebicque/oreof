@@ -36,7 +36,7 @@ class BlocCompetenceController extends AbstractController
     #[Route('/liste/parcours/{parcours}', name: 'app_bloc_competence_liste_parcours', methods: ['GET'])]
     public function listeParcours(
         BlocCompetenceRepository $blocCompetenceRepository,
-        ?Parcours $parcours = null
+        ?Parcours                $parcours = null
     ): Response {
         if ($parcours === null) {
             return $this->render('bloc_competence/_liste.html.twig', [
@@ -56,10 +56,10 @@ class BlocCompetenceController extends AbstractController
      */
     #[Route('/liste/transverse/{parcours}', name: 'app_bloc_competence_liste_transverse', methods: ['GET', 'POST'])]
     public function listeTransverse(
-        Request $request,
+        Request                  $request,
         BlocCompetenceRepository $blocCompetenceRepository,
-        CompetenceRepository $competenceRepository,
-        Parcours $parcours
+        CompetenceRepository     $competenceRepository,
+        Parcours                 $parcours
     ): Response {
         if ($request->isMethod('POST')) {
             $bccAdd = [];
@@ -81,13 +81,13 @@ class BlocCompetenceController extends AbstractController
                                     $blocCompetenceRepository->save($bcc, true);
                                     $bccAdd[$bc->getId()] = $bcc;
                                 }
-                                $cCopie = clone $b;
-                                $cCopie->setBlocCompetence($bccAdd[$bc->getId()]);
-                                $ordre = $competenceRepository->getMaxOrdreBlocCompetence($bccAdd[$bc->getId()]);
-                                $cCopie->setOrdre($ordre + 1);
-                                $cCopie->genereCode();
-                                $competenceRepository->save($cCopie, true);
                             }
+                            $cCopie = clone $b;
+                            $cCopie->setBlocCompetence($bccAdd[$bc->getId()]);
+                            $ordre = $competenceRepository->getMaxOrdreBlocCompetence($bccAdd[$bc->getId()]);
+                            $cCopie->setOrdre($ordre + 1);
+                            $cCopie->genereCode();
+                            $competenceRepository->save($cCopie, true);
                         }
                     }
                 }
@@ -127,10 +127,10 @@ class BlocCompetenceController extends AbstractController
     #[
         Route('/new/parcours/{parcours}', name: 'app_bloc_competence_new_parcours', methods: ['GET', 'POST'])]
     public function newParcours(
-        Request $request,
+        Request                  $request,
         BlocCompetenceRepository $blocCompetenceRepository,
-        CompetenceRepository $competenceRepository,
-        ?Parcours $parcours = null
+        CompetenceRepository     $competenceRepository,
+        ?Parcours                $parcours = null
     ): Response {
         $blocCompetence = new BlocCompetence();
         $blocCompetence->setParcours($parcours);
@@ -186,8 +186,8 @@ class BlocCompetenceController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_bloc_competence_edit', methods: ['GET', 'POST'])]
     public function edit(
-        Request $request,
-        BlocCompetence $blocCompetence,
+        Request                  $request,
+        BlocCompetence           $blocCompetence,
         BlocCompetenceRepository $blocCompetenceRepository
     ): Response {
         $form = $this->createForm(
@@ -218,7 +218,7 @@ class BlocCompetenceController extends AbstractController
     #[Route('/{id}/duplicate', name: 'app_bloc_competence_duplicate', methods: ['GET'])]
     public function duplicate(
         BlocCompetenceRepository $blocCompetenceRepository,
-        BlocCompetence $blocCompetence
+        BlocCompetence           $blocCompetence
     ): Response {
         $blocCompetenceNew = clone $blocCompetence;
         $blocCompetenceNew->setLibelle($blocCompetence->getLibelle() . ' - Copie');
@@ -239,9 +239,9 @@ class BlocCompetenceController extends AbstractController
 
     #[Route('/{id}/deplacer/{sens}', name: 'app_bloc_competence_deplacer', methods: ['GET'])]
     public function deplacer(
-        Bcc $bcc,
+        Bcc            $bcc,
         BlocCompetence $blocCompetence,
-        string $sens
+        string         $sens
     ): Response {
         $bcc->deplacerBlocCompetence($blocCompetence, $sens);
 
@@ -253,8 +253,8 @@ class BlocCompetenceController extends AbstractController
      */
     #[Route('/{id}', name: 'app_bloc_competence_delete', methods: ['DELETE'])]
     public function delete(
-        Request $request,
-        BlocCompetence $blocCompetence,
+        Request                  $request,
+        BlocCompetence           $blocCompetence,
         BlocCompetenceRepository $blocCompetenceRepository
     ): Response {
         //todo: tester s'il y a des compétences dans le bloc

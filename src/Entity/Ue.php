@@ -41,9 +41,6 @@ class Ue
     ], orphanRemoval: true)]
     private Collection $elementConstitutifs;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $subOrdre = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelle = null;
 
@@ -56,7 +53,10 @@ class Ue
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ueEnfants')]
     private ?self $ueParent = null;
 
-    #[ORM\OneToMany(mappedBy: 'ueParent', targetEntity: self::class)]
+    #[ORM\OneToMany(mappedBy: 'ueParent', targetEntity: self::class, cascade: [
+        'persist',
+        'remove'
+    ], orphanRemoval: true)]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ueEnfants;
 
@@ -190,18 +190,6 @@ class Ue
                 $elementConstitutif->setUe(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getSubOrdre(): ?int
-    {
-        return $this->subOrdre;
-    }
-
-    public function setSubOrdre(?int $subOrdre): self
-    {
-        $this->subOrdre = $subOrdre;
 
         return $this;
     }

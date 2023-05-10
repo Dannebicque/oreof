@@ -48,15 +48,15 @@ class ElementConstitutifController extends AbstractController
         ]);
     }
 
-    #[Route('/type-ec/{ec}/{ue}/{parcours}', name: 'app_element_constitutif_type_ec', methods: ['GET'])]
+    #[Route('/type-ec/{ue}/{parcours}/{ec}', name: 'app_element_constitutif_type_ec', methods: ['GET'])]
     public function typeEc(
         ElementConstitutifRepository $elementConstitutifRepository,
         Request $request,
         FicheMatiereRepository $ficheMatiereRepository,
         NatureUeEcRepository $natureUeEcRepository,
-        ElementConstitutif $ec,
         Ue $ue,
-        Parcours $parcours
+        Parcours $parcours,
+        ?ElementConstitutif $ec = null,
     ): Response {
         if ($request->query->has('delete')) {
             $ec = $elementConstitutifRepository->find($request->query->get('delete'));
@@ -118,6 +118,7 @@ class ElementConstitutifController extends AbstractController
                 ['ue' => $ue->getId(), 'parcours' => $parcours->getId()]
             ),
             'typeDiplome' => $typeDiplome,
+            'formation' => $parcours->getFormation(),
         ]);
         $form->handleRequest($request);
 
@@ -126,6 +127,7 @@ class ElementConstitutifController extends AbstractController
                 $tu = new TypeEc();
                 $tu->setLibelle($form->get('typeEcTexte')->getData());
                 $tu->addTypeDiplome($typeDiplome);
+                $tu->setFormation($parcours->getFormation());
                 $typeEcRepository->save($tu, true);
                 $elementConstitutif->setTypeEc($tu);
             }

@@ -25,6 +25,7 @@ class ElementConstitutifType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $typeDiplome = $options['typeDiplome'];
+        $formation = $options['formation'];
 
         $builder
             ->add('typeEc', EntityType::class, [
@@ -32,7 +33,7 @@ class ElementConstitutifType extends AbstractType
                 'choice_label' => 'libelle',
                 'query_builder' => fn (
                     TypeEcRepository $typeEcRepository
-                ) => $typeEcRepository->findByTypeDiplome($typeDiplome),
+                ) => $typeEcRepository->findByTypeDiplomeAndFormation($typeDiplome, $formation),
                 'required' => false,
             ])
             ->add('typeEcTexte', TextType::class, [
@@ -64,7 +65,7 @@ class ElementConstitutifType extends AbstractType
             'data_class' => ElementConstitutif::class,
             'translation_domain' => 'form',
             'typeDiplome' => null,
-
+            'formation' => null
         ]);
     }
 }

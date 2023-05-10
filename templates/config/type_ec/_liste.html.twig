@@ -3,6 +3,7 @@
     <tr>
         <th>Libellé</th>
         <th>Type(s) diplôme</th>
+        <th>Formation?</th>
         <th></th>
     </tr>
     </thead>
@@ -17,6 +18,11 @@
                         ,
                     {% endif %}
                 {% endfor %}
+            </td>
+            <td>
+                {% if type_ec.formation == null %}
+                    <span class="badge bg-success">Commune</span>{% else %}
+                    <span class="badge bg-info">{{ type_ec.formation.display }}</span>{% endif %}
             </td>
             <td class="text-end">
                 <button

@@ -95,13 +95,6 @@ export default class extends Controller {
     }
   }
 
-  // changeTypeUe(event) {
-  //   saveData(event.params.url, {
-  //     actions: 'changeTypeUe',
-  //     value: event.target.value,
-  //   })
-  // }
-
   delete(event) {
     event.preventDefault()
     const { url } = event.params

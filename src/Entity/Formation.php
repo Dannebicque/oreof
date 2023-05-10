@@ -135,6 +135,9 @@ class Formation
     #[ORM\ManyToOne(inversedBy: 'coFormations')]
     private ?User $coResponsable = null;
 
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: TypeEc::class)]
+    private Collection $typeEcs;
+
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
         $this->anneeUniversitaire = $anneeUniversitaire;
@@ -148,6 +151,7 @@ class Formation
         for ($i = 1; $i <= 3; $i++) {
             $this->etatSteps[$i] = false;
         }
+        $this->typeEcs = new ArrayCollection();
     }
 
     public function getEtatStep(int $step): bool
@@ -704,6 +708,36 @@ class Formation
     public function setCoResponsable(?User $coResponsable): self
     {
         $this->coResponsable = $coResponsable;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TypeEc>
+     */
+    public function getTypeEcs(): Collection
+    {
+        return $this->typeEcs;
+    }
+
+    public function addTypeEc(TypeEc $typeEc): self
+    {
+        if (!$this->typeEcs->contains($typeEc)) {
+            $this->typeEcs->add($typeEc);
+            $typeEc->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTypeEc(TypeEc $typeEc): self
+    {
+        if ($this->typeEcs->removeElement($typeEc)) {
+            // set the owning side to null (unless already changed)
+            if ($typeEc->getFormation() === $this) {
+                $typeEc->setFormation(null);
+            }
+        }
 
         return $this;
     }

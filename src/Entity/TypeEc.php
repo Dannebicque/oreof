@@ -32,6 +32,9 @@ class TypeEc
     #[ORM\OneToMany(mappedBy: 'typeEc', targetEntity: ElementConstitutif::class)]
     private Collection $elementConstitutifs;
 
+    #[ORM\ManyToOne(inversedBy: 'typeEcs')]
+    private ?Formation $formation = null;
+
     public function __construct()
     {
         $this->typeDiplomes = new ArrayCollection();
@@ -117,6 +120,18 @@ class TypeEc
                 $elementConstitutif->setTypeEc(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFormation(): ?Formation
+    {
+        return $this->formation;
+    }
+
+    public function setFormation(?Formation $formation): self
+    {
+        $this->formation = $formation;
 
         return $this;
     }

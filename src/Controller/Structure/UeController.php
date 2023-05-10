@@ -41,13 +41,13 @@ class UeController extends AbstractController
         Route('/detail/semestre/{semestre}/{parcours}', name: 'detail_semestre')
     ]
     public function detailComposante(
-        UeRepository $ueRepository,
-        TypeUeRepository $typeUeRepository,
+        UeRepository         $ueRepository,
+        TypeUeRepository     $typeUeRepository,
         NatureUeEcRepository $natureUeEcRepository,
-        Semestre $semestre,
-        Parcours $parcours
+        Semestre             $semestre,
+        Parcours             $parcours
     ): Response {
-        $ues = $ueRepository->findBy(['semestre' => $semestre], ['ordre' => 'ASC', 'subOrdre' => 'ASC']);
+        $ues = $ueRepository->findBy(['semestre' => $semestre], ['ordre' => 'ASC']);
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         return $this->render('structure/ue/_liste.html.twig', [
@@ -68,11 +68,11 @@ class UeController extends AbstractController
     ]
     public function addUe(
         NatureUeEcRepository $natureUeEcRepository,
-        TypeUeRepository $typeUeRepository,
-        Request $request,
-        UeRepository $ueRepository,
-        Semestre $semestre,
-        Parcours $parcours
+        TypeUeRepository     $typeUeRepository,
+        Request              $request,
+        UeRepository         $ueRepository,
+        Semestre             $semestre,
+        Parcours             $parcours
     ): Response {
         $ue = new Ue();
         $ue->setSemestre($semestre);
@@ -110,7 +110,6 @@ class UeController extends AbstractController
                 $ueEnfant1->setSemestre($semestre);
                 $ueEnfant1->setNatureUeEc($ue->getNatureUeEc());
                 $ueEnfant1->setOrdre(1);
-                $ueEnfant1->setSubOrdre(1);
                 $ueEnfant1->setUeParent($ue);
                 $ueEnfant1->setLibelle('Choix 1');
                 $ueRepository->save($ueEnfant1, true);
@@ -119,7 +118,6 @@ class UeController extends AbstractController
                 $ueEnfant2->setSemestre($semestre);
                 $ueEnfant2->setNatureUeEc($ue->getNatureUeEc());
                 $ueEnfant2->setOrdre(2);
-                $ueEnfant2->setSubOrdre(2);
                 $ueEnfant2->setUeParent($ue);
                 $ueEnfant2->setLibelle('Choix 2');
                 $ueRepository->save($ueEnfant2, true);
@@ -139,10 +137,10 @@ class UeController extends AbstractController
      */
     #[Route('/ue/update/typeUe/{ue}', name: 'change_type_ue', methods: ['POST'])]
     public function updateTypeUe(
-        Request $request,
-        UeRepository $ueRepository,
+        Request          $request,
+        UeRepository     $ueRepository,
         TypeUeRepository $typeUeRepository,
-        Ue $ue,
+        Ue               $ue,
     ): Response {
         $typeUe = JsonRequest::getValueFromRequest($request, 'value');
 
@@ -163,10 +161,10 @@ class UeController extends AbstractController
      */
     #[Route('/ue/update/nature/{ue}', name: 'change_nature_ue', methods: ['POST'])]
     public function updateNatureUe(
-        Request $request,
-        UeRepository $ueRepository,
+        Request              $request,
+        UeRepository         $ueRepository,
         NatureUeEcRepository $natureUeEcRepository,
-        Ue $ue,
+        Ue                   $ue,
     ): Response {
         $idNatureUe = JsonRequest::getValueFromRequest($request, 'value');
         if ($idNatureUe !== '') {
@@ -174,7 +172,7 @@ class UeController extends AbstractController
             if ($natureUe !== null) {
                 $ue->setNatureUeEc($natureUe);
                 if ($natureUe->isChoix() === true) {
-                    $ue->setSubOrdre(1);
+                    $ue->setSubOrdre(1);//todo: pourquoi????
                     $ue2 = clone $ue;
                     $ue2->setSubOrdre(2);
                     $ueRepository->save($ue2, true);
@@ -192,8 +190,8 @@ class UeController extends AbstractController
     #[Route('/deplacer/{ue}/{sens}', name: 'deplacer', methods: ['GET'])]
     public function deplacer(
         UeOrdre $ueOrdre,
-        Ue $ue,
-        string $sens
+        Ue      $ue,
+        string  $sens
     ): Response {
         $ueOrdre->deplacerUe($ue, $sens);
 
@@ -203,22 +201,22 @@ class UeController extends AbstractController
     #[Route('/deplacer_sub/{ue}/{sens}', name: 'deplacer_sub', methods: ['GET'])]
     public function deplacerSub(
         UeOrdre $ueOrdre,
-        Ue $ue,
-        string $sens
+        Ue      $ue,
+        string  $sens
     ): Response {
         $ueOrdre->deplacerSubUe($ue, $sens);
 
         return $this->json(true);
     }
 
-    #[Route('/{id}/{parcours}/modifier', name: 'edit', methods: ['GET','POST'])]
+    #[Route('/{id}/{parcours}/modifier', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(
         NatureUeEcRepository $natureUeEcRepository,
-        TypeUeRepository $typeUeRepository,
-        Request $request,
-        Ue $ue,
-        Parcours $parcours,
-        UeRepository $ueRepository
+        TypeUeRepository     $typeUeRepository,
+        Request              $request,
+        Ue                   $ue,
+        Parcours             $parcours,
+        UeRepository         $ueRepository
     ): Response {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
@@ -246,7 +244,7 @@ class UeController extends AbstractController
 
             if ($form->get('natureUeEc')->getData() !== null) {
                 if ($form->get('natureUeEc')->getData()->isChoix() === true) {
-                    $ue->setSubOrdre(1);
+                    $ue->setSubOrdre(1);//todo: Pourquoi??
                     $ue2 = clone $ue;
                     $ue2->setSubOrdre(2);
                     $ueRepository->save($ue2, true);
@@ -267,19 +265,23 @@ class UeController extends AbstractController
      */
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(
-        UeOrdre $ueOrdre,
-        Request $request,
-        Ue $ue,
+        UeOrdre                      $ueOrdre,
+        Request                      $request,
+        Ue                           $ue,
         ElementConstitutifRepository $elementConstitutifRepository,
-        UeRepository $ueRepository
+        UeRepository                 $ueRepository
     ): Response {
         if ($this->isCsrfTokenValid(
             'delete' . $ue->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf')
         )) {
-
+            //todo: gérer les UE mutualisées
             foreach ($ue->getElementConstitutifs() as $ec) {
                 $ue->removeElementConstitutif($ec);
+                foreach ($ec->getEcEnfants() as $ecEnfant) {
+                    $ue->removeElementConstitutif($ecEnfant);
+                    $elementConstitutifRepository->remove($ecEnfant, true);
+                }
                 $elementConstitutifRepository->remove($ec, true);
             }
 
@@ -302,8 +304,8 @@ class UeController extends AbstractController
     ]
     public function mutualiser(
         ComposanteRepository $composanteRepository,
-        Ue $ue,
-        Semestre $semestre
+        Ue                   $ue,
+        Semestre             $semestre
     ): Response {
         return $this->render('structure/ue/_mutualiser.html.twig', [
             'semestre' => $semestre,
@@ -317,12 +319,12 @@ class UeController extends AbstractController
         'DELETE'
     ])]
     public function mutualiseAjax(
-        EntityManagerInterface $entityManager,
-        Request $request,
-        FormationRepository $formationRepository,
-        ParcoursRepository $parcoursRepository,
+        EntityManagerInterface   $entityManager,
+        Request                  $request,
+        FormationRepository      $formationRepository,
+        ParcoursRepository       $parcoursRepository,
         UeMutualisableRepository $ueMutualisableRepository,
-        Ue $ue,
+        Ue                       $ue,
     ): Response {
         $data = JsonRequest::getFromRequest($request);
         $t = [];
@@ -339,8 +341,6 @@ class UeController extends AbstractController
                     ['error' => 'UE non trouvée'],
                     500
                 );
-
-                break;
             case 'liste':
                 return $this->render('structure/ue/_liste_mutualise.html.twig', [
                     'ues' => $ueMutualisableRepository->findBy(['ue' => $ue]),
@@ -400,8 +400,8 @@ class UeController extends AbstractController
     ]
     public function raccrocher(
         UeMutualisableRepository $ueMutualisableRepository,
-        Parcours $parcours,
-        Ue $ue
+        Parcours                 $parcours,
+        Ue                       $ue
     ): Response {
         $ues = $ueMutualisableRepository->findBy(['parcours' => $parcours]);
 
@@ -412,5 +412,4 @@ class UeController extends AbstractController
             'ues' => $ues
         ]);
     }
-
 }
