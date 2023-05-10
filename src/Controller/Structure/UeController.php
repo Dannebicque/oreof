@@ -330,6 +330,12 @@ class UeController extends AbstractController
         $t = [];
         switch ($data['field']) {
             case 'raccrocher':
+                if ($data['value'] === 'null') {
+                    $ue->setUeRaccrochee(null);
+                    $entityManager->flush();
+                    return $this->json(true);
+                }
+
                 $uem = $ueMutualisableRepository->find($data['value']);
                 if ($uem !== null) {
                     $ue->setUeRaccrochee($uem);

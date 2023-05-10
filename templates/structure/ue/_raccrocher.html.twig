@@ -15,6 +15,7 @@
                 class="form-select"
         >
             <option value="">Choisir une UE mutualisée</option>
+            <option value="null">Ne plus raccrocher cette UE (supprimer le lien entre les deux UE)</option>
             {% for u in ues %}
                 <option value="{{ u.id }}"
                 {% if ue.ueRaccrochee != null and  ue.ueRaccrochee.id == u.id %}selected{% endif %}
