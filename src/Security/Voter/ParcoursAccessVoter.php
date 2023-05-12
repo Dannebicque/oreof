@@ -55,14 +55,6 @@ class ParcoursAccessVoter extends Voter
             return true;
         }
 
-//        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
-//                $parcours,
-//                'autoriser'
-//            ))) {
-//            //si on est pas dans un état qui permet de modifier la formation
-//            return false;
-//        }
-
         $this->roles = $this->roleRepository->findByPermission($attribute);
 
         return match ($attribute) {
@@ -74,25 +66,29 @@ class ParcoursAccessVoter extends Voter
 
     private function hasShowOnHisParcours(UserInterface|User $user, Parcours $subject): bool
     {
-        //todo: A faire droit sur parcours ou sur la formation
+        //si identique, fusionner...
         /** @var User $user */
-//        foreach ($user->getUserCentres() as $centre) {
-//            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-        return true;
+        foreach ($user->getUserCentres() as $centre) {
+            if ($centre->getFormation() === $subject->getFormation() &&
+                count(array_intersect($centre->getDroits(), $this->roles)) > 0 &&
+                ($subject->getRespParcours()?->getId() === $user->getId()
+                    || $subject->getCoResponsable()?->getId() === $user->getId())
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function hasEditOnHisParcours(UserInterface|User $user, Parcours $subject): bool
     {
-        //todo: Comment gérer les co-responsable
         foreach ($user->getUserCentres() as $centre) {
             if ($centre->getFormation() === $subject->getFormation() &&
-                $subject->getRespParcours()?->getId() === $user->getId() &&
-                count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
+                count(array_intersect($centre->getDroits(), $this->roles)) > 0 &&
+                ($subject->getRespParcours()?->getId() === $user->getId()
+                    || $subject->getCoResponsable()?->getId() === $user->getId())
+            ) {
                 return true;
             }
         }
