@@ -27,7 +27,7 @@ class FormationEtatController extends BaseController
         $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()]);
         $listeFormationsOuvrables = [];
         foreach ($formations as $formation) {
-            if ($this->dpeWorkflow->can($formation, 'initialiser')) {
+            if ($this->dpeWorkflow->can($formation, 'initialiser') && $formation->getResponsableMention() !== null) {
                 if (!array_key_exists($formation->getComposantePorteuse()?->getId(), $listeFormationsOuvrables)) {
                     $listeFormationsOuvrables[$formation->getComposantePorteuse()?->getId()] = [];
                 }
