@@ -36,6 +36,7 @@
             </div>
             <div>{# class="scroll-out" #}
                 {% for ue in ues|filter(ue => ue.ueParent == null) %}
+                    {% set raccroche = raccroche or ue.ueRaccrochee != null %}
                     <div {{ stimulus_controller('structure--ue', {
                         ue:ue.id,
                         parcours:parcours.id,
@@ -79,15 +80,15 @@
 
                                     <div class="col-md-1 d-flex flex-column justify-content-center">
                                         {% if ue.ueEnfants|length == 0 %}
-                                        <div class="text-muted text-small d-md-none">Voir les EC</div>
-                                        <button class="btn btn-sm btn-outline-primary"
-                                                {{ stimulus_action('structure--ue', 'detail', 'click',
-                                                    {ue:ue.id, parcours: parcours.id, url: path
-                                                        ('structure_ec_detail_ue', {ue:ue.id, parcours: parcours.id})}
-                                                ) }}
-                                        >
-                                            <i class="fal fa-caret-right"></i> Voir les EC
-                                        </button>
+                                            <div class="text-muted text-small d-md-none">Voir les EC</div>
+                                            <button class="btn btn-sm btn-outline-primary"
+                                                    {{ stimulus_action('structure--ue', 'detail', 'click',
+                                                        {ue:ue.id, parcours: parcours.id, url: path
+                                                            ('structure_ec_detail_ue', {ue:ue.id, parcours: parcours.id, raccroche:raccroche})}
+                                                    ) }}
+                                            >
+                                                <i class="fal fa-caret-right"></i> Voir les EC
+                                            </button>
                                         {% endif %}
                                     </div>
                                     <div class="col-md-4">
@@ -107,6 +108,7 @@
                                                             class="btn btn-sm text-warning me-1"
                                                             data-size="lg"
                                                             data-bs-toggle="tooltip"
+                                                            {% if raccroche %}disabled{% endif %}
                                                             data-bs-placement="bottom"
                                                             title="Modifier l'UE {{ ue.display }}"
                                                     >
@@ -118,7 +120,7 @@
                                                         <button {{ stimulus_action('structure--ue', 'delete', 'click', {
                                                             url:path('structure_ue_delete',{'id': ue.id}),
                                                             csrf: csrf_token('delete' ~ ue.id)
-                                                        }) }} class="btn btn-sm text-danger">
+                                                        }) }} class="btn btn-sm text-danger" {% if raccroche %}disabled{% endif %}>
                                                             <i class="{{ iconDelete }}"></i> Supprimer
                                                         </button>
                                                     {% endif %}
@@ -140,6 +142,7 @@
                                                         data-action="click->modal#openModal"
                                                         class="btn btn-sm text-quaternary me-1"
                                                         data-size="lg"
+                                                        {% if raccroche %}disabled{% endif %}
                                                         data-bs-toggle="tooltip"
                                                         data-bs-placement="bottom"
                                                         title="Modifier l\'UE {{ ue.display }}"
@@ -159,6 +162,7 @@
                                                         class="btn btn-sm text-quaternary me-1"
                                                         data-size="lg"
                                                         data-bs-toggle="tooltip"
+                                                        {% if raccroche %}disabled{% endif %}
                                                         data-bs-placement="bottom"
                                                         {#                                                title="Modifier le semestre {{ semestre.semestre.display }}" #}
                                                 >
@@ -175,10 +179,12 @@
                                             ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
                                             'valider_ec')) #}
                                                     {% if not loop.first %}
-                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action
-                                                            ('structure--ue', 'deplacerUe',
-                                                            'click', {url: path('structure_ue_deplacer',{sens: 'up', ue:ue
-                                                            .id}), ue:ue.id, parcours:parcours.id}) }}>
+                                                        <button class="btn btn-sm btn-outline-info"
+                                                                {% if raccroche %}disabled{% endif %}
+                                                                {{ stimulus_action
+                                                                    ('structure--ue', 'deplacerUe',
+                                                                    'click', {url: path('structure_ue_deplacer',{sens: 'up', ue:ue
+                                                                    .id}), ue:ue.id, parcours:parcours.id}) }}>
                                                             <i class="fal fa-circle-up"></i></button>
                                                     {% else %}
                                                         <button class="btn btn-sm btn-outline-info" disabled>
@@ -186,8 +192,10 @@
                                                         </button>
                                                     {% endif %}
                                                     {% if not loop.last %}
-                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action('structure--ue', 'deplacerUe',
-                                                            'click', {url: path('structure_ue_deplacer',{sens: 'down', ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
+                                                        <button class="btn btn-sm btn-outline-info"
+                                                                {% if raccroche %}disabled{% endif %}
+                                                                {{ stimulus_action('structure--ue', 'deplacerUe',
+                                                                    'click', {url: path('structure_ue_deplacer',{sens: 'down', ue:ue.id}), ue:ue.id, parcours:parcours.id}) }}>
                                                             <i class="fal
                                         fa-circle-down"></i></button>
                                                     {% else %}
@@ -223,7 +231,7 @@
 
                     {# UE Enfants #}
                     {% for uee in ue.ueEnfants %}
-                        {% if loop.first %}
+                        {% if loop.first and raccroche == false %}
                             <div class="text-divider">
                                 <button class="btn text-success btn-sm"
                                         {{ stimulus_controller('modal', {
@@ -283,7 +291,7 @@
                                             <button class="btn btn-sm btn-outline-primary"
                                                     {{ stimulus_action('structure--ue', 'detail', 'click',
                                                         {ue:uee.id, parcours: parcours.id, url: path
-                                                            ('structure_ec_detail_ue', {ue:uee.id, parcours: parcours.id})}
+                                                            ('structure_ec_detail_ue', {ue:uee.id, parcours: parcours.id, raccroche: raccroche})}
                                                     ) }}
                                             >
                                                 <i class="fal fa-caret-right"></i> Voir les EC
@@ -418,21 +426,23 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="text-divider">
-                            <button class="btn text-success btn-sm"
-                                    {{ stimulus_controller('modal', {
-                                        size: 'lg',
-                                        modalTitle: 'Ajouter une UE après l\'' ~uee.displayBouton,
-                                        modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
-                                    }) }}
-                                    data-action="click->modal#openModal"
-                            >
-                                <i class="{{ iconAdd }}"></i>
-                                Ajouter une UE après l'<strong>{{ uee.displayBouton }}</strong>
-                            </button>
-                        </div>
+                        {% if raccroche == false %}
+                            <div class="text-divider">
+                                <button class="btn text-success btn-sm"
+                                        {{ stimulus_controller('modal', {
+                                            size: 'lg',
+                                            modalTitle: 'Ajouter une UE après l\'' ~uee.displayBouton,
+                                            modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
+                                        }) }}
+                                        data-action="click->modal#openModal"
+                                >
+                                    <i class="{{ iconAdd }}"></i>
+                                    Ajouter une UE après l'<strong>{{ uee.displayBouton }}</strong>
+                                </button>
+                            </div>
+                        {% endif %}
                     {% endfor %}
+                    {% if raccroche == false %}
                     <div class="text-divider">
                         <button class="btn text-success btn-sm"
                                 {{ stimulus_controller('modal', {
@@ -446,7 +456,9 @@
                             Ajouter une UE après l'<strong>{{ ue.displayBouton }}</strong>
                         </button>
                     </div>
+                    {% endif %}
                 {% else %}
+                    {% if raccroche == false %}
                     <div class="text-divider">
                         <button class="btn text-success btn-sm"
                                 {{ stimulus_controller('modal', {
@@ -460,6 +472,7 @@
                             Ajouter une UE
                         </button>
                     </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </section>

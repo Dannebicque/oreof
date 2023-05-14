@@ -13,6 +13,7 @@ use App\Controller\BaseController;
 use App\Entity\Parcours;
 use App\Entity\Ue;
 use App\Repository\ElementConstitutifRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -33,10 +34,13 @@ class EcController extends BaseController
         Route('/detail/ue/{ue}/{parcours}', name: 'detail_ue')
     ]
     public function detailComposante(
+        Request $request,
         ElementConstitutifRepository $elementConstitutifRepository,
         Ue $ue,
         Parcours $parcours
     ): Response {
+        $raccroche = $request->query->get('raccroche', false);
+
         if ($ue->getUeRaccrochee() === null) {
             $ecs = $elementConstitutifRepository->findBy(['ue' => $ue], ['ordre' => 'ASC']);
         } else {
@@ -49,7 +53,7 @@ class EcController extends BaseController
             'parcours' => $parcours,
             'deplacer' => true,
             'mode' => 'detail',
-            'editable' => $ue->getUeRaccrochee() === null ? true: false,
+            'editable' => $raccroche === false && $ue->getUeRaccrochee() === null ? true: false,
         ]);
     }
 }

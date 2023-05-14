@@ -18,7 +18,7 @@
             {% for sem in semestres %}
                 <option value="{{ sem.id }}"
                         {% if semestre.semestreRaccroche != null and  semestre.semestreRaccroche.id == sem.id %}selected{% endif %}
-                >{{ sem.semestre.display }} - {{ sem.parcours.libelle }}</option>
+                >{{ sem.semestre.display }} - {{ sem.semestre.semestreParcours[0].parcours.libelle }}</option>
             {% endfor %}
         </select>
     </div>

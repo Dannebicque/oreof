@@ -60,6 +60,10 @@ export default class extends Controller {
     this.detailTarget.innerHTML = await response.text()
   }
 
+  refreshListe() {
+    this._loadParcours()
+  }
+
   etatStep(event) {
     calculEtatStep(this.urlSaveValue, 4, event, 'parcours')
   }

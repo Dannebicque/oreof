@@ -38,6 +38,13 @@
             </div>
             <div>{# class="scroll-out" #}
                 {% for semestre in semestres %}
+                    {% if semestre.semestre.semestreRaccroche == true %}
+                        {% set sem = semestre.semestre.semestreRaccroche.semestre %}
+                        {% set raccroche = true %}
+                    {% else %}
+                        {% set sem = semestre.semestre %}
+                        {% set raccroche = false %}
+                    {% endif %}
                     <div {{ stimulus_controller('structure--semestre') }}>
                         <div class="card mb-2 sh-19 sh-md-8">
                             <div class="card-body pt-0 pb-0 h-100">
@@ -45,26 +52,25 @@
                                     <div class="col-12 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Semestre</div>
                                         <p>{{ semestre.semestre.display }}
-                                        {% if semestre.semestre.semestreRaccroche != null %}
-                                        <i class="fal fa-link"
-                                           data-controller="tooltip"
-                                           data-tooltip-placement-value="bottom"
-                                           title="Raccrochée au semestre {{ semestre.semestre
-                                           .semestreRaccroche.semestre.display }}"></i>{% endif %}</p>
+                                            {% if raccroche %}
+                                            <i class="fal fa-link"
+                                               data-controller="tooltip"
+                                               data-tooltip-placement-value="bottom"
+                                               title="Raccrochée au semestre {{ sem.display }}"></i>{% endif %}</p>
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
                                         <span id="ects_semestre_{{ semestre.semestre.id }}_{{ parcours.id }}">
-                                            {{ semestre.semestre.totalEctsSemestre|badgeEctsSemestre }}
+                                            {{ sem.totalEctsSemestre|badgeEctsSemestre }}
                                         </span>
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Nb UE</div>
-                                        {{ semestre.semestre.nbUes|badgeNb }}
+                                        {{ sem.nbUes|badgeNb }}
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Commun ?</div>
-                                        {% if semestre.semestre.troncCommun == true %}
+                                        {% if sem.troncCommun == true %}
                                             <span class="badge bg-info me-2">Tronc Commun</span>
 
                                         {% else %}
@@ -74,10 +80,10 @@
 
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Commun ?</div>
-                                        {% if semestre.semestreRaccroche != null %}
+                                        {% if raccroche %}
                                             <span class="badge bg-warning me-2">Raccroché</span>
                                         {% else %}
-                                            {% if semestre.semestre.semestreMutualisables|length > 0 %}
+                                            {% if sem.semestreMutualisables|length > 0 %}
                                                 <span class="badge bg-secondary me-2">Mutualisé</span>
                                             {% else %}
                                                 <span class="badge bg-primary me-2">Classique</span>
@@ -91,9 +97,9 @@
                                         <div class="text-muted text-small d-md-none">Voir les UE</div>
                                         <button class="btn btn-sm btn-outline-primary"
                                                 {{ stimulus_action('structure--semestre', 'detail', 'click',
-                                                    {semestre:semestre.semestre.id, url: path
-                                                        ('structure_ue_detail_semestre', {semestre:semestre.semestre
-                                                        .id, parcours: parcours.id})}
+                                                    {semestre:sem.id, url: path
+                                                        ('structure_ue_detail_semestre', {semestre:sem
+                                                        .id, parcours: parcours.id, raccroche:raccroche})}
                                                 ) }}
                                         >
                                             <i class="fal fa-caret-right"></i> Voir les UE
@@ -107,16 +113,16 @@
                                                 <button
                                                         {{ stimulus_controller('modal', {
                                                             size: 'lg',
-                                                            modalTitle: 'Mutualiser le semestre ' ~ semestre.semestre.display,
-                                                            modalUrl: path('structure_semestre_mutualiser', {semestre:semestre
-                                                            .semestre.id, parcours: parcours.id})
+                                                            modalTitle: 'Mutualiser le semestre ' ~ sem.display,
+                                                            modalUrl: path('structure_semestre_mutualiser', {semestre:sem.id, parcours: parcours.id})
                                                         }) }}
                                                         data-action="click->modal#openModal"
                                                         class="btn btn-sm text-quaternary me-1"
                                                         data-size="lg"
                                                         data-bs-toggle="tooltip"
                                                         data-bs-placement="bottom"
-                                                        title="Mutualiser le semestre {{ semestre.semestre.display }}"
+                                                        {% if raccroche %}disabled{% endif %}
+                                                        title="Mutualiser le semestre {{ sem.display }}"
                                                 >
                                                     <i class="fal fa-share-nodes"></i>
                                                     <span> Mutualiser le semestre</span>
@@ -134,6 +140,7 @@
                                                         data-size="lg"
                                                         data-bs-toggle="tooltip"
                                                         data-bs-placement="bottom"
+
                                                         title="Raccrocher un semestre mutualisé au semestre {{ semestre.semestre.display }}"
                                                 >
                                                     <i class="fal fa-down-to-bracket"></i>
@@ -153,8 +160,7 @@
                                                         <button class="btn btn-sm btn-outline-info" {{ stimulus_action
                                                             ('structure--semestre', 'deplacerSemestre',
                                                             'click', {url: path('structure_semestre_deplacer',{sens:
-                                                                'up', semestre:semestre
-                                                                .id,parcours:parcours.id}), semestre:semestre.id, parcours:parcours.id}) }}>
+                                                                'up', semestre:semestre.id,parcours:parcours.id}), semestre:semestre.id, parcours:parcours.id}) }}>
                                                             <i class="fal fa-circle-up"></i></button>
                                                     {% else %}
                                                         <button class="btn btn-sm btn-outline-info" disabled>
@@ -180,7 +186,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="detail_semestre_{{ semestre.semestre.id }}" class="d-none detail_semestre"
+                        <div id="detail_semestre_{{ sem.id }}" class="d-none detail_semestre"
 
                         >
                             <div class="row" style="margin-left:1px">
@@ -188,9 +194,9 @@
                                      data-action="base:refreshListe@window->structure--semestre#refreshListe
                                      structure--ue:refreshListe@window->structure--semestre#refreshListe
                                      ue--raccrocher:modalHide@window->structure--semestre#refreshListe"
-                                     data-structure--semestre-semestre-param="{{ semestre.semestre.id }}"
+                                     data-structure--semestre-semestre-param="{{ sem.id }}"
                                      data-structure--semestre-url-param="{{ path
-                                         ('structure_ue_detail_semestre', {semestre:semestre.semestre.id, parcours: parcours.id}) }}"
+                                         ('structure_ue_detail_semestre', {semestre:sem.id, parcours: parcours.id}) }}"
                                 >
 
                                 </div>
