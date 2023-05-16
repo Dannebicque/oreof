@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/Dannebicque/oreof/compare/v1.0.0...v1.0.1) (2023-05-16)
+
+
+### Features
+
+* Filtre boutons sur liste User selon les droits ([a098e63](https://github.com/Dannebicque/oreof/commit/a098e63ec80d2012d4a24b2c9e64e1256f6fffec))
+* Filtre des utilisateurs par Composante ([59efc37](https://github.com/Dannebicque/oreof/commit/59efc374227c8fdbe7d89a56dea237ce2c3b8acd))
+* lien vers guide.pdf ([fd7c687](https://github.com/Dannebicque/oreof/commit/fd7c687a4b96b3800230cc59f1ac7929b2b4fc45))
+* lien vers guide.pdf ([7a28d36](https://github.com/Dannebicque/oreof/commit/7a28d369cc61a8731806c6382f75673fcfe6a432))
+
+
+### Bug Fixes
+
+* accès parcours ([bac4b60](https://github.com/Dannebicque/oreof/commit/bac4b60e9a56eeafaa747fc011eb617bdf0f1798))
+* bug ajout parcours ([c0e2c0a](https://github.com/Dannebicque/oreof/commit/c0e2c0a2b78fc4b8cb2f3bc6475c52f7cfd5494d))
+* test si centre vide pour établissement ([c901391](https://github.com/Dannebicque/oreof/commit/c9013919fe00b33c70e6666d3efc613c71298b63))
+
 ## [1.0.0](https://github.com/Dannebicque/oreof/compare/v0.27.4...v1.0.0) (2023-05-16)
 
 ### [0.27.4](https://github.com/Dannebicque/oreof/compare/v0.27.3...v0.27.4) (2023-05-16)
