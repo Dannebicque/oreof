@@ -1,4 +1,9 @@
 <ul class="list-unstyled list-inline text-center menu-icons">
+    <li class="list-inline-item">
+        <a href="{{ asset('docs/guide.pdf') }}" target="_blank">
+            <i class="fal fa-question-circle"></i>
+        </a>
+    </li>
     <li class="list-inline-item {% if computed.notifsNonLu > 0 %}new-notif{% endif %}">
         <a href="#" data-bs-toggle="dropdown" data-bs-target="#notifications" aria-haspopup="true" aria-expanded="false" class="notification-button">
             <div class="position-relative d-inline-flex">
