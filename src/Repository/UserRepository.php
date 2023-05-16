@@ -9,6 +9,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Composante;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -96,7 +97,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findEnable(
         float|bool|int|string|null $sort,
-        string|null $direction
+        string|null                $direction
     ): array {
         return $this->createQueryBuilder('u')
             ->where('u.isEnable = :isEnable')
@@ -108,9 +109,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     public function findEnableBySearch(
-        string|null $q,
+        string|null                $q,
         float|bool|int|string|null $sort,
-        string|null $direction
+        string|null                $direction
     ) {
         return $this->createQueryBuilder('u')
             ->where('u.isEnable = :isEnable')
@@ -118,6 +119,47 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('u.isDeleted = false')
             ->setParameter('isEnable', true)
             ->setParameter('q', '%' . $q . '%')
+            ->addOrderBy('u.' . $sort, $direction)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByComposanteEnableBySearch(
+        Composante                 $composante,
+        string|null                $q,
+        float|bool|int|string|null $sort,
+        string|null                $direction
+    ): array {
+        return $this->createQueryBuilder('u')
+            ->innerJoin('u.userCentres', 'uc')
+            ->leftJoin('uc.formation', 'cf')
+            ->where('u.isEnable = :isEnable')
+            ->andWhere('u.isDeleted = false')
+            ->andWhere('u.nom LIKE :q OR u.prenom LIKE :q OR u.email LIKE :q OR u.username LIKE :q')
+            ->andWhere('uc.composante = :composante')
+            ->orWhere('cf.composantePorteuse = :composante')
+            ->setParameter('isEnable', true)
+            ->setParameter('composante', $composante)
+            ->setParameter('q', '%' . $q . '%')
+            ->addOrderBy('u.' . $sort, $direction)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByComposanteEnable(
+        Composante                 $composante,
+        float|bool|int|string|null $sort,
+        string|null                $direction
+    ): array {
+        return $this->createQueryBuilder('u')
+            ->innerJoin('u.userCentres', 'uc')
+            ->leftJoin('uc.formation', 'cf')
+            ->where('u.isEnable = :isEnable')
+            ->andWhere('u.isDeleted = false')
+            ->andWhere('uc.composante = :composante')
+            ->orWhere('cf.composantePorteuse = :composante')
+            ->setParameter('isEnable', true)
+            ->setParameter('composante', $composante)
             ->addOrderBy('u.' . $sort, $direction)
             ->getQuery()
             ->getResult();

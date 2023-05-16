@@ -52,17 +52,31 @@ class UserController extends AbstractController
 
     #[Route('/liste', name: 'app_user_liste', methods: ['GET'])]
     public function liste(
-        Request $request,
+        Request        $request,
         UserRepository $userRepository
     ): Response {
         $sort = $request->query->get('sort') ?? 'nom';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
 
-        if ($q) {
-            $users = $userRepository->findEnableBySearch($q, $sort, $direction);
-        } else {
-            $users = $userRepository->findEnable($sort, $direction);
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
+            if ($q) {
+                $users = $userRepository->findEnableBySearch($q, $sort, $direction);
+            } else {
+                $users = $userRepository->findEnable($sort, $direction);
+            }
+        } else if ($this->isGranted('ROLE_COMPOSANTE', $this->getUser() )) {
+            //todo: ROLE_COMPOSANTE_MANAGE_MY ?
+            foreach ($this->getUser()?->getUserCentres() as $centre) {
+                if ($centre->getComposante() !== null) {
+                    $composante =  $centre->getComposante(); //au moins une composante, todo: si plusieurs ?
+                }
+            }
+            if ($q) {
+                $users = $userRepository->findByComposanteEnableBySearch($composante, $q, $sort, $direction);
+            } else {
+                $users = $userRepository->findByComposanteEnable($composante,$sort, $direction);
+            }
         }
 
         return $this->render('config/user/_liste.html.twig', [
@@ -89,8 +103,8 @@ class UserController extends AbstractController
     #[Route('/ajouter-ldap', name: 'app_user_new_ldap_valide', methods: ['POST'])]
     #[IsGranted('ROLE_SES')]
     public function saveLdap(
-        Ldap $ldap,
-        Request $request,
+        Ldap           $ldap,
+        Request        $request,
         UserRepository $userRepository
     ): Response {
         $email = $request->request->get('user_ldap_email');
@@ -126,7 +140,7 @@ class UserController extends AbstractController
         Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(
         RoleRepository $roleRepository,
-        User $user
+        User           $user
     ): Response {
         return $this->render('config/user/show.html.twig', [
             'user' => $user,
@@ -139,9 +153,9 @@ class UserController extends AbstractController
      */
     #[Route('/change-role/{id}', name: 'app_user_roles', methods: ['POST'])]
     public function changeRole(
-        Request $request,
+        Request        $request,
         UserRepository $userRepository,
-        User $user
+        User           $user
     ): Response {
         $data = JsonRequest::getFromRequest($request);
         $roles = $user->getRoles();
@@ -189,10 +203,10 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'app_user_delete', methods: ['DELETE'])]
     #[IsGranted('ROLE_ADMIN')]
     public function delete(
-        Request $request,
-        User $user,
+        Request              $request,
+        User                 $user,
         UserCentreRepository $userCentreRepository,
-        UserRepository $userRepository
+        UserRepository       $userRepository
     ): Response {
         if ($this->isCsrfTokenValid(
             'delete' . $user->getId(),
