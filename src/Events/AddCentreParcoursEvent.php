@@ -21,7 +21,7 @@ class AddCentreParcoursEvent
     public function __construct(
         public Parcours $parcours,
         public array $droits = [],
-        public ?User $user
+        public ?User $user = null
     ) {
     }
 }
