@@ -76,6 +76,8 @@ class ParcoursAccessVoter extends Voter
                         || $subject->getCoResponsable()?->getId() === $user->getId()))
                 || ($centre->getComposante() === $subject->getFormation()?->getComposantePorteuse() &&
                     count(array_intersect($centre->getDroits(), $this->roles)) > 0)
+                || ($centre->getFormation() === $subject->getFormation() &&
+                    count(array_intersect($centre->getDroits(), $this->roles)) > 0)
 
             ) {
                 return true;
@@ -95,6 +97,8 @@ class ParcoursAccessVoter extends Voter
                         || $subject->getCoResponsable()?->getId() === $user->getId()))
                 || ($centre->getComposante() === $subject->getFormation()?->getComposantePorteuse() &&
                     count(array_intersect($centre->getDroits(), $this->roles)) > 0)
+                || ($centre->getFormation() === $subject->getFormation() &&
+                    count(array_intersect($centre->getDroits(), $this->roles)) > 0) //todo: est-ce que du coup ca ne coupe pas le responsable du parcours ?
 
             ) {
                 return true;

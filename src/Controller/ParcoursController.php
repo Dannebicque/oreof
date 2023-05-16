@@ -49,8 +49,10 @@ class ParcoursController extends BaseController
         $q = $request->query->get('q') ?? null;
 
 
-        $parcours = $parcoursRepository->findParcours($this->getAnneeUniversitaire(),
-            [$sort => $direction, 'recherche' => $q]);
+        $parcours = $parcoursRepository->findParcours(
+            $this->getAnneeUniversitaire(),
+            [$sort => $direction, 'recherche' => $q]
+        );
 
 
         $tParcours = [];
@@ -61,10 +63,10 @@ class ParcoursController extends BaseController
             $tParcours = $parcours;
         } else {
             foreach ($parcours as $p) {
-                if ($this->isGranted(
-                        'ROLE_FORMATION_EDIT_MY',
-                        $p->getFormation()
-                    ) || $this->isGranted('ROLE_FORMATION_SHOW_MY', $p->getFormation())) {
+                if ($this->isGranted('ROLE_FORMATION_EDIT_MY', $p->getFormation()) ||
+                    $this->isGranted('ROLE_FORMATION_SHOW_MY', $p->getFormation()) ||
+                    ($this->isGranted('ROLE_PARCOURS_EDIT_MY', $p) && ($p->getRespParcours() === $this->getUser() || $p->getCoResponsable() === $this->getUser()))
+                ) {
                     $tParcours[] = $p;
                 }
             }
@@ -99,11 +101,13 @@ class ParcoursController extends BaseController
             $this->parcoursWorkflow->apply($parcour, 'initialiser');
             $parcoursRepository->save($parcour, true);
 
-            //todo: ajouter le responsable du parcours aux centres et droits et envoyer mail
-            $event = new AddCentreParcoursEvent($parcour, ['ROLE_RESP_PARCOURS']);
+            $event = new AddCentreParcoursEvent($parcour, ['ROLE_RESP_PARCOURS'], $parcour->getRespParcours());
             $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
 
-            //todo: gérer droits du co responsable du parcours
+            if ($parcour->getCoResponsable() !== null) {
+                $event = new AddCentreParcoursEvent($parcour, ['ROLE_CO_RESP_PARCOURS'], $parcour->getCoResponsable());
+                $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
+            }
 
             return $this->json(true);
         }
