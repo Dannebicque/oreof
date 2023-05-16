@@ -27,7 +27,7 @@ class ParcoursAccessVoter extends Voter
     private array $roles;
 
     public function __construct(
-        private readonly Security $security,
+        private readonly Security       $security,
         private readonly RoleRepository $roleRepository,
     ) {
     }
@@ -69,10 +69,14 @@ class ParcoursAccessVoter extends Voter
         //si identique, fusionner...
         /** @var User $user */
         foreach ($user->getUserCentres() as $centre) {
-            if ($centre->getFormation() === $subject->getFormation() &&
-                count(array_intersect($centre->getDroits(), $this->roles)) > 0 &&
-                ($subject->getRespParcours()?->getId() === $user->getId()
-                    || $subject->getCoResponsable()?->getId() === $user->getId())
+            if (
+                ($centre->getFormation() === $subject->getFormation() &&
+                    count(array_intersect($centre->getDroits(), $this->roles)) > 0 &&
+                    ($subject->getRespParcours()?->getId() === $user->getId()
+                        || $subject->getCoResponsable()?->getId() === $user->getId()))
+                || ($centre->getComposante() === $subject->getFormation()?->getComposantePorteuse() &&
+                    count(array_intersect($centre->getDroits(), $this->roles)) > 0)
+
             ) {
                 return true;
             }
@@ -84,10 +88,14 @@ class ParcoursAccessVoter extends Voter
     private function hasEditOnHisParcours(UserInterface|User $user, Parcours $subject): bool
     {
         foreach ($user->getUserCentres() as $centre) {
-            if (($centre->getFormation() === $subject->getFormation() &&
-                count(array_intersect($centre->getDroits(), $this->roles)) > 0) ||
-                ($subject->getRespParcours()?->getId() === $user->getId()
-                    || $subject->getCoResponsable()?->getId() === $user->getId())
+            if (
+                ($centre->getFormation() === $subject->getFormation() &&
+                    count(array_intersect($centre->getDroits(), $this->roles)) > 0 &&
+                    ($subject->getRespParcours()?->getId() === $user->getId()
+                        || $subject->getCoResponsable()?->getId() === $user->getId()))
+                || ($centre->getComposante() === $subject->getFormation()?->getComposantePorteuse() &&
+                    count(array_intersect($centre->getDroits(), $this->roles)) > 0)
+
             ) {
                 return true;
             }

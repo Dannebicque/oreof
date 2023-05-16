@@ -66,7 +66,7 @@ class FormationAccessVoter extends Voter
     {
         /** @var User $user */
         foreach ($user->getUserCentres() as $centre) {
-            if ($centre->getFormation() === $subject && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
+            if (($centre->getFormation() === $subject || $centre->getComposante() === $subject->getComposantePorteuse()) && count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
                 return true;
             }
         }
@@ -77,7 +77,7 @@ class FormationAccessVoter extends Voter
     private function hasEditOnHisFormation(UserInterface|User $user, Formation $subject): bool
     {
         foreach ($user->getUserCentres() as $centre) {
-            if ($centre->getFormation() === $subject &&
+            if (($centre->getFormation() === $subject || $centre->getComposante() === $subject->getComposantePorteuse()) &&
                 count(array_intersect($centre->getDroits(), $this->roles)) > 0) {
                 return true;
             }
