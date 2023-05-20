@@ -15,6 +15,7 @@ use App\TypeDiplome\Source\LicenceProfessionnelleTypeDiplome;
 use App\TypeDiplome\Source\LicenceTypeDiplome;
 use App\TypeDiplome\Source\MasterMeefTypeDiplome;
 use App\TypeDiplome\Source\MasterTypeDiplome;
+use App\TypeDiplome\Source\MeefTypeDiplome;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -27,4 +28,5 @@ return static function (ContainerConfigurator $configurator): void {
 
     $services->set(ButTypeDiplome::class)->tag(TypeDiplomeRegistry::TAG_TYPE_DIPLOME);
     $services->set(LicenceTypeDiplome::class)->tag(TypeDiplomeRegistry::TAG_TYPE_DIPLOME);
+    $services->set(MeefTypeDiplome::class)->tag(TypeDiplomeRegistry::TAG_TYPE_DIPLOME);
 };

@@ -1,7 +1,7 @@
 {% form_theme form 'communs/form_theme.html.twig' %}
 {{ form_start(form) }}
-    {{ form_row(form.libelle) }}
-    {{ form_row(form.respParcours) }}
+    {{ form_row(form.libelle, {label: texte == 'option' ? 'options.labels.libelle'|trans({}, 'form') : ''}) }}
+    {{ form_row(form.respParcours, {label: texte == 'option' ? 'options.labels.respParcours'|trans({}, 'form') : ''}) }}
 <a
         href="#"
         {{ stimulus_controller('modal', {
@@ -19,7 +19,7 @@
     <i class="{{ iconAdd }}"></i>
     <span> {{ 'fiche_matiere.step1_collegue_manquant.label'|trans({}, 'form') }}</span>
 </a>
-{{ form_row(form.coResponsable) }}
+{{ form_row(form.coResponsable, {label: texte == 'option' ? 'options.labels.coResponsable'|trans({}, 'form') : ''}) }}
 <a
         href="#"
         {{ stimulus_controller('modal', {
@@ -39,7 +39,7 @@
 </a>
 
 
-{{ form_row(form.sigle) }}
+{{ form_row(form.sigle, {label: texte == 'option' ? 'options.labels.sigle'|trans({}, 'form') : ''}) }}
 
 <button type="submit" class="btn btn-success"
         {{ stimulus_action('base','sauvegardeFormModal', 'click') }}

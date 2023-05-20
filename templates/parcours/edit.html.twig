@@ -3,11 +3,26 @@
 {% block content %}
     {{ include('parcours/_synthese_parcours.html.twig') }}
 
-    {{ include('parcours/_wizard.html.twig') }}
+    {% if constant('SOURCE', typeD) == 'meef' %}
+        {% if parcours.parcoursParent != null %}
+            {{ include('parcours/_wizard.html.twig') }}
+            {% else %}
+            <div class="alert alert-warning mt-2">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Attention</strong> : ce parcours n'est pas une option. Il n'est donc pas possible de le modifier.
+            </div>
+        {% endif %}
+    {% else %}
+        {{ include('parcours/_wizard.html.twig') }}
+    {% endif %}
 {% endblock %}
 
 {% block header %}
-    Parcours <strong>{{ parcours.libelle }}</strong>
+    {% if parcours.parcoursParent == null %}
+        Parcours <strong>{{ parcours.libelle }}</strong>
+    {% else %}
+        Option <strong>{{ parcours.libelle }}</strong> (parcours <strong>{{ parcours.parcoursParent.libelle }}</strong>)
+    {% endif %}
 {% endblock %}
 
 {% block breadcrumb %}

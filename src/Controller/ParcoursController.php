@@ -17,6 +17,7 @@ use App\Events\AddCentreParcoursEvent;
 use App\Form\ParcoursType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,12 +88,26 @@ class ParcoursController extends BaseController
         ParcoursRepository $parcoursRepository,
         Formation $formation
     ): Response {
+//        if (!$this->isGranted('ROLE_RESP_FORMATION', $formation)) {
+//            throw $this->createAccessDeniedException();
+//        }
+
+
+        $parent = null;
         $parcour = new Parcours($formation);
+        if ($request->query->has('parent') && $request->query->get('parent') !== 'null') {
+            $parent = $parcoursRepository->find($request->query->get('parent'));
+            if (null === $parent) {
+               throw $this->createNotFoundException();
+            }
+            $parcour->setParcoursParent($parent);
+        }
 
         $parcour->setModalitesEnseignement(null);
         $form = $this->createForm(ParcoursType::class, $parcour, [
             'action' => $this->generateUrl('app_parcours_new', [
                 'formation' => $formation->getId(),
+                'parent' => $parent?->getId(),
             ]),
         ]);
         $form->handleRequest($request);
@@ -115,6 +130,8 @@ class ParcoursController extends BaseController
         return $this->render('parcours/new.html.twig', [
             'parcour' => $parcour,
             'form' => $form->createView(),
+            'parent' => $parent,
+            'texte' => $parent ? 'option' : 'parcours',
         ]);
     }
 
@@ -131,6 +148,7 @@ class ParcoursController extends BaseController
                 'parcours' => $parcours->getId(),
             ]),
         ]);
+        $parent = $parcours->getParcoursParent();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -155,6 +173,7 @@ class ParcoursController extends BaseController
         return $this->render('parcours/new.html.twig', [
             'parcour' => $parcours,
             'form' => $form->createView(),
+            'texte' => $parent ? 'option' : 'parcours',
         ]);
     }
 
@@ -171,16 +190,18 @@ class ParcoursController extends BaseController
      */
     #[Route('/{id}/edit', name: 'app_parcours_edit', methods: ['GET', 'POST'])]
     public function edit(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
         Request $request,
         ParcoursState $parcoursState,
         Parcours $parcour
     ): Response {
         $parcoursState->setParcours($parcour);
         $typeDiplome = $parcour->getFormation()?->getTypeDiplome();
-
+        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         return $this->render('parcours/edit.html.twig', [
             'parcours' => $parcour,
             'typeDiplome' => $typeDiplome,
+            'typeD' => $typeD,
             'formation' => $parcour->getFormation(),
             'parcoursState' => $parcoursState,
             'step' => $request->query->get('step') ?? 0,

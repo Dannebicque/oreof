@@ -1,7 +1,7 @@
 <table class="table table-striped">
     <thead>
     <tr>
-        <td>Libellé du parcours</td>
+        <td {% if constant('SOURCE', typeDiplome) == 'meef' %}colspan="2"{% endif %}>Libellé du parcours</td>
         <td>Responsable du parcours</td>
         <td>Co Responsable du parcours</td>
         <td></td>
@@ -9,9 +9,9 @@
     </tr>
     </thead>
     <tbody>
-    {% for parcour in parcours %}
+    {% for parcour in parcours|filter(parcour => parcour.parcoursParent == null) %}
         <tr>
-            <td>
+            <td {% if constant('SOURCE', typeDiplome) == 'meef' %}colspan="2"{% endif %}>
                 {{ parcour.libelle }}
             </td>
             <td>
@@ -40,12 +40,14 @@
                     <i class="{{ iconEdit }}"></i>
                     <span> Modifier le libellé/Responsable du parcours</span>
                 </button>
+                {% if constant('SOURCE', typeDiplome) != 'meef' %}
                 <a href="{{ path('app_parcours_edit', {id:parcour.id}) }}"
-                class="btn btn-sm text-warning btn-icon"
+                   class="btn btn-sm text-warning btn-icon"
                 >
                     <i class="{{ iconEdit }}"></i>
                     Editer la fiche du parcours
                 </a>
+                {% endif %}
 
                 <button {{ stimulus_action('formation--step3', 'dupliquerParcours', 'click', {
                     url:path('app_parcours_dupliquer',{'id': parcour.id}),
@@ -62,30 +64,115 @@
                 </button>
             </td>
         </tr>
+        {% if constant('SOURCE', typeDiplome) == 'meef' %}
+            {% for parc in parcour.parcoursEnfants %}
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        {{ parc.libelle }}
+                    </td>
+                    <td>
+                        {{ parc.respParcours != null ? parc.respParcours.display : 'Non défini' }}
+                    </td>
+                    <td>
+                        {{ parc.coResponsable != null ? parc.coResponsable.display : 'Non défini' }}
+                    </td>
+                    <td style="width:20%">
+                        {{ parc.remplissage|remplissage }}
+                    </td>
+                    <td class="text-end">
+                        <button
+                                {{ stimulus_controller('modal', {
+                                    size: 'lg',
+                                    nomEvenement: 'parcoursAdded',
+                                    modalTitle: 'Modifier une option',
+                                    modalUrl: path('app_parcours_edit_modal', {parcours:parc.id}) }) }}
+                                data-action="click->modal#openModal"
+                                class="btn btn-sm text-warning btn-icon"
+                                data-size="lg"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="bottom"
+                                title="Modifier une option"
+                        >
+                            <i class="{{ iconEdit }}"></i>
+                            <span> Modifier le libellé/Responsable de l'option</span>
+                        </button>
+                        <a href="{{ path('app_parcours_edit', {id:parc.id}) }}"
+                           class="btn btn-sm text-warning btn-icon"
+                        >
+                            <i class="{{ iconEdit }}"></i>
+                            Editer la fiche de l'option
+                        </a>
+
+                        <button {{ stimulus_action('formation--step3', 'dupliquerParcours', 'click', {
+                            url:path('app_parcours_dupliquer',{'id': parc.id}),
+                            id: parc.id}) }} class="btn btn-sm text-primary">
+                            <i class="{{ iconDuplicate }}"></i> Dupliquer
+                        </button>
+
+                        <button {{ stimulus_action('formation--step3', 'deleteParcours', 'click', {
+                            url:path('app_parcours_delete',{'id': parc.id}),
+                            id: parc.id,
+                            csrf: csrf_token('delete' ~ parc.id)
+                        }) }} class="btn btn-sm text-danger">
+                            <i class="{{ iconDelete }}"></i> Supprimer
+                        </button>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>&nbsp;</td>
+                    <td colspan="5" class="text-center bg-warning">Aucune option pour ce parcours.</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="5">
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                nomEvenement: 'parcoursAdded',
+                                modalTitle: 'Ajouter une option au parcours ' ~ parcour.libelle,
+                                modalUrl: path('app_parcours_new', {formation:formation.id, parent:parcour.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm btn-outline-success btn-icon btn-icon-end"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Ajouter une option au parcours {{ parcour.libelle }}"
+                    >
+                        <i class="{{ iconAdd }}"></i>
+                        <span> Ajouter une option au parcours <strong>{{ parcour.libelle }}</strong></span>
+                    </button>
+                </td>
+            </tr>
+        {% endif %}
     {% else %}
         <tr>
-            <td colspan="4" class="text-center bg-warning">Aucun parcours, veuillez en ajouter au moins un.</td>
+            <td colspan="{% if constant('SOURCE', typeDiplome) == 'meef' %}6{% else %}5{% endif %}"
+                class="text-center bg-warning">Aucun parcours, veuillez en ajouter au moins un.
+            </td>
         </tr>
     {% endfor %}
     <tr>
-       <td colspan="4">
-           <button
-                   {{ stimulus_controller('modal', {
-                       size: 'lg',
-                       nomEvenement: 'parcoursAdded',
-                       modalTitle: 'Ajouter un parcours',
-                       modalUrl: path('app_parcours_new', {formation:formation.id}) }) }}
-                   data-action="click->modal#openModal"
-                   class="btn btn-sm btn-outline-success btn-icon btn-icon-end"
-                   data-size="lg"
-                   data-bs-toggle="tooltip"
-                   data-bs-placement="bottom"
-                   title="Ajouter un parcours"
-           >
-               <i class="{{ iconAdd }}"></i>
-               <span> Ajouter un parcours</span>
-           </button>
-       </td>
+        <td colspan="{% if constant('SOURCE', typeDiplome) == 'meef' %}6{% else %}5{% endif %}">
+            <button
+                    {{ stimulus_controller('modal', {
+                        size: 'lg',
+                        nomEvenement: 'parcoursAdded',
+                        modalTitle: 'Ajouter un parcours',
+                        modalUrl: path('app_parcours_new', {formation:formation.id}) }) }}
+                    data-action="click->modal#openModal"
+                    class="btn btn-sm btn-outline-success btn-icon btn-icon-end"
+                    data-size="lg"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="Ajouter un parcours"
+            >
+                <i class="{{ iconAdd }}"></i>
+                <span> Ajouter un parcours</span>
+            </button>
+        </td>
     </tr>
     </tbody>
 </table>

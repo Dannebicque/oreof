@@ -154,6 +154,12 @@ class Parcours
     #[ORM\ManyToOne(inversedBy: 'coParcours')]
     private ?User $coResponsable = null;
 
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'parcoursEnfants')]
+    private ?self $parcoursParent = null;
+
+    #[ORM\OneToMany(mappedBy: 'parcoursParent', targetEntity: self::class)]
+    private Collection $parcoursEnfants;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -167,6 +173,7 @@ class Parcours
         $this->ficheMatiereParcours = new ArrayCollection();
         $this->semestreMutualisables = new ArrayCollection();
         $this->ueMutualisables = new ArrayCollection();
+        $this->parcoursEnfants = new ArrayCollection();
     }
 
 
@@ -802,6 +809,48 @@ class Parcours
     public function setCoResponsable(?User $coResponsable): self
     {
         $this->coResponsable = $coResponsable;
+
+        return $this;
+    }
+
+    public function getParcoursParent(): ?self
+    {
+        return $this->parcoursParent;
+    }
+
+    public function setParcoursParent(?self $parcoursParent): self
+    {
+        $this->parcoursParent = $parcoursParent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getParcoursEnfants(): Collection
+    {
+        return $this->parcoursEnfants;
+    }
+
+    public function addParcoursEnfant(self $parcoursEnfant): self
+    {
+        if (!$this->parcoursEnfants->contains($parcoursEnfant)) {
+            $this->parcoursEnfants->add($parcoursEnfant);
+            $parcoursEnfant->setParcoursParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParcoursEnfant(self $parcoursEnfant): self
+    {
+        if ($this->parcoursEnfants->removeElement($parcoursEnfant)) {
+            // set the owning side to null (unless already changed)
+            if ($parcoursEnfant->getParcoursParent() === $this) {
+                $parcoursEnfant->setParcoursParent(null);
+            }
+        }
 
         return $this;
     }
