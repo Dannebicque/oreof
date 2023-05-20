@@ -31,15 +31,14 @@ class RegisterController extends AbstractController
 {
     #[Route('/demande-acces', name: 'app_register')]
     public function index(
-        EtablissementRepository $etablissementRepository,
-        UserCentreRepository $userCentreRepository,
-        ComposanteRepository $composanteRepository,
-        Ldap $ldap,
+        EtablissementRepository  $etablissementRepository,
+        UserCentreRepository     $userCentreRepository,
+        ComposanteRepository     $composanteRepository,
+        Ldap                     $ldap,
         EventDispatcherInterface $eventDispatcher,
-        UserRepository $userRepository,
-        Request $request
-    ): Response
-    {
+        UserRepository           $userRepository,
+        Request                  $request
+    ): Response {
         $user = new User();
         $form = $this->createForm(RegisterType::class, $user);
 
@@ -59,26 +58,24 @@ class RegisterController extends AbstractController
                 $userRepository->save($user, true);
 
                 $centre = $form['centreDemande']->getData();
+                $ajout = false;
                 $userEvent = new UserRegisterEvent($user, $centre);
                 switch ($centre) {
                     case CentreGestionEnum::CENTRE_GESTION_COMPOSANTE:
                         $composante = $composanteRepository->find($request->request->get('selectListe'));
-                        $centreUser = new UserCentre();
-                        $centreUser->setUser($user);
-                        $centreUser->setComposante($composante);
+                        $user->setComposanteDemande($composante);
                         $userEvent->setComposante($composante);
+                        $ajout = true;
                         break;
                     case CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT:
                         $etablissement = $etablissementRepository->find(1);//todo: imposé car juste URCA
-                        $centreUser = new UserCentre();
-                        $centreUser->setUser($user);
-                        $centreUser->setEtablissement($etablissement);
+                        $user->setEtablissementDemande($etablissement);
                         $userEvent->setEtablissement($etablissement);
+                        $ajout = true;
                         break;
                 }
 
-                if (isset($centreUser)) {
-                    $userCentreRepository->save($centreUser, true);
+                if ($ajout) {
                     $this->addFlash('success', 'Votre demande a bien été prise en compte');
 
                     $eventDispatcher->dispatch($userEvent, UserRegisterEvent::USER_DEMANDE_ACCES);

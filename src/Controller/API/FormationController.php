@@ -9,18 +9,28 @@
 
 namespace App\Controller\API;
 
+use App\Controller\BaseController;
 use App\Repository\FormationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class FormationController extends AbstractController
+class FormationController extends BaseController
 {
     #[Route('/api/formation', name: 'api_formation')]
     public function getFormation(
+        Request $request,
         FormationRepository $formationRepository,
     ): Response {
-        $formations = $formationRepository->findAll();
+        $dpe = (bool) $request->query->get('dpe', false);
+
+        if ($dpe === false) {
+            $formations = $formationRepository->findAll();
+        } else {
+            $formations = $formationRepository->findByComposanteDpe($this->getUser(), $this->getAnneeUniversitaire());
+        }
+
         $t = [];
         foreach ($formations as $formation) {
             $t[] = [

@@ -1,0 +1,96 @@
+<table class="table">
+    <tbody>
+    <tr>
+        <th>Login URCA</th>
+        {# todo: possibilité de mise à jour? bouton ldap  #}
+        <td>{{ user.username }}</td>
+    </tr>
+    <tr>
+        <th>Nom</th>
+        <td>{{ user.nom }}</td>
+    </tr>
+    <tr>
+        <th>Prénom</th>
+        <td>{{ user.prenom }}</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{{ user.email }}</td>
+    </tr>
+    </tbody>
+</table>
+
+<div {{ stimulus_controller('register', {
+    urlComposante: path('api_composante', {dpe:dpe}),
+    urlFormation: path('api_formation', {dpe:dpe}),
+})|stimulus_controller('centre', {
+    urlListe: path('app_user_gestion_liste', {user:user.id}),
+    urlAdd: path('app_user_gestion_add_centre', {user:user.id})
+}) }}>
+    <div {{ stimulus_target('centre', 'liste') }}>
+
+    </div>
+    <div>
+        <h3>Ajouter un centre</h3>
+        <div>
+            <label class="form-label required" for="typeCentre">Type de centre</label>
+            <select id="typeCentre" class="form-select" {{ stimulus_action('register', 'changeCentre') }}
+                    required
+            >
+                {% for centre in typeCentres|filter(centre => (dpe == true and centre.value != 'cg_etablissement')) %}
+                    <option value="{{ centre.value }}">{{ centre.libelle }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="selectListe" class="form-label">Selon le centre, précisez</label>
+            <select class="form-select" name="selectListe" id="selectListe">
+                <option value="">Choisissez un centre</option>
+            </select>
+        </div>
+        <div>
+            <label for="droits" class="form-label required">Droits sur ce centre ?</label>
+            <select class="form-select" name="droits" id="droits" required>
+                <option value="">Choisissez un centre</option>
+                {% for role in roles %}
+                    <option value="{{ role.id }}">{{ role.libelle }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-success" {{ stimulus_action('centre', 'addCentre') }}>Ajouter le centre</button>
+    </div>
+</div>
+
+{% if user.isEnable %}
+    <a href="{{ path('app_user_gestion_revoque_admin', {user:user.id}) }}" class="btn btn-outline-danger">
+        Désactiver l'accès
+    </a>
+{% else %}
+    {% if (user.isValidDpe == false and (user.userCentres|length >0 and (user.userCentres[0].typeCentre == 'cg_composante' or user.userCentres[0].typeCentre ==
+        'cg_formation'))
+        ) or user.isValideAdministration == false %}
+        {% if user.isValidDpe == false %}
+            <span class="badge bg-warning">Non validé par DPE</span>
+        {% else %}
+            <span class="badge bg-success">
+            Validé par DPE le {{ user.dateValideDpe|dateTimeFr }}
+            </span>
+        {% endif %}
+        {% if not is_granted('ROLE_SES') %}
+            <a href="{{ path('app_user_gestion_valid_dpe', {user:user.id}) }}" class="btn btn-outline-success">
+                Valider l'accès
+            </a>
+        {% endif %}
+    {% endif %}
+    {% if is_granted('ROLE_SES') %}
+        {% if user.isValideAdministration == false %}
+            <a href="{{ path('app_user_gestion_valid_admin', {user:user.id}) }}" class="btn btn-outline-success">
+                Valider l'accès
+            </a>
+        {% else %}
+            <a href="{{ path('app_user_gestion_revoque_admin', {user:user.id}) }}" class="btn btn-outline-danger">
+                Révoquer l'accès
+            </a>
+        {% endif %}
+    {% endif %}
+{% endif %}

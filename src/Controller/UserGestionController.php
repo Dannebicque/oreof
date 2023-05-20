@@ -214,6 +214,8 @@ class UserGestionController extends BaseController
         }
 
         $user->setIsEnable(true);
+        $user->setComposanteDemande(null);
+        $user->setEtablissementDemande(null);
         $user->setIsValideAdministration(true);
         $user->setDateValideAdministration(new DateTime());
 

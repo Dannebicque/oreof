@@ -41,7 +41,7 @@ class AddCentreParcoursSubscriber implements EventSubscriberInterface
         $user = $event->user ?? $event->parcours->getRespParcours();
         $parcours = $event->parcours;
 
-        if (($user === null) || ($parcours === null)) {
+        if ($user === null || $parcours === null) {
             return;
         }
 

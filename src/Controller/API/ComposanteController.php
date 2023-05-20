@@ -11,6 +11,7 @@ namespace App\Controller\API;
 
 use App\Repository\ComposanteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,9 +19,16 @@ class ComposanteController extends AbstractController
 {
     #[Route('/api/composante', name: 'api_composante')]
     public function getComposante(
+        Request $request,
         ComposanteRepository $composanteRepository,
     ): Response {
-        $composantes = $composanteRepository->findAll();
+        $dpe = (bool) $request->query->get('dpe', false);
+
+        if ($dpe === false) {
+            $composantes = $composanteRepository->findAll();
+        } else {
+            $composantes = $composanteRepository->findByCentreGestion($this->getUser());
+        }
         $t = [];
         foreach ($composantes as $composante) {
             $t[] = [

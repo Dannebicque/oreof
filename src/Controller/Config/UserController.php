@@ -40,17 +40,36 @@ class UserController extends AbstractController
     }
 
     #[Route('/attente-validation', name: 'app_user_attente', methods: ['GET'])]
-    public function attente(UserRepository $repository): Response
+    public function attente(UserRepository $userRepository): Response
     {
         //todo: gérer par le responsable de DPE ?? pour affecter les droits et "pré-valider" les utilisateurs
-        $users = $repository->findNotEnableAvecDemande();
+        if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
+            $users = $userRepository->findNotEnableAvecDemande();
+            $dpe = false;
+        } elseif ($this->isGranted('ROLE_COMPOSANTE', $this->getUser())) {
+            //todo: ROLE_COMPOSANTE_MANAGE_MY ?
+            $composante = null;
+            $dpe = true;
+            foreach ($this->getUser()?->getUserCentres() as $centre) {
+                if ($centre->getComposante() !== null) {
+                    $composante = $centre->getComposante(); //au moins une composante, todo: si plusieurs ?
+                }
+            }
+            if ($composante !== null) {
+                $users = $userRepository->findByComposanteNotEnableAvecDemande($composante);
+            } else {
+                $users = [];
+            }
+        }
 
         return $this->render('config/user/attente.html.twig', [
             'users' => $users,
+            'dpe' => $dpe
         ]);
     }
 
-    #[Route('/liste', name: 'app_user_liste', methods: ['GET'])]
+    #[
+        Route('/liste', name: 'app_user_liste', methods: ['GET'])]
     public function liste(
         Request        $request,
         UserRepository $userRepository
@@ -65,17 +84,21 @@ class UserController extends AbstractController
             } else {
                 $users = $userRepository->findEnable($sort, $direction);
             }
-        } else if ($this->isGranted('ROLE_COMPOSANTE', $this->getUser() )) {
+        } elseif ($this->isGranted('ROLE_COMPOSANTE', $this->getUser())) {
             //todo: ROLE_COMPOSANTE_MANAGE_MY ?
             foreach ($this->getUser()?->getUserCentres() as $centre) {
                 if ($centre->getComposante() !== null) {
-                    $composante =  $centre->getComposante(); //au moins une composante, todo: si plusieurs ?
+                    $composante = $centre->getComposante(); //au moins une composante, todo: si plusieurs ?
                 }
             }
-            if ($q) {
-                $users = $userRepository->findByComposanteEnableBySearch($composante, $q, $sort, $direction);
+            if ($composante !== null) {
+                if ($q) {
+                    $users = $userRepository->findByComposanteEnableBySearch($composante, $q, $sort, $direction);
+                } else {
+                    $users = $userRepository->findByComposanteEnable($composante, $sort, $direction);
+                }
             } else {
-                $users = $userRepository->findByComposanteEnable($composante,$sort, $direction);
+                $users = [];
             }
         }
 
@@ -145,6 +168,23 @@ class UserController extends AbstractController
         return $this->render('config/user/show.html.twig', [
             'user' => $user,
             'roles' => $roleRepository->findByAll()
+        ]);
+    }
+
+    #[
+        Route('/show-attente/{id}', name: 'app_user_show_attente', methods: ['GET'])]
+    public function showAttente(
+        Request        $request,
+        RoleRepository $roleRepository,
+        User           $user
+    ): Response {
+        $dpe = (bool) $request->query->get('dpe', false);
+        return $this->render('config/user/_show_attente.html.twig', [
+            'user' => $user,
+            'typeCentres' => CentreGestionEnum::cases(),
+            'centresUser' => $user->getUserCentres(),
+            'roles' => $roleRepository->findAll(),
+            'dpe' => $dpe
         ]);
     }
 

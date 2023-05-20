@@ -1,72 +1,72 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-<div class="card">
-    <div class="card-body">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>Login URCA</th>
-                <th>Droits</th>
-                <th>Centre(s)</th>
-                <th>Date demande</th>
-                <th>Validé DPE ?</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for user in users %}
-            <tr>
-                <td>{{ user.nom }}</td>
-                <td>{{ user.prenom }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.roles|badgeDroits }}</td>
-                <td>
-                    {% for centre in user.userCentres %}
-                        <span class="badge bg-primary">{{ centre.display }}</span>
-                    {% endfor %}
-                </td>
-                <td>{{ user.dateDemande|dateTimeFr }}</td>
-                <td>
-                    {% if user.isValidDpe %}
-                    <span class="badge bg-success">Oui {% if user.isValidDpe == true %}
-                            ({{ user.dateValideDpe|dateTimeFr }})
-                        {% endif %}</span>
-                    {% else %}
-                        <span class="badge bg-warning">Non</span>
-                    {% endif %}
-                </td>
-                <td>
-                    <button
-                            {{ stimulus_controller('modal', {
-                                size: 'lg',
-                                modalTitle: 'Voir les détails de l\'utilisateur',
-                                modalUrl: path('app_user_show',{'id': user.id}) }) }}
-                            data-action="click->modal#openModal"
-                            class="btn btn-sm text-info"
-                            data-size="lg"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Voir les détails de l\'utilisateur"
-                    >
-                        <i class="{{ iconShow }}"></i>
-                        <span> voir et gérer</span>
-                    </button>
-                </td>
-            </tr>
-            {% else %}
+    <div class="card">
+        <div class="card-body">
+            <table class="table">
+                <thead>
                 <tr>
-                    <td colspan="8" class="bg-success">Aucune en demande en attente</td>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Login URCA</th>
+                    <th>Droits</th>
+                    <th>Centre(s)</th>
+                    <th>Date demande</th>
+                    <th>Validé DPE ?</th>
+                    <th></th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.nom }}</td>
+                        <td>{{ user.prenom }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.roles|badgeDroits }}</td>
+                        <td>
+                            {% for centre in user.userCentres %}
+                                <span class="badge bg-primary">{{ centre.display }}</span>
+                            {% endfor %}
+                        </td>
+                        <td>{{ user.dateDemande|dateTimeFr }}</td>
+                        <td>
+                            {% if user.isValidDpe %}
+                                <span class="badge bg-success">Oui {% if user.isValidDpe == true %}
+                                        ({{ user.dateValideDpe|dateTimeFr }})
+                                    {% endif %}</span>
+                            {% else %}
+                                <span class="badge bg-warning">Non</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <button
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        modalTitle: 'Voir les détails de l\'utilisateur',
+                                        modalUrl: path('app_user_show_attente',{'id': user.id, 'dpe': dpe}) }) }}
+                                    data-action="click->modal#openModal"
+                                    class="btn btn-sm text-info"
+                                    data-size="lg"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"
+                                    title="Voir les détails de l\'utilisateur"
+                            >
+                                <i class="{{ iconShow }}"></i>
+                                <span> voir et gérer</span>
+                            </button>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="bg-success">Aucune en demande en attente</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
 {% endblock %}
 

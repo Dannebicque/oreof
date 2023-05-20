@@ -146,6 +146,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
     }
 
+    public function findByComposanteNotEnableAvecDemande(
+        Composante $composante
+    ): array {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.composanteDemande = :composante')
+            ->andWhere('u.isEnable = :isEnable')
+            ->andWhere('u.dateDemande IS NOT NULL')
+            ->andWhere('u.isDeleted = false')
+            ->setParameter('isEnable', false)
+            ->setParameter('composante', $composante)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findByComposanteEnable(
         Composante                 $composante,
         float|bool|int|string|null $sort,

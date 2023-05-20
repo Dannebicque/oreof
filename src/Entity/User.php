@@ -102,6 +102,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'coResponsable', targetEntity: Formation::class)]
     private Collection $coFormations;
 
+    #[ORM\ManyToOne]
+    private ?Composante $composanteDemande = null;
+
+    #[ORM\ManyToOne]
+    private ?Etablissement $etablissementDemande = null;
+
     public function __construct()
     {
         $this->composantes = new ArrayCollection();
@@ -554,6 +560,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $coFormation->setCoResponsable(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getComposanteDemande(): ?Composante
+    {
+        return $this->composanteDemande;
+    }
+
+    public function setComposanteDemande(?Composante $composanteDemande): self
+    {
+        $this->composanteDemande = $composanteDemande;
+
+        return $this;
+    }
+
+    public function getEtablissementDemande(): ?Etablissement
+    {
+        return $this->etablissementDemande;
+    }
+
+    public function setEtablissementDemande(?Etablissement $etablissementDemande): self
+    {
+        $this->etablissementDemande = $etablissementDemande;
 
         return $this;
     }
