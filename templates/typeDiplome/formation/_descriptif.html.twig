@@ -3,6 +3,12 @@
         <dl>
             <dt>Modalités d'enseignement</dt>
             <dd>{{ parcours.modalitesEnseignement != null ? parcours.modalitesEnseignement.libelle : 'Erreur' }}</dd>
+        </dl>
+    </div>
+
+    {% if typeDiplome.hasStage %}
+    <div class="col-sm-12 col-md-6">
+        <dl>
             <dt>Stage(s)</dt>
             <dd>
                 {% if parcours.hasStage == true %}
@@ -14,27 +20,50 @@
             </dd>
         </dl>
     </div>
+    {% endif %}
+
+    {% if typeDiplome.hasProjet %}
     <div class="col-sm-12 col-md-6">
         <dl>
             <dt>Projet(s) tutoré(s)</dt>
             <dd>
                 {% if parcours.hasProjet == true %}
-                    Oui ({{ parcours.nbHeuresProjet }} heures). {{ parcours
-                .projetTexte|raw }}
-                {% else %}
-                    Non
-                {% endif %}
-            </dd>
-            <dt>TER/Mémoire</dt>
-            <dd>
-                {% if parcours.hasMemoire == true %}
-                    Oui ({{ parcours.nbHeuresMemoire }} heures). {{ parcours
-                .memoireTexte|raw }}
+                    Oui ({{ parcours.nbHeuresProjet }} heures). {{ parcours.projetText|raw }}
                 {% else %}
                     Non
                 {% endif %}
             </dd>
         </dl>
     </div>
-    {# todo: heures de situation pro pour LP et BUT #}
+    {% endif %}
+
+    {% if typeDiplome.hasMemoire %}
+        <div class="col-sm-12 col-md-6">
+            <dl>
+                <dt>TER/Mémoire</dt>
+                <dd>
+                    {% if parcours.hasMemoire == true %}
+                        Oui. {{ parcours.memoireText|raw }}
+                    {% else %}
+                        Non
+                    {% endif %}
+                </dd>
+            </dl>
+        </div>
+    {% endif %}
+
+    {% if typeDiplome.hasSituationPro %}
+    <div class="col-sm-12 col-md-6">
+        <dl>
+            <dt>Situation professionnelle</dt>
+            <dd>
+                {% if parcours.hasSituationPro == true %}
+                    Oui ({{ parcours.nbHeuresSituationPro }} heures).
+                {% else %}
+                    Non
+                {% endif %}
+            </dd>
+        </dl>
+    </div>
+    {% endif %}
 </div>
