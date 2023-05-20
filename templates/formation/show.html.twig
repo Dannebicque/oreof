@@ -76,12 +76,6 @@
                             Contacts pédagogiques
                         </a>
                     </li>
-                    <li>
-                        <a class="nav-link p-2" href="#ecs">
-                            <i class="fal fa-chevron-right"></i>
-                            Fiches des EC
-                        </a>
-                    </li>
                 {% else %}
                     {% for parcours in formation.parcours %}
                         <li>
@@ -141,12 +135,6 @@
                             <a class="nav-link p-2" href="#contacts_{{ parcours.id }}">
                                 <i class="fal fa-chevron-right text-start"></i>
                                 Contacts pédagogiques
-                            </a>
-                        </li>
-                        <li>
-                            <a class="nav-link p-2" href="#ecs_{{ parcours.id }}">
-                                <i class="fal fa-chevron-right"></i>
-                                Fiches des EC
                             </a>
                         </li>
                     {% endfor %}

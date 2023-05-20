@@ -529,4 +529,9 @@ class ElementConstitutif
 
         return $this;
     }
+
+    public function volumeTotalPresentiel(): float
+    {
+       return $this->volumeCmPresentiel + $this->volumeTdPresentiel + $this->volumeTpPresentiel;
+    }
 }

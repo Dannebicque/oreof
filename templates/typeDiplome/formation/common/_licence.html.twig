@@ -94,15 +94,6 @@
             </div>
         </section>
 
-        <section class="scroll-section" id="ecs">
-            <h2 class="small-title">Fiches EC/matières</h2>
-            <div class="card mb-5">
-                <div class="card-body">
-                    {{ include('typeDiplome/formation/_ecs.html.twig', {parcours:formation.parcours[0]}) }}
-                </div>
-            </div>
-        </section>
-
     {% else %}
         {% for parcours in formation.parcours %}
             <div>
@@ -189,15 +180,6 @@
                 <div class="card mb-5">
                     <div class="card-body">
                         {{ include('typeDiplome/formation/_contacts.html.twig', {parcours:parcours}) }}
-                    </div>
-                </div>
-            </section>
-
-            <section class="scroll-section" id="ecs_{{ parcours.id }}">
-                <h2 class="small-title">Fiches des EC</h2>
-                <div class="card mb-5">
-                    <div class="card-body">
-                        {{ include('typeDiplome/formation/_ecs.html.twig', {parcours:parcours}) }}
                     </div>
                 </div>
             </section>
