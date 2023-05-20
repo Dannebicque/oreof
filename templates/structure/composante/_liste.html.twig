@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div>{# class="scroll-out" #}
-                {% for composante in composantes %}
+                {% for composante in composantes|filter(composante => composante.formationsPortees|length > 0) %}
                     <div {{ stimulus_controller('structure--composante') }}>
                         <div class="card mb-2 sh-19 sh-md-8">
                             <div class="card-body pt-0 pb-0 h-100">
