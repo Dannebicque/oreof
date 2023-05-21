@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/Dannebicque/oreof/compare/v1.0.1...v1.1.0) (2023-05-21)
+
+
+### Features
+
+* Affichage formation => détail de la structure + liens fiches EC ([7c4f657](https://github.com/Dannebicque/oreof/commit/7c4f6579f31057549bf1141e7078a372cf689678))
+* Filtre des composantes sans formation portée ([e9e1505](https://github.com/Dannebicque/oreof/commit/e9e1505702dd71939dd98e08f0bfb1669ada8665))
+* Gestion des notifs. Marquage lu. ([e77611f](https://github.com/Dannebicque/oreof/commit/e77611fe636d476fbed07035813b1e5087642868))
+* Gestion des options du MEEF + Type Diplome MEEF ([80c17b2](https://github.com/Dannebicque/oreof/commit/80c17b23d5700dd04d208f36cdcfca067d3d3eaf))
+* Gestion des utilisateurs et des doublons. Lien Centre => Formation et/ou composantes ([2868fd5](https://github.com/Dannebicque/oreof/commit/2868fd5dc1ad8c864ccec2650fabecea2f767a0f))
+* Validation des demandes par DPE ([517a241](https://github.com/Dannebicque/oreof/commit/517a241a665429480304fe84f51a891269ae14d4))
+
+
+### Bug Fixes
+
+* Affichage formation ([810586d](https://github.com/Dannebicque/oreof/commit/810586d38083b18c0094bd1d610c8357a2b59761))
+
 ### [1.0.1](https://github.com/Dannebicque/oreof/compare/v1.0.0...v1.0.1) (2023-05-16)
 
 
