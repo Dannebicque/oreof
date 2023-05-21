@@ -63,7 +63,7 @@ class TypeEcRepository extends ServiceEntityRepository
             ->orderBy('t.libelle', 'ASC');
     }
 
-    public function findByTypeDiplomeAndFormation(TypeDiplome $typeDiplome, Formation $formation)
+    public function findByTypeDiplomeAndFormation(TypeDiplome $typeDiplome, Formation $formation): QueryBuilder
     {
         return $this->createQueryBuilder('t')
             ->join('t.typeDiplomes', 'td')

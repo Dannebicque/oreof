@@ -9,6 +9,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Composante;
+use App\Entity\Formation;
+use App\Entity\Role;
 use App\Entity\UserCentre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -51,6 +54,28 @@ class UserCentreRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('u')
             ->where('u.composante = :composante')
             ->setParameter('composante', $composante)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findComposanteWithSameRole(Composante $composante, Role $role): array
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.composante = :composante')
+            ->andWhere('u.droits LIKE :role')
+            ->setParameter('composante', $composante)
+            ->setParameter('role', '%'.$role->getCodeRole().'%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findFormationWithSameRole(Formation $formation, Role $role): array
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.formation = :formation')
+            ->andWhere('u.droits LIKE :role')
+            ->setParameter('formation', $formation)
+            ->setParameter('role', '%'.$role->getCodeRole().'%')
             ->getQuery()
             ->getResult();
     }

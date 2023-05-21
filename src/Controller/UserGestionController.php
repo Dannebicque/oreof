@@ -15,6 +15,9 @@ use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
 use App\Events\AddCentreFormationEvent;
 use App\Events\AddCentreParcoursEvent;
+use App\Events\NotifCentreComposanteEvent;
+use App\Events\NotifCentreEtablissementEvent;
+use App\Events\NotifCentreFormationEvent;
 use App\Events\UserEvent;
 use App\Form\UserAddType;
 use App\Repository\ComposanteRepository;
@@ -39,19 +42,19 @@ class UserGestionController extends BaseController
 {
     public function __construct(
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly UserRepository $userRepository,
+        private readonly UserRepository           $userRepository,
     ) {
     }
 
     #[Route('/ajout/utilisateur', name: 'app_user_missing')]
     public function ajoutUtilisateur(
-        Ldap $ldap,
+        Ldap                   $ldap,
         EntityManagerInterface $entityManager,
-        ParcoursRepository $parcoursRepository,
+        ParcoursRepository     $parcoursRepository,
         FicheMatiereRepository $ficheMatiereRepository,
-        FormationRepository $formationRepository,
-        UserRepository $userRepository,
-        Request $request
+        FormationRepository    $formationRepository,
+        UserRepository         $userRepository,
+        Request                $request
     ): Response {
         $user = new  User();
 
@@ -229,16 +232,19 @@ class UserGestionController extends BaseController
     #[Route('/valid/dpe/{user}', name: 'app_user_gestion_valid_dpe')]
     public function validDpe(User $user): Response
     {
-        $this->denyAccessUnlessGranted('CAN_EDIT_CENTRE');
+        // $this->denyAccessUnlessGranted('CAN_EDIT_CENTRE');//todo: faire sur manage composante
+        if (count($user->getUserCentres()) > 0) {
+            $user->setDateValideDpe(new DateTime());
+            $user->setIsValidDpe(true);
+            $user->setDateValideAdministration(new DateTime());
 
-        $user->setDateValideDpe(new DateTime());
-        $user->setIsValidDpe(true);
-        $user->setDateValideAdministration(new DateTime());
+            $this->userRepository->save($user, true);
+            $this->eventDispatcher->dispatch(new UserEvent($user), UserEvent::USER_VALIDE_DPE);
+            $this->addFlash('success', 'L\'utilisateur a bien été validé !');
+            return $this->redirectToRoute('app_user_attente');
+        }
 
-        $this->userRepository->save($user, true);
-        $this->eventDispatcher->dispatch(new UserEvent($user), UserEvent::USER_VALIDE_DPE);
-
-        return $this->redirectToRoute('app_user_attente');
+        $this->addFlash('error', 'L\'utilisateur doit avoir au moins un centre !');
     }
 
     #[Route('/revoque/admin/{user}', name: 'app_user_gestion_revoque_admin')]
@@ -258,7 +264,7 @@ class UserGestionController extends BaseController
     #[Route('/gestion/centre/{user}', name: 'app_user_gestion_centre')]
     public function gestionCentre(
         RoleRepository $roleRepository,
-        User $user
+        User           $user
     ): Response {
         $this->denyAccessUnlessGranted('CAN_EDIT_CENTRE');
 
@@ -285,45 +291,122 @@ class UserGestionController extends BaseController
      */
     #[Route('/add/centre/{user}', name: 'app_user_gestion_add_centre')]
     public function addCentre(
-        RoleRepository $roleRepository,
-        UserCentreRepository $userCentreRepository,
-        ComposanteRepository $composanteRepository,
+        EventDispatcherInterface $eventDispatcher,
+        RoleRepository          $roleRepository,
+        UserCentreRepository    $userCentreRepository,
+        ComposanteRepository    $composanteRepository,
         EtablissementRepository $etablissementRepository,
-        FormationRepository $formationRepository,
-        Request $request,
-        User $user
+        FormationRepository     $formationRepository,
+        Request                 $request,
+        User                    $user
     ): Response {
         $data = JsonRequest::getFromRequest($request);
         $nCentre = new UserCentre();
         $nCentre->setUser($user);
 
         $role = $roleRepository->find($data['role']);
+        if ($role === null) {
+            return $this->json(['error' => 'Ce rôle n\'existe pas'], 400);
+        }
+
         $nCentre->addRole($role);
+
 
         switch (CentreGestionEnum::from($data['centreType'])) {
             case CentreGestionEnum::CENTRE_GESTION_COMPOSANTE:
                 $centre = $composanteRepository->find($data['centreId']);
+                if ($centre === null) {
+                    return $this->json(['error' => 'Cette composante n\'existe pas'], 400);
+                }
                 $uc = $userCentreRepository->findOneBy(['user' => $user, 'composante' => $centre]);
                 if ($uc !== null) {
                     return $this->json(['error' => 'Ce centre est déjà associé à cet utilisateur'], 400);
                 }
+
+                if ($role->getCodeRole() === 'ROLE_DPE' || $role->getCodeRole() === 'ROLE_DIRECTEUR') {
+                    $uc = $userCentreRepository->findComposanteWithSameRole($centre, $role);
+
+                    if ($uc !== null && count($uc) > 0) {
+                        if ((bool)$data['force'] === false) {
+                            return $this->json(['error' => 'already_exist'], 400);
+                        }
+
+                        $userCentreRepository->remove($uc[0]); // on supprime l'ancien centre
+                        $event = new NotifCentreComposanteEvent($centre, [], $uc[0]->getUser());
+                        $eventDispatcher->dispatch($event, NotifCentreComposanteEvent::NOTIF_REMOVE_CENTRE_COMPOSANTE);
+                    }
+                }
+
                 $nCentre->setComposante($centre);
+                $event = new NotifCentreComposanteEvent($centre, [$role->getCodeRole()], $user);
+                $eventDispatcher->dispatch($event, NotifCentreComposanteEvent::NOTIF_ADD_CENTRE_COMPOSANTE);
+
+                //si centre DPE ou DIRECTEUR... Mettre à jour la composante
+                if ($role->getCodeRole() === 'ROLE_DPE') {
+                    $centre->setResponsableDpe($user);
+                    $composanteRepository->save($centre, true);
+                }
+
+                if ($role->getCodeRole() === 'ROLE_DIRECTEUR') {
+                    $centre->setDirecteur($user);
+                    $composanteRepository->save($centre, true);
+                }
                 break;
             case CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT:
                 $centre = $etablissementRepository->find(1);
+                if ($centre === null) {
+                    return $this->json(['error' => 'Cet établissement n\'existe pas'], 400);
+                }
+
                 $uc = $userCentreRepository->findOneBy(['user' => $user, 'etablissement' => $centre]);
                 if ($uc !== null) {
                     return $this->json(['error' => 'Ce centre est déjà associé à cet utilisateur'], 400);
                 }
                 $nCentre->setEtablissement($centre);
+
+                $event = new NotifCentreEtablissementEvent($centre, [$role->getCodeRole()], $user);
+                $eventDispatcher->dispatch($event, NotifCentreEtablissementEvent::NOTIF_ADD_CENTRE_ETABLISSEMENT);
+
                 break;
             case CentreGestionEnum::CENTRE_GESTION_FORMATION:
                 $centre = $formationRepository->find($data['centreId']);
+                if ($centre === null) {
+                    return $this->json(['error' => 'Cette formation n\'existe pas'], 400);
+                }
+
                 $uc = $userCentreRepository->findOneBy(['user' => $user, 'formation' => $centre]);
                 if ($uc !== null) {
                     return $this->json(['error' => 'Ce centre est déjà associé à cet utilisateur'], 400);
                 }
+
+                if ($role->getCodeRole() === 'ROLE_RESP_FORMATION' || $role->getCodeRole() === 'ROLE_CO_RESP_FORMATION') {
+                    $uc = $userCentreRepository->findFormationWithSameRole($centre, $role);
+                    if ($uc !== null && count($uc) > 0) {
+                        if ((bool)$data['force'] === false) {
+                            return $this->json(['error' => 'already_exist'], 400);
+                        }
+
+                        $userCentreRepository->remove($uc[0]); // on supprime l'ancien centre
+                        $event = new NotifCentreFormationEvent($centre, [], $uc[0]->getUser());
+                        $eventDispatcher->dispatch($event, NotifCentreFormationEvent::NOTIF_REMOVE_CENTRE_FORMATION);
+                    }
+                }
+
                 $nCentre->setFormation($centre);
+                $event = new NotifCentreFormationEvent($centre, [$role->getCodeRole()], $user);
+                $eventDispatcher->dispatch($event, NotifCentreFormationEvent::NOTIF_ADD_CENTRE_FORMATION);
+
+                //si centre ROLE_RESP_FORMATION ou ROLE_CO_RESP_FORMATION... Mettre à jour la formation
+                if ($role->getCodeRole() === 'ROLE_RESP_FORMATION') {
+                    $centre->setResponsableMention($user);
+                    $formationRepository->save($centre, true);
+                }
+
+                if ($role->getCodeRole() === 'ROLE_CO_RESP_FORMATION') {
+                    $centre->setCoResponsable($user);
+                    $formationRepository->save($centre, true);
+                }
+
                 break;
         }
 
@@ -337,8 +420,8 @@ class UserGestionController extends BaseController
      */
     #[Route('/{id}', name: 'app_user_gestion_delete_centre', methods: ['DELETE'])]
     public function delete(
-        Request $request,
-        UserCentre $userCentre,
+        Request              $request,
+        UserCentre           $userCentre,
         UserCentreRepository $userCentreRepository
     ): Response {
         if ($this->isCsrfTokenValid(

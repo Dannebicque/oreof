@@ -10,19 +10,13 @@
 namespace App\Repository;
 
 use App\Entity\AnneeUniversitaire;
-use App\Entity\Composante;
-use App\Entity\EcUe;
-use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Mention;
 use App\Entity\Parcours;
-use App\Entity\Semestre;
-use App\Entity\Ue;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<FicheMatiere>

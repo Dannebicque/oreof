@@ -10,8 +10,7 @@
                     <th>Prénom</th>
                     <th>Email</th>
                     <th>Login URCA</th>
-                    <th>Droits</th>
-                    <th>Centre(s)</th>
+                    <th>Centre(s) / Droits</th>
                     <th>Date demande</th>
                     <th>Validé DPE ?</th>
                     <th></th>
@@ -24,20 +23,23 @@
                         <td>{{ user.prenom }}</td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.username }}</td>
-                        <td>{{ user.roles|badgeDroits }}</td>
                         <td>
                             {% for centre in user.userCentres %}
-                                <span class="badge bg-primary">{{ centre.display }}</span>
+                                {{ centre|badgeCentre }}
                             {% endfor %}
                         </td>
                         <td>{{ user.dateDemande|dateTimeFr }}</td>
                         <td>
-                            {% if user.isValidDpe %}
-                                <span class="badge bg-success">Oui {% if user.isValidDpe == true %}
-                                        ({{ user.dateValideDpe|dateTimeFr }})
-                                    {% endif %}</span>
+                            {% if user.composanteDemande != null %}
+                                {% if user.isValidDpe %}
+                                    <span class="badge bg-success">Oui
+                                            ({{ user.dateValideDpe|dateTimeFr }})
+                                        </span>
+                                {% else %}
+                                    <span class="badge bg-warning">Non ({{ user.composanteDemande.libelle }})</span>
+                                {% endif %}
                             {% else %}
-                                <span class="badge bg-warning">Non</span>
+                                <span class="badge bg-success">Etablissement</span>
                             {% endif %}
                         </td>
                         <td>

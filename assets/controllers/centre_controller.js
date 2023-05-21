@@ -41,24 +41,33 @@ export default class extends Controller {
     if (role === '' || (centreType !== 'cg_etablissement' && centreId === '')) {
       callOut('Veuillez sélectionner un centre et un rôle', 'error')
     } else {
-      fetch(this.urlAddValue, {
-        method: 'POST',
-        body: JSON.stringify({
-          centreType,
-          centreId,
-          role,
-        }),
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          if (json.success) {
-            callOut('Centre ajouté', 'success')
-            this._updateListe()
-          } else {
-            callOut(json.error, 'error')
-          }
-        })
+      this._updateCentre(centreType, centreId, role, false)
     }
+  }
+
+  _updateCentre(centreType, centreId, role, force = false) {
+    fetch(this.urlAddValue, {
+      method: 'POST',
+      body: JSON.stringify({
+        centreType,
+        centreId,
+        role,
+        force,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.success) {
+          callOut('Centre ajouté', 'success')
+          this._updateListe()
+        } else if (json.error === 'already_exist') {
+          if (confirm('Le centre est déjà associé à un autre utilisateur, voulez-vous le remplacer ?')) {
+            this._updateCentre(centreType, centreId, role, true)
+          }
+        } else {
+          callOut(json.error, 'error')
+        }
+      })
   }
 
   delete(event) {

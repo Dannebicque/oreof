@@ -47,7 +47,7 @@ class SemestreRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByParcoursOrdre(?int $ordreDestination, Parcours $parcours)
+    public function findByParcoursOrdre(?int $ordreDestination, Parcours $parcours): ?Semestre
     {
         return $this->createQueryBuilder('s')
             ->join('s.parcours', 'p')
