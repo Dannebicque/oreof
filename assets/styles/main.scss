@@ -187,6 +187,9 @@
   background-color: var(--danger);
 }
 
+.non-lu {
+  background-color: rgba(var(--success-rgb), 0.15);
+}
 .trix-button--icon-strike,
 .trix-button--icon-quote,
 .trix-button--icon-code,

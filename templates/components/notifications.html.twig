@@ -1,15 +1,17 @@
-<ul class="list-unstyled list-inline text-center menu-icons">
+<ul class="list-unstyled list-inline text-center menu-icons" {{ stimulus_controller('notification', {
+    url: path('app_notification_lu'),
+}) }}>
     <li class="list-inline-item">
         <a href="{{ asset('docs/guide.pdf') }}" target="_blank">
             <i class="fal fa-question-circle"></i>
         </a>
     </li>
-    <li class="list-inline-item {% if computed.notifsNonLu > 0 %}new-notif{% endif %}">
+    <li class="list-inline-item {% if computed.notifsNonLu > 0 %}new-notif{% endif %}" id="indicNotifBtn">
         <a href="#" data-bs-toggle="dropdown" data-bs-target="#notifications" aria-haspopup="true" aria-expanded="false" class="notification-button">
             <div class="position-relative d-inline-flex">
                 <i class="fal fa-bell icon"></i>
                 {% if computed.notifsNonLu > 0 %}
-                <span class="position-absolute notification-dot rounded-xl"></span>
+                <span class="position-absolute notification-dot rounded-xl" id="indicNotif"></span>
                 {% endif %}
             </div>
         </a>
@@ -17,7 +19,8 @@
             <div class="scroll">
                 <ul class="list-unstyled border-last-none">
                     {% for notif in this.notifs %}
-                        <li class="mb-3 pb-3 border-bottom border-separator-light d-flex">
+                        <li class="mb-3 pb-3 border-bottom border-separator-light d-flex {% if notif.lu == false %}non-lu{% endif %}"
+                                {{ stimulus_action('notification', 'lu', 'click', {id: notif.id}) }}>
                             <div class="align-self-center">
                                 {{ notif.codeNotification|trans({},'notif') }}
                             </div>
