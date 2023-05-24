@@ -49,7 +49,6 @@ class ComposanteController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {//&& $form->isValid()
-            //dump($form);
             if ($composante->getDirecteur() === null) {
                 $usr = $addUser->addUser($request->request->get('directeur_toAdd'));
                 if ($usr !== null) {
