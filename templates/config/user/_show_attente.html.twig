@@ -52,7 +52,8 @@
             <select id="typeCentre" class="form-select" {{ stimulus_action('register', 'changeCentre') }}
                     required
             >
-                {% for centre in typeCentres|filter(centre => (dpe == true and centre.value != 'cg_etablissement')) %}
+                <option value="">Choisir un centre</option>
+                {% for centre in typeCentres|filter(centre => (dpe == true and centre.value != 'cg_etablissement') or dpe == false) %}
                     <option value="{{ centre.value }}">{{ centre.libelle }}</option>
                 {% endfor %}
             </select>
