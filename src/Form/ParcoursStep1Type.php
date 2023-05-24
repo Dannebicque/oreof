@@ -36,6 +36,11 @@ class ParcoursStep1Type extends AbstractType
                 'help' => '',
                 'class' => User::class,
                 'choice_label' => 'display',
+                'query_builder' => function ($er) {
+                    return $er->createQueryBuilder('u')
+                        ->orderBy('u.nom', 'ASC')
+                        ->addOrderBy('u.prenom', 'ASC');
+                },
                 'attr' => ['data-action' => 'change->parcours--step1#saveRespParcours']
             ])
             ->add('coResponsable', EntityType::class, [
@@ -43,6 +48,11 @@ class ParcoursStep1Type extends AbstractType
                 'help' => '',
                 'class' => User::class,
                 'choice_label' => 'display',
+                'query_builder' => function ($er) {
+                    return $er->createQueryBuilder('u')
+                        ->orderBy('u.nom', 'ASC')
+                        ->addOrderBy('u.prenom', 'ASC');
+                },
                 'attr' => ['data-action' => 'change->parcours--step1#saveCoRespParcours']
             ])
             ->add('objectifsParcours', TextareaAutoSaveType::class, [
