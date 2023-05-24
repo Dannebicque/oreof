@@ -2,7 +2,6 @@
     <tbody>
     <tr>
         <th>Login URCA</th>
-        {# todo: possibilité de mise à jour? bouton ldap  #}
         <td>{{ user.username }}</td>
     </tr>
     <tr>
@@ -17,59 +16,21 @@
         <th>Email</th>
         <td>{{ user.email }}</td>
     </tr>
-
     <tr>
-        <th>Rôles</th>
-        <td {{ stimulus_controller('user', {
-            url: path('app_user_roles', {id: user.id}),
-        }) }}>
-            {% for role in roles %}
-                <div class="me-2">
-                    <input
-                            {{ stimulus_action('user', 'changeRole', 'change', {
-                                role: role.codeRole
-                            }) }}
-                            id="roles_{{ loop.index }}" type="checkbox" name="roles[]" value="{{ role.codeRole }}"
-                            {% if role.codeRole in user.roles %}checked{% endif %}>
-                    <label for="roles_{{ loop.index }}">{{ role.libelle }}</label>
-                </div>
-            {% endfor %}
-        </td>
+        <th>Téléphone fixe</th>
+        <td>{{ user.telFixe }}</td>
+    </tr>
+    <tr>
+        <th>Téléphone portable</th>
+        <td>{{ user.telPortable }}</td>
     </tr>
 
     </tbody>
 </table>
 
-{% if user.isEnable %}
+{% if user.isEnable and is_granted('ROLE_SES') %}
     <a href="{{ path('app_user_gestion_revoque_admin', {user:user.id}) }}" class="btn btn-outline-danger">
         Désactiver l'accès
     </a>
-{% else %}
-    {% if (user.isValidDpe == false and (user.userCentres[0].typeCentre == 'cg_composante' or user.userCentres[0].typeCentre ==
-        'cg_formation')
-        ) or user.isValideAdministration == false %}
-        {% if user.isValidDpe == false %}
-            <span class="badge bg-warning">Non valider par DPE</span>
-        {% else %}
-            <span class="badge bg-success">
-            Valider par DPE le {{ user.dateValideDpe|dateTimeFr }}
-            </span>
-        {% endif %}
-        {% if not is_granted('ROLE_SES') %}
-        <a href="{{ path('app_user_gestion_valid_dpe', {user:user.id}) }}" class="btn btn-outline-success">
-            Valider l'accès
-        </a>
-    {% endif %}
-    {% endif %}
-    {% if is_granted('ROLE_SES') %}
-        {% if user.isValideAdministration == false %}
-            <a href="{{ path('app_user_gestion_valid_admin', {user:user.id}) }}" class="btn btn-outline-success">
-                Valider l'accès
-            </a>
-        {% else %}
-            <a href="{{ path('app_user_gestion_revoque_admin', {user:user.id}) }}" class="btn btn-outline-danger">
-                Révoquer l'accès
-            </a>
-        {% endif %}
-    {% endif %}
 {% endif %}
+

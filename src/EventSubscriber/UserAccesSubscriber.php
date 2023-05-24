@@ -21,10 +21,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class UserAccesSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        protected UserRepository $userRepository,
+        protected UserRepository       $userRepository,
         protected ComposanteRepository $composanteRepository,
-        protected FormationRepository $formationRepository,
-        protected Mailer $myMailer
+        protected FormationRepository  $formationRepository,
+        protected Mailer               $myMailer
     ) {
     }
 
@@ -79,7 +79,18 @@ class UserAccesSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onUserRevoqueAdmin(): void
+    public function onUserRefuserAdmin(UserEvent $event)
+    {
+        $user = $event->getUser();
+        $this->myMailer->initEmail();
+        $this->myMailer->setTemplate(
+            'mails/user/acces_refuse.txt.twig',
+            ['user' => $user, 'motif' => $event->getMotif()]
+        );
+        $this->myMailer->sendMessage([$user->getEmail()], '[ORéOF] Refus de votre demande accès');
+    }
+
+    public function onUserRevoqueAdmin(UserEvent $event): void
     {
     }
 
@@ -123,6 +134,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
             UserEvent::USER_VALIDE_DPE => 'onUserValideDpe',
             UserEvent::USER_VALIDE_ADMIN => 'onUserValideAdmin',
             UserEvent::USER_REVOQUE_ADMIN => 'onUserRevoqueAdmin',
+            UserEvent::USER_REFUSER_ADMIN => 'onUserRefuserAdmin',
             UserEvent::USER_AJOUTE => 'onUserAjoute',
         ];
     }

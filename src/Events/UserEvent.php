@@ -15,12 +15,15 @@ class UserEvent
 {
     protected User $user;
     protected string $centre;
+    protected string $motif;
     protected string $idCentre;
+
 
     public const USER_AJOUTE = 'user.ajoute';
     public const USER_VALIDE_DPE = 'user.valide_dpe';
     public const USER_VALIDE_ADMIN = 'user.valide_admin';
     public const USER_REVOQUE_ADMIN = 'user.revoque';
+    public const USER_REFUSER_ADMIN = 'user.refuser';
 
     public function __construct(User $user, string $centre = '', string $idCentre = '')
     {
@@ -42,5 +45,15 @@ class UserEvent
     public function getIdCentre(): string
     {
         return $this->idCentre;
+    }
+
+    public function setMotif(string $motif): void
+    {
+        $this->motif = $motif;
+    }
+
+    public function getMotif(): string
+    {
+        return $this->motif;
     }
 }

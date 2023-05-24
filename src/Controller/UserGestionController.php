@@ -229,6 +229,23 @@ class UserGestionController extends BaseController
         return $this->redirectToRoute('app_user_attente');
     }
 
+    #[Route('/refuser/admin/{user}', name: 'app_user_gestion_refuser_admin')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function refuserAdmin(
+        Request $request,
+        User $user): Response
+    {
+        $motif = $request->request->get('motif');
+        $this->userRepository->remove($user, true);
+
+        $userEvent = new UserEvent($user);
+        $userEvent->setMotif($motif);
+        $this->eventDispatcher->dispatch($userEvent, UserEvent::USER_REFUSER_ADMIN);
+
+        return $this->json(true);
+    }
+
+
     #[Route('/valid/dpe/{user}', name: 'app_user_gestion_valid_dpe')]
     public function validDpe(User $user): Response
     {

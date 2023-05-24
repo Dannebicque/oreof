@@ -79,4 +79,27 @@ export default class extends Controller {
       this.dispatch('refreshModale', { detail: { url: response.url } })
     }
   }
+
+  refuserAcces() {
+    document.getElementById('motifRefus').classList.toggle('d-none')
+  }
+
+  confirmeRefusAcces(event) {
+    const url = event.target.dataset.href
+    const motif = document.getElementById('texteMotifRefus').value
+
+    if (motif.length > 0) {
+      const data = new FormData()
+      data.append('motif', motif)
+
+      fetch(url, {
+        method: 'POST',
+        body: data,
+      }).then((reponse) => reponse.json()).then(
+        this.dispatch('modalHide'),
+      )
+    } else {
+      alert('Merci de saisir un motif')
+    }
+  }
 }

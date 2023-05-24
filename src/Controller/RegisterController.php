@@ -52,8 +52,10 @@ class RegisterController extends AbstractController
                 ]);
             }
             if ($existUser === null) {
-                $username = $ldap->getUsername($user->getEmail());
-                $user->setUsername($username ?? $user->getEmail());
+                $ldapUser = $ldap->getDatas($user->getEmail());
+                $user->setUsername($ldapUser['username'] ?? $user->getEmail());
+                $user->setNom($ldapUser['nom'] ?? $user->getNom());
+                $user->setPrenom($ldapUser['prenom'] ?? $user->getPrenom());
                 $user->setDateDemande(new DateTime());
 
 
