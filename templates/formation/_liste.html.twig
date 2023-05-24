@@ -144,7 +144,7 @@ bouton pour valider/invalide les étapes successives #}
                     <td>{{ parcours.etatParcours|badgeDpe }}</td>
                     <td>{{ parcours.remplissage|remplissage }}</td>
                     <td class="text-end">
-                        <a href=""
+                        <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"
                            class="btn btn-sm text-info"
                            data-bs-toggle="tooltip"
                            data-bs-placement="bottom"
