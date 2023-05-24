@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.4](https://github.com/Dannebicque/oreof/compare/v1.3.3...v1.3.4) (2023-05-24)
+
+
+### Bug Fixes
+
+* liste triée ([4e006fb](https://github.com/Dannebicque/oreof/commit/4e006fbb6eb1ad9f4134d5605f9f2689622b3d2b))
+* manque du return... ([b3a77f3](https://github.com/Dannebicque/oreof/commit/b3a77f32dd7abbca337c23a9219fa81f7965d6c5))
+* manque du return... ([b38b855](https://github.com/Dannebicque/oreof/commit/b38b855130b8a2e4c6c50bab0ac0550e0543443d))
+
 ### [1.3.3](https://github.com/Dannebicque/oreof/compare/v1.3.2...v1.3.3) (2023-05-24)
 
 
