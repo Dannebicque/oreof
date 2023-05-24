@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.3](https://github.com/Dannebicque/oreof/compare/v1.3.2...v1.3.3) (2023-05-24)
+
+
+### Features
+
+* Mail au DPE en cas de refus ([00c249c](https://github.com/Dannebicque/oreof/commit/00c249cbfb38369ee8b15bb7dbb80ffbb36ffdfc))
+
+
+### Bug Fixes
+
+* Ajout du nombre de parcours ([8fbe76a](https://github.com/Dannebicque/oreof/commit/8fbe76aaaa2682b910288cb0091ef5505f2e823f))
+* Redirection après ouverture ([ffd1b1c](https://github.com/Dannebicque/oreof/commit/ffd1b1c9b88b9ac589c8968083d44916f7bf7b9c))
+* TomSelect sur l'affichage des modals ([7dafd41](https://github.com/Dannebicque/oreof/commit/7dafd41a7c76ebb9295ebb4671c6616f66b178eb))
+* Tri des listes lors de l'ajout d'un parcours ([43ac766](https://github.com/Dannebicque/oreof/commit/43ac7665ab16e94c3a23fc6ae08c9a3bc8a793c1))
+* Typo mail VP ([4313042](https://github.com/Dannebicque/oreof/commit/43130424bdeaa25f42b285dc4b446a0c278e7199))
+
 ### [1.3.2](https://github.com/Dannebicque/oreof/compare/v1.3.1...v1.3.2) (2023-05-24)
 
 
