@@ -9,6 +9,7 @@
 import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
 
+import TomSelect from 'tom-select';
 import callOut from '../js/callOut'
 
 export default class extends Controller {
@@ -18,7 +19,7 @@ export default class extends Controller {
 
   nomEvenement = 'refreshListe'
 
-  details = { }
+  details = {}
 
   sauvegardeFormModal(event) {
     event.preventDefault()
@@ -59,6 +60,9 @@ export default class extends Controller {
       response = await fetch(`${event.detail.url}`)
     }
     this.modalBodyTarget.innerHTML = await response.text()
+    document.querySelectorAll('select.form-select').forEach((select) => {
+      const ts = new TomSelect(select, {})
+    })
   }
 
   modalHide() {
