@@ -82,6 +82,18 @@ class UserAccesSubscriber implements EventSubscriberInterface
     public function onUserRefuserAdmin(UserEvent $event)
     {
         $user = $event->getUser();
+        if ($user->getComposanteDemande() !== null && $user->getComposanteDemande()->getResponsableDpe() !== null) {
+            $this->myMailer->initEmail();
+            $this->myMailer->setTemplate(
+                'mails/user/acces_refuse_dpe.txt.twig',
+                [
+                    'dpe' => $user->getComposanteDemande()->getResponsableDpe(),
+                    'user' => $user,
+                    'motif' => $event->getMotif()]
+            );
+            $this->myMailer->sendMessage([$user->getEmail()], '[ORéOF] Refus de votre demande accès');
+        }
+
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
             'mails/user/acces_refuse.txt.twig',
