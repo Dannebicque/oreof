@@ -374,10 +374,10 @@ class UserGestionController extends BaseController
                     return $this->json(['error' => 'Cette formation n\'existe pas'], 400);
                 }
 
-                $uc = $userCentreRepository->findOneBy(['user' => $user, 'formation' => $centre]);
-                if ($uc !== null) {
-                    return $this->json(['error' => 'Ce centre est déjà associé à cet utilisateur'], 400);
-                }
+//                $uc = $userCentreRepository->findOneBy(['user' => $user, 'formation' => $centre]);
+//                if ($uc !== null) {
+//                    return $this->json(['error' => 'Ce centre est déjà associé à cet utilisateur'], 400);
+//                }
 
                 if ($role->getCodeRole() === 'ROLE_RESP_FORMATION' || $role->getCodeRole() === 'ROLE_CO_RESP_FORMATION') {
                     $uc = $userCentreRepository->findFormationWithSameRole($centre, $role);
