@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://github.com/Dannebicque/oreof/compare/v1.3.1...v1.3.2) (2023-05-24)
+
+
+### Features
+
+* Lien pour synchro BUT ([a209220](https://github.com/Dannebicque/oreof/commit/a2092201eff9561a5d9441b50c9f64150e208aa7))
+
 ### [1.3.1](https://github.com/Dannebicque/oreof/compare/v1.3.0...v1.3.1) (2023-05-24)
 
 
