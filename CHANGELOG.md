@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/Dannebicque/oreof/compare/v1.2.0...v1.3.0) (2023-05-24)
+
+
+### Features
+
+* Gestion des rôles et filtre DPE ou Admin ([6e02d9b](https://github.com/Dannebicque/oreof/commit/6e02d9bd00d5192d3bb5230f25de9368473b6668))
+
 ## [1.2.0](https://github.com/Dannebicque/oreof/compare/v1.1.2...v1.2.0) (2023-05-24)
 
 
