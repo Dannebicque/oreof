@@ -32,6 +32,17 @@
             </div>
             {% if is_granted('ROLE_SES') %}
             <div class="col-12 text-end">
+                {% if constant('SOURCE', typeD) == 'but' %}
+                    <a href="{{ path('app_formation_synchronisation',{'formation': formation.id}) }}"
+                       class="btn btn-sm text-danger "
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="Initialiser la formation depuis ORéBUT"
+                    >
+                        <i class="fal fa-rotate"></i>
+                        <span> initialiser depuis ORéBUT</span>
+                    </a>
+                {% endif %}
                     <a href="{{ path('app_formation_edit_modal',{'formation': formation.id}) }}"
                        class="btn btn-sm text-warning "
                        data-bs-toggle="tooltip"

@@ -26,6 +26,7 @@ use App\Repository\MentionRepository;
 use App\Repository\RoleRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserCentreRepository;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -317,10 +318,12 @@ class FormationController extends BaseController
         ParcoursState $parcoursState,
         FormationState $formationState,
         Request $request,
-        Formation $formation
+        Formation $formation,
+        TypeDiplomeRegistry $typeDiplomeRegistry
     ): Response {
         //todo: tester les droits et si on est en place "en_cours_redaction" => voter
         $formationState->setFormation($formation);
+        $typeD = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
         if ($formation->getParcours()?->first() !== false) {
             $parcoursState->setParcours($formation->getParcours()?->first());
         }
@@ -330,7 +333,8 @@ class FormationController extends BaseController
             'selectedStep' => $request->query->get('step', 1),
             'typeDiplome' => $formation->getTypeDiplome(),
             'parcoursState' => $parcoursState,
-            'formationState' => $formationState
+            'formationState' => $formationState,
+            'typeD' => $typeD
         ]);
     }
 

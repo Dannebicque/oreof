@@ -10,7 +10,11 @@
 namespace App\TypeDiplome\Source;
 
 use App\Entity\ElementConstitutif;
+use App\Entity\Formation;
+use App\TypeDiplome\Synchronisation\But;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\InputBag;
 
 class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
@@ -20,10 +24,26 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 
     public string $libelle = 'Bachelor Universitaire de Technologie (B.U.T.)';
 
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        protected But $synchronisationBut
+    ) {
+        parent::__construct($entityManager,$typeDiplomeRegistry);
+    }
+
     public function getMcccs(ElementConstitutif $elementConstitutif): array|Collection
     {
         return $elementConstitutif->getMcccs();
     }
+
+    public function synchroniser(
+        Formation $formation
+    )
+    {
+        $this->synchronisationBut->synchroniser($formation);
+    }
+
 
     public function initMcccs(ElementConstitutif $elementConstitutif): void
     {
