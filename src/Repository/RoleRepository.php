@@ -63,4 +63,9 @@ class RoleRepository extends ServiceEntityRepository
     {
         return $this->findBy(['porte' => 'All'], ['libelle' => 'ASC']);
     }
+
+    public function findByDpe(): array
+    {
+        return $this->findBy(['onlyAdmin' => false], ['libelle' => 'ASC']);
+    }
 }

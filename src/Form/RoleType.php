@@ -10,6 +10,7 @@
 namespace App\Form;
 
 use App\Entity\Role;
+use App\Form\Type\YesNoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,7 +29,11 @@ class RoleType extends AbstractType
                     'Uniquement les éléments dont on a la propriété' => 'MY',
                 ],
                 'expanded' => true
-            ]);
+            ])
+            ->add('onlyAdmin', YesNoType::class, [
+                'required' => true,
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

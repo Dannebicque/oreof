@@ -178,12 +178,18 @@ class UserController extends AbstractController
         RoleRepository $roleRepository,
         User           $user
     ): Response {
-        $dpe = (bool) $request->query->get('dpe', false);
+        $dpe = (bool)$request->query->get('dpe', false);
+        if ($dpe) {
+            $roles = $roleRepository->findByDpe();
+        } else {
+            $roles = $roleRepository->findAll();
+        }
+
         return $this->render('config/user/_show_attente.html.twig', [
             'user' => $user,
             'typeCentres' => CentreGestionEnum::cases(),
             'centresUser' => $user->getUserCentres(),
-            'roles' => $roleRepository->findAll(),
+            'roles' => $roles,
             'dpe' => $dpe
         ]);
     }

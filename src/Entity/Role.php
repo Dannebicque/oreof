@@ -33,6 +33,9 @@ class Role
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $porte = null;
 
+    #[ORM\Column]
+    private ?bool $onlyAdmin = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,5 +92,17 @@ class Role
     public function hasDroit(string $role): bool
     {
         return in_array($role, $this->getDroits(), true);
+    }
+
+    public function isOnlyAdmin(): ?bool
+    {
+        return $this->onlyAdmin;
+    }
+
+    public function setOnlyAdmin(bool $onlyAdmin): self
+    {
+        $this->onlyAdmin = $onlyAdmin;
+
+        return $this;
     }
 }
