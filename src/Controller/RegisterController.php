@@ -55,7 +55,7 @@ class RegisterController extends AbstractController
                 $username = $ldap->getUsername($user->getEmail());
                 $user->setUsername($username ?? $user->getEmail());
                 $user->setDateDemande(new DateTime());
-                $userRepository->save($user, true);
+
 
                 $centre = $form['centreDemande']->getData();
                 $ajout = false;
@@ -76,6 +76,7 @@ class RegisterController extends AbstractController
                 }
 
                 if ($ajout) {
+                    $userRepository->save($user, true);
                     $this->addFlash('success', 'Votre demande a bien été prise en compte');
 
                     $eventDispatcher->dispatch($userEvent, UserRegisterEvent::USER_DEMANDE_ACCES);
