@@ -30,12 +30,22 @@ class ParcoursType extends AbstractType
                 'required' => false,
                 'help' => '',
                 'class' => User::class,
+                'query_builder' => function ($er) {
+                    return $er->createQueryBuilder('u')
+                        ->orderBy('u.nom', 'ASC')
+                        ->addOrderBy('u.prenom', 'ASC');
+                },
                 'choice_label' => 'display', //todo: filtrer sur centre de le formation ? ou ajouter un user
             ])
             ->add('coResponsable', EntityType::class, [
                 'required' => false,
                 'help' => '',
                 'class' => User::class,
+                'query_builder' => function ($er) {
+                    return $er->createQueryBuilder('u')
+                        ->orderBy('u.nom', 'ASC')
+                        ->addOrderBy('u.prenom', 'ASC');
+                },
                 'choice_label' => 'display', //todo: filtrer sur centre de le formation ? ou ajouter un user
             ])
             ->add('sigle', TextType::class, [
