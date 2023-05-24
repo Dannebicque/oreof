@@ -19,6 +19,7 @@
             <select id="typeCentre" class="form-select" {{ stimulus_action('register', 'changeCentre') }}
             required
             >
+                <option value="">Choisir un centre</option>
                 {% for centre in centres %}
                     <option value="{{ centre.value }}">{{ centre.libelle }}</option>
                 {% endfor %}
