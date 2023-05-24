@@ -38,11 +38,8 @@ class FormationEtatController extends BaseController
             }
         }
 
-        //envoi d'un mail de synthèse aux composantes porteuses
-        //todo: à faire
-
         $this->addFlashBag('success', 'Les formations ont été ouvertes');
 
-        return $this->redirectToRoute('structure_formation_index');
+        return $this->redirectToRoute('structure_composante_index');
     }
 }
