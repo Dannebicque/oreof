@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/Dannebicque/oreof/compare/v1.3.0...v1.3.1) (2023-05-24)
+
+
+### Features
+
+* Affichage d'un parcours ([ceb9c20](https://github.com/Dannebicque/oreof/commit/ceb9c2088780662400bddfe5579dd72e43e6cc09))
+* Lien pour synchro BUT ([c88e582](https://github.com/Dannebicque/oreof/commit/c88e5821217f5bbb3557a9c21a74de147e9187b3))
+
+
+### Bug Fixes
+
+* Affichage des détails d'une formation ([7632950](https://github.com/Dannebicque/oreof/commit/7632950e092b962ac61ca4444c4edf794a2393fa))
+* Liste des types de centre ([c0dc5e2](https://github.com/Dannebicque/oreof/commit/c0dc5e2367efd2b059c3db3cc3e9b93807b7179b))
+* type centre vide par défaut ([8b2a148](https://github.com/Dannebicque/oreof/commit/8b2a148e6d7ab1343d91dd36250bacdf84ce7a71))
+
 ## [1.3.0](https://github.com/Dannebicque/oreof/compare/v1.2.0...v1.3.0) (2023-05-24)
 
 
