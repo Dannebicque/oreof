@@ -43,7 +43,7 @@ class ParcoursController extends BaseController
     #[Route('/liste', name: 'app_parcours_liste', methods: ['GET'])]
     public function liste(
         ParcoursRepository $parcoursRepository,
-        Request $request
+        Request            $request
     ): Response {
         $sort = $request->query->get('sort') ?? 'libelle';
         $direction = $request->query->get('direction') ?? 'asc';
@@ -84,9 +84,9 @@ class ParcoursController extends BaseController
     #[Route('/new/{formation}', name: 'app_parcours_new', methods: ['GET', 'POST'])]
     public function new(
         EventDispatcherInterface $eventDispatcher,
-        Request $request,
-        ParcoursRepository $parcoursRepository,
-        Formation $formation
+        Request                  $request,
+        ParcoursRepository       $parcoursRepository,
+        Formation                $formation
     ): Response {
 //        if (!$this->isGranted('ROLE_RESP_FORMATION', $formation)) {
 //            throw $this->createAccessDeniedException();
@@ -98,7 +98,7 @@ class ParcoursController extends BaseController
         if ($request->query->has('parent') && $request->query->get('parent') !== 'null') {
             $parent = $parcoursRepository->find($request->query->get('parent'));
             if (null === $parent) {
-               throw $this->createNotFoundException();
+                throw $this->createNotFoundException();
             }
             $parcour->setParcoursParent($parent);
         }
@@ -138,10 +138,10 @@ class ParcoursController extends BaseController
     #[Route('/edit/modal/{parcours}', name: 'app_parcours_edit_modal', methods: ['GET', 'POST'])]
     public function editModal(
         EventDispatcherInterface $eventDispatcher,
-        Request $request,
-        EntityManagerInterface $entityManager,
-        ParcoursRepository $parcoursRepository,
-        Parcours $parcours
+        Request                  $request,
+        EntityManagerInterface   $entityManager,
+        ParcoursRepository       $parcoursRepository,
+        Parcours                 $parcours
     ): Response {
         $form = $this->createForm(ParcoursType::class, $parcours, [
             'action' => $this->generateUrl('app_parcours_edit_modal', [
@@ -177,13 +177,23 @@ class ParcoursController extends BaseController
         ]);
     }
 
-//    #[Route('/{id}', name: 'app_parcours_show', methods: ['GET'])]
-//    public function show(Parcours $parcour): Response
-//    {
-//        return $this->render('parcours/show.html.twig', [
-//            'parcour' => $parcour,
-//        ]);
-//    }
+    #[Route('/{id}', name: 'app_parcours_show', methods: ['GET'])]
+    public function show(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        Parcours            $parcours
+    ): Response
+    {
+        $formation = $parcours->getFormation();
+        if ($formation === null) {
+            throw $this->createNotFoundException();
+        }
+        $typeDiplome = $formation->getTypeDiplome();
+        return $this->render('parcours/show.html.twig', [
+            'parcours' => $parcours,
+            'formation' => $formation,
+            'typeDiplome' => $typeDiplome,
+        ]);
+    }
 
     /**
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
@@ -191,9 +201,9 @@ class ParcoursController extends BaseController
     #[Route('/{id}/edit', name: 'app_parcours_edit', methods: ['GET', 'POST'])]
     public function edit(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        Request $request,
-        ParcoursState $parcoursState,
-        Parcours $parcour
+        Request             $request,
+        ParcoursState       $parcoursState,
+        Parcours            $parcour
     ): Response {
         $parcoursState->setParcours($parcour);
         $typeDiplome = $parcour->getFormation()?->getTypeDiplome();
@@ -211,7 +221,7 @@ class ParcoursController extends BaseController
     #[Route('/{id}/dupliquer', name: 'app_parcours_dupliquer', methods: ['GET'])]
     public function dupliquer(
         EntityManagerInterface $entityManager,
-        Parcours $parcour,
+        Parcours               $parcour,
     ): Response {
         $formation = $parcour->getFormation();
         $newParcours = clone $parcour;
@@ -257,10 +267,10 @@ class ParcoursController extends BaseController
     #[Route('/{id}', name: 'app_parcours_delete', methods: ['DELETE'])]
     public function delete(
         ElementConstitutifRepository $elementConstitutifRepository,
-        EntityManagerInterface $entityManager,
-        Request $request,
-        Parcours $parcour,
-        ParcoursRepository $parcoursRepository
+        EntityManagerInterface       $entityManager,
+        Request                      $request,
+        Parcours                     $parcour,
+        ParcoursRepository           $parcoursRepository
     ): Response {
         if ($this->isCsrfTokenValid('delete' . $parcour->getId(), JsonRequest::getValueFromRequest($request, 'csrf'))) {
             foreach ($parcour->getSemestreParcours() as $sp) {
