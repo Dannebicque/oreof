@@ -10,6 +10,7 @@
 namespace App\Form;
 
 use App\Entity\Role;
+use App\Enums\CentreGestionEnum;
 use App\Form\Type\YesNoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -32,6 +33,16 @@ class RoleType extends AbstractType
             ])
             ->add('onlyAdmin', YesNoType::class, [
                 'required' => true,
+            ])
+            ->add('centre', ChoiceType::class, [
+                'choices' => [
+                    'Formation' => CentreGestionEnum::CENTRE_GESTION_FORMATION,
+                    'Composante' => CentreGestionEnum::CENTRE_GESTION_COMPOSANTE,
+                    'Etablissement' => CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT,
+                ],
+                'placeholder' => 'Indiquez un centre de gestion',
+                'required' => true,
+                'expanded' => true
             ])
         ;
     }

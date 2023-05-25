@@ -9,6 +9,7 @@
 
 namespace App\Entity;
 
+use App\Enums\CentreGestionEnum;
 use App\Repository\RoleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -35,6 +36,9 @@ class Role
 
     #[ORM\Column]
     private ?bool $onlyAdmin = true;
+
+    #[ORM\Column(length: 255, nullable: true, enumType: CentreGestionEnum::class)]
+    private ?CentreGestionEnum $centre = null;
 
     public function getId(): ?int
     {
@@ -102,6 +106,18 @@ class Role
     public function setOnlyAdmin(bool $onlyAdmin): self
     {
         $this->onlyAdmin = $onlyAdmin;
+
+        return $this;
+    }
+
+    public function getCentre(): ?CentreGestionEnum
+    {
+        return $this->centre;
+    }
+
+    public function setCentre(?CentreGestionEnum $centre): self
+    {
+        $this->centre = $centre;
 
         return $this;
     }
