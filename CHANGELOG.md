@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.5](https://github.com/Dannebicque/oreof/compare/v1.3.4...v1.3.5) (2023-05-25)
+
+
+### Features
+
+* Ajout de la possibilité d'ajouter un utilisateur par le LDAP du DPE, mails ([2d42cf8](https://github.com/Dannebicque/oreof/commit/2d42cf843e62619a3bf59e80f4b224054cd323f0))
+* Droit de refuser pour le DPE + Typos Mails ([1e6d2fb](https://github.com/Dannebicque/oreof/commit/1e6d2fbd73408b1685cd402ea562fb31e0d6cf8d))
+
+
+### Bug Fixes
+
+* Mise à jour du guide ([be8692b](https://github.com/Dannebicque/oreof/commit/be8692b1e486b28b4aed1ba0980adc3dff524388))
+
 ### [1.3.4](https://github.com/Dannebicque/oreof/compare/v1.3.3...v1.3.4) (2023-05-24)
 
 
