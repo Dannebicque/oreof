@@ -81,6 +81,8 @@ class UserAccesSubscriber implements EventSubscriberInterface
 
     public function onUserRefuserAdmin(UserEvent $event)
     {
+        $admins = $this->userRepository->findByRole('ROLE_ADMIN');
+
         $user = $event->getUser();
         if ($user->getComposanteDemande() !== null && $user->getComposanteDemande()->getResponsableDpe() !== null) {
             $this->myMailer->initEmail();
@@ -92,6 +94,18 @@ class UserAccesSubscriber implements EventSubscriberInterface
                     'motif' => $event->getMotif()]
             );
             $this->myMailer->sendMessage([$user->getEmail()], '[ORéOF] Refus de votre demande accès');
+
+            foreach ($admins as $admin) {
+                $this->myMailer->initEmail();
+                $this->myMailer->setTemplate(
+                    'mails/user/acces_refuse_admin.txt.twig',
+                    [
+                        'admin' => $admin,
+                        'user' => $user,
+                        'motif' => $event->getMotif()]
+                );
+                $this->myMailer->sendMessage([$admin->getEmail()], '[ORéOF] Refus d\'une demande accès');
+            }
         }
 
         $this->myMailer->initEmail();

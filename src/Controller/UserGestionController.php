@@ -285,7 +285,7 @@ class UserGestionController extends BaseController
         RoleRepository $roleRepository,
         User           $user
     ): Response {
-        $this->denyAccessUnlessGranted('CAN_EDIT_CENTRE');
+//        $this->denyAccessUnlessGranted('CAN_EDIT_CENTRE');
 
         return $this->render('user/_gestion_centre.html.twig', [
             'user' => $user,

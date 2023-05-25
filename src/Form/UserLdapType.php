@@ -23,15 +23,6 @@ use UnitEnum;
 
 class UserLdapType extends AbstractType
 {
-   // private array $choices;
-//    public function __construct(RoleRepository $roleRepository)
-//    {
-//        $this->choices = [];
-//        $roles = $roleRepository->findByAll();
-//        foreach ($roles as $role) {
-//            $this->choices[$role->getCodeRole()] = $role->getLibelle();
-//        }
-//    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -41,29 +32,6 @@ class UserLdapType extends AbstractType
                 'help' => 'Adresse email URCA',
                 'attr' => ['maxlength' => 255]
             ])
-//            ->add('centreDemande', EnumType::class, [
-//                'class' => CentreGestionEnum::class,
-//                'choice_label' => static function (UnitEnum $choice): string {
-//                    return $choice->libelle();
-//                },
-//                'placeholder' => 'Indiquez un centre de gestion',
-//                'required' => true,
-//                'mapped' => false,
-//                'attr' => ['data-action' => 'change->register#changeCentre']
-//            ])
-
-//            ->add('role', ChoiceType::class, [
-//                'choices' => $this->choices,
-//                'expanded' => true,
-//                'label' => 'Droits',
-//                'placeholder' => 'Indiquez les droits accordés',
-//                'required' => true,
-//                'mapped' => false,
-//            ])
-//            ->add('sendMail', CheckboxType::class, [
-//                'label' => 'Envoyer un email de conformation à l\'utilisateur',
-//                'mapped' => false,
-//            ])
         ;
     }
 

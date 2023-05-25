@@ -53,44 +53,51 @@ class RegisterController extends AbstractController
             }
             if ($existUser === null) {
                 $ldapUser = $ldap->getDatas($user->getEmail());
-                $user->setUsername($ldapUser['username'] ?? $user->getEmail());
-                $user->setNom($ldapUser['nom'] ?? $user->getNom());
-                $user->setPrenom($ldapUser['prenom'] ?? $user->getPrenom());
-                $user->setDateDemande(new DateTime());
+                if ($ldapUser !== null) {
+                    $user->setUsername($ldapUser['username'] ?? $user->getEmail());
+                    $user->setNom($ldapUser['nom'] ?? $user->getNom());
+                    $user->setPrenom($ldapUser['prenom'] ?? $user->getPrenom());
+                    $user->setDateDemande(new DateTime());
 
 
-                $centre = $form['centreDemande']->getData();
-                $ajout = false;
-                $userEvent = new UserRegisterEvent($user, $centre);
-                switch ($centre) {
-                    case CentreGestionEnum::CENTRE_GESTION_COMPOSANTE:
-                        $composante = $composanteRepository->find($request->request->get('selectListe'));
-                        $user->setComposanteDemande($composante);
-                        $userEvent->setComposante($composante);
-                        $ajout = true;
-                        break;
-                    case CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT:
-                        $etablissement = $etablissementRepository->find(1);//todo: imposé car juste URCA
-                        $user->setEtablissementDemande($etablissement);
-                        $userEvent->setEtablissement($etablissement);
-                        $ajout = true;
-                        break;
+                    $centre = $form['centreDemande']->getData();
+                    $ajout = false;
+                    $userEvent = new UserRegisterEvent($user, $centre);
+                    switch ($centre) {
+                        case CentreGestionEnum::CENTRE_GESTION_COMPOSANTE:
+                            $composante = $composanteRepository->find($request->request->get('selectListe'));
+                            $user->setComposanteDemande($composante);
+                            $userEvent->setComposante($composante);
+                            $ajout = true;
+                            break;
+                        case CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT:
+                            $etablissement = $etablissementRepository->find(1);//todo: imposé car juste URCA
+                            $user->setEtablissementDemande($etablissement);
+                            $userEvent->setEtablissement($etablissement);
+                            $ajout = true;
+                            break;
+                    }
+
+                    if ($ajout) {
+                        $userRepository->save($user, true);
+                        $this->addFlash('success', 'Votre demande a bien été prise en compte');
+
+                        $eventDispatcher->dispatch($userEvent, UserRegisterEvent::USER_DEMANDE_ACCES);
+
+                        return $this->render('register/confirm.html.twig', [
+                            'user' => $user,
+                        ]);
+                    }
+
+                    $this->addFlash('Erreur', 'Une erreur est survenue, le centre n\'existe pas');
+                    return $this->redirectToRoute('app_register');
                 }
+                $this->addFlash('danger', 'Cet utilisateur n\'est pas dans le LDAP');
 
-                if ($ajout) {
-                    $userRepository->save($user, true);
-                    $this->addFlash('success', 'Votre demande a bien été prise en compte');
-
-                    $eventDispatcher->dispatch($userEvent, UserRegisterEvent::USER_DEMANDE_ACCES);
-
-                    return $this->render('register/confirm.html.twig', [
-                        'user' => $user,
-                    ]);
-                }
-
-                $this->addFlash('Erreur', 'Une erreur est survenue, le centre n\'existe pas');
-
-                return $this->redirectToRoute('app_register');
+                return $this->render('register/compte_existe.html.twig', [
+                    'user' => null,
+                    'email' => $user->getEmail()
+                ]);
             }
 
             $this->addFlash('danger', 'Cet utilisateur existe déjà');

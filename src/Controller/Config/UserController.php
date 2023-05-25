@@ -10,6 +10,8 @@
 namespace App\Controller\Config;
 
 use App\Classes\Ldap;
+use App\Classes\Mailer;
+use App\Controller\BaseController;
 use App\Entity\User;
 use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
@@ -31,7 +33,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/administration/utilisateurs')]
-class UserController extends AbstractController
+class UserController extends BaseController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(): Response
@@ -110,12 +112,19 @@ class UserController extends AbstractController
     }
 
     #[Route('/ajouter-ldap', name: 'app_user_new_ldap', methods: ['GET'])]
-    #[IsGranted('ROLE_SES')]
-    public function newLdap(): Response
-    {
+    public function newLdap(
+        Request $request
+    ): Response {
+        $dpe = false;
+
+        if ($request->query->has('access') && $request->query->get('access') === 'dpe') {
+            $dpe = true;
+        }
+
+
         $user = new User();
         $form = $this->createForm(UserLdapType::class, $user, [
-            'action' => $this->generateUrl('app_user_new_ldap'),
+            'action' => $dpe ? $this->generateUrl('app_user_new_ldap', ['access' => 'dpe']) : $this->generateUrl('app_user_new_ldap'),
         ]);
 
         return $this->render('config/user/new-ldap.html.twig', [
@@ -124,12 +133,18 @@ class UserController extends AbstractController
     }
 
     #[Route('/ajouter-ldap', name: 'app_user_new_ldap_valide', methods: ['POST'])]
-    #[IsGranted('ROLE_SES')]
     public function saveLdap(
+        Mailer         $myMailer,
         Ldap           $ldap,
         Request        $request,
         UserRepository $userRepository
     ): Response {
+        $dpe = false;
+
+        if ($request->query->has('access') && $request->query->get('access') === 'dpe') {
+            $dpe = true;
+        }
+
         $email = $request->request->get('user_ldap_email');
 
         $user = $userRepository->findOneBy(['email' => $email]);
@@ -140,17 +155,62 @@ class UserController extends AbstractController
             $user = new User();
             $user->setEmail($email);
             $dataUsers = $ldap->getDatas($email);
+            if ($dataUsers === null) {
+                $this->addFlash('danger', 'L\'utilisateur n\'a pas été trouvé dans l\'annuaire LDAP');
+                return $this->json(false, 500);
+            }
+//            $dataUsers = [
+//                'username' => $email,
+//                'nom' => 'nom',
+//                'prenom' => 'prenom'
+//            ];
+
             $user->setUsername($dataUsers['username']);
             $user->setNom($dataUsers['nom']);
             $user->setPrenom($dataUsers['prenom']);
         }
 
-
         $user->setIsEnable(true);
-        $user->setIsValideAdministration(true);
+        if ($dpe === false) {
+            $user->setIsValideAdministration(true);
+            $user->setDateValideAdministration(new \DateTime());
+            $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');
+
+            $myMailer->initEmail();
+            $myMailer->setTemplate(
+                'mails/user/acces_ajoute.txt.twig',
+                ['user' => $user]
+            );
+            $myMailer->sendMessage([$user->getEmail()], '[ORéOF] Accès ORéOF');
+        } else {
+            $admins = $userRepository->findByRole('ROLE_ADMIN');
+
+            $user->setIsValidDpe(true);
+            $user->setComposanteDemande($this->getUser()?->getComposanteResponsableDpe()->first());
+            $user->setDateDemande(new \DateTime());
+            $user->setDateValideDpe(new \DateTime());
+            $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès, il est en attente de validation par le SES');
+            // mail pour l'administrateur
+            foreach ($admins as $admin) {
+                $myMailer->initEmail();
+                $myMailer->setTemplate(
+                    'mails/user/ajout_oreof_dpe.txt.twig',
+                    [
+                        'user' => $user,
+                        'dpe' => $this->getUser()]
+                );
+                $myMailer->sendMessage([$admin->getEmail()], '[ORéOF] Nouvel ajout d\'un utilisateur par un DPE');
+            }
+            $myMailer->initEmail();
+            $myMailer->setTemplate(
+                'mails/user/ajout_oreof.txt.twig',
+                ['user' => $user, 'dpe' => $this->getUser()]
+            );
+            $myMailer->sendMessage([$user->getEmail()], '[ORéOF] Accès ORéOF');
+        }
         $userRepository->save($user, true);
 
-        $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès');
+        // mail pour le nouvel utilisateur
 
         return $this->json([
             'success' => true,
@@ -159,8 +219,7 @@ class UserController extends AbstractController
     }
 
 
-    #[
-        Route('/{id}', name: 'app_user_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(
         RoleRepository $roleRepository,
         User           $user
@@ -171,8 +230,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[
-        Route('/show-attente/{id}', name: 'app_user_show_attente', methods: ['GET'])]
+    #[Route('/show-attente/{id}', name: 'app_user_show_attente', methods: ['GET'])]
     public function showAttente(
         Request        $request,
         RoleRepository $roleRepository,
