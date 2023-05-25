@@ -34,6 +34,7 @@
 <div {{ stimulus_controller('register', {
     urlComposante: path('api_composante', {dpe:dpe}),
     urlFormation: path('api_formation', {dpe:dpe}),
+    urlDroits: path('api_droits', {dpe:dpe}),
 })|stimulus_controller('centre', {
     urlListe: path('app_user_gestion_liste', {user:user.id}),
     urlAdd: path('app_user_gestion_add_centre', {user:user.id})

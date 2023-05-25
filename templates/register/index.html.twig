@@ -14,6 +14,7 @@
     </div>
     <div {{ stimulus_controller('register', {
         urlComposante: path('api_composante'),
+        urlDroits: path('api_droits'),
     }) }}>
         {% form_theme form 'communs/form_theme.html.twig' %}
         {{ form_start(form) }}

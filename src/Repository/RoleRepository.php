@@ -68,4 +68,14 @@ class RoleRepository extends ServiceEntityRepository
     {
         return $this->findBy(['onlyAdmin' => false], ['libelle' => 'ASC']);
     }
+
+    public function findByCentre(string $centre): array
+    {
+        return $this->findBy(['centre' => $centre], ['libelle' => 'ASC']);
+    }
+
+    public function findByCentreDpe(string $centre, bool $dpe): array
+    {
+        return $this->findBy(['centre' => $centre, 'onlyAdmin' => $dpe], ['libelle' => 'ASC']);
+    }
 }
