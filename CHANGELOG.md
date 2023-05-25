@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.6](https://github.com/Dannebicque/oreof/compare/v1.3.5...v1.3.6) (2023-05-25)
+
+
+### Features
+
+* Ajout du centre sur le rôle pour filtrer ([5f4e0eb](https://github.com/Dannebicque/oreof/commit/5f4e0eb072e69660600334108a5a422ec7b02427))
+* Ajout du centre sur le rôle pour filtrer ([2ce1631](https://github.com/Dannebicque/oreof/commit/2ce163192920e293b3a6ef92c7f1bfe29c6c9f5a))
+
+
+### Bug Fixes
+
+* typo sur mail ([41bbc02](https://github.com/Dannebicque/oreof/commit/41bbc02b72a47c4465c48e707a79ea8179a795e9))
+* Typos et textes ([9334535](https://github.com/Dannebicque/oreof/commit/9334535fe0320b94d9e1427001d35324c197c96f))
+
 ### [1.3.5](https://github.com/Dannebicque/oreof/compare/v1.3.4...v1.3.5) (2023-05-25)
 
 
