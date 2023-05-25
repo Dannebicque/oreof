@@ -16,20 +16,18 @@
         <th>Email</th>
         <td>{{ user.email }}</td>
     </tr>
-    {% if is_granted('ROLE_SES') %}
-        <tr>
-            <th>Centre de gestion</th>
-            <td>
-                {% if user.composanteDemande != null %}
-                    Composante demandée : {{ user.composanteDemande.libelle }}
-                {% elseif user.etablissementDemande != null %}
-                    Etablissement demandé : {{ user.etablissementDemande.libelle }}
-                {% else %}
-                    <span class="badge bg-danger">Erreur de demande</span>
-                {% endif %}
-            </td>
-        </tr>
-    {% endif %}
+    <tr>
+        <th>Centre de gestion</th>
+        <td>
+            {% if user.composanteDemande != null %}
+                Composante demandée : {{ user.composanteDemande.libelle }}
+            {% elseif user.etablissementDemande != null %}
+                Etablissement demandé : {{ user.etablissementDemande.libelle }}
+            {% else %}
+                <span class="badge bg-danger">Erreur de demande</span>
+            {% endif %}
+        </td>
+    </tr>
     </tbody>
 </table>
 
@@ -96,6 +94,20 @@
                     <a href="{{ path('app_user_gestion_valid_dpe', {user:user.id}) }}" class="btn btn-outline-success">
                         Valider l'accès
                     </a>
+                    <button
+                            {{ stimulus_action('register', 'refuserAcces') }}
+                            class="btn text-danger">
+                        Refuser l'accès
+                    </button>
+                    <div id="motifRefus" class="d-none">
+                        <label class="form-label" for="texteMotifRefus"></label>
+                        <textarea class="form-control" id="texteMotifRefus"></textarea>
+                        <button data-href="{{ path('app_user_gestion_refuser_admin', {user:user.id}) }}"
+                                {{ stimulus_action('register', 'confirmeRefusAcces') }}
+                                class="btn btn-outline-danger">
+                            Confirmer le refus d'accès
+                        </button>
+                    </div>
                 {% endif %}
             {% endif %}
             {% if is_granted('ROLE_SES') %}

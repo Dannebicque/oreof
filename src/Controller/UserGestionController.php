@@ -262,6 +262,8 @@ class UserGestionController extends BaseController
         }
 
         $this->addFlash('error', 'L\'utilisateur doit avoir au moins un centre !');
+
+        return $this->json(false, 500);
     }
 
     #[Route('/revoque/admin/{user}', name: 'app_user_gestion_revoque_admin')]
