@@ -149,7 +149,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
                 'mails/user/acces_valide_dpe.txt.twig',
                 ['user' => $user, 'admin' => $admin]
             );
-            $this->myMailer->sendMessage([$admin->getEmail()], '[ORéOF] Validation demande accès par le centre');
+            $this->myMailer->sendMessage([$admin->getEmail()], '[ORéOF] Validation demande accès par le DPE');
         }
     }
 
