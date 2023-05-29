@@ -13,6 +13,7 @@ use App\Entity\AnneeUniversitaire;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\Mention;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -51,9 +52,9 @@ class FormationRepository extends ServiceEntityRepository
     }
 
     public function findByComposanteDpe(
-        UserInterface $user,
+        UserInterface      $user,
         AnneeUniversitaire $anneeUniversitaire,
-        array $sorts = []
+        array              $sorts = []
     ): array {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
@@ -70,7 +71,8 @@ class FormationRepository extends ServiceEntityRepository
                             WHEN f.mention IS NOT NULL THEN m.libelle
                             WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
                             ELSE f.mentionTexte
-                            END',$direction
+                            END',
+                    $direction
                 );
             } else {
                 $query->addOrderBy('f.' . $sort, $direction);
@@ -83,7 +85,7 @@ class FormationRepository extends ServiceEntityRepository
 
     public function findByAdmin(
         AnneeUniversitaire $anneeUniversitaire,
-        array $sorts = []
+        array              $sorts = []
     ): array {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
@@ -99,7 +101,8 @@ class FormationRepository extends ServiceEntityRepository
                             WHEN f.mention IS NOT NULL THEN m.libelle
                             WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
                             ELSE f.mentionTexte
-                            END',$direction
+                            END',
+                    $direction
                 );
             } else {
                 $query->addOrderBy('f.' . $sort, $direction);
@@ -111,11 +114,11 @@ class FormationRepository extends ServiceEntityRepository
     }
 
     public function findBySearch(
-        string|null $q,
+        string|null        $q,
         AnneeUniversitaire $anneeUniversitaire,
-        string|null $sort,
-        string|null $direction,
-        Composante|null $composante = null,
+        string|null        $sort,
+        string|null        $direction,
+        Composante|null    $composante = null,
     ) {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
@@ -129,6 +132,37 @@ class FormationRepository extends ServiceEntityRepository
         if ($composante !== null) {
             $query->andWhere('f.composantePorteuse = :composante')
                 ->setParameter('composante', $composante);
+        }
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
+    public function findByResponsableOuCoResponsable(User $user, AnneeUniversitaire $anneeUniversitaire, array $sorts = []): array
+    {
+        $query = $this->createQueryBuilder('f')
+            ->where('f.responsableMention = :user')
+            ->orWhere('f.coResponsable = :user')
+            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->setParameter('user', $user)
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+        ;
+
+        foreach ($sorts as $sort => $direction) {
+            if ($sort === 'mention') {
+                $query->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id');
+                $sort = 'm.libelle';
+                $query->addOrderBy(
+                    'CASE
+                            WHEN f.mention IS NOT NULL THEN m.libelle
+                            WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
+                            ELSE f.mentionTexte
+                            END',
+                    $direction
+                );
+            } else {
+                $query->addOrderBy('f.' . $sort, $direction);
+            }
         }
 
         return $query->getQuery()
