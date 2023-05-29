@@ -4,11 +4,8 @@ namespace App\Controller;
 
 use App\Repository\BlocCompetenceRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
-use App\Repository\FicheMatiereRepository;
 use App\Repository\SemestreMutualisableRepository;
-use App\Repository\SemestreRepository;
 use App\Repository\UeMutualisableRepository;
-use App\Repository\UeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

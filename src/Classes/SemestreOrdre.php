@@ -12,7 +12,6 @@ namespace App\Classes;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Repository\SemestreParcoursRepository;
-use App\Repository\SemestreRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class SemestreOrdre

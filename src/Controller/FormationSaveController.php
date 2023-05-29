@@ -15,7 +15,6 @@ use App\Entity\Formation;
 use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Events\AddCentreFormationEvent;
-use App\Events\AddCentreParcoursEvent;
 use App\Repository\ComposanteRepository;
 use App\Repository\RythmeFormationRepository;
 use App\Repository\UserRepository;

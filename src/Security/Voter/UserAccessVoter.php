@@ -9,8 +9,6 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\ElementConstitutif;
-use App\Entity\Formation;
 use App\Entity\User;
 use App\Repository\RoleRepository;
 use Symfony\Bundle\SecurityBundle\Security;

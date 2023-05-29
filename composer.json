@@ -16,7 +16,7 @@
         "doctrine/orm": "^2.14",
         "knplabs/knp-snappy-bundle": "^1.9",
         "php-translation/symfony-bundle": "^0.13.0",
-        "phpoffice/phpspreadsheet": "^1.27",
+        "phpoffice/phpspreadsheet": "^1.28",
         "sensio/framework-extra-bundle": "^6.2",
         "symfony/console": "6.2.*",
         "symfony/dotenv": "6.2.*",

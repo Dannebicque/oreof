@@ -11,13 +11,11 @@ namespace App\Controller;
 
 use App\Classes\Ldap;
 use App\Entity\User;
-use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
 use App\Events\UserRegisterEvent;
 use App\Form\RegisterType;
 use App\Repository\ComposanteRepository;
 use App\Repository\EtablissementRepository;
-use App\Repository\FormationRepository;
 use App\Repository\UserCentreRepository;
 use App\Repository\UserRepository;
 use DateTime;

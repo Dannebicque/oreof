@@ -11,14 +11,8 @@ namespace App\Twig;
 
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
-use App\Entity\UserCentre;
-use App\Enums\CentreGestionEnum;
-use App\Enums\EtatRemplissageEnum;
-use App\Utils\Tools;
-use DateTimeInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
-use Twig\TwigFunction;
 
 /**
  * Class AppExtension.

@@ -9,12 +9,10 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\User;
 use App\Repository\RoleRepository;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;

@@ -14,7 +14,6 @@ use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\SemestreParcours;
 use App\Entity\Ue;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
 

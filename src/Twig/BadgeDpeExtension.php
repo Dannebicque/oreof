@@ -31,6 +31,37 @@ class BadgeDpeExtension extends AbstractExtension
 
     public function badgeEc(array $etatsEc): string
     {
+        return $this->displayDpeBadge($etatsEc);
+    }
+
+    public function badge(string $texte, string $type): string
+    {
+        return '<span class="badge bg-' . $type . ' me-1">' . $texte . '</span>';
+    }
+
+    public function badgeFormation(array $etatsFormation): string
+    {
+        return $this->displayDpeBadge($etatsFormation);
+    }
+
+    public function badgeEtatComposante(array $etatsComposante): string
+    {
+        $etatsComposante = array_keys($etatsComposante);
+
+        return $this->displayDpeBadge($etatsComposante);
+    }
+
+    public function badgeDpe(array $etatsDpe): string
+    {
+        return $this->displayDpeBadge($etatsDpe);
+    }
+
+    /**
+     * @param array $etatsEc
+     * @return string
+     */
+    private function displayDpeBadge(array $etatsEc): string
+    {
         if (count($etatsEc) === 0) {
             return '<span class="badge bg-secondary me-1">Initialisé</span>';
         }
@@ -38,56 +69,7 @@ class BadgeDpeExtension extends AbstractExtension
         $etatsEc = array_keys($etatsEc);
         $html = '';
         foreach ($etatsEc as $etatEc) {
-            $html .= '<span class="badge bg-'.EtatDpeEnum::from(strtolower($etatEc))->badge().' me-1">' . EtatDpeEnum::from(strtolower($etatEc))->libelle() . '</span>';
-        }
-
-        return $html;
-    }
-
-    public function badge(string $texte, string $type): string
-    {
-          return'<span class="badge bg-'.$type.' me-1">' . $texte . '</span>';
-    }
-
-    public function badgeFormation(array $etatsFormation): string
-    {
-        if (count($etatsFormation) === 0) {
-            return '<span class="badge bg-secondary me-1">Initialisé</span>';
-        }
-
-        $etatsFormation = array_keys($etatsFormation);
-        $html = '';
-        foreach ($etatsFormation as $etatFormation) {
-            $html .= '<span class="badge bg-'.EtatDpeEnum::from(strtolower($etatFormation))->badge().' me-1">' . EtatDpeEnum::from(strtolower($etatFormation))->libelle() . '</span>';
-        }
-
-        return $html;
-    }
-
-    public function badgeEtatComposante(array $etatsComposante): string
-    {
-        $etatsComposante = array_keys($etatsComposante);
-
-        if (count($etatsComposante) === 0) {
-            return '<span class="badge bg-danger me-1">Initialisé</span>';
-        }
-        $html = '';
-        foreach ($etatsComposante as $etatComposante) {
-            $html .= '<span class="badge bg-'.EtatDpeEnum::from(strtolower($etatComposante))->badge().' me-1">' . EtatDpeEnum::from(strtolower($etatComposante))->libelle() . '</span>';
-        }
-
-        return $html;
-    }
-
-    public function badgeDpe(array $etatsDpe): string
-    {
-        if (count($etatsDpe) === 0) {
-            return '<span class="badge bg-secondary me-1">Initialisé</span>';
-        }
-        $etatsDpe = array_keys($etatsDpe);
-        $html = '';
-        foreach ($etatsDpe as $etatDpe) {
-            $html .= '<span class="badge bg-'.EtatDpeEnum::from(strtolower($etatDpe))->badge().' me-1">' . EtatDpeEnum::from(strtolower($etatDpe))->libelle() . '</span>';
+            $html .= '<span class="badge bg-' . EtatDpeEnum::from(strtolower($etatEc))->badge() . ' me-1">' . EtatDpeEnum::from(strtolower($etatEc))->libelle() . '</span>';
         }
 
         return $html;

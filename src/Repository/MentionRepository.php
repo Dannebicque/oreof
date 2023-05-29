@@ -12,7 +12,6 @@ namespace App\Repository;
 use App\Entity\Domaine;
 use App\Entity\Mention;
 use App\Entity\TypeDiplome;
-use App\TypeDiplome\Source\TypeDiplomeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

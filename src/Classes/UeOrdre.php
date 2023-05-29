@@ -9,7 +9,6 @@
 
 namespace App\Classes;
 
-use App\Entity\ElementConstitutif;
 use App\Entity\Semestre;
 use App\Entity\Ue;
 use App\Repository\UeRepository;

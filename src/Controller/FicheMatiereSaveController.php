@@ -11,18 +11,14 @@ namespace App\Controller;
 
 use App\Classes\UpdateEntity;
 use App\Classes\verif\FicheMatiereState;
-use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
-use App\Repository\BlocCompetenceRepository;
 use App\Repository\CompetenceRepository;
 use App\Repository\LangueRepository;
-use App\Repository\NatureUeEcRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

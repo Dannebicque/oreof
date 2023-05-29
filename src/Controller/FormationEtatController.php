@@ -34,7 +34,6 @@ class FormationEtatController extends BaseController
                 $listeFormationsOuvrables[$formation->getComposantePorteuse()?->getId()][] = $formation;
                 $this->dpeWorkflow->apply($formation, 'initialiser');
                 $formationRepository->save($formation, true);
-                //todo: initialiser également la composante dans ce cas ?
             }
         }
 

@@ -17,7 +17,6 @@ use App\Entity\User;
 use App\Enums\NiveauFormationEnum;
 use App\Form\Type\YesNoType;
 use App\Repository\MentionRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

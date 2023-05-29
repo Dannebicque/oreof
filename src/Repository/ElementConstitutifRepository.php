@@ -11,7 +11,6 @@ namespace App\Repository;
 
 use App\Entity\AnneeUniversitaire;
 use App\Entity\Composante;
-use App\Entity\EcUe;
 use App\Entity\ElementConstitutif;
 use App\Entity\Formation;
 use App\Entity\Parcours;

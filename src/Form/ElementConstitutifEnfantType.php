@@ -10,12 +10,6 @@
 namespace App\Form;
 
 use App\Entity\ElementConstitutif;
-use App\Entity\FicheMatiere;
-use App\Entity\NatureUeEc;
-use App\Entity\TypeEc;
-use App\Entity\User;
-use App\Repository\TypeEcRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;

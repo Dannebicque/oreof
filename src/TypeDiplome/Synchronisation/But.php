@@ -9,32 +9,30 @@
 
 namespace App\TypeDiplome\Synchronisation;
 
-use Symfony\Component\HttpKernel\HttpCache\HttpCache;
+use App\Entity\Formation;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class But
 {
     public function __construct(
-        protected HttpClientInterface $client)
-    {
+        protected HttpClientInterface   $client,
+        protected ParameterBagInterface $container
+    ) {
     }
 
-    public function synchroniser(\App\Entity\Formation $formation)
+    public function synchroniser(Formation $formation)
     {
         $response = $this->client->request(
             'GET',
-            'http://127.0.0.1:8001/fr/api/unifolio/semestre/liste',
+            'http://redigetonbut:8888/index.php/api/',
             [
                 'headers' => [
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json',
-                    'X_API_KEY' => $this->getParameter('api_key')
+                    'X_API_KEY' => $this->container->get('api_key')
                 ]
             ]
         );
-
-        dump($response->getContent());
-        die();
-
     }
 }

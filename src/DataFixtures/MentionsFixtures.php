@@ -11,7 +11,6 @@ namespace App\DataFixtures;
 
 use App\Entity\Mention;
 use App\TypeDiplome\Source\ButTypeDiplome;
-use App\TypeDiplome\Source\LicenceProfessionnelleTypeDiplome;
 use App\TypeDiplome\Source\MasterTypeDiplome;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;

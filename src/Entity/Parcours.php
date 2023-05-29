@@ -10,8 +10,6 @@
 namespace App\Entity;
 
 use App\Entity\Traits\LifeCycleTrait;
-use App\Enums\EtatDpeEnum;
-use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\ParcoursRepository;

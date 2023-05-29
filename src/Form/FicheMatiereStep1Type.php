@@ -9,7 +9,6 @@
 
 namespace App\Form;
 
-use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\User;
 use App\Form\Type\YesNoType;
@@ -22,9 +21,9 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class FicheMatiereStep1Type extends AbstractType
 {
-    private ?AuthorizationCheckerInterface $authorizationChecker;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
+    public function __construct(
+        private AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->authorizationChecker = $authorizationChecker;
     }
@@ -39,17 +38,12 @@ class FicheMatiereStep1Type extends AbstractType
         $builder
             ->add('responsableFicheMatiere', EntityType::class, [
                 'class' => User::class,
-'autocomplete' => true,
-//                'query_builder' => function ($er) use ($options) {
-//                    return $er->createQueryBuilder('u')
-//                        ->join('u.roles', 'r')
-//                        ->where('r.role = :role')
-//                        ->andWhere('u.parcours = :parcours')
-//                        ->setParameter('role', 'ROLE_FORMATION_EDIT_MY')
-//                        ->setParameter('parcours', $options['data']->getParcours()->getId())
-//                        ->orderBy('u.nom', 'ASC')
-//                        ->addOrderBy('u.prenom', 'ASC');
-//                },//todo: filtrer par user dans le centre
+                'autocomplete' => true,
+                'query_builder' => function ($er) {
+                    return $er->createQueryBuilder('u')
+                        ->orderBy('u.nom', 'ASC')
+                        ->addOrderBy('u.prenom', 'ASC');
+                },
                 'disabled' => !$access,
                 'required' => false,
                 'attr' => ['data-action' => 'change->fichematiere--step1#changeResponsableEc'],
@@ -108,7 +102,6 @@ class FicheMatiereStep1Type extends AbstractType
                 ],
                 'help' => '-'
             ]);
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void

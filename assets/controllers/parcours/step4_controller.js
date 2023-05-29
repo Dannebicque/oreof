@@ -70,7 +70,7 @@ export default class extends Controller {
 
   async _structure(options) {
     await saveData(this.urlGenereStructureValue, options).then(async () => {
-      this._loadParcours()
+      await this._loadParcours()
     })
   }
 

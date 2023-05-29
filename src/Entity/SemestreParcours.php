@@ -105,4 +105,34 @@ class SemestreParcours
 
         return $this;
     }
+
+    public function getAnnee(): int
+    {
+        //si ordre = 1 ou 2 alors année = 1
+        //si ordre = 3 ou 4 alors année = 2
+        //si ordre = 5 ou 6 alors année = 3
+
+        switch ($this->ordre) {
+            case 1:
+            case 2:
+                return 1;
+            case 3:
+            case 4:
+                return 2;
+            case 5:
+            case 6:
+                return 3;
+            default:
+                return 0;
+        }
+
+    }
+
+    public function getOrdreAnnee(): int
+    {
+        if ($this->ordre % 2 === 0) {
+            return 2;
+        }
+        return 1;
+    }
 }

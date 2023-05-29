@@ -10,17 +10,33 @@
 namespace App\TypeDiplome\Source;
 
 use App\Entity\ElementConstitutif;
-use App\Entity\Formation;
 use App\Entity\Mccc;
 use App\Entity\Parcours;
+use App\TypeDiplome\Export\LicenceMccc;
+use App\TypeDiplome\TypeDiplomeRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\InputBag;
 
 class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 {
     public const SOURCE = 'licence';
     public const TEMPLATE_FORM_MCCC = 'licence.html.twig';
+    public const NB_ANNEE = 3;
 
     public string $libelle = 'Licence';
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        TypeDiplomeRegistry    $typeDiplomeRegistry,
+        protected LicenceMccc  $licenceMccc
+    ) {
+        parent::__construct($entityManager, $typeDiplomeRegistry);
+    }
+
+    public function exportExcelMccc(Parcours $parcours)
+    {
+        return $this->licenceMccc->exportExcelLicenceMccc($parcours);
+    }
 
     public function saveMcccs(ElementConstitutif $elementConstitutif, InputBag $request): void
     {

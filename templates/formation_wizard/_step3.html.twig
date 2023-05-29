@@ -58,14 +58,14 @@
     <div id="bloc_semestre" class="{% if formation.hasParcours == false %}d-none{% endif %} mt-2">
         <fieldset class="mb-3">
             <div>
-                <legend class="col-form-label required">
+                <div class="col-form-label required">
                     {{ 'formation_step3.labels.structureFormation'|trans({}, 'form') }}
                     <i class="fal fa-question-circle ms-1"
                        data-controller="tooltip"
                        data-tooltip-placement-value="bottom"
                        aria-label="{{ 'formation_step3.helps.structureFormation.help'|trans({}, 'help') }}"
                        data-bs-original-title="{{ 'formation_step3.helps.structureFormation.help'|trans({}, 'help') }}"></i>
-                </legend>
+                </div>
 
                 <ul>
 

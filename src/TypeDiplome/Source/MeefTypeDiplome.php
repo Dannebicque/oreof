@@ -10,9 +10,7 @@
 namespace App\TypeDiplome\Source;
 
 use App\Entity\ElementConstitutif;
-use App\Entity\Formation;
 use App\Entity\Mccc;
-use App\Entity\Parcours;
 use Symfony\Component\HttpFoundation\InputBag;
 
 class MeefTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface

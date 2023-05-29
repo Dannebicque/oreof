@@ -9,19 +9,13 @@
 
 namespace App\Controller;
 
-use App\Classes\EcOrdre;
 use App\Classes\verif\FicheMatiereState;
 use App\Entity\FicheMatiere;
-use App\Entity\Parcours;
-use App\Entity\Ue;
-use App\Form\EcStep4Type;
 use App\Form\FicheMatiereType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
-use App\Repository\TypeEpreuveRepository;
 use App\Repository\UeRepository;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
@@ -29,8 +23,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Workflow\WorkflowInterface;
 
 #[Route('/fiche/matiere')]
 class FicheMatiereController extends AbstractController

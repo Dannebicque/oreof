@@ -13,8 +13,6 @@ use App\Entity\Parcours;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Form\Type\TextareaAutoSaveType;
 use App\Form\Type\YesNoType;
-use App\TypeDiplome\Source\ButTypeDiplome;
-use App\TypeDiplome\Source\LicenceProfessionnelleTypeDiplome;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;

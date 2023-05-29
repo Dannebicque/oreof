@@ -11,7 +11,6 @@ namespace App\Repository;
 
 use App\Entity\TypeDiplome;
 use App\Entity\TypeUe;
-use App\TypeDiplome\Source\TypeDiplomeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;

@@ -9,15 +9,11 @@
 
 namespace App\Controller\Structure;
 
-use _PHPStan_59e3e945c\Nette\Utils\Json;
 use App\Classes\SemestreOrdre;
-use App\Entity\FicheMatiere;
-use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\SemestreMutualisable;
 use App\Repository\ComposanteRepository;
-use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\SemestreMutualisableRepository;

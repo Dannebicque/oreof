@@ -50,7 +50,8 @@
                         {# todo: gérer des cas impossibles ? dans une liste enum et vérifier ? #}
                         {% set valeur = 'ROLE_'~centre.value~'_'~permission.value|upper~'_'~role.porte %}
                         <td>
-                            <input type="checkbox" value="{{ valeur }}"
+                            <label for="{{ valeur }}" class="sr-only"></label>
+                            <input type="checkbox" value="{{ valeur }}" id="{{ valeur }}"
                                     {% if role.hasDroit(valeur) %}
                                         checked
                                     {% endif %}

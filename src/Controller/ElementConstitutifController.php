@@ -16,16 +16,13 @@ use App\Entity\Parcours;
 use App\Entity\TypeEc;
 use App\Entity\Ue;
 use App\Form\EcStep4Type;
-use App\Form\ElementConstitutifEditType;
 use App\Form\ElementConstitutifEnfantType;
 use App\Form\ElementConstitutifType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
-use App\Repository\LangueRepository;
 use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeEcRepository;
 use App\Repository\TypeEpreuveRepository;
-use App\Repository\UeRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,8 +31,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Workflow\WorkflowInterface;
 
 #[Route('/element/constitutif')]
 class ElementConstitutifController extends AbstractController
@@ -157,7 +152,6 @@ class ElementConstitutifController extends AbstractController
                 $elementConstitutif->setOrdre($lastEc);
                 $elementConstitutif->genereCode();
                 $elementConstitutifRepository->save($elementConstitutif, true);
-                $subOrdre = 1;
                 //on récupère le champs matières, on découpe selon la ,. Si ca commence par "id_", on récupère la matière, sinon on créé la matière
                 $matieres = explode(',', $request->request->get('matieres'));
                 foreach ($matieres as $matiere) {
@@ -229,8 +223,6 @@ class ElementConstitutifController extends AbstractController
             throw new RuntimeException('Type de diplôme non trouvé');
         }
 
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-
         $form = $this->createForm(ElementConstitutifEnfantType::class, $elementConstitutif, [
             'action' => $this->generateUrl(
                 'app_element_constitutif_new_enfant',
@@ -274,38 +266,38 @@ class ElementConstitutifController extends AbstractController
         ]);
     }
 
-    /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-     */
-    #[
-        Route('/{id}', name: 'app_element_constitutif_show', methods: ['GET'])]
-    public function show(
-        FicheMatiere $ficheMatiere
-    ): Response {
-        $formation = $ficheMatiere->getParcours()->getFormation();
-        if ($formation === null) {
-            throw new RuntimeException('Formation non trouvée');
-        }
-
-        $bccs = [];
-        foreach ($ficheMatiere->getCompetences() as $competence) {
-            if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
-                $bccs[$competence->getBlocCompetence()?->getId()]['bcc'] = $competence->getBlocCompetence();
-                $bccs[$competence->getBlocCompetence()?->getId()]['competences'] = [];
-            }
-            $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
-        }
-
-        $typeDiplome = $formation->getTypeDiplome();
-
-        return $this->render('element_constitutif/show.html.twig', [
-            'ficheMatiere' => $ficheMatiere,
-            'template' => $typeDiplome::TEMPLATE,//todo: revoir pour appeler le template global ?
-            'formation' => $formation,
-            'typeDiplome' => $typeDiplome,
-            'bccs' => $bccs
-        ]);
-    }
+//    /**
+//     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+//     */
+//    #[
+//        Route('/{id}', name: 'app_element_constitutif_show', methods: ['GET'])]
+//    public function show(
+//        FicheMatiere $ficheMatiere
+//    ): Response {
+//        $formation = $ficheMatiere->getParcours()->getFormation();
+//        if ($formation === null) {
+//            throw new RuntimeException('Formation non trouvée');
+//        }
+//
+//        $bccs = [];
+//        foreach ($ficheMatiere->getCompetences() as $competence) {
+//            if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
+//                $bccs[$competence->getBlocCompetence()?->getId()]['bcc'] = $competence->getBlocCompetence();
+//                $bccs[$competence->getBlocCompetence()?->getId()]['competences'] = [];
+//            }
+//            $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
+//        }
+//
+//        $typeDiplome = $formation->getTypeDiplome();
+//
+//        return $this->render('element_constitutif/show.html.twig', [
+//            'ficheMatiere' => $ficheMatiere,
+//            'template' => $typeDiplome::TEMPLATE,//todo: revoir pour appeler le template global ?
+//            'formation' => $formation,
+//            'typeDiplome' => $typeDiplome,
+//            'bccs' => $bccs
+//        ]);
+//    }
 
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
     public function edit(

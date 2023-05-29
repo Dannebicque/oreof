@@ -11,7 +11,6 @@ namespace App\Form;
 
 use App\Entity\FicheMatiere;
 use App\Entity\Langue;
-use App\Entity\NatureUeEc;
 use App\Form\Type\TextareaAutoSaveType;
 use App\Repository\LangueRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

@@ -10,7 +10,6 @@
 namespace App\Controller;
 
 use App\Classes\MyPDF;
-use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

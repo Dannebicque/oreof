@@ -16,11 +16,9 @@ use App\Entity\Formation;
 use App\Entity\FormationDemande;
 use App\Entity\UserCentre;
 use App\Events\AddCentreFormationEvent;
-use App\Events\AddCentreParcoursEvent;
 use App\Form\FormationDemandeType;
 use App\Form\FormationSesType;
 use App\Repository\DomaineRepository;
-use App\Repository\FormationDemandeRepository;
 use App\Repository\FormationRepository;
 use App\Repository\MentionRepository;
 use App\Repository\RoleRepository;
@@ -71,10 +69,8 @@ class FormationController extends BaseController
                 $this->getAnneeUniversitaire(),
                 [$sort => $direction]
             );
-            $formations[] = $formationRepository->findBy([
-                'responsableMention' => $this->getUser(),
-                'anneeUniversitaire' => $this->getAnneeUniversitaire()
-            ], [$sort => $direction]);
+            $formations[] = $formationRepository->findByResponsableOuCoResponsable($this->getUser(),
+                $this->getAnneeUniversitaire(), [$sort => $direction]);
             $formations = array_merge(...$formations);
         }
 

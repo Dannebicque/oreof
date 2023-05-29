@@ -11,7 +11,6 @@ namespace App\Controller\API;
 
 use App\Entity\Parcours;
 use App\Entity\Ue;
-use App\Repository\ComposanteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

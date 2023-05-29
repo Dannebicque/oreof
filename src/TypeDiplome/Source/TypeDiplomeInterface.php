@@ -10,8 +10,6 @@
 namespace App\TypeDiplome\Source;
 
 use App\Entity\ElementConstitutif;
-use App\Entity\Formation;
-use App\Entity\Parcours;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\InputBag;
 

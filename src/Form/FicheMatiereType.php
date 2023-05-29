@@ -9,9 +9,7 @@
 
 namespace App\Form;
 
-use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
-use App\Entity\NatureUeEc;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;

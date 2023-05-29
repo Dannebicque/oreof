@@ -12,7 +12,6 @@ namespace App\Controller\Structure;
 use App\Classes\UeOrdre;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
-use App\Entity\NatureUeEc;
 use App\Entity\TypeUe;
 use App\Entity\Ue;
 use App\Entity\UeMutualisable;

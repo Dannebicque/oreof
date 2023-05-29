@@ -10,11 +10,7 @@
 namespace App\Components\Questionnaire\DependencyInjection;
 
 use App\TypeDiplome\Source\ButTypeDiplome;
-use App\TypeDiplome\Source\DeustTypeDiplome;
-use App\TypeDiplome\Source\LicenceProfessionnelleTypeDiplome;
 use App\TypeDiplome\Source\LicenceTypeDiplome;
-use App\TypeDiplome\Source\MasterMeefTypeDiplome;
-use App\TypeDiplome\Source\MasterTypeDiplome;
 use App\TypeDiplome\Source\MeefTypeDiplome;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

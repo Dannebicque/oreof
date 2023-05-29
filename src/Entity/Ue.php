@@ -62,7 +62,6 @@ class Ue
 
     public function __construct()
     {
-        $this->ecUes = new ArrayCollection();
         $this->elementConstitutifs = new ArrayCollection();
         $this->ueMutualisables = new ArrayCollection();
         $this->ueEnfants = new ArrayCollection();
@@ -126,18 +125,6 @@ class Ue
     public function setTypeUe(?TypeUe $typeUe): self
     {
         $this->typeUe = $typeUe;
-
-        return $this;
-    }
-
-    public function getTypeUeTexte(): ?string
-    {
-        return $this->typeUeTexte;
-    }
-
-    public function setTypeUeTexte(?string $typeUeTexte): self
-    {
-        $this->typeUeTexte = $typeUeTexte;
 
         return $this;
     }

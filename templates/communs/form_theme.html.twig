@@ -107,7 +107,8 @@
     </div>
     <div class="row mt-2 d-none" {{ stimulus_target('entity_with_add', 'zoneAdd') }}>
         <div class="col-10">
-            <input type="text" class="form-control" name="{{ name_field_to_add }}">
+            <label for="{{ name_field_to_add }}" class="sr-only">{{ name_field_to_add }}</label>
+            <input type="text" class="form-control" name="{{ name_field_to_add }}" id="{{ name_field_to_add }}">
             <span class="form-text mb-0 help-text">{{ help_to_add }}</span>
         </div>
         <div class="col-2">

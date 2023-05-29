@@ -9,7 +9,6 @@
 
 namespace App\Controller;
 
-use App\Classes\verif\FicheMatiereState;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Form\FicheMatiereStep1Type;
@@ -20,8 +19,6 @@ use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
-use App\Repository\SemestreRepository;
-use App\Repository\UeRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

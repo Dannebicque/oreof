@@ -11,7 +11,6 @@ namespace App\Repository;
 
 use App\Entity\TypeDiplome;
 use App\Entity\TypeEpreuve;
-use App\TypeDiplome\Source\TypeDiplomeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

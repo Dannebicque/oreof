@@ -12,6 +12,7 @@ parameters:
     CAS_PORT: '%env(resolve:CAS_PORT)%'
     CAS_CONTEXT: '%env(resolve:CAS_CONTEXT)%'
     CAS_CLIENT_SERVICE_NAME: '%env(resolve:CAS_CLIENT_SERVICE_NAME)%'
+    api_key: '%env(resolve:API_KEY)%'
 
 services:
     # default configuration for services in *this* file

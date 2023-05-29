@@ -81,7 +81,7 @@ class AddCentreFormationSubscriber implements EventSubscriberInterface
         //on vérifie s'il est déjà dans le centre
         $existe = $this->userCentreRepository->findOneBy(['user' => $user, 'formation' => $formation]);
 
-        //si oui, on vérifie s'il n'est pas responsable sur un autre parcours de la formation. Si non on supprimer le centre
+        //si oui, on vérifie s'il n'est pas responsable sur un autre parcours de la formation. Si non on supprime le centre
         if ($existe !== null) {
 //            $parcour = $this->formationRepository->findRespOtherParcoursInFormation($formation, $user);
 //            if (count($formation) === 0) {/

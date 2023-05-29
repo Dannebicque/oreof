@@ -10,9 +10,7 @@
 namespace App\Entity;
 
 use App\Entity\Traits\LifeCycleTrait;
-use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
-use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

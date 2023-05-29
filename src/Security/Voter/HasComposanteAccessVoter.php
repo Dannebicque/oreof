@@ -9,12 +9,10 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Composante;
 use App\Entity\User;
 use App\Repository\RoleRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\Voter\CacheableVoterInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 

@@ -46,7 +46,7 @@ export default class extends Controller {
 
   async refreshListeEc(event) { // l'event pourrait emetre le numéro d'UE et de parcours
     if (event.detail.ue === this.ueValue && event.detail.parcours === this.parcoursValue) {
-      this._listeEc(event)
+      await this._listeEc(event)
       // mise à jour des ECTS de l'UE et du Semestre
       const response = await fetch(this.urlValue)
       const data = await response.json()

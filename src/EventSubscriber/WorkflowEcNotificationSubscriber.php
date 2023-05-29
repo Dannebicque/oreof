@@ -9,7 +9,6 @@
 
 namespace App\EventSubscriber;
 
-use App\Entity\Formation;
 use App\Entity\Notification;
 use App\Repository\NotificationRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
