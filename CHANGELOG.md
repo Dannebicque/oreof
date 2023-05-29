@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.7](https://github.com/Dannebicque/oreof/compare/v1.3.6...v1.3.7) (2023-05-29)
+
+
+### Features
+
+* export MCCC en excel + refactoring et nettoyage de code. ([cef7226](https://github.com/Dannebicque/oreof/commit/cef7226b1e20c0cc85c10db31f2fa7f4b8dbe4a8))
+
+
+### Bug Fixes
+
+* Affiche des formations si co-responsable ([d84a609](https://github.com/Dannebicque/oreof/commit/d84a609af8a9e954ea2cf427307a3e77a78781d2))
+* sujet mail ([54551ae](https://github.com/Dannebicque/oreof/commit/54551ae18c99ab2ea4989e1288669ade9a0bc104))
+
 ### [1.3.6](https://github.com/Dannebicque/oreof/compare/v1.3.5...v1.3.6) (2023-05-25)
 
 
