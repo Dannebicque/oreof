@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.9](https://github.com/Dannebicque/oreof/compare/v1.3.8...v1.3.9) (2023-05-31)
+
+
+### Features
+
+* Tri du tableau des droits ([adde7d3](https://github.com/Dannebicque/oreof/commit/adde7d3c13a8a02aa6b24cf0511cc1e212ef94c6))
+* Update gestion des droits ([5075102](https://github.com/Dannebicque/oreof/commit/5075102d88114ee285523f454012e5fdacfbd5b7))
+
+
+### Bug Fixes
+
+* Update de UXAutocomplete ([880ba61](https://github.com/Dannebicque/oreof/commit/880ba61c6eae3cbeb7b5a0dab145afdde4ca503a))
+
 ### [1.3.8](https://github.com/Dannebicque/oreof/compare/v1.3.7...v1.3.8) (2023-05-31)
 
 ### [1.3.7](https://github.com/Dannebicque/oreof/compare/v1.3.6...v1.3.7) (2023-05-29)
