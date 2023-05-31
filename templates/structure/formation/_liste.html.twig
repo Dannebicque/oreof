@@ -81,7 +81,7 @@
                                     <div class="col-6 col-md-2 flex-column
                                            mb-1 mb-md-0 text-end">
                                         <div class="text-muted text-small d-md-none">Actions</div>
-                                        {% if (is_granted('ROLE_FORMATION_VALIDATE_MY', formation) and workflow_can
+                                        {% if (is_granted('CAN_FORMATION_VALIDATE_MY', formation) and workflow_can
                                             (formation,
                                             'valide_rf')) %}
                                             <button
@@ -100,7 +100,7 @@
                                                 <i class="{{ iconValidate }}"></i>
                                                 <span> Valider RF</span>
                                             </button>
-                                        {% elseif is_granted('ROLE_FORMATION_VALIDATE_ALL') and workflow_can(formation,
+                                        {% elseif is_granted('CAN_FORMATION_VALIDATE_ALL') and workflow_can(formation,
                                             'valider_central') %}
                                             <button
                                                     {{ stimulus_controller('modal', {
@@ -118,7 +118,7 @@
                                                 <i class="{{ iconValidate }}"></i>
                                                 <span> Valider SES</span>
                                             </button>
-                                        {% elseif is_granted('ROLE_COMPOSANTE_VALIDATE_ALL', formation.composantePorteuse) and
+                                        {% elseif is_granted('CAN_COMPOSANTE_VALIDATE_ALL', formation.composantePorteuse) and
                                             workflow_can
                                             (formation, 'valide_dpe_composante') %}
                                             <button
@@ -143,7 +143,7 @@
                                         >
                                             <i class="{{ iconShow }}"></i>
                                         </a>
-                                        {% if is_granted('ROLE_FORMATION_EDIT_MY', formation) %}
+                                        {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
                                             <a href="{{ path('app_formation_edit', {id:formation.id}) }}"
                                                class="btn btn-outline-warning btn-sm"
                                             >

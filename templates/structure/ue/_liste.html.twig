@@ -172,7 +172,7 @@
                                             </div>
                                             <div class="col-4 text-end mt-2">{# todo: boutons non centrés dans la
                                             ligne #}
-                                                {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation)) %} {#  and
+                                                {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)) %} {#  and
                                         (workflow_can(ec,
                                             'valider_parcours') or workflow_can(ec,
                                             'initialiser'))) or (is_granted
@@ -375,7 +375,7 @@
                                                 </div>
                                                 <div class="col-4 text-end mt-2">{# todo: boutons non centrés dans la
                                             ligne #}
-                                                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation)) %} {#  and
+                                                    {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)) %} {#  and
                                         (workflow_can(ec,
                                             'valider_parcours') or workflow_can(ec,
                                             'initialiser'))) or (is_granted

@@ -52,8 +52,8 @@ class FormationController extends BaseController
 
         if ($this->isGranted('ROLE_ADMIN') ||
             $this->isGranted('ROLE_SES') ||
-            $this->isGranted('ROLE_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
-            $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser())) {
+            $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
+            $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
             if ($q) {
                 $formations = $formationRepository->findBySearch($q, $this->getAnneeUniversitaire(), $sort, $direction);
             } else {
@@ -64,6 +64,21 @@ class FormationController extends BaseController
             }
         } else {
             $formations = [];
+
+            //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
+            $centres = $this->getUser()->getUserCentres();
+            foreach ($centres as $centre) {
+                if ($centre->getComposante() !== null && in_array('Gestionnaire', $centre->getDroits())) {
+                    //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
+                    $formations[] = $formationRepository->findByComposante(
+                        $centre->getComposante(),
+                        $this->getAnneeUniversitaire(),
+                        [$sort => $direction]
+                    );
+                }
+            }
+
+
             $formations[] = $formationRepository->findByComposanteDpe(
                 $this->getUser(),
                 $this->getAnneeUniversitaire(),
@@ -173,7 +188,7 @@ class FormationController extends BaseController
         Request $request,
         FormationRepository $formationRepository
     ): Response {
-        $this->denyAccessUnlessGranted('ROLE_FORMATION_ADD_ALL', $this->getUser());
+        $this->denyAccessUnlessGranted('CAN_FORMATION_CREATE_ALL', $this->getUser());
 
         $formation = new Formation($this->getAnneeUniversitaire());
         $form = $this->createForm(FormationSesType::class, $formation, [

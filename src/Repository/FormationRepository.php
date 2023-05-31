@@ -145,8 +145,37 @@ class FormationRepository extends ServiceEntityRepository
             ->orWhere('f.coResponsable = :user')
             ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
             ->setParameter('user', $user)
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire);
+
+        foreach ($sorts as $sort => $direction) {
+            if ($sort === 'mention') {
+                $query->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id');
+                $sort = 'm.libelle';
+                $query->addOrderBy(
+                    'CASE
+                            WHEN f.mention IS NOT NULL THEN m.libelle
+                            WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
+                            ELSE f.mentionTexte
+                            END',
+                    $direction
+                );
+            } else {
+                $query->addOrderBy('f.' . $sort, $direction);
+            }
+        }
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
+    public function findByComposante($composante, AnneeUniversitaire $anneeUniversitaire, array $sorts): array
+    {
+        $query = $this->createQueryBuilder('f')
+            ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
+            ->andWhere('c.id = :composante')
+            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
             ->setParameter('anneeUniversitaire', $anneeUniversitaire)
-        ;
+            ->setParameter('composante', $composante);
 
         foreach ($sorts as $sort => $direction) {
             if ($sort === 'mention') {

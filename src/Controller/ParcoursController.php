@@ -60,13 +60,13 @@ class ParcoursController extends BaseController
 
         if ($this->isGranted('ROLE_ADMIN') ||
             $this->isGranted('ROLE_SES') ||
-            $this->isGranted('ROLE_PARCOURS_SHOW_ALL')) {
+            $this->isGranted('CAN_PARCOURS_SHOW_ALL')) {
             $tParcours = $parcours;
         } else {
             foreach ($parcours as $p) {
-                if ($this->isGranted('ROLE_FORMATION_EDIT_MY', $p->getFormation()) ||
-                    $this->isGranted('ROLE_FORMATION_SHOW_MY', $p->getFormation()) ||
-                    ($this->isGranted('ROLE_PARCOURS_EDIT_MY', $p) && ($p->getRespParcours() === $this->getUser() || $p->getCoResponsable() === $this->getUser()))
+                if ($this->isGranted('CAN_FORMATION_EDIT_MY', $p->getFormation()) ||
+                    $this->isGranted('CAN_FORMATION_SHOW_MY', $p->getFormation()) ||
+                    ($this->isGranted('CAN_PARCOURS_EDIT_MY', $p) && ($p->getRespParcours() === $this->getUser() || $p->getCoResponsable() === $this->getUser()))
                 ) {
                     $tParcours[] = $p;
                 }

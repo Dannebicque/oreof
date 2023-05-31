@@ -112,11 +112,11 @@ class LicenceMccc
                                 $this->excelWriter->writeCellXY(7, $ligne, $ec->getFicheMatiere()->getResponsableFicheMatiere()?->getDisplay());
                                 $this->excelWriter->writeCellXY(12, $ligne, $ec->getFicheMatiere()->isEnseignementMutualise() === true ? 'O' : 'N');
                             }
-                            $this->excelWriter->writeCellXY(15, $ligne, $ec->getEcts());
-                            $this->excelWriter->writeCellXY(16, $ligne, $ec->getVolumeCmPresentiel());
-                            $this->excelWriter->writeCellXY(17, $ligne, $ec->getVolumeTdPresentiel());
-                            $this->excelWriter->writeCellXY(18, $ligne, $ec->getVolumeTpPresentiel());
-                            $this->excelWriter->writeCellXY(19, $ligne, $ec->volumeTotalPresentiel());
+                            $this->excelWriter->writeCellXY(14, $ligne, $ec->getEcts());
+                            $this->excelWriter->writeCellXY(15, $ligne, $ec->getVolumeCmPresentiel());
+                            $this->excelWriter->writeCellXY(16, $ligne, $ec->getVolumeTdPresentiel());
+                            $this->excelWriter->writeCellXY(17, $ligne, $ec->getVolumeTpPresentiel());
+                            $this->excelWriter->writeCellXY(18, $ligne, $ec->volumeTotalPresentiel());
                             $totalAnnee->addEc($ec);
                             $num++;
                             $ligne++;
@@ -124,10 +124,10 @@ class LicenceMccc
                         // $ligne++;//si $num a bougé, pas de ++
                     }
 
-                    $this->excelWriter->writeCellXY(16, $ligne, $totalAnnee->totalCmPresentiel);
-                    $this->excelWriter->writeCellXY(17, $ligne, $totalAnnee->totalTdPresentiel);
-                    $this->excelWriter->writeCellXY(18, $ligne, $totalAnnee->totalTpPresentiel);
-                    $this->excelWriter->writeCellXY(19, $ligne, $totalAnnee->getTotalPresentiel());
+                    $this->excelWriter->writeCellXY(15, $ligne, $totalAnnee->totalCmPresentiel);
+                    $this->excelWriter->writeCellXY(16, $ligne, $totalAnnee->totalTdPresentiel);
+                    $this->excelWriter->writeCellXY(17, $ligne, $totalAnnee->totalTpPresentiel);
+                    $this->excelWriter->writeCellXY(18, $ligne, $totalAnnee->getTotalPresentiel());
                 }
             }
             //suppression de la ligne modèle 18

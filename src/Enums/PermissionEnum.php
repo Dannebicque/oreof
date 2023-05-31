@@ -11,7 +11,7 @@ namespace App\Enums;
 
 enum PermissionEnum: string
 {
-    case CREATE = 'create';
+    case CREATE = 'create';//todo: possible en maj?
     case EDIT = 'edit';
     case DELETE = 'delete';
     case SHOW = 'show';
@@ -19,6 +19,20 @@ enum PermissionEnum: string
     case SUBMIT = 'submit';
     case MANAGE = 'manage';
     case EXPORT = 'export';
+
+    public static function getAvailableTypes()
+    {
+        return [
+            strtoupper(self::CREATE->value),
+            strtoupper(self::EDIT->value),
+            strtoupper(self::DELETE->value),
+            strtoupper(self::SHOW->value),
+            strtoupper(self::VALIDATE->value),
+            strtoupper(self::SUBMIT->value),
+            strtoupper(self::MANAGE->value),
+            strtoupper(self::EXPORT->value),
+        ];
+    }
 
     public function libelle(): string
     {

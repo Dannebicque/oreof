@@ -51,7 +51,7 @@ class FormationSaveController extends BaseController
         Formation $formation
     ): Response {
         $updateEntity->setGroups(['formation:read']);
-        $this->denyAccessUnlessGranted('ROLE_FORMATION_EDIT_MY', $formation);
+        $this->denyAccessUnlessGranted('CAN_FORMATION_EDIT_MY', $formation);
 
         if (!($this->dpeWorkflow->can($formation, 'valide_rf') || $this->dpeWorkflow->can(
             $formation,

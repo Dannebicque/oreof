@@ -45,22 +45,22 @@ class FicheMatiereController extends BaseController
                 [$sort => $direction],
                 $q
             );
-        } elseif ($this->isGranted('ROLE_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
-            $this->isGranted('ROLE_FORMATION_SHOW_ALL', $this->getUser())) {
+        } elseif ($this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
+            $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
             $ficheMatieres = $ficheMatiereRepository->findByComposanteDpe(
                 $this->getUser(),
                 $this->getAnneeUniversitaire(),
                 [$sort => $direction],
                 $q
             );
-        } elseif ($this->isGranted('ROLE_FORMATION_SHOW_MY', $this->getUser())) {
+        } elseif ($this->isGranted('CAN_FORMATION_SHOW_MY', $this->getUser())) {
             $ficheMatieres = $ficheMatiereRepository->findByResponsableFormation(
                 $this->getUser(),
                 $this->getAnneeUniversitaire(),
                 [$sort => $direction],
                 $q
             );
-        } elseif ($this->isGranted('ROLE_PARCOURS_SHOW_MY', $this->getUser())) {
+        } elseif ($this->isGranted('CAN_PARCOURS_SHOW_MY', $this->getUser())) {
             $ficheMatieres = $ficheMatiereRepository->findByResponsableParcours(
                 $this->getUser(),
                 $this->getAnneeUniversitaire(),

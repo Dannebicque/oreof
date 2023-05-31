@@ -41,20 +41,16 @@ class UserController extends BaseController
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
             $users = $userRepository->findNotEnableAvecDemande();
             $dpe = false;
-        } elseif ($this->isGranted('ROLE_COMPOSANTE', $this->getUser())) {
-            //todo: ROLE_COMPOSANTE_MANAGE_MY ?
+        } elseif ($this->isGranted('CAN_COMPOSANTE_MANAGE_MY', $this->getUser())) {
             $composante = null;
             $dpe = true;
+            $users = [];
             foreach ($this->getUser()?->getUserCentres() as $centre) {
                 if ($centre->getComposante() !== null) {
-                    $composante = $centre->getComposante(); //au moins une composante, todo: si plusieurs ?
+                    $users[] = $userRepository->findByComposanteNotEnableAvecDemande($centre->getComposante());
                 }
             }
-            if ($composante !== null) {
-                $users = $userRepository->findByComposanteNotEnableAvecDemande($composante);
-            } else {
-                $users = [];
-            }
+            $users = array_merge(...$users);
         }
 
         return $this->render('config/user/attente.html.twig', [
@@ -79,8 +75,7 @@ class UserController extends BaseController
             } else {
                 $users = $userRepository->findEnable($sort, $direction);
             }
-        } elseif ($this->isGranted('ROLE_COMPOSANTE', $this->getUser())) {
-            //todo: ROLE_COMPOSANTE_MANAGE_MY ?
+        } elseif ($this->isGranted('CAN_COMPOSANTE_MANAGE_MY', $this->getUser())) {
             foreach ($this->getUser()?->getUserCentres() as $centre) {
                 if ($centre->getComposante() !== null) {
                     $composante = $centre->getComposante(); //au moins une composante, todo: si plusieurs ?

@@ -152,15 +152,6 @@
                         </li>
                     {% endif %}
 
-                    {#                    <li> #}
-                    {#                        <a href="{{ path('structure_formation_index') }}"> #}
-                    {#                            <i class="fal fa-screen-users icon"></i> #}
-                    {#                            <span class="label">Formations</span> #}
-                    {#                        </a> #}
-                    {#                    </li> #}
-
-
-
                     {% if is_granted('ROLE_ADMIN') %}
                         <li class="mega">
                             <a href="#administration" data-href="administration">
@@ -348,7 +339,7 @@
                                 </li>
                             </ul>
                         </li>
-                    {% elseif is_granted('ROLE_COMPOSANTE', app.user) %}
+                    {% elseif is_granted('CAN_COMPOSANTE_MANAGE_MY', app.user) %}
                         <li class="mega">
                             <a href="#administration" data-href="administration">
                                 <i class="fal fa-wrench icon"></i>

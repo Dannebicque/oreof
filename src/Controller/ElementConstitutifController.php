@@ -532,7 +532,7 @@ class ElementConstitutifController extends AbstractController
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
         if ($this->isGranted(
-            'ROLE_FORMATION_EDIT_MY',
+            'CAN_FORMATION_EDIT_MY',
             $formation
         )) { //todo: ajouter le workflow...
 

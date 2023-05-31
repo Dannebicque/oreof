@@ -19,6 +19,18 @@ enum RoleNiveauEnum: string
     case SCOLARITE = 'SCOLARITE';
 
 
+    public static function getAvailableTypes()
+    {
+        return [
+            self::ETABLISSEMENT->value,
+            self::COMPOSANTE->value,
+            self::FORMATION->value,
+            self::PARCOURS->value,
+            self::EC->value,
+            self::SCOLARITE->value,
+        ];
+    }
+
     public function libelle(): string
     {
         return match ($this) {

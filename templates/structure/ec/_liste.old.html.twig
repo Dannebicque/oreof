@@ -86,8 +86,8 @@
                         </button>
                     </td>
                     <td class="text-end">
-                        {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or is_granted
-                            ('ROLE_EC_EDIT_MY', ec)) %}
+                        {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation) or is_granted
+                            ('CAN_EC_EDIT_MY', ec)) %}
                         {% if ec.ficheMatiere != null %}
                             <a
                                     href="{{ path('app_fiche_matiere_show',{'id': ec.ficheMatiere.id}) }}"
@@ -116,8 +116,8 @@
                     <td>
                         {% endif %}
 
-                        {% if ((is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
-                            ('ROLE_EC_EDIT_MY', ec)) )) %}
+                        {% if ((is_granted('CAN_FORMATION_EDIT_MY', parcours.formation) or (is_granted
+                            ('CAN_EC_EDIT_MY', ec)) )) %}
                             <button
                                     {% if deplacer is defined and deplacer == true %}
 
@@ -145,7 +145,7 @@
                             </button>
 
                         {% endif %}
-                        {% if is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) %}
+                        {% if is_granted('CAN_FORMATION_EDIT_MY', parcours.formation) %}
                             <button {{ stimulus_action('ec--liste', 'delete', 'click', {
                                 url:path('app_element_constitutif_delete',{'id': ec.id}),
                                 csrf: csrf_token('delete' ~ ec.id),
@@ -158,8 +158,8 @@
                     </td>
                     {% if deplacer == true %}
                     <td>
-                        {% if (is_granted('ROLE_FORMATION_EDIT_MY', parcours.formation) or (is_granted
-                            ('ROLE_EC_EDIT_MY', ec))) %}
+                        {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation) or (is_granted
+                            ('CAN_EC_EDIT_MY', ec))) %}
                             {% if not loop.first %}
                                 <button class="btn btn-sm btn-outline-info" {{ stimulus_action('ec--liste', 'deplacerEc',
                                     'click', {url: path('app_element_constitutif_deplacer',{sens: 'up', id:
