@@ -1,26 +1,12 @@
 const Encore = require('@symfony/webpack-encore');
-const CopyPlugin = require('copy-webpack-plugin'); // at the top
 
 require('dotenv').config(); // line to add
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin'); // line to add
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
 if (!Encore.isRuntimeEnvironmentConfigured()) {
   Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
 }
-
-Encore.addPlugin(
-  new CopyPlugin({
-    patterns: [
-      {
-        context: './node_modules/tinymce/',
-        from: '**/*.(min.js|min.css|woff)',
-        to: './tinymce/[path][name][ext]',
-      },
-    ],
-  }),
-);
 
 Encore
 // directory where compiled assets will be stored
@@ -87,34 +73,5 @@ Encore
 
 // uncomment if you're having problems with a jQuery plugin
 // .autoProvidejQuery()
-
-// .addPlugin(new BrowserSyncPlugin(
-//   {
-//     host: 'localhost',
-//     port: 3000,
-//     cors: true,
-//     proxy: process.env.PROXY,
-//     files: [
-//       {
-//         match: ['src/*.php'],
-//       },
-//       {
-//         match: ['templates/*.twig'],
-//       },
-//       {
-//         match: ['assets/*.js'],
-//       },
-//       {
-//         match: ['assets/*.css'],
-//       },
-//     ],
-//     notify: false,
-//   },
-//
-//   {
-//
-//     reload: true,
-//   },
-// ))
 
 module.exports = Encore.getWebpackConfig()

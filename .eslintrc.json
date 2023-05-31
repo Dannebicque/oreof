@@ -16,7 +16,8 @@
         "no-param-reassign": 0,
         "class-methods-use-this": "off",
         "no-restricted-globals": "off",
-        "no-plusplus": "off"
+        "no-plusplus": "off",
+        "no-alert": "off"
     },
     "ignorePatterns": ["assets/js/vendor/", "assets/js/base/"]
 }
