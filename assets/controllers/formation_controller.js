@@ -91,13 +91,13 @@ export default class extends Controller {
         let option = document.createElement('option')
         option.value = null
         option.text = ''
-        selectPersonnels.appendChild(option)
+        selectPersonnels.add(option)
 
         data.forEach((personnel) => {
           option = document.createElement('option')
           option.value = personnel.id
           option.text = personnel.libelle
-          selectPersonnels.appendChild(option)
+          selectPersonnels.add(option, null)
         })
       },
     )
@@ -117,23 +117,13 @@ export default class extends Controller {
         const selectMention = document.getElementById('formation_ses_mention')
         selectMention.innerHTML = ''
 
-        const tom = selectMention.tomselect
-        const tab = []
-
         mentions.forEach((mention) => {
-          tab.push({ value: mention.id, text: mention.libelle })
+          const opt = document.createElement('option');
+          opt.value = mention.id;
+          opt.text = mention.libelle;
+          selectMention.add(opt, null);
         })
-
-        tab.push({ value: 'autre', text: 'Autre' })
-
-        tom.clear()
-        tom.clearOptions()
-        tom.enable()
-
-        tom.addOptions(tab)
-        tom.setValue(selectedMention)
-        tom.settings.placeholder = 'Choisir dans la liste'
-        tom.inputState();
+        selectMention.value = selectedMention == null ? '' : selectedMention
       },
     )
   }

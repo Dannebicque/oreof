@@ -60,9 +60,10 @@ export default class extends Controller {
       response = await fetch(`${event.detail.url}`)
     }
     this.modalBodyTarget.innerHTML = await response.text()
-    document.querySelectorAll('select.form-select').forEach((select) => {
-      const ts = new TomSelect(select, {})
-    })
+    // todo: gérer le tom select avec symfony ux
+    // document.querySelectorAll('select.form-select').forEach((select) => {
+    //   const ts = new TomSelect(select, {})
+    // })
   }
 
   modalHide() {
