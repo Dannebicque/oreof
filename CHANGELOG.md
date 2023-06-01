@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.12](https://github.com/Dannebicque/oreof/compare/v1.3.11...v1.3.12) (2023-06-01)
+
+
+### Features
+
+* Affichage libellé UE ([ff24909](https://github.com/Dannebicque/oreof/commit/ff24909852da4f3c21f3ca91bfa1ebe423ae9c92))
+* Duplication parcours avec compétences ([c46e342](https://github.com/Dannebicque/oreof/commit/c46e342134c0bc0ba83bfed6acb680eb9243bbf4))
+* Export MCCC ([c3ea8b9](https://github.com/Dannebicque/oreof/commit/c3ea8b9602fb26b7c1a6a97fe1abc3cf3329fb9c))
+* Export MCCC ([824b97d](https://github.com/Dannebicque/oreof/commit/824b97d2aedbed1183fde95f90193292130da6b5))
+
+
+### Bug Fixes
+
+* Droits si DPE, typo ([240ee48](https://github.com/Dannebicque/oreof/commit/240ee48e15e6b7a2fc9e26bde471efe87be5f748))
+* Traductions ([36d98a1](https://github.com/Dannebicque/oreof/commit/36d98a19f11797efc3b7b99e97514499868e5d70))
+
 ### [1.3.11](https://github.com/Dannebicque/oreof/compare/v1.3.10...v1.3.11) (2023-06-01)
 
 
