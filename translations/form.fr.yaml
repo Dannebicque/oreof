@@ -309,6 +309,7 @@ options.labels.libelle: options.labels.libelle
 options.labels.respParcours: options.labels.respParcours
 options.labels.coResponsable: options.labels.coResponsable
 options.labels.sigle: Sigle
-role.labels.onlyAdmin.label: Rôle uniquement utilisable en admin ?
-role.labels.centre: Centre(s) pour ce rôle
-role.labels.centre.label: Centre(s) pour ce rôle
+role.labels.onlyAdmin.label: 'Rôle uniquement utilisable en admin ?'
+role.labels.centre: 'Centre(s) pour ce rôle'
+role.labels.centre.label: 'Centre(s) pour ce rôle'
+Charleville-Mézières: Charleville-Mézières

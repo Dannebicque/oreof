@@ -249,6 +249,6 @@ formation_step1.helps.coResponsable: 'Le cas échéant, précisez le nom du co-r
 parcours_step1.helps.respParcours: 'Non modifiable. Veuillez contacter le responsable de la mention/spécialité en cas de changement.'
 parcours_step1.helps.coResponsable: 'Le cas échéant, indiquez le co-responsable de ce parcours.'
 parcours.helps.coResponsable: 'Le cas échéant, indiquez le co-responsable de ce parcours.'
-role.helps.onlyAdmin.help: Indiquez si ce rôle est uniquement disponible si l''utilisateur est un administrateur
-role.helps.centre: Préciser quelles sont les centres qui peuvent utiliser ce rôle
-role.helps.centre.help: Préciser quelles sont les centres qui peuvent utiliser ce rôle
+role.helps.onlyAdmin.help: "Indiquez si ce rôle est uniquement disponible si l''utilisateur est un administrateur"
+role.helps.centre: 'Préciser quelles sont les centres qui peuvent utiliser ce rôle'
+role.helps.centre.help: 'Préciser quelles sont les centres qui peuvent utiliser ce rôle'
