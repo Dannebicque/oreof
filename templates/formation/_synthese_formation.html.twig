@@ -1,7 +1,12 @@
+{% if formation.hasParcours == true %}
+{% set col = 'col-4' %}
+{% else %}
+{%  set col = 'col-3' %}
+{% endif %}
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-4">
+            <div class="{{ col }}">
                 <dl>
                     <dt>Domaine</dt>
                     <dd>{{ formation.domaine ? formation.domaine.libelle : 'Non défini' }}</dd>
@@ -9,7 +14,7 @@
                     <dd>{{ typeDiplome|typeDiplome }}</dd>
                 </dl>
             </div>
-            <div class="col-4">
+            <div class="{{ col }}">
                 <dl>
                     <dt>Composante</dt>
                     <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'Non définie'
@@ -18,7 +23,7 @@
                     <dd id="synthese_formation_libelle_dd">{{ formation.display }}</dd>
                 </dl>
             </div>
-            <div class="col-4">
+            <div class="{{ col }}">
                 <dl>
                     <dt>Responsable de la mention/spécialité</dt>
                     <dd>
@@ -30,6 +35,17 @@
                     </dd>
                 </dl>
             </div>
+            {% if formation.hasParcours == false %}
+                <div class="{{ col }} d-grid">
+                    <a class="btn btn-outline-primary d-block" href="{{ path('app_parcours_bcc', {parcours:formation.parcours[0].id}) }}">
+                        Contrôler les BCC
+                    </a>
+                    <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_mccc', {parcours:formation.parcours[0].id}) }}">
+                        Contrôler les MCCC
+                    </a>
+                    {#                <button class="btn btn-outline-primary d-block mt-1">Contrôler les BCC</button> #}
+                </div>
+            {% endif %}
             {% if is_granted('ROLE_SES') %}
             <div class="col-12 text-end">
                 {% if constant('SOURCE', typeD) == 'but' %}

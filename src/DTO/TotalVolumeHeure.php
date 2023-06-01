@@ -37,5 +37,15 @@ class TotalVolumeHeure
         return $this->totalCmPresentiel + $this->totalTdPresentiel + $this->totalTpPresentiel;
     }
 
+    public function getTotalDistanciel(): float
+    {
+        return $this->totalCmDistanciel + $this->totalTdDistanciel + $this->totalTpDistanciel;
+    }
+
+    public function getTotalEtudiant(): float
+    {
+        return $this->getTotalPresentiel() + $this->getTotalDistanciel();
+    }
+
 
 }

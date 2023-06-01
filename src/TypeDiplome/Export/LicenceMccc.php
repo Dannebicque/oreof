@@ -110,13 +110,53 @@ class LicenceMccc
                                 $this->excelWriter->writeCellXY(5, $ligne, $ec->getFicheMatiere()->getLibelle());//todo: gérer les cas
                                 $this->excelWriter->writeCellXY(6, $ligne, $ec->getFicheMatiere()->getLibelleAnglais());
                                 $this->excelWriter->writeCellXY(7, $ligne, $ec->getFicheMatiere()->getResponsableFicheMatiere()?->getDisplay());
+
+                                // langue
+                                $texte = '';
+                                foreach ($ec->getFicheMatiere()->getLangueDispense() as $langue) {
+                                    $texte .= $langue->getLibelle() . "; ";
+                                }
+                                $texte = substr($texte, 0, -2);
+                                $this->excelWriter->writeCellXY(8, $ligne, $texte);
+
+                                $anglais = false;
+                                foreach ($ec->getFicheMatiere()->getLangueSupport() as $langue) {
+                                    if (strtolower($langue->getCodeIso()) === 'en') {
+                                        $anglais = true;
+                                    }
+                                }
+                                $this->excelWriter->writeCellXY(9, $ligne, $anglais === true ? 'O' : 'N');
+
                                 $this->excelWriter->writeCellXY(12, $ligne, $ec->getFicheMatiere()->isEnseignementMutualise() === true ? 'O' : 'N');
+
+
+                                // BCC
+                                $texte = '';
+                                foreach ($ec->getFicheMatiere()->getCompetences() as $comp) {
+                                    $texte .= $comp->getCode() . "; ";
+                                }
+                                // supprimer "; " à la fin
+                                $texte = substr($texte, 0, -2);
+
+                                $this->excelWriter->writeCellXY(13, $ligne, $texte);
                             }
+
+                            $this->excelWriter->writeCellXY(10, $ligne, $ec->getTypeEc() ? $ec->getTypeEc()->getLibelle() : '');
+
+                            // Heures
                             $this->excelWriter->writeCellXY(14, $ligne, $ec->getEcts());
                             $this->excelWriter->writeCellXY(15, $ligne, $ec->getVolumeCmPresentiel());
                             $this->excelWriter->writeCellXY(16, $ligne, $ec->getVolumeTdPresentiel());
                             $this->excelWriter->writeCellXY(17, $ligne, $ec->getVolumeTpPresentiel());
                             $this->excelWriter->writeCellXY(18, $ligne, $ec->volumeTotalPresentiel());
+
+                            //si pas distanciel, griser...
+                            $this->excelWriter->writeCellXY(19, $ligne, $ec->getVolumeCmDistanciel());
+                            $this->excelWriter->writeCellXY(20, $ligne, $ec->getVolumeTdDistanciel());
+                            $this->excelWriter->writeCellXY(21, $ligne, $ec->getVolumeTpDistanciel());
+                            $this->excelWriter->writeCellXY(22, $ligne, $ec->volumeTotalDistanciel());
+
+                            $this->excelWriter->writeCellXY(23, $ligne, $ec->volumeTotal());
                             $totalAnnee->addEc($ec);
                             $num++;
                             $ligne++;
@@ -128,6 +168,15 @@ class LicenceMccc
                     $this->excelWriter->writeCellXY(16, $ligne, $totalAnnee->totalTdPresentiel);
                     $this->excelWriter->writeCellXY(17, $ligne, $totalAnnee->totalTpPresentiel);
                     $this->excelWriter->writeCellXY(18, $ligne, $totalAnnee->getTotalPresentiel());
+
+                    //si pas distanciel, griser...
+
+                    $this->excelWriter->writeCellXY(19, $ligne, $totalAnnee->totalCmDistanciel);
+                    $this->excelWriter->writeCellXY(20, $ligne, $totalAnnee->totalTdDistanciel);
+                    $this->excelWriter->writeCellXY(21, $ligne, $totalAnnee->totalTpDistanciel);
+                    $this->excelWriter->writeCellXY(22, $ligne, $totalAnnee->getTotalDistanciel());
+
+                    $this->excelWriter->writeCellXY(15, $ligne+1, $totalAnnee->getTotalEtudiant());
                 }
             }
             //suppression de la ligne modèle 18

@@ -534,4 +534,14 @@ class ElementConstitutif
     {
        return $this->volumeCmPresentiel + $this->volumeTdPresentiel + $this->volumeTpPresentiel;
     }
+
+    public function volumeTotalDistanciel(): float
+    {
+       return $this->volumeCmDistanciel + $this->volumeTdDistanciel + $this->volumeTpDistanciel;
+    }
+
+    public function volumeTotal(): float
+    {
+       return $this->volumeTotalPresentiel() + $this->volumeTotalDistanciel();
+    }
 }
