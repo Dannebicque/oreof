@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.10](https://github.com/Dannebicque/oreof/compare/v1.3.9...v1.3.10) (2023-06-01)
+
+
+### Bug Fixes
+
+* Modifier un EC + Preselection liste. ([473dadf](https://github.com/Dannebicque/oreof/commit/473dadf5c208fd6c9b8d8aa3623a266262da2c2d))
+* Traductions ([afc35ee](https://github.com/Dannebicque/oreof/commit/afc35eedf61239f31c4b2abd3d869922d2a8d55a))
+
 ### [1.3.9](https://github.com/Dannebicque/oreof/compare/v1.3.8...v1.3.9) (2023-05-31)
 
 
