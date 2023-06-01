@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.11](https://github.com/Dannebicque/oreof/compare/v1.3.10...v1.3.11) (2023-06-01)
+
+
+### Bug Fixes
+
+* Droits si DPE ([32e4cd1](https://github.com/Dannebicque/oreof/commit/32e4cd1583cba214c194642218166efd950cb7be))
+
 ### [1.3.10](https://github.com/Dannebicque/oreof/compare/v1.3.9...v1.3.10) (2023-06-01)
 
 
