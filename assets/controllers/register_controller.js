@@ -43,8 +43,6 @@ export default class extends Controller {
 
   async _updateSelectDroit(centre) {
     // regarder si déjà un parametre ou pas
-    console.log()
-
     if (this.urlDroitsValue.includes('?')) {
       this.urlDroitsValue = `${this.urlDroitsValue}&centre=${centre}`
     } else {
