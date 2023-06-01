@@ -1,5 +1,5 @@
-formation_step2.helps.objectifsFormation: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu.  L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : 'A la fin de la formation, le diplômé sera capable de...' et peut être rédigé selon 3 axes : *le savoir et la connaissance *le savoir-faire et la compétence professionnelle *le savoir-être et la capacité d'adaptation à différentes situations."
-parcours_step1.helps.objectifsParcours: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu.  L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : \"A la fin de la formation, le diplômé sera capable de...\" et peut être rédigé selon 3 axes : •\tle savoir et la connaissance •\tle savoir-faire et la compétence professionnelle •\tle savoir-être et la capacité d'adaptation à différentes situations"
+formation_step2.helps.objectifsFormation: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu. L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : \"A la fin de la formation, le diplômé sera capable de...\" et peut être rédigé selon 3 axes : *le savoir et la connaissance *le savoir-faire et la compétence professionnelle *le savoir-être et la capacité d'adaptation à différentes situations."
+parcours_step1.helps.objectifsParcours: "Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu. L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : 'A la fin de la formation, le diplômé sera capable de...' et peut être rédigé selon 3 axes : •\tle savoir et la connaissance •\tle savoir-faire et la compétence professionnelle •\tle savoir-être et la capacité d'adaptation à différentes situations"
 parcours_step2.helps.nbHeuresSituationPro: "Précisez le nombre d'heures de mise en situation professionnelle prévu."
 user.helps.username: "Indiquez le login URCA de l'utilisateur."
 user.helps.email: "Indiquez l'adresse mail professionnelle."
@@ -53,7 +53,7 @@ parcours_step2.helps.projetText: 'Indiquez en quoi consiste le projet tutoré (n
 parcours_step2.helps.memoireText: 'Décrivez en quoi consiste le TER/mémoire.'
 bloc_competence.helps.libelle: 'Indiquez le libellé du bloc de compétences.'
 competence.helps.libelle: "Le libellé de la compétence doit commencer par un verbe d'action, et ne doit pas dépasser 255 caractères. Doit être cohérente avec la fiche RNCP du diplôme."
-parcours_step5.helps.prerequis: 'Indiquez si des prérequis pédagogiques sont conseillés pour réussir dans cette formation.'
+parcours_step5.helps.prerequis: 'Précisez en 3000 caractères maximum les connaissances et compétences recommandées, les profils/cursus les plus adaptés pour suivre cette formation dans de bonnes conditions.'
 parcours_step7.helps.poursuitesEtudes: ''
 parcours_step7.helps.debouches: ''
 parcours_step8.helps.coordSecretariat: 'Indiquez les coordonnées postales et téléphoniques du secrétariat ainsi que son adresse mail générique.'
@@ -62,9 +62,9 @@ ec_step1.helps.libelle: "N'est modifiable que par le responsable de la formation
 ec_step1.helps.libelleAnglais: "Précisez la version anglaise du libellé de l'EC."
 ec_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez oui.'
 ec_step2.helps.description: 'Indiquez en 3000 caractères maximum le contenu de l’enseignement. Faites une description détaillée des différents sujets traités dans cet enseignement.'
-ec_step3.helps.objectifs: 'Indiquez en 3000 caractères maximum les objectifs de l’enseignement'
+ec_step3.helps.objectifs: 'Indiquez en 3000 caractères maximum les objectifs de l’enseignement.'
 ec_step4.helps.modaliteEnseignement.help: "Indiquez les modalités d’enseignement de l'EC."
-ec_step4.helps.ects: ''
+ec_step4.helps.ects: "Indiquez le nombre d’ECTS attribués à l'enseignement."
 ec_step4.helps.volumeCmPresentiel: ''
 ec_step4.helps.volumeTdPresentiel: ''
 ec_step4.helps.volumeTpPresentiel: ''
@@ -78,9 +78,9 @@ parcours_step2.helps.hasProjet.help: ''
 parcours_step2.helps.nbHeuresProjet: "Précisez le nombre d'heures du projet tutoré prévu."
 parcours_step2.helps.hasMemoire.help: ''
 parcours_step8.helps.respParcours: 'Indiquez le responsable de parcours.'
-parcours.helps.sigle: 'Le cas échéant, indiquez le sigle utilisé pour ce parcours.'
+parcours.helps.sigle: 'Le cas échéant, indiquez le sigle/code utilisé pour ce parcours.'
 parcours_step1.helps.contenuFormation: 'Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différentes thématiques traitées dans la formation, en fonction des objectifs pédagogiques définis précédemment.'
-parcours_step1.helps.resultatsAttendus: 'Indiquez en 3000 caractères maximum les compétences acquises via la  formation (compétences à acquérir, à améliorer ou à entretenir). La description des compétences doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que "savoir, maitriser, être capable de…".'
+parcours_step1.helps.resultatsAttendus: "Indiquez en 3000 caractères maximum les compétences acquises via la  formation (compétences à acquérir, à améliorer ou à entretenir). La description des compétences doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que 'savoir, maitriser, être capable de…'."
 parcours_step1.helps.rythmeFormation: 'Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir, etc.).'
 parcours_step1.helps.rythmeFormationTexte: 'Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (déroulé, calendrier, périodes, etc.).'
 parcours_step1.helps.localisation.help: 'Choisissez le lieu où le parcours est proposé. Si le parcours est dispensé sur plusieurs sites, créer autant de parcours que de lieux de formation.'
@@ -112,7 +112,7 @@ parcours.helps.libelle: 'Indiquez le libellé exact de ce parcours.'
 parcours.helps.respParcours: 'Indiquez le responsable de ce parcours.'
 mention.helps.typeDiplome: ''
 mention.helps.libelle: 'Indiquez le libellé exact de la mention/spécialité.'
-mention.helps.sigle: 'Le cas échéant, indiquez le sigle utilisé pour cette mention/spécialité.'
+mention.helps.sigle: 'Le cas échéant, indiquez le sigle/code utilisé pour cette mention/spécialité.'
 mention.helps.domaine: ''
 domaine.helps.libelle: 'Indiquez le libellé exact du domaine de formation.'
 domaine.helps.sigle: 'Indiquez le sigle utilisé pour ce domaine.'
@@ -204,15 +204,15 @@ ec_manage.helps.fiche_matiere_multiple.help: 'Si la fiche EC/matière est déjà
 ec_manage.helps.fiche_matiere_libelle_multiple.help: "Seulement si la fiche EC/matière n'est pas présente dans la liste déroulante du champ précédent."
 ec_manage.helps.fiche_matiere_unique.help: 'Si la fiche EC/matière est déjà créée.'
 ec_manage.helps.fiche_matiere_libelle_unique.help: "Seulement si la fiche EC/matière n'est pas présente dans la liste déroulante du champ précédent."
-fiche_matiere_step2.helps.description: fiche_matiere_step2.helps.description
-fiche_matiere_step2.helps.langueDispense.help: fiche_matiere_step2.helps.langueDispense.help
-fiche_matiere_step2.helps.langueSupport.help: fiche_matiere_step2.helps.langueSupport.help
-fiche_matiere_step3.helps.objectifs: fiche_matiere_step3.helps.objectifs
-fiche_matiere_step3.labels.competence: fiche_matiere_step3.labels.competence
+fiche_matiere_step2.helps.description: 'Indiquez en 3000 caractères maximum le contenu de l’enseignement. Faites une description détaillée des différents sujets traités dans cet enseignement.'
+fiche_matiere_step2.helps.langueDispense.help: 'Plusieurs choix possibles.'
+fiche_matiere_step2.helps.langueSupport.help: 'Plusieurs choix possibles.'
+fiche_matiere_step3.helps.objectifs: 'Indiquez en 3000 caractères maximum les objectifs de l’enseignement.'
+fiche_matiere_step3.labels.competence: "Choisissez d'abord le/les bloc(s) de compétences pour accéder aux compétences associées."
 fiche_matiere_step1.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."
-user.add_missing.email.help: 'Indiquez un email valide du collègue à ajouter pour récupérer ses informations.'
+user.add_missing.email.help: "Indiquez un email valide de l'utilisateur à ajouter pour récupérer ses informations."
 form.helps.email: form.helps.email
-user_add.helps.email: 'Indiquez un email valide du collègue à ajouter pour récupérer ses informations.'
+user_add.helps.email: "Indiquez un email valide de l'utilisateur à ajouter pour récupérer ses informations."
 ue.helps.libelle: 'Vous pouvez indiquer un libellé pour une UE, notamment si elle est à choix pour expliquer les modalités'
 element_constitutif.helps.typeEc: '"'
 element_constitutif.helps.typeEcTexte: "Précisez le type d'EC si il n'est pas présent dans la liste déroulante du champ précédent."
@@ -228,23 +228,27 @@ ue.raccrocher.helps: "Sélectionnez l'UE mutualisée que vous souhaitez raccroch
 ec_manage.helps.fiche_matieres_libelle_choix.help: "Indiquez le libellé de l'EC s'il y en a un."
 element_constitutif_enfant.helps.libelle: "Indiquez le libellé exact de l'EC."
 form.helps.objectifsFormation: "Décrivez en 3000 caractères maximum la finalité de la mention ainsi que l'organisation pédagogique de la formation en tronc commun et parcours."
-formation_step1.helps.sigle: formation_step1.helps.sigle
-fiche_matiere_step1.helps.sigle: fiche_matiere_step1.helps.sigle
-mccc_licence.helps.choix_type_mccc.help: mccc_licence.helps.choix_type_mccc.help
-mccc_licence.helps.cc_ct.pourcentage_s1_cc.help: mccc_licence.helps.cc_ct.pourcentage_s1_cc.help
-mccc_licence.helps.cc_ct.nbepreuve_s1_cc.help: mccc_licence.helps.cc_ct.nbepreuve_s1_cc.help
-mccc_licence.helps.cc_ct.pourcentage_s1_et.help: mccc_licence.helps.cc_ct.pourcentage_s1_et.help
-mccc_licence.helps.cc_ct.typeEpreuve_s1_et.help: mccc_licence.helps.cc_ct.typeEpreuve_s1_et.help
-mccc_licence.helps.cc_ct.pourcentage_s2_et.help: mccc_licence.helps.cc_ct.pourcentage_s2_et.help
-mccc_licence.helps.cc_ct.typeEpreuve_s2_et.help: mccc_licence.helps.cc_ct.typeEpreuve_s2_et.help
-mccc_licence.helps.ct.pourcentage_s1_et.help: mccc_licence.helps.ct.pourcentage_s1_et.help
-mccc_licence.helps.ct.typeEpreuve_s1_et.help: mccc_licence.helps.ct.typeEpreuve_s1_et.help
-mccc_licence.helps.ct.pourcentage_s2_et.help: mccc_licence.helps.ct.pourcentage_s2_et.help
-mccc_licence.helps.ct.typeEpreuve_s2_et.help: mccc_licence.helps.ct.typeEpreuve_s2_et.help
-mccc_licence.helps.cc.pourcentage_s1_et.help: mccc_licence.helps.cc.pourcentage_s1_et.help
-mccc_licence.helps.cc.typeEpreuve_s1_cc.help: mccc_licence.helps.cc.typeEpreuve_s1_cc.help
+fiche_matiere_step1.helps.sigle: 'Le cas échéant, indiquez le sigle/code utilisé pour cet enseignement.'
+formation_step1.helps.sigle: 'Le cas échéant, indiquez le sigle utilisé pour cette mention/spécialité.'
+mccc_licence.helps.choix_type_mccc.help: "Indiquez les modalités de MCCC pour l'EC."
+mccc_licence.helps.ct.pourcentage_s1_et.help: ''
+mccc_licence.helps.ct.typeEpreuve_s1_et.help: ''
+mccc_licence.helps.ct.pourcentage_s2_et.help: ''
+mccc_licence.helps.ct.typeEpreuve_s2_et.help: ''
+mccc_licence.helps.cc_ct.pourcentage_s1_cc.help: ''
+mccc_licence.helps.cc_ct.nbepreuve_s1_cc.help: ''
+mccc_licence.helps.cc_ct.pourcentage_s1_et.help: ''
+mccc_licence.helps.cc_ct.typeEpreuve_s1_et.help: ''
+mccc_licence.helps.cc_ct.pourcentage_s2_et.help: ''
+mccc_licence.helps.cc_ct.typeEpreuve_s2_et.help: ''
+mccc_licence.helps.cc.pourcentage_s1_et.help: ''
+mccc_licence.helps.cc.typeEpreuve_s1_cc.help: '"'
 fiche_matiere_step3.labels.competence_transverse: fiche_matiere_step3.labels.competence_transverse
-parcours_step1.helps.respParcours: parcours_step1.helps.respParcours
-parcours_step1.helps.coResponsable: parcours_step1.helps.coResponsable
-formation_step1.helps.responsableMention: formation_step1.helps.responsableMention
-formation_step1.helps.coResponsable: formation_step1.helps.coResponsable
+formation_step1.helps.responsableMention: 'Non modifiable. Veuillez contacter le SES en cas de changement.'
+formation_step1.helps.coResponsable: 'Le cas échéant, précisez le nom du co-responsable de la formation.'
+parcours_step1.helps.respParcours: 'Non modifiable. Veuillez contacter le responsable de la mention/spécialité en cas de changement.'
+parcours_step1.helps.coResponsable: 'Le cas échéant, indiquez le co-responsable de ce parcours.'
+parcours.helps.coResponsable: 'Le cas échéant, indiquez le co-responsable de ce parcours.'
+role.helps.onlyAdmin.help: Indiquez si ce rôle est uniquement disponible si l''utilisateur est un administrateur
+role.helps.centre: Préciser quelles sont les centres qui peuvent utiliser ce rôle
+role.helps.centre.help: Préciser quelles sont les centres qui peuvent utiliser ce rôle

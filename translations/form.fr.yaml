@@ -54,7 +54,7 @@ fiche_matiere_step2.labels.langueDispense.label: 'Enseignement dispensé en :'
 fiche_matiere_step2.labels.langueSupport.label: 'Support de cours en :'
 fiche_matiere_step3.labels.objectifs: "Objectifs de l'enseignement"
 ec_step4.labels.modaliteEnseignement.label: "Modalité(s) d'enseignement"
-ec_step4.labels.ects: "Indiquez le nombre d’ECTS attribués à l'enseignement"
+ec_step4.labels.ects: 'Nombre d’ECTS'
 ec_step4.labels.volumeCmPresentiel: 'Volume horaire CM présentiel'
 ec_step4.labels.volumeTdPresentiel: 'Volume horaire TD présentiel'
 ec_step4.labels.volumeTpPresentiel: 'Volume horaire TP présentiel'
@@ -113,7 +113,7 @@ Troyes: Troyes
 parcours_step2.labels.nbHeuresSituationPro: "Nombre d'heures de mise en situation professionnelle prévu"
 formation_step3.labels.hasParcours: 'La formation propose-t-elle un(des) parcours ?'
 formation_step3.labels.libelleParcours: 'Précisez le libellé de chaque parcours'
-formation_step3.labels.structureFormation: "Précisez l'organisation de la formation"
+formation_step3.labels.structureFormation: 'Structure de la formation'
 fiche_matiere_step3.labels.competence: "Compétences travaillées dans l'enseignement"
 Mention: Mention
 Autre: Autre
@@ -142,7 +142,7 @@ fiche_matiere_step2.labels.typeEnseignement: "Précisez la nature de l'enseignem
 "Choisissez un type d'enseignement": '-'
 fiche_matiere_step3.alerte.no_bcc: fiche_matiere_step3.alerte.no_bcc
 parcours.labels.libelle: 'Libellé du parcours'
-parcours.labels.respParcours: 'Responsable de parcours'
+parcours.labels.respParcours: 'Responsable du parcours'
 parcours.labels.sigle: 'Sigle du parcours'
 'Mise en situation professionnelle': 'Mise en situation professionnelle'
 Renforcement: Renforcement
@@ -244,7 +244,7 @@ fiche_matiere_step1.labels.libelle: "Libellé de l'enseignement"
 fiche_matiere_step1.labels.libelleAnglais: "Libellé de l'enseignement en anglais"
 fiche_matiere_step1.labels.enseignementMutualise.label: "L'enseignement est-il mutualisé ?"
 fiche_matiere_step1.labels.isCmPresentielMutualise.label: 'Les CM présentiels sont-ils mutualisés ?'
-fiche_matiere_step1.labels.isTdPresentielMutualise.label: 'Les CM présentiels sont-ils mutualisés ?'
+fiche_matiere_step1.labels.isTdPresentielMutualise.label: 'Les TD présentiels sont-ils mutualisés ?'
 fiche_matiere_step1.labels.isTpPresentielMutualise.label: 'Les TP présentiels sont-ils mutualisés ?'
 fiche_matiere_step1.labels.isCmDistancielMutualise.label: 'Les CM distanciels sont-ils mutualisés ?'
 fiche_matiere_step1.labels.isTdDistancielMutualise.label: 'Les TD distanciels sont-ils mutualisés ?'
@@ -288,17 +288,27 @@ ue.raccrocher.label: "Précisez l'UE à raccrocher"
 ue.raccrocher.bouton: Raccrocher
 ec_manage.labels.fiche_matieres_libelle_choix.label: "Libellé de l'EC"
 element_constitutif_enfant.labels.libelle: "Libellé de l'EC"
-formation_step1.labels.sigle: formation_step1.labels.sigle
-fiche_matiere_step1.labels.sigle: fiche_matiere_step1.labels.sigle
-form.labels.objectifsFormation: form.labels.objectifsFormation
-mccc_licence.labels.choix_type_mccc.label: mccc_licence.labels.choix_type_mccc.label
-mccc_licence.ct.label: mccc_licence.ct.label
-mccc_licence.cc_ct.label: mccc_licence.cc_ct.label
-mccc_licence.cc.label: mccc_licence.cc.label
-mccc_licence.cci.label: mccc_licence.cci.label
-mccc_licence.placeholder.label: mccc_licence.placeholder.label
+fiche_matiere_step1.labels.sigle: "Sigle de l'enseignement"
+formation_step1.labels.sigle: 'Sigle de la formation'
+form.labels.objectifsFormation: "Décrivez l'organisation de la formation"
+mccc_licence.labels.choix_type_mccc.label: 'Modalités de contrôle de connaissance'
+mccc_licence.ct.label: 'Contrôle terminal (CT)'
+mccc_licence.cc_ct.label: 'Contrôle continu + Contrôle terminal (CC+CT)'
+mccc_licence.cc.label: 'Contrôle continu (CC)'
+mccc_licence.cci.label: 'Contrôle continu intégral (CCi)'
+mccc_licence.placeholder.label: 'Choisissez les MCCC de cet EC'
 fiche_matiere_step3.labels.competence_transverse: fiche_matiere_step3.labels.competence_transverse
-parcours_step1.labels.respParcours: parcours_step1.labels.respParcours
-parcours_step1.labels.coResponsable: parcours_step1.labels.coResponsable
-formation_step1.labels.responsableMention: formation_step1.labels.responsableMention
-formation_step1.labels.coResponsable: formation_step1.labels.coResponsable
+formation_step1.labels.responsableMention: 'Responsable de la formation'
+formation_step1.labels.coResponsable: 'Co-responsable de la formation'
+parcours_step1.labels.respParcours: 'Responsable du parcours'
+parcours_step1.labels.coResponsable: 'Co-responsable du parcours'
+parcours.labels.coResponsable: 'Co-responsable du parcours'
+meef: meef
+option: option
+options.labels.libelle: options.labels.libelle
+options.labels.respParcours: options.labels.respParcours
+options.labels.coResponsable: options.labels.coResponsable
+options.labels.sigle: Sigle
+role.labels.onlyAdmin.label: Rôle uniquement utilisable en admin ?
+role.labels.centre: Centre(s) pour ce rôle
+role.labels.centre.label: Centre(s) pour ce rôle
