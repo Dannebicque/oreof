@@ -132,6 +132,7 @@ class UserAccesSubscriber implements EventSubscriberInterface
             ['user' => $user]
         );
         $this->myMailer->sendMessage([$user->getEmail()], '[ORéOF] Validation demande accès');
+        //todo: envoyer un mail au DPE pour lui dire que la demande a été validée
     }
 
     /**
