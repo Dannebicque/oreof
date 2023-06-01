@@ -26,7 +26,7 @@ class DroitsController extends BaseController
         $dpe = (bool)$request->query->get('dpe', false);
 
         if ($dpe === true) {
-            $droits = $roleRepository->findByCentreDpe($centre, true);
+            $droits = $roleRepository->findByCentreDpe($centre);
         } else {
             $droits = $roleRepository->findByCentre($centre);
         }

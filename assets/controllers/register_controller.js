@@ -42,7 +42,16 @@ export default class extends Controller {
   }
 
   async _updateSelectDroit(centre) {
-    await fetch(`${this.urlDroitsValue}?centre=${centre}`).then((response) => response.json()).then(
+    // regarder si déjà un parametre ou pas
+    console.log()
+
+    if (this.urlDroitsValue.includes('?')) {
+      this.urlDroitsValue = `${this.urlDroitsValue}&centre=${centre}`
+    } else {
+      this.urlDroitsValue = `${this.urlDroitsValue}?centre=${centre}`
+    }
+
+    await fetch(`${this.urlDroitsValue}`).then((response) => response.json()).then(
       (data) => {
         const items = data
         while (this.selectDroits.options.length > 0) {
