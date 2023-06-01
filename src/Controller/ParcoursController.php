@@ -228,6 +228,19 @@ class ParcoursController extends BaseController
         $newParcours->setLibelle($parcour->getLibelle() . ' (copie)');
         $entityManager->persist($newParcours);
 
+        //dupliquer les blocs et les compétences
+        foreach ($parcour->getBlocCompetences() as $bloc) {
+            $newBloc = clone $bloc;
+            $newBloc->setParcours($newParcours);
+            $entityManager->persist($newBloc);
+
+            foreach ($bloc->getCompetences() as $competence) {
+                $newCompetence = clone $competence;
+                $newCompetence->setBlocCompetence($newBloc);
+                $entityManager->persist($newCompetence);
+            }
+        }
+
         foreach ($parcour->getSemestreParcours() as $sp) {
             if ($sp->getSemestre()->isTroncCommun()) {
                 //tronc commun, on duplique uniquement la liaison.
@@ -248,6 +261,8 @@ class ParcoursController extends BaseController
 
                     //dupliquer les EC des ue
                     foreach ($ue->getElementConstitutifs() as $ec) {
+                        //todo: on ne duplique pas les fiches EC/Matières ici ? Si on le fait, il faut reconstruire le lien vers les BC.
+                        //todo: dupliquer les MCCC
                         $newEc = clone $ec;
                         $newEc->setUe($newUe);
                         $newEc->setParcours($newParcours);
@@ -256,6 +271,7 @@ class ParcoursController extends BaseController
                 }
             }
         }
+
         $entityManager->flush();
 
         return $this->json(true);
