@@ -322,6 +322,7 @@ class ElementConstitutifController extends AbstractController
                 ['id' => $elementConstitutif->getId(), 'parcours' => $parcours->getId()]
             ),
             'typeDiplome' => $typeDiplome,
+            'formation' => $parcours->getFormation()
         ]);
 
         $form->handleRequest($request);

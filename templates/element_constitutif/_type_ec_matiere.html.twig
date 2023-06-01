@@ -10,7 +10,9 @@
 <select id="ficheMatiere" name="ficheMatiere" class="form-select">
     <option value="">Choisir dans la liste une fiche EC/matière</option>
     {% for matiere in matieres %}
-        <option value="id_{{ matiere.id }}">{{ matiere.display }}</option>
+        <option value="id_{{ matiere.id }}"
+        {% if ec.ficheMatiere != null and ec.ficheMatiere.id == matiere.id %}selected{% endif %}
+        >{{ matiere.display }}</option>
     {% endfor %}
 </select>
 OU
