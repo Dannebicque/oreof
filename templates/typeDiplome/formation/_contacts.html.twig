@@ -4,6 +4,12 @@
         <dd>{{ parcours.respParcours != null ? parcours.respParcours.display : 'erreur' }}</dd>
         <dt>Email</dt>
         <dd>{{ parcours.respParcours != null ? parcours.respParcours.email : 'erreur' }}</dd>
+        {% if parcours.coResponsable != null %}
+            <dt>Co-responsable du parcours</dt>
+            <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.display : 'erreur' }}</dd>
+            <dt>Email</dt>
+            <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.email : 'erreur' }}</dd>
+        {% endif %}
         <dt>Coordonnées secrétariat</dt>
         <dd>{{ parcours.coordSecretariat|raw }}</dd>
     </dl>

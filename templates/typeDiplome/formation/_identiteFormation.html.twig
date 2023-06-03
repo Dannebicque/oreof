@@ -27,6 +27,12 @@
             <dd>{{ formation.responsableMention != null ? formation.responsableMention.display : 'erreur' }}</dd>
             <dt>Email</dt>
             <dd>{{ formation.responsableMention != null ? formation.responsableMention.email : 'erreur' }}</dd>
+            {% if formation.coResponsable != null %}
+                <dt>Co-Responsable de la formation</dt>
+                <dd>{{ formation.coResponsable != null ? formation.coResponsable.display : 'erreur' }}</dd>
+                <dt>Email</dt>
+                <dd>{{ formation.coResponsable != null ? formation.coResponsable.email : 'erreur' }}</dd>
+            {% endif %}
         </dl>
     </div>
 </div>
