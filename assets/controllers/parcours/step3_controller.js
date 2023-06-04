@@ -22,6 +22,7 @@ export default class extends Controller {
   static values = {
     url: String,
     urlListe: String,
+    mutualise: { type: Boolean, default: false },
   }
 
   etatStep(event) {
@@ -111,10 +112,12 @@ export default class extends Controller {
   async _updateListe() {
     this.listeTarget.innerHTML = window.da.loaderStimulus
     const response = await fetch(this.urlListeValue)
-    if (document.getElementById('alertEtatStructure').querySelector('.alert-danger')) {
+    if (document.getElementById('alertEtatStructure') && document.getElementById('alertEtatStructure').querySelector('.alert-danger')) {
       document.getElementById('alertEtatStructure').querySelector('.alert-danger').remove()
     }
-    await updateEtatOnglet(this.urlValue, 'onglet3', 'parcours')
+    if (!this.mutualiseValue) {
+      await updateEtatOnglet(this.urlValue, 'onglet3', 'parcours')
+    }
 
     this.listeTarget.innerHTML = await response.text()
   }

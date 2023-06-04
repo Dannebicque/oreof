@@ -3,6 +3,7 @@
 </div>
 <div {{ stimulus_controller('parcours--step3', {
     urlListe: path('app_bloc_competence_liste_parcours', {parcours:null}),
+    mutualise: true,
 }) }}
         data-action="base:refreshListe@window->parcours--step3#refreshListe"
 >
