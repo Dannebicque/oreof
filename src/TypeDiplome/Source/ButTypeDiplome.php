@@ -11,6 +11,8 @@ namespace App\TypeDiplome\Source;
 
 use App\Entity\ElementConstitutif;
 use App\Entity\Formation;
+use App\Entity\Parcours;
+use App\Repository\ButCompetenceRepository;
 use App\TypeDiplome\Synchronisation\But;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\Common\Collections\Collection;
@@ -25,8 +27,9 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
     public string $libelle = 'Bachelor Universitaire de Technologie (B.U.T.)';
 
     public function __construct(
-        EntityManagerInterface $entityManager,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
+        protected ButCompetenceRepository $butCompetenceRepository,
+        protected EntityManagerInterface $entityManager,
+        protected TypeDiplomeRegistry $typeDiplomeRegistry,
         protected But $synchronisationBut
     ) {
         parent::__construct($entityManager,$typeDiplomeRegistry);
@@ -41,7 +44,16 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         Formation $formation
     )
     {
-        $this->synchronisationBut->synchroniser($formation);
+        return $this->synchronisationBut->synchroniser($formation);
+    }
+
+    public function getRefCompetences(Parcours $parcours): array|Collection
+    {
+        $competences = $this->butCompetenceRepository->findBy([
+            'formation' => $parcours->getFormation(),
+        ]);
+
+        return $competences;
     }
 
 

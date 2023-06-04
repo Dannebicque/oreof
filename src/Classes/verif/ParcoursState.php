@@ -69,7 +69,7 @@ class ParcoursState
 
     public function isEmptyOnglet3(): bool
     {
-        return $this->parcours->getBlocCompetences()->count() === 0;
+        return $this->parcours->getBlocCompetences()->count() === 0 && $this->parcours->getFormation()->getButCompetences()->count() === 0 ;
     }
 
     public function isEmptyOnglet4(): bool
@@ -183,13 +183,15 @@ class ParcoursState
     {
         $tab['error'] = [];
 
-        if ($this->parcours->getBlocCompetences()->count() === 0) {
+        if ($this->parcours->getBlocCompetences()->count() === 0 && $this->parcours->getFormation()->getButCompetences()->count() === 0) {
             $tab['error'][] = 'Vous devez ajouter au moins un bloc de compétences.';
         }
 
-        foreach ($this->parcours->getBlocCompetences() as $bloc) {
-            if ($bloc->getCompetences()->count() === 0) {
-                $tab['error'][] = 'Vous devez ajouter au moins une compétence au bloc de compétences "' . $bloc->getLibelle() . '".';
+        if ($this->parcours->getBlocCompetences()->count() > 0) {
+            foreach ($this->parcours->getBlocCompetences() as $bloc) {
+                if ($bloc->getCompetences()->count() === 0) {
+                    $tab['error'][] = 'Vous devez ajouter au moins une compétence au bloc de compétences "' . $bloc->getLibelle() . '".';
+                }
             }
         }
 

@@ -35,7 +35,7 @@
                     </dd>
                 </dl>
             </div>
-            {% if formation.hasParcours == false %}
+            {% if formation.hasParcours == false and formation.parcours[0] is defined %}
                 <div class="{{ col }} d-grid">
                     <a class="btn btn-outline-primary d-block" href="{{ path('app_parcours_bcc', {parcours:formation.parcours[0].id}) }}">
                         Contrôler les BCC

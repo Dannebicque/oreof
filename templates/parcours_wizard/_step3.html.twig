@@ -5,6 +5,7 @@
         data-action="base:refreshListe@window->parcours--step3#refreshListe
         base:modalClose@window->parcours--step3#refreshListe"
 >
+    {% if constant('SOURCE', typeDiplome) != 'but' %}
     <div class="row">
         <div class="col-md-4">
             <div class="alert alert-info mb-2 mt-2">
@@ -65,6 +66,12 @@
         <i class="{{ iconAdd }}"></i>
         <span> Ajouter des compétences transversales (Référentiel RNCP)</span>
     </button>
+    {% else %}
+        {{ component('alerte', {
+            type: 'info',
+            message: 'Le référentiel de compétences est national et importé du programme national officiel. Vous ne pouvez pas le modifier.'
+        }) }}
+    {% endif %}
 
     <div {{ stimulus_target('parcours--step3', 'liste') }} class="mt-2">
 

@@ -138,6 +138,9 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: TypeEc::class)]
     private Collection $typeEcs;
 
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: ButCompetence::class)]
+    private Collection $butCompetences;
+
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
         $this->anneeUniversitaire = $anneeUniversitaire;
@@ -152,6 +155,7 @@ class Formation
             $this->etatSteps[$i] = false;
         }
         $this->typeEcs = new ArrayCollection();
+        $this->butCompetences = new ArrayCollection();
     }
 
     public function getEtatStep(int $step): bool
@@ -736,6 +740,36 @@ class Formation
             // set the owning side to null (unless already changed)
             if ($typeEc->getFormation() === $this) {
                 $typeEc->setFormation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ButCompetence>
+     */
+    public function getButCompetences(): Collection
+    {
+        return $this->butCompetences;
+    }
+
+    public function addButCompetence(ButCompetence $butCompetence): self
+    {
+        if (!$this->butCompetences->contains($butCompetence)) {
+            $this->butCompetences->add($butCompetence);
+            $butCompetence->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeButCompetence(ButCompetence $butCompetence): self
+    {
+        if ($this->butCompetences->removeElement($butCompetence)) {
+            // set the owning side to null (unless already changed)
+            if ($butCompetence->getFormation() === $this) {
+                $butCompetence->setFormation(null);
             }
         }
 

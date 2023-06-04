@@ -17,6 +17,8 @@
 @import "tom-select/dist/css/tom-select.bootstrap5.min.css";
 @import "trix/dist/trix.css";
 
+@import "./_but.scss";
+
 $variable-prefix: bs- !default; // Deprecated in v5.2.0 for the shorter `$prefix`
 $prefix: $variable-prefix !default;
 body {

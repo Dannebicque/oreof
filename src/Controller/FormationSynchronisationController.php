@@ -19,6 +19,13 @@ class FormationSynchronisationController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_SES');
 
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
-        $typeDiplome->synchroniser($formation);
+        $state = $typeDiplome->synchroniser($formation);
+
+        return $this->render(
+            'formation_synchronisation/index.html.twig', [
+                'formation' => $formation,
+                'state' => $state
+            ]
+        );
     }
 }

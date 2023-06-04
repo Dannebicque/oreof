@@ -15,6 +15,7 @@ use App\Form\ParcoursStep2Type;
 use App\Form\ParcoursStep5Type;
 use App\Form\ParcoursStep6Type;
 use App\Repository\ParcoursRepository;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,14 +62,17 @@ class ParcoursWizardController extends AbstractController
 
     #[Route('/{parcours}/3', name: 'app_parcours_wizard_step_3', methods: ['GET'])]
     public function step3(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
         ParcoursRepository $parcoursRepository,
         Parcours $parcours
     ): Response {
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
         $listeParcours = $parcoursRepository->findBy(['formation' => $parcours->getFormation()]);
         return $this->render('parcours_wizard/_step3.html.twig', [
             'parcours' => $parcours,
             'blocCompetences' => $parcours->getBlocCompetences(),
             'listeParcours' => $listeParcours,
+            'typeDiplome' => $typeDiplome,
         ]);
     }
 

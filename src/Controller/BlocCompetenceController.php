@@ -16,6 +16,8 @@ use App\Entity\Parcours;
 use App\Form\BlocCompetenceType;
 use App\Repository\BlocCompetenceRepository;
 use App\Repository\CompetenceRepository;
+use App\TypeDiplome\Source\ButTypeDiplome;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,12 +37,22 @@ class BlocCompetenceController extends AbstractController
 
     #[Route('/liste/parcours/{parcours}', name: 'app_bloc_competence_liste_parcours', methods: ['GET'])]
     public function listeParcours(
+        TypeDiplomeRegistry      $typeDiplomeRegistry,
         BlocCompetenceRepository $blocCompetenceRepository,
         ?Parcours                $parcours = null
     ): Response {
+
         if ($parcours === null) {
             return $this->render('bloc_competence/_liste.html.twig', [
                 'bloc_competences' => $blocCompetenceRepository->findBy(['parcours' => null]),
+            ]);
+        }
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
+
+        if ($typeDiplome::SOURCE === ButTypeDiplome::SOURCE) {
+            return $this->render('typeDiplome/but/_refCompetences.html.twig', [
+                'competences' => $typeDiplome->getRefCompetences($parcours),
+                'parcours' => $parcours,
             ]);
         }
 
