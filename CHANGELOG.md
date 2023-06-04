@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.13](https://github.com/Dannebicque/oreof/compare/v1.3.12...v1.3.13) (2023-06-04)
+
+
+### Bug Fixes
+
+* Affichage des BCC en mutualisé ([906a78a](https://github.com/Dannebicque/oreof/commit/906a78a315a1cabc47fff6efe6f3729b84e81b92))
+* Affichage des compétences et structure ([8331e98](https://github.com/Dannebicque/oreof/commit/8331e98d1a934f1004dbe0e68deb97eaa73fcd19))
+* Nouvel EC enfant ([68e9ed3](https://github.com/Dannebicque/oreof/commit/68e9ed38477654ae2b168b2c14967f3c6bae3ac2))
+
 ### [1.3.12](https://github.com/Dannebicque/oreof/compare/v1.3.11...v1.3.12) (2023-06-01)
 
 
