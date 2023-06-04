@@ -69,11 +69,17 @@ export default class extends Controller {
   modalHide() {
     this.modal.hide()
     this.modalBodyTarget.innerHTML = ''
+    document.querySelectorAll('.modal-backdrop').forEach((e) => {
+      e.remove()
+    })
     this.dispatch('modalClose')
   }
 
   modalClose() {
     this.modalBodyTarget.innerHTML = ''
+    document.querySelectorAll('.modal-backdrop').forEach((e) => {
+      e.remove()
+    })
     this.dispatch('modalClose')
   }
 

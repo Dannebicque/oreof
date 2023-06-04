@@ -29,6 +29,7 @@ class ParcoursType extends AbstractType
             ->add('respParcours', EntityType::class, [
                 'required' => false,
                 'help' => '',
+                'autocomplete' => true,
                 'class' => User::class,
                 'query_builder' => function ($er) {
                     return $er->createQueryBuilder('u')
@@ -40,6 +41,7 @@ class ParcoursType extends AbstractType
             ->add('coResponsable', EntityType::class, [
                 'required' => false,
                 'help' => '',
+                'autocomplete' => true,
                 'class' => User::class,
                 'query_builder' => function ($er) {
                     return $er->createQueryBuilder('u')

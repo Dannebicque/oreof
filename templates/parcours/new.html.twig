@@ -1,4 +1,5 @@
 {% form_theme form 'communs/form_theme.html.twig' %}
+Parcours -{{ parcour.id }}-
 {{ form_start(form) }}
     {{ form_row(form.libelle, {label: texte == 'option' ? 'options.labels.libelle'|trans({}, 'form') : ''}) }}
     {{ form_row(form.respParcours, {label: texte == 'option' ? 'options.labels.respParcours'|trans({}, 'form') : ''}) }}
@@ -8,7 +9,7 @@
             size: 'lg',
             modalTitle: 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form'),
             nomEvenement: 'refreshStep',
-            modalUrl: path('app_user_missing', {action: 'responsableParcours'}) }) }}
+            modalUrl: path('app_user_missing', {action: 'responsableParcours', id: parcour is defined ? parcour.id : null}) }) }}
         data-action="click->modal#openModal"
         data-size="lg"
         class="ms-4"
@@ -26,7 +27,7 @@
             size: 'lg',
             modalTitle: 'fiche_matiere.step1_collegue_manquant.title'|trans({}, 'form'),
             nomEvenement: 'refreshStep',
-            modalUrl: path('app_user_missing', {action: 'responsableParcours'}) }) }}
+            modalUrl: path('app_user_missing', {action: 'coResponsableParcours', id: parcour is defined ? parcour.id : null}) }) }}
         data-action="click->modal#openModal"
         data-size="lg"
         class="ms-4"
