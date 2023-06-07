@@ -252,3 +252,4 @@ parcours.helps.coResponsable: 'Le cas échéant, indiquez le co-responsable de c
 role.helps.onlyAdmin.help: "Indiquez si ce rôle est uniquement disponible si l''utilisateur est un administrateur"
 role.helps.centre: 'Préciser quelles sont les centres qui peuvent utiliser ce rôle'
 role.helps.centre.help: 'Préciser quelles sont les centres qui peuvent utiliser ce rôle'
+ec_step4.helps.volumeTe: ''

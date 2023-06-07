@@ -112,6 +112,9 @@ class ElementConstitutif
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $etatMccc = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $volumeTe = null;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -543,5 +546,17 @@ class ElementConstitutif
     public function volumeTotal(): float
     {
        return $this->volumeTotalPresentiel() + $this->volumeTotalDistanciel();
+    }
+
+    public function getVolumeTe(): ?float
+    {
+        return $this->volumeTe;
+    }
+
+    public function setVolumeTe(?float $volumeTe): self
+    {
+        $this->volumeTe = $volumeTe;
+
+        return $this;
     }
 }

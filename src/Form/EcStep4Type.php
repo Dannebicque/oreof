@@ -93,6 +93,14 @@ class EcStep4Type extends AbstractType
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeTpDistanciel'
                 ],
+            ])
+            ->add('volumeTe', FloatType::class, [
+                'html5' => true,
+                'scale' => 1,
+                'attr' => [
+                    'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
+                    'data-ec--structure-type-param' => 'volumeTe'
+                ],
             ]);
     }
 

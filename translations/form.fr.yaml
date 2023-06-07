@@ -313,3 +313,4 @@ role.labels.onlyAdmin.label: 'Rôle uniquement utilisable en admin ?'
 role.labels.centre: 'Centre(s) pour ce rôle'
 role.labels.centre.label: 'Centre(s) pour ce rôle'
 Charleville-Mézières: Charleville-Mézières
+ec_step4.labels.volumeTe: Volume horaire étudiant (Stage, autonomie, ...)
