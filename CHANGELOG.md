@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.14](https://github.com/Dannebicque/oreof/compare/v1.3.13...v1.3.14) (2023-06-07)
+
+
+### Features
+
+* Ajout des heures "TE" ([b073cca](https://github.com/Dannebicque/oreof/commit/b073ccaa0913a639ac56521b7df537824800a5d0))
+* Augmentation de la taille ([2b48a5d](https://github.com/Dannebicque/oreof/commit/2b48a5d2e28e65df6de3daedeec3d126acfd59b3))
+* Synchronisation et affichage du référentiel de compétences d'un BUT ([d9eb275](https://github.com/Dannebicque/oreof/commit/d9eb275af909e8ccc21596cc8d7d44d804931640))
+
+
+### Bug Fixes
+
+* Ajout responsable ou coResponsable de parcours ([ebec06a](https://github.com/Dannebicque/oreof/commit/ebec06a575dbc69b862f30f2a434927174d7fd04))
+* correction création EC ([1196ae2](https://github.com/Dannebicque/oreof/commit/1196ae2843f8020e5e5eb2de37e67a916f27fe97))
+
 ### [1.3.13](https://github.com/Dannebicque/oreof/compare/v1.3.12...v1.3.13) (2023-06-04)
 
 
