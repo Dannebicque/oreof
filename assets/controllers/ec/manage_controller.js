@@ -32,7 +32,14 @@ export default class extends Controller {
   async connect() {
     const natureEc = document.getElementById('element_constitutif_natureUeEc').value
     if (natureEc !== '') {
-      const response = await fetch(`${this.urlValue}?choix=${natureEc}`)
+      let url = ''
+      if (this.urlValue.includes('?')) {
+        url = `${this.urlValue}&choix=${natureEc}`
+      } else {
+        url = `${this.urlValue}?choix=${natureEc}`
+      }
+
+      const response = await fetch(url)
       this.matieresTarget.innerHTML = await response.text()
       if (document.getElementById('ficheMatiere')) {
         this.tom = new TomSelect('#ficheMatiere')
@@ -59,10 +66,19 @@ export default class extends Controller {
       }
     }
 
-    const response = await fetch(`${this.urlValue}?choix=${event.target.value}`)
+    let url = ''
+    if (this.urlValue.includes('?')) {
+      url = `${this.urlValue}&choix=${event.target.value}`
+    } else {
+      url = `${this.urlValue}?choix=${event.target.value}`
+    }
+
+    const response = await fetch(url)
     this.matieresTarget.innerHTML = await response.text()
     if (document.getElementById('ficheMatiere')) {
-      this.tom = new TomSelect('#ficheMatiere')
+      this.tom = new TomSelect('#ficheMatiere', { allowEmptyOption: true })
+      this.tom.settings.placeholder = 'New placeholder';
+      this.tom.inputState();
     }
   }
 

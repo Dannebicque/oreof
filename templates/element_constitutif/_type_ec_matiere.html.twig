@@ -8,10 +8,10 @@
        data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_unique.help'|trans({}, 'help') }}"></i>
 </label>
 <select id="ficheMatiere" name="ficheMatiere" class="form-select">
-    <option value="">Choisir dans la liste une fiche EC/matière</option>
+    <option value="null" selected>Choisir dans la liste une fiche EC/matière</option>
     {% for matiere in matieres %}
         <option value="id_{{ matiere.id }}"
-        {% if ec.ficheMatiere != null and ec.ficheMatiere.id == matiere.id %}selected{% endif %}
+        {% if ec != null and ec.ficheMatiere != null and ec.ficheMatiere.id == matiere.id %}selected{% endif %}
         >{{ matiere.display }}</option>
     {% endfor %}
 </select>

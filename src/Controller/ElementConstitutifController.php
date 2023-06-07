@@ -43,16 +43,19 @@ class ElementConstitutifController extends AbstractController
         ]);
     }
 
-    #[Route('/type-ec/{ue}/{parcours}/{ec}', name: 'app_element_constitutif_type_ec', methods: ['GET'])]
+    #[Route('/type-ec/{ue}/{parcours}', name: 'app_element_constitutif_type_ec', methods: ['GET'])]
     public function typeEc(
         ElementConstitutifRepository $elementConstitutifRepository,
         Request $request,
         FicheMatiereRepository $ficheMatiereRepository,
         NatureUeEcRepository $natureUeEcRepository,
         Ue $ue,
-        Parcours $parcours,
-        ?ElementConstitutif $ec = null,
+        Parcours $parcours
     ): Response {
+        if ($request->query->has('ec')) {
+            $ec = $elementConstitutifRepository->find($request->query->get('ec'));
+        }
+
         if ($request->query->has('delete')) {
             $ec = $elementConstitutifRepository->find($request->query->get('delete'));
             $elementConstitutifRepository->remove($ec, true);
@@ -63,19 +66,19 @@ class ElementConstitutifController extends AbstractController
         if ($natureEc !== null) {
             if ($natureEc->isChoix() === true) {
                 return $this->render('element_constitutif/_type_ec_matieres.html.twig', [
-                    'ec' => $ec,
+                    'ec' => $ec ?? null,
                     'matieres' => $ficheMatiereRepository->findByParcours($parcours)
                 ]);
             }
 
             if ($natureEc->isLibre() === true) {
                 return $this->render('element_constitutif/_type_ec_matieres_libre.html.twig', [
-                    'ec' => $ec,
+                    'ec' => $ec ?? null,
                 ]);
             }
 
             return $this->render('element_constitutif/_type_ec_matiere.html.twig', [
-                'ec' => $ec,
+                'ec' => $ec ?? null,
                 'matieres' => $ficheMatiereRepository->findByParcours($parcours)
             ]);
         }
@@ -95,6 +98,7 @@ class ElementConstitutifController extends AbstractController
         Parcours $parcours
     ): Response {
         $elementConstitutif = new ElementConstitutif();
+        $elementConstitutif->setFicheMatiere(null);
         $elementConstitutif->setParcours($parcours);
 
         $elementConstitutif->setModaliteEnseignement($parcours?->getModalitesEnseignement());
@@ -193,7 +197,7 @@ class ElementConstitutifController extends AbstractController
         }
 
         return $this->render('element_constitutif/new.html.twig', [
-            'element_constitutif' => $elementConstitutif,
+            'elementConstitutif' => $elementConstitutif,
             'form' => $form->createView(),
             'ue' => $ue,
             'parcours' => $parcours,
