@@ -25,7 +25,7 @@ class BlocCompetence
     #[ORM\Column(length: 10)]
     private ?string $code = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text')]
     private ?string $libelle = null;
 
     #[ORM\OneToMany(mappedBy: 'blocCompetence', targetEntity: Competence::class, cascade: ['persist', 'remove'])]

@@ -21,7 +21,7 @@ class CompetenceType extends AbstractType
     {
         $builder
             ->add('libelle', TextType::class, [
-                'attr' => ['maxlength' => 255],
+                'attr' => ['maxlength' => 400],
                 'help' => '-'
                 ])
         ;
