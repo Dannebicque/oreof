@@ -19,6 +19,7 @@
             <label class="form-label required" for="typeCentre">Type de centre</label>
             <select id="typeCentre" class="form-select" {{ stimulus_action('register', 'changeCentre') }}
             required
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
             >
                 <option value="">Choisir un centre</option>
                 {% for centre in centres %}
@@ -28,13 +29,17 @@
         </div>
         <div>
             <label for="selectListe" class="form-label">Selon le centre, précisez</label>
-            <select class="form-select" name="selectListe" id="selectListe">
+            <select class="form-select" name="selectListe" id="selectListe"
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
                 <option value="">Choisissez un centre</option>
             </select>
         </div>
         <div>
             <label for="droits" class="form-label required">Droits sur ce centre ?</label>
-            <select class="form-select" name="droits" id="droits" required>
+            <select class="form-select" name="droits" id="droits" required
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
                 <option value="">Choisissez un centre</option>
                 {% for role in roles %}
                     <option value="{{ role.id }}">{{ role.libelle }}</option>
