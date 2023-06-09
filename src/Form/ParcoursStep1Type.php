@@ -35,6 +35,7 @@ class ParcoursStep1Type extends AbstractType
                 'required' => true,
                 'help' => '',
                 'class' => User::class,
+                'autocomplete' => true,
                 'choice_label' => 'display',
                 'query_builder' => function ($er) {
                     return $er->createQueryBuilder('u')
@@ -46,6 +47,7 @@ class ParcoursStep1Type extends AbstractType
             ->add('coResponsable', EntityType::class, [
                 'required' => false,
                 'help' => '',
+                'autocomplete' => true,
                 'class' => User::class,
                 'choice_label' => 'display',
                 'query_builder' => function ($er) {
