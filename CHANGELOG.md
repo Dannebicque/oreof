@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.15](https://github.com/Dannebicque/oreof/compare/v1.3.14...v1.3.15) (2023-06-09)
+
+
+### Features
+
+* Liste autocomplète sur les droits ([91ede0d](https://github.com/Dannebicque/oreof/commit/91ede0d11047de7cd4110e12bffac2a006ce09ad))
+* typos ([2844e34](https://github.com/Dannebicque/oreof/commit/2844e34f91a661910f640449a6943ae1a9c30f2d))
+
+
+### Bug Fixes
+
+* Gestion des changements des droits. Sans tout supprimer. ([6db7d50](https://github.com/Dannebicque/oreof/commit/6db7d5072c7bc4884785b4ff269933f4a8c53ccb))
+
 ### [1.3.14](https://github.com/Dannebicque/oreof/compare/v1.3.13...v1.3.14) (2023-06-07)
 
 
