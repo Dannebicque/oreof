@@ -118,7 +118,7 @@ class ParcoursSaveController extends AbstractController
 
                 return $this->json($rep);
             case 'respParcours':
-                $event = new AddCentreParcoursEvent($parcours, [],$parcours->getRespParcours());
+                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'],$parcours->getRespParcours());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'respParcours', $user);
@@ -126,7 +126,7 @@ class ParcoursSaveController extends AbstractController
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
                 return $this->json($rep);
             case 'coRespParcours':
-                $event = new AddCentreParcoursEvent($parcours, [],$parcours->getCoResponsable());
+                $event = new AddCentreParcoursEvent($parcours, ['ROLE_CO_RESP_PARCOURS'],$parcours->getCoResponsable());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'coResponsable', $user);

@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Classes\FormationStructure;
 use App\Classes\UpdateEntity;
 use App\Classes\verif\FormationState;
 use App\Entity\Formation;
@@ -39,6 +40,7 @@ class FormationSaveController extends BaseController
      */
     #[Route('/formation/save/{formation}', name: 'app_formation_save')]
     public function save(
+        FormationStructure $formationStructure,
         EventDispatcherInterface $eventDispatcher,
         RythmeFormationRepository $rythmeFormationRepository,
         EntityManagerInterface $em,
@@ -115,7 +117,12 @@ class FormationSaveController extends BaseController
                 return $updateEntity->saveField($formation, $data['field'], $data['value']);
             case 'float':
                 return $updateEntity->saveField($formation, $data['field'], (float)$data['value']);
-
+            case 'semestreDebut':
+                $semestreInitialDebut = $formation->getSemestreDebut();
+                $semestreNouveauDebut = (int)$data['value'];
+                $reponse = $updateEntity->saveField($formation, 'semestreDebut', $semestreNouveauDebut);
+                $formationStructure->updateStructureDepart($formation, $semestreInitialDebut, $semestreNouveauDebut);
+                return $reponse;
             case 'int':
                 return $updateEntity->saveField($formation, $data['field'], (int)$data['value']);
             case 'modalitesEnseignement':
@@ -138,7 +145,7 @@ class FormationSaveController extends BaseController
 
                 return $this->json(true);
             case 'coRespFormation':
-                $event = new AddCentreFormationEvent($formation, [], $formation->getCoResponsable());
+                $event = new AddCentreFormationEvent($formation, ['ROLE_CO_RESP_FORMATION'], $formation->getCoResponsable());
                 $eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($formation, 'coResponsable', $user);

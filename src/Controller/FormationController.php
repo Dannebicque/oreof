@@ -262,7 +262,7 @@ class FormationController extends BaseController
 
             if (isset($changeSet['responsableMention'])) {
                 // retirer l'ancien resp des centres et droits et envoyer mail
-                $event = new AddCentreFormationEvent($formation, [], $changeSet['responsableMention'][0]);
+                $event = new AddCentreFormationEvent($formation, ['ROLE_RESP_FORMATION'], $changeSet['responsableMention'][0]);
                 $eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
                 // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                 $event = new AddCentreFormationEvent($formation, ['ROLE_RESP_FORMATION'], $changeSet['responsableMention'][1]);

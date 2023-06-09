@@ -114,7 +114,7 @@ class UserGestionController extends BaseController
                     $parcours = $parcoursRepository->find($request->query->get('id'));
                     if ($parcours !== null) {
                         // retirer l'ancien resp des centres et droits et envoyer mail
-                        $event = new AddCentreParcoursEvent($parcours, [], $parcours->getRespParcours());
+                        $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $parcours->getRespParcours());
                         $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                         // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                         $event = new AddCentreParcoursEvent(
@@ -135,7 +135,7 @@ class UserGestionController extends BaseController
                     $formation = $formationRepository->find($request->query->get('id'));
                     if ($formation !== null) {
                         // retirer l'ancien resp des centres et droits et envoyer mail
-                        $event = new AddCentreFormationEvent($formation, [], $formation->getResponsableMention());
+                        $event = new AddCentreFormationEvent($formation, ['ROLE_RESP_FORMATION'], $formation->getResponsableMention());
                         $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
                         // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                         $event = new AddCentreFormationEvent(
@@ -156,7 +156,7 @@ class UserGestionController extends BaseController
                     $parcours = $parcoursRepository->find($request->query->get('id'));
                     if ($parcours !== null) {
                         // retirer l'ancien resp des centres et droits et envoyer mail
-                        $event = new AddCentreParcoursEvent($parcours, [], $parcours->getCoResponsable());
+                        $event = new AddCentreParcoursEvent($parcours, ['ROLE_CO_RESP_PARCOURS'], $parcours->getCoResponsable());
                         $this->eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                         // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                         $event = new AddCentreParcoursEvent(
@@ -177,7 +177,7 @@ class UserGestionController extends BaseController
                     $formation = $formationRepository->find($request->query->get('id'));
                     if ($formation !== null) {
                         // retirer l'ancien resp des centres et droits et envoyer mail
-                        $event = new AddCentreFormationEvent($formation, [], $formation->getCoResponsable());
+                        $event = new AddCentreFormationEvent($formation, ['ROLE_CO_RESP_FORMATION'], $formation->getCoResponsable());
                         $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
                         // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                         $event = new AddCentreFormationEvent(

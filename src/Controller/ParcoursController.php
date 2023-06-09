@@ -158,7 +158,7 @@ class ParcoursController extends BaseController
 
             if (isset($changeSet['respParcours'])) {
                 // retirer l'ancien resp des centres et droits et envoyer mail
-                $event = new AddCentreParcoursEvent($parcours, [], $changeSet['respParcours'][0]);
+                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $changeSet['respParcours'][0]);
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                 // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                 $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $changeSet['respParcours'][1]);

@@ -91,7 +91,18 @@ class AddCentreParcoursSubscriber implements EventSubscriberInterface
         if ($existe !== null) {
             $parcour = $this->parcoursRepository->findRespOtherParcoursInFormation($parcours, $user);
             if (count($parcour) === 0) {
-                $this->userCentreRepository->remove($existe, true);
+                $droits = $existe->getDroits();
+                $key = array_search($event->droits[0], $droits, true);
+                if (false !== $key) {
+                    unset($droits[$key]);
+                }
+
+                if (count($droits) > 0) {
+                    $existe->setDroits($droits);
+                    $this->userCentreRepository->save($existe, true);
+                } else {
+                    $this->userCentreRepository->remove($existe, true);
+                }
             }
         }
 

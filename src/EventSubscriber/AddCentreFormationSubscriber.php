@@ -19,8 +19,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class AddCentreFormationSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        protected Mailer $mailer,
-        protected FormationRepository $formationRepository,
+        protected Mailer               $mailer,
+        protected FormationRepository  $formationRepository,
         protected UserCentreRepository $userCentreRepository,
     ) {
     }
@@ -85,7 +85,20 @@ class AddCentreFormationSubscriber implements EventSubscriberInterface
         if ($existe !== null) {
 //            $parcour = $this->formationRepository->findRespOtherParcoursInFormation($formation, $user);
 //            if (count($formation) === 0) {/
+            $droits = $existe->getDroits();
+            $key = array_search($event->droits[0], $droits, true);
+            if (false !== $key) {
+                unset($droits[$key]);
+            }
+
+            if (count($droits) > 0) {
+                $existe->setDroits($droits);
+                $this->userCentreRepository->save($existe, true);
+            } else {
                 $this->userCentreRepository->remove($existe, true);
+            }
+
+
 //            }
         }
 
