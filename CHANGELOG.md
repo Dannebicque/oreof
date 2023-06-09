@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.16](https://github.com/Dannebicque/oreof/compare/v1.3.15...v1.3.16) (2023-06-09)
+
+
+### Bug Fixes
+
+* Liste des responsables/co responsable parcours ([73a654a](https://github.com/Dannebicque/oreof/commit/73a654a9ca98b55d685849cc6e0c932441c18791))
+* Renumérotation des BCC et C en cas de suppression ([5ddc96e](https://github.com/Dannebicque/oreof/commit/5ddc96ec3ced9f5dd335edc3c4f4b57de046c72e))
+
 ### [1.3.15](https://github.com/Dannebicque/oreof/compare/v1.3.14...v1.3.15) (2023-06-09)
 
 
