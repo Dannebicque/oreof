@@ -265,6 +265,7 @@ class BlocCompetenceController extends AbstractController
      */
     #[Route('/{id}', name: 'app_bloc_competence_delete', methods: ['DELETE'])]
     public function delete(
+        Bcc                      $bcc,
         Request                  $request,
         BlocCompetence           $blocCompetence,
         BlocCompetenceRepository $blocCompetenceRepository
@@ -274,7 +275,9 @@ class BlocCompetenceController extends AbstractController
             'delete' . $blocCompetence->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf')
         )) {
+            $parc = $blocCompetence->getParcours();
             $blocCompetenceRepository->remove($blocCompetence, true);
+            $bcc->renumeroteBlocCompetence($parc);
 
             return $this->json(true);
         }

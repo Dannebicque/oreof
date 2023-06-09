@@ -123,6 +123,7 @@ class CompetenceController extends AbstractController
      */
     #[Route('/{id}', name: 'app_competence_delete', methods: ['DELETE'])]
     public function delete(
+        Bcc $bcc,
         Request $request,
         Competence $competence,
         CompetenceRepository $competenceRepository
@@ -131,8 +132,9 @@ class CompetenceController extends AbstractController
             'delete' . $competence->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf')
         )) {
+            $bc = $competence->getBlocCompetence();
             $competenceRepository->remove($competence, true);
-
+            $bcc->renumeroteCompetences($bc);
             return $this->json(true);
         }
 

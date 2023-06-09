@@ -143,4 +143,37 @@ class Bcc
         }
         $this->entityManager->flush();
     }
+
+    public function renumeroteCompetences(?BlocCompetence $blocCompetence): void
+    {
+        if ($blocCompetence === null) {
+            return;
+        }
+
+        $i = 1;
+        foreach ($blocCompetence->getCompetences() as $competence) {
+            $competence->setOrdre($i);
+            $competence->genereCode();
+            ++$i;
+        }
+        $this->entityManager->flush();
+    }
+
+    public function renumeroteBlocCompetence(?Parcours $parc)
+    {
+        if ($parc === null) {
+            return;
+        }
+
+        $i = 1;
+        foreach ($parc->getBlocCompetences() as $bcc) {
+            $bcc->setOrdre($i);
+            $bcc->genereCode();
+            foreach ($bcc->getCompetences() as $competence) {
+                $competence->genereCode();
+            }
+            ++$i;
+        }
+        $this->entityManager->flush();
+    }
 }
