@@ -22,6 +22,7 @@
                         name="formation_semestreDebut"
                         id="formation_semestreDebut"
                         required="required"
+                        data-semestreDebut="{{ formation.semestreDebut }}"
                         {{ stimulus_action('formation--step3', 'changeSemestreDebut', 'change') }}>
                     <option value="">{{ 'formation_step3.labels.semestreDebut.option.vide'|trans({}, 'form') }}</option>
                     {% for i in 1..6 %}
@@ -67,27 +68,27 @@
                        data-bs-original-title="{{ 'formation_step3.helps.structureFormation.help'|trans({}, 'help') }}"></i>
                 </div>
 
-                <ul>
+                <ul id="listeSemestre">
 
                     {% for i in formation.semestreDebut..typeDiplome.semestreFin %}
-                        <li>
+                        <li id="sem_{{ i }}">
                             <span class="required">Semestre {{ i }}</span> :
                             <div class="form-check-inline">
-                                <input type="radio" id="formation_parcours_1" name="semestre_{{ i }}" required="required"
+                                <input type="radio" id="formation_parcours_{{ i }}_tc" name="semestre_{{ i }}" required="required"
                                        {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] == 'tronc_commun' %}checked{% endif %}
                                        class="form-check-input" value="tronc_commun" {{ stimulus_action('formation--step3',
                                     'changeSemestre',
                                     'click', {semestre: i}) }}>
-                                <label class="form-check-label" for="formation_parcours_1">Tronc Commun</label>
+                                <label class="form-check-label" for="formation_parcours_{{ i }}_tc">Tronc Commun</label>
                             </div>
                             <strong class="text-primary me-2">OU</strong>
                             <div class="form-check-inline">
-                                <input type="radio" id="formation_parcours_1" name="semestre_{{ i }}" required="required"
+                                <input type="radio" id="formation_parcours_{{ i }}_parc" name="semestre_{{ i }}" required="required"
                                        {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] ==
                                            'parcours' %}checked{% endif %}
                                        class="form-check-input" value="parcours" {{ stimulus_action('formation--step3',
                                     'changeSemestre', 'click', {semestre: i}) }}>
-                                <label class="form-check-label" for="formation_parcours_1">Parcours</label>
+                                <label class="form-check-label" for="formation_parcours_{{ i }}_parc">Parcours</label>
                             </div>
                         </li>
                     {% endfor %}

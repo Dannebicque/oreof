@@ -135,4 +135,9 @@ class SemestreParcours
         }
         return 1;
     }
+
+    public function display(): string
+    {
+        return 'S'.$this->getOrdre();
+    }
 }

@@ -9,6 +9,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -51,6 +52,7 @@ class SemestreParcoursRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('sp')
             ->where('sp.parcours = :parcours')
+            ->orderBy('sp.ordre', 'ASC')
             ->setParameter('parcours', $parcours)
             ->getQuery()
             ->getResult();
@@ -68,5 +70,17 @@ class SemestreParcoursRepository extends ServiceEntityRepository
             ->setParameter('ordre', $ordreDestination)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function findByParcoursOrdreInferieur(Formation $formation, int $semestreNouveauDebut): array
+    {
+        return $this->createQueryBuilder('sp')
+            ->innerJoin('sp.parcours', 'p')
+            ->andWhere('p.formation = :formation')
+            ->andWhere('sp.ordre < :ordre')
+            ->setParameter('formation', $formation)
+            ->setParameter('ordre', $semestreNouveauDebut)
+            ->getQuery()
+            ->getResult();
     }
 }
