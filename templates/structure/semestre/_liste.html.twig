@@ -37,172 +37,275 @@
                 </div>
             </div>
             <div>{# class="scroll-out" #}
-                {% for semestre in semestres %}
-                    {% if semestre.semestre.semestreRaccroche == true %}
-                        {% set sem = semestre.semestre.semestreRaccroche.semestre %}
-                        {% set raccroche = true %}
-                    {% else %}
-                        {% set sem = semestre.semestre %}
-                        {% set raccroche = false %}
-                    {% endif %}
-                    <div {{ stimulus_controller('structure--semestre') }}>
-                        <div class="card mb-2 sh-19 sh-md-8">
+                {% for i in debut..fin %}
+                    {% if semestres[i] is not defined %}
+                        <div class="card mb-2 sh-19 sh-md-8 border-danger text-danger"
+                        {{ stimulus_controller('semestre--manage', {
+                            url: path('structure_semestre_init', {parcours: parcours.id}),
+                        }) }}
+                        >
                             <div class="card-body pt-0 pb-0 h-100">
                                 <div class="row g-0 h-100 align-content-center">
-                                    <div class="col-12 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="col-12 col-md-1 d-flex flex-column justify-content-center">
                                         <div class="text-muted text-small d-md-none">Semestre</div>
-                                        <p>{{ semestre.semestre.display }}
-                                            {% if raccroche %}
-                                            <i class="fal fa-link"
-                                               data-controller="tooltip"
-                                               data-tooltip-placement-value="bottom"
-                                               title="Raccrochée au semestre {{ sem.display }}"></i>{% endif %}</p>
+                                        <p>S{{ i }}</p>
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">ECTS</div>
-                                        <span id="ects_semestre_{{ semestre.semestre.id }}_{{ parcours.id }}">
-                                            {{ sem.totalEctsSemestre|badgeEctsSemestre }}
-                                        </span>
                                     </div>
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Nb UE</div>
-                                        {{ sem.nbUes|badgeNb }}
                                     </div>
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Commun ?</div>
-                                        {% if sem.troncCommun == true %}
-                                            <span class="badge bg-info me-2">Tronc Commun</span>
-
-                                        {% else %}
-                                            <span class="badge bg-secondary me-2">Parcours</span>
-                                        {% endif %}
                                     </div>
 
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Commun ?</div>
-                                        {% if raccroche %}
-                                            <span class="badge bg-warning me-2">Raccroché</span>
-                                        {% else %}
-                                            {% if sem.semestreMutualisables|length > 0 %}
-                                                <span class="badge bg-secondary me-2">Mutualisé</span>
-                                            {% else %}
-                                                <span class="badge bg-primary me-2">Classique</span>
-                                            {% endif %}
-                                        {% endif %}
-
                                     </div>
 
                                     <div class="col-6 col-md-1 d-flex flex-column justify-content-center
                                             mb-1 mb-md-0">
                                         <div class="text-muted text-small d-md-none">Voir les UE</div>
-                                        <button class="btn btn-sm btn-outline-primary"
-                                                {{ stimulus_action('structure--semestre', 'detail', 'click',
-                                                    {semestre:sem.id, url: path
-                                                        ('structure_ue_detail_semestre', {semestre:sem
-                                                        .id, parcours: parcours.id, raccroche:raccroche})}
-                                                ) }}
-                                        >
-                                            <i class="fal fa-caret-right"></i> Voir les UE
-                                        </button>
                                     </div>
-                                    <div class="col-6 col-md-4 d-flex flex-column justify-content-end
-                                            align-items-md-end mb-1 mb-md-0 text-end">
+                                    <div class="col-6 col-md-4 d-flex flex-column
+                                           text-end">
                                         <div class="text-muted text-small d-md-none">Actions</div>
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <button
-                                                        {{ stimulus_controller('modal', {
-                                                            size: 'lg',
-                                                            modalTitle: 'Mutualiser le semestre ' ~ sem.display,
-                                                            modalUrl: path('structure_semestre_mutualiser', {semestre:sem.id, parcours: parcours.id})
-                                                        }) }}
-                                                        data-action="click->modal#openModal"
-                                                        class="btn btn-sm text-quaternary me-1"
-                                                        data-size="lg"
-                                                        data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom"
-                                                        {% if raccroche %}disabled{% endif %}
-                                                        title="Mutualiser le semestre {{ sem.display }}"
-                                                >
-                                                    <i class="fal fa-share-nodes"></i>
-                                                    <span> Mutualiser le semestre</span>
-                                                </button>
-                                                <button
-                                                        {{ stimulus_controller('modal', {
-                                                            size: 'lg',
-                                                            modalTitle: 'Raccrocher un semestre mutualisé au semestre ' ~ semestre
-                                                            .semestre.display,
-                                                            modalUrl: path('structure_semestre_raccrocher', {semestre:semestre
-                                                            .semestre.id, parcours: parcours.id})
-                                                        }) }}
-                                                        data-action="click->modal#openModal"
-                                                        class="btn btn-sm text-quaternary me-1"
-                                                        data-size="lg"
-                                                        data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom"
+                                        <button class="btn btn-outline-primary"
+                                            {{ stimulus_action('semestre--manage', 'initSemestre', 'click', {
+                                                ordre: i
+                                            }) }}
+                                        >Initialiser le semestre</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        {% set semestre = semestres[i] %}
+                        {% if semestre.semestre.semestreRaccroche == true %}
+                            {% set sem = semestre.semestre.semestreRaccroche.semestre %}
+                            {% set raccroche = true %}
+                        {% else %}
+                            {% set sem = semestre.semestre %}
+                            {% set raccroche = false %}
+                        {% endif %}
+                        <div {{ stimulus_controller('structure--semestre') }}>
+                            <div class="card mb-2 sh-19 sh-md-8">
+                                <div class="card-body pt-0 pb-0 h-100">
+                                    <div class="row g-0 h-100 align-content-center">
+                                        <div class="col-12 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                            <div class="text-muted text-small d-md-none">Semestre</div>
+                                            <p>{{ semestre.display }}
+                                                {% if raccroche %}
+                                                <i class="fal fa-link"
+                                                   data-controller="tooltip"
+                                                   data-tooltip-placement-value="bottom"
+                                                   title="Raccrochée au semestre {{ sem.display }}"></i>{% endif %}</p>
+                                        </div>
+                                        <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                            <div class="text-muted text-small d-md-none">ECTS</div>
+                                            <span id="ects_semestre_{{ semestre.semestre.id }}_{{ parcours.id }}">
+                                            {{ sem.totalEctsSemestre|badgeEctsSemestre }}
+                                        </span>
+                                        </div>
+                                        <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                            <div class="text-muted text-small d-md-none">Nb UE</div>
+                                            {{ sem.nbUes|badgeNb }}
+                                        </div>
+                                        <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                            <div class="text-muted text-small d-md-none">Commun ?</div>
+                                            {% if sem.troncCommun == true %}
+                                                <span class="badge bg-info me-2">Tronc Commun</span>
 
-                                                        title="Raccrocher un semestre mutualisé au semestre {{ semestre.semestre.display }}"
-                                                >
-                                                    <i class="fal fa-down-to-bracket"></i>
-                                                    <span> Raccrocher un semestre</span>
-                                                </button>
-                                            </div>
-                                            <div class="col-4 mt-2">{# todo: boutons non centrés dans la
-                                            ligne #}
-
-                                                {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)) %}
-                                                    {#                                                    and #}
-                                                    {#                                                    (workflow_can(ec, 'valider_parcours') or workflow_can(ec, #}
-                                                    {#                                                    'initialiser'))) or (is_granted #}
-                                                    {#                                                    ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
-                                                    {#                                                    'valider_ec')) #}
-                                                    {% if not loop.first %}
-                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action
-                                                            ('structure--semestre', 'deplacerSemestre',
-                                                            'click', {url: path('structure_semestre_deplacer',{sens:
-                                                                'up', semestre:semestre.id,parcours:parcours.id}), semestre:semestre.id, parcours:parcours.id}) }}>
-                                                            <i class="fal fa-circle-up"></i></button>
-                                                    {% else %}
-                                                        <button class="btn btn-sm btn-outline-info" disabled>
-                                                            <i class="fal fa-circle-up"></i>
-                                                        </button>
-                                                    {% endif %}
-                                                    {% if not loop.last %}
-                                                        <button class="btn btn-sm btn-outline-info" {{ stimulus_action('structure--semestre', 'deplacerSemestre',
-                                                            'click', {url: path('structure_semestre_deplacer',{sens:
-                                                                'down', semestre:semestre.id,parcours:parcours.id}), semestre:semestre.id, parcours:parcours.id}) }}>
-                                                            <i class="fal
-                                                                                        fa-circle-down"></i></button>
-                                                    {% else %}
-                                                        <button class="btn btn-sm btn-outline-info" disabled>
-                                                            <i class="fal fa-circle-down"></i>
-                                                        </button>
-                                                    {% endif %}
-                                                {% endif %}
-                                            </div>
+                                            {% else %}
+                                                <span class="badge bg-secondary me-2">Parcours</span>
+                                            {% endif %}
                                         </div>
 
+                                        <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                            <div class="text-muted text-small d-md-none">Commun ?</div>
+                                            {% if raccroche %}
+                                                <span class="badge bg-warning me-2">Raccroché</span>
+                                            {% else %}
+                                                {% if sem.semestreMutualisables|length > 0 %}
+                                                    <span class="badge bg-secondary me-2">Mutualisé</span>
+                                                {% else %}
+                                                    <span class="badge bg-primary me-2">Classique</span>
+                                                {% endif %}
+                                            {% endif %}
+
+                                        </div>
+
+                                        <div class="col-6 col-md-1 d-flex flex-column justify-content-center
+                                            mb-1 mb-md-0">
+                                            <div class="text-muted text-small d-md-none">Voir les UE</div>
+                                            <button class="btn btn-sm btn-outline-primary"
+                                                    {{ stimulus_action('structure--semestre', 'detail', 'click',
+                                                        {semestre:sem.id, url: path
+                                                            ('structure_ue_detail_semestre', {semestre:sem
+                                                            .id, parcours: parcours.id, raccroche:raccroche})}
+                                                    ) }}
+                                            >
+                                                <i class="fal fa-caret-right"></i> Voir les UE
+                                            </button>
+                                        </div>
+                                        <div class="col-6 col-md-4 d-flex flex-column
+                                           text-end">
+                                            <div class="text-muted text-small d-md-none">Actions</div>
+                                            <div class="row">
+                                                <div class="col-8 d-grid">
+                                                    <div class="btn-group d-block">
+                                                        <button class="btn btn-outline-primary btn-sm dropdown-toggle"
+                                                                type="button" id="dropdownMenuClickableInside"
+                                                                data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                                aria-expanded="false" title="Autres opérations">
+                                                            <i class="fas fa-ellipsis-v"></i> Actions
+                                                        </button>
+                                                        <ul class="dropdown-menu"
+                                                            aria-labelledby="dropdownMenuClickableInside">
+                                                            <li>
+                                                                <a
+                                                                        href="#"
+                                                                        {{ stimulus_controller('modal', {
+                                                                            size: 'lg',
+                                                                            modalTitle: 'Dupliquer le semestre ' ~ sem.display,
+                                                                            modalUrl: path('structure_semestre_dupliquer', {semestre:sem.id, parcours: parcours.id})
+                                                                        }) }}
+                                                                        data-action="click->modal#openModal"
+                                                                        class="dropdown-item text-primary"
+                                                                        data-size="lg"
+                                                                        {% if raccroche %}disabled{% endif %}
+                                                                        data-bs-toggle="tooltip"
+                                                                        data-bs-placement="bottom"
+                                                                        title="Dupliquer l\'UE {{ sem.display }}"
+                                                                >
+                                                                    <i class="{{ iconDuplicate }}"></i>
+                                                                    <span> Dupliquer le semestre</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a
+                                                                        href="#"
+                                                                        {{ stimulus_controller('modal', {
+                                                                            size: 'lg',
+                                                                            modalTitle: 'Déplacer le semestre ' ~ sem.display,
+                                                                            modalUrl: path('structure_semestre_changer', {semestre:sem.id, parcours: parcours.id})
+                                                                        }) }}
+                                                                        data-action="click->modal#openModal"
+                                                                        class="dropdown-item text-secondary"
+                                                                        data-size="lg"
+                                                                        {% if raccroche %}disabled{% endif %}
+                                                                        data-bs-toggle="tooltip"
+                                                                        data-bs-placement="bottom"
+                                                                        title="Déplacer l\'UE {{ sem.display }}"
+                                                                >
+                                                                    <i class="fal fa-right-left"></i>
+                                                                    <span> Déplacer le semestre</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a
+                                                                        href="#"
+                                                                        {{ stimulus_controller('modal', {
+                                                                            size: 'lg',
+                                                                            modalTitle: 'Mutualiser le semestre ' ~ sem.display,
+                                                                            modalUrl: path('structure_semestre_mutualiser', {semestre:sem.id, parcours: parcours.id})
+                                                                        }) }}
+                                                                        data-action="click->modal#openModal"
+                                                                        class="dropdown-item text-quaternary"
+                                                                        data-size="lg"
+                                                                        data-bs-toggle="tooltip"
+                                                                        data-bs-placement="bottom"
+                                                                        {% if raccroche %}disabled{% endif %}
+                                                                        title="Mutualiser le semestre {{ sem.display }}"
+                                                                >
+                                                                    <i class="fal fa-share-nodes"></i>
+                                                                    <span> Mutualiser le semestre</span>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a
+                                                                        href="#"
+                                                                        {{ stimulus_controller('modal', {
+                                                                            size: 'lg',
+                                                                            modalTitle: 'Raccrocher un semestre mutualisé au semestre ' ~ semestre
+                                                                            .semestre.display,
+                                                                            modalUrl: path('structure_semestre_raccrocher', {semestre:semestre
+                                                                            .semestre.id, parcours: parcours.id})
+                                                                        }) }}
+                                                                        data-action="click->modal#openModal"
+                                                                        class="dropdown-item text-quaternary"
+                                                                        data-size="lg"
+                                                                        data-bs-toggle="tooltip"
+                                                                        data-bs-placement="bottom"
+
+                                                                        title="Raccrocher un semestre mutualisé au semestre {{ semestre.semestre.display }}"
+                                                                >
+                                                                    <i class="fal fa-down-to-bracket"></i>
+                                                                    <span> Raccrocher un semestre</span>
+                                                                </a>
+                                                            </li>
+
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">{# todo: boutons non centrés dans la
+                                            ligne #}
+
+                                                    {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)) %}
+                                                        {#                                                    and #}
+                                                        {#                                                    (workflow_can(ec, 'valider_parcours') or workflow_can(ec, #}
+                                                        {#                                                    'initialiser'))) or (is_granted #}
+                                                        {#                                                    ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
+                                                        {#                                                    'valider_ec')) #}
+                                                        {% if not loop.first %}
+                                                            <button class="btn btn-sm btn-outline-info" {{ stimulus_action
+                                                                ('structure--semestre', 'deplacerSemestre',
+                                                                'click', {url: path('structure_semestre_deplacer',{sens:
+                                                                    'up', semestre:semestre.id,parcours:parcours.id}), semestre:semestre.id, parcours:parcours.id}) }}>
+                                                                <i class="fal fa-circle-up"></i></button>
+                                                        {% else %}
+                                                            <button class="btn btn-sm btn-outline-info" disabled>
+                                                                <i class="fal fa-circle-up"></i>
+                                                            </button>
+                                                        {% endif %}
+                                                        {% if not loop.last %}
+                                                            <button class="btn btn-sm btn-outline-info" {{ stimulus_action('structure--semestre', 'deplacerSemestre',
+                                                                'click', {url: path('structure_semestre_deplacer',{sens:
+                                                                    'down', semestre:semestre.id,parcours:parcours.id}), semestre:semestre.id, parcours:parcours.id}) }}>
+                                                                <i class="fal
+                                                                                        fa-circle-down"></i></button>
+                                                        {% else %}
+                                                            <button class="btn btn-sm btn-outline-info" disabled>
+                                                                <i class="fal fa-circle-down"></i>
+                                                            </button>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="detail_semestre_{{ sem.id }}" class="d-none detail_semestre"
+
+                            >
+                                <div class="row" style="margin-left:1px">
+                                    <div class="col-12" {{ stimulus_target('structure--semestre', 'detail') }}
+                                         data-action="base:refreshListe@window->structure--semestre#refreshListe
+                                     structure--ue:refreshListe@window->structure--semestre#refreshListe
+                                     ue--raccrocher:modalHide@window->structure--semestre#refreshListe"
+                                         data-structure--semestre-semestre-param="{{ sem.id }}"
+                                         data-structure--semestre-url-param="{{ path
+                                             ('structure_ue_detail_semestre', {semestre:sem.id, parcours: parcours.id}) }}"
+                                    >
+
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="detail_semestre_{{ sem.id }}" class="d-none detail_semestre"
-
-                        >
-                            <div class="row" style="margin-left:1px">
-                                <div class="col-12" {{ stimulus_target('structure--semestre', 'detail') }}
-                                     data-action="base:refreshListe@window->structure--semestre#refreshListe
-                                     structure--ue:refreshListe@window->structure--semestre#refreshListe
-                                     ue--raccrocher:modalHide@window->structure--semestre#refreshListe"
-                                     data-structure--semestre-semestre-param="{{ sem.id }}"
-                                     data-structure--semestre-url-param="{{ path
-                                         ('structure_ue_detail_semestre', {semestre:sem.id, parcours: parcours.id}) }}"
-                                >
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endif %}
                 {% else %}
                     <div class="card mb-2">
                         <div class="card-body bg-warning">

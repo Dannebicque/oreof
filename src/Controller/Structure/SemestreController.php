@@ -9,15 +9,20 @@
 
 namespace App\Controller\Structure;
 
+use App\Classes\JsonReponse;
 use App\Classes\SemestreOrdre;
+use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\SemestreMutualisable;
+use App\Entity\SemestreParcours;
 use App\Repository\ComposanteRepository;
+use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\SemestreMutualisableRepository;
 use App\Repository\SemestreParcoursRepository;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,20 +39,247 @@ class SemestreController extends AbstractController
         Route('/detail/parcours/{parcours}', name: 'detail_parcours')
     ]
     public function detailParcours(
+        TypeDiplomeRegistry        $registry,
         SemestreParcoursRepository $semestreRepository,
         Parcours                   $parcours
     ): Response {
-        $semestres = $semestreRepository->findBy(['parcours' => $parcours]);//todo: filtrer selon droits // ajouter le tronc commun
+        $formation = $parcours->getFormation();
+        if (null === $formation) {
+            throw $this->createNotFoundException('La formation n\'existe pas');
+        }
+        $typeDiplome = $formation->getTypeDiplome();
+
+        if (null === $typeDiplome) {
+            throw $this->createNotFoundException('Le type de diplôme n\'existe pas');
+        }
+
+        $sems = $semestreRepository->findByParcours($parcours);
+
+        $semestres = [];
+        foreach ($sems as $sem) {
+            $semestres[$sem->getOrdre()] = $sem;
+        }
+
+        $debut = $parcours->getFormation()?->getSemestreDebut();
 
         return $this->render('structure/semestre/_liste.html.twig', [
             'semestres' => $semestres,
-            'parcours' => $parcours
+            'parcours' => $parcours,
+            'debut' => $debut,
+            'fin' => $typeDiplome->getSemestreFin(),
         ]);
     }
 
     #[
-        Route('/mutualiser/{semestre}/{parcours}', name: 'mutualiser')
+        Route('/dupliquer/{semestre}/{parcours}', name: 'dupliquer')
     ]
+    public function dupliquer(
+        Semestre $semestre,
+        Parcours $parcours
+    ): Response {
+        return $this->render('structure/semestre/_dupliquer.html.twig', [
+            'semestre' => $semestre,
+            'parcours' => $parcours,
+            'formation' => $parcours->getFormation()
+        ]);
+    }
+
+    #[
+        Route('/init/{parcours}', name: 'init')
+    ]
+    public function init(
+        EntityManagerInterface     $entityManager,
+        SemestreParcoursRepository $semestreParcoursRepository,
+        Request                    $request,
+        Parcours                   $parcours
+    ): Response {
+        $ordre = JsonRequest::getValueFromRequest($request, 'position');
+        $semestres = $semestreParcoursRepository->findBy([
+            'parcours' => $parcours,
+            'ordre' => $ordre
+        ]);
+
+        if (count($semestres) > 0) {
+            return JsonReponse::error('Le semestre existe déjà');
+        }
+
+        $semestre = new Semestre();
+        $semestre->setOrdre($ordre);
+        $entityManager->persist($semestre);
+
+        $semestreParcours = new SemestreParcours($semestre, $parcours);
+        $semestreParcours->setOrdre($ordre);
+        $entityManager->persist($semestreParcours);
+        $entityManager->flush();
+
+        return JsonReponse::success('Semestre ajouté');
+    }
+
+    #[Route('/changer/{semestre}/{parcours}', name: 'changer')]
+    public function changer(
+        Semestre $semestre,
+        Parcours $parcours
+    ): Response {
+        return $this->render('structure/semestre/_changer.html.twig', [
+            'semestre' => $semestre,
+            'parcours' => $parcours,
+            'formation' => $parcours->getFormation()
+        ]);
+    }
+
+    #[Route('/changer-ajax/{semestre}/{parcours}', name: 'changer_ajax')]
+    public function changerAjax(
+        EntityManagerInterface     $entityManager,
+        SemestreParcoursRepository $semestreParcoursRepository,
+        ParcoursRepository         $parcoursRepository,
+        Request                    $request,
+        Semestre                   $semestre,
+        Parcours                   $parcours
+    ): Response {
+        $data = JsonRequest::getFromRequest($request);
+        //todo: on ne peut pas déplacer un semestre tronc commun ? Sauf vers une autre formation?
+
+        //Parcours de destination
+        $parcoursDestination = $parcoursRepository->find($data['destination']);
+        $ordre = (int)$data['position'];
+        if (null !== $parcoursDestination) {
+            //on récupère, s'il existe, le semestre à la position de destination
+            $semestreDest = $semestreParcoursRepository->findOneBy([
+                'parcours' => $parcoursDestination,
+                'ordre' => $ordre
+            ]);
+
+            //on supprime le semestre de la position de destination
+            if (null !== $semestreDest) {
+                $sem = $semestreDest->getSemestre();
+                if ($sem !== null) {
+                    if ($sem->getSemestreParcours()->count() === 1) {
+                        //donc uniquement mon parcours, on peut supprimer le semestre et sa structure
+                        $entityManager->remove($sem);
+                        $entityManager->flush();
+                    }
+                }
+                $semestreParcoursRepository->remove($semestreDest, true);
+            }
+
+
+            foreach ($semestre->getSemestreParcours() as $semestreParcour) {
+                if ($semestreParcour->getParcours() === $parcours) {
+                    $semestreParcour->setParcours($parcoursDestination);
+                    $semestreParcour->setOrdre((int)$ordre);
+                    $semestreParcoursRepository->save($semestreParcour, true);
+                }
+            }
+
+            return $this->json((new JsonReponse(Response::HTTP_OK, 'message', []))->getReponse());
+        }
+
+        return $this->json((new JsonReponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'message', []))->getReponse());
+    }
+
+    #[Route('/dupliquer-ajax/{semestre}/{parcours}', name: 'dupliquer_ajax')]
+    public function dupliquerAjax(
+        Request                            $request,
+        EntityManagerInterface             $entityManager,
+        FicheMatiereMutualisableRepository $ficheMatiereMutualisableRepository,
+        SemestreParcoursRepository         $semestreParcoursRepository,
+        ParcoursRepository                 $parcoursRepository,
+        Semestre                           $semestre,
+        Parcours                           $parcours
+    ): Response {
+        $data = JsonRequest::getFromRequest($request);
+
+        $parcoursDestination = $parcoursRepository->find($data['destination']);
+        $ordre = (int)$data['position'];
+        if (null !== $parcoursDestination) {
+            //on récupère, s'il existe, le semestre à la position de destination
+            $semestreDest = $semestreParcoursRepository->findOneBy([
+                'parcours' => $parcoursDestination,
+                'ordre' => $ordre
+            ]);
+
+            //on supprime le semestre de la position de destination
+            if (null !== $semestreDest) {
+                $sem = $semestreDest->getSemestre();
+                if ($sem !== null) {
+                    if ($sem->getSemestreParcours()->count() === 1) {
+                        //donc uniquement mon parcours, on peut supprimer le semestre et sa structure
+                        $entityManager->remove($sem);
+                        $entityManager->flush();
+                    }
+                }
+                $semestreParcoursRepository->remove($semestreDest, true);
+            }
+
+
+            //on clone le semestre et sa structure
+            $newSemestre = clone $semestre;
+            $entityManager->persist($newSemestre);
+            // on recopie les UE
+            foreach ($semestre->getUes() as $ue) {
+                $newUe = clone $ue;
+                $newUe->setSemestre($newSemestre);
+                //todo: code??
+                $entityManager->persist($newUe);
+                //on recopie les EC
+                foreach ($ue->getElementConstitutifs() as $ec) {
+                    switch ($data['dupliquer']) {
+                        case 'mutualise':
+                            //vérifier si pas déjà mutualisé
+                            $fm = $ficheMatiereMutualisableRepository->findBy([
+                                'ficheMatiere' => $ec->getFicheMatiere(),
+                            ]);
+
+                            if (count($fm) === 0) {
+                                //si pas mutualisé, mutualiser
+                                //le parcours d'origine
+                                $ficheMatiereMutualisable = new FicheMatiereMutualisable();
+                                $ficheMatiereMutualisable->setFicheMatiere($ec->getFicheMatiere());
+                                $ficheMatiereMutualisable->setParcours($parcours);
+                                $entityManager->persist($ficheMatiereMutualisable);
+                            }
+
+                            //le futur parcours de destination
+                            $ficheMatiereMutualisable = new FicheMatiereMutualisable();
+                            $ficheMatiereMutualisable->setFicheMatiere($ec->getFicheMatiere());
+                            $ficheMatiereMutualisable->setParcours($parcoursDestination);
+                            $entityManager->persist($ficheMatiereMutualisable);
+                            $entityManager->flush();
+
+                            //faire le lien dans les deux UE
+                            $newEc = clone $ec;
+                            $newEc->setUe($newUe);
+                            $entityManager->persist($newEc);
+                            $entityManager->flush();
+                            break;
+                        case 'recopie':
+                            $newEc = clone $ec;
+                            $newEc->setUe($newUe);
+                            $entityManager->persist($newEc);
+
+                            $newFm = clone $ec->getFicheMatiere();
+                            $newEc->setFicheMatiere($newFm);
+                            $entityManager->persist($newFm);
+                            $entityManager->flush();
+                            break;
+                    }
+                }
+            }
+
+
+            //on ajoute au parcours
+            $semestreParcours = new SemestreParcours($newSemestre, $parcoursDestination);
+            $semestreParcours->setOrdre($ordre);
+            $entityManager->persist($semestreParcours);
+            $entityManager->flush();
+
+            return $this->json((new JsonReponse(Response::HTTP_OK, 'message', []))->getReponse());
+        }
+
+        return $this->json((new JsonReponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'message', []))->getReponse());
+    }
+
+    #[Route('/mutualiser/{semestre}/{parcours}', name: 'mutualiser')]
     public function mutualiser(
         ComposanteRepository $composanteRepository,
         Semestre             $semestre,
@@ -145,13 +377,11 @@ class SemestreController extends AbstractController
         return $this->json($t);
     }
 
-    #[
-        Route('/raccrocher/{semestre}/{parcours}', name: 'raccrocher')
-    ]
+    #[Route('/raccrocher/{semestre}/{parcours}', name: 'raccrocher')]
     public function raccrocher(
         SemestreMutualisableRepository $semestreMutualisableRepository,
-        Semestre                   $semestre,
-        Parcours                   $parcours
+        Semestre                       $semestre,
+        Parcours                       $parcours
     ): Response {
         $semestres = $semestreMutualisableRepository->findBy(['parcours' => $parcours]);
 
@@ -174,30 +404,26 @@ class SemestreController extends AbstractController
         return $this->json(true);
     }
 
-    #[
-        Route('/data/{semestre}/{parcours}', name: 'data')
-    ]
-    public function data(
-        Request                    $request,
-        SemestreParcoursRepository $semestreRepository,
-        Semestre                   $semestre,
-        Parcours                   $parcours
-    ): Response {
-        $data = JsonRequest::getFromRequest($request);
-
-        switch ($data['action']) {
-            case 'mutualise':
-                return $this->render('structure/semestre/_mutualise.html.twig', [
-                    'semestre' => $semestre,
-                    'parcours' => $parcours
-                ]);
-                break;
-            case 'reutilise':
-                return $this->render('structure/semestre/_reutilise.html.twig', [
-                    'semestre' => $semestre,
-                    'parcours' => $parcours
-                ]);
-                break;
-        }
-    }
+//    #[Route('/data/{semestre}/{parcours}', name: 'data')]
+//    public function data(
+//        Request                    $request,
+//        SemestreParcoursRepository $semestreRepository,
+//        Semestre                   $semestre,
+//        Parcours                   $parcours
+//    ): Response {
+//        $data = JsonRequest::getFromRequest($request);
+//
+//        switch ($data['action']) {
+//            case 'mutualise':
+//                return $this->render('structure/semestre/_mutualise.html.twig', [
+//                    'semestre' => $semestre,
+//                    'parcours' => $parcours
+//                ]);
+//            case 'reutilise':
+//                return $this->render('structure/semestre/_reutilise.html.twig', [
+//                    'semestre' => $semestre,
+//                    'parcours' => $parcours
+//                ]);
+//        }
+//    }
 }

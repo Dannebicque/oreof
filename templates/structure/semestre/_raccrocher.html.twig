@@ -22,7 +22,7 @@
             {% endfor %}
         </select>
     </div>
-    <button class="btn btn-outline-success" {{ stimulus_action('semestre--raccrocher', 'valideReutilise') }}>
+    <button class="btn btn-success" {{ stimulus_action('semestre--raccrocher', 'valideReutilise') }}>
         {{ 'semestre.raccrocher.bouton'|trans({}, 'form') }}
     </button>
     {% if semestre.semestreRaccroche != null %}

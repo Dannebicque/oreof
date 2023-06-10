@@ -1,0 +1,46 @@
+<div
+        {{ stimulus_controller('semestre--manage', {
+            url: path('structure_semestre_changer_ajax', {semestre:semestre.id, parcours: parcours.id})
+        }) }}
+        data-action="semestre--manage:modalHide@window->base#modalHide"
+>
+    <div class="mb-1">
+        <label class="form-label" for="changer">
+            {{ 'semestre.changer.label'|trans({}, 'form') }}
+            <span class="required"></span>
+            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'semestre.changer.helps'|trans({}, 'help') }}"></i>
+        </label>
+        <select id="changer"
+                name="changer"
+                required="required"
+                class="form-select"
+                {{ stimulus_action('semestre--manage', 'changeParcours') }}
+        >
+            <option value="">Choisir un parcours pour déplacer le semestre</option>
+            {% for parcour in formation.parcours %}
+                <option value="{{ parcour.id }}">{{parcour.libelle }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-1">
+        <label class="form-label" for="position">
+            {{ 'semestre.position.label'|trans({}, 'form') }}
+            <span class="required"></span>
+            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'semestre.position.helps'|trans({}, 'help') }}"></i>
+        </label>
+        <select id="position"
+                name="position"
+                required="required"
+                class="form-select"
+                {{ stimulus_action('semestre--manage', 'changePosition') }}
+        >
+            <option value="">Choisir la position du semestre dans le parcours de destination</option>
+            {% for i in 1..6 %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button class="btn btn-success" {{ stimulus_action('semestre--manage', 'valideDeplacer') }}>
+        {{ 'semestre.changer.bouton'|trans({}, 'form') }}
+    </button>
+</div>

@@ -1,0 +1,70 @@
+<div
+        {{ stimulus_controller('semestre--manage', {
+            url: path('structure_semestre_dupliquer_ajax', {semestre:semestre.id, parcours: parcours.id})
+        }) }}
+        data-action="semestre--manage:modalHide@window->base#modalHide"
+>
+    <div class="mb-1">
+        <label class="form-label" for="changer">
+            {{ 'semestre.dupliquer.label'|trans({}, 'form') }}
+            <span class="required"></span>
+            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
+               title="{{ 'semestre.dupliquer.helps'|trans({}, 'help') }}"></i>
+        </label>
+        <select id="changer"
+                name="changer"
+                required="required"
+                class="form-select"
+                {{ stimulus_action('semestre--manage', 'changeParcours') }}
+        >
+            <option value="">Choisir un parcours pour dupliquer le semestre</option>
+            {% for parcour in formation.parcours %}
+                <option value="{{ parcour.id }}">{{ parcour.libelle }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-1">
+        <label class="form-label" for="position">
+            {{ 'semestre.position.label'|trans({}, 'form') }}
+            <span class="required"></span>
+            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
+               title="{{ 'semestre.position.helps'|trans({}, 'help') }}"></i>
+        </label>
+        <select id="position"
+                name="position"
+                required="required"
+                class="form-select"
+                {{ stimulus_action('semestre--manage', 'changePosition') }}
+        >
+            <option value="">Choisir la position du semestre dans le parcours de destination</option>
+            {% for i in 1..6 %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-1">
+        <label class="form-label" for="">
+            {{ 'semestre.fiche_recopie_mutualise.label'|trans({}, 'form') }}
+            <span class="required"></span>
+            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
+               title="{{ 'semestre.fiche_recopie.helps'|trans({}, 'help') }}"></i>
+        </label>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="option" id="recopie" value="recopie">
+            <label class="form-check-label" for="recopie">
+                {{ 'semestre.fiche_recopie.label'|trans({}, 'form') }}
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="option" id="mutualise" value="mutualise">
+            <label class="form-check-label" for="mutualise">
+                {{ 'semestre.fiche_mutualise.label'|trans({}, 'form') }}
+            </label>
+        </div>
+    </div>
+
+    <button class="btn btn-success" {{ stimulus_action('semestre--manage', 'valideDupliquer') }}>
+        {{ 'semestre.dupliquer.bouton'|trans({}, 'form') }}
+    </button>
+</div>
