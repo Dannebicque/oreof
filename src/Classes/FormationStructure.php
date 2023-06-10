@@ -14,14 +14,16 @@ use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\SemestreParcours;
 use App\Entity\Ue;
+use App\Repository\SemestreParcoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class FormationStructure
 {
     public function __construct(
-        protected EntityManagerInterface $entityManager,
-        protected WorkflowInterface $parcoursWorkflow,
+        protected SemestreParcoursRepository $semestreParcoursRepository,
+        protected EntityManagerInterface     $entityManager,
+        protected WorkflowInterface          $parcoursWorkflow,
     ) {
     }
 
@@ -194,6 +196,44 @@ class FormationStructure
 
             $this->entityManager->flush();
         }
+    }
 
+    public function updateStructureDepart(Formation $formation, ?int $semestreInitialDebut, int $semestreNouveauDebut): void
+    {
+        $semestresToDelete = [];
+        $semParc = $this->semestreParcoursRepository->findByParcoursOrdreInferieur($formation, $semestreNouveauDebut);
+        $semestres = $formation->getStructureSemestres();
+
+        // on regarde si on doit supprimer ou ajouter des semestres
+        if ($semestreInitialDebut === null || $semestreInitialDebut > $semestreNouveauDebut) {
+            //on ajoute
+            for ($i = $semestreNouveauDebut; $i < $semestreInitialDebut; $i++) {
+                $semestres[$i] = '';
+            }
+
+            ksort($semestres);
+            $formation->setStructureSemestres($semestres);
+            $this->entityManager->flush();
+        } else {
+            //on supprime
+            for ($i = 0; $i < $semestreNouveauDebut; $i++) {
+                if (array_key_exists($i, $semestres)) {
+                    unset($semestres[$i]);
+                }
+
+                foreach ($semParc as $sp) {
+                    $semestresToDelete[] = $sp->getSemestre();
+                    $this->entityManager->remove($sp);
+                }
+
+                $semestresToDelete = array_unique($semestresToDelete);
+                //supprimer réellement le semestre et les UE ??
+                foreach ($semestresToDelete as $semestre) {
+                    $this->entityManager->remove($semestre);
+                }
+            }
+            $formation->setStructureSemestres($semestres);
+            $this->entityManager->flush();
+        }
     }
 }

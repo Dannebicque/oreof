@@ -22,7 +22,7 @@
             {% endfor %}
         </select>
     </div>
-    <button class="btn btn-outline-success" {{ stimulus_action('ue--raccrocher', 'valideReutilise') }}>
+    <button class="btn btn-success" {{ stimulus_action('ue--raccrocher', 'valideReutilise') }}>
         {{ 'ue.raccrocher.bouton'|trans({}, 'form') }}
     </button>
     {% if ue.ueRaccrochee != null %}

@@ -9,6 +9,7 @@
 
 namespace App\Controller\Structure;
 
+use App\Classes\JsonReponse;
 use App\Classes\UeOrdre;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
@@ -417,5 +418,55 @@ class UeController extends AbstractController
             'parcours' => $parcours,
             'ues' => $ues
         ]);
+    }
+
+    #[
+        Route('/dupliquer/{ue}/{parcours}', name: 'dupliquer')
+    ]
+    public function dupliquer(
+        Ue $ue,
+        Parcours $parcours
+    ): Response {
+        return $this->render('structure/ue/_dupliquer.html.twig', [
+            'ue' => $ue,
+            'parcours' => $parcours,
+            'formation' => $parcours->getFormation()
+        ]);
+    }
+
+    #[
+        Route('/changer/{ue}/{parcours}', name: 'changer')
+    ]
+    public function changer(
+        Ue $ue,
+        Parcours $parcours
+    ): Response {
+        return $this->render('structure/ue/_changer.html.twig', [
+            'ue' => $ue,
+            'parcours' => $parcours,
+            'formation' => $parcours->getFormation()
+        ]);
+    }
+
+    #[
+        Route('/changer-ajax/{ue}/{parcours}', name: 'changer_ajax')
+    ]
+    public function changerAjax(
+        Ue $ue,
+        Parcours $parcours
+    ): Response {
+        //todo: a faire
+        return $this->json((new JsonReponse(Response::HTTP_OK, 'message', []))->getReponse());
+    }
+
+    #[
+        Route('/dupliquer-ajax/{ue}/{parcours}', name: 'dupliquer_ajax')
+    ]
+    public function dupliquerAjax(
+        Ue $ue,
+        Parcours $parcours
+    ): Response {
+        //todo: a faire
+        return $this->json((new JsonReponse(Response::HTTP_OK, 'message', []))->getReponse());
     }
 }

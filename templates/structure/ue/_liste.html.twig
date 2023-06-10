@@ -115,15 +115,6 @@
                                                         <i class="{{ iconEdit }}"></i>
                                                         <span> Modifier l'UE</span>
                                                     </button>
-                                                    <br>
-                                                    {% if typeDiplome.nbUeMax != 0 or ue.ordre > typeDiplome.nbUeMax %}
-                                                        <button {{ stimulus_action('structure--ue', 'delete', 'click', {
-                                                            url:path('structure_ue_delete',{'id': ue.id}),
-                                                            csrf: csrf_token('delete' ~ ue.id)
-                                                        }) }} class="btn btn-sm text-danger" {% if raccroche %}disabled{% endif %}>
-                                                            <i class="{{ iconDelete }}"></i> Supprimer
-                                                        </button>
-                                                    {% endif %}
                                                 {% else %}
                                                     <p class="ms-1">
                                                         UE modifiable uniquement par le parcours {{ ue.ueRaccrochee
@@ -131,53 +122,127 @@
                                                 {% endif %}
                                             </div>
                                             <div class="col-4">
-                                                <button
-                                                        {{ stimulus_controller('modal', {
-                                                            size: 'lg',
-                                                            modalTitle: 'Mutualiser l\'UE ' ~ ue.display,
-                                                            modalUrl:
-                                                            path
-                                                                ('structure_ue_mutualiser', {semestre:semestre.id, ue: ue.id})
-                                                        }) }}
-                                                        data-action="click->modal#openModal"
-                                                        class="btn btn-sm text-quaternary me-1"
-                                                        data-size="lg"
-                                                        {% if raccroche %}disabled{% endif %}
-                                                        data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom"
-                                                        title="Modifier l\'UE {{ ue.display }}"
-                                                >
-                                                    <i class="fal fa-share-nodes"></i>
-                                                    <span> Mutualiser l'UE</span>
-                                                </button>
-                                                <br>
-                                                <button
-                                                        {{ stimulus_controller('modal', {
-                                                            size: 'lg',
-                                                            modalTitle: 'Raccrocher une UE mutualisé pour l\'UE ' ~
-                                                            ue.display,
-                                                            modalUrl: path('structure_ue_raccrocher', {ue:ue.id, parcours: parcours.id})
-                                                        }) }}
-                                                        data-action="click->modal#openModal"
-                                                        class="btn btn-sm text-quaternary me-1"
-                                                        data-size="lg"
-                                                        data-bs-toggle="tooltip"
-                                                        {% if raccroche %}disabled{% endif %}
-                                                        data-bs-placement="bottom"
-                                                        {#                                                title="Modifier le semestre {{ semestre.semestre.display }}" #}
-                                                >
-                                                    <i class="fal fa-down-to-bracket"></i>
-                                                    <span> Raccrocher une UE</span>
-                                                </button>
+                                                <div class="text-muted text-small d-md-none">Autres actions</div>
+                                                <div class="btn-group d-grid">
+                                                    <button class="btn btn-outline-primary btn-sm dropdown-toggle d-block"
+                                                            type="button" id="dropdownMenuClickableInside"
+                                                            data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                            aria-expanded="false" title="Autres opérations">
+                                                        <i class="fas fa-ellipsis-v"></i> Actions
+                                                    </button>
+                                                    <ul class="dropdown-menu"
+                                                        aria-labelledby="dropdownMenuClickableInside">
+                                                        <li>
+                                                            <a
+                                                                    href="#"
+                                                                    {{ stimulus_controller('modal', {
+                                                                        size: 'lg',
+                                                                        modalTitle: 'Dupliquer l\'UE ' ~ ue.display,
+                                                                        modalUrl:
+                                                                        path
+                                                                            ('structure_ue_dupliquer', {parcours:parcours.id, ue: ue.id})
+                                                                    }) }}
+                                                                    data-action="click->modal#openModal"
+                                                                    class="dropdown-item text-primary"
+                                                                    data-size="lg"
+                                                                    {% if raccroche %}disabled{% endif %}
+                                                                    data-bs-toggle="tooltip"
+                                                                    data-bs-placement="bottom"
+                                                                    title="Dupliquer l\'UE {{ ue.display }}"
+                                                            >
+                                                                <i class="{{ iconDuplicate }}"></i>
+                                                                <span> Dupliquer l'UE</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a
+                                                                    href="#"
+                                                                    {{ stimulus_controller('modal', {
+                                                                        size: 'lg',
+                                                                        modalTitle: 'Déplacer l\'UE ' ~ ue.display,
+                                                                        modalUrl:
+                                                                        path
+                                                                            ('structure_ue_changer', {parcours:parcours.id, ue: ue.id})
+                                                                    }) }}
+                                                                    data-action="click->modal#openModal"
+                                                                    class="dropdown-item text-secondary"
+                                                                    data-size="lg"
+                                                                    {% if raccroche %}disabled{% endif %}
+                                                                    data-bs-toggle="tooltip"
+                                                                    data-bs-placement="bottom"
+                                                                    title="Déplacer l\'UE {{ ue.display }}"
+                                                            >
+                                                                <i class="fal fa-right-left"></i>
+                                                                <span> Déplacer l'UE</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a
+                                                                    href="#"
+                                                                    {{ stimulus_controller('modal', {
+                                                                        size: 'lg',
+                                                                        modalTitle: 'Mutualiser l\'UE ' ~ ue.display,
+                                                                        modalUrl:
+                                                                        path
+                                                                            ('structure_ue_mutualiser', {semestre:semestre.id, ue: ue.id})
+                                                                    }) }}
+                                                                    data-action="click->modal#openModal"
+                                                                    class="dropdown-item text-quaternary"
+                                                                    data-size="lg"
+                                                                    {% if raccroche %}disabled{% endif %}
+                                                                    data-bs-toggle="tooltip"
+                                                                    data-bs-placement="bottom"
+                                                                    title="Modifier l\'UE {{ ue.display }}"
+                                                            >
+                                                                <i class="fal fa-share-nodes"></i>
+                                                                <span> Mutualiser l'UE</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a
+                                                                    href="#"
+                                                                    {{ stimulus_controller('modal', {
+                                                                        size: 'lg',
+                                                                        modalTitle: 'Raccrocher une UE mutualisé pour l\'UE ' ~
+                                                                        ue.display,
+                                                                        modalUrl: path('structure_ue_raccrocher', {ue:ue.id, parcours: parcours.id})
+                                                                    }) }}
+                                                                    data-action="click->modal#openModal"
+                                                                    class="dropdown-item text-quaternary"
+                                                                    data-size="lg"
+                                                                    data-bs-toggle="tooltip"
+                                                                    {% if raccroche %}disabled{% endif %}
+                                                                    data-bs-placement="bottom"
+                                                                    {#                                                title="Modifier le semestre {{ semestre.semestre.display }}" #}
+                                                            >
+                                                                <i class="fal fa-down-to-bracket"></i>
+                                                                <span> Raccrocher une UE</span>
+                                                            </a>
+                                                        </li>
+                                                        {% if typeDiplome.nbUeMax != 0 or ue.ordre > typeDiplome.nbUeMax %}
+                                                            <li>
+                                                                <a
+                                                                        href="#"
+                                                                        {{ stimulus_action('structure--ue', 'delete', 'click', {
+                                                                            url:path('structure_ue_delete',{'id': ue.id}),
+                                                                            csrf: csrf_token('delete' ~ ue.id)
+                                                                        }) }}
+                                                                        class="dropdown-item text-danger" {% if raccroche %}disabled{% endif %}>
+                                                                    <i class="{{ iconDelete }}"></i> Supprimer
+                                                                </a>
+                                                            </li>
+                                                        {% endif %}
+                                                    </ul>
+                                                </div>
                                             </div>
-                                            <div class="col-4 text-end mt-2">{# todo: boutons non centrés dans la
-                                            ligne #}
+                                            <div class="col-4 text-end">
                                                 {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)) %} {#  and
                                         (workflow_can(ec,
                                             'valider_parcours') or workflow_can(ec,
                                             'initialiser'))) or (is_granted
                                             ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
                                             'valider_ec')) #}
+
                                                     {% if not loop.first %}
                                                         <button class="btn btn-sm btn-outline-info"
                                                                 {% if raccroche %}disabled{% endif %}
@@ -210,8 +275,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="detail_ue_{{ ue.id }}_{{ parcours.id }}" class="d-none detail_ue"
-                        >
+                        <div id="detail_ue_{{ ue.id }}_{{ parcours.id }}" class="d-none detail_ue">
                             <div class="row" style="margin-left:1px">
                                 <div class="col-12" {{ stimulus_target('structure--ue', 'detail') }}
                                      data-action="base:refreshListeEc@window->structure--ue#refreshListeEc
@@ -443,35 +507,35 @@
                         {% endif %}
                     {% endfor %}
                     {% if raccroche == false %}
-                    <div class="text-divider">
-                        <button class="btn text-success btn-sm"
-                                {{ stimulus_controller('modal', {
-                                    size: 'lg',
-                                    modalTitle: 'Ajouter une UE après l\'' ~ue.displayBouton,
-                                    modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
-                                }) }}
-                                data-action="click->modal#openModal"
-                        >
-                            <i class="{{ iconAdd }}"></i>
-                            Ajouter une UE après l'<strong>{{ ue.displayBouton }}</strong>
-                        </button>
-                    </div>
+                        <div class="text-divider">
+                            <button class="btn text-success btn-sm"
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        modalTitle: 'Ajouter une UE après l\'' ~ue.displayBouton,
+                                        modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
+                                    }) }}
+                                    data-action="click->modal#openModal"
+                            >
+                                <i class="{{ iconAdd }}"></i>
+                                Ajouter une UE après l'<strong>{{ ue.displayBouton }}</strong>
+                            </button>
+                        </div>
                     {% endif %}
                 {% else %}
                     {% if raccroche == false %}
-                    <div class="text-divider">
-                        <button class="btn text-success btn-sm"
-                                {{ stimulus_controller('modal', {
-                                    size: 'lg',
-                                    modalTitle: 'Ajouter une UE',
-                                    modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
-                                }) }}
-                                data-action="click->modal#openModal"
-                        >
-                            <i class="{{ iconAdd }}"></i>
-                            Ajouter une UE
-                        </button>
-                    </div>
+                        <div class="text-divider">
+                            <button class="btn text-success btn-sm"
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        modalTitle: 'Ajouter une UE',
+                                        modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
+                                    }) }}
+                                    data-action="click->modal#openModal"
+                            >
+                                <i class="{{ iconAdd }}"></i>
+                                Ajouter une UE
+                            </button>
+                        </div>
                     {% endif %}
                 {% endfor %}
             </div>

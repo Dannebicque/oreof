@@ -1,5 +1,4 @@
 {% form_theme form 'communs/form_theme.html.twig' %}
-Parcours -{{ parcour.id }}-
 {{ form_start(form) }}
     {{ form_row(form.libelle, {label: texte == 'option' ? 'options.labels.libelle'|trans({}, 'form') : ''}) }}
     {{ form_row(form.respParcours, {label: texte == 'option' ? 'options.labels.respParcours'|trans({}, 'form') : ''}) }}

@@ -60,11 +60,30 @@ class ParcoursController extends AbstractController
         Parcours $parcours
     ): Response
     {
-        $semestres = $semestreRepository->findByParcours($parcours);
+        $formation = $parcours->getFormation();
+        if (null === $formation) {
+            throw $this->createNotFoundException('La formation n\'existe pas');
+        }
+        $typeDiplome = $formation->getTypeDiplome();
+
+        if (null === $typeDiplome) {
+            throw $this->createNotFoundException('Le type de diplôme n\'existe pas');
+        }
+
+        $sems = $semestreRepository->findByParcours($parcours);
+
+        $semestres = [];
+        foreach ($sems as $sem) {
+            $semestres[$sem->getOrdre()] = $sem;
+        }
+
+        $debut = $parcours->getFormation()?->getSemestreDebut();
 
         return $this->render('structure/semestre/_liste.html.twig', [
             'semestres' => $semestres,
             'parcours' => $parcours,
+            'debut' => $debut,
+            'fin' => $typeDiplome->getSemestreFin(),
             'hasParcours' => $parcours->getFormation()?->isHasParcours()
         ]);
     }

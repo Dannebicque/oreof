@@ -85,11 +85,54 @@ export default class extends Controller {
   }
 
   changeSemestreDebut(event) {
-    this._save({
-      field: 'semestreDebut',
-      action: 'int',
-      value: event.target.value,
-    })
+    const sem = parseInt(event.target.dataset.semestredebut, 10)
+
+    if (sem !== event.target.value) {
+      if (confirm('Voulez-vous vraiment modifier le semestre de début des parcours ? Cela  va modifier la structure de votre parcours/formation et peut effacer les semestres caduques/devenus inutiles.')) {
+        if (sem > parseInt(event.target.value, 10)) {
+          const liste = document.getElementById('listeSemestre')
+          // on ajoute
+          let html = ''
+          for (let i = parseInt(event.target.value, 10); i < sem; i++) {
+            html += `<li id="sem_${i}">
+                    <span class="required">Semestre ${i}</span> :
+                        <div class="form-check-inline">
+                            <input type="radio" id="formation_parcours_${i}_tc" name="semestre_${i}" required="required"
+                                class="form-check-input" value="tronc_commun"
+                                 data-action="click->formation--step3#changeSemestre"
+                                 data-formation--step3-semestre-param="${i}"
+                                >
+                                <label class="form-check-label" for="formation_parcours_${i}_tc">Tronc Commun</label>
+                        </div>
+                        <strong class="text-primary me-2">OU</strong>
+                        <div class="form-check-inline">
+                            <input type="radio" id="formation_parcours_${i}_parc" name="semestre_{{ i }}" required="required"
+                                    class="form-check-input" value="parcours" 
+                                    data-action="click->formation--step3#changeSemestre"
+                                    data-formation--step3-semestre-param="${i}">
+                           <label class="form-check-label" for="formation_parcours_${i}_parc">Parcours</label>
+                        </div>
+                 </li>`
+          }
+
+          // ajouter un nouvel élément au début de la liste ul/li
+          liste.insertAdjacentHTML('afterbegin', html)
+        } else {
+          // on supprime
+          for (let i = 0; i < event.target.value; i++) {
+            if (document.getElementById(`sem_${i}`)) {
+              document.getElementById(`sem_${i}`).remove()
+            }
+          }
+        }
+
+        this._save({
+          action: 'semestreDebut',
+          value: event.target.value,
+        })
+        event.target.dataset.semestredebut = event.target.value
+      }
+    }
   }
 
   changeHasParcours(event) {
@@ -120,7 +163,7 @@ export default class extends Controller {
       callOut('Structure générée.', 'success')
       // todo: afficher le lien pour afficher le parcours par défaut
       // rediriger vers le parcours par défaut
-      window.location.href = `${this.urlReloadValue}?step=3`
+      window.location.href = `${this.urlReloadValue} ? step = 3`
     }
   }
 

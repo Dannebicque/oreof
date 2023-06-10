@@ -385,7 +385,7 @@
                                             nomEvenement: 'refreshListeEc',
                                             details: {ue: ue.id, parcours: parcours.id},
                                             modalUrl: path('app_element_constitutif_new_enfant', {ue: ue.id,
-                                                parcours:parcours.id, ec:ec.ecEnfants[0].id})
+                                                parcours:parcours.id, element:ec.ecEnfants[0].id})
                                         }) }}
                                         data-action="click->modal#openModal"
                                 >
@@ -540,7 +540,7 @@
                                                     nomEvenement: 'refreshListeEc',
                                                     details: {ue: ue.id, parcours: parcours.id},
                                                     modalUrl: path('app_element_constitutif_new_enfant', {ue: ue.id,
-                                                        parcours:parcours.id, ec:ece.id})
+                                                        parcours:parcours.id, element:ece.id})
                                                 }) }}
                                                 data-action="click->modal#openModal"
                                         >
@@ -561,7 +561,7 @@
                                         modalTitle: 'Ajouter un élément constitutif',
                                         nomEvenement: 'refreshListeEc',
                                         details: {ue: ue.id, parcours: parcours.id},
-                                        modalUrl: path('app_element_constitutif_new', {ue: ue.id, parcours:parcours.id, ec:ec
+                                        modalUrl: path('app_element_constitutif_new', {ue: ue.id, parcours:parcours.id, element:ec
                                         .id})
                                     }) }}
                                     data-action="click->modal#openModal"
