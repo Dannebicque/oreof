@@ -48,7 +48,7 @@ class UeController extends AbstractController
         Semestre             $semestre,
         Parcours             $parcours,
     ): Response {
-        $raccroche = (bool) $request->query->get('raccroche', false);
+        $raccroche = (bool)$request->query->get('raccroche', false);
         $ues = $ueRepository->findBy(['semestre' => $semestre], ['ordre' => 'ASC']);
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
@@ -175,9 +175,9 @@ class UeController extends AbstractController
             if ($natureUe !== null) {
                 $ue->setNatureUeEc($natureUe);
                 if ($natureUe->isChoix() === true) {
-                    $ue->setSubOrdre(1);//todo: pourquoi????
+                    $ue->setOrdre(1);
                     $ue2 = clone $ue;
-                    $ue2->setSubOrdre(2);
+                    $ue2->setOrdre(2);
                     $ueRepository->save($ue2, true);
                 }
             }
@@ -424,7 +424,7 @@ class UeController extends AbstractController
         Route('/dupliquer/{ue}/{parcours}', name: 'dupliquer')
     ]
     public function dupliquer(
-        Ue $ue,
+        Ue       $ue,
         Parcours $parcours
     ): Response {
         return $this->render('structure/ue/_dupliquer.html.twig', [
@@ -438,7 +438,7 @@ class UeController extends AbstractController
         Route('/changer/{ue}/{parcours}', name: 'changer')
     ]
     public function changer(
-        Ue $ue,
+        Ue       $ue,
         Parcours $parcours
     ): Response {
         return $this->render('structure/ue/_changer.html.twig', [
@@ -452,7 +452,7 @@ class UeController extends AbstractController
         Route('/changer-ajax/{ue}/{parcours}', name: 'changer_ajax')
     ]
     public function changerAjax(
-        Ue $ue,
+        Ue       $ue,
         Parcours $parcours
     ): Response {
         //todo: a faire
@@ -463,7 +463,7 @@ class UeController extends AbstractController
         Route('/dupliquer-ajax/{ue}/{parcours}', name: 'dupliquer_ajax')
     ]
     public function dupliquerAjax(
-        Ue $ue,
+        Ue       $ue,
         Parcours $parcours
     ): Response {
         //todo: a faire
