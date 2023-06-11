@@ -86,6 +86,8 @@ class FormationController extends BaseController
             );
             $formations[] = $formationRepository->findByResponsableOuCoResponsable($this->getUser(),
                 $this->getAnneeUniversitaire(), [$sort => $direction]);
+            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours($this->getUser(),
+                $this->getAnneeUniversitaire(), [$sort => $direction]);
             $formations = array_merge(...$formations);
         }
 
