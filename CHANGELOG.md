@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.18](https://github.com/Dannebicque/oreof/compare/v1.3.17...v1.3.18) (2023-06-11)
+
+
+### Bug Fixes
+
+* SubOrdre des UE ([3b4f897](https://github.com/Dannebicque/oreof/commit/3b4f897ab72b1f57a3c76dede54ef4a6568871ba))
+* Suspension tri par type diplome sur parcours ([7c0550e](https://github.com/Dannebicque/oreof/commit/7c0550e60bee005b92215d1d9bee53c92b54f67b))
+* Typo sur requete ([6028169](https://github.com/Dannebicque/oreof/commit/6028169fcc952376b7eb6d17e8f0f97e6325edc6))
+
 ### [1.3.17](https://github.com/Dannebicque/oreof/compare/v1.3.16...v1.3.17) (2023-06-11)
 
 
