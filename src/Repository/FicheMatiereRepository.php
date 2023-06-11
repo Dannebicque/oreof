@@ -73,6 +73,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
             ->andWhere('fo.anneeUniversitaire = :annee')
             ->setParameter('annee', $anneeUniversitaire)
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id');
@@ -90,6 +91,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
     ): array {
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
+            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
             ->andWhere('fo.anneeUniversitaire = :annee')
             ->andWhere('f.responsableFicheMatiere = :user')
@@ -120,7 +122,6 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 $qb->addOrderBy('u.nom', $direction);
                 $qb->addOrderBy('u.prenom', $direction);
             } elseif ($sort === 'mention') {
-                $qb->leftJoin(Formation::class, 'fo', 'WITH', 'p.formation = fo.id');
                 $qb->leftJoin(Mention::class, 'm', 'WITH', 'fo.mention = m.id');
                 $qb->addOrderBy(
                     'CASE
