@@ -236,7 +236,14 @@ class ElementConstitutif
 
     public function etatStructure(): string
     {
-        $nbHeures = $this->volumeCmPresentiel ?? 0.0 + $this->volumeTdPresentiel ?? 0.0 + $this->volumeTpPresentiel ?? 0.0 + $this->volumeCmDistanciel ?? 0.0 + $this->volumeTdDistanciel ?? 0.0 + $this->volumeTpDistanciel ?? 0.0;
+        $cmPresentiel = $this->volumeCmPresentiel ?? 0.0;
+        $tdPresentiel = $this->volumeTdPresentiel ?? 0.0;
+        $tpPresentiel = $this->volumeTpPresentiel ?? 0.0;
+        $cmDistanciel = $this->volumeCmDistanciel ?? 0.0;
+        $tdDistanciel = $this->volumeTdDistanciel ?? 0.0;
+        $tpDistanciel = $this->volumeTpDistanciel ?? 0.0;
+
+        $nbHeures = $cmPresentiel + $tdPresentiel + $tpPresentiel + $cmDistanciel + $tdDistanciel + $tpDistanciel;
 
         if ($nbHeures === 0.0 && $this->modaliteEnseignement === null) {
             return 'À compléter';
