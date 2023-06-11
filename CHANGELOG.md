@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.17](https://github.com/Dannebicque/oreof/compare/v1.3.16...v1.3.17) (2023-06-11)
+
+
+### Features
+
+* dupliquer/déplacer semestre ([3066b22](https://github.com/Dannebicque/oreof/commit/3066b22025fd9536d9bbfb7956c871cfd33725ba))
+
+
+### Bug Fixes
+
+* affichage du semestre avec le bon numéro ([24f7d5b](https://github.com/Dannebicque/oreof/commit/24f7d5b77f35cb51a6f3ac58f6b82f1d7bf1d443))
+* API URL ([faef85e](https://github.com/Dannebicque/oreof/commit/faef85e4a60fc63f2b1936c2ccd2c8ea62186cc6))
+* elements constitutifs, UE ([edaf986](https://github.com/Dannebicque/oreof/commit/edaf986f8aad04264395c25306cbf392563687fb))
+* Etat structure EC ([cf0d043](https://github.com/Dannebicque/oreof/commit/cf0d043f4cd91b361994294c43896d8ddc1c1d7a))
+* Liste des parcours pour le responsable ([301b909](https://github.com/Dannebicque/oreof/commit/301b909344a950416cb99c76aa6895a6c6fdd8fd))
+
 ### [1.3.16](https://github.com/Dannebicque/oreof/compare/v1.3.15...v1.3.16) (2023-06-09)
 
 
