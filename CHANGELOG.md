@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.19](https://github.com/Dannebicque/oreof/compare/v1.3.18...v1.3.19) (2023-06-14)
+
+
+### Features
+
+* picto si UE/Semestre mutualisée ([bf48167](https://github.com/Dannebicque/oreof/commit/bf48167590ac58af7f8c0bc5e509717f6a27a68b))
+
+
+### Bug Fixes
+
+* modification UX choix vers non choix ([ae45250](https://github.com/Dannebicque/oreof/commit/ae45250fb171ef366f299302ef75042d148e8d4c))
+* modification vers UE à choix ([f1a2190](https://github.com/Dannebicque/oreof/commit/f1a2190e86d3fad2ed8f78765a801de2942360ca))
+
 ### [1.3.18](https://github.com/Dannebicque/oreof/compare/v1.3.17...v1.3.18) (2023-06-11)
 
 
