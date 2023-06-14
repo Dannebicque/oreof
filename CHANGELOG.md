@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.21](https://github.com/Dannebicque/oreof/compare/v1.3.20...v1.3.21) (2023-06-14)
+
+
+### Bug Fixes
+
+* **#2:** Suppression des doublons dans la liste des formations ([7edd67c](https://github.com/Dannebicque/oreof/commit/7edd67c37c62059c053e8a0d87cc210c5409c949)), closes [#2](https://github.com/Dannebicque/oreof/issues/2)
+
 ### [1.3.20](https://github.com/Dannebicque/oreof/compare/v1.3.19...v1.3.20) (2023-06-14)
 
 
