@@ -247,9 +247,14 @@ class UeController extends AbstractController
 
             if ($form->get('natureUeEc')->getData() !== null) {
                 if ($form->get('natureUeEc')->getData()->isChoix() === true) {
-                    $ue->setSubOrdre(1);//todo: Pourquoi??
+                    $ue1 = clone $ue;
+                    $ue1->setUeParent($ue);
+                    $ue1->setOrdre(1);
+                    $ueRepository->save($ue1, true);
+
                     $ue2 = clone $ue;
-                    $ue2->setSubOrdre(2);
+                    $ue2->setUeParent($ue);
+                    $ue2->setOrdre(2);
                     $ueRepository->save($ue2, true);
                 }
             }
