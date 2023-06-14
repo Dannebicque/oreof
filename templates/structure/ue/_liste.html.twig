@@ -49,12 +49,17 @@
                                     <div class="col-md-1 d-flex flex-column justify-content-center">
                                         <div class="text-muted text-small d-md-none">ue</div>
                                         <p>{% if ue.libelle != null %}<abbr title="{{ ue.libelle }}">{% endif %}{{ ue
-                                                .display }}{% if ue.libelle != null %}</abbr>{% endif %} {% if ue
-                                            .ueRaccrochee != null %}
+                                                .display }}{% if ue.libelle != null %}</abbr>{% endif %}
+                                            {% if ue.ueRaccrochee != null %}
                                             <i class="fal fa-link"
                                                data-controller="tooltip"
                                                data-tooltip-placement-value="bottom"
                                                title="Raccrochée à l'UE {{ ue.ueRaccrochee.display }}"></i>{% endif %}
+                                            {% if ue.ueMutualisables|length >0 %}
+                                            <i class="fal fa-share-nodes"
+                                               data-controller="tooltip"
+                                               data-tooltip-placement-value="bottom"
+                                               title="UE mutualisée"></i>{% endif %}
                                         </p>
                                     </div>
                                     <div class="col-md-1 d-flex flex-column justify-content-center">
@@ -215,7 +220,7 @@
                                                                     data-bs-placement="bottom"
                                                                     {#                                                title="Modifier le semestre {{ semestre.semestre.display }}" #}
                                                             >
-                                                                <i class="fal fa-down-to-bracket"></i>
+                                                                <i class="fal fa-link"></i>
                                                                 <span> Raccrocher une UE</span>
                                                             </a>
                                                         </li>

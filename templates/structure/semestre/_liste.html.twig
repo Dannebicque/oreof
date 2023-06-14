@@ -100,7 +100,13 @@
                                                 <i class="fal fa-link"
                                                    data-controller="tooltip"
                                                    data-tooltip-placement-value="bottom"
-                                                   title="Raccrochée au semestre {{ sem.display }}"></i>{% endif %}</p>
+                                                   title="Raccrochée au semestre {{ sem.display }}"></i>{% endif %}
+                                                {% if semestre.semestre.semestreMutualisables|length > 0 %}
+                                                <i class="fal fa-share-nodes"
+                                                   data-controller="tooltip"
+                                                   data-tooltip-placement-value="bottom"
+                                                   title="Semestre mutualisé"></i>{% endif %}
+                                            </p>
                                         </div>
                                         <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                             <div class="text-muted text-small d-md-none">ECTS</div>
@@ -241,7 +247,7 @@
 
                                                                         title="Raccrocher un semestre mutualisé au semestre {{ semestre.semestre.display }}"
                                                                 >
-                                                                    <i class="fal fa-down-to-bracket"></i>
+                                                                    <i class="fal fa-link"></i>
                                                                     <span> Raccrocher un semestre</span>
                                                                 </a>
                                                             </li>
