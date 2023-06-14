@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.20](https://github.com/Dannebicque/oreof/compare/v1.3.19...v1.3.20) (2023-06-14)
+
+
+### Bug Fixes
+
+* **#1:** Champs requis non marqué sur fiche EC /Step1 ([202f41a](https://github.com/Dannebicque/oreof/commit/202f41ac2485bebd403fb12722e1edb6506f5bb8)), closes [#1](https://github.com/Dannebicque/oreof/issues/1)
+
 ### [1.3.19](https://github.com/Dannebicque/oreof/compare/v1.3.18...v1.3.19) (2023-06-14)
 
 
