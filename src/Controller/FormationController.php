@@ -91,8 +91,13 @@ class FormationController extends BaseController
             $formations = array_merge(...$formations);
         }
 
+        $tFormations = [];
+        foreach ($formations as $formation) {
+            $tFormations[$formation->getId()] = $formation;
+        }
+
         return $this->render('formation/_liste.html.twig', [
-            'formations' => $formations,
+            'formations' => $tFormations,
             'sort' => $sort,
             'direction' => $direction
         ]);
