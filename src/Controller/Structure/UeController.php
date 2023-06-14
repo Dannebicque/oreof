@@ -256,6 +256,10 @@ class UeController extends AbstractController
                     $ue2->setUeParent($ue);
                     $ue2->setOrdre(2);
                     $ueRepository->save($ue2, true);
+                } else {
+                    foreach ($ue->getUeEnfants() as $ueEnfant) {
+                        $ueRepository->remove($ueEnfant, true);
+                    }
                 }
             }
 
