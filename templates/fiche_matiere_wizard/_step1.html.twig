@@ -4,7 +4,7 @@
 }) }}>
     {% form_theme form 'communs/form_theme.html.twig' %}
 
-    {{ form_row(form.responsableFicheMatiere) }}
+    {{ form_row(form.responsableFicheMatiere, {required:true}) }}
     <a
             href="#"
             {{ stimulus_controller('modal', {
