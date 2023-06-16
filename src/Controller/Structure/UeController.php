@@ -70,6 +70,7 @@ class UeController extends AbstractController
         Route('/add-ue/semestre/{semestre}/{parcours}', name: 'add_ue_semestre')
     ]
     public function addUe(
+        UeOrdre              $ueOrdre,
         NatureUeEcRepository $natureUeEcRepository,
         TypeUeRepository     $typeUeRepository,
         Request              $request,
@@ -78,6 +79,12 @@ class UeController extends AbstractController
         Parcours             $parcours
     ): Response {
         $ue = new Ue();
+        $ueOrigine = $request->query->get('ue', null);
+        if ($ueOrigine !== null) {
+            $ueOrigine = $ueRepository->find($ueOrigine);
+        }
+        $sens = $request->query->get('sens', 'after');
+
         $ue->setSemestre($semestre);
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
@@ -87,7 +94,8 @@ class UeController extends AbstractController
         $form = $this->createForm(UeType::class, $ue, [
             'action' => $this->generateUrl('structure_ue_add_ue_semestre', [
                 'semestre' => $semestre->getId(),
-                'parcours' => $parcours->getId()
+                'parcours' => $parcours->getId(),
+                'ue' => $ueOrigine ? $ueOrigine->getId() : null,
             ]),
             'typeDiplome' => $typeDiplome,
         ]);
@@ -95,8 +103,22 @@ class UeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $ordre = $ueRepository->getMaxOrdre($semestre);
-            $ue->setOrdre($ordre + 1);
+            if ($ueOrigine !== null && $ueOrigine->getUeParent() !== null) {
+                $ue->setUeParent($ueOrigine->getUeParent());
+                if ($sens === 'after') {
+                    $ordreInit = $ueOrigine->getOrdre();
+                    $ueOrdre->decaleSousOrdre($ueOrigine->getUeParent(), $ueOrigine->getOrdre(), $ue);
+                    $ue->setOrdre($ordreInit);
+
+                } else {
+                    $ordreInit = $ueOrigine->getOrdre();
+                    $ueOrdre->decaleSousOrdre($ueOrigine->getUeParent(), $ueOrigine->getOrdre(), $ue);
+                    $ue->setOrdre($ordreInit);
+                }
+            } else {
+                $ordre = $ueRepository->getMaxOrdre($semestre);
+                $ue->setOrdre($ordre + 1);
+            }
 
             if ($form->get('typeUeTexte')->getData() !== null && $form->get('typeUe')->getData() === null) {
                 $tu = new TypeUe();

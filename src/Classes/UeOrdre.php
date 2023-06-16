@@ -136,7 +136,7 @@ class UeOrdre
         $this->entityManager->flush();
     }
 
-    public function renumeroterUE(?int $ordre, ?Semestre $semestre)
+    public function renumeroterUE(?int $ordre, ?Semestre $semestre): void
     {
         $ues = $this->ueRepository->findBySemestreOrdreAfter($ordre, $semestre);
 
@@ -148,6 +148,16 @@ class UeOrdre
             }
         }
 
+        $this->entityManager->flush();
+    }
+
+    public function decaleSousOrdre(Ue $ueParent, ?int $ordre, Ue $ue): void
+    {
+        foreach ($ueParent->getUeEnfants() as $enfant) {
+            if ($enfant->getOrdre() >= $ordre && $enfant !== $ue) {
+                $enfant->setOrdre($enfant->getOrdre() + 1);
+            }
+        }
         $this->entityManager->flush();
     }
 }

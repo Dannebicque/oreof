@@ -306,7 +306,7 @@
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
                                             modalTitle: 'Ajouter une UE avant l\'' ~uee.displayBouton,
-                                            modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
+                                            modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id, ue: uee.id, sens:'before'})
                                         }) }}
                                         data-action="click->modal#openModal"
                                 >
@@ -501,7 +501,7 @@
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
                                             modalTitle: 'Ajouter une UE après l\'' ~uee.displayBouton,
-                                            modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
+                                            modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id, ue:uee.id})
                                         }) }}
                                         data-action="click->modal#openModal"
                                 >
@@ -517,7 +517,7 @@
                                     {{ stimulus_controller('modal', {
                                         size: 'lg',
                                         modalTitle: 'Ajouter une UE après l\'' ~ue.displayBouton,
-                                        modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id})
+                                        modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id,ue:ue.id})
                                     }) }}
                                     data-action="click->modal#openModal"
                             >
