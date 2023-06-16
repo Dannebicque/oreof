@@ -7,6 +7,7 @@
  */
 
 import { Controller } from '@hotwired/stimulus'
+import callOut from '../../js/callOut';
 
 export default class extends Controller {
   static targets = ['detail']
@@ -26,6 +27,15 @@ export default class extends Controller {
       event.target.firstElementChild.classList.remove('fa-caret-right')
       event.target.firstElementChild.classList.add('fa-caret-down')
     }
+  }
+
+  async deplacerSemestre(event) {
+    event.preventDefault()
+    const { url } = event.params
+    await fetch(url).then(() => {
+      callOut('Semestre déplacé', 'success')
+      this.dispatch('refreshListe')
+    })
   }
 
   async refreshListe(event) {

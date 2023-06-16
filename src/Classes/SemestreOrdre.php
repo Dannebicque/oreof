@@ -10,7 +10,7 @@
 namespace App\Classes;
 
 use App\Entity\Parcours;
-use App\Entity\Semestre;
+use App\Entity\SemestreParcours;
 use App\Repository\SemestreParcoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -22,7 +22,7 @@ class SemestreOrdre
     ) {
     }
 
-    public function deplacerSemestre(Semestre $semestre, Parcours $parcours, string $sens): bool
+    public function deplacerSemestre(SemestreParcours $semestre, Parcours $parcours, string $sens): bool
     {
         //modifie l'ordre de la ressource
         $ordreInitial = $semestre->getOrdre();
@@ -44,7 +44,7 @@ class SemestreOrdre
     private function inverseSemestre(
         ?int $ordreInitial,
         ?int $ordreDestination,
-        Semestre $semestre,
+        SemestreParcours $semestre,
         Parcours $parcours
     ): bool {
         // on inverse les sous-ordres

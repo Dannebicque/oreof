@@ -3,7 +3,9 @@
     urlSave: path('app_parcours_save', {parcours:parcours.id}),
     urlGenereStructure: path('app_formation_genere_structure', {parcours:parcours.id}),
 }) }}
-        data-action="semestre--raccrocher:modalHide@window->parcours--step4#refreshListe semestre--manage:modalHide@window->parcours--step4#refreshListe"
+        data-action="
+        semestre--raccrocher:modalHide@window->parcours--step4#refreshListe semestre--manage:modalHide@window->parcours--step4#refreshListe structure--semestre:refreshListe@window->parcours--step4#refreshListe
+"
 >
     <div class="row">
         <div class="col-4">

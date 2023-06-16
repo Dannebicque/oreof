@@ -2,8 +2,10 @@
     url: path('app_parcours_save', {parcours:parcours.id}),
     urlListe: path('app_bloc_competence_liste_parcours', {parcours:parcours.id})
 }) }}
-        data-action="base:refreshListe@window->parcours--step3#refreshListe
-        base:modalClose@window->parcours--step3#refreshListe"
+        data-action="
+        base:refreshListe@window->parcours--step3#refreshListe
+        base:modalClose@window->parcours--step3#refreshListe
+"
 >
     {% if constant('SOURCE', typeDiplome) != 'but' %}
     <div class="row">

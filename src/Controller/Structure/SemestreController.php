@@ -395,7 +395,7 @@ class SemestreController extends AbstractController
     #[Route('/deplacer/{semestre}/{parcours}/{sens}', name: 'deplacer', methods: ['GET'])]
     public function deplacer(
         SemestreOrdre $semestreOrdre,
-        Semestre      $semestre,
+        SemestreParcours      $semestre,
         Parcours      $parcours,
         string        $sens
     ): Response {
