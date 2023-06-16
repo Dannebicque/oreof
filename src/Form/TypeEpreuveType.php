@@ -25,6 +25,9 @@ class TypeEpreuveType extends AbstractType
             ->add('libelle', TextType::class, [
                 'label' => 'Libellé',
             ])
+            ->add('sigle', TextType::class, [
+                'label' => 'Sigle',
+            ])
             ->add('typeDiplomes', EntityType::class, [
                 'class' =>TypeDiplome::class,
                 'choice_label' => 'libelle',

@@ -31,6 +31,9 @@ class TypeEpreuve
     #[ORM\ManyToMany(targetEntity: TypeDiplome::class, inversedBy: 'typeEpreuves')]
     private Collection $typeDiplomes;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $sigle = null;
+
     public function __construct()
     {
         $this->typeDiplomes = new ArrayCollection();
@@ -85,6 +88,18 @@ class TypeEpreuve
     public function removeTypeDiplome(TypeDiplome $typeDiplome): self
     {
         $this->typeDiplomes->removeElement($typeDiplome);
+
+        return $this;
+    }
+
+    public function getSigle(): ?string
+    {
+        return $this->sigle;
+    }
+
+    public function setSigle(?string $sigle): self
+    {
+        $this->sigle = $sigle;
 
         return $this;
     }
