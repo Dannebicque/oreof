@@ -24,7 +24,7 @@
         <div class="col-4">
             <span>Type d'épreuve</span><br>
             {% if mcccs[1]['et'].typeEpreuve[0] is defined and typeEpreuves[mcccs[1]['et'].typeEpreuve[0]] is defined
-            %}{{ typeEpreuves[mcccs[1]['et'].typeEpreuve[0]].libelle }}{% else %}erreur{% endif %}
+            %}{{ typeEpreuves[mcccs[1]['et'].typeEpreuve[0]].display }}{% else %}erreur{% endif %}
         </div>
     </div>
 </div>
@@ -63,7 +63,7 @@
         <div class="col-4">
             <span>Type d'épreuve</span><br>
             {% if mcccs[2]['et'].typeEpreuve[0] is defined and typeEpreuves[mcccs[2]['et'].typeEpreuve[0]] is defined
-            %}{{ typeEpreuves[mcccs[2]['et'].typeEpreuve[0]].libelle }}{% else %}erreur{% endif %}
+            %}{{ typeEpreuves[mcccs[2]['et'].typeEpreuve[0]].display }}{% else %}erreur{% endif %}
         </div>
     </div>
 </div>

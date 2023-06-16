@@ -37,7 +37,7 @@
                 {% for typeE in typeEpreuves %}
                     <option value="{{ typeE.id }}"
                             {% if mcccs[1]['et'].typeEpreuve[0] is defined and mcccs[1]['et'].typeEpreuve[0] == typeE.id %}selected{% endif %}
-                    >{{ typeE.libelle }}</option>
+                    >{{ typeE.display }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -81,7 +81,7 @@
                 {% for typeE in typeEpreuves %}
                     <option value="{{ typeE.id }}"
                             {% if mcccs[2]['et'].typeEpreuve[0] is defined and mcccs[2]['et'].typeEpreuve[0] == typeE.id %}selected{% endif %}
-                    >{{ typeE.libelle }}</option>
+                    >{{ typeE.display }}</option>
                 {% endfor %}
             </select>
         </div>

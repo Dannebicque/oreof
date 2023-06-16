@@ -103,4 +103,12 @@ class TypeEpreuve
 
         return $this;
     }
+
+    public function display(): string
+    {
+        if ($this->sigle !== null) {
+            return $this->getLibelle() . '(' . $this->getSigle() . ')';
+        }
+        return $this->getLibelle();
+    }
 }
