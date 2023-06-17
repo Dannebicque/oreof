@@ -46,11 +46,9 @@ class FormationStructureController extends BaseController
                 $parcoursOriginal = $parcoursRepository->find(JsonRequest::getValueFromRequest($request, 'value'));
                 $formationStructure->recopieParcours($parcours, $parcoursOriginal);
                 break;
-            case 'reinitialiseStructure':
-                $formationStructure->genereStructre($parcours);
-                break;
             case 'genereStructure':
-                $formationStructure->genereStructre($parcours);
+            case 'reinitialiseStructure':
+                $formationStructure->genereStructure($parcours);
                 break;
         }
 

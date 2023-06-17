@@ -16,6 +16,7 @@ use App\Entity\SemestreParcours;
 use App\Entity\Ue;
 use App\Repository\SemestreParcoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class FormationStructure
@@ -27,31 +28,28 @@ class FormationStructure
     ) {
     }
 
-    /**
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-     */
-    public function genereStructre(Parcours $parcours): void
+    public function genereStructure(Parcours $parcours): void
     {
         $formation = $parcours->getFormation();
         if ($formation === null) {
-            throw new \RuntimeException('La formation n\'est pas définie');
+            throw new RuntimeException('La formation n\'est pas définie');
         }
 
-        $this->genereStructure($formation, $parcours);
+        $this->genereStructureFormation($formation, $parcours);
     }
 
     public function genereStructrePasParcours(Formation $formation): void
     {
-        $this->genereStructure($formation, $formation->getParcours()->first());
+        $this->genereStructureFormation($formation, $formation->getParcours()->first());
     }
 
-    private function genereStructure(Formation $formation, bool|Parcours|null $parcours = null): void
+    private function genereStructureFormation(Formation $formation, bool|Parcours|null $parcours = null): void
     {
         if ($formation->getTypeDiplome() === null) {
-            throw new \RuntimeException('Le type de diplôme n\'est pas défini');
+            throw new RuntimeException('Le type de diplôme n\'est pas défini');
         }
 
-        if ($parcours !== null && $parcours instanceof Parcours) {
+        if ($parcours instanceof Parcours) {
             $this->deleteStructure($parcours);
         }
 
@@ -112,13 +110,13 @@ class FormationStructure
         $tSemestres = [];
 
         //récupérer les semestres de tronc commun existants pour les autres parcours de la formation
-        if ($parcours->getFormation()->isHasParcours() === true) {
+        if ($parcours->getFormation() !== null && $parcours->getFormation()->isHasParcours() === true) {
             foreach ($parcours->getFormation()->getParcours() as $parcoursFormation) {
                 if ($parcoursFormation->getId() !== $parcours->getId()) {
                     foreach ($parcoursFormation->getSemestreParcours() as $semestreParcours) {
                         $semestre = $semestreParcours->getSemestre();
                         if ($semestre !== null && $semestre->isTroncCommun()) {
-                            $tSemestres[$semestre?->getOrdre()] = $semestre;
+                            $tSemestres[$semestre->getOrdre()] = $semestre;
                         }
                     }
                 }
@@ -162,14 +160,14 @@ class FormationStructure
         }
     }
 
-    public function recopieParcours(Parcours $parcours, ?Parcours $parcoursOriginal)
+    public function recopieParcours(Parcours $parcours, ?Parcours $parcoursOriginal): void
     {
-        if ($parcoursOriginal !== null && $parcours !== null && $parcours instanceof Parcours) {
+        if ($parcoursOriginal !== null) {
             $this->deleteStructure($parcours);
         }
 
         foreach ($parcoursOriginal->getSemestreParcours() as $semestreParcour) {
-            if ($semestreParcour->getSemestre()->isTroncCommun()) {
+            if ($semestreParcour->getSemestre()?->isTroncCommun()) {
                 $spNew = new SemestreParcours($semestreParcour->getSemestre(), $parcours);
                 $this->entityManager->persist($spNew);
             } else {
@@ -179,7 +177,7 @@ class FormationStructure
                 $newSp = new SemestreParcours($newSemestre, $parcours);
                 $this->entityManager->persist($newSp);
 
-                foreach ($semestreParcour->getSemestre()->getUes() as $ue) {
+                foreach ($semestreParcour->getSemestre()?->getUes() as $ue) {
                     $newUe = clone $ue;
                     $newUe->setSemestre($newSemestre);
                     $this->entityManager->persist($newUe);

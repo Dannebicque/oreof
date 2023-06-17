@@ -38,11 +38,11 @@
             </div>
             <div>{# class="scroll-out" #}
                 {% for i in debut..fin %}
-                    {% if semestres[i] is not defined %}
-                        <div class="card mb-2 sh-19 sh-md-8 border-danger text-danger"
-                        {{ stimulus_controller('semestre--manage', {
-                            url: path('structure_semestre_init', {parcours: parcours.id}),
-                        }) }}
+                    {% if semestres[i] is not defined or semestres[i].semestre.dispense==false %}
+                        <div class="card mb-2 sh-19 sh-md-8  {% if semestres[i] is not defined %}border-danger text-danger{% endif %}"
+                                {{ stimulus_controller('semestre--manage', {
+                                    url: path('structure_semestre_actions', {parcours: parcours.id}),
+                                }) }}
                         >
                             <div class="card-body pt-0 pb-0 h-100">
                                 <div class="row g-0 h-100 align-content-center">
@@ -50,32 +50,41 @@
                                         <div class="text-muted text-small d-md-none">Semestre</div>
                                         <p>S{{ i }}</p>
                                     </div>
-                                    <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">ECTS</div>
-                                    </div>
-                                    <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Nb UE</div>
-                                    </div>
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Commun ?</div>
-                                    </div>
+                                    {% if semestres[i] is defined and semestres[i].semestre.dispense==false %}
+                                        <div class="col-6 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                            <div class="text-muted text-small d-md-none">ECTS</div>
+                                            <span class="badge bg-info">Semestre non dispensé</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="col-6 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                            <div class="text-muted text-small d-md-none">ECTS</div>
 
-                                    <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Commun ?</div>
-                                    </div>
+                                        </div>
+                                    {% endif %}
 
-                                    <div class="col-6 col-md-1 d-flex flex-column justify-content-center
+                                    <div class="col-6 col-md-7 d-flex flex-column justify-content-center
                                             mb-1 mb-md-0">
-                                        <div class="text-muted text-small d-md-none">Voir les UE</div>
-                                    </div>
-                                    <div class="col-6 col-md-4 d-flex flex-column
-                                           text-end">
                                         <div class="text-muted text-small d-md-none">Actions</div>
-                                        <button class="btn btn-outline-primary"
-                                            {{ stimulus_action('semestre--manage', 'initSemestre', 'click', {
-                                                ordre: i
-                                            }) }}
-                                        >Initialiser le semestre</button>
+                                        <div class="row">
+                                            <div class="col-6 d-grid">
+                                                {% if semestres[i] is not defined %}
+                                                    <button class="btn btn-outline-warning"
+                                                            {{ stimulus_action('semestre--manage', 'semestreNonDispense', 'click', {
+                                                                ordre: i
+                                                            }) }}
+                                                    >Semestre non dispensé
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-6 d-grid">
+                                                <button class="btn btn-outline-primary"
+                                                        {{ stimulus_action('semestre--manage', 'initSemestre', 'click', {
+                                                            ordre: i
+                                                        }) }}
+                                                >Initialiser le semestre
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -102,10 +111,10 @@
                                                    data-tooltip-placement-value="bottom"
                                                    title="Raccrochée au semestre {{ sem.display }}"></i>{% endif %}
                                                 {% if semestre.semestre.semestreMutualisables|length > 0 %}
-                                                <i class="fal fa-share-nodes"
-                                                   data-controller="tooltip"
-                                                   data-tooltip-placement-value="bottom"
-                                                   title="Semestre mutualisé"></i>{% endif %}
+                                                    <i class="fal fa-share-nodes"
+                                                       data-controller="tooltip"
+                                                       data-tooltip-placement-value="bottom"
+                                                       title="Semestre mutualisé"></i>{% endif %}
                                             </p>
                                         </div>
                                         <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">

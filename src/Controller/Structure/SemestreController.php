@@ -85,7 +85,7 @@ class SemestreController extends AbstractController
     }
 
     #[
-        Route('/init/{parcours}', name: 'init')
+        Route('/actions/{parcours}', name: 'actions')
     ]
     public function init(
         EntityManagerInterface     $entityManager,
@@ -94,6 +94,7 @@ class SemestreController extends AbstractController
         Parcours                   $parcours
     ): Response {
         $ordre = JsonRequest::getValueFromRequest($request, 'position');
+        $action = JsonRequest::getValueFromRequest($request, 'action');
         $semestres = $semestreParcoursRepository->findBy([
             'parcours' => $parcours,
             'ordre' => $ordre
@@ -103,16 +104,33 @@ class SemestreController extends AbstractController
             return JsonReponse::error('Le semestre existe déjà');
         }
 
-        $semestre = new Semestre();
-        $semestre->setOrdre($ordre);
-        $entityManager->persist($semestre);
+        switch($action)
+        {
+            case 'init':
+                $semestre = new Semestre();
+                $semestre->setOrdre($ordre);
+                $entityManager->persist($semestre);
 
-        $semestreParcours = new SemestreParcours($semestre, $parcours);
-        $semestreParcours->setOrdre($ordre);
-        $entityManager->persist($semestreParcours);
-        $entityManager->flush();
+                $semestreParcours = new SemestreParcours($semestre, $parcours);
+                $semestreParcours->setOrdre($ordre);
+                $entityManager->persist($semestreParcours);
+                $entityManager->flush();
+                return JsonReponse::success('Semestre ajouté');
+            case 'nonDispense':
+                $semestre = new Semestre();
+                $semestre->setOrdre($ordre);
+                $semestre->setDispense(false);
+                $entityManager->persist($semestre);
 
-        return JsonReponse::success('Semestre ajouté');
+                $semestreParcours = new SemestreParcours($semestre, $parcours);
+                $semestreParcours->setOrdre($ordre);
+                $entityManager->persist($semestreParcours);
+                $entityManager->flush();
+                return JsonReponse::success('Semestre marqué comme non dispensé');
+        }
+
+
+
     }
 
     #[Route('/changer/{semestre}/{parcours}', name: 'changer')]

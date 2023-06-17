@@ -12,6 +12,7 @@ namespace App\Entity;
 use App\Repository\SemestreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SemestreRepository::class)]
@@ -40,6 +41,12 @@ class Semestre
 
     #[ORM\ManyToOne(inversedBy: 'semestres')]
     private ?SemestreMutualisable $semestreRaccroche = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $commentaire = null;
+
+    #[ORM\Column]
+    private ?bool $dispense = true;
 
     public function __construct()
     {
@@ -197,6 +204,30 @@ class Semestre
     public function setSemestreRaccroche(?SemestreMutualisable $semestreRaccroche): self
     {
         $this->semestreRaccroche = $semestreRaccroche;
+
+        return $this;
+    }
+
+    public function getCommentaire(): ?string
+    {
+        return $this->commentaire;
+    }
+
+    public function setCommentaire(?string $commentaire): self
+    {
+        $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function isDispense(): ?bool
+    {
+        return $this->dispense;
+    }
+
+    public function setDispense(bool $dispense): self
+    {
+        $this->dispense = $dispense;
 
         return $this;
     }

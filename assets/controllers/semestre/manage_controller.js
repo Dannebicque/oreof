@@ -55,6 +55,21 @@ export default class extends Controller {
       method: 'POST',
       body: JSON.stringify({
         position: event.params.ordre,
+        action: 'init',
+      }),
+    }
+    fetch(this.urlValue, body).then((response) => {
+      JsonResponse(response)
+      this.dispatch('modalHide')
+    })
+  }
+
+  semestreNonDispense(event) {
+    const body = {
+      method: 'POST',
+      body: JSON.stringify({
+        position: event.params.ordre,
+        action: 'nonDispense',
       }),
     }
     fetch(this.urlValue, body).then((response) => {
