@@ -44,7 +44,7 @@ class BlocCompetenceController extends AbstractController
 
         if ($parcours === null) {
             return $this->render('bloc_competence/_liste.html.twig', [
-                'bloc_competences' => $blocCompetenceRepository->findBy(['parcours' => null]),
+                'bloc_competences' => $blocCompetenceRepository->findBy(['parcours' => null], ['ordre' => 'ASC']),
             ]);
         }
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());

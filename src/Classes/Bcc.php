@@ -86,7 +86,7 @@ class Bcc
     {
         $sae = $this->blocCompetenceRepository->findOneBy([
             'ordre' => $ordreDestination,
-            'parcours' => $blocCompetence->getParcours()->getId()
+            'parcours' => $blocCompetence->getParcours()?->getId()
         ]);
         $blocCompetence->setOrdre($ordreDestination);
         $blocCompetence->genereCode();

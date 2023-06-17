@@ -117,12 +117,10 @@ class MutualiseController extends AbstractController
     }
 
     #[Route('/4', name: 'step4')]
-    public function step4(BlocCompetenceRepository $blocCompetenceRepository): Response
+    public function step4(): Response
     {
-        $bccs = $blocCompetenceRepository->findBy(['parcours' => null]);
 
         return $this->render('mutualise_wizard/_step4.html.twig', [
-            'bloc_competences' => $bccs
         ]);
     }
 }
