@@ -18,20 +18,33 @@ export default class extends Controller {
 
   static debounces = ['rechercher'];
 
+  fields = {}
+
   connect() {
     useDebounce(this)
     this._updateListe()
   }
 
+  filter(event) {
+    if (event.target.value === '') {
+      delete this.fields[event.params.field]
+    } else {
+      this.fields[event.params.field] = event.target.value
+    }
+    this._updateListe(this.fields)
+  }
+
   rechercher(event) {
     event.preventDefault()
-    this._updateListe({ q: event.target.value })
+    this.fields.q = event.target.value
+    this._updateListe(this.fields)
   }
 
   effaceFiltre(event) {
     event.preventDefault()
+    this.fields = {}
     document.getElementById('filtre_crud').value = ''
-    this._updateListe()
+    this._updateListe(this.fields)
   }
 
   delete(event) {
@@ -83,6 +96,8 @@ export default class extends Controller {
   }
 
   sort(event) {
-    this._updateListe(event.params)
+    this.fields.sort = event.params.sort
+    this.fields.direction = event.params.direction
+    this._updateListe(this.fields)
   }
 }

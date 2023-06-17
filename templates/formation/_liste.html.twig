@@ -1,7 +1,8 @@
 {# todo: reprendre cette page comme le bilan des formations pour le SES, DPE ou Admin avec état, remplissage et
 bouton pour valider/invalide les étapes successives #}
 <div {{ stimulus_controller('structure--formation') }}>
-
+    {% set sort = params.sort is defined ? params.sort : 'typeDiplome'  %}
+    {% set direction = params.direction is defined ? params.direction : 'asc' %}
 
     <table class="table">
         <thead>
@@ -14,7 +15,6 @@ bouton pour valider/invalide les étapes successives #}
                         }) }}
                 >
                     Composante
-
                     {{ displaySort('composantePorteuse', sort, direction) }}
                 </a>
             </th>
@@ -26,7 +26,6 @@ bouton pour valider/invalide les étapes successives #}
                         }) }}
                 >
                     Type de formation
-
                     {{ displaySort('typeDiplome', sort, direction) }}
                 </a>
             </th>
@@ -46,6 +45,75 @@ bouton pour valider/invalide les étapes successives #}
             <th>Remplissage</th>
             <th></th>
         </tr>
+        {% if is_granted('ROLE_SES') %}
+            <tr>
+                <th>
+                    <label for="filter-composante" class="sr-only">Composante</label>
+                    <select
+                            {{ stimulus_action('crud', 'filter', 'change', {
+                                'field': 'composantePorteuse'
+                            }) }}
+                            id="filter-composante"
+                            {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                            class="form-select">
+                        <option value="">Toutes les composantes</option>
+                        {% for composante in composantes %}
+                            <option value="{{ composante.id }}"
+                            {% if params['composantePorteuse'] is defined and params['composantePorteuse']  == composante.id %}selected{% endif %}
+                            >{{ composante.libelle }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <label for="filter-type_formation" class="sr-only">type formation</label>
+                    <select
+                            {{ stimulus_action('crud', 'filter', 'change', {
+                                'field': 'typeDiplome'
+                            }) }}
+                            {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                            id="filter-type_formation" class="form-select">
+                        <option value="">Tous les types de formation</option>
+                        {% for type in typeDiplomes %}
+                            <option value="{{ type.id }}"
+                                    {% if params['typeDiplome'] is defined and params['typeDiplome']  == type.id %}selected{% endif %}
+                            >{{ type.libelle }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <label for="filter-mention" class="sr-only">mention</label>
+                    <select
+                            {{ stimulus_action('crud', 'filter', 'change', {
+                                'field': 'mention'
+                            }) }}
+                            id="filter-mention" class="form-select"></select>
+                </th>
+                <th>
+                    <label for="filter-etat" class="sr-only">etat</label>
+                    <select
+                            {{ stimulus_action('crud', 'filter', 'change', {
+                                'field': 'etat'
+                            }) }}
+                            id="filter-etat" class="form-select"></select>
+                </th>
+                <th>
+                    <label for="filter-remplissage" class="sr-only">remplissage</label>
+                    <select
+                            {{ stimulus_action('crud', 'filter', 'change', {
+                                'field': 'remplissage'
+                            }) }}
+                            id="filter-remplissage" class="form-select"></select>
+                </th>
+                <th>
+                    <button class="btn btn-outline-danger"
+                            {{ stimulus_action('crud', 'effaceFiltre', 'click', {
+                            }) }}
+                    >
+                        Effacer les filtres
+                    </button>
+                </th>
+            </tr>
+        {% endif %}
         </thead>
         <tbody>
         {% for formation in formations %}
@@ -77,8 +145,8 @@ bouton pour valider/invalide les étapes successives #}
                 <td class="text-end">
                     {% if formation.hasParcours and formation.parcours|length > 0 %}
                         <button class="btn btn-sm btn-outline-primary"
-                        {{ stimulus_action('structure--formation', 'afficherParcours', 'click',
-                            {formation:formation.id}) }}
+                                {{ stimulus_action('structure--formation', 'afficherParcours', 'click',
+                                    {formation:formation.id}) }}
                         >
                             <i class="fal fa-caret-right"></i>
                             Voir les parcours ({{ formation.parcours|length }})

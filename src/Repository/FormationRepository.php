@@ -84,43 +84,15 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByAdmin(
-        AnneeUniversitaire $anneeUniversitaire,
-        array              $sorts = []
-    ): array {
-        $query = $this->createQueryBuilder('f')
-            ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire);
-
-        foreach ($sorts as $sort => $direction) {
-            if ($sort === 'mention') {
-                $query->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id');
-                $sort = 'm.libelle';
-                $query->addOrderBy(
-                    'CASE
-                            WHEN f.mention IS NOT NULL THEN m.libelle
-                            WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
-                            ELSE f.mentionTexte
-                            END',
-                    $direction
-                );
-            } else {
-                $query->addOrderBy('f.' . $sort, $direction);
-            }
-        }
-
-        return $query->getQuery()
-            ->getResult();
-    }
-
     public function findBySearch(
         string|null        $q,
         AnneeUniversitaire $anneeUniversitaire,
-        string|null        $sort,
-        string|null        $direction,
+        array              $options = [],
         Composante|null    $composante = null,
-    ) {
+    ): array {
+        $sort = $options['sort'] ?? 'typeDiplome';
+        $direction = $options['direction'] ?? 'ASC';
+
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
             ->where('f.anneeUniversitaire = :anneeUniversitaire')
@@ -129,6 +101,32 @@ class FormationRepository extends ServiceEntityRepository
             ->setParameter('q', '%' . $q . '%')
             ->orderBy('f.' . $sort, $direction);
 
+        if (array_key_exists('typeDiplome', $options) && null !== $options['typeDiplome']) {
+            $query->andWhere('f.typeDiplome = :typeDiplome')
+                ->setParameter('typeDiplome', $options['typeDiplome']);
+        }
+
+        if (array_key_exists('mention', $options) && null !== $options['mention']) {
+            $query->andWhere('f.mention = :mention')
+                ->setParameter('mention', $options['mention']);
+        }
+
+        if (array_key_exists('composantePorteuse', $options) && null !== $options['composantePorteuse']) {
+            $query->andWhere('f.composantePorteuse = :composante')
+                ->setParameter('composante', $options['composantePorteuse']);
+        }
+
+        if ($sort === 'mention') {
+            $query->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id');
+            $query->addOrderBy(
+                'CASE
+                            WHEN f.mention IS NOT NULL THEN m.libelle
+                            WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
+                            ELSE f.mentionTexte
+                            END',
+                $direction
+            );
+        }
 
         if ($composante !== null) {
             $query->andWhere('f.composantePorteuse = :composante')
@@ -151,7 +149,6 @@ class FormationRepository extends ServiceEntityRepository
         foreach ($sorts as $sort => $direction) {
             if ($sort === 'mention') {
                 $query->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id');
-                $sort = 'm.libelle';
                 $query->addOrderBy(
                     'CASE
                             WHEN f.mention IS NOT NULL THEN m.libelle
@@ -169,7 +166,7 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByComposante($composante, AnneeUniversitaire $anneeUniversitaire, array $sorts): array
+    public function findByComposante(Composante $composante, AnneeUniversitaire $anneeUniversitaire, array $sorts): array
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
@@ -181,7 +178,6 @@ class FormationRepository extends ServiceEntityRepository
         foreach ($sorts as $sort => $direction) {
             if ($sort === 'mention') {
                 $query->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id');
-                $sort = 'm.libelle';
                 $query->addOrderBy(
                     'CASE
                             WHEN f.mention IS NOT NULL THEN m.libelle
@@ -212,7 +208,6 @@ class FormationRepository extends ServiceEntityRepository
         foreach ($sorts as $sort => $direction) {
             if ($sort === 'mention') {
                 $query->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id');
-                $sort = 'm.libelle';
                 $query->addOrderBy(
                     'CASE
                             WHEN f.mention IS NOT NULL THEN m.libelle

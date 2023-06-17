@@ -18,6 +18,7 @@ use App\Entity\UserCentre;
 use App\Events\AddCentreFormationEvent;
 use App\Form\FormationDemandeType;
 use App\Form\FormationSesType;
+use App\Repository\ComposanteRepository;
 use App\Repository\DomaineRepository;
 use App\Repository\FormationRepository;
 use App\Repository\MentionRepository;
@@ -43,8 +44,10 @@ class FormationController extends BaseController
 
     #[Route('/liste', name: 'app_formation_liste', methods: ['GET'])]
     public function liste(
-        FormationRepository $formationRepository,
-        Request $request
+        ComposanteRepository  $composanteRepository,
+        TypeDiplomeRepository $typeDiplomeRepository,
+        FormationRepository   $formationRepository,
+        Request               $request
     ): Response {
         $sort = $request->query->get('sort') ?? 'typeDiplome';
         $direction = $request->query->get('direction') ?? 'asc';
@@ -54,14 +57,7 @@ class FormationController extends BaseController
             $this->isGranted('ROLE_SES') ||
             $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            if ($q) {
-                $formations = $formationRepository->findBySearch($q, $this->getAnneeUniversitaire(), $sort, $direction);
-            } else {
-                $formations = $formationRepository->findByAdmin(
-                    $this->getAnneeUniversitaire(),
-                    [$sort => $direction]
-                );
-            }
+            $formations = $formationRepository->findBySearch($q, $this->getAnneeUniversitaire(), $request->query->all());
         } else {
             $formations = [];
 
@@ -84,10 +80,16 @@ class FormationController extends BaseController
                 $this->getAnneeUniversitaire(),
                 [$sort => $direction]
             );
-            $formations[] = $formationRepository->findByResponsableOuCoResponsable($this->getUser(),
-                $this->getAnneeUniversitaire(), [$sort => $direction]);
-            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours($this->getUser(),
-                $this->getAnneeUniversitaire(), [$sort => $direction]);
+            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
+                $this->getUser(),
+                $this->getAnneeUniversitaire(),
+                [$sort => $direction]
+            );
+            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
+                $this->getUser(),
+                $this->getAnneeUniversitaire(),
+                [$sort => $direction]
+            );
             $formations = array_merge(...$formations);
         }
 
@@ -98,16 +100,17 @@ class FormationController extends BaseController
 
         return $this->render('formation/_liste.html.twig', [
             'formations' => $tFormations,
-            'sort' => $sort,
-            'direction' => $direction
+            'composantes' => $composanteRepository->findAll(),
+            'typeDiplomes' => $typeDiplomeRepository->findAll(),
+            'params' => $request->query->all()
         ]);
     }
 
     #[Route('/liste/{composante}', name: 'app_formation_liste_composante', methods: ['GET'])]
     public function listeComposante(
         FormationRepository $formationRepository,
-        Composante $composante,
-        Request $request
+        Composante          $composante,
+        Request             $request
     ): Response {
         $sort = $request->query->get('sort') ?? 'typeDiplome';
         $direction = $request->query->get('direction') ?? 'asc';
@@ -139,11 +142,11 @@ class FormationController extends BaseController
 
     #[Route('/demande', name: 'app_formation_demande_new', methods: ['GET', 'POST'])]
     public function demande(
-        RoleRepository $roleRepository,
-        MentionRepository $mentionRepository,
+        RoleRepository       $roleRepository,
+        MentionRepository    $mentionRepository,
         UserCentreRepository $userCentreRepository,
-        Request $request,
-        FormationRepository $formationRepository
+        Request              $request,
+        FormationRepository  $formationRepository
     ): Response {
         $formationDemande = new FormationDemande();
         $form = $this->createForm(FormationDemandeType::class, $formationDemande, [
@@ -153,9 +156,9 @@ class FormationController extends BaseController
 
         if ($form->isSubmitted()) {
             if (array_key_exists(
-                    'mention',
-                    $request->request->all()['formation_ses']
-                ) && $request->request->all()['formation_ses']['mention'] !== null && $request->request->all()['formation_ses']['mention'] !== 'autre') {
+                'mention',
+                $request->request->all()['formation_ses']
+            ) && $request->request->all()['formation_ses']['mention'] !== null && $request->request->all()['formation_ses']['mention'] !== 'autre') {
                 $mention = $mentionRepository->find($request->request->all()['formation_ses']['mention']);
                 $formation->setMentionTexte(null);
                 $formation->setMention($mention);
@@ -189,11 +192,11 @@ class FormationController extends BaseController
 
     #[Route('/new', name: 'app_formation_new', methods: ['GET', 'POST'])]
     public function new(
-        RoleRepository $roleRepository,
-        MentionRepository $mentionRepository,
+        RoleRepository       $roleRepository,
+        MentionRepository    $mentionRepository,
         UserCentreRepository $userCentreRepository,
-        Request $request,
-        FormationRepository $formationRepository
+        Request              $request,
+        FormationRepository  $formationRepository
     ): Response {
         $this->denyAccessUnlessGranted('CAN_FORMATION_CREATE_ALL', $this->getUser());
 
@@ -242,11 +245,11 @@ class FormationController extends BaseController
     #[Route('/edit/formation/{formation}', name: 'app_formation_edit_modal', methods: ['GET', 'POST'])]
     public function editModal(
         EventDispatcherInterface $eventDispatcher,
-        EntityManagerInterface $entityManager,
-        MentionRepository $mentionRepository,
-        Request $request,
-        FormationRepository $formationRepository,
-        Formation $formation
+        EntityManagerInterface   $entityManager,
+        MentionRepository        $mentionRepository,
+        Request                  $request,
+        FormationRepository      $formationRepository,
+        Formation                $formation
     ): Response {
         $form = $this->createForm(FormationSesType::class, $formation, [
             'action' => $this->generateUrl('app_formation_edit_modal', ['formation' => $formation->getId()]),
@@ -292,10 +295,10 @@ class FormationController extends BaseController
      */
     #[Route('/api', name: 'app_formation_api', methods: ['GET'])]
     public function api(
-        MentionRepository $mentionRepository,
+        MentionRepository     $mentionRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
-        DomaineRepository $domaineRepository,
-        Request $request
+        DomaineRepository     $domaineRepository,
+        Request               $request
     ): Response {
         $domaine = $domaineRepository->find($request->query->get('domaine'));
 
@@ -333,10 +336,10 @@ class FormationController extends BaseController
      */
     #[Route('/{id}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
     public function edit(
-        ParcoursState $parcoursState,
-        FormationState $formationState,
-        Request $request,
-        Formation $formation,
+        ParcoursState       $parcoursState,
+        FormationState      $formationState,
+        Request             $request,
+        Formation           $formation,
         TypeDiplomeRegistry $typeDiplomeRegistry
     ): Response {
         //todo: tester les droits et si on est en place "en_cours_redaction" => voter
@@ -359,9 +362,9 @@ class FormationController extends BaseController
     #[Route('/{id}', name: 'app_formation_delete', methods: ['DELETE'])]
     public function delete(
         EntityManagerInterface $entityManager,
-        Request $request,
-        Formation $formation,
-        FormationRepository $formationRepository
+        Request                $request,
+        Formation              $formation,
+        FormationRepository    $formationRepository
     ): Response {
         if ($this->isCsrfTokenValid(
             'delete' . $formation->getId(),
