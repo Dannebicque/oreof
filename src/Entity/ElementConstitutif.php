@@ -81,7 +81,7 @@ class ElementConstitutif
     #[ORM\Column]
     private ?int $ordre = null;
 
-    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
+    #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
     private ?FicheMatiere $ficheMatiere = null;
 
     #[ORM\ManyToOne()]
