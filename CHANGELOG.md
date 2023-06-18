@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.22](https://github.com/Dannebicque/oreof/compare/v1.3.21...v1.3.22) (2023-06-18)
+
+
+### Features
+
+* Affichage du sigle du type d'épreuve ([c808e60](https://github.com/Dannebicque/oreof/commit/c808e609ae7cc6970c77bdd873f4a0863d3fb793))
+* Ajout du sigle pour le type d'épreuve ([c6ee635](https://github.com/Dannebicque/oreof/commit/c6ee6357ca6a786266cd4aed41f7680950f58831))
+* Filtres sur la liste des formations ([86518b1](https://github.com/Dannebicque/oreof/commit/86518b1b3e3e630ac2b2bb6832e5eb02b3ed2eda))
+* Insertion UE enfants ([32e6a09](https://github.com/Dannebicque/oreof/commit/32e6a096f2a797349830ca45af45e83f25d12b3c))
+* Marquer un semestre comme non proposé ([ed6de7e](https://github.com/Dannebicque/oreof/commit/ed6de7e00fd9dce7f480916e92cb8434be1002eb))
+* Monter/descendre semestre sur structure ([30bbe63](https://github.com/Dannebicque/oreof/commit/30bbe63b4c8c1bdc6536bfac815c7c454c59b9ed))
+
+
+### Bug Fixes
+
+* déplacer/dupliquer semestre ([7438b54](https://github.com/Dannebicque/oreof/commit/7438b5451cb9a576c46f7dc31adae839cc80dc0b))
+* liste des parcours mutualisés ([1e0a03c](https://github.com/Dannebicque/oreof/commit/1e0a03c21294f7ad926d6c0a41ee48be5111e442))
+* Ordre des BCC sur mutualisé ([d00c76c](https://github.com/Dannebicque/oreof/commit/d00c76ced6799afee1724e7e71e421175c278ae7))
+* ordre Semestre/UE dans l'affichage de la structure ([c08654f](https://github.com/Dannebicque/oreof/commit/c08654f6a0e828287f78a945a877d2a8287c7418))
+
 ### [1.3.21](https://github.com/Dannebicque/oreof/compare/v1.3.20...v1.3.21) (2023-06-14)
 
 
