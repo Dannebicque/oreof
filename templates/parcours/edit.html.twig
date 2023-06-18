@@ -33,6 +33,15 @@
 {% endblock %}
 
 {% block bouton_header %}
+    <a href="{{ path('app_parcours_show', {id:parcours.id}) }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Voir le parcours"
+    >
+        <i class="{{ iconShow }}"></i>
+        <span> Voir le parcours</span>
+    </a>
     <a href="{{ path('app_formation_edit', {id:formation.id}) }}"
        class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"
