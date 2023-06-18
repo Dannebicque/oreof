@@ -39,6 +39,7 @@ class Ue
         'persist',
         'remove'
     ], orphanRemoval: true)]
+    #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $elementConstitutifs;
 
     #[ORM\Column(length: 255, nullable: true)]

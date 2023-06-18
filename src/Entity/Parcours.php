@@ -99,6 +99,7 @@ class Parcours
     private ?RythmeFormation $rythmeFormation = null;
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: SemestreParcours::class, cascade: ['persist', 'remove'])]
+    #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $semestreParcours;
 
     #[ORM\ManyToOne]
@@ -455,7 +456,6 @@ class Parcours
 
     public function remplissage(): float
     {
-
         return $this->remplissageBrut() / 10 * 100;
     }
 
@@ -525,6 +525,12 @@ class Parcours
 
     public function getRegimeInscription(): array
     {
+        if (count($this->regimeInscription) === 0) {
+            if (count($this->getFormation()?->getRegimeInscription()) !== 0) {
+                return $this->getFormation()?->getRegimeInscription();
+            }
+        }
+
         $t = [];
         foreach ($this->regimeInscription as $value) {
             $t[] = RegimeInscriptionEnum::from($value);
