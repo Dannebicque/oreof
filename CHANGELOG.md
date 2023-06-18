@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.25](https://github.com/Dannebicque/oreof/compare/v1.3.24...v1.3.25) (2023-06-18)
+
+
+### Bug Fixes
+
+* affichage semestre non dispensé ([ce5b18d](https://github.com/Dannebicque/oreof/commit/ce5b18d0c6a46ab72217ab4f9544feec60c7568c))
+
 ### [1.3.24](https://github.com/Dannebicque/oreof/compare/v1.3.23...v1.3.24) (2023-06-18)
 
 
