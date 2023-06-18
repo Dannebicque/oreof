@@ -253,3 +253,8 @@ role.helps.onlyAdmin.help: "Indiquez si ce rôle est uniquement disponible si l'
 role.helps.centre: 'Préciser quelles sont les centres qui peuvent utiliser ce rôle'
 role.helps.centre.help: 'Préciser quelles sont les centres qui peuvent utiliser ce rôle'
 ec_step4.helps.volumeTe: ''
+semestre.changer.helps: semestre.changer.helps
+semestre.position.helps: semestre.position.helps
+semestre.dupliquer.helps: semestre.dupliquer.helps
+semestre.fiche_recopie.helps: semestre.fiche_recopie.helps
+semestre.fiche_mutualise.helps: semestre.fiche_mutualise.helps

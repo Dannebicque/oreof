@@ -313,4 +313,12 @@ role.labels.onlyAdmin.label: 'Rôle uniquement utilisable en admin ?'
 role.labels.centre: 'Centre(s) pour ce rôle'
 role.labels.centre.label: 'Centre(s) pour ce rôle'
 Charleville-Mézières: Charleville-Mézières
-ec_step4.labels.volumeTe: Volume horaire TE (stage, projet, autonomie, ...)
+ec_step4.labels.volumeTe: 'Volume horaire TE (stage, projet, autonomie, ...)'
+semestre.changer.label: Choisir le parcours dans lequel déplacer le semestre
+semestre.position.label: Position du semestre dans le parcours de destination
+semestre.changer.bouton: Déplacer le semestre
+semestre.dupliquer.label: Choisir le parcours dans lequel dupliquer le semestre
+semestre.dupliquer.bouton: Dupliquer le semestre
+semestre.fiche_recopie.label: Dupliquer en recopiant les fiches EC/matières (permet une modification dans chaque parcours)
+semestre.fiche_mutualise.label: Dupliquer en mutualisant les fiches EC/matières (les éléments seront liés sur les deux parcours, toutes les modifications seront répercutées)
+semestre.fiche_recopie_mutualise.label: Précisez si vous souhaitez recopier ou mutualiser les fiches EC/matières

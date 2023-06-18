@@ -46,7 +46,7 @@ class Semestre
     private ?string $commentaire = null;
 
     #[ORM\Column]
-    private ?bool $dispense = true;
+    private ?bool $nonDispense = false;
 
     public function __construct()
     {
@@ -220,14 +220,14 @@ class Semestre
         return $this;
     }
 
-    public function isDispense(): ?bool
+    public function isNonDispense(): ?bool
     {
-        return $this->dispense;
+        return $this->nonDispense;
     }
 
-    public function setDispense(bool $dispense): self
+    public function setNonDispense(bool $nonDispense): self
     {
-        $this->dispense = $dispense;
+        $this->nonDispense = $nonDispense;
 
         return $this;
     }

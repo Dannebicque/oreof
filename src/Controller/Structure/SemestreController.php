@@ -119,7 +119,7 @@ class SemestreController extends AbstractController
             case 'nonDispense':
                 $semestre = new Semestre();
                 $semestre->setOrdre($ordre);
-                $semestre->setDispense(false);
+                $semestre->setNonDispense(true);
                 $entityManager->persist($semestre);
 
                 $semestreParcours = new SemestreParcours($semestre, $parcours);
@@ -221,6 +221,12 @@ class SemestreController extends AbstractController
                 $sem = $semestreDest->getSemestre();
                 if ($sem !== null) {
                     if ($sem->getSemestreParcours()->count() === 1) {
+                        foreach ($sem->getUes() as $ue) {
+                            foreach ($ue->getElementConstitutifs() as $ec) {
+                                $entityManager->remove($ec);
+                            }
+                            $entityManager->remove($ue);
+                        }
                         //donc uniquement mon parcours, on peut supprimer le semestre et sa structure
                         $entityManager->remove($sem);
                         $entityManager->flush();
