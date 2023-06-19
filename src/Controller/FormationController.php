@@ -100,8 +100,8 @@ class FormationController extends BaseController
 
         return $this->render('formation/_liste.html.twig', [
             'formations' => $tFormations,
-            'composantes' => $composanteRepository->findAll(),
-            'typeDiplomes' => $typeDiplomeRepository->findAll(),
+            'composantes' => $composanteRepository->findBy([], ['libelle' => 'ASC']),
+            'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
             'params' => $request->query->all()
         ]);
     }

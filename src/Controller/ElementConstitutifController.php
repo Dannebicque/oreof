@@ -46,11 +46,11 @@ class ElementConstitutifController extends AbstractController
     #[Route('/type-ec/{ue}/{parcours}', name: 'app_element_constitutif_type_ec', methods: ['GET'])]
     public function typeEc(
         ElementConstitutifRepository $elementConstitutifRepository,
-        Request $request,
-        FicheMatiereRepository $ficheMatiereRepository,
-        NatureUeEcRepository $natureUeEcRepository,
-        Ue $ue,
-        Parcours $parcours
+        Request                      $request,
+        FicheMatiereRepository       $ficheMatiereRepository,
+        NatureUeEcRepository         $natureUeEcRepository,
+        Ue                           $ue,
+        Parcours                     $parcours
     ): Response {
         if ($request->query->has('ec')) {
             $ec = $elementConstitutifRepository->find($request->query->get('ec'));
@@ -88,14 +88,14 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/new/{ue}/{parcours}', name: 'app_element_constitutif_new', methods: ['GET', 'POST'])]
     public function new(
-        EcOrdre $ecOrdre,
-        Request $request,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
-        TypeEcRepository $typeEcRepository,
-        FicheMatiereRepository $ficheMatiereRepository,
+        EcOrdre                      $ecOrdre,
+        Request                      $request,
+        TypeDiplomeRegistry          $typeDiplomeRegistry,
+        TypeEcRepository             $typeEcRepository,
+        FicheMatiereRepository       $ficheMatiereRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
-        Ue $ue,
-        Parcours $parcours
+        Ue                           $ue,
+        Parcours                     $parcours
     ): Response {
         $elementConstitutif = new ElementConstitutif();
         $elementConstitutif->setFicheMatiere(null);
@@ -206,14 +206,14 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/new-enfant/{ue}/{parcours}', name: 'app_element_constitutif_new_enfant', methods: ['GET', 'POST'])]
     public function newEnfant(
-        EcOrdre $ecOrdre,
-        Request $request,
-        TypeDiplomeRegistry $typeDiplomeRegistry,
-        TypeEcRepository $typeEcRepository,
-        FicheMatiereRepository $ficheMatiereRepository,
+        EcOrdre                      $ecOrdre,
+        Request                      $request,
+        TypeDiplomeRegistry          $typeDiplomeRegistry,
+        TypeEcRepository             $typeEcRepository,
+        FicheMatiereRepository       $ficheMatiereRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
-        Ue $ue,
-        Parcours $parcours
+        Ue                           $ue,
+        Parcours                     $parcours
     ): Response {
         $ecParent = $elementConstitutifRepository->find($request->query->get('ec'));
         $elementConstitutif = new ElementConstitutif();
@@ -305,14 +305,14 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
     public function edit(
-        EcOrdre $ecOrdre,
-        FicheMatiereRepository $ficheMatiereRepository,
-        EntityManagerInterface $entityManager,
-        Request $request,
+        EcOrdre                      $ecOrdre,
+        FicheMatiereRepository       $ficheMatiereRepository,
+        EntityManagerInterface       $entityManager,
+        Request                      $request,
         ElementConstitutifRepository $elementConstitutifRepository,
-        TypeEcRepository $typeEcRepository,
-        ElementConstitutif $elementConstitutif,
-        Parcours $parcours
+        TypeEcRepository             $typeEcRepository,
+        ElementConstitutif           $elementConstitutif,
+        Parcours                     $parcours
     ): Response {
         $typeDiplome = $parcours->getFormation()->getTypeDiplome();
 
@@ -436,12 +436,12 @@ class ElementConstitutifController extends AbstractController
             'POST'
         ])]
     public function editEnfant(
-        FicheMatiereRepository $ficheMatiereRepository,
-        Request $request,
+        FicheMatiereRepository       $ficheMatiereRepository,
+        Request                      $request,
         ElementConstitutifRepository $elementConstitutifRepository,
-        ElementConstitutif $elementConstitutif,
-        Parcours $parcours,
-        Ue $ue
+        ElementConstitutif           $elementConstitutif,
+        Parcours                     $parcours,
+        Ue                           $ue
     ): Response {
 //        $form = $this->createForm(ElementConstitutifEnfantType::class, $elementConstitutif, [
 //            'action' => $this->generateUrl(
@@ -482,9 +482,9 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/{id}/structure-ec', name: 'app_element_constitutif_structure', methods: ['GET', 'POST'])]
     public function structureEc(
-        Request $request,
+        Request                      $request,
         ElementConstitutifRepository $elementConstitutifRepository,
-        ElementConstitutif $elementConstitutif
+        ElementConstitutif           $elementConstitutif
     ): Response {
 //        if ($this->isGranted(
 //            'ROLE_FORMATION_EDIT_MY',
@@ -520,11 +520,11 @@ class ElementConstitutifController extends AbstractController
      */
     #[Route('/{id}/mccc-ec', name: 'app_element_constitutif_mccc', methods: ['GET', 'POST'])]
     public function mcccEc(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
-        TypeEpreuveRepository $typeEpreuveRepository,
-        Request $request,
+        TypeDiplomeRegistry          $typeDiplomeRegistry,
+        TypeEpreuveRepository        $typeEpreuveRepository,
+        Request                      $request,
         ElementConstitutifRepository $elementConstitutifRepository,
-        ElementConstitutif $elementConstitutif
+        ElementConstitutif           $elementConstitutif
     ): Response {
         $formation = $elementConstitutif->getParcours()?->getFormation();
         if ($formation === null) {
@@ -536,16 +536,12 @@ class ElementConstitutifController extends AbstractController
         }
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
-        if ($this->isGranted(
-            'CAN_FORMATION_EDIT_MY',
-            $formation
-        )) { //todo: ajouter le workflow...
-
+        if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
+            $this->isGranted('CAN_PARCOURS_EDIT_MY', $elementConstitutif->getParcours())) { //todo: ajouter le workflow...
             if ($request->isMethod('POST')) {
                 $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
 
                 if ($request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
-
                     $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
                     $elementConstitutifRepository->save($elementConstitutif, true);
                     $typeD->clearMcccs($elementConstitutif);
@@ -576,9 +572,9 @@ class ElementConstitutifController extends AbstractController
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
     public function displayMcccEc(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
+        TypeDiplomeRegistry   $typeDiplomeRegistry,
         TypeEpreuveRepository $typeEpreuveRepository,
-        ElementConstitutif $elementConstitutif
+        ElementConstitutif    $elementConstitutif
     ): Response {
         $formation = $elementConstitutif->getParcours()->getFormation();
         if ($formation === null) {
@@ -602,10 +598,10 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/{id}/{ue}/deplacer/{sens}', name: 'app_element_constitutif_deplacer', methods: ['GET'])]
     public function deplacer(
-        EcOrdre $ecOrdre,
+        EcOrdre            $ecOrdre,
         ElementConstitutif $elementConstitutif,
-        Ue $ue,
-        string $sens
+        Ue                 $ue,
+        string             $sens
     ): Response {
         $ecOrdre->deplacerElementConstitutif($elementConstitutif, $sens, $ue);
 
@@ -614,10 +610,10 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/{id}', name: 'app_element_constitutif_delete', methods: ['DELETE'])]
     public function delete(
-        EcOrdre $ecOrdre,
-        EntityManagerInterface $entityManager,
-        Request $request,
-        ElementConstitutif $elementConstitutif,
+        EcOrdre                      $ecOrdre,
+        EntityManagerInterface       $entityManager,
+        Request                      $request,
+        ElementConstitutif           $elementConstitutif,
         ElementConstitutifRepository $elementConstitutifRepository
     ): Response {
         if ($this->isCsrfTokenValid(
