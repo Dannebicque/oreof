@@ -102,14 +102,16 @@ class Semestre
 
     public function display(): string
     {
-        return 'S'.$this->getOrdre();
+        return 'S' . $this->getOrdre();
     }
 
     public function totalEctsSemestre(): int
     {
         $total = 0;
         foreach ($this->getUes() as $ue) {
-            $total += $ue->totalEctsUe();
+            if ($ue->getUeParent() === null) {
+                $total += $ue->totalEctsUe();
+            }
         }
 
         return $total;
