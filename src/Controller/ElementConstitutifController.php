@@ -208,20 +208,18 @@ class ElementConstitutifController extends AbstractController
     public function newEnfant(
         EcOrdre                      $ecOrdre,
         Request                      $request,
-        TypeDiplomeRegistry          $typeDiplomeRegistry,
-        TypeEcRepository             $typeEcRepository,
         FicheMatiereRepository       $ficheMatiereRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
         Ue                           $ue,
         Parcours                     $parcours
     ): Response {
-        $ecParent = $elementConstitutifRepository->find($request->query->get('ec'));
+        $ecParent = $elementConstitutifRepository->find($request->query->get('element'));
         $elementConstitutif = new ElementConstitutif();
         $elementConstitutif->setParcours($parcours);
 
         $elementConstitutif->setModaliteEnseignement($parcours?->getModalitesEnseignement());
         $elementConstitutif->setUe($ue);
-        $typeDiplome = $parcours->getFormation()->getTypeDiplome();
+        $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         if ($typeDiplome === null) {
             throw new RuntimeException('Type de diplôme non trouvé');
