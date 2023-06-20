@@ -242,8 +242,9 @@ class ElementConstitutif
         $cmDistanciel = $this->volumeCmDistanciel ?? 0.0;
         $tdDistanciel = $this->volumeTdDistanciel ?? 0.0;
         $tpDistanciel = $this->volumeTpDistanciel ?? 0.0;
+        $volumeTe = $this->volumeTe ?? 0.0;
 
-        $nbHeures = $cmPresentiel + $tdPresentiel + $tpPresentiel + $cmDistanciel + $tdDistanciel + $tpDistanciel;
+        $nbHeures = $cmPresentiel + $tdPresentiel + $tpPresentiel + $cmDistanciel + $tdDistanciel + $tpDistanciel + $volumeTe;
 
         if ($nbHeures === 0.0 && $this->modaliteEnseignement === null) {
             return 'À compléter';
