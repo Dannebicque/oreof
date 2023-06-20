@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.31](https://github.com/Dannebicque/oreof/compare/v1.3.30...v1.3.31) (2023-06-20)
+
+
+### Bug Fixes
+
+* Numérotation des UE selon l'ordre du semestre dans le parcours ([2e4f893](https://github.com/Dannebicque/oreof/commit/2e4f8935ac3288bbfa6614fd6fc2b4e4964fc901))
+
 ### [1.3.30](https://github.com/Dannebicque/oreof/compare/v1.3.29...v1.3.30) (2023-06-20)
 
 
