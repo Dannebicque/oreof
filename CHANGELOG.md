@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.28](https://github.com/Dannebicque/oreof/compare/v1.3.27...v1.3.28) (2023-06-20)
+
+
+### Bug Fixes
+
+* Etat des MCCC ([95d3885](https://github.com/Dannebicque/oreof/commit/95d3885b99e0ad55d388bd75c56d635a4141700a))
+* Prise en compte des heures en autonomie dans l'état de la structure ([f77a9e9](https://github.com/Dannebicque/oreof/commit/f77a9e96d61e62dc99bb8e8c81a14288aa85603f))
+
 ### [1.3.27](https://github.com/Dannebicque/oreof/compare/v1.3.26...v1.3.27) (2023-06-20)
 
 
