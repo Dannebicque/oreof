@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.27](https://github.com/Dannebicque/oreof/compare/v1.3.26...v1.3.27) (2023-06-20)
+
+
+### Bug Fixes
+
+* Dupliquer semestre ([d239737](https://github.com/Dannebicque/oreof/commit/d2397377a9e3841d09228285468d35c2dac4889f))
+
 ### [1.3.26](https://github.com/Dannebicque/oreof/compare/v1.3.25...v1.3.26) (2023-06-20)
 
 
