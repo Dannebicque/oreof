@@ -12,6 +12,7 @@ namespace App\Entity;
 use App\Repository\UeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UeRepository::class)]
@@ -60,6 +61,9 @@ class Ue
     ], orphanRemoval: true)]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ueEnfants;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $descriptionUeLibre = null;
 
     public function __construct()
     {
@@ -133,8 +137,16 @@ class Ue
     public function totalEctsUe(): int
     {
         $total = 0;
-        foreach ($this->getElementConstitutifs() as $ec) {
-            $total += $ec->getEcts();
+        if ($this->getUeEnfants()->count() === 0) {
+            foreach ($this->getElementConstitutifs() as $ec) {
+                $total += $ec->getEcts();
+            }
+        } else {
+            $ects = [];
+            foreach ($this->getUeEnfants() as $ue) {
+                $ects[] = $ue->totalEctsUe();
+            }
+            $total = min($ects);
         }
 
         return $total;
@@ -285,6 +297,18 @@ class Ue
                 $ueEnfant->setUeParent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescriptionUeLibre(): ?string
+    {
+        return $this->descriptionUeLibre;
+    }
+
+    public function setDescriptionUeLibre(?string $descriptionUeLibre): self
+    {
+        $this->descriptionUeLibre = $descriptionUeLibre;
 
         return $this;
     }
