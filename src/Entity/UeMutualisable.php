@@ -90,6 +90,6 @@ class UeMutualisable
 
     public function display(): string
     {
-        return $this->getUe()?->display() . ' - ' . $this->getParcours()?->getLibelle();
+        return $this->getUe()?->display($this->getParcours()) . ' - ' . $this->getParcours()?->getLibelle();
     }
 }

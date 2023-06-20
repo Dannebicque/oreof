@@ -101,7 +101,7 @@ class Ue
         return $this;
     }
 
-    public function display(): string
+    public function display(Parcours $parcours): string
     {
         if ($this->ueParent === null) {
             $ordreue = $this->ordre;
@@ -109,17 +109,30 @@ class Ue
             $ordreue = $this->ueParent->ordre . '.' . chr($this->ordre + 64);
         }
 
-        return 'UE ' . $this->getSemestre()?->getOrdre() . '.' . $ordreue;
+        foreach ($this->getSemestre()?->getSemestreParcours() as $semestreParcours) {
+            if ($semestreParcours->getParcours() === $parcours) {
+                return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue;
+            }
+        }
+
+        return 'erreur';
     }
 
-    public function displayBouton(): string
+    public function displayBouton(Parcours $parcours): string
     {
         if ($this->ueParent === null) {
             $ordreue = $this->ordre;
         } else {
             $ordreue = $this->ueParent->ordre . '.' . chr($this->ordre + 64);
         }
-        return 'UE ' . $this->getSemestre()?->getOrdre() . '.' . $ordreue;
+
+        foreach ($this->getSemestre()?->getSemestreParcours() as $semestreParcours) {
+            if ($semestreParcours->getParcours() === $parcours) {
+                return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue;
+            }
+        }
+
+        return 'erreur';
     }
 
     public function getTypeUe(): ?TypeUe

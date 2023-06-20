@@ -213,7 +213,7 @@ class ParcoursState
 
             foreach ($semestre->getSemestre()?->getUes() as $ue) {
                 if ($ue->getElementConstitutifs()->count() === 0) {
-                    $tab['error'][] = 'Vous devez ajouter au moins un EC à l\'UE "' . $ue->display() . '".';
+                    $tab['error'][] = 'Vous devez ajouter au moins un EC à l\'UE "' . $ue->display($this->parcours) . '".';
                 }
             }
         }
