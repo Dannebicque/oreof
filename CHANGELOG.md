@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.30](https://github.com/Dannebicque/oreof/compare/v1.3.29...v1.3.30) (2023-06-20)
+
+
+### Bug Fixes
+
+* Somme des ECTS sur les semestre ([e4b7ef3](https://github.com/Dannebicque/oreof/commit/e4b7ef31260757b64b7b23136b9ac9847262d9cb))
+* Somme des ECTS sur les UE ([b03d558](https://github.com/Dannebicque/oreof/commit/b03d55801a37e6582a14be917164ea66bdae1917))
+* Typo Elements Constitutifs Enfants ([c85f7b7](https://github.com/Dannebicque/oreof/commit/c85f7b74cb5a01e0c9f2e2fd0d040a637fed4f9d))
+
 ### [1.3.29](https://github.com/Dannebicque/oreof/compare/v1.3.28...v1.3.29) (2023-06-20)
 
 
