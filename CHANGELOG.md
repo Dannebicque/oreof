@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.26](https://github.com/Dannebicque/oreof/compare/v1.3.25...v1.3.26) (2023-06-20)
+
+
+### Features
+
+* ajout d'un bouton pour avoir l'aperçu d'un parcours pour l'édition ([3222c50](https://github.com/Dannebicque/oreof/commit/3222c501f7960fa89056efa99aa23663409cfcbc))
+
+
+### Bug Fixes
+
+* affichage semestre non dispensé ([ef38eac](https://github.com/Dannebicque/oreof/commit/ef38eaca92ae79edb50aeaae0bfdf245f5b5d5be))
+* Tri des listes ([f8f29fb](https://github.com/Dannebicque/oreof/commit/f8f29fb8611efda0c48c082a5fd98dca08879e07))
+
 ### [1.3.25](https://github.com/Dannebicque/oreof/compare/v1.3.24...v1.3.25) (2023-06-18)
 
 
