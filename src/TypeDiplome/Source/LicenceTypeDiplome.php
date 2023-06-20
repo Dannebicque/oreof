@@ -111,7 +111,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                     $nbNotes++;
                 }
 
-                if ($totalPourcentage === 100 && $nbNotes >= 3) {
+                if ($totalPourcentage === 100.0 && $nbNotes >= 3) {
                     $isCompleted = 'Complet';
                 }
                 break;
