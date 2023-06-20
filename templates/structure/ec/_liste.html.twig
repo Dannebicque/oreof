@@ -80,8 +80,7 @@
                                     <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
                                         <div class="text-muted text-small d-md-none">mccc</div>
                                         <button
-                                                {% if deplacer is defined and deplacer == true and editable ==
-                                                    true %}
+                                                {% if deplacer is defined and deplacer == true and editable == true %}
                                                     {{ stimulus_controller('modal', {
                                                         size: 'lg',
                                                         nomEvenement: 'refreshListeEc',

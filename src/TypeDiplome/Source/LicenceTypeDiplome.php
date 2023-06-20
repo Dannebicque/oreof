@@ -88,6 +88,9 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                     }
                 }
 
+                $totalPourcentage = 0;
+                $nbNotes = 0;
+
                 $this->entityManager->flush();
                 foreach ($pourcentages as $key => $pourcentage) {
                     if (array_key_exists($key, $mcccs)) {
@@ -104,6 +107,12 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                         $mcccs[$key] = $mccc;
                         $this->entityManager->persist($mccc);
                     }
+                    $totalPourcentage+= (float)$pourcentage;
+                    $nbNotes++;
+                }
+
+                if ($totalPourcentage === 100 && $nbNotes >= 3) {
+                    $isCompleted = 'Complet';
                 }
                 break;
             case 'cc_ct':
