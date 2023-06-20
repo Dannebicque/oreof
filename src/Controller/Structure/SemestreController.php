@@ -104,8 +104,7 @@ class SemestreController extends AbstractController
             return JsonReponse::error('Le semestre existe déjà');
         }
 
-        switch($action)
-        {
+        switch($action) {
             case 'init':
                 $semestre = new Semestre();
                 $semestre->setOrdre($ordre);
@@ -128,9 +127,6 @@ class SemestreController extends AbstractController
                 $entityManager->flush();
                 return JsonReponse::success('Semestre marqué comme non dispensé');
         }
-
-
-
     }
 
     #[Route('/changer/{semestre}/{parcours}', name: 'changer')]
@@ -280,10 +276,11 @@ class SemestreController extends AbstractController
                             $newEc = clone $ec;
                             $newEc->setUe($newUe);
                             $entityManager->persist($newEc);
-
-                            $newFm = clone $ec->getFicheMatiere();
-                            $newEc->setFicheMatiere($newFm);
-                            $entityManager->persist($newFm);
+                            if ($ec->getFicheMatiere() !== null) {
+                                $newFm = clone $ec->getFicheMatiere();
+                                $newEc->setFicheMatiere($newFm);
+                                $entityManager->persist($newFm);
+                            }
                             $entityManager->flush();
                             break;
                     }
