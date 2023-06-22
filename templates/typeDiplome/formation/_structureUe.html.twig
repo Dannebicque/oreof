@@ -1,6 +1,6 @@
 <tr>
     <th>&nbsp;</th>
-    <th colspan="3">{{ ue.display }} | {{ ue.libelle }}</th>
+    <th colspan="3">{{ ue.display(parcours) }} | {{ ue.libelle }}</th>
     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
         <th colspan="4">Présentiel</th>
     {% endif %}

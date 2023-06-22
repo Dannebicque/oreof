@@ -10,7 +10,7 @@
                     <tr>
                         <th colspan="2" rowspan="2">&nbsp;</th>
                         {% for ue in semestre.semestre.ues %}
-                            <th colspan="{{ ue.ecUes|length }}">{{ ue.display }}</th>
+                            <th colspan="{{ ue.ecUes|length }}">{{ ue.display(parcours) }}</th>
                         {% endfor %}
                     </tr>
                     <tr>
