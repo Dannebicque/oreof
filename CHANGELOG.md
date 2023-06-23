@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.33](https://github.com/Dannebicque/oreof/compare/v1.3.32...v1.3.33) (2023-06-23)
+
+
+### Features
+
+* Affichage du sigle sur liste d'épreuve ([0a42bd1](https://github.com/Dannebicque/oreof/commit/0a42bd1d1426e266cbb535e0515ad2f3998885dc))
+
+
+### Bug Fixes
+
+* Display UE sur export Excel ([e7aeac2](https://github.com/Dannebicque/oreof/commit/e7aeac2d87ce47eda3ab7d4f9b26ac80d3bf09f6))
+* Libellé de l'UE ([cd63bfc](https://github.com/Dannebicque/oreof/commit/cd63bfce012f90da8de9dbd0b2dcbeb70d390bf0))
+
 ### [1.3.32](https://github.com/Dannebicque/oreof/compare/v1.3.31...v1.3.32) (2023-06-20)
 
 
