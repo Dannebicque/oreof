@@ -252,7 +252,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['fiche_matiere:read'])]
     public function getDisplay(): string
     {
-        return $this->getPrenom().' '.$this->getNom();
+        return mb_strtoupper($this->getNom()).' '. ucwords(mb_strtolower($this->getPrenom()));
     }
 
     public function getAvatarInitiales(): ?string
