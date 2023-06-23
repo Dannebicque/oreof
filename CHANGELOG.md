@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.34](https://github.com/Dannebicque/oreof/compare/v1.3.33...v1.3.34) (2023-06-23)
+
+
+### Bug Fixes
+
+* Typo + display du type d'épreuve ([1e6edc3](https://github.com/Dannebicque/oreof/commit/1e6edc385f066bf85f882060bfa2fe9f6618a0e7))
+
 ### [1.3.33](https://github.com/Dannebicque/oreof/compare/v1.3.32...v1.3.33) (2023-06-23)
 
 
