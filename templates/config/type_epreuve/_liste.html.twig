@@ -1,15 +1,50 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Libellé</th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'libelle',
+                        'direction': getDirection('libelle', sort, direction)
+                    }) }}
+            >
+                Libellé
+                {{ displaySort('libelle', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'sigle',
+                        'direction': getDirection('sigle', sort, direction)
+                    }) }}
+            >
+                Sigle
+                {{ displaySort('sigle', sort, direction) }}
+            </a>
+        </th>
         <th>Type(s) diplôme</th>
         <th></th>
     </tr>
     </thead>
     <tbody>
+    <tr>
+        <td>
+            <label for="libelle" class="sr-only">Libellé</label>
+            <input type="text" class="form-control" id="libelle">
+        </td>
+        <td>
+            <label for="type_diplome" class="sr-only">Type de diplôme</label>
+            <select class="form-select" id="type_diplome"></select>
+        </td>
+        <td>
+            <button class="btn btn-outline-secondary">X Filtre</button>
+        </td>
+    </tr>
     {% for type_epreuve in type_epreuves %}
         <tr>
             <td>{{ type_epreuve.libelle }}</td>
+            <td>{{ type_epreuve.sigle }}</td>
             <td>
                 {% for typeDip in type_epreuve.typeDiplomes %}
                     {{ typeDip|typeDiplome }}
