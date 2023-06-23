@@ -42,6 +42,19 @@ class TypeEpreuveRepository extends ServiceEntityRepository
         }
     }
 
+   public function findBySearchAndSort(string $sort, string $direction, ?string $q = ''): array
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->orderBy('t.' . $sort, $direction);
+
+        if ('' !== $q) {
+            $qb->andWhere('t.libelle LIKE :q')
+                ->setParameter('q', '%' . $q . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function remove(TypeEpreuve $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
