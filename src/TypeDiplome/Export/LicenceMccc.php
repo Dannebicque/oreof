@@ -14,6 +14,9 @@ use App\DTO\TotalVolumeHeure;
 use App\Entity\Parcours;
 use App\Enums\RegimeInscriptionEnum;
 use App\TypeDiplome\Source\LicenceTypeDiplome;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Style;
 
 class LicenceMccc
 {
@@ -27,6 +30,11 @@ class LicenceMccc
     {
         $formation = $parcours->getFormation();
 
+        $redStyle = new Style(false, true);
+        $redStyle->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->getEndColor()->setARGB(Color::COLOR_RED);
+        $redStyle->getFont()->setColor(new Color(Color::COLOR_WHITE));
 
         if (null === $formation) {
             throw new \Exception('La formation n\'existe pas');
@@ -95,8 +103,8 @@ class LicenceMccc
                         }
 
                         //UE
-                        $this->excelWriter->writeCellXY(2, $ligne, $ue->display());
-                        $this->excelWriter->writeCellXY(3, $ligne, $ue->getLibelle());
+                        $this->excelWriter->writeCellXY(2, $ligne, $ue->display($parcours), ['wrap' => true]);
+                        $this->excelWriter->writeCellXY(3, $ligne, $ue->getLibelle(), ['wrap' => true]);
                         if ($nbEcs > 1) {
                             $this->excelWriter->mergeCellsCaR(2, $ligne, 2, $ligne + $nbEcs - 1);
                             $this->excelWriter->mergeCellsCaR(3, $ligne, 3, $ligne + $nbEcs - 1);
@@ -107,9 +115,9 @@ class LicenceMccc
 
                             if ($ec->getFicheMatiere() !== null) {
                                 //todo: plutôt un test sur le type EC
-                                $this->excelWriter->writeCellXY(5, $ligne, $ec->getFicheMatiere()->getLibelle());//todo: gérer les cas
-                                $this->excelWriter->writeCellXY(6, $ligne, $ec->getFicheMatiere()->getLibelleAnglais());
-                                $this->excelWriter->writeCellXY(7, $ligne, $ec->getFicheMatiere()->getResponsableFicheMatiere()?->getDisplay());
+                                $this->excelWriter->writeCellXY(5, $ligne, $ec->getFicheMatiere()->getLibelle(), ['wrap' => true]);//todo: gérer les cas
+                                $this->excelWriter->writeCellXY(6, $ligne, $ec->getFicheMatiere()->getLibelleAnglais(), ['wrap' => true]);
+                                $this->excelWriter->writeCellXY(7, $ligne, $ec->getFicheMatiere()->getResponsableFicheMatiere()?->getDisplay(), ['wrap' => true]);
 
                                 // langue
                                 $texte = '';
@@ -135,7 +143,7 @@ class LicenceMccc
                                 foreach ($ec->getFicheMatiere()->getCompetences() as $comp) {
                                     $texte .= $comp->getCode() . "; ";
                                 }
-                                // supprimer "; " à la fin
+
                                 $texte = substr($texte, 0, -2);
 
                                 $this->excelWriter->writeCellXY(13, $ligne, $texte);
@@ -151,7 +159,7 @@ class LicenceMccc
                             $this->excelWriter->writeCellXY(18, $ligne, $ec->volumeTotalPresentiel());
 
                             //si pas distanciel, griser...
-                            $this->excelWriter->writeCellXY(19, $ligne, $ec->getVolumeCmDistanciel());
+                            $this->excelWriter->writeCellXY(19, $ligne, $ec->getVolumeCmDistanciel(), ['bgcolor' => 'cccccc']);
                             $this->excelWriter->writeCellXY(20, $ligne, $ec->getVolumeTdDistanciel());
                             $this->excelWriter->writeCellXY(21, $ligne, $ec->getVolumeTpDistanciel());
                             $this->excelWriter->writeCellXY(22, $ligne, $ec->volumeTotalDistanciel());
@@ -164,33 +172,30 @@ class LicenceMccc
                         // $ligne++;//si $num a bougé, pas de ++
                     }
 
-                    $this->excelWriter->writeCellXY(15, $ligne, $totalAnnee->totalCmPresentiel);
-                    $this->excelWriter->writeCellXY(16, $ligne, $totalAnnee->totalTdPresentiel);
-                    $this->excelWriter->writeCellXY(17, $ligne, $totalAnnee->totalTpPresentiel);
-                    $this->excelWriter->writeCellXY(18, $ligne, $totalAnnee->getTotalPresentiel());
+                    $this->excelWriter->writeCellXY(15, $ligne, $totalAnnee->totalCmPresentiel, ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY(16, $ligne, $totalAnnee->totalTdPresentiel, ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY(17, $ligne, $totalAnnee->totalTpPresentiel, ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY(18, $ligne, $totalAnnee->getTotalPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
 
                     //si pas distanciel, griser...
 
-                    $this->excelWriter->writeCellXY(19, $ligne, $totalAnnee->totalCmDistanciel);
-                    $this->excelWriter->writeCellXY(20, $ligne, $totalAnnee->totalTdDistanciel);
-                    $this->excelWriter->writeCellXY(21, $ligne, $totalAnnee->totalTpDistanciel);
-                    $this->excelWriter->writeCellXY(22, $ligne, $totalAnnee->getTotalDistanciel());
+                    $this->excelWriter->writeCellXY(19, $ligne, $totalAnnee->totalCmDistanciel, ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY(20, $ligne, $totalAnnee->totalTdDistanciel, ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY(21, $ligne, $totalAnnee->totalTpDistanciel, ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY(22, $ligne, $totalAnnee->getTotalDistanciel(), ['style' => 'HORIZONTAL_CENTER']);
 
-                    $this->excelWriter->writeCellXY(15, $ligne+1, $totalAnnee->getTotalEtudiant());
+                    $this->excelWriter->writeCellXY(15, $ligne+1, $totalAnnee->getTotalEtudiant(), ['style' => 'HORIZONTAL_CENTER']);
                 }
             }
             //suppression de la ligne modèle 18
             $this->excelWriter->removeRow(18);
         }
 
-//        $redStyle = new Style(false, true);
-//        $redStyle->getFill()
-//            ->setFillType(Fill::FILL_SOLID)
-//            ->getEndColor()->setARGB(Color::COLOR_RED);
-//        $redStyle->getFont()->setColor(new Color(Color::COLOR_WHITE));
 
 
-        //todo: supprimer la feuille de modèle
+
+        //supprimer la feuille de modèle
+        $spreadsheet->removeSheetByIndex(0);
 
         $this->excelWriter->setSpreadsheet($spreadsheet, true);
 
