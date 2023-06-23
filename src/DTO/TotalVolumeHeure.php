@@ -20,6 +20,7 @@ class TotalVolumeHeure
     public float $totalCmDistanciel = 0;
     public float $totalTdDistanciel = 0;
     public float $totalTpDistanciel = 0;
+    public float $totalVolumeTe = 0;
 
     public function addEc(ElementConstitutif $ec): void
     {
@@ -30,11 +31,18 @@ class TotalVolumeHeure
         $this->totalCmDistanciel += $ec->getVolumeCmDistanciel();
         $this->totalTdDistanciel += $ec->getVolumeTdDistanciel();
         $this->totalTpDistanciel += $ec->getVolumeTpDistanciel();
+
+        $this->totalVolumeTe += $ec->getVolumeTe();
     }
 
     public function getTotalPresentiel(): float
     {
         return $this->totalCmPresentiel + $this->totalTdPresentiel + $this->totalTpPresentiel;
+    }
+
+    public function getTotalVolumeTe(): float
+    {
+        return $this->totalVolumeTe;
     }
 
     public function getTotalDistanciel(): float
@@ -46,6 +54,4 @@ class TotalVolumeHeure
     {
         return $this->getTotalPresentiel() + $this->getTotalDistanciel();
     }
-
-
 }
