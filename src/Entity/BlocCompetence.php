@@ -146,6 +146,6 @@ class BlocCompetence
 
     public function genereCode(): void
     {
-        $this->setCode('BC ' . chr($this->getOrdre()+64));
+        $this->setCode('BC ' . $this->getOrdre());
     }
 }
