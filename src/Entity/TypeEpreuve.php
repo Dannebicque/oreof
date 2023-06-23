@@ -107,7 +107,7 @@ class TypeEpreuve
     public function display(): string
     {
         if ($this->sigle !== null) {
-            return $this->getLibelle() . '(' . $this->getSigle() . ')';
+            return $this->getLibelle() . ' (' . $this->getSigle() . ')';
         }
         return $this->getLibelle();
     }
