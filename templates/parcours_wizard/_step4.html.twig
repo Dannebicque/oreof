@@ -8,28 +8,28 @@
 "
 >
     <div class="row">
-        <div class="col-4">
-            <div class="alert alert-info mb-2 mt-2">
-                {% if parcours.semestreParcours|length == 0 %}
-                    Générer la structure du parcours en cliquant sur le bouton ci-dessous.
-                    <button {{ stimulus_action('parcours--step4', 'genereStructure') }} class="btn btn-sm
-                    btn-outline-primary
-                d-block">
-                        Générer la structure
-                    </button>
-                {% else %}
-                    Réinitialiser la structure de la formation en cliquant sur le bouton ci-dessous. Cela va effacer
-                    toutes les données sur la structure.
-                    <button {{ stimulus_action('parcours--step4', 'reinitialiseStructure') }} class="btn btn-sm
-                    btn-outline-danger
-                d-block">
-                        Réinitialiser la structure
-                    </button>
-                {% endif %}
+{#        <div class="col-4">#}
+{#            <div class="alert alert-info mb-2 mt-2">#}
+{#                {% if parcours.semestreParcours|length == 0 %}#}
+{#                    Générer la structure du parcours en cliquant sur le bouton ci-dessous.#}
+{#                    <button {{ stimulus_action('parcours--step4', 'genereStructure') }} class="btn btn-sm#}
+{#                    btn-outline-primary#}
+{#                d-block">#}
+{#                        Générer la structure#}
+{#                    </button>#}
+{#                {% else %}#}
+{#                    Réinitialiser la structure de la formation en cliquant sur le bouton ci-dessous. Cela va effacer#}
+{#                    toutes les données sur la structure.#}
+{#                    <button {{ stimulus_action('parcours--step4', 'reinitialiseStructure') }} class="btn btn-sm#}
+{#                    btn-outline-danger#}
+{#                d-block">#}
+{#                        Réinitialiser la structure#}
+{#                    </button>#}
+{#                {% endif %}#}
 
-            </div>
-        </div>
-        <div class="col-8">
+{#            </div>#}
+{#        </div>#}
+        <div class="col-12">
             {% if listeParcours|length > 1 %}
                 <div class="alert alert-info mb-2 mt-2">
                     Vous pouvez récupérer la structure des semestres d'un autre parcours en cliquant sur le bouton

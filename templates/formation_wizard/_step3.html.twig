@@ -59,40 +59,40 @@
     <div id="bloc_semestre" class="{% if formation.hasParcours == false %}d-none{% endif %} mt-2">
         <fieldset class="mb-3">
             <div>
-                <div class="col-form-label required">
-                    {{ 'formation_step3.labels.structureFormation'|trans({}, 'form') }}
-                    <i class="fal fa-question-circle ms-1"
-                       data-controller="tooltip"
-                       data-tooltip-placement-value="bottom"
-                       aria-label="{{ 'formation_step3.helps.structureFormation.help'|trans({}, 'help') }}"
-                       data-bs-original-title="{{ 'formation_step3.helps.structureFormation.help'|trans({}, 'help') }}"></i>
-                </div>
+{#                <div class="col-form-label required">#}
+{#                    {{ 'formation_step3.labels.structureFormation'|trans({}, 'form') }}#}
+{#                    <i class="fal fa-question-circle ms-1"#}
+{#                       data-controller="tooltip"#}
+{#                       data-tooltip-placement-value="bottom"#}
+{#                       aria-label="{{ 'formation_step3.helps.structureFormation.help'|trans({}, 'help') }}"#}
+{#                       data-bs-original-title="{{ 'formation_step3.helps.structureFormation.help'|trans({}, 'help') }}"></i>#}
+{#                </div>#}
 
-                <ul id="listeSemestre">
+{#                <ul id="listeSemestre">#}
 
-                    {% for i in formation.semestreDebut..typeDiplome.semestreFin %}
-                        <li id="sem_{{ i }}">
-                            <span class="required">Semestre {{ i }}</span> :
-                            <div class="form-check-inline">
-                                <input type="radio" id="formation_parcours_{{ i }}_tc" name="semestre_{{ i }}" required="required"
-                                       {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] == 'tronc_commun' %}checked{% endif %}
-                                       class="form-check-input" value="tronc_commun" {{ stimulus_action('formation--step3',
-                                    'changeSemestre',
-                                    'click', {semestre: i}) }}>
-                                <label class="form-check-label" for="formation_parcours_{{ i }}_tc">Tronc Commun</label>
-                            </div>
-                            <strong class="text-primary me-2">OU</strong>
-                            <div class="form-check-inline">
-                                <input type="radio" id="formation_parcours_{{ i }}_parc" name="semestre_{{ i }}" required="required"
-                                       {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] ==
-                                           'parcours' %}checked{% endif %}
-                                       class="form-check-input" value="parcours" {{ stimulus_action('formation--step3',
-                                    'changeSemestre', 'click', {semestre: i}) }}>
-                                <label class="form-check-label" for="formation_parcours_{{ i }}_parc">Parcours</label>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
+{#                    {% for i in formation.semestreDebut..typeDiplome.semestreFin %}#}
+{#                        <li id="sem_{{ i }}">#}
+{#                            <span class="required">Semestre {{ i }}</span> :#}
+{#                            <div class="form-check-inline">#}
+{#                                <input type="radio" id="formation_parcours_{{ i }}_tc" name="semestre_{{ i }}" required="required"#}
+{#                                       {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] == 'tronc_commun' %}checked{% endif %}#}
+{#                                       class="form-check-input" value="tronc_commun" {{ stimulus_action('formation--step3',#}
+{#                                    'changeSemestre',#}
+{#                                    'click', {semestre: i}) }}>#}
+{#                                <label class="form-check-label" for="formation_parcours_{{ i }}_tc">Tronc Commun</label>#}
+{#                            </div>#}
+{#                            <strong class="text-primary me-2">OU</strong>#}
+{#                            <div class="form-check-inline">#}
+{#                                <input type="radio" id="formation_parcours_{{ i }}_parc" name="semestre_{{ i }}" required="required"#}
+{#                                       {% if formation.structureSemestres[i] is defined and formation.structureSemestres[i] ==#}
+{#                                           'parcours' %}checked{% endif %}#}
+{#                                       class="form-check-input" value="parcours" {{ stimulus_action('formation--step3',#}
+{#                                    'changeSemestre', 'click', {semestre: i}) }}>#}
+{#                                <label class="form-check-label" for="formation_parcours_{{ i }}_parc">Parcours</label>#}
+{#                            </div>#}
+{#                        </li>#}
+{#                    {% endfor %}#}
+{#                </ul>#}
             </div>
 
             {% form_theme form 'communs/form_theme.html.twig' %}
