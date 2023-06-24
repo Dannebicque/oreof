@@ -258,3 +258,8 @@ semestre.position.helps: semestre.position.helps
 semestre.dupliquer.helps: semestre.dupliquer.helps
 semestre.fiche_recopie.helps: semestre.fiche_recopie.helps
 semestre.fiche_mutualise.helps: semestre.fiche_mutualise.helps
+ec_step4.helps.mccc_enfants_identique: 'Cocher cette case pour appliquer les mêmes modalités de contrôle des connaissances et compétences à tous les EC enfants de cet EC.'
+ec_step4.helps.heures_enfants_edentiques: "Cocher cette case pour appliquer les mêmes volumes horaires d'enseignement à tous les EC enfants de cet EC."
+ec_step4.helps.mccc_enfants_identique_parent: "Cocher cette case pour récupérer les mêmes modalités de contrôle des connaissances et compétences de l'EC parent, s'appliquera à tous les EC enfants."
+ec_step4.helps.heures_enfants_edentiques_parent: "Cocher cette case pour récupérer les mêmes volumes horaires d'enseignement de l'EC parent, s'appliquera à tous les EC enfants."
+ue.helps.descriptionUeLibre: Décrivez en quelques mots les choix pour cette UE libre (255 caractères maximum).

@@ -39,16 +39,11 @@ class EcStep4Type extends AbstractType
             ]);
         }
 
-//        $builder
-//            ->add('ects', NumberType::class, [
-//                'html5' => true,
-//                'scale' => 0,
-//                'attr' => ['data-action' => !$isModal ? 'change->ec--structure#saveEcts' : ''],
-//            ]);
 
         $builder->add('volumeCmPresentiel', FloatType::class, [
             'html5' => true,
             'scale' => 1,
+            'required' => false,
             'attr' => [
                 'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                 'data-ec--structure-type-param' => 'volumeCmPresentiel'
@@ -57,6 +52,7 @@ class EcStep4Type extends AbstractType
             ->add('volumeTdPresentiel', FloatType::class, [
                 'html5' => true,
                 'scale' => 1,
+                'required' => false,
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeTdPresentiel'
@@ -65,6 +61,7 @@ class EcStep4Type extends AbstractType
             ->add('volumeTpPresentiel', FloatType::class, [
                 'html5' => true,
                 'scale' => 1,
+                'required' => false,
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeTpPresentiel'
@@ -73,6 +70,7 @@ class EcStep4Type extends AbstractType
             ->add('volumeCmDistanciel', FloatType::class, [
                 'html5' => true,
                 'scale' => 1,
+                'required' => false,
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeCmDistanciel',
@@ -81,6 +79,7 @@ class EcStep4Type extends AbstractType
             ->add('volumeTdDistanciel', FloatType::class, [
                 'html5' => true,
                 'scale' => 1,
+                'required' => false,
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeTdDistanciel'
@@ -89,6 +88,7 @@ class EcStep4Type extends AbstractType
             ->add('volumeTpDistanciel', FloatType::class, [
                 'html5' => true,
                 'scale' => 1,
+                'required' => false,
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeTpDistanciel'
@@ -97,6 +97,7 @@ class EcStep4Type extends AbstractType
             ->add('volumeTe', FloatType::class, [
                 'html5' => true,
                 'scale' => 1,
+                'required' => false,
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeTe'

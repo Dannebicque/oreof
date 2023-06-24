@@ -314,11 +314,16 @@ role.labels.centre: 'Centre(s) pour ce rôle'
 role.labels.centre.label: 'Centre(s) pour ce rôle'
 Charleville-Mézières: Charleville-Mézières
 ec_step4.labels.volumeTe: 'Volume horaire TE (stage, projet, autonomie, ...)'
-semestre.changer.label: Choisir le parcours dans lequel déplacer le semestre
-semestre.position.label: Position du semestre dans le parcours de destination
-semestre.changer.bouton: Déplacer le semestre
-semestre.dupliquer.label: Choisir le parcours dans lequel dupliquer le semestre
-semestre.dupliquer.bouton: Dupliquer le semestre
-semestre.fiche_recopie.label: Dupliquer en recopiant les fiches EC/matières (permet une modification dans chaque parcours)
-semestre.fiche_mutualise.label: Dupliquer en mutualisant les fiches EC/matières (les éléments seront liés sur les deux parcours, toutes les modifications seront répercutées)
-semestre.fiche_recopie_mutualise.label: Précisez si vous souhaitez recopier ou mutualiser les fiches EC/matières
+semestre.changer.label: 'Choisir le parcours dans lequel déplacer le semestre'
+semestre.position.label: 'Position du semestre dans le parcours de destination'
+semestre.changer.bouton: 'Déplacer le semestre'
+semestre.dupliquer.label: 'Choisir le parcours dans lequel dupliquer le semestre'
+semestre.dupliquer.bouton: 'Dupliquer le semestre'
+semestre.fiche_recopie.label: 'Dupliquer en recopiant les fiches EC/matières (permet une modification dans chaque parcours)'
+semestre.fiche_mutualise.label: 'Dupliquer en mutualisant les fiches EC/matières (les éléments seront liés sur les deux parcours, toutes les modifications seront répercutées)'
+semestre.fiche_recopie_mutualise.label: 'Précisez si vous souhaitez recopier ou mutualiser les fiches EC/matières'
+ec_step4.labels.mccc_enfants_identique: 'Appliquer ces MCCC à tous les EC enfants ?'
+ec_step4.labels.heures_enfants_edentiques: 'Appliquer les volumes horaires à tous les EC enfants ?'
+ec_step4.labels.mccc_enfants_identique_parent: "Utiliser les MCCC de l'EC parent (s'appliquera pour tous les enfants de l'EC) ?"
+ec_step4.labels.heures_enfants_edentiques_parent: "Utiliser les volumes horaires de l'EC parent (s'appliquera pour tous les enfants de l'EC) ?"
+ue.labels.descriptionUeLibre: 'Description de l''UE libre'

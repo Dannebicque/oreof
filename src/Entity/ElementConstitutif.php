@@ -115,6 +115,12 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?float $volumeTe = null;
 
+    #[ORM\Column]
+    private ?bool $mcccEnfantsIdentique = false;
+
+    #[ORM\Column]
+    private ?bool $heuresEnfantsIdentiques = false;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -564,6 +570,30 @@ class ElementConstitutif
     public function setVolumeTe(?float $volumeTe): self
     {
         $this->volumeTe = $volumeTe;
+
+        return $this;
+    }
+
+    public function isMcccEnfantsIdentique(): ?bool
+    {
+        return $this->mcccEnfantsIdentique ?? true;
+    }
+
+    public function setMcccEnfantsIdentique(bool $mcccEnfantsIdentique): self
+    {
+        $this->mcccEnfantsIdentique = $mcccEnfantsIdentique;
+
+        return $this;
+    }
+
+    public function isHeuresEnfantsIdentiques(): ?bool
+    {
+        return $this->heuresEnfantsIdentiques ?? true;
+    }
+
+    public function setHeuresEnfantsIdentiques(bool $heuresEnfantsIdentiques): self
+    {
+        $this->heuresEnfantsIdentiques = $heuresEnfantsIdentiques;
 
         return $this;
     }

@@ -6,26 +6,26 @@ parcours.'}) }}
     .modaliteEnseignement == null %}
         {{ form_row(form.modaliteEnseignement) }}
     {% endif %}
-        <div id="bloc_presentiel"  style="display:{% if ec.modaliteEnseignement != null and ec.modaliteEnseignement.value != 2 %}block{% else
+    <div id="bloc_presentiel" style="display:{% if ec.modaliteEnseignement != null and ec.modaliteEnseignement.value != 2 %}block{% else
 %}none{% endif %}">
-            <h3>Volume Présentiel</h3>
-            <div class="row">
-                <div class="col-4">{{ form_row(form.volumeCmPresentiel) }}</div>
-                <div class="col-4">{{ form_row(form.volumeTdPresentiel) }}</div>
-                <div class="col-4">{{ form_row(form.volumeTpPresentiel) }}</div>
-            </div>
+        <h3>Volume Présentiel</h3>
+        <div class="row">
+            <div class="col-4">{{ form_row(form.volumeCmPresentiel) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTdPresentiel) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTpPresentiel) }}</div>
         </div>
+    </div>
 
 
-        <div id="bloc_distanciel" style="display:{% if ec.modaliteEnseignement != null and ec.modaliteEnseignement.value != 0 %}block{% else
+    <div id="bloc_distanciel" style="display:{% if ec.modaliteEnseignement != null and ec.modaliteEnseignement.value != 0 %}block{% else
 %}none{% endif %}">
-            <h3>Volume Distanciel</h3>
-            <div class="row">
-                <div class="col-4">{{ form_row(form.volumeCmDistanciel) }}</div>
-                <div class="col-4">{{ form_row(form.volumeTdDistanciel) }}</div>
-                <div class="col-4">{{ form_row(form.volumeTpDistanciel) }}</div>
-            </div>
+        <h3>Volume Distanciel</h3>
+        <div class="row">
+            <div class="col-4">{{ form_row(form.volumeCmDistanciel) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTdDistanciel) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTpDistanciel) }}</div>
         </div>
+    </div>
 
     <div>
         <h3>Volume horaire Travail Etudiant (TE)</h3>
@@ -36,5 +36,34 @@ parcours.'}) }}
         </div>
     </div>
 
-
 {% endif %}
+
+        {% if ec.ecEnfants|length > 0 %}
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="ec_step4_heures_enfants_edentiques"
+                       name="ec_step4[heuresEnfantsIdentiques]"
+                       {% if ec.heuresEnfantsIdentiques == true %}checked{% endif %}
+                >
+                <label class="form-check-label"
+                       for="ec_step4_heures_enfants_edentiques"> {{ 'ec_step4.labels.heures_enfants_edentiques'|trans({}, 'form') }}
+                    <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                       data-tooltip-placement-value="bottom"
+                       title="{{ 'ec_step4.helps.heures_enfants_edentiques'|trans({}, 'help') }}"></i></label>
+            </div>
+
+        {% endif %}
+
+        {% if ec.ecParent != null %}
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="ec_step4_heures_enfants_edentiques"
+                       name="ec_step4[heuresEnfantsIdentiques]"
+                       {% if ec.ecParent.heuresEnfantsIdentiques == true %}checked{% endif %}
+                >
+                <label class="form-check-label"
+                       for="ec_step4_heures_enfants_edentiques"> {{ 'ec_step4.labels.heures_enfants_edentiques_parent'|trans({}, 'form') }}
+                    <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                       data-tooltip-placement-value="bottom"
+                       title="{{ 'ec_step4.helps.heures_enfants_edentiques_parent'|trans({}, 'help') }}"></i></label>
+            </div>
+
+        {% endif %}

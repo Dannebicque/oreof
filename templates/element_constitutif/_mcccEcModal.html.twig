@@ -1,18 +1,40 @@
 <h2>MCCC pour {{ ec.ficheMatiere != null ? ec.ficheMatiere.libelle : ec.texteEcLibre }}</h2>
-<form method="post" action="{{ path('app_element_constitutif_mccc', {id:ec.id}) }}" {{ stimulus_controller('ec--structureparcours') }}>
-    <div class="mb-2">
-        <label for="ec_step4_ects" class="form-label">
-            {{ 'ec_step4.labels.ects'|trans({}, 'form') }}
-            <span class="required"></span>
-            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
-               title="{{ 'ec_step4.helps.ects'|trans({}, 'help') }}"></i>
-        </label>
-        <div class="input-group">
-            <input type="number" id="ec_step4_ects" name="ec_step4[ects]"
-                   value="{{ ec.ects }}" min="0" max="60"
-                   required="required" data-action="" step="any" class="form-control">
+<form method="post"
+      action="{{ path('app_element_constitutif_mccc', {id:ec.id}) }}" {{ stimulus_controller('ec--structureparcours') }}>
+    {% if ec.ecParent == null %}
+        {# Uniquement sur le parent. #}
+        <div class="mb-2">
+            <label for="ec_step4_ects" class="form-label">
+                {{ 'ec_step4.labels.ects'|trans({}, 'form') }}
+                <span class="required"></span>
+                <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
+                   title="{{ 'ec_step4.helps.ects'|trans({}, 'help') }}"></i>
+            </label>
+            <div class="input-group">
+                <input type="number" id="ec_step4_ects" name="ec_step4[ects]"
+                       value="{{ ec.ects }}" min="0" max="60"
+                       required="required" data-action="" step="any" class="form-control">
+            </div>
         </div>
-    </div>
+    {% endif %}
+
+    {% if ec.ecEnfants|length > 0 %}
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="ec_step4_mccc_enfants_identique" name="ec_step4[mcccEnfantsIdentique]"
+            {% if ec.mcccEnfantsIdentique == true %}checked{% endif %}
+            >
+            <label class="form-check-label" for="ec_step4_mccc_enfants_identique"> {{ 'ec_step4.labels.mccc_enfants_identique'|trans({}, 'form') }} <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'ec_step4.helps.mccc_enfants_identique'|trans({}, 'help') }}"></i></label>
+        </div>
+    {% endif %}
+
+    {% if ec.ecParent != null %}
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="ec_step4_mccc_enfants_identique" name="ec_step4[mcccEnfantsIdentique]"
+                   {% if ec.ecParent.mcccEnfantsIdentique == true %}checked{% endif %}
+            >
+            <label class="form-check-label" for="ec_step4_mccc_enfants_identique"> {{ 'ec_step4.labels.mccc_enfants_identique_parent'|trans({}, 'form') }} <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ 'ec_step4.helps.mccc_enfants_identique_parent'|trans({}, 'help') }}"></i></label>
+        </div>
+    {% endif %}
 
     {{ include('typeDiplome/mccc/'~templateForm) }}
 
