@@ -20,6 +20,11 @@
     <div>
         {{ form_row(form.natureUeEc, {'row_attr' : {'id' : 'natureUeEc' }}) }}
     </div>
+    <div id="descriptionUeLibre"
+    {% if ue is defined and ue.natureUeEc != null and ue.natureUeEc.libre == true %}class=""{% else %}class="d-none"{% endif %}
+    >
+        {{ form_row(form.descriptionUeLibre, {'row_attr' : {'id' : 'natureUeEc' }}) }}
+    </div>
 </div>
 <button type="submit" class="btn btn-success"
         {{ stimulus_action('base','sauvegardeFormModal', 'click') }}

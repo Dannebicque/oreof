@@ -152,7 +152,9 @@ class Ue
         $total = 0;
         if ($this->getUeEnfants()->count() === 0) {
             foreach ($this->getElementConstitutifs() as $ec) {
-                $total += $ec->getEcts();
+                //if ($ec->getEcParent() === null) {
+                    $total += $ec->getEcts();
+                //}
             }
         } else {
             $ects = [];

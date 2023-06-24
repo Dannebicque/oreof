@@ -8,6 +8,7 @@
 
 import { Controller } from '@hotwired/stimulus'
 import { useDebounce } from 'stimulus-use'
+import { saveData } from '../js/saveData';
 
 export default class extends Controller {
   static debounces = ['changeNatureUeEcTexte', 'changeTypeUeTexte'];
@@ -24,5 +25,23 @@ export default class extends Controller {
   changeTypeUeTexte(event) {
     event.preventDefault()
     document.getElementById('ue_typeUe').disabled = event.currentTarget.value.length > 0
+  }
+
+  changeNatureUe(event) {
+    // récupérer data-choix sur la balise option selectionnée
+
+    const { choix } = event.target.options[event.target.selectedIndex].dataset
+    const { libre } = event.target.options[event.target.selectedIndex].dataset
+    if (choix === 'true') {
+      if (confirm('Attention, vous allez changer la nature de l\'UE pour une UE impliquant plusieurs choix. Vous devez définir au moins deux UE de choix. Souhaitez-vous continuer ?')) {
+        document.getElementById('descriptionUeLibre').classList.add('d-none')
+      }
+    } else if (libre === 'true') {
+      if (confirm('Attention, vous allez changer la nature de l\'UE. Souhaitez-vous continuer ?')) {
+        document.getElementById('descriptionUeLibre').classList.remove('d-none')
+      }
+    } else {
+      document.getElementById('descriptionUeLibre').classList.add('d-none')
+    }
   }
 }

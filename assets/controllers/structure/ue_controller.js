@@ -73,28 +73,6 @@ export default class extends Controller {
     document.getElementById(`detail_ue_${event.params.ue}_${event.params.parcours}`).classList.remove('d-none')
   }
 
-  changeNatureUe(event) {
-    // récupérer data-choix sur la balise option selectionnée
-
-    const { choix } = event.target.options[event.target.selectedIndex].dataset
-    if (choix === 'true') {
-      if (confirm('Attention, vous allez changer la nature de l\'UE pour une UE impliquant plusieurs choix. Vous devez définir au moins deux UE de choix. Souhaitez-vous continuer ?')) {
-        saveData(event.params.url, {
-          actions: 'changeNatureUe',
-          value: event.target.value,
-        })
-        // todo: et bouton pour en ajouter d'autres ??? en dessous ? Gérer le déplacement dans l'ordre sans le dépasser, gérer la supprssion...
-        // todo: problème de refresh de la liste des UE...
-        this.dispatch('refreshListe')
-      }
-    } else {
-      saveData(event.params.url, {
-        actions: 'changeNatureUe',
-        value: event.target.value,
-      })
-    }
-  }
-
   delete(event) {
     event.preventDefault()
     const { url } = event.params

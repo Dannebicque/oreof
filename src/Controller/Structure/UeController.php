@@ -291,6 +291,7 @@ class UeController extends AbstractController
 
         return $this->render('structure/ue/_new.html.twig', [
             'form' => $form->createView(),
+            'ue' => $ue,
         ]);
     }
 
