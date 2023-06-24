@@ -32,6 +32,18 @@ export default class extends Controller {
   }
 
   changeComposante(event) {
+    // effacer toutes les options du select avec un id parcours
+    const parcours = document.getElementById('parcours')
+    const formation = document.getElementById('formation')
+
+    while (formation.options.length > 0) {
+      formation.remove(0);
+    }
+
+    while (parcours.options.length > 0) {
+      parcours.remove(0);
+    }
+
     this._getData(event.target.value, 'formation')
   }
 
@@ -72,6 +84,12 @@ export default class extends Controller {
   }
 
   changeFormation(event) {
+    const parcours = document.getElementById('parcours')
+
+    while (parcours.options.length > 0) {
+      parcours.remove(0);
+    }
+
     this._getData(event.target.value, 'parcours')
   }
 
@@ -92,25 +110,25 @@ export default class extends Controller {
 
   _updateSelect(data, field) {
     const select = document.getElementById(`${field}`)
-    select.innerHTML = ''
+
     if (data.length === 0) {
       const option = document.createElement('option')
-      option.value = ''
+      option.value = null
       option.text = 'Aucune donnée'
-      select.add(option)
+      select.add(option, null)
     }
 
     if (data.length > 1) {
       const option = document.createElement('option')
-      option.value = ''
+      option.value = null
       option.text = 'Choisir dans la liste'
-      select.add(option)
+      select.add(option, null)
     }
     data.forEach((item) => {
       const option = document.createElement('option')
       option.value = item.id
       option.text = item.libelle
-      select.add(option)
+      select.add(option, null)
     })
 
     if (data.length === 1) {

@@ -89,42 +89,42 @@ export default class extends Controller {
 
     if (sem !== event.target.value) {
       if (confirm('Voulez-vous vraiment modifier le semestre de début des parcours ? Cela  va modifier la structure de votre parcours/formation et peut effacer les semestres caduques/devenus inutiles.')) {
-        if (sem > parseInt(event.target.value, 10)) {
-          const liste = document.getElementById('listeSemestre')
-          // on ajoute
-          let html = ''
-          for (let i = parseInt(event.target.value, 10); i < sem; i++) {
-            html += `<li id="sem_${i}">
-                    <span class="required">Semestre ${i}</span> :
-                        <div class="form-check-inline">
-                            <input type="radio" id="formation_parcours_${i}_tc" name="semestre_${i}" required="required"
-                                class="form-check-input" value="tronc_commun"
-                                 data-action="click->formation--step3#changeSemestre"
-                                 data-formation--step3-semestre-param="${i}"
-                                >
-                                <label class="form-check-label" for="formation_parcours_${i}_tc">Tronc Commun</label>
-                        </div>
-                        <strong class="text-primary me-2">OU</strong>
-                        <div class="form-check-inline">
-                            <input type="radio" id="formation_parcours_${i}_parc" name="semestre_{{ i }}" required="required"
-                                    class="form-check-input" value="parcours" 
-                                    data-action="click->formation--step3#changeSemestre"
-                                    data-formation--step3-semestre-param="${i}">
-                           <label class="form-check-label" for="formation_parcours_${i}_parc">Parcours</label>
-                        </div>
-                 </li>`
-          }
-
-          // ajouter un nouvel élément au début de la liste ul/li
-          liste.insertAdjacentHTML('afterbegin', html)
-        } else {
-          // on supprime
-          for (let i = 0; i < event.target.value; i++) {
-            if (document.getElementById(`sem_${i}`)) {
-              document.getElementById(`sem_${i}`).remove()
-            }
-          }
-        }
+        // if (sem > parseInt(event.target.value, 10)) {
+        //   const liste = document.getElementById('listeSemestre')
+        //   // on ajoute
+        //   let html = ''
+        //   // for (let i = parseInt(event.target.value, 10); i < sem; i++) {
+        //   //   html += `<li id="sem_${i}">
+        //   //           <span class="required">Semestre ${i}</span> :
+        //   //               <div class="form-check-inline">
+        //   //                   <input type="radio" id="formation_parcours_${i}_tc" name="semestre_${i}" required="required"
+        //   //                       class="form-check-input" value="tronc_commun"
+        //   //                        data-action="click->formation--step3#changeSemestre"
+        //   //                        data-formation--step3-semestre-param="${i}"
+        //   //                       >
+        //   //                       <label class="form-check-label" for="formation_parcours_${i}_tc">Tronc Commun</label>
+        //   //               </div>
+        //   //               <strong class="text-primary me-2">OU</strong>
+        //   //               <div class="form-check-inline">
+        //   //                   <input type="radio" id="formation_parcours_${i}_parc" name="semestre_{{ i }}" required="required"
+        //   //                           class="form-check-input" value="parcours"
+        //   //                           data-action="click->formation--step3#changeSemestre"
+        //   //                           data-formation--step3-semestre-param="${i}">
+        //   //                  <label class="form-check-label" for="formation_parcours_${i}_parc">Parcours</label>
+        //   //               </div>
+        //   //        </li>`
+        //   // }
+        //
+        //   // ajouter un nouvel élément au début de la liste ul/li
+        //   //liste.insertAdjacentHTML('afterbegin', html)
+        // } else {
+        //   // on supprime
+        //   for (let i = 0; i < event.target.value; i++) {
+        //     if (document.getElementById(`sem_${i}`)) {
+        //       document.getElementById(`sem_${i}`).remove()
+        //     }
+        //   }
+        // }
 
         this._save({
           action: 'semestreDebut',
@@ -140,11 +140,11 @@ export default class extends Controller {
 
     if (parseInt(data, 10) === 1) {
       document.getElementById('liste_Parcours').classList.remove('d-none')
-      document.getElementById('bloc_semestre').classList.remove('d-none')
+      // document.getElementById('bloc_semestre').classList.remove('d-none')
       document.getElementById('bloc_pas_parcours').classList.add('d-none')
     } else {
       document.getElementById('liste_Parcours').classList.add('d-none')
-      document.getElementById('bloc_semestre').classList.add('d-none')
+      // document.getElementById('bloc_semestre').classList.add('d-none')
       document.getElementById('bloc_pas_parcours').classList.remove('d-none')
     }
 

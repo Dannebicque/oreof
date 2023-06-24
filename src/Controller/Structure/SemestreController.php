@@ -16,6 +16,7 @@ use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\SemestreMutualisable;
 use App\Entity\SemestreParcours;
+use App\Entity\Ue;
 use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
@@ -104,7 +105,7 @@ class SemestreController extends AbstractController
             return JsonReponse::error('Le semestre existe déjà');
         }
 
-        switch($action) {
+        switch ($action) {
             case 'init':
                 $semestre = new Semestre();
                 $semestre->setOrdre($ordre);
@@ -113,6 +114,17 @@ class SemestreController extends AbstractController
                 $semestreParcours = new SemestreParcours($semestre, $parcours);
                 $semestreParcours->setOrdre($ordre);
                 $entityManager->persist($semestreParcours);
+
+                $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
+                if (null !== $typeDiplome && $typeDiplome->getNbUeMin() > 0) {
+                    for ($i = 1; $i <= $typeDiplome->getNbUeMin(); $i++) {
+                        $ue = new Ue();
+                        $ue->setSemestre($semestre);
+                        $ue->setOrdre($i);
+                        $entityManager->persist($ue);
+                    }
+                }
+
                 $entityManager->flush();
                 return JsonReponse::success('Semestre ajouté');
             case 'nonDispense':
@@ -239,7 +251,7 @@ class SemestreController extends AbstractController
             foreach ($semestre->getUes() as $ue) {
                 $newUe = clone $ue;
                 $newUe->setSemestre($newSemestre);
-                //todo: code??
+                $newUe->setUeParent(null);//todo: a gérer ?? l'UE parent change...
                 $entityManager->persist($newUe);
                 //on recopie les EC
                 foreach ($ue->getElementConstitutifs() as $ec) {
@@ -350,16 +362,16 @@ class SemestreController extends AbstractController
                     'semestre' => $semestre
                 ]);
             case 'formation':
-                $formations = $formationRepository->findBy(['composantePorteuse' => $data['value']]);
+                $formations = $formationRepository->findBy(['composantePorteuse' => $data['value']], ['libelle' => 'ASC']);
                 foreach ($formations as $formation) {
                     $t[] = [
                         'id' => $formation->getId(),
-                        'libelle' => $formation->getDisplay()
+                        'libelle' => $formation->getTypeDiplome()?->getLibelle(). ' - '.$formation->getDisplay()
                     ];
                 }
                 break;
             case 'parcours':
-                $parcours = $parcoursRepository->findBy(['formation' => $data['value']]);
+                $parcours = $parcoursRepository->findBy(['formation' => $data['value']], ['libelle' => 'ASC']);
                 foreach ($parcours as $parcour) {
                     $t[] = [
                         'id' => $parcour->getId(),
@@ -368,7 +380,17 @@ class SemestreController extends AbstractController
                 }
                 break;
             case 'save':
-                $parcours = $parcoursRepository->find($data['parcours']);
+                if (!isset($data['parcours']) || $data['parcours'] === '') {
+                    $formation = $formationRepository->find($data['formation']);
+                    if ($formation !== null && $formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
+                        $parcours = $formation->getParcours()[0];
+                    }
+                } else {
+                    $parcours = $parcoursRepository->find($data['parcours']);
+                }
+
+
+
                 $exist = $semestreMutualisableRepository->findOneBy([
                     'semestre' => $semestre,
                     'parcours' => $parcours
@@ -415,10 +437,10 @@ class SemestreController extends AbstractController
 
     #[Route('/deplacer/{semestre}/{parcours}/{sens}', name: 'deplacer', methods: ['GET'])]
     public function deplacer(
-        SemestreOrdre $semestreOrdre,
-        SemestreParcours      $semestre,
-        Parcours      $parcours,
-        string        $sens
+        SemestreOrdre    $semestreOrdre,
+        SemestreParcours $semestre,
+        Parcours         $parcours,
+        string           $sens
     ): Response {
         $semestreOrdre->deplacerSemestre($semestre, $parcours, $sens);
 
