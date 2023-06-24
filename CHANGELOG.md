@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.35](https://github.com/Dannebicque/oreof/compare/v1.3.34...v1.3.35) (2023-06-24)
+
+
+### Features
+
+* EC MCCC et colume horaire sur EC enfants ([56c0bf8](https://github.com/Dannebicque/oreof/commit/56c0bf80b711cfee803a2efd5ee7d7546da0cf67))
+* Export des MCCC et compétences en excel ([47eff9b](https://github.com/Dannebicque/oreof/commit/47eff9bf487015d0df7df149e9e92ac0829c7da8))
+* Suppression structure par semestre + génération structure ([24e8cd8](https://github.com/Dannebicque/oreof/commit/24e8cd89e3598c8d69fdecbded19866a83348ded))
+* UE => Text descriptif si UE libre ([526b319](https://github.com/Dannebicque/oreof/commit/526b3194e54e8b8412e37ed22a522d64f2dd63cd))
+* UE Texte descriptif ([494b2d8](https://github.com/Dannebicque/oreof/commit/494b2d8e90f02abc078ce5f37ea34a0da2e1ef08))
+
+
+### Bug Fixes
+
+* Ajout EC enfant ([e34d57a](https://github.com/Dannebicque/oreof/commit/e34d57a7f29d434391d10bb0cd1b9213416db904))
+* formatage des nom/prénom ([ea9b5c7](https://github.com/Dannebicque/oreof/commit/ea9b5c77728cbdc670cdcdcd3c738743811b15dc))
+* Modèle MCCC ([5460a88](https://github.com/Dannebicque/oreof/commit/5460a88f3aa684057192a3fc5a928e2455329544))
+* Modification numérotation BCC/Comp ([024c4e8](https://github.com/Dannebicque/oreof/commit/024c4e8b5166b63907ebf0eb073b978b42a209c7))
+* Mutualisation semestre liste avec autocomplete et tri ([89e7c0b](https://github.com/Dannebicque/oreof/commit/89e7c0b896309d597c732409f053d9a602de63fc))
+* tri par ordre alphabétique ([27b0715](https://github.com/Dannebicque/oreof/commit/27b07153e8c7b06d2c42866c8f22cf78c4ced318))
+
 ### [1.3.34](https://github.com/Dannebicque/oreof/compare/v1.3.33...v1.3.34) (2023-06-23)
 
 
