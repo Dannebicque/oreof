@@ -214,6 +214,11 @@ class ElementConstitutifController extends AbstractController
         Parcours                     $parcours
     ): Response {
         $ecParent = $elementConstitutifRepository->find($request->query->get('element'));
+
+        if ($ecParent === null) {
+            throw new RuntimeException('Element constitutif parent non trouvé');
+        }
+
         $elementConstitutif = new ElementConstitutif();
         $elementConstitutif->setParcours($parcours);
 
@@ -228,7 +233,7 @@ class ElementConstitutifController extends AbstractController
         $form = $this->createForm(ElementConstitutifEnfantType::class, $elementConstitutif, [
             'action' => $this->generateUrl(
                 'app_element_constitutif_new_enfant',
-                ['ue' => $ue->getId(), 'parcours' => $parcours->getId(), 'ec' => $request->query->get('ec')]
+                ['ue' => $ue->getId(), 'parcours' => $parcours->getId(), 'element' => $request->query->get('element')]
             )
         ]);
         $form->handleRequest($request);
@@ -250,7 +255,7 @@ class ElementConstitutifController extends AbstractController
             $elementConstitutif->setFicheMatiere($ficheMatiere);
             $elementConstitutif->setEcParent($ecParent->getEcParent());
             $elementConstitutif->setOrdre($nextEnfant);
-            $ecOrdre->decalerEnfant($ecParent);
+            $ecOrdre->decalerEnfant($ecParent);//todo: a revoir ? décale de trop... Idem sur supprimer...
             $elementConstitutif->genereCode();
 
             $elementConstitutifRepository->save($elementConstitutif, true);
@@ -268,39 +273,6 @@ class ElementConstitutifController extends AbstractController
         ]);
     }
 
-//    /**
-//     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-//     */
-//    #[
-//        Route('/{id}', name: 'app_element_constitutif_show', methods: ['GET'])]
-//    public function show(
-//        FicheMatiere $ficheMatiere
-//    ): Response {
-//        $formation = $ficheMatiere->getParcours()->getFormation();
-//        if ($formation === null) {
-//            throw new RuntimeException('Formation non trouvée');
-//        }
-//
-//        $bccs = [];
-//        foreach ($ficheMatiere->getCompetences() as $competence) {
-//            if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
-//                $bccs[$competence->getBlocCompetence()?->getId()]['bcc'] = $competence->getBlocCompetence();
-//                $bccs[$competence->getBlocCompetence()?->getId()]['competences'] = [];
-//            }
-//            $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
-//        }
-//
-//        $typeDiplome = $formation->getTypeDiplome();
-//
-//        return $this->render('element_constitutif/show.html.twig', [
-//            'ficheMatiere' => $ficheMatiere,
-//            'template' => $typeDiplome::TEMPLATE,//todo: revoir pour appeler le template global ?
-//            'formation' => $formation,
-//            'typeDiplome' => $typeDiplome,
-//            'bccs' => $bccs
-//        ]);
-//    }
-
     #[Route('/{id}/edit/{parcours}', name: 'app_element_constitutif_edit', methods: ['GET', 'POST'])]
     public function edit(
         EcOrdre                      $ecOrdre,
@@ -312,7 +284,7 @@ class ElementConstitutifController extends AbstractController
         ElementConstitutif           $elementConstitutif,
         Parcours                     $parcours
     ): Response {
-        $typeDiplome = $parcours->getFormation()->getTypeDiplome();
+        $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         if ($typeDiplome === null) {
             throw new RuntimeException('Type de diplôme non trouvé');
@@ -496,7 +468,17 @@ class ElementConstitutifController extends AbstractController
             ),
         ]);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
+            if (array_key_exists('heuresEnfantsIdentiques', $request->request->all()['ec_step4'])) {
+                if ($elementConstitutif->getEcParent() !== null) {
+                    $elementConstitutif->getEcParent()->setHeuresEnfantsIdentiques((bool)$request->request->all()['ec_step4']['heuresEnfantsIdentiques']);
+                } else {
+                    $elementConstitutif->setHeuresEnfantsIdentiques((bool)$request->request->all()['ec_step4']['heuresEnfantsIdentiques']);
+                }
+            } else {
+                $elementConstitutif->setHeuresEnfantsIdentiques(false);
+            }
+
             $elementConstitutifRepository->save($elementConstitutif, true);
 
             return $this->json(true);
@@ -537,7 +519,21 @@ class ElementConstitutifController extends AbstractController
         if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
             $this->isGranted('CAN_PARCOURS_EDIT_MY', $elementConstitutif->getParcours())) { //todo: ajouter le workflow...
             if ($request->isMethod('POST')) {
-                $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
+                if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
+                    $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
+                } else {
+                    $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
+                }
+
+                if ($request->request->has('ec_step4') && array_key_exists('mcccEnfantsIdentique', $request->request->all()['ec_step4'])) {
+                    if ($elementConstitutif->getEcParent() !== null) {
+                        $elementConstitutif->getEcParent()->setMcccEnfantsIdentique((bool)$request->request->all()['ec_step4']['mcccEnfantsIdentique']);
+                    } else {
+                        $elementConstitutif->setMcccEnfantsIdentique((bool)$request->request->all()['ec_step4']['mcccEnfantsIdentique']);
+                    }
+                } else {
+                    $elementConstitutif->setMcccEnfantsIdentique(false);
+                }
 
                 if ($request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
                     $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
