@@ -16,6 +16,7 @@ use App\Repository\TypeUeRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -52,10 +53,21 @@ class UeType extends AbstractType
             ->add('natureUeEc', EntityType::class, [
                 'class' => NatureUeEc::class,
                 'choice_label' => 'libelle',
+                'attr' => ['data-action' => 'change->ue#changeNatureUe'],
                 'query_builder' => function (EntityRepository $qb) {
                     return $qb->createQueryBuilder('n')
                         ->orderBy('n.libelle', 'ASC');
                 },
+                'choice_attr' => function ($choice) {
+                    return ['data-choix' => $choice->isChoix() ? 'true' : 'false', 'data-libre' => $choice->isLibre() ? 'true' : 'false'];
+                },
+                'required' => false,
+            ])
+            ->add('descriptionUeLibre', TextareaType::class, [
+                'attr' => [
+                    'maxlength' => 255,
+                    'rows' => 5,
+                ],
                 'required' => false,
             ]);
     }
