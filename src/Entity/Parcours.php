@@ -440,11 +440,14 @@ class Parcours
     public function remplissageBrut(): int
     {
         $total = 0;
-        $total += count($this->getRegimeInscription()) === 0 ? 0 : 1;
-        $total += $this->getContenuFormation() === null ? 0 : 1;
-        $total += $this->getDebouches() === null ? 0 : 1;
-        $total += $this->getResultatsAttendus() === null ? 0 : 1;
-        $total += $this->getRythmeFormation() === null ? 0 : 1;
+        //if (!$this->isParcoursDefaut()) {
+            $total += count($this->getRegimeInscription()) === 0 ? 0 : 1;
+            $total += $this->getContenuFormation() === null ? 0 : 1;
+            $total += $this->getDebouches() === null ? 0 : 1;
+            $total += $this->getResultatsAttendus() === null ? 0 : 1;
+            $total += $this->getRythmeFormation() === null ? 0 : 1;
+       // }
+
         $total += $this->getLocalisation() === null ? 0 : 1;
         $total += $this->getObjectifsParcours() === null ? 0 : 1;
         $total += $this->getPoursuitesEtudes() === null ? 0 : 1;
@@ -456,7 +459,11 @@ class Parcours
 
     public function remplissage(): float
     {
-        return $this->remplissageBrut() / 10 * 100;
+        //if ($this->isParcoursDefaut()) {
+            return $this->remplissageBrut() / 10 * 100;
+        //}
+
+        //return $this->remplissageBrut() / 5 * 100;
     }
 
     public function getRythmeFormation(): ?RythmeFormation
