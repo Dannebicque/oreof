@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/Dannebicque/oreof/compare/v1.3.36...v1.4.0) (2023-06-25)
+
+
+### Features
+
+* Ajout des ECTS sur UE ([21278f1](https://github.com/Dannebicque/oreof/commit/21278f1ab1ecdb4ef6d8d42e2fd84aa124603884))
+* Ajout du quitus sur l'EC ([bfce360](https://github.com/Dannebicque/oreof/commit/bfce3602b47f436edecd41456ca526f217b7e15e))
+* Commande pour mise à jour des codes des BCC/Comp ([25455c1](https://github.com/Dannebicque/oreof/commit/25455c1d904b310e9c77f43e62748f678f0f7275))
+
+
+### Bug Fixes
+
+* Taux remplissage ([5c0240e](https://github.com/Dannebicque/oreof/commit/5c0240e832d2a8d77bead5f17186a788afdc12cd))
+
 ### [1.3.36](https://github.com/Dannebicque/oreof/compare/v1.3.35...v1.3.36) (2023-06-25)
 
 
