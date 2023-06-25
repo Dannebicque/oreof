@@ -65,6 +65,9 @@ class Ue
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descriptionUeLibre = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $ects = null;
+
     public function __construct()
     {
         $this->elementConstitutifs = new ArrayCollection();
@@ -147,8 +150,13 @@ class Ue
         return $this;
     }
 
-    public function totalEctsUe(): int
+    public function totalEctsUe(): float
     {
+        if ($this->getElementConstitutifs()->count() === 0 && $this->getEcts() !== null) {
+            return $this->getEcts();
+        }
+
+        //todo: prendre en compte les ECTS de l'UE sur pas d'EC
         $total = 0;
         if ($this->getUeEnfants()->count() === 0) {
             foreach ($this->getElementConstitutifs() as $ec) {
@@ -324,6 +332,18 @@ class Ue
     public function setDescriptionUeLibre(?string $descriptionUeLibre): self
     {
         $this->descriptionUeLibre = $descriptionUeLibre;
+
+        return $this;
+    }
+
+    public function getEcts(): ?float
+    {
+        return $this->ects;
+    }
+
+    public function setEcts(?float $ects): self
+    {
+        $this->ects = $ects;
 
         return $this;
     }

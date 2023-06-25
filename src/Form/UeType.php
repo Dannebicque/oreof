@@ -12,6 +12,7 @@ namespace App\Form;
 use App\Entity\NatureUeEc;
 use App\Entity\TypeUe;
 use App\Entity\Ue;
+use App\Form\Type\FloatType;
 use App\Repository\TypeUeRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -33,6 +34,9 @@ class UeType extends AbstractType
                 'attr' => [
                     'maxlength' => 255,
                 ],
+                'required' => false
+            ])
+            ->add('ects', FloatType::class, [
                 'required' => false
             ])
             ->add('typeUe', EntityType::class, [

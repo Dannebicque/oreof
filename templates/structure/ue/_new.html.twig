@@ -5,6 +5,7 @@
         {{ stimulus_controller('ue') }}
 >
     {{ form_row(form.libelle) }}
+    {{ form_row(form.ects) }}
     <div>
         {{ form_row(form.typeUe, {'row_attr' : {'id' : 'typeUe' }}) }}
         <button class="btn text-info"
@@ -21,7 +22,8 @@
         {{ form_row(form.natureUeEc, {'row_attr' : {'id' : 'natureUeEc' }}) }}
     </div>
     <div id="descriptionUeLibre"
-    {% if ue is defined and ue.natureUeEc != null and ue.natureUeEc.libre == true %}class=""{% else %}class="d-none"{% endif %}
+         {% if ue is defined and ue.natureUeEc != null and ue.natureUeEc.libre == true %}class=""
+         {% else %}class="d-none"{% endif %}
     >
         {{ form_row(form.descriptionUeLibre, {'row_attr' : {'id' : 'natureUeEc' }}) }}
     </div>
