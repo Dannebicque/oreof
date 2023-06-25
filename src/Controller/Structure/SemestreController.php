@@ -249,52 +249,106 @@ class SemestreController extends AbstractController
             $entityManager->persist($newSemestre);
             // on recopie les UE
             foreach ($semestre->getUes() as $ue) {
-                $newUe = clone $ue;
-                $newUe->setSemestre($newSemestre);
-                $newUe->setUeParent(null);//todo: a gérer ?? l'UE parent change...
-                $entityManager->persist($newUe);
-                //on recopie les EC
-                foreach ($ue->getElementConstitutifs() as $ec) {
-                    switch ($data['dupliquer']) {
-                        case 'mutualise':
-                            //vérifier si pas déjà mutualisé
-                            $fm = $ficheMatiereMutualisableRepository->findBy([
-                                'ficheMatiere' => $ec->getFicheMatiere(),
-                            ]);
+                if ($ue->getUeParent() === null) {
+                    $newUe = clone $ue;
+                    $newUe->setSemestre($newSemestre);
+                    $newUe->setUeParent(null);
+                    $entityManager->persist($newUe);
+                    //on recopie les EC
+                    foreach ($ue->getElementConstitutifs() as $ec) {
+                        switch ($data['dupliquer']) {
+                            case 'mutualise':
+                                //vérifier si pas déjà mutualisé
+                                $fm = $ficheMatiereMutualisableRepository->findBy([
+                                    'ficheMatiere' => $ec->getFicheMatiere(),
+                                ]);
 
-                            if (count($fm) === 0) {
-                                //si pas mutualisé, mutualiser
-                                //le parcours d'origine
+                                if (count($fm) === 0) {
+                                    //si pas mutualisé, mutualiser
+                                    //le parcours d'origine
+                                    $ficheMatiereMutualisable = new FicheMatiereMutualisable();
+                                    $ficheMatiereMutualisable->setFicheMatiere($ec->getFicheMatiere());
+                                    $ficheMatiereMutualisable->setParcours($parcours);
+                                    $entityManager->persist($ficheMatiereMutualisable);
+                                }
+
+                                //le futur parcours de destination
                                 $ficheMatiereMutualisable = new FicheMatiereMutualisable();
                                 $ficheMatiereMutualisable->setFicheMatiere($ec->getFicheMatiere());
-                                $ficheMatiereMutualisable->setParcours($parcours);
+                                $ficheMatiereMutualisable->setParcours($parcoursDestination);
                                 $entityManager->persist($ficheMatiereMutualisable);
-                            }
+                                $entityManager->flush();
 
-                            //le futur parcours de destination
-                            $ficheMatiereMutualisable = new FicheMatiereMutualisable();
-                            $ficheMatiereMutualisable->setFicheMatiere($ec->getFicheMatiere());
-                            $ficheMatiereMutualisable->setParcours($parcoursDestination);
-                            $entityManager->persist($ficheMatiereMutualisable);
-                            $entityManager->flush();
+                                //faire le lien dans les deux UE
+                                $newEc = clone $ec;
+                                $newEc->setUe($newUe);
+                                $entityManager->persist($newEc);
+                                $entityManager->flush();
+                                break;
+                            case 'recopie':
+                                $newEc = clone $ec;
+                                $newEc->setUe($newUe);
+                                $entityManager->persist($newEc);
+                                if ($ec->getFicheMatiere() !== null) {
+                                    $newFm = clone $ec->getFicheMatiere();
+                                    $newEc->setFicheMatiere($newFm);
+                                    $entityManager->persist($newFm);
+                                }
+                                $entityManager->flush();
+                                break;
+                        }
+                    }
 
-                            //faire le lien dans les deux UE
-                            $newEc = clone $ec;
-                            $newEc->setUe($newUe);
-                            $entityManager->persist($newEc);
-                            $entityManager->flush();
-                            break;
-                        case 'recopie':
-                            $newEc = clone $ec;
-                            $newEc->setUe($newUe);
-                            $entityManager->persist($newEc);
-                            if ($ec->getFicheMatiere() !== null) {
-                                $newFm = clone $ec->getFicheMatiere();
-                                $newEc->setFicheMatiere($newFm);
-                                $entityManager->persist($newFm);
+                    // on recopie les UE enfants
+                    foreach ($ue->getUeEnfants() as $ueEnfant) {
+                        $newUeEnfant = clone $ueEnfant;
+                        $newUeEnfant->setSemestre($newSemestre);
+                        $newUeEnfant->setUeParent($newUe);
+                        $entityManager->persist($newUeEnfant);
+                        //on recopie les EC
+                        foreach ($ueEnfant->getElementConstitutifs() as $ec) {
+                            switch ($data['dupliquer']) {
+                                case 'mutualise':
+                                    //vérifier si pas déjà mutualisé
+                                    $fm = $ficheMatiereMutualisableRepository->findBy([
+                                        'ficheMatiere' => $ec->getFicheMatiere(),
+                                    ]);
+
+                                    if (count($fm) === 0) {
+                                        //si pas mutualisé, mutualiser
+                                        //le parcours d'origine
+                                        $ficheMatiereMutualisable = new FicheMatiereMutualisable();
+                                        $ficheMatiereMutualisable->setFicheMatiere($ec->getFicheMatiere());
+                                        $ficheMatiereMutualisable->setParcours($parcours);
+                                        $entityManager->persist($ficheMatiereMutualisable);
+                                    }
+
+                                    //le futur parcours de destination
+                                    $ficheMatiereMutualisable = new FicheMatiereMutualisable();
+                                    $ficheMatiereMutualisable->setFicheMatiere($ec->getFicheMatiere());
+                                    $ficheMatiereMutualisable->setParcours($parcoursDestination);
+                                    $entityManager->persist($ficheMatiereMutualisable);
+                                    $entityManager->flush();
+
+                                    //faire le lien dans les deux UE
+                                    $newEc = clone $ec;
+                                    $newEc->setUe($newUeEnfant);
+                                    $entityManager->persist($newEc);
+                                    $entityManager->flush();
+                                    break;
+                                case 'recopie':
+                                    $newEc = clone $ec;
+                                    $newEc->setUe($newUeEnfant);
+                                    $entityManager->persist($newEc);
+                                    if ($ec->getFicheMatiere() !== null) {
+                                        $newFm = clone $ec->getFicheMatiere();
+                                        $newEc->setFicheMatiere($newFm);
+                                        $entityManager->persist($newFm);
+                                    }
+                                    $entityManager->flush();
+                                    break;
                             }
-                            $entityManager->flush();
-                            break;
+                        }
                     }
                 }
             }
@@ -366,7 +420,7 @@ class SemestreController extends AbstractController
                 foreach ($formations as $formation) {
                     $t[] = [
                         'id' => $formation->getId(),
-                        'libelle' => $formation->getTypeDiplome()?->getLibelle(). ' - '.$formation->getDisplay()
+                        'libelle' => $formation->getTypeDiplome()?->getLibelle() . ' - ' . $formation->getDisplay()
                     ];
                 }
                 break;
@@ -388,7 +442,6 @@ class SemestreController extends AbstractController
                 } else {
                     $parcours = $parcoursRepository->find($data['parcours']);
                 }
-
 
 
                 $exist = $semestreMutualisableRepository->findOneBy([
