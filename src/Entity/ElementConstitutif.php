@@ -121,6 +121,9 @@ class ElementConstitutif
     #[ORM\Column]
     private ?bool $heuresEnfantsIdentiques = false;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $quitus = false;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -594,6 +597,18 @@ class ElementConstitutif
     public function setHeuresEnfantsIdentiques(bool $heuresEnfantsIdentiques): self
     {
         $this->heuresEnfantsIdentiques = $heuresEnfantsIdentiques;
+
+        return $this;
+    }
+
+    public function isQuitus(): ?bool
+    {
+        return $this->quitus;
+    }
+
+    public function setQuitus(?bool $quitus): self
+    {
+        $this->quitus = $quitus;
 
         return $this;
     }

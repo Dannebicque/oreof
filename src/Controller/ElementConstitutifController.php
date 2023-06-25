@@ -535,6 +535,12 @@ class ElementConstitutifController extends AbstractController
                     $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
                 }
 
+                if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
+                    $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
+                } else {
+                    $elementConstitutif->setQuitus(false);
+                }
+
                 if ($request->request->has('ec_step4') && array_key_exists('mcccEnfantsIdentique', $request->request->all()['ec_step4'])) {
                     if ($elementConstitutif->getEcParent() !== null) {
                         $elementConstitutif->getEcParent()->setMcccEnfantsIdentique((bool)$request->request->all()['ec_step4']['mcccEnfantsIdentique']);
