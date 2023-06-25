@@ -248,14 +248,24 @@ class ElementConstitutifController extends AbstractController
             } else {
                 $ficheMatiere = new FicheMatiere();
                 $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
-                $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
+                $ficheMatiere->setParcours($parcours);
                 $ficheMatiereRepository->save($ficheMatiere, true);
             }
-            $nextEnfant = $ecOrdre->getOrdreEnfantSuivant($ecParent);
+
             $elementConstitutif->setFicheMatiere($ficheMatiere);
             $elementConstitutif->setEcParent($ecParent->getEcParent());
-            $elementConstitutif->setOrdre($nextEnfant);
-            $ecOrdre->decalerEnfant($ecParent);//todo: a revoir ? décale de trop... Idem sur supprimer...
+            //si up => $ecParent->getOrdre() + 1; si down => $ecParent->getOrdre()
+            if ($request->query->get('sens', 'after') === 'avant') {
+                $ordre = $ecParent->getOrdre();
+                $ecOrdre->decalerEnfant($ecParent->getEcParent(), $ordre);
+                $elementConstitutif->setOrdre($ordre);
+            } else {
+                $ordre = $ecParent->getOrdre() + 1;
+                $ecOrdre->decalerEnfant($ecParent->getEcParent(), $ordre);
+                $elementConstitutif->setOrdre($ordre);
+            }
+
+
             $elementConstitutif->genereCode();
 
             $elementConstitutifRepository->save($elementConstitutif, true);
@@ -622,10 +632,14 @@ class ElementConstitutifController extends AbstractController
             foreach ($elementConstitutif->getEcEnfants() as $enfant) {
                 $entityManager->remove($enfant);
             }
-            $ordre = $elementConstitutif->getOrdre();
-            $ue = $elementConstitutif->getUe();
-            $elementConstitutifRepository->remove($elementConstitutif, true);
-            $ecOrdre->removeElementConstitutif($ordre, $ue);
+            if ($elementConstitutif->getEcParent() === null) {
+                $ecOrdre->removeElementConstitutif($elementConstitutif);
+            } else {
+                $ecOrdre->removeElementConstitutifEnfant($elementConstitutif);
+            }
+            $entityManager->remove($elementConstitutif);
+            $entityManager->flush();
+
 
             return $this->json(true);
         }
