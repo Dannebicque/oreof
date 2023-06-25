@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.36](https://github.com/Dannebicque/oreof/compare/v1.3.35...v1.3.36) (2023-06-25)
+
+
+### Bug Fixes
+
+* dupliquer un semestre ([944a15f](https://github.com/Dannebicque/oreof/commit/944a15f038bbac24e36ad0fc3c3c820609719813))
+* Ordre des EC à l'ajout et à la suppression ([f1617e4](https://github.com/Dannebicque/oreof/commit/f1617e42d82b9ec2be9b427cffcad2f48c46f34e))
+
 ### [1.3.35](https://github.com/Dannebicque/oreof/compare/v1.3.34...v1.3.35) (2023-06-24)
 
 
