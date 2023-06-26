@@ -11,6 +11,7 @@ namespace App\TypeDiplome\Export;
 
 use App\Classes\Excel\ExcelWriter;
 use App\DTO\TotalVolumeHeure;
+use App\Entity\AnneeUniversitaire;
 use App\Entity\ElementConstitutif;
 use App\Entity\Mccc;
 use App\Entity\Parcours;
@@ -81,18 +82,19 @@ class LicenceMccc
     public function __construct(
         protected ExcelWriter $excelWriter,
         TypeEpreuveRepository $typeEpreuveRepository
-    )
-    {
+    ) {
         $epreuves = $typeEpreuveRepository->findAll();
 
         foreach ($epreuves as $epreuve) {
             $this->typeEpreuves[$epreuve->getId()] = $epreuve;
         }
-
     }
 
 
-    public function exportExcelLicenceMccc(Parcours $parcours)
+    public function exportExcelLicenceMccc(
+        AnneeUniversitaire $anneeUniversitaire,
+        Parcours           $parcours
+    )
     {
         $formation = $parcours->getFormation();
 
@@ -302,8 +304,8 @@ class LicenceMccc
         $spreadsheet->removeSheetByIndex(0);
 
         $this->excelWriter->setSpreadsheet($spreadsheet, true);
-
-        return $this->excelWriter->genereFichier(substr('mccc_' . $parcours->getLibelle(), 0, 30));
+        //MCCC -2023-2024 -  M Psychologie sociale, du travail et des organisations
+        return $this->excelWriter->genereFichier(substr('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle(), 0, 30));
     }
 
     public function getMcccs(ElementConstitutif $elementConstitutif): array
@@ -338,7 +340,6 @@ class LicenceMccc
         }
 
         return substr($texte, 0, -2);
-
     }
 
     private function genereReferentielCompetences($spreadsheet, $parcours, $formation): void

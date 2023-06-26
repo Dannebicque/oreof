@@ -24,6 +24,8 @@ class ParcoursMcccExportController extends BaseController
     {
         $formation = $parcours->getFormation();
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
-        return $typeDiplome->exportExcelMccc($parcours);
+        return $typeDiplome->exportExcelMccc(
+            $this->getAnneeUniversitaire(),
+            $parcours);
     }
 }
