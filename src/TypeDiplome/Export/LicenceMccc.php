@@ -94,8 +94,7 @@ class LicenceMccc
     public function exportExcelLicenceMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours
-    )
-    {
+    ) {
         $formation = $parcours->getFormation();
 
         $redStyle = new Style(false, true);
@@ -166,118 +165,55 @@ class LicenceMccc
                 $this->excelWriter->setSheet($clonedWorksheet);
                 $this->excelWriter->writeCellName(self::CEL_ANNEE_ETUDE, $i . ' année');
                 foreach ($tabSemestresAnnee[$i] as $key => $semestre) {
+                    $debutSemestre = $ligne;
                     foreach ($semestre->getSemestre()->getUes() as $ue) {
-                        $num = 1;
-
-                        $nbEcs = $ue->getElementConstitutifs()->count();
-                        for ($l = 0; $l < $nbEcs; $l++) {
-                            $this->excelWriter->insertNewRowBefore($ligne + $l);
-                        }
-
                         //UE
-                        $this->excelWriter->writeCellXY(self::COL_UE, $ligne, $ue->display($parcours), ['wrap' => true]);
-                        $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $ligne, $ue->getLibelle(), ['wrap' => true]);
-                        if ($nbEcs > 1) {
-                            $this->excelWriter->mergeCellsCaR(self::COL_UE, $ligne, self::COL_UE, $ligne + $nbEcs - 1);
-                            $this->excelWriter->mergeCellsCaR(self::COL_INTITULE_UE, $ligne, self::COL_INTITULE_UE, $ligne + $nbEcs - 1);
-                        }
-                        foreach ($ue->getElementConstitutifs() as $ec) {
-                            $this->excelWriter->writeCellXY(self::COL_SEMESTRE, $ligne, 'S' . $semestre->getOrdre());
-                            $this->excelWriter->writeCellXY(self::COL_NUM_EC, $ligne, $num);//todo: gérer les cas
-
-                            if ($ec->getFicheMatiere() !== null) {
-                                //todo: plutôt un test sur le type EC
-                                $this->excelWriter->writeCellXY(self::COL_INTITULE_EC, $ligne, $ec->getFicheMatiere()->getLibelle(), ['wrap' => true]);//todo: gérer les cas
-                                $this->excelWriter->writeCellXY(self::COL_INTITULE_EC_EN, $ligne, $ec->getFicheMatiere()->getLibelleAnglais(), ['wrap' => true]);
-                                $this->excelWriter->writeCellXY(self::COL_RESP_EC, $ligne, $ec->getFicheMatiere()->getResponsableFicheMatiere()?->getDisplay(), ['wrap' => true]);
-
-                                // langue
-                                $texte = '';
-                                foreach ($ec->getFicheMatiere()->getLangueDispense() as $langue) {
-                                    $texte .= $langue->getLibelle() . "; ";
-                                }
-                                $texte = substr($texte, 0, -2);
-                                $this->excelWriter->writeCellXY(self::COL_LANGUE_EC, $ligne, $texte);
-
-                                $anglais = false;
-                                foreach ($ec->getFicheMatiere()->getLangueSupport() as $langue) {
-                                    if (strtolower($langue->getCodeIso()) === 'en') {
-                                        $anglais = true;
+                        if ($ue->getUeParent() === null) {
+                            $debut = $ligne;
+                            foreach ($ue->getElementConstitutifs() as $ec) {
+                                if ($ec->getEcParent() === null) {
+                                    $ligne = $this->afficheEc($ligne, $ec, $totalAnnee);
+                                    foreach ($ec->getEcEnfants() as $ece) {
+                                        $ligne = $this->afficheEc($ligne, $ece, $totalAnnee);
                                     }
-                                }
-                                $this->excelWriter->writeCellXY(self::COL_SUPPORT_ANGLAIS, $ligne, $anglais === true ? 'O' : 'N');
-
-                                $this->excelWriter->writeCellXY(self::COL_COURS_MUTUALISE, $ligne, $ec->getFicheMatiere()->isEnseignementMutualise() === true ? 'O' : 'N');
-
-
-                                // BCC
-                                $texte = '';
-                                foreach ($ec->getFicheMatiere()->getCompetences() as $comp) {
-                                    $texte .= $comp->getCode() . "; ";
-                                }
-
-                                $texte = substr($texte, 0, -2);
-
-                                $this->excelWriter->writeCellXY(self::COL_COMPETENCES, $ligne, $texte);
-
-                                // MCCC
-
-                                $mcccs = $this->getMcccs($ec);
-
-                                switch ($ec->getTypeMccc()) {
-                                    case 'cc':
-                                        $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, '50%');
-                                        $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, 2);
-                                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()));
-                                        break;
-                                    case 'cci':
-                                        $texte = '';
-                                        foreach ($mcccs as $mccc) {
-                                            $texte .= $this->displayTypeEpreuve($mccc->getTypeEpreuve()) . '(' . $mccc->getPourcentage() . '%; ';
-                                        }
-                                        $texte = substr($texte, 0, -2);
-                                        $this->excelWriter->writeCellXY(self::COL_MCCC_CCI_EPREUVES, $ligne, $texte);
-
-                                        break;
-                                    case 'cc_ct':
-                                        $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, $mcccs[1]['cc']->getPourcentage());
-                                        $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, $mcccs[1]['cc']->getNbEpreuves());
-                                        $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
-                                        $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
-
-                                        break;
-                                    case 'ct':
-                                        $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, '100%');
-                                        $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
-                                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()));
-                                        break;
                                 }
                             }
 
-                            $this->excelWriter->writeCellXY(self::COL_TYPE_EC, $ligne, $ec->getTypeEc() ? $ec->getTypeEc()->getLibelle() : '');
+                            if ($debut < $ligne - 1) {
+                                //    dump(self::COL_UE.'-'. $debut.'-'. self::COL_UE.'-'. $ligne - 1);
+                                $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
+//
+                                $this->excelWriter->mergeCellsCaR(self::COL_INTITULE_UE, $debut, self::COL_INTITULE_UE, $ligne - 1);
+                            }
+                            $this->excelWriter->writeCellXY(self::COL_UE, $debut, $ue->display($parcours), ['wrap' => true]);
+                            $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $debut, $ue->getLibelle(), ['wrap' => true]);
+                            foreach ($ue->getUeEnfants() as $uee) {
+                                $debut = $ligne;
+                                foreach ($uee->getElementConstitutifs() as $ec) {
+                                    if ($ec->getEcParent() === null) {
+                                        $ligne = $this->afficheEc($ligne, $ec, $totalAnnee);
+                                        foreach ($ec->getEcEnfants() as $ece) {
+                                            $ligne = $this->afficheEc($ligne, $ece, $totalAnnee);
+                                        }
+                                    }
+                                }
 
-                            // Heures
-                            $this->excelWriter->writeCellXY(self::COL_ECTS, $ligne, $ec->getEcts());
-                            $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $ec->getVolumeCmPresentiel());
-                            $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $ec->getVolumeTdPresentiel());
-                            $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $ec->getVolumeTpPresentiel());
-                            $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TOTAL, $ligne, $ec->volumeTotalPresentiel());
-
-                            //si pas distanciel, griser...
-                            $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_CM, $ligne, $ec->getVolumeCmDistanciel(), ['bgcolor' => 'cccccc']);
-                            $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TD, $ligne, $ec->getVolumeTdDistanciel());
-                            $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TP, $ligne, $ec->getVolumeTpDistanciel());
-                            $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TOTAL, $ligne, $ec->volumeTotalDistanciel());
-                            $this->excelWriter->writeCellXY(self::COL_HEURES_AUTONOMIE, $ligne, $ec->getVolumeTe());
-
-                            $this->excelWriter->writeCellXY(self::COL_HEURES_TOTAL, $ligne, $ec->volumeTotal());
-                            $totalAnnee->addEc($ec);
-                            $num++;
-                            $ligne++;
+                                if ($debut < $ligne - 1) {
+                                    //    dump(self::COL_UE.'-'. $debut.'-'. self::COL_UE.'-'. $ligne - 1);
+                                    $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
+//
+                                    $this->excelWriter->mergeCellsCaR(self::COL_INTITULE_UE, $debut, self::COL_INTITULE_UE, $ligne - 1);
+                                }
+                                $this->excelWriter->writeCellXY(self::COL_UE, $debut, $uee->display($parcours), ['wrap' => true]);
+                                $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $debut, $uee->getLibelle(), ['wrap' => true]);
+                            }
                         }
-                        // $ligne++;//si $num a bougé, pas de ++
                     }
 
+                    $this->excelWriter->mergeCellsCaR(self::COL_SEMESTRE, $debutSemestre, self::COL_SEMESTRE, $ligne - 1);
+                    $this->excelWriter->writeCellXY(self::COL_SEMESTRE, $debutSemestre, 'S' . $semestre->getOrdre());
+
+                    //dump(self::COL_SEMESTRE.'*-*'. $debutSemestre.'*-*'. self::COL_SEMESTRE.'*-*'. $ligne - 1);
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $totalAnnee->totalCmPresentiel, ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $totalAnnee->totalTdPresentiel, ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $totalAnnee->totalTpPresentiel, ['style' => 'HORIZONTAL_CENTER']);
@@ -373,5 +309,112 @@ class LicenceMccc
                 $ligne++;
             }
         }
+    }
+
+    /**
+     * @param int $ligne
+     * @param int $num
+     * @param mixed $ec
+     * @param TotalVolumeHeure $totalAnnee
+     * @return int
+     */
+    private function afficheEc(int $ligne, ElementConstitutif $ec, TotalVolumeHeure $totalAnnee): int
+    {
+        $this->excelWriter->insertNewRowBefore($ligne);
+        $this->excelWriter->writeCellXY(self::COL_NUM_EC, $ligne, $ec->getCode());//todo: gérer les cas
+
+        if ($ec->getFicheMatiere() !== null) {
+            //todo: plutôt un test sur le type EC
+            $this->excelWriter->writeCellXY(self::COL_INTITULE_EC, $ligne, $ec->getFicheMatiere()->getLibelle(), ['wrap' => true]);//todo: gérer les cas
+            $this->excelWriter->writeCellXY(self::COL_INTITULE_EC_EN, $ligne, $ec->getFicheMatiere()->getLibelleAnglais(), ['wrap' => true]);
+            $this->excelWriter->writeCellXY(self::COL_RESP_EC, $ligne, $ec->getFicheMatiere()->getResponsableFicheMatiere()?->getDisplay(), ['wrap' => true]);
+
+            // langue
+            $texte = '';
+            foreach ($ec->getFicheMatiere()->getLangueDispense() as $langue) {
+                $texte .= $langue->getLibelle() . "; ";
+            }
+            $texte = substr($texte, 0, -2);
+            $this->excelWriter->writeCellXY(self::COL_LANGUE_EC, $ligne, $texte);
+
+            $anglais = false;
+            foreach ($ec->getFicheMatiere()->getLangueSupport() as $langue) {
+                if (strtolower($langue->getCodeIso()) === 'en') {
+                    $anglais = true;
+                }
+            }
+            $this->excelWriter->writeCellXY(self::COL_SUPPORT_ANGLAIS, $ligne, $anglais === true ? 'O' : 'N');
+
+            $this->excelWriter->writeCellXY(self::COL_COURS_MUTUALISE, $ligne, $ec->getFicheMatiere()->isEnseignementMutualise() === true ? 'O' : 'N');
+
+
+            // BCC
+            $texte = '';
+            foreach ($ec->getFicheMatiere()->getCompetences() as $comp) {
+                $texte .= $comp->getCode() . "; ";
+            }
+
+            $texte = substr($texte, 0, -2);
+
+            $this->excelWriter->writeCellXY(self::COL_COMPETENCES, $ligne, $texte);
+
+            // MCCC
+
+            $mcccs = $this->getMcccs($ec);
+
+            switch ($ec->getTypeMccc()) {
+                case 'cc':
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, '50%');
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, 2);
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()));
+                    break;
+                case 'cci':
+                    $texte = '';
+                    foreach ($mcccs as $mccc) {
+                        $texte .= $this->displayTypeEpreuve($mccc->getTypeEpreuve()) . '(' . $mccc->getPourcentage() . '%; ';
+                    }
+                    $texte = substr($texte, 0, -2);
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_CCI_EPREUVES, $ligne, $texte);
+
+                    break;
+                case 'cc_ct':
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, $mcccs[1]['cc']->getPourcentage());
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, $mcccs[1]['cc']->getNbEpreuves());
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
+
+                    break;
+                case 'ct':
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, '100%');
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()));
+                    break;
+            }
+        }
+
+        $this->excelWriter->writeCellXY(self::COL_TYPE_EC, $ligne, $ec->getTypeEc() ? $ec->getTypeEc()->getLibelle() : '');
+
+        // Heures
+        $this->excelWriter->writeCellXY(self::COL_ECTS, $ligne, $ec->getEcts());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $ec->getVolumeCmPresentiel());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $ec->getVolumeTdPresentiel());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $ec->getVolumeTpPresentiel());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TOTAL, $ligne, $ec->volumeTotalPresentiel());
+
+        //si pas distanciel, griser...
+        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_CM, $ligne, $ec->getVolumeCmDistanciel(), ['bgcolor' => 'cccccc']);
+        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TD, $ligne, $ec->getVolumeTdDistanciel());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TP, $ligne, $ec->getVolumeTpDistanciel());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TOTAL, $ligne, $ec->volumeTotalDistanciel());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_AUTONOMIE, $ligne, $ec->getVolumeTe());
+
+        $this->excelWriter->writeCellXY(self::COL_HEURES_TOTAL, $ligne, $ec->volumeTotal());
+        $totalAnnee->addEc($ec);
+
+        $ligne++;
+        //dump($ligne);
+
+
+        return $ligne;
     }
 }

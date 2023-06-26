@@ -9,6 +9,7 @@
 
 namespace App\TypeDiplome\Source;
 
+use App\Entity\AnneeUniversitaire;
 use App\Entity\ElementConstitutif;
 use App\Entity\Mccc;
 use App\Entity\Parcours;
@@ -33,9 +34,9 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         parent::__construct($entityManager, $typeDiplomeRegistry);
     }
 
-    public function exportExcelMccc(Parcours $parcours)
+    public function exportExcelMccc(AnneeUniversitaire $anneeUniversitaire, Parcours $parcours)
     {
-        return $this->licenceMccc->exportExcelLicenceMccc($parcours);
+        return $this->licenceMccc->exportExcelLicenceMccc($anneeUniversitaire, $parcours);
     }
 
     public function saveMcccs(ElementConstitutif $elementConstitutif, InputBag $request): void
@@ -107,7 +108,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                         $mcccs[$key] = $mccc;
                         $this->entityManager->persist($mccc);
                     }
-                    $totalPourcentage+= (float)$pourcentage;
+                    $totalPourcentage += (float)$pourcentage;
                     $nbNotes++;
                 }
 
