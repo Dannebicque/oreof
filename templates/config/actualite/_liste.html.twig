@@ -1,0 +1,22 @@
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Date</th>
+            <th>Publié ?</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for actualite in actualites %}
+            <tr>
+                <td>{{ actualite.titre }}</td>
+                <td>{{ actualite.datePublication|date('d/m/Y H:i') }}</td>
+                <td>{{ actualite.affiche|badgeBoolean }}</td>
+                <td>&nbsp;</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
