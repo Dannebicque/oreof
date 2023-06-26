@@ -71,7 +71,8 @@ bouton pour valider/invalide les étapes successives #}
                                 'field': 'typeDiplome'
                             }) }}
                             {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
-                            id="filter-type_formation" class="form-select">
+                            id="filter-type_formation" class="form-select"
+                    >
                         <option value="">Tous les types de formation</option>
                         {% for type in typeDiplomes %}
                             <option value="{{ type.id }}"
@@ -86,7 +87,17 @@ bouton pour valider/invalide les étapes successives #}
                             {{ stimulus_action('crud', 'filter', 'change', {
                                 'field': 'mention'
                             }) }}
-                            id="filter-mention" class="form-select"></select>
+                            id="filter-mention" class="form-select"
+                            {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                    >
+                        <option value="">Toutes les mentions</option>
+                        {% for mention in mentions %}
+                            <option value="{{ mention.id }}"
+                                    {% if params['mention'] is defined and params['mention']  == mention.id %}selected{% endif %}
+                            >{{ mention.libelle }}</option>
+                        {% endfor %}
+
+                    </select>
                 </th>
                 <th>
                     <label for="filter-etat" class="sr-only">etat</label>
@@ -94,7 +105,9 @@ bouton pour valider/invalide les étapes successives #}
                             {{ stimulus_action('crud', 'filter', 'change', {
                                 'field': 'etat'
                             }) }}
-                            id="filter-etat" class="form-select"></select>
+                            id="filter-etat" class="form-select">
+
+                    </select>
                 </th>
                 <th>
                     <label for="filter-remplissage" class="sr-only">remplissage</label>
@@ -102,7 +115,10 @@ bouton pour valider/invalide les étapes successives #}
                             {{ stimulus_action('crud', 'filter', 'change', {
                                 'field': 'remplissage'
                             }) }}
-                            id="filter-remplissage" class="form-select"></select>
+                            id="filter-remplissage" class="form-select">
+
+
+                    </select>
                 </th>
                 <th>
                     <button class="btn btn-outline-danger"

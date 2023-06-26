@@ -44,6 +44,7 @@ class FormationController extends BaseController
 
     #[Route('/liste', name: 'app_formation_liste', methods: ['GET'])]
     public function liste(
+        MentionRepository     $mentionRepository,
         ComposanteRepository  $composanteRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
         FormationRepository   $formationRepository,
@@ -100,6 +101,7 @@ class FormationController extends BaseController
 
         return $this->render('formation/_liste.html.twig', [
             'formations' => $tFormations,
+            'mentions' => $mentionRepository->findBy([], ['libelle' => 'ASC']),
             'composantes' => $composanteRepository->findBy([], ['libelle' => 'ASC']),
             'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
             'params' => $request->query->all()
