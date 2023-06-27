@@ -52,6 +52,11 @@ class TotalVolumeHeure
 
     public function getTotalEtudiant(): float
     {
+        return $this->getTotalPresentiel() + $this->getTotalDistanciel() + $this->totalVolumeTe;
+    }
+
+    public function getVolumeTotal(): float
+    {
         return $this->getTotalPresentiel() + $this->getTotalDistanciel();
     }
 }

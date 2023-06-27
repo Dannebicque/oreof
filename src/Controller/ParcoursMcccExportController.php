@@ -23,9 +23,43 @@ class ParcoursMcccExportController extends BaseController
     )
     {
         $formation = $parcours->getFormation();
-        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
+
+        if (null === $formation) {
+            throw new \Exception('Pas de formation.');
+        }
+
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
+
+        if (null === $typeDiplome) {
+            throw new \Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
+        }
         return $typeDiplome->exportExcelMccc(
             $this->getAnneeUniversitaire(),
             $parcours);
+    }
+
+    #[Route('/parcours/mccc/export-light/{parcours}.{_format}', name: 'app_parcours_mccc_export_light')]
+    public function exportMcccLightXlsx(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        Parcours $parcours,
+        string $_format = 'xlsx'
+    )
+    {
+        $formation = $parcours->getFormation();
+
+        if (null === $formation) {
+            throw new \Exception('Pas de formation.');
+        }
+
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
+
+        if (null === $typeDiplome) {
+            throw new \Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
+        }
+
+        return $typeDiplome->exportExcelMccc(
+            $this->getAnneeUniversitaire(),
+            $parcours,
+            false);
     }
 }

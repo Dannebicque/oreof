@@ -317,7 +317,7 @@ class ExcelWriter
         }
     }
 
-    public function insertNewRowBefore(int $ligne):void
+    public function insertNewRowBefore(int $ligne): void
     {
         $this->sheet->insertNewRowBefore($ligne);
     }
@@ -325,5 +325,15 @@ class ExcelWriter
     public function removeRow(int $ligne): void
     {
         $this->sheet->removeRow($ligne);
+    }
+
+    public function copyFromCellToCell(string $source, string $dest): void
+    {
+        $this->sheet->setCellValue($dest, $this->sheet->getCell($source)->getValue());
+    }
+
+    public function removeColumn(string $column, int $nbCol): void
+    {
+        $this->sheet->removeColumn($column, $nbCol);
     }
 }

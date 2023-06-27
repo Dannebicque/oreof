@@ -34,9 +34,13 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         parent::__construct($entityManager, $typeDiplomeRegistry);
     }
 
-    public function exportExcelMccc(AnneeUniversitaire $anneeUniversitaire, Parcours $parcours)
+    public function exportExcelMccc(
+        AnneeUniversitaire $anneeUniversitaire,
+        Parcours           $parcours,
+        bool               $versionFull = true
+    )
     {
-        return $this->licenceMccc->exportExcelLicenceMccc($anneeUniversitaire, $parcours);
+        return $this->licenceMccc->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $versionFull);
     }
 
     public function saveMcccs(ElementConstitutif $elementConstitutif, InputBag $request): void

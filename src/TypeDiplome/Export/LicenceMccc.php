@@ -78,6 +78,7 @@ class LicenceMccc
 
 
     protected array $typeEpreuves = [];
+    private bool $versionFull = true;
 
     public function __construct(
         protected ExcelWriter $excelWriter,
@@ -93,8 +94,10 @@ class LicenceMccc
 
     public function exportExcelLicenceMccc(
         AnneeUniversitaire $anneeUniversitaire,
-        Parcours           $parcours
+        Parcours           $parcours,
+        bool               $versionFull = true
     ) {
+        $this->versionFull = $versionFull;
         $formation = $parcours->getFormation();
 
         $redStyle = new Style(false, true);
@@ -130,7 +133,11 @@ class LicenceMccc
         $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
         $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->isParcoursDefaut() === false ? $parcours->getLibelle() : '');
         $modele->setCellValue(self::CEL_COMPOSANTE, $formation->getComposantePorteuse()?->getLibelle());
-        $modele->setCellValue(self::CEL_SITE_FORMATION, $parcours->getLocalisation()?->getLibelle());
+        if ($formation->isHasParcours() === false) {
+            $modele->setCellValue(self::CEL_SITE_FORMATION, $formation->getLocalisationMention()[0]?->getLibelle());
+        } else {
+            $modele->setCellValue(self::CEL_SITE_FORMATION, $parcours->getLocalisation()?->getLibelle());
+        }
         $modele->setCellValue(self::CEL_RESPONSABLE_MENTION, $formation->getResponsableMention()?->getDisplay());
         $modele->setCellValue(self::CEL_RESPONSABLE_PARCOURS, $parcours->getRespParcours()?->getDisplay());
 
@@ -226,13 +233,16 @@ class LicenceMccc
                     $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TP, $ligne, $totalAnnee->totalTpDistanciel, ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TOTAL, $ligne, $totalAnnee->getTotalDistanciel(), ['style' => 'HORIZONTAL_CENTER']);
 
+                    $this->excelWriter->writeCellXY(self::COL_HEURES_TOTAL, $ligne, $totalAnnee->getVolumeTotal(), ['style' => 'HORIZONTAL_CENTER']);
+
                     $this->excelWriter->writeCellXY(self::COL_HEURES_AUTONOMIE, $ligne + 1, $totalAnnee->getTotalVolumeTe(), ['style' => 'HORIZONTAL_CENTER']);
 
-                    $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_CM, $ligne + 2, $totalAnnee->getTotalEtudiant(), ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne + 2, $totalAnnee->getTotalEtudiant(), ['style' => 'HORIZONTAL_CENTER']);
                 }
             }
             //suppression de la ligne modèle 18
             $this->excelWriter->removeRow(18);
+            $this->updateIfNotFull();
         }
 
 
@@ -292,8 +302,6 @@ class LicenceMccc
         $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->isParcoursDefaut() === false ? $parcours->getLibelle() : '');
         $modele->setCellValue(self::CEL_COMPOSANTE, $formation->getComposantePorteuse()?->getLibelle());
         $modele->setCellValue(self::CEL_SITE_FORMATION, $parcours->getLocalisation()?->getLibelle());
-        $modele->setCellValue(self::CEL_RESPONSABLE_MENTION, $formation->getResponsableMention()?->getDisplay());
-        $modele->setCellValue(self::CEL_RESPONSABLE_PARCOURS, $parcours->getRespParcours()?->getDisplay());
 
         $bccs = $parcours->getBlocCompetences();
 
@@ -357,40 +365,42 @@ class LicenceMccc
             $texte = substr($texte, 0, -2);
 
             $this->excelWriter->writeCellXY(self::COL_COMPETENCES, $ligne, $texte);
-
-            // MCCC
-
-            $mcccs = $this->getMcccs($ec);
-
-            switch ($ec->getTypeMccc()) {
-                case 'cc':
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, '50%');
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, 2);
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()));
-                    break;
-                case 'cci':
-                    $texte = '';
-                    foreach ($mcccs as $mccc) {
-                        $texte .= $this->displayTypeEpreuve($mccc->getTypeEpreuve()) . '(' . $mccc->getPourcentage() . '%; ';
-                    }
-                    $texte = substr($texte, 0, -2);
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CCI_EPREUVES, $ligne, $texte);
-
-                    break;
-                case 'cc_ct':
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, $mcccs[1]['cc']->getPourcentage());
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, $mcccs[1]['cc']->getNbEpreuves());
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
-
-                    break;
-                case 'ct':
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, '100%');
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()));
-                    break;
-            }
+        } else {
+            $this->excelWriter->writeCellXY(self::COL_INTITULE_EC, $ligne, $ec->getTexteEcLibre(), ['wrap' => true]);
         }
+        // MCCC
+
+        $mcccs = $this->getMcccs($ec);
+
+        switch ($ec->getTypeMccc()) {
+            case 'cc':
+                $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, '50%');
+                $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, 2);
+                $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()));
+                break;
+            case 'cci':
+                $texte = '';
+                foreach ($mcccs as $mccc) {
+                    $texte .= $this->displayTypeEpreuve($mccc->getTypeEpreuve()) . '(' . $mccc->getPourcentage() . '%; ';
+                }
+                $texte = substr($texte, 0, -2);
+                $this->excelWriter->writeCellXY(self::COL_MCCC_CCI_EPREUVES, $ligne, $texte);
+
+                break;
+            case 'cc_ct':
+                $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, $mcccs[1]['cc']->getPourcentage());
+                $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, $mcccs[1]['cc']->getNbEpreuves());
+                $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
+                $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
+
+                break;
+            case 'ct':
+                $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, '100%');
+                $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
+                $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()));
+                break;
+        }
+
 
         $this->excelWriter->writeCellXY(self::COL_TYPE_EC, $ligne, $ec->getTypeEc() ? $ec->getTypeEc()->getLibelle() : '');
 
@@ -416,5 +426,32 @@ class LicenceMccc
 
 
         return $ligne;
+    }
+
+    private function updateIfNotFull(): void
+    {
+        if ($this->versionFull === false) {
+            //décalage des données de formation
+            $this->excelWriter->copyFromCellToCell('I5', 'R5');
+            $this->excelWriter->copyFromCellToCell('J5', 'S5');
+
+            $this->excelWriter->copyFromCellToCell('I6', 'R6');
+            $this->excelWriter->copyFromCellToCell('J6', 'S6');
+
+            $this->excelWriter->copyFromCellToCell('I7', 'R7');
+            $this->excelWriter->copyFromCellToCell('J7', 'S7');
+
+            $this->excelWriter->copyFromCellToCell('I9', 'R9');
+            $this->excelWriter->copyFromCellToCell('J9', 'S9');
+
+            $this->excelWriter->copyFromCellToCell('I11', 'R11');
+            $this->excelWriter->copyFromCellToCell('J11', 'S11');
+
+            $this->excelWriter->copyFromCellToCell('I13', 'R13');
+            $this->excelWriter->copyFromCellToCell('J13', 'S13');
+
+            //suppression des colonnes
+            $this->excelWriter->removeColumn('F', 8);
+        }
     }
 }
