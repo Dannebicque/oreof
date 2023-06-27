@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [](https://github.com/Dannebicque/oreof/compare/v1.4.0...v) (2023-06-26)
+### [1.4.1](https://github.com/Dannebicque/oreof/compare/v1.4.0...v1.4.1) (2023-06-27)
 
 
 ### Features
@@ -13,7 +13,9 @@ All notable changes to this project will be documented in this file. See [standa
 ### Bug Fixes
 
 * Liste des mentions ([87b3b3e](https://github.com/Dannebicque/oreof/commit/87b3b3ebf3963e27fb076cbc5fbb54a1ea13c8a4))
+* MCCC avec EC et UE enfants ([cf464d0](https://github.com/Dannebicque/oreof/commit/cf464d0e0134dfbafb9009c2f815e5f9a009ca55))
 * MCCC avec EC et UE enfants ([2415b6a](https://github.com/Dannebicque/oreof/commit/2415b6a5dab83f9fa1073a38a2b272b0707116d7))
+* MCCC avec EC et UE enfants + coquilles dans le fichier Excel ([c72a406](https://github.com/Dannebicque/oreof/commit/c72a4069a70bf9d050c64b53562e11595795820a))
 * Nom du fichier export excel ([8cbabc0](https://github.com/Dannebicque/oreof/commit/8cbabc05791f033e204ac3da65040834691c83f3))
 
 ## [1.4.0](https://github.com/Dannebicque/oreof/compare/v1.3.36...v1.4.0) (2023-06-25)
