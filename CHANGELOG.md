@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.2](https://github.com/Dannebicque/oreof/compare/v1.4.1...v1.4.2) (2023-06-28)
+
+
+### Bug Fixes
+
+* Affichage des fiches mutualisées ([81a0d93](https://github.com/Dannebicque/oreof/commit/81a0d93d432c7eaf0e88ceeb13926639e7c041a9))
+* Liste des EC avec EC mutualisées ([a902483](https://github.com/Dannebicque/oreof/commit/a9024836f8aaf2191be675d1adfadbaa297ffc43))
+* Listes UX sur la mutualisation des fiches matières ([5c19252](https://github.com/Dannebicque/oreof/commit/5c19252aacded385e69ed1de89fd7de387a041fc))
+* Mise en page sur les listes ([a82e078](https://github.com/Dannebicque/oreof/commit/a82e078a53c325555894e19a4aa6584f126c5dcc))
+
 ### [1.4.1](https://github.com/Dannebicque/oreof/compare/v1.4.0...v1.4.1) (2023-06-27)
 
 
