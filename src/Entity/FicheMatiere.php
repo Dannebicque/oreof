@@ -24,6 +24,10 @@ class FicheMatiere
 {
     use LifeCycleTrait;
 
+    public const TYPE_MATIERE_COURS = 'matiere';
+    public const TYPE_MATIERE_SAE = 'sae';
+    public const TYPE_MATIERE_RESSOURCE = 'ressource';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -103,6 +107,9 @@ class FicheMatiere
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['fiche_matiere:read'])]
     private ?string $sigle = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $typeMatiere = 'matiere';
 
     public function __construct()
     {
@@ -493,9 +500,25 @@ class FicheMatiere
     {
         $texte = $this->getLibelle();
         if ($this->sigle !== null && trim($this->sigle) !== '') {
-            $texte .= ' (' . $this->sigle . ')';
+            $texte .= ' | ' . $this->sigle;
+        }
+
+        if ($this->getFicheMatiereParcours()-> count() > 0) {
+            $texte .= ' (mutualisée)';
         }
 
         return $texte;
+    }
+
+    public function getTypeMatiere(): ?string
+    {
+        return $this->typeMatiere ?? self::TYPE_MATIERE_COURS;
+    }
+
+    public function setTypeMatiere(?string $typeMatiere): self
+    {
+        $this->typeMatiere = $typeMatiere;
+
+        return $this;
     }
 }
