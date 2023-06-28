@@ -72,6 +72,8 @@
                                                 data-bs-placement="bottom"
                                                 title="Modifier la fiche EC/matière"
                                                 >
+                                                    <span class="badge bg-info"> Voir la fiche</span>
+                                                </a>
                                             {% else %}
                                                 <a
                                                         href="{{ path('app_fiche_matiere_show',{'id': ec.ficheMatiere.id}) }}"
@@ -80,7 +82,7 @@
                                                         data-bs-placement="bottom"
                                                         title="Voir la fiche EC/matière"
                                                 >
-                                            {% endif %}
+
                                             <i class="fal fa-file"></i>
                                             {% if ec.ficheMatiere.remplissage == 100 %}
                                                 <span class="badge bg-success"> Complet</span>
@@ -88,6 +90,7 @@
                                                 <span class="badge bg-warning"> À compléter</span>
                                             {% endif %}
                                             </a>
+                                                    {% endif %}
                                         {% else %}
                                             <span class="badge bg-info">EC Libre</span>
                                         {% endif %}
