@@ -58,7 +58,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->leftJoin('f.parcours', 'p')
             ->leftJoin('f.ficheMatiereParcours', 'pm')
             ->where('p = :parcours')
-            ->orWhere('pm = :parcours')
+            ->orWhere('pm.parcours = :parcours')
             ->setParameter('parcours', $parcours)
             ->orderBy('f.libelle', 'ASC')
             ->getQuery()
