@@ -4,8 +4,13 @@
     <div class="row">
         <div class="col-12">
             <label for="composante">Choisir une composante</label>
-            <select class="form-select" id="composante" name="composante" {{ stimulus_action('fichematiere--mutualise',
-                'changeComposante') }}>
+            <select
+                    class="form-select"
+                    id="composante"
+                    name="composante"
+                    {{ stimulus_action('fichematiere--mutualise', 'changeComposante') }}
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
                 <option value="0">Choisir une composante</option>
                 {% for composante in composantes %}
                     <option value="{{ composante.id }}">{{ composante.libelle }}</option>
@@ -16,22 +21,27 @@
     <div class="row">
         <div class="col-12">
             <label for="formation">Choisir une mention/spécialité</label>
-            <select class="form-select" id="formation" name="formation" {{ stimulus_action('fichematiere--mutualise',
-                'changeFormation') }}>
-                <option value="0">Choisir d'abord une composante</option>
+            <select class="form-select" id="formation" name="formation"
+                    {{ stimulus_action('fichematiere--mutualise', 'changeFormation') }}
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
+                <option value="">Choisir d'abord une composante</option>
             </select>
         </div>
     </div>
     <div class="row">
         <div class="col-12">
             <label for="parcours">Choisir un parcours</label>
-            <select class="form-select" id="parcours" name="parcours">
-                <option value="0">Choisir d'abord une mention/spécialité</option>
+            <select class="form-select" id="parcours" name="parcours"
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+            >
+                <option value="">Choisir d'abord une mention/spécialité</option>
             </select>
         </div>
     </div>
 
-    <button class="btn btn-success mt-2" data-action="fichematiere--mutualise#ajouter base#modalClose" data-bs-dismiss="modal">
+    <button class="btn btn-success mt-2" data-action="fichematiere--mutualise#ajouter base#modalClose"
+            data-bs-dismiss="modal">
         Ajouter
     </button>
 </div>
