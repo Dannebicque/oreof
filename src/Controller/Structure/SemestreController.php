@@ -192,15 +192,56 @@ class SemestreController extends AbstractController
             foreach ($semestre->getSemestreParcours() as $semestreParcour) {
                 if ($semestreParcour->getParcours() === $parcours) {
                     $semestreParcour->setParcours($parcoursDestination);
-                    $semestreParcour->setOrdre((int)$ordre);
+                    $semestreParcour->setOrdre($ordre);
                     $semestreParcoursRepository->save($semestreParcour, true);
+
+                    // mise à jour du parcours en cascade
+                    foreach ($semestre->getUes() as $ue) {
+                        foreach ($ue->getElementConstitutifs() as $ec) {
+                            if ($ec->getParcours() === $parcours) {
+                                $ec->setParcours($parcoursDestination);
+                                if ($ec->getFicheMatiere() !== null && $ec->getFicheMatiere()->getParcours() === $parcours) {
+                                    $ec->getFicheMatiere()->setParcours($parcoursDestination);
+                                }
+                            }
+                            foreach ($ec->getEcEnfants() as $ecEnfant) {
+                                if ($ecEnfant->getParcours() === $parcours) {
+                                    $ecEnfant->setParcours($parcoursDestination);
+                                    if ($ecEnfant->getFicheMatiere() !== null && $ecEnfant->getFicheMatiere()->getParcours() === $parcours) {
+                                        $ecEnfant->getFicheMatiere()->setParcours($parcoursDestination);
+                                    }
+                                }
+                            }
+                        }
+
+                        //déplacer chaque enfant
+                        foreach ($ue->getUeEnfants() as $ueEnfant) {
+                            foreach ($ueEnfant->getElementConstitutifs() as $ec) {
+                                if ($ec->getParcours() === $parcours) {
+                                    $ec->setParcours($parcoursDestination);
+                                    if ($ec->getFicheMatiere() !== null && $ec->getFicheMatiere()->getParcours() === $parcours) {
+                                        $ec->getFicheMatiere()->setParcours($parcoursDestination);
+                                    }
+                                }
+                                foreach ($ec->getEcEnfants() as $ecEnfant) {
+                                    if ($ecEnfant->getParcours() === $parcours) {
+                                        $ecEnfant->setParcours($parcoursDestination);
+                                        if ($ecEnfant->getFicheMatiere() !== null && $ecEnfant->getFicheMatiere()->getParcours() === $parcours) {
+                                            $ecEnfant->getFicheMatiere()->setParcours($parcoursDestination);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $entityManager->flush();
                 }
             }
 
-            return $this->json((new JsonReponse(Response::HTTP_OK, 'message', []))->getReponse());
+            return $this->json((new JsonReponse(Response::HTTP_OK, 'Semestre déplacé', []))->getReponse());
         }
 
-        return $this->json((new JsonReponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'message', []))->getReponse());
+        return $this->json((new JsonReponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'Erreur lors du déplacement du semestre', []))->getReponse());
     }
 
     #[Route('/dupliquer-ajax/{semestre}/{parcours}', name: 'dupliquer_ajax')]

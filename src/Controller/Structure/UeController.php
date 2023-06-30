@@ -488,11 +488,85 @@ class UeController extends AbstractController
         Route('/changer-ajax/{ue}/{parcours}', name: 'changer_ajax')
     ]
     public function changerAjax(
-        Ue       $ue,
-        Parcours $parcours
+        ParcoursRepository     $parcoursRepository,
+        EntityManagerInterface $entityManager,
+        UeRepository           $ueRepository,
+        SemestreRepository     $semestreRepository,
+        Request                $request,
+        Ue                     $ue,
+        Parcours               $parcours
     ): Response {
-        //todo: a faire
-        return $this->json((new JsonReponse(Response::HTTP_OK, 'message', []))->getReponse());
+        $data = JsonRequest::getFromRequest($request);
+
+        //Parcours de destination
+        $semestreDestination = $semestreRepository->find($data['destination']);
+        $parcoursDestination = $parcoursRepository->find($data['parcours']);
+        $ordre = (int)$data['position'];
+        if (null !== $semestreDestination) {
+            //on récupère, s'il existe, le semestre à la position de destination
+            $ueDest = $ueRepository->findOneBy([
+                'semestre' => $semestreDestination,
+                'ordre' => $ordre
+            ]);
+
+            //on supprime le semestre de la position de destination
+            if (null !== $ueDest) {
+                foreach ($ueDest->getElementConstitutifs() as $ec) {
+                    $entityManager->remove($ec);
+                }
+                $entityManager->remove($ueDest);
+                $entityManager->flush();
+            }
+
+
+            $ue->setSemestre($semestreDestination);
+            $ue->setOrdre($ordre);
+            // modifier le parcours des EC et fiches ?
+            foreach ($ue->getElementConstitutifs() as $ec) {
+                if ($ec->getParcours() === $parcours) {
+                    $ec->setParcours($parcoursDestination);
+                    if ($ec->getFicheMatiere() !== null && $ec->getFicheMatiere()->getParcours() === $parcours) {
+                        $ec->getFicheMatiere()->setParcours($parcoursDestination);
+                    }
+                }
+                foreach ($ec->getEcEnfants() as $ecEnfant) {
+                    if ($ecEnfant->getParcours() === $parcours) {
+                        $ecEnfant->setParcours($parcoursDestination);
+                        if ($ecEnfant->getFicheMatiere() !== null && $ecEnfant->getFicheMatiere()->getParcours() === $parcours) {
+                            $ecEnfant->getFicheMatiere()->setParcours($parcoursDestination);
+                        }
+                    }
+                }
+            }
+
+            //déplacer chaque enfant
+            foreach ($ue->getUeEnfants() as $ueEnfant) {
+                $ueEnfant->setSemestre($semestreDestination);
+                foreach ($ueEnfant->getElementConstitutifs() as $ec) {
+                    if ($ec->getParcours() === $parcours) {
+                        $ec->setParcours($parcoursDestination);
+                        if ($ec->getFicheMatiere() !== null && $ec->getFicheMatiere()->getParcours() === $parcours) {
+                            $ec->getFicheMatiere()->setParcours($parcoursDestination);
+                        }
+                    }
+                    foreach ($ec->getEcEnfants() as $ecEnfant) {
+                        if ($ecEnfant->getParcours() === $parcours) {
+                            $ecEnfant->setParcours($parcoursDestination);
+                            if ($ecEnfant->getFicheMatiere() !== null && $ecEnfant->getFicheMatiere()->getParcours() === $parcours) {
+                                $ecEnfant->getFicheMatiere()->setParcours($parcoursDestination);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            $entityManager->flush();
+
+            return $this->json((new JsonReponse(Response::HTTP_OK, 'UE déplacée', []))->getReponse());
+        }
+
+        return $this->json((new JsonReponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'Erreur lors du déplacement de l\'UE', []))->getReponse());
     }
 
     #[
@@ -520,7 +594,7 @@ class UeController extends AbstractController
     #[Route('/dupliquer-ajax/{ue}/{parcours}', name: 'dupliquer_ajax')]
     public function dupliquerAjax(
         FicheMatiereMutualisableRepository $ficheMatiereMutualisableRepository,
-        ParcoursRepository                $parcoursRepository,
+        ParcoursRepository                 $parcoursRepository,
         EntityManagerInterface             $entityManager,
         UeRepository                       $ueRepository,
         SemestreRepository                 $semestreRepository,
@@ -600,7 +674,6 @@ class UeController extends AbstractController
                                 $newEcEnfant->setEcParent($newEc);
                                 $newEcEnfant->setFicheMatiere($ecEnfant->getFicheMatiere());
                                 $entityManager->persist($newEcEnfant);
-
                             }
                         }
                         $entityManager->flush();

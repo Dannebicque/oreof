@@ -13,23 +13,24 @@ import JsonResponse from '../../js/JsonResponse';
 export default class extends Controller {
   static values = {
     url: String,
+    urlSemestre: String,
   }
 
   valideDupliquer(event) {
     event.preventDefault()
     const { value } = document.getElementById('changer')
     const position = document.getElementById('position').value
-    if (value !== '' && position !== '') {
-      fetch(this.urlValue).then((response) => {
-        JsonResponse(response)
-      })
+    const dupliquer = document.querySelector('input[name="option"]:checked').value;
 
+    if (value !== '' && position !== '') {
       if (confirm('Voulez-vous vraiment dupliquer cette UE ?')) {
         const body = {
           method: 'POST',
           body: JSON.stringify({
             destination: value,
+            parcours: document.getElementById('parcours').value,
             position,
+            dupliquer,
           }),
         }
         fetch(this.urlValue, body).then((response) => {
@@ -61,6 +62,7 @@ export default class extends Controller {
           body: JSON.stringify({
             destination: value,
             position,
+            parcours: document.getElementById('parcours').value,
           }),
         }
         fetch(this.urlValue, body).then((response) => {
@@ -87,9 +89,30 @@ export default class extends Controller {
     }
   }
 
-  changeParcours(event) {
+  async changeParcours(event) {
     if (event.target.value !== '') {
       document.getElementById('changer').classList.remove('is-invalid')
     }
+    // update liste des semestres
+    await fetch(`${this.urlSemestreValue}?parcours=${event.target.value}`).then((response) => response.json()).then(
+      (data) => {
+        const select = document.getElementById('changer')
+        const items = data
+        while (select.options.length > 0) {
+          select.remove(0);
+        }
+        let option = document.createElement('option')
+        option.value = null
+        option.text = 'Choisir dans la liste le semestre'
+        select.add(option, null)
+
+        items.forEach((semestre) => {
+          option = document.createElement('option')
+          option.value = semestre.id
+          option.text = semestre.libelle
+          select.add(option, null)
+        })
+      },
+    )
   }
 }
