@@ -11,17 +11,22 @@ namespace App\Controller\Structure;
 
 use App\Classes\JsonReponse;
 use App\Classes\UeOrdre;
+use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
+use App\Entity\SemestreParcours;
 use App\Entity\TypeUe;
 use App\Entity\Ue;
 use App\Entity\UeMutualisable;
 use App\Form\UeType;
 use App\Repository\ComposanteRepository;
 use App\Repository\ElementConstitutifRepository;
+use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\NatureUeEcRepository;
 use App\Repository\ParcoursRepository;
+use App\Repository\SemestreParcoursRepository;
+use App\Repository\SemestreRepository;
 use App\Repository\TypeUeRepository;
 use App\Repository\UeMutualisableRepository;
 use App\Repository\UeRepository;
@@ -109,7 +114,6 @@ class UeController extends AbstractController
                     $ordreInit = $ueOrigine->getOrdre();
                     $ueOrdre->decaleSousOrdre($ueOrigine->getUeParent(), $ueOrigine->getOrdre(), $ue);
                     $ue->setOrdre($ordreInit);
-
                 } else {
                     $ordreInit = $ueOrigine->getOrdre();
                     $ueOrdre->decaleSousOrdre($ueOrigine->getUeParent(), $ueOrigine->getOrdre(), $ue);
@@ -492,13 +496,212 @@ class UeController extends AbstractController
     }
 
     #[
-        Route('/dupliquer-ajax/{ue}/{parcours}', name: 'dupliquer_ajax')
+        Route('/semestre-ajax', name: 'semestre_ajax')
     ]
-    public function dupliquerAjax(
-        Ue       $ue,
-        Parcours $parcours
+    public function semestreAjax(
+        Request                    $request,
+        SemestreParcoursRepository $semestreParcoursRepository
     ): Response {
-        //todo: a faire
-        return $this->json((new JsonReponse(Response::HTTP_OK, 'message', []))->getReponse());
+        $semestres = $semestreParcoursRepository->findBy([
+            'parcours' => $request->query->get('parcours')
+        ], ['ordre' => 'ASC']);
+
+        $t = [];
+        foreach ($semestres as $semestre) {
+            $t[] = [
+                'id' => $semestre->getSemestre()?->getId(),
+                'libelle' => $semestre->display()
+            ];
+        }
+
+        return $this->json($t);
+    }
+
+    #[Route('/dupliquer-ajax/{ue}/{parcours}', name: 'dupliquer_ajax')]
+    public function dupliquerAjax(
+        FicheMatiereMutualisableRepository $ficheMatiereMutualisableRepository,
+        ParcoursRepository                $parcoursRepository,
+        EntityManagerInterface             $entityManager,
+        UeRepository                       $ueRepository,
+        SemestreRepository                 $semestreRepository,
+        Request                            $request,
+        Ue                                 $ue,
+        Parcours                           $parcours
+    ): Response {
+        $data = JsonRequest::getFromRequest($request);
+        $ordre = (int)$data['position'];
+        $semestre = $semestreRepository->find($data['destination']);
+        $parcoursDestination = $parcoursRepository->find($data['parcours']);
+
+        if (null !== $semestre && null !== $parcoursDestination) {
+            //on récupère, s'il existe, le semestre à la position de destination
+            $ueDestination = $ueRepository->findOneBy([
+                'semestre' => $semestre,
+                'ordre' => $ordre
+            ]);
+
+            //on supprime le semestre de la position de destination
+            if (null !== $ueDestination) {
+                foreach ($ueDestination->getElementConstitutifs() as $ec) {
+                    $entityManager->remove($ec);
+                }
+                $entityManager->remove($ueDestination);
+                $entityManager->flush();
+            }
+
+
+            //on clone le semestre et sa structure
+            $newUe = clone $ue;
+            $newUe->setSemestre($semestre);
+            $newUe->setOrdre($ordre);
+            $entityManager->persist($newUe);
+            // on recopie les UE
+
+            //on recopie les EC
+            foreach ($ue->getElementConstitutifs() as $ec) {
+                switch ($data['dupliquer']) {
+                    case 'mutualise':
+                        //vérifier si pas déjà mutualisé
+                        $ficheMatiereMutualisable = $ficheMatiereMutualisableRepository->findBy([
+                            'ficheMatiere' => $ec->getFicheMatiere(),
+                            'parcours' => $parcoursDestination
+                        ]);
+
+                        if (count($ficheMatiereMutualisable) === 0) {
+                            //si pas mutualisé, mutualiser
+                            $ficheMatiereMutualisable = new FicheMatiereMutualisable();
+                            $ficheMatiereMutualisable->setFicheMatiere($ec->getFicheMatiere());
+                            $ficheMatiereMutualisable->setParcours($parcoursDestination);
+                            $entityManager->persist($ficheMatiereMutualisable);
+                        }
+
+                        if ($ec->getEcParent() === null) {
+                            //faire le lien dans les deux UE
+                            $newEc = clone $ec;
+                            $newEc->setUe($newUe);
+                            $entityManager->persist($newEc);
+
+                            foreach ($ec->getEcEnfants() as $ecEnfant) {
+                                $ficheMatiereMutualisable = $ficheMatiereMutualisableRepository->findBy([
+                                    'ficheMatiere' => $ecEnfant->getFicheMatiere(),
+                                    'parcours' => $parcoursDestination
+                                ]);
+
+                                if (count($ficheMatiereMutualisable) === 0) {
+                                    $ficheMatiereMutualisable = new FicheMatiereMutualisable();
+                                    $ficheMatiereMutualisable->setFicheMatiere($ecEnfant->getFicheMatiere());
+                                    $ficheMatiereMutualisable->setParcours($parcoursDestination);
+                                    $entityManager->persist($ficheMatiereMutualisable);
+                                }
+
+                                //faire le lien dans les deux UE
+                                $newEcEnfant = clone $ecEnfant;
+                                $newEcEnfant->setUe($newUe);
+                                $newEcEnfant->setEcParent($newEc);
+                                $newEcEnfant->setFicheMatiere($ecEnfant->getFicheMatiere());
+                                $entityManager->persist($newEcEnfant);
+
+                            }
+                        }
+                        $entityManager->flush();
+
+                        break;
+                    case 'recopie':
+                        if ($ec->getEcParent() === null) {
+                            $newEc = clone $ec;
+                            $newEc->setUe($newUe);
+                            $entityManager->persist($newEc);
+                            if ($ec->getFicheMatiere() !== null) {
+                                $newFm = clone $ec->getFicheMatiere();
+                                $newFm->setParcours($parcoursDestination);
+                                $newEc->setFicheMatiere($newFm);
+                                $entityManager->persist($newFm);
+                            }
+
+                            foreach ($ec->getEcEnfants() as $ecEnfant) {
+                                $newEcEnfant = clone $ecEnfant;
+                                $newEcEnfant->setUe($newUe);
+                                $newEcEnfant->setEcParent($newEc);
+                                $entityManager->persist($newEcEnfant);
+                                if ($ecEnfant->getFicheMatiere() !== null) {
+                                    $newFm = clone $ecEnfant->getFicheMatiere();
+                                    $newFm->setParcours($parcoursDestination);
+                                    $newEcEnfant->setFicheMatiere($newFm);
+                                    $entityManager->persist($newFm);
+                                }
+                            }
+                        }
+                        $entityManager->flush();
+                        break;
+                }
+            }
+
+            // on recopie les UE enfants
+            foreach ($ue->getUeEnfants() as $ueEnfant) {
+                $newUeEnfant = clone $ueEnfant;
+                $newUeEnfant->setSemestre($semestre);
+                $newUeEnfant->setUeParent($newUe);
+                $entityManager->persist($newUeEnfant);
+                //on recopie les EC
+                foreach ($ueEnfant->getElementConstitutifs() as $ec) {
+                    switch ($data['dupliquer']) {
+                        case 'mutualise':
+                            //vérifier si pas déjà mutualisé
+                            $ficheMatiereMutualisable = $ficheMatiereMutualisableRepository->findBy([
+                                'ficheMatiere' => $ec->getFicheMatiere(),
+                                'parcours' => $parcoursDestination
+                            ]);
+
+                            if (count($ficheMatiereMutualisable) === 0) {
+                                //si pas mutualisé, mutualiser
+                                //le parcours d'origine
+                                $ficheMatiereMutualisable = new FicheMatiereMutualisable();
+                                $ficheMatiereMutualisable->setFicheMatiere($ec->getFicheMatiere());
+                                $ficheMatiereMutualisable->setParcours($parcoursDestination);
+                                $entityManager->persist($ficheMatiereMutualisable);
+                            }
+
+                            //faire le lien dans les deux UE
+                            $newEc = clone $ec;
+                            $newEc->setUe($newUeEnfant);
+                            $entityManager->persist($newEc);
+                            $entityManager->flush();
+                            break;
+                        case 'recopie':
+                            if ($ec->getEcParent() === null) {
+                                $newEc = clone $ec;
+                                $newEc->setUe($newUeEnfant);
+                                $entityManager->persist($newEc);
+                                if ($ec->getFicheMatiere() !== null) {
+                                    $newFm = clone $ec->getFicheMatiere();
+                                    $newFm->setParcours($parcoursDestination);
+                                    $newEc->setFicheMatiere($newFm);
+                                    $entityManager->persist($newFm);
+                                }
+                                foreach ($ec->getEcEnfants() as $ecEnfant) {
+                                    $newEcEnfant = clone $ecEnfant;
+                                    $newEcEnfant->setUe($newUeEnfant);
+                                    $newEcEnfant->setEcParent($newEc);
+                                    $entityManager->persist($newEcEnfant);
+                                    if ($ec->getFicheMatiere() !== null) {
+                                        $newFm = clone $ec->getFicheMatiere();
+                                        $newFm->setParcours($parcoursDestination);
+                                        $newEcEnfant->setFicheMatiere($newFm);
+                                        $entityManager->persist($newFm);
+                                    }
+                                }
+                            }
+                            $entityManager->flush();
+                            break;
+                    }
+                }
+            }
+
+            $entityManager->flush();
+
+            return $this->json((new JsonReponse(Response::HTTP_OK, 'L\'UE a été dupliquée', []))->getReponse());
+        }
+
+        return $this->json((new JsonReponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'Erreur lors de la duplication de l\'UE', []))->getReponse());
     }
 }
