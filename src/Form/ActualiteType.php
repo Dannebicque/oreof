@@ -24,6 +24,7 @@ class ActualiteType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Actualite::class,
+            'translation_domain' => 'form',
         ]);
     }
 }
