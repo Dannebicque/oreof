@@ -304,13 +304,13 @@
                                 <button class="btn text-success btn-sm"
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
-                                            modalTitle: 'Ajouter une UE avant l\'' ~uee.displayBouton(parcours),
+                                            modalTitle: 'Ajouter une UE avant l\'' ~uee.display(parcours),
                                             modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id, ue: uee.id, sens:'before'})
                                         }) }}
                                         data-action="click->modal#openModal"
                                 >
                                     <i class="{{ iconAdd }}"></i>
-                                    Ajouter une UE avant l'<strong>{{ uee.displayBouton(parcours) }}</strong>
+                                    Ajouter une UE avant l'<strong>{{ uee.display(parcours) }}</strong>
                                 </button>
                             </div>
                         {% endif %}
@@ -499,13 +499,13 @@
                                 <button class="btn text-success btn-sm"
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
-                                            modalTitle: 'Ajouter une UE après l\'' ~uee.displayBouton(parcours),
+                                            modalTitle: 'Ajouter une UE après l\'' ~uee.display(parcours),
                                             modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id, ue:uee.id})
                                         }) }}
                                         data-action="click->modal#openModal"
                                 >
                                     <i class="{{ iconAdd }}"></i>
-                                    Ajouter une UE après l'<strong>{{ uee.displayBouton(parcours) }}</strong>
+                                    Ajouter une UE après l'<strong>{{ uee.display(parcours) }}</strong>
                                 </button>
                             </div>
                         {% endif %}
@@ -515,13 +515,13 @@
                             <button class="btn text-success btn-sm"
                                     {{ stimulus_controller('modal', {
                                         size: 'lg',
-                                        modalTitle: 'Ajouter une UE après l\'' ~ue.displayBouton(parcours),
+                                        modalTitle: 'Ajouter une UE après l\'' ~ue.display(parcours),
                                         modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id,ue:ue.id})
                                     }) }}
                                     data-action="click->modal#openModal"
                             >
                                 <i class="{{ iconAdd }}"></i>
-                                Ajouter une UE après l'<strong>{{ ue.displayBouton(parcours) }}</strong>
+                                Ajouter une UE après l'<strong>{{ ue.display(parcours) }}</strong>
                             </button>
                         </div>
                     {% endif %}

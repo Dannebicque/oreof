@@ -1,0 +1,86 @@
+<div
+        {{ stimulus_controller('ue--manage', {
+            url: path('structure_ue_dupliquer_ajax', {ue:ue.id, parcours: parcours.id}),
+            urlSemestre: path('structure_ue_semestre_ajax')
+        }) }}
+        data-action="ue--manage:modalHide@window->base#modalHide"
+>
+    <div class="mb-1">
+        <label class="form-label" for="parcours">
+            {{ 'ue.dupliquer.label'|trans({}, 'form') }}
+            <span class="required"></span>
+            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
+               title="{{ 'ue.dupliquer.helps'|trans({}, 'help') }}"></i>
+        </label>
+        <select id="parcours"
+                name="parcours"
+                required="required"
+                class="form-select"
+                {{ stimulus_action('ue--manage', 'changeParcours') }}
+        >
+            <option value="">Choisir un parcours pour dupliquer l'UE</option>
+            {% for parcour in formation.parcours %}
+                <option value="{{ parcour.id }}">{{ parcour.libelle }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-1">
+        <label class="form-label" for="changer">
+            {{ 'ue.semestre.dupliquer.label'|trans({}, 'form') }}
+            <span class="required"></span>
+            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
+               title="{{ 'ue.semestre.dupliquer.helps'|trans({}, 'help') }}"></i>
+        </label>
+        <select id="changer"
+                name="changer"
+                required="required"
+                class="form-select"
+        >
+            <option value="">Choisir un semestre dans le parcours pour dupliquer l'UE</option>
+        </select>
+    </div>
+    <div class="mb-1">
+        <label class="form-label" for="position">
+            {{ 'ue.position.label'|trans({}, 'form') }}
+            <span class="required"></span>
+            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
+               title="{{ 'ue.position.helps'|trans({}, 'help') }}"></i>
+        </label>
+        <select id="position"
+                name="position"
+                required="required"
+                class="form-select"
+                {{ stimulus_action('ue--manage', 'changePosition') }}
+        >
+            <option value="">Choisir la position de l'UE dans le semestre de destination</option>
+            {% for i in 1..15 %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-1">
+        <label class="form-label" for="">
+            {{ 'ue.fiche_recopie_mutualise.label'|trans({}, 'form') }}
+            <span class="required"></span>
+            <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
+               title="{{ 'ue.fiche_recopie.helps'|trans({}, 'help') }}"></i>
+        </label>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="option" id="recopie" value="recopie">
+            <label class="form-check-label" for="recopie">
+                {{ 'ue.fiche_recopie.label'|trans({}, 'form') }}
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="option" id="mutualise" value="mutualise">
+            <label class="form-check-label" for="mutualise">
+                {{ 'ue.fiche_mutualise.label'|trans({}, 'form') }}
+            </label>
+        </div>
+    </div>
+
+    <button class="btn btn-success" {{ stimulus_action('ue--manage', 'valideDupliquer') }}>
+        {{ 'ue.dupliquer.bouton'|trans({}, 'form') }}
+    </button>
+</div>
