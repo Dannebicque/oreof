@@ -54,27 +54,27 @@ class LicenceMccc
     const COL_LANGUE_EC = 8;
     const COL_SUPPORT_ANGLAIS = 9;
     const COL_TYPE_EC = 10;
-    const COL_OBLIGATOIRE_OPTIONNEL = 11;
-    const COL_COURS_MUTUALISE = 12;
-    const COL_COMPETENCES = 13;
-    const COL_ECTS = 14;
-    const COL_HEURES_PRES_CM = 15;
-    const COL_HEURES_PRES_TD = 16;
-    const COL_HEURES_PRES_TP = 17;
-    const COL_HEURES_PRES_TOTAL = 18;
+   // const COL_OBLIGATOIRE_OPTIONNEL = 11;
+    const COL_COURS_MUTUALISE = 11;
+    const COL_COMPETENCES = 12;
+    const COL_ECTS = 13;
+    const COL_HEURES_PRES_CM = 14;
+    const COL_HEURES_PRES_TD = 15;
+    const COL_HEURES_PRES_TP = 16;
+    const COL_HEURES_PRES_TOTAL = 17;
 
-    const COL_HEURES_DIST_CM = 19;
-    const COL_HEURES_DIST_TD = 20;
-    const COL_HEURES_DIST_TP = 21;
-    const COL_HEURES_DIST_TOTAL = 22;
-    const COL_HEURES_AUTONOMIE = 23;
-    const COL_HEURES_TOTAL = 24;
-    const COL_MCCC_CC_POUCENTAGE = 25;
-    const COL_MCCC_CC_NB_EPREUVE = 26;
-    const COL_MCCC_ET_POUCENTAGE = 27;
-    const COL_MCCC_ET_TYPE_EPREUVE = 28;
-    const COL_MCCC_CCI_EPREUVES = 29;
-    const COL_MCCC_SECONDE_CHANCE = 30;
+    const COL_HEURES_DIST_CM = 18;
+    const COL_HEURES_DIST_TD = 19;
+    const COL_HEURES_DIST_TP = 20;
+    const COL_HEURES_DIST_TOTAL = 21;
+    const COL_HEURES_AUTONOMIE = 22;
+    const COL_HEURES_TOTAL = 23;
+    const COL_MCCC_CC_POUCENTAGE = 24;
+    const COL_MCCC_CC_NB_EPREUVE = 25;
+    const COL_MCCC_ET_POUCENTAGE = 26;
+    const COL_MCCC_ET_TYPE_EPREUVE = 27;
+    const COL_MCCC_CCI_EPREUVES = 28;
+    const COL_MCCC_SECONDE_CHANCE = 29;
 
 
     protected array $typeEpreuves = [];
@@ -420,6 +420,8 @@ class LicenceMccc
 
         $this->excelWriter->writeCellXY(self::COL_HEURES_TOTAL, $ligne, $ec->volumeTotal());
         $totalAnnee->addEc($ec);
+
+        $this->excelWriter->getRowAutosize($ligne);
 
         $ligne++;
         //dump($ligne);

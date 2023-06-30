@@ -336,4 +336,9 @@ class ExcelWriter
     {
         $this->sheet->removeColumn($column, $nbCol);
     }
+
+    public function getRowAutosize(int $ligne): void
+    {
+        $this->sheet->getRowDimension($ligne)->setRowHeight(-1);
+    }
 }
