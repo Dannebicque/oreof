@@ -121,23 +121,6 @@ class Ue
         return 'erreur';
     }
 
-    public function displayBouton(Parcours $parcours): string
-    {
-        if ($this->ueParent === null) {
-            $ordreue = $this->ordre;
-        } else {
-            $ordreue = $this->ueParent->ordre . '.' . chr($this->ordre + 64);
-        }
-
-        foreach ($this->getSemestre()?->getSemestreParcours() as $semestreParcours) {
-            if ($semestreParcours->getParcours() === $parcours) {
-                return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue;
-            }
-        }
-
-        return 'erreur';
-    }
-
     public function getTypeUe(): ?TypeUe
     {
         return $this->typeUe;
