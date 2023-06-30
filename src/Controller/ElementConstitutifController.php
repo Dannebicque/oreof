@@ -64,10 +64,13 @@ class ElementConstitutifController extends AbstractController
 
         $natureEc = $natureUeEcRepository->find($request->query->get('choix'));
         if ($natureEc !== null) {
+            $matieres = $ficheMatiereRepository->findByParcours($parcours);
+
+
             if ($natureEc->isChoix() === true) {
                 return $this->render('element_constitutif/_type_ec_matieres.html.twig', [
                     'ec' => $ec ?? null,
-                    'matieres' => $ficheMatiereRepository->findByParcours($parcours)
+                    'matieres' => $matieres
                 ]);
             }
 
@@ -79,7 +82,7 @@ class ElementConstitutifController extends AbstractController
 
             return $this->render('element_constitutif/_type_ec_matiere.html.twig', [
                 'ec' => $ec ?? null,
-                'matieres' => $ficheMatiereRepository->findByParcours($parcours)
+                'matieres' => $matieres
             ]);
         }
 
