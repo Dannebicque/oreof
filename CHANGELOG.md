@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/Dannebicque/oreof/compare/v1.5.0...v1.5.1) (2023-06-30)
+
+
+### Bug Fixes
+
+* Bon domaine de traduction sur ActualiteType.php ([c4c5579](https://github.com/Dannebicque/oreof/commit/c4c557921732cf882010b534a919a98e0d9541a2))
+* Suppresion d'un doublons ([b048223](https://github.com/Dannebicque/oreof/commit/b048223001a0f4977a56fc275f47de566f15993c))
+
 ## [1.5.0](https://github.com/Dannebicque/oreof/compare/v1.4.3...v1.5.0) (2023-06-30)
 
 
