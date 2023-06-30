@@ -75,8 +75,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
             ->andWhere('fo.anneeUniversitaire = :annee')
-            ->setParameter('annee', $anneeUniversitaire)
-            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id');
+            ->setParameter('annee', $anneeUniversitaire);
 
         $this->addFiltres($q, $qb, $options);
 
