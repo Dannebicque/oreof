@@ -253,6 +253,14 @@ role.helps.onlyAdmin.help: "Indiquez si ce rôle est uniquement disponible si l'
 role.helps.centre: 'Préciser quelles sont les centres qui peuvent utiliser ce rôle'
 role.helps.centre.help: 'Préciser quelles sont les centres qui peuvent utiliser ce rôle'
 ec_step4.helps.volumeTe: ''
+actualite.helps.datePublication.help: actualite.helps.datePublication.help
+actualite.helps.titre: actualite.helps.titre
+actualite.helps.texte: actualite.helps.texte
+actualite.helps.affiche.help: actualite.helps.affiche.help
+ue.dupliquer.helps: ue.dupliquer.helps
+ue.semestre.dupliquer.helps: ue.semestre.dupliquer.helps
+ue.position.helps: ue.position.helps
+ue.fiche_recopie.helps: ue.fiche_recopie.helps
 semestre.changer.helps: semestre.changer.helps
 semestre.position.helps: semestre.position.helps
 semestre.dupliquer.helps: semestre.dupliquer.helps
@@ -263,5 +271,5 @@ ec_step4.helps.heures_enfants_edentiques: "Cocher cette case pour appliquer les 
 ec_step4.helps.mccc_enfants_identique_parent: "Cocher cette case pour récupérer les mêmes modalités de contrôle des connaissances et compétences de l'EC parent, s'appliquera à tous les EC enfants."
 ec_step4.helps.heures_enfants_edentiques_parent: "Cocher cette case pour récupérer les mêmes volumes horaires d'enseignement de l'EC parent, s'appliquera à tous les EC enfants."
 ue.helps.descriptionUeLibre: 'Décrivez en quelques mots les choix pour cette UE libre (255 caractères maximum).'
-ec_step4.helps.quitus: ec_step4.helps.quitus
-ue.helps.ects: ue.helps.ects
+ec_step4.helps.quitus: "L'utilisation du quitus est exceptionnelle. Son utilisation est soumise à autorisation de la présidence."
+ue.helps.ects: ECTS associés à l'UE, uniquement pour les UE libres ou les BUT, ne seront pas pris en compte dans les autres cas.
