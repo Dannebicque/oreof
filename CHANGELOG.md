@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/Dannebicque/oreof/compare/v1.4.3...v1.5.0) (2023-06-30)
+
+
+### Bug Fixes
+
+* Affichage des mutualisations sur la structure ([b001c50](https://github.com/Dannebicque/oreof/commit/b001c5089e57689bddb2abdae4575ff0e47a5c52))
+* Dupliquer UE ([8f3276c](https://github.com/Dannebicque/oreof/commit/8f3276c5268db8d475158ef4be5b59f41d123733))
+* Liste des fiches mutualisées dans les listes ([81aed75](https://github.com/Dannebicque/oreof/commit/81aed750985c17b4a0fd9401110b0f7dc6be6e88))
+* Mise à jour des traductions ([769e534](https://github.com/Dannebicque/oreof/commit/769e534ce621ce3bf551af0884d94d258b9c1a8e))
+* Mutualisation d'un semestre ([2e1d40e](https://github.com/Dannebicque/oreof/commit/2e1d40e0b95cc92401a0331662de9cd84f24090f))
+* Mutualisation/déplacement des UE/Semestre, bonne association EC/Parcours ([003e673](https://github.com/Dannebicque/oreof/commit/003e6731b57b85e5597574248563f79094e7149b))
+* Suppression colonne obligatoire export MCCC ([16c0bd8](https://github.com/Dannebicque/oreof/commit/16c0bd88beb3092479a973fd78e0153426a228cc))
+* Type sur répository ([eb1feb0](https://github.com/Dannebicque/oreof/commit/eb1feb0a5963581aa0a8925a8cd56da97ce30643))
+
 ### [1.4.3](https://github.com/Dannebicque/oreof/compare/v1.4.2...v1.4.3) (2023-06-28)
 
 
