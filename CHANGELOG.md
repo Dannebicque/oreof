@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.3](https://github.com/Dannebicque/oreof/compare/v1.5.2...v1.5.3) (2023-07-03)
+
+
+### Bug Fixes
+
+* Affichage EC mutualisé/récupéré ([723a84b](https://github.com/Dannebicque/oreof/commit/723a84b94ce519d5998f66d4ed20830a820842e6))
+* typo ([ddd6d35](https://github.com/Dannebicque/oreof/commit/ddd6d35d819b18eaa5143760e05a74bcdb5078fe))
+
 ### [1.5.2](https://github.com/Dannebicque/oreof/compare/v1.5.1...v1.5.2) (2023-07-03)
 
 
