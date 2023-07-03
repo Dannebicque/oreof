@@ -63,7 +63,7 @@
                                             {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation) or is_granted
                                                 ('CAN_PARCOURS_EDIT_MY', parcours)) %}
 
-                                                {% if ec.ficheMatiere != null and editable == true %}
+                                                {% if ec.ficheMatiere != null %}
                                                     {% if ec.ficheMatiere.parcours.id == parcours.id %}
                                                         <a
                                                                 href="{{ path('app_fiche_matiere_edit',{'id': ec.ficheMatiere.id}) }}"
@@ -72,7 +72,12 @@
                                                                 data-bs-placement="bottom"
                                                                 title="Modifier la fiche EC/matière"
                                                         >
-                                                            <span class="badge bg-info"> Voir la fiche</span>
+                                                            <i class="fal fa-file"></i>
+                                                            {% if ec.ficheMatiere.remplissage == 100 %}
+                                                                <span class="badge bg-success"> Complet</span>
+                                                            {% else %}
+                                                                <span class="badge bg-warning"> À compléter</span>
+                                                            {% endif %}
                                                         </a>
                                                     {% else %}
                                                         <a
@@ -82,13 +87,7 @@
                                                                 data-bs-placement="bottom"
                                                                 title="Voir la fiche EC/matière"
                                                         >
-
-                                                            <i class="fal fa-file"></i>
-                                                            {% if ec.ficheMatiere.remplissage == 100 %}
-                                                                <span class="badge bg-success"> Complet</span>
-                                                            {% else %}
-                                                                <span class="badge bg-warning"> À compléter</span>
-                                                            {% endif %}
+                                                            <span class="badge bg-info"> Voir la fiche</span>
                                                         </a>
                                                     {% endif %}
                                                 {% else %}
