@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.2](https://github.com/Dannebicque/oreof/compare/v1.5.1...v1.5.2) (2023-07-03)
+
+
+### Features
+
+* Ajout d'une page de documentation ([c9b2a25](https://github.com/Dannebicque/oreof/commit/c9b2a253a2bf64f2572361bb7d97cf87f6538a3d))
+
 ### [1.5.1](https://github.com/Dannebicque/oreof/compare/v1.5.0...v1.5.1) (2023-06-30)
 
 
