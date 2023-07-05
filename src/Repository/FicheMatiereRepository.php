@@ -17,6 +17,7 @@ use App\Entity\Parcours;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<FicheMatiere>
@@ -134,5 +135,30 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 $qb->addOrderBy('f.' . $sort, $direction);
             }
         }
+    }
+
+    public function findByResponsableParcours(?UserInterface $user, AnneeUniversitaire $getAnneeUniversitaire, array $array, float|bool|int|string|null $q): array
+    {
+        return $this->createQueryBuilder('f')
+            ->leftJoin('f.parcours', 'p')
+            ->where('p.respParcours = :parcours')
+            ->orWhere('p.coResponsable = :parcours')
+            ->setParameter('parcours', $user)
+            ->orderBy('f.libelle', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByResponsableFormation(?UserInterface $user, AnneeUniversitaire $getAnneeUniversitaire, array $array, float|bool|int|string|null $q)
+    {
+        return $this->createQueryBuilder('f')
+            ->leftJoin('f.parcours', 'p')
+            ->join('p.formation', 'fo')
+            ->where('fo.responsableMention = :parcours')
+            ->orWhere('fo.coResponsable = :parcours')
+            ->setParameter('parcours', $user)
+            ->orderBy('f.libelle', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }

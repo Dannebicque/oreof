@@ -45,43 +45,54 @@ class FicheMatiereController extends BaseController
                 [$sort => $direction],
                 $q
             );
-        } elseif ($this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
-            $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $ficheMatieres = $ficheMatiereRepository->findByComposanteDpe(
-                $this->getUser(),
-                $this->getAnneeUniversitaire(),
-                [$sort => $direction],
-                $q
-            );
-        } elseif ($this->isGranted('CAN_FORMATION_SHOW_MY', $this->getUser())) {
-            $ficheMatieres = $ficheMatiereRepository->findByResponsableFormation(
-                $this->getUser(),
-                $this->getAnneeUniversitaire(),
-                [$sort => $direction],
-                $q
-            );
-        } elseif ($this->isGranted('CAN_PARCOURS_SHOW_MY', $this->getUser())) {
-            $ficheMatieres = $ficheMatiereRepository->findByResponsableParcours(
-                $this->getUser(),
-                $this->getAnneeUniversitaire(),
-                [$sort => $direction],
-                $q
-            );
         } else {
-            $ficheMatieres = $ficheMatiereRepository->findByResponsableFicheMatiere(
+            $ficheMatieres = [];
+
+            // toutes les fiches en tant que responsable composante/DPE
+//            $ficheMatieres[] = $ficheMatiereRepository->findByComposanteDpe(
+//                $this->getUser(),
+//                $this->getAnneeUniversitaire(),
+//                [$sort => $direction],
+//                $q
+//            );
+            // toutes les fiches en tant que responsable formation
+            $ficheMatieres[] = $ficheMatiereRepository->findByResponsableFormation(
                 $this->getUser(),
                 $this->getAnneeUniversitaire(),
                 [$sort => $direction],
                 $q
             );
+
+            // toutes les fiches en tant que responsable parcours
+            $ficheMatieres[] = $ficheMatiereRepository->findByResponsableParcours(
+                $this->getUser(),
+                $this->getAnneeUniversitaire(),
+                [$sort => $direction],
+                $q
+            );
+
+            // toutes les fiches en tant que responsable fiche matière
+            $ficheMatieres[] = $ficheMatiereRepository->findByResponsableFicheMatiere(
+                $this->getUser(),
+                $this->getAnneeUniversitaire(),
+                [$sort => $direction],
+                $q
+            );
+            $tFicheMatieres = [];
+            foreach ($ficheMatieres as $ficheMatiere) {
+                foreach ($ficheMatiere as $fiche) {
+                    $tFicheMatieres[$fiche->getId()] = $fiche;
+                }
+            }
         }
 
         return $this->render('structure/fiche_matiere/_liste.html.twig', [
-            'ficheMatieres' => $ficheMatieres,
+            'ficheMatieres' => $tFicheMatieres,
             'deplacer' => false,
             'mode' => 'liste',
-            'sort' => $sort,
-            'direction' => $direction
+            'mentions' => [],
+            'parcours' => [],
+            'params' => $request->query->all()
         ]);
     }
 
