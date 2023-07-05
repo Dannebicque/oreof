@@ -44,49 +44,11 @@
                     {% set sommeTdDist = 0 %}
                     {% set sommeTpDist = 0 %}
                     {% set sommeTotalDist = 0 %}
-                    {% for ec in ue.elementConstitutifs %}
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                            <td>
-                                {% if ec.ficheMatiere != null %}
-                                    <a href="{{ path('app_fiche_matiere_show', {'id': ec.ficheMatiere.id}) }} }}">
-                                        {{ ec.ficheMatiere.display }}
-                                    </a>
-                                {% else %}
-                                    {{ ec.libelle }}
-                                {% endif %}
-                            </td>
-                            <td>{{ ec.ects }}</td>
-
-                            {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
-                                <td>{{ ec.volumeCmPresentiel }}</td>
-                                <td>{{ ec.volumeTdPresentiel }}</td>
-                                <td>{{ ec.volumeTpPresentiel }}</td>
-                                <td>{{ ec.volumeTotalPresentiel }}</td>
-                            {% endif %}
-
-                            {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 2 or parcours.modalitesEnseignement.value == 1) %}
-                                <td>{{ ec.volumeCmDistanciel }}</td>
-                                <td>{{ ec.volumeTdDistanciel }}</td>
-                                <td>{{ ec.volumeTpDistanciel }}</td>
-                                <td>{{ ec.volumeTotalDistanciel }}</td>
-                            {% endif %}
-
-                            {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-                                <td>{{ ec.volumeTotalPresentiel + ec.volumeTotalDistanciel }}</td>
-                            {% endif %}
-                        </tr>
-                        {% set sommeEcts = sommeEcts + ec.ects %}
-                        {% set sommeCm = sommeCm + ec.volumeCmPresentiel %}
-                        {% set sommeTd = sommeTd + ec.volumeTdPresentiel %}
-                        {% set sommeTp = sommeTp + ec.volumeTpPresentiel %}
-                        {% set sommeTotal = sommeTotal + ec.volumeTotalPresentiel %}
-
-                        {% set sommeCmDist = sommeCmDist + ec.volumeCmDistanciel %}
-                        {% set sommeTdDist = sommeTdDist + ec.volumeTdDistanciel %}
-                        {% set sommeTpDist = sommeTpDist + ec.volumeTpDistanciel %}
-                        {% set sommeTotalDist = sommeTotalDist + ec.volumeTotalDistanciel %}
+                    {% for ec in ue.elementConstitutifs|filter(ec => ec.ecParent == null) %}
+                        {{ include('typeDiplome/formation/_structureEc.html.twig', {ec:ec}) }}
+                        {% for ece in ec.ecEnfants %}
+                            {{ include('typeDiplome/formation/_structureEc.html.twig', {ec:ece}) }}
+                        {% endfor %}
                     {% endfor %}
 <tr>
     <th>&nbsp;</th>

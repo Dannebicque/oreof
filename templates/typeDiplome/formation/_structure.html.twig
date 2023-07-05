@@ -23,7 +23,7 @@
                 {% set sommeSemTpDist = 0 %}
                 {% set sommeSemTotalDist = 0 %}
                 <tr>
-                    <th colspan=" {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 2) %}8{% else %}13{% endif %}">{{ semestre.semestre.display }}</th>
+                    <th colspan=" {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 2) %}8{% else %}13{% endif %}">{{ semestre.display }}</th>
                 </tr>
 
                 {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
