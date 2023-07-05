@@ -380,6 +380,7 @@ class LicenceMccc
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()));
                 } else {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, 'Erreur');
+                    //todo: ajouter couleur dans ce cas ?
                 }
                 break;
             case 'cci':
