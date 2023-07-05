@@ -502,7 +502,7 @@ class SemestreController extends AbstractController
                     'semestre' => $semestre
                 ]);
             case 'formation':
-                $formations = $formationRepository->findBy(['composantePorteuse' => $data['value']], ['libelle' => 'ASC']);
+                $formations = $formationRepository->findByComposantePorteuse($data['value']);
                 foreach ($formations as $formation) {
                     $t[] = [
                         'id' => $formation->getId(),

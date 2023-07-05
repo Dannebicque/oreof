@@ -224,4 +224,21 @@ class FormationRepository extends ServiceEntityRepository
         return $query->getQuery()
             ->getResult();
     }
+
+    public function findByComposantePorteuse(mixed $composante): array
+    {
+        return $this->createQueryBuilder('f')
+            ->where('f.composantePorteuse = :composante')
+            ->setParameter('composante', $composante)
+            ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
+            ->addOrderBy(
+                'CASE
+                            WHEN f.mention IS NOT NULL THEN m.libelle
+                            WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
+                            ELSE f.mentionTexte
+                            END',
+                'ASC'
+            )->getQuery()
+            ->getResult();
+    }
 }
