@@ -54,7 +54,7 @@ class LicenceMccc
     const COL_LANGUE_EC = 8;
     const COL_SUPPORT_ANGLAIS = 9;
     const COL_TYPE_EC = 10;
-   // const COL_OBLIGATOIRE_OPTIONNEL = 11;
+    // const COL_OBLIGATOIRE_OPTIONNEL = 11;
     const COL_COURS_MUTUALISE = 11;
     const COL_COMPETENCES = 12;
     const COL_ECTS = 13;
@@ -376,7 +376,11 @@ class LicenceMccc
             case 'cc':
                 $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, '50%');
                 $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, 2);
-                $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()));
+                if ($mcccs[2]['et'] !== null) {
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()));
+                } else {
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, 'Erreur');
+                }
                 break;
             case 'cci':
                 $texte = '';
