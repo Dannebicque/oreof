@@ -139,13 +139,10 @@ class Ue
             return $this->getEcts();
         }
 
-        //todo: prendre en compte les ECTS de l'UE sur pas d'EC
         $total = 0;
         if ($this->getUeEnfants()->count() === 0) {
             foreach ($this->getElementConstitutifs() as $ec) {
-                //if ($ec->getEcParent() === null) {
-                    $total += $ec->getEcts();
-                //}
+                $total += $ec->getEcts();
             }
         } else {
             $ects = [];

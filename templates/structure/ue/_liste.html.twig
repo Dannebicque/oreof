@@ -48,18 +48,19 @@
                                 <div class="row g-0 h-100 align-content-center">
                                     <div class="col-md-1 d-flex flex-column justify-content-center">
                                         <div class="text-muted text-small d-md-none">ue</div>
-                                        <p class="mt-0 mb-0">{% if ue.libelle != null %}<abbr title="{{ ue.libelle }}">{% endif %}{{ ue
-                                                .display(parcours) }}{% if ue.libelle != null %}</abbr>{% endif %}
+                                        <p class="mt-0 mb-0">{% if ue.libelle != null %}<abbr
+                                                    title="{{ ue.libelle }}">{% endif %}{{ ue
+                                                    .display(parcours) }}{% if ue.libelle != null %}</abbr>{% endif %}
                                             {% if ue.ueRaccrochee != null %}
                                             <i class="fal fa-link"
                                                data-controller="tooltip"
                                                data-tooltip-placement-value="bottom"
                                                title="Raccrochée à l'UE {{ ue.ueRaccrochee.display(parcours) }}"></i>{% endif %}
                                             {% if ue.ueMutualisables|length >0 %}
-                                            <i class="fal fa-share-nodes"
-                                               data-controller="tooltip"
-                                               data-tooltip-placement-value="bottom"
-                                               title="UE mutualisée"></i>{% endif %}
+                                                <i class="fal fa-share-nodes"
+                                                   data-controller="tooltip"
+                                                   data-tooltip-placement-value="bottom"
+                                                   title="UE mutualisée"></i>{% endif %}
                                         </p>
                                     </div>
                                     <div class="col-md-1 d-flex flex-column justify-content-center">
@@ -327,7 +328,7 @@
                                             <div class="text-muted text-small d-md-none">ue</div>
                                             <p>{% if uee.libelle != null %}
                                                 <abbr title="{{ uee.libelle }}">{% endif %}{{ uee
-                                                    .display(parcours) }}{% if uee.libelle != null %}</abbr>{% endif %} {% if uee
+                                                        .display(parcours) }}{% if uee.libelle != null %}</abbr>{% endif %} {% if uee
                                                 .ueRaccrochee != null %}
                                                 <i class="fal fa-link"
                                                    data-controller="tooltip"
@@ -338,8 +339,8 @@
                                         <div class="col-md-1 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">ECTS</div>
                                             <span id="ects_ue_{{ uee.id }}_{{ parcours.id }}">
-                                            {{ uee.totalEctsUe|badgeEctsUe(typeDiplome.nbEctsMaxUe) }}
-                                        </span>
+                                                {{ uee.totalEctsUe|badgeEctsUe(typeDiplome.nbEctsMaxUe) }}
+                                            </span>
                                         </div>
                                         <div class="col-md-1 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">NB. EC</div>
