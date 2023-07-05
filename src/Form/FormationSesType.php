@@ -42,17 +42,31 @@ class FormationSesType extends AbstractType
         $builder
             ->add('typeDiplome', EntityType::class, [
                 'class' => TypeDiplome::class,
+                'query_builder' => static function ($er) {
+                    return $er->createQueryBuilder('t')
+                        ->orderBy('t.libelle', 'ASC');
+                },
+                'autocomplete' => true,
                 'choice_label' => 'libelle',
                 'attr' => ['data-action' => 'change->formation#changeTypeDiplome']
             ])
             ->add('domaine', EntityType::class, [
                 'class' => Domaine::class,
+                'query_builder' => static function ($er) {
+                    return $er->createQueryBuilder('d')
+                        ->orderBy('d.libelle', 'ASC');
+                },
                 'choice_label' => 'libelle',
+                'autocomplete' => true,
                 'attr' => ['data-action' => 'change->formation#changeDomaine']
             ])
             ->add('composantePorteuse', EntityType::class, [
                 'attr' => ['placeholder' => 'Choisir la composante porteuse du projet', 'data-action' => 'change->formation#changeComposante'],
                 'class' => Composante::class,
+                'query_builder' => static function ($er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.libelle', 'ASC');
+                },
                 'choice_label' => 'libelle',
                 'required' => true,
                 'autocomplete' => true,

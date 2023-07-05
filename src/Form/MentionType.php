@@ -25,6 +25,11 @@ class MentionType extends AbstractType
         $builder
             ->add('typeDiplome', EntityType::class, [
                 'class' => TypeDiplome::class,
+                'query_builder' => static function ($er) {
+                    return $er->createQueryBuilder('t')
+                        ->orderBy('t.libelle', 'ASC');
+                },
+                'autocomplete' => true,
                 'choice_label' => 'libelle',
                 'label' => 'Type de diplôme',
                 'attr' => ['data-action' => 'change->formation#changeTypeDiplome']
@@ -39,6 +44,11 @@ class MentionType extends AbstractType
                 'required' => false,
             ])
             ->add('domaine', EntityType::class, [
+                'query_builder' => static function ($er) {
+                    return $er->createQueryBuilder('d')
+                        ->orderBy('d.libelle', 'ASC');
+                },
+                'autocomplete' => true,
                 'class' => Domaine::class,
                 'choice_label' => 'libelle',
             ])
