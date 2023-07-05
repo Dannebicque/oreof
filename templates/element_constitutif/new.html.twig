@@ -13,6 +13,11 @@
             'id': 'formEc'}
     }) }}
 
+    {% if isAdmin %}
+        {{ form_row(form.ordre) }}
+        {{ form_row(form.code) }}
+    {% endif %}
+
     <div>
         {{ form_row(form.typeEc, {'row_attr' : {'id' : 'typeUe' }}) }}
         <button class="btn text-info"

@@ -4,6 +4,10 @@
 <div
         {{ stimulus_controller('ue') }}
 >
+    {% if isAdmin %}
+        {{ form_row(form.ordre) }}
+    {% endif %}
+
     {{ form_row(form.libelle) }}
     {{ form_row(form.ects) }}
     <div>

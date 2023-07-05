@@ -16,6 +16,7 @@ use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeEcRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,6 +27,16 @@ class ElementConstitutifType extends AbstractType
     {
         $typeDiplome = $options['typeDiplome'];
         $formation = $options['formation'];
+        $isAdmin = $options['isAdmin'];
+
+        if ($isAdmin) {
+            $builder->add('ordre', IntegerType::class, [
+            ])
+            ->add('code', TextType::class, [
+                'required' => false,
+            ])
+            ;
+        }
 
         $builder
             ->add('typeEc', EntityType::class, [
@@ -65,7 +76,8 @@ class ElementConstitutifType extends AbstractType
             'data_class' => ElementConstitutif::class,
             'translation_domain' => 'form',
             'typeDiplome' => null,
-            'formation' => null
+            'formation' => null,
+            'isAdmin' => false,
         ]);
     }
 }

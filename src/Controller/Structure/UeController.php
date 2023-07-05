@@ -83,6 +83,7 @@ class UeController extends AbstractController
         Semestre             $semestre,
         Parcours             $parcours
     ): Response {
+        $isAdmin = $this->isGranted('ROLE_SES');
         $ue = new Ue();
         $ueOrigine = $request->query->get('ue', null);
         if ($ueOrigine !== null) {
@@ -103,6 +104,7 @@ class UeController extends AbstractController
                 'ue' => $ueOrigine ? $ueOrigine->getId() : null,
             ]),
             'typeDiplome' => $typeDiplome,
+            'isAdmin' => $isAdmin,
         ]);
 
         $form->handleRequest($request);
@@ -158,6 +160,7 @@ class UeController extends AbstractController
 
         return $this->render('structure/ue/_new.html.twig', [
             'form' => $form->createView(),
+            'isAdmin' => $isAdmin ?? false,
         ]);
     }
 
@@ -248,16 +251,17 @@ class UeController extends AbstractController
         UeRepository         $ueRepository
     ): Response {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
-
         if ($typeDiplome === null) {
             throw new \Exception('Type de diplôme non trouvé');
         }
+        $isAdmin = $this->isGranted('ROLE_SES');
         $form = $this->createForm(UeType::class, $ue, [
             'action' => $this->generateUrl('structure_ue_edit', [
                 'id' => $ue->getId(),
                 'parcours' => $parcours->getId()
             ]),
             'typeDiplome' => $typeDiplome,
+            'isAdmin' => $isAdmin
         ]);
 
         $form->handleRequest($request);
@@ -296,6 +300,7 @@ class UeController extends AbstractController
         return $this->render('structure/ue/_new.html.twig', [
             'form' => $form->createView(),
             'ue' => $ue,
+            'isAdmin' => $isAdmin ?? false,
         ]);
     }
 

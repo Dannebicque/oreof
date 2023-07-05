@@ -100,6 +100,7 @@ class ElementConstitutifController extends AbstractController
         Ue                           $ue,
         Parcours                     $parcours
     ): Response {
+        $isAdmin = $this->isGranted('ROLE_SES');
         $elementConstitutif = new ElementConstitutif();
         $elementConstitutif->setFicheMatiere(null);
         $elementConstitutif->setParcours($parcours);
@@ -121,6 +122,7 @@ class ElementConstitutifController extends AbstractController
             ),
             'typeDiplome' => $typeDiplome,
             'formation' => $parcours->getFormation(),
+            'isAdmin' => $isAdmin
         ]);
         $form->handleRequest($request);
 
@@ -204,6 +206,7 @@ class ElementConstitutifController extends AbstractController
             'form' => $form->createView(),
             'ue' => $ue,
             'parcours' => $parcours,
+            'isAdmin' => $isAdmin,
         ]);
     }
 
@@ -303,13 +306,15 @@ class ElementConstitutifController extends AbstractController
             throw new RuntimeException('Type de diplôme non trouvé');
         }
 
+        $isAdmin = $this->isGranted('ROLE_SES');
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl(
                 'app_element_constitutif_edit',
                 ['id' => $elementConstitutif->getId(), 'parcours' => $parcours->getId()]
             ),
             'typeDiplome' => $typeDiplome,
-            'formation' => $parcours->getFormation()
+            'formation' => $parcours->getFormation(),
+            'isAdmin' => $isAdmin
         ]);
 
         $form->handleRequest($request);
@@ -410,6 +415,7 @@ class ElementConstitutifController extends AbstractController
             'form' => $form->createView(),
             'ue' => $elementConstitutif->getUe(),
             'parcours' => $parcours,
+            'isAdmin' => $isAdmin
         ]);
     }
 
@@ -426,6 +432,7 @@ class ElementConstitutifController extends AbstractController
         Parcours                     $parcours,
         Ue                           $ue
     ): Response {
+        $isAdmin = $this->isGranted('ROLE_SES');
 //        $form = $this->createForm(ElementConstitutifEnfantType::class, $elementConstitutif, [
 //            'action' => $this->generateUrl(
         //                'app_element_constitutif_edit_enfant',
@@ -459,7 +466,8 @@ class ElementConstitutifController extends AbstractController
             'element_constitutif' => $elementConstitutif,
             'parcours' => $parcours,
             'ue' => $ue,
-            'matieres' => $ficheMatiereRepository->findByParcours($parcours)
+            'matieres' => $ficheMatiereRepository->findByParcours($parcours),
+            'isAdmin' => $isAdmin
         ]);
     }
 

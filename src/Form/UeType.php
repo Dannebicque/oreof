@@ -17,6 +17,7 @@ use App\Repository\TypeUeRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,6 +28,12 @@ class UeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $typeDiplome = $options['typeDiplome'];
+        $isAdmin = $options['isAdmin'];
+
+        if (true === $isAdmin) {
+            $builder->add('ordre', IntegerType::class, [
+            ]);
+        }
 
 
         $builder
@@ -82,6 +89,7 @@ class UeType extends AbstractType
             'data_class' => Ue::class,
             'translation_domain' => 'form',
             'typeDiplome' => null,
+            'isAdmin' => false
         ]);
     }
 }
