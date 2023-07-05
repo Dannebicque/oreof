@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.4](https://github.com/Dannebicque/oreof/compare/v1.5.3...v1.5.4) (2023-07-05)
+
+
+### Features
+
+* Modifier ordre UE/EC en admin ([6cb99dc](https://github.com/Dannebicque/oreof/commit/6cb99dc6d4fec5f7e9e96167f92364d88eacc50b))
+
+
+### Bug Fixes
+
+* Affichage structure ([c708a7c](https://github.com/Dannebicque/oreof/commit/c708a7cce0dbb7891817a4a8b6823d682c1cd39f))
+* Bug si MCCC null sur seconde chance ([7e7c9e0](https://github.com/Dannebicque/oreof/commit/7e7c9e074ff9480bc79eaf4f5eb9a067f94421ee))
+* Bug si MCCC null sur seconde chance ([3e4b37d](https://github.com/Dannebicque/oreof/commit/3e4b37d889a8a31dd83623276ceea5b100f7de6b))
+* Export MCCC ([a30ce68](https://github.com/Dannebicque/oreof/commit/a30ce6859371cea8742ea4fb0bc54e76fc7abd28))
+* Filtre des formations pour mutualisation ([201b439](https://github.com/Dannebicque/oreof/commit/201b4397c89e20eac1307e20af3531ca1835caa0))
+* Liste des fiches matières selon les droits ([4efe6c0](https://github.com/Dannebicque/oreof/commit/4efe6c0acd5cf5f2287122938ef0b3cff45b14e5))
+* liste des UE. ([83aae37](https://github.com/Dannebicque/oreof/commit/83aae37edd6ca251c3df35c2648ced8c2640b5e8))
+* Mise en forme, tri et auto-complète des formulaires ([d75ab95](https://github.com/Dannebicque/oreof/commit/d75ab957d0b0206dd6afa08dcb9d825f74e93c4c))
+
 ### [1.5.3](https://github.com/Dannebicque/oreof/compare/v1.5.2...v1.5.3) (2023-07-03)
 
 
