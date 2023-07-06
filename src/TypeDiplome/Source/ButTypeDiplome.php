@@ -18,6 +18,10 @@ use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\InputBag;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 {
@@ -32,7 +36,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         protected TypeDiplomeRegistry $typeDiplomeRegistry,
         protected But $synchronisationBut
     ) {
-        parent::__construct($entityManager,$typeDiplomeRegistry);
+        parent::__construct($entityManager, $typeDiplomeRegistry);
     }
 
     public function getMcccs(ElementConstitutif $elementConstitutif): array|Collection
@@ -40,20 +44,23 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         return $elementConstitutif->getMcccs();
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     public function synchroniser(
         Formation $formation
-    )
-    {
+    ): bool {
         return $this->synchronisationBut->synchroniser($formation);
     }
 
     public function getRefCompetences(Parcours $parcours): array|Collection
     {
-        $competences = $this->butCompetenceRepository->findBy([
+        return $this->butCompetenceRepository->findBy([
             'formation' => $parcours->getFormation(),
         ]);
-
-        return $competences;
     }
 
 

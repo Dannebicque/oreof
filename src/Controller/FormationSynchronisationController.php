@@ -14,18 +14,20 @@ class FormationSynchronisationController extends AbstractController
     public function index(
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Formation $formation
-    ): Response
-    {
+    ): Response {
         $this->denyAccessUnlessGranted('ROLE_SES');
 
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
         $state = $typeDiplome->synchroniser($formation);
 
-        return $this->render(
-            'formation_synchronisation/index.html.twig', [
-                'formation' => $formation,
-                'state' => $state
-            ]
-        );
+        if ($state) {
+            $this->addFlash('success', 'La synchronisation a été effectuée avec succès.');
+        } else {
+            $this->addFlash('danger', 'La synchronisation a échoué.');
+        }
+
+        return $this->redirectToRoute('app_formation_edit', [
+            'formation' => $formation->getId(),
+        ]);
     }
 }
