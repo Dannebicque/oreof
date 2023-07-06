@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.6](https://github.com/Dannebicque/oreof/compare/v1.5.5...v1.5.6) (2023-07-06)
+
+
+### Features
+
+* Filtre sur les fiches matières ([89e9908](https://github.com/Dannebicque/oreof/commit/89e99084291cdcfdd73f59504b000296a24c3288))
+* Synchronisation du BUT avec ORéBUT ([d72af63](https://github.com/Dannebicque/oreof/commit/d72af6391891760662b722e6390ca415bd97ec25))
+
 ### [1.5.5](https://github.com/Dannebicque/oreof/compare/v1.5.4...v1.5.5) (2023-07-06)
 
 
