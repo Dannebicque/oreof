@@ -59,92 +59,100 @@
             <th></th>
 
         </tr>
-{#        <tr>#}
-{#            <th>#}
-{#                <label for="filter-mention" class="sr-only">mention</label>#}
-{#                <select#}
-{#                        {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                            'field': 'mention'#}
-{#                        }) }}#}
-{#                        id="filter-mention"#}
-{#                        {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}#}
-{#                        class="form-select">#}
-{#                    <option value="">Toutes les mentions</option>#}
-{#                    {% for mention in mentions %}#}
-{#                        <option value="{{ mention.id }}"#}
-{#                                {% if params['mention'] is defined and params['mention']  == mention.id %}selected{% endif %}#}
-{#                        >#}
-{#                            {{ mention.libelle }}#}
-{#                        </option>#}
-{#                    {% endfor %}#}
-{#                </select>#}
-{#            </th>#}
-{#            <th>#}
-{#                <label for="filter-parcours" class="sr-only">parcours</label>#}
-{#                <select#}
-{#                        {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                            'field': 'parcours'#}
-{#                        }) }}#}
-{#                        {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}#}
-{#                        id="filter-parcours" class="form-select"#}
-{#                >#}
-{#                    <option value="">Tous les parcours</option>#}
-{#                    {% for parc in parcours %}#}
-{#                        <option value="{{ parc.id }}"#}
-{#                                {% if params['parcours'] is defined and params['parcours']  == parc.id %}selected{% endif %}#}
-{#                        >{{ parcours.libelle }}</option>#}
-{#                    {% endfor %}#}
-{#                </select>#}
-{#            </th>#}
-{#            <th>#}
-{#                <label for="filter-libelle" class="sr-only">libelle</label>#}
-{#                <input#}
-{#                        {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                            'field': 'libelle'#}
-{#                        }) }}#}
-{#                        id="filter-mention" class="form-control"#}
-{#                >#}
-{#            </th>#}
-{#            <th>#}
-{#                <label for="filter-referent" class="sr-only">referent</label>#}
-{#                <select#}
-{#                        {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                            'field': 'referent'#}
-{#                        }) }}#}
-{#                        id="filter-referent" class="form-select">#}
-
-{#                </select>#}
-{#            </th>#}
-{#            <th>#}
-{#                <label for="filter-utilise" class="sr-only">utilisé?</label>#}
-{#                <select#}
-{#                        {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                            'field': 'utilise'#}
-{#                        }) }}#}
-{#                        id="filter-utilise" class="form-select">#}
-{#                    <option value="">Tous</option>#}
-{#                    <option value="1">Oui</option>#}
-{#                    <option value="0">Non</option>#}
-{#                </select>#}
-{#            </th>#}
-{#            <th>#}
-{#                <label for="filter-remplissage" class="sr-only">remplissage</label>#}
-{#                <select#}
-{#                        {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                            'field': 'remplissage'#}
-{#                        }) }}#}
-{#                        id="filter-remplissage" class="form-select">#}
-{#                </select>#}
-{#            </th>#}
-{#            <th>#}
-{#                <button class="btn btn-outline-danger"#}
-{#                        {{ stimulus_action('crud', 'effaceFiltre', 'click', {#}
-{#                        }) }}#}
-{#                >#}
-{#                    Effacer les filtres#}
-{#                </button>#}
-{#            </th>#}
-{#        </tr>#}
+        <tr>
+            <th>
+                <label for="filter-mention" class="sr-only">mention</label>
+                <select
+                        {{ stimulus_action('crud', 'filter', 'change', {
+                            'field': 'mention'
+                        }) }}
+                        id="filter-mention"
+                        {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                        class="form-select">
+                    <option value="">Toutes les mentions</option>
+                    {% for mention in mentions %}
+                        <option value="{{ mention.id }}"
+                                {% if params['mention'] is defined and params['mention']  == mention.id %}selected{% endif %}
+                        >
+                            {{ mention.display }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </th>
+            <th>
+                <label for="filter-parcours" class="sr-only">parcours</label>
+                <select
+                        {{ stimulus_action('crud', 'filter', 'change', {
+                            'field': 'parcours'
+                        }) }}
+                        {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                        id="filter-parcours" class="form-select"
+                >
+                    <option value="">Tous les parcours</option>
+                    {% for parc in parcours %}
+                        <option value="{{ parc.id }}"
+                                {% if params['parcours'] is defined and params['parcours']  == parc.id %}selected{% endif %}
+                        >{{ parc.libelle }}</option>
+                    {% endfor %}
+                </select>
+            </th>
+            <th>
+                <label for="filter-libelle" class="sr-only">libelle</label>
+                <input
+                        {{ stimulus_action('crud', 'filter', 'change', {
+                            'field': 'libelle'
+                        }) }}
+                        value="{% if params['libelle'] is defined %}{{ params['libelle'] }}{% endif %}"
+                        id="filter-mention" class="form-control"
+                >
+            </th>
+            <th>
+                <label for="filter-referent" class="sr-only">referent</label>
+                <select
+                        {{ stimulus_action('crud', 'filter', 'change', {
+                            'field': 'referent'
+                        }) }}
+                        {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                        id="filter-referent" class="form-select">
+                    <option value="">Tous les référents</option>
+                    <option value="vide" {% if params['referent'] is defined and params['referent']  == 'vide' %}selected{% endif %}>Non défini</option>
+                    {% for user in users %}
+                        <option value="{{ user.id }}"
+                                {% if params['referent'] is defined and params['referent']  == user.id %}selected{% endif %}
+                        >{{ user.display }}</option>
+                    {% endfor %}
+                </select>
+            </th>
+            <th>
+                <label for="filter-utilise" class="sr-only">utilisé?</label>
+                <select
+                        {{ stimulus_action('crud', 'filter', 'change', {
+                            'field': 'utilise'
+                        }) }}
+                        id="filter-utilise" class="form-select">
+                    <option value="">Tous</option>
+                    <option value="1">Oui</option>
+                    <option value="0">Non</option>
+                </select>
+            </th>
+            <th>
+                <label for="filter-remplissage" class="sr-only">remplissage</label>
+                <select
+                        {{ stimulus_action('crud', 'filter', 'change', {
+                            'field': 'remplissage'
+                        }) }}
+                        id="filter-remplissage" class="form-select">
+                </select>
+            </th>
+            <th>
+                <button class="btn btn-outline-danger"
+                        {{ stimulus_action('crud', 'effaceFiltre', 'click', {
+                        }) }}
+                >
+                    Effacer les filtres
+                </button>
+            </th>
+        </tr>
         </thead>
         <tbody>
         {% for ficheMatiere in ficheMatieres %}

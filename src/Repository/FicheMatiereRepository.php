@@ -16,6 +16,7 @@ use App\Entity\Mention;
 use App\Entity\Parcours;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -68,9 +69,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
     public function findByAdmin(
         AnneeUniversitaire $anneeUniversitaire,
-        array $options = [],
-        string|null $q = null
-    ) {
+        array              $options = []
+    ): array {
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
@@ -78,16 +78,15 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->andWhere('fo.anneeUniversitaire = :annee')
             ->setParameter('annee', $anneeUniversitaire);
 
-        $this->addFiltres($q, $qb, $options);
+        $this->addFiltres($qb, $options);
 
         return $qb->getQuery()->getResult();
     }
 
     public function findByResponsableFicheMatiere(
-        User $user,
+        UserInterface      $user,
         AnneeUniversitaire $anneeUniversitaire,
-        array $options = [],
-        string|null $q = null
+        array              $options = []
     ): array {
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
@@ -98,48 +97,61 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->setParameter('annee', $anneeUniversitaire);
 
-        $this->addFiltres($q, $qb, $options);
+        $this->addFiltres($qb, $options);
 
         return $qb->getQuery()->getResult();
     }
 
-    /**
-     * @param string|null                $q
-     * @param \Doctrine\ORM\QueryBuilder $qb
-     * @param array                      $options
-     *
-     * @return void
-     */
-    private function addFiltres(?string $q, \Doctrine\ORM\QueryBuilder $qb, array $options): void
+    private function addFiltres(QueryBuilder $qb, array $options): void
     {
-        if (null !== $q) {
-            $qb->andWhere('f.libelle LIKE :q')
-                ->setParameter('q', '%' . $q . '%');
+        $sort = $options['sort'] ?? 'mention';
+        $direction = $options['direction'] ?? 'ASC';
+
+        if (array_key_exists('parcours', $options) && null !== $options['parcours']) {
+            $qb->andWhere('f.parcours = :parcours')
+                ->setParameter('parcours', $options['parcours']);
         }
 
-        foreach ($options as $sort => $direction) {
-            if ($sort === 'responsableFicheMatiere') {
-                $qb->addOrderBy('u.nom', $direction);
-                $qb->addOrderBy('u.prenom', $direction);
-            } elseif ($sort === 'mention') {
-                $qb->leftJoin(Mention::class, 'm', 'WITH', 'fo.mention = m.id');
-                $qb->addOrderBy(
-                    'CASE
-                            WHEN fo.mention IS NOT NULL THEN m.libelle
-                            WHEN fo.mentionTexte IS NOT NULL THEN fo.mentionTexte
-                            ELSE fo.mentionTexte
-                            END',
-                    $direction
-                );
+        if (array_key_exists('referent', $options) && null !== $options['referent']) {
+            if ($options['referent'] === 'vide') {
+                $qb->andWhere('f.responsableFicheMatiere IS NULL');
             } else {
-                $qb->addOrderBy('f.' . $sort, $direction);
+                $qb->andWhere('f.responsableFicheMatiere = :referent')
+                    ->setParameter('referent', $options['referent']);
             }
+        }
+
+        if (array_key_exists('q', $options) && null !== $options['q']) {
+            $qb->andWhere('f.libelle LIKE :q')
+                ->setParameter('q', '%' . $options['q'] . '%');
+        }
+
+        if (array_key_exists('libelle', $options) && null !== $options['libelle']) {
+            $qb->andWhere('f.libelle LIKE :q')
+                ->setParameter('q', '%' . $options['libelle'] . '%');
+        }
+
+        if ($sort === 'responsableFicheMatiere') {
+            $qb->addOrderBy('u.nom', $direction);
+            $qb->addOrderBy('u.prenom', $direction);
+        } elseif ($sort === 'mention') {
+            $qb->leftJoin(Mention::class, 'm', 'WITH', 'fo.mention = m.id');
+            $qb->addOrderBy(
+                'CASE
+                        WHEN fo.mention IS NOT NULL THEN m.libelle
+                        WHEN fo.mentionTexte IS NOT NULL THEN fo.mentionTexte
+                        ELSE fo.mentionTexte
+                        END',
+                $direction
+            );
+        } else {
+            $qb->addOrderBy('f.' . $sort, $direction);
         }
     }
 
-    public function findByResponsableParcours(?UserInterface $user, AnneeUniversitaire $getAnneeUniversitaire, array $array, float|bool|int|string|null $q): array
+    public function findByResponsableParcours(?UserInterface $user, AnneeUniversitaire $getAnneeUniversitaire, array $options): array
     {
-        return $this->createQueryBuilder('f')
+        $query = $this->createQueryBuilder('f')
             ->leftJoin('f.parcours', 'p')
             ->where('p.respParcours = :parcours')
             ->orWhere('p.coResponsable = :parcours')
@@ -147,18 +159,25 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->orderBy('f.libelle', 'ASC')
             ->getQuery()
             ->getResult();
+        $this->addFiltres($query, $options);
+
+        return $query->getQuery()
+            ->getResult();
     }
 
-    public function findByResponsableFormation(?UserInterface $user, AnneeUniversitaire $getAnneeUniversitaire, array $array, float|bool|int|string|null $q)
+    public function findByResponsableFormation(?UserInterface $user, AnneeUniversitaire $getAnneeUniversitaire, array $options): array
     {
-        return $this->createQueryBuilder('f')
+        $query = $this->createQueryBuilder('f')
             ->leftJoin('f.parcours', 'p')
             ->join('p.formation', 'fo')
             ->where('fo.responsableMention = :parcours')
             ->orWhere('fo.coResponsable = :parcours')
             ->setParameter('parcours', $user)
-            ->orderBy('f.libelle', 'ASC')
-            ->getQuery()
+            ->orderBy('f.libelle', 'ASC');
+
+        $this->addFiltres($query, $options);
+
+        return $query->getQuery()
             ->getResult();
     }
 }

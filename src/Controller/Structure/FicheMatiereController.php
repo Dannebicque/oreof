@@ -32,22 +32,19 @@ class FicheMatiereController extends BaseController
 
     #[Route('/liste', name: 'liste')]
     public function liste(
-        Request $request,
+        Request                $request,
         FicheMatiereRepository $ficheMatiereRepository
     ): Response {
         $sort = $request->query->get('sort') ?? 'libelle';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
-
+        $ficheMatieres = [];
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
-            $ficheMatieres = $ficheMatiereRepository->findByAdmin(
+            $ficheMatieres[] = $ficheMatiereRepository->findByAdmin(
                 $this->getAnneeUniversitaire(),
-                [$sort => $direction],
-                $q
+                $request->query->all()
             );
         } else {
-            $ficheMatieres = [];
-
             // toutes les fiches en tant que responsable composante/DPE
 //            $ficheMatieres[] = $ficheMatiereRepository->findByComposanteDpe(
 //                $this->getUser(),
@@ -59,29 +56,41 @@ class FicheMatiereController extends BaseController
             $ficheMatieres[] = $ficheMatiereRepository->findByResponsableFormation(
                 $this->getUser(),
                 $this->getAnneeUniversitaire(),
-                [$sort => $direction],
-                $q
+                $request->query->all()
             );
 
             // toutes les fiches en tant que responsable parcours
             $ficheMatieres[] = $ficheMatiereRepository->findByResponsableParcours(
                 $this->getUser(),
                 $this->getAnneeUniversitaire(),
-                [$sort => $direction],
-                $q
+                $request->query->all()
             );
 
             // toutes les fiches en tant que responsable fiche matière
             $ficheMatieres[] = $ficheMatiereRepository->findByResponsableFicheMatiere(
                 $this->getUser(),
                 $this->getAnneeUniversitaire(),
-                [$sort => $direction],
-                $q
+                $request->query->all()
             );
-            $tFicheMatieres = [];
-            foreach ($ficheMatieres as $ficheMatiere) {
-                foreach ($ficheMatiere as $fiche) {
-                    $tFicheMatieres[$fiche->getId()] = $fiche;
+        }
+
+        $tFicheMatieres = [];
+        $tMentions = [];
+        $tParcours = [];
+        $tUsers = [];
+        foreach ($ficheMatieres as $ficheMatiere) {
+            foreach ($ficheMatiere as $fiche) {
+                $tFicheMatieres[$fiche->getId()] = $fiche;
+
+                if (null !== $fiche->getParcours()) {
+                    $tParcours[$fiche->getParcours()->getId()] = $fiche->getParcours();
+                    if ($fiche->getParcours()->getFormation() !== null) {
+                        $tMentions[$fiche->getParcours()->getFormation()->getId()] = $fiche->getParcours()->getFormation();
+                    }
+                }
+
+                if (null !== $fiche->getResponsableFicheMatiere()) {
+                    $tUsers[$fiche->getResponsableFicheMatiere()->getId()] = $fiche->getResponsableFicheMatiere();
                 }
             }
         }
@@ -90,8 +99,9 @@ class FicheMatiereController extends BaseController
             'ficheMatieres' => $tFicheMatieres,
             'deplacer' => false,
             'mode' => 'liste',
-            'mentions' => [],
-            'parcours' => [],
+            'mentions' => $tMentions,
+            'parcours' => $tParcours,
+            'users' => $tUsers,
             'params' => $request->query->all()
         ]);
     }
@@ -101,7 +111,7 @@ class FicheMatiereController extends BaseController
     ]
     public function detailComposante(
         ElementConstitutifRepository $elementConstitutifRepository,
-        Ue $ue,
+        Ue                           $ue,
     ): Response {
         $ecs = $elementConstitutifRepository->findByUe($ue);
 

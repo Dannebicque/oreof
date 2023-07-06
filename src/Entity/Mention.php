@@ -74,18 +74,6 @@ class Mention
         return $this;
     }
 
-//    public function getTypeDiplome(): ?string
-//    {
-//        return $this->typeDiplome;
-//    }
-//
-//    public function setTypeDiplome(?string $typeDiplome): self
-//    {
-//        $this->typeDiplome = $typeDiplome;
-//
-//        return $this;
-//    }
-
     public function getDomaine(): ?Domaine
     {
         return $this->domaine;
@@ -138,5 +126,10 @@ class Mention
         }
 
         return $this;
+    }
+
+    public function display(): string
+    {
+        return $this->typeDiplome?->getLibelleCourt().' '.$this->getLibelle();
     }
 }
