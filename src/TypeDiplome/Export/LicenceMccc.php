@@ -282,7 +282,11 @@ class LicenceMccc
     {
         $texte = '';
         foreach ($typeE as $type) {
-            $texte .= $this->typeEpreuves[$type]->getSigle() . '; ';
+            if ($this->typeEpreuves[$type] !== null) {
+                $texte .= $this->typeEpreuves[$type]->getSigle() . '; ';
+            } else {
+                $texte .=  'erreur épreuve; ';
+            }
         }
 
         return substr($texte, 0, -2);
