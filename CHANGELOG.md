@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.9](https://github.com/Dannebicque/oreof/compare/v1.5.8...v1.5.9) (2023-07-07)
+
+
+### Bug Fixes
+
+* Ajout du sigle sur la fiche matière ([3d49f0e](https://github.com/Dannebicque/oreof/commit/3d49f0ecba86c25f114e5534217db15968bf1dff))
+* Requete filtre sur les matières ([f5eaed3](https://github.com/Dannebicque/oreof/commit/f5eaed35726546089a98031371d28853b412fa41))
+* Validation structure ([d7b9b33](https://github.com/Dannebicque/oreof/commit/d7b9b33f48bfd48f70ee361b1f4e914d89a79429))
+
 ### [1.5.8](https://github.com/Dannebicque/oreof/compare/v1.5.7...v1.5.8) (2023-07-07)
 
 
