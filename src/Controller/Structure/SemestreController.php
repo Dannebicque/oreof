@@ -102,7 +102,11 @@ class SemestreController extends AbstractController
         ]);
 
         if (count($semestres) > 0) {
-            return JsonReponse::error('Le semestre existe déjà');
+            foreach ($semestres as $semestre) {
+                $semestre->getSemestre()?->setNonDispense(false);
+            }
+            $entityManager->flush();
+            return JsonReponse::success('Semestre mis à jour');
         }
 
         switch ($action) {
