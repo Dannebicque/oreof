@@ -13,7 +13,7 @@
     </td>
     <td>{{ ec.ects }}</td>
 
-    {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
+    {% if presentiel %}
         {% if ec.ecEnfants|length > 0 %}
             <td colspan="4"></td>
         {% else %}
@@ -22,26 +22,16 @@
                 <td>{{ ec.ecParent.volumeTdPresentiel }}</td>
                 <td>{{ ec.ecParent.volumeTpPresentiel }}</td>
                 <td>{{ ec.ecParent.volumeTotalPresentiel }}</td>
-
-                {% set sommeCm = sommeCm + ec.ecParent.volumeCmPresentiel %}
-                {% set sommeTd = sommeTd + ec.ecParent.volumeTdPresentiel %}
-                {% set sommeTp = sommeTp + ec.ecParent.volumeTpPresentiel %}
-                {% set sommeTotal = sommeTotal + ec.ecParent.volumeTotalPresentiel %}
             {% else %}
                 <td>{{ ec.volumeCmPresentiel }}</td>
                 <td>{{ ec.volumeTdPresentiel }}</td>
                 <td>{{ ec.volumeTpPresentiel }}</td>
                 <td>{{ ec.volumeTotalPresentiel }}</td>
-
-                {% set sommeCm = sommeCm + ec.volumeCmPresentiel %}
-                {% set sommeTd = sommeTd + ec.volumeTdPresentiel %}
-                {% set sommeTp = sommeTp + ec.volumeTpPresentiel %}
-                {% set sommeTotal = sommeTotal + ec.volumeTotalPresentiel %}
             {% endif %}
         {% endif %}
     {% endif %}
 
-    {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 2 or parcours.modalitesEnseignement.value == 1) %}
+    {% if distanciel %}
         {% if ec.ecEnfants|length > 0 %}
             <td colspan="4"></td>
         {% else %}
@@ -50,19 +40,11 @@
                 <td>{{ ec.ecParent.volumeTdDistanciel }}</td>
                 <td>{{ ec.ecParent.volumeTpDistanciel }}</td>
                 <td>{{ ec.ecParent.volumeTotalDistanciel }}</td>
-                {% set sommeCmDist = sommeCmDist + ec.ecParent.volumeCmDistanciel %}
-                {% set sommeTdDist = sommeTdDist + ec.ecParent.volumeTdDistanciel %}
-                {% set sommeTpDist = sommeTpDist + ec.ecParent.volumeTpDistanciel %}
-                {% set sommeTotalDist = sommeTotalDist + ec.ecParent.volumeTotalDistanciel %}
             {% else %}
                 <td>{{ ec.volumeCmDistanciel }}</td>
                 <td>{{ ec.volumeTdDistanciel }}</td>
                 <td>{{ ec.volumeTpDistanciel }}</td>
                 <td>{{ ec.volumeTotalDistanciel }}</td>
-                {% set sommeCmDist = sommeCmDist + ec.volumeCmDistanciel %}
-                {% set sommeTdDist = sommeTdDist + ec.volumeTdDistanciel %}
-                {% set sommeTpDist = sommeTpDist + ec.volumeTpDistanciel %}
-                {% set sommeTotalDist = sommeTotalDist + ec.volumeTotalDistanciel %}
             {% endif %}
         {% endif %}
 
@@ -76,7 +58,5 @@
         {% endif %}
     {% endif %}
 </tr>
-{% set sommeEcts = sommeEcts + ec.ects %}
-
 
 

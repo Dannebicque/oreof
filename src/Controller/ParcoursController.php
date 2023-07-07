@@ -10,6 +10,9 @@
 namespace App\Controller;
 
 use App\Classes\verif\ParcoursState;
+use App\DTO\HeuresEctsFormation;
+use App\DTO\HeuresEctsSemestre;
+use App\DTO\HeuresEctsUe;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\SemestreParcours;
@@ -181,17 +184,33 @@ class ParcoursController extends BaseController
     public function show(
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours            $parcours
-    ): Response
-    {
+    ): Response {
         $formation = $parcours->getFormation();
         if ($formation === null) {
             throw $this->createNotFoundException();
         }
         $typeDiplome = $formation->getTypeDiplome();
+
+        $dto = new HeuresEctsFormation();
+
+        foreach ($parcours->getSemestreParcours() as $semestreParcours) {
+            $dtoSemestre = new HeuresEctsSemestre();
+            foreach ($semestreParcours->getSemestre()->getUes() as $ue) {
+                $dtoUe = new HeuresEctsUe();
+                foreach ($ue->getElementConstitutifs() as $elementConstitutif) {
+                    $dtoUe->addEc($elementConstitutif);
+                }
+
+                $dtoSemestre->addUe($ue->getId(), $dtoUe);
+            }
+            $dto->addSemestre($semestreParcours->getId(), $dtoSemestre);
+        }
+
         return $this->render('parcours/show.html.twig', [
             'parcours' => $parcours,
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
+            'dto' => $dto
         ]);
     }
 

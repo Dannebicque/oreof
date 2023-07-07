@@ -1,29 +1,12 @@
 <div class="row">
     <div class="col-sm-12">
         <table class="table table-striped table-hover">
-            {% set sommeFormEcts = 0 %}
-            {% set sommeFormCm = 0 %}
-            {% set sommeFormTd = 0 %}
-            {% set sommeFormTp = 0 %}
-            {% set sommeFormTotal = 0 %}
-            {% set sommeFormCmDist = 0 %}
-            {% set sommeFormTdDist = 0 %}
-            {% set sommeFormTpDist = 0 %}
-            {% set sommeFormTotalDist = 0 %}
+            {% set presentiel = parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
+            {% set distanciel = parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 2 or parcours.modalitesEnseignement.value == 1) %}
 
             {% for semestre in parcours.semestreParcours %}
-
-                {% set sommeSemEcts = 0 %}
-                {% set sommeSemCm = 0 %}
-                {% set sommeSemTd = 0 %}
-                {% set sommeSemTp = 0 %}
-                {% set sommeSemTotal = 0 %}
-                {% set sommeSemCmDist = 0 %}
-                {% set sommeSemTdDist = 0 %}
-                {% set sommeSemTpDist = 0 %}
-                {% set sommeSemTotalDist = 0 %}
                 <tr>
-                    <th colspan=" {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 2) %}8{% else %}13{% endif %}">{{ semestre.display }}</th>
+                    <th colspan=" {% if presentiel %}8{% else %}13{% endif %}">{{ semestre.display }}</th>
                 </tr>
 
                 {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
@@ -32,47 +15,47 @@
                 <tr>
                     <th>&nbsp;</th>
                     <th colspan="2" class="text-end">Total Semestre</th>
-                    <th>{{ sommeSemEcts }}</th>
+                    <th>{{ dto.semestres[semestre.id].sommeSemestreEcts }}</th>
 
-                    {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
-                    <th>{{ sommeSemCm }}</th>
-                    <th>{{ sommeSemTd }}</th>
-                    <th>{{ sommeSemTp }}</th>
-                    <th>{{ sommeSemTotal }}</th>
+                    {% if presentiel %}
+                        <th>{{ dto.semestres[semestre.id].sommeSemestreCmPres }}</th>
+                        <th>{{ dto.semestres[semestre.id].sommeSemestreTdPres }}</th>
+                        <th>{{ dto.semestres[semestre.id].sommeSemestreTpPres }}</th>
+                        <th>{{ dto.semestres[semestre.id].sommeSemestreTotalPres }}</th>
                     {% endif %}
 
-                    {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 2 or parcours.modalitesEnseignement.value == 1) %}
-                    <th>{{ sommeSemCmDist }}</th>
-                    <th>{{ sommeSemTdDist }}</th>
-                    <th>{{ sommeSemTpDist }}</th>
-                    <th>{{ sommeSemTotalDist }}</th>
+                    {% if distanciel %}
+                        <th>{{ dto.semestres[semestre.id].sommeSemestreCmDist }}</th>
+                        <th>{{ dto.semestres[semestre.id].sommeSemestreTdDist }}</th>
+                        <th>{{ dto.semestres[semestre.id].sommeSemestreTpDist }}</th>
+                        <th>{{ dto.semestres[semestre.id].sommeSemestreTotalDist }}</th>
                     {% endif %}
 
                     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-                    <th>{{ sommeSemTotalDist+sommeSemTotal }}</th>
+                        <th>{{ dto.semestres[semestre.id].sommeSemestreTotalPresDist }}</th>
                     {% endif %}
                 </tr>
             {% endfor %}
             <tr>
                 <th colspan="3" class="text-end">Total formation</th>
-                <th>{{ sommeFormEcts }}</th>
+                <th>{{ dto.sommeFormationEcts }}</th>
 
-                {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
-                <th>{{ sommeFormCm }}</th>
-                <th>{{ sommeFormTd }}</th>
-                <th>{{ sommeFormTp }}</th>
-                <th>{{ sommeFormTotal }}</th>
+                {% if presentiel %}
+                    <th>{{ dto.sommeFormationCmPres }}</th>
+                    <th>{{ dto.sommeFormationTdPres }}</th>
+                    <th>{{ dto.sommeFormationTpPres }}</th>
+                    <th>{{ dto.sommeFormationTotalPres }}</th>
                 {% endif %}
 
-                {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 2 or parcours.modalitesEnseignement.value == 1) %}
-                <th>{{ sommeFormCmDist }}</th>
-                <th>{{ sommeFormTdDist }}</th>
-                <th>{{ sommeFormTpDist }}</th>
-                <th>{{ sommeFormTotalDist }}</th>
+                {% if distanciel %}
+                    <th>{{ dto.sommeFormationCmDist }}</th>
+                    <th>{{ dto.sommeFormationTdDist }}</th>
+                    <th>{{ dto.sommeFormationTpDist }}</th>
+                    <th>{{ dto.sommeFormationTotalDist }}</th>
                 {% endif %}
 
                 {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-                <th>{{ sommeFormTotalDist+sommeFormTotal }}</th>
+                    <th>{{ dto.sommeFormationTotalPresDist }}</th>
                 {% endif %}
             </tr>
         </table>

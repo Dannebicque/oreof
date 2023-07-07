@@ -1,10 +1,10 @@
 <tr>
     <th>&nbsp;</th>
     <th colspan="3">{{ ue.display(parcours) }} | {{ ue.libelle }}</th>
-    {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
+    {% if presentiel %}
         <th colspan="4">Présentiel</th>
     {% endif %}
-    {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 2 or parcours.modalitesEnseignement.value == 1) %}
+    {% if distanciel %}
         <th colspan="4">Distanciel</th>
     {% endif %}
     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
@@ -17,14 +17,14 @@
     <th>Fiche EC/Matière</th>
     <th>ECTS</th>
 
-    {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
+    {% if presentiel %}
         <th>CM</th>
         <th>TD</th>
         <th>TP</th>
         <th>Total Prés.</th>
     {% endif %}
 
-    {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 2 or parcours.modalitesEnseignement.value == 1) %}
+    {% if distanciel %}
         <th>CM</th>
         <th>TD</th>
         <th>TP</th>
@@ -35,65 +35,36 @@
         <th>Total</th>
     {% endif %}
 </tr>
-{% set sommeEcts = 0 %}
-                    {% set sommeCm = 0 %}
-                    {% set sommeTd = 0 %}
-                    {% set sommeTp = 0 %}
-                    {% set sommeTotal = 0 %}
-                    {% set sommeCmDist = 0 %}
-                    {% set sommeTdDist = 0 %}
-                    {% set sommeTpDist = 0 %}
-                    {% set sommeTotalDist = 0 %}
-                    {% for ec in ue.elementConstitutifs|filter(ec => ec.ecParent == null) %}
-                        {{ include('typeDiplome/formation/_structureEc.html.twig', {ec:ec}) }}
-                        {% for ece in ec.ecEnfants %}
-                            {{ include('typeDiplome/formation/_structureEc.html.twig', {ec:ece}) }}
-                        {% endfor %}
-                    {% endfor %}
+
+{% for ec in ue.elementConstitutifs|filter(ec => ec.ecParent == null) %}
+    {{ include('typeDiplome/formation/_structureEc.html.twig', {ec:ec}) }}
+    {% for ece in ec.ecEnfants %}
+        {{ include('typeDiplome/formation/_structureEc.html.twig', {ec:ece}) }}
+    {% endfor %}
+{% endfor %}
 <tr>
     <th>&nbsp;</th>
     <th>&nbsp;</th>
     <th class="text-end">Total</th>
-    <th>{{ sommeEcts }}</th>
-    {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
-        <th>{{ sommeCm }}</th>
-        <th>{{ sommeTd }}</th>
-        <th>{{ sommeTp }}</th>
-        <th>{{ sommeTotal }}</th>
+    <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeEcts }}</th>
+    {% if presentiel %}
+        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeCmPres }}</th>
+        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTdPres }}</th>
+        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTpPres }}</th>
+        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTotalPres }}</th>
     {% endif %}
 
-    {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 2 or parcours.modalitesEnseignement.value == 1) %}
-        <th>{{ sommeCmDist }}</th>
-        <th>{{ sommeTdDist }}</th>
-        <th>{{ sommeTpDist }}</th>
-        <th>{{ sommeTotalDist }}</th>
+    {% if distanciel %}
+        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeCmDist }}</th>
+        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTdDist }}</th>
+        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTpDist }}</th>
+        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTotalDist }}</th>
     {% endif %}
 
     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-        <th>{{ sommeTotalDist+sommeTotal }}</th>
+        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTotalPresDist }}</th>
     {% endif %}
 </tr>
-{% set sommeSemEcts = sommeSemEcts+sommeEcts %}
-{% set sommeSemCm = sommeSemCm+sommeCm %}
-{% set sommeSemTd = sommeSemTd+sommeTd %}
-{% set sommeSemTp = sommeSemTp+sommeTp %}
-{% set sommeSemTotal = sommeSemTotal+sommeTotal %}
-
-{% set sommeSemCmDist = sommeSemCmDist+sommeCmDist %}
-{% set sommeSemTdDist = sommeSemTdDist+sommeTdDist %}
-{% set sommeSemTpDist = sommeSemTpDist+sommeTpDist %}
-{% set sommeSemTotalDist = sommeSemTotalDist+sommeTotalDist %}
-
-{% set sommeFormEcts = sommeFormEcts+sommeSemEcts %}
-{% set sommeFormCm = sommeFormCm+sommeSemCm %}
-{% set sommeFormTd = sommeFormTd+sommeSemTd %}
-{% set sommeFormTp = sommeFormTp+sommeSemTp %}
-{% set sommeFormTotal = sommeFormTotal+sommeSemTotal %}
-
-{% set sommeFormCmDist = sommeFormCmDist+sommeSemCmDist %}
-{% set sommeFormTdDist = sommeFormTdDist+sommeSemTdDist %}
-{% set sommeFormTpDist = sommeFormTpDist+sommeSemTpDist %}
-{% set sommeFormTotalDist = sommeFormTotalDist+sommeSemTotalDist %}
 {% for ueE in ue.ueEnfants %}
     {{ include('typeDiplome/formation/_structureUe.html.twig', {ue:ueE}) }}
 {% endfor %}
