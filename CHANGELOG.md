@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.10](https://github.com/Dannebicque/oreof/compare/v1.5.9...v1.5.10) (2023-07-07)
+
+
+### Bug Fixes
+
+* Initi semestre ([253a9fb](https://github.com/Dannebicque/oreof/commit/253a9fb919f2f703e2efbfb48cb07f2779cc70d5))
+* Semestre mutualisée ([14b5b17](https://github.com/Dannebicque/oreof/commit/14b5b17c211f156f6abb830a73d3205c2404dfc0))
+
 ### [1.5.9](https://github.com/Dannebicque/oreof/compare/v1.5.8...v1.5.9) (2023-07-07)
 
 
