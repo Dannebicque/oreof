@@ -175,7 +175,7 @@
                         <span class="badge bg-warning">Sans parcours</span>
                     {% endif %}
                 </td>
-                <td>{{ ficheMatiere.libelle }}</td>
+                <td>{{ ficheMatiere.libelle }} {% if ficheMatiere.sigle != null %}({{ ficheMatiere.sigle }}){% endif %}</td>
                 <td>
                     {% if ficheMatiere.responsableFicheMatiere != null %}
                         {{ ficheMatiere.responsableFicheMatiere.display }}
