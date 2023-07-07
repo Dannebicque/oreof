@@ -91,7 +91,7 @@
                         </div>
                     {% else %}
                         {% set semestre = semestres[i] %}
-                        {% if semestre.semestre.semestreRaccroche == true %}
+                        {% if semestre.semestre.semestreRaccroche != null %}
                             {% set sem = semestre.semestre.semestreRaccroche.semestre %}
                             {% set raccroche = true %}
                         {% else %}
