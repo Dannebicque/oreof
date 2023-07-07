@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Classes\Excel;
 
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
@@ -27,7 +26,7 @@ class ExcelWriter
         $this->dir = $kernel->getProjectDir() . '/public/modeles/';
     }
 
-    public function nouveauFichier($libelle = '')
+    public function nouveauFichier(string $libelle = '') : void
     {
         $this->spreadsheet = new Spreadsheet();
         $this->spreadsheet->removeSheetByIndex(0);
@@ -36,10 +35,7 @@ class ExcelWriter
         }
     }
 
-    /**
-     * @param $libelle
-     */
-    public function createSheet($libelle): void
+    public function createSheet(string $libelle): void
     {
         $this->spreadsheet->createSheet()->setTitle($libelle);
         $this->sheet = $this->spreadsheet->getSheetByName($libelle);
@@ -52,104 +48,74 @@ class ExcelWriter
     }
 
 
-    public function writeCellXY(int $col, int $row, ?string $value = '', array $options = []): void
+    public function writeCellXY(int $col, int $row, mixed $value = '', array $options = []): void
     {
-        $this->sheet->setCellValueByColumnAndRow($col, $row, $value);
+        $this->sheet->setCellValue([$col, $row], $value);
         //traiter les options
         //style n'est pas un tableau
-        if (is_array($options) && $this->sheet->getCellByColumnAndRow(
-            $col,
-            $row
-        )) {
+        if (is_array($options) && $this->sheet->getCell([$col, $row])) {
             foreach ($options as $key => $valeur) {
                 switch ($key) {
                     case 'style':
                         switch ($valeur) {
                             case 'HORIZONTAL_RIGHT':
-                                $this->sheet->getCellByColumnAndRow(
-                                    $col,
-                                    $row
-                                )->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
+                                $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
                                 break;
                             case 'HORIZONTAL_CENTER':
-                                $this->sheet->getCellByColumnAndRow(
-                                    $col,
-                                    $row
-                                )->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                                $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
                                 break;
                             case 'numerique':
-                                $this->sheet->getCellByColumnAndRow(
-                                    $col,
-                                    $row
-                                )->getStyle()->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                                $this->sheet->getCell([$col, $row])->getStyle()->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
                                 break;
                         }
                         break;
                     case 'valign':
                         switch ($valeur) {
                             case 'VERTICAL_TOP':
-                                $this->sheet->getCellByColumnAndRow(
-                                    $col,
-                                    $row
-                                )->getStyle()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
+                                $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
                                 break;
                             case 'VERTICAL_CENTER':
-                                $this->sheet->getCellByColumnAndRow(
-                                    $col,
-                                    $row
-                                )->getStyle()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                                $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
                                 break;
                             case 'VERTICAL_BOTTOM':
-                                $this->sheet->getCellByColumnAndRow(
-                                    $col,
-                                    $row
-                                )->getStyle()->getAlignment()->setVertical(Alignment::VERTICAL_BOTTOM);
+                                $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setVertical(Alignment::VERTICAL_BOTTOM);
                                 break;
                         }
                         break;
                     case 'number_format':
-                        $this->sheet->getCellByColumnAndRow(
-                            $col,
-                            $row
-                        )->getStyle()->getNumberFormat()->setFormatCode($valeur);
+                        $this->sheet->getCell([$col, $row])->getStyle()->getNumberFormat()->setFormatCode($valeur);
                         break;
                     case 'color':
                         if (0 === mb_strpos($valeur, '#')) {
                             $valeur = mb_substr($valeur, 1, mb_strlen($valeur));
                         }
 
-                        $this->sheet->getCellByColumnAndRow(
-                            $col,
-                            $row
-                        )->getStyle()->getFont()->getColor()->setARGB('FF' . $valeur);
+                        $this->sheet->getCell([$col, $row])->getStyle()->getFont()->getColor()->setARGB('FF' . $valeur);
                         break;
                     case 'bgcolor':
                         if (0 === mb_strpos($valeur, '#')) {
                             $valeur = mb_substr($valeur, 1, mb_strlen($valeur));
                         }
-                        $this->sheet->getCellByColumnAndRow(
-                            $col,
-                            $row
-                        )->getStyle()->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($valeur);
+                        $this->sheet->getCell([$col, $row])->getStyle()->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($valeur);
                         break;
                     case 'font-size':
-                        $this->sheet->getCellByColumnAndRow($col, $row)->getStyle()->getFont()->setSize($valeur);
+                        $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setSize($valeur);
                         break;
                     case 'font-weight':
-                        $this->sheet->getCellByColumnAndRow($col, $row)->getStyle()->getFont()->setBold(true);
+                        $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setBold(true);
                         break;
                     case 'font-italic':
-                        $this->sheet->getCellByColumnAndRow($col, $row)->getStyle()->getFont()->setItalic(true);
+                        $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setItalic(true);
                         break;
                     case 'wrap':
-                        $this->sheet->getCellByColumnAndRow($col, $row)->getStyle()->getAlignment()->setWrapText(true);
+                        $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setWrapText(true);
                         break;
                 }
             }
         }
     }
 
-    public function writeCellName($adresse, $value, array $options = []): void
+    public function writeCellName(string $adresse, mixed $value, array $options = []): void
     {
         $this->sheet->setCellValue($adresse, $value);
 
@@ -172,20 +138,20 @@ class ExcelWriter
         }
     }
 
-    public function colorCellXY($col, $lig, $couleur): void
+    public function colorCellXY(int $col, int $lig, string $couleur): void
     {
         $cell = Coordinate::stringFromColumnIndex($col) . $lig;
         $this->colorCells($cell, $couleur);
     }
 
-    public function colorCells($cells, $couleur): void
+    public function colorCells(string $cells, string $couleur): void
     {
         $this->sheet->getStyle($cells)->getFill()
             ->setFillType(Fill::FILL_SOLID)
             ->getStartColor()->setARGB($couleur);
     }
 
-    public function borderCellsRange($col1, $lig1, $col2, $lig2): void
+    public function borderCellsRange(int $col1, int $lig1, int $col2, int $lig2): void
     {
         if ($col1 < $col2) {
             $cell1 = Coordinate::stringFromColumnIndex($col1) . $lig1;
@@ -194,7 +160,7 @@ class ExcelWriter
         }
     }
 
-    public function borderCells($cells): void
+    public function borderCells(string $cells): void
     {
         $this->sheet->getStyle($cells)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
     }
@@ -209,7 +175,7 @@ class ExcelWriter
         $this->sheet->getColumnDimension($col)->setWidth($taille);
     }
 
-    public function mergeCellsCaR($col1, $lig1, $col2, $lig2): void
+    public function mergeCellsCaR(int $col1, int $lig1, int $col2, int $lig2): void
     {
         if ($col1 <= $col2) {
             $cell1 = Coordinate::stringFromColumnIndex($col1) . $lig1;
@@ -218,12 +184,12 @@ class ExcelWriter
         }
     }
 
-    public function mergeCells($cells): void
+    public function mergeCells(string $cells): void
     {
         $this->sheet->mergeCells($cells);
     }
 
-    public function borderBottomCellsRange($col1, $lig1, $col2, $lig2, array $array)
+    public function borderBottomCellsRange(int $col1, int $lig1, int $col2, int $lig2, array $array)
     {
         $color = $array['color'];
         if (0 === mb_strpos($color, '#')) {
@@ -235,14 +201,14 @@ class ExcelWriter
         $this->sheet->getStyle($cell1 . ':' . $cell2)->getBorders()->getBottom()->setBorderStyle($array['size'])->getColor()->setARGB('FF' . $color);
     }
 
-    public function getColumnsAutoSize(string $depart, string $fin)
+    public function getColumnsAutoSize(string $depart, string $fin): void
     {
         foreach (range($depart, $fin) as $columnID) {
             $this->sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
     }
 
-    public function getColumnsAutoSizeInt(int $depart, int $fin)
+    public function getColumnsAutoSizeInt(int $depart, int $fin): void
     {
         for ($columnID = $depart; $columnID <= $fin; $columnID++) {
             $this->sheet->getColumnDimension(Coordinate::stringFromColumnIndex($columnID))->setAutoSize(true);
@@ -260,7 +226,7 @@ class ExcelWriter
 //       }
     }
 
-    public function genereFichier($name)
+    public function genereFichier(string $name): StreamedResponse
     {
         $this->pageSetup($name);
         $writer = new Xlsx($this->spreadsheet);
@@ -277,7 +243,7 @@ class ExcelWriter
         );
     }
 
-    public function pageSetup($name): void
+    public function pageSetup(string $name): void
     {
         $this->spreadsheet->getProperties()->setTitle($name);
         $this->spreadsheet->getActiveSheet()->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A4);
@@ -306,7 +272,7 @@ class ExcelWriter
         return $reader->load($inputFileName);
     }
 
-    public function orientationCellXY(int $col, int $ligne, string $orientation)
+    public function orientationCellXY(int $col, int $ligne, string $orientation): void
     {
         $cell1 = Coordinate::stringFromColumnIndex($col) . $ligne;
         switch ($orientation) {
