@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.8](https://github.com/Dannebicque/oreof/compare/v1.5.7...v1.5.8) (2023-07-07)
+
+
+### Bug Fixes
+
+* Affiche numéro UE ([793dc46](https://github.com/Dannebicque/oreof/commit/793dc463a6698c2916d57160d9fba22fa87df8b3))
+
 ### [1.5.7](https://github.com/Dannebicque/oreof/compare/v1.5.6...v1.5.7) (2023-07-07)
 
 
