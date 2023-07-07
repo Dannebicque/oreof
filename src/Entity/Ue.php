@@ -118,7 +118,7 @@ class Ue
             }
         }
 
-        return 'erreur';
+        return 'UE ' . $this->getSemestre()->getOrdre() . '.' . $ordreue;
     }
 
     public function getTypeUe(): ?TypeUe
