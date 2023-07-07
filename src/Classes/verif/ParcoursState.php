@@ -207,11 +207,18 @@ class ParcoursState
         }
 
         foreach ($this->parcours->getSemestreParcours() as $semestre) {
-            if ($semestre->getSemestre()?->getUes()->count() === 0) {
+
+            if ($semestre->getSemestre()->getSemestreRaccroche() !== null) {
+                $sem = $semestre->getSemestre()->getSemestreRaccroche();
+            } else {
+                $sem = $semestre->getSemestre();
+            }
+
+            if ($sem?->getUes()->count() === 0) {
                 $tab['error'][] = 'Vous devez ajouter au moins une UE au semestre "' . $semestre->getSemestre()?->display() . '".';
             }
 
-            foreach ($semestre->getSemestre()?->getUes() as $ue) {
+            foreach ($sem?->getUes() as $ue) {
                 if ($ue->getElementConstitutifs()->count() === 0) {
                     $tab['error'][] = 'Vous devez ajouter au moins un EC à l\'UE "' . $ue->display($this->parcours) . '".';
                 }
