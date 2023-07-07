@@ -153,12 +153,11 @@ class FicheMatiereRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('f')
             ->leftJoin('f.parcours', 'p')
+            ->join('p.formation', 'fo')
             ->where('p.respParcours = :parcours')
             ->orWhere('p.coResponsable = :parcours')
             ->setParameter('parcours', $user)
-            ->orderBy('f.libelle', 'ASC')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('f.libelle', 'ASC');
         $this->addFiltres($query, $options);
 
         return $query->getQuery()
