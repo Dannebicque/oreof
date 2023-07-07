@@ -135,13 +135,13 @@ class UserGestionController extends BaseController
                     $formation = $formationRepository->find($request->query->get('id'));
                     if ($formation !== null) {
                         // retirer l'ancien resp des centres et droits et envoyer mail
-                        $event = new AddCentreFormationEvent($formation, ['ROLE_RESP_FORMATION'], $formation->getResponsableMention());
+                        $event = new AddCentreFormationEvent($formation, $formation->getResponsableMention(), ['ROLE_RESP_FORMATION']);
                         $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
                         // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                         $event = new AddCentreFormationEvent(
                             $formation,
-                            ['ROLE_RESP_FORMATION'],
-                            $user
+                            $user,
+                            ['ROLE_RESP_FORMATION']
                         );
                         $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
 
@@ -177,13 +177,13 @@ class UserGestionController extends BaseController
                     $formation = $formationRepository->find($request->query->get('id'));
                     if ($formation !== null) {
                         // retirer l'ancien resp des centres et droits et envoyer mail
-                        $event = new AddCentreFormationEvent($formation, ['ROLE_CO_RESP_FORMATION'], $formation->getCoResponsable());
+                        $event = new AddCentreFormationEvent($formation, $formation->getCoResponsable(), ['ROLE_CO_RESP_FORMATION']);
                         $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::REMOVE_CENTRE_FORMATION);
                         // ajouter le nouveau resp, ajouter centre et droits et envoyer mail
                         $event = new AddCentreFormationEvent(
                             $formation,
-                            ['ROLE_CO_RESP_FORMATION'],
-                            $user
+                            $user,
+                            ['ROLE_CO_RESP_FORMATION']
                         );
                         $this->eventDispatcher->dispatch($event, AddCentreFormationEvent::ADD_CENTRE_FORMATION);
                     }
@@ -320,6 +320,7 @@ class UserGestionController extends BaseController
         User                    $user
     ): Response {
         $data = JsonRequest::getFromRequest($request);
+        //todo: ne devrait pas add si un centre existe déjà sur le même type
         $nCentre = new UserCentre();
         $nCentre->setUser($user);
 
@@ -351,13 +352,13 @@ class UserGestionController extends BaseController
                         }
 
                         $userCentreRepository->remove($uc[0]); // on supprime l'ancien centre
-                        $event = new NotifCentreComposanteEvent($centre, [], $uc[0]->getUser());
+                        $event = new NotifCentreComposanteEvent($centre, $uc[0]->getUser());
                         $eventDispatcher->dispatch($event, NotifCentreComposanteEvent::NOTIF_REMOVE_CENTRE_COMPOSANTE);
                     }
                 }
 
                 $nCentre->setComposante($centre);
-                $event = new NotifCentreComposanteEvent($centre, [$role->getCodeRole()], $user);
+                $event = new NotifCentreComposanteEvent($centre, $user, [$role->getCodeRole()]);
                 $eventDispatcher->dispatch($event, NotifCentreComposanteEvent::NOTIF_ADD_CENTRE_COMPOSANTE);
 
                 //si centre DPE ou DIRECTEUR... Mettre à jour la composante
@@ -383,7 +384,7 @@ class UserGestionController extends BaseController
                 }
                 $nCentre->setEtablissement($centre);
 
-                $event = new NotifCentreEtablissementEvent($centre, [$role->getCodeRole()], $user);
+                $event = new NotifCentreEtablissementEvent($centre, $user, [$role->getCodeRole()]);
                 $eventDispatcher->dispatch($event, NotifCentreEtablissementEvent::NOTIF_ADD_CENTRE_ETABLISSEMENT);
 
                 break;
@@ -406,13 +407,13 @@ class UserGestionController extends BaseController
                         }
 
                         $userCentreRepository->remove($uc[0]); // on supprime l'ancien centre
-                        $event = new NotifCentreFormationEvent($centre, [], $uc[0]->getUser());
+                        $event = new NotifCentreFormationEvent($centre, $uc[0]->getUser());
                         $eventDispatcher->dispatch($event, NotifCentreFormationEvent::NOTIF_REMOVE_CENTRE_FORMATION);
                     }
                 }
 
                 $nCentre->setFormation($centre);
-                $event = new NotifCentreFormationEvent($centre, [$role->getCodeRole()], $user);
+                $event = new NotifCentreFormationEvent($centre, $user, [$role->getCodeRole()]);
                 $eventDispatcher->dispatch($event, NotifCentreFormationEvent::NOTIF_ADD_CENTRE_FORMATION);
 
                 //si centre ROLE_RESP_FORMATION ou ROLE_CO_RESP_FORMATION... Mettre à jour la formation

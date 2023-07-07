@@ -20,8 +20,8 @@ class NotifCentreFormationEvent
 
     public function __construct(
         public Formation $formation,
-        public array $droits = [],
-        public ?User $user
+        public ?User $user,
+        public array $droits = []
     ) {
     }
 }

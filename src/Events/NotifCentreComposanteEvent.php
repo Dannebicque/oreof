@@ -20,8 +20,8 @@ class NotifCentreComposanteEvent
 
     public function __construct(
         public Composante $composante,
-        public array $droits = [],
-        public ?User $user
+        public ?User $user,
+        public array $droits = []
     ) {
     }
 }

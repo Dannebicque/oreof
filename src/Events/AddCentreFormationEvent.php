@@ -20,8 +20,8 @@ class AddCentreFormationEvent
 
     public function __construct(
         public Formation $formation,
+        public ?User $user,
         public array $droits = [],
-        public ?User $user
     ) {
     }
 }

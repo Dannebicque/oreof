@@ -20,8 +20,8 @@ class NotifCentreEtablissementEvent
 
     public function __construct(
         public Etablissement $etablissement,
-        public array $droits = [],
-        public ?User $user
+        public ?User $user,
+        public array $droits = []
     ) {
     }
 }
