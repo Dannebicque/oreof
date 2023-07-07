@@ -209,12 +209,13 @@ class ParcoursState
         foreach ($this->parcours->getSemestreParcours() as $semestre) {
 
             if ($semestre->getSemestre()->getSemestreRaccroche() !== null) {
-                $sem = $semestre->getSemestre()->getSemestreRaccroche();
+                $sem = $semestre->getSemestre()->getSemestreRaccroche()->getSemestre();
             } else {
                 $sem = $semestre->getSemestre();
             }
 
             if ($sem?->getUes()->count() === 0) {
+                //todo: potentielle des UE raccrochées également
                 $tab['error'][] = 'Vous devez ajouter au moins une UE au semestre "' . $semestre->getSemestre()?->display() . '".';
             }
 
