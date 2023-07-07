@@ -1,5 +1,8 @@
 <tr>
     <th>&nbsp;</th>
+    {% if ue.ueRaccrochee != null %}
+        {% set ue = ue.ueRaccrochee.ue %}
+    {% endif %}
     <th colspan="3">{{ ue.display(parcours) }} | {{ ue.libelle }}</th>
     {% if presentiel %}
         <th colspan="4">Présentiel</th>
@@ -46,6 +49,7 @@
     <th>&nbsp;</th>
     <th>&nbsp;</th>
     <th class="text-end">Total</th>
+
     <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeEcts }}</th>
     {% if presentiel %}
         <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeCmPres }}</th>

@@ -26,6 +26,8 @@
         </div>
     </section>
     {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
+        {% set dto = tParcours[formation.parcours[0].id] %}
+
         <section class="scroll-section" id="descriptif">
             <h3 class="small-title">Descriptif</h3>
             <div class="card mb-5">
@@ -48,7 +50,7 @@
             <h3 class="small-title">Structure</h3>
             <div class="card mb-5">
                 <div class="card-body">
-                    {{ include('typeDiplome/formation/_structure.html.twig', {parcours:formation.parcours[0]}) }}
+                    {{ include('typeDiplome/formation/_structure.html.twig', {parcours:formation.parcours[0], dto: dto}) }}
                 </div>
             </div>
         </section>
@@ -85,6 +87,7 @@
 
     {% else %}
         {% for parcours in formation.parcours %}
+            {% set dto = tParcours[parcours.id] %}
             <div>
                 <h2 class="small-title">Parcours {{ parcours.libelle }}</h2>
             </div>
@@ -131,7 +134,7 @@
                 <h3 class="small-title">Structure</h3>
                 <div class="card mb-5">
                     <div class="card-body">
-                        {{ include('typeDiplome/formation/_structure.html.twig', {parcours:parcours}) }}
+                        {{ include('typeDiplome/formation/_structure.html.twig', {parcours:parcours, dto:dto}) }}
                     </div>
                 </div>
             </section>

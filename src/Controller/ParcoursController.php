@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Classes\CalculStructureParcours;
 use App\Classes\verif\ParcoursState;
 use App\DTO\HeuresEctsFormation;
 use App\DTO\HeuresEctsSemestre;
@@ -182,7 +183,7 @@ class ParcoursController extends BaseController
 
     #[Route('/{id}', name: 'app_parcours_show', methods: ['GET'])]
     public function show(
-        TypeDiplomeRegistry $typeDiplomeRegistry,
+        CalculStructureParcours $calculStructureParcours,
         Parcours            $parcours
     ): Response {
         $formation = $parcours->getFormation();
@@ -191,20 +192,7 @@ class ParcoursController extends BaseController
         }
         $typeDiplome = $formation->getTypeDiplome();
 
-        $dto = new HeuresEctsFormation();
-
-        foreach ($parcours->getSemestreParcours() as $semestreParcours) {
-            $dtoSemestre = new HeuresEctsSemestre();
-            foreach ($semestreParcours->getSemestre()->getUes() as $ue) {
-                $dtoUe = new HeuresEctsUe();
-                foreach ($ue->getElementConstitutifs() as $elementConstitutif) {
-                    $dtoUe->addEc($elementConstitutif);
-                }
-
-                $dtoSemestre->addUe($ue->getId(), $dtoUe);
-            }
-            $dto->addSemestre($semestreParcours->getId(), $dtoSemestre);
-        }
+        $dto = $calculStructureParcours->calcul($parcours);
 
         return $this->render('parcours/show.html.twig', [
             'parcours' => $parcours,

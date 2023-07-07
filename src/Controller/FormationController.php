@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Classes\CalculStructureParcours;
 use App\Classes\verif\FormationState;
 use App\Classes\verif\ParcoursState;
 use App\Entity\Composante;
@@ -323,13 +324,19 @@ class FormationController extends BaseController
      */
     #[Route('/{id}', name: 'app_formation_show', methods: ['GET'])]
     public function show(
-        Formation $formation
+        Formation $formation,
+        CalculStructureParcours $calculStructureParcours
     ): Response {
         $typeDiplome = $formation->getTypeDiplome();
+        $tParcours = [];
+        foreach ($formation->getParcours() as $parcours) {
+            $tParcours[$parcours->getId()] =  $calculStructureParcours->calcul($parcours);
+        }
 
         return $this->render('formation/show.html.twig', [
             'formation' => $formation,
-            'typeDiplome' => $typeDiplome
+            'typeDiplome' => $typeDiplome,
+            'tParcours' => $tParcours
         ]);
     }
 

@@ -24,11 +24,12 @@
         <div class="col-sm-12">
             <h3>Parcours</h3>
             {% for parcours in formation.parcours %}
-            <ul>
-                <li>{{ parcours.libelle }}</li>{# todo: ajouter une ancre #}
-            </ul>
+                <ul>
+                    <li>{# todo: uniquement si dans formation, sinon des liens ? #}
+                        <a href="#presentation_{{ parcours.id }}">{{ parcours.libelle }}</a>
+                    </li>
+                </ul>
             {% endfor %}
-{# todo: structure des semestres... #}
         </div>
     </div>
 {% else %}
