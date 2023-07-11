@@ -10,13 +10,13 @@
                     <tr>
                         <th colspan="2" rowspan="2">&nbsp;</th>
                         {% for ue in semestre.semestre.ues %}
-                            <th colspan="{{ ue.ecUes|length }}">{{ ue.display(parcours) }}</th>
+                            <th colspan="{{ ue.elementConstitutifs|length }}">{{ ue.display(parcours) }}</th>
                         {% endfor %}
                     </tr>
                     <tr>
                         {% for ue in semestre.semestre.ues %}
-                            {% for ec in ue.ecUes %}
-                                <th>{{ ec.ec.code }}</th>
+                            {% for ec in ue.elementConstitutifs %}
+                                <th>{{ ec.code }}</th>
                             {% endfor %}
                         {% endfor %}
                     </tr>
@@ -30,10 +30,16 @@
                                 {% endif %}
                                 <td>{{ competence.display }}</td>
                                 {% for ue in semestre.semestre.ues %}
-                                    {% for ec in ue.ecUes %}
+                                    {% for ec in ue.elementConstitutifs %}
                                         <td>
-                                            {% if competence.elementConstitutifs.contains(ec.ec) %}
+                                            {% if ec.isFicheFromParcours %}
+                                                {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
+                                                    <i class="fa fa-check"></i>
+                                                {% endif %}
+                                            {% else %}
+                                            {% if competence.elementConstitutifs.contains(ec) %}
                                                 <i class="fa fa-check"></i>
+                                            {% endif %}
                                             {% endif %}
                                         </td>
                                     {% endfor %}
