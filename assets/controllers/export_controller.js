@@ -33,4 +33,11 @@ export default class extends Controller {
       this.listeTarget.innerHTML = await response.text()
     }
   }
+
+  checkAll(event) {
+    const checkboxes = document.querySelectorAll('.check-all')
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = event.target.checked
+    })
+  }
 }
