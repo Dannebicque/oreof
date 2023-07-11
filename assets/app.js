@@ -31,6 +31,7 @@ window.da = {
 }
 
 window.addEventListener('load', () => { // le dom est chargé
+  document.getElementsByTagName('html')[0].dataset.color = localStorage.getItem('STORAGE_COLOR') ?? 'light-blue'
   // toast
   toasts.forEach((toast) => {
     callOut(toast.text, toast.type)

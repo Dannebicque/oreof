@@ -310,3 +310,40 @@
   font-size:1.3em;
   text-shadow: 2px 2px 2px rgba(0,0,0,.5);
 }
+
+.settings-buttons-container {
+  position: fixed !important;
+  right: -1px;
+  top: 50%;
+  z-index: 1000 !important;
+  margin-top: -70px;
+}
+
+.settings-button {
+  display: block;
+  opacity: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: var(--border-radius-md);
+  border-bottom-left-radius: var(--border-radius-md);
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+.settings-button span {
+  padding: 0.4rem 0.85rem 0.4rem 0.85rem;
+  height: 40px;
+  display: inline-block;
+}
+.settings-button span svg {
+  margin-top: 3px;
+}
+.settings-button::before {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-top-left-radius: var(--border-radius-md) !important;
+  border-bottom-left-radius: var(--border-radius-md) !important;
+}
+
+html[data-show=true] .settings-button {
+  opacity: 1;
+}

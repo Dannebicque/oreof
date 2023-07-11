@@ -1,0 +1,89 @@
+/*
+*
+* Light Pink
+*
+* Theme variables.
+*
+*/
+
+html[data-color='light-pink'] {
+  --primary: #ed6789;
+  --secondary: #ffa7a0;
+  --tertiary: #f74b63;
+  --quaternary: #fb6565;
+  --primary-rgb: 237, 103, 137;
+  --secondary-rgb: 255, 167, 160;
+  --tertiary-rgb: 247, 75, 99;
+  --quaternary-rgb: 251, 101, 101;
+
+  --primary-darker: #d95e7e;
+  --secondary-darker: #ed9c96;
+  --tertiary-darker: #dd4358;
+  --quaternary-darker: #e95e5e;
+
+  --body: #4e4e4e;
+  --alternate: #7c7c7c;
+  --muted: #afafaf;
+  --separator: #e6e6e6;
+  --separator-light: #f1f1f1;
+  --body-rgb: 59, 59, 59;
+  --alternate-rgb: 124, 124, 124;
+  --muted-rgb: 176, 176, 176;
+  --separator-rgb: 221, 221, 221;
+  --separator-light-rgb: 241, 241, 241;
+
+  --background: #f9f9f9;
+  --foreground: #ffffff;
+  --background-rgb: 249, 249, 249;
+  --foreground-rgb: 255, 255, 255;
+
+  --background-theme: #f1eaee;
+  --background-light: #f8f8f8;
+
+  --gradient-1: #ed6789;
+  --gradient-2: #f16b8d;
+  --gradient-3: #f57092;
+
+  --gradient-1-lighter: #f97697;
+  --gradient-1-darker: #d9607e;
+
+  --light-text: #fff;
+  --dark-text: #343a40;
+  --light-text-darker: #eeeeee;
+  --dark-text-darker: #23272b;
+
+  --light-text-rgb: 255, 255, 255;
+  --dark-text-rgb: 52, 58, 64;
+
+  --danger: #cf2637;
+  --info: #279aac;
+  --warning: #ebb71a;
+  --success: #439b38;
+  --light: #dadada;
+  --dark: #4e4e4e;
+  --danger-darker: #771a23;
+  --info-darker: #19545d;
+  --warning-darker: #aa830f;
+  --success-darker: #285422;
+  --light-darker: #c9c9c9;
+  --dark-darker: #282828;
+  --body-darker: #333333;
+  --alternate-darker: #616161;
+  --muted-darker: #888888;
+  --separator-darker: #c0c0c0;
+
+  --danger-rgb: 182, 40, 54;
+  --info-rgb: 41, 138, 153;
+  --warning-rgb: 235, 183, 26;
+  --success-rgb: 65, 139, 56;
+  --light-rgb: 218, 218, 218;
+  --dark-rgb: 78, 78, 78;
+
+  --menu-shadow: 0px 3px 10px rgba(0, 0, 0, 0.12);
+  --menu-shadow-navcolor: 0px 2px 6px rgba(0, 0, 0, 0.05);
+
+  --background-navcolor-light: #fff;
+  --background-navcolor-dark: #242424;
+
+  --theme-image-filter: hue-rotate(145deg) contrast(0.9) brightness(1);
+}

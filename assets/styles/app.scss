@@ -17,7 +17,26 @@
 @import "tom-select/dist/css/tom-select.bootstrap5.min.css";
 @import "trix/dist/trix.css";
 
+//@import 'themes/shared';
+@import 'themes/dark.blue';
+@import 'themes/dark.green';
+@import 'themes/dark.red';
+@import 'themes/dark.purple';
+@import 'themes/dark.pink';
+@import 'themes/dark.teal';
+@import 'themes/dark.lime';
+@import 'themes/dark.sky';
+@import 'themes/light.blue';
+@import 'themes/light.green';
+@import 'themes/light.red';
+@import 'themes/light.purple';
+@import 'themes/light.pink';
+@import 'themes/light.teal';
+@import 'themes/light.lime';
+@import 'themes/light.sky';
+
 @import "./_but.scss";
+@import "./_settings.scss";
 
 $variable-prefix: bs- !default; // Deprecated in v5.2.0 for the shorter `$prefix`
 $prefix: $variable-prefix !default;

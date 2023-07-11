@@ -48,7 +48,12 @@ export default class extends Controller {
       this.element.getElementsByTagName('form')[0].action = event.detail.formAction
     }
 
-    document.getElementById('stimulus_modal').classList.add(`modal-${event.detail.size}`)
+    if (event.detail.right === true) {
+      document.getElementById('stimulus_modal').parentElement.classList.add('modal-right', event.detail.size)
+    } else {
+      document.getElementById('stimulus_modal').parentElement.classList.remove('modal-right')
+      document.getElementById('stimulus_modal').classList.add(`modal-${event.detail.size}`)
+    }
 
     this.modal = new Modal(this.modalTarget)
     this.modal.show()
@@ -60,10 +65,6 @@ export default class extends Controller {
       response = await fetch(`${event.detail.url}`)
     }
     this.modalBodyTarget.innerHTML = await response.text()
-    // todo: gérer le tom select avec symfony ux
-    // document.querySelectorAll('select.form-select').forEach((select) => {
-    //   const ts = new TomSelect(select, {})
-    // })
   }
 
   modalHide() {

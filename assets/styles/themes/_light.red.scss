@@ -1,0 +1,89 @@
+/*
+*
+* Light Red
+*
+* Theme variables.
+*
+*/
+
+html[data-color='light-red'] {
+  --primary: #eb5858;
+  --secondary: #ff9773;
+  --tertiary: #f9a049;
+  --quaternary: #e92d62;
+  --primary-rgb: 235, 88, 88;
+  --secondary-rgb: 255, 151, 151;
+  --tertiary-rgb: 249, 160, 73;
+  --quaternary-rgb: 233, 45, 98;
+
+  --primary-darker: #df5353;
+  --secondary-darker: #eb8d6c;
+  --tertiary-darker: #e99645;
+  --quaternary-darker: #d32959;
+
+  --body: #4e4e4e;
+  --alternate: #7c7c7c;
+  --muted: #afafaf;
+  --separator: #e6e6e6;
+  --separator-light: #f1f1f1;
+  --body-rgb: 59, 59, 59;
+  --alternate-rgb: 124, 124, 124;
+  --muted-rgb: 176, 176, 176;
+  --separator-rgb: 221, 221, 221;
+  --separator-light-rgb: 241, 241, 241;
+
+  --background: #f9f9f9;
+  --foreground: #ffffff;
+  --background-rgb: 249, 249, 249;
+  --foreground-rgb: 255, 255, 255;
+
+  --background-theme: #f1ecea;
+  --background-light: #f8f8f8;
+
+  --gradient-1: #eb5858;
+  --gradient-2: #f35c5c;
+  --gradient-3: #f35e5e;
+
+  --gradient-1-lighter: #f96363;
+  --gradient-1-darker: #d95151;
+
+  --light-text: #fff;
+  --dark-text: #343a40;
+  --light-text-darker: #eeeeee;
+  --dark-text-darker: #23272b;
+
+  --light-text-rgb: 255, 255, 255;
+  --dark-text-rgb: 52, 58, 64;
+
+  --danger: #cf2637;
+  --info: #279aac;
+  --warning: #ebb71a;
+  --success: #439b38;
+  --light: #dadada;
+  --dark: #4e4e4e;
+  --danger-darker: #771a23;
+  --info-darker: #19545d;
+  --warning-darker: #aa830f;
+  --success-darker: #285422;
+  --light-darker: #c9c9c9;
+  --dark-darker: #282828;
+  --body-darker: #333333;
+  --alternate-darker: #616161;
+  --muted-darker: #888888;
+  --separator-darker: #c0c0c0;
+
+  --danger-rgb: 182, 40, 54;
+  --info-rgb: 41, 138, 153;
+  --warning-rgb: 235, 183, 26;
+  --success-rgb: 65, 139, 56;
+  --light-rgb: 218, 218, 218;
+  --dark-rgb: 78, 78, 78;
+
+  --menu-shadow: 0px 3px 10px rgba(0, 0, 0, 0.12);
+  --menu-shadow-navcolor: 0px 2px 6px rgba(0, 0, 0, 0.05);
+
+  --background-navcolor-light: #fff;
+  --background-navcolor-dark: #242424;
+
+  --theme-image-filter: hue-rotate(158deg) contrast(1.1);
+}

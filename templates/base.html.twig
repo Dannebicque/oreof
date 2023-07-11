@@ -146,10 +146,32 @@
 
                     {% if is_granted('ROLE_SES') %}
                         <li>
-                            <a href="{{ path('structure_composante_index') }}">
+                            <a href="#gestion_offre_formation" data-href="gestion_offre_formation">
                                 <i class="fal fa-school icon"></i>
-                                <span class="label">Gestion de l'offre de formation</span>
+                                <span class="label">Gestion de l'offre</span>
                             </a>
+                            <ul id="gestion_offre_formation">
+                                <li>
+                                    <a href="{{ path('structure_composante_index') }}">
+                                        <i class="fal fa-book icon"></i>
+                                        <span class="label">Consulter l'offre de formation</span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ path('app_export_index') }}">
+                                        <i class="fal fa-download icon"></i>
+                                        <span class="label">Export de fichier</span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{{ path('structure_fiche_matiere_index') }}">
+                                        <i class="fal fa-person-chalkboard icon"></i>
+                                        <span class="label">Validations</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     {% endif %}
 
@@ -591,7 +613,24 @@
 </div>
 
 {#<!-- Theme Settings & Niches Buttons Start -->#}
-{#<div class="settings-buttons-container">#}
+<div class="settings-buttons-container">
+        <button type="button" class="btn settings-button btn-primary p-0"
+                {{ stimulus_controller('modal', {
+                    size: 'large',
+                    modalTitle: 'Paramètres & Accessibilité',
+                    right: true,
+                    modalUrl: path('app_settings') }) }}
+                data-action="click->modal#openModal"
+                class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                data-size="lg"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Paramètres & Accessibilité"
+        >
+                <span class="d-inline-block no-delay" data-bs-delay="0" data-bs-offset="0,3" data-bs-toggle="tooltip" data-bs-placement="left" title="Aide">
+                  <i class="fas fa-gears position-relative"></i>
+                </span>
+        </button>
 {#    <button type="button" class="btn settings-button btn-primary p-0"#}
 {#            {{ stimulus_controller('modal', {#}
 {#                size: 'large',#}
@@ -626,7 +665,7 @@
 {#              <i class="fas fa-comment-exclamation position-relative"></i>#}
 {#            </span>#}
 {#    </button>#}
-{#</div>#}
+</div>
 {#<!-- Theme Settings & Niches Buttons End -->#}
 
 </body>

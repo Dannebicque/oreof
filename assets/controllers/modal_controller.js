@@ -16,6 +16,7 @@ export default class extends Controller {
     modalTitle: String,
     formAction: String,
     size: { type: String, default: 'md' },
+    right: { type: Boolean, default: false },
     btnClose: { type: String, default: 'Fermer' },
     form: { type: Boolean, default: false },
     params: Array,
@@ -34,6 +35,7 @@ export default class extends Controller {
         btnClose: this.btnCloseValue,
         params: this.paramsValue,
         title: this.modalTitleValue,
+        right: this.rightValue,
       },
     })
   }
