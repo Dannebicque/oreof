@@ -14,13 +14,11 @@ use App\Classes\UeOrdre;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
-use App\Entity\SemestreParcours;
 use App\Entity\TypeUe;
 use App\Entity\Ue;
 use App\Entity\UeMutualisable;
 use App\Form\UeType;
 use App\Repository\ComposanteRepository;
-use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\NatureUeEcRepository;
@@ -37,14 +35,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[
-    Route('/structure/ue', name: 'structure_ue_')
-]
+#[Route('/structure/ue', name: 'structure_ue_')]
 class UeController extends AbstractController
 {
-    #[
-        Route('/detail/semestre/{semestre}/{parcours}', name: 'detail_semestre')
-    ]
+    #[Route('/detail/semestre/{semestre}/{parcours}', name: 'detail_semestre')]
     public function detailComposante(
         Request              $request,
         UeRepository         $ueRepository,
@@ -71,9 +65,7 @@ class UeController extends AbstractController
     /**
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
-    #[
-        Route('/add-ue/semestre/{semestre}/{parcours}', name: 'add_ue_semestre')
-    ]
+    #[Route('/add-ue/semestre/{semestre}/{parcours}', name: 'add_ue_semestre')]
     public function addUe(
         UeOrdre              $ueOrdre,
         NatureUeEcRepository $natureUeEcRepository,
@@ -309,11 +301,10 @@ class UeController extends AbstractController
      */
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(
+        EntityManagerInterface      $entityManager,
         UeOrdre                      $ueOrdre,
         Request                      $request,
-        Ue                           $ue,
-        ElementConstitutifRepository $elementConstitutifRepository,
-        UeRepository                 $ueRepository
+        Ue                           $ue
     ): Response {
         if ($this->isCsrfTokenValid(
             'delete' . $ue->getId(),
@@ -324,12 +315,21 @@ class UeController extends AbstractController
                 $ue->removeElementConstitutif($ec);
                 foreach ($ec->getEcEnfants() as $ecEnfant) {
                     $ue->removeElementConstitutif($ecEnfant);
-                    $elementConstitutifRepository->remove($ecEnfant, true);
+                    $entityManager->remove($ecEnfant);
                 }
-                $elementConstitutifRepository->remove($ec, true);
+                $entityManager->remove($ec);
+                foreach ($ue->getUeEnfants() as $ueEnfant) {
+                    $ueEnfant->removeElementConstitutif($ec);
+                    foreach ($ec->getEcEnfants() as $ecEnfant) {
+                        $ueEnfant->removeElementConstitutif($ecEnfant);
+                        $entityManager->remove($ecEnfant);
+                    }
+                    $entityManager->remove($ec);
+                }
             }
 
-            $ueRepository->remove($ue, true);
+            $entityManager->remove($ue);
+            $entityManager->flush();
 
             if ($ue->getUeParent() !== null) {
                 $ueOrdre->renumeroterSubUE($ue->getOrdre(), $ue->getUeParent(), $ue->getSemestre());
@@ -343,9 +343,7 @@ class UeController extends AbstractController
         return $this->json(false);
     }
 
-    #[
-        Route('/mutualiser/{ue}/{semestre}', name: 'mutualiser')
-    ]
+    #[Route('/mutualiser/{ue}/{semestre}', name: 'mutualiser')]
     public function mutualiser(
         ComposanteRepository $composanteRepository,
         Ue                   $ue,
@@ -443,9 +441,7 @@ class UeController extends AbstractController
         return $this->json($t);
     }
 
-    #[
-        Route('/raccrocher/{ue}/{parcours}', name: 'raccrocher')
-    ]
+    #[Route('/raccrocher/{ue}/{parcours}', name: 'raccrocher')]
     public function raccrocher(
         UeMutualisableRepository $ueMutualisableRepository,
         Parcours                 $parcours,
@@ -461,9 +457,7 @@ class UeController extends AbstractController
         ]);
     }
 
-    #[
-        Route('/dupliquer/{ue}/{parcours}', name: 'dupliquer')
-    ]
+    #[Route('/dupliquer/{ue}/{parcours}', name: 'dupliquer')]
     public function dupliquer(
         Ue       $ue,
         Parcours $parcours
@@ -475,9 +469,7 @@ class UeController extends AbstractController
         ]);
     }
 
-    #[
-        Route('/changer/{ue}/{parcours}', name: 'changer')
-    ]
+    #[Route('/changer/{ue}/{parcours}', name: 'changer')]
     public function changer(
         Ue       $ue,
         Parcours $parcours
@@ -489,9 +481,7 @@ class UeController extends AbstractController
         ]);
     }
 
-    #[
-        Route('/changer-ajax/{ue}/{parcours}', name: 'changer_ajax')
-    ]
+    #[Route('/changer-ajax/{ue}/{parcours}', name: 'changer_ajax')]
     public function changerAjax(
         ParcoursRepository     $parcoursRepository,
         EntityManagerInterface $entityManager,
@@ -574,9 +564,7 @@ class UeController extends AbstractController
         return $this->json((new JsonReponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'Erreur lors du déplacement de l\'UE', []))->getReponse());
     }
 
-    #[
-        Route('/semestre-ajax', name: 'semestre_ajax')
-    ]
+    #[Route('/semestre-ajax', name: 'semestre_ajax')]
     public function semestreAjax(
         Request                    $request,
         SemestreParcoursRepository $semestreParcoursRepository

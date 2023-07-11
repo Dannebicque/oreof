@@ -5,27 +5,31 @@
             <div class="card mb-2 bg-transparent no-shadow d-none d-md-block sh-3">
                 <div class="card-body pt-0 pb-0 h-100">
                     <div class="row g-0 h-100 align-content-center">
-                        <div class="col-12 col-md-1 d-flex align-items-center mb-2 text-secondary
+                        <div class="col-md-1 d-flex align-items-center mb-2 text-secondary
                         mb-md-0 text-small justify-content-center">
                             EC
                         </div>
-                        <div class="col-12 col-md-2 d-flex align-items-center mb-2 justify-content-center
+                        <div class="col-md-3 d-flex align-items-center mb-2 justify-content-center
                         text-secondary mb-md-0 text-small">
                             Fiche EC/matière associée
                         </div>
-                        <div class="col-12 col-md-2 d-flex align-items-center mb-2 justify-content-center
+                        <div class="col-md-1 d-flex align-items-center mb-2 justify-content-center
                         text-secondary mb-md-0 text-small">
                             Fiche EC/matière
                         </div>
-                        <div class="col-6 col-md-2 d-flex align-items-center justify-content-center
+                        <div class="col-md-1 d-flex align-items-center mb-2 justify-content-center
+                        text-secondary mb-md-0 text-small">
+                            BCC
+                        </div>
+                        <div class="col-md-1 d-flex align-items-center justify-content-center
                         text-secondary text-small">
                             MCCC
                         </div>
-                        <div class="col-6 col-md-2 d-flex align-items-center justify-content-center
+                        <div class="col-md-1 d-flex align-items-center justify-content-center
                         text-secondary text-small">
                             Volumes Horaires
                         </div>
-                        <div class="col-6 col-md-3 d-flex align-items-center justify-content-center
+                        <div class="col-md-4 d-flex align-items-center justify-content-center
                         text-secondary text-small">
                             Actions
                         </div>
@@ -38,12 +42,12 @@
                         {% if ec.ecEnfants|length == 0 %}
                             <div class="card mb-2 sh-19 sh-md-8">
                                 <div class="card-body pt-0 pb-0 h-100 {% if ue.ueParent != null %}border-left-sousUe border-left-sousUe-{{ ue.ordre }}{% endif %}">
-                                    <div class="row g-0 h-100 align-content-center">
-                                        <div class="col-12 col-md-1 d-flex flex-column justify-content-center">
+                                    <div class="row g-1 h-100 align-content-center">
+                                        <div class="col-md-1 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">ec</div>
                                             {{ ec.code }}
                                         </div>
-                                        <div class="col-12 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="col-12 col-md-3 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">Matière</div>
                                             {% if ec.ficheMatiere != null %}
                                                 <p class="mt-0 mb-0">{{ ec.display }}
@@ -58,11 +62,10 @@
                                             {% endif %}
                                         </div>
 
-                                        <div class="col-12 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="col-md-1 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">Remplissage</div>
                                             {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation) or is_granted
                                                 ('CAN_PARCOURS_EDIT_MY', parcours)) %}
-
                                                 {% if ec.ficheMatiere != null %}
                                                     {% if ec.ficheMatiere.parcours.id == parcours.id %}
                                                         <a
@@ -95,7 +98,36 @@
                                                 {% endif %}
                                             {% endif %}
                                         </div>
-                                        <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="col-md-1 d-flex flex-column justify-content-center">
+                                            <div class="text-muted text-small d-md-none">bcc</div>
+                                            <button
+                                                    {% if deplacer is defined and deplacer == true and editable == true %}
+                                                        {{ stimulus_controller('modal', {
+                                                            size: 'lg',
+                                                            nomEvenement: 'refreshListeEc',
+                                                            details: {ue: ue.id, parcours: parcours.id},
+                                                            modalTitle: 'Blocs de compétences',
+                                                            modalUrl: path('app_element_constitutif_bcc',{'id': ec.id}) }) }}
+                                                    {% else %}
+                                                        {{ stimulus_controller('modal', {
+                                                            size: 'lg',
+                                                            modalTitle: 'Blocs de compétences',
+                                                            modalUrl: path('app_element_constitutif_bcc',{'id': ec.id}) }) }}
+                                                    {% endif %}
+                                                    data-action="click->modal#openModal"
+                                                    class="btn btn-sm btn-outline-info"
+                                                    data-size="lg"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom"
+                                                    title="Blocs de compétences"
+                                            >
+                                                <i class="fal fa-ballot-check"></i>
+                                                <span class="badge bg-{% if ec.etatBcc == 'Complet' %}success{% else %}warning{% endif %}">
+                            {{ ec.etatBcc }}
+                        </span>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-1 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">mccc</div>
                                             <button
                                                     {% if deplacer is defined and deplacer == true and editable == true %}
@@ -112,7 +144,7 @@
                                                             modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
                                                     {% endif %}
                                                     data-action="click->modal#openModal"
-                                                    class="btn btn-sm btn-outline-info me-1 ms-1"
+                                                    class="btn btn-sm btn-outline-info"
                                                     data-size="lg"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom"
@@ -124,7 +156,7 @@
                         </span>
                                             </button>
                                         </div>
-                                        <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
+                                        <div class="col-md-1 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">Volumes Horaires</div>
                                             <button
                                                     {% if deplacer is defined and deplacer == true and editable ==
@@ -142,7 +174,7 @@
                                                             modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
                                                     {% endif %}
                                                     data-action="click->modal#openModal"
-                                                    class="btn btn-sm btn-outline-info me-1"
+                                                    class="btn btn-sm btn-outline-info"
                                                     data-size="lg"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom"
@@ -155,7 +187,7 @@
                                             </button>
 
                                         </div>
-                                        <div class="col-6 col-md-3 d-flex flex-column justify-content-center">
+                                        <div class="col-md-4 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">Actions</div>
                                             <div class="row">
                                                 <div class="col-6">

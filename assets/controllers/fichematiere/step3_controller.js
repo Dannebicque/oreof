@@ -19,10 +19,13 @@ export default class extends Controller {
 
   static values = {
     url: String,
+    updateStep: { type: Boolean, default: true },
   }
 
   connect() {
-    document.getElementById('fiche_matiere_step3_objectifs').addEventListener('trix-blur', this.saveObjectifs.bind(this))
+    if (document.getElementById('fiche_matiere_step3_objectifs')) {
+      document.getElementById('fiche_matiere_step3_objectifs').addEventListener('trix-blur', this.saveObjectifs.bind(this))
+    }
   }
 
   saveObjectifs() {
@@ -55,7 +58,9 @@ export default class extends Controller {
 
   async _save(options) {
     await saveData(this.urlValue, options).then(async () => {
-      await updateEtatOnglet(this.urlValue, 'onglet3', 'ec')
+      if (this.updateStepValue) {
+        await updateEtatOnglet(this.urlValue, 'onglet3', 'ec')
+      }
     })
   }
 }
