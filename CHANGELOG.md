@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/Dannebicque/oreof/compare/v1.5.10...v1.6.0) (2023-07-11)
+
+
+### Features
+
+* Choix couleurs + Modal right ([8679b68](https://github.com/Dannebicque/oreof/commit/8679b6819ae813d7956061915f0d574a0b45ac42))
+* Export ([8ae9f9a](https://github.com/Dannebicque/oreof/commit/8ae9f9a1791293fb80045f9ccbc193df716c14d8))
+* Export ([b67395b](https://github.com/Dannebicque/oreof/commit/b67395b8358be5964944abda3f5eab0d6b6ec281))
+* Gestion des BCCC sur les EC ou Fiches Matières selon si mutualisée ou pas ([baed0dd](https://github.com/Dannebicque/oreof/commit/baed0ddf597ef8fe3cff45241a00219b5dea7035))
+* Historique des modifications sur parcours, formation, fiches ([bd13fb7](https://github.com/Dannebicque/oreof/commit/bd13fb733279a74f660fb52a1b105d62f6a0d94a))
+* Lien EC/Compétences pour les EC mutualisés ([78240d4](https://github.com/Dannebicque/oreof/commit/78240d4b2e4a6e8bf575093162c3aa1247149901))
+* Page historique en modal right ([9ba0b72](https://github.com/Dannebicque/oreof/commit/9ba0b72a3657e40ae12d66d984a13beab17c2f8b))
+* police dyslexique ([35805e2](https://github.com/Dannebicque/oreof/commit/35805e2fbe5a4452e8ce45feade78fcc56b920e5))
+* Settings, choix des couleurs ([7e83de7](https://github.com/Dannebicque/oreof/commit/7e83de73057caee02d10fe5d7932d952945ab4d6))
+
+
+### Bug Fixes
+
+* Affichage des parcours mutualisés avec EC ([8c04472](https://github.com/Dannebicque/oreof/commit/8c04472e3952eaaa38f2ec67612bfbec72bf8cba))
+* Affichage des parcours mutualisés avec EC ([3937637](https://github.com/Dannebicque/oreof/commit/393763726e0e1cf5b0b4f672cd5454f594d08d7a))
+* bouton retour sur parcours BCC ([3854c0e](https://github.com/Dannebicque/oreof/commit/3854c0e3bc8fc7bddf577b1bf27da5c91bfc99ac))
+* Calcul des heures dans un DTO ([c720cb1](https://github.com/Dannebicque/oreof/commit/c720cb11f13b937f39dc748d8473d3ffb6df9d18))
+* Calcul des heures dans un DTO ([d66fcf8](https://github.com/Dannebicque/oreof/commit/d66fcf8627216f2e3af052a6fd78e9c6ff3c312c))
+* Choix de la composante d'inscription ([f345a19](https://github.com/Dannebicque/oreof/commit/f345a194de9456b8308e94a90ab1619c16b24167))
+* export ([40cf925](https://github.com/Dannebicque/oreof/commit/40cf92555f0bebdab964f4a333b1c671beed6466))
+* Réparation de la fiche comparaison BCC ([2c907e1](https://github.com/Dannebicque/oreof/commit/2c907e179f06dfc75b147aca1c7a38d547f234cd))
+
 ### [1.5.10](https://github.com/Dannebicque/oreof/compare/v1.5.9...v1.5.10) (2023-07-07)
 
 
