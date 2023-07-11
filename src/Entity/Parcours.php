@@ -159,6 +159,9 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcoursParent', targetEntity: self::class)]
     private Collection $parcoursEnfants;
 
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: HistoriqueParcours::class)]
+    private Collection $historiqueParcours;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -173,6 +176,7 @@ class Parcours
         $this->semestreMutualisables = new ArrayCollection();
         $this->ueMutualisables = new ArrayCollection();
         $this->parcoursEnfants = new ArrayCollection();
+        $this->historiqueParcours = new ArrayCollection();
     }
 
 
@@ -860,6 +864,36 @@ class Parcours
             // set the owning side to null (unless already changed)
             if ($parcoursEnfant->getParcoursParent() === $this) {
                 $parcoursEnfant->setParcoursParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, HistoriqueParcours>
+     */
+    public function getHistoriqueParcours(): Collection
+    {
+        return $this->historiqueParcours;
+    }
+
+    public function addHistoriqueParcour(HistoriqueParcours $historiqueParcour): static
+    {
+        if (!$this->historiqueParcours->contains($historiqueParcour)) {
+            $this->historiqueParcours->add($historiqueParcour);
+            $historiqueParcour->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistoriqueParcour(HistoriqueParcours $historiqueParcour): static
+    {
+        if ($this->historiqueParcours->removeElement($historiqueParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($historiqueParcour->getParcours() === $this) {
+                $historiqueParcour->setParcours(null);
             }
         }
 

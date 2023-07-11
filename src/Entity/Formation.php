@@ -141,6 +141,9 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: ButCompetence::class)]
     private Collection $butCompetences;
 
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: HistoriqueFormation::class)]
+    private Collection $historiqueFormations;
+
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
         $this->anneeUniversitaire = $anneeUniversitaire;
@@ -156,6 +159,7 @@ class Formation
         }
         $this->typeEcs = new ArrayCollection();
         $this->butCompetences = new ArrayCollection();
+        $this->historiqueFormations = new ArrayCollection();
     }
 
     public function getEtatStep(int $step): bool
@@ -525,16 +529,24 @@ class Formation
     {
         $total = 0;
         $total += count($this->getRegimeInscription()) === 0 ? 0 : 1;
-        $total += $this->getContenuFormation() === null ? 0 : 1;
-        $total += $this->getResultatsAttendus() === null ? 0 : 1;
+        //$total += $this->getContenuFormation() === null ? 0 : 1;
+        //$total += $this->getResultatsAttendus() === null ? 0 : 1;
         $total += $this->getRythmeFormation() === null ? 0 : 1;
         $total += $this->getRythmeFormationTexte() === null ? 0 : 1;
         $total += $this->isHasParcours() === null ? 0 : 1;
-        $max = 6;
-        foreach ($this->getParcours() as $parcours) {
-            $total += $parcours->remplissageBrut();
-            $max += 10;
+        $max = 4;
+        if ($this->hasParcours === true) {
+            foreach ($this->getParcours() as $parcours) {
+                $total += $parcours->remplissageBrut();
+                $max += 10;
+            }
+        } else {
+            if ($this->getParcours()->first() !== false) {
+                $total += $this->getParcours()->first()->remplissageBrut();
+                $max += 5;
+            }
         }
+
 
         //todo: ajouter le remplissage des matières ?
         return $total / $max * 100;
@@ -770,6 +782,36 @@ class Formation
             // set the owning side to null (unless already changed)
             if ($butCompetence->getFormation() === $this) {
                 $butCompetence->setFormation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, HistoriqueFormation>
+     */
+    public function getHistoriqueFormations(): Collection
+    {
+        return $this->historiqueFormations;
+    }
+
+    public function addHistoriqueFormation(HistoriqueFormation $historiqueFormation): static
+    {
+        if (!$this->historiqueFormations->contains($historiqueFormation)) {
+            $this->historiqueFormations->add($historiqueFormation);
+            $historiqueFormation->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistoriqueFormation(HistoriqueFormation $historiqueFormation): static
+    {
+        if ($this->historiqueFormations->removeElement($historiqueFormation)) {
+            // set the owning side to null (unless already changed)
+            if ($historiqueFormation->getFormation() === $this) {
+                $historiqueFormation->setFormation(null);
             }
         }
 

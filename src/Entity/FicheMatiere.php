@@ -111,6 +111,9 @@ class FicheMatiere
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $typeMatiere = 'matiere';
 
+    #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: HistoriqueFicheMatiere::class)]
+    private Collection $historiqueFicheMatieres;
+
     public function __construct()
     {
         $this->competences = new ArrayCollection();
@@ -122,6 +125,7 @@ class FicheMatiere
         }
         $this->elementConstitutifs = new ArrayCollection();
         $this->ficheMatiereParcours = new ArrayCollection();
+        $this->historiqueFicheMatieres = new ArrayCollection();
     }
 
     public function getEtatStep(int $step): bool
@@ -518,6 +522,36 @@ class FicheMatiere
     public function setTypeMatiere(?string $typeMatiere): self
     {
         $this->typeMatiere = $typeMatiere;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, HistoriqueFicheMatiere>
+     */
+    public function getHistoriqueFicheMatieres(): Collection
+    {
+        return $this->historiqueFicheMatieres;
+    }
+
+    public function addHistoriqueFicheMatiere(HistoriqueFicheMatiere $historiqueFicheMatiere): static
+    {
+        if (!$this->historiqueFicheMatieres->contains($historiqueFicheMatiere)) {
+            $this->historiqueFicheMatieres->add($historiqueFicheMatiere);
+            $historiqueFicheMatiere->setFicheMatiere($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistoriqueFicheMatiere(HistoriqueFicheMatiere $historiqueFicheMatiere): static
+    {
+        if ($this->historiqueFicheMatieres->removeElement($historiqueFicheMatiere)) {
+            // set the owning side to null (unless already changed)
+            if ($historiqueFicheMatiere->getFicheMatiere() === $this) {
+                $historiqueFicheMatiere->setFicheMatiere(null);
+            }
+        }
 
         return $this;
     }
