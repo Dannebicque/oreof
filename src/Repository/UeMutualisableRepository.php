@@ -12,6 +12,7 @@ use App\Entity\UeMutualisable;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<UeMutualisable>
@@ -98,7 +99,7 @@ class UeMutualisableRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findByParcours(User $user, array $options): array
+    public function findByParcours(UserInterface $user, array $options): array
     {
         //todo: filtrer selon les parcours de l'utilisateur
         $qb = $this->createQueryBuilder('u')

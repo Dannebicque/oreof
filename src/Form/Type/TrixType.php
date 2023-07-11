@@ -16,13 +16,8 @@ use Symfony\Component\Form\FormView;
 
 class TrixType extends AbstractType
 {
-    private string $id;
-
     private bool $enabled = true;
 
-    /**
-     * @param bool $flag
-     */
     public function setEnabled(bool $flag): void
     {
         $this->enabled = $flag;
@@ -33,7 +28,7 @@ class TrixType extends AbstractType
         return $this->enabled;
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['trixId'] = substr(sha1(uniqid($view->vars['id'], true)), -6);
         $view->vars['enabled'] = $this->enabled;
@@ -42,7 +37,7 @@ class TrixType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
+    public function getParent(): string
     {
         return TextareaType::class;
     }
