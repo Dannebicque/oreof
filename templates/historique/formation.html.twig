@@ -1,0 +1,25 @@
+<h2>{{ formation.display }}</h2>
+
+{% for histo in historiques %}
+    <div class="row g-0 align-items-center mb-2">
+        <div class="col-auto">
+            <div class="border border-primary sw-5 sh-5 rounded-xl d-flex justify-content-center align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="acorn-icons acorn-icons-screen text-primary"><path d="M10 15V16V18M8 18H12"></path><path d="M14.5 2C15.9045 2 16.6067 2 17.1111 2.33706C17.3295 2.48298 17.517 2.67048 17.6629 2.88886C18 3.39331 18 4.09554 18 5.5L18 11.5C18 12.9045 18 13.6067 17.6629 14.1111C17.517 14.3295 17.3295 14.517 17.1111 14.6629C16.6067 15 15.9045 15 14.5 15L5.5 15C4.09554 15 3.39331 15 2.88886 14.6629C2.67048 14.517 2.48298 14.3295 2.33706 14.1111C2 13.6067 2 12.9045 2 11.5L2 5.5C2 4.09554 2 3.39331 2.33706 2.88886C2.48298 2.67048 2.67048 2.48298 2.88886 2.33706C3.39331 2 4.09554 2 5.5 2L14.5 2Z"></path><path d="M9 7 7 10M13.2412 7 11.2412 10"></path></svg>
+            </div>
+        </div>
+        <div class="col ps-3">
+            <div class="row g-0">
+                <div class="col">
+                    <div class="sh-5 d-flex align-items-center lh-1-25">Project Views</div>
+                </div>
+                <div class="col-auto">
+                    <div class="sh-5 d-flex align-items-center">23.573</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+        Aucune validation pour cette formation.
+    </div>
+{% endfor %}
