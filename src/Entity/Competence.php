@@ -37,11 +37,15 @@ class Competence
     #[ORM\Column]
     private ?int $ordre = null;
 
+    #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'competences')]
+    private Collection $elementConstitutifs;
+
 
     public function __construct(BlocCompetence $blocCompetence)
     {
         $this->blocCompetence = $blocCompetence;
         $this->ficheMatieres = new ArrayCollection();
+        $this->elementConstitutifs = new ArrayCollection();
     }
     public function getId(): ?int
     {
@@ -131,5 +135,32 @@ class Competence
     public function genereCode(): void
     {
         $this->setCode($this->getBlocCompetence()?->getOrdre()  . chr($this->getOrdre()+64));
+    }
+
+    /**
+     * @return Collection<int, ElementConstitutif>
+     */
+    public function getElementConstitutifs(): Collection
+    {
+        return $this->elementConstitutifs;
+    }
+
+    public function addElementConstitutif(ElementConstitutif $elementConstitutif): static
+    {
+        if (!$this->elementConstitutifs->contains($elementConstitutif)) {
+            $this->elementConstitutifs->add($elementConstitutif);
+            $elementConstitutif->addCompetence($this);
+        }
+
+        return $this;
+    }
+
+    public function removeElementConstitutif(ElementConstitutif $elementConstitutif): static
+    {
+        if ($this->elementConstitutifs->removeElement($elementConstitutif)) {
+            $elementConstitutif->removeCompetence($this);
+        }
+
+        return $this;
     }
 }

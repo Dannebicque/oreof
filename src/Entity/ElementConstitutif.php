@@ -124,10 +124,14 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $quitus = false;
 
+    #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'elementConstitutifs')]
+    private Collection $competences;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
         $this->ecEnfants = new ArrayCollection();
+        $this->competences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -540,7 +544,7 @@ class ElementConstitutif
 
     public function getEtatMccc(): ?string
     {
-        return $this->etatMccc === null ? 'A Compléter' : $this->etatMccc;
+        return $this->etatMccc === null ? 'A Saisir' : $this->etatMccc;
     }
 
     public function setEtatMccc(?string $etatMccc): self
@@ -609,6 +613,52 @@ class ElementConstitutif
     public function setQuitus(?bool $quitus): self
     {
         $this->quitus = $quitus;
+
+        return $this;
+    }
+
+    public function getEtatBcc(): ?string
+    {
+        if ($this->getFicheMatiere() !== null) {
+            if ($this->isFicheFromParcours()) {
+                if ($this->getFicheMatiere()->getCompetences()->count() > 0) {
+                    return 'Complet';
+                }
+            } else {
+                if ($this->getCompetences()->count() > 0) {
+                    return 'Complet';
+                }
+            }
+        }
+
+        return 'A saisir';
+    }
+
+    public function isFicheFromParcours(): bool
+    {
+        return $this->getParcours()?->getId() === $this->ficheMatiere->getParcours()->getId();
+    }
+
+    /**
+     * @return Collection<int, Competence>
+     */
+    public function getCompetences(): Collection
+    {
+        return $this->competences;
+    }
+
+    public function addCompetence(Competence $competence): static
+    {
+        if (!$this->competences->contains($competence)) {
+            $this->competences->add($competence);
+        }
+
+        return $this;
+    }
+
+    public function removeCompetence(Competence $competence): static
+    {
+        $this->competences->removeElement($competence);
 
         return $this;
     }
