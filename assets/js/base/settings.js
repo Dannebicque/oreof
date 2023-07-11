@@ -45,6 +45,7 @@ export default class Settings {
         layout: 'fluid',
         radius: 'rounded',
         color: 'light-blue',
+        dyslexique: 'false',
         navcolor: 'default',
       },
       storagePrefix: 'acorn-standard-',
@@ -87,6 +88,11 @@ export default class Settings {
         event: null,
         update: true,
         attribute: 'data-navcolor',
+      },
+      dyslexique: {
+        event: Globals.dyslexiqueAttributeChange,
+        update: true,
+        attribute: 'data-dyslexique',
       },
     };
     this.optionSelector = '#settings .option';
@@ -177,6 +183,7 @@ export default class Settings {
   }
 
   _setAttributes() {
+    console.log(this.settings.attributes)
     for (const prop in this.settings.attributes) {
       document.documentElement.setAttribute(this.attributeOptions[prop].attribute, this.settings.attributes[prop]);
     }

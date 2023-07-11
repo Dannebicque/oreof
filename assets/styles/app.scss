@@ -38,6 +38,45 @@
 @import "./_but.scss";
 @import "./_settings.scss";
 
+@import url('https://fonts.cdnfonts.com/css/open-dyslexic');
+//@font-face {
+//  font-family: 'opendyslexic';
+//  src: url('https://dyslexicfonts.com/fonts/OpenDyslexic-Regular.otf');
+//  font-style: normal;
+//  font-weight: normal;
+//}
+//
+//@font-face {
+//  font-family: 'opendyslexic';
+//  src: url('https://dyslexicfonts.com/fonts/OpenDyslexic-Italic.ttf');
+//  font-style: italic;
+//  font-weight: normal;
+//}
+//
+//@font-face {
+//  font-family: 'opendyslexic';
+//  src: url('https://dyslexicfonts.com/fonts/OpenDyslexic-Bold.ttf');
+//  font-weight: bold;
+//  font-style: normal;
+//}
+//
+//@font-face {
+//  font-family: 'opendyslexic';
+//  src: url('https://dyslexicfonts.com/fonts/OpenDyslexic-BoldItalic.ttf');
+//  font-weight: bold;
+//  font-style: italic;
+//}
+
+html[data-dyslexique='true'] {
+  --font: 'Open-Dyslexic', serif;
+  --font-heading: 'Open-Dyslexic', serif;
+}
+
+html[data-dyslexique='false'] {
+  --font: 'Raleway', sans-serif;
+  --font-heading: 'Montserrat', sans-serif;
+}
+
 $variable-prefix: bs- !default; // Deprecated in v5.2.0 for the shorter `$prefix`
 $prefix: $variable-prefix !default;
 body {

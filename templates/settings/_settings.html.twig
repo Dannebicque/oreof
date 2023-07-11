@@ -1,4 +1,17 @@
 <div class="scroll-track-visible" id="settings" {{ stimulus_controller('settings') }}>
+
+    <div class="mb-5" id="color">
+        <label class="mb-3 d-inline-block form-label">Dysléxique</label>
+        <div class="form-check">
+            <input type="checkbox" name="dyslexique"
+                   value="1"
+                   id="dyslexique"
+                   class="form-check-input"
+                    {{ stimulus_action('settings', 'changeDyslexique', 'change') }}
+            >
+            <label for="dyslexique" class="form-check-label">Activer la police "dysléxique"</label>
+        </div>
+    </div>
     <div class="mb-5" id="color">
         <label class="mb-3 d-inline-block form-label">Color</label>
         <div class="row d-flex g-3 justify-content-between flex-wrap mb-3">

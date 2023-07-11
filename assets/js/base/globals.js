@@ -22,6 +22,7 @@ Globals.menuPlacementChange = 'MENU_PLACEMENT_CHANGE';
 Globals.menuBehaviourChange = 'MENU_BEHAVIOUR_CHANGE';
 Globals.layoutChange = 'LAYOUT_CHANGE';
 Globals.colorAttributeChange = 'COLOR_ATTRIBUTE_CHANGE';
+Globals.dyslexiqueAttributeChange = 'DYSLEXIQUE_ATTRIBUTE_CHANGE';
 Globals.borderRadiusChange = 'BORDER_RADIUS_CHANGE';
 Globals.lightDarkModeClick = 'LIGHT_DARK_MODE_CLICK';
 Globals.pinButtonClick = 'PIN_BUTTON_CLICK';
@@ -40,7 +41,7 @@ export class Variables {
       this._initVariables();
     });
 
-    document.documentElement.addEventListener(Globals.borderRadiusChange, (event) => {
+    document.documentElement.addEventListener(Globals.dyslexiqueAttributeChange, (event) => {
       this._initVariables();
     });
   }
@@ -87,6 +88,8 @@ export class Variables {
     Globals.xl = rootStyle.getPropertyValue('--xl').trim();
     Globals.xxl = rootStyle.getPropertyValue('--xxl').trim();
     Globals.direction = 'ltr';
+
+    Globals.font = rootStyle.getPropertyValue('--font').trim();
   }
 }
 

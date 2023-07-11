@@ -9,9 +9,25 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
+  connect() {
+    const dyslexiqueCheckbox = document.getElementById('dyslexique');
+    const storageDyslexique = localStorage.getItem('acorn-standard-dyslexique');
+
+    if (storageDyslexique === 'true') {
+      dyslexiqueCheckbox.checked = true;
+    } else if (storageDyslexique === 'false') {
+      dyslexiqueCheckbox.checked = false;
+    }
+  }
+
   changeColor(event) {
     const color = event.currentTarget.dataset.value
     document.getElementsByTagName('html')[0].dataset.color = color
-    localStorage.setItem('STORAGE_COLOR', color)
+    localStorage.setItem('acorn-standard-color', color)
+  }
+
+  changeDyslexique(event) {
+    document.getElementsByTagName('html')[0].dataset.dyslexique = event.target.checked
+    localStorage.setItem('acorn-standard-dyslexique', event.target.checked)
   }
 }
