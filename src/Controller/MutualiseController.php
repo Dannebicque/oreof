@@ -33,6 +33,8 @@ class MutualiseController extends AbstractController
         Request $request,
         FicheMatiereMutualisableRepository $ficheMatiereRepository): Response
     {
+        //todo: Améliorer. Ne devrait afficher que les fiches de mon parcours/formation si pas admin.
+        //todo: devrait afficher que les fiches avec un parcours mutualisé et le parcours d'origine dans la liste.
         $sort = $request->query->get('sort') ?? 'libelle';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;

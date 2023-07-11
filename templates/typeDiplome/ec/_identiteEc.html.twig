@@ -24,10 +24,16 @@
             <dt>Intitulé de l'EC en anglais</dt>
             <dd>{{ ficheMatiere.libelleAnglais }}</dd>
             <dt>Enseignement mutualisé ?</dt>
-            <dd>{{ ficheMatiere.enseignementMutualise == true ? 'Oui' : 'Non' }}</dd>
-            {% if ficheMatiere.enseignementMutualise == true %}
-            <dt>Formation(s) partageant l’enseignement mutualisé</dt>
-            <dd></dd>
+            <dd>{{ ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 ? 'Oui' : 'Non' }}</dd>
+            {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 %}
+                <dt>Formation(s) partageant l’enseignement mutualisé</dt>
+                <dd>
+                    <ul>
+                        {% for parc in ficheMatiere.ficheMatiereParcours %}
+                            <li>{{ parc.parcours.libelle }} ({{ parc.parcours.formation.display }})</li>
+                        {% endfor %}
+                    </ul>
+                </dd>
             {% endif %}
             <dt>Code Pégase</dt>
             <dd>-A ajouter-</dd>

@@ -2,9 +2,6 @@
     <thead>
     <tr>
         <th>
-            Code UE
-        </th>
-        <th>
             <a href="#"
                     {{ stimulus_action('crud', 'sort', 'click', {
                         'sort': 'formation',
@@ -66,7 +63,6 @@
     <tbody>
     {% for ue in ues %}
         <tr>
-            <td>{{ ue.ue.display(parcours) }}</td>
             <td>
                 {% if ue.parcours != null and ue.ue.semestre.semestreParcours[0] is defined %}
                     {{ ue.ue.semestre.semestreParcours[0].parcours.formation.display }}

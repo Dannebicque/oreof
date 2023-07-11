@@ -77,7 +77,19 @@
                 <td>Pas de parcours associé</td>
                 <td>Pas de parcours associé</td>
             {% endif %}
-            <td>Voir ?</td>
+            <td>
+                <a
+                        href="{{ path('app_fiche_matiere_show',{'id': fiche.id}) }}"
+                        class="btn btn-sm text-info"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Voir une fiche EC/matière"
+                        target="_blank"
+                >
+                    <i class="{{ iconShow }}"></i>
+                    <span> voir</span>
+                </a>
+            </td>
         </tr>
     {% endfor %}
     </tbody>
