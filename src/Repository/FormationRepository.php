@@ -166,7 +166,7 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByComposante(Composante $composante, AnneeUniversitaire $anneeUniversitaire, array $sorts): array
+    public function findByComposante(Composante $composante, AnneeUniversitaire $anneeUniversitaire, array $sorts = []): array
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')

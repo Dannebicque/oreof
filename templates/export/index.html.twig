@@ -13,52 +13,62 @@
 {% endblock %}
 
 {% block content %}
-    <div {{ stimulus_controller('export',
-        {
-            url: path('app_export_liste')
-        }) }}>
-        <div class="row">
-            <div class="col-6">
-                <div>
-                    <label for="annee_universitaire">Annnée Universitaire</label>
-                    <select name="annee_universitaire"
-                            {{ stimulus_action('export', 'changeListe') }}
-                            id="annee_universitaire"
-                            class="form-select">
-                        {% for annee in annees %}
-                            <option value="{{ annee.id }}" {% if annee.defaut == true %}selected{% endif %}>{{ annee.libelle }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div>
-                    <label for="composante">Composante</label>
-                    <select name="composante" id="composante" class="form-select"
-                            {{ stimulus_action('export', 'changeListe') }}
-                    >
-                        <option value="">Choisir une composante</option>
-                        {% for composante in composantes %}
-                            <option value="{{ composante.id }}">{{ composante.libelle }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div>
-                    <label for="type_document">Type d'export</label>
-                    <select name="type_document" id="type_document" class="form-select"
-                            {{ stimulus_action('export', 'changeListe') }}
-                    >
+    <div
+            {{ stimulus_controller('export',
+                {
+                    url: path('app_export_liste')
+                }) }}
+    >
+        <div class="card mt-2">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div>
+                            <label for="annee_universitaire">Annnée Universitaire</label>
+                            <select name="annee_universitaire"
+                                    {{ stimulus_action('export', 'changeListe') }}
+                                    id="annee_universitaire"
+                                    class="form-select">
+                                {% for annee in annees %}
+                                    <option value="{{ annee.id }}"
+                                            {% if annee.defaut == true %}selected{% endif %}>{{ annee.libelle }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label for="composante">Composante</label>
+                            <select name="composante" id="composante" class="form-select"
+                                    {{ stimulus_action('export', 'changeListe') }}
+                                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                            >
+                                <option value="">Choisir une composante</option>
+                                {% for composante in composantes %}
+                                    <option value="{{ composante.id }}">{{ composante.libelle }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label for="type_document">Type d'export</label>
+                            <select name="type_document" id="type_document" class="form-select"
+                                    {{ stimulus_action('export', 'changeListe') }}
+                            >
 
-                    </select>
-                </div>
-            </div>
-            <div class="col-6">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
 
+                    </div>
+                </div>
             </div>
         </div>
-        <div {{ stimulus_target('export', 'liste') }}>
+        // choix formation/parcours, mutliples, filtres, composante, type de diplôme, ... liste avec checkbox et check
+        all
 
+        <div
+                class="card mt-2"
+                {{ stimulus_target('export', 'liste') }}>
         </div>
     </div>
 
-
-    // choix formation/parcours, mutliples, filtres, composante, type de diplôme, ... liste avec checkbox et check all
 {% endblock %}
