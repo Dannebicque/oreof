@@ -34,9 +34,8 @@ class ParcoursStep5Type extends AbstractType
                 'choice_label' => 'libelle',
                 'multiple' => false,
                 'expanded' => false,
-                'choice_attr' => function () {
-                    return ['data-action' => 'change->parcours--step5#changeComposanteInscription'];
-                },
+                'autocomplete' => true,
+                'attr' => ['data-action' => 'change->parcours--step5#changeComposanteInscription'],
             ])
             ->add('regimeInscription', EnumType::class, [
                 'class' => RegimeInscriptionEnum::class,
