@@ -24,16 +24,18 @@
             </div>
             <div class="col-4">
                 <dl>
-                    <dt>Formation(s) mobilisant la fiche EC/matière</dt>
+                    <dt>Formation(s) pouvant mobiliser la fiche EC/matière</dt>
                     <dd>
-                        {% if ficheMatiere.enseignementMutualise == true %}
-                            {% for ec in ficheMatiere.elementConstitutifs %}
-                                {{ (ec.parcours != null and ec.parcours.formation != null) ? ec.parcours.formation
-                                .display : 'non défini' }} / {{ ec.parcours != null ? ec.parcours.libelle : 'non défini' }}
-                                <br>
-                            {% else %}
-                                Non utilisée
+                        {# todo: mettre une "coche" si réellement utilisée #}
+                        {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 %}
+                            <ul>
+                            {% for ec in ficheMatiere.ficheMatiereParcours %}
+                                <li>{{ (ec.parcours != null and ec.parcours.formation != null) ? ec.parcours.formation
+                                .display : 'non défini' }} / {{ ec.parcours != null ? ec.parcours.libelle : 'non défini' }}</li>
                             {% endfor %}
+                            </ul>
+                            {% else %}
+                            <span class="badge bg-info">Fiche EC/matière non mutualisée</span>
                         {% endif %}
                     </dd>
                 </dl>
