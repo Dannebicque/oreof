@@ -16,33 +16,66 @@
             </div>
         </div>
     </section>
-
-{#    <section class="scroll-section" id="objectifs">#}
-{#        <h2 class="small-title">Objectifs / compétences acquises à l’issue de la formation</h2>#}
-{#        <div class="card mb-5">#}
-{#            <div class="card-body">#}
-{#                {{ include('typeDiplome/formation/_objectifs.html.twig') }}#}
+    {# todo: liste tous les parcours exploitant cette fiche matière (les EC) #}
+    {# todo: pour chaque parcours mobilisant la fiche... #}
+    {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.elementConstitutifs|length > 0 %}
+        {% for ec in ficheMatiere.elementConstitutifs %}
+            <section class="scroll-section" id="objectifs">
+                <h2 class="small-title">Parcours utilisant la fiche matière et détails des EC</h2>
+                <div class="card mb-5">
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li>
+                                <button
+                                        {{ stimulus_controller('modal', {
+                                            size: 'lg',
+                                            modalTitle: 'Ajouter un domaine',
+                                            modalUrl: path('app_fiche_matiere_detail_parcours', {elementConstitutif:ec.id}) }) }}
+                                        data-action="click->modal#openModal"
+                                        class="btn text-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                                        data-size="lg"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom"
+                                        title="Ajouter un domaine"
+                                >
+                                    <i class="{{ iconShow }}"></i>
+                                    <span> Voir les éléments pour le parcours <strong>{{ ec.parcours.libelle }}</strong></span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        {% endfor %}
+    {% else %}
+        <section class="scroll-section" id="objectifs">
+            <h2 class="small-title">Objectifs / compétences acquises à l’issue de la formation</h2>
+            <div class="card mb-5">
+                <div class="card-body">
+                    {{ include('typeDiplome/formation/_objectifs.html.twig') }}
+                </div>
+            </div>
+        </section>
+{#        <section class="scroll-section" id="structure">#}
+{#            <h2 class="small-title">Structure et organisation pédagogiques</h2>#}
+{#            <div class="card mb-5">#}
+{#                <div class="card-body">#}
+{#                    {{ include('typeDiplome/ec/_structure.html.twig') }}#}
+{#                </div>#}
 {#            </div>#}
-{#        </div>#}
-{#    </section>#}
+{#        </section>#}
 
-{#    <section class="scroll-section" id="structure">#}
-{#        <h2 class="small-title">Structure et organisation pédagogiques</h2>#}
-{#        <div class="card mb-5">#}
-{#            <div class="card-body">#}
-{#                {{ include('typeDiplome/ec/_structure.html.twig') }}#}
+{#        <section class="scroll-section" id="mccc">#}
+{#            <h2 class="small-title">Modalités de contrôle des connaissances</h2>#}
+{#            <div class="card mb-5">#}
+{#                <div class="card-body">#}
+{#                    {{ include('typeDiplome/ec/_mccc.html.twig') }}#}
+{#                </div>#}
 {#            </div>#}
-{#        </div>#}
-{#    </section>#}
+{#        </section>#}
+    {% endif %}
+    {# todo: si pas mutualisé, alors affichage BCCC, MCCC et heures ici, si mutualisé affichage des parcours + modal avec des détails. Si impression 1 docs/parcours #}
 
-{#    <section class="scroll-section" id="mccc">#}
-{#        <h2 class="small-title">Modalités de contrôle des connaissances</h2>#}
-{#        <div class="card mb-5">#}
-{#            <div class="card-body">#}
-{#                {{ include('typeDiplome/ec/_mccc.html.twig') }}#}
-{#            </div>#}
-{#        </div>#}
-{#    </section>#}
 
     <section class="scroll-section" id="infos">
         <h2 class="small-title">Infos Pratiques</h2>
