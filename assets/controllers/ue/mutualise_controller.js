@@ -95,16 +95,24 @@ export default class extends Controller {
     select.innerHTML = ''
     if (data.length === 0) {
       const option = document.createElement('option')
-      option.value = ''
+      option.value = null
       option.text = 'Aucune donnée'
       select.add(option)
     }
 
     if (data.length > 1) {
       const option = document.createElement('option')
-      option.value = ''
+      option.value = null
       option.text = 'Choisir dans la liste'
+      option.selected = true
       select.add(option)
+
+      if (field === 'parcours') {
+        const optionAll = document.createElement('option')
+        optionAll.value = 'all'
+        optionAll.text = 'Mutualiser avec tous les parcours de la mention'
+        select.add(optionAll, null)
+      }
     }
     data.forEach((item) => {
       const option = document.createElement('option')

@@ -122,8 +122,17 @@ export default class extends Controller {
       const option = document.createElement('option')
       option.value = null
       option.text = 'Choisir dans la liste'
+      option.selected = true
       select.add(option, null)
+
+      if (field === 'parcours') {
+        const optionAll = document.createElement('option')
+        optionAll.value = 'all'
+        optionAll.text = 'Mutualiser avec tous les parcours de la mention'
+        select.add(optionAll, null)
+      }
     }
+
     data.forEach((item) => {
       const option = document.createElement('option')
       option.value = item.id

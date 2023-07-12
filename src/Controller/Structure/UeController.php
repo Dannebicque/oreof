@@ -411,18 +411,24 @@ class UeController extends AbstractController
                 }
                 break;
             case 'save':
-                $parcours = $parcoursRepository->find($data['parcours']);
-                $exist = $ueMutualisableRepository->findOneBy([
-                    'parcours' => $parcours,
-                    'ue' => $ue
-                ]);
-
-                if ($exist === null) {
-                    $ueMutualise = new UeMutualisable();
-                    $ueMutualise->setUe($ue);
-                    $ueMutualise->setParcours($parcours);
-                    $entityManager->persist($ueMutualise);
-                    $entityManager->flush();
+                if (!isset($data['parcours']) || $data['parcours'] === '') {
+                    $formation = $formationRepository->find($data['formation']);
+                    if ($formation !== null && $formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
+                        $parcours = $formation->getParcours()[0];
+                        $this->updateUeMutualisable($ueMutualisableRepository, $ue, $parcours, $entityManager);
+                    }
+                } else {
+                    if ($data['parcours'] !== 'all') {
+                        $parcours = $parcoursRepository->find($data['parcours']);
+                        $this->updateUeMutualisable($ueMutualisableRepository, $ue, $parcours, $entityManager);
+                    } else {
+                        $formation = $formationRepository->find($data['formation']);
+                        if ($formation !== null) {
+                            foreach ($formation->getParcours() as $parcours) {
+                                $this->updateUeMutualisable($ueMutualisableRepository, $ue, $parcours, $entityManager);
+                            }
+                        }
+                    }
                 }
 
                 return $this->json(true);
@@ -769,5 +775,21 @@ class UeController extends AbstractController
         }
 
         return $this->json((new JsonReponse(Response::HTTP_INTERNAL_SERVER_ERROR, 'Erreur lors de la duplication de l\'UE', []))->getReponse());
+    }
+
+    private function updateUeMutualisable(UeMutualisableRepository $ueMutualisableRepository, Ue $ue, mixed $parcours, EntityManagerInterface $entityManager): void
+    {
+        $exist = $ueMutualisableRepository->findOneBy([
+            'ue' => $ue,
+            'parcours' => $parcours
+        ]);
+
+        if ($exist === null) {
+            $ueMutualise = new UeMutualisable();
+            $ueMutualise->setUe($ue);
+            $ueMutualise->setParcours($parcours);
+            $entityManager->persist($ueMutualise);
+            $entityManager->flush();
+        }
     }
 }

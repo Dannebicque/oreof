@@ -346,7 +346,6 @@ class SemestreController extends AbstractController
                                         $newEcEnfant->setEcParent($newEc);
                                         $newEcEnfant->setFicheMatiere($ecEnfant->getFicheMatiere());
                                         $entityManager->persist($newEcEnfant);
-
                                     }
                                 }
                                 $entityManager->flush();
@@ -528,23 +527,20 @@ class SemestreController extends AbstractController
                     $formation = $formationRepository->find($data['formation']);
                     if ($formation !== null && $formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
                         $parcours = $formation->getParcours()[0];
+                        $this->updateSemestreMutualisable($semestreMutualisableRepository, $semestre, $parcours, $entityManager);
                     }
                 } else {
-                    $parcours = $parcoursRepository->find($data['parcours']);
-                }
-
-
-                $exist = $semestreMutualisableRepository->findOneBy([
-                    'semestre' => $semestre,
-                    'parcours' => $parcours
-                ]);
-
-                if ($exist === null) {
-                    $semestreMutualise = new SemestreMutualisable();
-                    $semestreMutualise->setSemestre($semestre);
-                    $semestreMutualise->setParcours($parcours);
-                    $entityManager->persist($semestreMutualise);
-                    $entityManager->flush();
+                    if ($data['parcours'] !== 'all') {
+                        $parcours = $parcoursRepository->find($data['parcours']);
+                        $this->updateSemestreMutualisable($semestreMutualisableRepository, $semestre, $parcours, $entityManager);
+                    } else {
+                        $formation = $formationRepository->find($data['formation']);
+                        if ($formation !== null) {
+                            foreach ($formation->getParcours() as $parcours) {
+                                $this->updateSemestreMutualisable($semestreMutualisableRepository, $semestre, $parcours, $entityManager);
+                            }
+                        }
+                    }
                 }
 
                 return $this->json(true);
@@ -612,4 +608,20 @@ class SemestreController extends AbstractController
 //                ]);
 //        }
 //    }
+
+    private function updateSemestreMutualisable(SemestreMutualisableRepository $semestreMutualisableRepository, Semestre $semestre, mixed $parcours, EntityManagerInterface $entityManager): void
+    {
+        $exist = $semestreMutualisableRepository->findOneBy([
+            'semestre' => $semestre,
+            'parcours' => $parcours
+        ]);
+
+        if ($exist === null) {
+            $semestreMutualise = new SemestreMutualisable();
+            $semestreMutualise->setSemestre($semestre);
+            $semestreMutualise->setParcours($parcours);
+            $entityManager->persist($semestreMutualise);
+            $entityManager->flush();
+        }
+    }
 }
