@@ -66,7 +66,8 @@ class FormationController extends BaseController
             //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
             $centres = $this->getUser()->getUserCentres();
             foreach ($centres as $centre) {
-                if ($centre->getComposante() !== null && in_array('Gestionnaire', $centre->getDroits())) {
+                //todo: gérer avec un voter
+                if ($centre->getComposante() !== null && (in_array('Gestionnaire', $centre->getDroits()) || in_array('Directeur', $centre->getDroits()))) {
                     //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
                     $formations[] = $formationRepository->findByComposante(
                         $centre->getComposante(),
