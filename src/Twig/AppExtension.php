@@ -91,7 +91,7 @@ class AppExtension extends AbstractExtension
 
     public function badgeCentre(UserCentre $userCentre): string
     {
-        $droit = count($userCentre->getDroits()) > 0 ? $userCentre->getDroits()[0] : 'Erreur';
+        $droit = count($userCentre->getDroits()) > 0 ? $userCentre->getDroits()[array_key_first($userCentre->getDroits())] : 'Erreur';
         return match ($userCentre->typeCentre()) {
             CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => '<span class="badge bg-success me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' ('.$droit.')</span>',
             CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => '<span class="badge bg-warning me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' ('.$droit.')</span>',
