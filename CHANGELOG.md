@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.3](https://github.com/Dannebicque/oreof/compare/v1.6.2...v1.6.3) (2023-07-12)
+
+
+### Features
+
+* Choix de tous les parcours si mutualisation Semestre ou UE ([da77a0f](https://github.com/Dannebicque/oreof/commit/da77a0f52a4eb6a81030ccc8924b203490c6af3a))
+
 ### [1.6.2](https://github.com/Dannebicque/oreof/compare/v1.6.1...v1.6.2) (2023-07-12)
 
 
