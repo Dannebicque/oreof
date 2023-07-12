@@ -10,6 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\verif\FicheMatiereState;
+use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Form\FicheMatiereType;
 use App\Repository\ElementConstitutifRepository;
@@ -95,6 +96,33 @@ class FicheMatiereController extends AbstractController
             'ficheMatiere' => $ficheMatiere,
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
+            'bccs' => $bccs
+        ]);
+    }
+
+    #[Route('/{elementConstitutif}/show-parcours', name: 'app_fiche_matiere_detail_parcours', methods: ['GET'])]
+    public function showParcours(
+        ElementConstitutif $elementConstitutif
+    ): Response {
+
+        if ($elementConstitutif->isFicheFromParcours() === true) {
+            $competences = $elementConstitutif->getFicheMatiere()->getCompetences();
+        } else {
+            $competences = $elementConstitutif->getCompetences();
+        }
+
+        $bccs = [];
+        foreach ($competences as $competence) {
+            if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
+                $bccs[$competence->getBlocCompetence()?->getId()]['bcc'] = $competence->getBlocCompetence();
+                $bccs[$competence->getBlocCompetence()?->getId()]['competences'] = [];
+            }
+            $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
+        }
+
+
+        return $this->render('fiche_matiere/_showParcours.html.twig', [
+            'ficheMatiere' => $elementConstitutif->getFicheMatiere(),
             'bccs' => $bccs
         ]);
     }
