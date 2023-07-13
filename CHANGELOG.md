@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.5](https://github.com/Dannebicque/oreof/compare/v1.6.4...v1.6.5) (2023-07-13)
+
+
+### Bug Fixes
+
+* Gestion si semestre raccroché ([58e41c3](https://github.com/Dannebicque/oreof/commit/58e41c36f0d8d6608bc5b4a76448abadb3c525eb))
+* Gestion si semestre raccroché ([e2a56f6](https://github.com/Dannebicque/oreof/commit/e2a56f622845d0bbb6f0dab4e18d17f430ecb6b2))
+
 ### [1.6.4](https://github.com/Dannebicque/oreof/compare/v1.6.3...v1.6.4) (2023-07-13)
 
 
