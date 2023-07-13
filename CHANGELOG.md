@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.4](https://github.com/Dannebicque/oreof/compare/v1.6.3...v1.6.4) (2023-07-13)
+
+
+### Features
+
+* Slug sur les fiches matières ([45e80fc](https://github.com/Dannebicque/oreof/commit/45e80fca75e39af0fe5b52da2f4ce42fac7e4042))
+
+
+### Bug Fixes
+
+* Gestion si semestre raccroché ([e1e23d8](https://github.com/Dannebicque/oreof/commit/e1e23d8c91c1728db1f6c22041dbf0ac88756602))
+* liste des users avec rôle pas sur 0 (?) ([d853915](https://github.com/Dannebicque/oreof/commit/d853915f85ffc08f40e051c86eeba2a3942dba3b))
+
 ### [1.6.3](https://github.com/Dannebicque/oreof/compare/v1.6.2...v1.6.3) (2023-07-12)
 
 
