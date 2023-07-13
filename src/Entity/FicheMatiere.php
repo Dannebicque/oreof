@@ -116,7 +116,7 @@ class FicheMatiere
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: HistoriqueFicheMatiere::class)]
     private Collection $historiqueFicheMatieres;
 
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(length: 255)]
     #[Gedmo\Slug(fields: ['libelle'])]
     private ?string $slug = null;
 
