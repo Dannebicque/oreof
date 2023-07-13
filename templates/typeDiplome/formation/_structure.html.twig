@@ -6,7 +6,7 @@
 
             {% for semestreParc in parcours.semestreParcours %}
                 {% if semestreParc.semestre.semestreRaccroche != null %}
-                    {% set semestre = semestreParc.semestre.semestreRaccroche %}
+                    {% set semestre = semestreParc.semestre.semestreRaccroche.semestre %}
                 {% else %}
                     {% set semestre = semestreParc.semestre %}
                 {% endif %}
