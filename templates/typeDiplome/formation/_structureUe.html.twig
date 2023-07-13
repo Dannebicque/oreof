@@ -50,23 +50,23 @@
     <th>&nbsp;</th>
     <th class="text-end">Total</th>
 
-    <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeEcts }}</th>
+    <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeEcts }}</th>
     {% if presentiel %}
-        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeCmPres }}</th>
-        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTdPres }}</th>
-        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTpPres }}</th>
-        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTotalPres }}</th>
+        <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeCmPres }}</th>
+        <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeTdPres }}</th>
+        <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeTpPres }}</th>
+        <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeTotalPres }}</th>
     {% endif %}
 
     {% if distanciel %}
-        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeCmDist }}</th>
-        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTdDist }}</th>
-        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTpDist }}</th>
-        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTotalDist }}</th>
+        <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeCmDist }}</th>
+        <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeTdDist }}</th>
+        <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeTpDist }}</th>
+        <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeTotalDist }}</th>
     {% endif %}
 
     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-        <th>{{ dto.semestres[semestre.id].ues[ue.id].sommeUeTotalPresDist }}</th>
+        <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeTotalPresDist }}</th>
     {% endif %}
 </tr>
 {% for ueE in ue.ueEnfants %}
