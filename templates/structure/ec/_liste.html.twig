@@ -69,7 +69,7 @@
                                                 {% if ec.ficheMatiere != null %}
                                                     {% if ec.ficheMatiere.parcours.id == parcours.id %}
                                                         <a
-                                                                href="{{ path('app_fiche_matiere_edit',{'id': ec.ficheMatiere.id}) }}"
+                                                                href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
                                                                 class="btn btn-sm btn-outline-info"
                                                                 data-bs-toggle="tooltip"
                                                                 data-bs-placement="bottom"
@@ -84,7 +84,7 @@
                                                         </a>
                                                     {% else %}
                                                         <a
-                                                                href="{{ path('app_fiche_matiere_show',{'id': ec.ficheMatiere.id}) }}"
+                                                                href="{{ path('app_fiche_matiere_show',{slug: ec.ficheMatiere.slug}) }}"
                                                                 class="btn btn-sm btn-outline-info"
                                                                 data-bs-toggle="tooltip"
                                                                 data-bs-placement="bottom"
@@ -485,8 +485,8 @@
                                                         or is_granted('CAN_EC_EDIT_MY', ece)) %}
                                                         {% if ece.ficheMatiere != null and editable == true %}
                                                             <a
-                                                                    href="{{ path('app_fiche_matiere_edit',{'id': ece
-                                                                    .ficheMatiere.id}) }}"
+                                                                    href="{{ path('app_fiche_matiere_edit',{slug: ece
+                                                                    .ficheMatiere.slug}) }}"
                                                                     class="btn btn-sm btn-outline-info"
                                                                     data-bs-toggle="tooltip"
                                                                     data-bs-placement="bottom"
