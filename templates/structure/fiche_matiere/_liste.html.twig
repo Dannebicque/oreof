@@ -198,7 +198,7 @@
                     {#                        ('ROLE_PARCOURS_EDIT_MY', ficheMatiere)) and  (not workflow_can(ec, #}
                     {#                        'initialiser') ) %} #}
                     <a
-                            href="{{ path('app_fiche_matiere_show',{'id': ficheMatiere.id}) }}"
+                            href="{{ path('app_fiche_matiere_show',{slug: ficheMatiere.slug}) }}"
                             class="btn btn-sm text-info"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
@@ -217,7 +217,7 @@
                     {#                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
                     {#                        'valider_ec')) %} #}
                     <a
-                            href="{{ path('app_fiche_matiere_edit',{'id': ficheMatiere.id}) }}"
+                            href="{{ path('app_fiche_matiere_edit',{slug: ficheMatiere.slug}) }}"
                             class="btn btn-sm text-warning"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
@@ -227,7 +227,7 @@
                         <span> modifier</span>
                     </a>
                     <button {{ stimulus_action('crud', 'duplicate', 'click', {
-                        url:path('app_fiche_matiere_dupliquer',{'id': ficheMatiere.id})
+                        url:path('app_fiche_matiere_dupliquer',{slug: ficheMatiere.slug})
                     }) }} class="btn btn-sm text-primary">
                         <i class="{{ iconDuplicate }}"></i>
                         <span> dupliquer</span>
@@ -238,7 +238,7 @@
                     {#                        'valider_ec') %} #}
 
                     <button {{ stimulus_action('crud', 'delete', 'click', {
-                        url:path('app_fiche_matiere_delete',{'id': ficheMatiere.id}),
+                        url:path('app_fiche_matiere_delete',{slug: ficheMatiere.slug}),
                         csrf: csrf_token('delete' ~ ficheMatiere.id)
                     }) }} class="btn btn-sm text-danger">
                         <i class="{{ iconDelete }}"></i> Supprimer

@@ -17,6 +17,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Gedmo\Mapping\Annotation as Gedmo;
+
 
 #[ORM\Entity(repositoryClass: FicheMatiereRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -113,6 +115,10 @@ class FicheMatiere
 
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: HistoriqueFicheMatiere::class)]
     private Collection $historiqueFicheMatieres;
+
+    #[ORM\Column(length: 255, unique: true)]
+    #[Gedmo\Slug(fields: ['libelle'])]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -552,6 +558,18 @@ class FicheMatiere
                 $historiqueFicheMatiere->setFicheMatiere(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }

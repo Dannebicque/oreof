@@ -72,7 +72,7 @@ class FicheMatiereController extends AbstractController
     /**
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
-    #[Route('/{id}', name: 'app_fiche_matiere_show', methods: ['GET'])]
+    #[Route('/{slug}', name: 'app_fiche_matiere_show', methods: ['GET'])]
     public function show(
         FicheMatiere $ficheMatiere
     ): Response {
@@ -127,7 +127,7 @@ class FicheMatiereController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_fiche_matiere_edit', methods: ['GET', 'POST'])]
+    #[Route('/{slug}/edit', name: 'app_fiche_matiere_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         FicheMatiere $ficheMatiere,
@@ -171,7 +171,7 @@ class FicheMatiereController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/dupliquer', name: 'app_fiche_matiere_dupliquer', methods: ['GET'])]
+    #[Route('/{slug}/dupliquer', name: 'app_fiche_matiere_dupliquer', methods: ['GET'])]
     public function dupliquer(
         FicheMatiere $ficheMatiere,
         ElementConstitutifRepository $elementConstitutifRepository,
@@ -236,7 +236,7 @@ class FicheMatiereController extends AbstractController
 //        ]);
 //    }
 
-    #[Route('/{id}', name: 'app_fiche_matiere_delete', methods: ['DELETE'])]
+    #[Route('/{slug}', name: 'app_fiche_matiere_delete', methods: ['DELETE'])]
     public function delete(
         Request $request,
         FicheMatiere $ficheMatiere,
