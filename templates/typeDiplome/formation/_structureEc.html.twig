@@ -4,7 +4,7 @@
     <td>
         <strong>{{ ec.code }}</strong>
         {% if ec.ficheMatiere != null %}
-            <a href="{{ path('app_fiche_matiere_show', {'id': ec.ficheMatiere.id}) }} }}">
+            <a href="{{ path('app_fiche_matiere_show', {slug: ec.ficheMatiere.slug}) }} }}">
                 {{ ec.ficheMatiere.display }}
             </a>
         {% else %}
