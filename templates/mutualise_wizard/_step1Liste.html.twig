@@ -79,7 +79,7 @@
             {% endif %}
             <td>
                 <a
-                        href="{{ path('app_fiche_matiere_show',{'id': fiche.ficheMatiere.id}) }}"
+                        href="{{ path('app_fiche_matiere_show',{slug: fiche.ficheMatiere.slug}) }}"
                         class="btn btn-sm text-info"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
