@@ -70,10 +70,12 @@ class MyPDF
         array $data,
         string $name,
         string $dir
-    ): void {
+    ): string {
         $output = self::genereOutputPdf($template, $data, $name);
 
         file_put_contents($dir.Tools::slug($name).'.pdf', $output);
+
+        return Tools::slug($name).'.pdf';
     }
 
     /**

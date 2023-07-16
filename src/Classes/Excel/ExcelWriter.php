@@ -243,6 +243,13 @@ class ExcelWriter
         );
     }
 
+    public function saveFichier(string $name, string $dir): void
+    {
+        $this->pageSetup($name);
+        $writer = new Xlsx($this->spreadsheet);
+        $writer->save($dir . $name . '.xlsx');//todo: vérifier si / à la fin de dir
+    }
+
     public function pageSetup(string $name): void
     {
         $this->spreadsheet->getProperties()->setTitle($name);

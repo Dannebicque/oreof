@@ -16,7 +16,8 @@
     <div
             {{ stimulus_controller('export',
                 {
-                    url: path('app_export_liste')
+                    url: path('app_export_liste'),
+                    urlValide: path('app_export_valide')
                 }) }}
     >
         <div class="card mt-2">
@@ -49,15 +50,28 @@
                         </div>
                         <div>
                             <label for="type_document">Type d'export</label>
-                            <select name="type_document" id="type_document" class="form-select"
-                                    {{ stimulus_action('export', 'changeListe') }}
-                            >
-
+                            <select name="type_document" id="type_document" class="form-select">
+                                <option value="">Choisir le format</option>
+                                <option value="xslx-mccc">Fichiers MCCC format Excel (xslx)</option>
+                                <option value="pdf-conseil">Fichiers PDF pour le conseil (pdf)</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-6">
-
+                        <div>
+                            <label for="date">Préciser, si besoin, la date du conseil ou de la commission</label>
+                            <input type="date" name="date" id="date" class="form-control">
+                        </div>
+                        <div class="mt-2">
+                            <button class="btn btn-outline-success" type="button"
+                                    {{ stimulus_action('export', 'valideExport') }}
+                            >Générer les documents</button>
+                        </div>
+                        {{ component('alerte', {
+                            type: 'info',
+                            message: 'Les documents seront générés et un lien de téléchargement sera envoyé par email',
+                            id: 'alerte-success'
+                        }) }}
                     </div>
                 </div>
             </div>

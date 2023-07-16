@@ -15,8 +15,10 @@ use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\TypeDiplome\Export\LicenceMccc;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\InputBag;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 {
@@ -37,10 +39,22 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
     public function exportExcelMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
+        DateTimeInterface  $dateEdition,
         bool               $versionFull = true
-    )
+    ): StreamedResponse
     {
-        return $this->licenceMccc->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $versionFull);
+        return $this->licenceMccc->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+    }
+
+    public function exportAndSaveExcelMccc(
+        string $dir,
+        AnneeUniversitaire $anneeUniversitaire,
+        Parcours           $parcours,
+        DateTimeInterface  $dateEdition,
+        bool               $versionFull = true
+    ): string
+    {
+        return $this->licenceMccc->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $dateEdition, $versionFull);
     }
 
     public function saveMcccs(ElementConstitutif $elementConstitutif, InputBag $request): void

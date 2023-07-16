@@ -13,17 +13,22 @@ use App\Classes\Excel\ExcelWriter;
 use App\DTO\TotalVolumeHeure;
 use App\Entity\AnneeUniversitaire;
 use App\Entity\ElementConstitutif;
-use App\Entity\Mccc;
+use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\TypeEpreuveRepository;
-use App\TypeDiplome\Source\LicenceTypeDiplome;
+use DateTimeInterface;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Style;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LicenceMccc
 {
+    //todo: ajouter un watermark sur le doc ou une mention que la mention est définitive ou pas.
+    //todo: gérer la date de vote
+
     // Pages
     const PAGE_MODELE = 'modele';
     const PAGE_REF_COMPETENCES = 'ref. compétences';
@@ -79,6 +84,7 @@ class LicenceMccc
 
     protected array $typeEpreuves = [];
     private bool $versionFull = true;
+    private string $fileName;
 
     public function __construct(
         protected ExcelWriter $excelWriter,
@@ -92,11 +98,13 @@ class LicenceMccc
     }
 
 
-    public function exportExcelLicenceMccc(
+    public function genereExcelLicenceMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
+        DateTimeInterface  $dateEdition,
         bool               $versionFull = true
-    ) {
+    ): void {
+        //todo: gérer la date de publication et un "marquage" sur le document si pré-CFVU
         $this->versionFull = $versionFull;
         $formation = $parcours->getFormation();
 
@@ -171,7 +179,7 @@ class LicenceMccc
                 $totalAnnee = new TotalVolumeHeure();
                 $this->excelWriter->setSheet($clonedWorksheet);
                 $this->excelWriter->writeCellName(self::CEL_ANNEE_ETUDE, $i . ' année');
-                foreach ($tabSemestresAnnee[$i] as $key => $semestre) {
+                foreach ($tabSemestresAnnee[$i] as $semestre) {
                     $debutSemestre = $ligne;
                     foreach ($semestre->getSemestre()->getUes() as $ue) {
                         //UE
@@ -251,7 +259,29 @@ class LicenceMccc
 
         $this->excelWriter->setSpreadsheet($spreadsheet, true);
         //MCCC -2023-2024 -  M Psychologie sociale, du travail et des organisations
-        return $this->excelWriter->genereFichier(substr('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle(), 0, 30));
+        $this->fileName = substr('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle(), 0, 30);
+    }
+
+    public function exportExcelLicenceMccc(
+        AnneeUniversitaire $anneeUniversitaire,
+        Parcours           $parcours,
+        DateTimeInterface  $dateEdition,
+        bool               $versionFull = true
+    ): StreamedResponse {
+        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        return $this->excelWriter->genereFichier($this->fileName);
+    }
+
+    public function exportAndSaveExcelLicenceMccc(
+        AnneeUniversitaire $anneeUniversitaire,
+        Parcours           $parcours,
+        string             $dir,
+        DateTimeInterface  $dateEdition,
+        bool               $versionFull = true
+    ): string {
+        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        $this->excelWriter->saveFichier($this->fileName, $dir);
+        return $this->fileName . '.xlsx';
     }
 
     public function getMcccs(ElementConstitutif $elementConstitutif): array
@@ -278,21 +308,21 @@ class LicenceMccc
         return $tabMcccs;
     }
 
-    private function displayTypeEpreuve($typeE): string
+    private function displayTypeEpreuve(array $typeE): string
     {
         $texte = '';
         foreach ($typeE as $type) {
             if ($this->typeEpreuves[$type] !== null) {
                 $texte .= $this->typeEpreuves[$type]->getSigle() . '; ';
             } else {
-                $texte .=  'erreur épreuve; ';
+                $texte .= 'erreur épreuve; ';
             }
         }
 
         return substr($texte, 0, -2);
     }
 
-    private function genereReferentielCompetences($spreadsheet, $parcours, $formation): void
+    private function genereReferentielCompetences(Spreadsheet $spreadsheet, Parcours $parcours, Formation $formation): void
     {
         $modele = $spreadsheet->getSheetByName(self::PAGE_REF_COMPETENCES);
         if ($modele === null) {
@@ -323,13 +353,6 @@ class LicenceMccc
         }
     }
 
-    /**
-     * @param int $ligne
-     * @param int $num
-     * @param mixed $ec
-     * @param TotalVolumeHeure $totalAnnee
-     * @return int
-     */
     private function afficheEc(int $ligne, ElementConstitutif $ec, TotalVolumeHeure $totalAnnee): int
     {
         $this->excelWriter->insertNewRowBefore($ligne);
@@ -390,7 +413,7 @@ class LicenceMccc
             case 'cci':
                 $texte = '';
                 foreach ($mcccs as $mccc) {
-                    $texte .= $this->displayTypeEpreuve($mccc->getTypeEpreuve()) . '(' . $mccc->getPourcentage() . '%; ';
+                    $texte .= $this->displayTypeEpreuve($mccc->getTypeEpreuve()) . '(' . $mccc->getPourcentage() . '%); ';
                 }
                 $texte = substr($texte, 0, -2);
                 $this->excelWriter->writeCellXY(self::COL_MCCC_CCI_EPREUVES, $ligne, $texte);
@@ -398,7 +421,7 @@ class LicenceMccc
                 break;
             case 'cc_ct':
                 if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1]) && $mcccs[1]['cc'] !== null) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, $mcccs[1]['cc']->getPourcentage());
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, $mcccs[1]['cc']->getPourcentage() . '%');
                     $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, $mcccs[1]['cc']->getNbEpreuves());
                 } else {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, 'Erreur');
@@ -406,7 +429,7 @@ class LicenceMccc
                 }
 
                 if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getPourcentage()) . '%');
                     $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
                 } else {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, 'Erreur');

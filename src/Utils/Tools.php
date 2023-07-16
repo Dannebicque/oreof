@@ -9,6 +9,7 @@
 
 namespace App\Utils;
 
+use DateTimeInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 abstract class Tools
@@ -53,5 +54,14 @@ abstract class Tools
         $value = str_replace([',', '.'], '.', $value);
 
         return (float) $value;
+    }
+
+    public static function convertDate(string|null $date): DateTimeInterface
+    {
+        if (null === $date) {
+            return new \DateTime();
+        }
+
+        return new \DateTime($date);
     }
 }

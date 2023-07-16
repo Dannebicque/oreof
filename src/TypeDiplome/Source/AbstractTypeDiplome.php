@@ -14,8 +14,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 abstract class AbstractTypeDiplome
 {
-    private ?TypeDiplomeInterface $typeDiplome;
-
     public function __construct(
         protected EntityManagerInterface $entityManager,
         protected TypeDiplomeRegistry $typeDiplomeRegistry

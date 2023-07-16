@@ -13,6 +13,7 @@ use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
 use App\Utils\Tools;
 use DateTimeInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -22,9 +23,13 @@ use Twig\TwigFunction;
  */
 class AppExtension extends AbstractExtension
 {
+    public function __construct(private RouterInterface $router) {
+
+    }
     public function getFilters(): array
     {
         return [
+            new TwigFilter('url', [$this, 'url']),
             new TwigFilter('tel_format', [$this, 'telFormat']),
             new TwigFilter('mailto', [$this, 'mailto'], ['is_safe' => ['html']]),
             new TwigFilter('dateFr', [$this, 'dateFr'], ['is_safe' => ['html']]),
@@ -52,6 +57,13 @@ class AppExtension extends AbstractExtension
         }
 
         return '<i class="fal fa-sort fa-lg"></i>';
+    }
+
+    public function url(string $url): string
+    {
+        $baseurl = $this->router->getContext()->getScheme() . '://' . $this->router->getContext()->getHost() . $this->router->getContext()->getBaseUrl();
+
+        return $baseurl . $url;
     }
 
     public function getDirection(string $field, ?string $sort, ?string $direction): ?string
