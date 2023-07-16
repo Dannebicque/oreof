@@ -28,10 +28,21 @@ class MentionController extends AbstractController
     }
 
     #[Route('/liste', name: 'app_mention_liste', methods: ['GET'])]
-    public function liste(MentionRepository $mentionRepository): Response
+    public function liste(
+        Request $request,
+        MentionRepository $mentionRepository): Response
     {
+        $sort = $request->query->get('sort') ?? 'type_diplome';
+        $direction = $request->query->get('direction') ?? 'asc';
+        $q = $request->query->get('q') ?? '';
+
+        $mentions = $mentionRepository->findBySearch($q, $sort, $direction);
+
+
         return $this->render('config/mention/_liste.html.twig', [
-            'mentions' => $mentionRepository->findBy([], ['typeDiplome' => 'ASC', 'libelle' => 'ASC']),
+            'mentions' => $mentions,
+            'sort' => $sort,
+            'direction' => $direction,
         ]);
     }
 

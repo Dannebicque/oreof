@@ -77,4 +77,29 @@ class MentionRepository extends ServiceEntityRepository
 
         return $result;
     }
+
+    public function findBySearch(string|null $q, string|null $sort, string|null $direction): array
+    {
+        $query = $this->createQueryBuilder('m');
+
+        if ($q !== null && $q !== '') {
+            $query->andWhere('m.libelle LIKE :q')
+                ->orWhere('m.sigle LIKE :q')
+                ->setParameter('q', '%' . $q . '%');
+        }
+
+        if ($sort !== null && $sort !== '') {
+            if ($sort === 'type_diplome') {
+                $query->leftJoin('m.typeDiplome', 't')
+                    ->orderBy('t.libelle', $direction);
+            } elseif ($sort === 'domaine') {
+                $query->leftJoin('m.domaine', 'd')
+                    ->orderBy('d.libelle', $direction);
+            } else {
+                $query->orderBy('m.' . $sort, $direction);
+            }
+        }
+
+        return $query->getQuery()->getResult();
+    }
 }

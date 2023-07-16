@@ -7,7 +7,11 @@
             }) }}
          data-action="base:refreshListe@window->crud#refreshListe"
     >
-        <div class="card-body" {{ stimulus_target('crud', 'liste') }}>
+        <div class="card-body">
+            {{ include('communs/_recherche.html.twig') }}
+            <div {{ stimulus_target('crud', 'liste') }}>
+
+            </div>
         </div>
     </div>
 {% endblock %}

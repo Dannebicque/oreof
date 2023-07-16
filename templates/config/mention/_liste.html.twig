@@ -1,9 +1,39 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Libellé</th>
-        <th>Sigle</th>
-        <th>Type de diplôme</th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'libelle',
+                        'direction': getDirection('libelle', sort, direction)
+                    }) }}
+            >
+                Libellé
+                {{ displaySort('libelle', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'sigle',
+                        'direction': getDirection('sigle', sort, direction)
+                    }) }}
+            >
+                Sigle
+                {{ displaySort('sigle', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'type_diplome',
+                        'direction': getDirection('type_diplome', sort, direction)
+                    }) }}
+            >
+                Type de diplôme
+                {{ displaySort('type_diplome', sort, direction) }}
+            </a>
+        </th>
         <th>Utilisé ?</th>
         <th></th>
     </tr>
