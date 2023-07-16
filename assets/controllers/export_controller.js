@@ -11,12 +11,36 @@ import { Controller } from '@hotwired/stimulus'
 export default class extends Controller {
   static values = {
     url: String,
+    urlValide: String,
   }
 
   static targets = ['liste']
 
   connect() {
-    console.log('connect')
+  }
+
+  valideExport(event) {
+    // récupère les données du formulaire + les données de la liste
+    const liste = document.querySelectorAll('.check-all:checked')
+    const data = new FormData()
+
+    console.log(liste)
+    // ajoute les données de la liste au formulaire
+    liste.forEach((element) => {
+      data.append('liste[]', element.value)
+    })
+
+    // ajoute les données du formulaire au formulaire
+    data.append('annee_universitaire', document.getElementById('annee_universitaire').value)
+    data.append('composante', document.getElementById('composante').value)
+    data.append('type_document', document.getElementById('type_document').value)
+    data.append('date', document.getElementById('date').value)
+
+    // envoie le formulaire
+    fetch(this.urlValideValue, {
+      method: 'POST',
+      body: data,
+    })
   }
 
   async changeListe() {
