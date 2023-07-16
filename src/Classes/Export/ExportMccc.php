@@ -20,40 +20,45 @@ use ZipArchive;
 class ExportMccc
 {
     public function __construct(
+        private string $dir,
         private TypeDiplomeRegistry $typeDiplomeRegistry,
-        private array $formations,
-        private AnneeUniversitaire $annee,
-        private DateTimeInterface $date
-    )
-    {
+        private array               $formations,
+        private AnneeUniversitaire  $annee,
+        private DateTimeInterface   $date
+    ) {
     }
 
     public function exportZip(): string
     {
         $zip = new \ZipArchive();
         $fileName = 'export_mccc_' . date('YmdHis') . '.zip';
-        $zipName = 'temp/zip/'.$fileName;
+        $zipName = $this->dir.'/zip/' . $fileName;
         $zip->open($zipName, \ZipArchive::CREATE);
 
 
         $tabFiles = [];
-        $dir = 'temp/mccc/';
+        $dir = $this->dir.'/mccc/';
 
         foreach ($this->formations as $formation) {
-            $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
-            foreach ($formation->getParcours() as $parcours) {
-                $fichier = $typeDiplome->exportAndSaveExcelMccc(
-                    $dir,
-                    $this->annee,
-                    $parcours,
-                    $this->date
-                );
+            if ($formation->getTypeDiplome()?->getModeleMcc() !== null) {
 
-                $tabFiles[] = $fichier;
-                $zip->addFile(
-                    $dir.$fichier,
-                    $formation->getDisplay().'/'.$fichier
-                );
+                $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
+                if (null !== $typeDiplome) {
+                    foreach ($formation->getParcours() as $parcours) {
+                        $fichier = $typeDiplome->exportAndSaveExcelMccc(
+                            $dir,
+                            $this->annee,
+                            $parcours,
+                            $this->date
+                        );
+
+                        $tabFiles[] = $fichier;
+                        $zip->addFile(
+                            $dir . $fichier,
+                            $formation->getDisplay() . '/' . $fichier
+                        );
+                    }
+                }
             }
         }
 
@@ -61,8 +66,8 @@ class ExportMccc
 
         // suppression des PDF
         foreach ($tabFiles as $file) {
-            if (file_exists($dir.$file)) {
-                unlink($dir.$file);
+            if (file_exists($dir . $file)) {
+                unlink($dir . $file);
             }
         }
 

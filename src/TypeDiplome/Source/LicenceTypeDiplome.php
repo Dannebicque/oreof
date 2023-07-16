@@ -54,6 +54,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         bool               $versionFull = true
     ): string
     {
+
         return $this->licenceMccc->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $dateEdition, $versionFull);
     }
 

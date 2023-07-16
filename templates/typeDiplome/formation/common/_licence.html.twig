@@ -86,7 +86,7 @@
         </section>
 
     {% else %}
-        {% for parcours in formation.parcours %}
+        {% for parcours in formation.parcours|filter(parcours => tParcours[parcours.id] is defined) %}
             {% set dto = tParcours[parcours.id] %}
             <div>
                 <h2 class="small-title">Parcours {{ parcours.libelle }}</h2>

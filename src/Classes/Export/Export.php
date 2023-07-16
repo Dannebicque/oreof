@@ -13,6 +13,7 @@ use App\Classes\MyPDF;
 use App\Entity\AnneeUniversitaire;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use DateTimeInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class Export
@@ -22,12 +23,15 @@ class Export
     private array $formations;
     private AnneeUniversitaire $annee;
     private DateTimeInterface $date;
+    private string $dir;
 
     public function __construct(
+        KernelInterface $kernel,
         private TypeDiplomeRegistry $typeDiplomeRegistry,
         private MyPDF $myPDF
     )
     {
+        $this->dir = $kernel->getProjectDir().'/public/temp';
     }
 
     public  function setDate(DateTimeInterface $date):void
@@ -62,6 +66,7 @@ class Export
     private function exportConseil() : string
     {
         $this->export = new ExportConseil(
+            $this->dir,
             $this->myPDF,
             $this->formations,
             $this->annee,
@@ -72,6 +77,7 @@ class Export
     private function exportMccc() : string
     {
         $this->export = new ExportMccc(
+            $this->dir,
             $this->typeDiplomeRegistry,
             $this->formations,
             $this->annee,

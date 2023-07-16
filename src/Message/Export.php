@@ -16,10 +16,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class Export
 {
     public function __construct(
-        private readonly UserInterface $user,
+        private readonly int $userId,
         private readonly string $typeDocument,
         private readonly array $formations,
-        private readonly AnneeUniversitaire $annee,
+        private readonly int $anneeUniversitaireId,
         private readonly DateTimeInterface $date)
     {
     }
@@ -28,9 +28,9 @@ class Export
         return $this->date;
     }
 
-    public  function getUser(): UserInterface
+    public  function getUser(): int
     {
-        return $this->user;
+        return $this->userId;
     }
     public  function getTypeDocument(): string
     {
@@ -40,8 +40,8 @@ class Export
     {
         return $this->formations;
     }
-    public  function getAnnee(): AnneeUniversitaire
+    public  function getAnnee(): int
     {
-        return $this->annee;
+        return $this->anneeUniversitaireId;
     }
 }

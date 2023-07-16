@@ -10,6 +10,7 @@
         "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-zip": "*",
         "apereo/phpcas": "^1.6",
         "doctrine/doctrine-bundle": "^2.8",
         "doctrine/doctrine-migrations-bundle": "^3.2",
@@ -20,6 +21,7 @@
         "phpoffice/phpspreadsheet": "^1.28",
         "stof/doctrine-extensions-bundle": "*",
         "symfony/console": "6.3.*",
+        "symfony/doctrine-messenger": "6.3.*",
         "symfony/dotenv": "6.3.*",
         "symfony/expression-language": "6.3.*",
         "symfony/flex": "^2",
@@ -41,8 +43,7 @@
         "symfony/workflow": "6.3.*",
         "symfony/yaml": "6.3.*",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0",
-      "ext-zip": "*"
+        "twig/twig": "^2.12|^3.0"
     },
     "config": {
         "allow-plugins": {

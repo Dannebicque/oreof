@@ -85,10 +85,10 @@ class ExportController extends BaseController
         }
 
         $messageBus->dispatch(new Export(
-            $this->getUser(),
+            $this->getUser()->getId(),
             $request->request->get('type_document'),
             $formations,
-            $annee,
+            $annee->getId(),
             Tools::convertDate($request->request->get('date', null))
         ) );
 

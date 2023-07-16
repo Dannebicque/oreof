@@ -36,9 +36,9 @@ class TypeDiplomeRegistry
     /**
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
-    public function getTypeDiplome(string $name): mixed
+    public function getTypeDiplome(?string $name): mixed
     {
-        if (!array_key_exists($name, $this->typesDiplomes)) {
+        if ($name === null || !array_key_exists($name, $this->typesDiplomes)) {
             throw new TypeDiplomeNotFoundException();
         }
 

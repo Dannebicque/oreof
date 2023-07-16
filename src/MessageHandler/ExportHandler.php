@@ -10,6 +10,8 @@
 namespace App\MessageHandler;
 
 use App\Classes\Export\Export;
+use App\Repository\AnneeUniversitaireRepository;
+use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -18,6 +20,8 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 class ExportHandler
 {
     public function __construct(
+        private UserRepository $userRepository,
+        private AnneeUniversitaireRepository $anneeUniversitaireRepository,
         private readonly MailerInterface $mailer,
         private Export $export)
     {
@@ -27,12 +31,16 @@ class ExportHandler
     {
         $this->export->setTypeDocument($exportMessage->getTypeDocument());
         $this->export->setDate($exportMessage->getDate());
-        $lien = $this->export->exportFormations($exportMessage->getFormations(), $exportMessage->getAnnee());
 
-        if (null !== $exportMessage->getUser()) {
+        $user = $this->userRepository->find($exportMessage->getUser());
+        $annee = $this->anneeUniversitaireRepository->find($exportMessage->getAnnee());
+
+        $lien = $this->export->exportFormations($exportMessage->getFormations(), $annee);
+
+        if (null !== $user && $lien !== null) {
             $mail = (new TemplatedEmail())
                 ->from('oreof@univ-reims.fr')
-                ->to($exportMessage->getUser()->getEmail())
+                ->to($user->getEmail())
                 ->subject('Documents prêts')
 
                 // path of the Twig template to render
@@ -40,7 +48,7 @@ class ExportHandler
 
                 // pass variables (name => value) to the template
                 ->context([
-                    'user' => $exportMessage->getUser(),
+                    'user' => $user,
                     'lien' => $lien,
                 ]);
 

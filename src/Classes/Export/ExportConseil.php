@@ -18,6 +18,7 @@ use DateTimeInterface;
 class ExportConseil
 {
     public function __construct(
+        private string $dir,
         private MyPDF              $myPDF,
         private array              $formations,
         private AnneeUniversitaire $annee,
@@ -29,11 +30,11 @@ class ExportConseil
     {
         $zip = new \ZipArchive();
         $fileName = 'export_conseil_' . date('YmdHis') . '.zip';
-        $zipName = 'temp/zip/' . $fileName;
+        $zipName = $this->dir. '/zip/' . $fileName;
         $zip->open($zipName, \ZipArchive::CREATE);
 
         $tabFiles = [];
-        $dir = 'temp/pdf/';
+        $dir = $this->dir.'/pdf/';
 
         foreach ($this->formations as $formation) {
             $tParcours = [];
