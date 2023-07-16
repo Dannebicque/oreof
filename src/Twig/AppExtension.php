@@ -13,6 +13,7 @@ use App\Entity\UserCentre;
 use App\Enums\CentreGestionEnum;
 use App\Utils\Tools;
 use DateTimeInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -23,7 +24,7 @@ use Twig\TwigFunction;
  */
 class AppExtension extends AbstractExtension
 {
-    public function __construct(private RouterInterface $router) {
+    public function __construct(private readonly ParameterBagInterface $parameterBag) {
 
     }
     public function getFilters(): array
@@ -61,8 +62,7 @@ class AppExtension extends AbstractExtension
 
     public function url(string $url): string
     {
-        $baseurl = $this->router->getContext()->getScheme() . '://' . $this->router->getContext()->getHost() . $this->router->getContext()->getBaseUrl();
-
+        $baseurl = $this->parameterBag->get('BASE_URL');
         return $baseurl . $url;
     }
 

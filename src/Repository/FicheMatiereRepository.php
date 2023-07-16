@@ -179,4 +179,16 @@ class FicheMatiereRepository extends ServiceEntityRepository
         return $query->getQuery()
             ->getResult();
     }
+
+    public function findByHd(AnneeUniversitaire $getAnneeUniversitaire, array $options): array
+    {
+        $query = $this->createQueryBuilder('f')
+            ->where('f.parcours IS NULL')
+            ->orderBy('f.libelle', 'ASC');
+
+      //  $this->addFiltres($query, $options);
+
+        return $query->getQuery()
+            ->getResult();
+    }
 }

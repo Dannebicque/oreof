@@ -3,7 +3,7 @@
 {% block content %}
     <div class="card"
             {{ stimulus_controller('crud', {
-                url: path('structure_fiche_matiere_liste'),
+                url: type == 'hd' ? path('structure_fiche_matiere_liste_hd') : path('structure_fiche_matiere_liste'),
             }) }}
          data-action="base:refreshListe@window->crud#refreshListe base:modalClose@window->crud#refreshListe"
     >
@@ -17,7 +17,11 @@
 {% endblock %}
 
 {% block header %}
-    Détail des fiches EC/matières
+    {% if type == 'hd' %}
+        Détail des fiches EC/matières "hors diplôme"
+    {% else %}
+        Détail des fiches EC/matières
+    {% endif %}
 {% endblock %}
 
 {% block breadcrumb %}
@@ -26,19 +30,21 @@
 {% endblock %}
 
 {% block bouton_header %}
-    <button
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'Ajouter une fiche EC/matière',
-                modalUrl: path('app_fiche_matiere_new') }) }}
-            data-action="click->modal#openModal"
-            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-            data-size="lg"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Ajouter une fiche EC/matière"
-    >
-        <i class="{{ iconAdd }}"></i>
-        <span> Ajouter une fiche EC/matière</span>
-    </button>
+    {% if type == 'hd' %}
+        <button
+                {{ stimulus_controller('modal', {
+                    size: 'lg',
+                    modalTitle: 'Ajouter une fiche EC/matière',
+                    modalUrl: path('app_fiche_matiere_new') }) }}
+                data-action="click->modal#openModal"
+                class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                data-size="lg"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Ajouter une fiche EC/matière"
+        >
+            <i class="{{ iconAdd }}"></i>
+            <span> Ajouter une fiche EC/matière</span>
+        </button>
+    {% endif %}
 {% endblock %}

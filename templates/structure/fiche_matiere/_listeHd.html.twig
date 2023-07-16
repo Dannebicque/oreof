@@ -1,0 +1,180 @@
+<div>
+    <p><strong>{{ ficheMatieres|length }}</strong> fiches matières</p>
+    {% set sort = params.sort is defined ? params.sort : 'mention'  %}
+    {% set direction = params.direction is defined ? params.direction : 'asc' %}
+
+    <table class="table table-striped {% if mode == 'detail' %}table-bordered table-condensed{% endif %} table-hover ">
+        <thead>
+        <tr>
+            <th>
+                <a href="#"
+                        {{ stimulus_action('crud', 'sort', 'click', {
+                            'sort': 'libelle',
+                            'direction': getDirection('libelle', sort, direction)
+                        }) }}
+                >
+                    Libellé
+                    {{ displaySort('libelle', sort, direction) }}
+                </a>
+            </th>
+            <th>
+                <a href="#"
+                        {{ stimulus_action('crud', 'sort', 'click', {
+                            'sort': 'responsableFicheMatiere',
+                            'direction': getDirection('responsableFicheMatiere', sort, direction)
+                        }) }}
+                >
+                    Référent
+                    {{ displaySort('responsableFicheMatiere', sort, direction) }}
+                </a>
+
+            </th>
+            <th>Utilisé?</th>
+            <th>Remplissage</th>
+            {#            <th>Etat</th> #}
+            <th></th>
+
+        </tr>
+{#        <tr>#}
+{#            <th>#}
+{#                <label for="filter-libelle" class="sr-only">libelle</label>#}
+{#                <input#}
+{#                        {{ stimulus_action('crud', 'filter', 'change', {#}
+{#                            'field': 'libelle'#}
+{#                        }) }}#}
+{#                        value="{% if params['libelle'] is defined %}{{ params['libelle'] }}{% endif %}"#}
+{#                        id="filter-libelle" class="form-control"#}
+{#                >#}
+{#            </th>#}
+{#            <th>#}
+{#                <label for="filter-referent" class="sr-only">referent</label>#}
+{#                <select#}
+{#                        {{ stimulus_action('crud', 'filter', 'change', {#}
+{#                            'field': 'referent'#}
+{#                        }) }}#}
+{#                        {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}#}
+{#                        id="filter-referent" class="form-select">#}
+{#                    <option value="">Tous les référents</option>#}
+{#                    <option value="vide" {% if params['referent'] is defined and params['referent']  == 'vide' %}selected{% endif %}>Non défini</option>#}
+{#                    {% for user in users %}#}
+{#                        <option value="{{ user.id }}"#}
+{#                                {% if params['referent'] is defined and params['referent']  == user.id %}selected{% endif %}#}
+{#                        >{{ user.display }}</option>#}
+{#                    {% endfor %}#}
+{#                </select>#}
+{#            </th>#}
+{#            <th>#}
+{#                <label for="filter-utilise" class="sr-only">utilisé?</label>#}
+{#                <select#}
+{#                        {{ stimulus_action('crud', 'filter', 'change', {#}
+{#                            'field': 'utilise'#}
+{#                        }) }}#}
+{#                        id="filter-utilise" class="form-select">#}
+{#                    <option value="">Tous</option>#}
+{#                    <option value="1">Oui</option>#}
+{#                    <option value="0">Non</option>#}
+{#                </select>#}
+{#            </th>#}
+{#            <th>#}
+{#                <label for="filter-remplissage" class="sr-only">remplissage</label>#}
+{#                <select#}
+{#                        {{ stimulus_action('crud', 'filter', 'change', {#}
+{#                            'field': 'remplissage'#}
+{#                        }) }}#}
+{#                        id="filter-remplissage" class="form-select">#}
+{#                </select>#}
+{#            </th>#}
+{#            <th>#}
+{#                <button class="btn btn-outline-danger"#}
+{#                        {{ stimulus_action('crud', 'effaceFiltre', 'click', {#}
+{#                        }) }}#}
+{#                >#}
+{#                    Effacer les filtres#}
+{#                </button>#}
+{#            </th>#}
+{#        </tr>#}
+        </thead>
+        <tbody>
+        {% for ficheMatiere in ficheMatieres %}
+            <tr>
+                <td>{{ ficheMatiere.libelle }} {% if ficheMatiere.sigle != null %}({{ ficheMatiere.sigle }}){% endif %}</td>
+                <td>
+                    {% if ficheMatiere.responsableFicheMatiere != null %}
+                        {{ ficheMatiere.responsableFicheMatiere.display }}
+                    {% else %}
+                        <span class="badge bg-warning">Non défini</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if ficheMatiere.elementConstitutifs|length > 0 %}
+                        <span class="badge bg-success">Oui</span>
+                    {% else %}
+                        <span class="badge bg-danger">Non</span>
+                    {% endif %}
+                </td>
+                <td>{{ ficheMatiere.remplissage|remplissage }}</td>
+                {#            <td>{{ ficheMatiere.etatFicheMatiere|badgeEc }}</td> #}
+
+                <td class="text-end">
+                    {#                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', ficheMatiere.parcours.formation) or is_granted #}
+                    {#                        ('ROLE_PARCOURS_EDIT_MY', ficheMatiere)) and  (not workflow_can(ec, #}
+                    {#                        'initialiser') ) %} #}
+                    <a
+                            href="{{ path('app_fiche_matiere_show',{slug: ficheMatiere.slug}) }}"
+                            class="btn btn-sm text-info"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Voir une fiche EC/matière"
+                            target="_blank"
+                    >
+                        <i class="{{ iconShow }}"></i>
+                        <span> voir</span>
+                    </a>
+                    {#                    {% endif %} #}
+
+
+                    {#                    {% if ((is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and  (workflow_can(ec, #}
+                    {#                        'valider_ec') or workflow_can(ec, #}
+                    {#                        'initialiser'))) or (is_granted #}
+                    {#                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
+                    {#                        'valider_ec')) %} #}
+                    <a
+                            href="{{ path('app_fiche_matiere_edit',{slug: ficheMatiere.slug}) }}"
+                            class="btn btn-sm text-warning"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Modifier une fiche EC/matière"
+                    >
+                        <i class="{{ iconEdit }}"></i>
+                        <span> modifier</span>
+                    </a>
+                    <button {{ stimulus_action('crud', 'duplicate', 'click', {
+                        url:path('app_fiche_matiere_dupliquer',{slug: ficheMatiere.slug})
+                    }) }} class="btn btn-sm text-primary">
+                        <i class="{{ iconDuplicate }}"></i>
+                        <span> dupliquer</span>
+                    </button>
+
+                    {#                {% endif %} #}
+                    {#                    {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and workflow_can(ec, #}
+                    {#                        'valider_ec') %} #}
+
+                    <button {{ stimulus_action('crud', 'delete', 'click', {
+                        url:path('app_fiche_matiere_delete',{slug: ficheMatiere.slug}),
+                        csrf: csrf_token('delete' ~ ficheMatiere.id)
+                    }) }} class="btn btn-sm text-danger">
+                        <i class="{{ iconDelete }}"></i> Supprimer
+                    </button>
+                    {#                    {% endif %} #}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="{% if mode == 'liste' %}10{% else %}8{% endif %}" class="bg-warning">
+                    Aucune fiche EC/matière
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

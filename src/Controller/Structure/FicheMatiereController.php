@@ -25,9 +25,15 @@ class FicheMatiereController extends BaseController
     #[
         Route('/', name: 'index')
     ]
-    public function index(): Response
-    {
-        return $this->render('structure/fiche_matiere/index.html.twig');
+    public function index(
+        Request $request
+    ): Response {
+        return $this->render(
+            'structure/fiche_matiere/index.html.twig',
+            [
+                'type' => $request->query->get('type', 'parcours'),
+            ]
+        );
     }
 
     #[Route('/liste', name: 'liste')]
@@ -35,9 +41,6 @@ class FicheMatiereController extends BaseController
         Request                $request,
         FicheMatiereRepository $ficheMatiereRepository
     ): Response {
-        $sort = $request->query->get('sort') ?? 'libelle';
-        $direction = $request->query->get('direction') ?? 'asc';
-        $q = $request->query->get('q') ?? null;
         $ficheMatieres = [];
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
             $ficheMatieres[] = $ficheMatiereRepository->findByAdmin(
@@ -106,6 +109,24 @@ class FicheMatiereController extends BaseController
         ]);
     }
 
+    #[Route('/liste/hors-diplome', name: 'liste_hd')]
+    public function listeHorsDiplome(
+        Request                $request,
+        FicheMatiereRepository $ficheMatiereRepository
+    ): Response {
+        $ficheMatieres = $ficheMatiereRepository->findByHd(
+            $this->getAnneeUniversitaire(),
+            $request->query->all()
+        );
+
+        return $this->render('structure/fiche_matiere/_listeHd.html.twig', [
+            'ficheMatieres' => $ficheMatieres,
+            'deplacer' => false,
+            'mode' => 'liste',
+            'params' => $request->query->all()
+        ]);
+    }
+
     #[
         Route('/detail/ue/{ue}/{parcours}', name: 'detail_ue')
     ]
@@ -117,9 +138,6 @@ class FicheMatiereController extends BaseController
 
         return $this->render('structure/fiche_matiere/_liste.html.twig', [
             'ecs' => $ecs,
-//            'ue' => $ue,
-//            'parcours' => $parcours,
-//            'deplacer' => true,
             'mode' => 'detail',
             'sort' => 'libelle',
             'direction' => 'asc'
