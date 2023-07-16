@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.6](https://github.com/Dannebicque/oreof/compare/v1.6.5...v1.6.6) (2023-07-16)
+
+
+### Features
+
+* Export des formations ([1972b99](https://github.com/Dannebicque/oreof/commit/1972b9988af6420a32851ec57ebbe8e4f8b7e8a5))
+* Export des formations ([3fc8e5e](https://github.com/Dannebicque/oreof/commit/3fc8e5e03110aaef827e7929de8b30a7b6fdd626))
+* Fiches EC/matières "Hors diplôme" ([38af65e](https://github.com/Dannebicque/oreof/commit/38af65edd3f10ad1ef308a655ea2129f143b76d6))
+* Tri/filtres sur les mentions ([8ef0215](https://github.com/Dannebicque/oreof/commit/8ef02151dd17421e1e3de3e9a0cc38e0eca5ec57))
+
+
+### Bug Fixes
+
+* Gestion si semestre raccroché ([887dfa3](https://github.com/Dannebicque/oreof/commit/887dfa3c0b794aed5ced3429e29583a03e52eb56))
+* Gestion si semestre raccroché ([a516ae0](https://github.com/Dannebicque/oreof/commit/a516ae0d1dbc3cdda79f0cc70f99ebc741205467))
+* Gestion si semestre raccroché ([db34d86](https://github.com/Dannebicque/oreof/commit/db34d862e297ce9b93e5afd5acec6512148ed5fa))
+
 ### [1.6.5](https://github.com/Dannebicque/oreof/compare/v1.6.4...v1.6.5) (2023-07-13)
 
 
