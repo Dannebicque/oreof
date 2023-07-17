@@ -429,7 +429,7 @@ class LicenceMccc
                 }
 
                 if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getPourcentage()) . '%');
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, $mcccs[1]['et']->getPourcentage()) . '%';
                     $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
                 } else {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, 'Erreur');
