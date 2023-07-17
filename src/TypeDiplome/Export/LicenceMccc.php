@@ -265,7 +265,7 @@ class LicenceMccc
     public function exportExcelLicenceMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        DateTimeInterface  $dateEdition,
+        ?DateTimeInterface  $dateEdition = null,
         bool               $versionFull = true
     ): StreamedResponse {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);

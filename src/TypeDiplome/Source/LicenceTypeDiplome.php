@@ -39,7 +39,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
     public function exportExcelMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        DateTimeInterface  $dateEdition,
+        ?DateTimeInterface  $dateEdition = null,
         bool               $versionFull = true
     ): StreamedResponse
     {
