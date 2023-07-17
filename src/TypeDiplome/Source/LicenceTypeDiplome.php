@@ -43,6 +43,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         bool               $versionFull = true
     ): StreamedResponse
     {
+        //todo: exploiter la date...
         return $this->licenceMccc->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
     }
 

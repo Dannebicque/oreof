@@ -101,7 +101,7 @@ class LicenceMccc
     public function genereExcelLicenceMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        DateTimeInterface  $dateEdition,
+        ?DateTimeInterface  $dateEdition = null,
         bool               $versionFull = true
     ): void {
         //todo: gérer la date de publication et un "marquage" sur le document si pré-CFVU
