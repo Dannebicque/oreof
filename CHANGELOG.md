@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.8](https://github.com/Dannebicque/oreof/compare/v1.6.7...v1.6.8) (2023-07-17)
+
+
+### Bug Fixes
+
+* export, typage ([8f6e20f](https://github.com/Dannebicque/oreof/commit/8f6e20f3aac5ca0d365da6ecd21c448481f2da96))
+
 ### [1.6.7](https://github.com/Dannebicque/oreof/compare/v1.6.6...v1.6.7) (2023-07-16)
 
 
