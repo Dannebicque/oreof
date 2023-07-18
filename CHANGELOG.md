@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.11](https://github.com/Dannebicque/oreof/compare/v1.6.10...v1.6.11) (2023-07-18)
+
+
+### Bug Fixes
+
+* Affichage des UE ([e8fae1c](https://github.com/Dannebicque/oreof/commit/e8fae1c0efc0f36a2462c63f4720a37c59a5b8e7))
+* Filtre sur la liste des parcours des droits. ([a1480ee](https://github.com/Dannebicque/oreof/commit/a1480ee3f43a111ae519eac47f519b6ba8a7e424))
+* Mise en page BCC + bug null ([fd71117](https://github.com/Dannebicque/oreof/commit/fd71117dd1bc6c0025dddab40cf4be5a1baa97ff))
+
 ### [1.6.10](https://github.com/Dannebicque/oreof/compare/v1.6.9...v1.6.10) (2023-07-18)
 
 
