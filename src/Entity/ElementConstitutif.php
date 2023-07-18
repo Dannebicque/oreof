@@ -636,7 +636,7 @@ class ElementConstitutif
 
     public function isFicheFromParcours(): bool
     {
-        return $this->getParcours()?->getId() === $this->ficheMatiere->getParcours()->getId();
+        return $this->getParcours()?->getId() === $this->ficheMatiere?->getParcours()->getId();
     }
 
     /**
