@@ -109,7 +109,11 @@ class Semestre
     {
         $total = 0;
         foreach ($this->getUes() as $ue) {
-            if ($ue->getUeParent() === null) {
+            if ($ue->getUeRaccrochee() !== null &&
+                $ue->getUeRaccrochee()->getUe() !== null &&
+                $ue->getUeRaccrochee()->getUe()->getUeParent() === null) {
+                $total += $ue->getUeRaccrochee()->getUe()->totalEctsUe();
+            } elseif ($ue->getUeParent() === null) {
                 $total += $ue->totalEctsUe();
             }
         }
