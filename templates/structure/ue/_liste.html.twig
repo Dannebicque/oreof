@@ -371,12 +371,14 @@
                                                 <div class="text-muted text-small d-md-none">ue</div>
                                                 <p>{% if uee.libelle != null %}
                                                     <abbr title="{{ uee.libelle }}">{% endif %}{{ uee
-                                                            .display(parcours) }}{% if uee.libelle != null %}</abbr>{% endif %} {% if uee
-                                                    .ueRaccrochee != null %}
-                                                    <i class="fal fa-link"
-                                                       data-controller="tooltip"
-                                                       data-tooltip-placement-value="bottom"
-                                                       title="Raccrochée à l'UE {{ uee.ueRaccrochee.display(parcours) }}"></i>{% endif %}
+                                                            .display(parcours) }}{% if uee.libelle != null %}</abbr>{% endif %}
+
+                                                    {% if raccroche == true %}
+                                                        <i class="fal fa-link"
+                                                           data-controller="tooltip"
+                                                           data-tooltip-placement-value="bottom"
+                                                           title="Raccrochée à l'UE {{ ue.ueRaccrochee.display(parcours) }}"></i>
+                                                    {% endif %}
                                                 </p>
                                             </div>
                                             <div class="col-md-1 d-flex flex-column justify-content-center">
