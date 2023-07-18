@@ -36,8 +36,8 @@
             </div>
             <div>{# class="scroll-out" #}
                 {% for ue in ues %}
-                    {% set raccroche = raccroche or ue.ueRaccrochee != null %}
-                    {% if (raccroche and ue.ueRaccrochee.ue != null and ue.ueRaccrochee.ue.ueParent == null) or (not raccroche and ue.ueParent==null) %}
+                    {% set raccroche = ue.ueRaccrochee != null %}
+                    {% if (raccroche and ue.ueRaccrochee != null and ue.ueRaccrochee.ue != null and ue.ueRaccrochee.ue.ueParent == null) or (not raccroche and ue.ueParent==null) %}
                         <div {{ stimulus_controller('structure--ue', {
                             ue:ue.id,
                             parcours:parcours.id,
@@ -576,7 +576,6 @@
                                 </div>
                             {% endif %}
                         {% endfor %}
-                        {% if raccroche == false %}
                             <div class="text-divider">
                                 <button class="btn text-success btn-sm"
                                         {{ stimulus_controller('modal', {
@@ -590,10 +589,8 @@
                                     Ajouter une UE après l'<strong>{{ ue.display(parcours) }}</strong>
                                 </button>
                             </div>
-                        {% endif %}
                     {% endif %}
                 {% else %}
-                    {% if raccroche == false %}
                         <div class="text-divider">
                             <button class="btn text-success btn-sm"
                                     {{ stimulus_controller('modal', {
@@ -607,7 +604,6 @@
                                 Ajouter une UE
                             </button>
                         </div>
-                    {% endif %}
                 {% endfor %}
             </div>
         </section>

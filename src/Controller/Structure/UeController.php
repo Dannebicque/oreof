@@ -94,6 +94,7 @@ class UeController extends AbstractController
                 'semestre' => $semestre->getId(),
                 'parcours' => $parcours->getId(),
                 'ue' => $ueOrigine ? $ueOrigine->getId() : null,
+                'sens' => $sens,
             ]),
             'typeDiplome' => $typeDiplome,
             'isAdmin' => $isAdmin,
