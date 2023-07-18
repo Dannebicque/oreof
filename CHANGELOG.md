@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.9](https://github.com/Dannebicque/oreof/compare/v1.6.8...v1.6.9) (2023-07-18)
+
+
+### Bug Fixes
+
+* export, typage ([5c5dc11](https://github.com/Dannebicque/oreof/commit/5c5dc113397488162a6cfeed7ee39d94086d7da0))
+* export, typage ([025878b](https://github.com/Dannebicque/oreof/commit/025878b98d440eb5d64cc67d61a5cea624af88db))
+* indicateur d'UE enfant raccrochée ([d45a476](https://github.com/Dannebicque/oreof/commit/d45a4767daeb9086efc62ee62883602a8d8d944f))
+* Type, ECTS et Nature UE si UE raccrochée ([be19d41](https://github.com/Dannebicque/oreof/commit/be19d4107a4a995e2dd32e9de5d1e1ce76942be5))
+* UE enfants sur UE raccrochée ([a028c46](https://github.com/Dannebicque/oreof/commit/a028c46bfaa1f1e6fb72e456aa38cb9028576325))
+
 ### [1.6.8](https://github.com/Dannebicque/oreof/compare/v1.6.7...v1.6.8) (2023-07-17)
 
 
