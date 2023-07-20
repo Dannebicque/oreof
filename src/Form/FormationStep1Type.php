@@ -37,8 +37,14 @@ class FormationStep1Type extends AbstractType
             ])
             ->add('coResponsable', EntityType::class, [
                 'required' => false,
+                'autocomplete' => true,
                 'help' => '',
                 'class' => User::class,
+                'query_builder' => function ($er) {
+                    return $er->createQueryBuilder('u')
+                        ->orderBy('u.nom', 'ASC')
+                        ->addOrderBy('u.prenom', 'ASC');
+                },
                 'attr' => ['data-action' => 'change->formation--step1#saveCoRespFormation'],
                 'choice_label' => 'display',
             ])
