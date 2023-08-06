@@ -84,7 +84,7 @@
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
         {href: path('app_formation_index'), title: 'Liste des formations'},
-        {href: path('app_formation_show', {id:formation.id}), title:'Formation :  ' ~ formation.display},
+        {href: path('app_formation_show', {slug:formation.slug}), title:'Formation :  ' ~ formation.display},
     ]}) }}
 {% endblock %}
 

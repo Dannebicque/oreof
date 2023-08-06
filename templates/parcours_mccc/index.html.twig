@@ -5,4 +5,6 @@
 {% block content %}
 
     <a href="{{ path('app_parcours_mccc_export', {parcours:parcours.id, _format:'xlsx'}) }}">Export des MCCC en Excel</a>
+
+    <a href="{{ path('app_parcours_mccc_export_light', {parcours:parcours.id, _format:'xlsx'}) }}">Export des MCCC en Excel (version light)</a>
 {% endblock %}

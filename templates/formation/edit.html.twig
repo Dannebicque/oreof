@@ -117,7 +117,7 @@
 {% endblock %}
 
 {% block bouton_header %}
-    <a href="{{ path('app_formation_show', {id:formation.id}) }}"
+    <a href="{{ path('app_formation_show', {slug:formation.slug}) }}"
        class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"
        data-bs-placement="bottom"

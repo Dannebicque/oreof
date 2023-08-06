@@ -42,7 +42,7 @@
                                 <div class="row g-0 h-100 align-content-center">
                                     <div class="col-12 col-md-2 d-flex flex-column mb-1 mb-md-0 justify-content-center">
                                         <div class="text-muted text-small d-md-none">Formation</div>
-                                        <a href="{{ path('app_formation_show', {id:formation.id}) }}"
+                                        <a href="{{ path('app_formation_show', {slug:formation.slug}) }}"
                                            class="text-truncate">
                                             {{ formation.display }}
                                         </a>
@@ -138,13 +138,13 @@
                                                 <span> Valider DPE</span>
                                             </button>
                                         {% endif %}
-                                        <a href="{{ path('app_formation_show', {id:formation.id}) }}"
+                                        <a href="{{ path('app_formation_show', {slug:formation.slug}) }}"
                                            class="btn btn-outline-info btn-sm"
                                         >
                                             <i class="{{ iconShow }}"></i>
                                         </a>
                                         {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
-                                            <a href="{{ path('app_formation_edit', {id:formation.id}) }}"
+                                            <a href="{{ path('app_formation_edit', {slug:formation.slug}) }}"
                                                class="btn btn-outline-warning btn-sm"
                                             >
                                                 <i class="{{ iconEdit }}"></i>

@@ -17,7 +17,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Sluggable\Handler\RelativeSlugHandler;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -142,7 +144,12 @@ class Formation
     private Collection $butCompetences;
 
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: HistoriqueFormation::class)]
+    #[ORM\OrderBy(['created' => 'DESC'])]
     private Collection $historiqueFormations;
+
+    #[ORM\Column(length: 255, unique: true)]
+    #[Gedmo\Slug(fields: ['sigle'], unique: true)]
+    private ?string $slug = null;
 
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
@@ -161,6 +168,16 @@ class Formation
         $this->butCompetences = new ArrayCollection();
         $this->historiqueFormations = new ArrayCollection();
     }
+
+    #[ORM\PreFlush]
+    public function updateSlug(): void
+    {
+        $texte = $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
+        $texte = ($this->getTypeDiplome() != null ? $this->getTypeDiplome()->getLibelleCourt() : '') . '-' . $texte . '-' . $this->getAnneeUniversitaire()->getAnnee();
+
+        $this->setSlug($texte);
+    }
+
 
     public function getEtatStep(int $step): bool
     {
@@ -814,6 +831,18 @@ class Formation
                 $historiqueFormation->setFormation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
 
         return $this;
     }

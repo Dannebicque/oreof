@@ -6,25 +6,66 @@
     <style>
         body {
             font-family: "DejaVu Sans", serif;
-            font-size: 12px;
         }
 
+        @page {
+            margin: 0cm 0cm;
+        }
+
+        /** Define now the real margins of every page in the PDF **/
+        body {
+            margin-top: 1.5cm;
+            margin-left: 2cm;
+            margin-right: 2cm;
+            margin-bottom: 1.5cm;
+        }
+
+        /** Define the header rules **/
+        header {
+            position: fixed;
+            top: 0cm;
+            left: 0cm;
+            right: 0cm;
+            height: 1.5cm;
+
+            /** Extra personal styles **/
+            background-color: #03a9f4;
+            color: white;
+            text-align: center;
+            line-height: 0.75cm;
+        }
+
+        /** Define the footer rules **/
         footer {
             position: fixed;
-            bottom: -80px;
-            left: 0;
-            right: 0;
-            border-top: 1px solid black;
-            height: 80px;
-            padding: 5px;
-            font-family: "DejaVu Sans", serif;
-            font-size: 12px;
+            bottom: 0cm;
+            left: 0cm;
+            right: 0cm;
+            height: 1.5cm;
+
+            /** Extra personal styles **/
+            background-color: #03a9f4;
+            color: white;
+            text-align: center;
+            line-height: 0.75cm;
         }
     </style>
 </head>
-<body>
-{% block content %}
 
-{% endblock %}
+<body>
+<header>
+    <h1>This is a Header</h1>
+</header>
+
+<footer>
+    <p>Copyright &copy; <?php echo date("Y");?></p>
+</footer>
+
+<main>
+    {% block content %}
+
+    {% endblock %}
+</main>
+
 </body>
 </html>

@@ -246,7 +246,7 @@ class FormationController extends BaseController
         ]);
     }
 
-    #[Route('/edit/formation/{formation}', name: 'app_formation_edit_modal', methods: ['GET', 'POST'])]
+    #[Route('/edit/formation/{slug}', name: 'app_formation_edit_modal', methods: ['GET', 'POST'])]
     public function editModal(
         EventDispatcherInterface $eventDispatcher,
         EntityManagerInterface   $entityManager,
@@ -256,7 +256,7 @@ class FormationController extends BaseController
         Formation                $formation
     ): Response {
         $form = $this->createForm(FormationSesType::class, $formation, [
-            'action' => $this->generateUrl('app_formation_edit_modal', ['formation' => $formation->getId()]),
+            'action' => $this->generateUrl('app_formation_edit_modal', ['formation' => $formation->getSlug()]),
         ]);
         $form->handleRequest($request);
 
@@ -285,7 +285,7 @@ class FormationController extends BaseController
 
             $formationRepository->save($formation, true);
 
-            return $this->redirectToRoute('app_formation_edit', ['id' => $formation->getId()]);
+            return $this->redirectToRoute('app_formation_edit', ['slug' => $formation->getSlug()]);
         }
 
         return $this->render('formation/editModal.html.twig', [
@@ -323,7 +323,7 @@ class FormationController extends BaseController
     /**
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
-    #[Route('/{id}', name: 'app_formation_show', methods: ['GET'])]
+    #[Route('/{slug}', name: 'app_formation_show', methods: ['GET'])]
     public function show(
         Formation $formation,
         CalculStructureParcours $calculStructureParcours
@@ -344,7 +344,7 @@ class FormationController extends BaseController
     /**
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
-    #[Route('/{id}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
+    #[Route('/{slug}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
     public function edit(
         ParcoursState       $parcoursState,
         FormationState      $formationState,

@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Repository\FicheMatiereRepository;
+use App\Repository\FormationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -20,7 +21,8 @@ class UpdateSlugCommand extends Command
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private FicheMatiereRepository $ficheRepository
+        private FicheMatiereRepository $ficheRepository,
+        private FormationRepository $formationRepository
     )
     {
         parent::__construct();
@@ -43,6 +45,14 @@ class UpdateSlugCommand extends Command
             $fiches = $this->ficheRepository->findAll();
             foreach ($fiches as $fiche) {
                 $fiche->setSlug(null);
+                $this->entityManager->persist($fiche);
+            }
+            $this->entityManager->flush();
+        } else if ($arg1 === 'formation') {
+            $io->note(sprintf('You passed an argument: %s', $arg1));
+            $fiches = $this->formationRepository->findAll();
+            foreach ($fiches as $fiche) {
+                $fiche->updateSlug();
                 $this->entityManager->persist($fiche);
             }
             $this->entityManager->flush();

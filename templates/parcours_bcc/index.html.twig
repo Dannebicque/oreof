@@ -61,7 +61,7 @@
 {% block breadcrumb %}
     {{ include('communs/_breadcrumb.html.twig', {liens:[
         {href: path('app_parcours_index'), title: 'Liste des parcours'},
-        {href: path('app_formation_edit', {id:parcours.formation.id}), title: 'Formation : '~parcours.formation
+        {href: path('app_formation_edit', {slug:parcours.formation.slug}), title: 'Formation : '~parcours.formation
         .display},
         {href: path('app_parcours_edit', {id:parcours.id}), title: 'Parcours : '~parcours.libelle},
     ]}) }}

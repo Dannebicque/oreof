@@ -27,7 +27,7 @@ class FormationSynchronisationController extends AbstractController
         }
 
         return $this->redirectToRoute('app_formation_edit', [
-            'formation' => $formation->getId(),
+            'formation' => $formation->getSlug(),
         ]);
     }
 }

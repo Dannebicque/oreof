@@ -27,13 +27,13 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/bloc/competence')]
 class BlocCompetenceController extends AbstractController
 {
-    #[Route('/liste/formation/{formation}', name: 'app_bloc_competence_liste_formation', methods: ['GET'])]
-    public function listeFormation(BlocCompetenceRepository $blocCompetenceRepository, Formation $formation): Response
-    {
-        return $this->render('bloc_competence/_liste.html.twig', [
-            'bloc_competences' => $blocCompetenceRepository->findByFormation($formation),
-        ]);
-    }
+//    #[Route('/liste/formation/{slug}', name: 'app_bloc_competence_liste_formation', methods: ['GET'])]
+//    public function listeFormation(BlocCompetenceRepository $blocCompetenceRepository, Formation $formation): Response
+//    {
+//        return $this->render('bloc_competence/_liste.html.twig', [
+//            'bloc_competences' => $blocCompetenceRepository->findByFormation($formation),
+//        ]);
+//    }
 
     #[Route('/liste/parcours/{parcours}', name: 'app_bloc_competence_liste_parcours', methods: ['GET'])]
     public function listeParcours(

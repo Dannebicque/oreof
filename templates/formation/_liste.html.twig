@@ -169,7 +169,7 @@ bouton pour valider/invalide les étapes successives #}
                         </button>
                     {% endif %}
 
-                    <a href="{{ path('app_formation_show',{'id': formation.id}) }}"
+                    <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}"
                        class="btn btn-sm text-info"
                        data-bs-toggle="tooltip"
                        data-bs-placement="bottom"
@@ -180,7 +180,7 @@ bouton pour valider/invalide les étapes successives #}
                     </a>
 
                     {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
-                        <a href="{{ path('app_formation_edit',{'id': formation.id}) }}"
+                        <a href="{{ path('app_formation_edit',{'slug': formation.slug}) }}"
                            class="btn btn-sm text-warning"
                            data-bs-toggle="tooltip"
                            data-bs-placement="bottom"
@@ -252,6 +252,7 @@ bouton pour valider/invalide les étapes successives #}
                         {% endif %}
 
                         {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_SES') %}
+                            {# todo manque formation sur le isgranted #}
                             <button {{ stimulus_action('crud', 'delete', 'click', {
                                 url:path('app_parcours_delete',{'id': parcours.id}),
                                 csrf: csrf_token('delete' ~ parcours.id)
