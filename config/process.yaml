@@ -1,0 +1,116 @@
+process:
+  fiche_matiere:
+    icon: 'fa-ballot-check'
+    label: 'validation.fiche_matiere'
+    hasValid: true
+    hasReserve: false
+    hasRefuse: false
+    hasUpload: false
+    showOn: ['ficheMatiere']
+    isTimeline: false
+    hasDate: false
+    transition: 'en_cours_redaction'
+    canValide: ''
+
+  parcours:
+    icon: 'fa-memo-circle-check'
+    label: 'validation.parcours'
+    hasValid: true
+    hasReserve: false
+    hasRefuse: false
+    hasUpload: false
+    showOn: ['parcours', 'ficheMatiere']
+    isTimeline: false
+    hasDate: false
+    transition: 'en_cours_redaction'
+    canValide: 'valider_parcours'
+  formation:
+    icon: 'fa-file-circle-check'
+    label: 'validation.formation'
+    hasValid: true
+    hasReserve: false
+    hasRefuse: false
+    hasUpload: false
+    showOn: ['formation','parcours', 'ficheMatiere']
+    isTimeline: false
+    hasDate: false
+    transition: 'en_cours_redaction'
+    canValide: 'valide_rf'
+  dpe:
+    icon: 'fa-check-to-slot'
+    label: 'validation.dpe'
+    hasValid: true
+    hasReserve: true
+    hasRefuse: true
+    hasUpload: true
+    isTimeline: true
+    hasDate: false
+    transition: 'soumis_dpe_composante'
+    canValide: 'valide_dpe_composante'
+    canRefuse: 'refuser_dpe_composante'
+    canReserve: 'reserver_dpe_composante'
+  conseil:
+    icon: 'fa-people-line'
+    label: 'validation.conseil'
+    hasValid: true
+    hasReserve: true
+    hasRefuse: true
+    hasUpload: true
+    isTimeline: true
+    hasDate: true
+    transition: 'soumis_conseil'
+    canValide: 'valider_conseil'
+    canRefuse: 'refuser_conseil'
+    canReserve: 'reserver_conseil'
+  ses:
+    icon: 'fa-school-circle-check'
+    label: 'validation.ses'
+    hasValid: true
+    hasReserve: true
+    hasRefuse: true
+    hasUpload: false
+    isTimeline: false
+    hasDate: false
+    transition: 'soumis_central'
+    canValide: 'valider_central'
+    canRefuse: 'refuser_central'
+    canReserve: 'reserver_central'
+  vp:
+    icon: 'fa-handshake'
+    label: 'validation.vp'
+    hasValid: true
+    hasReserve: true
+    hasRefuse: true
+    hasUpload: false
+    isTimeline: false
+    hasDate: false
+    transition: 'soumis_vp'
+    canValide: 'transmettre_cfvu'
+    canRefuse: ''
+    canReserve: ''
+  cfvu:
+    icon: 'fa-stamp'
+    label: 'validation.cfvu'
+    hasValid: true
+    hasReserve: true
+    hasRefuse: true
+    hasUpload: false
+    isTimeline: true
+    hasDate: true
+    transition: 'soumis_cfvu'
+    canValide: 'valider_cfvu'
+    canRefuse: 'refuser_definitif_cfvu'
+    canReserve: 'valider_reserve_cfvu'
+  publication:
+    icon: 'fa-bullhorn'
+    label: 'validation.publication'
+    hasValid: true
+    hasReserve: false
+    hasRefuse: false
+    hasUpload: false
+    isTimeline: true
+    hasDate: true
+    transition: 'valide_pour_publication'
+    canValide: 'valider_publication'
+
+

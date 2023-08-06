@@ -1,0 +1,62 @@
+{{ component('alerte', {
+    type: 'info',
+    message: (process.label~'.'~place)|trans
+}) }}
+
+{{ etape }}
+<pre>
+{{ dump(process) }}
+</pre>
+
+<form action="{{ path('app_validation_valide', {etape:etape, type:type, id:id}) }}" method="post">
+
+{% if process.hasDate %}
+    <div>
+        <label for="date" class="form-label">Date <span class="required"></span> <i class="fal fa-question-circle ms-1"
+                                  data-controller="tooltip"
+                                  data-tooltip-placement-value="bottom"
+                                  aria-label="{{ 'valide.'~process.label~'.helps.date.help'|trans({}, 'help') }}"
+                                  data-bs-original-title="{{ 'valide.'~process.label~'.helps.date.help'|trans({}, 'help') }}"></i></label>
+        <input type="date" name="date"
+               class="form-control"
+               id="date"
+               value="{{ 'now'|date('Y-m-d') }}"> {# ou date déjà saisie si édition? #}
+    </div>
+{% endif %}
+
+
+
+...recap des validations si fiche, formation ou parcours
+
+{% if process.hasUpload %}
+    <div>
+        <label for="file" class="form-label">Fichier <i class="fal fa-question-circle ms-1"
+                                     data-controller="tooltip"
+                                     data-tooltip-placement-value="bottom"
+                                     aria-label="{{ 'valide.'~process.label~'.helps.fichier.help'|trans({}, 'help') }}"
+                                     data-bs-original-title="{{ 'valide.'~process.label~'.helps.fichier.help'|trans({}, 'help') }}"></i></label>
+        <input type="file" name="file" id="file" accept="application/pdf">
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="laisserPasser">
+        <label class="form-check-label" for="laisserPasser" >
+            Laissé passé (le document sera à déposer au plus tard avant la publication) <i
+                    class="fal fa-question-circle ms-1"
+                    data-controller="tooltip"
+                    data-tooltip-placement-value="bottom"
+                    aria-label="{{ 'valide.'~process.label~'.helps.laisserPasser.help'|trans({}, 'help') }}"
+                    data-bs-original-title="{{ 'valide.'~process.label~'.helps.laisserPasser.help'|trans({}, 'help') }}"></i>
+        </label>
+    </div>
+{% endif %}
+<div class="mt-2">
+    <button type="submit" class="btn btn-success"
+            {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+            data-action="live#emit"
+            data-event="valide"
+    >
+        <i class="fal fa-floppy-disk"></i>
+        Enregistrer
+    </button>
+</div>
+</form>

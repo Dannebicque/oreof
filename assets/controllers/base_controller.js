@@ -33,6 +33,10 @@ export default class extends Controller {
       .then(async () => {
         callOut('Sauvegarde effectuée', 'success')
         this.modal.hide()
+        if (this.updateComponent) {
+          const component = document.getElementById(this.updateComponent.id).__component;
+          component.emit(this.updateComponent.event);
+        }
         this.dispatch(this.nomEvenement, { detail: this.details })
       })
   }
@@ -42,6 +46,7 @@ export default class extends Controller {
     this.modalTitleTarget.innerHTML = event.detail.title
     this.btnCloseTarget.innerHTML = event.detail.btnClose
     this.nomEvenement = event.detail.nomEvenement
+    this.updateComponent = event.detail.updateComponent
     this.details = event.detail.details
     if (event.detail.form === true) {
       document.getElementById('btn_modal_submit').classList.remove('d-none')

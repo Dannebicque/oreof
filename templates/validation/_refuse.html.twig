@@ -1,0 +1,47 @@
+<form action="{{ path('app_validation_refuse', {etape:etape, type:type, id:id}) }}" method="post">
+
+    {% if process.hasDate %}
+    <div>
+        <label for="date" class="form-label">Date <span class="required"></span>
+            <i class="fal fa-question-circle ms-1"
+                data-controller="tooltip"
+                data-tooltip-placement-value="bottom"
+                aria-label="{{ 'refuse.'~process.label~'.helps.date.help'|trans({}, 'help') }}"
+                data-bs-original-title="{{ 'refuse.'~process.label~'.helps.date.help'|trans({}, 'help') }}">
+            </i>
+        </label>
+        <input type="date" name="date"
+               class="form-control"
+               required
+               id="date"
+               value="{{ 'now'|date('Y-m-d') }}"> {# ou date déjà saisie si édition? #}
+    </div>
+{% endif %}
+
+<div>
+    <label for="argumentaire" class="form-label">Argumentaire <span class="required"></span>
+        <i class="fal fa-question-circle ms-1"
+           data-controller="tooltip"
+           data-tooltip-placement-value="bottom"
+           aria-label="{{ 'refuse.'~process.label~'.helps.date.help'|trans({}, 'help') }}"
+           data-bs-original-title="{{ 'refuse.'~process.label~'.helps.date.help'|trans({}, 'help') }}"></i>
+    </label>
+    <textarea name="argumentaire"
+              class="form-control"
+              required
+              id="argumentaire"
+              rows="5"
+    > </textarea>
+</div>
+
+<div class="mt-2">
+    <button type="submit" class="btn btn-success"
+            {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+            data-action="live#emit"
+            data-event="refuse"
+    >
+        <i class="fal fa-floppy-disk"></i>
+        Enregistrer
+    </button>
+</div>
+</form>

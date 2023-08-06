@@ -23,7 +23,7 @@ framework:
                 - 'soumis_vp'
                 - 'soumis_cfvu'
                 - 'refuse_definitif_cfvu'
-                - 'valie_a_publier'
+                - 'valide_a_publier'
                 - 'publie'
                 - 'valide_pour_publication'
                 - 'soumis_conseil_reserve'
@@ -42,15 +42,12 @@ framework:
                     from: 'soumis_rf'
                     to: 'en_cours_redaction'
                 refuser_dpe_composante:
-                    guard: "is_granted('ROLE_RESP_DPE')"
                     from: 'soumis_dpe_composante'
                     to: 'refuse_dpe_composante'
                 valide_dpe_composante:
-                    guard: "is_granted('ROLE_RESP_DPE')"
                     from: 'soumis_dpe_composante'
                     to: 'soumis_conseil'
                 reserver_dpe_composante:
-                    guard: "is_granted('ROLE_RESP_DPE')"
                     from: 'soumis_dpe_composante'
                     to: 'soumis_rf'
                 refuser_conseil:
@@ -63,19 +60,15 @@ framework:
                     from: 'soumis_conseil'
                     to: 'soumis_dpe_composante'
                 laisser_passer_conseil:
-                    guard: "is_granted('ROLE_RESP_DPE')"
                     from: 'soumis_conseil'
                     to: 'soumis_central'
                 refuser_central:
-                    guard: "is_granted('ROLE_SES')"
                     from: 'soumis_central'
                     to: 'refuse_central'
                 valider_central:
-                    guard: "is_granted('ROLE_SES')"
                     from: 'soumis_central'
                     to: 'soumis_vp'
                 reserver_central:
-                    guard: "is_granted('ROLE_SES')"
                     from: 'soumis_central'
                     to: 'soumis_dpe_composante'
                 transmettre_cfvu:
@@ -101,9 +94,9 @@ framework:
                     to: 'valide_pour_publication'
                 valider_publication:
                     from: 'valide_pour_publication'
-                    to: 'valie_a_publier'
+                    to: 'valide_a_publier'
                 publier:
-                    from: 'valie_a_publier'
+                    from: 'valide_a_publier'
                     to: 'publie'
         parcours:
             type: 'workflow'

@@ -1,0 +1,32 @@
+{% if process.hasDate %}
+    <div>
+        <label for="date" class="form-label">Date <span class="required"></span> <i class="fal fa-question-circle ms-1"
+                                  data-controller="tooltip"
+                                  data-tooltip-placement-value="bottom"
+                                  aria-label="{{ 'reserve.'~process.label~'.helps.date.help'|trans({}, 'help') }}"
+                                  data-bs-original-title="{{ 'reserve.'~process.label~'.helps.date.help'|trans({}, 'help') }}"></i></label>
+        <input type="date" name="date"
+               class="form-control"
+               required
+               id="date"
+               value="{{ 'now'|date('Y-m-d') }}"> {# ou date déjà saisie si édition? #}
+    </div>
+{% endif %}
+
+<div>
+    <label for="argumentaire" class="form-label">Argumentaire <span class="required"></span><i class="fal fa-question-circle ms-1"
+                                              data-controller="tooltip"
+                                              data-tooltip-placement-value="bottom"
+                                              aria-label="{{ 'reserve.'~process.label~'.helps.date.help'|trans({}, 'help') }}"
+                                              data-bs-original-title="{{ 'reserve.'~process.label~'.helps.date.help'|trans({}, 'help') }}"></i></label>
+    <textarea name="argumentaire"
+              class="form-control"
+              required
+              id="argumentaire"
+              rows="5"
+    > </textarea>
+</div>
+
+<div class="mt-2">
+    <button type="button" class="btn btn-success">Valider</button>
+</div>

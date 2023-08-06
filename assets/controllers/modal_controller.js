@@ -20,6 +20,7 @@ export default class extends Controller {
     btnClose: { type: String, default: 'Fermer' },
     form: { type: Boolean, default: false },
     params: Array,
+    updateComponent: { type: Object, default: {} },
   }
 
   openModal(event) {
@@ -36,6 +37,7 @@ export default class extends Controller {
         params: this.paramsValue,
         title: this.modalTitleValue,
         right: this.rightValue,
+        updateComponent: this.updateComponentValue,
       },
     })
   }

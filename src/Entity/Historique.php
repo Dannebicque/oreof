@@ -28,6 +28,12 @@ abstract class Historique
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $commentaire = null;
 
+    #[ORM\ManyToOne(inversedBy: 'historiques')]
+    private ?User $user = null;
+
+    #[ORM\Column(length: 30)]
+    private ?string $etape = null;
+
     public function getCreated(): ?\DateTimeInterface
     {
         return $this->created;
@@ -60,6 +66,30 @@ abstract class Historique
     public function setCommentaire(?string $commentaire): static
     {
         $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getEtape(): ?string
+    {
+        return $this->etape;
+    }
+
+    public function setEtape(string $etape): static
+    {
+        $this->etape = $etape;
 
         return $this;
     }
