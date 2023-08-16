@@ -7,6 +7,7 @@
  */
 
 import { Controller } from '@hotwired/stimulus'
+import callOut from '../js/callOut'
 
 export default class extends Controller {
   static values = {
@@ -20,27 +21,56 @@ export default class extends Controller {
   }
 
   valideExport(event) {
+    event.preventDefault()
     // récupère les données du formulaire + les données de la liste
-    const liste = document.querySelectorAll('.check-all:checked')
-    const data = new FormData()
 
-    console.log(liste)
-    // ajoute les données de la liste au formulaire
-    liste.forEach((element) => {
-      data.append('liste[]', element.value)
-    })
+    let isValid = true
+    // vérifier les champs obligatoires et mettre en surbrillance les champs non remplis
+    if (document.getElementById('annee_universitaire').value === '') {
+      document.getElementById('annee_universitaire').classList.add('is-invalid')
+      isValid = false
+    } else {
+      document.getElementById('annee_universitaire').classList.remove('is-invalid')
+    }
 
-    // ajoute les données du formulaire au formulaire
-    data.append('annee_universitaire', document.getElementById('annee_universitaire').value)
-    data.append('composante', document.getElementById('composante').value)
-    data.append('type_document', document.getElementById('type_document').value)
-    data.append('date', document.getElementById('date').value)
+    if (document.getElementById('composante').value === '') {
+      document.getElementById('composante').classList.add('is-invalid')
+      isValid = false
+    } else {
+      document.getElementById('composante').classList.remove('is-invalid')
+    }
 
-    // envoie le formulaire
-    fetch(this.urlValideValue, {
-      method: 'POST',
-      body: data,
-    })
+    if (document.getElementById('type_document').value === '') {
+      document.getElementById('type_document').classList.add('is-invalid')
+      isValid = false
+    } else {
+      document.getElementById('type_document').classList.remove('is-invalid')
+    }
+
+    if (isValid) {
+      const liste = document.querySelectorAll('.check-all:checked')
+      const data = new FormData()
+
+      console.log(liste)
+      // ajoute les données de la liste au formulaire
+      liste.forEach((element) => {
+        data.append('liste[]', element.value)
+      })
+
+      // ajoute les données du formulaire au formulaire
+      data.append('annee_universitaire', document.getElementById('annee_universitaire').value)
+      data.append('composante', document.getElementById('composante').value)
+      data.append('type_document', document.getElementById('type_document').value)
+      data.append('date', document.getElementById('date').value)
+
+      // envoie le formulaire
+      fetch(this.urlValideValue, {
+        method: 'POST',
+        body: data,
+      })
+    } else {
+      callOut('Veuillez remplir les champs obligatoires', 'danger')
+    }
   }
 
   async changeListe() {
@@ -56,12 +86,5 @@ export default class extends Controller {
       const response = await fetch(`${this.urlValue}?${body.toString()}`)
       this.listeTarget.innerHTML = await response.text()
     }
-  }
-
-  checkAll(event) {
-    const checkboxes = document.querySelectorAll('.check-all')
-    checkboxes.forEach((checkbox) => {
-      checkbox.checked = event.target.checked
-    })
   }
 }

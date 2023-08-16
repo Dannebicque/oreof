@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block breadcrumb %}
-
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+    ]}) }}
 {% endblock %}
 
 {% block bouton_header %}
@@ -25,7 +26,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div>
-                            <label for="annee_universitaire">Annnée Universitaire</label>
+                            <label for="annee_universitaire" class="required">Annnée Universitaire</label>
                             <select name="annee_universitaire"
                                     {{ stimulus_action('export', 'changeListe') }}
                                     id="annee_universitaire"
@@ -37,7 +38,7 @@
                             </select>
                         </div>
                         <div>
-                            <label for="composante">Composante</label>
+                            <label for="composante" class="required">Composante</label>
                             <select name="composante" id="composante" class="form-select"
                                     {{ stimulus_action('export', 'changeListe') }}
                                     {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
@@ -49,7 +50,7 @@
                             </select>
                         </div>
                         <div>
-                            <label for="type_document">Type d'export</label>
+                            <label for="type_document" class="required">Type d'export</label>
                             <select name="type_document" id="type_document" class="form-select">
                                 <option value="">Choisir le format</option>
                                 <option value="xslx-mccc">Fichiers MCCC format Excel (xslx)</option>
@@ -76,12 +77,9 @@
                 </div>
             </div>
         </div>
-        // choix formation/parcours, mutliples, filtres, composante, type de diplôme, ... liste avec checkbox et check
-        all
+        // choix formation/parcours, mutliples, filtres, composante, type de diplôme
 
-        <div
-                class="card mt-2"
-                {{ stimulus_target('export', 'liste') }}>
+        <div class="card mt-2" {{ stimulus_target('export', 'liste') }}>
         </div>
     </div>
 
