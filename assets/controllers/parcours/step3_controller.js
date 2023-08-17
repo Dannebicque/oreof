@@ -36,6 +36,7 @@ export default class extends Controller {
   delete(event) {
     event.preventDefault()
     const { url } = event.params
+    console.log(url)
     const { csrf } = event.params
     let modal = new Modal(document.getElementById('modal-delete'))
     modal.show()
@@ -50,6 +51,7 @@ export default class extends Controller {
       await fetch(url, body).then(() => {
         callOut('Suppression effectuée', 'success')
         this._updateListe()
+        // todo: trouver le moyen de supprimer l'event sinon l'ancien reste actif
       })
     })
   }
