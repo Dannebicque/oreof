@@ -1,39 +1,26 @@
-<ul class="list-unstyled list-inline text-center menu-icons" {{ stimulus_controller('notification', {
-    url: path('app_notification_lu'),
-}) }}>
+<ul class="list-unstyled list-inline text-center menu-icons">
     <li class="list-inline-item">
         <a href="{{ path('app_document') }}" target="_blank">
             <i class="fal fa-question-circle"></i>
         </a>
     </li>
     <li class="list-inline-item {% if computed.notifsNonLu > 0 %}new-notif{% endif %}" id="indicNotifBtn">
-        <a href="#" data-bs-toggle="dropdown" data-bs-target="#notifications" aria-haspopup="true" aria-expanded="false" class="notification-button">
+        <a
+                href="#"
+                class="notification-button"
+                {{ stimulus_controller('modal', {
+                    size: 'large',
+                    modalTitle: 'Notifications',
+                    right: true,
+                    modalUrl: path('app_notification_liste_user') }) }}
+                data-action="click->modal#openModal"
+        >
             <div class="position-relative d-inline-flex">
                 <i class="fal fa-bell icon"></i>
                 {% if computed.notifsNonLu > 0 %}
-                <span class="position-absolute notification-dot rounded-xl" id="indicNotif"></span>
+                    <span class="position-absolute notification-dot rounded-xl" id="indicNotif"></span>
                 {% endif %}
             </div>
         </a>
-        <div class="dropdown-menu dropdown-menu-end wide notification-dropdown scroll-out" id="notifications">
-            <div class="scroll">
-                <ul class="list-unstyled border-last-none">
-                    {% for notif in this.notifs %}
-                        <li class="mb-3 pb-3 border-bottom border-separator-light d-flex {% if notif.lu == false %}non-lu{% endif %}"
-                                {{ stimulus_action('notification', 'lu', 'click', {id: notif.id}) }}>
-                            <div class="align-self-center">
-                                {{ notif.codeNotification|trans({},'notif') }}
-                            </div>
-                        </li>
-                    {% else %}
-                        <li class="mb-3 pb-3 border-bottom border-separator-light d-flex bg-success">
-                            <div class="align-self-center ">
-                                Pas de notification
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
     </li>
 </ul>

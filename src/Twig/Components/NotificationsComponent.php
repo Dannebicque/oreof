@@ -23,11 +23,6 @@ final class NotificationsComponent extends AbstractController
     {
     }
 
-    public function getNotifs(): array
-    {
-        return $this->notificationRepository->findBy(['destinataire' => $this->user], ['created' => 'DESC']);
-    }
-
     public function getNotifsNonLu(): int
     {
         return $this->notificationRepository->count(['destinataire' => $this->user, 'lu' => false]);

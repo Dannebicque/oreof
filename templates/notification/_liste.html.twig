@@ -1,0 +1,53 @@
+<div
+        {{ stimulus_controller('notification', {
+            url: path('app_notification_lu'),
+        }) }}
+>
+<div {{ stimulus_target('notification', 'liste') }}>
+    {% for notif in notifications %}
+        {% if notif.lu == false %}
+            {% set color='warning' %}
+            {% set icon='fa-exclamation' %}
+        {% else %}
+            {% set color='success' %}
+            {% set icon='fa-check' %}
+        {% endif %}
+        <div class="row g-0 align-items-center mb-2 {% if notif.lu == false %}non-lu{% endif %}" {{ stimulus_action('notification', 'lu', 'click', {id: notif.id}) }}>
+            <div class="col-auto">
+                <div class="border border-{{ color }}  sw-5 sh-5 rounded-xl d-flex justify-content-center align-items-center">
+                    <i class="fas {{ icon }} text-{{ color }} fs-3"></i>
+                </div>
+            </div>
+            <div class="col ps-3">
+                <div class="row g-0">
+                    <div class="col">
+                        <div class="sh-5 d-flex align-items-center lh-1-25">
+                            {{ notif.codeNotification|trans({},'notif') }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="sh-5 d-flex align-items-center">{{ notif.created|date('d/m/Y') }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        {{ component('alerte', {
+            'type': 'info',
+            'message': 'Aucune notification.'
+        }) }}
+    {% endfor %}
+</div>
+    <div class="mt-2 row">
+        <div class="col-6 d-grid">
+            <button class="btn btn-warning d-block"
+                    {{ stimulus_action('notification', 'toutLu', 'click', {url: path('app_notification_tout_lu')}) }}
+            >Tout marquer comme lu</button>
+        </div>
+        <div class="col-6 d-grid">
+            <button class="btn btn-danger d-block"
+                    {{ stimulus_action('notification', 'toutSupprimer', 'click', {url: path('app_notification_tout_suppr')}) }}
+            >Tout supprimer</button>
+        </div>
+    </div>
+</div>
