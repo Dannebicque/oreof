@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/Dannebicque/oreof/compare/v1.6.11...v1.7.0) (2023-08-21)
+
+
+### Features
+
+* Export ([489aa9d](https://github.com/Dannebicque/oreof/commit/489aa9dc378b9c4298fae923328881da97348602))
+* Historique des validations avec Events ([39caf24](https://github.com/Dannebicque/oreof/commit/39caf240cab980ef78fa78d12c666e6dfd430375))
+* Partie validation des formations/parcours ([5503fb1](https://github.com/Dannebicque/oreof/commit/5503fb17a4c69d1051e66ec7f572c11f785f984d))
+* refonte partie notification + fonctionnalités ([ce66d33](https://github.com/Dannebicque/oreof/commit/ce66d33ec728865c48cbd4aefabe44fcebc60a26))
+* Stimulus controller pour Check All ([4e5ded4](https://github.com/Dannebicque/oreof/commit/4e5ded4996f3b18d319805d55aa787665a728bfc))
+* Usage du controller stimulus checkAll + suppression code en double ([883fff6](https://github.com/Dannebicque/oreof/commit/883fff648b818a63e66564a315b6b72c05e5b792))
+
+
+### Bug Fixes
+
+* affichage des formations avec rôle lecteur ([8c91665](https://github.com/Dannebicque/oreof/commit/8c91665fa2f119d9ee4cd4c52d657ec5db872baf))
+* alignement sur UE et menu sur UE enfants ([0160da5](https://github.com/Dannebicque/oreof/commit/0160da53942fe243b56285980fa406bb922e4071))
+* portée ALL avec type enum. ([2fcda50](https://github.com/Dannebicque/oreof/commit/2fcda508564412f03109a8c8766182cb37b9006a))
+* tri liste co-responsable de mention ([f311dd5](https://github.com/Dannebicque/oreof/commit/f311dd542a78b4c6a7b6300dfe3d7bda50cf21f8))
+
 ### [1.6.11](https://github.com/Dannebicque/oreof/compare/v1.6.10...v1.6.11) (2023-07-18)
 
 
