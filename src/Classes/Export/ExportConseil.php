@@ -42,8 +42,7 @@ class ExportConseil
             foreach ($formation->getParcours() as $parcours) {
                 $tParcours[$parcours->getId()] = $calculStructureParcours->calcul($parcours);
             }
-
-            $fichier = $this->myPDF::genereAndSavePdf('pdf/formation.html.twig', [
+            $fichier = $this->myPDF::genereAndSavePdf('pdf/conseil.html.twig', [
                 'formation' => $formation,
                 'typeDiplome' => $formation->getTypeDiplome(),
                 'tParcours' => $tParcours,
