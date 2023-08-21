@@ -73,16 +73,14 @@ class GlobalVoter extends Voter
         // vérifier si un rôle compatible est présent sur au moins un centre de l'utilisateur
         // si non, accès interdit.
         // si oui, vérifier la portée du rôle, si besoin vérifier par hierarchie
-
         $roles = $this->roleRepository->findByPermission($this->getRoleFromAttribute()); // on récupère les rôles qui ont la permission demandée
-
         foreach ($this->user->getUserCentres() as $centre) {
             if (!array_intersect($centre->getDroits(), $roles)) {
                 return false; //aucun centre en commun
             }
 
             // on a au moins un centre en commun, on vérifie la portée
-            if ($this->portee === PorteeEnum::ALL) {
+            if ($this->portee === PorteeEnum::ALL->value) {
                 return true; //pas de portée, c'est OK
             }
 
@@ -93,15 +91,16 @@ class GlobalVoter extends Voter
 
                 if ($subject instanceof Formation) {
                     if ($this->canAccessFormation($subject, $centre)) {
-                        //soit centre = formation et responsable ou coresponsable,
+                        //todo: soit centre = formation et responsable ou coresponsable,
                         //soit on remonte à la composante, et centre  = composante de la formaiton
                         return true;
                     }
                 }
 
                 if ($subject instanceof Parcours) {
+
                     if ($this->canAccessParcours($subject, $centre)) {
-                        //soit centre = formation et responsable ou coresponsable du parcours ou de la formation,
+                        //todo: soit centre = formation et responsable ou coresponsable du parcours ou de la formation,
                         //soit on remonte à la composante, et centre  = composante de la formation
                         return true;
                     }
@@ -122,8 +121,6 @@ class GlobalVoter extends Voter
                 }
             }
         }
-
-
         return false;//pas défaut c'est non...
     }
 
