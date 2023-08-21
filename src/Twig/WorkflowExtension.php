@@ -13,6 +13,9 @@ use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -22,6 +25,8 @@ class WorkflowExtension extends AbstractExtension
     public function __construct(
         #[Target('dpe')]
         private readonly WorkflowInterface $dpeWorkflow,
+        #[Target('parcours')]
+        private readonly WorkflowInterface $parcoursWorkflow,
     ) {
     }
 
@@ -35,36 +40,46 @@ class WorkflowExtension extends AbstractExtension
         ];
     }
 
-    public function isPlace(Parcours|FicheMatiere|Formation $entity, string $place): bool
+    public function isPlace(string $workflow, Parcours|FicheMatiere|Formation $entity, string $place): bool
     {
-        $actualPlaces = $this->dpeWorkflow->getMarking($entity)->getPlaces();
+        $actualPlaces = $this->getWorkflow($workflow)->getMarking($entity)->getPlaces();
 
         return array_key_exists($place, $actualPlaces);
     }
 
-    public function isPass(string $workflow, Parcours|FicheMatiere|Formation $entity, string $place): bool
+    public function isPass(string $workflowTexte, Parcours|FicheMatiere|Formation $entity, string $place): bool
     {
-        $definition = $this->dpeWorkflow->getDefinition();
+        $workflow = $this->getWorkflow($workflowTexte);
+
+        $definition = $workflow->getDefinition();
         $places = array_keys($definition->getPlaces());
-        $actualPlaces = $this->dpeWorkflow->getMarking($entity)->getPlaces();
+        $actualPlaces = $this->getWorkflow($workflowTexte)->getMarking($entity)->getPlaces();
 
         $indexActualPlace = array_search(array_keys($actualPlaces)[0], $places);
         $indexPlace = array_search($place, $places);
-
+//dump($indexActualPlace, $indexPlace);
         if ($indexActualPlace > $indexPlace) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function isRefuse(string $workflow, Parcours|FicheMatiere|Formation $entity): bool
     {
-        $places = $this->dpeWorkflow->getMarking($entity)->getPlaces();
+        $places = $this->getWorkflow($workflow)->getMarking($entity)->getPlaces();
         if (count($places) > 0) {
           return str_starts_with(array_keys($places)[0], 'refuse');
         }
 
         return false;
+    }
+
+    private function getWorkflow(string $workflow): WorkflowInterface
+    {
+        return match($workflow) {
+            'dpe' => $this->dpeWorkflow,
+            'parcours' => $this->parcoursWorkflow,
+        };
     }
 }

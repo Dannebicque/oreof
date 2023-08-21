@@ -1,0 +1,19 @@
+Modifier l'état de validation de ...
+<form action="{{ path('app_validation_edit', {type:type, id:id}) }}" method="post">
+    {% for key, etat in etats %}
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="etat" id="etat_{{ loop.index }}" value="{{ key }}">
+            <label class="form-check-label" for="etat_{{ loop.index }}">{{ ('workflow.'~etat.label)|trans }}</label>
+        </div>
+    {% endfor %}
+    <div class="mt-2">
+        <button type="submit" class="btn btn-success"
+                {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+                data-action="live#emit"
+                data-event="edit"
+        >
+            <i class="fal fa-floppy-disk"></i>
+            Enregistrer
+        </button>
+    </div>
+</form>

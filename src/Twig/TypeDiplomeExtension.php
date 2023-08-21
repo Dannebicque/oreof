@@ -24,6 +24,6 @@ class TypeDiplomeExtension extends AbstractExtension
 
     public function typeDiplome(?TypeDiplome $value): string
     {
-        return $value !== null ? $value->getLibelle() : '<span class="badge bg-warning">Non défini</span>';
+        return ($value !== null && $value->getLibelle() !== null) ? $value->getLibelle() : '<span class="badge bg-warning">Non défini</span>';
     }
 }

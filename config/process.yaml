@@ -11,7 +11,6 @@ process:
     hasDate: false
     transition: 'en_cours_redaction'
     canValide: ''
-
   parcours:
     icon: 'fa-memo-circle-check'
     label: 'validation.parcours'

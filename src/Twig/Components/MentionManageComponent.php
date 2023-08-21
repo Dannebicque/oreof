@@ -20,9 +20,10 @@ use Symfony\UX\TwigComponent\Attribute\PostMount;
 final class MentionManageComponent
 {
     const TAB = [
-        'initialisation_dpe' => '',
-        'autorisation_saisie' => 'formation',
-        'en_cours_redaction' => 'formation',
+        'initialisation_dpe' => 'formation',
+        'autorisation_saisie' => null,
+        'en_cours_redaction' => null,
+        'soumis_parcours' => 'formation',
         'soumis_rf' => 'formation',
         'soumis_dpe_composante' => 'dpe',
         'refuse_rf' => 'formation',
@@ -70,6 +71,8 @@ final class MentionManageComponent
         private ValidationProcess                $validationProcess,
         #[Target('dpe')]
         private WorkflowInterface                $dpeWorkflow,
+        #[Target('parcours')]
+        private WorkflowInterface                $parcoursWorkflow,
     ) {
         $this->process = $this->validationProcess->getProcess();
     }
@@ -80,8 +83,18 @@ final class MentionManageComponent
         $this->typeDiplome = $this->parcours?->getFormation()->getTypeDiplome();
         $this->formation = $this->parcours?->getFormation();
         $place = array_keys($this->dpeWorkflow->getMarking($this->formation)->getPlaces())[0];
-        $this->etape = self::TAB[$place];
+        $this->etape = self::TAB[$place] ?? $this->type;
         $this->event = 'valide';
+    }
+
+    #[LiveListener('mention_manage:edit')]
+    public function edit()
+    {
+        $this->typeDiplome = $this->parcours?->getFormation()->getTypeDiplome();
+        $this->formation = $this->parcours?->getFormation();
+        $place = array_keys($this->dpeWorkflow->getMarking($this->formation)->getPlaces())[0];
+        $this->etape = self::TAB[$place] ?? $this->type;
+        $this->event = 'edit';
     }
 
     #[LiveListener('mention_manage:refuse')]
@@ -90,7 +103,7 @@ final class MentionManageComponent
         $this->typeDiplome = $this->parcours?->getFormation()->getTypeDiplome();
         $this->formation = $this->parcours?->getFormation();
         $place = array_keys($this->dpeWorkflow->getMarking($this->formation)->getPlaces())[0];
-        $this->etape = self::TAB[$place];
+        $this->etape = self::TAB[$place] ?? $this->type;
         $this->event = 'valide';
     }
 
@@ -99,9 +112,11 @@ final class MentionManageComponent
     {
         if ($this->type === 'formation') {
             $this->typeDiplome = $this->formation->getTypeDiplome();
+            $place = array_keys($this->dpeWorkflow->getMarking($this->formation)->getPlaces())[0];
         } elseif ($this->type === 'parcours') {
             $this->typeDiplome = $this->parcours?->getFormation()->getTypeDiplome();
             $this->formation = $this->parcours?->getFormation();
+            $place = array_keys($this->parcoursWorkflow->getMarking($this->parcours)->getPlaces())[0];
         } elseif ($this->type === 'ficheMatiere') {
             $this->typeDiplome = $this->ficheMatiere->getParcours()->getFormation()->getTypeDiplome();
             $this->parcours = $this->ficheMatiere->getParcours();
@@ -115,8 +130,7 @@ final class MentionManageComponent
         }
 
         // dépend du type et de l'étape...
-        $place = array_keys($this->dpeWorkflow->getMarking($this->formation)->getPlaces())[0];
-        $this->etape = self::TAB[$place];
+        $this->etape = self::TAB[$place] ?? $this->type;
     }
 
     public function dateHistorique(string $transition): string
