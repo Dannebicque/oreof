@@ -58,6 +58,7 @@ class FormationController extends BaseController
         if ($this->isGranted('ROLE_ADMIN') ||
             $this->isGranted('ROLE_SES') ||
             $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
+            $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
             $formations = $formationRepository->findBySearch($q, $this->getAnneeUniversitaire(), $request->query->all());
         } else {
