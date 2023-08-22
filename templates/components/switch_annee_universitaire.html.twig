@@ -1,13 +1,17 @@
 <!-- component html -->
 <div class="language-switch-container" {{ attributes }}>
     <button class="btn btn-empty language-button dropdown-toggle" data-bs-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false"> {{ user_data.anneeUniversitaire != null ? user_data
-        .anneeUniversitaire
-        .libelle : 'erreur' }}
+            aria-haspopup="true" aria-expanded="false">
+        <span class="d-md-none">
+        {{ user_data.anneeUniversitaire != null ? user_data.anneeUniversitaire.libelle : 'erreur' }}
+            </span>
+        <span class="d-none d-lg-block">
+        {{ user_data.anneeUniversitaire != null ? user_data.anneeUniversitaire.annee : 'erreur' }}
+            </span>
     </button>
     <div class="dropdown-menu">
         {% for anneeUniversitaire in this.anneesUniversitaires %}
-        <a href="#" class="dropdown-item">{{ anneeUniversitaire.libelle }}</a>
+            <a href="#" class="dropdown-item">{{ anneeUniversitaire.libelle }}</a>
         {% endfor %}
     </div>
 </div>
