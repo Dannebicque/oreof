@@ -60,6 +60,7 @@ class ParcoursMcccExportController extends BaseController
         return $typeDiplome->exportExcelMccc(
             $this->getAnneeUniversitaire(),
             $parcours,
+            null,
             false);
     }
 }
