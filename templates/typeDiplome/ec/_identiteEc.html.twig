@@ -2,9 +2,9 @@
     <div class="col-md-6 col-sm-12">
         <dl>
             <dt>Type de diplôme</dt>
-            <dd>{{ typeDiplome|typeDiplome }}</dd>
+            <dd>{{ typeDiplome != null ? typeDiplome|typeDiplome : 'N.C.' }}</dd>
             <dt>Domaine</dt>
-            <dd>{{ formation.domaine != null ? formation.domaine.libelle : 'erreur' }}</dd>
+            <dd>{{ (formation != null and formation.domaine != null) ? formation.domaine.libelle : 'erreur' }}</dd>
             <dt>Parcours</dt>
             <dd>{{ ficheMatiere.parcours != null ? ficheMatiere.parcours.libelle : 'erreur' }}</dd>
         </dl>
@@ -12,9 +12,9 @@
     <div class="col-md-6 col-sm-12">
         <dl>
             <dt>Composante porteuse</dt>
-            <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
+            <dd>{{ (formation != null and formation.composantePorteuse != null) ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
             <dt>Mention/Spécialité</dt>
-            <dd>{{ formation.display }}</dd>
+            <dd>{{ formation != null ? formation.display : '' }}</dd>
         </dl>
     </div>
     <div class="col-12">

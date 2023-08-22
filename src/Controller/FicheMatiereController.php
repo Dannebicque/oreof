@@ -76,10 +76,10 @@ class FicheMatiereController extends AbstractController
     public function show(
         FicheMatiere $ficheMatiere
     ): Response {
-        $formation = $ficheMatiere->getParcours()->getFormation();
-        if ($formation === null) {
-            throw new RuntimeException('Formation non trouvée');
-        }
+        $formation = $ficheMatiere->getParcours()?->getFormation();
+//        if ($formation === null) {
+//            throw new RuntimeException('Formation non trouvée');
+//        }
 
         $bccs = [];
         foreach ($ficheMatiere->getCompetences() as $competence) {
@@ -90,7 +90,11 @@ class FicheMatiereController extends AbstractController
             $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
         }
 
-        $typeDiplome = $formation->getTypeDiplome();
+        if ($formation !== null) {
+            $typeDiplome = $formation->getTypeDiplome();
+        } else {
+            $typeDiplome = null;
+        }
 
         return $this->render('fiche_matiere/show.html.twig', [
             'ficheMatiere' => $ficheMatiere,
