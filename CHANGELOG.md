@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.1](https://github.com/Dannebicque/oreof/compare/v1.7.0...v1.7.1) (2023-08-22)
+
+
+### Bug Fixes
+
+* Export des MCCC si juste une année 3 ([a057ca4](https://github.com/Dannebicque/oreof/commit/a057ca4235fa7aa2ef97cf039b90043e7712608d))
+
 ## [1.7.0](https://github.com/Dannebicque/oreof/compare/v1.6.11...v1.7.0) (2023-08-21)
 
 
