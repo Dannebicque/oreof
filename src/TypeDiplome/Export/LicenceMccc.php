@@ -30,56 +30,56 @@ class LicenceMccc
     //todo: gérer la date de vote
 
     // Pages
-    const PAGE_MODELE = 'modele';
-    const PAGE_REF_COMPETENCES = 'ref. compétences';
+    public const PAGE_MODELE = 'modele';
+    public const PAGE_REF_COMPETENCES = 'ref. compétences';
     // Cellules
-    const CEL_TYPE_FORMATION = 'J5';
-    const CEL_INTITULE_FORMATION = 'J6';
-    const CEL_INTITULE_PARCOURS = 'J7';
-    const CEL_ANNEE_ETUDE = 'J9';
-    const CEL_COMPOSANTE = 'J11';
-    const CEL_SITE_FORMATION = 'J13';
-    const CEL_ANNEE_UNIVERSITAIRE = 'A3';
-    const CEL_RESPONSABLE_MENTION = 'E21';
-    const CEL_RESPONSABLE_PARCOURS = 'E22';
-    const CEL_REGIME_FI = 'C7';
-    const CEL_REGIME_FC = 'C9';
-    const CEL_REGIME_FI_APPRENTISSAGE = 'C11';
-    const CEL_REGIME_FC_CONTRAT_PRO = 'C13';
+    public const CEL_TYPE_FORMATION = 'J5';
+    public const CEL_INTITULE_FORMATION = 'J6';
+    public const CEL_INTITULE_PARCOURS = 'J7';
+    public const CEL_ANNEE_ETUDE = 'J9';
+    public  const CEL_COMPOSANTE = 'J11';
+    public const CEL_SITE_FORMATION = 'J13';
+    public const CEL_ANNEE_UNIVERSITAIRE = 'A3';
+    public const CEL_RESPONSABLE_MENTION = 'E21';
+    public const CEL_RESPONSABLE_PARCOURS = 'E22';
+    public const CEL_REGIME_FI = 'C7';
+    public const CEL_REGIME_FC = 'C9';
+    public const CEL_REGIME_FI_APPRENTISSAGE = 'C11';
+    public const CEL_REGIME_FC_CONTRAT_PRO = 'C13';
 
     //Colonnes sur Modèles
 
-    const COL_SEMESTRE = 1;
-    const COL_UE = 2;
-    const COL_INTITULE_UE = 3;
-    const COL_NUM_EC = 4;
-    const COL_INTITULE_EC = 5;
-    const COL_INTITULE_EC_EN = 6;
-    const COL_RESP_EC = 7;
-    const COL_LANGUE_EC = 8;
-    const COL_SUPPORT_ANGLAIS = 9;
-    const COL_TYPE_EC = 10;
+    public const COL_SEMESTRE = 1;
+    public const COL_UE = 2;
+    public const COL_INTITULE_UE = 3;
+    public const COL_NUM_EC = 4;
+    public const COL_INTITULE_EC = 5;
+    public const COL_INTITULE_EC_EN = 6;
+    public const COL_RESP_EC = 7;
+    public const COL_LANGUE_EC = 8;
+    public  const COL_SUPPORT_ANGLAIS = 9;
+    public const COL_TYPE_EC = 10;
     // const COL_OBLIGATOIRE_OPTIONNEL = 11;
-    const COL_COURS_MUTUALISE = 11;
-    const COL_COMPETENCES = 12;
-    const COL_ECTS = 13;
-    const COL_HEURES_PRES_CM = 14;
-    const COL_HEURES_PRES_TD = 15;
-    const COL_HEURES_PRES_TP = 16;
-    const COL_HEURES_PRES_TOTAL = 17;
+    public const COL_COURS_MUTUALISE = 11;
+    public const COL_COMPETENCES = 12;
+    public const COL_ECTS = 13;
+    public const COL_HEURES_PRES_CM = 14;
+    public const COL_HEURES_PRES_TD = 15;
+    public const COL_HEURES_PRES_TP = 16;
+    public const COL_HEURES_PRES_TOTAL = 17;
 
-    const COL_HEURES_DIST_CM = 18;
-    const COL_HEURES_DIST_TD = 19;
-    const COL_HEURES_DIST_TP = 20;
-    const COL_HEURES_DIST_TOTAL = 21;
-    const COL_HEURES_AUTONOMIE = 22;
-    const COL_HEURES_TOTAL = 23;
-    const COL_MCCC_CC_POUCENTAGE = 24;
-    const COL_MCCC_CC_NB_EPREUVE = 25;
-    const COL_MCCC_ET_POUCENTAGE = 26;
-    const COL_MCCC_ET_TYPE_EPREUVE = 27;
-    const COL_MCCC_CCI_EPREUVES = 28;
-    const COL_MCCC_SECONDE_CHANCE = 29;
+    public const COL_HEURES_DIST_CM = 18;
+    public const COL_HEURES_DIST_TD = 19;
+    public const COL_HEURES_DIST_TP = 20;
+    public const COL_HEURES_DIST_TOTAL = 21;
+    public const COL_HEURES_AUTONOMIE = 22;
+    public const COL_HEURES_TOTAL = 23;
+    public const COL_MCCC_CC_POUCENTAGE = 24;
+    public const COL_MCCC_CC_NB_EPREUVE = 25;
+    public const COL_MCCC_ET_POUCENTAGE = 26;
+    public const COL_MCCC_ET_TYPE_EPREUVE = 27;
+    public const COL_MCCC_CCI_EPREUVES = 28;
+    public const COL_MCCC_SECONDE_CHANCE = 29;
 
 
     protected array $typeEpreuves = [];
@@ -165,7 +165,7 @@ class LicenceMccc
         }
         $nbAnnees = count($tabSemestresAnnee);
         //recopie du modèle sur chaque année, puis remplissage
-        for ($i = 1; $i <= $nbAnnees; $i++) {
+        foreach ($tabSemestresAnnee as $i => $semestres) {
             $clonedWorksheet = clone $modele;
             $clonedWorksheet->setTitle('Année ' . $i);
             $spreadsheet->addSheet($clonedWorksheet);
