@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.3](https://github.com/Dannebicque/oreof/compare/v1.7.2...v1.7.3) (2023-08-22)
+
+
+### Bug Fixes
+
+* Affichage des fiches matières "hors parcours" ([9b420f3](https://github.com/Dannebicque/oreof/commit/9b420f3369583d10a3638e50fe07c07129dd75ab))
+* display sur écran MD du menu user ([19a9bb3](https://github.com/Dannebicque/oreof/commit/19a9bb3697bb405cf89ddf83ae282e991b853210))
+* lien pour voir parcours sur liste des parcours ([97c859d](https://github.com/Dannebicque/oreof/commit/97c859daa0128d1791f7b72d356fae7092b42128))
+* typo sur URL fiche matière ([482d90f](https://github.com/Dannebicque/oreof/commit/482d90f888651319c1ed73b19bc36561dd2661a8))
+* version du guide PDF ([c85d3fc](https://github.com/Dannebicque/oreof/commit/c85d3fcbe440cfeee007199dd4d0a474e9173e3d))
+
 ### [1.7.2](https://github.com/Dannebicque/oreof/compare/v1.7.1...v1.7.2) (2023-08-22)
 
 
