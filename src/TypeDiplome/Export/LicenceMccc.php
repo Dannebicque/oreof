@@ -80,6 +80,7 @@ class LicenceMccc
     public const COL_MCCC_ET_TYPE_EPREUVE = 27;
     public const COL_MCCC_CCI_EPREUVES = 28;
     public const COL_MCCC_SECONDE_CHANCE = 29;
+    const COL_DETAIL_TYPE_EPREUVES = "A24";
 
 
     protected array $typeEpreuves = [];
@@ -163,7 +164,15 @@ class LicenceMccc
                 $modele->setCellValue(self::CEL_REGIME_FC_CONTRAT_PRO, 'X');
             }
         }
-        $nbAnnees = count($tabSemestresAnnee);
+        //ajoute les sigles
+        $texte = '';
+        foreach ($this->typeEpreuves as $typeEpreuve) {
+            $texte .= $typeEpreuve->getSigle() . ' : ' . $typeEpreuve->getLibelle() . '; ';
+        }
+        $texte = substr($texte, 0, -2);
+        $modele->setCellValue(self::COL_DETAIL_TYPE_EPREUVES, $texte);
+
+
         //recopie du modèle sur chaque année, puis remplissage
         foreach ($tabSemestresAnnee as $i => $semestres) {
             $clonedWorksheet = clone $modele;
@@ -195,7 +204,6 @@ class LicenceMccc
                             }
 
                             if ($debut < $ligne - 1) {
-                                //    dump(self::COL_UE.'-'. $debut.'-'. self::COL_UE.'-'. $ligne - 1);
                                 $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
 //
                                 $this->excelWriter->mergeCellsCaR(self::COL_INTITULE_UE, $debut, self::COL_INTITULE_UE, $ligne - 1);
@@ -214,7 +222,6 @@ class LicenceMccc
                                 }
 
                                 if ($debut < $ligne - 1) {
-                                    //    dump(self::COL_UE.'-'. $debut.'-'. self::COL_UE.'-'. $ligne - 1);
                                     $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
 //
                                     $this->excelWriter->mergeCellsCaR(self::COL_INTITULE_UE, $debut, self::COL_INTITULE_UE, $ligne - 1);
@@ -228,7 +235,6 @@ class LicenceMccc
                     $this->excelWriter->mergeCellsCaR(self::COL_SEMESTRE, $debutSemestre, self::COL_SEMESTRE, $ligne - 1);
                     $this->excelWriter->writeCellXY(self::COL_SEMESTRE, $debutSemestre, 'S' . $semestre->getOrdre());
 
-                    //dump(self::COL_SEMESTRE.'*-*'. $debutSemestre.'*-*'. self::COL_SEMESTRE.'*-*'. $ligne - 1);
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $totalAnnee->totalCmPresentiel, ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $totalAnnee->totalTdPresentiel, ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $totalAnnee->totalTpPresentiel, ['style' => 'HORIZONTAL_CENTER']);
@@ -312,7 +318,7 @@ class LicenceMccc
     {
         $texte = '';
         foreach ($typeE as $type) {
-            if ($this->typeEpreuves[$type] !== null) {
+            if ($type !== "" && $this->typeEpreuves[$type] !== null) {
                 $texte .= $this->typeEpreuves[$type]->getSigle() . '; ';
             } else {
                 $texte .= 'erreur épreuve; ';
@@ -404,7 +410,7 @@ class LicenceMccc
                 $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, '50%');
                 $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, 2);
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()));
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()).' (' . $mcccs[2]['et']->getPourcentage() . '%)');
                 } else {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, 'Erreur');
                     //todo: ajouter couleur dans ce cas ?
@@ -413,7 +419,7 @@ class LicenceMccc
             case 'cci':
                 $texte = '';
                 foreach ($mcccs as $mccc) {
-                    $texte .= $this->displayTypeEpreuve($mccc->getTypeEpreuve()) . '(' . $mccc->getPourcentage() . '%); ';
+                    $texte .= 'cc'.$mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
                 }
                 $texte = substr($texte, 0, -2);
                 $this->excelWriter->writeCellXY(self::COL_MCCC_CCI_EPREUVES, $ligne, $texte);
@@ -429,11 +435,17 @@ class LicenceMccc
                 }
 
                 if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, $mcccs[1]['et']->getPourcentage()) . '%';
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, $mcccs[1]['et']->getPourcentage() . '%');
                     $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
                 } else {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, 'Erreur');
                     $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, 'Erreur');
+                }
+
+                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()).' (' . $mcccs[2]['et']->getPourcentage() . '%)');
+                } else {
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, 'Erreur');
                 }
                 break;
             case 'ct':
@@ -445,7 +457,7 @@ class LicenceMccc
                 }
 
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()));
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()).' (' . $mcccs[2]['et']->getPourcentage() . '%)');
                 } else {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, 'Erreur');
                 }
