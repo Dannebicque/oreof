@@ -23,7 +23,7 @@
             <h3 class="small-title">Présentation</h3>
             <div class="card mb-5">
                 <div class="card-body">
-                    {{ include('typeDiplome/formation/_presentationFormation.html.twig') }}
+                    {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours:true}) }}
                 </div>
             </div>
         </section>
@@ -87,7 +87,14 @@
         </section>
 
     {% else %}
-
+        <section class="scroll-section" id="presentation">
+            <h3 class="small-title">Présentation</h3>
+            <div class="card mb-5">
+                <div class="card-body">
+                    {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours:true}) }}
+                </div>
+            </div>
+        </section>
         {% for parcours in formation.parcours|filter(parcours => tParcours[parcours.id] is defined) %}
             {% set dto = tParcours[parcours.id] %}
             <div>

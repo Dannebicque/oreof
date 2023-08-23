@@ -1,4 +1,6 @@
+{% if hasParcours == false %}
 <div class="row">
+    {# todo: ne doit pas être là? #}
     <div class=col-sm-12">
         <dl>
             <dt>Contenu de la formation</dt>
@@ -18,6 +20,7 @@
         </dl>
     </div>
 </div>
+{% endif %}
 
 {% if formation.isHasParcours == true %}
     <div class="row">
