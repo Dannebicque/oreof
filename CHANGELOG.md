@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.1](https://github.com/Dannebicque/oreof/compare/v1.8.0...v1.8.1) (2023-08-23)
+
+
+### Bug Fixes
+
+* vérification structure si semestre non dispensé ([a840441](https://github.com/Dannebicque/oreof/commit/a840441a44a43b6ab6f7c1e67de695c034d56229))
+
 ## [1.8.0](https://github.com/Dannebicque/oreof/compare/v1.7.4...v1.8.0) (2023-08-23)
 
 
