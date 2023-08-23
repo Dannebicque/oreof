@@ -26,11 +26,20 @@ class CompetenceExportController extends AbstractController
         $dompdf->stream('BCC du parcours_'.$parcours->getLibelle(), ["Attachment" => true]);
     }
 
-    #[Route('/competence/export/croise', name: 'app_competence_export_croise')]
-    public function croise(): Response
+    #[Route('/competence/export/croise/{parcours}', name: 'app_competence_export_croise')]
+    public function croise(Parcours $parcours): Response
     {
-        return $this->render('competence_export/index.html.twig', [
-            'controller_name' => 'CompetenceExportController',
+        $html = $this->renderView('pdf/bcc_export_croise.html.twig', [
+            'formation' => $parcours->getFormation(),
+            'parcours' => $parcours,
+            'titre' => 'BCC du parcours '.$parcours->getLibelle(),
         ]);
+        $dompdf = new Dompdf();
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+
+
+        $dompdf->stream('BCC Croisé du parcours_'.$parcours->getLibelle(), ["Attachment" => true]);
     }
 }

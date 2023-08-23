@@ -1,57 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            {% for semestre in parcours.semestreParcours %}
-                <h2>{{ semestre.semestre.display }}</h2>
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th colspan="2" rowspan="2">&nbsp;</th>
-                        {% for ue in semestre.semestre.ues %}
-                            <th colspan="{{ ue.elementConstitutifs|length }}" class="text-center">{{ ue.display(parcours) }}</th>
-                        {% endfor %}
-                    </tr>
-                    <tr>
-                        {% for ue in semestre.semestre.ues %}
-                            {% for ec in ue.elementConstitutifs %}
-                                <th class="text-center">{{ ec.code }}</th>
-                            {% endfor %}
-                        {% endfor %}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for bcc in parcours.blocCompetences %}
-                        {% for competence in bcc.competences %}
-                            <tr>
-                                {% if loop.first %}
-                                <td rowspan="{{ bcc.competences|length }}">{{ bcc.display }}</td>
-                                {% endif %}
-                                <td>{{ competence.display }}</td>
-                                {% for ue in semestre.semestre.ues %}
-                                    {% for ec in ue.elementConstitutifs %}
-                                        <td class="text-center">
-                                            {% if ec.isFicheFromParcours %}
-                                                {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
-                                                    <i class="fa fa-check"></i>
-                                                {% endif %}
-                                            {% else %}
-                                            {% if competence.elementConstitutifs.contains(ec) %}
-                                                <i class="fa fa-check"></i>
-                                            {% endif %}
-                                            {% endif %}
-                                        </td>
-                                    {% endfor %}
-                                {% endfor %}
-                            </tr>
-                        {% endfor %}
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% endfor %}
-        </div>
-    </div>
+    {{ include('parcours_bcc/_tableauCroise.html.twig') }}
 {% endblock %}
 
 {% block header %}
@@ -77,15 +27,15 @@
         <i class="{{ iconDownload }}"></i>
         <span> Export des BCC</span>
     </a>
-{#    <a href="{{ path('app_competence_export_croise', {parcours:parcours.id}) }}"#}
-{#       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"#}
-{#       data-bs-toggle="tooltip"#}
-{#       data-bs-placement="bottom"#}
-{#       title="Retour au parcours"#}
-{#    >#}
-{#        <i class="{{ iconDownload }}"></i>#}
-{#        <span> Export du tableau croisé BCC/EC</span>#}
-{#    </a>#}
+    <a href="{{ path('app_competence_export_croise', {parcours:parcours.id}) }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour au parcours"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Export du tableau croisé BCC/EC</span>
+    </a>
     <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
        class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"
