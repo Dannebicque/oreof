@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/Dannebicque/oreof/compare/v1.7.4...v1.8.0) (2023-08-23)
+
+
+### Features
+
+* Export des BCC en PDF ([b03fa0e](https://github.com/Dannebicque/oreof/commit/b03fa0e9e40f41923d416222462603fac45f74d2))
+
 ### [1.7.4](https://github.com/Dannebicque/oreof/compare/v1.7.3...v1.7.4) (2023-08-23)
 
 
