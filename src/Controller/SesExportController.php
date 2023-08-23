@@ -41,7 +41,9 @@ class SesExportController extends BaseController
             }
             $excelWriter->writeCellXY(4, $ligne, '');
             $excelWriter->writeCellXY(5, $ligne, array_key_first($formation->getEtatDpe()));
-            $excelWriter->writeCellXY(6, $ligne, number_format($formation->remplissage()/100, 2));
+            $excelWriter->writeCellXY(6, $ligne, number_format($formation->remplissage()/100, 2), [
+                'pourcentage' => 'pourcentage',
+            ]);
             $excelWriter->writeCellXY(7, $ligne, $formation->getResponsableMention()?->getDisplay());
             $ligne++;
             foreach ($formation->getParcours() as $parcours) {
