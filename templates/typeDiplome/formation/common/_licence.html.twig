@@ -17,15 +17,16 @@
         </div>
     </section>
 
-    <section class="scroll-section" id="presentation">
-        <h3 class="small-title">Présentation</h3>
-        <div class="card mb-5">
-            <div class="card-body">
-                {{ include('typeDiplome/formation/_presentationFormation.html.twig') }}
-            </div>
-        </div>
-    </section>
+
     {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
+        <section class="scroll-section" id="presentation">
+            <h3 class="small-title">Présentation</h3>
+            <div class="card mb-5">
+                <div class="card-body">
+                    {{ include('typeDiplome/formation/_presentationFormation.html.twig') }}
+                </div>
+            </div>
+        </section>
         {% set dto = tParcours[formation.parcours[0].id] %}
 
         <section class="scroll-section" id="descriptif">
@@ -86,6 +87,7 @@
         </section>
 
     {% else %}
+
         {% for parcours in formation.parcours|filter(parcours => tParcours[parcours.id] is defined) %}
             {% set dto = tParcours[parcours.id] %}
             <div>
