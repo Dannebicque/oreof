@@ -110,6 +110,9 @@ class ExcelWriter
                     case 'wrap':
                         $this->sheet->getCell([$col, $row])->getStyle()->getAlignment()->setWrapText(true);
                         break;
+                    case 'pourcentage':
+                        $this->sheet->getCell([$col, $row])->getStyle()->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE_00);
+                        break;
                 }
             }
         }
