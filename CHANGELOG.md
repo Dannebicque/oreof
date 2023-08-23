@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.4](https://github.com/Dannebicque/oreof/compare/v1.7.3...v1.7.4) (2023-08-23)
+
+
+### Features
+
+* Affichage d'un parcours ([758730b](https://github.com/Dannebicque/oreof/commit/758730b93e3d4c64d3ffd861281f783d620f14d5))
+* Ajout des boutons exports MCCC et affichage BCC ([2294f66](https://github.com/Dannebicque/oreof/commit/2294f66381287936ef46382e486a5e5823a3460a))
+* Ajout des boutons MCCC et BCC sur parcours ([be79673](https://github.com/Dannebicque/oreof/commit/be79673c7fb02b1b7e9a124de476d70d095440ee))
+* Ergonomie, boutons d'exports, ... ([b131a9d](https://github.com/Dannebicque/oreof/commit/b131a9daafa5476c6a4b0fac44010c731c278996))
+* Mise en page PDF ([98c906e](https://github.com/Dannebicque/oreof/commit/98c906efec23ee92dce2cd4deab9af893f9a1f6d))
+
+
+### Bug Fixes
+
+* Affichage année universitaire ([a8aada2](https://github.com/Dannebicque/oreof/commit/a8aada285cc5d867bf93b974e630a757e067c4e6))
+* Déplacement bouton paramètres dans menu ([8a638c9](https://github.com/Dannebicque/oreof/commit/8a638c9a168e5c006ea0af17d17422745619f2d4))
+* message callOut sur génération des docs ([cd3bef7](https://github.com/Dannebicque/oreof/commit/cd3bef78b1bbf8e175f1256c7344c9537e4b66a5))
+* Params export MCCC Excel ([9faafca](https://github.com/Dannebicque/oreof/commit/9faafca89110af2398299aa0a34ac7145b2a3190))
+* si typeUE est null ([d3cf23b](https://github.com/Dannebicque/oreof/commit/d3cf23b14ff5d0f44f614c1c58ff5283a49a436d))
+
 ### [1.7.3](https://github.com/Dannebicque/oreof/compare/v1.7.2...v1.7.3) (2023-08-22)
 
 
