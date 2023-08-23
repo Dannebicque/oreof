@@ -8,6 +8,7 @@
 
 import { Controller } from '@hotwired/stimulus'
 import callOut from '../js/callOut'
+import JsonResponse from '../js/JsonResponse'
 
 export default class extends Controller {
   static values = {
@@ -51,7 +52,6 @@ export default class extends Controller {
       const liste = document.querySelectorAll('.check-all:checked')
       const data = new FormData()
 
-      console.log(liste)
       // ajoute les données de la liste au formulaire
       liste.forEach((element) => {
         data.append('liste[]', element.value)
@@ -67,6 +67,8 @@ export default class extends Controller {
       fetch(this.urlValideValue, {
         method: 'POST',
         body: data,
+      }).then((response) => {
+        JsonResponse(response)
       })
     } else {
       callOut('Veuillez remplir les champs obligatoires', 'danger')

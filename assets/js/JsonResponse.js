@@ -9,8 +9,7 @@
 import callOut from './callOut';
 
 export default async function JsonResponse(reponse) {
-  const data = await reponse.json().then((json) => JSON.parse(json.content))
-
+  const data = await reponse.json()
   if (reponse.status === 200) {
     callOut(data.message, 'success')
     return data
