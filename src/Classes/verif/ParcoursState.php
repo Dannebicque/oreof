@@ -214,7 +214,7 @@ class ParcoursState
                 $sem = $semestre->getSemestre();
             }
 
-            if ($sem?->getUes()->count() === 0) {
+            if ($sem?->isNonDispense() === false && $sem?->getUes()->count() === 0) {
                 //todo: potentielle des UE raccrochées également
                 $tab['error'][] = 'Vous devez ajouter au moins une UE au semestre "' . $semestre->getSemestre()?->display() . '".';
             }
