@@ -13,10 +13,10 @@
     </div>
     <div class="col-md-6 col-sm-12">
         <dl>
-            <dt>Composante porteuse</dt>
-            <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
             <dt>Mention/Spécialité</dt>
             <dd>{{ formation.display }}</dd>
+            <dt>Composante porteuse</dt>
+            <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
             <dt>Niveau à la sortie de la formation</dt>
             <dd>{{ formation.niveauSortie.libelle }}</dd>
         </dl>

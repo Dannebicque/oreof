@@ -23,13 +23,37 @@
     <div class="row">
         <div class="col-sm-12">
             <h3>Parcours</h3>
+            <table class="table">
             {% for parcours in formation.parcours %}
-                <ul>
-                    <li>{# todo: uniquement si dans formation, sinon des liens ? #}
+                <tr>
+                    <td>{# todo: uniquement si dans formation, sinon des liens ? #}
                         <a href="#presentation_{{ parcours.id }}">{{ parcours.libelle }}</a>
-                    </li>
-                </ul>
+                    </td>
+                    <td>
+                        <a href="{{ path('app_parcours_mccc_export', {parcours:parcours.id})  }}"
+                           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Télécharger les MCCC"
+                        >
+                            <i class="{{ iconDownload }}"></i>
+                            <span> MCCC (xlsx)</span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('app_parcours_bcc', {parcours:parcours.id})  }}"
+                           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Voir les BCC"
+                        >
+                            <i class="{{ iconShow }}"></i>
+                            <span> Voir BCC</span>
+                        </a>
+                    </td>
+                </tr>
             {% endfor %}
+            </table>
         </div>
     </div>
 {% else %}

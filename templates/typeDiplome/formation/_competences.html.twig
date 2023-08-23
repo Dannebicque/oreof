@@ -1,5 +1,16 @@
 <div class="row">
-    <div class="col-12">
+    <div class="col-sm-12 text-end mb-2">
+        <a href="{{ path('app_parcours_bcc', {parcours:parcours.id})  }}"
+           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Voir les BCC"
+        >
+            <i class="{{ iconShow }}"></i>
+            <span> Voir BCC</span>
+        </a>
+    </div>
+    <div class="col-sm-12">
         <ul class="list-unstyled">
         {% for bc in parcours.blocCompetences %}
             <li>{{ bc.display }}</li>

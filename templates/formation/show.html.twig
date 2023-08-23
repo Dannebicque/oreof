@@ -156,6 +156,47 @@
 {% endblock %}
 
 {% block bouton_header %}
+    {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
+    {% set parcours = formation.parcours[0] %}
+        <a href="{{ path('app_parcours_mccc_export', {parcours:parcours.id})  }}"
+           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Télécharger les MCCC"
+        >
+            <i class="{{ iconDownload }}"></i>
+            <span> MCCC (xlsx)</span>
+        </a>
+        <a href="{{ path('app_parcours_bcc', {parcours:parcours.id})  }}"
+           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Voir les BCC"
+        >
+            <i class="{{ iconShow }}"></i>
+            <span> Voir BCC</span>
+        </a>
+        {% else %}
+            <a href="#presentation"
+               class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+               data-bs-toggle="tooltip"
+               data-bs-placement="bottom"
+               title="Télécharger les MCCC"
+            >
+                <i class="{{ iconShow }}"></i>
+                <span> MCCC Parcours</span>
+            </a>
+            <a href="#presentation"
+               class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+               data-bs-toggle="tooltip"
+               data-bs-placement="bottom"
+               title="Voir les BCC"
+            >
+                <i class="{{ iconShow }}"></i>
+                <span> BCC Parcours</span>
+            </a>
+    {% endif %}
+
     <a href="{{ path('app_formation_export', {slug:formation.slug})  }}"
        class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"
@@ -163,7 +204,7 @@
        title="Télécharger en PDF"
     >
         <i class="{{ iconDownload }}"></i>
-        <span> Télécharger en PDF</span>
+        <span> Fiche descriptive (PDF)</span>
     </a>
     <a href="{{ path('app_formation_index')  }}"
        class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
