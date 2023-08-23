@@ -6,10 +6,22 @@
     <style>
         body {
             font-family: "DejaVu Sans", serif;
+            font-size: 12px;
         }
 
         @page {
             margin: 0cm 0cm;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin: 0;
+            border-bottom: 1px solid black;
         }
 
         /** Define now the real margins of every page in the PDF **/
@@ -18,6 +30,16 @@
             margin-left: 2cm;
             margin-right: 2cm;
             margin-bottom: 1.5cm;
+        }
+
+        .table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .table, .table th, .table td {
+            border: 1px solid black;
+            padding: 2px;
         }
 
         /** Define the header rules **/
@@ -54,11 +76,15 @@
 
 <body>
 <header>
-    <h1>This is a Header</h1>
+    {% block header %}
+    <h1>{{ titre }}</h1>
+    {% endblock %}
 </header>
 
 <footer>
-    <p>Copyright &copy; <?php echo date("Y");?></p>
+    {% block footer %}
+    <p>Document généré le {{ 'now'|date('d/m/Y H:i') }} depuis ORéOF {% if final is defined and final == true %}Document voté le ... {% else %}Document provisoire non validé en CFVU{% endif %}</p>
+    {% endblock %}
 </footer>
 
 <main>
