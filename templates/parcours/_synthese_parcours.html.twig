@@ -36,11 +36,12 @@
                 <a class="btn btn-outline-primary d-block" href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">
                     Contrôler les BCC
                 </a>
-                <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_mccc', {parcours:parcours
-                .id}) }}">
-                    Contrôler les MCCC
+                <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_mccc_export', {parcours:parcours.id, _format:'xlsx'}) }}">
+                    Export MCCC (xlsx)
                 </a>
-                {#                <button class="btn btn-outline-primary d-block mt-1">Contrôler les BCC</button> #}
+                <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_mccc_export_light', {parcours:parcours.id, _format:'xlsx'}) }}">
+                    Export simplifié des MCCC (xlsx)
+                </a>
             </div>
         </div>
 {#        {{ component('mention_manage', {parcours:parcours, type:'parcours'}) }}#}

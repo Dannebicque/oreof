@@ -12,17 +12,17 @@ namespace App\Controller;
 use App\Classes\CalculStructureParcours;
 use App\Classes\MyPDF;
 use App\Entity\Formation;
+use App\Entity\Parcours;
 use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class FormationExportController extends AbstractController
+class ParcoursExportController extends AbstractController
 {
     public function __construct(
         private readonly MyPDF $myPdf
-    )
-    {
+    ) {
     }
 
     /**
@@ -31,28 +31,28 @@ class FormationExportController extends AbstractController
      * @throws \Twig\Error\LoaderError
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
-    #[Route('/formation/export/{slug}', name: 'app_formation_export')]
-    public function export(Formation $formation,
-                           CalculStructureParcours $calculStructureParcours
-    ): Response
-    {
-        $typeDiplome = $formation->getTypeDiplome();
-        $tParcours = [];
-        foreach ($formation->getParcours() as $parcours) {
-            $tParcours[$parcours->getId()] =  $calculStructureParcours->calcul($parcours);
+    #[Route('/parcours/export/{parcours}', name: 'app_parcours_export')]
+    public function export(
+        Parcours                $parcours,
+        CalculStructureParcours $calculStructureParcours
+    ): Response {
+        $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
+
+        if (null === $typeDiplome) {
+            throw new \Exception('Type de diplôme non trouvé');
         }
 
-        $html = $this->renderView('pdf/formation.html.twig', [
-            'formation' => $formation,
+        $html = $this->renderView('pdf/parcours.html.twig', [
+            'formation' => $parcours->getFormation(),
             'typeDiplome' => $typeDiplome,
-            'titre' => 'Détails de la formation '.$formation->getDisplay(),
-            'tParcours' => $tParcours,
+            'parcours' => $parcours,
+            'titre' => 'Détails du parcours '.$parcours->getLibelle(),
+            'dto' => $calculStructureParcours->calcul($parcours)
         ]);
         $dompdf = new Dompdf();
         $dompdf->loadHtml($html);
         $dompdf->render();
 
-
-        $dompdf->stream('dpe_formation_'.$formation->getDisplay(), ["Attachment" => true]);
+        $dompdf->stream('Parcours_'.$parcours->getLibelle(), ["Attachment" => true]);
     }
 }
