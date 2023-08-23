@@ -551,19 +551,21 @@ class Formation
         $total += $this->getRythmeFormation() === null ? 0 : 1;
         $total += $this->getRythmeFormationTexte() === null ? 0 : 1;
         $total += $this->isHasParcours() === null ? 0 : 1;
+
         $max = 4;
         if ($this->hasParcours === true) {
             foreach ($this->getParcours() as $parcours) {
-                $total += $parcours->remplissageBrut();
-                $max += 10;
+                $remplissage = $parcours->remplissageBrut();
+                $total += $remplissage->score;
+                $max += $remplissage->total;
             }
         } else {
             if ($this->getParcours()->first() !== false) {
-                $total += $this->getParcours()->first()->remplissageBrut();
-                $max += 5;
+                $remplissage = $this->getParcours()->first()->remplissageBrut();
+                $total += $remplissage->score;
+                $max += $remplissage->total;
             }
         }
-
 
         //todo: ajouter le remplissage des matières ?
         return $total / $max * 100;

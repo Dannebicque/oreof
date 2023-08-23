@@ -9,6 +9,7 @@
 
 namespace App\Entity;
 
+use App\DTO\Remplissage;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\RegimeInscriptionEnum;
@@ -441,30 +442,37 @@ class Parcours
         return $this;
     }
 
-    public function remplissageBrut(): int
+    public function remplissageBrut(): Remplissage
     {
-        $total = 0;
-        //if (!$this->isParcoursDefaut()) {
-            $total += count($this->getRegimeInscription()) === 0 ? 0 : 1;
-            $total += $this->getContenuFormation() === null ? 0 : 1;
-            $total += $this->getDebouches() === null ? 0 : 1;
-            $total += $this->getResultatsAttendus() === null ? 0 : 1;
-            $total += $this->getRythmeFormation() === null ? 0 : 1;
-       // }
+        $remplissage = new Remplissage();
+        $remplissage->add(count($this->getRegimeInscription()) === 0 ? 0 : 1);
+        if ($this->isParcoursDefaut() === false) {
+            $remplissage->add($this->getContenuFormation() === null ? 0 : 1);
+            $remplissage->add($this->getResultatsAttendus() === null ? 0 : 1);
+            $remplissage->add($this->getRythmeFormation() === null ? 0 : 1);
+            $remplissage->add($this->getLocalisation() === null ? 0 : 1);
+            $remplissage->add($this->getObjectifsParcours() === null ? 0 : 1);
+        }
 
-        $total += $this->getLocalisation() === null ? 0 : 1;
-        $total += $this->getObjectifsParcours() === null ? 0 : 1;
-        $total += $this->getPoursuitesEtudes() === null ? 0 : 1;
-        $total += $this->getCoordSecretariat() === null ? 0 : 1;
-        $total += count($this->getCodesRome()) === 0 ? 0 : 1;
+        $remplissage->add($this->getDebouches() === null ? 0 : 1);
 
-        return $total;
+        $remplissage->add($this->getPoursuitesEtudes() === null ? 0 : 1);
+        $remplissage->add($this->getCoordSecretariat() === null ? 0 : 1);
+        $remplissage->add(count($this->getBlocCompetences()) === 0 ? 0 : 1);
+        if (count($this->getBlocCompetences()) !== 0) {
+            foreach ($this->getBlocCompetences() as $bloc) {
+                $remplissage->add(count($bloc->getCompetences()) === 0 ? 0 : 1);
+            }
+        }
+
+        return $remplissage;
     }
 
     public function remplissage(): float
     {
         //if ($this->isParcoursDefaut()) {
-            return $this->remplissageBrut() / 10 * 100;
+        $remplissage = $this->remplissageBrut();
+        return $remplissage->score / $remplissage->total * 100;
         //}
 
         //return $this->remplissageBrut() / 5 * 100;
@@ -547,7 +555,7 @@ class Parcours
             $t[] = RegimeInscriptionEnum::from($value);
         }
 
-        return$t;
+        return $t;
     }
 
     public function setRegimeInscription(?array $regimeInscription): self
@@ -898,5 +906,10 @@ class Parcours
         }
 
         return $this;
+    }
+
+    public function getValide()
+    {
+        return $this->getEtatParcours()['valide'] ?? false;
     }
 }
