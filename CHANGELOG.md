@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.3](https://github.com/Dannebicque/oreof/compare/v1.8.2...v1.8.3) (2023-08-23)
+
+
+### Features
+
+* Add bouton modifier pour revenir sur le DPE ([c0c9611](https://github.com/Dannebicque/oreof/commit/c0c961164212b3da6c291fc6b54f77815e646f61))
+* DTO pour remplissage ([39ad2ee](https://github.com/Dannebicque/oreof/commit/39ad2eea4f113ee718aabf8d0cd1238a14f5913f))
+* Export du tableau croisé des BCC ([5fc7745](https://github.com/Dannebicque/oreof/commit/5fc774506337e3241df45181a31537eef773a4c9))
+* Export Excel SES ([55609c5](https://github.com/Dannebicque/oreof/commit/55609c505f00d6cd899e26fcc99da87b9c34491d))
+
+
+### Bug Fixes
+
+* Affichage formation ([d108260](https://github.com/Dannebicque/oreof/commit/d1082601a7debe6f432509f8ef767ecbe19635a4))
+* bug affichage mauvaise partie sur formation par défaut ([01e54a2](https://github.com/Dannebicque/oreof/commit/01e54a22298703929f8a2ed83c0ebf8af21e7dad))
+* lien parcours si pas de parcours ([235d5cb](https://github.com/Dannebicque/oreof/commit/235d5cbc245584e45a89e74e6834d6bd4f674440))
+* Typo modèle MCCC ([68d8ef1](https://github.com/Dannebicque/oreof/commit/68d8ef1016772e45fdcd52cd66777acb17eb6adc))
+
 ### [1.8.2](https://github.com/Dannebicque/oreof/compare/v1.8.1...v1.8.2) (2023-08-23)
 
 ### [1.8.1](https://github.com/Dannebicque/oreof/compare/v1.8.0...v1.8.1) (2023-08-23)
