@@ -1,0 +1,25 @@
+{% extends 'pdf/base-pdf.html.twig' %}
+
+{% block content %}
+    {# todo: attention, si BUT différent, dépendre du type de formation #}
+    <div class="col-sm-12">
+        <ul class="list-unstyled">
+            {% for bc in parcours.blocCompetences %}
+                <li>{{ bc.display }}</li>
+                <li>
+                    <ul>
+                        {% for c in bc.competences %}
+                            <li>{{ c.display }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+
+{% block title %}
+BCC du parcours {{ parcours.libelle }}<br>
+    Formation {{ parcours.formation.display }}
+{% endblock %}
+

@@ -68,6 +68,24 @@
 {% endblock %}
 
 {% block bouton_header %}
+    <a href="{{ path('app_competence_export_bcc', {parcours:parcours.id}) }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour au parcours"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Export des BCC</span>
+    </a>
+{#    <a href="{{ path('app_competence_export_croise', {parcours:parcours.id}) }}"#}
+{#       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"#}
+{#       data-bs-toggle="tooltip"#}
+{#       data-bs-placement="bottom"#}
+{#       title="Retour au parcours"#}
+{#    >#}
+{#        <i class="{{ iconDownload }}"></i>#}
+{#        <span> Export du tableau croisé BCC/EC</span>#}
+{#    </a>#}
     <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
        class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"

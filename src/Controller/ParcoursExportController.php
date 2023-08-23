@@ -11,7 +11,6 @@ namespace App\Controller;
 
 use App\Classes\CalculStructureParcours;
 use App\Classes\MyPDF;
-use App\Entity\Formation;
 use App\Entity\Parcours;
 use Dompdf\Dompdf;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
