@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.5](https://github.com/Dannebicque/oreof/compare/v1.8.4...v1.8.5) (2023-08-24)
+
+
+### Features
+
+* Fix header avec titre + boutons + breadcrumsb ([29397a8](https://github.com/Dannebicque/oreof/commit/29397a8254d503d62e15de37e4acfb9fadc0a37b))
+* Lisibilité de la fiche parcours/formation ([7483273](https://github.com/Dannebicque/oreof/commit/748327333ba0231d2ea89b0e876abcfd4652dc3a))
+* Process de validation : corrections de mise en page, affichage sur les show de parcours et formations ([5087d95](https://github.com/Dannebicque/oreof/commit/5087d95231835833fd66613197d581edd0be8459))
+
+
+### Bug Fixes
+
+* process ([20e0472](https://github.com/Dannebicque/oreof/commit/20e0472ff1ee2fc947fd1835d98d921fc2592b19))
+
 ### [1.8.4](https://github.com/Dannebicque/oreof/compare/v1.8.3...v1.8.4) (2023-08-23)
 
 
