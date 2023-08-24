@@ -3,6 +3,11 @@
 {% block title %}Formation{% endblock %}
 
 {% block content %}
+
+    {% if is_granted('CAN_FORMATION_VALIDATE_MY') %}
+        {{ component('mention_manage', {formation:formation, type:'formation'}) }}
+    {% endif %}
+
     <div class="row">
         {{ include('typeDiplome/formation/common/_licence.html.twig') }}
         <!-- Scrollspy Start -->

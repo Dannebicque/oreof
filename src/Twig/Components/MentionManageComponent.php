@@ -56,7 +56,7 @@ final class MentionManageComponent
     public ?FicheMatiere $ficheMatiere = null;
 
     #[LiveProp]
-    public TypeDiplome $typeDiplome;
+    public ?TypeDiplome $typeDiplome;
 
     public string $etape = '';
 
@@ -74,14 +74,21 @@ final class MentionManageComponent
         #[Target('parcours')]
         private WorkflowInterface                $parcoursWorkflow,
     ) {
+//        dump($this->type);
         $this->process = $this->validationProcess->getProcess();
     }
 
     #[LiveListener('mention_manage:valide')]
     public function valide()
     {
-        $this->typeDiplome = $this->parcours?->getFormation()->getTypeDiplome();
-        $this->formation = $this->parcours?->getFormation();
+//        dump($this->type);
+//        if ($this->parcours !== null) {
+//            $this->typeDiplome = $this->parcours?->getFormation()?->getTypeDiplome();
+//            $this->formation = $this->parcours?->getFormation();
+//        } else {
+//            $this->typeDiplome = $this->formation->getTypeDiplome();
+//        }
+
         $place = array_keys($this->dpeWorkflow->getMarking($this->formation)->getPlaces())[0];
         $this->etape = self::TAB[$place] ?? $this->type;
         $this->event = 'valide';
@@ -90,8 +97,8 @@ final class MentionManageComponent
     #[LiveListener('mention_manage:edit')]
     public function edit()
     {
-        $this->typeDiplome = $this->parcours?->getFormation()->getTypeDiplome();
-        $this->formation = $this->parcours?->getFormation();
+//        $this->typeDiplome = $this->parcours?->getFormation()->getTypeDiplome();
+//        $this->formation = $this->parcours?->getFormation();
         $place = array_keys($this->dpeWorkflow->getMarking($this->formation)->getPlaces())[0];
         $this->etape = self::TAB[$place] ?? $this->type;
         $this->event = 'edit';
@@ -100,8 +107,8 @@ final class MentionManageComponent
     #[LiveListener('mention_manage:refuse')]
     public function refuse()
     {
-        $this->typeDiplome = $this->parcours?->getFormation()->getTypeDiplome();
-        $this->formation = $this->parcours?->getFormation();
+//        $this->typeDiplome = $this->parcours?->getFormation()->getTypeDiplome();
+//        $this->formation = $this->parcours?->getFormation();
         $place = array_keys($this->dpeWorkflow->getMarking($this->formation)->getPlaces())[0];
         $this->etape = self::TAB[$place] ?? $this->type;
         $this->event = 'valide';

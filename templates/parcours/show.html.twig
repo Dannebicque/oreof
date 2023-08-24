@@ -3,6 +3,10 @@
 {% block title %}Parcours{% endblock %}
 
 {% block content %}
+    {% if is_granted('CAN_PARCOURS_VALIDATE_MY') %}
+        {{ component('mention_manage', {parcours:parcours, type:'parcours'}) }}
+    {% endif %}
+
     <div class="row">
         {{ include('typeDiplome/parcours/common/_licence.html.twig') }}
         <!-- Scrollspy Start -->

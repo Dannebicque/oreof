@@ -1,7 +1,10 @@
 {% if formation.hasParcours == true %}
-{% set col = 'col-4' %}
+    {% set col = 'col-4' %}
 {% else %}
-{%  set col = 'col-3' %}
+    {% set col = 'col-3' %}
+{% endif %}
+{% if is_granted('ROLE_ADMIN') %}
+    {{ component('mention_manage', {formation:formation, type:'formation'}) }}
 {% endif %}
 <div class="card">
     <div class="card-body">
@@ -17,8 +20,7 @@
             <div class="{{ col }}">
                 <dl>
                     <dt>Composante</dt>
-                    <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'Non définie'
-                        }}</dd>
+                    <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'Non définie' }}</dd>
                     <dt>Mention/spécialité (sigle)</dt>
                     <dd id="synthese_formation_libelle_dd">{{ formation.display }}</dd>
                 </dl>
@@ -37,20 +39,45 @@
             </div>
             {% if formation.hasParcours == false and formation.parcours[0] is defined %}
                 <div class="{{ col }} d-grid">
-                    <a class="btn btn-outline-primary d-block" href="{{ path('app_parcours_bcc', {parcours:formation.parcours[0].id}) }}">
+                    <a class="btn btn-outline-primary d-block"
+                       href="{{ path('app_parcours_bcc', {parcours:formation.parcours[0].id}) }}">
                         Contrôler les BCC
                     </a>
-                    <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_mccc_export', {parcours:formation.parcours[0].id, _format:'xlsx'}) }}">
+                    <a class="btn btn-outline-primary d-block mt-1"
+                       href="{{ path('app_parcours_mccc_export', {parcours:formation.parcours[0].id, _format:'xlsx'}) }}">
                         Export MCCC (xlsx)
                     </a>
-                    <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_mccc_export_light', {parcours:formation.parcours[0].id, _format:'xlsx'}) }}">
+                    <a class="btn btn-outline-primary d-block mt-1"
+                       href="{{ path('app_parcours_mccc_export_light', {parcours:formation.parcours[0].id, _format:'xlsx'}) }}">
                         Export simplifié des MCCC (xlsx)
                     </a>
                 </div>
             {% endif %}
+            <div class="d-flec d-grid justify-content-end">
 
+                {% if is_granted('ROLE_SES') %}
+                    <a href="{{ path('app_formation_edit_modal',{'slug': formation.slug}) }}"
+                       class="btn btn-sm btn-icon btn-icon-only btn-outline-warning ms-1"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="Modifier la formation"
+                    >
+                        <i class="{{ iconEdit }}"></i>
+                    </a>
+                    {% if typeDiplome.libelleCourt == 'BUT' %}
+                        <a href="{{ path('app_formation_synchronisation',{'formation': formation.id}) }}"
+                           class="btn btn-sm btn-icon btn-icon-only btn-outline-danger ms-1"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Initialiser la formation depuis ORéBUT"
+                        >
+                            <i class="fal fa-rotate"></i>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
         </div>
-{#        {{ component('mention_manage', {formation:formation, type:'formation'}) }}#}
-
     </div>
 </div>
+
+
