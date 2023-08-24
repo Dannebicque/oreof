@@ -11,6 +11,7 @@ process:
     hasDate: false
     transition: 'en_cours_redaction'
     canValide: ''
+    check: true
   parcours:
     icon: 'fa-memo-circle-check'
     label: 'validation.parcours'
@@ -23,6 +24,7 @@ process:
     hasDate: false
     transition: 'en_cours_redaction'
     canValide: 'valider_parcours'
+    check: true
   formation:
     icon: 'fa-file-circle-check'
     label: 'validation.formation'
@@ -35,13 +37,14 @@ process:
     hasDate: false
     transition: 'en_cours_redaction'
     canValide: 'valide_rf'
+    check: true
   dpe:
     icon: 'fa-check-to-slot'
     label: 'validation.dpe'
     hasValid: true
     hasReserve: true
     hasRefuse: true
-    hasUpload: true
+    hasUpload: false
     isTimeline: true
     hasDate: false
     transition: 'soumis_dpe_composante'
@@ -96,7 +99,7 @@ process:
     hasUpload: false
     isTimeline: true
     hasDate: true
-    transition: 'soumis_cfvu'
+    transition: 'valider_cfvu'
     canValide: 'valider_cfvu'
     canRefuse: 'refuser_definitif_cfvu'
     canReserve: 'valider_reserve_cfvu'
