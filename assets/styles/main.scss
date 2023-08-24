@@ -10,6 +10,10 @@
   border-left: 2px solid var(--primary);
 }
 
+.border-left-parcours {
+  border-left: 2px solid var(--primary);
+}
+
 .border-left-sousEc {
   border-left: 2px solid var(--primary) !important;
 }
@@ -22,6 +26,11 @@
 
   .border-left-sousEc-#{$i} {
     border-left-color: var(--color-#{$i}) !important;
+  }
+
+  .border-left-parcours-#{$i} {
+    border-left-color: var(--color-#{$i}) !important;
+    padding-left: 15px;
   }
 }
 

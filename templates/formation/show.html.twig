@@ -84,59 +84,57 @@
                 {% else %}
                     {% for parcours in formation.parcours %}
                         <li>
-                            Parcours {{ parcours.libelle }}
+                            <strong>Parcours {{ parcours.libelle }}</strong>
                         </li>
-                        <li>
+                        <li class="border-left-parcours border-left-parcours-{{ loop.index}}">
                             <a class="nav-link p-2" href="#presentation_{{ parcours.id }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Présentation
                             </a>
                         </li>
-                        <li>
+                        <li class="border-left-parcours border-left-parcours-{{ loop.index}}">
                             <a class="nav-link p-2" href="#descriptif_{{ parcours.id }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Descriptif de la formation
                             </a>
                         </li>
-                        <li>
+                        <li class="border-left-parcours border-left-parcours-{{ loop.index}}">
                             <a class="nav-link p-2" href="#localisation_{{ parcours.id }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Localisation
                             </a>
                         </li>
-                        <li>
+                        <li class="border-left-parcours border-left-parcours-{{ loop.index}}">
                             <a class="nav-link p-2" href="#competences_{{ parcours.id }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Compétences Acquises
                             </a>
                         </li>
-                        <li>
+                        <li class="border-left-parcours border-left-parcours-{{ loop.index}}">
                             <a class="nav-link p-2" href="#structure_{{ parcours.id }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Structure
                             </a>
                         </li>
-
-
-                        <li>
+                        <li class="border-left-parcours border-left-parcours-{{ loop.index}}">
                             <a class="nav-link p-2" href="#admission_{{ parcours.id }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Admission
                             </a>
                         </li>
-                        <li>
+                        <li class="border-left-parcours border-left-parcours-{{ loop.index}}">
                             <a class="nav-link p-2" href="#inscription_{{ parcours.id }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Inscription
                             </a>
                         </li>
-                        <li>
+                        <li class="border-left-parcours border-left-parcours-{{ loop.index}}">
                             <a class="nav-link p-2" href="#et_apres_{{ parcours.id }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Et après...
                             </a>
                         </li>
-                        <li>
+                        <li class="border-left-parcours border-left-parcours-{{ loop.index}}">
                             <a class="nav-link p-2" href="#contacts_{{ parcours.id }}">
                                 <i class="fal fa-chevron-right text-start"></i>
                                 Contacts pédagogiques
