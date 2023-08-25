@@ -11,6 +11,8 @@ namespace App\Controller;
 
 use App\Classes\MyPDF;
 use App\Entity\FicheMatiere;
+use App\Entity\Parcours;
+use Dompdf\Dompdf;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,9 +57,31 @@ class FicheMatiereExportController extends AbstractController
                 'ficheMatiere' => $ficheMatiere,
                 'formation' => $formation,
                 'typeDiplome' => $typeDiplome,
-                'bccs' => $bccs
+                'bccs' => $bccs,
+                'titre' => 'Fiche EC/matière '.$ficheMatiere->getLibelle(),
             ],
             'dpe_fiche_matiere_'.$ficheMatiere->getLibelle()
         );
+    }
+
+    #[Route('/fiche-matiere/export/all/{parcours}', name: 'fiche_matiere_export_all')]
+    public function exportFichesMatieres(Parcours $parcours): Response
+    {
+        $html = $this->renderView('pdf/ficheMatiereAll.html.twig', [
+            'formation' => $parcours->getFormation(),
+            'parcours' => $parcours,
+            'fiches' => $parcours->getFicheMatieres(),
+            'typeDiplome' => $parcours->getFormation()?->getTypeDiplome(),
+        ]);
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+
+        $dompdf->stream('FichesMatieres'.$parcours->getLibelle(), ["Attachment" => true]);
+    }
+
+    #[Route('/fiche-matiere/export/zip/{parcours}', name: 'fiche_matiere_export_zip')]
+    public function exportFichesMatieresZip(Parcours $parcours): Response
+    {
     }
 }
