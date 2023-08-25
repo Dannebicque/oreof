@@ -47,6 +47,9 @@
                 <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_mccc_export_light', {parcours:parcours.id, _format:'xlsx'}) }}">
                     Export simplifié des MCCC (xlsx)
                 </a>
+{#                {{ include('btn/export_mccc.html.twig', {block:true}) }}
+todo: résoudre le soucis du block sur btn dropdown #}
+
             </div>
         </div>
     </div>

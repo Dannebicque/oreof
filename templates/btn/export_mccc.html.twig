@@ -1,0 +1,15 @@
+<div class="btn-group">
+    <button type="button" class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="{{ iconDownload }}"></i>  MCCC
+    </button>
+    <div class="dropdown-menu" style="">
+        <a class="dropdown-item" href="{{ path('app_parcours_mccc_export', {parcours:parcours.id, _format:'xlsx'}) }}">
+            Version complète (xlsx)
+        </a>
+        <a class="dropdown-item" href="{{ path('app_parcours_mccc_export_light', {parcours:parcours.id, _format:'xlsx'}) }}">Version simplifiée (xlsx)</a>
+        <a class="dropdown-item" href="{{ path('app_parcours_mccc_export', {parcours:parcours.id, _format:'pdf'}) }}">
+            Version complète (pdf)
+        </a>
+        <a class="dropdown-item" href="{{ path('app_parcours_mccc_export_light', {parcours:parcours.id, _format:'pdf'}) }}">Version simplifiée (pdf)</a>
+    </div>
+</div>

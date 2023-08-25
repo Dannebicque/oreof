@@ -161,17 +161,7 @@
 {% block bouton_header %}
     {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
     {% set parcours = formation.parcours[0] %}
-        <div class="btn-group">
-            <button type="button" class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="{{ iconDownload }}"></i>  MCCC (xlsx)
-            </button>
-            <div class="dropdown-menu" style="">
-                <a class="dropdown-item" href="{{ path('app_parcours_mccc_export', {parcours:parcours.id, _format:'xlsx'}) }}">
-                    Version complète
-                </a>
-                <a class="dropdown-item" href="{{ path('app_parcours_mccc_export_light', {parcours:parcours.id, _format:'xlsx'}) }}">Version simplifiée</a>
-            </div>
-        </div>
+        {{ include('btn/export_mccc.html.twig') }}
         <a href="{{ path('app_parcours_bcc', {parcours:parcours.id})  }}"
            class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
            data-bs-toggle="tooltip"
