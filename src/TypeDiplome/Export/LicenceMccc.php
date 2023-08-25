@@ -42,10 +42,10 @@ class LicenceMccc
     public const CEL_ANNEE_UNIVERSITAIRE = 'A3';
     public const CEL_RESPONSABLE_MENTION = 'E21';
     public const CEL_RESPONSABLE_PARCOURS = 'E22';
-    public const CEL_REGIME_FI = 'C7';
-    public const CEL_REGIME_FC = 'C9';
-    public const CEL_REGIME_FI_APPRENTISSAGE = 'C11';
-    public const CEL_REGIME_FC_CONTRAT_PRO = 'C13';
+    public const CEL_REGIME_FI = 'D7';
+    public const CEL_REGIME_FC = 'D9';
+    public const CEL_REGIME_FI_APPRENTISSAGE = 'D11';
+    public const CEL_REGIME_FC_CONTRAT_PRO = 'D13';
 
     //Colonnes sur Modèles
 
@@ -120,8 +120,6 @@ class LicenceMccc
         }
         $spreadsheet = $this->excelWriter->createFromTemplate('Annexe_MCCC.xlsx');
 
-        $this->genereReferentielCompetences($spreadsheet, $parcours, $formation);
-
         // Prépare le modèle avant de dupliquer
         $modele = $spreadsheet->getSheetByName(self::PAGE_MODELE);
         if ($modele === null) {
@@ -172,12 +170,14 @@ class LicenceMccc
         $texte = substr($texte, 0, -2);
         $modele->setCellValue(self::COL_DETAIL_TYPE_EPREUVES, $texte);
 
+        $index = 1;
 
         //recopie du modèle sur chaque année, puis remplissage
         foreach ($tabSemestresAnnee as $i => $semestres) {
             $clonedWorksheet = clone $modele;
             $clonedWorksheet->setTitle('Année ' . $i);
-            $spreadsheet->addSheet($clonedWorksheet);
+            $spreadsheet->addSheet($clonedWorksheet, $index);
+            $index++;
             $anneeSheets[$i] = $clonedWorksheet;
 
 
@@ -257,8 +257,10 @@ class LicenceMccc
             //suppression de la ligne modèle 18
             $this->excelWriter->removeRow(18);
             $this->updateIfNotFull();
+            $this->excelWriter->mergeCellsCaR(1, $ligne+4, 20, $ligne +4);
+            $this->excelWriter->setPrintArea('A1:AC' . $ligne+5);
         }
-
+        $this->genereReferentielCompetences($spreadsheet, $parcours, $formation);
 
         //supprimer la feuille de modèle
         $spreadsheet->removeSheetByIndex(0);
@@ -275,7 +277,7 @@ class LicenceMccc
         bool               $versionFull = true
     ): StreamedResponse {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
-        return $this->excelWriter->genereFichier($this->fileName);
+        return $this->excelWriter->genereFichierPdf($this->fileName);
     }
 
     public function exportAndSaveExcelLicenceMccc(
@@ -349,14 +351,17 @@ class LicenceMccc
         $this->excelWriter->setSheet($modele);
         foreach ($bccs as $bcc) {
             $this->excelWriter->writeCellXY(1, $ligne, $bcc->getCode());
-            $this->excelWriter->writeCellXY(2, $ligne, $bcc->getLibelle());
+            $this->excelWriter->writeCellXY(2, $ligne, $bcc->getLibelle(), ['wrap' => true]);
             $ligne++;
             foreach ($bcc->getCompetences() as $competence) {
                 $this->excelWriter->writeCellXY(2, $ligne, $competence->getCode());
-                $this->excelWriter->writeCellXY(3, $ligne, $competence->getLibelle());
+                $this->excelWriter->writeCellXY(3, $ligne, $competence->getLibelle(), ['wrap' => true]);
+
                 $ligne++;
             }
         }
+
+        $this->excelWriter->setPrintArea('A1:C' . $ligne);
     }
 
     private function afficheEc(int $ligne, ElementConstitutif $ec, TotalVolumeHeure $totalAnnee): int

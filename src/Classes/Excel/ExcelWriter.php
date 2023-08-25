@@ -232,6 +232,19 @@ class ExcelWriter
     public function genereFichier(string $name): StreamedResponse
     {
         $this->pageSetup($name);
+        foreach ($this->spreadsheet->getAllSheets() as $shh) {
+            $sh = $this->spreadsheet->setActiveSheetIndex($this->spreadsheet->getIndex($shh));
+            $sh->setShowGridlines(false);
+            $sh->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A3);
+            $sh->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
+            $sh->getPageSetup()->setFitToPage(1);
+            $sh->getPageSetup()->setFitToWidth(1);
+            $sh->getPageSetup()->setFitToHeight(1);
+            $sh->getPageMargins()->setTop(1);
+            $sh->getPageMargins()->setRight(0.75);
+            $sh->getPageMargins()->setLeft(0.75);
+            $sh->getPageMargins()->setBottom(1);
+        }
         $writer = new Xlsx($this->spreadsheet);
 
         return new StreamedResponse(
@@ -259,7 +272,7 @@ class ExcelWriter
         $this->spreadsheet->getActiveSheet()->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A4);
         $this->spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
         $this->spreadsheet->getActiveSheet()->setShowGridlines(true); //affichage de la grille
-        $this->spreadsheet->getActiveSheet()->setPrintGridlines(true); //affichage de la grille
+        $this->spreadsheet->getActiveSheet()->setPrintGridlines(false); //affichage de la grille
         $this->spreadsheet->getActiveSheet()->getPageSetup()->setRowsToRepeatAtTopByStartAndEnd(
             1,
             1
@@ -316,5 +329,51 @@ class ExcelWriter
     public function getRowAutosize(int $ligne): void
     {
         $this->sheet->getRowDimension($ligne)->setRowHeight(-1);
+    }
+
+    public function genereFichierPdf(string $name): StreamedResponse
+    {
+
+        $this->pageSetup($name);
+        $nbSheets = $this->spreadsheet->getSheetCount();
+        for($i = 0; $i<$nbSheets; $i++){
+            $sh = $this->spreadsheet->setActiveSheetIndex($i);
+            $sh->setShowGridlines(false);
+            $sh->setPrintGridlines(false); //affichage de la grille
+
+            $sh->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A3);
+            $sh->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
+            $sh->getPageSetup()->setHorizontalCentered(true);
+            $sh->getPageSetup()->setVerticalCentered(false);
+            $sh->getPageSetup()->setFitToPage(1);
+            $sh->getPageSetup()->setFitToWidth(1);
+            $sh->getPageSetup()->setFitToHeight(0);
+            $sh->getPageMargins()->setTop(1);
+            $sh->getPageMargins()->setRight(0.75);
+            $sh->getPageMargins()->setLeft(0.75);
+            $sh->getPageMargins()->setBottom(1);
+        }
+        //todo: ajouter header/footer
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($this->spreadsheet, 'Mpdf');
+        $writer->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
+        $writer->setPaperSize(PageSetup::PAPERSIZE_A3);
+        $writer->writeAllSheets();
+        return new StreamedResponse(
+            static function () use ($writer) {
+                $writer->save('php://output');
+            },
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment;filename="' . $name . '.pdf"',
+            ]
+        );
+
+    }
+
+    public function setPrintArea(string $string)
+    {
+        $this->sheet->getPageSetup()->setPrintArea($string,0, PageSetup::SETPRINTRANGE_OVERWRITE);
     }
 }
