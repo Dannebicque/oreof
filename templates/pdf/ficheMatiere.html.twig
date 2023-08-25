@@ -1,0 +1,132 @@
+<header>
+    <h1>{{ ec.ficheMatiere.libelle }}</h1>
+</header>
+
+{% set ficheMatiere = ec.ficheMatiere %}
+<h2>Identité de la fiche EC/matière</h2>
+<div class="row">
+    <div class="col-12">
+        <dl>
+            <dt>Type de diplôme</dt>
+            <dd>{{ typeDiplome != null ? typeDiplome|typeDiplome : 'N.C.' }}</dd>
+            <dt>Mention/Spécialité</dt>
+            <dd>{{ formation != null ? formation.display : '' }}</dd>
+            <dt>Parcours</dt>
+            <dd>
+                {% if parcours.parcoursDefaut == false %}
+                {{ parcours.libelle }}
+                {% else %}
+                Mention sans parcours
+                {% endif %}
+            </dd>
+            <dt>Composante porteuse</dt>
+            <dd>{{ (formation != null and formation.composantePorteuse != null) ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
+            <dt>Semestre / UE</dt>
+            <dd>{{ semestre.display }} / {{ ec.ue.display(parcours) }}</dd>
+            <dt>Intitulé de l'EC</dt>
+            <dd>{{ ficheMatiere.libelle }}</dd>
+            <dt>Intitulé de l'EC en anglais</dt>
+            <dd>{{ ficheMatiere.libelleAnglais }}</dd>
+            <dt>Enseignement mutualisé ?</dt>
+            <dd>{{ ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 ? 'Oui' : 'Non' }}</dd>
+            {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 %}
+                <dt>Formation(s) partageant l’enseignement mutualisé</dt>
+                <dd>
+                    <ul>
+                        {% for parc in ficheMatiere.ficheMatiereParcours %}
+                            <li>{{ parc.parcours.libelle }} ({{ parc.parcours.formation.display }})</li>
+                        {% endfor %}
+                    </ul>
+                </dd>
+            {% endif %}
+        </dl>
+    </div>
+    <div class="col-12 mt-2">
+        <h2>Heures</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <td></td>
+                <td>CM</td>
+                <td>TD</td>
+                <td>TP</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Présentiel</td>
+                <td>{{ ec.volumeCmPresentiel }}</td>
+                <td>{{ ec.volumeTdPresentiel }}</td>
+                <td>{{ ec.volumeTpPresentiel }}</td>
+            </tr>
+            <tr>
+                <td>Distanciel</td>
+                <td>{{ ec.volumeCmDistanciel }}</td>
+                <td>{{ ec.volumeTdDistanciel }}</td>
+                <td>{{ ec.volumeTpDistanciel }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-12 mt-2">
+        <h2>Détail de la fiche EC/matière</h2>
+        <div class="row">
+            <div class="col-sm-12">
+                <dl>
+                    <dt>Description de l’enseignement</dt>
+                    <dd>
+                        {{ ficheMatiere.description|raw }}
+                    </dd>
+                    <dt>Enseignement dispensé en</dt>
+                    <dd>
+                        <ul>
+                            {% for langue in ficheMatiere.langueDispense %}
+                                <li>{{ langue.libelle }}</li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                    <dt>Support de cours en</dt>
+                    <dd>
+                        <ul>
+                            {% for langue in ficheMatiere.langueSupport %}
+                                <li>{{ langue.libelle }}</li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                    <dt>Objectifs de l'enseignement</dt>
+                    <dd>
+                        {{ ficheMatiere.objectifs|raw }}
+                    </dd>
+                </dl>
+            </div>
+            {#    <div class="col-sm-12"> #}
+            {#        <dl> #}
+            {#            <dt>Type d'enseignement</dt> #}
+            {#            <dd>{{ ficheMatiere.ues.typeUe != null ? ficheMatiere.ue.typeUe.libelle : #}
+            {#                'erreur' #}
+            {#                }}</dd> #}
+            {#            <dt>Enseignement Obligatoire / Optionnel</dt> #}
+            {#            <dd>{{ elementConstitutif.ecUes[0].ue.ueObligatoire != null ? elementConstitutif.ecUes[0].ue #}
+            {#                .ueObligatoire.libelle : 'erreur'}}</dd> #}
+            {#        </dl> #}
+            {#    </div> #}
+        </div>
+    </div>
+    <div class="col-12 mt-2">
+        <h2>BCC pour le parcours</h2>
+        <ul>
+            {% if ec.ficheMatiere.parcours.id == parcours.id %}
+                {% for competence in ec.ficheMatiere.competences %}
+                    <li>{{ competence.display }}</li>
+                {% endfor %}
+            {% else %}
+                {% for competence in ec.competences %}
+                    <li>{{ competence.display }}</li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+    <div class="col-12 mt-2">
+    <h2>MCCC pour le parcours</h2>
+    </div>
+</div>

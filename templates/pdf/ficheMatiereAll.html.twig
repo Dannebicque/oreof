@@ -1,0 +1,24 @@
+{% extends 'pdf/base-pdf.html.twig' %}
+
+{% block content %}
+    <h1 class="text-center">{{ formation.display }}</h1>
+    {% if parcours.parcoursDefaut == false %}
+        <h2 class="text-center">{{ parcours.libelle }}</h2>
+    {% endif %}
+    <div class="page_break"></div>
+    {% for semestre in parcours.semestreParcours %}
+        <h1 class="text-center">Fiches EC/matière du semestre {{ semestre.display }}</h1>
+        <div class="page_break"></div>
+        {% for ue in semestre.semestre.ues %}
+            {% for ec in ue.elementConstitutifs %}
+                {{ include('pdf/ficheMatiere.html.twig', {semestre:semestre}) }}
+                <div class="page_break"></div>
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
+
+{% block header %}
+    &nbsp;
+{% endblock %}
+

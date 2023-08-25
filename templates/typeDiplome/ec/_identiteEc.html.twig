@@ -1,20 +1,24 @@
 <div class="row">
-    <div class="col-md-6 col-sm-12">
+    <div class="col-12">
         <dl>
             <dt>Type de diplôme</dt>
             <dd>{{ typeDiplome != null ? typeDiplome|typeDiplome : 'N.C.' }}</dd>
-            <dt>Domaine</dt>
-            <dd>{{ (formation != null and formation.domaine != null) ? formation.domaine.libelle : 'erreur' }}</dd>
-            <dt>Parcours</dt>
-            <dd>{{ ficheMatiere.parcours != null ? ficheMatiere.parcours.libelle : 'erreur' }}</dd>
-        </dl>
-    </div>
-    <div class="col-md-6 col-sm-12">
-        <dl>
-            <dt>Composante porteuse</dt>
-            <dd>{{ (formation != null and formation.composantePorteuse != null) ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
             <dt>Mention/Spécialité</dt>
             <dd>{{ formation != null ? formation.display : '' }}</dd>
+            <dt>Parcours porteur</dt>
+            <dd>
+                {% if ficheMatiere.parcours != null %}
+                    {% if ficheMatiere.parcours.parcoursDefaut == false %}
+                        {{ ficheMatiere.parcours.libelle }}
+                    {% else %}
+                        Mention sans parcours
+                    {% endif %}
+                {% else %}
+                    Pas de parcours précisé
+                {% endif %}
+            </dd>
+            <dt>Composante porteuse</dt>
+            <dd>{{ (formation != null and formation.composantePorteuse != null) ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
         </dl>
     </div>
     <div class="col-12">
