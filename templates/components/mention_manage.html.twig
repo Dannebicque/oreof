@@ -175,10 +175,15 @@
                                     {% endif %}
                                 {% else %}
                                     {% if this.type=='parcours' and this.parcours.etatParcours['soumis_parcours'] is defined %}
-                                        <button class="btn btn-sm btn-success d-block">Validé</button>
+                                        <div class="col-3 d-grid">
+                                            <button class="btn btn-sm btn-success d-block">Validé</button>
+                                        </div>
                                     {% else %}
-                                        <button class="btn btn-sm btn-warning d-block">Validation indisp.</button>
+                                        <div class="col-3 d-grid">
+                                            <button class="btn btn-sm btn-warning d-block">Validation indisp.</button>
+                                        </div>
                                     {% endif %}
+                                    <div class="col-6 d-grid"></div>
                                 {% endif %}
                             {% else %}
                                 {% if this.process[this.etape] is defined %}
