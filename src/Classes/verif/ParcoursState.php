@@ -232,9 +232,14 @@ class ParcoursState
     private function etatOnglet5(): bool|array
     {
         $tab['error'] = [];
+        //todo: inscription, alternance ?
 
         if ($this->parcours->getPrerequis() === null || trim($this->parcours->getPrerequis()) === '') {
             $tab['error'][] = 'Vous devez indiquer les prérequis.';
+        }
+
+        if ($this->parcours->getComposanteInscription() === null) {
+            $tab['error'][] = 'Vous devez indiquer la composante d\'inscription.';
         }
 
         if ($this->parcours->getCoordSecretariat() === null || trim($this->parcours->getCoordSecretariat()) === '') {
