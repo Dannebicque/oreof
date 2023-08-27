@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.1](https://github.com/Dannebicque/oreof/compare/v1.9.0...v1.9.1) (2023-08-27)
+
+
+### Features
+
+* Ajout de la structure ([2fbfd07](https://github.com/Dannebicque/oreof/commit/2fbfd076959f5e08749c26cc4a193bb131587f3f))
+
 ## [1.9.0](https://github.com/Dannebicque/oreof/compare/v1.8.5...v1.9.0) (2023-08-27)
 
 
