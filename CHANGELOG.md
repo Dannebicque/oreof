@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/Dannebicque/oreof/compare/v1.8.5...v1.9.0) (2023-08-27)
+
+
+### Features
+
+* Ajout d'un bouton pour retour sur édition directement ([e25e38c](https://github.com/Dannebicque/oreof/commit/e25e38cad68c67286299ded8f448ec1026cb8ecb))
+* Ajout de l'heure et de l'auteur ([34c5bec](https://github.com/Dannebicque/oreof/commit/34c5becdbbf5c495401066f135a4012bc7fbc14a))
+* bouton messagerie interne ([a4c9b7a](https://github.com/Dannebicque/oreof/commit/a4c9b7af52ef5b1d56cdfbbbd2662c061e997007))
+* Boutons export MCCC ([c3acb72](https://github.com/Dannebicque/oreof/commit/c3acb72d1ad776376d198e2675800e189c5a6b59))
+* Export PDF des MCCC ([bec3b99](https://github.com/Dannebicque/oreof/commit/bec3b99eb2273db827604b7ddf3432c2e64cb867))
+* export PDF des MCCC en partant de l'excel ([0844734](https://github.com/Dannebicque/oreof/commit/08447344609615ac13c16c7efd28d30099f91a46))
+* filtre sur l'état de remplissage + indicateur de parcours ([0aff576](https://github.com/Dannebicque/oreof/commit/0aff576d21f249ce97779016ce7bcf1aa21410e4))
+* Système de contact en interne pour le SES ([6df2de4](https://github.com/Dannebicque/oreof/commit/6df2de47e181484f2bea018c0cc4ddbe7971ae84))
+* Validation du parcours avec détail ([6c482f5](https://github.com/Dannebicque/oreof/commit/6c482f51b76c90b1de92028771b906b944e84227))
+
+
+### Bug Fixes
+
+* boutons exports des fiches ([08a3700](https://github.com/Dannebicque/oreof/commit/08a3700e29cd026cdd6d38f5e3cd757cc921dcfa))
+* export des fiches matières ([0881b9b](https://github.com/Dannebicque/oreof/commit/0881b9b2f27d5a479e9b50f9b2d94c9de489691b))
+* export fiches matières ([5c23d0a](https://github.com/Dannebicque/oreof/commit/5c23d0a3ae78ac071c369c0be2c7ccea69a1d3b7))
+* Gestion validation ([60547ee](https://github.com/Dannebicque/oreof/commit/60547eeecdec9ace4f58ba838b640b5af080a939))
+* modele Excel export MCCC ([95c5b30](https://github.com/Dannebicque/oreof/commit/95c5b30c5e68c7408765a506145f8036a77070a7))
+
 ### [1.8.5](https://github.com/Dannebicque/oreof/compare/v1.8.4...v1.8.5) (2023-08-24)
 
 
