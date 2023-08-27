@@ -1,4 +1,22 @@
 <ul class="list-unstyled list-inline text-center menu-icons">
+    {% if is_granted('ROLE_SES') %}
+    <li class="list-inline-item">
+        <a href="#"
+                {{ stimulus_controller('modal', {
+                    size: 'large',
+                    modalTitle: 'Contacter',
+                    right: true,
+                    modalUrl: path('app_ses_contact') }) }}
+           data-action="click->modal#openModal"
+           data-size="lg"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Contacter"
+        >
+            <i class="fas fa-comment"></i>
+        </a>
+    </li>
+    {% endif %}
     <li class="list-inline-item">
     <a href="#"
             {{ stimulus_controller('modal', {
