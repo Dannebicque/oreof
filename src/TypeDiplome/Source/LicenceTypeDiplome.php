@@ -47,6 +47,17 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         return $this->licenceMccc->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
     }
 
+    public function exportPdfMccc(
+        AnneeUniversitaire $anneeUniversitaire,
+        Parcours           $parcours,
+        ?DateTimeInterface  $dateEdition = null,
+        bool               $versionFull = true
+    ): StreamedResponse
+    {
+        //todo: exploiter la date...
+        return $this->licenceMccc->exportPdfLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+    }
+
     public function exportAndSaveExcelMccc(
         string $dir,
         AnneeUniversitaire $anneeUniversitaire,

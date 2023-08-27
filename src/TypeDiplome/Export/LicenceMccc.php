@@ -277,6 +277,16 @@ class LicenceMccc
         bool               $versionFull = true
     ): StreamedResponse {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        return $this->excelWriter->genereFichier($this->fileName);
+    }
+
+    public function exportPdfLicenceMccc(
+        AnneeUniversitaire $anneeUniversitaire,
+        Parcours           $parcours,
+        ?DateTimeInterface  $dateEdition = null,
+        bool               $versionFull = true
+    ): StreamedResponse {
+        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
         return $this->excelWriter->genereFichierPdf($this->fileName);
     }
 
