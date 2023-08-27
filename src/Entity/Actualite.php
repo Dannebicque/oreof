@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ActualiteRepository;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -30,6 +31,11 @@ class Actualite
     {
         return $this->id;
     }
+
+    public function __construct() {
+        $this->datePublication = new DateTime();
+    }
+
 
     public function getDatePublication(): ?\DateTimeInterface
     {
