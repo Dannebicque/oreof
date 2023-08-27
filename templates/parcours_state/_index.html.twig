@@ -140,6 +140,28 @@
         <th colspan="2">Structure de la maquette</th>
     </tr>
     <tr>
+        <td>Structure</td>
+        <td>{{ valide.etat.structure.global|badgeValide }}</td>
+    </tr>
+    {% for key, semestre in valide.etat.structure.semestres  %}
+    <tr>
+        <td class="ps-2">Semestre {{ key }}</td>
+        <td>{{ semestre.global|badgeValide }}</td>
+    </tr>
+        {% for keyUe, ue in semestre.ues  %}
+            <tr>
+                <td class="ps-4">UE {{ keyUe }}</td>
+                <td>{{ ue.global|badgeValide }}</td>
+            </tr>
+            {% for keyEc, ec in ue.ecs  %}
+                <tr>
+                    <td class="ps-5">EC {{ keyEc }}</td>
+                    <td>{{ ec.global|badgeValide }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+    <tr>
         <th colspan="2">Admission & inscription</th>
     </tr>
     <tr>

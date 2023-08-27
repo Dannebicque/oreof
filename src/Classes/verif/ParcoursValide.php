@@ -142,7 +142,7 @@ class ParcoursValide
         }
 
         // onglet 4
-
+        $this->etat['structure'] = $this->valideStructure($parcours);
 
         // onglet 5
         $this->etat['preRequis'] = $this->nonVide($parcours->getPrerequis());
@@ -153,7 +153,7 @@ class ParcoursValide
         foreach ($parcours->getRegimeInscription() as $regimeInscription) {
             if ($regimeInscription !== RegimeInscriptionEnum::FI && $regimeInscription !== RegimeInscriptionEnum::FC) {
                 $this->etat['modaliteAlternance'] = $this->nonVide($parcours->getModalitesAlternance());
-                $this->etat['regimeInscription'] = $this->etat['modaliteAlternance'] === self::COMPLET ?  self::COMPLET : self::INCOMPLET;
+                $this->etat['regimeInscription'] = $this->etat['modaliteAlternance'] === self::COMPLET ? self::COMPLET : self::INCOMPLET;
             }
         }
 
@@ -175,5 +175,35 @@ class ParcoursValide
         }
 
         return self::VIDE;
+    }
+
+    private function valideStructure(Parcours $parcours): array
+    {
+        $structure = [];
+        $etatGlobal = self::COMPLET;
+
+        foreach ($parcours->getSemestreParcours() as $semestreParcour) {
+            $structure['semestres'][$semestreParcour->getOrdre()]['global'] = count($semestreParcour->getSemestre()->getUes()) === 0 ? self::VIDE : self::COMPLET;;
+            foreach ($semestreParcour->getSemestre()->getUes() as $ue) {
+                $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = count($ue->getElementConstitutifs()) === 0 ? self::VIDE : self::COMPLET;
+                foreach ($ue->getElementConstitutifs() as $ec) {
+                    if ($ec->getFicheMatiere() === null || $ec->getMcccs()->count() === 0 || $ec->etatStructure() !== 'Complet') {
+                        $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['global'] = self::INCOMPLET;
+                        $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = self::INCOMPLET;
+                        $structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::INCOMPLET;
+                    } elseif ($ec->getFicheMatiere() === null && $ec->getMcccs()->count() === 0 && $ec->getHeures() === 'À compléter') {
+                        $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['global'] = self::VIDE;
+                        $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = self::INCOMPLET;
+                        $structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::INCOMPLET;
+                    } else {
+                        $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['global'] = self::COMPLET;
+                    }
+                }
+            }
+        }
+        $structure['global'] = $etatGlobal;
+
+
+        return $structure;
     }
 }
