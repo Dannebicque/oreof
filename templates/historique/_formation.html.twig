@@ -17,12 +17,13 @@
         <div class="col ps-3">
             <div class="row g-0">
                 <div class="col">
-                    <div class="sh-5 d-flex align-items-center lh-1-25">
+                    <div class="d-flex align-items-center lh-1-25">
                         {{ histo.etape|etapeLabel|trans }}
                     </div>
+                    <p class="text-small">par : {{ histo.user.display }}</p>
                 </div>
                 <div class="col-auto">
-                    <div class="sh-5 d-flex align-items-center">{{ histo.created|date('d/m/Y') }}</div>
+                    <div class="sh-5 d-flex align-items-center">{{ histo.created|date('d/m/Y H:i') }}</div>
                 </div>
             </div>
         </div>

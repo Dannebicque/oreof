@@ -14,10 +14,7 @@ class HistoriqueController extends AbstractController
     #[Route('/historique/formation/{formation}', name: 'app_historique_formation')]
     public function formation(Formation $formation): Response
     {
-
-
-
-        return $this->render('historique/formation.html.twig', [
+        return $this->render('historique/_formation.html.twig', [
             'historiques' => $formation->getHistoriqueFormations(),
             'formation' => $formation
         ]);
@@ -29,17 +26,17 @@ class HistoriqueController extends AbstractController
         $historiques = [];
         $histo = $parcours->getHistoriqueParcours();
         foreach ($histo as $h) {
-            $historiques[$h->getCreated()->format('dmYhis')] = $h ;
+            $historiques[$h->getCreated()?->format('dmYhis')] = $h ;
         }
 
-        $histo = $parcours->getFormation()->getHistoriqueFormations();
+        $histo = $parcours->getFormation()?->getHistoriqueFormations();
         foreach ($histo as $h) {
-            $historiques[$h->getCreated()->format('dmYhis')] = $h ;
+            $historiques[$h->getCreated()?->format('dmYhis')] = $h ;
         }
 
         asort($historiques);
 
-        return $this->render('historique/formation.html.twig', [
+        return $this->render('historique/_formation.html.twig', [
             'historiques' => $historiques,
             'parcours' => $parcours,
             'formation' => $parcours->getFormation()
@@ -52,7 +49,7 @@ class HistoriqueController extends AbstractController
         $historiques = [];
         $histo = $ficheMatiere->getHistoriqueFicheMatieres();
         foreach ($histo as $h) {
-            $historiques[$h->getCreated()->format('dmYhis')] = $h ;
+            $historiques[$h->getCreated()?->format('dmYhis')] = $h ;
         }
 
 //        $histo = $parcours->getFormation()->getHistoriqueFormations();
@@ -62,7 +59,7 @@ class HistoriqueController extends AbstractController
 
         asort($historiques);
 
-        return $this->render('historique/formation.html.twig', [
+        return $this->render('historique/_formation.html.twig', [
             'historiques' => $historiques,
             'ficheMatiere' => $ficheMatiere,
             //'formation' => $parcours->getFormation()
