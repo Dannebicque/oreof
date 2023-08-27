@@ -120,6 +120,18 @@
        title="Télécharger en PDF"
     >
         <i class="{{ iconDownload }}"></i>
-        <span> Télécharger en PDF</span>
+        <span> Fiche descriptive (PDF)</span>
     </a>
+
+    {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) %}
+        <a href="{{ path('app_parcours_edit', {id:parcours.id})  }}"
+           class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Modifier le parcours"
+        >
+            <i class="{{ iconEdit }}"></i>
+            <span> Modifier le parcours</span>
+        </a>
+    {% endif %}
 {% endblock %}
