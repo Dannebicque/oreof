@@ -1,0 +1,37 @@
+<form method="post" action="{{ path('app_ses_contact') }}">
+    <div class="mb-3">
+        <label for="destinataires" class="form-label required">Destinataire</label>
+        <select id="destinataires" name="destinataires[]" multiple class="form-select" required
+                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+
+        >
+            {% for user in users %}
+                <option value="{{ user.id }}">{{ user.display }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="replyTo" class="form-label">Copie à</label>
+        <select id="replyTo" name="replyTo[]" multiple class="form-select"
+                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+        >
+            {% for user in users %}
+                <option value="{{ user.id }}">{{ user.display }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="subject" class="form-label required">Sujet</label>
+        <input type="text" id="subject" name="subject" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="message" class="form-label required">Message</label>
+        <textarea id="message" name="message" class="form-control" required rows="10"></textarea>
+    </div>
+    <button type="submit" class="btn btn-success"
+            {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+    >
+        <i class="fal fa-send"></i>
+        Envoyer
+    </button>
+</form>

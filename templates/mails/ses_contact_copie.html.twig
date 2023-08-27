@@ -1,0 +1,9 @@
+Destinataire : {% for adresse in destinataires %}{{ adresse.address }} - {{ adresse.name }}, {% endfor %}<br>
+Copie : {% for adresse in cc %}{{ adresse.address }} - {{ adresse.name }}, {% endfor %}<br><br>
+
+Message :<br><br>
+
+<p>{{ message|raw }}</p>
+
+Cordialement,<br>
+Le Service des Enseignements et de la Scolarité

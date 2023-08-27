@@ -6,17 +6,26 @@
  * @lastUpdate 10/06/2023 09:11
  */
 
-import callOut from './callOut';
+import callOut from './callOut'
 
 export default async function JsonResponse(reponse) {
   const data = await reponse.json()
   if (reponse.status === 200) {
-    callOut(data.message, 'success')
+    if (data.message.trim() !== '') {
+      callOut(data.message, 'success')
+    } else {
+      callOut('Sauvegarde effectuée', 'success')
+    }
+
     return data
   }
 
   if (reponse.status === 500) {
-    callOut(data.message, 'error')
+    if (data.message.trim() !== '') {
+      callOut(data.message, 'error')
+    } else {
+      callOut('Erreur lors de la sauvegarde', 'error')
+    }
     return data
   }
 }

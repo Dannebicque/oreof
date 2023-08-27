@@ -11,6 +11,7 @@ import { Modal } from 'bootstrap'
 
 import TomSelect from 'tom-select';
 import callOut from '../js/callOut'
+import JsonResponse from '../js/JsonResponse'
 
 export default class extends Controller {
   static targets = ['modal', 'modalBody', 'modalTitle', 'size', 'btnClose', 'liste']
@@ -29,9 +30,13 @@ export default class extends Controller {
       method: form.method,
       body: new URLSearchParams(new FormData(form)),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        // response.json()
+        JsonResponse(response)
+      })
       .then(async () => {
-        callOut('Sauvegarde effectuée', 'success')
+        // callOut('Sauvegarde effectuée', 'success')
+
         this.modal.hide()
         if (this.updateComponent) {
           const component = document.getElementById(this.updateComponent.id).__component;

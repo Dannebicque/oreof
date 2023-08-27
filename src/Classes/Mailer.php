@@ -55,22 +55,30 @@ class Mailer
         if (array_key_exists('replyTo', $options) && '' !== $options['replyTo']) {
             if (is_array($options['replyTo'])) {
                 foreach ($options['replyTo'] as $email) {
-                    $this->mail->addReplyTo(new Address($email));
+                    $this->mail->addReplyTo($this->getEmail($email));
                 }
             } else {
-                $this->mail->replyTo(new Address($options['replyTo']));
+                $this->mail->replyTo($this->getEmail($options['replyTo']));
             }
         } else {
-            $this->mail->replyTo($this->from);
+            $this->mail->replyTo($this->getEmail($this->from));
+        }
+    }
+
+    private function getEmail(string|Address|null $email): Address
+    {
+        if ($email instanceof Address) {
+            return $email;
+        }
+        if (null !== $email && '' !== trim($email)) {
+            return new Address(trim($email));
         }
     }
 
     private function checkTo(array $mails): void
     {
         foreach ($mails as $m) {
-            if (null !== $m && '' !== trim($m)) {
-                $this->mail->addTo(new Address(trim($m)));
-            }
+            $this->mail->addTo($this->getEmail($m));
         }
     }
 
@@ -78,7 +86,7 @@ class Mailer
     {
         if (array_key_exists('cc', $options) && (is_countable($options['cc']) ? count($options['cc']) : 0) > 0) {
             foreach ($options['cc'] as $cc) {
-                $this->mail->addCc(new Address($cc));
+                $this->mail->addCc($this->getEmail($cc));
             }
         }
     }
@@ -90,7 +98,7 @@ class Mailer
 
     public function setTemplate(?string $template, ?array $data): void
     {
-        if (!str_contains((string) $template, 'html')) {
+        if (!str_contains((string)$template, 'html')) {
             $this->mail->textTemplate($template)
                 ->context($data);
         } else {
