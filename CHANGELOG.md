@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.2](https://github.com/Dannebicque/oreof/compare/v1.10.1...v1.10.2) (2023-08-28)
+
+
+### Bug Fixes
+
+* marges Excels ([33d8bf8](https://github.com/Dannebicque/oreof/commit/33d8bf865cfac0e290741355509001701ca1c4a1))
+
 ### [1.10.1](https://github.com/Dannebicque/oreof/compare/v1.10.0...v1.10.1) (2023-08-28)
 
 
