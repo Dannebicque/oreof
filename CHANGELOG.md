@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/Dannebicque/oreof/compare/v1.9.2...v1.10.0) (2023-08-28)
+
+
+### Features
+
+* Validation de la formation ([fbc821e](https://github.com/Dannebicque/oreof/commit/fbc821e755bd6d43a452085a7082f1f060dfb146))
+
+
+### Bug Fixes
+
+* Couleur orange visible ([1fec7a0](https://github.com/Dannebicque/oreof/commit/1fec7a03e37b39b7350da8136d80c94b8d2064e9))
+* Couleur orange visible ([de64c2d](https://github.com/Dannebicque/oreof/commit/de64c2dc8ffbe3caef28461453439f5463adeb3f))
+* dump restant ([4c5285c](https://github.com/Dannebicque/oreof/commit/4c5285c27566b2107fb522cd01cb648b1d04485c))
+* formData pour l'upload des images ([774bfcb](https://github.com/Dannebicque/oreof/commit/774bfcb09bea06ceac6a5ad988dad4ce0d6d60d6))
+* masquer les boutons si print ([efe3394](https://github.com/Dannebicque/oreof/commit/efe3394e8a7e13a25f8dc515ef7465c3860f2427))
+* Processus de validation. Ajout des possibilités sur valider et refuser, traitement de l'upload et mise à jour de l'historique ([760e826](https://github.com/Dannebicque/oreof/commit/760e826bc74e500b8a451e7b202a68e788888aa8))
+
 ### [1.9.2](https://github.com/Dannebicque/oreof/compare/v1.9.1...v1.9.2) (2023-08-27)
 
 
