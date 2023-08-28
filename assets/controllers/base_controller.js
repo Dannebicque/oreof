@@ -28,7 +28,7 @@ export default class extends Controller {
     const form = this.element.getElementsByTagName('form')[0]
     fetch(form.action, {
       method: form.method,
-      body: new URLSearchParams(new FormData(form)),
+      body: new FormData(form),
     })
       .then((response) => {
         // response.json()
