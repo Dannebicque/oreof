@@ -3,20 +3,26 @@
         <dl>
             <dt>Type de diplôme</dt>
             <dd>{{ typeDiplome|typeDiplome }}</dd>
-            <dt>Domaine</dt>
-            <dd>{{ formation.domaine != null ? formation.domaine.libelle : 'erreur' }}</dd>
-            <dt>Niveau à l'entrée de la formation</dt>
-            <dd>{{ formation.niveauEntree.libelle }}</dd>
-            <dt>Inscription au RNCP</dt>
-            <dd>{{ formation.inRncp == true ? formation.codeRncp : 'Non inscrit' }}</dd>
-        </dl>
-    </div>
-    <div class="col-md-6 col-sm-12">
-        <dl>
             <dt>Mention/Spécialité</dt>
             <dd>{{ formation.display }}</dd>
+            {% if formation.isHasParcours == true and print is defined and print == true %}
+                <dt>Parcours</dt>
+                <dd>
+                    <ul>
+                        {% for parcours in formation.parcours %}
+                            <li>{{ parcours.libelle }}</li>
+                        {% endfor %}
+                    </ul>
+                </dd>
+            {% endif %}
+            <dt>Domaine</dt>
+            <dd>{{ formation.domaine != null ? formation.domaine.libelle : 'erreur' }}</dd>
             <dt>Composante porteuse</dt>
             <dd>{{ formation.composantePorteuse != null ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
+            <dt>Inscription au RNCP</dt>
+            <dd>{{ formation.inRncp == true ? formation.codeRncp : 'Non inscrit' }}</dd>
+            <dt>Niveau à l'entrée de la formation</dt>
+            <dd>{{ formation.niveauEntree.libelle }}</dd>
             <dt>Niveau à la sortie de la formation</dt>
             <dd>{{ formation.niveauSortie.libelle }}</dd>
         </dl>

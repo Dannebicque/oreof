@@ -1,5 +1,5 @@
 <div class="row">
-
+    {% if (print is defined and print == false) %}
     <div class="col-sm-12 text-end mb-2">
         <div class="btn-group">
             <button type="button" class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -17,6 +17,7 @@
 
         {{ include('btn/export_mccc.html.twig') }}
     </div>
+    {% endif %}
     <div class="col-sm-12">
         <table class="table table-striped table-hover">
             {% set presentiel = parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
