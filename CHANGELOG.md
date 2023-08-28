@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.1](https://github.com/Dannebicque/oreof/compare/v1.10.0...v1.10.1) (2023-08-28)
+
+
+### Features
+
+* Export PDF avec image + corrections des espaces + bugs sur fiches des parcours ([3ffbfcd](https://github.com/Dannebicque/oreof/commit/3ffbfcd068d508d8a0a6a6326cbb6c5fb9184cf6))
+
+
+### Bug Fixes
+
+* marges Excels ([58b0f91](https://github.com/Dannebicque/oreof/commit/58b0f91679402e2b9c9382f14d3f74f22d731b4b))
+* validation, page validation, correctifs divers sur le process ([4dfba88](https://github.com/Dannebicque/oreof/commit/4dfba8840126f471696a1f8b54ca205fd707a77e))
+
 ## [1.10.0](https://github.com/Dannebicque/oreof/compare/v1.9.2...v1.10.0) (2023-08-28)
 
 
