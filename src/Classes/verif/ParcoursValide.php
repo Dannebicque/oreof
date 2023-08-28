@@ -13,44 +13,41 @@ use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
 use App\Enums\RegimeInscriptionEnum;
 
-class ParcoursValide
+class ParcoursValide extends AbstractValide
 {
-    public const COMPLET = 'complet';
-    public const INCOMPLET = 'incomplet';
-    public const VIDE = 'vide';
-    public const NON_CONCERNE = 'non_concerne';
-
     public array $etat = [];
     public array $bccs = [];
 
-    public function __construct()
+    public function __construct(Parcours $parcours, TypeDiplome $typeDiplome)
     {
+        $this->parcours = $parcours;
+        $this->typeDiplome = $typeDiplome;
     }
 
-    public function valide(Parcours $parcours, TypeDiplome $typeDiplome): ParcoursValide
+    public function valideParcours(): ParcoursValide
     {
         //onglet 1
-        $this->etat['respParcours'] = $parcours->getRespParcours() ? self::COMPLET : self::VIDE;
-        $this->etat['objectifsParcours'] = $this->nonVide($parcours->getObjectifsParcours());
-        $this->etat['resultatsAttendus'] = $this->nonVide($parcours->getResultatsAttendus());
-        $this->etat['contenuParcours'] = $this->nonVide($parcours->getContenuFormation());
-        $this->etat['rythmeParcours'] = $parcours->getRythmeFormation() !== null || $this->nonVide($parcours->getRythmeFormationTexte()) ? self::COMPLET : self::VIDE;
-        $this->etat['localisation'] = $parcours->getLocalisation() ? self::COMPLET : self::VIDE;
+        $this->etat['respParcours'] = $this->parcours->getRespParcours() ? self::COMPLET : self::VIDE;
+        $this->etat['objectifsParcours'] = $this->nonVide($this->parcours->getObjectifsParcours());
+        $this->etat['resultatsAttendus'] = $this->nonVide($this->parcours->getResultatsAttendus());
+        $this->etat['contenuParcours'] = $this->nonVide($this->parcours->getContenuFormation());
+        $this->etat['rythmeParcours'] = $this->parcours->getRythmeFormation() !== null || $this->nonVide($this->parcours->getRythmeFormationTexte()) ? self::COMPLET : self::VIDE;
+        $this->etat['localisation'] = $this->parcours->getLocalisation() ? self::COMPLET : self::VIDE;
 
         //onglet 2
-        $this->etat['modalitesEnseignement'] = $parcours->getModalitesEnseignement() ? self::COMPLET : self::VIDE;
-        if ($parcours->isHasStage() === null && $typeDiplome->isHasStage() === true) {
+        $this->etat['modalitesEnseignement'] = $this->parcours->getModalitesEnseignement() ? self::COMPLET : self::VIDE;
+        if ($this->parcours->isHasStage() === null && $typeDiplome->isHasStage() === true) {
             $this->etat['stage'] = self::INCOMPLET;
             $this->etat['stageModalite'] = self::VIDE;
             $this->etat['stageHeures'] = self::VIDE;
-        } elseif ($parcours->isHasStage() === true) {
-            if ($parcours->getStageText() === null || trim($parcours->getStageText()) === '') {
+        } elseif ($this->parcours->isHasStage() === true) {
+            if ($this->parcours->getStageText() === null || trim($this->parcours->getStageText()) === '') {
                 $this->etat['stageModalite'] = self::INCOMPLET;
                 $this->etat['stage'] = self::INCOMPLET;
             } else {
                 $this->etat['stageModalite'] = self::COMPLET;
             }
-            if ($parcours->getNbHeuresStages() === 0.0 || $parcours->getNbHeuresStages() === null) {
+            if ($this->parcours->getNbHeuresStages() === 0.0 || $this->parcours->getNbHeuresStages() === null) {
                 $this->etat['stageHeures'] = self::INCOMPLET;
                 $this->etat['stage'] = self::INCOMPLET;
             } else {
@@ -64,18 +61,18 @@ class ParcoursValide
             $this->etat['stage'] = self::COMPLET;
         }
 
-        if ($parcours->isHasProjet() === null && $typeDiplome->isHasProjet() === true) {
+        if ($this->parcours->isHasProjet() === null && $typeDiplome->isHasProjet() === true) {
             $this->etat['projet'] = self::INCOMPLET;
             $this->etat['projetModalite'] = self::VIDE;
             $this->etat['projetHeures'] = self::VIDE;
-        } elseif ($parcours->isHasProjet() === true) {
-            if ($parcours->getProjetText() === null || trim($parcours->getProjetText()) === '') {
+        } elseif ($this->parcours->isHasProjet() === true) {
+            if ($this->parcours->getProjetText() === null || trim($this->parcours->getProjetText()) === '') {
                 $this->etat['projetModalite'] = self::INCOMPLET;
                 $this->etat['projet'] = self::INCOMPLET;
             } else {
                 $this->etat['projetModalite'] = self::COMPLET;
             }
-            if ($parcours->getNbHeuresProjet() === 0.0 || $parcours->getNbHeuresProjet() === null) {
+            if ($this->parcours->getNbHeuresProjet() === 0.0 || $this->parcours->getNbHeuresProjet() === null) {
                 $this->etat['projetHeures'] = self::INCOMPLET;
                 $this->etat['projet'] = self::INCOMPLET;
             } else {
@@ -89,18 +86,18 @@ class ParcoursValide
             $this->etat['projet'] = self::COMPLET;
         }
 
-        if ($parcours->isHasSituationPro() === null && $typeDiplome->isHasSituationPro() === true) {
+        if ($this->parcours->isHasSituationPro() === null && $typeDiplome->isHasSituationPro() === true) {
             $this->etat['situationPro'] = self::INCOMPLET;
             $this->etat['situationProModalite'] = self::VIDE;
             $this->etat['situationProHeures'] = self::VIDE;
-        } elseif ($parcours->isHasSituationPro() === true) {
-            if ($parcours->getSituationProText() === null || trim($parcours->getSituationProText()) === '') {
+        } elseif ($this->parcours->isHasSituationPro() === true) {
+            if ($this->parcours->getSituationProText() === null || trim($this->parcours->getSituationProText()) === '') {
                 $this->etat['situationProModalite'] = self::INCOMPLET;
                 $this->etat['situationPro'] = self::INCOMPLET;
             } else {
                 $this->etat['situationProModalite'] = self::COMPLET;
             }
-            if ($parcours->getNbHeuresSituationPro() === 0.0 || $parcours->getNbHeuresSituationPro() === null) {
+            if ($this->parcours->getNbHeuresSituationPro() === 0.0 || $this->parcours->getNbHeuresSituationPro() === null) {
                 $this->etat['situationProHeures'] = self::INCOMPLET;
                 $this->etat['situationPro'] = self::INCOMPLET;
             } else {
@@ -115,11 +112,11 @@ class ParcoursValide
         }
 
 
-        if ($parcours->isHasMemoire() === null && $typeDiplome->isHasMemoire() === true) {
+        if ($this->parcours->isHasMemoire() === null && $typeDiplome->isHasMemoire() === true) {
             $this->etat['memoire'] = self::INCOMPLET;
             $this->etat['memoireModalite'] = self::VIDE;
-        } elseif ($parcours->isHasMemoire() === true) {
-            if ($parcours->getMemoireText() === null || trim($parcours->getMemoireText()) === '') {
+        } elseif ($this->parcours->isHasMemoire() === true) {
+            if ($this->parcours->getMemoireText() === null || trim($this->parcours->getMemoireText()) === '') {
                 $this->etat['memoireModalite'] = self::INCOMPLET;
                 $this->etat['memoire'] = self::INCOMPLET;
             } else {
@@ -131,9 +128,9 @@ class ParcoursValide
         }
 
         //onglet 3
-        $this->etat['competences'] = $parcours->getBlocCompetences()->count() > 0 ? self::COMPLET : self::VIDE;
+        $this->etat['competences'] = $this->parcours->getBlocCompetences()->count() > 0 ? self::COMPLET : self::VIDE;
 
-        foreach ($parcours->getBlocCompetences() as $blocCompetence) {
+        foreach ($this->parcours->getBlocCompetences() as $blocCompetence) {
             $this->bccs[$blocCompetence->getId()]['texte'] = $blocCompetence->display();
             $this->bccs[$blocCompetence->getId()]['etat'] = $blocCompetence->getCompetences()->count() > 0 ? self::COMPLET : self::VIDE;
             if ($this->bccs[$blocCompetence->getId()]['etat'] === self::VIDE) {
@@ -142,17 +139,17 @@ class ParcoursValide
         }
 
         // onglet 4
-        $this->etat['structure'] = $this->valideStructure($parcours);
+        $this->etat['structure'] = $this->valideStructure($this->parcours);
 
         // onglet 5
-        $this->etat['preRequis'] = $this->nonVide($parcours->getPrerequis());
-        $this->etat['composanteInscription'] = $this->nonVide($parcours->getComposanteInscription());
-        $this->etat['regimeInscription'] = count($parcours->getRegimeInscription()) > 0 ? self::COMPLET : self::VIDE;
-        $this->etat['coordSecretariat'] = $this->nonVide($parcours->getCoordSecretariat());
+        $this->etat['preRequis'] = $this->nonVide($this->parcours->getPrerequis());
+        $this->etat['composanteInscription'] = $this->nonVide($this->parcours->getComposanteInscription());
+        $this->etat['regimeInscription'] = count($this->parcours->getRegimeInscription()) > 0 ? self::COMPLET : self::VIDE;
+        $this->etat['coordSecretariat'] = $this->nonVide($this->parcours->getCoordSecretariat());
         $this->etat['modaliteAlternance'] = self::NON_CONCERNE;
-        foreach ($parcours->getRegimeInscription() as $regimeInscription) {
+        foreach ($this->parcours->getRegimeInscription() as $regimeInscription) {
             if ($regimeInscription !== RegimeInscriptionEnum::FI && $regimeInscription !== RegimeInscriptionEnum::FC) {
-                $this->etat['modaliteAlternance'] = $this->nonVide($parcours->getModalitesAlternance());
+                $this->etat['modaliteAlternance'] = $this->nonVide($this->parcours->getModalitesAlternance());
                 $this->etat['regimeInscription'] = $this->etat['modaliteAlternance'] === self::COMPLET ? self::COMPLET : self::INCOMPLET;
             }
         }
@@ -160,29 +157,23 @@ class ParcoursValide
 
         // onglet 6
 
-        $this->etat['poursuitesEtudes'] = $this->nonVide($parcours->getPoursuitesEtudes());
-        $this->etat['debouches'] = $this->nonVide($parcours->getDebouches());
-        $this->etat['codeRome'] = count($parcours->getCodesRome()) > 0 ? self::COMPLET : self::VIDE;
+        $this->etat['poursuitesEtudes'] = $this->nonVide($this->parcours->getPoursuitesEtudes());
+        $this->etat['debouches'] = $this->nonVide($this->parcours->getDebouches());
+        $this->etat['codeRome'] = count($this->parcours->getCodesRome()) > 0 ? self::COMPLET : self::VIDE;
 
 
         return $this;
     }
 
-    private function nonVide(?string $getObjectifsParcours): string
-    {
-        if (null !== $getObjectifsParcours && '' !== $getObjectifsParcours) {
-            return self::COMPLET;
-        }
 
-        return self::VIDE;
-    }
 
-    private function valideStructure(Parcours $parcours): array
+    private function valideStructure(): array
     {
+        //todo: gérer les semestres, UE, ... raccrochés, les UE/EC à choix...
         $structure = [];
         $etatGlobal = self::COMPLET;
 
-        foreach ($parcours->getSemestreParcours() as $semestreParcour) {
+        foreach ($this->parcours->getSemestreParcours() as $semestreParcour) {
             $structure['semestres'][$semestreParcour->getOrdre()]['global'] = count($semestreParcour->getSemestre()->getUes()) === 0 ? self::VIDE : self::COMPLET;;
             foreach ($semestreParcour->getSemestre()->getUes() as $ue) {
                 $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = count($ue->getElementConstitutifs()) === 0 ? self::VIDE : self::COMPLET;
@@ -205,5 +196,16 @@ class ParcoursValide
 
 
         return $structure;
+    }
+
+    public function isParcoursValide(): bool
+    {
+        foreach ($this->etat as $etat) {
+            if ($etat !== self::COMPLET) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

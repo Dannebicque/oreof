@@ -3,11 +3,6 @@
     message: (process.label~'.valide.'~place)|trans
 }) }}
 
-{#{{ etape }}#}
-{#<pre>#}
-{#{{ dump(process) }}#}
-{#</pre>#}
-
 <form action="{{ path('app_validation_valide', {etape:etape, type:type, id:id}) }}" method="post">
 
     {% if process.hasDate %}
@@ -26,13 +21,7 @@
     {% endif %}
 
     {% if process.check is defined and process.check == true %}
-        //check
-        ...recap des validations si fiche, formation ou parcours
-
-        {% for val in validation %}
-            <p>{{ val.parcours.libelle }}
-                {{ val.etat == false ? 'non' : 'oui' }}</p>
-        {% endfor %}
+        {{ include('validation/_check'~etape|capitalize~'.html.twig') }}
     {% endif %}
 
     {% if process.hasValid is iterable %}

@@ -1,0 +1,67 @@
+<h3>Données de la formation</h3>
+{{ include('formation_state/_index.html.twig', {valide:validation.formation}) }}
+
+{% if objet.isHasParcours == true %}
+    <h3>Parcours de la formation</h3>
+    <table class="table"
+            {{ stimulus_controller('check_all') }}
+    >
+        <thead>
+        <tr>
+            <th>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
+                    </label>
+                </div>
+            </th>
+            <th>Libellé</th>
+            <th>Etat validation</th>
+            <th>Valider</th>
+            <th>Réserve</th>
+        </tr>
+
+        </thead>
+        {% for val in validation.parcours %}
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input
+                                    {{ stimulus_action('check_all', 'check') }}
+                                    type="checkbox"
+                                    class="check-all"
+                                    name="parcours[]"
+                                    value="{{ val.parcours.id }}"
+                            >
+                        </label>
+                    </div>
+                </td>
+                <td>{{ val.parcours.libelle }}</td>
+                <td>{{ val.etat|badgeBoolean }}</td>
+                <td>
+                    <button class="btn btn-outline-success btn-sm">Valider</button>
+                </td>
+                <td>
+                    <button class="btn btn-outline-warning btn-sm">Réserve</button>
+                </td>
+            </tr>
+        {% endfor %}
+        <tfoot>
+        <tr>
+            <td colspan="3">
+                Pour la selection :
+            </td>
+            <td>
+                <button class="btn btn-outline-success btn-sm">Valider</button>
+            </td>
+            <td>
+                <button class="btn btn-outline-warning btn-sm">Réserve</button>
+            </td>
+        </tfoot>
+    </table>
+{% else %}
+    <div class="alert alert-info">
+        Mention sans parcours.
+    </div>
+{% endif %}

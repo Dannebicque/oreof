@@ -10,19 +10,50 @@
 namespace App\Classes\verif;
 
 use App\Entity\Formation;
+use App\Enums\RegimeInscriptionEnum;
 
-class FormationValide
+class FormationValide extends AbstractValide
 {
+    public array $etat = [];
 
-    public function valide(Formation $objet, array $process)
+    public function __construct(protected Formation $formation)
+    {
+    }
+
+
+    public function valideParcours(array $process): array
     {
         $tParcours = [];
         //vérifier que les parcours sont validés
-        foreach ($objet->getParcours() as $parcours) {
+        foreach ($this->formation->getParcours() as $parcours) {
             $tParcours[$parcours->getId()]['parcours'] = $parcours;
             $tParcours[$parcours->getId()]['etat'] = $parcours->getValide();
         }
 
         return $tParcours;
+    }
+
+    public function valideFormation(): FormationValide
+    {
+        $this->etat['respFormation'] = $this->formation->getResponsableMention() !== null ? self::COMPLET : self::VIDE;
+        $this->etat['localisations'] = $this->formation->getLocalisationMention()->count() > 0 ? self::COMPLET : self::VIDE;
+        $this->etat['composantesInscriptions'] = $this->formation->getComposantesInscription()->count() > 0 ? self::COMPLET : self::VIDE;
+        $this->etat['regimeInscription'] = count($this->formation->getRegimeInscription()) > 0 ? self::COMPLET : self::VIDE;
+        $this->etat['modaliteAlternance'] = self::NON_CONCERNE;
+        foreach ($this->formation->getRegimeInscription() as $regimeInscription) {
+            if ($regimeInscription !== RegimeInscriptionEnum::FI && $regimeInscription !== RegimeInscriptionEnum::FC) {
+                $this->etat['modaliteAlternance'] = $this->nonVide($this->formation->getModalitesAlternance());
+                $this->etat['regimeInscription'] = $this->etat['modaliteAlternance'] === self::COMPLET ? self::COMPLET : self::INCOMPLET;
+            }
+        }
+        $this->etat['objectifsFormation'] = $this->nonVide($this->formation->getObjectifsFormation());
+        $this->etat['hasParcours'] = $this->formation->isHasParcours() === null ? self::VIDE : self::COMPLET;
+
+        return $this;
+    }
+
+    public function isFormationValide(): bool
+    {
+
     }
 }

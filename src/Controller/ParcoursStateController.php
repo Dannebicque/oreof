@@ -13,14 +13,12 @@ class ParcoursStateController extends AbstractController
     #[Route('/parcours/state/{parcours}', name: 'app_parcours_state')]
     public function index(Parcours $parcours): Response
     {
-        $valideParcours = new ParcoursValide();
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
-
-
+        $valideParcours = new ParcoursValide($parcours, $typeDiplome);
 
         return $this->render('parcours_state/_index.html.twig', [
             'parcours' => $parcours,
-            'valide' => $valideParcours->valide($parcours, $typeDiplome),
+            'valide' => $valideParcours->valideParcours(),
             'typeDiplome' => $typeDiplome,
         ]);
     }

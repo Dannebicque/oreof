@@ -1,0 +1,46 @@
+<table class="table table-striped">
+    <tr>
+        <th colspan="2">Localisation de la formation</th>
+    </tr>
+    <tr>
+        <td>{{ 'formation_step1.labels.responsableMention'|trans({}, 'form') }}</td>
+        <td>
+            {{ valide.etat.respFormation|badgeValide }}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ 'formation_step1.labels.localisationMention.label'|trans({}, 'form') }}</td>
+        <td>
+            {{ valide.etat.localisations|badgeValide }}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ 'formation_step1.labels.composantesInscription.label'|trans({}, 'form') }}</td>
+        <td>
+            {{ valide.etat.composantesInscriptions|badgeValide }}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ 'formation_step1.labels.regimeInscription.label'|trans({}, 'form') }}</td>
+        <td>
+            {{ valide.etat.regimeInscription|badgeValide }}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ 'formation_step1.labels.modalitesAlternance'|trans({}, 'form') }}</td>
+        <td>
+            {{ valide.etat.modaliteAlternance|badgeValide }}
+        </td>
+    </tr>
+    <tr>
+        <th colspan="2">Structure et organisation de la formation</th>
+    </tr>
+    <tr>
+        <td>{{ 'formation_step3.labels.hasParcours'|trans({}, 'form') }}</td>
+        <td>{{ valide.etat.hasParcours|badgeValide }}</td>
+    </tr>
+    <tr>
+        <td>{{ 'form.labels.objectifsFormation'|trans({}, 'form') }}</td>
+        <td>{{ valide.etat.objectifsFormation|badgeValide }}</td>
+    </tr>
+</table>

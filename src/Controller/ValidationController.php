@@ -34,7 +34,7 @@ class ValidationController extends AbstractController
 
     #[Route('/validation/valide/{etape}', name: 'app_validation_valide')]
     public function valide(
-        FormationValide        $formationValide,
+
         #[Target('dpe')]
         WorkflowInterface      $dpeWorkflow,
         WorkflowInterface      $parcoursWorkflow,
@@ -52,12 +52,15 @@ class ValidationController extends AbstractController
 
         switch ($type) {
             case 'formation':
+
                 $objet = $formationRepository->find($id);
                 if ($objet === null) {
                     return JsonReponse::error('Formation non trouvée');
                 }
                 if (array_key_exists('check', $process)) {
-                    $validation = $formationValide->valide($objet, $process);
+                    $formationValide = new FormationValide($objet);
+                    $validation['parcours'] = $formationValide->valideParcours($process);
+                    $validation['formation'] = $formationValide->valideFormation();
                 }
 
                 $place = $dpeWorkflow->getMarking($objet);
@@ -94,6 +97,7 @@ class ValidationController extends AbstractController
         }
 
         return $this->render('validation/_valide.html.twig', [
+            'objet' => $objet,
             'process' => $process,
             'place' => array_keys($place->getPlaces())[0],
             'transitions' => $transitions,
