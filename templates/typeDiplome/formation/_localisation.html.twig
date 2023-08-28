@@ -7,6 +7,13 @@
             </dd>
             <dt>Régime(s) d'inscription</dt>
             <dd>
+                <ul>
+                    {% for regime in formation.regimeInscription %}
+                    <li>{{ regime.value }}</li>
+                    {% endfor %}
+                </ul>
+
+
                 {{ formation.regimeInscriptionTexte }}
             </dd>
             <dt>Modalités de l'alternance</dt>
@@ -16,7 +23,7 @@
         </dl>
     </div>
     <div class="col-6">
-        Composante(s) d'inscription
+        <strong>Composante(s) d'inscription</strong>
         {% for composante in formation.composantesInscription %}
         <dl>
             <dt>Composante</dt>

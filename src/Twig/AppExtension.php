@@ -39,8 +39,37 @@ class AppExtension extends AbstractExtension
             new TwigFilter('badgeBoolean', [$this, 'badgeBoolean'], ['is_safe' => ['html']]),
             new TwigFilter('badgeDroits', [$this, 'badgeDroits'], ['is_safe' => ['html']]),
             new TwigFilter('badgeCentre', [$this, 'badgeCentre'], ['is_safe' => ['html']]),
-            new TwigFilter('etatRemplissage', [$this, 'etatRemplissage'], ['is_safe' => ['html']])
+            new TwigFilter('etatRemplissage', [$this, 'etatRemplissage'], ['is_safe' => ['html']]),
+            new TwigFilter('printTexte', [$this, 'printTexte'], ['is_safe' => ['html']])
         ];
+    }
+
+    public function printTexte(?string $texte): string
+    {
+        $texte = nl2br(trim($texte));
+
+        //retirer <div> de début et de fin
+        if (str_starts_with($texte, '<div>')) {
+            $texte = mb_substr($texte, 5);
+        }
+
+        if (str_ends_with($texte, '</div>')) {
+            $texte = mb_substr($texte, 0, -6);
+        }
+
+        if (str_ends_with($texte, '<br>')) {
+            $texte = mb_substr($texte, 0, -4);
+        }
+
+        if (str_ends_with($texte, '<br/>')) {
+            $texte = mb_substr($texte, 0, -5);
+        }
+
+        if (str_ends_with($texte, '<br />')) {
+            $texte = mb_substr($texte, 0, -6);
+        }
+
+        return '<div>'.$texte.'</div>';
     }
 
     public function getFunctions(): array

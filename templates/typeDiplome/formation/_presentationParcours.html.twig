@@ -7,11 +7,7 @@
             <dd>{{ parcours.resultatsAttendus|raw }}</dd>
             <dt>Rythme de formation</dt>
             <dd>
-                <ul>
-                {% for rythme in parcours.rythmeFormation %}
-                <li>{{ rythme.libelle }}</li>
-                {% endfor %}
-                </ul>
+                {{ parcours.rythmeFormation != null ? parcours.rythmeFormation.libelle : 'Non précisé' }}
             </dd>
             <dt>Précisions sur le rythme de formation</dt>
             <dd>{{ parcours.rythmeFormationTexte|raw }}</dd>

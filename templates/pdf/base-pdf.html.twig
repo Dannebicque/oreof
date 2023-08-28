@@ -23,6 +23,14 @@
             font-size: 1.5em;
             margin: 0;
             border-bottom: 1px solid black;
+
+        }
+
+        h3 {
+            padding-top:10px;
+            font-size: 1.2em;
+            margin: 0;
+            border-bottom: 1px solid black;
         }
 
         /** Define now the real margins of every page in the PDF **/
@@ -55,7 +63,6 @@
             background-color: #03a9f4;
             color: white;
             text-align: center;
-            line-height: 0.75cm;
         }
 
         /** Define the footer rules **/
@@ -88,15 +95,32 @@
         .mt-2 {
             margin-top: 20px;
         }
+
+        #class_logo {
+            float: left;
+            width: 20%;
+        }
+
+        #class_logo img {
+            height: 1.4cm;
+        }
+
+        #class_titre {
+            float: right;
+            width: 80%;
+        }
     </style>
 </head>
 
 <body>
 {% block header %}
     <header>
-
+        <div id="class_logo">
+        <img src="{{ baseUrl }}{{ asset('images/logo_urca.png') }}" alt="logo">
+        </div>
+        <div id="class_titre">
         <h1>{{ titre }}</h1>
-
+        </div>
     </header>
 {% endblock %}
 

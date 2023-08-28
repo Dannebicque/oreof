@@ -10,9 +10,11 @@
 namespace App\Controller;
 
 use App\Classes\CalculStructureParcours;
+use App\Classes\MyDomPdf;
 use App\Classes\MyPDF;
 use App\Entity\Parcours;
 use Dompdf\Dompdf;
+use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,6 +34,7 @@ class ParcoursExportController extends AbstractController
      */
     #[Route('/parcours/export/{parcours}', name: 'app_parcours_export')]
     public function export(
+        MyDomPdf $myDomPdf,
         Parcours                $parcours,
         CalculStructureParcours $calculStructureParcours
     ): Response {
@@ -40,18 +43,13 @@ class ParcoursExportController extends AbstractController
         if (null === $typeDiplome) {
             throw new \Exception('Type de diplôme non trouvé');
         }
-
-        $html = $this->renderView('pdf/parcours.html.twig', [
+        return $myDomPdf->render('pdf/parcours.html.twig', [
             'formation' => $parcours->getFormation(),
             'typeDiplome' => $typeDiplome,
             'parcours' => $parcours,
+            'hasParcours' => $parcours->getFormation()->isHasParcours(),
             'titre' => 'Détails du parcours '.$parcours->getLibelle(),
             'dto' => $calculStructureParcours->calcul($parcours)
-        ]);
-        $dompdf = new Dompdf();
-        $dompdf->loadHtml($html);
-        $dompdf->render();
-
-        $dompdf->stream('Parcours_'.$parcours->getLibelle(), ["Attachment" => true]);
+        ], 'Parcours_'.$parcours->getLibelle());
     }
 }

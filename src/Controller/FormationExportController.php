@@ -10,9 +10,11 @@
 namespace App\Controller;
 
 use App\Classes\CalculStructureParcours;
+use App\Classes\MyDomPdf;
 use App\Classes\MyPDF;
 use App\Entity\Formation;
 use Dompdf\Dompdf;
+use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,8 +34,10 @@ class FormationExportController extends AbstractController
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
     #[Route('/formation/export/{slug}', name: 'app_formation_export')]
-    public function export(Formation $formation,
-                           CalculStructureParcours $calculStructureParcours
+    public function export(
+        MyDomPdf $myDomPdf,
+        Formation $formation,
+        CalculStructureParcours $calculStructureParcours
     ): Response
     {
         $typeDiplome = $formation->getTypeDiplome();
@@ -42,17 +46,11 @@ class FormationExportController extends AbstractController
             $tParcours[$parcours->getId()] =  $calculStructureParcours->calcul($parcours);
         }
 
-        $html = $this->renderView('pdf/formation.html.twig', [
+        return $myDomPdf->render('pdf/formation.html.twig', [
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
             'titre' => 'Détails de la formation '.$formation->getDisplay(),
             'tParcours' => $tParcours,
-        ]);
-        $dompdf = new Dompdf();
-        $dompdf->loadHtml($html);
-        $dompdf->render();
-
-
-        $dompdf->stream('dpe_formation_'.$formation->getDisplay(), ["Attachment" => true]);
+        ], 'Formation_'.$formation->getDisplay().'.pdf');
     }
 }
