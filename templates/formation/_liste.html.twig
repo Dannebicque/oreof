@@ -137,7 +137,6 @@ bouton pour valider/invalide les étapes successives #}
             {% if (params['remplissage'] is defined and formation.remplissage == params['remplissage']) or  params['remplissage'] is not defined %}
                 <tr>
                     <td>
-                        {{ formation.remplissage }}
                         {% if formation.composantePorteuse != null %}
                             {{ formation.composantePorteuse.libelle }}
                         {% else %}
