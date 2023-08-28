@@ -8,6 +8,10 @@
     {% else %}
         {% set color='warning' %}
     {% endif %}
+
+    {% if histo.complements.sousReserveModifications is defined or histo.complements.sousReserveConseil is defined %}
+    {% set color='warning' %}
+    {% endif %}
     <div class="row g-0 align-items-center mb-2">
         <div class="col-auto">
             <div class="border border-{{ color }} sw-5 sh-5 rounded-xl d-flex justify-content-center align-items-center">
@@ -19,13 +23,33 @@
                 <div class="col">
                     <div class="d-flex align-items-center lh-1-25">
                         {{ histo.etape|etapeLabel|trans }}
+                        {% if histo.complements.sousReserveModifications is defined %}
+                            <span class="badge bg-warning ms-2">Sous réserve de modifications</span>
+                        {% endif %}
+                        {% if histo.complements.sousReserveConseil is defined %}
+                            <span class="badge bg-warning ms-2">Sous réserve de validation du conseil</span>
+                        {% endif %}
                     </div>
                     <p class="text-small">par : {{ histo.user.display }}</p>
                 </div>
                 <div class="col-auto">
-                    <div class="sh-5 d-flex align-items-center">{{ histo.created|date('d/m/Y H:i') }}</div>
+                    <div class="sh-5 d-flex align-items-center">{{ histo.date|date('d/m/Y H:i') }}</div>
                 </div>
             </div>
+            {% if histo.commentaire is defined or histo.complements.fichier is defined %}
+            <div class="row">
+                {% if histo.commentaire is defined %}
+                    <div class="col-auto">
+                        <p>{{ histo.commentaire|raw }}</p>
+                    </div>
+                {% endif %}
+                {% if histo.complements.fichier is defined %}
+                    <div class="col-auto">
+                        <p><a href="{{ asset('uploads/conseils/'~histo.complements.fichier) }}" target="_blank">Voir le PV du conseil</a></p>
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
         </div>
     </div>
     {% else %}

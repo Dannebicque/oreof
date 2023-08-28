@@ -10,6 +10,7 @@
 namespace App\Events;
 
 use App\Entity\Parcours;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class HistoriqueParcoursEvent extends AbstractHistoriqueEvent
@@ -19,12 +20,9 @@ class HistoriqueParcoursEvent extends AbstractHistoriqueEvent
 
     private Parcours $parcours;
 
-    /**
-     * @param Parcours $parcours
-     */
-    public function __construct(Parcours $parcours, UserInterface $user, ?string $etape, ?string $etat, ?string $commentaire = '')
+    public function __construct(Parcours $parcours, UserInterface $user, string $etape, string $etat, Request $request)
     {
-        parent::__construct($user, $etape, $etat, $commentaire);
+        parent::__construct($user, $etape, $etat, $request);
 
         $this->parcours = $parcours;
     }

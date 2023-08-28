@@ -34,6 +34,17 @@ abstract class Historique
     #[ORM\Column(length: 30)]
     private ?string $etape = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $date = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $complements = null;
+
+    public function __construct()
+    {
+        $this->created = new \DateTime();
+    }
+
     public function getCreated(): ?\DateTimeInterface
     {
         return $this->created;
@@ -90,6 +101,30 @@ abstract class Historique
     public function setEtape(string $etape): static
     {
         $this->etape = $etape;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(?\DateTimeInterface $date): static
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    public function getComplements(): ?array
+    {
+        return $this->complements;
+    }
+
+    public function setComplements(?array $complements = []): static
+    {
+        $this->complements = $complements;
 
         return $this;
     }

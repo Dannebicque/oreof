@@ -52,10 +52,6 @@ class ValidationController extends AbstractController
 
         switch ($type) {
             case 'formation':
-
-
-
-
                 $objet = $formationRepository->find($id);
                 if ($objet === null) {
                     return JsonReponse::error('Formation non trouvée');
@@ -70,7 +66,7 @@ class ValidationController extends AbstractController
                 if ($request->isMethod('POST')) {
                     $dpeWorkflow->apply($objet, $process['canValide']); //todo: a rendre dynamique, next step ou step de validation, de refus oud e reserve
                     $this->entityManager->flush();
-                    $histoEvent = new HistoriqueFormationEvent($objet, $this->getUser(), $etape, 'valide',$request->request->get('commentaire'));
+                    $histoEvent = new HistoriqueFormationEvent($objet, $this->getUser(), $etape, 'valide', $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
                     return JsonReponse::success('ok');
                 }
@@ -169,10 +165,63 @@ class ValidationController extends AbstractController
     }
 
     #[Route('/validation/reserve/{etape}', name: 'app_validation_reserve')]
-    public function reserve(string $etape, Request $request): Response
+    public function reserve(
+        #[Target('dpe')]
+        WorkflowInterface      $dpeWorkflow,
+        WorkflowInterface      $parcoursWorkflow,
+        ParcoursRepository    $parcoursRepository,
+        FormationRepository    $formationRepository,
+        string                 $etape,
+        Request $request
+    ): Response
     {
+        $type = $request->query->get('type');
+        $id = $request->query->get('id');
+        $definition = $dpeWorkflow->getDefinition();
+
+        $process = $this->validationProcess->getEtape($etape);
+
+        switch ($type) {
+            case 'formation':
+                $objet = $formationRepository->find($id);
+                if ($objet === null) {
+                    return JsonReponse::error('Formation non trouvée');
+                }
+                $place = $dpeWorkflow->getMarking($objet);
+                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
+                break;
+            case 'parcours':
+                $objet = $formationRepository->find($id);
+                if ($objet === null) {
+                    return JsonReponse::error('Parcours ou formation non trouvés');
+                }
+                $place = $dpeWorkflow->getMarking($objet);
+                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
+                if ($request->isMethod('POST')) {
+                    $dpeWorkflow->apply($objet, $process['canRefuse']); //todo: a rendre dynamique, next step ou step de validation, de refus oud e reserve
+                    $histoEvent = new HistoriqueFormationEvent($objet, $this->getUser(), $etape, 'refuse',$request->request->get('commentaire'));
+                    $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
+                    return JsonReponse::success('ok');
+                }
+                break;
+            case 'ficheMatiere':
+                $objet = $formationRepository->find($id);
+                if ($objet === null) {
+                    return JsonReponse::error('Fiche EC/matière non trouvée');
+                }
+                $place = $dpeWorkflow->getMarking($objet);
+                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
+                break;
+        }
+
         return $this->render('validation/_reserve.html.twig', [
-            'process' => $this->validationProcess->getEtape($etape),
+            'process' => $process,
+            'place' => array_keys($place->getPlaces())[0],
+            'transitions' => $transitions,
+            'defintion' => $definition,
+            'type' => $type,
+            'id' => $id,
+            'etape' => $etape,
         ]);
     }
 
@@ -198,7 +247,7 @@ class ValidationController extends AbstractController
                     }
                     $objet->setEtatDpe([$process['transition'] => 1]);
                     //mettre à jour l'historique
-                    $histoEvent = new HistoriqueFormationEvent($objet, $this->getUser(), $data['etat'], 'valide');
+                    $histoEvent = new HistoriqueFormationEvent($objet, $this->getUser(), $data['etat'], 'valide', $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
                     $this->entityManager->flush();
                     break;
@@ -210,7 +259,7 @@ class ValidationController extends AbstractController
 
                     $objet->setEtatParcours([$process['transition'] => 1]);
                     //mettre à jour l'historique
-                    $histoEvent = new HistoriqueParcoursEvent($objet, $this->getUser(), $data['etat'], 'valide');
+                    $histoEvent = new HistoriqueParcoursEvent($objet, $this->getUser(), $data['etat'], 'valide', $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                     $this->entityManager->flush();
                     break;

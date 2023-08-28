@@ -9,26 +9,22 @@
 
 namespace App\Events;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 abstract class AbstractHistoriqueEvent
 {
     protected UserInterface $user;
-    protected ?string $etat = '';
-    protected ?string $commentaire = '';
-    protected ?string $etape = '';
+    protected string $etat = '';
+    protected Request $request;
+    protected string $etape = '';
 
-    /**
-     * @param UserInterface $user
-     * @param string|null $etat
-     * @param string|null $commentaire
-     * @param string|null $etape
-     */
-    public function __construct(UserInterface $user, ?string $etape, ?string $etat, ?string $commentaire = '')
+
+    public function __construct(UserInterface $user, string $etape, string $etat, Request $request = null)
     {
         $this->user = $user;
         $this->etat = $etat;
-        $this->commentaire = $commentaire;
+        $this->request = $request;
         $this->etape = $etape;
     }
 
@@ -42,9 +38,9 @@ abstract class AbstractHistoriqueEvent
         return $this->etat;
     }
 
-    public function getCommentaire(): ?string
+    public function getRequest(): ?Request
     {
-        return $this->commentaire;
+        return $this->request;
     }
 
     public function getEtape(): ?string

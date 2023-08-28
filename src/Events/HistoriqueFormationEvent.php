@@ -10,6 +10,7 @@
 namespace App\Events;
 
 use App\Entity\Formation;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class HistoriqueFormationEvent extends AbstractHistoriqueEvent
@@ -21,9 +22,9 @@ class HistoriqueFormationEvent extends AbstractHistoriqueEvent
     /**
      * @param Formation $formation
      */
-    public function __construct(Formation $formation, UserInterface $user, ?string $etape, ?string $etat, ?string $commentaire = '')
+    public function __construct(Formation $formation, UserInterface $user, string $etape, string $etat, Request $request)
     {
-        parent::__construct($user, $etape, $etat, $commentaire);
+        parent::__construct($user, $etape, $etat, $request);
 
         $this->formation = $formation;
     }

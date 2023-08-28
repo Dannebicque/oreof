@@ -29,7 +29,7 @@ process:
     icon: 'fa-file-circle-check'
     label: 'validation.formation'
     hasValid: true
-    hasReserve: false
+    hasReserve: true
     hasRefuse: false
     hasUpload: false
     showOn: ['formation','parcours', 'ficheMatiere']
@@ -93,9 +93,12 @@ process:
   cfvu:
     icon: 'fa-stamp'
     label: 'validation.cfvu'
-    hasValid: true
-    hasReserve: true
-    hasRefuse: true
+    hasValid:
+      - sousReserveModifications
+      - sousReserveConseil
+    hasReserve: false
+    hasRefuse:
+      - projetARevoir
     hasUpload: false
     isTimeline: true
     hasDate: true
