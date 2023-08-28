@@ -1,0 +1,38 @@
+{% if objet.isHasParcours == true %}
+    <h3>Parcours de la formation</h3>
+    <table class="table"
+
+    >
+        <thead>
+        <tr>
+            <th>Libellé</th>
+            <th>Etat du parcours</th>
+            <th>Etat validation ?</th>
+            <th>Voir et Valider</th>
+        </tr>
+
+        </thead>
+        {% for val in validation.parcours %}
+            <tr>
+                <td>{{ val.parcours.libelle }}</td>
+                <td>
+                    {{ val.parcours.etatParcours|badgeDpe }}
+                </td>
+                <td>
+                    {% if val.parcours.etatParcours.valide_parcours_rf is defined %}
+                        <span class="badge bg-success">Validé RF</span>
+                    {% else %}
+                        <span class="badge bg-danger">Non validé RF</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('app_parcours_edit', {id:val.parcours.id}) }}" class="btn btn-outline-info btn-sm">Voir le parcours et valider</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <div class="alert alert-info">
+        Mention sans parcours.
+    </div>
+{% endif %}

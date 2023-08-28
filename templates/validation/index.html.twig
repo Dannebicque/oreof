@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+    Gestion des validations des DPE
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="row gy-2">
+        <div class="col-12 p-0">
+            <div class="card"
+                    {{ stimulus_controller('validation--index', {
+                        url: path('app_validation_formation_liste')
+                    }) }}
+            >
+                <div class="card-body">
+                    {{ include('communs/_recherche.html.twig') }}
+                    <div {{ stimulus_target('validation--index', 'liste') }}>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

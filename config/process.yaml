@@ -1,5 +1,6 @@
 process:
   fiche_matiere:
+    page: 'fiche_matiere'
     icon: 'fa-ballot-check'
     label: 'validation.fiche_matiere'
     hasValid: true
@@ -13,6 +14,7 @@ process:
     canValide: ''
     check: true
   parcours:
+    page: 'parcours'
     icon: 'fa-memo-circle-check'
     label: 'validation.parcours'
     hasValid: true
@@ -25,11 +27,27 @@ process:
     transition: 'en_cours_redaction'
     canValide: 'valider_parcours'
     check: true
+  parcours_rf:
+    page: 'parcours'
+    icon: 'fa-file-circle-check'
+    label: 'validation.parcours_rf'
+    hasValid: true
+    hasReserve: true
+    hasRefuse: false
+    hasUpload: false
+    showOn: [ 'parcours', 'ficheMatiere' ]
+    isTimeline: false
+    hasDate: false
+    transition: 'soumis_parcours'
+    canValide: 'valider_rf'
+    canReserve: 'reserver_rf'
+    check: true
   formation:
+    page: 'formation'
     icon: 'fa-file-circle-check'
     label: 'validation.formation'
     hasValid: true
-    hasReserve: true
+    hasReserve: false
     hasRefuse: false
     hasUpload: false
     showOn: ['formation','parcours', 'ficheMatiere']
@@ -39,6 +57,7 @@ process:
     canValide: 'valide_rf'
     check: true
   dpe:
+    page: 'formation'
     icon: 'fa-check-to-slot'
     label: 'validation.dpe'
     hasValid: true
@@ -52,6 +71,7 @@ process:
     canRefuse: 'refuser_dpe_composante'
     canReserve: 'reserver_dpe_composante'
   conseil:
+    page: 'formation'
     icon: 'fa-people-line'
     label: 'validation.conseil'
     hasValid: true
@@ -65,6 +85,7 @@ process:
     canRefuse: 'refuser_conseil'
     canReserve: 'reserver_conseil'
   ses:
+    page: 'formation'
     icon: 'fa-school-circle-check'
     label: 'validation.ses'
     hasValid: true
@@ -78,6 +99,7 @@ process:
     canRefuse: 'refuser_central'
     canReserve: 'reserver_central'
   vp:
+    page: 'formation'
     icon: 'fa-handshake'
     label: 'validation.vp'
     hasValid: true
@@ -91,6 +113,7 @@ process:
     canRefuse: ''
     canReserve: ''
   cfvu:
+    page: 'formation'
     icon: 'fa-stamp'
     label: 'validation.cfvu'
     hasValid:
@@ -102,11 +125,12 @@ process:
     hasUpload: false
     isTimeline: true
     hasDate: true
-    transition: 'valider_cfvu'
+    transition: 'soumis_cfvu'
     canValide: 'valider_cfvu'
     canRefuse: 'refuser_definitif_cfvu'
     canReserve: 'valider_reserve_cfvu'
   publication:
+    page: 'formation'
     icon: 'fa-bullhorn'
     label: 'validation.publication'
     hasValid: true

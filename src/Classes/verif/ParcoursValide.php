@@ -18,10 +18,8 @@ class ParcoursValide extends AbstractValide
     public array $etat = [];
     public array $bccs = [];
 
-    public function __construct(Parcours $parcours, TypeDiplome $typeDiplome)
+    public function __construct(protected Parcours $parcours, protected TypeDiplome $typeDiplome)
     {
-        $this->parcours = $parcours;
-        $this->typeDiplome = $typeDiplome;
     }
 
     public function valideParcours(): ParcoursValide
@@ -36,7 +34,7 @@ class ParcoursValide extends AbstractValide
 
         //onglet 2
         $this->etat['modalitesEnseignement'] = $this->parcours->getModalitesEnseignement() ? self::COMPLET : self::VIDE;
-        if ($this->parcours->isHasStage() === null && $typeDiplome->isHasStage() === true) {
+        if (($this->parcours->isHasStage() === null || $this->parcours->isHasStage() === false) && $this->typeDiplome->isHasStage() === true) {
             $this->etat['stage'] = self::INCOMPLET;
             $this->etat['stageModalite'] = self::VIDE;
             $this->etat['stageHeures'] = self::VIDE;
@@ -58,10 +56,10 @@ class ParcoursValide extends AbstractValide
                 $this->etat['stage'] = self::COMPLET;
             }
         } else {
-            $this->etat['stage'] = self::COMPLET;
+            $this->etat['stage'] = self::NON_CONCERNE;
         }
 
-        if ($this->parcours->isHasProjet() === null && $typeDiplome->isHasProjet() === true) {
+        if (($this->parcours->isHasProjet() === null || $this->parcours->isHasProjet() === false) && $this->typeDiplome->isHasProjet() === true) {
             $this->etat['projet'] = self::INCOMPLET;
             $this->etat['projetModalite'] = self::VIDE;
             $this->etat['projetHeures'] = self::VIDE;
@@ -83,10 +81,10 @@ class ParcoursValide extends AbstractValide
                 $this->etat['projet'] = self::COMPLET;
             }
         } else {
-            $this->etat['projet'] = self::COMPLET;
+            $this->etat['projet'] = self::NON_CONCERNE;
         }
 
-        if ($this->parcours->isHasSituationPro() === null && $typeDiplome->isHasSituationPro() === true) {
+        if (($this->parcours->isHasSituationPro() === null || $this->parcours->isHasSituationPro() === false) && $this->typeDiplome->isHasSituationPro() === true) {
             $this->etat['situationPro'] = self::INCOMPLET;
             $this->etat['situationProModalite'] = self::VIDE;
             $this->etat['situationProHeures'] = self::VIDE;
@@ -108,11 +106,11 @@ class ParcoursValide extends AbstractValide
                 $this->etat['situationPro'] = self::COMPLET;
             }
         } else {
-            $this->etat['situationPro'] = self::COMPLET;
+            $this->etat['situationPro'] = self::NON_CONCERNE;
         }
 
 
-        if ($this->parcours->isHasMemoire() === null && $typeDiplome->isHasMemoire() === true) {
+        if (($this->parcours->isHasMemoire() === null || $this->parcours->isHasMemoire() === false) && $this->typeDiplome->isHasMemoire() === true) {
             $this->etat['memoire'] = self::INCOMPLET;
             $this->etat['memoireModalite'] = self::VIDE;
         } elseif ($this->parcours->isHasMemoire() === true) {
@@ -124,7 +122,7 @@ class ParcoursValide extends AbstractValide
                 $this->etat['memoire'] = self::COMPLET;
             }
         } else {
-            $this->etat['memoire'] = self::COMPLET;
+            $this->etat['memoire'] = self::NON_CONCERNE;
         }
 
         //onglet 3
@@ -172,11 +170,13 @@ class ParcoursValide extends AbstractValide
         //todo: gérer les semestres, UE, ... raccrochés, les UE/EC à choix...
         $structure = [];
         $etatGlobal = self::COMPLET;
-
+        $structure['semestres'] = [];
         foreach ($this->parcours->getSemestreParcours() as $semestreParcour) {
-            $structure['semestres'][$semestreParcour->getOrdre()]['global'] = count($semestreParcour->getSemestre()->getUes()) === 0 ? self::VIDE : self::COMPLET;;
+            $structure['semestres'][$semestreParcour->getOrdre()]['global'] = count($semestreParcour->getSemestre()->getUes()) === 0 ? self::VIDE : self::COMPLET;
+            $structure['semestres'][$semestreParcour->getOrdre()]['ues'] = [];
             foreach ($semestreParcour->getSemestre()->getUes() as $ue) {
                 $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = count($ue->getElementConstitutifs()) === 0 ? self::VIDE : self::COMPLET;
+                $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'] = [];
                 foreach ($ue->getElementConstitutifs() as $ec) {
                     if ($ec->getFicheMatiere() === null || $ec->getMcccs()->count() === 0 || $ec->etatStructure() !== 'Complet') {
                         $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['global'] = self::INCOMPLET;

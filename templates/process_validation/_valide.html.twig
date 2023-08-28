@@ -1,0 +1,99 @@
+{{ component('alerte', {
+    type: 'info',
+    message: (process.label~'.valide.'~place)|trans({}, 'process')
+}) }}
+
+<form action="{{ path('app_validation_valide', {etape:etape, type:type, id:id}) }}" method="post">
+
+    {% if process.hasDate %}
+        <div>
+            <label for="date" class="form-label">Date <span class="required"></span> <i
+                        class="fal fa-question-circle ms-1"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ 'valide.'~process.label~'.helps.date.help'|trans({}, 'process') }}"
+                        data-bs-original-title="{{ 'valide.'~process.label~'.helps.date.help'|trans({}, 'process') }}"></i></label>
+            <input type="date" name="date"
+                   class="form-control"
+                   id="date"
+                   value="{{ 'now'|date('Y-m-d') }}"> {# ou date déjà saisie si édition? #}
+        </div>
+    {% endif %}
+
+    {% if process.check is defined and process.check == true %}
+        {{ include('process_validation/_check'~etape|capitalize~'.html.twig') }}
+    {% endif %}
+
+    {% if process.hasValid is iterable %}
+        {% for cas in process.hasValid %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="{{ cas }}" id="{{ cas }}" name="{{ cas }}">
+                <label class="form-check-label" for="{{ cas }}">
+                    {{ (process.label~'.valide.cas.'~cas~'.'~place)|trans({}, 'process') }} <i
+                            class="fal fa-question-circle ms-1"
+                            data-controller="tooltip"
+                            data-tooltip-placement-value="bottom"
+                            aria-label="{{ ('valide.'~process.label~'.helps.'~cas~'.help')|trans({}, 'process') }}"
+                            data-bs-original-title="{{ ('valide.'~process.label~'.helps.'~cas~'.help')|trans({}, 'process') }}"></i>
+                </label>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if process.hasUpload %}
+        <div>
+            <label for="file" class="form-label">Fichier <i class="fal fa-question-circle ms-1"
+                                                            data-controller="tooltip"
+                                                            data-tooltip-placement-value="bottom"
+                                                            aria-label="{{ ('valide.'~process.label~'.helps.fichier.help')|trans({}, 'process') }}"
+                                                            data-bs-original-title="{{ ('valide.'~process.label~'.helps.fichier.help')|trans({}, 'process') }}"></i></label>
+            <input type="file" name="file" id="file" accept="application/pdf" class="form-control">
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="laisserPasser" id="laisserPasser"
+                   name="laisserPasser">
+            <label class="form-check-label" for="laisserPasser">
+                {{ 'valide.'~process.label~'.helps.laisserPasser.texte'|trans({}, 'process') }}
+                <i
+                        class="fal fa-question-circle ms-1"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('valide.'~process.label~'.helps.laisserPasser.help')|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('valide.'~process.label~'.helps.laisserPasser.help')|trans({}, 'process') }}"></i>
+            </label>
+        </div>
+    {% endif %}
+
+
+    {% if (process.check is defined and process.check == true) %}
+        {% if valid == true %}
+            <div class="mt-2">
+                <button type="submit" class="btn btn-success"
+                        {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+                        data-action="live#emit"
+                        data-event="valide"
+                >
+                    <i class="fal fa-floppy-disk"></i>
+                    {{ ('btn.'~process.label~'.valide.'~place)|trans({}, 'process') }}
+                </button>
+            </div>
+        {% else %}
+            {{ component('alerte', {
+                type: 'danger',
+                message: (process.label~'.valide.impossible.'~place)|trans({}, 'process')
+            }) }}
+        {% endif %}
+    {% else %}
+        <div class="mt-2">
+            <button type="submit" class="btn btn-success"
+                    {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+                    data-action="live#emit"
+                    data-event="valide"
+            >
+                <i class="fal fa-floppy-disk"></i>
+                {{ ('btn.'~process.label~'.valide.'~place)|trans({}, 'process') }}
+            </button>
+        </div>
+    {% endif %}
+
+</form>

@@ -23,7 +23,7 @@ use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class ValidationController extends AbstractController
+class ProcessValidationController extends AbstractController
 {
     public function __construct(
         private EventDispatcherInterface $eventDispatcher,
@@ -49,7 +49,7 @@ class ValidationController extends AbstractController
         $definition = $dpeWorkflow->getDefinition();
 
         $process = $this->validationProcess->getEtape($etape);
-
+        $valid = true;
         switch ($type) {
             case 'formation':
 
@@ -61,6 +61,7 @@ class ValidationController extends AbstractController
                     $formationValide = new FormationValide($objet);
                     $validation['parcours'] = $formationValide->valideParcours($process);
                     $validation['formation'] = $formationValide->valideFormation();
+                    $valid = $formationValide->isFormationValide();
                 }
 
                 $place = $dpeWorkflow->getMarking($objet);
@@ -82,9 +83,12 @@ class ValidationController extends AbstractController
                 $place = $parcoursWorkflow->getMarking($objet);
                 $transitions = $parcoursWorkflow->getEnabledTransitions($objet);
                 if ($request->isMethod('POST')) {
+//                    dump($objet);
+//                    dump($process['canValide']);
+//                    dump($parcoursWorkflow->getMarking($objet));
                     $parcoursWorkflow->apply($objet, $process['canValide']); //todo: a rendre dynamique, next step ou step de validation, de refus oud e reserve
                     $this->entityManager->flush();
-                    $histoEvent = new HistoriqueParcoursEvent($objet, $this->getUser(), $etape, 'valide',$request->request->get('commentaire'));
+                    $histoEvent = new HistoriqueParcoursEvent($objet, $this->getUser(), $etape, 'valide',$request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                     return JsonReponse::success('ok');
                 }
@@ -96,7 +100,7 @@ class ValidationController extends AbstractController
                 break;
         }
 
-        return $this->render('validation/_valide.html.twig', [
+        return $this->render('process_validation/_valide.html.twig', [
             'objet' => $objet,
             'process' => $process,
             'place' => array_keys($place->getPlaces())[0],
@@ -105,6 +109,7 @@ class ValidationController extends AbstractController
             'type' => $type,
             'id' => $id,
             'etape' => $etape,
+            'valid' => $valid ?? '',
             'validation' => $validation ?? '',
         ]);
     }
@@ -157,7 +162,7 @@ class ValidationController extends AbstractController
                 break;
         }
 
-        return $this->render('validation/_refuse.html.twig', [
+        return $this->render('process_validation/_refuse.html.twig', [
             'process' => $process,
             'place' => array_keys($place->getPlaces())[0],
             'transitions' => $transitions,
@@ -218,7 +223,7 @@ class ValidationController extends AbstractController
                 break;
         }
 
-        return $this->render('validation/_reserve.html.twig', [
+        return $this->render('process_validation/_reserve.html.twig', [
             'process' => $process,
             'place' => array_keys($place->getPlaces())[0],
             'transitions' => $transitions,
@@ -273,11 +278,11 @@ class ValidationController extends AbstractController
 //                    break;
             }
 
-            return JsonReponse::success('ok');
+            return JsonReponse::success('Validation modifiée');
         }
 
 
-        return $this->render('validation/_edit.html.twig', [
+        return $this->render('process_validation/_edit.html.twig', [
             'etats' => $this->validationProcess->getProcess(),
             'type' => $type,
             'id' => $id,

@@ -111,7 +111,8 @@ framework:
                 - 'autorisation_saisie'
                 - 'en_cours_redaction'
                 - 'soumis_parcours'
-                - 'refuse_parcours'
+                - 'refuse_parcours_rf'
+                - 'valide_parcours_rf'
             transitions:
                 initialiser:
                     from: 'initialisation_parcours'
@@ -122,9 +123,12 @@ framework:
                 valider_parcours:
                     from: 'en_cours_redaction'
                     to: 'soumis_parcours'
-                refuser_ec:
-                    from: 'en_cours_redaction'
-                    to: 'refuse_parcours'
+                refuser_rf:
+                    from: 'soumis_parcours'
+                    to: 'refuse_parcours_rf'
+                valider_rf:
+                    from: 'soumis_parcours'
+                    to: 'valide_parcours_rf'
         composante:
             type: 'workflow'
             marking_store:

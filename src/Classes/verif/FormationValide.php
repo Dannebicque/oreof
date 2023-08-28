@@ -54,6 +54,26 @@ class FormationValide extends AbstractValide
 
     public function isFormationValide(): bool
     {
+        foreach ($this->etat as $etat) {
+            if ($etat === self::VIDE || $etat === self::INCOMPLET) {
+                return false;
+            }
+        }
 
+        if ($this->formation->isHasParcours() === true) {
+            foreach ($this->formation->getParcours() as $parcours)
+            {
+                $parcoursValide = new ParcoursValide($parcours, $this->formation->getTypeDiplome());
+                if ($parcoursValide->isParcoursValide() === false) {
+                    return false;
+                }
+
+                if (!array_key_exists('valide_parcours_rf', $parcours->getEtatParcours())) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

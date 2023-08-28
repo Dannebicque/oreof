@@ -57,7 +57,7 @@ class WorkflowExtension extends AbstractExtension
 
         $indexActualPlace = array_search(array_keys($actualPlaces)[0], $places);
         $indexPlace = array_search($place, $places);
-//dump($indexActualPlace, $indexPlace);
+
         if ($indexActualPlace > $indexPlace) {
             return true;
         }

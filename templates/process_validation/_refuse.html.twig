@@ -1,6 +1,6 @@
 {{ component('alerte', {
     type: 'warning',
-    message: (process.label~'.refuse.'~place)|trans
+    message: (process.label~'.refuse.'~place)|trans({}, 'process')
 }) }}
 
 
@@ -8,12 +8,12 @@
 
     {% if process.hasDate %}
     <div>
-        <label for="date" class="form-label">Date <span class="required"></span>
+        <label for="date" class="form-label">{{ ('refuse.'~process.label~'.date.label')|trans({}, 'process') }} <span class="required"></span>
             <i class="fal fa-question-circle ms-1"
                 data-controller="tooltip"
                 data-tooltip-placement-value="bottom"
-                aria-label="{{ 'refuse.'~process.label~'.helps.date.help'|trans({}, 'help') }}"
-                data-bs-original-title="{{ 'refuse.'~process.label~'.helps.date.help'|trans({}, 'help') }}">
+                aria-label="{{ ('refuse.'~process.label~'.helps.date.help')|trans({}, 'process') }}"
+                data-bs-original-title="{{ ('refuse.'~process.label~'.helps.date.help')|trans({}, 'process') }}">
             </i>
         </label>
         <input type="date" name="date"
@@ -25,12 +25,12 @@
 {% endif %}
 
 <div>
-    <label for="argumentaire" class="form-label">Argumentaire <span class="required"></span>
+    <label for="argumentaire" class="form-label">{{ ('refuse.'~process.label~'.argumentaire.label')|trans({}, 'process') }} <span class="required"></span>
         <i class="fal fa-question-circle ms-1"
            data-controller="tooltip"
            data-tooltip-placement-value="bottom"
-           aria-label="{{ 'refuse.'~process.label~'.helps.date.help'|trans({}, 'help') }}"
-           data-bs-original-title="{{ 'refuse.'~process.label~'.helps.date.help'|trans({}, 'help') }}"></i>
+           aria-label="{{ ('refuse.'~process.label~'.helps.argumentaire.help')|trans({}, 'process') }}"
+           data-bs-original-title="{{ ('refuse.'~process.label~'.helps.argumentaire.help')|trans({}, 'process') }}"></i>
     </label>
     <textarea name="argumentaire"
               class="form-control"
@@ -45,12 +45,12 @@
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="{{ cas }}">
                 <label class="form-check-label" for="{{ cas }}">
-                    {{ (process.label~'.refuse.cas.'~cas~'.'~place)|trans}} <i
+                    {{ ('reserve.'~process.label~'.helps.'~cas~'.'~place~'.label')|trans({}, 'process')}} <i
                             class="fal fa-question-circle ms-1"
                             data-controller="tooltip"
                             data-tooltip-placement-value="bottom"
-                            aria-label="{{ 'refuse.'~process.label~'.helps.'~cas~'.help'|trans({}, 'help') }}"
-                            data-bs-original-title="{{ 'refuse.'~process.label~'.helps.'~cas~'.help'|trans({}, 'help') }}"></i>
+                            aria-label="{{ ('refuse.'~process.label~'.helps.'~cas~'.'~place~'.help')|trans({}, 'process') }}"
+                            data-bs-original-title="{{ ('refuse.'~process.label~'.helps.'~cas~'.'~place~'.help')|trans({}, 'process') }}"></i>
                 </label>
             </div>
         {% endfor %}
@@ -63,7 +63,7 @@
             data-event="refuse"
     >
         <i class="fal fa-floppy-disk"></i>
-        {{ ('btn.'~process.label~'.refuse.'~place)|trans }}
+        {{ ('btn.'~process.label~'.refuse.'~place)|trans({}, 'process') }}
     </button>
 </div>
 </form>
