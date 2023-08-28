@@ -349,8 +349,8 @@ class ExcelWriter
             $sh->getPageSetup()->setFitToWidth(1);
             $sh->getPageSetup()->setFitToHeight(0);
             $sh->getPageMargins()->setTop(1);
-            $sh->getPageMargins()->setRight(0.75);
-            $sh->getPageMargins()->setLeft(0.75);
+            $sh->getPageMargins()->setRight(0.5);
+            $sh->getPageMargins()->setLeft(0.5);
             $sh->getPageMargins()->setBottom(1);
         }
         //todo: ajouter header/footer
