@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.3](https://github.com/Dannebicque/oreof/compare/v1.10.2...v1.10.3) (2023-08-29)
+
+
+### Bug Fixes
+
+* slug sur formation edition ([c8ec92c](https://github.com/Dannebicque/oreof/commit/c8ec92c88aa0d0b8f5bac081328c78ee2fdfb284))
+
 ### [1.10.2](https://github.com/Dannebicque/oreof/compare/v1.10.1...v1.10.2) (2023-08-28)
 
 
