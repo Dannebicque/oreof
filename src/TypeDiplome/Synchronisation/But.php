@@ -16,6 +16,7 @@ use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Formation;
+use App\Entity\Langue;
 use App\Entity\NatureUeEc;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
@@ -24,6 +25,7 @@ use App\Entity\TypeEc;
 use App\Entity\TypeUe;
 use App\Entity\Ue;
 use App\Enums\ModaliteEnseignementEnum;
+use App\Repository\LangueRepository;
 use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeEcRepository;
 use App\Repository\TypeUeRepository;
@@ -47,8 +49,10 @@ class But
     private ?NatureUeEc $natureEc;
     private ?NatureUeEc $natureUe;
     private ?TypeUe $typeUe;
+    private ?Langue $francais;
 
     public function __construct(
+        LangueRepository                  $langueRepository,
         TypeEcRepository                 $typeEcRepository,
         TypeUeRepository                 $typeUeRepository,
         NatureUeEcRepository             $natureUeEcRepository,
@@ -61,6 +65,7 @@ class But
         $this->natureEc = $natureUeEcRepository->findOneBy(['libelle' => 'EC obligatoire']);
         $this->natureUe = $natureUeEcRepository->findOneBy(['libelle' => 'UE Obligatoire']);
         $this->typeUe = $typeUeRepository->findOneBy(['libelle' => 'Disciplinaire']);
+        $this->francais = $langueRepository->findOneBy(['codeIso' => 'fr']);
     }
 
     /**
@@ -380,6 +385,8 @@ class But
         $fm->setLibelle($ressource['libelle']);
         $fm->setSigle($ressource['codeMatiere']);
         $fm->setDescription($ressource['description']);
+        $fm->addLangueDispense($this->francais);
+        $fm->addLangueSupport($this->francais);
         $this->entityManager->persist($fm);
 
         if (!array_key_exists('apcRessourceParcours', $ressource) || count($ressource['apcRessourceParcours']) === 0) {

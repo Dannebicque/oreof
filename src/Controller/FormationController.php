@@ -257,7 +257,7 @@ class FormationController extends BaseController
         Formation                $formation
     ): Response {
         $form = $this->createForm(FormationSesType::class, $formation, [
-            'action' => $this->generateUrl('app_formation_edit_modal', ['formation' => $formation->getSlug()]),
+            'action' => $this->generateUrl('app_formation_edit_modal', ['slug' => $formation->getSlug()]),
         ]);
         $form->handleRequest($request);
 
