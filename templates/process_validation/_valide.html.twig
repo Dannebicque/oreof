@@ -37,6 +37,21 @@
                             data-bs-original-title="{{ ('valide.'~process.label~'.helps.'~cas~'.help')|trans({}, 'process') }}"></i>
                 </label>
             </div>
+            <div>
+                <label for="argumentaire_{{ cas }}" class="form-label"> {{ (process.label~'.valide.commentaire.cas.'~cas~'.'~place)|trans({}, 'process') }} <span class="required"></span>
+                    <i class="fal fa-question-circle ms-1"
+                       data-controller="tooltip"
+                       data-tooltip-placement-value="bottom"
+                       aria-label="{{ (process.label~'.valide.helps.commentaire.cas.'~cas~'.'~place)|trans({}, 'process') }}"
+                       data-bs-original-title="{{ (process.label~'.valide.helps.commentaire.cas.'~cas~'.'~place)|trans({}, 'process') }}"></i>
+                </label>
+                <textarea name="argumentaire_{{ cas }}"
+                          class="form-control"
+                          required
+                          id="argumentaire_{{ cas }}"
+                          rows="5"
+                > </textarea>
+            </div>
         {% endfor %}
     {% endif %}
 
@@ -95,5 +110,4 @@
             </button>
         </div>
     {% endif %}
-
 </form>

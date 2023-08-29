@@ -21,6 +21,7 @@ use App\Repository\UserRepository;
 use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Workflow\Event\Event;
 
@@ -56,7 +57,6 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         ];
     }
 
-
     public function createHistoriqueFormation(HistoriqueFormationEvent $event): void
     {
         $request = $event->getRequest();
@@ -76,6 +76,10 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         foreach ($this->cases as $cas) {
             if ($request->request->has($cas)) {
                 $tab[$cas] = $request->request->get($cas);
+            }
+
+            if ($request->request->has('argumentaire_'.$cas)) {
+                $tab['argumentaire_'.$cas] = $request->request->get('argumentaire_'.$cas);
             }
         }
 
@@ -116,11 +120,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $this->entityManager->flush();
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request|null $request
-     * @return \DateTime|\DateTimeInterface
-     */
-    private function getDateTime(?\Symfony\Component\HttpFoundation\Request $request): \DateTimeInterface|\DateTime
+    private function getDateTime(Request $request): \DateTimeInterface|\DateTime
     {
         if ($request->request->has('date')) {
             $date = Tools::convertDate($request->request->get('date'));
@@ -130,11 +130,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         return $date;
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return bool|float|int|string|null
-     */
-    private function getCommentaire(\Symfony\Component\HttpFoundation\Request $request): string|int|bool|null|float
+    private function getCommentaire(Request $request): string
     {
         if ($request->request->has('commentaire')) {
             $commentaire = $request->request->get('commentaire');
