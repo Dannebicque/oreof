@@ -15,7 +15,7 @@ process:
     check: true
   parcours:
     page: 'parcours'
-    icon: 'fa-memo-circle-check'
+    icon: 'fa-paper-plane'
     label: 'validation.parcours'
     hasValid: true
     hasReserve: false
