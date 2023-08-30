@@ -1,7 +1,12 @@
 <div class="card">
     <div class="card-body">
-        {% for semestre in parcours.semestreParcours|filter(semestre => semestre.semestre.nonDispense == false) %}
-            <h2>{{ semestre.display }}</h2>
+        {% for semParc in parcours.semestreParcours|filter(semestre => semestre.semestre.nonDispense == false) %}
+            {% if semParc.semestre.semestreRaccroche != null %}
+                {% set semestre = semParc.semestre.semestreRaccroche %}
+                {% else %}
+                {% set semestre = semParc %}
+            {% endif %}
+            <h2>{{ semParc.display }}</h2>
             <table class="table table-bordered">
                 <thead>
                 <tr>
