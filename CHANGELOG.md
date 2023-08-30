@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.5](https://github.com/Dannebicque/oreof/compare/v1.10.4...v1.10.5) (2023-08-30)
+
+
+### Features
+
+* Structure vérification ([9a1e836](https://github.com/Dannebicque/oreof/commit/9a1e8362dc30706bec83f9679410a4ead56bd65e))
+
+
+### Bug Fixes
+
+* 100% et pas 50% sur CC ([a696b75](https://github.com/Dannebicque/oreof/commit/a696b75c56847e88c3edeceb7667b32cd5dbb921))
+* MCCC export xlsx ([bf117ac](https://github.com/Dannebicque/oreof/commit/bf117aca038ff36c478acf6f48e23aacbb184000))
+
 ### [1.10.4](https://github.com/Dannebicque/oreof/compare/v1.10.3...v1.10.4) (2023-08-30)
 
 
