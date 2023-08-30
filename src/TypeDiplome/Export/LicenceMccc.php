@@ -130,8 +130,12 @@ class LicenceMccc
         // récupération des semestres du parcours puis classement par année et par ordre
         $tabSemestresAnnee = [];
         $semestres = $parcours->getSemestreParcours();
-        foreach ($semestres as $semestre) {
-            $tabSemestresAnnee[$semestre->getAnnee()][$semestre->getOrdreAnnee()] = $semestre;
+        foreach ($semestres as $semParc) {
+            if ($semParc->getSemestre()->getSemestreRaccroche() !== null) {
+                $tabSemestresAnnee[$semParc->getAnnee()][$semParc->getOrdreAnnee()] = $semParc->getSemestre()->getSemestreRaccroche();
+            } else {
+                $tabSemestresAnnee[$semParc->getAnnee()][$semParc->getOrdreAnnee()] = $semParc;
+            }
         }
 
         //en-tête du fichier
@@ -231,9 +235,10 @@ class LicenceMccc
                             }
                         }
                     }
+                    //todo: gérer les UE et EC raccrocchées
 
                     $this->excelWriter->mergeCellsCaR(self::COL_SEMESTRE, $debutSemestre, self::COL_SEMESTRE, $ligne - 1);
-                    $this->excelWriter->writeCellXY(self::COL_SEMESTRE, $debutSemestre, 'S' . $semestre->getOrdre());
+                    $this->excelWriter->writeCellXY(self::COL_SEMESTRE, $debutSemestre, 'S' . $semParc->getOrdre());
 
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $totalAnnee->totalCmPresentiel, ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $totalAnnee->totalTdPresentiel, ['style' => 'HORIZONTAL_CENTER']);
