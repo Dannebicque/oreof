@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.4](https://github.com/Dannebicque/oreof/compare/v1.10.3...v1.10.4) (2023-08-30)
+
+
+### Features
+
+* vérification sur les formations sans parcours ([e42fc48](https://github.com/Dannebicque/oreof/commit/e42fc4834bccff5310a39904ebcae4286282e453))
+
+
+### Bug Fixes
+
+* Ajout des zones de saisie sur les "cas" du process ([d1ef22a](https://github.com/Dannebicque/oreof/commit/d1ef22af6b9dd8df44b0866c895fe968c4da5bf0))
+* bouton non visible pour le moment ([d3d98b0](https://github.com/Dannebicque/oreof/commit/d3d98b0c245c0cef34b163eb1063db4ebd9f3b24))
+* icone parcours et parcours RF ([54297a6](https://github.com/Dannebicque/oreof/commit/54297a660f3c6a1b028eb678b30fe9f84b386951))
+
 ### [1.10.3](https://github.com/Dannebicque/oreof/compare/v1.10.2...v1.10.3) (2023-08-29)
 
 
