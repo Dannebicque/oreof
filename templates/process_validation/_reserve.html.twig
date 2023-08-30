@@ -1,6 +1,6 @@
 {{ component('alerte', {
     type: 'warning',
-    message: (process.label~'.reserve.'~place)|trans({}, 'process')
+    message: (process.label~'.reserve.alerte')|trans({}, 'process')
 }) }}
 
 <form action="{{ path('app_validation_reserve', {etape:etape, type:type, id:id}) }}" method="post">
@@ -71,7 +71,7 @@
             data-event="reserve"
     >
         <i class="fal fa-floppy-disk"></i>
-        {{ ('btn.'~process.label~'.reserve.'~place)|trans({}, 'process') }}
+        {{ ('btn.'~process.label~'.reserve')|trans({}, 'process') }}
     </button>
 </div>
 </form>

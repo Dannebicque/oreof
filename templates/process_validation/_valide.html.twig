@@ -1,6 +1,6 @@
 {{ component('alerte', {
     type: 'info',
-    message: (process.label~'.valide.'~place)|trans({}, 'process')
+    message: (process.label~'.valide.alerte')|trans({}, 'process')
 }) }}
 
 <form action="{{ path('app_validation_valide', {etape:etape, type:type, id:id}) }}" method="post">
@@ -106,7 +106,7 @@
                     data-event="valide"
             >
                 <i class="fal fa-floppy-disk"></i>
-                {{ ('btn.'~process.label~'.valide.'~place)|trans({}, 'process') }}
+                {{ ('btn.'~process.label~'.valide')|trans({}, 'process') }}
             </button>
         </div>
     {% endif %}

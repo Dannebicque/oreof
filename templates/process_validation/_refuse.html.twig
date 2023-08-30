@@ -1,6 +1,6 @@
 {{ component('alerte', {
     type: 'warning',
-    message: (process.label~'.refuse.'~place)|trans({}, 'process')
+    message: (process.label~'.refuse.alerte')|trans({}, 'process')
 }) }}
 
 
@@ -78,7 +78,7 @@
             data-event="refuse"
     >
         <i class="fal fa-floppy-disk"></i>
-        {{ ('btn.'~process.label~'.refuse.'~place)|trans({}, 'process') }}
+        {{ ('btn.'~process.label~'.refuse')|trans({}, 'process') }}
     </button>
 </div>
 </form>
