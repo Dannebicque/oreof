@@ -422,7 +422,7 @@ class LicenceMccc
 
         switch ($ec->getTypeMccc()) {
             case 'cc':
-                $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, '50%');
+                $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, '100%');
                 $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, 2);
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()).' (' . $mcccs[2]['et']->getPourcentage() . '%)');
