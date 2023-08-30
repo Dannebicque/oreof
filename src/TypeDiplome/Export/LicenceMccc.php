@@ -264,7 +264,7 @@ class LicenceMccc
 
         //supprimer la feuille de modèle
         $spreadsheet->removeSheetByIndex(0);
-
+        $spreadsheet->setActiveSheetIndex(0);
         $this->excelWriter->setSpreadsheet($spreadsheet, true);
         //MCCC -2023-2024 -  M Psychologie sociale, du travail et des organisations
         $this->fileName = substr('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle(), 0, 30);
@@ -492,7 +492,7 @@ class LicenceMccc
         $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TOTAL, $ligne, $ec->volumeTotalPresentiel());
 
         //si pas distanciel, griser...
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_CM, $ligne, $ec->getVolumeCmDistanciel(), ['bgcolor' => 'cccccc']);
+        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_CM, $ligne, $ec->getVolumeCmDistanciel());
         $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TD, $ligne, $ec->getVolumeTdDistanciel());
         $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TP, $ligne, $ec->getVolumeTpDistanciel());
         $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TOTAL, $ligne, $ec->volumeTotalDistanciel());
