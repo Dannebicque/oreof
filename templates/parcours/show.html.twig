@@ -3,7 +3,7 @@
 {% block title %}Parcours{% endblock %}
 
 {% block content %}
-    {% if is_granted('CAN_PARCOURS_VALIDATE_MY') %}
+    {% if is_granted('ROLE_SES') %} {# todo: CAN_PARCOURS_VALIDATE_MY #}
         {{ component('mention_manage', {parcours:parcours, type:'parcours'}) }}
     {% endif %}
 

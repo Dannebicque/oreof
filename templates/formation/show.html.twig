@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    {% if is_granted('CAN_FORMATION_VALIDATE_MY') %}
+    {% if is_granted('ROLE_SES') %}{# todo: CAN_PARCOURS_VALIDATE_MY #}
         {{ component('mention_manage', {formation:formation, type:'formation'}) }}
     {% endif %}
 
