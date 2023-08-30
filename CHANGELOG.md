@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.7](https://github.com/Dannebicque/oreof/compare/v1.10.6...v1.10.7) (2023-08-30)
+
+
+### Bug Fixes
+
+* affichage du numéro de semestre dans le raccrochement ([0db9643](https://github.com/Dannebicque/oreof/commit/0db9643eb1146c66f4749f2628ddae29b595cf94))
+* BCCC reprise des semestres si raccrochés ([23819af](https://github.com/Dannebicque/oreof/commit/23819af9c37d5d165ff60fc947ff81b2f8e9765e))
+* clé de traduction ([05b69c4](https://github.com/Dannebicque/oreof/commit/05b69c46dee9ee39e5c88b76e503ebdd22a5f13d))
+* MCCC reprise des semestres si raccrochés ([5c2560f](https://github.com/Dannebicque/oreof/commit/5c2560fb5aa4eac549fd507fcab70c0968470650))
+* test ([900bd5f](https://github.com/Dannebicque/oreof/commit/900bd5f5499c5eb781fba5172420f2c27b792f2d))
+
 ### [1.10.6](https://github.com/Dannebicque/oreof/compare/v1.10.5...v1.10.6) (2023-08-30)
 
 
