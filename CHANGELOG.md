@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.6](https://github.com/Dannebicque/oreof/compare/v1.10.5...v1.10.6) (2023-08-30)
+
+
+### Bug Fixes
+
+* Validation parcours et localisation/régime si pas de parcours ([ea36d76](https://github.com/Dannebicque/oreof/commit/ea36d76985f2b5bd2ab7d9382cd8a46e6de28251))
+
 ### [1.10.5](https://github.com/Dannebicque/oreof/compare/v1.10.4...v1.10.5) (2023-08-30)
 
 
