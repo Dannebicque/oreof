@@ -26,8 +26,32 @@ class BadgeDpeExtension extends AbstractExtension
             new TwigFilter('badgeFormation', [$this, 'badgeFormation'], ['is_safe' => ['html']]),
             new TwigFilter('badgeEc', [$this, 'badgeEc'], ['is_safe' => ['html']]),
             new TwigFilter('badge', [$this, 'badge'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeValide', [$this, 'badgeValide'], ['is_safe' => ['html']])
+            new TwigFilter('badgeValide', [$this, 'badgeValide'], ['is_safe' => ['html']]),
+            new TwigFilter('displayErreurs', [$this, 'displayErreurs'], ['is_safe' => ['html']])
         ];
+    }
+
+    public function displayErreurs(?array $erreurs): string
+    {
+        //retirer les cellules vides du tableau erreurs
+        $erreurs = array_filter($erreurs, function ($erreur) {
+            return !empty($erreur);
+        });
+
+        if (null === $erreurs || 0 === count($erreurs)) {
+            return '';
+        }
+
+        $texte = '<ul>';
+        foreach ($erreurs as $erreur) {
+            $texte .= '<li>' . $erreur . '</li>';
+        }
+        $texte .= '</ul>';
+        return '<i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="' . $texte . '"
+                   data-bs-original-title="' . $texte . '"></i>';
     }
 
     public function badgeEc(array $etatsEc): string

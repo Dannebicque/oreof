@@ -172,25 +172,53 @@ class ParcoursValide extends AbstractValide
         $etatGlobal = self::COMPLET;
         $structure['semestres'] = [];
         foreach ($this->parcours->getSemestreParcours() as $semestreParcour) {
-            $structure['semestres'][$semestreParcour->getOrdre()]['global'] = count($semestreParcour->getSemestre()->getUes()) === 0 ? self::VIDE : self::COMPLET;
+
+            if ($semestreParcour->getSemestre()?->getSemestreRaccroche() !== null) {
+                $sem = $semestreParcour->getSemestre()?->getSemestreRaccroche()?->getSemestre();
+            } else {
+                $sem = $semestreParcour->getSemestre();
+            }
+
+            $hasUe = count($sem->getUes()) === 0 ? self::VIDE : self::COMPLET;
             $structure['semestres'][$semestreParcour->getOrdre()]['ues'] = [];
             foreach ($semestreParcour->getSemestre()->getUes() as $ue) {
                 $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = count($ue->getElementConstitutifs()) === 0 ? self::VIDE : self::COMPLET;
                 $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'] = [];
                 foreach ($ue->getElementConstitutifs() as $ec) {
-                    if ($ec->getFicheMatiere() === null || $ec->getMcccs()->count() === 0 || $ec->etatStructure() !== 'Complet') {
+                    if ($ec->getFicheMatiere() === null || $ec->getMcccs()->count() === 0 || $ec->etatStructure() !== 'Complet' || $ec->getEtatBcc() !== 'Complet') {
                         $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['global'] = self::INCOMPLET;
                         $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = self::INCOMPLET;
-                        $structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::INCOMPLET;
+                        $hasUe = self::INCOMPLET;
+
+                        //pour chaque cas indiquer l'erreur
+                        if ($ec->getFicheMatiere() === null) {
+                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['erreur'][] = 'Fiche matière non renseignée';
+                        }
+
+                        if ($ec->getMcccs()->count() === 0) {
+                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['erreur'][] = 'MCCC non renseignées';
+                        }
+
+                        if ($ec->etatStructure() !== 'Complet') {
+                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['erreur'][] = 'Volumes horaires non resnsignés';
+                        }
+
+                        if ($ec->getEtatBcc() !== 'Complet') {
+                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['erreur'][] = 'BCC incomplet ou non renseignés';
+                        }
+
                     } elseif ($ec->getFicheMatiere() === null && $ec->getMcccs()->count() === 0 && $ec->getHeures() === 'À compléter') {
                         $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['global'] = self::VIDE;
                         $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = self::INCOMPLET;
-                        $structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::INCOMPLET;
+                        $hasUe = self::INCOMPLET;
                     } else {
                         $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['global'] = self::COMPLET;
                     }
                 }
             }
+            $structure['semestres'][$semestreParcour->getOrdre()]['global'] = $sem->totalEctsSemestre() !== 30 ? self::ERREUR : $hasUe;
+            $structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = $sem->totalEctsSemestre() !== 30 ? 'Le semestre doit faire 30 ECTS' : '';
+
         }
         $structure['global'] = $etatGlobal;
 

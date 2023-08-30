@@ -214,14 +214,37 @@ class ParcoursState
                 $sem = $semestre->getSemestre();
             }
 
+            if ($sem->totalEctsSemestre() !== 30) {
+                $tab['error'][] = 'Le semestre "' . $semestre->getSemestre()?->display() . '" doit faire 30 ECTS.';
+            }
+
             if ($sem?->isNonDispense() === false && $sem?->getUes()->count() === 0) {
                 //todo: potentielle des UE raccrochées également
-                $tab['error'][] = 'Vous devez ajouter au moins une UE au semestre "' . $semestre->getSemestre()?->display() . '".';
+                $tab['error'][] = 'Vous devez ajouter au moins une UE au semestre "' . $sem?->display() . '".';
+
             }
 
             foreach ($sem?->getUes() as $ue) {
                 if ($ue->getElementConstitutifs()->count() === 0) {
                     $tab['error'][] = 'Vous devez ajouter au moins un EC à l\'UE "' . $ue->display($this->parcours) . '".';
+                } else {
+                    foreach ($ue->getElementConstitutifs() as $ec) {
+                        if ($ec->getFicheMatiere() === null) {
+                            $tab['error'][] = 'Vous devez affecter une fiche EC/matière à l\'EC "' . $ec->getOrdre() . '.';
+                        }
+
+                        if ($ec->getEtatMccc() === 'A Saisir') {
+                            $tab['error'][] = 'Vous devez saisir les MCCC de l\'EC "' . $ec->getOrdre() . '.';
+                        }
+
+                        if ($ec->etatStructure() !== 'Complet') {
+                            $tab['error'][] = 'Vous devez saisir les volumes horaires de l\'EC "' . $ec->getOrdre() . '.';
+                        }
+
+                        if ($ec->getEtatBcc() !== 'Complet') {
+                            $tab['error'][] = 'Vous devez saisir les BCC de l\'EC "' . $ec->getOrdre() . '.';
+                        }
+                    }
                 }
             }
         }

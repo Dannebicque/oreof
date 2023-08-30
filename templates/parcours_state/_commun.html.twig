@@ -105,8 +105,10 @@
 </tr>
 {% for key, semestre in valide.etat.structure.semestres  %}
     <tr>
-        <td class="ps-2">Semestre {{ key }}</td>
-        <td>{{ semestre.global|badgeValide }}</td>
+        <td class="ps-2"><strong>Semestre {{ key }}</strong></td>
+        <td>
+            {{ semestre.erreur|displayErreurs }}
+            {{ semestre.global|badgeValide }}</td>
     </tr>
     {% for keyUe, ue in semestre.ues  %}
         <tr>
@@ -116,7 +118,9 @@
         {% for keyEc, ec in ue.ecs  %}
             <tr>
                 <td class="ps-5">EC {{ keyEc }}</td>
-                <td>{{ ec.global|badgeValide }}</td>
+                <td>
+                    {{ ec.erreur|displayErreurs }}
+                    {{ ec.global|badgeValide }}</td>
             </tr>
         {% endfor %}
     {% endfor %}
