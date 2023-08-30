@@ -18,6 +18,7 @@ class FormationStateController extends AbstractController
         $typeDiplome = $formation->getTypeDiplome();
         $valideFormation = new FormationValide($formation);
 
+
         return $this->render('formation_state/_index.html.twig', [
             'formation' => $formation,
             'valide' => $valideFormation->valideFormation(),

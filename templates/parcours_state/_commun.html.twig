@@ -1,0 +1,177 @@
+<tr>
+    <th colspan="2">Descriptif</th>
+</tr>
+<tr>
+    <td>Modalités d'enseignements</td>
+    <td>
+        {{ valide.etat.modalitesEnseignement|badgeValide }}
+    </td>
+</tr>
+<tr>
+    <td>Stage</td>
+    <td>
+        {{ valide.etat.stage|badgeValide }}
+    </td>
+</tr>
+{% if typeDiplome.hasStage %}
+    <tr>
+        <td class="ps-5">Modalités du stage</td>
+        <td>
+            {{ valide.etat.stageModalite|badgeValide }}
+        </td>
+    </tr>
+    <tr>
+        <td class="ps-5">Heures de stage</td>
+        <td>
+            {{ valide.etat.stageHeures|badgeValide }}
+        </td>
+    </tr>
+{% endif %}
+
+<tr>
+    <td>Projet</td>
+    <td>
+        {{ valide.etat.projet|badgeValide }}
+    </td>
+</tr>
+{% if typeDiplome.hasProjet %}
+    <tr>
+        <td class="ps-5">Modalités du projet</td>
+        <td>
+            {{ valide.etat.projetModalite|badgeValide }}
+        </td>
+    </tr>
+    <tr>
+        <td class="ps-5">Heures de projet</td>
+        <td>
+            {{ valide.etat.projetHeures|badgeValide }}
+        </td>
+    </tr>
+{% endif %}
+
+<tr>
+    <td>Situation Professionnelle</td>
+    <td>
+        {{ valide.etat.situationPro|badgeValide }}
+    </td>
+</tr>
+{% if typeDiplome.hasSituationPro %}
+    <tr>
+        <td class="ps-5">Modalités de la  situation professionnelle</td>
+        <td>
+            {{ valide.etat.situationProModalite|badgeValide }}
+        </td>
+    </tr>
+    <tr>
+        <td class="ps-5">Heures de la  situation professionnelle</td>
+        <td>
+            {{ valide.etat.situationProHeures|badgeValide }}
+        </td>
+    </tr>
+{% endif %}
+<tr>
+    <td>Mémoire TER</td>
+    <td>
+        {{ valide.etat.memoire|badgeValide }}
+    </td>
+</tr>
+{% if typeDiplome.hasMemoire %}
+    <tr>
+        <td class="ps-5">Modalités du mémoire TER</td>
+        <td>
+            {{ valide.etat.memoireModalite|badgeValide }}
+        </td>
+    </tr>
+{% endif %}
+<tr>
+    <th colspan="2">Compétences</th>
+</tr>
+<tr>
+    <td>Référentiel de compétences</td>
+    <td>{{ valide.etat.competences|badgeValide }}</td>
+</tr>
+{% for bcc in valide.bccs %}
+    <tr>
+        <td class="ps-5">{{ bcc.texte }}</td>
+        <td>{{ bcc.etat|badgeValide }}</td>
+    </tr>
+{% endfor %}
+<tr>
+    <th colspan="2">Structure de la maquette</th>
+</tr>
+<tr>
+    <td>Structure</td>
+    <td>{{ valide.etat.structure.global|badgeValide }}</td>
+</tr>
+{% for key, semestre in valide.etat.structure.semestres  %}
+    <tr>
+        <td class="ps-2">Semestre {{ key }}</td>
+        <td>{{ semestre.global|badgeValide }}</td>
+    </tr>
+    {% for keyUe, ue in semestre.ues  %}
+        <tr>
+            <td class="ps-4">UE {{ keyUe }}</td>
+            <td>{{ ue.global|badgeValide }}</td>
+        </tr>
+        {% for keyEc, ec in ue.ecs  %}
+            <tr>
+                <td class="ps-5">EC {{ keyEc }}</td>
+                <td>{{ ec.global|badgeValide }}</td>
+            </tr>
+        {% endfor %}
+    {% endfor %}
+{% endfor %}
+<tr>
+    <th colspan="2">Admission & inscription</th>
+</tr>
+<tr>
+    <td>Prérequis recommandés</td>
+    <td>
+        {{ valide.etat.preRequis|badgeValide }}
+    </td>
+</tr>
+<tr>
+    <td>Composante inscription</td>
+    <td>
+        {{ valide.etat.composanteInscription|badgeValide }}
+    </td>
+</tr>
+<tr>
+    <td>Régime d'inscription</td>
+    <td>
+        {{ valide.etat.regimeInscription|badgeValide }}
+    </td>
+</tr>
+<tr>
+    <td>Modalité de l'alternance (le cas échéant)</td>
+    <td>
+        {{ valide.etat.modaliteAlternance|badgeValide }}
+    </td>
+</tr>
+<tr>
+    <td>Coordonnées du secrétariat pédagogique</td>
+    <td>
+        {{ valide.etat.coordSecretariat|badgeValide }}
+    </td>
+</tr>
+<tr>
+    <th colspan="2">Et après...</th>
+</tr>
+<tr>
+    <td>Poursuites d'études envisageables</td>
+    <td>
+        {{ valide.etat.poursuitesEtudes|badgeValide }}
+    </td>
+</tr>
+<tr>
+    <td>Débouchés</td>
+    <td>
+        {{ valide.etat.debouches|badgeValide }}
+    </td>
+</tr>
+<tr>
+    <td>Codes romes</td>
+    <td>
+        {{ valide.etat.codeRome|badgeValide }}
+    </td>
+</tr>

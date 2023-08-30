@@ -43,4 +43,48 @@
         <td>{{ 'form.labels.objectifsFormation'|trans({}, 'form') }}</td>
         <td>{{ valide.etat.objectifsFormation|badgeValide }}</td>
     </tr>
+    {% if formation.isHasparcours == true %}
+
+    {% else %}
+        <tr>
+            <td>Parcours unique présent ?</td>
+            <td>{{ valide.etat.erreurHasParcours|badgeValide }}</td>
+        </tr>
+        <tr>
+            <td>Etat du parcours unique de la formation</td>
+            <td>{{ valide.etat.valideParcours|badgeValide }}</td>
+        </tr>
+        {% if valide.etat.etatParcoursDefaut is defined %}
+            <tr>
+                <th colspan="2">Présentation de la formation</th>
+            </tr>
+            <tr>
+                <td>Objectifs de la formation</td>
+                <td>
+                    {{ valide.etat.objectifsFormation|badgeValide }}
+                </td>
+            </tr>
+            <tr>
+                <td>Résultats attendus de la formation</td>
+                <td>
+                    {{ valide.etat.resultatsAttendus|badgeValide }}
+                </td>
+            </tr>
+            <tr>
+                <td>Contenu de la formation</td>
+                <td>
+                    {{ valide.etat.contenuFormation|badgeValide }}
+                </td>
+            </tr>
+            <tr>
+                <td>Rythme de la formation</td>
+                <td>
+                    {{ valide.etat.rythmeFormation|badgeValide }}
+                </td>
+            </tr>
+
+        {{ include('parcours_state/_commun.html.twig', {valide:valide.etat.etatParcoursDefaut}) }}
+            {% endif %}
+    {% endif %}
+
 </table>

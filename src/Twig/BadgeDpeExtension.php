@@ -45,6 +45,7 @@ class BadgeDpeExtension extends AbstractExtension
         return match ($etat) {
             'complet' => '<span class="badge bg-success me-1">Complet</span>',
             'incomplet' => '<span class="badge bg-warning me-1">Incomplet</span>',
+            'erreur' => '<span class="badge bg-danger me-1">Erreur de saisie</span>',
             'vide' => '<span class="badge bg-danger me-1">Non complété</span>',
             'non_concerne' => '<span class="badge bg-info me-1">Non concerné</span>',
         };

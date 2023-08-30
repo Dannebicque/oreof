@@ -14,6 +14,7 @@ abstract class AbstractValide
     public const COMPLET = 'complet';
     public const INCOMPLET = 'incomplet';
     public const VIDE = 'vide';
+    public const ERREUR = 'erreur';
     public const NON_CONCERNE = 'non_concerne';
 
     protected function nonVide(?string $field): string

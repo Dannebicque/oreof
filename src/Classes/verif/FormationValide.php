@@ -14,6 +14,7 @@ use App\Enums\RegimeInscriptionEnum;
 
 class FormationValide extends AbstractValide
 {
+
     public array $etat = [];
 
     public function __construct(protected Formation $formation)
@@ -48,6 +49,35 @@ class FormationValide extends AbstractValide
         }
         $this->etat['objectifsFormation'] = $this->nonVide($this->formation->getObjectifsFormation());
         $this->etat['hasParcours'] = $this->formation->isHasParcours() === null ? self::VIDE : self::COMPLET;
+
+        if ($this->formation->isHasParcours() === false and $this->formation->getParcours()->count() > 1) {
+            $this->etat['erreurHasParcours'] = self::ERREUR;
+            $this->etat['valideParcours'] = self::INCOMPLET;
+        }
+
+        if ($this->formation->isHasParcours() === false and $this->formation->getParcours()->count() === 1) {
+            $parcours = $this->formation->getParcours()->first();
+            if ($parcours->isParcoursDefaut() === true) {
+                $this->etat['erreurHasParcours'] = self::COMPLET;
+                //validation du parcours
+                $parcoursValide = new ParcoursValide($parcours, $this->formation->getTypeDiplome());
+                $this->etat['etatParcoursDefaut'] = $parcoursValide->valideParcours();
+                $this->etat['valideParcours'] = $parcoursValide->isParcoursValide() === true ? self::COMPLET : self::INCOMPLET;
+
+                //données de la formation si pas de parcours
+                $this->etat['objectifsFormation'] = $this->nonVide($this->formation->getObjectifsFormation());
+                $this->etat['resultatsAttendus'] = $this->nonVide($this->formation->getResultatsAttendus());
+                $this->etat['contenuFormation'] = $this->nonVide($this->formation->getContenuFormation());
+                $this->etat['rythmeFormation'] = $this->formation->getRythmeFormation() !== null || $this->nonVide($this->formation->getRythmeFormationTexte()) ? self::COMPLET : self::VIDE;
+            } else {
+                $this->etat['erreurHasParcours'] = self::ERREUR;
+                $this->etat['valideParcours'] = self::INCOMPLET;
+                $this->etat['objectifsFormation'] = self::VIDE;
+                $this->etat['resultatsAttendus'] = self::VIDE;
+                $this->etat['contenuFormation'] = self::VIDE;
+                $this->etat['rythmeFormation'] = self::VIDE;
+            }
+        }
 
         return $this;
     }
