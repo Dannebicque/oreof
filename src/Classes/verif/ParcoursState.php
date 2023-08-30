@@ -265,7 +265,7 @@ class ParcoursState
                 $tab['error'][] = 'Vous devez indiquer la composante d\'inscription.';
             }
 
-            if ($this->parcours->getRegimeInscription() === null) {
+            if (count($this->parcours->getRegimeInscription()) === 0) {
                 $tab['error'][] = 'Vous devez indiquer le régime d\'inscription.';
             }
 
