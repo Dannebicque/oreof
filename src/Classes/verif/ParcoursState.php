@@ -13,6 +13,7 @@ use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
 use App\Enums\EtatRemplissageEnum;
+use App\Enums\RegimeInscriptionEnum;
 
 class ParcoursState
 {
@@ -69,7 +70,7 @@ class ParcoursState
 
     public function isEmptyOnglet3(): bool
     {
-        return $this->parcours->getBlocCompetences()->count() === 0 && $this->parcours->getFormation()->getButCompetences()->count() === 0 ;
+        return $this->parcours->getBlocCompetences()->count() === 0 && $this->parcours->getFormation()->getButCompetences()->count() === 0;
     }
 
     public function isEmptyOnglet4(): bool
@@ -207,7 +208,6 @@ class ParcoursState
         }
 
         foreach ($this->parcours->getSemestreParcours() as $semestre) {
-
             if ($semestre->getSemestre()->getSemestreRaccroche() !== null) {
                 $sem = $semestre->getSemestre()->getSemestreRaccroche()->getSemestre();
             } else {
@@ -221,7 +221,6 @@ class ParcoursState
             if ($sem?->isNonDispense() === false && $sem?->getUes()->count() === 0) {
                 //todo: potentielle des UE raccrochées également
                 $tab['error'][] = 'Vous devez ajouter au moins une UE au semestre "' . $sem?->display() . '".';
-
             }
 
             foreach ($sem?->getUes() as $ue) {
@@ -261,8 +260,22 @@ class ParcoursState
             $tab['error'][] = 'Vous devez indiquer les prérequis.';
         }
 
-        if ($this->parcours->getComposanteInscription() === null) {
-            $tab['error'][] = 'Vous devez indiquer la composante d\'inscription.';
+        if ($this->formation->isHasParcours() === true) {
+            if ($this->parcours->getComposanteInscription() === null) {
+                $tab['error'][] = 'Vous devez indiquer la composante d\'inscription.';
+            }
+
+            if ($this->parcours->getRegimeInscription() === null) {
+                $tab['error'][] = 'Vous devez indiquer le régime d\'inscription.';
+            }
+
+            foreach ($this->parcours->getRegimeInscription() as $regimeInscription) {
+                if ($regimeInscription !== RegimeInscriptionEnum::FI && $regimeInscription !== RegimeInscriptionEnum::FC) {
+                    if ($this->parcours->getModalitesAlternance() === null) {
+                        $tab['error'][] = 'Vous devez indiquer les modalités de l\'alternance.';
+                    }
+                }
+            }
         }
 
         if ($this->parcours->getCoordSecretariat() === null || trim($this->parcours->getCoordSecretariat()) === '') {
