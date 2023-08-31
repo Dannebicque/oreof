@@ -240,7 +240,7 @@ class ParcoursState
                             $tab['error'][] = 'Vous devez saisir les volumes horaires de l\'EC "' . $ec->getOrdre() . '.';
                         }
 
-                        if ($ec->getEtatBcc() !== 'Complet') {
+                        if ($ec->getEtatBcc($this->parcours) !== 'Complet') {
                             $tab['error'][] = 'Vous devez saisir les BCC de l\'EC "' . $ec->getOrdre() . '.';
                         }
                     }

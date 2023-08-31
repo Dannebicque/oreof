@@ -34,14 +34,12 @@
                             {% for ue in semestre.semestre.ues %}
                                 {% for ec in ue.elementConstitutifs %}
                                     <td class="text-center">
-                                        {% if ec.isFicheFromParcours %}
+                                        {% if ec.parcours.id == parcours.id %}
                                             {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
-{#                                                <i class="fa fa-check"></i>#}
                                                 X
                                             {% endif %}
                                         {% else %}
                                             {% if competence.elementConstitutifs.contains(ec) %}
-{#                                                <i class="fa fa-check"></i>#}
                                                 X
                                             {% endif %}
                                         {% endif %}

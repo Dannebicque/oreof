@@ -41,7 +41,7 @@ class ElementConstitutifBccController extends AbstractController
     /**
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
-    #[Route('/{id}/bcc-ec', name: 'app_element_constitutif_bcc', methods: ['GET', 'POST'])]
+    #[Route('/{id}/bcc-ec/{parcours}', name: 'app_element_constitutif_bcc', methods: ['GET', 'POST'])]
     public function bccEc(
         EntityManagerInterface       $entityManager,
         CompetenceRepository         $competenceRepository,
@@ -50,7 +50,8 @@ class ElementConstitutifBccController extends AbstractController
         TypeEpreuveRepository        $typeEpreuveRepository,
         Request                      $request,
         ElementConstitutifRepository $elementConstitutifRepository,
-        ElementConstitutif           $elementConstitutif
+        ElementConstitutif           $elementConstitutif,
+        Parcours                     $parcours
     ): Response {
         $formation = $elementConstitutif->getParcours()?->getFormation();
         if ($formation === null) {
@@ -64,7 +65,7 @@ class ElementConstitutifBccController extends AbstractController
                 $competence = $competenceRepository->find($data['value']);
 
                 //on regarde si c'est déjà là, soit dans EC, soit dans fichematiere
-                if ($elementConstitutif->isFicheFromParcours()) {
+                if ($elementConstitutif->getParcours()?->getId() === $parcours->getId()) {
                     $existe = $elementConstitutif->getFicheMatiere()->getCompetences()->contains($competence);
                     if ($existe && (bool)$data['checked'] === false) {
                         $elementConstitutif->getFicheMatiere()->removeCompetence($competence);
@@ -88,14 +89,13 @@ class ElementConstitutifBccController extends AbstractController
 
         $ecBccs = [];
         $ecComps = [];
-        if ($elementConstitutif->isFicheFromParcours()) {
-            $parcours = $elementConstitutif->getFicheMatiere()->getParcours();
+
+        if ($elementConstitutif->getParcours()->getId() === $parcours->getId()) {
             foreach ($ficheMatiere->getCompetences() as $competence) {
                 $ecComps[] = $competence->getId();
                 $ecBccs[] = $competence->getBlocCompetence()?->getId();
             }
         } else {
-            $parcours = $elementConstitutif->getParcours();
             foreach ($elementConstitutif->getCompetences() as $competence) {
                 $ecComps[] = $competence->getId();
                 $ecBccs[] = $competence->getBlocCompetence()?->getId();
@@ -117,6 +117,7 @@ class ElementConstitutifBccController extends AbstractController
                 'wizard' => false,
                 'ecBccs' => array_flip(array_unique($ecBccs)),
                 'ecComps' => array_flip($ecComps),
+                'parcours' => $parcours
             ]);
         }
 

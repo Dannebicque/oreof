@@ -1,5 +1,5 @@
 <div class="mt-2" {{ stimulus_controller('fichematiere--step3', {
-    url: path('app_element_constitutif_bcc', {id:ec.id}),
+    url: path('app_element_constitutif_bcc', {id:ec.id, parcours: parcours.id}),
     updateStep: false
 }) }}>
     {% for bcc in bccs %}
