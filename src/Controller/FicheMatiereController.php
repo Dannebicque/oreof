@@ -183,6 +183,7 @@ class FicheMatiereController extends AbstractController
     ): Response {
         $newFicheMatiere = clone $ficheMatiere;
         $newFicheMatiere->setLibelle($ficheMatiere->getLibelle() . '-copie');
+        $newFicheMatiere->setSlug(null);
         $entityManager->persist($newFicheMatiere);
         $entityManager->flush();
 
