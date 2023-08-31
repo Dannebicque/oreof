@@ -23,6 +23,7 @@
                 {{ displaySort('sigle', sort, direction) }}
             </a>
         </th>
+        <th>Durée</th>
         <th>Type(s) diplôme</th>
         <th></th>
     </tr>
@@ -32,6 +33,14 @@
         <td>
             <label for="libelle" class="sr-only">Libellé</label>
             <input type="text" class="form-control" id="libelle">
+        </td>
+        <td>
+            <label for="sigle" class="sr-only">Sigle</label>
+            <input type="text" class="form-control" id="sigle">
+        </td>
+        <td>
+            <label for="sigle" class="sr-only">Avec Durée ?</label>
+            <input type="text" class="form-control" id="sigle">
         </td>
         <td>
             <label for="type_diplome" class="sr-only">Type de diplôme</label>
@@ -45,6 +54,7 @@
         <tr>
             <td>{{ type_epreuve.libelle }}</td>
             <td>{{ type_epreuve.sigle }}</td>
+            <td>{{ type_epreuve.hasDuree|badgeBoolean }}</td>
             <td>
                 {% for typeDip in type_epreuve.typeDiplomes %}
                     {{ typeDip|typeDiplome }}

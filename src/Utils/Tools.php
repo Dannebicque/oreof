@@ -9,6 +9,7 @@
 
 namespace App\Utils;
 
+use DateTime;
 use DateTimeInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
@@ -59,9 +60,14 @@ abstract class Tools
     public static function convertDate(string|null $date): DateTimeInterface
     {
         if (null === $date) {
-            return new \DateTime();
+            return new DateTime();
         }
 
-        return new \DateTime($date);
+        return new DateTime($date);
+    }
+
+    public static function convertToTime(string $time): ?DateTimeInterface
+    {
+        return DateTime::createFromFormat('H:i', $time) ?? null;
     }
 }

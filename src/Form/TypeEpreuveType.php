@@ -11,6 +11,7 @@ namespace App\Form;
 
 use App\Entity\TypeDiplome;
 use App\Entity\TypeEpreuve;
+use App\Form\Type\YesNoType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -27,6 +28,9 @@ class TypeEpreuveType extends AbstractType
             ])
             ->add('sigle', TextType::class, [
                 'label' => 'Sigle',
+            ])
+            ->add('hasDuree', YesNoType::class, [
+                'label' => 'hasDuree',
             ])
             ->add('typeDiplomes', EntityType::class, [
                 'class' =>TypeDiplome::class,

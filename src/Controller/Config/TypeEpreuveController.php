@@ -28,10 +28,18 @@ class TypeEpreuveController extends AbstractController
     }
 
     #[Route('/liste', name: 'app_type_epreuve_liste', methods: ['GET'])]
-    public function liste(TypeEpreuveRepository $typeEpreuveRepository): Response
+    public function liste(
+        Request $request,
+        TypeEpreuveRepository $typeEpreuveRepository): Response
     {
+        $sort = $request->query->get('sort') ?? 'libelle';
+        $direction = $request->query->get('direction') ?? 'asc';
+        $q = $request->query->get('q') ?? '';
+
         return $this->render('config/type_epreuve/_liste.html.twig', [
-            'type_epreuves' => $typeEpreuveRepository->findAll(),
+            'type_epreuves' => $typeEpreuveRepository->findBySearchAndSort($sort, $direction, $q),
+            'sort' => $sort,
+            'direction' => $direction,
         ]);
     }
 

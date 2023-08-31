@@ -34,6 +34,9 @@ class TypeEpreuve
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $sigle = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $hasDuree = false;
+
     public function __construct()
     {
         $this->typeDiplomes = new ArrayCollection();
@@ -110,5 +113,17 @@ class TypeEpreuve
             return $this->getLibelle() . ' (' . $this->getSigle() . ')';
         }
         return $this->getLibelle();
+    }
+
+    public function isHasDuree(): ?bool
+    {
+        return $this->hasDuree;
+    }
+
+    public function setHasDuree(?bool $hasDuree): static
+    {
+        $this->hasDuree = $hasDuree;
+
+        return $this;
     }
 }
