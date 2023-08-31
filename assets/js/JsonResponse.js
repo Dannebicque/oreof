@@ -11,7 +11,7 @@ import callOut from './callOut'
 export default async function JsonResponse(reponse) {
   const data = await reponse.json()
   if (reponse.status === 200) {
-    if (data.message.trim() !== '') {
+    if (data.message !== undefined && data.message.trim() !== '') {
       callOut(data.message, 'success')
     } else {
       callOut('Sauvegarde effectuée', 'success')
@@ -21,7 +21,7 @@ export default async function JsonResponse(reponse) {
   }
 
   if (reponse.status === 500) {
-    if (data.message.trim() !== '') {
+    if (data.message !== undefined && data.message.trim() !== '') {
       callOut(data.message, 'error')
     } else {
       callOut('Erreur lors de la sauvegarde', 'error')

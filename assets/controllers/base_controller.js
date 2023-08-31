@@ -38,7 +38,8 @@ export default class extends Controller {
         // callOut('Sauvegarde effectuée', 'success')
 
         this.modal.hide()
-        if (this.updateComponent) {
+
+        if (this.updateComponent.length > 0) {
           const component = document.getElementById(this.updateComponent.id).__component;
           component.emit(this.updateComponent.event);
         }
