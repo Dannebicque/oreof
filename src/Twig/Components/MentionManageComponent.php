@@ -79,25 +79,25 @@ final class MentionManageComponent
     }
 
     #[LiveListener('mention_manage:valide')]
-    public function valide()
+    public function valide(): void
     {
-        $place = array_keys($this->dpeWorkflow->getMarking($this->formation)->getPlaces())[0];
+        $place = $this->getPlace($this->type);
         $this->etape = self::TAB[$place] ?? $this->type;
         $this->event = 'valide';
     }
 
     #[LiveListener('mention_manage:edit')]
-    public function edit()
+    public function edit(): void
     {
-        $place = array_keys($this->dpeWorkflow->getMarking($this->formation)->getPlaces())[0];
+        $place = $this->getPlace($this->type);
         $this->etape = self::TAB[$place] ?? $this->type;
         $this->event = 'edit';
     }
 
     #[LiveListener('mention_manage:refuse')]
-    public function refuse()
+    public function refuse(): void
     {
-        $place = array_keys($this->dpeWorkflow->getMarking($this->formation)->getPlaces())[0];
+        $place = $this->getPlace($this->type);
         $this->etape = self::TAB[$place] ?? $this->type;
         $this->event = 'valide';
     }
@@ -107,11 +107,11 @@ final class MentionManageComponent
     {
         if ($this->type === 'formation') {
             $this->typeDiplome = $this->formation->getTypeDiplome();
-            $place = array_keys($this->dpeWorkflow->getMarking($this->formation)->getPlaces())[0];
+            $place = $this->getPlace($this->type);
         } elseif ($this->type === 'parcours') {
             $this->typeDiplome = $this->parcours?->getFormation()->getTypeDiplome();
             $this->formation = $this->parcours?->getFormation();
-            $place = array_keys($this->parcoursWorkflow->getMarking($this->parcours)->getPlaces())[0];
+            $place = $this->getPlace($this->type);
         } elseif ($this->type === 'ficheMatiere') {
             $this->typeDiplome = $this->ficheMatiere->getParcours()->getFormation()->getTypeDiplome();
             $this->parcours = $this->ficheMatiere->getParcours();
@@ -135,5 +135,22 @@ final class MentionManageComponent
         }
 
         return '- à venir -';
+    }
+
+    private function getWorkflow(string $type): WorkflowInterface
+    {
+        if ($type === 'formation') {
+            return $this->dpeWorkflow;
+        }
+
+        if ($type === 'parcours') {
+            return $this->parcoursWorkflow;
+        }
+    }
+
+    private function getPlace(string $type)
+    {
+        $objet = $type === 'formation' ? $this->formation : $this->parcours;
+        return array_keys($this->getWorkflow($type)->getMarking($objet)->getPlaces())[0];
     }
 }
