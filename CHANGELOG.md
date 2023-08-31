@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.9](https://github.com/Dannebicque/oreof/compare/v1.10.8...v1.10.9) (2023-08-31)
+
+
+### Bug Fixes
+
+* BCC des parcours sur mutualisé ([65b9adc](https://github.com/Dannebicque/oreof/commit/65b9adc1d4eff97b0f47c7c6d611731e97d8f0bf))
+* bon workflow selon le type ([5b84527](https://github.com/Dannebicque/oreof/commit/5b84527baa9e4269a86ddede3e307f0f74140271))
+* typo et tests sur le JS ([fa6584b](https://github.com/Dannebicque/oreof/commit/fa6584b2ebbf212733b629f87fd3cd4dbf73ea99))
+
 ### [1.10.8](https://github.com/Dannebicque/oreof/compare/v1.10.7...v1.10.8) (2023-08-31)
 
 
