@@ -214,7 +214,7 @@ class ParcoursState
                 $sem = $semestre->getSemestre();
             }
 
-            if ($sem->totalEctsSemestre() !== 30) {
+            if ($sem?->isNonDispense() === false && $sem->totalEctsSemestre() !== 30) {
                 $tab['error'][] = 'Le semestre "' . $semestre->getSemestre()?->display() . '" doit faire 30 ECTS.';
             }
 
