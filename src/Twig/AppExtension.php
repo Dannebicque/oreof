@@ -104,7 +104,7 @@ class AppExtension extends AbstractExtension
         return 'asc';
     }
 
-    public function badgeBoolean(bool $value): string
+    public function badgeBoolean(?bool $value = false): string
     {
         return $value ? '<span class="badge bg-success">Oui</span>' : '<span class="badge bg-danger">Non</span>';
     }
