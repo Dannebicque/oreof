@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.10](https://github.com/Dannebicque/oreof/compare/v1.10.9...v1.10.10) (2023-08-31)
+
+
+### Bug Fixes
+
+* Vérification des semestres et des ECTS ([0780a9b](https://github.com/Dannebicque/oreof/commit/0780a9b10f47e91dd8a769ac91bf10f48331c6f0))
+
 ### [1.10.9](https://github.com/Dannebicque/oreof/compare/v1.10.8...v1.10.9) (2023-08-31)
 
 
