@@ -29,7 +29,7 @@ process:
     check: true
   parcours_rf:
     page: 'parcours'
-    icon: 'fa-file-circle-check'
+    icon: 'fa-memo-circle-check'
     label: 'validation.parcours_rf'
     hasValid: true
     hasReserve: true
