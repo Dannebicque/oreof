@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.11](https://github.com/Dannebicque/oreof/compare/v1.10.10...v1.10.11) (2023-08-31)
+
+
+### Features
+
+* Type d'épreuve avec durée ([a92ab47](https://github.com/Dannebicque/oreof/commit/a92ab47f7195a039861f8fe9bb1c3c7ea2ae1aa5))
+
+
+### Bug Fixes
+
+* badge si null ([ee3a903](https://github.com/Dannebicque/oreof/commit/ee3a903c818c76f7f66698dceabeabda2e8bed42))
+
 ### [1.10.10](https://github.com/Dannebicque/oreof/compare/v1.10.9...v1.10.10) (2023-08-31)
 
 
