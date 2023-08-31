@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.8](https://github.com/Dannebicque/oreof/compare/v1.10.7...v1.10.8) (2023-08-31)
+
+
+### Bug Fixes
+
+* Dupliquer fiche matière ([f5803dd](https://github.com/Dannebicque/oreof/commit/f5803ddb33400061ea507de5fb890bfbc4d997fd))
+* icône ([3c6fe08](https://github.com/Dannebicque/oreof/commit/3c6fe0848e79400f169631b94678bf8ea74ce7ae))
+
 ### [1.10.7](https://github.com/Dannebicque/oreof/compare/v1.10.6...v1.10.7) (2023-08-30)
 
 
