@@ -1,18 +1,22 @@
-<div class="card">
+{% set editable = editable is not defined ? false : editable %}
+<div class="card" {{ stimulus_controller('parcours--bcc', {
+    urlUpdateComptence: path('app_parcours_bcc_update_competence', {parcours: parcours.id})
+}) }}>
     <div class="card-body">
         {% for semParc in parcours.semestreParcours|filter(semestre => semestre.semestre.nonDispense == false) %}
             {% if semParc.semestre.semestreRaccroche != null %}
                 {% set semestre = semParc.semestre.semestreRaccroche %}
-                {% else %}
+            {% else %}
                 {% set semestre = semParc %}
             {% endif %}
             <h2>{{ semParc.display }}</h2>
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
                     <th colspan="2" rowspan="2">&nbsp;</th>
                     {% for ue in semestre.semestre.ues %}
-                        <th colspan="{{ ue.elementConstitutifs|length }}" class="text-center">{{ ue.display(parcours) }}</th>
+                        <th colspan="{{ ue.elementConstitutifs|length }}"
+                            class="text-center">{{ ue.display(parcours) }}</th>
                     {% endfor %}
                 </tr>
                 <tr>
@@ -34,14 +38,28 @@
                             {% for ue in semestre.semestre.ues %}
                                 {% for ec in ue.elementConstitutifs %}
                                     <td class="text-center">
+                                        {% set checked = "" %}
                                         {% if ec.parcours.id == parcours.id %}
                                             {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
-                                                X
+                                                {% set checked = "X" %}
                                             {% endif %}
                                         {% else %}
                                             {% if competence.elementConstitutifs.contains(ec) %}
-                                                X
+                                                {% set checked = "X" %}
                                             {% endif %}
+                                        {% endif %}
+                                        {% if editable == true %}
+                                            <label class="sr-only" for="competences_{{ competence.id }}_{{ ec.id }}">Compétence mobilisée</label>
+                                            <input type="checkbox" class="form-check"
+                                                   id="competences_{{ competence.id }}_{{ ec.id }}"
+                                                   {{ stimulus_action('parcours--bcc', 'updateCompetence', 'change', {
+                                                         competence: competence.id,
+                                                         ec: ec.id
+                                                   }) }}
+                                                   value="X"
+                                                   {% if checked == "X" %}checked{% endif %}>
+                                        {% else %}
+                                            {{ checked }}
                                         {% endif %}
                                     </td>
                                 {% endfor %}

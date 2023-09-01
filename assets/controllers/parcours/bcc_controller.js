@@ -7,8 +7,13 @@
  */
 import { Controller } from '@hotwired/stimulus'
 import callOut from '../../js/callOut'
+import JsonResponse from '../../js/JsonResponse'
 
 export default class extends Controller {
+  static values = {
+    urlUpdateComptence: String,
+  }
+
   changeBcc(event) {
     if (event.target.checked) {
       document.getElementById(`bcc_${event.params.id}_competence`).classList.remove('d-none')
@@ -34,5 +39,20 @@ export default class extends Controller {
         callOut('Sauvegarde effectuée', 'success')
         this.dispatch('modalClose')
       })
+  }
+
+  async updateCompetence(event) {
+    const body = new FormData()
+    body.append('competence', event.params.competence)
+    body.append('ec', event.params.ec)
+    body.append('checked', event.currentTarget.checked)
+
+    await fetch(this.urlUpdateComptenceValue, {
+      method: 'POST',
+      body,
+    }).then((response) => {
+      // response.json()
+      JsonResponse(response)
+    })
   }
 }
