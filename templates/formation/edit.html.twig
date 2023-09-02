@@ -11,9 +11,7 @@
                 formation: formation.id,
             }) }}
             {{ stimulus_action('formation_wizard', 'refreshStep', 'base:refreshStep@window') }}
-
     >
-
         <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs" id="lineTitleTabsContainer" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="nav-link {% if selectedStep == 1 %}active{% endif %}"
@@ -98,7 +96,6 @@
                 <div class="tab-content">
                     <div class="tab-pane fade active show" id="step_1" role="tabpanel" {{ stimulus_target
                         ('formation_wizard', 'content') }}>
-
                     </div>
                 </div>
             </div>

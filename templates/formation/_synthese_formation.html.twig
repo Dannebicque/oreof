@@ -38,21 +38,7 @@
                 </dl>
             </div>
             {% if formation.hasParcours == false and formation.parcours[0] is defined %}
-                <div class="{{ col }} d-grid">
-                    <a class="btn btn-outline-primary d-block"
-                       href="{{ path('app_parcours_bcc', {parcours:formation.parcours[0].id}) }}">
-                        Contrôler les BCC
-                    </a>
-                    <a class="btn btn-outline-primary d-block mt-1"
-                       href="{{ path('app_parcours_mccc_export', {parcours:formation.parcours[0].id, _format:'xlsx'}) }}">
-                        Export MCCC (xlsx)
-                    </a>
-                    <a class="btn btn-outline-primary d-block mt-1"
-                       href="{{ path('app_parcours_mccc_export_light', {parcours:formation.parcours[0].id, _format:'xlsx'}) }}">
-                        Export simplifié des MCCC (xlsx)
-                    </a>
-                    {# todo: include du btn/export_mccc si block résolu #}
-                </div>
+                {{ include('communs/_boutonSynthese.html.twig', {parcours: formation.parcours[0], col:col}) }}
             {% endif %}
             <div class="d-flex d-grid justify-content-end">
 

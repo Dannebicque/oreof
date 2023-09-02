@@ -38,23 +38,7 @@
                 </dl>
             </div>
             <div class="col-3 d-grid">
-                <a class="btn btn-outline-primary d-block" href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">
-                    <i class="fas fa-check"></i>
-                    Contrôler les BCC
-                </a>
-                <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_mccc_export', {parcours:parcours.id, _format:'xlsx'}) }}">
-                    <i class="{{ iconDownload }}"></i>
-                    Export MCCC (xlsx)
-                </a>
-                <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_mccc_export_light', {parcours:parcours.id, _format:'xlsx'}) }}">
-                    <i class="{{ iconDownload }}"></i>
-                    Export simplifié des MCCC (xlsx)
-                </a>
-{#                {{ include('btn/export_mccc.html.twig', {block:true}) }}
-todo: résoudre le soucis du block sur btn dropdown #}
-
-
-
+                {{ include('communs/_boutonSynthese.html.twig', {parcours: parcours, col:3}) }}
             </div>
         </div>
     </div>
