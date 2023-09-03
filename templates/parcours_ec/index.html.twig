@@ -1,7 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="card">
+    <div class="card"
+    {{ stimulus_controller('parcours--ec', {
+        urlUpdate: path('app_parcours_ec_update',{parcours: parcours.id}),
+    }) }}
+    >
         <div class="card-body">
             <table class="table table-bordered table-hover">
                 <tbody>
@@ -21,9 +25,10 @@
                         <tr>
                             <th colspan="6" class="font-weight-bold">{{ ue.display(parcours) }}</th>
                         </tr>
-                        <tr >
+                        <tr>
                             <th class="font-weight-bold">EC</th>
                             <th class="font-weight-bold">Fiche</th>
+                            <th class="font-weight-bold">Type EC</th>
                             <th class="font-weight-bold">BCC</th>
                             <th class="font-weight-bold">MCCC</th>
                             <th class="font-weight-bold">Vol. Horaire</th>
@@ -62,6 +67,29 @@
                                     {% else %}
                                         <span class="badge bg-info">EC Libre</span>
                                     {% endif %}
+                                </td>
+                                <td>
+                                    <label for="typeEc_{{ ec.id }}" class="sr-only">Type EC</label>
+                                    <select
+                                            class="form-select"
+                                            name="typeEc_{{ ec.id }}"
+                                            id="typeEc_{{ ec.id }}"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            title="Type EC"
+                                            {{ stimulus_action('parcours--ec', 'changeTypeEc', 'change', {
+                                                ec:ec.id
+                                            }) }}
+                                            >
+                                        <option value="">Choisir dans la liste</option>
+                                        {% for typeEc in typesEc %}
+                                            <option
+                                                    value="{{ typeEc.id }}"
+                                                    {% if ec.typeEc != null and ec.typeEc.id == typeEc.id %}selected{% endif %}>
+                                                {{ typeEc.libelle }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
                                 </td>
                                 <td>
                                     <button
