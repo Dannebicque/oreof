@@ -9,6 +9,7 @@
 
 namespace App\Twig;
 
+use App\DTO\Remplissage;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -21,8 +22,12 @@ class RemplissageExtension extends AbstractExtension
         ];
     }
 
-    public function remplissage(float $value): string
+    public function remplissage(Remplissage|float $value): string
     {
+        if ($value instanceof Remplissage) {
+            $value = $value->calcul();
+        }
+
         $value = round($value);
 
         if ($value === 0.0) {

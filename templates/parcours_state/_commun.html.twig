@@ -134,6 +134,7 @@
         {{ valide.etat.preRequis|badgeValide }}
     </td>
 </tr>
+{% if parcours.parcoursDefaut == false %}
 <tr>
     <td>Composante inscription</td>
     <td>
@@ -152,6 +153,7 @@
         {{ valide.etat.modaliteAlternance|badgeValide }}
     </td>
 </tr>
+{% endif %}
 <tr>
     <td>Coordonnées du secrétariat pédagogique</td>
     <td>

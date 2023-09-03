@@ -241,4 +241,44 @@ class FormationRepository extends ServiceEntityRepository
             )->getQuery()
             ->getResult();
     }
+
+    public function findByComposanteAndAnneeUniversitaire(string|null $composante, string|null $anneeUniversitaire): array
+    {
+        return $this->createQueryBuilder('f')
+            ->where('f.composantePorteuse = :composante')
+            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->setParameter('composante', $composante)
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
+            ->addOrderBy(
+                'CASE
+                            WHEN f.mention IS NOT NULL THEN m.libelle
+                            WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
+                            ELSE f.mentionTexte
+                            END',
+                'ASC'
+            )->getQuery()
+            ->getResult();
+    }
+
+    public function findByComposanteAndAnneeUniversitaireAndTypeDiplome(string|null $composante, string|null $anneeUniversitaire, string|null $typeDiplome): array
+    {
+        return $this->createQueryBuilder('f')
+            ->where('f.composantePorteuse = :composante')
+            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('f.typeDiplome = :typeDiplome')
+            ->setParameter('composante', $composante)
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('typeDiplome', $typeDiplome)
+            ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
+            ->addOrderBy(
+                'CASE
+                            WHEN f.mention IS NOT NULL THEN m.libelle
+                            WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
+                            ELSE f.mentionTexte
+                            END',
+                'ASC'
+            )->getQuery()
+            ->getResult();
+    }
 }

@@ -9,6 +9,7 @@
 
 namespace App\Classes\verif;
 
+use App\DTO\Remplissage;
 use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
 use App\Enums\RegimeInscriptionEnum;
@@ -24,13 +25,18 @@ class ParcoursValide extends AbstractValide
 
     public function valideParcours(): ParcoursValide
     {
-        //onglet 1
-        $this->etat['respParcours'] = $this->parcours->getRespParcours() ? self::COMPLET : self::VIDE;
-        $this->etat['objectifsParcours'] = $this->nonVide($this->parcours->getObjectifsParcours());
-        $this->etat['resultatsAttendus'] = $this->nonVide($this->parcours->getResultatsAttendus());
-        $this->etat['contenuParcours'] = $this->nonVide($this->parcours->getContenuFormation());
-        $this->etat['rythmeParcours'] = $this->parcours->getRythmeFormation() !== null || $this->nonVide($this->parcours->getRythmeFormationTexte()) ? self::COMPLET : self::VIDE;
-        $this->etat['localisation'] = $this->parcours->getLocalisation() ? self::COMPLET : self::VIDE;
+
+        if (!$this->parcours->isParcoursDefaut()) {
+            //onglet 1
+            $this->etat['respParcours'] = $this->parcours->getRespParcours() ? self::COMPLET : self::VIDE;
+            $this->etat['objectifsParcours'] = $this->nonVide($this->parcours->getObjectifsParcours());
+            $this->etat['resultatsAttendus'] = $this->nonVide($this->parcours->getResultatsAttendus());
+            $this->etat['contenuParcours'] = $this->nonVide($this->parcours->getContenuFormation());
+            $this->etat['rythmeParcours'] = $this->parcours->getRythmeFormation() !== null || $this->nonVide($this->parcours->getRythmeFormationTexte()) ? self::COMPLET : self::VIDE;
+            $this->etat['localisation'] = $this->parcours->getLocalisation() ? self::COMPLET : self::VIDE;
+        }
+
+
 
         //onglet 2
         $this->etat['modalitesEnseignement'] = $this->parcours->getModalitesEnseignement() ? self::COMPLET : self::VIDE;
@@ -141,14 +147,18 @@ class ParcoursValide extends AbstractValide
 
         // onglet 5
         $this->etat['preRequis'] = $this->nonVide($this->parcours->getPrerequis());
-        $this->etat['composanteInscription'] = $this->nonVide($this->parcours->getComposanteInscription());
-        $this->etat['regimeInscription'] = count($this->parcours->getRegimeInscription()) > 0 ? self::COMPLET : self::VIDE;
         $this->etat['coordSecretariat'] = $this->nonVide($this->parcours->getCoordSecretariat());
-        $this->etat['modaliteAlternance'] = self::NON_CONCERNE;
-        foreach ($this->parcours->getRegimeInscription() as $regimeInscription) {
-            if ($regimeInscription !== RegimeInscriptionEnum::FI && $regimeInscription !== RegimeInscriptionEnum::FC) {
-                $this->etat['modaliteAlternance'] = $this->nonVide($this->parcours->getModalitesAlternance());
-                $this->etat['regimeInscription'] = $this->etat['modaliteAlternance'] === self::COMPLET ? self::COMPLET : self::INCOMPLET;
+
+
+        if ($this->parcours->isParcoursDefaut() === false) {
+            $this->etat['composanteInscription'] = $this->parcours->getComposanteInscription() !== null ? self::COMPLET : self::VIDE;
+            $this->etat['regimeInscription'] = count($this->parcours->getRegimeInscription()) > 0 ? self::COMPLET : self::VIDE;
+            $this->etat['modaliteAlternance'] = self::NON_CONCERNE;
+            foreach ($this->parcours->getRegimeInscription() as $regimeInscription) {
+                if ($regimeInscription !== RegimeInscriptionEnum::FI && $regimeInscription !== RegimeInscriptionEnum::FC) {
+                    $this->etat['modaliteAlternance'] = $this->nonVide($this->parcours->getModalitesAlternance());
+                    $this->etat['regimeInscription'] = $this->etat['modaliteAlternance'] === self::COMPLET ? self::COMPLET : self::INCOMPLET;
+                }
             }
         }
 
@@ -170,7 +180,6 @@ class ParcoursValide extends AbstractValide
         $etatGlobal = self::COMPLET;
         $structure['semestres'] = [];
         foreach ($this->parcours->getSemestreParcours() as $semestreParcour) {
-
             if ($semestreParcour->getSemestre()?->getSemestreRaccroche() !== null) {
                 $sem = $semestreParcour->getSemestre()?->getSemestreRaccroche()?->getSemestre();
             } else {
@@ -210,7 +219,6 @@ class ParcoursValide extends AbstractValide
                             if ($ec->getTypeEc() === null) {
                                 $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['erreur'][] = 'Type d\'EC non renseigné (disciplinaire, ...)';
                             }
-
                         } elseif ($ec->getFicheMatiere() === null && $ec->getMcccs()->count() === 0 && $ec->getHeures() === 'À compléter' && $ec->getTypeEc() === null) {
                             $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['global'] = self::VIDE;
                             $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['erreur'] = [];
@@ -226,8 +234,6 @@ class ParcoursValide extends AbstractValide
                     $structure['semestres'][$semestreParcour->getOrdre()]['global'] = $sem->totalEctsSemestre() !== 30 ? self::ERREUR : $hasUe;
                     $structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = $sem->totalEctsSemestre() !== 30 ? 'Le semestre doit faire 30 ECTS' : '';
                 }
-
-
             }
         }
 
@@ -236,14 +242,53 @@ class ParcoursValide extends AbstractValide
         return $structure;
     }
 
-    public function isParcoursValide(): bool
+    function verifierEtat($etat): bool
     {
-        foreach ($this->etat as $etat) {
-            if ($etat !== self::COMPLET) {
+        foreach ($etat as $element) {
+
+            if (is_array($element)) {
+                if (!$this->verifierEtat($element)) {
+                    return false;
+                }
+            } else if ($element !== self::COMPLET && $element !== self::NON_CONCERNE && $element !== "") {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public function isParcoursValide(): bool
+    {
+        return $this->verifierEtat($this->etat);
+    }
+
+    public function calculPourcentage(): float
+    {
+        return $this->calcul()->calcul();
+    }
+
+    public function calcul(): Remplissage
+    {
+        $remplissage = new Remplissage();
+        return $this->calculRemplissageFromEtat($this->etat, $remplissage);
+    }
+
+    function calculRemplissageFromEtat(array $etat, Remplissage $remplissage): Remplissage
+    {
+        foreach ($etat as $element) {
+            if (is_array($element)) {
+                $this->calculRemplissageFromEtat($element, $remplissage);
+            } elseif (
+                $element === self::COMPLET ||
+                $element === self::INCOMPLET ||
+                $element === self::VIDE ||
+                $element === self::ERREUR
+            ) {
+                $remplissage->add($element === self::COMPLET ? 1 : 0);
+            }
+        }
+
+        return $remplissage;
     }
 }

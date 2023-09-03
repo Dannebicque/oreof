@@ -9,6 +9,7 @@
 
 namespace App\Classes\verif;
 
+use App\DTO\Remplissage;
 use App\Entity\Formation;
 use App\Enums\RegimeInscriptionEnum;
 
@@ -36,24 +37,7 @@ class FormationValide extends AbstractValide
 
     public function valideFormation(): FormationValide
     {
-        $this->etat['respFormation'] = $this->formation->getResponsableMention() !== null ? self::COMPLET : self::VIDE;
-        $this->etat['localisations'] = $this->formation->getLocalisationMention()->count() > 0 ? self::COMPLET : self::VIDE;
-        $this->etat['composantesInscriptions'] = $this->formation->getComposantesInscription()->count() > 0 ? self::COMPLET : self::VIDE;
-        $this->etat['regimeInscription'] = count($this->formation->getRegimeInscription()) > 0 ? self::COMPLET : self::VIDE;
-        $this->etat['modaliteAlternance'] = self::NON_CONCERNE;
-        foreach ($this->formation->getRegimeInscription() as $regimeInscription) {
-            if ($regimeInscription !== RegimeInscriptionEnum::FI && $regimeInscription !== RegimeInscriptionEnum::FC) {
-                $this->etat['modaliteAlternance'] = $this->nonVide($this->formation->getModalitesAlternance());
-                $this->etat['regimeInscription'] = $this->etat['modaliteAlternance'] === self::COMPLET ? self::COMPLET : self::INCOMPLET;
-            }
-        }
-        $this->etat['objectifsFormation'] = $this->nonVide($this->formation->getObjectifsFormation());
-        $this->etat['hasParcours'] = $this->formation->isHasParcours() === null ? self::VIDE : self::COMPLET;
-
-        if ($this->formation->isHasParcours() === false and $this->formation->getParcours()->count() > 1) {
-            $this->etat['erreurHasParcours'] = self::ERREUR;
-            $this->etat['valideParcours'] = self::INCOMPLET;
-        }
+       $this->valideOnlyFormation();
 
         if ($this->formation->isHasParcours() === false and $this->formation->getParcours()->count() === 1) {
             $parcours = $this->formation->getParcours()->first();
@@ -105,5 +89,53 @@ class FormationValide extends AbstractValide
         }
 
         return true;
+    }
+
+    public function calcul(): Remplissage
+    {
+        $remplissage = new Remplissage();
+        return $this->calculRemplissageFromEtat($this->etat, $remplissage);
+    }
+
+    function calculRemplissageFromEtat(array $etat, Remplissage $remplissage): Remplissage
+    {
+        foreach ($etat as $element) {
+            if (is_array($element)) {
+                $this->calculRemplissageFromEtat($element, $remplissage);
+            } elseif (
+                $element === self::COMPLET ||
+                $element === self::INCOMPLET ||
+                $element === self::VIDE ||
+                $element === self::ERREUR
+            ) {
+                $remplissage->add($element === self::COMPLET ? 1 : 0);
+            }
+        }
+
+        return $remplissage;
+    }
+
+    public function valideOnlyFormation(): FormationValide
+    {
+        $this->etat['respFormation'] = $this->formation->getResponsableMention() !== null ? self::COMPLET : self::VIDE;
+        $this->etat['localisations'] = $this->formation->getLocalisationMention()->count() > 0 ? self::COMPLET : self::VIDE;
+        $this->etat['composantesInscriptions'] = $this->formation->getComposantesInscription()->count() > 0 ? self::COMPLET : self::VIDE;
+        $this->etat['regimeInscription'] = count($this->formation->getRegimeInscription()) > 0 ? self::COMPLET : self::VIDE;
+        $this->etat['modaliteAlternance'] = self::NON_CONCERNE;
+        foreach ($this->formation->getRegimeInscription() as $regimeInscription) {
+            if ($regimeInscription !== RegimeInscriptionEnum::FI && $regimeInscription !== RegimeInscriptionEnum::FC) {
+                $this->etat['modaliteAlternance'] = $this->nonVide($this->formation->getModalitesAlternance());
+                $this->etat['regimeInscription'] = $this->etat['modaliteAlternance'] === self::COMPLET ? self::COMPLET : self::INCOMPLET;
+            }
+        }
+        $this->etat['objectifsFormation'] = $this->nonVide($this->formation->getObjectifsFormation());
+        $this->etat['hasParcours'] = $this->formation->isHasParcours() === null ? self::VIDE : self::COMPLET;
+
+        if ($this->formation->isHasParcours() === false and $this->formation->getParcours()->count() > 1) {
+            $this->etat['erreurHasParcours'] = self::ERREUR;
+            $this->etat['valideParcours'] = self::INCOMPLET;
+        }
+
+        return $this;
     }
 }

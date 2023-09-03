@@ -9,6 +9,8 @@
 
 namespace App\Entity;
 
+use App\Classes\verif\FormationValide;
+use App\DTO\Remplissage;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\NiveauFormationEnum;
 use App\Enums\RegimeInscriptionEnum;
@@ -16,6 +18,7 @@ use App\Repository\FormationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Sluggable\Handler\RelativeSlugHandler;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -150,6 +153,9 @@ class Formation
     #[ORM\Column(length: 255, unique: true)]
     #[Gedmo\Slug(fields: ['sigle'], unique: true)]
     private ?string $slug = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $remplissage = [];
 
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
@@ -542,33 +548,24 @@ class Formation
         return $this;
     }
 
-    public function remplissage(): float
+    public function remplissageBrut(): Remplissage
     {
-        $total = 0;
-        $total += count($this->getRegimeInscription()) === 0 ? 0 : 1;
-        //$total += $this->getContenuFormation() === null ? 0 : 1;
-        //$total += $this->getResultatsAttendus() === null ? 0 : 1;
-        $total += $this->getRythmeFormation() === null ? 0 : 1;
-        $total += $this->getRythmeFormationTexte() === null ? 0 : 1;
-        $total += $this->isHasParcours() === null ? 0 : 1;
-
-        $max = 4;
+        $remplissage = new Remplissage();
         if ($this->hasParcours === true) {
+            $valide = new FormationValide($this);
+            $valide->valideOnlyFormation();
+            $remplissage = $valide->calcul();
             foreach ($this->getParcours() as $parcours) {
-                $remplissage = $parcours->remplissageBrut();
-                $total += $remplissage->score;
-                $max += $remplissage->total;
+                $remp = $parcours->getRemplissage();
+                $remplissage->addRemplissage($remp);
             }
         } else {
-            if ($this->getParcours()->first() !== false) {
-                $remplissage = $this->getParcours()->first()->remplissageBrut();
-                $total += $remplissage->score;
-                $max += $remplissage->total;
-            }
+            $valide = new FormationValide($this);
+            $valide->valideFormation();
+            $remplissage = $valide->calcul();
         }
 
-        //todo: ajouter le remplissage des matières ?
-        return $total / $max * 100;
+        return $remplissage;
     }
 
     public function getRythmeFormation(): ?RythmeFormation
@@ -847,5 +844,44 @@ class Formation
         $this->slug = $slug;
 
         return $this;
+    }
+
+    public function getRemplissage(): Remplissage
+    {
+        $remplissage = new Remplissage();
+
+        if (
+            $this->remplissage !== null &&
+            count($this->remplissage) > 0
+            && array_key_exists('score', $this->remplissage)
+            && array_key_exists('total', $this->remplissage)) {
+            $remplissage->setScore($this->remplissage['score']);
+            $remplissage->setTotal($this->remplissage['total']);
+        }
+
+
+        return $remplissage;
+    }
+
+    public function setRemplissage(?Remplissage $remplissage = null): static
+    {
+
+        if (null === $remplissage) {
+            $remplissage = $this->remplissageBrut();
+        }
+
+        $this->remplissage = [
+            'score' => $remplissage->score,
+            'total' => $remplissage->total,
+        ];
+
+        return $this;
+    }
+
+    #[ORM\PreFlush]
+    public function updateRemplissage(PreFlushEventArgs $args): void
+    {
+        $remplissage = $this->remplissageBrut();
+        $this->setRemplissage($remplissage);
     }
 }

@@ -9,6 +9,7 @@
 
 namespace App\Entity;
 
+use App\Classes\verif\ParcoursValide;
 use App\DTO\Remplissage;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
@@ -17,6 +18,7 @@ use App\Repository\ParcoursRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ParcoursRepository::class)]
@@ -162,6 +164,9 @@ class Parcours
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: HistoriqueParcours::class)]
     private Collection $historiqueParcours;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $remplissage = [];
 
     public function __construct(Formation $formation)
     {
@@ -444,38 +449,10 @@ class Parcours
 
     public function remplissageBrut(): Remplissage
     {
-        $remplissage = new Remplissage();
-        $remplissage->add(count($this->getRegimeInscription()) === 0 ? 0 : 1);
-        if ($this->isParcoursDefaut() === false) {
-            $remplissage->add($this->getContenuFormation() === null ? 0 : 1);
-            $remplissage->add($this->getResultatsAttendus() === null ? 0 : 1);
-            $remplissage->add($this->getRythmeFormation() === null ? 0 : 1);
-            $remplissage->add($this->getLocalisation() === null ? 0 : 1);
-            $remplissage->add($this->getObjectifsParcours() === null ? 0 : 1);
-        }
+        $verification = new ParcoursValide($this, $this->getFormation()->getTypeDiplome());
+        $verification->valideParcours();
 
-        $remplissage->add($this->getDebouches() === null ? 0 : 1);
-
-        $remplissage->add($this->getPoursuitesEtudes() === null ? 0 : 1);
-        $remplissage->add($this->getCoordSecretariat() === null ? 0 : 1);
-        $remplissage->add(count($this->getBlocCompetences()) === 0 ? 0 : 1);
-        if (count($this->getBlocCompetences()) !== 0) {
-            foreach ($this->getBlocCompetences() as $bloc) {
-                $remplissage->add(count($bloc->getCompetences()) === 0 ? 0 : 1);
-            }
-        }
-
-        return $remplissage;
-    }
-
-    public function remplissage(): float
-    {
-        //if ($this->isParcoursDefaut()) {
-        $remplissage = $this->remplissageBrut();
-        return $remplissage->score / $remplissage->total * 100;
-        //}
-
-        //return $this->remplissageBrut() / 5 * 100;
+        return $verification->calcul();
     }
 
     public function getRythmeFormation(): ?RythmeFormation
@@ -911,5 +888,43 @@ class Parcours
     public function getValide()
     {
         return $this->getEtatParcours()['valide'] ?? false;
+    }
+
+    public function getRemplissage(): Remplissage
+    {
+        $remplissage = new Remplissage();
+
+        if ($this->remplissage !== null &&
+            count($this->remplissage) > 0
+            && array_key_exists('score', $this->remplissage)
+            && array_key_exists('total', $this->remplissage)) {
+            $remplissage->setScore($this->remplissage['score']);
+            $remplissage->setTotal($this->remplissage['total']);
+        }
+
+
+        return $remplissage;
+    }
+
+    public function setRemplissage(?Remplissage $remplissage = null): static
+    {
+
+        if (null === $remplissage) {
+            $remplissage = $this->remplissageBrut();
+        }
+
+        $this->remplissage = [
+            'score' => $remplissage->score,
+            'total' => $remplissage->total,
+        ];
+
+        return $this;
+    }
+
+    #[ORM\PreFlush]
+    public function updateRemplissage(PreFlushEventArgs $args): void
+    {
+        $remplissage = $this->remplissageBrut();
+        $this->setRemplissage($remplissage);
     }
 }
