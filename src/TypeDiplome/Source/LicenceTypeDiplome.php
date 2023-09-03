@@ -15,6 +15,7 @@ use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\TypeDiplome\Export\LicenceMccc;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Utils\Tools;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\InputBag;
@@ -96,6 +97,12 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                     $isCompleted = 'Complet';
                 }
 
+                if ($request->get('duree_s2_et') !== '') {
+                    $mcccs[2]['et']->setDuree(Tools::convertToTime($request->get('duree_s2_et')));
+                } else {
+                    $mcccs[2]['et']->setDuree(null);
+                }
+
                 if (array_key_exists('cc', $mcccs[1])) {
                     $mcccs[1]['cc']->setPourcentage(50);
                     $mcccs[1]['cc']->setNbEpreuves(2);
@@ -160,14 +167,27 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                     $mcccs[1]['et']->setNbEpreuves(0);
                     $mcccs[1]['et']->setTypeEpreuve([]);
                 }
+                if ($request->get('duree_s1_et') !== '') {
+                    $mcccs[1]['et']->setDuree(Tools::convertToTime($request->get('duree_s1_et')));
+                }else {
+                    $mcccs[1]['et']->setDuree(null);
+                }
+
+//todo: encart sur vérification parcours/formation sur la structure selon le type, cas des licences. Permet de déporter les tests spécifiques dans les type de diplômes ou départer la vérification structure dans les types de diplômes
 
                 $mcccs[2]['et']->setPourcentage(100);
                 $mcccs[2]['et']->setNbEpreuves(1);
                 $mcccs[2]['et']->setTypeEpreuve([$request->get('typeEpreuve_s2_et')]);
-
+                if ($request->get('duree_s2_et') !== '') {
+                    $mcccs[2]['et']->setDuree(Tools::convertToTime($request->get('duree_s2_et')));
+                } else {
+                    $mcccs[2]['et']->setDuree(null);
+                }
                 if (
                     $mcccs[1]['cc']->getNbEpreuves() > 0 &&
                     $mcccs[1]['et']->getTypeEpreuve() !== null &&
+                    $mcccs[1]['et']->getDuree() !== null &&
+                    $mcccs[2]['et']->getDuree() !== null &&
                     $mcccs[2]['et']->getTypeEpreuve() !== null &&
                     $mcccs[1]['cc']->getPourcentage() + $mcccs[1]['et']->getPourcentage() === 100.00
                 ) {
@@ -183,13 +203,26 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                     $mcccs[1]['et']->setTypeEpreuve([$request->get('typeEpreuve_s1_et')]);
                 }
 
+                if ($request->get('duree_s1_et') !== '') {
+                    $mcccs[1]['et']->setDuree(Tools::convertToTime($request->get('duree_s1_et')));
+                } else {
+                    $mcccs[1]['et']->setDuree(null);
+                }
+
                 if ($request->get('typeEpreuve_s2_et') === "") {
                     $mcccs[2]['et']->setTypeEpreuve(null);
                 } else {
                     $mcccs[2]['et']->setTypeEpreuve([$request->get('typeEpreuve_s2_et')]);
                 }
 
+                if ($request->get('duree_s2_et') !== '') {
+                    $mcccs[2]['et']->setDuree(Tools::convertToTime($request->get('duree_s2_et')));
+                } else {
+                    $mcccs[2]['et']->setDuree(null);
+                }
+
                 if ($mcccs[1]['et']->getTypeEpreuve() !== null && count($mcccs[1]['et']->getTypeEpreuve()) > 0 &&
+                    $mcccs[1]['et']->getDuree() !== null && $mcccs[2]['et']->getDuree() !== null &&
                     $mcccs[2]['et']->getTypeEpreuve() !== null && count($mcccs[2]['et']->getTypeEpreuve()) > 0) {
                     $isCompleted = 'Complet';
                 }
@@ -207,6 +240,12 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         $mcccs = $this->getMcccs($elementConstitutif);
 
         switch ($field) {
+            case 'duree_s1_et':
+                $mcccs[1]['et']->setDuree(Tools::convertToTime($value));
+                break;
+            case 'duree_s2_et':
+                $mcccs[2]['et']->setDuree(Tools::convertToTime($value));
+                break;
             case 'pourcentage_s1_cc':
                 $mcccs[1]['cc']->setPourcentage((float)$value);
                 break;

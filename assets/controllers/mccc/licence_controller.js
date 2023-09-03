@@ -34,11 +34,33 @@ export default class extends Controller {
 
     const response = await fetch(`${this.urlValue}?${params.toString()}`)
     this.zoneTarget.innerHTML = await response.text()
+    console.log(typeMccc)
+    if (typeMccc === 'cc') {
+      this.saveDataCc()
+    } else if (typeMccc === 'ct') {
+      this.saveDataCt()
+    } else if (typeMccc === 'cc_ct') {
+      this.saveDataCcCt()
+    }
   }
 
   saveDataCcCt() {
     // on vérifie que le pourcentage est bien de 100
     const total = parseFloat(document.getElementById('pourcentage_s1_cc').value) + parseFloat(document.getElementById('pourcentage_s1_et').value)
+
+    const option1 = document.querySelector('#typeEpreuve_s1_et option:checked')
+    document.getElementById('duree_s1_et').disabled = !(parseInt(option1.dataset.hasduree, 10) === 1)
+
+    if (document.getElementById('duree_s1_et').disabled === true) {
+      document.getElementById('duree_s1_et').value = ''
+    }
+
+    const option2 = document.querySelector('#typeEpreuve_s2_et option:checked')
+    document.getElementById('duree_s2_et').disabled = !(parseInt(option2.dataset.hasduree, 10) === 1)
+
+    if (document.getElementById('duree_s2_et').disabled === true) {
+      document.getElementById('duree_s2_et').value = ''
+    }
 
     if (total !== 100) {
       this.zoneErreurTarget.classList.remove('d-none')
@@ -46,6 +68,31 @@ export default class extends Controller {
     } else {
       this.zoneErreurTarget.classList.add('d-none')
       this.zoneErreurTarget.innerHTML = ''
+    }
+  }
+
+  saveDataCt() {
+    const option1 = document.querySelector('#typeEpreuve_s1_et option:checked')
+    document.getElementById('duree_s1_et').disabled = !(parseInt(option1.dataset.hasduree, 10) === 1)
+
+    if (document.getElementById('duree_s1_et').disabled === true) {
+      document.getElementById('duree_s1_et').value = ''
+    }
+
+    const option2 = document.querySelector('#typeEpreuve_s2_et option:checked')
+    document.getElementById('duree_s2_et').disabled = !(parseInt(option2.dataset.hasduree, 10) === 1)
+
+    if (document.getElementById('duree_s2_et').disabled === true) {
+      document.getElementById('duree_s2_et').value = ''
+    }
+  }
+
+  saveDataCc() {
+    const option = document.querySelector('#typeEpreuve_s2_et option:checked')
+    document.getElementById('duree_s2_et').disabled = !(parseInt(option.dataset.hasduree, 10) === 1)
+
+    if (document.getElementById('duree_s2_et').disabled === true) {
+      document.getElementById('duree_s2_et').value = ''
     }
   }
 

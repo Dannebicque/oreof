@@ -70,15 +70,35 @@
                    data-bs-original-title="{{ 'mccc_licence.helps.ct.typeEpreuve_s2_et.help'|trans({}, 'help') }}"></i>
             </label>
             <select type="text" class="form-select" id="typeEpreuve_s2_et" name="typeEpreuve_s2_et"
-                    {{ stimulus_action('mccc--licence', 'saveDataCcCt', 'change') }}
+                    {{ stimulus_action('mccc--licence', 'saveDataCc', 'change') }}
             >
                 <option value="">Choisir</option>
                 {% for typeE in typeEpreuves %}
                     <option value="{{ typeE.id }}"
+                            data-hasduree="{{ typeE.hasDuree }}"
                             {% if mcccs[2]['et'].typeEpreuve[0] is defined and mcccs[2]['et'].typeEpreuve[0] == typeE.id %}selected{% endif %}
                     >{{ typeE.display }}</option>
                 {% endfor %}
             </select>
+        </div>
+        <div class="col-4">
+            &nbsp;
+        </div>
+        <div class="col-4">
+            &nbsp;
+        </div>
+        <div class="col-4">
+            <label for="duree_s2_et">
+                Durée de l'épreuve
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="{{ 'mccc_licence.helps.ct.duree_s2_et.help'|trans({}, 'help') }}"
+                   data-bs-original-title="{{ 'mccc_licence.helps.ct.duree_s2_et.help'|trans({}, 'help') }}"></i>
+            </label>
+                <input type="time" class="form-control" id="duree_s2_et" name="duree_s2_et"
+                value="{% if mcccs[2]['et'].duree != null %}{{ mcccs[2]['et'].duree|date('H:i') }}{% endif %}"
+                >
         </div>
     </div>
 

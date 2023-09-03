@@ -66,8 +66,11 @@ abstract class Tools
         return new DateTime($date);
     }
 
-    public static function convertToTime(string $time): ?DateTimeInterface
+    public static function convertToTime(?string $time): ?DateTimeInterface
     {
+        if (null === $time) {
+            return null;
+        }
         return DateTime::createFromFormat('H:i', $time) ?? null;
     }
 }

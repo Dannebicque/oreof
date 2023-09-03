@@ -48,6 +48,9 @@ class Mccc
     #[ORM\Column]
     private ?bool $examenTerminal = null;
 
+    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $duree = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -157,6 +160,18 @@ class Mccc
     public function setExamenTerminal(bool $examenTerminal): self
     {
         $this->examenTerminal = $examenTerminal;
+
+        return $this;
+    }
+
+    public function getDuree(): ?\DateTimeInterface
+    {
+        return $this->duree;
+    }
+
+    public function setDuree(?\DateTimeInterface $duree): static
+    {
+        $this->duree = $duree;
 
         return $this;
     }

@@ -65,6 +65,7 @@
                 >
                 <span class="input-group-text">%</span>
             </div>
+
         </div>
         <div class="col-4">
             <label for="typeEpreuve_s1_et">
@@ -84,10 +85,32 @@
                 <option value="">Choisir</option>
                 {% for typeE in typeEpreuves %}
                     <option value="{{ typeE.id }}"
+                            data-hasduree="{{ typeE.hasDuree }}"
                             {% if mcccs[1]['et'].typeEpreuve[0] is defined and mcccs[1]['et'].typeEpreuve[0] == typeE.id %}selected{% endif %}
                     >{{ typeE.display }}</option>
                 {% endfor %}
             </select>
+        </div>
+        <div class="col-4">
+            &nbsp;
+        </div>
+        <div class="col-4">
+            &nbsp;
+        </div>
+        <div class="col-4">
+            <label for="duree_s1_et">
+                Durée de l'épreuve
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="{{ 'mccc_licence.helps.ct.duree_s1_et.help'|trans({}, 'help') }}"
+                   data-bs-original-title="{{ 'mccc_licence.helps.ct.duree_s1_et.help'|trans({}, 'help') }}"></i>
+            </label>
+            <div class="input-group">
+                <input type="time" class="form-control" id="duree_s1_et" name="duree_s1_et"
+                       value="{% if mcccs[1]['et'].duree != null %}{{ mcccs[1]['et'].duree|date('H:i') }}{% endif %}"
+                >
+            </div>
         </div>
     </div>
 </div>
@@ -131,10 +154,32 @@
                 <option value="">Choisir</option>
                 {% for typeE in typeEpreuves %}
                     <option value="{{ typeE.id }}"
+                            data-hasduree="{{ typeE.hasDuree }}"
                             {% if mcccs[2]['et'].typeEpreuve[0] is defined and mcccs[2]['et'].typeEpreuve[0] == typeE.id %}selected{% endif %}
                     >{{ typeE.display }}</option>
                 {% endfor %}
             </select>
+        </div>
+        <div class="col-4">
+            &nbsp;
+        </div>
+        <div class="col-4">
+            &nbsp;
+        </div>
+        <div class="col-4">
+            <label for="duree_s2_et">
+                Durée de l'épreuve
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="{{ 'mccc_licence.helps.ct.duree_s2_et.help'|trans({}, 'help') }}"
+                   data-bs-original-title="{{ 'mccc_licence.helps.ct.duree_s2_et.help'|trans({}, 'help') }}"></i>
+            </label>
+            <div class="input-group">
+                <input type="time" class="form-control" id="duree_s2_et" name="duree_s2_et"
+                       value="{% if mcccs[2]['et'].duree != null %}{{ mcccs[2]['et'].duree|date('H:i') }}{% endif %}"
+                >
+            </div>
         </div>
     </div>
 
