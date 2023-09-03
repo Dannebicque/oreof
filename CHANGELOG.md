@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/Dannebicque/oreof/compare/v1.10.11...v1.11.0) (2023-09-03)
+
+
+### Features
+
+* Gestion des liens EC/BCC directement dans la page contrôle BCC ([7c48fe4](https://github.com/Dannebicque/oreof/commit/7c48fe476e156e9431fee73feed35920e9e108bf))
+* Licence, durée des épreuves ([a45ab72](https://github.com/Dannebicque/oreof/commit/a45ab72111f99f638c08706ed47d5d0bc480d111))
+* Licence, durée des épreuves, export Excel ([4b553ca](https://github.com/Dannebicque/oreof/commit/4b553caca5187eebcd908d3cf28fac7fd327a029))
+* MCCC pour le BUT ([44115ca](https://github.com/Dannebicque/oreof/commit/44115cafb718b7b94e27ec59da02c9fe8bd1c6e5))
+
+
+### Bug Fixes
+
+* bug si tableau vide sur erreurs ([633f168](https://github.com/Dannebicque/oreof/commit/633f168bd0951c68aeb50081a73cbacd254996cc))
+
 ### [1.10.11](https://github.com/Dannebicque/oreof/compare/v1.10.10...v1.10.11) (2023-08-31)
 
 
