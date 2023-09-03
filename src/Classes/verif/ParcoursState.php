@@ -243,6 +243,10 @@ class ParcoursState
                         if ($ec->getEtatBcc($this->parcours) !== 'Complet') {
                             $tab['error'][] = 'Vous devez saisir les BCC de l\'EC "' . $ec->getOrdre() . '.';
                         }
+
+                        if ($ec->getTypeEc() === null) {
+                            $tab['error'][] = 'Vous devez indiquer le type d\'EC pour l\'EC "' . $ec->getOrdre() . '.';
+                        }
                     }
                 }
             }

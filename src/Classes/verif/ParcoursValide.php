@@ -184,7 +184,7 @@ class ParcoursValide extends AbstractValide
                     $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = count($ue->getElementConstitutifs()) === 0 ? self::VIDE : self::COMPLET;
                     $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'] = [];
                     foreach ($ue->getElementConstitutifs() as $ec) {
-                        if ($ec->getFicheMatiere() === null || $ec->getMcccs()->count() === 0 || $ec->etatStructure() !== 'Complet' || $ec->getEtatBcc($this->parcours) !== 'Complet') {
+                        if ($ec->getFicheMatiere() === null || $ec->getMcccs()->count() === 0 || $ec->etatStructure() !== 'Complet' || $ec->getEtatBcc($this->parcours) !== 'Complet' || $ec->getTypeEc() === null) {
                             $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['global'] = self::INCOMPLET;
                             $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['erreur'] = [];
                             $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = self::INCOMPLET;
@@ -207,7 +207,11 @@ class ParcoursValide extends AbstractValide
                                 $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['erreur'][] = 'BCC incomplet ou non renseignés';
                             }
 
-                        } elseif ($ec->getFicheMatiere() === null && $ec->getMcccs()->count() === 0 && $ec->getHeures() === 'À compléter') {
+                            if ($ec->getTypeEc() === null) {
+                                $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['erreur'][] = 'Type d\'EC non renseigné (disciplinaire, ...)';
+                            }
+
+                        } elseif ($ec->getFicheMatiere() === null && $ec->getMcccs()->count() === 0 && $ec->getHeures() === 'À compléter' && $ec->getTypeEc() === null) {
                             $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['global'] = self::VIDE;
                             $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['erreur'] = [];
                             $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = self::INCOMPLET;
