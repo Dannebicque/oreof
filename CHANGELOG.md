@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.3](https://github.com/Dannebicque/oreof/compare/v1.12.2...v1.12.3) (2023-09-03)
+
+
+### Features
+
+* Ajout du type d'EC éditable dans la synthèse des EC d'un parcours ([b581578](https://github.com/Dannebicque/oreof/commit/b5815785368428733658cad5f25c68cee14ab48b))
+* Calcul du taux de remplissage en se basant sur la vérification + correction parcours par défaut. ([1ac40f2](https://github.com/Dannebicque/oreof/commit/1ac40f27a7278db0a1166b3b537f56d40dd4b8e5))
+* Options sur l'établissement ([135ae1a](https://github.com/Dannebicque/oreof/commit/135ae1a0d8fcb4f96b3913acaa3a5f07415480fe))
+
 ### [1.12.2](https://github.com/Dannebicque/oreof/compare/v1.12.1...v1.12.2) (2023-09-03)
 
 
