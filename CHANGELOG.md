@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.4](https://github.com/Dannebicque/oreof/compare/v1.12.3...v1.12.4) (2023-09-03)
+
+
+### Bug Fixes
+
+* BCC et MCCC sur BUT pour synchro ([4e23e9e](https://github.com/Dannebicque/oreof/commit/4e23e9e8a8541ae1bd5e39fab8435f0e63107688))
+* titre section inscription ([9f79b40](https://github.com/Dannebicque/oreof/commit/9f79b4028426611a02489ef45284dbe467f986c7))
+
 ### [1.12.3](https://github.com/Dannebicque/oreof/compare/v1.12.2...v1.12.3) (2023-09-03)
 
 
