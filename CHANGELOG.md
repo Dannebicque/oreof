@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/Dannebicque/oreof/compare/v1.11.0...v1.12.0) (2023-09-03)
+
+
+### Features
+
+* Vue état des EC ([db3e283](https://github.com/Dannebicque/oreof/commit/db3e283753c81bd63777395a0c15a0f015d0bd52))
+
 ## [1.11.0](https://github.com/Dannebicque/oreof/compare/v1.10.11...v1.11.0) (2023-09-03)
 
 
