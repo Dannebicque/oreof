@@ -80,7 +80,8 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
     public function synchroniserMccc(
         Formation $formation
     ): bool {
-        return $this->synchronisationBut->synchroniserMccc($formation);
+        $this->synchronisationBut->synchroniserMccc($formation);
+        return true;
     }
 
     public function getRefCompetences(Parcours $parcours): array|Collection

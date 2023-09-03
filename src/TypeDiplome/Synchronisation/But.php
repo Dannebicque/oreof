@@ -576,13 +576,13 @@ class But
         }
     }
 
-    public function synchroniserMccc(Formation $formation)
+    public function synchroniserMccc(Formation $formation): void
     {
         foreach ($formation->getRegimeInscription() as $regime) {
             if ($regime === RegimeInscriptionEnum::FI || $regime === RegimeInscriptionEnum::FC) {
                 $fifc = 'fi';
             } else {
-                $fifc = 'fc';
+                $fifc = 'alt';
             }
         }
         $sigle = strtoupper($formation->getSigle());
@@ -601,7 +601,7 @@ class But
             $tabEcs[$ec->getFicheMatiere()->getSigle()][] = $ec; //plusieurs ec ? un par parcours ??
         }
 
-        for ($i = 1; $i <= 1; $i++) {
+        for ($i = 1; $i <= 6; $i++) {
             //tester sur l'onglet $i exsite dans le fichier excel et le selectionner
             if ($spreadsheet->sheetNameExists('Semestre ' . $i)) {
                 $sheet = $spreadsheet->getSheetByName('Semestre ' . $i);
