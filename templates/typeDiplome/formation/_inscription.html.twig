@@ -17,10 +17,9 @@
         </dl>
     </div>
     <div class="col-6">
-        <strong>Composante(s) d'inscription</strong>
         {% for composante in formation.composantesInscription %}
             <dl>
-                <dt>Composante</dt>
+                <dt>Composante d'inscription</dt>
                 <dd>{{ composante.libelle }}</dd>
                 <dt>Adresse</dt>
                 <dd>{{ composante.adresse != null ? composante.adresse.display|raw : 'Erreur'}}</dd>

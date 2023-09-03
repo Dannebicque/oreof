@@ -18,10 +18,8 @@
                 {{ parcours.modalitesAlternance|raw }}
             </dd>
 
-
-        <strong>Composante(s) d'inscription</strong>
-        {% if parcours.composanteInscription != null %}
-                <dt>Composante</dt>
+            {% if parcours.composanteInscription != null %}
+                <dt>Composante  d'inscription</dt>
                 <dd>{{ parcours.composanteInscription.libelle }}</dd>
                 <dt>Adresse</dt>
                 <dd>{{ parcours.composanteInscription.adresse != null ? parcours.composanteInscription.adresse.display|raw :
