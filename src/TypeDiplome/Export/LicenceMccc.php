@@ -78,8 +78,10 @@ class LicenceMccc
     public const COL_MCCC_CC_NB_EPREUVE = 25;
     public const COL_MCCC_ET_POUCENTAGE = 26;
     public const COL_MCCC_ET_TYPE_EPREUVE = 27;
-    public const COL_MCCC_CCI_EPREUVES = 28;
-    public const COL_MCCC_SECONDE_CHANCE = 29;
+    public const COL_MCCC_ET_DUREE_EPREUVE = 28;
+    public const COL_MCCC_CCI_EPREUVES = 29;
+    public const COL_MCCC_SECONDE_CHANCE = 30;
+    public const COL_MCCC_DUREE_SECONDE_CHANCE = 31;
     const COL_DETAIL_TYPE_EPREUVES = "A24";
 
 
@@ -431,6 +433,7 @@ class LicenceMccc
                 $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, 2);
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()).' (' . $mcccs[2]['et']->getPourcentage() . '%)');
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_DUREE_SECONDE_CHANCE, $ligne, $this->displayDuree($mcccs[2]['et']->getDuree()));
                 } else {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, 'Erreur');
                     //todo: ajouter couleur dans ce cas ?
@@ -457,6 +460,7 @@ class LicenceMccc
                 if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, $mcccs[1]['et']->getPourcentage() . '%');
                     $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_DUREE_EPREUVE, $ligne, $this->displayDuree($mcccs[1]['et']->getDuree()));
                 } else {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, 'Erreur');
                     $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, 'Erreur');
@@ -464,6 +468,8 @@ class LicenceMccc
 
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()).' (' . $mcccs[2]['et']->getPourcentage() . '%)');
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_DUREE_SECONDE_CHANCE, $ligne, $this->displayDuree($mcccs[2]['et']->getDuree()));
+
                 } else {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, 'Erreur');
                 }
@@ -472,12 +478,16 @@ class LicenceMccc
                 $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, '100%');
                 if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_DUREE_EPREUVE, $ligne, $this->displayDuree($mcccs[1]['et']->getDuree()));
+
                 } else {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, 'Erreur');
                 }
 
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()).' (' . $mcccs[2]['et']->getPourcentage() . '%)');
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_DUREE_SECONDE_CHANCE, $ligne, $this->displayDuree($mcccs[2]['et']->getDuree()));
+
                 } else {
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, 'Erreur');
                 }
@@ -540,5 +550,14 @@ class LicenceMccc
             //suppression des colonnes
             $this->excelWriter->removeColumn('F', 8);
         }
+    }
+
+    private function displayDuree(?DateTimeInterface $duree): string
+    {
+        if ($duree === null) {
+            return '';
+        }
+
+        return $duree->format('H\hi');
     }
 }
