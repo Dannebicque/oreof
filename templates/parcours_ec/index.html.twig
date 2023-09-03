@@ -1,0 +1,164 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered table-hover">
+                <tbody>
+                {% for semParc in parcours.semestreParcours|filter(semestre => semestre.semestre.nonDispense == false) %}
+                    {% if semParc.semestre.semestreRaccroche != null %}
+                        {% set semestre = semParc.semestre.semestreRaccroche %}
+                    {% else %}
+                        {% set semestre = semParc %}
+                    {% endif %}
+                    <tr>
+                        <th colspan="6" class="text-center font-weight-bold">
+                            {{ semestre.display }}</th>
+                    </tr>
+
+
+                    {% for ue in semestre.semestre.ues %}
+                        <tr>
+                            <th colspan="6" class="font-weight-bold">{{ ue.display(parcours) }}</th>
+                        </tr>
+                        <tr >
+                            <th class="font-weight-bold">EC</th>
+                            <th class="font-weight-bold">Fiche</th>
+                            <th class="font-weight-bold">BCC</th>
+                            <th class="font-weight-bold">MCCC</th>
+                            <th class="font-weight-bold">Vol. Horaire</th>
+                        </tr>
+                        {% for ec in tabEcs[semestre.ordre][ue.id] %}
+                            <tr>
+                                <th>{{ ec.display }}</th>
+                                <td>
+                                    {% if ec.ficheMatiere != null %}
+                                        {% if ec.ficheMatiere.parcours.id == parcours.id %}
+                                            <a
+                                                    href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
+                                                    class="btn btn-sm btn-outline-info"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom"
+                                                    title="Modifier la fiche EC/matière"
+                                            >
+                                                <i class="fal fa-file"></i>
+                                                {% if ec.ficheMatiere.remplissage == 100 %}
+                                                    <span class="badge bg-success"> Complet</span>
+                                                {% else %}
+                                                    <span class="badge bg-warning"> À compléter</span>
+                                                {% endif %}
+                                            </a>
+                                        {% else %}
+                                            <a
+                                                    href="{{ path('app_fiche_matiere_show',{slug: ec.ficheMatiere.slug}) }}"
+                                                    class="btn btn-sm btn-outline-info"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom"
+                                                    title="Voir la fiche EC/matière"
+                                            >
+                                                <span class="badge bg-info"> Voir la fiche</span>
+                                            </a>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="badge bg-info">EC Libre</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button
+
+
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                modalTitle: 'Blocs de compétences',
+                                                modalUrl: path('app_element_constitutif_bcc',{id: ec.id,parcours: parcours.id}) }) }}
+
+                                            data-action="click->modal#openModal"
+                                            class="btn btn-sm btn-outline-info"
+                                            data-size="lg"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            title="Blocs de compétences"
+                                    >
+                                        <i class="fal fa-ballot-check"></i>
+                                        <span class="badge bg-{% if ec.etatBcc(parcours) == 'Complet' %}success{% else %}warning{% endif %}">
+                            {{ ec.etatBcc(parcours) }}
+                        </span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button
+
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
+                                                modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
+                                            data-action="click->modal#openModal"
+                                            class="btn btn-sm btn-outline-info"
+                                            data-size="lg"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            title="Modalités de Contrôle des Connaissances et des Compétences"
+                                    >
+                                        <i class="fal fa-marker"></i>
+                                        <span class="badge bg-{% if ec.etatMccc == 'Complet' %}success{% else %}warning{% endif %}">
+                            {{ ec.etatMccc }}
+                        </span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button
+
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                modalTitle: 'Volumes Horaires',
+                                                modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
+
+                                            data-action="click->modal#openModal"
+                                            class="btn btn-sm btn-outline-info"
+                                            data-size="lg"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            title="Volumes Horaires"
+                                    >
+                                        <i class="fal fa-clock"></i>
+                                        <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
+                            {{ ec.etatStructure }}
+                        </span>
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block header %}
+    EC pour le parcours {{ parcours.libelle }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('app_parcours_index'), title: 'Liste des parcours'},
+        {href: path('app_formation_edit', {slug:parcours.formation.slug}), title: 'Formation : '~parcours.formation
+        .display},
+        {href: path('app_parcours_edit', {id:parcours.id}), title: 'Parcours : '~parcours.libelle},
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour au parcours"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour au parcours</span>
+    </a>
+{% endblock %}

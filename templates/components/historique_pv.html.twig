@@ -1,0 +1,33 @@
+<div{{ attributes }}>
+    <!-- component html -->
+    {% if this.hasPv == false %}
+        {# todo: filtrer uniquement sur DPE pour la mise à jour #}
+        <button
+                {{ stimulus_controller('modal', {
+                    size: 'lg',
+                    modalTitle: 'Vérifier la saisie',
+                    modalUrl: path('app_formation_state', {formation:formation.id}) }) }}
+                data-action="click->modal#openModal"
+                class="btn btn-outline-warning btn-sm ms-1"
+                data-size="lg"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Vérifier la saisie"
+        >
+            <i class="{{ iconEdit }}"></i>
+            <span> Déposer le PV</span>
+        </button>
+    {% else %}
+        <a
+                href="{{ asset('uploads/conseils/'~this.fichier) }}"
+                target="_blank"
+                class="btn btn-outline-info btn-sm ms-1"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Voir le PV"
+        >
+            <i class="{{ iconDownload }}"></i>
+            <span> Voir le PV</span>
+        </a>
+    {% endif %}
+</div>
