@@ -31,16 +31,18 @@ class BadgeDpeExtension extends AbstractExtension
         ];
     }
 
-    public function displayErreurs(?array $erreurs): string
+    public function displayErreurs(?array $erreurs = []): string
     {
+        if (null === $erreurs || 0 === count($erreurs)) {
+            return '';
+        }
+
         //retirer les cellules vides du tableau erreurs
         $erreurs = array_filter($erreurs, function ($erreur) {
             return !empty($erreur);
         });
 
-        if (null === $erreurs || 0 === count($erreurs)) {
-            return '';
-        }
+
 
         $texte = '<ul>';
         foreach ($erreurs as $erreur) {

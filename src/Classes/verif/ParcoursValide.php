@@ -186,6 +186,7 @@ class ParcoursValide extends AbstractValide
                     foreach ($ue->getElementConstitutifs() as $ec) {
                         if ($ec->getFicheMatiere() === null || $ec->getMcccs()->count() === 0 || $ec->etatStructure() !== 'Complet' || $ec->getEtatBcc($this->parcours) !== 'Complet') {
                             $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['global'] = self::INCOMPLET;
+                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['erreur'] = [];
                             $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = self::INCOMPLET;
                             $hasUe = self::INCOMPLET;
 
@@ -208,10 +209,12 @@ class ParcoursValide extends AbstractValide
 
                         } elseif ($ec->getFicheMatiere() === null && $ec->getMcccs()->count() === 0 && $ec->getHeures() === 'À compléter') {
                             $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['global'] = self::VIDE;
+                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['erreur'] = [];
                             $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = self::INCOMPLET;
                             $hasUe = self::INCOMPLET;
                         } else {
                             $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['global'] = self::COMPLET;
+                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'][$ec->getId()]['erreur'] = [];
                         }
                     }
                 }
