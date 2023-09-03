@@ -178,4 +178,14 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByFormation(Formation $formation)
+    {
+        return $this->createQueryBuilder('ec')
+            ->join('ec.parcours', 'p')
+            ->where('p.formation = :formation')
+            ->setParameter('formation', $formation)
+            ->getQuery()
+            ->getResult();
+    }
 }

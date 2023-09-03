@@ -3,6 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\ButApprentissageCritique;
+use App\Entity\ButCompetence;
+use App\Entity\Semestre;
+use App\Entity\Ue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,28 +42,24 @@ class ButApprentissageCritiqueRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return ButApprentissageCritique[] Returns an array of ButApprentissageCritique objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByCompetenceSemestre(ButCompetence $competence, Semestre $semestre): array
+    {
+        if ($semestre->getOrdre() === 1 || $semestre->getOrdre() === 2) {
+            $annee = 'BUT1';
+        } else  if ($semestre->getOrdre() === 3 || $semestre->getOrdre() === 4) {
+            $annee = 'BUT2';
+        } else {
+            $annee = 'BUT3';
+        }
 
-//    public function findOneBySomeField($value): ?ButApprentissageCritique
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $this->createQueryBuilder('ac')
+            ->innerJoin('ac.niveau', 'an')
+            ->innerJoin('an.competence', 'comp')
+            ->where('an.annee = :annee')
+            ->andWhere('comp.id = :competence')
+            ->setParameter('annee', $annee)
+            ->setParameter('competence', $competence->getId())
+            ->getQuery()
+            ->getResult();
+    }
 }

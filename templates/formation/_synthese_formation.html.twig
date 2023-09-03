@@ -52,6 +52,15 @@
                         <i class="{{ iconEdit }}"></i>
                     </a>
                     {% if typeDiplome.libelleCourt == 'BUT' %}
+                        <a href="{{ path('app_formation_synchronisation_mccc',{'formation': formation.id}) }}"
+                           class="btn btn-sm btn-icon btn-icon-only btn-outline-danger ms-1"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Récupérer MCCC de la formation depuis XLSX"
+                        >
+                            <i class="fa-l fa-group-arrows-rotate"></i>
+                        </a>
+
                         <a href="{{ path('app_formation_synchronisation',{'formation': formation.id}) }}"
                            class="btn btn-sm btn-icon btn-icon-only btn-outline-danger ms-1"
                            data-bs-toggle="tooltip"

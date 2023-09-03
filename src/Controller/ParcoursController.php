@@ -330,6 +330,18 @@ class ParcoursController extends BaseController
                 $entityManager->remove($ec);
             }
 
+            foreach ($parcour->getFicheMatiereParcours() as $ficheMatiereParcour) {
+                $entityManager->remove($ficheMatiereParcour);
+            }
+
+            foreach ($parcour->getSemestreMutualisables() as $semestreMutualisable) {
+                $entityManager->remove($semestreMutualisable);
+            }
+
+            foreach ($parcour->getUeMutualisables() as $ueMutualisable) {
+                $entityManager->remove($ueMutualisable);
+            }
+
             $parcoursRepository->remove($parcour, true);
 
             return $this->json(true);

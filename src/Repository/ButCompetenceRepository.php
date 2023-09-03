@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\ButCompetence;
+use App\Entity\Formation;
+use App\Entity\Ue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,28 +41,14 @@ class ButCompetenceRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return ButCompetence[] Returns an array of ButCompetence objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?ButCompetence
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findOneByUe(Ue $ue, Formation $formation): ?ButCompetence
+    {
+        return $this->createQueryBuilder('b')
+            ->where('b.numero = :ue')
+            ->andWhere('b.formation = :formation')
+            ->setParameter('ue', $ue->getOrdre())
+            ->setParameter('formation', $formation)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

@@ -17,6 +17,7 @@ use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereMutualisable;
 use App\Entity\Formation;
 use App\Entity\Langue;
+use App\Entity\Mccc;
 use App\Entity\NatureUeEc;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
@@ -25,13 +26,18 @@ use App\Entity\TypeEc;
 use App\Entity\TypeUe;
 use App\Entity\Ue;
 use App\Enums\ModaliteEnseignementEnum;
+use App\Enums\RegimeInscriptionEnum;
+use App\Repository\ElementConstitutifRepository;
 use App\Repository\LangueRepository;
 use App\Repository\NatureUeEcRepository;
 use App\Repository\TypeEcRepository;
 use App\Repository\TypeUeRepository;
+use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
 use JsonException;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -44,21 +50,25 @@ class But
     protected bool $type3;
     protected array $listeParcours = [];
     protected array $structure = [];
+    protected array $listeAcs = [];
     private ?TypeEc $typeEcRessource;
     private ?TypeEc $typeEcSae;
     private ?NatureUeEc $natureEc;
     private ?NatureUeEc $natureUe;
     private ?TypeUe $typeUe;
     private ?Langue $francais;
+    private string $baseDir;
 
     public function __construct(
-        LangueRepository                  $langueRepository,
-        TypeEcRepository                 $typeEcRepository,
-        TypeUeRepository                 $typeUeRepository,
-        NatureUeEcRepository             $natureUeEcRepository,
-        protected EntityManagerInterface $entityManager,
-        protected HttpClientInterface    $client,
-        protected ParameterBagInterface  $container
+        LangueRepository                       $langueRepository,
+        TypeEcRepository                       $typeEcRepository,
+        TypeUeRepository                       $typeUeRepository,
+        NatureUeEcRepository                   $natureUeEcRepository,
+        protected EntityManagerInterface       $entityManager,
+        protected HttpClientInterface          $client,
+        protected ParameterBagInterface        $container,
+        protected ElementConstitutifRepository $elementConstitutifRepository,
+        private KernelInterface                $kernel
     ) {
         $this->typeEcRessource = $typeEcRepository->findOneBy(['libelle' => 'Ressource']);
         $this->typeEcSae = $typeEcRepository->findOneBy(['libelle' => 'SAE']);
@@ -66,6 +76,7 @@ class But
         $this->natureUe = $natureUeEcRepository->findOneBy(['libelle' => 'UE Obligatoire']);
         $this->typeUe = $typeUeRepository->findOneBy(['libelle' => 'Disciplinaire']);
         $this->francais = $langueRepository->findOneBy(['codeIso' => 'fr']);
+        $this->baseDir = $this->kernel->getProjectDir() . '/public/';
     }
 
     /**
@@ -181,12 +192,14 @@ class But
             $comp->addButNiveau($niv);
             $this->entityManager->persist($niv);
             foreach ($niveau['apcApprentissageCritiques'] as $acs) {
+
                 $ac = new ButApprentissageCritique();
                 $ac->setLibelle($acs['libelle']);
                 $ac->setCode($acs['code']);
                 $ac->setNiveau($niv);
                 $niv->addButApprentissageCritique($ac);
                 $this->entityManager->persist($ac);
+                $this->listeAcs[$acs['code']] = $ac;
             }
         }
 
@@ -219,8 +232,24 @@ class But
                 $semP[] = $semestreParcour;
             }
 
+            foreach ($parcours->getFicheMatieres() as $fmp) {
+                foreach ($fmp->getFicheMatiereParcours() as $fp) {
+                    $this->entityManager->remove($fp);
+                }
+
+                $this->entityManager->remove($fmp);
+            }
+
             foreach ($parcours->getFicheMatiereParcours() as $fmp) {
                 $this->entityManager->remove($fmp);
+            }
+
+            foreach ($parcours->getSemestreMutualisables() as $semestreMutualisable) {
+                $this->entityManager->remove($semestreMutualisable);
+            }
+
+            foreach ($parcours->getUeMutualisables() as $ueMutualisable) {
+                $this->entityManager->remove($ueMutualisable);
             }
 
             $this->entityManager->remove($parcours);
@@ -498,6 +527,17 @@ class But
                 $ec->setFicheMatiere($fm);
                 $ec->genereCode();
                 $this->entityManager->persist($ec);
+
+                //ajout des apprentissages critiques en fonction de l'UE
+                foreach ($ressource['apcRessourceApprentissageCritiques'] as $apprentissageCritique) {
+
+                    $codeAc = $apprentissageCritique['apprentissageCritique']['code'];
+                    if ((int)substr($codeAc, 3,1) === $competence['competence']['numero']) {
+                        $ac = $this->listeAcs[$codeAc];
+                        $ac->addElementConstitutif($ec);
+                        $ec->addApprentissagesCritique($ac);
+                    }
+                }
             }
         }
     }
@@ -511,7 +551,7 @@ class But
                 if ((int)$sae['ordre'] === 99) {
                     $ec->setOrdre(60);
                 } else {
-                    $ec->setOrdre($sae['ordre']+50);
+                    $ec->setOrdre($sae['ordre'] + 50);
                 }
                 $ec->setNatureUeEc($this->natureEc);
                 $ec->setParcours($this->listeParcours[$keyParcours]);
@@ -521,6 +561,116 @@ class But
                 $ec->setFicheMatiere($fm);
                 $ec->genereCode();
                 $this->entityManager->persist($ec);
+
+                //ajout des apprentissages critiques en fonction de l'UE
+                foreach ($sae['apcSaeApprentissageCritiques'] as $apprentissageCritique) {
+
+                    $codeAc = $apprentissageCritique['apprentissageCritique']['code'];
+                    if ((int)substr($codeAc, 3,1) === $competence['competence']['numero']) {
+                        $ac = $this->listeAcs[$codeAc];
+                        $ac->addElementConstitutif($ec);
+                        $ec->addApprentissagesCritique($ac);
+                    }
+                }
+            }
+        }
+    }
+
+    public function synchroniserMccc(Formation $formation)
+    {
+        foreach ($formation->getRegimeInscription() as $regime) {
+            if ($regime === RegimeInscriptionEnum::FI || $regime === RegimeInscriptionEnum::FC) {
+                $fifc = 'fi';
+            } else {
+                $fifc = 'fc';
+            }
+        }
+        $sigle = strtoupper($formation->getSigle());
+        //ouvrir le fichier excel qui se trouve dans public/but
+        $spreadsheet = IOFactory::load($this->baseDir . '/but/MCCC_' . $fifc . '_' . $sigle . ' 2023-2024.xlsx');
+
+        $ligneDebut = 22;
+
+
+        $ecs = $this->elementConstitutifRepository->findByFormation($formation);
+        $tabEcs = [];
+        foreach ($ecs as $ec) {
+            if (!array_key_exists($ec->getFicheMatiere()->getSigle(), $tabEcs)) {
+                $tabEcs[$ec->getFicheMatiere()->getSigle()] = [];
+            }
+            $tabEcs[$ec->getFicheMatiere()->getSigle()][] = $ec; //plusieurs ec ? un par parcours ??
+        }
+
+        for ($i = 1; $i <= 1; $i++) {
+            //tester sur l'onglet $i exsite dans le fichier excel et le selectionner
+            if ($spreadsheet->sheetNameExists('Semestre ' . $i)) {
+                $sheet = $spreadsheet->getSheetByName('Semestre ' . $i);
+                if ($sheet !== null) {
+                    $ligne = $ligneDebut;
+                    while ($sheet->getCell('H' . $ligne)->getValue() !== 'Date du vote de la CFVU :' && $ligne < 100) {
+                        $codeEc = $sheet->getCell('B' . $ligne)->getValue();
+                        if (array_key_exists($codeEc, $tabEcs)) {
+                            //heures
+                            // G => CM
+                            // H => TD
+                            // I => TP
+                            // J => PRJ
+                            foreach ($tabEcs[$codeEc] as $ec) {
+                                $ec->setVolumeCmPresentiel(Tools::convertToFloat($sheet->getCell('G' . $ligne)->getValue()));
+                                $ec->setVolumeTdPresentiel(Tools::convertToFloat($sheet->getCell('H' . $ligne)->getValue()));
+                                $ec->setVolumeTpPresentiel(Tools::convertToFloat($sheet->getCell('I' . $ligne)->getValue()));
+                                $ec->setVolumeTe(Tools::convertToFloat($sheet->getCell('J' . $ligne)->getValue()));
+
+                                $tabMcccs = [
+                                    'N' => ['td_tp_oral', 'M'],
+                                    'P' => ['td_tp_ecrit', 'Q'],
+                                    'R' => ['td_tp_rapport', 'S'],
+                                    'T' => ['td_tp_autre', 'U'],
+                                    'V' => ['cm_ecrit', 'W'],
+                                    'X' => ['cm_rapport', 'Y'],
+                                    'Z' => ['iut_portfolio', 'AA'],
+                                    'AB' => ['iut_livrable', 'AC'],
+                                    'AD' => ['iut_rapport', 'AE'],
+                                    'AF' => ['iut_soutenance', 'AG'],
+                                    'AH' => ['hors_iut_entreprise', 'AI'],
+                                    'AJ' => ['hors_iut_rapport', 'AK'],
+                                    'AL' => ['hors_iut_soutenance', 'AM'],
+                                ];
+
+                                foreach ($ec->getMcccs() as $mccc) {
+                                    $this->entityManager->remove($mccc);
+                                }
+                                $totalPourcentage = 0;
+                                foreach ($tabMcccs as $key => $value) {
+
+                                    // MCCC
+                                    if ($sheet->getCell($key . $ligne)->getValue() !== '') {
+                                        $mccc = new Mccc();
+                                        $mccc->setTypeEpreuve([$value[0]]);
+                                        $mccc->setPourcentage(Tools::convertToFloat($sheet->getCell($key . $ligne)->getValue()) * 100);
+                                        $mccc->setNbEpreuves((int)$sheet->getCell($value[1] . $ligne)->getValue());
+                                        $mccc->setLibelle($value[0]);
+                                        $mccc->setControleContinu(true);
+                                        $mccc->setNumeroSession(1);
+                                        $mccc->setExamenTerminal(false);
+                                        $totalPourcentage += $mccc->getPourcentage();
+                                        $this->entityManager->persist($mccc);
+                                        $ec->addMccc($mccc);
+                                    }
+
+                                }
+
+                                if ($totalPourcentage === 100.0) {
+                                    $ec->setEtatMccc('Complet');
+                                } else {
+                                    $ec->setEtatMccc(null);
+                                }
+                            }
+                            $this->entityManager->flush();
+                        }
+                        $ligne++;
+                    }
+                }
             }
         }
     }

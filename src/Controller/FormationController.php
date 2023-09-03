@@ -113,6 +113,9 @@ class FormationController extends BaseController
 
     #[Route('/liste/{composante}', name: 'app_formation_liste_composante', methods: ['GET'])]
     public function listeComposante(
+        MentionRepository   $mentionRepository,
+        TypeDiplomeRepository $typeDiplomeRepository,
+        ComposanteRepository $composanteRepository,
         FormationRepository $formationRepository,
         Composante          $composante,
         Request             $request
@@ -141,7 +144,10 @@ class FormationController extends BaseController
         return $this->render('formation/_liste.html.twig', [
             'formations' => $formations,
             'sort' => $sort,
-            'direction' => $direction
+            'direction' => $direction,
+            'composantes' => $composanteRepository->findAll(),
+            'typeDiplomes' => $typeDiplomeRepository->findAll(),
+            'mentions' => $mentionRepository->findAll(),
         ]);
     }
 

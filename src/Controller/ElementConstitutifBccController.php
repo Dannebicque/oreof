@@ -20,6 +20,8 @@ use App\Form\EcStep4Type;
 use App\Form\ElementConstitutifEnfantType;
 use App\Form\ElementConstitutifType;
 use App\Repository\BlocCompetenceRepository;
+use App\Repository\ButApprentissageCritiqueRepository;
+use App\Repository\ButCompetenceRepository;
 use App\Repository\CompetenceRepository;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
@@ -43,89 +45,142 @@ class ElementConstitutifBccController extends AbstractController
      */
     #[Route('/{id}/bcc-ec/{parcours}', name: 'app_element_constitutif_bcc', methods: ['GET', 'POST'])]
     public function bccEc(
-        EntityManagerInterface       $entityManager,
-        CompetenceRepository         $competenceRepository,
-        BlocCompetenceRepository     $blocCompetenceRepository,
-        TypeDiplomeRegistry          $typeDiplomeRegistry,
-        TypeEpreuveRepository        $typeEpreuveRepository,
-        Request                      $request,
-        ElementConstitutifRepository $elementConstitutifRepository,
-        ElementConstitutif           $elementConstitutif,
-        Parcours                     $parcours
+        ButCompetenceRepository            $butCompetenceRepository,
+        ButApprentissageCritiqueRepository $butApprentissageCritiqueRepository,
+        EntityManagerInterface             $entityManager,
+        CompetenceRepository               $competenceRepository,
+        BlocCompetenceRepository           $blocCompetenceRepository,
+        Request                            $request,
+        ElementConstitutif                 $elementConstitutif,
+        Parcours                           $parcours
     ): Response {
         $formation = $elementConstitutif->getParcours()?->getFormation();
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
         }
         $ficheMatiere = $elementConstitutif->getFicheMatiere();
+        $typeDiplome = $formation->getTypeDiplome();
 
-        if ($request->isMethod('POST')) {
-            $data = JsonRequest::getFromRequest($request);
-            if ($data['action'] === 'addCompetence') {
-                $competence = $competenceRepository->find($data['value']);
+        if ($typeDiplome === null) {
+            throw new RuntimeException('Type de diplome non trouvé');
+        }
 
-                //on regarde si c'est déjà là, soit dans EC, soit dans fichematiere
-                if ($elementConstitutif->getParcours()?->getId() === $parcours->getId()) {
-                    $existe = $elementConstitutif->getFicheMatiere()->getCompetences()->contains($competence);
-                    if ($existe && (bool)$data['checked'] === false) {
-                        $elementConstitutif->getFicheMatiere()->removeCompetence($competence);
-                    } elseif (!$existe && (bool)$data['checked'] === true) {
-                        $elementConstitutif->getFicheMatiere()->addCompetence($competence);
+        if ($typeDiplome->getLibelleCourt() === 'BUT') {
+            if ($request->isMethod('POST')) {
+                $data = JsonRequest::getFromRequest($request);
+                if ($data['action'] === 'addCompetence') {
+                    $competence = $butApprentissageCritiqueRepository->find($data['value']);
+                    if ($competence === null) {
+                        return JsonReponse::error('Apprentissage critique non trouvé');
                     }
-                    $entityManager->flush();
-                } else {
-                    $existe = $elementConstitutif->getCompetences()->contains($competence);
+
+                    //on regarde si c'est déjà là, soit dans EC, soit dans fichematiere
+
+                    $existe = $elementConstitutif->getApprentissagesCritiques()->contains($competence);
                     if ($existe && (bool)$data['checked'] === false) {
-                        $elementConstitutif->removeCompetence($competence);
+                        $elementConstitutif->removeApprentissagesCritique($competence);
                     } elseif (!$existe && (bool)$data['checked'] === true) {
-                        $elementConstitutif->addCompetence($competence);
+                        $elementConstitutif->addApprentissagesCritique($competence);
                     }
                     $entityManager->flush();
                 }
-                return JsonReponse::success('Compétence ajoutée');
+                return JsonReponse::success('Apprentissage critique ajouté');
             }
-            return JsonReponse::error('Action interdite');
-        }
 
-        $ecBccs = [];
-        $ecComps = [];
+            $ecComps = [];
+            //tester si BUT ou autre...
 
-        if ($elementConstitutif->getParcours()->getId() === $parcours->getId()) {
-            foreach ($ficheMatiere->getCompetences() as $competence) {
-                $ecComps[] = $competence->getId();
-                $ecBccs[] = $competence->getBlocCompetence()?->getId();
+
+            foreach ($elementConstitutif->getApprentissagesCritiques() as $competence) {
+                if ($competence !== null) {
+                    $ecComps[] = $competence->getId();
+                }
+            }
+
+            $competence = $butCompetenceRepository->findOneByUe($elementConstitutif->getUe(), $formation);
+            $apprentissageCritiques = $butApprentissageCritiqueRepository->findByCompetenceSemestre($competence, $elementConstitutif->getUe()->getSemestre());
+
+            if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
+                $this->isGranted('CAN_PARCOURS_EDIT_MY', $elementConstitutif->getParcours())) { //todo: ajouter le workflow...
+                return $this->render('element_constitutif/_bccEcButModal.html.twig', [
+                    'competence' => $competence,
+                    'ec' => $elementConstitutif,
+                    'apprentissageCritiques' => $apprentissageCritiques,
+                    'ecComps' => array_flip($ecComps),
+                    'parcours' => $parcours
+                ]);
             }
         } else {
-            foreach ($elementConstitutif->getCompetences() as $competence) {
-                $ecComps[] = $competence->getId();
-                $ecBccs[] = $competence->getBlocCompetence()?->getId();
+            if ($request->isMethod('POST')) {
+                $data = JsonRequest::getFromRequest($request);
+                if ($data['action'] === 'addCompetence') {
+                    $competence = $competenceRepository->find($data['value']);
+
+                    //on regarde si c'est déjà là, soit dans EC, soit dans fichematiere
+                    if ($elementConstitutif->getParcours()?->getId() === $parcours->getId()) {
+                        $existe = $elementConstitutif->getFicheMatiere()->getCompetences()->contains($competence);
+                        if ($existe && (bool)$data['checked'] === false) {
+                            $elementConstitutif->getFicheMatiere()->removeCompetence($competence);
+                        } elseif (!$existe && (bool)$data['checked'] === true) {
+                            $elementConstitutif->getFicheMatiere()->addCompetence($competence);
+                        }
+                        $entityManager->flush();
+                    } else {
+                        $existe = $elementConstitutif->getCompetences()->contains($competence);
+                        if ($existe && (bool)$data['checked'] === false) {
+                            $elementConstitutif->removeCompetence($competence);
+                        } elseif (!$existe && (bool)$data['checked'] === true) {
+                            $elementConstitutif->addCompetence($competence);
+                        }
+                        $entityManager->flush();
+                    }
+                    return JsonReponse::success('Compétence ajoutée');
+                }
+                return JsonReponse::error('Action interdite');
             }
-        }
+
+            $ecBccs = [];
+            $ecComps = [];
+            //tester si BUT ou autre...
 
 
-        if ($ficheMatiere->getParcours() !== null) {
-            $bccs = $blocCompetenceRepository->findByParcours($parcours);
-        } else {
-            $bccs = $blocCompetenceRepository->findBy(['parcours' => null]);
-        }
+            if ($elementConstitutif->getParcours()->getId() === $parcours->getId()) {
+                foreach ($ficheMatiere->getCompetences() as $competence) {
+                    $ecComps[] = $competence->getId();
+                    $ecBccs[] = $competence->getBlocCompetence()?->getId();
+                }
+            } else {
+                foreach ($elementConstitutif->getCompetences() as $competence) {
+                    $ecComps[] = $competence->getId();
+                    $ecBccs[] = $competence->getBlocCompetence()?->getId();
+                }
+            }
 
-        if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
-            $this->isGranted('CAN_PARCOURS_EDIT_MY', $elementConstitutif->getParcours())) { //todo: ajouter le workflow...
-            return $this->render('element_constitutif/_bccEcModal.html.twig', [
+
+            if ($ficheMatiere->getParcours() !== null) {
+                $bccs = $blocCompetenceRepository->findByParcours($parcours);
+            } else {
+                $bccs = $blocCompetenceRepository->findBy(['parcours' => null]);
+            }
+
+            if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
+                $this->isGranted('CAN_PARCOURS_EDIT_MY', $elementConstitutif->getParcours())) { //todo: ajouter le workflow...
+                return $this->render('element_constitutif/_bccEcModal.html.twig', [
+                    'ec' => $elementConstitutif,
+                    'bccs' => $bccs,
+                    'wizard' => false,
+                    'ecBccs' => array_flip(array_unique($ecBccs)),
+                    'ecComps' => array_flip($ecComps),
+                    'parcours' => $parcours
+                ]);
+            }
+
+            //todo: a faire
+            return $this->render('element_constitutif/_bccEcNonEditable.html.twig', [
                 'ec' => $elementConstitutif,
                 'bccs' => $bccs,
-                'wizard' => false,
-                'ecBccs' => array_flip(array_unique($ecBccs)),
-                'ecComps' => array_flip($ecComps),
-                'parcours' => $parcours
             ]);
         }
-
-        //todo: a faire
-        return $this->render('element_constitutif/_bccEcNonEditable.html.twig', [
-            'ec' => $elementConstitutif,
-            'bccs' => $bccs,
-        ]);
     }
 
 //    /**

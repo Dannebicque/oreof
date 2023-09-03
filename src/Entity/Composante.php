@@ -9,6 +9,7 @@
 
 namespace App\Entity;
 
+use App\DTO\Remplissage;
 use App\Repository\ComposanteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -160,16 +161,14 @@ class Composante
         return $this;
     }
 
-    public function remplissage(): float
+    public function remplissage(): Remplissage
     {
-        $totalRemplissage = 0;
-        $nbFormations = 0;
+        $remplissage = new Remplissage();
         foreach ($this->formations as $formation) {
-            $totalRemplissage += $formation->remplissage();
-            $nbFormations++;
+            $remplissage->addRemplissage($formation->getRemplissage());
         }
 
-        return $nbFormations > 0 ? $totalRemplissage / $nbFormations : 0;
+        return $remplissage;
     }
 
     public function getTelStandard(): ?string

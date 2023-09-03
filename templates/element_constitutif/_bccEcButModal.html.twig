@@ -1,0 +1,20 @@
+<div class="mt-2" {{ stimulus_controller('fichematiere--step3', {
+    url: path('app_element_constitutif_bcc', {id:ec.id, parcours: parcours.id}),
+    updateStep: false
+}) }}>
+    <h3>{{ competence.libelle }}</h3>
+    {% for ac in apprentissageCritiques %}
+        <div class=" mb-2">
+            <input type="checkbox" name="ec[bccs][]" value="{{ ac.id }}" id="ac_{{ ac.id }}"
+                   {% if ecComps[ac.id] is defined %}checked{% endif %}
+                    {{ stimulus_action('fichematiere--step3', 'changeCompetence', 'change', {id:ac.id}) }}
+            >
+            <label for="ac_{{ ac.id }}"><strong>{{ ac.code }} {{ ac.libelle }}</strong></label>
+        </div>
+    {% else %}
+        {{ component('alerte', {
+            type: 'warning',
+            message: 'fiche_matiere.alerte.no_bcc'|trans({}, 'form')
+        }) }}
+    {% endfor %}
+</div>

@@ -127,11 +127,15 @@ class ElementConstitutif
     #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'elementConstitutifs')]
     private Collection $competences;
 
+    #[ORM\ManyToMany(targetEntity: ButApprentissageCritique::class, inversedBy: 'elementConstitutifs')]
+    private Collection $apprentissagesCritiques;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
         $this->ecEnfants = new ArrayCollection();
         $this->competences = new ArrayCollection();
+        $this->apprentissagesCritiques = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -632,6 +636,10 @@ class ElementConstitutif
             }
         }
 
+        if ($this->getApprentissagesCritiques()->count() > 0) {
+            return 'Complet';
+        }
+
         return 'A saisir';
     }
 
@@ -667,5 +675,29 @@ class ElementConstitutif
 
     public function getHeures()
     {
+    }
+
+    /**
+     * @return Collection<int, ButApprentissageCritique>
+     */
+    public function getApprentissagesCritiques(): Collection
+    {
+        return $this->apprentissagesCritiques;
+    }
+
+    public function addApprentissagesCritique(ButApprentissageCritique $apprentissagesCritique): static
+    {
+        if (!$this->apprentissagesCritiques->contains($apprentissagesCritique)) {
+            $this->apprentissagesCritiques->add($apprentissagesCritique);
+        }
+
+        return $this;
+    }
+
+    public function removeApprentissagesCritique(ButApprentissageCritique $apprentissagesCritique): static
+    {
+        $this->apprentissagesCritiques->removeElement($apprentissagesCritique);
+
+        return $this;
     }
 }
