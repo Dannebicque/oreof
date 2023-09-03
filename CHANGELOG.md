@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.2](https://github.com/Dannebicque/oreof/compare/v1.12.1...v1.12.2) (2023-09-03)
+
+
+### Bug Fixes
+
+* TypeEc vide ([61f9eb4](https://github.com/Dannebicque/oreof/commit/61f9eb4db7ef736b1dca9ce97713d7b6f9dbbd2d))
+
 ### [1.12.1](https://github.com/Dannebicque/oreof/compare/v1.12.0...v1.12.1) (2023-09-03)
 
 
