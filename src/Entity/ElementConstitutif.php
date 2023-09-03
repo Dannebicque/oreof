@@ -556,17 +556,17 @@ class ElementConstitutif
 
     public function volumeTotalPresentiel(): float
     {
-       return $this->volumeCmPresentiel + $this->volumeTdPresentiel + $this->volumeTpPresentiel;
+        return $this->volumeCmPresentiel + $this->volumeTdPresentiel + $this->volumeTpPresentiel;
     }
 
     public function volumeTotalDistanciel(): float
     {
-       return $this->volumeCmDistanciel + $this->volumeTdDistanciel + $this->volumeTpDistanciel;
+        return $this->volumeCmDistanciel + $this->volumeTdDistanciel + $this->volumeTpDistanciel;
     }
 
     public function volumeTotal(): float
     {
-       return $this->volumeTotalPresentiel() + $this->volumeTotalDistanciel();
+        return $this->volumeTotalPresentiel() + $this->volumeTotalDistanciel();
     }
 
     public function getVolumeTe(): ?float
@@ -617,17 +617,18 @@ class ElementConstitutif
         return $this;
     }
 
-    public function getEtatBcc(): ?string
+    public function getEtatBcc(Parcours $parcours): ?string
     {
-        if ($this->getFicheMatiere() !== null) {
-            if ($this->isFicheFromParcours()) {
+        //todo: déplacer les compétences des fiches dans l'EC ? Script de mise à jour
+        if ($this->getParcours() === $parcours) {
+            if ($this->getFicheMatiere() !== null) {
                 if ($this->getFicheMatiere()->getCompetences()->count() > 0) {
                     return 'Complet';
                 }
-            } else {
-                if ($this->getCompetences()->count() > 0) {
-                    return 'Complet';
-                }
+            }
+        } else {
+            if ($this->getCompetences()->count() > 0) {
+                return 'Complet';
             }
         }
 
@@ -636,6 +637,7 @@ class ElementConstitutif
 
     public function isFicheFromParcours(): bool
     {
+        //todo: faux, provoque un faux résultat
         return $this->getParcours()?->getId() === $this->ficheMatiere?->getParcours()->getId();
     }
 
@@ -661,5 +663,9 @@ class ElementConstitutif
         $this->competences->removeElement($competence);
 
         return $this;
+    }
+
+    public function getHeures()
+    {
     }
 }

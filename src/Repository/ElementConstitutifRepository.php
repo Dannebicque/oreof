@@ -163,4 +163,19 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult() ?? 0;
     }
+
+    public function findByParcours(Parcours $parcours): array
+    {
+        return $this->createQueryBuilder('ec')
+            ->join('ec.ue', 'ue')
+            ->join('ec.parcours', 'p')
+            ->innerJoin(Semestre::class, 's', 'WITH', 's.id = ue.semestre')
+            ->join('p.semestreParcours', 'sp')
+            ->where('ec.parcours = :parcours')
+            ->setParameter('parcours', $parcours)
+            ->addOrderBy('sp.ordre', 'ASC')
+            ->addOrderBy('ue.ordre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }
