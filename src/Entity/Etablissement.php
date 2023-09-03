@@ -13,6 +13,7 @@ use App\Repository\EtablissementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 #[ORM\Entity(repositoryClass: EtablissementRepository::class)]
 class Etablissement
@@ -37,11 +38,25 @@ class Etablissement
     #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: UserCentre::class)]
     private Collection $userCentres;
 
+    #[ORM\Column]
+    private ?array $options = [];
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->villes = new ArrayCollection();
         $this->userCentres = new ArrayCollection();
+
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
+        $this->setOptions($resolver->resolve($this->options));
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'domaine'       => '@univ-reims.fr',
+        ]);
     }
 
     public function getId(): ?int
@@ -153,6 +168,20 @@ class Etablissement
         if ($this->userCentres->removeElement($userCentre) && $userCentre->getEtablissement() === $this) {
             $userCentre->setEtablissement(null);
         }
+
+        return $this;
+    }
+
+    public function getOptions(): array
+    {
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
+        return $resolver->resolve($this->options ?? []);
+    }
+
+    public function setOptions(array $options = []): static
+    {
+        $this->options = $options;
 
         return $this;
     }

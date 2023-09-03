@@ -3,6 +3,7 @@
     <tr>
         <th>Libellé</th>
         <th>Adresse</th>
+        <th>Domaine autorisé</th>
         <th>actions</th>
     </tr>
     </thead>
@@ -11,6 +12,7 @@
         <tr>
             <td>{{ etablissement.libelle }}</td>
             <td>{{ etablissement.adresse != null ? etablissement.adresse.display|raw : '' }}</td>
+            <td>{{ etablissement.options.domaine }}</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {
