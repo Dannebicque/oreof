@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.1](https://github.com/Dannebicque/oreof/compare/v1.12.0...v1.12.1) (2023-09-03)
+
+
+### Bug Fixes
+
+* IsFromParcours ([4c4fdde](https://github.com/Dannebicque/oreof/commit/4c4fddef81c97a8560e525e93109530f18901909))
+
 ## [1.12.0](https://github.com/Dannebicque/oreof/compare/v1.11.0...v1.12.0) (2023-09-03)
 
 
