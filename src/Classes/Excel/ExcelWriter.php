@@ -168,6 +168,18 @@ class ExcelWriter
         $this->sheet->getStyle($cells)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
     }
 
+    public function borderOutsiteInside(int $col1, int $lig1, int $col2, int $lig2): void
+    {
+        if ($col1 <= $col2) {
+            $cell1 = Coordinate::stringFromColumnIndex($col1) . $lig1;
+            $cell2 = Coordinate::stringFromColumnIndex($col2) . $lig2;
+
+
+        $this->sheet->getStyle($cell1 . ':' . $cell2)->getBorders()->getInside()->setBorderStyle(Border::BORDER_THIN);
+        $this->sheet->getStyle($cell1 . ':' . $cell2)->getBorders()->getOutline()->setBorderStyle(Border::BORDER_MEDIUM);
+        }
+    }
+
     public function getRowDimension(int $ligne, int $taille): void
     {
         $this->sheet->getRowDimension($ligne)->setRowHeight($taille);
@@ -375,5 +387,10 @@ class ExcelWriter
     public function setPrintArea(string $string)
     {
         $this->sheet->getPageSetup()->setPrintArea($string,0, PageSetup::SETPRINTRANGE_OVERWRITE);
+    }
+
+    public function unMergeCells(string $string): void
+    {
+        $this->sheet->unmergeCells($string);
     }
 }

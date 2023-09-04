@@ -624,18 +624,17 @@ class ElementConstitutif
     public function getEtatBcc(Parcours $parcours): ?string
     {
         //todo: déplacer les compétences des fiches dans l'EC ? Script de mise à jour
-        if ($this->getParcours() === $parcours) {
-            if ($this->getFicheMatiere() !== null) {
+
+        if ($this->getFicheMatiere() !== null) {
+
+            if ($this->getFicheMatiere()->getParcours() === $parcours) {
                 if ($this->getFicheMatiere()->getCompetences()->count() > 0) {
                     return 'Complet';
                 }
-            }
-        } else {
-            if ($this->getCompetences()->count() > 0) {
+            } elseif ($this->getCompetences()->count() > 0) {
                 return 'Complet';
             }
         }
-
         if ($this->getApprentissagesCritiques()->count() > 0) {
             return 'Complet';
         }
