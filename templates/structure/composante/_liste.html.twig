@@ -69,9 +69,10 @@
                                     <div class="col-6 col-md-3 d-flex flex-column justify-content-end
                                     align-items-md-end mb-1 mb-md-0">
                                         <div class="text-muted d-md-none">Actions</div>
-                                        <button class="btn btn-outline-info btn-sm">
-                                            Actions à définir?
-                                        </button>
+                                        <a href="{{ path('app_composante', {composante:composante.id}) }}" class="btn text-info btn-sm">
+                                            <i class="{{ iconShow }}"></i>
+                                            voir
+                                        </a>
                                     </div>
                                 </div>
                             </div>

@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/composante')]
+#[Route('/administration/composante')]
 class ComposanteController extends AbstractController
 {
     #[Route('/', name: 'app_composante_index', methods: ['GET'])]

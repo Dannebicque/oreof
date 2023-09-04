@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+
+<div class="row">
+
+    <div class="col-6">
+        <h2 class="small-title mt-3">Identité de la composante</h2>
+        <div class="card">
+            <div class="card-title"></div>
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <th>Libellé</th>
+                        <td>{{ composante.libelle }}</td>
+                    </tr>
+                    <tr>
+                        <th>Sigle</th>
+                        <td>{{ composante.sigle }}</td>
+                    </tr>
+                    <tr>
+                        <th>Directeur</th>
+                        <td>{{ composante.directeur ? composante.directeur.display : 'Non défini' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Responsable DPE</th>
+                        <td>{{ composante.responsableDpe ? composante.responsableDpe.display : 'Non défini' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Adresse</th>
+                        <td>{{ composante.adresse ? composante.adresse.display|raw : 'Non définie' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Téléphone standard de la composante</th>
+                        <td>{{ composante.telStandard|tel_format }}</td>
+                    </tr>
+                    <tr>
+                        <th>Autre téléphone de la composante</th>
+                        <td>{{ composante.telComplementaire|tel_format }}</td>
+                    </tr>
+                    <tr>
+                        <th>Adresse mail de contact de la composante</th>
+                        <td>{{ composante.mailContact|mailto }}</td>
+                    </tr>
+                    <tr>
+                        <th>URL du site de la composante</th>
+                        <td>{{ composante.urlSite }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <h2 class="small-title mt-3">Vos formations</h2>
+        <div class="card">
+            <div class="card-title"></div>
+            <div class="card-body">
+
+                b
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block header %}
+    Détails de la composante {{ composante.libelle }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('structure_composante_index'), title: 'Gestion de l\'offre de formation'},
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+
+{% endblock %}
