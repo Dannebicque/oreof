@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.8](https://github.com/Dannebicque/oreof/compare/v1.12.7...v1.12.8) (2023-09-04)
+
+
+### Features
+
+* Ajout d'un bouton pour réinitialiser un semestre ([24c0a05](https://github.com/Dannebicque/oreof/commit/24c0a0514668797d05401962e9e2ec56b81e7e4f))
+* Liste des fiches sur validation parcours + blocage ([24107b4](https://github.com/Dannebicque/oreof/commit/24107b4536c57d4556e9bec71ab3cff7a063c71d))
+* Page composante ([21fbca3](https://github.com/Dannebicque/oreof/commit/21fbca33ef70dd3df0e74757e3d9fc0727fee7ce))
+
 ### [1.12.7](https://github.com/Dannebicque/oreof/compare/v1.12.5...v1.12.7) (2023-09-04)
 
 
