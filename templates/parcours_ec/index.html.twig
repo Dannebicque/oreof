@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+    {{ component('alerte', {type:'warning', message: 'Actuellement les indicateurs ne sont pas mis à jour en temps réel. Merci d\'actualiser cette page si nécessaire.'}) }}
     <div class="card"
     {{ stimulus_controller('parcours--ec', {
         urlUpdate: path('app_parcours_ec_update',{parcours: parcours.id}),
