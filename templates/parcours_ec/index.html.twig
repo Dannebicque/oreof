@@ -17,7 +17,7 @@
                     {% endif %}
                     <tr>
                         <th colspan="6" class="text-center font-weight-bold">
-                            {{ semestre.display }}</th>
+                            {{ semParc.display }}</th>
                     </tr>
 
 
@@ -33,7 +33,7 @@
                             <th class="font-weight-bold">MCCC</th>
                             <th class="font-weight-bold">Vol. Horaire</th>
                         </tr>
-                        {% for ec in tabEcs[semestre.ordre][ue.id] %}
+                        {% for ec in tabEcs[semParc.ordre][ue.id] %}
                             <tr>
                                 <th>{{ ec.display }}</th>
                                 <td>

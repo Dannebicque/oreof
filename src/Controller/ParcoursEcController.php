@@ -16,19 +16,26 @@ class ParcoursEcController extends AbstractController
 {
     #[Route('/parcours/ec/{parcours}', name: 'app_parcours_ec')]
     public function index(
-        TypeEcRepository $typeEcRepository,
+        TypeEcRepository             $typeEcRepository,
         ElementConstitutifRepository $ecRepository,
-        Parcours $parcours): Response
-    {
+        Parcours                     $parcours
+    ): Response {
         $ecs = $ecRepository->findByParcours($parcours);
         $tabEcs = [];
 
         foreach ($parcours->getSemestreParcours() as $semestreParcour) {
             $tabEcs[$semestreParcour->getOrdre()] = [];
-            foreach ($semestreParcour->getSemestre()->getUes() as $ue) {
+
+            if ($semestreParcour->getSemestre()->getSemestreRaccroche() !== null) {
+                $semestre = $semestreParcour->getSemestre()->getSemestreRaccroche();
+            } else {
+                $semestre = $semestreParcour;
+            }
+
+            foreach ($semestre->getSemestre()->getUes() as $ue) {
                 $tabEcs[$semestreParcour->getOrdre()][$ue->getId()] = [];
                 foreach ($ue->getElementConstitutifs() as $ec) {
-                        $tabEcs[$semestreParcour->getOrdre()][$ue->getId()][] = $ec;
+                    $tabEcs[$semestreParcour->getOrdre()][$ue->getId()][] = $ec;
                 }
             }
         }
@@ -44,10 +51,10 @@ class ParcoursEcController extends AbstractController
     #[Route('/parcours/ec/{parcours}/update', name: 'app_parcours_ec_update')]
     public function updateParcoursEc(
         ElementConstitutifRepository $ecRepository,
-        TypeEcRepository $typeEcRepository,
-        Request $request,
-        Parcours $parcours): Response
-    {
+        TypeEcRepository             $typeEcRepository,
+        Request                      $request,
+        Parcours                     $parcours
+    ): Response {
         $field = $request->request->get('field');
         $ec = $ecRepository->find($request->request->get('ec'));
 
@@ -55,8 +62,7 @@ class ParcoursEcController extends AbstractController
             return JsonReponse::error('EC introuvable');
         }
 
-        switch ($field)
-        {
+        switch ($field) {
             case 'typeEc':
                 $typeEc = $typeEcRepository->find($request->request->get('value'));
                 if ($typeEc === null) {
