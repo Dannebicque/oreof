@@ -9,6 +9,7 @@
 
 namespace App\Controller\Structure;
 
+use _PHPStan_a4fa95a42\Nette\Neon\Entity;
 use App\Classes\JsonReponse;
 use App\Classes\SemestreOrdre;
 use App\Entity\FicheMatiereMutualisable;
@@ -574,6 +575,52 @@ class SemestreController extends AbstractController
         ]);
     }
 
+    #[Route('/reinitialiser/{semestre}/{parcours}', name: 'reinitialiser')]
+    public function reinitialiser(
+        EntityManagerInterface     $entityManager,
+        SemestreParcoursRepository $semestreParcoursRepository,
+        Semestre                   $semestre,
+        Parcours                   $parcours
+    ): Response {
+        $sem = $semestreParcoursRepository->findOneBy([
+            'semestre' => $semestre,
+            'parcours' => $parcours
+        ]);
+
+        if ($sem === null) {
+            return JsonReponse::error('Le semestre n\'existe pas');
+        }
+
+        if ($semestre->getSemestreMutualisables()->count() > 0) {
+            return JsonReponse::error('Le semestre est mutualisé');
+        }
+
+        foreach ($semestre->getUes() as $ue) {
+            foreach ($ue->getElementConstitutifs() as $ec) {
+                foreach ($ec->getEcEnfants() as $ecEnfant) {
+                    $entityManager->remove($ecEnfant);
+                }
+                $entityManager->remove($ec);
+                foreach ($ue->getUeEnfants() as $uee) {
+                    foreach ($uee->getElementConstitutifs() as $ecuee) {
+                        foreach ($ecuee->getEcEnfants() as $ecEnfant) {
+                            $entityManager->remove($ecEnfant);
+                        }
+                        $entityManager->remove($ecuee);
+                    }
+                    $entityManager->remove($uee);
+                }
+            }
+            $entityManager->remove($ue);
+        }
+        $entityManager->remove($semestre);
+        $sem->setSemestre(null);
+        $entityManager->flush();
+
+        return JsonReponse::success('Le semestre a été réinitialisé');
+    }
+
+
     #[Route('/deplacer/{semestre}/{parcours}/{sens}', name: 'deplacer', methods: ['GET'])]
     public function deplacer(
         SemestreOrdre    $semestreOrdre,
@@ -585,29 +632,6 @@ class SemestreController extends AbstractController
 
         return $this->json(true);
     }
-
-//    #[Route('/data/{semestre}/{parcours}', name: 'data')]
-//    public function data(
-//        Request                    $request,
-//        SemestreParcoursRepository $semestreRepository,
-//        Semestre                   $semestre,
-//        Parcours                   $parcours
-//    ): Response {
-//        $data = JsonRequest::getFromRequest($request);
-//
-//        switch ($data['action']) {
-//            case 'mutualise':
-//                return $this->render('structure/semestre/_mutualise.html.twig', [
-//                    'semestre' => $semestre,
-//                    'parcours' => $parcours
-//                ]);
-//            case 'reutilise':
-//                return $this->render('structure/semestre/_reutilise.html.twig', [
-//                    'semestre' => $semestre,
-//                    'parcours' => $parcours
-//                ]);
-//        }
-//    }
 
     private function updateSemestreMutualisable(SemestreMutualisableRepository $semestreMutualisableRepository, Semestre $semestre, mixed $parcours, EntityManagerInterface $entityManager): void
     {

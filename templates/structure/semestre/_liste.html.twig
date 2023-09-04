@@ -245,8 +245,7 @@
                                                                             size: 'lg',
                                                                             modalTitle: 'Raccrocher un semestre mutualisé au semestre ' ~ semestre
                                                                             .semestre.display,
-                                                                            modalUrl: path('structure_semestre_raccrocher', {semestre:semestre
-                                                                            .semestre.id, parcours: parcours.id})
+                                                                            modalUrl: path('structure_semestre_raccrocher', {semestre:semestre.semestre.id, parcours: parcours.id})
                                                                         }) }}
                                                                         data-action="click->modal#openModal"
                                                                         class="dropdown-item text-quaternary"
@@ -259,6 +258,25 @@
                                                                     <i class="fal fa-link"></i>
                                                                     <span> Raccrocher un semestre</span>
                                                                 </a>
+                                                            </li>
+                                                            <li>
+                                                                <button
+                                                                        {{ stimulus_action('structure--semestre', 'reinitSemestre', 'click', {
+                                                                            url: path
+                                                                                ('structure_semestre_reinitialiser',
+                                                                                {semestre:semestre.semestre.id, parcours: parcours.id})
+                                                                        })
+                                                                        }}
+                                                                        href="#"
+                                                                        class="dropdown-item text-danger"
+                                                                        data-size="lg"
+                                                                        data-bs-toggle="tooltip"
+                                                                        data-bs-placement="bottom"
+                                                                        title="Réinitialiser le semestre {{ semestre.display }}"
+                                                                >
+                                                                    <i class="{{ iconDelete }}"></i>
+                                                                    <span> Réinitialiser un semestre</span>
+                                                                </button>
                                                             </li>
 
                                                         </ul>
