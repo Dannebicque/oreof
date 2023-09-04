@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.5](https://github.com/Dannebicque/oreof/compare/v1.12.4...v1.12.5) (2023-09-04)
+
+
+### Bug Fixes
+
+* Affichage des BCC selon parcours ([97f5919](https://github.com/Dannebicque/oreof/commit/97f5919d9f5ea735ecf55c228d7f5a63603d1677))
+* synchro BUT ([024c0a2](https://github.com/Dannebicque/oreof/commit/024c0a2479c3fc193c461d04668da64b75a895d2))
+
 ### [1.12.4](https://github.com/Dannebicque/oreof/compare/v1.12.3...v1.12.4) (2023-09-03)
 
 
