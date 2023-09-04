@@ -1,1 +1,36 @@
-// Fiches EC
+<h3>Fiches EC/matières du parcours</h3>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Libellé</th>
+        <th>Etat de la fiche</th>
+        <th>Etat validation ?</th>
+        <th>Voir et Valider</th>
+    </tr>
+
+    </thead>
+    {% for val in validation.fiches %}
+        {% if val.fiche != null %}
+        <tr>
+            <td>{{ val.fiche.libelle }}</td>
+            <td>
+                {{ val.etat|badgeBoolean }}
+            </td>
+            <td>
+{#                {% if val.fiche.etatParcours.valide_parcours_rf is defined %}#}
+{#                    <span class="badge bg-success">Validé RF</span>#}
+{#                {% else %}#}
+{#                    <span class="badge bg-danger">Non validé RF</span>#}
+{#                {% endif %}#}
+            </td>
+            <td>
+                <a href="{{ path('app_fiche_matiere_edit', {slug:val.fiche.slug}) }}" class="btn btn-outline-info btn-sm">Voir la fiche EC/matière et valider</a>
+            </td>
+        </tr>
+        {% else %}
+            <tr>
+                <td class="badge bg-warning" colspan="4">EC sans fiche</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+</table>

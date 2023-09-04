@@ -25,7 +25,6 @@ class ParcoursValide extends AbstractValide
 
     public function valideParcours(): ParcoursValide
     {
-
         if (!$this->parcours->isParcoursDefaut()) {
             //onglet 1
             $this->etat['respParcours'] = $this->parcours->getRespParcours() ? self::COMPLET : self::VIDE;
@@ -35,7 +34,6 @@ class ParcoursValide extends AbstractValide
             $this->etat['rythmeParcours'] = $this->parcours->getRythmeFormation() !== null || $this->nonVide($this->parcours->getRythmeFormationTexte()) ? self::COMPLET : self::VIDE;
             $this->etat['localisation'] = $this->parcours->getLocalisation() ? self::COMPLET : self::VIDE;
         }
-
 
 
         //onglet 2
@@ -242,15 +240,14 @@ class ParcoursValide extends AbstractValide
         return $structure;
     }
 
-    function verifierEtat($etat): bool
+    public function verifierEtat($etat): bool
     {
         foreach ($etat as $element) {
-
             if (is_array($element)) {
                 if (!$this->verifierEtat($element)) {
                     return false;
                 }
-            } else if ($element !== self::COMPLET && $element !== self::NON_CONCERNE && $element !== "") {
+            } elseif ($element !== self::COMPLET && $element !== self::NON_CONCERNE && $element !== "") {
                 return false;
             }
         }
@@ -274,7 +271,7 @@ class ParcoursValide extends AbstractValide
         return $this->calculRemplissageFromEtat($this->etat, $remplissage);
     }
 
-    function calculRemplissageFromEtat(array $etat, Remplissage $remplissage): Remplissage
+    public function calculRemplissageFromEtat(array $etat, Remplissage $remplissage): Remplissage
     {
         foreach ($etat as $element) {
             if (is_array($element)) {
@@ -290,5 +287,28 @@ class ParcoursValide extends AbstractValide
         }
 
         return $remplissage;
+    }
+
+    public function valideFichesParcours(array $process): array
+    {
+        $tFiches = [];
+        //vérifier que les parcours sont validés
+        foreach ($this->parcours->getSemestreParcours() as $semestreParcour) {
+            if ($semestreParcour->getSemestre()?->getSemestreRaccroche() !== null) {
+                $sem = $semestreParcour->getSemestre()?->getSemestreRaccroche()->getSemestre();
+            } else {
+                $sem = $semestreParcour->getSemestre();
+            }
+            if ($sem !== null) {
+                foreach ($sem->getUes() as $ue) {
+                    foreach ($ue->getElementConstitutifs() as $ec) {
+                        $tFiches[$ec->getId()]['fiche'] = $ec->getFicheMatiere();
+                        $tFiches[$ec->getId()]['etat'] = $ec->getFicheMatiere() !== null;
+                    }
+                }
+            }
+        }
+
+        return $tFiches;
     }
 }
