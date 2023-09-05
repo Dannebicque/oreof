@@ -1,4 +1,4 @@
-Modifier l'état de validation de ...
+{{ 'process.modification'|trans({}, 'process') }}
 <form action="{{ path('app_validation_edit', {type:type, id:id}) }}" method="post">
     {% for key, etat in etats %}
         <div class="form-check">
