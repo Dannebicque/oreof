@@ -39,7 +39,7 @@
                                 {% for ec in ue.elementConstitutifs %}
                                     <td class="text-center">
                                         {% set checked = "" %}
-                                        {% if ec.parcours.id == parcours.id %}
+                                        {% if ec.ficheMatiere != null and ec.ficheMatiere.parcours.id == parcours.id %}
                                             {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
                                                 {% set checked = "X" %}
                                             {% endif %}

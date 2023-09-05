@@ -110,19 +110,20 @@ class ElementConstitutifBccController extends AbstractController
                     'parcours' => $parcours
                 ]);
             }
-        } else {
+        }
+        else {
             if ($request->isMethod('POST')) {
                 $data = JsonRequest::getFromRequest($request);
                 if ($data['action'] === 'addCompetence') {
                     $competence = $competenceRepository->find($data['value']);
 
                     //on regarde si c'est déjà là, soit dans EC, soit dans fichematiere
-                    if ($elementConstitutif->getParcours()?->getId() === $parcours->getId()) {
-                        $existe = $elementConstitutif->getFicheMatiere()->getCompetences()->contains($competence);
+                    if ($ficheMatiere !== null && $ficheMatiere->getParcours()?->getId() === $parcours->getId()) {
+                        $existe = $ficheMatiere->getCompetences()->contains($competence);
                         if ($existe && (bool)$data['checked'] === false) {
-                            $elementConstitutif->getFicheMatiere()->removeCompetence($competence);
+                            $ficheMatiere->removeCompetence($competence);
                         } elseif (!$existe && (bool)$data['checked'] === true) {
-                            $elementConstitutif->getFicheMatiere()->addCompetence($competence);
+                            $ficheMatiere->addCompetence($competence);
                         }
                         $entityManager->flush();
                     } else {
@@ -144,7 +145,7 @@ class ElementConstitutifBccController extends AbstractController
             //tester si BUT ou autre...
 
 
-            if ($elementConstitutif->getParcours()->getId() === $parcours->getId()) {
+            if ($ficheMatiere !== null && $ficheMatiere->getParcours()->getId() === $parcours->getId()) {
                 foreach ($ficheMatiere->getCompetences() as $competence) {
                     $ecComps[] = $competence->getId();
                     $ecBccs[] = $competence->getBlocCompetence()?->getId();
