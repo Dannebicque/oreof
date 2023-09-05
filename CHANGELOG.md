@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.9](https://github.com/Dannebicque/oreof/compare/v1.12.8...v1.12.9) (2023-09-05)
+
+
+### Bug Fixes
+
+* affichage des compétences sur contrôles des BCC ([a66573b](https://github.com/Dannebicque/oreof/commit/a66573bfab3a0d529f3a056edae0fc24766ac4c2))
+
+### [1.12.6](https://github.com/Dannebicque/oreof/compare/v1.12.5...v1.12.6) (2023-09-04)
+
 ### [1.12.8](https://github.com/Dannebicque/oreof/compare/v1.12.7...v1.12.8) (2023-09-04)
 
 
