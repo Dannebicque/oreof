@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.11](https://github.com/Dannebicque/oreof/compare/v1.12.10...v1.12.11) (2023-09-06)
+
+
+### Bug Fixes
+
+* Export SES ([a60a1b9](https://github.com/Dannebicque/oreof/commit/a60a1b97557cc9061b7cdb33d36e826e0d07e2e3))
+* Suspension blocage validation parcours ([e8e1845](https://github.com/Dannebicque/oreof/commit/e8e184559067bd31fae93415da1573ea45caeedd))
+
 ### [1.12.10](https://github.com/Dannebicque/oreof/compare/v1.12.9...v1.12.10) (2023-09-06)
 
 
