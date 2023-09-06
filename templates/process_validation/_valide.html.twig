@@ -81,7 +81,7 @@
 
 
     {% if (process.check is defined and process.check == true) %}
-        {% if valid == true %}
+{#        {% if valid == true %}#}
             <div class="mt-2">
                 <button type="submit" class="btn btn-success"
                         {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
@@ -92,12 +92,12 @@
                     {{ ('btn.'~process.label~'.valide.'~place)|trans({}, 'process') }}
                 </button>
             </div>
-        {% else %}
+{#        {% else %}#}
             {{ component('alerte', {
                 type: 'danger',
                 message: (process.label~'.valide.impossible.'~place)|trans({}, 'process')
             }) }}
-        {% endif %}
+{#        {% endif %}#}
     {% else %}
         <div class="mt-2">
             <button type="submit" class="btn btn-success"
