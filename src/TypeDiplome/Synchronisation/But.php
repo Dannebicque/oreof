@@ -76,7 +76,7 @@ class But
         $this->natureUe = $natureUeEcRepository->findOneBy(['libelle' => 'UE Obligatoire']);
         $this->typeUe = $typeUeRepository->findOneBy(['libelle' => 'Disciplinaire']);
         $this->francais = $langueRepository->findOneBy(['codeIso' => 'fr']);
-        $this->baseDir = $this->kernel->getProjectDir() . '/public/';
+        $this->baseDir = $this->kernel->getProjectDir() . '/public';
     }
 
     /**
