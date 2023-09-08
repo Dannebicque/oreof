@@ -29,6 +29,7 @@ class FicheMatiereType extends AbstractType
             ->add('responsableFicheMatiere', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'display',
+                'autocomplete' => true,
                 'required' => true,
             ]);
     }
