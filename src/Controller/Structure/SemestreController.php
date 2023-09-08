@@ -292,6 +292,7 @@ class SemestreController extends AbstractController
 
             //on clone le semestre et sa structure
             $newSemestre = clone $semestre;
+            $newSemestre->setTroncCommun(false);
             $entityManager->persist($newSemestre);
             // on recopie les UE
             foreach ($semestre->getUes() as $ue) {
@@ -323,6 +324,9 @@ class SemestreController extends AbstractController
                                     //faire le lien dans les deux UE
                                     $newEc = clone $ec;
                                     $newEc->setUe($newUe);
+                                    $newEc->getMcccs()->clear();
+                                    $newEc->setEtatMccc('A Saisir');
+                                    $newEc->getCompetences()->clear();
                                     $newEc->setFicheMatiere($ec->getFicheMatiere());
                                     $entityManager->persist($newEc);
 
@@ -344,6 +348,9 @@ class SemestreController extends AbstractController
                                         //faire le lien dans les deux UE
                                         $newEcEnfant = clone $ecEnfant;
                                         $newEcEnfant->setUe($newUe);
+                                        $newEcEnfant->getCompetences()->clear();
+                                        $newEcEnfant->getMcccs()->clear();
+                                        $newEcEnfant->setEtatMccc('A Saisir');
                                         $newEcEnfant->setEcParent($newEc);
                                         $newEcEnfant->setFicheMatiere($ecEnfant->getFicheMatiere());
                                         $entityManager->persist($newEcEnfant);
@@ -359,6 +366,7 @@ class SemestreController extends AbstractController
                                     if ($ec->getFicheMatiere() !== null) {
                                         $newFm = clone $ec->getFicheMatiere();
                                         $newFm->setParcours($parcoursDestination);
+                                        $newFm->setSlug(null);
                                         $newEc->setFicheMatiere($newFm);
                                         $entityManager->persist($newFm);
                                     }
@@ -370,6 +378,7 @@ class SemestreController extends AbstractController
                                         if ($ec->getFicheMatiere() !== null) {
                                             $newFm = clone $ec->getFicheMatiere();
                                             $newFm->setParcours($parcoursDestination);
+                                            $newFm->setSlug(null);
                                             $newEcEnfant->setFicheMatiere($newFm);
                                             $entityManager->persist($newFm);
                                         }

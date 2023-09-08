@@ -208,7 +208,7 @@ class ParcoursState
         }
 
         foreach ($this->parcours->getSemestreParcours() as $semestre) {
-            if ($semestre->getSemestre()->getSemestreRaccroche() !== null) {
+            if ($semestre->getSemestre() !== null && $semestre->getSemestre()->getSemestreRaccroche() !== null) {
                 $sem = $semestre->getSemestre()->getSemestreRaccroche()->getSemestre();
             } else {
                 $sem = $semestre->getSemestre();
@@ -223,32 +223,36 @@ class ParcoursState
                 $tab['error'][] = 'Vous devez ajouter au moins une UE au semestre "' . $sem?->display() . '".';
             }
 
-            foreach ($sem?->getUes() as $ue) {
-                if ($ue->getElementConstitutifs()->count() === 0) {
-                    $tab['error'][] = 'Vous devez ajouter au moins un EC à l\'UE "' . $ue->display($this->parcours) . '".';
-                } else {
-                    foreach ($ue->getElementConstitutifs() as $ec) {
-                        if ($ec->getFicheMatiere() === null) {
-                            $tab['error'][] = 'Vous devez affecter une fiche EC/matière à l\'EC "' . $ec->getOrdre() . '.';
-                        }
+            if ($sem !== null) {
+                foreach ($sem?->getUes() as $ue) {
+                    if ($ue->getElementConstitutifs()->count() === 0) {
+                        $tab['error'][] = 'Vous devez ajouter au moins un EC à l\'UE "' . $ue->display($this->parcours) . '".';
+                    } else {
+                        foreach ($ue->getElementConstitutifs() as $ec) {
+                            if ($ec->getFicheMatiere() === null) {
+                                $tab['error'][] = 'Vous devez affecter une fiche EC/matière à l\'EC "' . $ec->getOrdre() . '.';
+                            }
 
-                        if ($ec->getEtatMccc() === 'A Saisir') {
-                            $tab['error'][] = 'Vous devez saisir les MCCC de l\'EC "' . $ec->getOrdre() . '.';
-                        }
+                            if ($ec->getEtatMccc() === 'A Saisir') {
+                                $tab['error'][] = 'Vous devez saisir les MCCC de l\'EC "' . $ec->getOrdre() . '.';
+                            }
 
-                        if ($ec->etatStructure() !== 'Complet') {
-                            $tab['error'][] = 'Vous devez saisir les volumes horaires de l\'EC "' . $ec->getOrdre() . '.';
-                        }
+                            if ($ec->etatStructure() !== 'Complet') {
+                                $tab['error'][] = 'Vous devez saisir les volumes horaires de l\'EC "' . $ec->getOrdre() . '.';
+                            }
 
-                        if ($ec->getEtatBcc($this->parcours) !== 'Complet') {
-                            $tab['error'][] = 'Vous devez saisir les BCC de l\'EC "' . $ec->getOrdre() . '.';
-                        }
+                            if ($ec->getEtatBcc($this->parcours) !== 'Complet') {
+                                $tab['error'][] = 'Vous devez saisir les BCC de l\'EC "' . $ec->getOrdre() . '.';
+                            }
 
-                        if ($ec->getTypeEc() === null) {
-                            $tab['error'][] = 'Vous devez indiquer le type d\'EC pour l\'EC "' . $ec->getOrdre() . '.';
+                            if ($ec->getTypeEc() === null) {
+                                $tab['error'][] = 'Vous devez indiquer le type d\'EC pour l\'EC "' . $ec->getOrdre() . '.';
+                            }
                         }
                     }
                 }
+            } else {
+                $tab['error'][] = 'Le semestre "' . $semestre->getSemestre()?->display() . '" n\'existe pas.';
             }
         }
 
