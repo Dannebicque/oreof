@@ -1,21 +1,20 @@
 <h3>1ᵉ Session</h3>
-<div id="epreuves_ct">
-    {% if mcccs[1]['et'] is defined %}
-        {% for i in 1..mcccs[1]['et']|length %}
-            {{ include('typeDiplome/mccc/licence/_epreuveCt.html.twig', {index:i}) }}
-
-        {% else %}
-            {{ include('typeDiplome/mccc/licence/_epreuveCt.html.twig',{index:1}) }}
+<input type="hidden" value="cc_autre" name="type_cc">
+<div id="epreuves_cc_autre">
+    {{ include('typeDiplome/mccc/licence/_epreuveCc.html.twig', {index: 1, btn: false}) }}
+    {{ include('typeDiplome/mccc/licence/_epreuveCc.html.twig', {index: 2, btn:false}) }}
+    {% if mcccs[1]['cc'] is defined and mcccs[1]['cc']|length > 2 %}
+        {% for i in 3..mcccs[1]['cc']|length %}
+            {{ include('typeDiplome/mccc/licence/_epreuveCc.html.twig', {index: i, btn: true}) }}
         {% endfor %}
-    {% else %}
-        {{ include('typeDiplome/mccc/licence/_epreuveCt.html.twig',{index:1}) }}
     {% endif %}
 </div>
 <button class="btn btn-primary mb-2"
-        {{ stimulus_action('mccc--licence', 'addEpreuveCt', 'click') }}
->Ajouter une épreuve de contrôle terminal
+        {{ stimulus_action('mccc--licence', 'addEpreuveCcAutresDiplomes', 'click') }}
+>Ajouter une épreuve
 </button>
-<h3>2ᵉ Session</h3>
+
+<h3 class="mt-2">2ᵉ Session</h3>
 <div id="epreuves_s2_ct">
     {% if mcccs[2]['et'] is defined %}
         {% for i in 1..mcccs[2]['et']|length %}

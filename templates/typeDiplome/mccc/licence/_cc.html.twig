@@ -1,6 +1,7 @@
 <h3>1ᵉ Session</h3>
+<input type="hidden" value="cc" name="type_cc">
 <div>
-    <div class="row">
+    <div class="row gy-2">
         <div class="col-4">
             <strong>Contrôle continu</strong>
         </div>
@@ -23,12 +24,12 @@
         </div>
         <div class="col-4">
             <label for="typeEpreuve_s1_cc">
-                Type d'épreuve
+                Nb d'épreuve(s)
                 <i class="fal fa-question-circle ms-1"
                    data-controller="tooltip"
                    data-tooltip-placement-value="bottom"
-                   aria-label="{{ 'mccc_licence.helps.cc.typeEpreuve_s1_cc.help'|trans({}, 'help') }}"
-                   data-bs-original-title="{{ 'mccc_licence.helps.cc.typeEpreuve_s1_cc.help'|trans({}, 'help') }}"></i>
+                   aria-label="{{ 'mccc_licence.helps.cc.nbepreuve_s1_cc.help'|trans({}, 'help') }}"
+                   data-bs-original-title="{{ 'mccc_licence.helps.cc.nbepreuve_s1_cc.help'|trans({}, 'help') }}"></i>
             </label>
             <input type="text" class="form-control"
                    id="typeEpreuve_s1_cc"
@@ -36,73 +37,57 @@
                    disabled
                    value="2 épreuves">
         </div>
-    </div>
-</div>
-<h3>2ᵉ Session</h3>
-<div>
-    <div class="row">
+        <div class="col-4">&nbsp;</div>
         <div class="col-4">
-            <strong>Examen 2ᵉ Session</strong>
-        </div>
-        <div class="col-4">
-            <label for="pourcentage_s2_et">
-                Pourcentage
-                <i class="fal fa-question-circle ms-1"
-                   data-controller="tooltip"
-                   data-tooltip-placement-value="bottom"
-                   aria-label="{{ 'mccc_licence.helps.ct.pourcentage_s2_et.help'|trans({}, 'help') }}"
-                   data-bs-original-title="{{ 'mccc_licence.helps.ct.pourcentage_s2_et.help'|trans({}, 'help') }}"></i>
-            </label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="pourcentage_s2_et" name="pourcentage_s2_et"
-                       disabled
-                       value="100">
-                <span class="input-group-text">%</span>
+            <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="cc_has_tp" name="cc_has_tp"
+                       {% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}checked{% endif %}
+                >
+                <label class="form-check-label" for="cc_has_tp"> {{ 'mccc.licence.labels.cc_has_tp'|trans({}, 'form') }}
+                    <i
+                        class="fal fa-question-circle ms-1" data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        title="{{ 'mccc.licence.helps.cc_has_tp'|trans({}, 'help') }}"></i></label>
             </div>
         </div>
         <div class="col-4">
-            <label for="typeEpreuve_s2_et">
-                Type d'épreuve
+            <label for="cc_has_tp_pourcentage">
+                {{ 'mccc_licence.labels.cc.cc_has_tp_pourcentage'|trans({}, 'form') }}
                 <i class="fal fa-question-circle ms-1"
                    data-controller="tooltip"
                    data-tooltip-placement-value="bottom"
-                   aria-label="{{ 'mccc_licence.helps.ct.typeEpreuve_s2_et.help'|trans({}, 'help') }}"
-                   data-bs-original-title="{{ 'mccc_licence.helps.ct.typeEpreuve_s2_et.help'|trans({}, 'help') }}"></i>
+                   aria-label="{{ 'mccc_licence.helps.cc.cc_has_tp_pourcentage.help'|trans({}, 'help') }}"
+                   data-bs-original-title="{{ 'mccc_licence.helps.cc.cc_has_tp_pourcentage.help'|trans({}, 'help') }}"></i>
             </label>
-            <select type="text" class="form-select" id="typeEpreuve_s2_et" name="typeEpreuve_s2_et"
-                    {{ stimulus_action('mccc--licence', 'saveDataCc', 'change') }}
-            >
-                <option value="">Choisir</option>
-                {% for typeE in typeEpreuves %}
-                    <option value="{{ typeE.id }}"
-                            data-hasduree="{{ typeE.hasDuree }}"
-                            {% if mcccs[2]['et'].typeEpreuve[0] is defined and mcccs[2]['et'].typeEpreuve[0] == typeE.id %}selected{% endif %}
-                    >{{ typeE.display }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-4">
-            &nbsp;
-        </div>
-        <div class="col-4">
-            &nbsp;
-        </div>
-        <div class="col-4">
-            <label for="duree_s2_et">
-                Durée de l'épreuve
-                <i class="fal fa-question-circle ms-1"
-                   data-controller="tooltip"
-                   data-tooltip-placement-value="bottom"
-                   aria-label="{{ 'mccc_licence.helps.ct.duree_s2_et.help'|trans({}, 'help') }}"
-                   data-bs-original-title="{{ 'mccc_licence.helps.ct.duree_s2_et.help'|trans({}, 'help') }}"></i>
-            </label>
-                <input type="time" class="form-control" id="duree_s2_et" name="duree_s2_et"
-                value="{% if mcccs[2]['et'].duree != null %}{{ mcccs[2]['et'].duree|date('H:i') }}{% endif %}"
-                >
+            <div class="input-group">
+                <input type="text" class="form-control"
+                       id="cc_has_tp_pourcentage"
+                       name="cc_has_tp_pourcentage"
+                       disabled
+                       value="50">
+                <span class="input-group-text">%</span>
+            </div>{# forcément 50% par défaut dans ce cas de figure #}
         </div>
     </div>
+</div>
+<h3>2ᵉ Session</h3>
+<div id="epreuves_s2_ct">
+    {% if mcccs[2]['et'] is defined %}
+        {% for i in 1..mcccs[2]['et']|length %}
+            {{ include('typeDiplome/mccc/licence/_secondeChance.html.twig', {index:i}) }}
+        {% else %}
+            {{ include('typeDiplome/mccc/licence/_secondeChance.html.twig',{index:1}) }}
+        {% endfor %}
+    {% else %}
+        {{ include('typeDiplome/mccc/licence/_secondeChance.html.twig',{index:1}) }}
+    {% endif %}
+</div>
 
-    <div class="alert alert-danger d-none mt-2" {{ stimulus_target('mccc--licence', 'zoneErreur') }}>
+<button class="btn btn-primary mb-2"
+        {{ stimulus_action('mccc--licence', 'addEpreuveSecondeSession', 'click') }}
+>Ajouter une épreuve pour la 2e session
+</button>
 
-    </div>
+<div class="alert alert-danger d-none mt-2" {{ stimulus_target('mccc--licence', 'zoneErreur') }}>
+
 </div>

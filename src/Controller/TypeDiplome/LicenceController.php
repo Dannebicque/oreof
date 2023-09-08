@@ -33,7 +33,7 @@ class LicenceController extends AbstractController
         ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif $elementConstitutif
     ) {
-        $typeDiplome = $typeDiplomeRepository->findOneBy(['ModeleMcc' => LicenceTypeDiplome::class]);
+        $typeDiplome = $elementConstitutif->getParcours()->getFormation()->getTypeDiplome();
 
         if ($typeDiplome === null) {
             throw new \Exception('Type de diplome non trouvé');
@@ -46,18 +46,26 @@ class LicenceController extends AbstractController
             $elementConstitutif->setTypeMccc($request->query->get('type'));
             $elementConstitutifRepository->save($elementConstitutif, true);
             $typeD->clearMcccs($elementConstitutif);
-            $typeD->initMcccs($elementConstitutif);
             $entityManager->flush();
             $entityManager->refresh($elementConstitutif);
-
         }
 
         switch ($request->query->get('type')) {
             case 'cc':
+                if ($typeDiplome->getLibelleCourt() !== 'L') {
+                    //seul cas particulier, pour les autres mêmes formulaires
+                    return $this->render('typeDiplome/mccc/licence/_cc_autres_diplomes.html.twig', [
+                        'mcccs' => $licenceTypeDiplome->getMcccs($elementConstitutif),
+                        'typeEpreuves' => $typeEpreuves,
+                    ]);
+                }
+
                 return $this->render('typeDiplome/mccc/licence/_cc.html.twig', [
                     'mcccs' => $licenceTypeDiplome->getMcccs($elementConstitutif),
                     'typeEpreuves' => $typeEpreuves,
                 ]);
+
+            // no break
             case 'cci':
                 return $this->render('typeDiplome/mccc/licence/_cci.html.twig', [
                     'mcccs' => $licenceTypeDiplome->getMcccs($elementConstitutif),

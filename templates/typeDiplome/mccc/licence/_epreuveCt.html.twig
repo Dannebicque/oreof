@@ -1,0 +1,85 @@
+<div class="row epreuve_ct">
+    <div class="col-4">
+        <strong>Contrôle terminal N°{{ index }}</strong>
+    </div>
+    <div class="col-4">
+        <label for="pourcentage_s1_ct{{ index }}">
+            Pourcentage
+            <i class="fal fa-question-circle ms-1"
+               data-controller="tooltip"
+               data-tooltip-placement-value="bottom"
+               aria-label="{{ 'mccc_licence.helps.cc_ct.pourcentage_s1_et.help'|trans({}, 'help') }}"
+               data-bs-original-title="{{ 'mccc_licence.helps.cc_ct.pourcentage_s1_et.help'|trans({}, 'help') }}"></i>
+        </label>
+        <div class="input-group">
+            <input type="text" class="form-control" id="pourcentage_s1_ct{{ index }}"
+                   name="pourcentage_s1_ct{{ index }}"
+                    {#                        {{ stimulus_action('mccc--licence', 'saveDataCcCt', 'change', { #}
+                    {#                            action: 'float', #}
+                    {#                            field: 'pourcentage_s1_ct1', #}
+                    {#                        }) }} #}
+                    {% if mcccs[1]['et'][index] is defined %}
+                        value="{{ mcccs[1]['et'][index].pourcentage }}"
+                    {% endif %}
+            >
+            <span class="input-group-text">%</span>
+        </div>
+    </div>
+    <div class="col-4">
+        <label for="typeEpreuve_s1_ct{{ index }}">
+            Type d'épreuve
+            <i class="fal fa-question-circle ms-1"
+               data-controller="tooltip"
+               data-tooltip-placement-value="bottom"
+               aria-label="{{ 'mccc_licence.helps.cc_ct.typeEpreuve_s1_et.help'|trans({}, 'help') }}"
+               data-bs-original-title="{{ 'mccc_licence.helps.cc_ct.typeEpreuve_s1_et.help'|trans({}, 'help') }}"></i>
+        </label>
+        <select class="form-select typeEpreuveSelectCt" id="typeEpreuve_s1_ct{{ index }}"
+                name="typeEpreuve_s1_ct{{ index }}"
+                {{ stimulus_action('mccc--licence', 'changeTypeEpreuveCt', 'change') }}
+        >
+            <option value="">Choisir</option>
+            {% for typeE in typeEpreuves %}
+                <option value="{{ typeE.id }}"
+                        data-hasduree="{{ typeE.hasDuree }}"
+                        {% if mcccs[1]['et'][index] is defined %}
+                            {% if mcccs[1]['et'][index].typeEpreuve[0] is defined and mcccs[1]['et'][index].typeEpreuve[0] == typeE.id %}selected{% endif %}
+                        {% endif %}
+                >{{ typeE.display }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-4">
+        &nbsp;
+    </div>
+    <div class="col-4">
+        &nbsp;
+    </div>
+    <div class="col-4">
+        <label for="duree_s1_ct{{ index }}">
+            Durée de l'épreuve
+            <i class="fal fa-question-circle ms-1"
+               data-controller="tooltip"
+               data-tooltip-placement-value="bottom"
+               aria-label="{{ 'mccc_licence.helps.ct.duree_s1_et.help'|trans({}, 'help') }}"
+               data-bs-original-title="{{ 'mccc_licence.helps.ct.duree_s1_et.help'|trans({}, 'help') }}"></i>
+        </label>
+        <div class="input-group">
+            <input type="time" class="form-control" id="duree_s1_ct{{ index }}" name="duree_s1_ct{{ index }}"
+                    {% if mcccs[1]['et'][index] is defined %}
+                        value="{% if mcccs[1]['et'][index].duree != null %}{{ mcccs[1]['et'][index].duree|date('H:i') }}{% endif %}"
+                    {% endif %}
+            >
+        </div>
+    </div>
+    {% if index > 1 %}
+        <div class="col-8">&nbsp;</div>
+        <div class="col-4 d-grid mt-2">
+            <button type="button" class="btn btn-danger btn-sm d-block"
+                    data-action="click->mccc--licence#removeEpreuveCtS1">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    {% endif %}
+</div>
+

@@ -51,6 +51,12 @@ class Mccc
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $duree = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $numeroEpreuve = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $options = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -172,6 +178,30 @@ class Mccc
     public function setDuree(?\DateTimeInterface $duree): static
     {
         $this->duree = $duree;
+
+        return $this;
+    }
+
+    public function getNumeroEpreuve(): ?int
+    {
+        return $this->numeroEpreuve;
+    }
+
+    public function setNumeroEpreuve(?int $numeroEpreuve): static
+    {
+        $this->numeroEpreuve = $numeroEpreuve;
+
+        return $this;
+    }
+
+    public function getOptions(): ?array
+    {
+        return $this->options;
+    }
+
+    public function setOptions(?array $options): static
+    {
+        $this->options = $options;
 
         return $this;
     }

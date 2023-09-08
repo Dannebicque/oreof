@@ -18,13 +18,60 @@ export default class extends Controller {
 
   connect() {
     if (this.typeMcccValue !== null) {
-      this._loadTypeMccc(this.typeMcccValue)
+      this._loadTypeMccc(this.typeMcccValue).then(() => {
+        this._verifyTypeEpreuveCt()
+        this._verifyTypeEpreuveEt()
+      })
     }
+  }
+
+  _verifyTypeEpreuveEt() {
+    document.querySelectorAll('.typeEpreuveSelectEt').forEach((element) => {
+      const name = element.getAttribute('name')
+      this._changeTypeEpreuveEt(name)
+    })
+  }
+
+  _verifyTypeEpreuveCt() {
+    document.querySelectorAll('.typeEpreuveSelectCt').forEach((element) => {
+      const name = element.getAttribute('name')
+      this._changeTypeEpreuveCt(name)
+    })
   }
 
   changeType(event) {
     if (confirm('Attention, vous allez perdre les données saisies. Êtes-vous sûr ?')) {
       this._loadTypeMccc(event.target.value)
+    }
+  }
+
+  changeTypeEpreuveCt(event) {
+    const name = event.target.getAttribute('name')
+    this._changeTypeEpreuveCt(name)
+  }
+
+  _changeTypeEpreuveCt(name) {
+    const numEpreuve = name.substr(name.lastIndexOf('_') + 1)
+    const option1 = document.querySelector(`#typeEpreuve_s1_${numEpreuve} option:checked`)
+    document.getElementById(`duree_s1_${numEpreuve}`).disabled = !(parseInt(option1.dataset.hasduree, 10) === 1)
+
+    if (document.getElementById(`duree_s1_${numEpreuve}`).disabled === true) {
+      document.getElementById(`duree_s1_${numEpreuve}`).value = ''
+    }
+  }
+
+  changeTypeEpreuveEt(event) {
+    const name = event.target.getAttribute('name')
+    this._changeTypeEpreuveEt(name)
+  }
+
+  _changeTypeEpreuveEt(name) {
+    const numEpreuve = name.substr(name.lastIndexOf('_') + 1)
+    const option1 = document.querySelector(`#typeEpreuve_s2_${numEpreuve} option:checked`)
+    document.getElementById(`duree_s2_${numEpreuve}`).disabled = !(parseInt(option1.dataset.hasduree, 10) === 1)
+
+    if (document.getElementById(`duree_s2_${numEpreuve}`).disabled === true) {
+      document.getElementById(`duree_s2_${numEpreuve}`).value = ''
     }
   }
 
@@ -34,33 +81,12 @@ export default class extends Controller {
 
     const response = await fetch(`${this.urlValue}?${params.toString()}`)
     this.zoneTarget.innerHTML = await response.text()
-    console.log(typeMccc)
-    if (typeMccc === 'cc') {
-      this.saveDataCc()
-    } else if (typeMccc === 'ct') {
-      this.saveDataCt()
-    } else if (typeMccc === 'cc_ct') {
-      this.saveDataCcCt()
-    }
   }
 
   saveDataCcCt() {
+    // todo: gérer les cas multiples sur les secondes session... Revoir affichage/masquage
     // on vérifie que le pourcentage est bien de 100
     const total = parseFloat(document.getElementById('pourcentage_s1_cc').value) + parseFloat(document.getElementById('pourcentage_s1_et').value)
-
-    const option1 = document.querySelector('#typeEpreuve_s1_et option:checked')
-    document.getElementById('duree_s1_et').disabled = !(parseInt(option1.dataset.hasduree, 10) === 1)
-
-    if (document.getElementById('duree_s1_et').disabled === true) {
-      document.getElementById('duree_s1_et').value = ''
-    }
-
-    const option2 = document.querySelector('#typeEpreuve_s2_et option:checked')
-    document.getElementById('duree_s2_et').disabled = !(parseInt(option2.dataset.hasduree, 10) === 1)
-
-    if (document.getElementById('duree_s2_et').disabled === true) {
-      document.getElementById('duree_s2_et').value = ''
-    }
 
     if (total !== 100) {
       this.zoneErreurTarget.classList.remove('d-none')
@@ -71,30 +97,34 @@ export default class extends Controller {
     }
   }
 
-  saveDataCt() {
-    const option1 = document.querySelector('#typeEpreuve_s1_et option:checked')
-    document.getElementById('duree_s1_et').disabled = !(parseInt(option1.dataset.hasduree, 10) === 1)
+  // saveDataCt() {
+  //   const option1 = document.querySelector('#typeEpreuve_s1_et1 option:checked')
+  //   document.getElementById('duree_s1_et1').disabled = !(parseInt(option1.dataset.hasduree, 10) === 1)
+  //
+  //   if (document.getElementById('duree_s1_et1').disabled === true) {
+  //     document.getElementById('duree_s1_et1').value = ''
+  //   }
+  //
+  //   const option2 = document.querySelector('#typeEpreuve_s2_et1 option:checked')
+  //   document.getElementById('duree_s2_et1').disabled = !(parseInt(option2.dataset.hasduree, 10) === 1)
+  //
+  //   if (document.getElementById('duree_s2_et1').disabled === true) {
+  //     document.getElementById('duree_s2_et1').value = ''
+  //   }
+  // }
 
-    if (document.getElementById('duree_s1_et').disabled === true) {
-      document.getElementById('duree_s1_et').value = ''
-    }
-
-    const option2 = document.querySelector('#typeEpreuve_s2_et option:checked')
-    document.getElementById('duree_s2_et').disabled = !(parseInt(option2.dataset.hasduree, 10) === 1)
-
-    if (document.getElementById('duree_s2_et').disabled === true) {
-      document.getElementById('duree_s2_et').value = ''
-    }
-  }
-
-  saveDataCc() {
-    const option = document.querySelector('#typeEpreuve_s2_et option:checked')
-    document.getElementById('duree_s2_et').disabled = !(parseInt(option.dataset.hasduree, 10) === 1)
-
-    if (document.getElementById('duree_s2_et').disabled === true) {
-      document.getElementById('duree_s2_et').value = ''
-    }
-  }
+  // saveDataCc(event) {
+  //   const nomChamp = event.target.getAttribute('name')
+  //   // récuperer la partie après le dernier _
+  //   const numEpreuve = nomChamp.substr(nomChamp.lastIndexOf('_') + 1)
+  //
+  //   const option = document.querySelector(`#typeEpreuve_s2_${numEpreuve} option:checked`)
+  //   document.getElementById(`duree_s2_${numEpreuve}`).disabled = !(parseInt(option.dataset.hasduree, 10) === 1)
+  //
+  //   if (document.getElementById(`duree_s2_${numEpreuve}`).disabled === true) {
+  //     document.getElementById(`duree_s2_${numEpreuve}`).value = ''
+  //   }
+  // }
 
   saveDataCci() {
     let total = 0
@@ -160,6 +190,197 @@ export default class extends Controller {
     document.getElementById('epreuve_cci').appendChild(div)
   }
 
+  addEpreuveSecondeSession(event) {
+    event.preventDefault()
+    // ajouter un nouveau champs pour une nouvelle épreuve
+    const div = document.createElement('div')
+    const nbEpreuves = document.querySelectorAll('.epreuve_s2_ct').length
+    const numEp = nbEpreuves + 1
+    div.classList.add('row')
+    div.classList.add('epreuve_s2_ct')
+
+    // récupérer le contenu de la première épreuve, et le dupliquer
+    const epreuve1 = document.querySelector('.epreuve_s2_ct')
+    let html = epreuve1.innerHTML
+    html = html.replace(/ct1/g, `ct${numEp}`)
+    // ajouter le numéro de l'epreuve dans le texte
+    // parcours tous les éléments da epreuve_et et numéroter le texte
+
+    html += `
+        <div class="col-8">&nbsp;</div>
+        <div class="col-4 d-grid mt-2">
+        <button type="button" class="btn btn-danger btn-sm d-block" data-action="click->mccc--licence#removeEpreuveCt">
+            <i class="fas fa-trash"></i>
+        </button>
+        </div>
+    </div>`
+    div.innerHTML = html
+    document.getElementById('epreuves_s2_ct').appendChild(div)
+
+    let index = 1
+    document.querySelectorAll('.epreuve_s2_ct').forEach((element) => {
+      const htmlTitre = element.innerHTML
+      element.innerHTML = htmlTitre.replace(/Session N°[0-9]/g, `Session N°${index}`)
+      if (numEp > 1) {
+        element.querySelector('input').disabled = false
+      } else {
+        element.querySelector('input').disabled = true
+      }
+      index++
+    })
+
+    this._verifyTypeEpreuveEt()
+  }
+
+  addEpreuveCt(event) {
+    event.preventDefault()
+    // ajouter un nouveau champs pour une nouvelle épreuve
+
+    const nbEpreuves = document.querySelectorAll('.epreuve_ct')
+    const numEp = nbEpreuves.length + 1
+    const tab = []
+    let idx = 1
+    // sauvegarde des données des champs
+    nbEpreuves.forEach(() => {
+      tab[idx] = []
+      tab[idx][`pourcentage_s1_ct${idx}`] = document.getElementById(`pourcentage_s1_ct${idx}`).value
+      tab[idx][`typeEpreuve_s1_ct${idx}`] = document.getElementById(`typeEpreuve_s1_ct${idx}`).value
+      tab[idx][`duree_s1_ct${idx}`] = document.getElementById(`duree_s1_ct${idx}`).value
+      idx++
+    })
+
+    // récupérer le contenu de la première épreuve, et le dupliquer
+    const html = document.querySelector('.epreuve_ct').cloneNode(true)
+    html.innerHTML = html.innerHTML.replace(/ct1/g, `ct${numEp}`)
+    // ajouter le numéro de l'epreuve dans le texte
+    // parcours tous les éléments da epreuve_et et numéroter le texte
+
+    html.innerHTML += `
+        <div class="col-8">&nbsp;</div>
+        <div class="col-4 d-grid mt-2">
+        <button type="button" class="btn btn-danger btn-sm d-block" data-action="click->mccc--licence#removeEpreuveCtS1">
+            <i class="fas fa-trash"></i>
+        </button>
+        </div>
+    </div>`
+
+    const div = document.createElement('div')
+    div.classList.add('row')
+    div.classList.add('epreuve_ct')
+    div.innerHTML = html.innerHTML
+    document.getElementById('epreuves_ct').appendChild(div)
+
+    let index = 1
+    document.querySelectorAll('.epreuve_ct').forEach((element) => {
+      const htmlTitre = element.innerHTML
+      element.innerHTML = htmlTitre.replace(/Contrôle terminal N°[0-9]/g, `Contrôle terminal N°${index}`)
+      document.getElementById(`pourcentage_s1_ct${index}`).value = tab[index][`pourcentage_s1_ct${index}`]
+      document.getElementById(`typeEpreuve_s1_ct${index}`).value = tab[index][`typeEpreuve_s1_ct${index}`]
+      document.getElementById(`duree_s1_ct${index}`).value = tab[index][`duree_s1_ct${index}`]
+
+      // if (numEp > 1) {
+      //   element.querySelector('input').disabled = false
+      // } else {
+      //   element.querySelector('input').disabled = true
+      // }
+      index++
+    })
+
+    this._verifyTypeEpreuveCt()
+  }
+
+  addEpreuveCcAutresDiplomes(event) {
+    event.preventDefault()
+    // ajouter un nouveau champs pour une nouvelle épreuve
+
+    const nbEpreuves = document.querySelectorAll('.epreuve_cc_autre')
+    const numEp = nbEpreuves.length + 1
+    const tab = []
+    let idx = 1
+    // sauvegarde des données des champs
+    nbEpreuves.forEach(() => {
+      tab[idx] = []
+      tab[idx][`pourcentage_s1_cc${idx}`] = document.getElementById(`pourcentage_s1_cc${idx}`).value
+      idx++
+    })
+
+    // récupérer le contenu de la première épreuve, et le dupliquer
+    const html = document.querySelector('.epreuve_cc_autre').cloneNode(true)
+    html.innerHTML = html.innerHTML.replace(/cc1/g, `cc${numEp}`)
+    // ajouter le numéro de l'epreuve dans le texte
+    // parcours tous les éléments da epreuve_et et numéroter le texte
+
+    html.innerHTML += `
+        <div class="col-8">&nbsp;</div>
+        <div class="col-4 d-grid mt-2">
+        <button type="button" class="btn btn-danger btn-sm d-block" data-action="click->mccc--licence#removeEpreuveCcAutre">
+            <i class="fas fa-trash"></i>
+        </button>
+        </div>`
+
+    const div = document.createElement('div')
+    div.classList.add('row')
+    div.classList.add('epreuve_cc_autre')
+    div.innerHTML = html.innerHTML
+    document.getElementById('epreuves_cc_autre').appendChild(div)
+
+    let index = 1
+    document.querySelectorAll('.epreuve_cc_autre').forEach((element) => {
+      const htmlTitre = element.innerHTML
+      element.innerHTML = htmlTitre.replace(/Contrôle continu N°[0-9]/g, `Contrôle continu N°${index}`)
+      document.getElementById(`pourcentage_s1_cc${index}`).value = tab[index][`pourcentage_s1_cc${index}`]
+      index++
+    })
+  }
+
+  removeEpreuveCtS1(event) {
+    event.preventDefault()
+    const div = event.target.closest('.epreuve_ct')
+    div.remove()
+
+    // renuméroter les épreuves
+    let numEp = 1
+    document.querySelectorAll('.epreuve_ct').forEach((element) => {
+      let html = element.innerHTML
+      html = html.replace(/Contrôle terminal N°[0-9]/g, `Contrôle terminal N°${numEp}`)
+      html = html.replace(/ct[0-9]/g, `ct${numEp}`)
+      element.innerHTML = html
+      numEp++
+    })
+  }
+
+  removeEpreuveCt(event) {
+    event.preventDefault()
+    const div = event.target.closest('.epreuve_s2_ct')
+    div.remove()
+
+    // renuméroter les épreuves
+    let numEp = 1
+    document.querySelectorAll('.epreuve_s2_ct').forEach((element) => {
+      let html = element.innerHTML
+      html = html.replace(/Examen 2ᵉ Session N°[0-9]/g, `Examen 2ᵉ Session N°${numEp}`)
+      html = html.replace(/et[0-9]/g, `et${numEp}`)
+      element.innerHTML = html
+      numEp++
+    })
+  }
+
+  removeEpreuveCcAutre(event) {
+    event.preventDefault()
+    const div = event.target.closest('.epreuve_cc_autre')
+    div.remove()
+
+    // renuméroter les épreuves
+    let numEp = 1
+    document.querySelectorAll('.epreuve_cc_autre').forEach((element) => {
+      let html = element.innerHTML
+      html = html.replace(/Contrôle continu N°[0-9]/g, `Contrôle continu N°${numEp}`)
+      html = html.replace(/cc[0-9]/g, `cc${numEp}`)
+      element.innerHTML = html
+      numEp++
+    })
+  }
+
   removeEpreuveCci(event) {
     event.preventDefault()
     const div = event.target.closest('.epreuve')
@@ -173,5 +394,9 @@ export default class extends Controller {
       element.querySelector('input').setAttribute('name', `pourcentage[${numEp}]`)
       numEp++
     })
+  }
+
+  ccHasTp(event) {
+    document.getElementById('cc_has_tp_pourcentage').disabled = !event.target.checked
   }
 }
