@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.15](https://github.com/Dannebicque/oreof/compare/v1.12.14...v1.12.15) (2023-09-08)
+
+
+### Bug Fixes
+
+* Affichage diplôme sur formation ([5f65772](https://github.com/Dannebicque/oreof/commit/5f6577268eb8c3c329ccfa42dbe9d4a9779b753e))
+* ajout de la liste autocomplète sur fichematière ([10a0254](https://github.com/Dannebicque/oreof/commit/10a0254c5fc600ffd37a5e04c2edf6042ea64681))
+* Dupliquer fiches matières avec conservation des parcours mutualisés ([909acdd](https://github.com/Dannebicque/oreof/commit/909acdd08cd2d0c286e1a26c8dc26f66ccf25926))
+* mutualisation sur une mention et non un parcours ([f308583](https://github.com/Dannebicque/oreof/commit/f30858355a0c49a1eddb844cb244b314f1997e17))
+
 ### [1.12.14](https://github.com/Dannebicque/oreof/compare/v1.12.13...v1.12.14) (2023-09-08)
 
 
