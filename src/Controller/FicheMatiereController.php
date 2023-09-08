@@ -187,21 +187,29 @@ class FicheMatiereController extends AbstractController
         $entityManager->persist($newFicheMatiere);
         $entityManager->flush();
 
-        foreach ($ficheMatiere->getElementConstitutifs() as $elementConstitutif) {
-            $newElementConstitutif = clone $elementConstitutif;
-            $newElementConstitutif->setFicheMatiere($newFicheMatiere);
-
-            if ($elementConstitutif->getEcParent() !== null) {
-                $ordreMax = $elementConstitutifRepository->findLastEcEnfant($elementConstitutif);
-                $newElementConstitutif->setOrdre($ordreMax);
-            } else {
-                $ordreMax = $elementConstitutifRepository->findLastEc($elementConstitutif->getUe());
-                $newElementConstitutif->setOrdre($ordreMax + 1);
-            }
-            $newElementConstitutif->genereCode();
-            $entityManager->persist($newElementConstitutif);
+        foreach($ficheMatiere->getFicheMatiereParcours() as $parcours) {
+            //on duplique les parcours de mutualisation
+            $newFicheMatiereParcours = clone $parcours;
+            $newFicheMatiereParcours->setFicheMatiere($newFicheMatiere);
+            $entityManager->persist($newFicheMatiereParcours);
             $entityManager->flush();
         }
+
+//        foreach ($ficheMatiere->getElementConstitutifs() as $elementConstitutif) {
+//            $newElementConstitutif = clone $elementConstitutif;
+//            $newElementConstitutif->setFicheMatiere($newFicheMatiere);
+//
+//            if ($elementConstitutif->getEcParent() !== null) {
+//                $ordreMax = $elementConstitutifRepository->findLastEcEnfant($elementConstitutif);
+//                $newElementConstitutif->setOrdre($ordreMax);
+//            } else {
+//                $ordreMax = $elementConstitutifRepository->findLastEc($elementConstitutif->getUe());
+//                $newElementConstitutif->setOrdre($ordreMax + 1);
+//            }
+//            $newElementConstitutif->genereCode();
+//            $entityManager->persist($newElementConstitutif);
+//            $entityManager->flush();
+//        }
 
         return $this->json(true);
     }
