@@ -39,6 +39,10 @@
             </select>
         </div>
     </div>
+    {{ component('alerte', {
+        type:'info',
+        message: 'Vous pouvez choisir "Mutualiser avec tous les parcours de la mention" pour mutualiser avec tous les parcours de la mention.'
+    }) }}
 
     <button class="btn btn-success mt-2" data-action="fichematiere--mutualise#ajouter base#modalClose"
             data-bs-dismiss="modal">

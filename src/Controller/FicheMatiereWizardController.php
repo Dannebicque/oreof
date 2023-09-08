@@ -113,19 +113,26 @@ class FicheMatiereWizardController extends AbstractController
                 }
                 break;
             case 'save':
-                $parcours = $parcoursRepository->find($data['parcours']);
-                $exist = $ficheMatiereParcoursRepository->findOneBy([
-                    'ficheMatiere' => $ficheMatiere,
-                    'parcours' => $parcours
-                ]);
-
-                if ($exist === null) {
-                    $ficheMatiereParcours = new FicheMatiereMutualisable();
-                    $ficheMatiereParcours->setFicheMatiere($ficheMatiere);
-                    $ficheMatiereParcours->setParcours($parcours);
-                    $entityManager->persist($ficheMatiereParcours);
-                    $entityManager->flush();
+                if (!isset($data['parcours']) || $data['parcours'] === '') {
+                    $formation = $formationRepository->find($data['formation']);
+                    if ($formation !== null && $formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
+                        $parcours = $formation->getParcours()[0];
+                        $this->updateFicheMatiereMutualisable($ficheMatiereParcoursRepository, $ficheMatiere, $parcours, $entityManager);
+                    }
+                } else {
+                    if ($data['parcours'] !== 'all') {
+                        $parcours = $parcoursRepository->find($data['parcours']);
+                        $this->updateFicheMatiereMutualisable($ficheMatiereParcoursRepository, $ficheMatiere, $parcours, $entityManager);
+                    } else {
+                        $formation = $formationRepository->find($data['formation']);
+                        if ($formation !== null) {
+                            foreach ($formation->getParcours() as $parcours) {
+                                $this->updateFicheMatiereMutualisable($ficheMatiereParcoursRepository, $ficheMatiere, $parcours, $entityManager);
+                            }
+                        }
+                    }
                 }
+
 
                 return $this->json(true);
             case 'delete':
@@ -186,5 +193,25 @@ class FicheMatiereWizardController extends AbstractController
             'ecBccs' => array_flip(array_unique($ecBccs)),
             'ecComps' => array_flip($ecComps),
         ]);
+    }
+
+    private function updateFicheMatiereMutualisable(
+        FicheMatiereMutualisableRepository $ficheMatiereParcoursRepository,
+        FicheMatiere $ficheMatiere,
+        mixed $parcours,
+        EntityManagerInterface $entityManager): void
+    {
+        $exist = $ficheMatiereParcoursRepository->findOneBy([
+            'ficheMatiere' => $ficheMatiere,
+            'parcours' => $parcours
+        ]);
+
+        if ($exist === null) {
+            $ficheMatiereParcours = new FicheMatiereMutualisable();
+            $ficheMatiereParcours->setFicheMatiere($ficheMatiere);
+            $ficheMatiereParcours->setParcours($parcours);
+            $entityManager->persist($ficheMatiereParcours);
+            $entityManager->flush();
+        }
     }
 }
