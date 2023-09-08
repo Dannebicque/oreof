@@ -109,7 +109,7 @@ class UserCentre
         }
 
         if ($this->formation !== null) {
-            return 'Formation ('.$this->formation->getDisplay().')';
+            return 'Formation ('.$this->formation->getDisplayLong().')';
         }
 
         if ($this->etablissement !== null) {

@@ -519,7 +519,7 @@ class SemestreController extends AbstractController
                 foreach ($formations as $formation) {
                     $t[] = [
                         'id' => $formation->getId(),
-                        'libelle' => $formation->getTypeDiplome()?->getLibelle() . ' - ' . $formation->getDisplay()
+                        'libelle' => $formation->getDisplayLong()
                     ];
                 }
                 break;

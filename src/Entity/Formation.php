@@ -884,4 +884,10 @@ class Formation
         $remplissage = $this->remplissageBrut();
         $this->setRemplissage($remplissage);
     }
+
+    public function getDisplayLong(): string
+    {
+        $typeD = $this->getTypeDiplome() !== null ? $this->getTypeDiplome()->getLibelle() . ' - ' : '';
+        return $typeD . $this->getDisplay();
+    }
 }

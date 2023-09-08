@@ -38,7 +38,7 @@
             </div>
             <div>{# class="scroll-out" #}
                 {% for i in debut..fin %}
-                    {% if semestres[i] is not defined or semestres[i].semestre.nonDispense==true %}
+                    {% if semestres[i] is not defined or (semestres[i].semestre != null and semestres[i].semestre.nonDispense==true) %}
                         <div class="card mb-2 sh-19 sh-md-8  {% if semestres[i] is not defined %}border-danger text-danger{% endif %}"
                                 {{ stimulus_controller('semestre--manage', {
                                     url: path('structure_semestre_actions', {parcours: parcours.id}),

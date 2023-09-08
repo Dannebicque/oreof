@@ -34,7 +34,7 @@ class FormationController extends BaseController
         foreach ($formations as $formation) {
             $t[] = [
                 'id' => $formation->getId(),
-                'libelle' => $formation->getTypeDiplome()->getLibelle(). ' '. $formation->getDisplay(),
+                'libelle' => $formation->getDisplayLong(),
             ];
         }
         return $this->json($t);
