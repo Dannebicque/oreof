@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.14](https://github.com/Dannebicque/oreof/compare/v1.12.13...v1.12.14) (2023-09-08)
+
+
+### Features
+
+* Nouvelle gestion des MCCC ([0006a96](https://github.com/Dannebicque/oreof/commit/0006a964c0edaaf54629b103441a2d5987a2e833))
+
 ### [1.12.13](https://github.com/Dannebicque/oreof/compare/v1.12.12...v1.12.13) (2023-09-08)
 
 
