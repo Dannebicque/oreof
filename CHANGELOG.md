@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.18](https://github.com/Dannebicque/oreof/compare/v1.12.17...v1.12.18) (2023-09-10)
+
+
+### Bug Fixes
+
+* Vérification parcours avec Ec à choix ([53a3ea0](https://github.com/Dannebicque/oreof/commit/53a3ea044f1fb1a1e7ae0f8190b6244d8bd491d2))
+
 ### [1.12.17](https://github.com/Dannebicque/oreof/compare/v1.12.16...v1.12.17) (2023-09-10)
 
 
