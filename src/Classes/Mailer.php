@@ -65,7 +65,7 @@ class Mailer
         }
     }
 
-    private function getEmail(string|Address|null $email): Address
+    private function getEmail(string|Address|null $email): ?Address
     {
         if ($email instanceof Address) {
             return $email;
@@ -73,12 +73,16 @@ class Mailer
         if (null !== $email && '' !== trim($email)) {
             return new Address(trim($email));
         }
+
+        return null;
     }
 
     private function checkTo(array $mails): void
     {
         foreach ($mails as $m) {
-            $this->mail->addTo($this->getEmail($m));
+            if (null !== $this->getEmail($m)) {
+                $this->mail->addTo($this->getEmail($m));
+            }
         }
     }
 
