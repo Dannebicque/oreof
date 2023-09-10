@@ -194,10 +194,6 @@ class ElementConstitutifController extends AbstractController
                 $elementConstitutifRepository->save($elementConstitutif, true);
             }
 
-            if ($elementConstitutif->getMcccs()->count() === 0) {
-                $typeD->initMcccs($elementConstitutif);
-            }
-
             return $this->json(true);
         }
 
