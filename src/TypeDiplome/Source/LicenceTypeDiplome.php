@@ -123,9 +123,12 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                     $mcccs = $this->sauvegardeCc($elementConstitutif, $mcccs, $request->all(), 1, 's1_cc', 'NOT-L');
                     $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $request->all(), 2, 's2_ct');
                 }
+                $etatMccc = $this->verificationMccc($elementConstitutif, $mcccs, $typeD);
+
                 break;
             case 'cci':
                 $pourcentages = $request->all()['pourcentage'];
+                $totPourcentage = 0.0;
                 //supprimer les MCCC en trop
                 foreach ($mcccs as $mccc) {
                     if (!array_key_exists($mccc->getNumeroSession(), $pourcentages)) {
@@ -137,6 +140,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 foreach ($pourcentages as $key => $pourcentage) {
                     if (array_key_exists($key, $mcccs)) {
                         $mcccs[$key]->setPourcentage((float)$pourcentage);
+                        $totPourcentage += (float)$pourcentage;
                     } else {
                         $mccc = new Mccc();
                         $mccc->setEc($elementConstitutif);
@@ -148,9 +152,11 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                         $mccc->setControleContinu(true);
                         $mccc->setExamenTerminal(false);
                         $mcccs[$key] = $mccc;
+                        $totPourcentage += (float)$pourcentage;
                         $this->entityManager->persist($mccc);
                     }
                 }
+                $etatMccc = $totPourcentage === 100.0;
                 break;
             case 'cc_ct':
                 $tab = [
@@ -181,6 +187,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
 
                 $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $data, 1, 's1_ct', false);
                 $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $data, 2, 's2_ct');
+                $etatMccc = $this->verificationMccc($elementConstitutif, $mcccs, $typeD);
 
                 //todo: encart sur vérification parcours/formation sur la structure selon le type, cas des licences. Permet de déporter les tests spécifiques dans les type de diplômes ou départer la vérification structure dans les types de diplômes
                 break;
@@ -191,12 +198,12 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 //récupérer toutes les clés commencant par typeEpreuve_s1_ct
                 $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $data, 1, 's1_ct');
                 $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $data, 2, 's2_ct');
-
+                $etatMccc = $this->verificationMccc($elementConstitutif, $mcccs, $typeD);
                 break;
         }
 
 
-        $elementConstitutif->setEtatMccc($this->verificationMccc($elementConstitutif, $mcccs, $typeD) ? 'Complet' : 'A Saisir');
+        $elementConstitutif->setEtatMccc($etatMccc ? 'Complet' : 'A Saisir');
         $this->entityManager->flush();
     }
 
