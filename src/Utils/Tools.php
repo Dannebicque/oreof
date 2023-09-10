@@ -12,6 +12,7 @@ namespace App\Utils;
 use DateTime;
 use DateTimeInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use function Symfony\Component\String\u;
 
 abstract class Tools
 {
@@ -72,5 +73,13 @@ abstract class Tools
             return null;
         }
         return DateTime::createFromFormat('H:i', $time) ?? null;
+    }
+
+    public static function FileName(string $string, int $size = 50)
+    {
+        $slugger = new AsciiSlugger();
+        $slug = $slugger->slug($string);
+
+        return u($slug)->truncate($size);
     }
 }
