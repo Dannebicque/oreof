@@ -38,6 +38,7 @@ enum EtatDpeEnum: string
     case soumis_rf = 'soumis_rf';
     case soumis_parcours = 'soumis_parcours';
     case valide_parcours_rf = 'valide_parcours_rf';
+    case reserve_parcours_rf = 'reserve_parcours_rf';
     case soumis_ec = 'soumis_ec';
     case soumis_dpe_composante = 'soumis_dpe_composante';
     case refuse_rf = 'refuse_rf';
@@ -77,6 +78,7 @@ enum EtatDpeEnum: string
             self::soumis_central => 'Soumis Central',
             self::soumis_parcours => 'Soumis Parcours',
             self::valide_parcours_rf => 'Valide Parcours Responsable de Formation',
+            self::reserve_parcours_rf => 'Réserve Parcours Responsable de Formation',
             self::soumis_vp => 'Soumis VP',
             self::soumis_cfvu => 'Soumis CFVU',
             self::refuse_definitif_cfvu => 'Refusé définitif CFVU',
@@ -91,7 +93,7 @@ enum EtatDpeEnum: string
     {
         return match ($this) {
             self::initialisation_dpe, self::initialisation_ec, self::initialisation_parcours => 'secondary',
-            self::autorisation_saisie, self::en_cours_redaction => 'warning',
+            self::autorisation_saisie, self::en_cours_redaction, self::reserve_parcours_rf => 'warning',
             self::soumis_rf, self::soumis_ec, self::soumis_dpe_composante, self::soumis_conseil, self::soumis_central, self::soumis_vp, self::soumis_cfvu, self::soumis_conseil_reserve, self::soumis_parcours, self::valide_parcours_rf => 'info',
             self::refuse_rf, self::refuse_ec, self::refuse_dpe_composante, self::refuse_conseil, self::refuse_central, self::refuse_definitif_cfvu => 'danger',
             self::valie_a_publier, self::publie, self::valide_pour_publication  => 'success',

@@ -22,7 +22,7 @@
             <div class="row g-0">
                 <div class="col">
                     <div class="d-flex align-items-center lh-1-25">
-                        {{ histo.etape|etapeLabel|trans }}
+                        {{ ('historique.'~histo.etape|etapeLabel)|trans({}, 'process') }}
                         {% if histo.complements.sousReserveModifications is defined %}
                             <span class="badge bg-warning ms-2">Sous réserve de modifications</span>
                         {% endif %}

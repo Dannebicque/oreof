@@ -1,0 +1,8 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour {{ parcours.getRespParcours.display }}, {% if parcours.getCoResponsable != null %}{{ parcours.getCoResponsable.display }},{% endif %}</p>
+
+    <p>Votre parcours <strong>{{ parcours.libelle }}</strong>  de la formation <strong>{{ formation.displayLong }}</strong>, vient d'être validé par le responsable de formation.</p>
+
+{% endblock %}

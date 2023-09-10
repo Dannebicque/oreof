@@ -1,0 +1,20 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour {{ parcours.getRespParcours.display }}
+        , {% if parcours.getCoResponsable != null %}{{ parcours.getCoResponsable.display }}, {% endif %}</p>
+
+    <p>Une ou des réserve(s) ont été émises sur votre parcours <strong>{{ parcours.libelle }}</strong> de la formation <strong>{{ formation.displayLong }}</strong>, par le
+        responsable de formation.</p>
+
+    <p>Le motif est :</p>
+
+    <p>{{ motif|raw }}</p>
+
+    <p>Vous pouvez modifier votre parcours en cliquant sur le lien suivant :</p>
+
+    <p>
+        <a href="{{ url('app_parcours_edit', {'id': parcours.id}) }}">{{ url('app_parcours_edit', {'id': parcours.id}) }}</a>
+    </p>
+
+{% endblock %}

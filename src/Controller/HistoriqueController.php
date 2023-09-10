@@ -26,15 +26,14 @@ class HistoriqueController extends AbstractController
         $historiques = [];
         $histo = $parcours->getHistoriqueParcours();
         foreach ($histo as $h) {
-            $historiques[$h->getCreated()?->format('dmYhis')] = $h ;
+            $historiques[$h->getCreated()?->getTimestamp()] = $h ;
         }
 
         $histo = $parcours->getFormation()?->getHistoriqueFormations();
         foreach ($histo as $h) {
-            $historiques[$h->getCreated()?->format('dmYhis')] = $h ;
+            $historiques[$h->getCreated()?->getTimestamp()] = $h ;
         }
-
-        asort($historiques);
+        krsort($historiques);
 
         return $this->render('historique/_formation.html.twig', [
             'historiques' => $historiques,

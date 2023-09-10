@@ -35,6 +35,7 @@
         "symfony/monolog-bundle": "^3.8",
         "symfony/runtime": "6.3.*",
         "symfony/security-bundle": "6.3.*",
+        "symfony/string": "6.3.*",
         "symfony/translation": "6.3.*",
         "symfony/twig-bundle": "6.3.*",
         "symfony/ux-autocomplete": "^2.7",

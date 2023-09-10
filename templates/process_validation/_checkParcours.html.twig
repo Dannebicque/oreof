@@ -1,7 +1,16 @@
+<h3>Etat du parcours</h3>
+
+<p>Vérification de l'état du parcours {{ objet.libelle }} :
+<span class="badge bg-{{ processData.valid == true ? 'success' : 'danger' }}">
+{{ processData.valid == true ? "Parcours vérifié complet" : 'Parcours incomplet' }}
+</span> </p>
+<p>Vous pouvez vérifier l'état ici : <button>Vérifier</button></p>
+
 <h3>Fiches EC/matières du parcours</h3>
 <table class="table">
     <thead>
     <tr>
+        <th>Sem. / UE</th>
         <th>Libellé</th>
         <th>Etat de la fiche</th>
         <th>Etat validation ?</th>
@@ -9,9 +18,11 @@
     </tr>
 
     </thead>
-    {% for val in validation.fiches %}
+    {% for val in processData.validation.fiches %}
         {% if val.fiche != null %}
         <tr>
+            <td>{{ val.ec.ue.semestre.display }} {{ val.ec.ue.display(objet) }} </td>
+            <td>{{ val.ec.code }}  {{ val.ec.libelle }}</td>
             <td>{{ val.fiche.libelle }}</td>
             <td>
                 {{ val.etat|badgeBoolean }}
@@ -28,8 +39,10 @@
             </td>
         </tr>
         {% else %}
-            <tr>
-                <td class="badge bg-warning" colspan="4">EC sans fiche</td>
+            <tr class="bg-warning">
+                <td class="text-white">{{ val.ec.ue.semestre.display }} {{ val.ec.ue.display(objet) }} </td>
+                <td class="text-white">{{ val.ec.code }} {{ val.ec.libelle }}</td>
+                <td class="text-center text-white" colspan="4">EC sans fiche</td>
             </tr>
         {% endif %}
     {% endfor %}

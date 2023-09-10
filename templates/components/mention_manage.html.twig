@@ -38,17 +38,20 @@
                             </div>
                         </div>
                         <div class="col-{{ col_process }} d-flex align-items-center justify-content-center">
+
                             {# todo: vérifier que c'est validable (toutes les fiches OK, tous les parcours OK #}
                             {% for key, etape in this.process %}
                                 {% if (etape.showOn is defined and this.type in etape.showOn) or etape.showOn is not defined %}
                                     {# btn-outline-info ou btn-outline-muted #}
                                     <button class="btn btn-sm btn-icon btn-icon-only
-                            {% if (key == 'parcours' and isPass('parcours',this.parcours, etape.transition)) or isPass('dpe',this.formation, etape.transition) %}
+                            {% if ((key == 'parcours' or key == 'parcours_rf') and isPass('parcours',this.parcours, etape.transition)) or  isPass('dpe',this.formation, etape.transition) %}
+                            {#  todo: risque de ne plus rien afficher sur parcours #}
                                 btn-success {# toutes les étapes avant l'étape en cours #}
                             {% elseif isRefuse('dpe',this.formation, etape.transition) %}
                                 btn-danger {# toutes les étapes avant l'étape en cours #}
                             {% else %}
-                                {% if isPlace('dpe', this.formation, etape.transition) %}
+
+                                {% if ((key == 'parcours' or key == 'parcours_rf') and isPlace('parcours', this.parcours, etape.transition)) or isPlace('dpe', this.formation, etape.transition) %}
                                     btn-info {# l'étape en cours #}
                                 {% else %}
                                     btn-muted {# les prochaines étapes #}
@@ -181,8 +184,8 @@
                             {% else %}
                                 {% if this.type=='parcours' and this.parcours.etatParcours['soumis_parcours'] is defined %}
                                     <div class="col-2 d-grid">
-                                        <button class="btn btn-sm btn-success d-block">Transmis responsable de
-                                            formation
+                                        <button class="btn btn-sm btn-success d-block">
+                                            {{ 'transmis.responsable.formation'|trans({}, 'process') }}
                                         </button>
                                     </div>
                                 {% elseif this.type=='parcours' and this.parcours.etatParcours['soumis_parcours_rf'] is defined %}
@@ -191,7 +194,8 @@
                                     </div>
                                 {% else %}
                                     <div class="col-2 d-grid">
-                                        <button class="btn btn-sm btn-warning d-block">Validation indisp.
+                                        <button class="btn btn-sm btn-warning d-block">
+                                            {{ 'validation.indisponible'|trans({}, 'process') }}
                                         </button>
                                     </div>
                                 {% endif %}
@@ -199,7 +203,9 @@
                                 </div>
                             {% endif %}
                         {% else %}
-                            <button class="btn btn-sm btn-outline-danger">Refusé</button>
+                            <button class="btn btn-sm btn-outline-danger">
+                                {{ ('validation.etat.refuser.'~this.etape)|trans({}, 'process') }}
+                            </button>
                         {% endif %}
 
                         <div class="col-6 d-flex justify-content-center">
@@ -207,14 +213,14 @@
                                 <button
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
-                                            modalTitle: 'Vérifier la saisie',
+                                            modalTitle: 'verifier.la.saisie.parcours.title'|trans({}, 'process'),
                                             modalUrl: path('app_parcours_state', {parcours:parcours.id}) }) }}
                                         data-action="click->modal#openModal"
                                         class="btn btn-outline-success btn-sm"
                                         data-size="lg"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
-                                        title="Vérifier la saisie"
+                                        title="{{ 'verifier.la.saisie.parcours.infobulle'|trans({}, 'process') }}"
                                 >
                                     <i class="fas fa-check"></i>
                                     <span> Vérifier la saisie</span>
@@ -222,14 +228,14 @@
                                 <button class="btn btn-sm btn-icon btn-icon-only btn-outline-info ms-1" type="button"
                                         {{ stimulus_controller('modal', {
                                             size: 'large',
-                                            modalTitle: 'Historique des validations',
+                                            modalTitle: 'historique.de.validation.parcours.title'|trans({}, 'process'),
                                             right: true,
                                             modalUrl: path('app_historique_parcours', {parcours:this.parcours.id}) }) }}
                                         data-action="click->modal#openModal"
                                         data-size="lg"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
-                                        title="Historique des validations"
+                                        title="{{ 'historique.de.validation.parcours.infobulle'|trans({}, 'process') }}"
                                 >
                                     <i class="fal fa-timeline"></i>
                                 </button>
@@ -252,14 +258,14 @@
                                 <button class="btn btn-sm btn-icon btn-icon-only btn-outline-info ms-1" type="button"
                                         {{ stimulus_controller('modal', {
                                             size: 'large',
-                                            modalTitle: 'Historique des validations',
+                                            modalTitle: 'historique.de.validation.fiche_matiere.title'|trans({}, 'process'),
                                             right: true,
                                             modalUrl: path('app_historique_fiche_matiere', {fiche_matiere:this.fiche_matiere.id}) }) }}
                                         data-action="click->modal#openModal"
                                         data-size="lg"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
-                                        title="Historique des validations"
+                                        title="{{ 'historique.de.validation.fiche_matiere.infobulle'|trans({}, 'process') }}"
                                 >
                                     <i class="fal fa-timeline"></i>
                                 </button>
@@ -267,14 +273,14 @@
                                 <button
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
-                                            modalTitle: 'Vérifier la saisie',
+                                            modalTitle: 'verifier.la.saisie.formation.title'|trans({}, 'process'),
                                             modalUrl: path('app_formation_state', {formation:formation.id}) }) }}
                                         data-action="click->modal#openModal"
                                         class="btn btn-outline-success btn-sm"
                                         data-size="lg"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
-                                        title="Vérifier la saisie"
+                                        title="{{ 'verifier.la.saisie.formation.infobulle'|trans({}, 'process') }}"
                                 >
                                     <i class="fas fa-check"></i>
                                     <span> Vérifier la saisie</span>
@@ -285,14 +291,14 @@
                                 <button class="btn btn-sm btn-icon btn-icon-only btn-outline-info ms-1" type="button"
                                         {{ stimulus_controller('modal', {
                                             size: 'large',
-                                            modalTitle: 'Historique des validations',
+                                            modalTitle: 'historique.de.validation.formation.title'|trans({}, 'process'),
                                             right: true,
                                             modalUrl: path('app_historique_formation', {formation:this.formation.id}) }) }}
                                         data-action="click->modal#openModal"
                                         data-size="lg"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
-                                        title="Historique des validations"
+                                        title="{{ 'historique.de.validation.formation.infobulle'|trans({}, 'process') }}"
                                 >
                                     <i class="fal fa-timeline"></i>
                                 </button>
@@ -303,10 +309,10 @@
                                    class="btn btn-sm btn-icon btn-icon-only btn-outline-secondary ms-1"
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="bottom"
-                                   title="Modifier la validation"
+                                   title="{{ 'modifier.la.validation.infobulle'|trans({}, 'process') }}"
                                         {{ stimulus_controller('modal', {
                                             size: 'large',
-                                            modalTitle: 'Modifier la validation',
+                                            modalTitle: 'modifier.la.validation.title'|trans({}, 'process'),
                                             right: false,
                                             updateComponent: {
                                                 id: 'mention_manage',

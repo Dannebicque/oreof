@@ -111,7 +111,7 @@ framework:
                 - 'autorisation_saisie'
                 - 'en_cours_redaction'
                 - 'soumis_parcours'
-                - 'refuse_parcours_rf'
+                - 'reserve_parcours_rf'
                 - 'valide_parcours_rf'
             transitions:
                 initialiser:
@@ -120,12 +120,12 @@ framework:
                 autoriser:
                     from: 'autorisation_saisie'
                     to: 'en_cours_redaction'
-                valider_parcours:
+                valider_parcours: # Soumettre du resp de parcours vers formation
                     from: 'en_cours_redaction'
                     to: 'soumis_parcours'
-                refuser_rf:
+                reserver_rf:
                     from: 'soumis_parcours'
-                    to: 'refuse_parcours_rf'
+                    to: 'reserve_parcours_rf'
                 valider_rf:
                     from: 'soumis_parcours'
                     to: 'valide_parcours_rf'

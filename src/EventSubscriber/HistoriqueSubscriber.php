@@ -29,8 +29,9 @@ class HistoriqueSubscriber implements EventSubscriberInterface
 {
     protected array $cases = [
         'laisserPasser',
-        'sousReserveModifications',
+        'acceptationDirecte',
         'sousReserveConseil',
+        'sousReserveModifications',
         'projetARevoir'
     ];
 
@@ -132,8 +133,8 @@ class HistoriqueSubscriber implements EventSubscriberInterface
 
     private function getCommentaire(Request $request): string
     {
-        if ($request->request->has('commentaire')) {
-            $commentaire = $request->request->get('commentaire');
+        if ($request->request->has('argumentaire')) {
+            $commentaire = $request->request->get('argumentaire');
         } else {
             $commentaire = '';
         }

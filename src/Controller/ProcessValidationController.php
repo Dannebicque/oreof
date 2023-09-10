@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Classes\JsonReponse;
+use App\Classes\Process\FormationProcess;
+use App\Classes\Process\ParcoursProcess;
 use App\Classes\ValidationProcess;
 use App\Classes\verif\FormationValide;
 use App\Classes\verif\ParcoursValide;
@@ -20,19 +22,83 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProcessValidationController extends AbstractController
 {
     public function __construct(
         private EventDispatcherInterface $eventDispatcher,
         private EntityManagerInterface   $entityManager,
-        private ValidationProcess        $validationProcess
+        private ValidationProcess        $validationProcess,
+        private FormationProcess         $formationProcess,
+        private ParcoursProcess          $parcoursProcess,
     )
     {
     }
 
     #[Route('/validation/valide/{etape}', name: 'app_validation_valide')]
     public function valide(
+        #[Target('dpe')]
+        WorkflowInterface   $dpeWorkflow,
+        ParcoursRepository  $parcoursRepository,
+        FormationRepository $formationRepository,
+        string              $etape,
+        Request             $request
+    ): Response {
+        $type = $request->query->get('type');
+        $id = $request->query->get('id');
+//        $definition = $dpeWorkflow->getDefinition();
+
+        $process = $this->validationProcess->getEtape($etape);
+//        $valid = true;
+        switch ($type) {
+            case 'formation':
+                $objet = $formationRepository->find($id);
+
+                if ($objet === null) {
+                    return JsonReponse::error('Formation non trouvée');
+                }
+
+                $processData = $this->formationProcess->etatFormation($objet, $process);
+
+                if ($request->isMethod('POST')) {
+                    return $this->formationProcess->valideFormation($objet, $this->getUser(), $process, $etape, $request);
+                }
+                break;
+            case 'parcours':
+                $objet = $parcoursRepository->find($id);
+
+                if ($objet === null) {
+                    return JsonReponse::error('Parcours non trouvé');
+                }
+
+                $processData = $this->parcoursProcess->etatParcours($objet, $process);
+
+                if ($request->isMethod('POST')) {
+                    return $this->parcoursProcess->valideParcours($objet, $this->getUser(), $process, $etape, $request);
+                }
+
+                break;
+            case 'ficheMatiere':
+                $objet = $formationRepository->find($id);
+                $place = $dpeWorkflow->getMarking($objet);
+                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
+                break;
+        }
+
+        return $this->render('process_validation/_valide.html.twig', [
+            'objet' => $objet,
+            'process' => $process,
+            'type' => $type,
+            'id' => $id,
+            'etape' => $etape,
+            'processData' => $processData ?? null,
+        ]);
+    }
+
+    #[Route('/validation/refuse/{etape}', name: 'app_validation_refuse')]
+    public function refuse(
+        TranslatorInterface $translator,
         #[Target('dpe')]
         WorkflowInterface   $dpeWorkflow,
         WorkflowInterface   $parcoursWorkflow,
@@ -46,29 +112,20 @@ class ProcessValidationController extends AbstractController
         $definition = $dpeWorkflow->getDefinition();
 
         $process = $this->validationProcess->getEtape($etape);
-        $valid = true;
+        //workflow pas toujours celui de dpe??
+
         switch ($type) {
             case 'formation':
                 $objet = $formationRepository->find($id);
+
                 if ($objet === null) {
                     return JsonReponse::error('Formation non trouvée');
                 }
-                if (array_key_exists('check', $process)) {
-                    $formationValide = new FormationValide($objet);
-                    $validation['parcours'] = $formationValide->valideParcours($process);
-                    $validation['formation'] = $formationValide->valideFormation();
-                    $valid = $formationValide->isFormationValide();
-                }
 
-                $place = $dpeWorkflow->getMarking($objet);
-                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
+                $processData = $this->formationProcess->etatFormation($objet, $process);
 
                 if ($request->isMethod('POST')) {
-                    $dpeWorkflow->apply($objet, $process['canValide']); //todo: a rendre dynamique, next step ou step de validation, de refus oud e reserve
-                    $this->entityManager->flush();
-                    $histoEvent = new HistoriqueFormationEvent($objet, $this->getUser(), $etape, 'valide', $request);
-                    $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
-                    return JsonReponse::success('ok');
+                    return $this->formationProcess->refuseFormation($objet, $this->getUser(), $process, $etape, $request);
                 }
                 break;
             case 'parcours':
@@ -78,83 +135,25 @@ class ProcessValidationController extends AbstractController
                     return JsonReponse::error('Parcours non trouvé');
                 }
 
-                $formation = $objet->getFormation();
+                $processData = $this->parcoursProcess->etatParcours($objet, $process);
 
-                if (array_key_exists('check', $process) && $formation !== null) {
-                    $parcoursValide = new ParcoursValide($objet, $formation->getTypeDiplome());
-                    $validation['parcours'] = $parcoursValide->valideParcours();
-                    $validation['fiches'] = $parcoursValide->valideFichesParcours($process);
-                    $valid = $parcoursValide->isParcoursValide();
-                }
-
-                $place = $parcoursWorkflow->getMarking($objet);
-                $transitions = $parcoursWorkflow->getEnabledTransitions($objet);
                 if ($request->isMethod('POST')) {
-                    $parcoursWorkflow->apply($objet, $process['canValide']); //todo: a rendre dynamique, next step ou step de validation, de refus oud e reserve
-                    $this->entityManager->flush();
-                    $histoEvent = new HistoriqueParcoursEvent($objet, $this->getUser(), $etape, 'valide', $request);
-                    $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
-                    return JsonReponse::success('ok');
+                    return $this->parcoursProcess->refuseParcours($objet, $this->getUser(), $process, $etape, $request);
                 }
                 break;
-            case 'ficheMatiere':
-                $objet = $formationRepository->find($id);
-                $place = $dpeWorkflow->getMarking($objet);
-                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
-                break;
-        }
-
-        return $this->render('process_validation/_valide.html.twig', [
-            'objet' => $objet,
-            'process' => $process,
-            'place' => array_keys($place->getPlaces())[0],
-            'transitions' => $transitions,
-            'defintion' => $definition,
-            'type' => $type,
-            'id' => $id,
-            'etape' => $etape,
-            'valid' => $valid ?? '',
-            'validation' => $validation ?? '',
-        ]);
-    }
-
-    #[Route('/validation/refuse/{etape}', name: 'app_validation_refuse')]
-    public function refuse(
-        #[Target('dpe')]
-        WorkflowInterface   $dpeWorkflow,
-        FormationRepository $formationRepository,
-        string              $etape,
-        Request             $request
-    ): Response {
-        $type = $request->query->get('type');
-        $id = $request->query->get('id');
-        $definition = $dpeWorkflow->getDefinition();
-
-        $process = $this->validationProcess->getEtape($etape);
-
-        switch ($type) {
-            case 'formation':
-                $objet = $formationRepository->find($id);
-                if ($objet === null) {
-                    return JsonReponse::error('Formation non trouvée');
-                }
-                $place = $dpeWorkflow->getMarking($objet);
-                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
-                break;
-            case 'parcours':
-                $objet = $formationRepository->find($id);
-                if ($objet === null) {
-                    return JsonReponse::error('Parcours ou formation non trouvés');
-                }
-                $place = $dpeWorkflow->getMarking($objet);
-                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
-                if ($request->isMethod('POST')) {
-                    $dpeWorkflow->apply($objet, $process['canRefuse']); //todo: a rendre dynamique, next step ou step de validation, de refus oud e reserve
-                    $histoEvent = new HistoriqueFormationEvent($objet, $this->getUser(), $etape, 'refuse', $request->request->get('commentaire'));
-                    $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
-                    return JsonReponse::success('ok');
-                }
-                break;
+//                $objet = $parcoursRepository->find($id);
+//                if ($objet === null) {
+//                    return JsonReponse::error('Parcours non trouvé');
+//                }
+//                $place = $parcoursWorkflow->getMarking($objet);
+//                $transitions = $parcoursWorkflow->getEnabledTransitions($objet);
+//                if ($request->isMethod('POST')) {
+//                    $parcoursWorkflow->apply($objet, $process['canRefuse'], ['motif' => $request->request->get('commentaire', '')]);
+//                    $histoEvent = new HistoriqueParcoursEvent($objet, $this->getUser(), $etape, 'refuse', $request);
+//                    $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
+//                    return JsonReponse::success($translator->trans('parcours.refuse.'.$etape.'.flash.success', [], 'process'));
+//                }
+//                break;
             case 'ficheMatiere':
                 $objet = $formationRepository->find($id);
                 if ($objet === null) {
@@ -167,12 +166,11 @@ class ProcessValidationController extends AbstractController
 
         return $this->render('process_validation/_refuse.html.twig', [
             'process' => $process,
-            'place' => array_keys($place->getPlaces())[0],
-            'transitions' => $transitions,
-            'defintion' => $definition,
             'type' => $type,
             'id' => $id,
             'etape' => $etape,
+            'objet' => $objet,
+            'processData' => $processData ?? null,
         ]);
     }
 
@@ -195,24 +193,28 @@ class ProcessValidationController extends AbstractController
         switch ($type) {
             case 'formation':
                 $objet = $formationRepository->find($id);
+
                 if ($objet === null) {
                     return JsonReponse::error('Formation non trouvée');
                 }
-                $place = $dpeWorkflow->getMarking($objet);
-                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
+
+                $processData = $this->formationProcess->etatFormation($objet, $process);
+
+                if ($request->isMethod('POST')) {
+                    return $this->formationProcess->reserveFormation($objet, $this->getUser(), $process, $etape, $request);
+                }
                 break;
             case 'parcours':
-                $objet = $formationRepository->find($id);
+                $objet = $parcoursRepository->find($id);
+
                 if ($objet === null) {
-                    return JsonReponse::error('Parcours ou formation non trouvés');
+                    return JsonReponse::error('Parcours non trouvé');
                 }
-                $place = $dpeWorkflow->getMarking($objet);
-                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
+
+                $processData = $this->parcoursProcess->etatParcours($objet, $process);
+
                 if ($request->isMethod('POST')) {
-                    $dpeWorkflow->apply($objet, $process['canRefuse']); //todo: a rendre dynamique, next step ou step de validation, de refus oud e reserve
-                    $histoEvent = new HistoriqueFormationEvent($objet, $this->getUser(), $etape, 'refuse', $request->request->get('commentaire'));
-                    $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
-                    return JsonReponse::success('ok');
+                    return $this->parcoursProcess->reserveParcours($objet, $this->getUser(), $process, $etape, $request);
                 }
                 break;
             case 'ficheMatiere':
@@ -227,9 +229,8 @@ class ProcessValidationController extends AbstractController
 
         return $this->render('process_validation/_reserve.html.twig', [
             'process' => $process,
-            'place' => array_keys($place->getPlaces())[0],
-            'transitions' => $transitions,
-            'defintion' => $definition,
+            'objet' => $objet,
+            'processData' => $processData ?? null,
             'type' => $type,
             'id' => $id,
             'etape' => $etape,
