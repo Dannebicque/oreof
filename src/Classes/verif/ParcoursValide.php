@@ -187,6 +187,8 @@ class ParcoursValide extends AbstractValide
             if ($sem !== null) {
                 $hasUe = count($sem->getUes()) === 0 ? self::VIDE : self::COMPLET;
                 $structure['semestres'][$semestreParcour->getOrdre()]['ues'] = [];
+                $structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::INCOMPLET;
+                $structure['semestres'][$semestreParcour->getOrdre()]['erreur'] = [];
                 foreach ($semestreParcour->getSemestre()->getUes() as $ue) {
                     $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = count($ue->getElementConstitutifs()) === 0 ? self::VIDE : self::COMPLET;
                     $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'] = [];
@@ -302,6 +304,7 @@ class ParcoursValide extends AbstractValide
             if ($sem !== null) {
                 foreach ($sem->getUes() as $ue) {
                     foreach ($ue->getElementConstitutifs() as $ec) {
+                        $tFiches[$ec->getId()]['ec'] = $ec;
                         $tFiches[$ec->getId()]['fiche'] = $ec->getFicheMatiere();
                         $tFiches[$ec->getId()]['etat'] = $ec->getFicheMatiere() !== null;
                     }
