@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.16](https://github.com/Dannebicque/oreof/compare/v1.12.15...v1.12.16) (2023-09-10)
+
+
+### Bug Fixes
+
+* cas adresse null ([e0bd004](https://github.com/Dannebicque/oreof/commit/e0bd004b931c22db49e4b37ad6df91f05a1c8faf))
+* cas tableau de vérifi vide ([b527f6b](https://github.com/Dannebicque/oreof/commit/b527f6b58901c52998c9511947c0695ada6a0b5d))
+* initMccc supprimé ([d6e7691](https://github.com/Dannebicque/oreof/commit/d6e76910f4f37e81516c8e873ad2b885296e358c))
+* process de validation Parcours revu OK et formation OK sur validation ([2f8e5ad](https://github.com/Dannebicque/oreof/commit/2f8e5ad70bb8879b385aef0a3abd30f685a6f9e2))
+* Taille et slug des noms de fichiers ([c0b5d74](https://github.com/Dannebicque/oreof/commit/c0b5d74818238f5695253e119f0806b1c312a1de))
+
 ### [1.12.15](https://github.com/Dannebicque/oreof/compare/v1.12.14...v1.12.15) (2023-09-08)
 
 
