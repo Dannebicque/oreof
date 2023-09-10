@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.17](https://github.com/Dannebicque/oreof/compare/v1.12.16...v1.12.17) (2023-09-10)
+
+
+### Bug Fixes
+
+* cc_has_tp on null ([361559b](https://github.com/Dannebicque/oreof/commit/361559bfb28b2cbafec8faf255b31256b525f3f2))
+* Somme des ECTS sur EC avec enfants ([d56a570](https://github.com/Dannebicque/oreof/commit/d56a570ea081e6a295d0f19a53e81c43b042efe2))
+* Vérification des MCCC ([59d9da9](https://github.com/Dannebicque/oreof/commit/59d9da9170b58c4e20ab52d1a6c636a0a6903f31))
+
 ### [1.12.16](https://github.com/Dannebicque/oreof/compare/v1.12.15...v1.12.16) (2023-09-10)
 
 
