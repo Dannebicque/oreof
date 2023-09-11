@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.22](https://github.com/Dannebicque/oreof/compare/v1.12.21...v1.12.22) (2023-09-11)
+
+
+### Bug Fixes
+
+* taille Apc ([8249052](https://github.com/Dannebicque/oreof/commit/8249052155d1cf3de909250a942763d19146e321))
+
 ### [1.12.21](https://github.com/Dannebicque/oreof/compare/v1.12.20...v1.12.21) (2023-09-11)
 
 
