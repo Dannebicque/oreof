@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.21](https://github.com/Dannebicque/oreof/compare/v1.12.20...v1.12.21) (2023-09-11)
+
+
+### Bug Fixes
+
+* vérification avec EC enfants ([9e20224](https://github.com/Dannebicque/oreof/commit/9e20224c5e097b7ae183bd766408f040c90d4c86))
+
 ### [1.12.20](https://github.com/Dannebicque/oreof/compare/v1.12.19...v1.12.20) (2023-09-11)
 
 
