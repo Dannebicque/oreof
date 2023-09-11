@@ -51,11 +51,16 @@
                                             <div class="text-muted text-small d-md-none">Matière</div>
                                             {% if ec.ficheMatiere != null %}
                                                 <p class="mt-0 mb-0">{{ ec.display }}
-                                                {% if ec.ficheMatiere.parcours.id != parcours.id %}
+                                                {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id != parcours.id %}
                                                     <i class="fal fa-link"
                                                        data-controller="tooltip"
                                                        data-tooltip-placement-value="bottom"
                                                        title="Fiche matière/EC rédigée par le parcours {{ ec.ficheMatiere.parcours.libelle }}"></i></p>
+                                                {% elseif ec.ficheMatiere.parcours == null %}
+                                                    <i class="fal fa-link"
+                                                       data-controller="tooltip"
+                                                       data-tooltip-placement-value="bottom"
+                                                       title="Fiche matière/EC mutualisée globalement"></i></p>
                                                 {% endif %}
                                             {% else %}
                                                 {{ ec.texteEcLibre }}
@@ -67,30 +72,29 @@
                                             {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation) or is_granted
                                                 ('CAN_PARCOURS_EDIT_MY', parcours)) %}
                                                 {% if ec.ficheMatiere != null %}
-                                                    {% if ec.ficheMatiere.parcours.id == parcours.id %}
+                                                    {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id %}
                                                         <a
                                                                 href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
-                                                                class="btn btn-sm btn-outline-info"
+                                                                class="btn btn-sm btn-outline-info  px-1"
                                                                 data-bs-toggle="tooltip"
                                                                 data-bs-placement="bottom"
                                                                 title="Modifier la fiche EC/matière"
                                                         >
-                                                            <i class="fal fa-file"></i>
                                                             {% if ec.ficheMatiere.remplissage == 100 %}
-                                                                <span class="badge bg-success"> Complet</span>
+                                                                <span class="badge bg-success">Fiche</span>
                                                             {% else %}
-                                                                <span class="badge bg-warning"> À compléter</span>
+                                                                <span class="badge bg-warning">Fiche</span>
                                                             {% endif %}
                                                         </a>
                                                     {% else %}
                                                         <a
                                                                 href="{{ path('app_fiche_matiere_show',{slug: ec.ficheMatiere.slug}) }}"
-                                                                class="btn btn-sm btn-outline-info"
+                                                                class="btn btn-sm btn-outline-info  px-1"
                                                                 data-bs-toggle="tooltip"
                                                                 data-bs-placement="bottom"
                                                                 title="Voir la fiche EC/matière"
                                                         >
-                                                            <span class="badge bg-info"> Voir la fiche</span>
+                                                            <span class="badge bg-info">Voir la fiche</span>
                                                         </a>
                                                     {% endif %}
                                                 {% else %}
@@ -116,15 +120,14 @@
                                                             modalUrl: path('app_element_constitutif_bcc',{id: ec.id,parcours: parcours.id}) }) }}
                                                     {% endif %}
                                                     data-action="click->modal#openModal"
-                                                    class="btn btn-sm btn-outline-info"
+                                                    class="btn btn-sm btn-outline-info  px-1"
                                                     data-size="lg"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom"
                                                     title="Blocs de compétences"
                                             >
-                                                <i class="fal fa-ballot-check"></i>
                                                 <span class="badge bg-{% if ec.etatBcc(parcours) == 'Complet' %}success{% else %}warning{% endif %}">
-                            {{ ec.etatBcc(parcours) }}
+                            BCC
                         </span>
                                             </button>
                                         </div>
@@ -145,15 +148,14 @@
                                                             modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
                                                     {% endif %}
                                                     data-action="click->modal#openModal"
-                                                    class="btn btn-sm btn-outline-info"
+                                                    class="btn btn-sm btn-outline-info px-1"
                                                     data-size="lg"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom"
                                                     title="Modalités de Contrôle des Connaissances et des Compétences"
                                             >
-                                                <i class="fal fa-marker"></i>
                                                 <span class="badge bg-{% if ec.etatMccc == 'Complet' %}success{% else %}warning{% endif %}">
-                            {{ ec.etatMccc }}
+                            MCCC
                         </span>
                                             </button>
                                         </div>
@@ -175,15 +177,14 @@
                                                             modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
                                                     {% endif %}
                                                     data-action="click->modal#openModal"
-                                                    class="btn btn-sm btn-outline-info"
+                                                    class="btn btn-sm btn-outline-info px-1"
                                                     data-size="lg"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="bottom"
                                                     title="Volumes Horaires"
                                             >
-                                                <i class="fal fa-clock"></i>
                                                 <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
-                            {{ ec.etatStructure }}
+                            Heures
                         </span>
                                             </button>
 
@@ -310,7 +311,6 @@
                                                     data-bs-placement="bottom"
                                                     title="Modalités de Contrôle des Connaissances et des Compétences"
                                             >
-                                                <i class="fal fa-marker"></i>
                                                 {% if ec.ecEnfants|length > 0 and ec.mcccEnfantsIdentique == false %}
                                                     <span class="badge bg-info ms-1 me-1">MCCC des enfants</span>
                                                 {% else %}
@@ -347,7 +347,6 @@
                                                         data-bs-placement="bottom"
                                                         title="Volumes Horaires"
                                                 >
-                                                    <i class="fal fa-clock"></i>
                                                     <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
                             {{ ec.etatStructure }}
                         </span>
@@ -457,12 +456,12 @@
                                 {% for ece in ec.ecEnfants %}
                                     <div class="card mb-2 sh-19 sh-md-8 border-left-sousEc border-left-sousEc-{{ ec.ordre }}">
                                         <div class="card-body pt-0 pb-0 h-100 {% if ue.ueParent != null %}border-left-sousUe border-left-sousUe-{{ ue.ordre }}{% endif %}">
-                                            <div class="row g-0 h-100 align-content-center">
-                                                <div class="col-12 col-md-1 d-flex flex-column justify-content-center">
+                                            <div class="row g-1 h-100 align-content-center">
+                                                <div class="col-md-1 d-flex flex-column justify-content-center">
                                                     <div class="text-muted text-small d-md-none">ec</div>
                                                     {{ ece.code }}
                                                 </div>
-                                                <div class="col-12 col-md-2 d-flex flex-column justify-content-center">
+                                                <div class="col-md-3 d-flex flex-column justify-content-center">
                                                     <div class="text-muted text-small d-md-none">Matière</div>
                                                     {% if ece.ficheMatiere != null %}
                                                         <p class="mt-0 mb-0">
@@ -479,7 +478,7 @@
                                                         <span class="badge bg-info">(EC Libre)</span>
                                                     {% endif %}
                                                 </div>
-                                                <div class="col-12 col-md-2 d-flex flex-column justify-content-center">
+                                                <div class="col-md-1 d-flex flex-column justify-content-center">
                                                     <div class="text-muted text-small d-md-none">Remplissage</div>
                                                     {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)
                                                         or is_granted('CAN_PARCOURS_EDIT_MY', parcours)
@@ -488,16 +487,15 @@
                                                             <a
                                                                     href="{{ path('app_fiche_matiere_edit',{slug: ece
                                                                     .ficheMatiere.slug}) }}"
-                                                                    class="btn btn-sm btn-outline-info"
+                                                                    class="btn btn-sm btn-outline-info px-1"
                                                                     data-bs-toggle="tooltip"
                                                                     data-bs-placement="bottom"
                                                                     title="Modifier la fiche EC/matière"
                                                             >
-                                                                <i class="fal fa-file"></i>
                                                                 {% if ece.ficheMatiere.remplissage == 100 %}
-                                                                    <span class="badge bg-success"> Complet</span>
+                                                                    <span class="badge bg-success"> Fiche</span>
                                                                 {% else %}
-                                                                    <span class="badge bg-warning"> À compléter</span>
+                                                                    <span class="badge bg-warning"> Fiche</span>
                                                                 {% endif %}
                                                             </a>
                                                         {% else %}
@@ -505,7 +503,36 @@
                                                         {% endif %}
                                                     {% endif %}
                                                 </div>
-                                                <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
+                                                <div class="col-md-1 d-flex flex-column justify-content-center">
+                                                    <div class="text-muted text-small d-md-none">bcc</div>
+                                                    <button
+
+                                                            {% if deplacer is defined and deplacer == true and editable == true %}
+                                                                {{ stimulus_controller('modal', {
+                                                                    size: 'lg',
+                                                                    nomEvenement: 'refreshListeEc',
+                                                                    details: {ue: ue.id, parcours: parcours.id},
+                                                                    modalTitle: 'Blocs de compétences',
+                                                                    modalUrl: path('app_element_constitutif_bcc',{id: ece.id, parcours: parcours.id}) }) }}
+                                                            {% else %}
+                                                                {{ stimulus_controller('modal', {
+                                                                    size: 'lg',
+                                                                    modalTitle: 'Blocs de compétences',
+                                                                    modalUrl: path('app_element_constitutif_bcc',{id: ece.id,parcours: parcours.id}) }) }}
+                                                            {% endif %}
+                                                            data-action="click->modal#openModal"
+                                                            class="btn btn-sm btn-outline-info px-1"
+                                                            data-size="lg"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom"
+                                                            title="Blocs de compétences"
+                                                    >
+                                                        <span class="badge bg-{% if ece.etatBcc(parcours) == 'Complet' %}success{% else %}warning{% endif %}">
+                            BCC
+                        </span>
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-1 d-flex flex-column justify-content-center">
                                                     <div class="text-muted text-small d-md-none">mccc</div>
                                                     {% if ec.mcccEnfantsIdentique == true %}
                                                         <span class="badge bg-info ms-1 me-1">MCCC du parent</span>
@@ -526,20 +553,19 @@
                                                                         modalUrl: path('app_element_constitutif_mccc',{'id': ece.id}) }) }}
                                                                 {% endif %}
                                                                 data-action="click->modal#openModal"
-                                                                class="btn btn-sm btn-outline-info me-1 ms-1"
+                                                                class="btn btn-sm btn-outline-info me-1 ms-1 px-1"
                                                                 data-size="lg"
                                                                 data-bs-toggle="tooltip"
                                                                 data-bs-placement="bottom"
                                                                 title="Modalités de Contrôle des Connaissances et des Compétences"
                                                         >
-                                                            <i class="fal fa-marker"></i>
                                                             <span class="badge bg-{% if ece.etatMccc == 'Complet' %}success{% else %}warning{% endif %}">
-                            {{ ece.etatMccc }}
+                            MCCC
                         </span>
                                                         </button>
                                                     {% endif %}
                                                 </div>
-                                                <div class="col-6 col-md-2 d-flex flex-column justify-content-center">
+                                                <div class="col-md-1 d-flex flex-column justify-content-center">
                                                     <div class="text-muted text-small d-md-none">Volumes Horaires</div>
                                                     {% if ec.heuresEnfantsIdentiques == true %}
                                                         <span class="badge bg-info ms-1 me-1">Vol. horaires du parent</span>
@@ -560,20 +586,19 @@
                                                                         modalUrl: path('app_element_constitutif_structure',{'id': ece.id}) }) }}
                                                                 {% endif %}
                                                                 data-action="click->modal#openModal"
-                                                                class="btn btn-sm btn-outline-info me-1"
+                                                                class="btn btn-sm btn-outline-info  px-1"
                                                                 data-size="lg"
                                                                 data-bs-toggle="tooltip"
                                                                 data-bs-placement="bottom"
                                                                 title="Volumes Horaires"
                                                         >
-                                                            <i class="fal fa-clock"></i>
                                                             <span class="badge bg-{% if ece.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
-                            {{ ece.etatStructure }}
+                            Heures
                         </span>
                                                         </button>
                                                     {% endif %}
                                                 </div>
-                                                <div class="col-6 col-md-3 d-flex flex-column justify-content-center">
+                                                <div class="col-md-4 d-flex flex-column justify-content-center">
                                                     <div class="text-muted text-small d-md-none">Actions</div>
                                                     <div class="row">
                                                         <div class="col-6">
