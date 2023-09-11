@@ -51,7 +51,7 @@ enum EtatDpeEnum: string
     case soumis_vp = 'soumis_vp';
     case soumis_cfvu = 'soumis_cfvu';
     case refuse_definitif_cfvu = 'refuse_definitif_cfvu';
-    case valie_a_publier = 'valie_a_publier';
+    case valide_a_publier = 'valide_a_publier';
     case publie = 'publie';
     case valide_pour_publication = 'valide_pour_publication';
     case soumis_conseil_reserve = 'soumis_conseil_reserve';
@@ -82,7 +82,7 @@ enum EtatDpeEnum: string
             self::soumis_vp => 'Soumis VP',
             self::soumis_cfvu => 'Soumis CFVU',
             self::refuse_definitif_cfvu => 'Refusé définitif CFVU',
-            self::valie_a_publier => 'Validé à publier',
+            self::valide_a_publier => 'Validé à publier',
             self::publie => 'Publié',
             self::valide_pour_publication => 'Validé pour publication',
             self::soumis_conseil_reserve => 'Soumis Conseil réservé',
@@ -96,7 +96,7 @@ enum EtatDpeEnum: string
             self::autorisation_saisie, self::en_cours_redaction, self::reserve_parcours_rf => 'warning',
             self::soumis_rf, self::soumis_ec, self::soumis_dpe_composante, self::soumis_conseil, self::soumis_central, self::soumis_vp, self::soumis_cfvu, self::soumis_conseil_reserve, self::soumis_parcours, self::valide_parcours_rf => 'info',
             self::refuse_rf, self::refuse_ec, self::refuse_dpe_composante, self::refuse_conseil, self::refuse_central, self::refuse_definitif_cfvu => 'danger',
-            self::valie_a_publier, self::publie, self::valide_pour_publication  => 'success',
+            self::valide_a_publier, self::publie, self::valide_pour_publication  => 'success',
         };
     }
 }

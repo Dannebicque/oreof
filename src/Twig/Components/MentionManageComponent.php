@@ -121,7 +121,7 @@ final class MentionManageComponent
 
         $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->formation], ['created' => 'DESC']);
         foreach ($historiques as $historique) {
-            $this->historiques[$historique->getEtape()] = $historique->getCreated();
+            $this->historiques[$historique->getEtape()] = $historique;
         }
 
         // dépend du type et de l'étape...
@@ -131,7 +131,7 @@ final class MentionManageComponent
     public function dateHistorique(string $transition): string
     {
         if (array_key_exists($transition, $this->historiques)) {
-            return $this->historiques[$transition]->format('d/m/Y');
+            return $this->historiques[$transition]->getCreated()->format('d/m/Y');
         }
 
         return '- à venir -';

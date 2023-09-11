@@ -136,7 +136,7 @@ class Ue
     public function totalEctsUe(): float
     {
         if ($this->getElementConstitutifs()->count() === 0 && $this->getEcts() !== null) {
-            return $this->getEcts();
+            return $this->getEcts();//todo: marche pas en BUT
         }
 
         $total = 0;
