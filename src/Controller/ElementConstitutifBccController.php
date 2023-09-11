@@ -145,7 +145,7 @@ class ElementConstitutifBccController extends AbstractController
             //tester si BUT ou autre...
 
 
-            if ($ficheMatiere !== null && $ficheMatiere->getParcours()->getId() === $parcours->getId()) {
+            if (($ficheMatiere !== null && $ficheMatiere->getParcours()?->getId() === $parcours->getId())) {
                 foreach ($ficheMatiere->getCompetences() as $competence) {
                     $ecComps[] = $competence->getId();
                     $ecBccs[] = $competence->getBlocCompetence()?->getId();
@@ -158,11 +158,11 @@ class ElementConstitutifBccController extends AbstractController
             }
 
 
-            if ($ficheMatiere->getParcours() !== null) {
+           /// if ($parcours !== null) {
                 $bccs = $blocCompetenceRepository->findByParcours($parcours);
-            } else {
-                $bccs = $blocCompetenceRepository->findBy(['parcours' => null]);
-            }
+//            } else {
+//                $bccs = $blocCompetenceRepository->findBy(['parcours' => null]);
+//            }
 
             if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
                 $this->isGranted('CAN_PARCOURS_EDIT_MY', $elementConstitutif->getParcours())) { //todo: ajouter le workflow...
