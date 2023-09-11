@@ -117,7 +117,8 @@
         </tr>
         {% for keyEc, ec in ue.ecs  %}
             <tr>
-                <td class="ps-5">EC {{ keyEc }}</td>
+                {# todo: non prise en compte des enfants et des UE enfants... #}
+                <td class="ps-5">EC {{ ec.display }}</td>
                 <td>
                     {{ ec.erreur|displayErreurs }}
                     {{ ec.global|badgeValide }}</td>
