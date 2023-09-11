@@ -192,7 +192,6 @@ class But
             $comp->addButNiveau($niv);
             $this->entityManager->persist($niv);
             foreach ($niveau['apcApprentissageCritiques'] as $acs) {
-
                 $ac = new ButApprentissageCritique();
                 $ac->setLibelle($acs['libelle']);
                 $ac->setCode($acs['code']);
@@ -296,79 +295,81 @@ class But
         }
 
         foreach ($data['apcParcours'] as $parcours) {
-            $this->structure[$parcours['id']] = [];
-            $listeSemestre = [];
-            $parc = new Parcours($this->formation);
-            $parc->setLibelle($parcours['libelle']);
-            $parc->setSigle($parcours['code']);
-            $parc->setContenuFormation($parcours['textePresentation']);
-            $state = $parc->getEtatSteps();
-            $state['3'] = true;
-            $parc->setEtatSteps($state);
-            $this->entityManager->persist($parc);
-            $this->listeParcours[$parcours['id']] = $parc;
+            if ($parcours['dispense'] === true) {
+                $this->structure[$parcours['id']] = [];
+                $listeSemestre = [];
+                $parc = new Parcours($this->formation);
+                $parc->setLibelle($parcours['libelle']);
+                $parc->setSigle($parcours['code']);
+                $parc->setContenuFormation($parcours['textePresentation']);
+                $state = $parc->getEtatSteps();
+                $state['3'] = true;
+                $parc->setEtatSteps($state);
+                $this->entityManager->persist($parc);
+                $this->listeParcours[$parcours['id']] = $parc;
 
-            //si type 3 idem, si type 1 ou 2 tronc commun
-            if ($this->type3) {
-                $debut = 1;
-            } else {
-                $debut = 3;
-                for ($i = 1; $i <= 2; $i++) {
-                    $semParc = new SemestreParcours($tronc[$i], $parc);
+                //si type 3 idem, si type 1 ou 2 tronc commun
+                if ($this->type3) {
+                    $debut = 1;
+                } else {
+                    $debut = 3;
+                    for ($i = 1; $i <= 2; $i++) {
+                        $semParc = new SemestreParcours($tronc[$i], $parc);
+                        $semParc->setOrdre($i);
+                        $semParc->setPorteur(true);
+                        $this->entityManager->persist($semParc);
+                        $tronc[$i]->addSemestreParcour($semParc);
+
+                        $listeSemestre[$i] = $tronc[$i];
+                        $this->structure[$parcours['id']][$i]['semestre'] = $tronc[$i];
+                        $this->structure[$parcours['id']][$i]['ues'] = [];
+                    }
+                }
+
+                //création des semestres
+                for ($i = $debut; $i <= 6; $i++) {
+                    $this->structure[$parcours['id']][$i] = [];
+                    $semestre = new Semestre();
+                    $semestre->setOrdre($i);
+                    $semestre->setTroncCommun(false);
+                    $this->entityManager->persist($semestre);
+
+                    $semParc = new SemestreParcours($semestre, $parc);
                     $semParc->setOrdre($i);
                     $semParc->setPorteur(true);
                     $this->entityManager->persist($semParc);
-                    $tronc[$i]->addSemestreParcour($semParc);
-
-                    $listeSemestre[$i] = $tronc[$i];
-                    $this->structure[$parcours['id']][$i]['semestre'] = $tronc[$i];
+                    $semestre->addSemestreParcour($semParc);
+                    $this->structure[$parcours['id']][$i]['semestre'] = $semestre;
                     $this->structure[$parcours['id']][$i]['ues'] = [];
-                }
-            }
-
-            //création des semestres
-            for ($i = $debut; $i <= 6; $i++) {
-                $this->structure[$parcours['id']][$i] = [];
-                $semestre = new Semestre();
-                $semestre->setOrdre($i);
-                $semestre->setTroncCommun(false);
-                $this->entityManager->persist($semestre);
-
-                $semParc = new SemestreParcours($semestre, $parc);
-                $semParc->setOrdre($i);
-                $semParc->setPorteur(true);
-                $this->entityManager->persist($semParc);
-                $semestre->addSemestreParcour($semParc);
-                $this->structure[$parcours['id']][$i]['semestre'] = $semestre;
-                $this->structure[$parcours['id']][$i]['ues'] = [];
-                $listeSemestre[$i] = $semestre;
-            }
-
-            //synchron Parcours / Compétences / UE
-            foreach ($parcours['apcParcoursNiveaux'] as $apcParcoursNiveau) {
-                $annee = $apcParcoursNiveau['niveau']['annee']['libelle'];
-                //todo: ne faire qu'une seule fois BUT1 si pas type 3
-                $offset = 0;
-                if ($annee === 'BUT2') {
-                    $offset = 2;
-                } elseif ($annee === 'BUT3') {
-                    $offset = 4;
+                    $listeSemestre[$i] = $semestre;
                 }
 
-                if ((!$this->type3 && $addOne === true && $annee === 'BUT1') || $annee !== 'BUT1' || $this->type3) {
-                    for ($j = 1; $j <= 2; $j++) {
-                        $ue = new Ue();
-                        $ue->setTypeUe($this->typeUe);
-                        $ue->setNatureUeEc($this->natureUe);
-                        $ue->setOrdre($apcParcoursNiveau['niveau']['competence']['numero']);//numéro de la compétence = ordre
-                        $ue->setLibelle($apcParcoursNiveau['niveau']['competence']['nom_court']); //nom court de la compétence
-                        $ue->setSemestre($listeSemestre[$offset + $j]);
-                        $this->structure[$parcours['id']][$offset + $j]['ues'][$apcParcoursNiveau['niveau']['competence']['numero']] = $ue;
-                        $this->entityManager->persist($ue);
+                //synchron Parcours / Compétences / UE
+                foreach ($parcours['apcParcoursNiveaux'] as $apcParcoursNiveau) {
+                    $annee = $apcParcoursNiveau['niveau']['annee']['libelle'];
+                    //todo: ne faire qu'une seule fois BUT1 si pas type 3
+                    $offset = 0;
+                    if ($annee === 'BUT2') {
+                        $offset = 2;
+                    } elseif ($annee === 'BUT3') {
+                        $offset = 4;
+                    }
+
+                    if ((!$this->type3 && $addOne === true && $annee === 'BUT1') || $annee !== 'BUT1' || $this->type3) {
+                        for ($j = 1; $j <= 2; $j++) {
+                            $ue = new Ue();
+                            $ue->setTypeUe($this->typeUe);
+                            $ue->setNatureUeEc($this->natureUe);
+                            $ue->setOrdre($apcParcoursNiveau['niveau']['competence']['id']);//numéro de la compétence = ordre
+                            $ue->setLibelle($apcParcoursNiveau['niveau']['competence']['nom_court']); //nom court de la compétence
+                            $ue->setSemestre($listeSemestre[$offset + $j]);
+                            $this->structure[$parcours['id']][$offset + $j]['ues'][$apcParcoursNiveau['niveau']['competence']['id']] = $ue;
+                            $this->entityManager->persist($ue);
+                        }
                     }
                 }
+                $addOne = false;
             }
-            $addOne = false;
         }
     }
 
@@ -445,17 +446,20 @@ class But
         } else {
             $first = true;
             foreach ($ressource['apcRessourceParcours'] as $parc) {
-                $this->genereEcbyUE($ressource, $fm, $parc['parcours']['id']);
-                if ($first === false) {
-                    $fm->setEnseignementMutualise(true);
-                    $mutualise = new FicheMatiereMutualisable();
-                    $mutualise->setFicheMatiere($fm);
-                    $mutualise->setParcours($this->listeParcours[$parc['parcours']['id']]);
-                    $this->entityManager->persist($mutualise);
-                } else {
-                    $fm->setParcours($this->listeParcours[$parc['parcours']['id']]);
+
+                if (array_key_exists($parc['parcours']['id'], $this->listeParcours)) {
+                    $this->genereEcbyUE($ressource, $fm, $parc['parcours']['id']);
+                    if ($first === false) {
+                        $fm->setEnseignementMutualise(true);
+                        $mutualise = new FicheMatiereMutualisable();
+                        $mutualise->setFicheMatiere($fm);
+                        $mutualise->setParcours($this->listeParcours[$parc['parcours']['id']]);
+                        $this->entityManager->persist($mutualise);
+                    } else {
+                        $fm->setParcours($this->listeParcours[$parc['parcours']['id']]);
+                    }
+                    $first = false;
                 }
-                $first = false;
             }
         }
     }
@@ -481,7 +485,6 @@ class But
                 //tous les parcours et mutualisé
                 foreach ($this->listeParcours as $key => $parcours) {
                     $this->genereEcSaebyUE($sae, $fm, $key);
-
                     if ($first === false) {
                         $fm->setEnseignementMutualise(true);
                         $mutualise = new FicheMatiereMutualisable();
@@ -497,17 +500,19 @@ class But
         } else {
             $first = true;
             foreach ($sae['apcSaeParcours'] as $parc) {
-                $this->genereEcSaebyUE($sae, $fm, $parc['parcours']['id']);
-                if ($first === false) {
-                    $fm->setEnseignementMutualise(true);
-                    $mutualise = new FicheMatiereMutualisable();
-                    $mutualise->setFicheMatiere($fm);
-                    $mutualise->setParcours($this->listeParcours[$parc['parcours']['id']]);
-                    $this->entityManager->persist($mutualise);
-                } else {
-                    $fm->setParcours($this->listeParcours[$parc['parcours']['id']]);
+                if (array_key_exists($parc['parcours']['id'], $this->listeParcours)) {
+                    $this->genereEcSaebyUE($sae, $fm, $parc['parcours']['id']);
+                    if ($first === false) {
+                        $fm->setEnseignementMutualise(true);
+                        $mutualise = new FicheMatiereMutualisable();
+                        $mutualise->setFicheMatiere($fm);
+                        $mutualise->setParcours($this->listeParcours[$parc['parcours']['id']]);
+                        $this->entityManager->persist($mutualise);
+                    } else {
+                        $fm->setParcours($this->listeParcours[$parc['parcours']['id']]);
+                    }
+                    $first = false;
                 }
-                $first = false;
             }
         }
     }
@@ -515,27 +520,28 @@ class But
     private function genereEcbyUE(array $ressource, FicheMatiere $fm, int $keyParcours): void
     {
         foreach ($ressource['apcRessourceCompetences'] as $competence) {
-            if (array_key_exists($competence['competence']['numero'], $this->structure[$keyParcours][$ressource['semestre']['ordreLmd']]['ues'])) {
+            if (array_key_exists($keyParcours, $this->structure) && array_key_exists($competence['competence']['id'], $this->structure[$keyParcours][$ressource['semestre']['ordreLmd']]['ues'])) {
                 $ec = new ElementConstitutif();
                 $ec->setModaliteEnseignement(ModaliteEnseignementEnum::PRESENTIELLE);
                 $ec->setOrdre($ressource['ordre']);
                 $ec->setNatureUeEc($this->natureEc);
                 $ec->setParcours($this->listeParcours[$keyParcours]);
                 $ec->setTypeEc($this->typeEcRessource);
+                $ec->setEcts($competence['coefficient']);
                 $ec->setLibelle($ressource['libelle']);
-                $ec->setUe($this->structure[$keyParcours][$ressource['semestre']['ordreLmd']]['ues'][$competence['competence']['numero']]);
+                $ec->setUe($this->structure[$keyParcours][$ressource['semestre']['ordreLmd']]['ues'][$competence['competence']['id']]);
                 $ec->setFicheMatiere($fm);
                 $ec->genereCode();
                 $this->entityManager->persist($ec);
 
                 //ajout des apprentissages critiques en fonction de l'UE
                 foreach ($ressource['apcRessourceApprentissageCritiques'] as $apprentissageCritique) {
-
                     $codeAc = $apprentissageCritique['apprentissageCritique']['code'];
-                    if ((int)substr($codeAc, 3,1) === $competence['competence']['numero']) {
+                    if ((int)substr($codeAc, 3, 1) === $competence['competence']['id']) {
                         $ac = $this->listeAcs[$codeAc];
                         $ac->addElementConstitutif($ec);
                         $ec->addApprentissagesCritique($ac);
+                        //todo: récupe des Coeffs ???
                     }
                 }
             }
@@ -545,7 +551,8 @@ class But
     private function genereEcSaebyUE(array $sae, FicheMatiere $fm, int $keyParcours): void
     {
         foreach ($sae['apcSaeCompetences'] as $competence) {
-            if (array_key_exists($competence['competence']['numero'], $this->structure[$keyParcours][$sae['semestre']['ordreLmd']]['ues'])) {
+
+            if (array_key_exists($keyParcours, $this->structure) && array_key_exists($competence['competence']['id'], $this->structure[$keyParcours][$sae['semestre']['ordreLmd']]['ues'])) {
                 $ec = new ElementConstitutif();
                 $ec->setModaliteEnseignement(ModaliteEnseignementEnum::PRESENTIELLE);
                 if ((int)$sae['ordre'] === 99) {
@@ -557,16 +564,16 @@ class But
                 $ec->setParcours($this->listeParcours[$keyParcours]);
                 $ec->setTypeEc($this->typeEcSae);
                 $ec->setLibelle($sae['libelle']);
-                $ec->setUe($this->structure[$keyParcours][$sae['semestre']['ordreLmd']]['ues'][$competence['competence']['numero']]);
+                $ec->setEcts($competence['coefficient']);
+                $ec->setUe($this->structure[$keyParcours][$sae['semestre']['ordreLmd']]['ues'][$competence['competence']['id']]);
                 $ec->setFicheMatiere($fm);
                 $ec->genereCode();
                 $this->entityManager->persist($ec);
 
                 //ajout des apprentissages critiques en fonction de l'UE
                 foreach ($sae['apcSaeApprentissageCritiques'] as $apprentissageCritique) {
-
                     $codeAc = $apprentissageCritique['apprentissageCritique']['code'];
-                    if ((int)substr($codeAc, 3,1) === $competence['competence']['numero']) {
+                    if ((int)substr($codeAc, 3, 1) === $competence['competence']['id']) {
                         $ac = $this->listeAcs[$codeAc];
                         $ac->addElementConstitutif($ec);
                         $ec->addApprentissagesCritique($ac);
@@ -642,7 +649,6 @@ class But
                                 }
                                 $totalPourcentage = 0;
                                 foreach ($tabMcccs as $key => $value) {
-
                                     // MCCC
                                     if ($sheet->getCell($key . $ligne)->getValue() !== '') {
                                         $mccc = new Mccc();
@@ -657,7 +663,6 @@ class But
                                         $this->entityManager->persist($mccc);
                                         $ec->addMccc($mccc);
                                     }
-
                                 }
 
                                 if ($totalPourcentage === 100.0) {
