@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.20](https://github.com/Dannebicque/oreof/compare/v1.12.19...v1.12.20) (2023-09-11)
+
+
+### Bug Fixes
+
+* BCC sur fiches globales ([8c510de](https://github.com/Dannebicque/oreof/commit/8c510def5ba6d46c6d81cf1bca2f13f49c6fd205))
+* BCC sur les EC enfants + amélioration lisibilité liste des EC ([60af636](https://github.com/Dannebicque/oreof/commit/60af63607316ca533580fce2a998dc5a00d33ed3))
+* lisibilité de la partie CFVU dans le process ([675246c](https://github.com/Dannebicque/oreof/commit/675246c66c22371f4ed4f38e1beed1827bd3dfe0))
+* Masquer le nb d'EC si UE enfants ([89cae68](https://github.com/Dannebicque/oreof/commit/89cae68810c7880f5b0fd1d455133fcdd81384be))
+* MCCC pourcentage null autorisé pour la saisie incomplète ([5bb6177](https://github.com/Dannebicque/oreof/commit/5bb61776e457f45fdf4c89db2903e9df5f97daa9))
+* Process de validation ([8d3f212](https://github.com/Dannebicque/oreof/commit/8d3f212c019bf314ab5a9d9171a2b036791a8e5a))
+* typo ([7c315b6](https://github.com/Dannebicque/oreof/commit/7c315b690e44f14d7ef166cb658198d7f1b0bf73))
+
 ### [1.12.19](https://github.com/Dannebicque/oreof/compare/v1.12.18...v1.12.19) (2023-09-11)
 
 
