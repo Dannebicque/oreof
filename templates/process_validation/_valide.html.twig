@@ -47,10 +47,10 @@
                         data-bs-original-title="{{ ('valide.'~process.label~'.helps.acceptation.non.directe.help')|trans({}, 'process') }}"></i>
             </label>
         </div>
-        <div class="form-check">
+        <div class="form-check ms-3">
             <input class="form-check-input" type="checkbox" value="true" id="sousReserveConseil" name="sousReserveConseil">
             <label class="form-check-label" for="sousReserveConseil">
-                <strong>{{ (process.label~'.valide.cas.sous.reserve.conseil.'~processData.placeTexte)|trans({}, 'process') }}</strong> <i
+                {{ (process.label~'.valide.cas.sous.reserve.conseil.'~processData.placeTexte)|trans({}, 'process') }} <i
                         class="fal fa-question-circle ms-1"
                         data-controller="tooltip"
                         data-tooltip-placement-value="bottom"
@@ -58,10 +58,10 @@
                         data-bs-original-title="{{ ('valide.'~process.label~'.helps.sous.reserve.conseil.help')|trans({}, 'process') }}"></i>
             </label>
         </div>
-            <div class="form-check">
+            <div class="form-check ms-3">
                 <input class="form-check-input" type="checkbox" value="true" id="sousReserveModifications" name="sousReserveModifications">
                 <label class="form-check-label" for="sousReserveModifications">
-                    <strong>{{ (process.label~'.valide.cas.sous.reserve.modifications.'~processData.placeTexte)|trans({}, 'process') }}</strong> <i
+                    {{ (process.label~'.valide.cas.sous.reserve.modifications.'~processData.placeTexte)|trans({}, 'process') }} <i
                             class="fal fa-question-circle ms-1"
                             data-controller="tooltip"
                             data-tooltip-placement-value="bottom"
