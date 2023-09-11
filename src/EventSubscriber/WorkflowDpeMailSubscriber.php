@@ -135,7 +135,7 @@ class WorkflowDpeMailSubscriber implements EventSubscriberInterface
         );
         $this->myMailer->sendMessage(
             [$formation->getResponsableMention()?->getEmail(), $formation->getCoResponsable()?->getEmail()],
-            '[ORéOF]  Votre formation a reçu des réserves par le DPE de votre composante'
+            '[ORéOF]  Votre formation a reçu des réserves du DPE de votre composante'
         );
     }
     public function onValideRf(Event $event)
