@@ -4,7 +4,23 @@
 <span class="badge bg-{{ processData.valid == true ? 'success' : 'danger' }}">
 {{ processData.valid == true ? "Parcours vérifié complet" : 'Parcours incomplet' }}
 </span> </p>
-<p>Vous pouvez vérifier l'état ici : <button>Vérifier</button></p>
+<p>Vous pouvez vérifier l'état ici :
+    <button
+            {{ stimulus_controller('modal', {
+                size: 'lg',
+                modalTitle: 'verifier.la.saisie.parcours.title'|trans({}, 'process'),
+                modalUrl: path('app_parcours_state', {parcours:objet.id}) }) }}
+            data-action="click->modal#openModal"
+            class="btn btn-outline-success btn-sm"
+            data-size="lg"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="{{ 'verifier.la.saisie.parcours.infobulle'|trans({}, 'process') }}"
+    >
+        <i class="fas fa-check"></i>
+        <span> Vérifier la saisie</span>
+    </button>
+</p>
 
 <h3>Fiches EC/matières du parcours</h3>
 <table class="table">
