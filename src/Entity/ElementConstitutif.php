@@ -429,7 +429,7 @@ class ElementConstitutif
             return $this->ficheMatiere->getLibelle();
         }
 
-        return $this->texteEcLibre;
+        return $this->texteEcLibre ?? $this->libelle ?? 'Aucun libellé';
     }
 
     public function getFicheMatiere(): ?FicheMatiere
