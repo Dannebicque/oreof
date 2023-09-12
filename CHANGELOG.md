@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.23](https://github.com/Dannebicque/oreof/compare/v1.12.22...v1.12.23) (2023-09-12)
+
+
+### Bug Fixes
+
+* clé traduction ([2fa190a](https://github.com/Dannebicque/oreof/commit/2fa190a720418f4e0082ab806e8724439f2a5023))
+* ECTS des UE prioritaires si non nul et > 0. ([8c2ed52](https://github.com/Dannebicque/oreof/commit/8c2ed52d73878242dd1831eda1f00929ce14f7f4))
+* ECTS sur BUT ([4d81b8c](https://github.com/Dannebicque/oreof/commit/4d81b8cd092f1979e3b37af33cf50743a0dfb16a))
+
 ### [1.12.22](https://github.com/Dannebicque/oreof/compare/v1.12.21...v1.12.22) (2023-09-11)
 
 
