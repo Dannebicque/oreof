@@ -21,7 +21,7 @@ use Symfony\Component\Workflow\Event\Event;
 
 class WorkflowDpeMailSubscriber implements EventSubscriberInterface
 {
-    public const EMAIL_CENTRAL = 'cfvu@univ-reims.fr'; //todo: a mettre sur établissement ?
+    public const EMAIL_CENTRAL = 'cfvu-secretariat@univ-reims.fr'; //todo: a mettre sur établissement ?
 
     public function __construct(
         protected UserRepository       $userRepository,
