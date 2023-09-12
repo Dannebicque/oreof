@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.24](https://github.com/Dannebicque/oreof/compare/v1.12.23...v1.12.24) (2023-09-12)
+
+
+### Bug Fixes
+
+* Clés traductions ([e0e806e](https://github.com/Dannebicque/oreof/commit/e0e806e72b80641ed11be12e3942b16b216df3bd))
+* Mail CFVU ([e548164](https://github.com/Dannebicque/oreof/commit/e5481648c79d6174546bea8bcb039a573f47f3ec))
+* Régime Inscription ([0d310f9](https://github.com/Dannebicque/oreof/commit/0d310f96db663c0fcd2d27c8fc8003b9dd43807a))
+
 ### [1.12.23](https://github.com/Dannebicque/oreof/compare/v1.12.22...v1.12.23) (2023-09-12)
 
 
