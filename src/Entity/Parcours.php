@@ -529,7 +529,11 @@ class Parcours
 
         $t = [];
         foreach ($this->regimeInscription as $value) {
-            $t[] = RegimeInscriptionEnum::from($value);
+            if ($value instanceof RegimeInscriptionEnum) {
+                $t[] = $value;
+            } else {
+                $t[] = RegimeInscriptionEnum::from($value);
+            }
         }
 
         return $t;
