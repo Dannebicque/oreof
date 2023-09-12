@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.26](https://github.com/Dannebicque/oreof/compare/v1.12.25...v1.12.26) (2023-09-12)
+
+
+### Bug Fixes
+
+* PExport MCCC ([beb3f85](https://github.com/Dannebicque/oreof/commit/beb3f857a2924555b799f4876a8faa4d9fe0a064))
+* Process de validation ([5cd48e5](https://github.com/Dannebicque/oreof/commit/5cd48e55a60613837cc68359beade0d4bc980e6e))
+
 ### [1.12.25](https://github.com/Dannebicque/oreof/compare/v1.12.24...v1.12.25) (2023-09-12)
 
 
