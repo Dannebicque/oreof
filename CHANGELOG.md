@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.27](https://github.com/Dannebicque/oreof/compare/v1.12.26...v1.12.27) (2023-09-12)
+
+
+### Bug Fixes
+
+* Reserve sur parcours + refresh en live de l'historique ([5bec945](https://github.com/Dannebicque/oreof/commit/5bec94530a70c929c1181a4c8726a797e81b0396))
+
 ### [1.12.26](https://github.com/Dannebicque/oreof/compare/v1.12.25...v1.12.26) (2023-09-12)
 
 
