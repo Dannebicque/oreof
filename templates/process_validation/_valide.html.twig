@@ -7,12 +7,12 @@
 
     {% if process.hasDate %}
         <div>
-            <label for="date" class="form-label">{{ 'valide.'~process.label~'.date.label'|trans({}, 'process') }} <span class="required"></span> <i
+            <label for="date" class="form-label">{{ ('valide.'~process.label~'.date.label')|trans({}, 'process') }} <span class="required"></span> <i
                         class="fal fa-question-circle ms-1"
                         data-controller="tooltip"
                         data-tooltip-placement-value="bottom"
-                        aria-label="{{ 'valide.'~process.label~'.helps.date.help'|trans({}, 'process') }}"
-                        data-bs-original-title="{{ 'valide.'~process.label~'.helps.date.help'|trans({}, 'process') }}"></i></label>
+                        aria-label="{{ ('valide.'~process.label~'.helps.date.help')|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('valide.'~process.label~'.helps.date.help')|trans({}, 'process') }}"></i></label>
             <input type="date" name="date"
                    class="form-control"
                    id="date"
