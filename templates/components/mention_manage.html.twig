@@ -41,7 +41,7 @@
                             {% for key, etape in this.process %}
                                 {% if (etape.showOn is defined and this.type in etape.showOn) or etape.showOn is not defined %}
                                     {% set class = 'btn-muted' %}
-                                    {% if ((key == 'parcours' or key == 'parcours_rf') and isPlace('parcours', this.parcours, key)) or isPlace('dpe', this.formation, key) %}
+                                    {% if (this.type == 'parcours' and isPlace('parcours', this.parcours, key)) or (this.type == 'formation' and isPlace('dpe', this.formation, key)) %}
                                         {% set class = 'btn-info' %}
                                     {% else %}
                                         {% if this.type == 'parcours' %}

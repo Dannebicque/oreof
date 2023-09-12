@@ -10,6 +10,8 @@
 namespace App\Twig;
 
 use App\Classes\ValidationProcess;
+use App\Entity\HistoriqueFormation;
+use App\Entity\HistoriqueParcours;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -26,6 +28,7 @@ class HistoriqueExtension extends AbstractExtension
     {
         return [
                 new TwigFilter('etapeLabel', [$this, 'etapeLabel']),
+                new TwigFilter('etapeParams', [$this, 'etapeParams']),
                 new TwigFilter('etapeIcone', [$this, 'etapeIcone']),
             ];
     }
@@ -33,6 +36,19 @@ class HistoriqueExtension extends AbstractExtension
     public function etapeLabel(string $etape): string
     {
         return $this->validationProcess->getEtapeCle($etape, 'label');
+    }
+
+    public function etapeParams(HistoriqueParcours|HistoriqueFormation $historique): array
+    {
+        if ($historique instanceof HistoriqueParcours) {
+            return
+                ['%parcours%' => $historique->getParcours()?->getLibelle(),
+                 '%formation%' => $historique->getParcours()?->getFormation()?->getDisplayLong()];
+        }
+
+        if ($historique instanceof HistoriqueFormation) {
+            return ['%formation%' => $historique->getFormation()?->getDisplayLong()];
+        }
     }
 
     public function etapeIcone(string $etape): string

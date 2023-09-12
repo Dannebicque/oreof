@@ -8,6 +8,7 @@ use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
 use App\Repository\HistoriqueFormationRepository;
+use App\Repository\HistoriqueParcoursRepository;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
@@ -69,6 +70,7 @@ final class MentionManageComponent
 
     public function __construct(
         private HistoriqueFormationRepository    $historiqueFormationRepository,
+        private HistoriqueParcoursRepository    $historiqueParcoursRepository,
         private ValidationProcess                $validationProcess,
         #[Target('dpe')]
         private WorkflowInterface                $dpeWorkflow,
@@ -108,20 +110,23 @@ final class MentionManageComponent
         if ($this->type === 'formation') {
             $this->typeDiplome = $this->formation->getTypeDiplome();
             $place = $this->getPlace($this->type);
+            $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->formation], ['created' => 'DESC']);
+            foreach ($historiques as $historique) {
+                $this->historiques[$historique->getEtape()] = $historique;
+            }
         } elseif ($this->type === 'parcours') {
             $this->typeDiplome = $this->parcours?->getFormation()->getTypeDiplome();
             $this->formation = $this->parcours?->getFormation();
             $place = $this->getPlace($this->type);
+            $historiques = $this->historiqueParcoursRepository->findBy(['parcours' => $this->parcours], ['created' => 'DESC']);
+            foreach ($historiques as $historique) {
+                $this->historiques[$historique->getEtape()] = $historique;
+            }
         } elseif ($this->type === 'ficheMatiere') {
             $this->typeDiplome = $this->ficheMatiere->getParcours()->getFormation()->getTypeDiplome();
             $this->parcours = $this->ficheMatiere->getParcours();
             $this->formation = $this->parcours->getFormation();
 
-        }
-
-        $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->formation], ['created' => 'DESC']);
-        foreach ($historiques as $historique) {
-            $this->historiques[$historique->getEtape()] = $historique;
         }
 
         // dépend du type et de l'étape...

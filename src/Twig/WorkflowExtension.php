@@ -103,6 +103,10 @@ class WorkflowExtension extends AbstractExtension
             return true;
         }
 
+        if (array_key_exists('soumis_parcours',$actualPlaces) && $entity instanceof Parcours && $place==='parcours_rf') {
+            return true;
+        }
+
         if (array_key_exists($place,$actualPlaces)) {
             return true;
         }
