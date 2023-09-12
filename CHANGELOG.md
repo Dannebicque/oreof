@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.25](https://github.com/Dannebicque/oreof/compare/v1.12.24...v1.12.25) (2023-09-12)
+
+
+### Bug Fixes
+
+* bouton vers la vérification depuis valide parcours (A faire ouvrir une deuxième modal et pas remplacer) ([14abddc](https://github.com/Dannebicque/oreof/commit/14abddc91af0f96d5be813dd9f1b6b4ac2375a24))
+* Historique avec parcours sur formation + process ([9ed034f](https://github.com/Dannebicque/oreof/commit/9ed034ff7eccda38a53ef0bf872c8921eef06ead))
+* Libelle EC null ([dc51be3](https://github.com/Dannebicque/oreof/commit/dc51be3166d2f5b2eaac09ec61e8e168f9475ab0))
+* RegimeInscription enum sur parcours ([66739c0](https://github.com/Dannebicque/oreof/commit/66739c06c5010274207f0bcf1a348d112032f326))
+
 ### [1.12.24](https://github.com/Dannebicque/oreof/compare/v1.12.23...v1.12.24) (2023-09-12)
 
 
