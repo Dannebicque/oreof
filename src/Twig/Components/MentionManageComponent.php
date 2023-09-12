@@ -85,6 +85,7 @@ final class MentionManageComponent
     {
         $place = $this->getPlace($this->type);
         $this->etape = self::TAB[$place] ?? $this->type;
+        $this->getHistorique();
         $this->event = 'valide';
     }
 
@@ -101,7 +102,32 @@ final class MentionManageComponent
     {
         $place = $this->getPlace($this->type);
         $this->etape = self::TAB[$place] ?? $this->type;
-        $this->event = 'valide';
+        $this->getHistorique();
+        $this->event = 'refuse';
+    }
+
+    #[LiveListener('mention_manage:reserve')]
+    public function reserve(): void
+    {
+        $place = $this->getPlace($this->type);
+        $this->etape = self::TAB[$place] ?? $this->type;
+        $this->getHistorique();
+        $this->event = 'reserve';
+    }
+
+    private function getHistorique() : void
+    {
+        if ($this->type === 'formation') {
+            $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->formation], ['created' => 'ASC']);
+            foreach ($historiques as $historique) {
+                $this->historiques[$historique->getEtape()] = $historique;
+            }
+        } elseif ($this->type === 'parcours') {
+            $historiques = $this->historiqueParcoursRepository->findBy(['parcours' => $this->parcours], ['created' => 'ASC']);
+            foreach ($historiques as $historique) {
+                $this->historiques[$historique->getEtape()] = $historique;
+            }
+        }
     }
 
     #[PostMount]
@@ -110,24 +136,18 @@ final class MentionManageComponent
         if ($this->type === 'formation') {
             $this->typeDiplome = $this->formation->getTypeDiplome();
             $place = $this->getPlace($this->type);
-            $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->formation], ['created' => 'DESC']);
-            foreach ($historiques as $historique) {
-                $this->historiques[$historique->getEtape()] = $historique;
-            }
         } elseif ($this->type === 'parcours') {
             $this->typeDiplome = $this->parcours?->getFormation()->getTypeDiplome();
             $this->formation = $this->parcours?->getFormation();
             $place = $this->getPlace($this->type);
-            $historiques = $this->historiqueParcoursRepository->findBy(['parcours' => $this->parcours], ['created' => 'DESC']);
-            foreach ($historiques as $historique) {
-                $this->historiques[$historique->getEtape()] = $historique;
-            }
         } elseif ($this->type === 'ficheMatiere') {
             $this->typeDiplome = $this->ficheMatiere->getParcours()->getFormation()->getTypeDiplome();
             $this->parcours = $this->ficheMatiere->getParcours();
             $this->formation = $this->parcours->getFormation();
 
         }
+
+        $this->getHistorique();
 
         // dépend du type et de l'étape...
         $this->etape = self::TAB[$place] ?? $this->type;

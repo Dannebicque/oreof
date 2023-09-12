@@ -1,3 +1,4 @@
+#bin/console workflow:dump parcours | dot -Tpng -o graph.png
 framework:
     workflows:
         dpe:
@@ -111,7 +112,7 @@ framework:
                 - 'autorisation_saisie'
                 - 'en_cours_redaction'
                 - 'soumis_parcours'
-                - 'reserve_parcours_rf'
+                #- 'reserve_parcours_rf'
                 - 'valide_parcours_rf'
             transitions:
                 initialiser:
@@ -125,7 +126,7 @@ framework:
                     to: 'soumis_parcours'
                 reserver_rf:
                     from: 'soumis_parcours'
-                    to: 'reserve_parcours_rf'
+                    to: 'en_cours_redaction'
                 valider_rf:
                     from: 'soumis_parcours'
                     to: 'valide_parcours_rf'
