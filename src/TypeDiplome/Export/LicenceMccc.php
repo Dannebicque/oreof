@@ -14,9 +14,12 @@ use App\DTO\TotalVolumeHeure;
 use App\Entity\AnneeUniversitaire;
 use App\Entity\ElementConstitutif;
 use App\Entity\Formation;
+use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\TypeEpreuveRepository;
+use App\TypeDiplome\Source\LicenceTypeDiplome;
+use App\Utils\Tools;
 use DateTimeInterface;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -60,7 +63,6 @@ class LicenceMccc
     public const COL_LANGUE_EC = 8;
     public const COL_SUPPORT_ANGLAIS = 9;
     public const COL_TYPE_EC = 10;
-    // const COL_OBLIGATOIRE_OPTIONNEL = 11;
     public const COL_COURS_MUTUALISE = 11;
     public const COL_COMPETENCES = 12;
     public const COL_ECTS = 13;
@@ -73,18 +75,17 @@ class LicenceMccc
     public const COL_HEURES_DIST_TD = 19;
     public const COL_HEURES_DIST_TP = 20;
     public const COL_HEURES_DIST_TOTAL = 21;
-    public const COL_HEURES_AUTONOMIE = 22;
-    public const COL_HEURES_TOTAL = 23;
-    public const COL_MCCC_CC_POUCENTAGE = 24;
-    public const COL_MCCC_CC_NB_EPREUVE = 25;
-    public const COL_MCCC_ET_POUCENTAGE = 26;
-    public const COL_MCCC_ET_TYPE_EPREUVE = 27;
-    public const COL_MCCC_ET_DUREE_EPREUVE = 28;
-    public const COL_MCCC_CCI_EPREUVES = 29;
-    public const COL_MCCC_SECONDE_CHANCE = 30;
-    public const COL_MCCC_DUREE_SECONDE_CHANCE = 31;
-    const COL_DETAIL_TYPE_EPREUVES = "A24";
+    public const COL_HEURES_AUTONOMIE = 23;
+    public const COL_HEURES_TOTAL = 22;
+    public const COL_MCCC_CCI = 24;
+    public const COL_MCCC_CC = 25;
+    public const COL_MCCC_CT = 26;
+    public const COL_MCCC_SECONDE_CHANCE_CC_SANS_TP = 27;
+    public const COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP = 28;
+    public const COL_MCCC_SECONDE_CHANCE_CC_SUP_10 = 29;
+    public const COL_MCCC_SECONDE_CHANCE_CT = 30;
 
+    const COL_DETAIL_TYPE_EPREUVES = "A25";
 
     protected array $typeEpreuves = [];
     private bool $versionFull = true;
@@ -201,9 +202,14 @@ class LicenceMccc
                 $totalAnnee = new TotalVolumeHeure();
                 $this->excelWriter->setSheet($clonedWorksheet);
                 $this->excelWriter->writeCellName(self::CEL_ANNEE_ETUDE, $i . ' année');
-                foreach ($tabSemestresAnnee[$i] as $semestre) {
+                foreach ($tabSemestresAnnee[$i] as $ordreAnnee => $semestre) {
                     $debutSemestre = $ligne;
                     foreach ($semestre->getSemestre()->getUes() as $ue) {
+                        if ($ue->getUeRaccrochee() !== null) {
+                            $ue = $ue->getUeRaccrochee()->getUe();
+                            //todo: permet de récupérer les EC et les heures associées... mais c'est pas top logiquement !==
+                        }
+
                         //UE
                         if ($ue->getUeParent() === null) {
                             $debut = $ligne;
@@ -240,10 +246,16 @@ class LicenceMccc
                                 $this->excelWriter->borderOutsiteInside(self::COL_HEURES_AUTONOMIE, $debut, self::COL_HEURES_AUTONOMIE, $ligne - 1);
                                 $this->excelWriter->borderOutsiteInside(self::COL_HEURES_TOTAL, $debut, self::COL_HEURES_TOTAL, $ligne - 1);
 
-                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_CC_POUCENTAGE, $debut, self::COL_MCCC_CC_NB_EPREUVE, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_ET_POUCENTAGE, $debut, self::COL_MCCC_ET_DUREE_EPREUVE, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_CCI_EPREUVES, $debut, self::COL_MCCC_CCI_EPREUVES, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE, $debut, self::COL_MCCC_DUREE_SECONDE_CHANCE, $ligne - 1);
+                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_CCI, $debut, self::COL_MCCC_CCI, $ligne - 1);
+                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_CC, $debut, self::COL_MCCC_CC, $ligne - 1);
+                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_CT, $debut, self::COL_MCCC_CT, $ligne - 1);
+
+                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne - 1);
+
+                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne - 1);
+                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CT, $debut, self::COL_MCCC_SECONDE_CHANCE_CT, $ligne - 1);
+
+                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne - 1);
                             }
                             $this->excelWriter->writeCellXY(self::COL_UE, $debut, $ue->display($parcours), ['wrap' => true]);
                             $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $debut, $ue->getLibelle(), ['wrap' => true]);
@@ -257,6 +269,7 @@ class LicenceMccc
                                         }
                                     }
                                 }
+                                //todo: gérer l'affichage mutualisé sur les EC (en fonction ds données et pas du champs ? ou mise à jour du champs et gestion en BDD ?
 
                                 if ($debut < $ligne - 1) {
                                     $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
@@ -271,7 +284,7 @@ class LicenceMccc
                     //todo: gérer les UE et EC raccrocchées
 
                     $this->excelWriter->mergeCellsCaR(self::COL_SEMESTRE, $debutSemestre, self::COL_SEMESTRE, $ligne - 1);
-                    $this->excelWriter->writeCellXY(self::COL_SEMESTRE, $debutSemestre, 'S' . $semParc->getOrdre());
+                    $this->excelWriter->writeCellXY(self::COL_SEMESTRE, $debutSemestre, 'S' . $this->getNumSemestre($i, $ordreAnnee));
 
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $totalAnnee->totalCmPresentiel, ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $totalAnnee->totalTdPresentiel, ['style' => 'HORIZONTAL_CENTER']);
@@ -302,8 +315,10 @@ class LicenceMccc
         //supprimer la feuille de modèle
         $spreadsheet->removeSheetByIndex(0);
         $spreadsheet->setActiveSheetIndex(0);
+        $spreadsheet->getActiveSheet()->setSelectedCells('A1');
         $this->excelWriter->setSpreadsheet($spreadsheet, true);
-        $this->fileName = substr('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle(), 0, 30);
+
+        $this->fileName = Tools::FileName('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle(), 40);
     }
 
     public function exportExcelLicenceMccc(
@@ -340,6 +355,7 @@ class LicenceMccc
 
     public function getMcccs(ElementConstitutif $elementConstitutif): array
     {
+        //todo: a mutualiser avec le code dans LicenceTypeDiplome
         $mcccs = $elementConstitutif->getMcccs();
         $tabMcccs = [];
 
@@ -352,9 +368,9 @@ class LicenceMccc
                 if ($mccc->isSecondeChance()) {
                     $tabMcccs[3]['chance'] = $mccc;
                 } elseif ($mccc->isControleContinu() === true && $mccc->isExamenTerminal() === false) {
-                    $tabMcccs[$mccc->getNumeroSession()]['cc'] = $mccc;
+                    $tabMcccs[$mccc->getNumeroSession()]['cc'][$mccc->getNumeroEpreuve() ?? 1] = $mccc;
                 } elseif ($mccc->isControleContinu() === false && $mccc->isExamenTerminal() === true) {
-                    $tabMcccs[$mccc->getNumeroSession()]['et'] = $mccc;
+                    $tabMcccs[$mccc->getNumeroSession()]['et'][$mccc->getNumeroEpreuve() ?? 1] = $mccc;
                 }
             }
         }
@@ -464,13 +480,25 @@ class LicenceMccc
 
         switch ($ec->getTypeMccc()) {
             case 'cc':
-                $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, '100%');
-                $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, 2);
-                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()) . ' (' . $mcccs[2]['et']->getPourcentage() . '%)');
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_DUREE_SECONDE_CHANCE, $ligne, $this->displayDuree($mcccs[2]['et']->getDuree()));
-                } else {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, 'Erreur');
+                $texte = '';
+                $nb = 1;
+                foreach ($mcccs[1]['cc'] as $mccc) {
+                    for($i = 1; $i <= $mccc->getNbEpreuves(); $i++) {
+                        $texte .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
+                        $nb++;
+                    }
+                }
+                $texte = substr($texte, 0, -2);
+                $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
+
+                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && is_array($mcccs[2]['et'])) {
+                    $texte = '';
+                    foreach ($mcccs[2]['et'] as $mccc) {
+                        $texte .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                    }
+
+                    $texte = substr($texte, 0, -2);
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texte);
                 }
                 break;
             case 'cci':
@@ -479,51 +507,60 @@ class LicenceMccc
                     $texte .= 'cc' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
                 }
                 $texte = substr($texte, 0, -2);
-                $this->excelWriter->writeCellXY(self::COL_MCCC_CCI_EPREUVES, $ligne, $texte);
+                $this->excelWriter->writeCellXY(self::COL_MCCC_CCI, $ligne, $texte);
 
                 break;
             case 'cc_ct':
                 if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1]) && $mcccs[1]['cc'] !== null) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, $mcccs[1]['cc']->getPourcentage() . '%');
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, $mcccs[1]['cc']->getNbEpreuves());
-                } else {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_POUCENTAGE, $ligne, 'Erreur');
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC_NB_EPREUVE, $ligne, 'Erreur');
+                    $texte = '';
+                    foreach ($mcccs[1]['cc'] as $mccc) {
+                        $texte .= 'CC' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
+                    }
+                    $texte = substr($texte, 0, -2);
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
                 }
 
                 if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, $mcccs[1]['et']->getPourcentage() . '%');
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_DUREE_EPREUVE, $ligne, $this->displayDuree($mcccs[1]['et']->getDuree()));
-                } else {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, 'Erreur');
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, 'Erreur');
+                    $texteEpreuve = '';
+                    foreach ($mcccs[1]['et'] as $mccc) {
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                    }
+
+                    $texteEpreuve = substr($texteEpreuve, 0, -2);
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_CT, $ligne, $texteEpreuve);
                 }
 
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()) . ' (' . $mcccs[2]['et']->getPourcentage() . '%)');
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_DUREE_SECONDE_CHANCE, $ligne, $this->displayDuree($mcccs[2]['et']->getDuree()));
-                } else {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, 'Erreur');
+                    $texteEpreuve = '';
+                    foreach ($mcccs[2]['et'] as $mccc) {
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                    }
+
+                    $texteEpreuve = substr($texteEpreuve, 0, -2);
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texteEpreuve);
                 }
                 break;
             case 'ct':
-                $this->excelWriter->writeCellXY(self::COL_MCCC_ET_POUCENTAGE, $ligne, '100%');
                 if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, $this->displayTypeEpreuve($mcccs[1]['et']->getTypeEpreuve()));
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_DUREE_EPREUVE, $ligne, $this->displayDuree($mcccs[1]['et']->getDuree()));
-                } else {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_ET_TYPE_EPREUVE, $ligne, 'Erreur');
+                    $texteEpreuve = '';
+                    foreach ($mcccs[1]['et'] as $mccc) {
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                    }
+
+                    $texteEpreuve = substr($texteEpreuve, 0, -2);
+
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_CT, $ligne, $texteEpreuve);
                 }
 
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, $this->displayTypeEpreuve($mcccs[2]['et']->getTypeEpreuve()) . ' (' . $mcccs[2]['et']->getPourcentage() . '%)');
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_DUREE_SECONDE_CHANCE, $ligne, $this->displayDuree($mcccs[2]['et']->getDuree()));
-                } else {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE, $ligne, 'Erreur');
+                    $texteEpreuve = '';
+                    foreach ($mcccs[2]['et'] as $mccc) {
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                    }
+
+                    $texteEpreuve = substr($texteEpreuve, 0, -2);
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CT, $ligne, $texteEpreuve);
                 }
-
-
                 break;
         }
 
@@ -615,5 +652,54 @@ class LicenceMccc
         }
 
         return $duree->format('H\hi');
+    }
+
+    private function getNumSemestre(int $i, int|string $ordreAnnee): int
+    {
+        //$i => 1, 2 ou 3
+        //$ordreAnnee => 1 ou 2
+        if ($i === 1) {
+            return $ordreAnnee;
+        } elseif ($i === 2) {
+            return $ordreAnnee + 2;
+        } elseif ($i === 3) {
+            return $ordreAnnee + 4;
+        } else {
+            return 'erreur';
+        }
+    }
+
+    private function displayTypeEpreuveWithDureePourcentage(Mccc $mccc): string
+    {
+        $texte = '';
+        foreach ($mccc->getTypeEpreuve() as $type) {
+            $duree = '';
+            if ($this->typeEpreuves[$type]->isHasDuree() === true) {
+                $duree = ' ' . $this->displayDuree($mccc->getDuree());
+            }
+            if ($type !== "" && $this->typeEpreuves[$type] !== null) {
+                $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . $mccc->getPourcentage() . '%); ';
+            } else {
+                $texte .= 'erreur épreuve; ';
+            }
+        }
+
+        return $texte;
+    }
+
+    private function displayTypeEpreuveWithDuree(Mccc $mccc)
+    {
+        $texte = '';
+        foreach ($mccc->getTypeEpreuve() as $type) {
+            if ($type !== "" && $this->typeEpreuves[$type] !== null) {
+                if ($this->typeEpreuves[$type]->isHasDuree() === true) {
+                    $texte .= $this->typeEpreuves[$type]->getSigle() . ' (' . $this->displayDuree($mccc->getDuree()) . '); ';
+                }
+            } else {
+                $texte .= 'erreur épreuve; ';
+            }
+        }
+
+        return $texte;
     }
 }
