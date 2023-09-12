@@ -1,6 +1,6 @@
 {{ component('alerte', {
     type: 'warning',
-    message: (process.label~'.reserve.alerte')|trans({}, 'process')
+    message: (process.label~'.reserve.alerte')|trans({}, 'process')|nl2br|raw
 }) }}
 
 <form action="{{ path('app_validation_reserve', {etape:etape, type:type, id:id}) }}" method="post">
@@ -23,8 +23,8 @@
     <label for="argumentaire" class="form-label">{{ ('reserve.'~process.label~'.argumentaire.label')|trans({}, 'process') }} <span class="required"></span><i class="fal fa-question-circle ms-1"
                                               data-controller="tooltip"
                                               data-tooltip-placement-value="bottom"
-                                              aria-label="{{ ('reserve.'~process.label~'.helps.date.help')|trans({}, 'process') }}"
-                                              data-bs-original-title="{{ ('reserve.'~process.label~'.helps.date.help')|trans({}, 'process') }}"></i></label>
+                                              aria-label="{{ ('reserve.'~process.label~'.helps.argumentaire.help')|trans({}, 'process') }}"
+                                              data-bs-original-title="{{ ('reserve.'~process.label~'.helps.argumentaire.help')|trans({}, 'process') }}"></i></label>
     <textarea name="argumentaire"
               class="form-control"
               required

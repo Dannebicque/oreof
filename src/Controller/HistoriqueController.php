@@ -14,8 +14,22 @@ class HistoriqueController extends AbstractController
     #[Route('/historique/formation/{formation}', name: 'app_historique_formation')]
     public function formation(Formation $formation): Response
     {
+        $historiques = [];
+        foreach ($formation->getParcours() as $parcours) {
+            $histo = $parcours->getHistoriqueParcours();
+            foreach ($histo as $h) {
+                $historiques[$h->getCreated()?->getTimestamp()] = $h;
+            }
+        }
+
+        $histo = $formation->getHistoriqueFormations();
+        foreach ($histo as $h) {
+            $historiques[$h->getCreated()?->getTimestamp()] = $h;
+        }
+        krsort($historiques);
+
         return $this->render('historique/_formation.html.twig', [
-            'historiques' => $formation->getHistoriqueFormations(),
+            'historiques' => $historiques,
             'formation' => $formation
         ]);
     }
@@ -26,12 +40,12 @@ class HistoriqueController extends AbstractController
         $historiques = [];
         $histo = $parcours->getHistoriqueParcours();
         foreach ($histo as $h) {
-            $historiques[$h->getCreated()?->getTimestamp()] = $h ;
+            $historiques[$h->getCreated()?->getTimestamp()] = $h;
         }
 
         $histo = $parcours->getFormation()?->getHistoriqueFormations();
         foreach ($histo as $h) {
-            $historiques[$h->getCreated()?->getTimestamp()] = $h ;
+            $historiques[$h->getCreated()?->getTimestamp()] = $h;
         }
         krsort($historiques);
 
@@ -48,7 +62,7 @@ class HistoriqueController extends AbstractController
         $historiques = [];
         $histo = $ficheMatiere->getHistoriqueFicheMatieres();
         foreach ($histo as $h) {
-            $historiques[$h->getCreated()?->format('dmYhis')] = $h ;
+            $historiques[$h->getCreated()?->format('dmYhis')] = $h;
         }
 
 //        $histo = $parcours->getFormation()->getHistoriqueFormations();

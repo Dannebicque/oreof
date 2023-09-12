@@ -39,7 +39,8 @@ export default class extends Controller {
 
         this.modal.hide()
 
-        if (this.updateComponent.length > 0) {
+        // tester si l'objet json updateComponent n'est pas vide et contient les clés id et event
+        if (Object.keys(this.updateComponent).length > 0 && this.updateComponent.id && this.updateComponent.event) {
           const component = document.getElementById(this.updateComponent.id).__component;
           component.emit(this.updateComponent.event);
         }

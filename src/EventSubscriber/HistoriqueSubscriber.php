@@ -85,7 +85,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         }
 
         //upload
-        if ($request->files->has('file')) {
+        if ($request->files->has('file') && $request->files->get('file') !== null) {
             $file = $request->files->get('file');
             $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
             $file->move(

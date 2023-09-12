@@ -1,6 +1,6 @@
 {{ component('alerte', {
     type: 'info',
-    message: (process.label~'.valide.alerte')|trans({}, 'process')
+    message: (process.label~'.valide.alerte')|trans({}, 'process')|nl2br|raw
 }) }}
 
 <form action="{{ path('app_validation_valide', {etape:etape, type:type, id:id}) }}" method="post">
