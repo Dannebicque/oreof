@@ -104,6 +104,8 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 
     public function saveMcccs(ElementConstitutif $elementConstitutif, InputBag $request): void
     {
+        $elementConstitutif->setEcts($request->get('ec_ects'));
+
         $type = $elementConstitutif->getFicheMatiere()->getTypeMatiere();
         $mcccs = $this->getMcccs($elementConstitutif);
         foreach ($this->typeEpreuves[$type] as $ep) {

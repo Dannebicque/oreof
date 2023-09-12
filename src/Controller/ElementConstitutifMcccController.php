@@ -87,7 +87,6 @@ class ElementConstitutifMcccController extends AbstractController
                         $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
                         $elementConstitutifRepository->save($elementConstitutif, true);
                         $typeD->clearMcccs($elementConstitutif);
-                        $typeD->initMcccs($elementConstitutif);
                     }
                 }
 
