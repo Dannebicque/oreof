@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.28](https://github.com/Dannebicque/oreof/compare/v1.12.27...v1.12.28) (2023-09-13)
+
+
+### Bug Fixes
+
+* Refuser DPE + Etat parcours ([2a59af0](https://github.com/Dannebicque/oreof/commit/2a59af05036ed2f98bd7bab51a90ea3f4b2b9b7c))
+
 ### [1.12.27](https://github.com/Dannebicque/oreof/compare/v1.12.26...v1.12.27) (2023-09-12)
 
 
