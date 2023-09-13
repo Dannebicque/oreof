@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.31](https://github.com/Dannebicque/oreof/compare/v1.12.30...v1.12.31) (2023-09-13)
+
+
+### Bug Fixes
+
+* Compétences sur fiche null ([fd8bc1e](https://github.com/Dannebicque/oreof/commit/fd8bc1e9a5f3714d0e077aa6d2223b3ec6312143))
+
 ### [1.12.30](https://github.com/Dannebicque/oreof/compare/v1.12.29...v1.12.30) (2023-09-13)
 
 
