@@ -29,7 +29,7 @@
                             {{ ('historique.laisserPasser.conseil')|trans(histo|etapeParams, 'process') }}
                         {% else %}
                             {{ ('historique.'~histo.etape|etapeLabel)|trans(histo|etapeParams, 'process') }}
-                            {% endif %}
+                        {% endif %}
                     </div>
                     {% if histo.complements.sousReserveModifications is defined %}
                         <span class="badge bg-warning ms-2">Sous réserve de modifications</span>
