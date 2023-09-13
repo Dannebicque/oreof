@@ -307,9 +307,10 @@ class ParcoursValide extends AbstractValide
             if ($sem !== null) {
                 foreach ($sem->getUes() as $ue) {
                     foreach ($ue->getElementConstitutifs() as $ec) {
-                        $tFiches[$ec->getId()]['ec'] = $ec;
-                        $tFiches[$ec->getId()]['fiche'] = $ec->getFicheMatiere();
-                        $tFiches[$ec->getId()]['etat'] = $ec->getFicheMatiere() !== null;
+                        if ($ec->getEcEnfants()->count() === 0 || !$ec->getNatureUeEc()?->isLibre() === false) {
+                            $tFiches[$ec->getId()]['ec'] = $ec;
+                            $tFiches[$ec->getId()]['fiche'] = $ec->getFicheMatiere();
+                        }
                     }
                 }
             }

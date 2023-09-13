@@ -138,6 +138,24 @@ class WorkflowDpeMailSubscriber implements EventSubscriberInterface
             '[ORéOF]  Votre formation a reçu des réserves du DPE de votre composante'
         );
     }
+
+    public function onRefuseDpeComposante(Event $event){
+        //mail au RF
+        /** @var Formation $formation */
+        $formation = $event->getSubject();
+        $context = $event->getContext();
+
+        //todo: check si le responsable de formation accepte le mail
+        $this->myMailer->initEmail();
+        $this->myMailer->setTemplate(
+            'mails/workflow/formation/refuse_dpe_composante.html.twig',
+            ['formation' => $formation, 'motif' => $context['motif']]
+        );
+        $this->myMailer->sendMessage(
+            [$formation->getResponsableMention()?->getEmail(), $formation->getCoResponsable()?->getEmail()],
+            '[ORéOF]  Votre formation a été refusée par le DPE de votre composante'
+        );
+    }
     public function onValideRf(Event $event)
     {
         /** @var Formation $formation */

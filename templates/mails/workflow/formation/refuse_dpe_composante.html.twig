@@ -1,0 +1,12 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour {{ formation.responsableMention.display }}, {% if formation.coResponsable != null %}{{ formation.coResponsable.display }}, {% endif %}</p>
+
+    <p>Votre formation <strong>{{ formation.displayLong }}</strong>, a été refusée par le
+        DPE de votre composante.</p>
+
+    <p>Le motif est :</p>
+
+    <p>{{ motif|raw }}</p>
+{% endblock %}

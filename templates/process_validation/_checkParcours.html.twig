@@ -1,9 +1,9 @@
 <h3>Etat du parcours</h3>
 
 <p>Vérification de l'état du parcours {{ objet.libelle }} :
-<span class="badge bg-{{ processData.valid == true ? 'success' : 'danger' }}">
+    <span class="badge bg-{{ processData.valid == true ? 'success' : 'danger' }}">
 {{ processData.valid == true ? "Parcours vérifié complet" : 'Parcours incomplet' }}
-</span> </p>
+</span></p>
 <p>Vous pouvez vérifier l'état ici :
     <button
             {{ stimulus_controller('modal', {
@@ -27,39 +27,41 @@
     <thead>
     <tr>
         <th>Sem. / UE</th>
+        <th>EC</th>
         <th>Libellé</th>
         <th>Etat de la fiche</th>
-        <th>Etat validation ?</th>
         <th>Voir et Valider</th>
     </tr>
 
     </thead>
     {% for val in processData.validation.fiches %}
         {% if val.fiche != null %}
-        <tr>
-            <td>{{ val.ec.ue.semestre.display }} {{ val.ec.ue.display(objet) }} </td>
-            <td>{{ val.ec.code }}  {{ val.ec.libelle }}</td>
-            <td>{{ val.fiche.libelle }}</td>
-            <td>
-                {{ val.etat|badgeBoolean }}
-            </td>
-            <td>
-{#                {% if val.fiche.etatParcours.valide_parcours_rf is defined %}#}
-{#                    <span class="badge bg-success">Validé RF</span>#}
-{#                {% else %}#}
-{#                    <span class="badge bg-danger">Non validé RF</span>#}
-{#                {% endif %}#}
-            </td>
-            <td>
-                <a href="{{ path('app_fiche_matiere_show', {slug:val.fiche.slug}) }}" class="btn btn-outline-info btn-sm">Voir la fiche EC/matière et valider</a>
-            </td>
-        </tr>
+            <tr>
+                <td>{{ val.ec.ue.semestre.display }} {{ val.ec.ue.display(objet) }} </td>
+                <td>{{ val.ec.code }}  {{ val.ec.libelle }}</td>
+                <td>{{ val.fiche.libelle }}</td>
+                <td>
+                    {% if val.fiche != null and val.fiche.libelle != null %}
+                        <span class="badge bg-success">Initiée</span>
+                    {% elseif val.fiche != null and val.fiche.libelle == null %}
+                        <span class="badge bg-warning">Non Initiée</span>
+                    {% else %}
+                        <span class="badge bg-danger">Manquante</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('app_fiche_matiere_show', {slug:val.fiche.slug}) }}"
+                       class="btn btn-outline-info btn-sm">Voir la fiche EC/matière et valider</a>
+                </td>
+            </tr>
         {% else %}
             <tr class="bg-warning">
                 <td class="text-white">{{ val.ec.ue.semestre.display }} {{ val.ec.ue.display(objet) }} </td>
                 <td class="text-white">{{ val.ec.code }} {{ val.ec.libelle }}</td>
-                <td class="text-center text-white" colspan="4">EC sans fiche</td>
+                <td class="text-center text-white" colspan="3">EC sans fiche</td>
             </tr>
         {% endif %}
     {% endfor %}
 </table>
+
+{{ component('alerte', {type:'info', message: 'Une fiche est initiée si elle est composée d\'un libellé au minimum.'}) }}

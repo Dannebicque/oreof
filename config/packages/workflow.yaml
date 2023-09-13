@@ -50,7 +50,7 @@ framework:
                     to: 'soumis_conseil'
                 reserver_dpe_composante:
                     from: 'soumis_dpe_composante'
-                    to: 'soumis_rf'
+                    to: 'en_cours_redaction'
                 refuser_conseil:
                     from: 'soumis_conseil'
                     to: 'refuse_conseil'

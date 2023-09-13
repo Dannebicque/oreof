@@ -9,7 +9,9 @@ use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
 use App\Repository\HistoriqueFormationRepository;
 use App\Repository\HistoriqueParcoursRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveListener;
@@ -18,7 +20,7 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 
 #[AsLiveComponent('mention_manage')]
-final class MentionManageComponent
+final class MentionManageComponent extends AbstractController
 {
     const TAB = [
         'initialisation_dpe' => 'formation',
@@ -69,24 +71,27 @@ final class MentionManageComponent
     public string $event = 'none';
 
     public function __construct(
-        private HistoriqueFormationRepository    $historiqueFormationRepository,
-        private HistoriqueParcoursRepository    $historiqueParcoursRepository,
-        private ValidationProcess                $validationProcess,
+        private HistoriqueFormationRepository $historiqueFormationRepository,
+        private HistoriqueParcoursRepository  $historiqueParcoursRepository,
+        private ValidationProcess             $validationProcess,
         #[Target('dpe')]
-        private WorkflowInterface                $dpeWorkflow,
+        private WorkflowInterface             $dpeWorkflow,
         #[Target('parcours')]
-        private WorkflowInterface                $parcoursWorkflow,
+        private WorkflowInterface             $parcoursWorkflow,
     ) {
         $this->process = $this->validationProcess->getProcess();
     }
 
     #[LiveListener('mention_manage:valide')]
-    public function valide(): void
+    public function valide(): Response
     {
         $place = $this->getPlace($this->type);
         $this->etape = self::TAB[$place] ?? $this->type;
         $this->getHistorique();
         $this->event = 'valide';
+
+        // si niveau parcours, formation ou composante, une fois validé => On redirige vers le show.
+        //return $this->redirectToRoute('app_formation_show', ['slug' => $this->formation->getSlug()]); //uniquement si RF ou DPE
     }
 
     #[LiveListener('mention_manage:edit')]
@@ -115,7 +120,7 @@ final class MentionManageComponent
         $this->event = 'reserve';
     }
 
-    private function getHistorique() : void
+    private function getHistorique(): void
     {
         if ($this->type === 'formation') {
             $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->formation], ['created' => 'ASC']);
@@ -144,7 +149,6 @@ final class MentionManageComponent
             $this->typeDiplome = $this->ficheMatiere->getParcours()->getFormation()->getTypeDiplome();
             $this->parcours = $this->ficheMatiere->getParcours();
             $this->formation = $this->parcours->getFormation();
-
         }
 
         $this->getHistorique();
