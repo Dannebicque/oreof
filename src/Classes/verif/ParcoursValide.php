@@ -247,12 +247,12 @@ class ParcoursValide extends AbstractValide
 
     public function verifierEtat($etat): bool
     {
-        foreach ($etat as $element) {
+        foreach ($etat as $key => $element) {
             if (is_array($element)) {
                 if (!$this->verifierEtat($element)) {
                     return false;
                 }
-            } elseif ($element !== self::COMPLET && $element !== self::NON_CONCERNE && $element !== "") {
+            } elseif ($element === self::INCOMPLET || $element === self::VIDE || $element === self::ERREUR) {
                 return false;
             }
         }
