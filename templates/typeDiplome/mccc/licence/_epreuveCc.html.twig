@@ -27,7 +27,7 @@
         <div class="form-check mb-2">
             <input class="form-check-input" type="checkbox" id="cc_has_tp_s1_cc{{ index }}"
                    name="cc_has_tp_s1_cc{{ index }}"
-                   {% if mcccs[1]['cc'][index].options is defined and mcccs[1]['cc'][index].options.cc_has_tp == "on" %}checked{% endif %} >
+                   {% if mcccs[1]['cc'][index].options is defined and mcccs[1]['cc'][index].options.cc_has_tp is defined and mcccs[1]['cc'][index].options.cc_has_tp == "on" %}checked{% endif %} >
             <label class="form-check-label"
                    for="cc_has_tp_s1_cc{{ index }}"> {{ 'mccc.licence.labels.cc_has_tp'|trans({}, 'form') }}
                 <i

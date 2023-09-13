@@ -482,6 +482,7 @@ class LicenceMccc
             case 'cc':
                 $texte = '';
                 $texteAvecTp = '';
+                $hasTp = false;
                 $pourcentageTp = 0;
                 $nb = 1;
                 foreach ($mcccs[1]['cc'] as $mccc) {
@@ -494,6 +495,7 @@ class LicenceMccc
                 $nb = 1;
                 foreach ($mcccs[1]['cc'] as $mccc) {
                     if ($mccc->hasTp()) {
+                        $hasTp = true;
                         $pourcentageTp += $mccc->pourcentageTp();
                         $texteAvecTp .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
                     }
@@ -501,7 +503,6 @@ class LicenceMccc
 
                 $texte = substr($texte, 0, -2);
                 $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
-                $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne, $texte);
 
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && is_array($mcccs[2]['et'])) {
                     $texte = '';
@@ -514,9 +515,9 @@ class LicenceMccc
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texte);
                 }
 
-
-
-                $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, $texteAvecTp);
+                if ($hasTp) {
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+',  $texteAvecTp));
+                }
 
                 break;
             case 'cci':
@@ -538,6 +539,18 @@ class LicenceMccc
                     $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
                 }
 
+                $texteAvecTp = '';
+                $pourcentageTp = 0;
+                $nb = 1;
+                $hasTp = false;
+                foreach ($mcccs[1]['cc'] as $mccc) {
+                    if ($mccc->hasTp()) {
+                        $hasTp= true;
+                        $pourcentageTp += $mccc->pourcentageTp();
+                        $texteAvecTp .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
+                    }
+                }
+
                 if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
                     $texteEpreuve = '';
                     foreach ($mcccs[1]['et'] as $mccc) {
@@ -552,11 +565,17 @@ class LicenceMccc
                     $texteEpreuve = '';
                     foreach ($mcccs[2]['et'] as $mccc) {
                         $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTp);
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texteEpreuve);
+                    if ($hasTp) {
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne, str_replace(';', '+',  $texteAvecTp));
+                    }
                 }
+
+                //on garde CC et on complète avec le reste de pourcentage de l'ET
                 break;
             case 'ct':
                 if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
@@ -602,7 +621,7 @@ class LicenceMccc
         $this->excelWriter->writeCellXY(self::COL_HEURES_TOTAL, $ligne, $ec->volumeTotal());
         $totalAnnee->addEc($ec);
 
-        $this->excelWriter->getRowAutosize($ligne);
+       // $this->excelWriter->getRowAutosize($ligne);
 
         $ligne++;
         //dump($ligne);
