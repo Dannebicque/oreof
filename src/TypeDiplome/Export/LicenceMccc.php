@@ -483,7 +483,7 @@ class LicenceMccc
                 $texte = '';
                 $nb = 1;
                 foreach ($mcccs[1]['cc'] as $mccc) {
-                    for($i = 1; $i <= $mccc->getNbEpreuves(); $i++) {
+                    for ($i = 1; $i <= $mccc->getNbEpreuves(); $i++) {
                         $texte .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
                         $nb++;
                     }
@@ -673,11 +673,12 @@ class LicenceMccc
     {
         $texte = '';
         foreach ($mccc->getTypeEpreuve() as $type) {
-            $duree = '';
-            if ($this->typeEpreuves[$type]->isHasDuree() === true) {
-                $duree = ' ' . $this->displayDuree($mccc->getDuree());
-            }
             if ($type !== "" && $this->typeEpreuves[$type] !== null) {
+                $duree = '';
+                if ($this->typeEpreuves[$type]->isHasDuree() === true) {
+                    $duree = ' ' . $this->displayDuree($mccc->getDuree());
+                }
+
                 $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . $mccc->getPourcentage() . '%); ';
             } else {
                 $texte .= 'erreur épreuve; ';
