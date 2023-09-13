@@ -83,13 +83,16 @@ final class MentionManageComponent extends AbstractController
     }
 
     #[LiveListener('mention_manage:valide')]
-    public function valide(): Response
+    public function valide(): void
     {
         $place = $this->getPlace($this->type);
         $this->etape = self::TAB[$place] ?? $this->type;
         $this->getHistorique();
         $this->event = 'valide';
+    }
 
+    public function redirige(): Response
+    {
         // si niveau parcours, formation ou composante, une fois validé => On redirige vers le show.
         //return $this->redirectToRoute('app_formation_show', ['slug' => $this->formation->getSlug()]); //uniquement si RF ou DPE
     }
