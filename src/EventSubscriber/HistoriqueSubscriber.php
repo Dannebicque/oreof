@@ -19,6 +19,7 @@ use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\UserRepository;
 use App\Utils\Tools;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,6 +78,9 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         foreach ($this->cases as $cas) {
             if ($request->request->has($cas)) {
                 $tab[$cas] = $request->request->get($cas);
+                if ($cas === 'laisserPasser') {
+                    $histo->setEtat('laisserPasser');
+                }
             }
 
             if ($request->request->has('argumentaire_'.$cas)) {
@@ -121,12 +125,12 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $this->entityManager->flush();
     }
 
-    private function getDateTime(Request $request): \DateTimeInterface|\DateTime
+    private function getDateTime(Request $request): ?DateTimeInterface
     {
         if ($request->request->has('date')) {
             $date = Tools::convertDate($request->request->get('date'));
         } else {
-            $date = new \DateTime();
+            $date = null;
         }
         return $date;
     }

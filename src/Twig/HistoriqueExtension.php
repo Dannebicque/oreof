@@ -47,7 +47,10 @@ class HistoriqueExtension extends AbstractExtension
         }
 
         if ($historique instanceof HistoriqueFormation) {
-            return ['%formation%' => $historique->getFormation()?->getDisplayLong()];
+            return [
+                '%formation%' => $historique->getFormation()?->getDisplayLong(),
+                '%date%' => $historique->getDate()?->format('d/m/Y'),
+            ];
         }
     }
 

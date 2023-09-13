@@ -11,7 +11,7 @@ final class HistoriquePvComponent
 {
     public ?Formation $formation = null;
     public bool $hasPv = false;
-    public ?string $pv = null;
+    public ?string $fichier = null;
 
     #[PostMount]
     public function postMount() {
@@ -20,7 +20,7 @@ final class HistoriquePvComponent
            if ($h->getEtape() === 'conseil') {
                if (array_key_exists('fichier', $h->getComplements())) {
                      $this->hasPv = true;
-                     $this->pv = $h->getComplements()['fichier'];
+                     $this->fichier = $h->getComplements()['fichier'];
                }
            }
         }

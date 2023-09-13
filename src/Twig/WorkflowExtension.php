@@ -54,6 +54,7 @@ class WorkflowExtension extends AbstractExtension
             {
                 'valide' => 'btn-success',
                 'reserve' => 'btn-warning',
+                'laisserPasser' => 'btn-warning',
                 'refuse' => 'btn-danger',
                 default => 'btn-muted',
             };

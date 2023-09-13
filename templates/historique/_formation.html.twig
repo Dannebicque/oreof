@@ -9,7 +9,10 @@
         {% set color='warning' %}
     {% endif %}
 
-    {% if histo.complements.sousReserveModifications is defined or histo.complements.sousReserveConseil is defined %}
+    {% if
+        histo.etape == 'laisserPasser' or
+        histo.complements.sousReserveModifications is defined or
+        histo.complements.sousReserveConseil is defined %}
     {% set color='warning' %}
     {% endif %}
     <div class="row g-0 align-items-center mb-2">
@@ -22,18 +25,25 @@
             <div class="row g-0">
                 <div class="col">
                     <div class="d-flex align-items-center lh-1-25">
-                        {{ ('historique.'~histo.etape|etapeLabel)|trans(histo|etapeParams, 'process') }}
-                        {% if histo.complements.sousReserveModifications is defined %}
-                            <span class="badge bg-warning ms-2">Sous réserve de modifications</span>
-                        {% endif %}
-                        {% if histo.complements.sousReserveConseil is defined %}
-                            <span class="badge bg-warning ms-2">Sous réserve de validation du conseil</span>
-                        {% endif %}
+                        {% if histo.etape == 'laisserPasser' %}
+                            {{ ('historique.laisserPasser.conseil')|trans(histo|etapeParams, 'process') }}
+                        {% else %}
+                            {{ ('historique.'~histo.etape|etapeLabel)|trans(histo|etapeParams, 'process') }}
+                            {% endif %}
                     </div>
+                    {% if histo.complements.sousReserveModifications is defined %}
+                        <span class="badge bg-warning ms-2">Sous réserve de modifications</span>
+                    {% endif %}
+                    {% if histo.complements.sousReserveConseil is defined %}
+                        <span class="badge bg-warning ms-2">Sous réserve de validation du conseil</span>
+                    {% endif %}
+                    {% if histo.etat == 'laisserPasser' %}
+                        <span class="badge bg-warning ms-2">Laissez-passer demandé</span>
+                    {% endif %}
                     <p class="text-small">par : {{ histo.user.display }}</p>
                 </div>
                 <div class="col-auto">
-                    <div class="sh-5 d-flex align-items-center">{{ histo.date|date('d/m/Y H:i') }}</div>
+                    <div class="sh-5 d-flex align-items-center">{{ histo.created|date('d/m/Y H:i') }}</div>
                 </div>
             </div>
             {% if histo.commentaire is defined or histo.complements.fichier is defined %}

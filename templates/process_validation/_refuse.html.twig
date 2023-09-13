@@ -29,7 +29,7 @@
         <div class="form-check mt-2">
             <input class="form-check-input" type="radio" value="projetARevoir" id="projetARevoir">
             <label class="form-check-label" for="projetARevoir">
-                {{ ('reserve.'~process.label~'.helps.projet.a.revoir.label')|trans({}, 'process') }} <i
+                <strong>{{ ('reserve.'~process.label~'.helps.projet.a.revoir.label')|trans({}, 'process') }}</strong> <i
                         class="fal fa-question-circle ms-1"
                         data-controller="tooltip"
                         data-tooltip-placement-value="bottom"
@@ -40,7 +40,7 @@
         <div class="form-check">
             <input class="form-check-input" type="radio" value="projetRefusDefinitif" id="projetRefusDefinitif">
             <label class="form-check-label" for="projetRefusDefinitif">
-                {{ ('reserve.'~process.label~'.helps.projet.refus.definitif.label')|trans({}, 'process') }} <i
+                <strong>{{ ('reserve.'~process.label~'.helps.projet.refus.definitif.label')|trans({}, 'process') }}</strong> <i
                         class="fal fa-question-circle ms-1"
                         data-controller="tooltip"
                         data-tooltip-placement-value="bottom"

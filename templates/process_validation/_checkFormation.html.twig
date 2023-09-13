@@ -26,7 +26,9 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{{ path('app_parcours_show', {id:val.parcours.id}) }}" class="btn btn-outline-info btn-sm">Voir le parcours et valider</a>
+                    <a href="{{ path('app_parcours_show', {id:val.parcours.id}) }}"
+                       target="_blank"
+                       class="btn btn-outline-info btn-sm">Voir le parcours et valider</a>
                 </td>
             </tr>
         {% endfor %}
