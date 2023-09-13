@@ -138,4 +138,22 @@ class FormationValide extends AbstractValide
 
         return $this;
     }
+
+    public function allSubmitted(): bool
+    {
+        foreach ($this->formation->getParcours() as $parcours) {
+            if (!(array_key_exists('soumis_parcours', $parcours->getEtatParcours()) || array_key_exists('soumis_parcours_rf', $parcours->getEtatParcours()))) {
+                return false;
+            }
+        }
+    }
+
+    public function allValidated(): bool
+    {
+        foreach ($this->formation->getParcours() as $parcours) {
+            if (!(array_key_exists('soumis_parcours_rf', $parcours->getEtatParcours()))) {
+                return false;
+            }
+        }
+    }
 }

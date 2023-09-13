@@ -38,6 +38,9 @@
                             </div>
                         </div>
                         <div class="col-{{ col_process }} d-flex align-items-center justify-content-center">
+                            {% if this.type == 'formation' and this.formation.isHasParcours == true %}
+                                {{ component('formation_parcours', {formation: this.formation}) }}
+                            {% endif %}
                             {% for key, etape in this.process %}
                                 {% if (etape.showOn is defined and this.type in etape.showOn) or etape.showOn is not defined %}
                                     {% set class = 'btn-muted' %}
