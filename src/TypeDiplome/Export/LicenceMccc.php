@@ -458,7 +458,7 @@ class LicenceMccc
 
             // BCC
             $texte = '';
-            if ($this->parcours->getId() === $ec->getFicheMatiere()->getParcours()->getId()) {
+            if ($this->parcours->getId() === $ec->getFicheMatiere()->getParcours()?->getId()) {
                 foreach ($ec->getFicheMatiere()->getCompetences() as $comp) {
                     $texte .= $comp->getCode() . "; ";
                 }
