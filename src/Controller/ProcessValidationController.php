@@ -51,12 +51,24 @@ class ProcessValidationController extends AbstractController
 
         $process = $this->validationProcess->getEtape($etape);
 //        $valid = true;
+        $laisserPasser = false;
         switch ($type) {
             case 'formation':
                 $objet = $formationRepository->find($id);
 
                 if ($objet === null) {
                     return JsonReponse::error('Formation non trouvée');
+                }
+
+                if ($etape === 'cfvu') {
+                    $histo = $objet->getHistoriqueFormations();
+                    foreach ($histo as $h) {
+                        if ($h->getEtape() === 'conseil' && $h->getEtat() === 'laisserPasser') {
+                            if ($laisserPasser === false || $laisserPasser->getCreated() < $h->getCreated()) {
+                                $laisserPasser = $h;
+                            }
+                        }
+                    }
                 }
 
                 $processData = $this->formationProcess->etatFormation($objet, $process);
@@ -93,6 +105,7 @@ class ProcessValidationController extends AbstractController
             'id' => $id,
             'etape' => $etape,
             'processData' => $processData ?? null,
+            'laisserPasser' => $laisserPasser,
         ]);
     }
 
