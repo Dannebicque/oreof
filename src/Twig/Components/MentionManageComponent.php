@@ -163,7 +163,7 @@ final class MentionManageComponent extends AbstractController
     public function dateHistorique(string $transition): string
     {
         if (array_key_exists($transition, $this->historiques)) {
-            return $this->historiques[$transition]->getCreated()->format('d/m/Y');
+            return $this->historiques[$transition]->getDate() !== null ? $this->historiques[$transition]->getDate()->format('d/m/Y') : $this->historiques[$transition]->getCreated()->format('d/m/Y');
         }
 
         return '- à venir -';
