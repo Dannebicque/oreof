@@ -34,7 +34,7 @@ abstract class Historique
     #[ORM\Column(length: 30)]
     private ?string $etape = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(nullable: true)]
