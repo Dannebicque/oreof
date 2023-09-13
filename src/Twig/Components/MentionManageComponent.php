@@ -135,6 +135,10 @@ final class MentionManageComponent extends AbstractController
             foreach ($historiques as $historique) {
                 $this->historiques[$historique->getEtape()] = $historique;
             }
+            $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->parcours->getFormation()], ['created' => 'ASC']);
+            foreach ($historiques as $historique) {
+                $this->historiques[$historique->getEtape()] = $historique;
+            }
         }
     }
 
