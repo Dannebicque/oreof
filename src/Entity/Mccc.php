@@ -205,4 +205,22 @@ class Mccc
 
         return $this;
     }
+
+    public function hasTp(): bool
+    {
+        if ($this->options === null) {
+            return false;
+        }
+        //regarde si la clé has_tp existe dans options et si c'est à on
+        return array_key_exists('cc_has_tp', $this->options) && $this->options['cc_has_tp'] === 'on';
+    }
+
+    public function pourcentageTp(): float
+    {
+        if ($this->options === null) {
+            return 0;
+        }
+        //regarde si la clé has_tp existe dans options et si c'est à on
+        return array_key_exists('pourcentage', $this->options) ? $this->options['pourcentage'] : 0;
+    }
 }

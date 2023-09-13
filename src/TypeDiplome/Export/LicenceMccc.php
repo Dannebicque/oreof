@@ -481,6 +481,8 @@ class LicenceMccc
         switch ($ec->getTypeMccc()) {
             case 'cc':
                 $texte = '';
+                $texteAvecTp = '';
+                $pourcentageTp = 0;
                 $nb = 1;
                 foreach ($mcccs[1]['cc'] as $mccc) {
                     for ($i = 1; $i <= $mccc->getNbEpreuves(); $i++) {
@@ -488,23 +490,39 @@ class LicenceMccc
                         $nb++;
                     }
                 }
+
+                $nb = 1;
+                foreach ($mcccs[1]['cc'] as $mccc) {
+                    if ($mccc->hasTp()) {
+                        $pourcentageTp += $mccc->pourcentageTp();
+                        $texteAvecTp .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
+                    }
+                }
+
                 $texte = substr($texte, 0, -2);
                 $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
+                $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne, $texte);
 
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && is_array($mcccs[2]['et'])) {
                     $texte = '';
                     foreach ($mcccs[2]['et'] as $mccc) {
                         $texte .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTp);
                     }
 
                     $texte = substr($texte, 0, -2);
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texte);
                 }
+
+
+
+                $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, $texteAvecTp);
+
                 break;
             case 'cci':
                 $texte = '';
                 foreach ($mcccs as $mccc) {
-                    $texte .= 'cc' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
+                    $texte .= 'CC' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
                 }
                 $texte = substr($texte, 0, -2);
                 $this->excelWriter->writeCellXY(self::COL_MCCC_CCI, $ligne, $texte);
@@ -680,6 +698,25 @@ class LicenceMccc
                 }
 
                 $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . $mccc->getPourcentage() . '%); ';
+            } else {
+                $texte .= 'erreur épreuve; ';
+            }
+        }
+
+        return $texte;
+    }
+
+    private function displayTypeEpreuveWithDureePourcentageTp(Mccc $mccc, float $pourcentage): string
+    {
+        $texte = '';
+        foreach ($mccc->getTypeEpreuve() as $type) {
+            if ($type !== "" && $this->typeEpreuves[$type] !== null) {
+                $duree = '';
+                if ($this->typeEpreuves[$type]->isHasDuree() === true) {
+                    $duree = ' ' . $this->displayDuree($mccc->getDuree());
+                }
+
+                $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . ($mccc->getPourcentage() - $pourcentage) . '%); ';
             } else {
                 $texte .= 'erreur épreuve; ';
             }
