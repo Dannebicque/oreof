@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.30](https://github.com/Dannebicque/oreof/compare/v1.12.29...v1.12.30) (2023-09-13)
+
+
+### Features
+
+* affichage barre de filtre VP ([b7d2592](https://github.com/Dannebicque/oreof/commit/b7d2592d38b0b3092e22d966d27b471dea3a5c6d))
+* affichage des états des parcours ([fae7358](https://github.com/Dannebicque/oreof/commit/fae735875984dc02b8e709bcc189d10dcbdabe05))
+* Gestion du PV et du cas LaissezPasser en conseil ([77a22be](https://github.com/Dannebicque/oreof/commit/77a22be0dc6c7528bc27f5ae5415098da32816ce))
+* si laissez-passer, pré-remplissage CFVU ([86c92cc](https://github.com/Dannebicque/oreof/commit/86c92cc2663a41a6ccd46721a251ae7fab909374))
+* Type épreuve null sur MCCC ([846c93c](https://github.com/Dannebicque/oreof/commit/846c93caf599be5a3a66ba1a1c8be7386cef9106))
+
+
+### Bug Fixes
+
+* affichage formation historique ([390e376](https://github.com/Dannebicque/oreof/commit/390e376c1ce3a1561fad26f2e0a4ca0aa9b71b02))
+* affichage historique complet sur parcours ([ffc366f](https://github.com/Dannebicque/oreof/commit/ffc366fa1f8ac71704d8b5354e0417f5f8ab3914))
+* Date null sur l'historique ([da4e0d2](https://github.com/Dannebicque/oreof/commit/da4e0d2cacd51cb507e561ad678bf25b972e99b0))
+* export MCCC ([2fb8546](https://github.com/Dannebicque/oreof/commit/2fb85465a3e4d1d2dff5da2ee07eccb586cfbc8d))
+* Lien vérifier + typo sur parcours ([ced9b69](https://github.com/Dannebicque/oreof/commit/ced9b695f758053863c262260d203d134e88a1a7))
+* parcours valide ([0f92bd6](https://github.com/Dannebicque/oreof/commit/0f92bd6f64dbfbf222e64bd31fc8c6ef872fcc36))
+* process validation ([e0db5e6](https://github.com/Dannebicque/oreof/commit/e0db5e6ee55ba194e7f2d3ec6f4e633ce0b0818e))
+* Utilisation de Date plutôt que created sur la timeline de validation ([f6306a8](https://github.com/Dannebicque/oreof/commit/f6306a856a14a0ec2f90f8817c376ac37a4a4b8b))
+
 ### [1.12.29](https://github.com/Dannebicque/oreof/compare/v1.12.28...v1.12.29) (2023-09-13)
 
 
