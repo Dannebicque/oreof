@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+    Ressources/SAE ECTS pour le parcours {{ parcours.libelle }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('app_parcours_index'), title: 'Liste des parcours'},
+        {href: path('app_formation_edit', {slug:parcours.formation.slug}), title: 'Formation : '~parcours.formation
+        .display},
+        {href: path('app_parcours_edit', {id:parcours.id}), title: 'Parcours : '~parcours.libelle},
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour au parcours"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour au parcours</span>
+    </a>
+{% endblock %}
+
+{% block content %}
+    <div class="card"
+            {{ stimulus_controller('parcours--ec', {
+                urlUpdate: path('app_parcours_ec_update', {parcours:parcours.id}),
+            }) }}
+    >
+        <div class="card-body">
+            <table class="table table-bordered table-hover">
+                {% for semParcours in parcours.semestreParcours %}
+                    <tr>
+                        <td colspan="{{ tabUes[semParcours.ordre]|length + 1 }}" class="text-center font-weight-bold">
+                            Semestre {{ semParcours.ordre }}</td>
+                    </tr>
+                    <tr>
+                        <td>Ec</td>
+                        {% for ue in tabUes[semParcours.ordre] %}
+                            <td>{{ ue.libelle }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>ECTS UE</td>
+                        {% for ue in tabUes[semParcours.ordre] %}
+                            <td>
+                                <input type="text" class="form-control" value="{{ ue.ects }}" name="ects_{{ ue.id }}"
+                                {{ stimulus_action('parcours--ec', 'updateEctsUe', 'change', {
+                                    field: 'ectsUE',
+                                    ue: ue.id,
+                                }) }}
+                                >
+                            </td>
+                        {% endfor %}
+                    </tr>
+                    {% for ec in tabEcs[semParcours.ordre] %}
+                        <tr>
+                            <td>{{ ec.ficheMatiere.sigle }} {{ ec.ficheMatiere.libelle }}</td>
+                            {% for ue in tabUes[semParcours.ordre] %}
+                                <td>
+                                    {% if tabEcUes[semParcours.ordre][ue.id][ec.ordre] is defined %}
+                                        <input type="text" class="form-control"
+                                                {{ stimulus_action('parcours--ec', 'updateEctsEc', 'change', {
+                                                    field: 'coeffEc',
+                                                    ec: tabEcUes[semParcours.ordre][ue.id][ec.ordre].id,
+                                                }) }}
+                                               value="{{ tabEcUes[semParcours.ordre][ue.id][ec.ordre].ects }}">
+                                        {% else %}
+                                            <span class="badge bg-muted">N.C.</span>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
+

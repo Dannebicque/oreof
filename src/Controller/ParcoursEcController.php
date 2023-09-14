@@ -7,6 +7,8 @@ use App\Entity\Parcours;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\TypeEcRepository;
+use App\Repository\UeRepository;
+use App\Utils\Tools;
 use Hoa\Visitor\Element;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,8 +74,43 @@ class ParcoursEcController extends AbstractController
         ]);
     }
 
+    #[Route('/parcours/ressources-sae/{parcours}/coeff', name: 'app_parcours_ressources_sae_but_coeff')]
+    public function ressourcesSaeCoeff(
+        Parcours               $parcours
+    )
+    {
+        $tabEcs = [];
+        $tabEcUes = [];
+        $tabUes = [];
+        foreach ($parcours->getSemestreParcours() as $semParc)
+        {
+            $tabEcs[$semParc->getOrdre()] = [];
+            foreach ($semParc->getSemestre()->getUes() as $ue)
+            {
+                $tabEcs[$semParc->getOrdre()] = [];
+                $tabEcUes[$semParc->getOrdre()][$ue->getId()] = [];
+                $tabUes[$semParc->getOrdre()][$ue->getId()] = $ue;
+                foreach ($ue->getElementConstitutifs() as $ec)
+                {
+                    $tabEcUes[$semParc->getOrdre()][$ue->getId()][$ec->getOrdre()] = $ec;
+                    $tabEcs[$semParc->getOrdre()][$ec->getId()] = $ec;
+                }
+            }
+        }
+
+
+
+        return $this->render('parcours_ec/ressources_saes_coeff.html.twig', [
+            'parcours' => $parcours,
+            'tabEcs' => $tabEcs,
+            'tabEcUes' => $tabEcUes,
+            'tabUes' => $tabUes,
+        ]);
+    }
+
     #[Route('/parcours/ec/{parcours}/update', name: 'app_parcours_ec_update')]
     public function updateParcoursEc(
+        UeRepository                 $ueRepository,
         ElementConstitutifRepository $ecRepository,
         TypeEcRepository             $typeEcRepository,
         Request                      $request,
@@ -81,14 +118,15 @@ class ParcoursEcController extends AbstractController
     ): Response
     {
         $field = $request->request->get('field');
-        $ec = $ecRepository->find($request->request->get('ec'));
 
-        if ($ec === null) {
-            return JsonReponse::error('EC introuvable');
-        }
 
         switch ($field) {
             case 'typeEc':
+                $ec = $ecRepository->find($request->request->get('ec'));
+
+                if ($ec === null) {
+                    return JsonReponse::error('EC introuvable');
+                }
                 $typeEc = $typeEcRepository->find($request->request->get('value'));
                 if ($typeEc === null) {
                     return JsonReponse::error('Type EC introuvable');
@@ -96,6 +134,26 @@ class ParcoursEcController extends AbstractController
                 $ec->setTypeEc($typeEc);
                 $ecRepository->save($ec, true);
                 return JsonReponse::success('Type EC mis à jour');
+            case 'ectsUE':
+                $ue = $ueRepository->find($request->request->get('ue'));
+
+                if ($ue === null) {
+                    return JsonReponse::error('UE introuvable');
+                }
+
+                $ue->setEcts(Tools::convertToFloat($request->request->get('value')));
+                $ueRepository->save($ue, true);
+                return JsonReponse::success('ECTS de l\'UE mis à jour');
+            case 'coeffEc':
+                $ec = $ecRepository->find($request->request->get('ec'));
+
+                if ($ec === null) {
+                    return JsonReponse::error('EC introuvable');
+                }
+
+                $ec->setEcts(Tools::convertToFloat($request->request->get('value')));
+                $ecRepository->save($ec, true);
+                return JsonReponse::success('ECTS de l\'EC mis à jour');
         }
     }
 }

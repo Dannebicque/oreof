@@ -9,6 +9,10 @@
             <i class="fas fa-check"></i>
             Contrôler les Ressources/SAE
         </a>
+        <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_ressources_sae_but_coeff', {parcours:parcours.id}) }}">
+            <i class="fas fa-check"></i>
+            Coeff. / UE / Ressources/SAE
+        </a>
     {% else %}
         <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_ec', {parcours:parcours.id}) }}">
             <i class="fas fa-check"></i>
@@ -20,10 +24,12 @@
         <i class="{{ iconDownload }}"></i>
         Export MCCC (xlsx)
     </a>
+    {% if parcours.formation.typeDiplome.libelleCourt != 'BUT' %}
     <a class="btn btn-outline-primary d-block mt-1"
        href="{{ path('app_parcours_mccc_export_light', {parcours:parcours.id, _format:'xlsx'}) }}">
         <i class="{{ iconDownload }}"></i>
         Export simplifié des MCCC (xlsx)
     </a>
+    {% endif %}
     {# todo: include du btn/export_mccc si block résolu #}
 </div>

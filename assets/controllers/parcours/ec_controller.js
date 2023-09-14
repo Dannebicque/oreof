@@ -28,4 +28,34 @@ export default class extends Controller {
       JsonResponse(response)
     })
   }
+
+  async updateEctsUe(event) {
+    const body = new FormData()
+    body.append('value', event.target.value)
+    body.append('field', event.params.field)
+    body.append('ue', event.params.ue)
+
+    await fetch(this.urlUpdateValue, {
+      method: 'POST',
+      body,
+    }).then((response) => {
+      // response.json()
+      JsonResponse(response)
+    })
+  }
+
+  async updateEctsEc(event) {
+    const body = new FormData()
+    body.append('value', event.target.value)
+    body.append('field', event.params.field)
+    body.append('ec', event.params.ec)
+
+    await fetch(this.urlUpdateValue, {
+      method: 'POST',
+      body,
+    }).then((response) => {
+      // response.json()
+      JsonResponse(response)
+    })
+  }
 }
