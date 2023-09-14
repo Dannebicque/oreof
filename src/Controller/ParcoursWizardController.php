@@ -9,14 +9,21 @@
 
 namespace App\Controller;
 
+use App\Classes\Bcc;
+use App\Classes\JsonReponse;
+use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\Form\ParcoursStep1Type;
 use App\Form\ParcoursStep2Type;
 use App\Form\ParcoursStep5Type;
 use App\Form\ParcoursStep6Type;
+use App\Repository\ComposanteRepository;
+use App\Repository\FicheMatiereMutualisableRepository;
+use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -84,6 +91,65 @@ class ParcoursWizardController extends AbstractController
             'parcours' => $parcours,
             'listeParcours' => $listeParcours,
         ]);
+    }
+
+    #[Route('/{parcours}/recopie/hors-formation', name: 'app_recopie_bcc_autre_formation', methods: ['GET'])]
+    public function recopieHorsParcours(
+        ComposanteRepository $composanteRepository,
+        Parcours $parcours,
+    ): Response {
+
+        $composantes = $composanteRepository->findAll();
+
+        return $this->render('parcours_wizard/_recopieHorsFormation.html.twig', [
+            'parcours' => $parcours,
+            'composantes' => $composantes,
+        ]);
+    }
+
+    #[Route('/{parcours}/recopie/hors-formation/ajax', name: 'app_recopie_bcc_autre_formation_ajax', methods: [
+        'POST',
+        'DELETE'
+    ])]
+    public function recopieHorsParcoursAjax(
+        BCC $bcc,
+        EntityManagerInterface $entityManager,
+        Request $request,
+        FormationRepository $formationRepository,
+        ParcoursRepository $parcoursRepository,
+        Parcours $parcours,
+    ): Response {
+        $data = JsonRequest::getFromRequest($request);
+        $t = [];
+        switch ($data['field']) {
+            case 'formation':
+                $formations = $formationRepository->findBy(['composantePorteuse' => $data['value']]);
+                foreach ($formations as $formation) {
+                    $t[] = [
+                        'id' => $formation->getId(),
+                        'libelle' => $formation->getDisplayLong()
+                    ];
+                }
+                break;
+            case 'parcours':
+                $allParcours = $parcoursRepository->findBy(['formation' => $data['value']]);
+                foreach ($allParcours as $parcour) {
+                    $t[] = [
+                        'id' => $parcour->getId(),
+                        'libelle' => $parcour->getLibelle()
+                    ];
+                }
+                break;
+            case 'save':
+                if (isset($data['parcours']) && $data['parcours'] !== '') {
+                    $bcc->recopieBcc($parcours, $data['parcours']);
+                    return JsonReponse::success('Recopie effectuée');
+                }
+
+                return JsonReponse::error('Erreur lors de la recopie des BCC');
+        }
+
+        return $this->json($t);
     }
 
     #[Route('/{parcours}/5', name: 'app_parcours_wizard_step_5', methods: ['GET'])]
