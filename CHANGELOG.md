@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.33](https://github.com/Dannebicque/oreof/compare/v1.12.32...v1.12.33) (2023-09-14)
+
+
+### Features
+
+* MCCC du BUT ([c1cbda5](https://github.com/Dannebicque/oreof/commit/c1cbda537b1ca71a923c19e5c6fb37e48a5b5c38))
+
 ### [1.12.32](https://github.com/Dannebicque/oreof/compare/v1.12.31...v1.12.32) (2023-09-14)
 
 
