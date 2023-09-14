@@ -41,7 +41,7 @@
                     <tr>
                         <td>Ec</td>
                         {% for ue in tabUes[semParcours.ordre] %}
-                            <td>{{ ue.libelle }}</td>
+                            <td>{{ ue.display(parcours) }}</td>
                         {% endfor %}
                     </tr>
                     <tr>

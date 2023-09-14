@@ -49,9 +49,16 @@
                                     <div class="row g-0 h-100 align-content-center">
                                         <div class="col-md-1 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">ue</div>
-                                            <p class="mt-0 mb-0">{% if ue.libelle != null %}<abbr
+                                            <p class="mt-0 mb-0">
+                                                {% if parcours.formation is defined and
+                                                    parcours.formation.typediplome.libelleCourt == 'BUT' %}
+                                                    {{ ue.display(parcours) }}
+                                                {% else %}
+                                                    {% if ue.libelle != null %}<abbr
                                                         title="{{ ue.libelle }}">{% endif %}
                                                     {{ ue.display(parcours) }}{% if ue.libelle != null %}</abbr>{% endif %}
+                                                {% endif %}
+
                                                 {% if ue.ueRaccrochee != null %}
                                                 <i class="fal fa-link"
                                                    data-controller="tooltip"
