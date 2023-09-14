@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.32](https://github.com/Dannebicque/oreof/compare/v1.12.31...v1.12.32) (2023-09-14)
+
+
+### Features
+
+* GEstion des BUT et pages simplifiées. ([93b504f](https://github.com/Dannebicque/oreof/commit/93b504f1dda1400bd88b3398757488f94f28fe44))
+
+
+### Bug Fixes
+
+* lien fiche EC ([09f526f](https://github.com/Dannebicque/oreof/commit/09f526f9afccfe0819ad0e7b7ff6a420ef76faa2))
+* MCCC ([79e0a2c](https://github.com/Dannebicque/oreof/commit/79e0a2c5eff37fb310918f413adda9728a860651))
+
 ### [1.12.31](https://github.com/Dannebicque/oreof/compare/v1.12.30...v1.12.31) (2023-09-13)
 
 
