@@ -1,30 +1,31 @@
 <div class="mb-2">
-{#    <label for="ec_step4_ects" class="form-label">#}
-{#        {{ 'ec_step4.but.labels.ects'|trans({}, 'form') }} #}{# todo: afficher l'UE '%ue%': ec.ue.display(parcours) #}
-{#        <span class="required"></span>#}
-{#        <i class="fal fa-question-circle ms-1" data-controller="tooltip"#}
-{#           data-tooltip-placement-value="bottom"#}
-{#           title="{{ 'ec_step4.but.helps.ects'|trans({}, 'help') }}"></i>#}
-{#    </label>#}
-{#    <div class="input-group">#}
-{#        <input type="number" id="ec_step4_ects" name="ec_ects"#}
-{#               value="{{ ec.ects }}" min="0" max="60"#}
-{#               required="required" data-action="" step="any" class="form-control">#}
-{#    </div>#}
-{#</div>#}
+    {#    <label for="ec_step4_ects" class="form-label"> #}
+    {#        {{ 'ec_step4.but.labels.ects'|trans({}, 'form') }} #}{# todo: afficher l'UE '%ue%': ec.ue.display(parcours) #}
+    {#        <span class="required"></span> #}
+    {#        <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
+    {#           data-tooltip-placement-value="bottom" #}
+    {#           title="{{ 'ec_step4.but.helps.ects'|trans({}, 'help') }}"></i> #}
+    {#    </label> #}
+    {#    <div class="input-group"> #}
+    {#        <input type="number" id="ec_step4_ects" name="ec_ects" #}
+    {#               value="{{ ec.ects }}" min="0" max="60" #}
+    {#               required="required" data-action="" step="any" class="form-control"> #}
+    {#    </div> #}
+    {# </div> #}
 
-<div {{ stimulus_controller('mccc--but') }}>
-    {% if ficheMatiere.typeMatiere == 'sae' %}
-        {{ include('typeDiplome/mccc/but/_sae.html.twig') }}
-    {% elseif ficheMatiere.typeMatiere == 'ressource' %}
-        {{ include('typeDiplome/mccc/but/_ressource.html.twig') }}
-    {% else %}
-        {{ component('Alerte', {
-            'type': 'danger',
-            'message': 'Le type de matière n\'est pas reconnu.'
-        }) }}
-    {% endif %}
-    <div {{ stimulus_target('mccc--but', 'erreur') }} id="erreur" class="mt-2">
+    <div {{ stimulus_controller('mccc--but') }}>
+        {% if ficheMatiere.typeMatiere == 'sae' %}
+            {{ include('typeDiplome/mccc/but/_sae.html.twig') }}
+        {% elseif ficheMatiere.typeMatiere == 'ressource' %}
+            {{ include('typeDiplome/mccc/but/_ressource.html.twig') }}
+        {% else %}
+            {{ component('Alerte', {
+                'type': 'danger',
+                'message': 'Le type de matière n\'est pas reconnu.'
+            }) }}
+        {% endif %}
+        <div {{ stimulus_target('mccc--but', 'erreur') }} id="erreur" class="mt-2">
 
+        </div>
     </div>
 </div>

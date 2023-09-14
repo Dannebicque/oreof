@@ -22,13 +22,23 @@
             <div class="col-8"></div>
         </div>
     {% endif %}
-
-    {% if ficheMatiere.typeMatiere == 'sae' %}
-        {{ include('typeDiplome/mccc/but/_sae.html.twig') }}
-    {% else %}
-        {{ include('typeDiplome/mccc/but/_ressource.html.twig') }}
-    {% endif %}
     {{ form_end(form) }}
+
+    <form method="post"
+          id="formMccc"
+          action="{{ path('app_element_constitutif_mccc_but', {id:ficheMatiere.id}) }}" {{ stimulus_controller('ec--mccc') }}>
+        {{ include('typeDiplome/mccc/but.html.twig') }}
+
+        <button type="button" class="btn btn-success"
+                {{ stimulus_action('fichematiere--step4','sauvegardeMccc', 'click') }}
+        >
+            <i class="fal fa-floppy-disk"></i>
+            Enregistrer
+        </button>
+
+        {{ component('alerte', {type:"info", message:'tous les champs avec un <span class="text-red">*</span> sont
+obligatoires'}) }}
+    </form>
 
     <div class="alert {% if ficheMatiere.getEtatStep(4) %}alert-success{% else %}alert-warning{% endif %} mt-2"
          id="alertEtatStructure">

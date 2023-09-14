@@ -11,6 +11,7 @@ import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import { calculEtatStep } from '../../js/calculEtatStep'
 import trixEditor from '../../js/trixEditor'
+import JsonResponse from '../../js/JsonResponse'
 
 export default class extends Controller {
   static targets = [
@@ -32,6 +33,19 @@ export default class extends Controller {
       action: 'float',
       value: event.target.value,
     })
+  }
+
+  sauvegardeMccc(event) {
+    event.preventDefault()
+    event.stopPropagation()
+    const form = document.getElementById('formMccc')
+    fetch(form.action, {
+      method: form.method,
+      body: new FormData(form),
+    })
+      .then((response) => {
+        JsonResponse(response)
+      })
   }
 
   etatStep(event) {

@@ -10,6 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\EcOrdre;
+use App\Classes\JsonReponse;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
@@ -132,7 +133,7 @@ class ElementConstitutifMcccController extends AbstractController
             $this->isGranted('CAN_PARCOURS_EDIT_MY', $ficheMatiere->getParcours())) { //todo: ajouter le workflow...
             if ($request->isMethod('POST')) {
                 $typeD->saveMcccs($ficheMatiere, $request->request);
-                return $this->json(true);
+                return JsonReponse::success('MCCCs enregistrés');
             }
 
             return $this->render('element_constitutif/_mcccEcModalBut.html.twig', [
