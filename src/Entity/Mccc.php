@@ -42,6 +42,9 @@ class Mccc
     #[ORM\ManyToOne(inversedBy: 'mcccs')]
     private ?ElementConstitutif $ec = null;
 
+    #[ORM\ManyToOne(inversedBy: 'mcccs')]
+    private ?FicheMatiere $ficheMatiere = null;
+
     #[ORM\Column]
     private ?bool $controleContinu = null;
 
@@ -222,5 +225,17 @@ class Mccc
         }
         //regarde si la clé has_tp existe dans options et si c'est à on
         return array_key_exists('pourcentage', $this->options) ? $this->options['pourcentage'] : 0;
+    }
+
+    public function getFicheMatiere(): ?FicheMatiere
+    {
+        return $this->ficheMatiere;
+    }
+
+    public function setFicheMatiere(?FicheMatiere $ficheMatiere): static
+    {
+        $this->ficheMatiere = $ficheMatiere;
+
+        return $this;
     }
 }

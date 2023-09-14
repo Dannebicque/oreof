@@ -14,11 +14,14 @@ use App\Entity\FicheMatiereMutualisable;
 use App\Form\FicheMatiereStep1Type;
 use App\Form\FicheMatiereStep2Type;
 use App\Form\FicheMatiereStep3Type;
+use App\Form\FicheMatiereStep4Type;
 use App\Repository\BlocCompetenceRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
+use App\Repository\TypeDiplomeRepository;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -192,6 +195,22 @@ class FicheMatiereWizardController extends AbstractController
             'bccs' => $bccs ,
             'ecBccs' => array_flip(array_unique($ecBccs)),
             'ecComps' => array_flip($ecComps),
+        ]);
+    }
+
+    #[Route('/{ficheMatiere}/4', name: 'app_fiche_matiere_wizard_step_4', methods: ['GET'])]
+    public function step4(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        FicheMatiere $ficheMatiere,
+    ): Response {
+        $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
+        $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
+        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+
+        return $this->render('fiche_matiere_wizard/_step4.html.twig', [
+            'mcccs' => $typeD->getMcccs($ficheMatiere),
+            'ficheMatiere' => $ficheMatiere,
+            'form' => $form->createView(),
         ]);
     }
 

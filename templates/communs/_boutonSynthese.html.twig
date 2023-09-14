@@ -4,10 +4,17 @@
         <i class="fas fa-check"></i>
         Contrôler les BCC
     </a>
-    <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_ec', {parcours:parcours.id}) }}">
-        <i class="fas fa-check"></i>
-        Contrôler les EC
-    </a>
+    {% if parcours.formation.typeDiplome.libelleCourt == 'BUT' %}
+        <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_ressources_sae_but', {parcours:parcours.id}) }}">
+            <i class="fas fa-check"></i>
+            Contrôler les Ressources/SAE
+        </a>
+    {% else %}
+        <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_ec', {parcours:parcours.id}) }}">
+            <i class="fas fa-check"></i>
+            Contrôler les EC
+        </a>
+    {% endif %}
     <a class="btn btn-outline-primary d-block mt-1"
        href="{{ path('app_parcours_mccc_export', {parcours:parcours.id, _format:'xlsx'}) }}">
         <i class="{{ iconDownload }}"></i>

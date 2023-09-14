@@ -15,6 +15,4 @@ use Symfony\Component\HttpFoundation\InputBag;
 
 interface TypeDiplomeInterface
 {
-    public function getMcccs(ElementConstitutif $elementConstitutif): array|Collection;
-    public function saveMcccs(ElementConstitutif $elementConstitutif, InputBag $request): void;
 }

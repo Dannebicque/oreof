@@ -10,6 +10,7 @@
 namespace App\TypeDiplome\Source;
 
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Mccc;
 use App\Entity\Parcours;
@@ -54,7 +55,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         parent::__construct($entityManager, $typeDiplomeRegistry);
     }
 
-    public function getMcccs(ElementConstitutif $elementConstitutif): array|Collection
+    public function getMcccs(FicheMatiere $elementConstitutif): array|Collection
     {
         $mcccs = $elementConstitutif->getMcccs();
         $tab = [];
@@ -97,17 +98,14 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         // TODO: Implement initMcccs() method.
     }
 
-    public function saveMccc(ElementConstitutif $elementConstitutif, string $field, mixed $value): void
-    {
-        // TODO: Implement saveMccc() method.
-    }
 
-    public function saveMcccs(ElementConstitutif $elementConstitutif, InputBag $request): void
+    public function saveMcccs(FicheMatiere $ficheMatiere, InputBag $request): void
     {
-        $elementConstitutif->setEcts($request->get('ec_ects'));
+    //    $elementConstitutif->setEcts($request->get('ec_ects'));
 
-        $type = $elementConstitutif->getFicheMatiere()->getTypeMatiere();
-        $mcccs = $this->getMcccs($elementConstitutif);
+        $type = $ficheMatiere->getTypeMatiere();
+        $total = 0.0;
+        $mcccs = $this->getMcccs($ficheMatiere);
         foreach ($this->typeEpreuves[$type] as $ep) {
             if ($request->has('pourcentage_' . $ep) && $request->has('nombre_' . $ep)) {
                 $pourcentage = $request->get('pourcentage_' . $ep);
@@ -119,6 +117,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
                     $mcccs[$ep]->setNumeroSession(1);
                     $mcccs[$ep]->setControleContinu(true);
                     $mcccs[$ep]->setExamenTerminal(false);
+                    $total += $mcccs[$ep]->getPourcentage() * $mcccs[$ep]->getNbEpreuves();
                 } else {
                     $mccc = new Mccc();
                     $mccc->setTypeEpreuve([$ep]);
@@ -129,10 +128,13 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
                     $mccc->setNumeroSession(1);
                     $mccc->setExamenTerminal(false);
                     $this->entityManager->persist($mccc);
-                    $elementConstitutif->addMccc($mccc);
+                    $ficheMatiere->addMccc($mccc);
+                    $total += $mccc->getPourcentage() * $mccc->getNbEpreuves();
                 }
             }
         }
+
+        $ficheMatiere->setEtatMccc($total === 100.0 ? 'Complet' : 'Incomplet');
         $this->entityManager->flush();
     }
 }

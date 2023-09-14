@@ -120,8 +120,27 @@ class FicheMatiere
     #[Gedmo\Slug(fields: ['libelle'])]
     private ?string $slug = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $volumeCmPresentiel;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $volumeTdPresentiel;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $volumeTpPresentiel;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $volumeTe = null;
+
+    #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: Mccc::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $mcccs;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $etatMccc = null;
+
     public function __construct()
     {
+        $this->mcccs = new ArrayCollection();
         $this->competences = new ArrayCollection();
         $this->langueDispense = new ArrayCollection();
         $this->langueSupport = new ArrayCollection();
@@ -572,5 +591,111 @@ class FicheMatiere
         $this->slug = $slug;
 
         return $this;
+    }
+
+    public function getVolumeCmPresentiel(): ?float
+    {
+        return $this->volumeCmPresentiel;
+    }
+
+    public function setVolumeCmPresentiel(?float $volumeCmPresentiel = 0.0): self
+    {
+        $this->volumeCmPresentiel = $volumeCmPresentiel;
+
+        return $this;
+    }
+
+    public function getVolumeTdPresentiel(): ?float
+    {
+        return $this->volumeTdPresentiel;
+    }
+
+    public function setVolumeTdPresentiel(?float $volumeTdPresentiel = 0.0): self
+    {
+        $this->volumeTdPresentiel = $volumeTdPresentiel;
+
+        return $this;
+    }
+
+    public function getVolumeTpPresentiel(): ?float
+    {
+        return $this->volumeTpPresentiel;
+    }
+
+    public function setVolumeTpPresentiel(?float $volumeTpPresentiel = 0.0): self
+    {
+        $this->volumeTpPresentiel = $volumeTpPresentiel;
+
+        return $this;
+    }
+
+    public function getVolumeTe(): ?float
+    {
+        return $this->volumeTe;
+    }
+
+    public function setVolumeTe(?float $volumeTe = 0.0): self
+    {
+        $this->volumeTe = $volumeTe;
+
+        return $this;
+    }
+
+    public function getEtatMccc(): ?string
+    {
+        return $this->etatMccc;
+    }
+
+    public function setEtatMccc(?string $etatMccc): static
+    {
+        $this->etatMccc = $etatMccc;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mccc>
+     */
+    public function getMcccs(): Collection
+    {
+        return $this->mcccs;
+    }
+
+    public function addMccc(Mccc $mccc): static
+    {
+        if (!$this->mcccs->contains($mccc)) {
+            $this->mcccs->add($mccc);
+            $mccc->setFicheMatiere($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMccc(Mccc $mccc): static
+    {
+        if ($this->mcccs->removeElement($mccc)) {
+            // set the owning side to null (unless already changed)
+            if ($mccc->getFicheMatiere() === $this) {
+                $mccc->setFicheMatiere(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function etatStructure(): string
+    {
+        $cmPresentiel = $this->volumeCmPresentiel ?? 0.0;
+        $tdPresentiel = $this->volumeTdPresentiel ?? 0.0;
+        $tpPresentiel = $this->volumeTpPresentiel ?? 0.0;
+        $volumeTe = $this->volumeTe ?? 0.0;
+
+        $nbHeures = $cmPresentiel + $tdPresentiel + $tpPresentiel + $volumeTe;
+
+        if ($nbHeures === 0.0) {
+            return 'À compléter';
+        }
+
+        return 'Complet';
     }
 }

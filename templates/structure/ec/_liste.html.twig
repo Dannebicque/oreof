@@ -13,22 +13,25 @@
                         text-secondary mb-md-0 text-small">
                             Fiche EC/matière associée
                         </div>
-                        <div class="col-md-1 d-flex align-items-center mb-2 justify-content-center
+                        <div class="col-md-{% if isBut %}3{% else %}1{% endif %} d-flex align-items-center mb-2 justify-content-center
                         text-secondary mb-md-0 text-small">
                             Fiche EC/matière
                         </div>
+
                         <div class="col-md-1 d-flex align-items-center mb-2 justify-content-center
                         text-secondary mb-md-0 text-small">
                             BCC
                         </div>
-                        <div class="col-md-1 d-flex align-items-center justify-content-center
+                        {% if not isBut %}
+                            <div class="col-md-1 d-flex align-items-center justify-content-center
                         text-secondary text-small">
-                            MCCC
-                        </div>
-                        <div class="col-md-1 d-flex align-items-center justify-content-center
+                                MCCC
+                            </div>
+                            <div class="col-md-1 d-flex align-items-center justify-content-center
                         text-secondary text-small">
-                            Volumes Horaires
-                        </div>
+                                Volumes Horaires
+                            </div>
+                        {% endif %}
                         <div class="col-md-4 d-flex align-items-center justify-content-center
                         text-secondary text-small">
                             Actions
@@ -50,7 +53,9 @@
                                         <div class="col-12 col-md-3 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">Matière</div>
                                             {% if ec.ficheMatiere != null %}
-                                                <p class="mt-0 mb-0">{{ ec.display }}
+                                                <p class="mt-0 mb-0">
+                                                {% if isBut %}{{ ec.ficheMatiere.sigle }} | {% endif %}
+                                                {{ ec.display }}
                                                 {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id != parcours.id %}
                                                     <i class="fal fa-link"
                                                        data-controller="tooltip"
@@ -67,12 +72,12 @@
                                             {% endif %}
                                         </div>
 
-                                        <div class="col-md-1 d-flex flex-column justify-content-center">
+                                        <div class="col-md-{% if isBut %}3{% else %}1{% endif %} d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">Remplissage</div>
                                             {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation) or is_granted
                                                 ('CAN_PARCOURS_EDIT_MY', parcours)) %}
                                                 {% if ec.ficheMatiere != null %}
-                                                    {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id %}
+                                                    {% if isBut %}
                                                         <a
                                                                 href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
                                                                 class="btn btn-sm btn-outline-info  px-1"
@@ -88,16 +93,33 @@
                                                             {% endif %}
                                                         </a>
                                                     {% else %}
-                                                        <a
-                                                                href="{{ path('app_fiche_matiere_show',{slug: ec.ficheMatiere.slug}) }}"
-                                                                class="btn btn-sm btn-outline-info  px-1"
-                                                                data-bs-toggle="tooltip"
-                                                                target="_blank"
-                                                                data-bs-placement="bottom"
-                                                                title="Voir la fiche EC/matière"
-                                                        >
-                                                            <span class="badge bg-info">Voir la fiche</span>
-                                                        </a>
+                                                        {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id %}
+                                                            <a
+                                                                    href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
+                                                                    class="btn btn-sm btn-outline-info  px-1"
+                                                                    data-bs-toggle="tooltip"
+                                                                    target="_blank"
+                                                                    data-bs-placement="bottom"
+                                                                    title="Modifier la fiche EC/matière"
+                                                            >
+                                                                {% if ec.ficheMatiere.remplissage == 100 %}
+                                                                    <span class="badge bg-success">Fiche</span>
+                                                                {% else %}
+                                                                    <span class="badge bg-warning">Fiche</span>
+                                                                {% endif %}
+                                                            </a>
+                                                        {% else %}
+                                                            <a
+                                                                    href="{{ path('app_fiche_matiere_show',{slug: ec.ficheMatiere.slug}) }}"
+                                                                    class="btn btn-sm btn-outline-info  px-1"
+                                                                    data-bs-toggle="tooltip"
+                                                                    target="_blank"
+                                                                    data-bs-placement="bottom"
+                                                                    title="Voir la fiche EC/matière"
+                                                            >
+                                                                <span class="badge bg-info">Voir la fiche</span>
+                                                            </a>
+                                                        {% endif %}
                                                     {% endif %}
                                                 {% else %}
                                                     <span class="badge bg-info">EC Libre</span>
@@ -133,6 +155,7 @@
                         </span>
                                             </button>
                                         </div>
+                                        {% if not isBut %}
                                         <div class="col-md-1 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">mccc</div>
                                             <button
@@ -191,6 +214,7 @@
                                             </button>
 
                                         </div>
+                                        {% endif %}
                                         <div class="col-md-4 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">Actions</div>
                                             <div class="row">

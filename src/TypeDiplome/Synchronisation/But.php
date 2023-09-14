@@ -446,7 +446,6 @@ class But
         } else {
             $first = true;
             foreach ($ressource['apcRessourceParcours'] as $parc) {
-
                 if (array_key_exists($parc['parcours']['id'], $this->listeParcours)) {
                     $this->genereEcbyUE($ressource, $fm, $parc['parcours']['id']);
                     if ($first === false) {
@@ -551,7 +550,6 @@ class But
     private function genereEcSaebyUE(array $sae, FicheMatiere $fm, int $keyParcours): void
     {
         foreach ($sae['apcSaeCompetences'] as $competence) {
-
             if (array_key_exists($keyParcours, $this->structure) && array_key_exists($competence['competence']['id'], $this->structure[$keyParcours][$sae['semestre']['ordreLmd']]['ues'])) {
                 $ec = new ElementConstitutif();
                 $ec->setModaliteEnseignement(ModaliteEnseignementEnum::PRESENTIELLE);
@@ -598,14 +596,14 @@ class But
 
         $ligneDebut = 22;
 
-
         $ecs = $this->elementConstitutifRepository->findByFormation($formation);
         $tabEcs = [];
         foreach ($ecs as $ec) {
-            if (!array_key_exists($ec->getFicheMatiere()->getSigle(), $tabEcs)) {
-                $tabEcs[$ec->getFicheMatiere()->getSigle()] = [];
+            $fiche = $ec->getFicheMatiere();
+            $tabEcs[$fiche->getSigle()] = $fiche;
+            foreach ($ec->getMcccs() as $mccc) {
+                $this->entityManager->remove($mccc);
             }
-            $tabEcs[$ec->getFicheMatiere()->getSigle()][] = $ec; //plusieurs ec ? un par parcours ??
         }
 
         for ($i = 1; $i <= 6; $i++) {
@@ -622,59 +620,58 @@ class But
                             // H => TD
                             // I => TP
                             // J => PRJ
-                            foreach ($tabEcs[$codeEc] as $ec) {
-                                $ec->setVolumeCmPresentiel(Tools::convertToFloat($sheet->getCell('G' . $ligne)->getValue()));
-                                $ec->setVolumeTdPresentiel(Tools::convertToFloat($sheet->getCell('H' . $ligne)->getValue()));
-                                $ec->setVolumeTpPresentiel(Tools::convertToFloat($sheet->getCell('I' . $ligne)->getValue()));
-                                $ec->setVolumeTe(Tools::convertToFloat($sheet->getCell('J' . $ligne)->getValue()));
+                            $ec = $tabEcs[$codeEc];
+                            $ec->setVolumeCmPresentiel(Tools::convertToFloat($sheet->getCell('G' . $ligne)->getValue()));
+                            $ec->setVolumeTdPresentiel(Tools::convertToFloat($sheet->getCell('H' . $ligne)->getValue()));
+                            $ec->setVolumeTpPresentiel(Tools::convertToFloat($sheet->getCell('I' . $ligne)->getValue()));
+                            $ec->setVolumeTe(Tools::convertToFloat($sheet->getCell('J' . $ligne)->getValue()));
 
-                                $tabMcccs = [
-                                    'N' => ['td_tp_oral', 'M'],
-                                    'P' => ['td_tp_ecrit', 'Q'],
-                                    'R' => ['td_tp_rapport', 'S'],
-                                    'T' => ['td_tp_autre', 'U'],
-                                    'V' => ['cm_ecrit', 'W'],
-                                    'X' => ['cm_rapport', 'Y'],
-                                    'Z' => ['iut_portfolio', 'AA'],
-                                    'AB' => ['iut_livrable', 'AC'],
-                                    'AD' => ['iut_rapport', 'AE'],
-                                    'AF' => ['iut_soutenance', 'AG'],
-                                    'AH' => ['hors_iut_entreprise', 'AI'],
-                                    'AJ' => ['hors_iut_rapport', 'AK'],
-                                    'AL' => ['hors_iut_soutenance', 'AM'],
-                                ];
+                            $tabMcccs = [
+                                'N' => ['td_tp_oral', 'O'],
+                                'P' => ['td_tp_ecrit', 'Q'],
+                                'R' => ['td_tp_rapport', 'S'],
+                                'T' => ['td_tp_autre', 'U'],
+                                'V' => ['cm_ecrit', 'W'],
+                                'X' => ['cm_rapport', 'Y'],
+                                'Z' => ['iut_portfolio', 'AA'],
+                                'AB' => ['iut_livrable', 'AC'],
+                                'AD' => ['iut_rapport', 'AE'],
+                                'AF' => ['iut_soutenance', 'AG'],
+                                'AH' => ['hors_iut_entreprise', 'AI'],
+                                'AJ' => ['hors_iut_rapport', 'AK'],
+                                'AL' => ['hors_iut_soutenance', 'AM'],
+                            ];
 
-                                foreach ($ec->getMcccs() as $mccc) {
-                                    $this->entityManager->remove($mccc);
-                                }
-                                $totalPourcentage = 0;
-                                foreach ($tabMcccs as $key => $value) {
-                                    // MCCC
-                                    if ($sheet->getCell($key . $ligne)->getValue() !== '') {
-                                        $mccc = new Mccc();
-                                        $mccc->setTypeEpreuve([$value[0]]);
-                                        $mccc->setPourcentage(Tools::convertToFloat($sheet->getCell($key . $ligne)->getValue()) * 100);
-                                        $mccc->setNbEpreuves((int)$sheet->getCell($value[1] . $ligne)->getValue());
-                                        $mccc->setLibelle($value[0]);
-                                        $mccc->setControleContinu(true);
-                                        $mccc->setNumeroSession(1);
-                                        $mccc->setExamenTerminal(false);
-                                        $totalPourcentage += $mccc->getPourcentage();
-                                        $this->entityManager->persist($mccc);
-                                        $ec->addMccc($mccc);
-                                    }
-                                }
-
-                                if ($totalPourcentage === 100.0) {
-                                    $ec->setEtatMccc('Complet');
-                                } else {
-                                    $ec->setEtatMccc(null);
+                            foreach ($ec->getMcccs() as $mccc) {
+                                $this->entityManager->remove($mccc);
+                            }
+                            $totalPourcentage = 0;
+                            foreach ($tabMcccs as $key => $value) {
+                                // MCCC
+                                if ($sheet->getCell($key . $ligne)->getValue() !== '') {
+                                    $mccc = new Mccc();
+                                    $mccc->setTypeEpreuve([$value[0]]);
+                                    $mccc->setPourcentage(Tools::convertToFloat($sheet->getCell($key . $ligne)->getValue()) * 100);
+                                    $mccc->setNbEpreuves((int)$sheet->getCell($value[1] . $ligne)->getValue());
+                                    $mccc->setLibelle($value[0]);
+                                    $mccc->setControleContinu(true);
+                                    $mccc->setNumeroSession(1);
+                                    $mccc->setExamenTerminal(false);
+                                    $totalPourcentage += $mccc->getPourcentage();
+                                    $this->entityManager->persist($mccc);
+                                    $ec->addMccc($mccc);
                                 }
                             }
-                            $this->entityManager->flush();
+
+                            if ($totalPourcentage === 100.0) {
+                                $ec->setEtatMccc('Complet');
+                            } else {
+                                $ec->setEtatMccc(null);
+                            }
                         }
                         $ligne++;
                     }
+                    $this->entityManager->flush();
                 }
             }
         }

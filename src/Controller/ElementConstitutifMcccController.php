@@ -46,7 +46,8 @@ class ElementConstitutifMcccController extends AbstractController
         Request                      $request,
         ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif           $elementConstitutif
-    ): Response {
+    ): Response
+    {
         $formation = $elementConstitutif->getParcours()?->getFormation();
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
@@ -60,34 +61,32 @@ class ElementConstitutifMcccController extends AbstractController
         if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
             $this->isGranted('CAN_PARCOURS_EDIT_MY', $elementConstitutif->getParcours())) { //todo: ajouter le workflow...
             if ($request->isMethod('POST')) {
-                if ($typeDiplome->getLibelleCourt() !== 'BUT') {
-                    if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
-                        $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
-                    } else {
-                        $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
-                    }
+                if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
+                    $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
+                } else {
+                    $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
+                }
 
-                    if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
-                        $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
-                    } else {
-                        $elementConstitutif->setQuitus(false);
-                    }
+                if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
+                    $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
+                } else {
+                    $elementConstitutif->setQuitus(false);
+                }
 
-                    if ($request->request->has('ec_step4') && array_key_exists('mcccEnfantsIdentique', $request->request->all()['ec_step4'])) {
-                        if ($elementConstitutif->getEcParent() !== null) {
-                            $elementConstitutif->getEcParent()->setMcccEnfantsIdentique((bool)$request->request->all()['ec_step4']['mcccEnfantsIdentique']);
-                        } else {
-                            $elementConstitutif->setMcccEnfantsIdentique((bool)$request->request->all()['ec_step4']['mcccEnfantsIdentique']);
-                        }
+                if ($request->request->has('ec_step4') && array_key_exists('mcccEnfantsIdentique', $request->request->all()['ec_step4'])) {
+                    if ($elementConstitutif->getEcParent() !== null) {
+                        $elementConstitutif->getEcParent()->setMcccEnfantsIdentique((bool)$request->request->all()['ec_step4']['mcccEnfantsIdentique']);
                     } else {
-                        $elementConstitutif->setMcccEnfantsIdentique(false);
+                        $elementConstitutif->setMcccEnfantsIdentique((bool)$request->request->all()['ec_step4']['mcccEnfantsIdentique']);
                     }
+                } else {
+                    $elementConstitutif->setMcccEnfantsIdentique(false);
+                }
 
-                    if ($request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
-                        $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
-                        $elementConstitutifRepository->save($elementConstitutif, true);
-                        $typeD->clearMcccs($elementConstitutif);
-                    }
+                if ($request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
+                    $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
+                    $elementConstitutifRepository->save($elementConstitutif, true);
+                    $typeD->clearMcccs($elementConstitutif);
                 }
 
                 $typeD->saveMcccs($elementConstitutif, $request->request);
@@ -109,6 +108,42 @@ class ElementConstitutifMcccController extends AbstractController
             'ec' => $elementConstitutif,
             'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
         ]);
+    }
+
+    #[Route('/{id}/mccc-ec-but', name: 'app_element_constitutif_mccc_but', methods: ['GET', 'POST'])]
+    public function mcccEcBut(
+        TypeDiplomeRegistry   $typeDiplomeRegistry,
+        TypeEpreuveRepository $typeEpreuveRepository,
+        Request               $request,
+        FicheMatiere          $ficheMatiere
+    ): Response
+    {
+        $formation = $ficheMatiere->getParcours()?->getFormation();
+        if ($formation === null) {
+            throw new RuntimeException('Formation non trouvée');
+        }
+        $typeDiplome = $formation->getTypeDiplome();
+        if ($typeDiplome === null) {
+            throw new RuntimeException('Type de diplome non trouvé');
+        }
+        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+
+        if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
+            $this->isGranted('CAN_PARCOURS_EDIT_MY', $ficheMatiere->getParcours())) { //todo: ajouter le workflow...
+            if ($request->isMethod('POST')) {
+                $typeD->saveMcccs($ficheMatiere, $request->request);
+                return $this->json(true);
+            }
+
+            return $this->render('element_constitutif/_mcccEcModalBut.html.twig', [
+                'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
+                'ficheMatiere' => $ficheMatiere,
+                'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
+                'mcccs' => $typeD->getMcccs($ficheMatiere),
+                'wizard' => false,
+                'typeDiplome' => $typeDiplome,
+            ]);
+        }
     }
 
 //    /**

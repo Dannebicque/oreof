@@ -48,6 +48,7 @@ class EcController extends BaseController
         }
 
         return $this->render('structure/ec/_liste.html.twig', [
+            'isBut' => $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT',
             'ecs' => $ecs,
             'ue' => $ue,
             'parcours' => $parcours,

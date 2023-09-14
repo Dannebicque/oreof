@@ -23,7 +23,9 @@ class FicheMatiereState
 
     public function onglets(): array
     {
-        for ($i = 1; $i <= 3; $i++) {
+        $max = $this->ficheMatiere->getParcours()?->getTypeDiplome()?->getLibelleCourt() === 'BUT' ? 4 : 3;
+
+        for ($i = 1; $i <= $max; $i++) {
             $methodEmpty = 'isEmptyOnglet' . $i;
             if ($this->$methodEmpty() === true) {
                 $onglets[$i] = EtatRemplissageEnum::VIDE;
@@ -49,6 +51,11 @@ class FicheMatiereState
     public function isEmptyOnglet3(): bool
     {
         return $this->ficheMatiere->getObjectifs() === null && $this->ficheMatiere->getCompetences() === null;
+    }
+
+    public function isEmptyOnglet4(): bool
+    {
+        return true;
     }
 
     public function valideStep(mixed $value): bool|array
@@ -135,5 +142,9 @@ class FicheMatiereState
         }
 
         return count($tab['error']) > 0 ? $tab : true;
+    }
+
+    private function etatOnglet4(): bool|array
+    {
     }
 }

@@ -18,6 +18,7 @@ use App\Entity\Ue;
 use App\Form\EcStep4Type;
 use App\Form\ElementConstitutifEnfantType;
 use App\Form\ElementConstitutifType;
+use App\Form\FicheMatiereStep4Type;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\NatureUeEcRepository;
@@ -510,6 +511,31 @@ class ElementConstitutifController extends AbstractController
 //        return $this->render('element_constitutif/_structureEcNonEditable.html.twig', [
 //            'ec' => $elementConstitutif,
 //        ]);
+    }
+
+    #[Route('/{id}/structure-but', name: 'app_element_constitutif_structure_but', methods: ['GET', 'POST'])]
+    public function structureBut(
+        Request                      $request,
+        FicheMatiereRepository $ficheMatiereRepository,
+        FicheMatiere           $ficheMatiere
+    ): Response {
+        $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere, [
+            'action' => $this->generateUrl(
+                'app_element_constitutif_structure_but',
+                ['id' => $ficheMatiere->getId()]
+            ),
+        ]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            $ficheMatiereRepository->save($ficheMatiere, true);
+
+            return $this->json(true);
+        }
+
+        return $this->render('element_constitutif/_structureEcModalBut.html.twig', [
+            'ficheMatiere' => $ficheMatiere,
+            'form' => $form->createView(),
+        ]);
     }
 
     #[Route('/{id}/{ue}/deplacer/{sens}', name: 'app_element_constitutif_deplacer', methods: ['GET'])]
