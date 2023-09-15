@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.36](https://github.com/Dannebicque/oreof/compare/v1.12.35...v1.12.36) (2023-09-15)
+
+
+### Features
+
+* Recopie BCC depuis une autre formation ([9b9f989](https://github.com/Dannebicque/oreof/commit/9b9f989a8d44dc18b0feb97b7e0ed85261ac8667))
+
 ### [1.12.35](https://github.com/Dannebicque/oreof/compare/v1.12.34...v1.12.35) (2023-09-14)
 
 
