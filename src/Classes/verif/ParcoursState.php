@@ -225,9 +225,14 @@ class ParcoursState
 
             if ($sem !== null) {
                 foreach ($sem?->getUes() as $ue) {
+                    if ($ue->getUeRaccrochee() !== null) {
+                        $ue = $ue->getUeRaccrochee()->getUe();
+                    }
+
                     if ($ue->getUeEnfants()->count() === 0 && $ue->getElementConstitutifs()->count() === 0) {
                         $tab['error'][] = 'Vous devez ajouter au moins un EC à l\'UE "' . $ue->display($this->parcours) . '".';
                     } else {
+
                         foreach ($ue->getElementConstitutifs() as $ec) {
                             if ($ec->getNatureUeEc()?->isChoix()) {
                                 if ($ec->getEcts() === null) {
