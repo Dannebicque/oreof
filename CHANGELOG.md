@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.40](https://github.com/Dannebicque/oreof/compare/v1.12.39...v1.12.40) (2023-09-16)
+
+
+### Features
+
+* Commande de mise à jour des AC ([5a74e0f](https://github.com/Dannebicque/oreof/commit/5a74e0f57f9140fdb3a870383607e5869187d336))
+
 ### [1.12.39](https://github.com/Dannebicque/oreof/compare/v1.12.38...v1.12.39) (2023-09-16)
 
 
