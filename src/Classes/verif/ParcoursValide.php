@@ -88,10 +88,14 @@ class ParcoursValide extends AbstractValide
             $this->etat['projet'] = self::NON_CONCERNE;
         }
 
-        if (($this->parcours->isHasSituationPro() === null || $this->parcours->isHasSituationPro() === false) && $this->typeDiplome->isHasSituationPro() === true) {
-            $this->etat['situationPro'] = self::INCOMPLET;
-            $this->etat['situationProModalite'] = self::VIDE;
-            $this->etat['situationProHeures'] = self::VIDE;
+        if (($this->parcours->isHasSituationPro() === null || $this->parcours->isHasSituationPro() === false)) {
+            if ($this->typeDiplome->isHasSituationPro() === true) {
+                $this->etat['situationPro'] = self::INCOMPLET;
+                $this->etat['situationProModalite'] = self::VIDE;
+                $this->etat['situationProHeures'] = self::VIDE;
+            } else {
+                $this->etat['memoire'] = self::NON_CONCERNE;
+            }
         } elseif ($this->parcours->isHasSituationPro() === true) {
             if ($this->parcours->getSituationProText() === null || trim($this->parcours->getSituationProText()) === '') {
                 $this->etat['situationProModalite'] = self::INCOMPLET;
@@ -114,9 +118,13 @@ class ParcoursValide extends AbstractValide
         }
 
 
-        if (($this->parcours->isHasMemoire() === null || $this->parcours->isHasMemoire() === false) && $this->typeDiplome->isHasMemoire() === true) {
-            $this->etat['memoire'] = self::INCOMPLET;
-            $this->etat['memoireModalite'] = self::VIDE;
+        if (($this->parcours->isHasMemoire() === null || $this->parcours->isHasMemoire() === false)) {
+            if ($this->typeDiplome->isHasMemoire() === true) {
+                $this->etat['memoire'] = self::INCOMPLET;
+                $this->etat['memoireModalite'] = self::VIDE;
+            } else {
+                $this->etat['memoire'] = self::NON_CONCERNE;
+            }
         } elseif ($this->parcours->isHasMemoire() === true) {
             if ($this->parcours->getMemoireText() === null || trim($this->parcours->getMemoireText()) === '') {
                 $this->etat['memoireModalite'] = self::INCOMPLET;
