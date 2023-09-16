@@ -188,4 +188,12 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findWithAc()
+    {
+        return $this->createQueryBuilder('ec')
+            ->join('ec.apprentissagesCritiques', 'ac')
+            ->getQuery()
+            ->getResult();
+    }
 }
