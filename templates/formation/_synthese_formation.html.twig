@@ -61,6 +61,15 @@
                             <i class="fa-l fa-group-arrows-rotate"></i>
                         </a>
 
+                        <a href="{{ path('app_formation_synchronisation_acs',{'formation': formation.id}) }}"
+                           class="btn btn-sm btn-icon btn-icon-only btn-outline-danger ms-1"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Synchro AC"
+                        >
+                            <i class="fal fa-users-between-lines"></i>
+                        </a>
+
                         <a href="{{ path('app_formation_synchronisation',{'formation': formation.id}) }}"
                            class="btn btn-sm btn-icon btn-icon-only btn-outline-danger ms-1"
                            data-bs-toggle="tooltip"

@@ -35,6 +35,7 @@ class ButCompetence
     private array $composantes = [];
 
     #[ORM\OneToMany(mappedBy: 'competence', targetEntity: ButNiveau::class)]
+    #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $butNiveaux;
 
     public function __construct()
@@ -147,5 +148,10 @@ class ButCompetence
         }
 
         return $this;
+    }
+
+    public function getDisplay(): string
+    {
+        return '['.$this->getNomCourt().'] ' . $this->getLibelle();
     }
 }

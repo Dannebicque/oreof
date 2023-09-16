@@ -138,6 +138,9 @@ class FicheMatiere
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $etatMccc = null;
 
+    #[ORM\ManyToMany(targetEntity: ButApprentissageCritique::class, inversedBy: 'ficheMatieres')]
+    private Collection $apprentissagesCritiques;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -151,6 +154,7 @@ class FicheMatiere
         $this->elementConstitutifs = new ArrayCollection();
         $this->ficheMatiereParcours = new ArrayCollection();
         $this->historiqueFicheMatieres = new ArrayCollection();
+        $this->apprentissagesCritiques = new ArrayCollection();
     }
 
     public function getEtatStep(int $step): bool
@@ -697,5 +701,29 @@ class FicheMatiere
         }
 
         return 'Complet';
+    }
+
+    /**
+     * @return Collection<int, ButApprentissageCritique>
+     */
+    public function getApprentissagesCritiques(): Collection
+    {
+        return $this->apprentissagesCritiques;
+    }
+
+    public function addApprentissagesCritique(ButApprentissageCritique $apprentissagesCritique): static
+    {
+        if (!$this->apprentissagesCritiques->contains($apprentissagesCritique)) {
+            $this->apprentissagesCritiques->add($apprentissagesCritique);
+        }
+
+        return $this;
+    }
+
+    public function removeApprentissagesCritique(ButApprentissageCritique $apprentissagesCritique): static
+    {
+        $this->apprentissagesCritiques->removeElement($apprentissagesCritique);
+
+        return $this;
     }
 }

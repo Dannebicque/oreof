@@ -16,6 +16,7 @@ use App\Form\FicheMatiereStep2Type;
 use App\Form\FicheMatiereStep3Type;
 use App\Form\FicheMatiereStep4Type;
 use App\Repository\BlocCompetenceRepository;
+use App\Repository\ButCompetenceRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
@@ -72,7 +73,7 @@ class FicheMatiereWizardController extends AbstractController
     #[Route('/{ficheMatiere}/mutualise/add', name: 'app_fiche_matiere_wizard_step_1_mutualise_add', methods: ['GET'])]
     public function mutualiseAdd(
         ComposanteRepository $composanteRepository,
-        FicheMatiere $ficheMatiere,
+        FicheMatiere         $ficheMatiere,
     ): Response {
         $composantes = $composanteRepository->findAll();//todo: filtrer dans les formations
 
@@ -87,12 +88,12 @@ class FicheMatiereWizardController extends AbstractController
         'DELETE'
     ])]
     public function mutualiseAjax(
-        EntityManagerInterface $entityManager,
-        Request $request,
-        FormationRepository $formationRepository,
-        ParcoursRepository $parcoursRepository,
+        EntityManagerInterface             $entityManager,
+        Request                            $request,
+        FormationRepository                $formationRepository,
+        ParcoursRepository                 $parcoursRepository,
         FicheMatiereMutualisableRepository $ficheMatiereParcoursRepository,
-        FicheMatiere $ficheMatiere,
+        FicheMatiere                       $ficheMatiere,
     ): Response {
         $data = JsonRequest::getFromRequest($request);
         $t = [];
@@ -167,32 +168,46 @@ class FicheMatiereWizardController extends AbstractController
 
     #[Route('/{ficheMatiere}/3', name: 'app_fiche_matiere_wizard_step_3', methods: ['GET'])]
     public function step3(
+        ButCompetenceRepository  $butCompetenceRepository,
         BlocCompetenceRepository $blocCompetenceRepository,
-        FicheMatiere $ficheMatiere,
+        FicheMatiere             $ficheMatiere,
     ): Response {
         $form = $this->createForm(FicheMatiereStep3Type::class, $ficheMatiere);
+        $isBut = false;
+        if ($ficheMatiere->getParcours() !== null && $ficheMatiere->getParcours()->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
+            $isBut = true;
+            $ecBccs = [];
+            $ecComps = [];
 
-        $ecBccs = [];
-        $ecComps = [];
+            foreach ($ficheMatiere->getApprentissagesCritiques() as $competence) {
+                $ecComps[] = $competence->getId();
+                $ecBccs[] = $competence->getNiveau()?->getCompetence()?->getId();
+            }
 
-        foreach ($ficheMatiere->getCompetences() as $competence) {
-            $ecComps[] = $competence->getId();
-            $ecBccs[] = $competence->getBlocCompetence()?->getId();
-        }
-
-
-
-        if ($ficheMatiere->getParcours() !== null) {
-            $bccs = $blocCompetenceRepository->findByParcours($ficheMatiere->getParcours());
+            $bccs = $butCompetenceRepository->findBy(['formation' => $ficheMatiere->getParcours()->getFormation()], ['numero' => 'ASC']);
         } else {
-            $bccs = $blocCompetenceRepository->findBy(['parcours' => null]);
+            $ecBccs = [];
+            $ecComps = [];
+
+            foreach ($ficheMatiere->getCompetences() as $competence) {
+                $ecComps[] = $competence->getId();
+                $ecBccs[] = $competence->getBlocCompetence()?->getId();
+            }
+
+
+            if ($ficheMatiere->getParcours() !== null) {
+                $bccs = $blocCompetenceRepository->findByParcours($ficheMatiere->getParcours());
+            } else {
+                $bccs = $blocCompetenceRepository->findBy(['parcours' => null]);
+            }
         }
 
 
         return $this->render('fiche_matiere_wizard/_step3.html.twig', [
             'ficheMatiere' => $ficheMatiere,
             'form' => $form->createView(),
-            'bccs' => $bccs ,
+            'bccs' => $bccs,
+            'isBut' => $isBut,
             'ecBccs' => array_flip(array_unique($ecBccs)),
             'ecComps' => array_flip($ecComps),
         ]);
@@ -201,7 +216,7 @@ class FicheMatiereWizardController extends AbstractController
     #[Route('/{ficheMatiere}/4', name: 'app_fiche_matiere_wizard_step_4', methods: ['GET'])]
     public function step4(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        FicheMatiere $ficheMatiere,
+        FicheMatiere        $ficheMatiere,
     ): Response {
         $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
         $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
@@ -216,9 +231,10 @@ class FicheMatiereWizardController extends AbstractController
 
     private function updateFicheMatiereMutualisable(
         FicheMatiereMutualisableRepository $ficheMatiereParcoursRepository,
-        FicheMatiere $ficheMatiere,
-        mixed $parcours,
-        EntityManagerInterface $entityManager): void
+        FicheMatiere                       $ficheMatiere,
+        mixed                              $parcours,
+        EntityManagerInterface             $entityManager
+    ): void
     {
         $exist = $ficheMatiereParcoursRepository->findOneBy([
             'ficheMatiere' => $ficheMatiere,

@@ -9,18 +9,22 @@
 
 namespace App\TypeDiplome\Source;
 
+use App\Entity\AnneeUniversitaire;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\Repository\ButCompetenceRepository;
+use App\TypeDiplome\Export\ButMccc;
 use App\TypeDiplome\Synchronisation\But;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
+use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\InputBag;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -50,7 +54,9 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         protected ButCompetenceRepository $butCompetenceRepository,
         protected EntityManagerInterface  $entityManager,
         protected TypeDiplomeRegistry     $typeDiplomeRegistry,
-        protected But                     $synchronisationBut
+        protected But                     $synchronisationBut,
+        protected ButMccc  $butMccc
+
     ) {
         parent::__construct($entityManager, $typeDiplomeRegistry);
     }
@@ -136,5 +142,38 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 
         $ficheMatiere->setEtatMccc($total === 100.0 ? 'Complet' : 'Incomplet');
         $this->entityManager->flush();
+    }
+
+    public function exportExcelMccc(
+        AnneeUniversitaire $anneeUniversitaire,
+        Parcours           $parcours,
+        ?DateTimeInterface $dateEdition = null,
+        bool               $versionFull = true
+    ): StreamedResponse
+    {
+        //todo: exploiter la date...
+        return $this->butMccc->exportExcelButMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+    }
+
+    public function exportPdfMccc(
+        AnneeUniversitaire $anneeUniversitaire,
+        Parcours           $parcours,
+        ?DateTimeInterface $dateEdition = null,
+        bool               $versionFull = true
+    ): StreamedResponse
+    {
+        //todo: exploiter la date...
+        return $this->butMccc->exportPdfButMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+    }
+
+    public function exportAndSaveExcelMccc(
+        string             $dir,
+        AnneeUniversitaire $anneeUniversitaire,
+        Parcours           $parcours,
+        DateTimeInterface  $dateEdition,
+        bool               $versionFull = true
+    ): string
+    {
+        return $this->butMccc->exportAndSaveExcelbutMccc($anneeUniversitaire, $parcours, $dir, $dateEdition, $versionFull);
     }
 }

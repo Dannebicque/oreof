@@ -26,11 +26,16 @@ class ButApprentissageCritique
     private ?ButNiveau $niveau = null;
 
     #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'apprentissagesCritiques')]
+    /** @deprecated  */
     private Collection $elementConstitutifs;
+
+    #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'apprentissagesCritiques')]
+    private Collection $ficheMatieres;
 
     public function __construct()
     {
         $this->elementConstitutifs = new ArrayCollection();
+        $this->ficheMatieres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -99,5 +104,37 @@ class ButApprentissageCritique
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, FicheMatiere>
+     */
+    public function getFicheMatieres(): Collection
+    {
+        return $this->ficheMatieres;
+    }
+
+    public function addFicheMatiere(FicheMatiere $ficheMatiere): static
+    {
+        if (!$this->ficheMatieres->contains($ficheMatiere)) {
+            $this->ficheMatieres->add($ficheMatiere);
+            $ficheMatiere->addApprentissagesCritique($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFicheMatiere(FicheMatiere $ficheMatiere): static
+    {
+        if ($this->ficheMatieres->removeElement($ficheMatiere)) {
+            $ficheMatiere->removeApprentissagesCritique($this);
+        }
+
+        return $this;
+    }
+
+    public function getDisplay(): string
+    {
+        return $this->code . ' - ' . $this->libelle;
     }
 }

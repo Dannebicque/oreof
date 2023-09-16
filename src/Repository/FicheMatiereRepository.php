@@ -191,4 +191,17 @@ class FicheMatiereRepository extends ServiceEntityRepository
         return $query->getQuery()
             ->getResult();
     }
+
+    public function findByCodeAndFormation(mixed $codeMatiere, Formation $formation): array
+    {
+        return $this->createQueryBuilder('f')
+            ->leftJoin('f.parcours', 'p')
+            ->join('p.formation', 'fo')
+            ->where('fo = :formation')
+            ->andWhere('f.sigle = :code')
+            ->setParameter('formation', $formation)
+            ->setParameter('code', $codeMatiere)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -91,7 +91,7 @@ class ElementConstitutifBccController extends AbstractController
             //tester si BUT ou autre...
 
 
-            foreach ($elementConstitutif->getApprentissagesCritiques() as $competence) {
+            foreach ($elementConstitutif->getFicheMatiere()->getApprentissagesCritiques() as $competence) {
                 if ($competence !== null) {
                     $ecComps[] = $competence->getId();
                 }

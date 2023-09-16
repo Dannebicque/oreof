@@ -87,7 +87,7 @@ class ElementConstitutif
     #[ORM\ManyToOne()]
     private ?Parcours $parcours = null;
 
-    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
+    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
     private ?Ue $ue = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -128,6 +128,7 @@ class ElementConstitutif
     private Collection $competences;
 
     #[ORM\ManyToMany(targetEntity: ButApprentissageCritique::class, inversedBy: 'elementConstitutifs')]
+    /** @deprecated */
     private Collection $apprentissagesCritiques;
 
     public function __construct()

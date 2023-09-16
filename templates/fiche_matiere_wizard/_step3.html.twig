@@ -4,6 +4,8 @@
     {% form_theme form 'communs/form_theme.html.twig' %}
     {{ form_start(form) }}
     {{ form_row(form.objectifs) }}
+
+    {% if isBut == false %}
     <div class="mt-2">
         <p>
             <strong>{{ 'fiche_matiere_step3.labels.competence'|trans({}, 'form') }}</strong>
@@ -43,6 +45,49 @@
             }) }}
         {% endfor %}
     </div>
+    {% else %}
+        <div class="mt-2">
+            <p>
+                <strong>{{ 'fiche_matiere_step3.labels.competence'|trans({}, 'form') }}</strong>
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="{{ 'fiche_matiere_step3.labels.competence'|trans({}, 'help') }}"
+                   data-bs-original-title="{{ 'fiche_matiere_step3.labels.competence'|trans({}, 'help') }}"></i>
+            </p>
+            {% for bcc in bccs %}
+                <div class=" mb-2">
+                    <input type="checkbox" name="ec[bccs][]" value="{{ bcc.id }}" id="bcc_{{ bcc.id }}"
+                           {% if ecBccs[bcc.id] is defined %}checked{% endif %}
+                            {{ stimulus_action('fichematiere--step3', 'changeBcc', 'change', {id:bcc.id}) }}
+                    >
+                    <label for="bcc_{{ bcc.id }}"><strong>{{ bcc.display }}</strong></label>
+                    <div id="bcc_{{ bcc.id }}_competence" class="{% if ecBccs[bcc.id] is not defined %}d-none {%
+                        endif %} mb-2 ms-3">
+                        {% for niveau in bcc.butNiveaux %}
+                        {% for competence in niveau.butApprentissageCritiques %}
+                            <div>
+                                <input type="checkbox" name="ec[competences][]"
+                                       {% if ecComps[competence.id] is defined %}checked{% endif %}
+                                       value="{{ competence.id }}"
+                                       id="competence_{{ competence.id }}"
+                                       class="bcc_{{ bcc.id }}"
+                                        {{ stimulus_action('fichematiere--step3', 'changeCompetence', 'change', {id:competence.id}) }}
+                                >
+                                <label for="competence_{{ competence.id }}">{{ competence.display }}</label>
+                            </div>
+                        {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                {{ component('alerte', {
+                    type: 'warning',
+                    message: 'fiche_matiere.alerte.no_bcc'|trans({}, 'form')
+                }) }}
+            {% endfor %}
+        </div>
+    {% endif %}
     {{ form_end(form) }}
 
     <div class="alert {% if ficheMatiere.getEtatStep(3) %}alert-success{% else %}alert-warning{% endif %}"
