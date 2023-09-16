@@ -373,3 +373,15 @@ html[data-show=true] .settings-button {
 html[data-placement='horizontal'] main {
   padding-top: 180px;
 }
+
+.table-container {
+  display: block;
+  max-height: 500px; /* Définir la hauteur maximale de votre choix */
+  overflow-y: auto;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background-color: #ddd; /* Changer la couleur de fond de votre choix*/
+}

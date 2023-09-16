@@ -87,18 +87,16 @@ class ParcoursEcController extends AbstractController
             $tabEcs[$semParc->getOrdre()] = [];
             foreach ($semParc->getSemestre()->getUes() as $ue)
             {
-                $tabEcs[$semParc->getOrdre()] = [];
                 $tabEcUes[$semParc->getOrdre()][$ue->getId()] = [];
                 $tabUes[$semParc->getOrdre()][$ue->getId()] = $ue;
                 foreach ($ue->getElementConstitutifs() as $ec)
                 {
-                    $tabEcUes[$semParc->getOrdre()][$ue->getId()][$ec->getOrdre()] = $ec;
-                    $tabEcs[$semParc->getOrdre()][$ec->getId()] = $ec;
+                    $tabEcUes[$semParc->getOrdre()][$ue->getId()][$ec->getFicheMatiere()->getSigle()] = $ec;
+                    $tabEcs[$semParc->getOrdre()][$ec->getFicheMatiere()->getSigle()] = $ec;
                 }
             }
+            ksort($tabEcs[$semParc->getOrdre()]);
         }
-
-
 
         return $this->render('parcours_ec/ressources_saes_coeff.html.twig', [
             'parcours' => $parcours,

@@ -62,15 +62,15 @@
                             <td>{{ ec.ficheMatiere.sigle }} {{ ec.ficheMatiere.libelle }}</td>
                             {% for ue in tabUes[semParcours.ordre] %}
                                 <td>
-                                    {% if tabEcUes[semParcours.ordre][ue.id][ec.ordre] is defined %}
+                                    {% if tabEcUes[semParcours.ordre][ue.id][ec.ficheMatiere.sigle] is defined %}
                                         <input type="text" class="form-control"
                                                 {{ stimulus_action('parcours--ec', 'updateEctsEc', 'change', {
                                                     field: 'coeffEc',
-                                                    ec: tabEcUes[semParcours.ordre][ue.id][ec.ordre].id,
+                                                    ec: tabEcUes[semParcours.ordre][ue.id][ec.ficheMatiere.sigle].id,
                                                 }) }}
-                                               value="{{ tabEcUes[semParcours.ordre][ue.id][ec.ordre].ects }}">
-                                        {% else %}
-                                            <span class="badge bg-muted">N.C.</span>
+                                               value="{{ tabEcUes[semParcours.ordre][ue.id][ec.ficheMatiere.sigle].ects }}">
+                                    {% else %}
+                                        <span class="badge bg-muted">N.C.</span>
                                     {% endif %}
                                 </td>
                             {% endfor %}

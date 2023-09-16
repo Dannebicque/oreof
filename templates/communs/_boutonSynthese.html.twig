@@ -1,10 +1,16 @@
+{% if parcours.formation.typeDiplome.libelleCourt == 'BUT' %}
+{% set isBut = true %}
+{% else %}
+{% set isBut = false %}
+{% endif %}
+
 <div class="{{ col }} d-grid">
-    <a class="btn btn-outline-primary d-block"
-       href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">
-        <i class="fas fa-check"></i>
-        Contrôler les BCC
-    </a>
-    {% if parcours.formation.typeDiplome.libelleCourt == 'BUT' %}
+    {% if isBut %}
+        <a class="btn btn-outline-primary d-block"
+           href="{{ path('app_parcours_bcc_but', {parcours:parcours.id}) }}">
+            <i class="fas fa-check"></i>
+            Contrôler les AC/Compétences
+        </a>
         <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_ressources_sae_but', {parcours:parcours.id}) }}">
             <i class="fas fa-check"></i>
             Contrôler les Ressources/SAE
@@ -14,17 +20,23 @@
             Coeff. / UE / Ressources/SAE
         </a>
     {% else %}
+        <a class="btn btn-outline-primary d-block"
+           href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">
+            <i class="fas fa-check"></i>
+            Contrôler les BCC
+        </a>
         <a class="btn btn-outline-primary d-block mt-1" href="{{ path('app_parcours_ec', {parcours:parcours.id}) }}">
             <i class="fas fa-check"></i>
             Contrôler les EC
         </a>
     {% endif %}
+
     <a class="btn btn-outline-primary d-block mt-1"
        href="{{ path('app_parcours_mccc_export', {parcours:parcours.id, _format:'xlsx'}) }}">
         <i class="{{ iconDownload }}"></i>
         Export MCCC (xlsx)
     </a>
-    {% if parcours.formation.typeDiplome.libelleCourt != 'BUT' %}
+    {% if isBut == false %}
     <a class="btn btn-outline-primary d-block mt-1"
        href="{{ path('app_parcours_mccc_export_light', {parcours:parcours.id, _format:'xlsx'}) }}">
         <i class="{{ iconDownload }}"></i>

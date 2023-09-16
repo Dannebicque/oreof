@@ -22,7 +22,8 @@
                 <tr>
                     {% for ue in semestre.semestre.ues %}
                         {% for ec in ue.elementConstitutifs %}
-                            <th class="text-center">{{ ec.code }}</th>
+                            <th class="text-center">{{ ec.code }} <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ ec.display }}"></i>
+                            </th>
                         {% endfor %}
                     {% endfor %}
                 </tr>
