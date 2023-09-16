@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.38](https://github.com/Dannebicque/oreof/compare/v1.12.37...v1.12.38) (2023-09-16)
+
+
+### Features
+
+* BUT : vérification sur les matières + BCC sur la fiche matière et pas l'UE ([462bfde](https://github.com/Dannebicque/oreof/commit/462bfde4b820410fc1b44b6a5e044edef230dcc4))
+* tableau AC/BUT ([f6d3c00](https://github.com/Dannebicque/oreof/commit/f6d3c0002f44b3dfe19e3fccb89e14c0cd6ea7ac))
+
 ### [1.12.37](https://github.com/Dannebicque/oreof/compare/v1.12.36...v1.12.37) (2023-09-16)
 
 
