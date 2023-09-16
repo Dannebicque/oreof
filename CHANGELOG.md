@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.37](https://github.com/Dannebicque/oreof/compare/v1.12.36...v1.12.37) (2023-09-16)
+
+
+### Bug Fixes
+
+* Fix si Sitatuion ou mémoire non obligatoire ([928ca48](https://github.com/Dannebicque/oreof/commit/928ca4825f883905dccc94fa3f7cefee779757b6))
+* State sur UE raccrochée ([ffea8f5](https://github.com/Dannebicque/oreof/commit/ffea8f5c211686081e7c0f996415ae0150d75d73))
+
 ### [1.12.36](https://github.com/Dannebicque/oreof/compare/v1.12.35...v1.12.36) (2023-09-15)
 
 
