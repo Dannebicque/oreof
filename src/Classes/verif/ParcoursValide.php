@@ -94,7 +94,7 @@ class ParcoursValide extends AbstractValide
                 $this->etat['situationProModalite'] = self::VIDE;
                 $this->etat['situationProHeures'] = self::VIDE;
             } else {
-                $this->etat['memoire'] = self::NON_CONCERNE;
+                $this->etat['situationPro'] = self::NON_CONCERNE;
             }
         } elseif ($this->parcours->isHasSituationPro() === true) {
             if ($this->parcours->getSituationProText() === null || trim($this->parcours->getSituationProText()) === '') {
