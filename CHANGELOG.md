@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.0](https://github.com/Dannebicque/oreof/compare/v1.12.40...v1.13.0) (2023-09-17)
+
+
+### Features
+
+* Publication du processus de validation ([5a3453a](https://github.com/Dannebicque/oreof/commit/5a3453a1048413d7ce6e75bd89129ca6b3c193b7))
+
+
+### Bug Fixes
+
+* Etat des parcours sur formation ([ae5cf1d](https://github.com/Dannebicque/oreof/commit/ae5cf1db2802cb9389e1a61c74cb03dbd496a35d))
+* filtre sur remplissage ([35b7c6b](https://github.com/Dannebicque/oreof/commit/35b7c6b0cc1222f00f733b8cb4a028f4e01b8676))
+
 ### [1.12.40](https://github.com/Dannebicque/oreof/compare/v1.12.39...v1.12.40) (2023-09-16)
 
 
