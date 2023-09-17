@@ -3,9 +3,7 @@
 {% block title %}Parcours{% endblock %}
 
 {% block content %}
-    {% if is_granted('ROLE_SES') %} {# todo: CAN_PARCOURS_VALIDATE_MY #}
-        {{ component('mention_manage', {parcours:parcours, type:'parcours'}) }}
-    {% endif %}
+    {{ component('mention_manage', {parcours:parcours, type:'parcours'}) }}
 
     <div class="row">
         {{ include('typeDiplome/parcours/common/_licence.html.twig') }}
@@ -97,8 +95,10 @@
     {{ include('btn/export_mccc.html.twig') }}
 
     <div class="btn-group">
-        <button type="button" class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="{{ iconDownload }}"></i>  BCC
+        <button type="button"
+                class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1"
+                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="{{ iconDownload }}"></i> BCC
         </button>
         <div class="dropdown-menu" style="">
             <a class="dropdown-item" href="{{ path('app_parcours_bcc', {parcours:parcours.id}) }}">
@@ -124,7 +124,7 @@
     </a>
 
     {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) %}
-        <a href="{{ path('app_parcours_edit', {id:parcours.id})  }}"
+        <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
            class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
            data-bs-toggle="tooltip"
            data-bs-placement="bottom"

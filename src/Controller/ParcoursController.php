@@ -213,6 +213,11 @@ class ParcoursController extends BaseController
         ParcoursState       $parcoursState,
         Parcours            $parcour
     ): Response {
+
+        if (!$this->isGranted('CAN_PARCOURS_EDIT_MY', $parcour)) {
+            return $this->redirectToRoute('app_parcours_show', ['id' => $parcour->getId()]);
+        }
+
         $parcoursState->setParcours($parcour);
         $typeDiplome = $parcour->getFormation()?->getTypeDiplome();
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());

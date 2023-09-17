@@ -59,7 +59,7 @@ framework:
                     to: 'soumis_central'
                 reserver_conseil:
                     from: 'soumis_conseil'
-                    to: 'soumis_dpe_composante'
+                    to: 'en_cours_redaction'
                 laisser_passer_conseil:
                     from: 'soumis_conseil'
                     to: 'soumis_central'
@@ -71,7 +71,7 @@ framework:
                     to: 'soumis_vp'
                 reserver_central:
                     from: 'soumis_central'
-                    to: 'soumis_dpe_composante'
+                    to: 'en_cours_redaction'
                 transmettre_cfvu:
                     from: 'soumis_vp'
                     to: 'soumis_cfvu'
@@ -80,10 +80,10 @@ framework:
                     to: 'refuse_definitif_cfvu'
                 refuser_revoir_cfvu:
                     from: 'soumis_cfvu'
-                    to: 'soumis_dpe_composante'
+                    to: 'en_cours_redaction'
                 valider_reserve_cfvu:
                     from: 'soumis_cfvu'
-                    to: 'soumis_dpe_composante'
+                    to: 'en_cours_redaction'
                 valider_reserve_conseil_cfvu:
                     from: 'soumis_cfvu'
                     to: 'soumis_conseil_reserve' #todo mais on court-circuite le retour directement vers valider publicatio

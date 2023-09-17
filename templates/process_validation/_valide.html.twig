@@ -18,7 +18,7 @@
             <input type="date" name="date"
                    class="form-control"
                    id="date"
-                   value="{{ 'now'|date('Y-m-d') }}"> {# ou date déjà saisie si édition? #}
+                   >
         </div>
     {% endif %}
 
@@ -133,7 +133,7 @@
 
 
     {% if (process.check is defined and process.check == true) %}
-{#        {% if processData.valid == true %}#}
+        {% if processData.valid == true %}
             <div class="mt-2">
                 <button type="submit" class="btn btn-success"
                         {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
@@ -144,12 +144,12 @@
                     {{ ('btn.'~process.label~'.valide.'~processData.placeTexte)|trans({}, 'process') }}
                 </button>
             </div>
-{#        {% else %}#}
+        {% else %}
             {{ component('alerte', {
                 type: 'danger',
                 message: (process.label~'.valide.impossible.'~processData.placeTexte)|trans({}, 'process')
             }) }}
-{#        {% endif %}#}
+        {% endif %}
     {% else %}
         <div class="mt-2">
             <button type="submit" class="btn btn-success"

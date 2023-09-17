@@ -1,8 +1,8 @@
 {% set formation = parcours.formation %}
 
-{% if is_granted('ROLE_ADMIN') %}
+{#{% if is_granted('ROLE_ADMIN') %}#}
         {{ component('mention_manage', {parcours:parcours, type:'parcours'}) }}
-{% endif %}
+{#{% endif %}#}
 
 <div class="card">
     <div class="card-body">

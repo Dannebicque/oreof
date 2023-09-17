@@ -359,7 +359,11 @@ class FormationController extends BaseController
         Formation           $formation,
         TypeDiplomeRegistry $typeDiplomeRegistry
     ): Response {
-        //todo: tester les droits et si on est en place "en_cours_redaction" => voter
+
+        if (!$this->isGranted('CAN_FORMATION_EDIT_MY', $formation)) {
+            return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
+        }
+
         $formationState->setFormation($formation);
         $typeD = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
         if ($formation->getParcours()?->first() !== false) {

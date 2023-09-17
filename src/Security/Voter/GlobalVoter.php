@@ -15,6 +15,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 class GlobalVoter extends Voter
 {
@@ -24,6 +25,8 @@ class GlobalVoter extends Voter
     private User $user;
 
     public function __construct(
+        private WorkflowInterface $dpeWorkflow,
+        private WorkflowInterface $parcoursWorkflow,
         private readonly Security       $security,
         private readonly RoleRepository $roleRepository,
     ) {
@@ -90,20 +93,12 @@ class GlobalVoter extends Voter
                 // soit par héritage
 
                 if ($subject instanceof Formation) {
-                    if ($this->canAccessFormation($subject, $centre)) {
-                        //todo: soit centre = formation et responsable ou coresponsable,
-                        //soit on remonte à la composante, et centre  = composante de la formaiton
-                        return true;
-                    }
+                   return $this->canAccessFormation($subject, $centre);
                 }
 
                 if ($subject instanceof Parcours) {
 
-                    if ($this->canAccessParcours($subject, $centre)) {
-                        //todo: soit centre = formation et responsable ou coresponsable du parcours ou de la formation,
-                        //soit on remonte à la composante, et centre  = composante de la formation
-                        return true;
-                    }
+                    return $this->canAccessParcours($subject, $centre);
                 }
 
                 if ($subject instanceof Composante) {
@@ -126,7 +121,6 @@ class GlobalVoter extends Voter
 
     private function decomposeAttribute(string $attribute): bool
     {
-        // die();
         $tab = explode('_', $attribute);
         if (count($tab) !== 4) {
             return false;
@@ -146,12 +140,49 @@ class GlobalVoter extends Voter
 
     private function canAccessFormation(Formation $subject, mixed $centre): bool
     {
-        return $centre->getFormation() === $subject || $centre->getComposante() === $subject->getComposantePorteuse();
+        $canEdit = false;
+        if ($subject->getResponsableMention() === $this->user || $subject->getCoResponsable() === $this->user) {
+            $canEdit = $this->dpeWorkflow->can($subject, 'autoriser') || $this->dpeWorkflow->can($subject, 'valide_rf');
+        }
+
+        if ($subject->getComposantePorteuse() === $centre->getComposante() && $centre->getComposante()->getResponsableDpe() === $this->user) {
+            $canEdit =
+                $this->dpeWorkflow->can($subject, 'autoriser') ||
+                $this->dpeWorkflow->can($subject, 'valide_rf') ||
+                $this->dpeWorkflow->can($subject, 'valide_dpe_composante') ||
+                $this->dpeWorkflow->can($subject, 'valider_conseil');
+        }
+
+        $centre = $centre->getFormation() === $subject || $centre->getComposante() === $subject->getComposantePorteuse();
+        return $canEdit && $centre;
     }
 
     private function canAccessParcours(Parcours $subject, mixed $centre): bool
     {
-        return true;
+        $canEdit = false;
+        if ($subject->getRespParcours() === $this->user || $subject->getCoResponsable() === $this->user) {
+            $canEdit = $this->parcoursWorkflow->can($subject, 'autoriser') || $this->parcoursWorkflow->can($subject, 'valider_parcours');
+        }
+
+        if ($subject->getFormation()->getResponsableMention() === $this->user || $subject->getFormation()->getCoResponsable() === $this->user) {
+            $canEdit = $this->parcoursWorkflow->can($subject, 'autoriser') ||
+                $this->parcoursWorkflow->can($subject, 'valider_parcours') ||
+                $this->parcoursWorkflow->can($subject, 'valider_rf') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'autoriser') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'valide_rf');
+        }
+
+        if ($subject->getFormation()->getComposantePorteuse() === $centre->getComposante() && $centre->getComposante()->getResponsableDpe() === $this->user) {
+            $canEdit = $this->parcoursWorkflow->can($subject, 'autoriser') ||
+                $this->parcoursWorkflow->can($subject, 'valider_parcours') ||
+                $this->parcoursWorkflow->can($subject, 'valider_rf') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'autoriser') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'valide_rf') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'valide_dpe_composante') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'valider_conseil');
+        }
+
+        return  $canEdit;
     }
 
     private function canAccessComposante(Composante $subject, mixed $centre): bool

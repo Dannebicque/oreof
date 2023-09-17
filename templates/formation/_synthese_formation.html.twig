@@ -3,9 +3,9 @@
 {% else %}
     {% set col = 'col-3' %}
 {% endif %}
-{% if is_granted('ROLE_ADMIN') %}
+{#{% if is_granted('ROLE_ADMIN') %}#}
     {{ component('mention_manage', {formation:formation, type:'formation'}) }}
-{% endif %}
+{#{% endif %}#}
 <div class="card">
     <div class="card-body">
         <div class="row">

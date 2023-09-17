@@ -89,12 +89,19 @@ final class MentionManageComponent extends AbstractController
         $this->etape = self::TAB[$place] ?? $this->type;
         $this->getHistorique();
         $this->event = 'valide';
+
+        $this->redirige();
     }
 
     public function redirige(): Response
     {
         // si niveau parcours, formation ou composante, une fois validé => On redirige vers le show.
-        //return $this->redirectToRoute('app_formation_show', ['slug' => $this->formation->getSlug()]); //uniquement si RF ou DPE
+        if ($this->type === 'parcours') {
+            return $this->redirectToRoute('app_parcours_show', ['id' => $this->parcours->getId()]); //uniquement si RF ou DPE
+        }
+
+        return $this->redirectToRoute('app_formation_show', ['slug' => $this->formation->getSlug()]); //uniquement si RF ou DPE
+
     }
 
     #[LiveListener('mention_manage:edit')]
