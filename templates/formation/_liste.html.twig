@@ -134,7 +134,7 @@ bouton pour valider/invalide les étapes successives #}
         </thead>
         <tbody>
         {% for formation in formations %}
-            {% if (params['remplissage'] is defined and formation.remplissage == params['remplissage']) or  params['remplissage'] is not defined %}
+            {% if (params['remplissage'] is defined and formation.remplissage.calcul == params['remplissage']) or  params['remplissage'] is not defined %}
                 <tr>
                     <td>
                         {% if formation.composantePorteuse != null %}
