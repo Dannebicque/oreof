@@ -76,11 +76,11 @@ class ElementConstitutifBccController extends AbstractController
 
                     //on regarde si c'est déjà là, soit dans EC, soit dans fichematiere
 
-                    $existe = $elementConstitutif->getApprentissagesCritiques()->contains($competence);
+                    $existe = $elementConstitutif->getFicheMatiere()?->getApprentissagesCritiques()->contains($competence);
                     if ($existe && (bool)$data['checked'] === false) {
-                        $elementConstitutif->removeApprentissagesCritique($competence);
+                        $elementConstitutif->getFicheMatiere()?->removeApprentissagesCritique($competence);
                     } elseif (!$existe && (bool)$data['checked'] === true) {
-                        $elementConstitutif->addApprentissagesCritique($competence);
+                        $elementConstitutif->getFicheMatiere()?->addApprentissagesCritique($competence);
                     }
                     $entityManager->flush();
                 }
@@ -91,7 +91,7 @@ class ElementConstitutifBccController extends AbstractController
             //tester si BUT ou autre...
 
 
-            foreach ($elementConstitutif->getFicheMatiere()->getApprentissagesCritiques() as $competence) {
+            foreach ($elementConstitutif->getFicheMatiere()?->getApprentissagesCritiques() as $competence) {
                 if ($competence !== null) {
                     $ecComps[] = $competence->getId();
                 }
