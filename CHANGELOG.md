@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.3](https://github.com/Dannebicque/oreof/compare/v1.13.2...v1.13.3) (2023-09-18)
+
+
+### Bug Fixes
+
+* Ue des semestres raccrochées ([bb19d5d](https://github.com/Dannebicque/oreof/commit/bb19d5da16aaba6f0afb182ac86573696216ef54))
+
 ### [1.13.2](https://github.com/Dannebicque/oreof/compare/v1.13.1...v1.13.2) (2023-09-18)
 
 
