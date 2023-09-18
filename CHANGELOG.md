@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.4](https://github.com/Dannebicque/oreof/compare/v1.13.3...v1.13.4) (2023-09-18)
+
+
+### Bug Fixes
+
+* EC sans UE. ([4e1da82](https://github.com/Dannebicque/oreof/commit/4e1da823b2dd030a6c46f6f8af0f2cdc9817acf0))
+* Etat remplissage BCC ([5b169fa](https://github.com/Dannebicque/oreof/commit/5b169fad7358323dce4cad631aa48ba9d4c21e89))
+* Suppression BCC sur BUT ([c21ff95](https://github.com/Dannebicque/oreof/commit/c21ff9595ff7f9ace3073f0e690e009c7275f2d7))
+* typo sur composant ([9a1f13e](https://github.com/Dannebicque/oreof/commit/9a1f13eff12b148805cd9e2fdbb3aa604a9638b2))
+
 ### [1.13.3](https://github.com/Dannebicque/oreof/compare/v1.13.2...v1.13.3) (2023-09-18)
 
 
