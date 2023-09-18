@@ -145,7 +145,10 @@ class GlobalVoter extends Voter
             $canEdit = $this->dpeWorkflow->can($subject, 'autoriser') || $this->dpeWorkflow->can($subject, 'valide_rf');
         }
 
-        if ($subject->getComposantePorteuse() === $centre->getComposante() && $centre->getComposante()->getResponsableDpe() === $this->user) {
+        if (
+            $subject->getComposantePorteuse() === $centre->getComposante()
+        ) {
+            //&& $centre->getComposante()->getResponsableDpe() === $this->user
             $canEdit =
                 $this->dpeWorkflow->can($subject, 'autoriser') ||
                 $this->dpeWorkflow->can($subject, 'valide_rf') ||
