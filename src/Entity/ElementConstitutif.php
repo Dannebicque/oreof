@@ -627,7 +627,6 @@ class ElementConstitutif
         //todo: déplacer les compétences des fiches dans l'EC ? Script de mise à jour
 
         if ($this->getFicheMatiere() !== null) {
-
             if ($this->getFicheMatiere()->getParcours() === $parcours) {
                 if ($this->getFicheMatiere()->getCompetences()->count() > 0) {
                     return 'Complet';
@@ -635,10 +634,18 @@ class ElementConstitutif
             } elseif ($this->getCompetences()->count() > 0) {
                 return 'Complet';
             }
+
+            if ($this->getFicheMatiere()->getApprentissagesCritiques()->count() > 0) {
+                //todo: les Ac doivent être dans la bonne compétence...
+                foreach ($this->getFicheMatiere()->getApprentissagesCritiques() as $ac) {
+                    if ($ac->getNiveau() !== null &&
+                        $ac->getNiveau()->getCompetence()?->getNumero() === $this->getUe()?->getOrdre()) {
+                        return 'Complet';
+                    }
+                }
+            }
         }
-        if ($this->getApprentissagesCritiques()->count() > 0) {
-            return 'Complet';
-        }
+
 
         return 'A saisir';
     }
