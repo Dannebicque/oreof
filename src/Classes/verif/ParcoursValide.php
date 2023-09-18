@@ -197,7 +197,7 @@ class ParcoursValide extends AbstractValide
                 $structure['semestres'][$semestreParcour->getOrdre()]['ues'] = [];
                 $structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::INCOMPLET;
                 $structure['semestres'][$semestreParcour->getOrdre()]['erreur'] = [];
-                foreach ($semestreParcour->getSemestre()->getUes() as $ue) {
+                foreach ($sem->getUes() as $ue) {
                     $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['global'] = count($ue->getElementConstitutifs()) === 0 ? self::VIDE : self::COMPLET;
                     $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getOrdre()]['ecs'] = [];
                     foreach ($ue->getElementConstitutifs() as $ec) {
