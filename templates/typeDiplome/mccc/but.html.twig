@@ -19,7 +19,7 @@
         {% elseif ficheMatiere.typeMatiere == 'ressource' %}
             {{ include('typeDiplome/mccc/but/_ressource.html.twig') }}
         {% else %}
-            {{ component('Alerte', {
+            {{ component('alerte', {
                 'type': 'danger',
                 'message': 'Le type de matière n\'est pas reconnu.'
             }) }}
