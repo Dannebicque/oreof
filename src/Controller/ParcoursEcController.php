@@ -22,8 +22,7 @@ class ParcoursEcController extends AbstractController
         TypeEcRepository             $typeEcRepository,
         ElementConstitutifRepository $ecRepository,
         Parcours                     $parcours
-    ): Response
-    {
+    ): Response {
         $ecs = $ecRepository->findByParcours($parcours);
         $tabEcs = [];
 
@@ -56,17 +55,19 @@ class ParcoursEcController extends AbstractController
     public function ressourcesSae(
         FicheMatiereRepository $ficheMatiereRepository,
         Parcours               $parcours
-    )
-    {
+    ) {
         $fichesMatieres = $ficheMatiereRepository->findByParcours($parcours);
         $tabEcs = [];
         foreach ($fichesMatieres as $ficheMatiere) {
-            $sem = $ficheMatiere->getElementConstitutifs()->first()->getUe()->getSemestre();
-            if (array_key_exists($sem->getOrdre(), $tabEcs) === false) {
-                $tabEcs[$sem->getOrdre()] = [];
+            if ($ficheMatiere->getElementConstitutifs()->count() > 0) {
+                $sem = $ficheMatiere->getElementConstitutifs()?->first()->getUe()?->getSemestre();
+                if ($sem !== null) {
+                    if (array_key_exists($sem->getOrdre(), $tabEcs) === false) {
+                        $tabEcs[$sem->getOrdre()] = [];
+                    }
+                    $tabEcs[$sem->getOrdre()][] = $ficheMatiere;
+                }
             }
-            $tabEcs[$sem->getOrdre()][] = $ficheMatiere;
-
         }
         return $this->render('parcours_ec/ressources_saes.html.twig', [
             'parcours' => $parcours,
@@ -76,21 +77,17 @@ class ParcoursEcController extends AbstractController
 
     #[Route('/parcours/ressources-sae/{parcours}/coeff', name: 'app_parcours_ressources_sae_but_coeff')]
     public function ressourcesSaeCoeff(
-        Parcours               $parcours
-    )
-    {
+        Parcours $parcours
+    ) {
         $tabEcs = [];
         $tabEcUes = [];
         $tabUes = [];
-        foreach ($parcours->getSemestreParcours() as $semParc)
-        {
+        foreach ($parcours->getSemestreParcours() as $semParc) {
             $tabEcs[$semParc->getOrdre()] = [];
-            foreach ($semParc->getSemestre()->getUes() as $ue)
-            {
+            foreach ($semParc->getSemestre()->getUes() as $ue) {
                 $tabEcUes[$semParc->getOrdre()][$ue->getId()] = [];
                 $tabUes[$semParc->getOrdre()][$ue->getId()] = $ue;
-                foreach ($ue->getElementConstitutifs() as $ec)
-                {
+                foreach ($ue->getElementConstitutifs() as $ec) {
                     $tabEcUes[$semParc->getOrdre()][$ue->getId()][$ec->getFicheMatiere()->getSigle()] = $ec;
                     $tabEcs[$semParc->getOrdre()][$ec->getFicheMatiere()->getSigle()] = $ec;
                 }
@@ -113,8 +110,7 @@ class ParcoursEcController extends AbstractController
         TypeEcRepository             $typeEcRepository,
         Request                      $request,
         Parcours                     $parcours
-    ): Response
-    {
+    ): Response {
         $field = $request->request->get('field');
 
 
