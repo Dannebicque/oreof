@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.6](https://github.com/Dannebicque/oreof/compare/v1.13.5...v1.13.6) (2023-09-19)
+
+
+### Bug Fixes
+
+* Ajout du libelle de la fiche en titre ([d14bcd3](https://github.com/Dannebicque/oreof/commit/d14bcd35b9e77a879b5c4228546eb6c4caba7545))
+
 ### [1.13.5](https://github.com/Dannebicque/oreof/compare/v1.13.4...v1.13.5) (2023-09-19)
 
 
