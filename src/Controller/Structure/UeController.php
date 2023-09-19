@@ -128,10 +128,11 @@ class UeController extends AbstractController
             }
             $ueRepository->save($ue, true);
 
-            if ($ue->getNatureUeEc()?->isChoix() === true) {
+            if ($ue->getNatureUeEc()?->isChoix() === true && $ue->getUeParent() === null) {
                 //on ajoute par défaut deux UE enfants
                 $ueEnfant1 = new Ue();
                 $ueEnfant1->setSemestre($semestre);
+                $ueEnfant1->setNatureUeEc(null);
                 $ueEnfant1->setNatureUeEc($ue->getNatureUeEc());
                 $ueEnfant1->setOrdre(1);
                 $ueEnfant1->setUeParent($ue);
@@ -140,6 +141,7 @@ class UeController extends AbstractController
 
                 $ueEnfant2 = new Ue();
                 $ueEnfant2->setSemestre($semestre);
+                $ueEnfant2->setNatureUeEc(null);
                 $ueEnfant2->setNatureUeEc($ue->getNatureUeEc());
                 $ueEnfant2->setOrdre(2);
                 $ueEnfant2->setUeParent($ue);
