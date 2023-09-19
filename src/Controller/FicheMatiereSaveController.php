@@ -16,6 +16,7 @@ use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\ButApprentissageCritiqueRepository;
 use App\Repository\CompetenceRepository;
+use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
 use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
@@ -32,6 +33,7 @@ class FicheMatiereSaveController extends BaseController
      */
     #[Route('/fiche_matiere/save/{ficheMatiere}', name: 'app_fiche_matiere_save')]
     public function save(
+        FicheMatiereRepository $ficheMatiereRepository,
         ButApprentissageCritiqueRepository $butApprentissageCritiqueRepository,
         FicheMatiereState      $ficheMatiereState,
         EntityManagerInterface $entityManager,
@@ -52,6 +54,12 @@ class FicheMatiereSaveController extends BaseController
         //todo: check si bonne formation...
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
+            case 'checkbox':
+                return $updateEntity->saveYesNo(
+                    $ficheMatiere,
+                    $data['field'],
+                    $data['isChecked']
+                );
             case 'stateOnglet':
                 $ong = substr($data['onglet'], 6);
                 $val = $ficheMatiereState->onglets()[$ong];

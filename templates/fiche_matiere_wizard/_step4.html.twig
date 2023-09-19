@@ -3,6 +3,17 @@
 }) }}>
     {% form_theme form 'communs/form_theme.html.twig' %}
     {{ form_start(form) }}
+    <h3>Répartition des heures</h3>
+
+    <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="sansHeures" name="sansHeures"
+               {% if ficheMatiere.sansHeures == true %}checked{% endif %}
+               data-action="change->fichematiere--step4#saveSansHeures"
+        >
+        <label class="form-check-label" for="sansHeures"> {{ 'mccc.but.labels.sansHeures'|trans({}, 'form') }} <i
+                    class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
+                    title="{{ 'mccc.but.helps.sansHeures'|trans({}, 'help') }}"></i></label>
+    </div>
     <div class="row">
         <div class="col-4">
             {{ form_row(form.volumeCmPresentiel) }}

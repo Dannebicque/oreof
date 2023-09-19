@@ -35,6 +35,14 @@ export default class extends Controller {
     })
   }
 
+  saveSansHeures(event) {
+    this._save({
+      field: 'sansHeures',
+      action: 'checkbox',
+      isChecked: event.target.checked,
+    })
+  }
+
   sauvegardeMccc(event) {
     event.preventDefault()
     event.stopPropagation()

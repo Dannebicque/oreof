@@ -703,7 +703,7 @@ class FicheMatiere
 
         $nbHeures = $cmPresentiel + $tdPresentiel + $tpPresentiel + $volumeTe;
 
-        if ($nbHeures === 0.0) {
+        if ($nbHeures === 0.0 && $this->sansHeures === false) {
             return 'À compléter';
         }
 
