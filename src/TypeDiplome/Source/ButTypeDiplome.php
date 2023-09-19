@@ -135,7 +135,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
                 }
             }
         }
-        $ficheMatiere->setEtatMccc($total === 100.0 ? 'Complet' : 'Incomplet');
+        $ficheMatiere->setEtatMccc($total >= 99.0 ? 'Complet' : 'Incomplet');
         $this->entityManager->flush();
     }
 
