@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.10](https://github.com/Dannebicque/oreof/compare/v1.13.9...v1.13.10) (2023-09-19)
+
+
+### Features
+
+* Export MCCC BUT. ([0138d33](https://github.com/Dannebicque/oreof/commit/0138d3378ad9938ad02ffbe9bbab4dd810c0bbd7))
+* MCCC portfolio sans note ([6097552](https://github.com/Dannebicque/oreof/commit/6097552e74faa288bb0b49195ba2e89805cee7c3))
+
+
+### Bug Fixes
+
+* arrondi à 99% ([88fe72a](https://github.com/Dannebicque/oreof/commit/88fe72acee0f9ae5ae89a22ed953914f00065e05))
+* Module sans heures (stage par exemple) ([98443d2](https://github.com/Dannebicque/oreof/commit/98443d2e94dfcb87f2cdc7914e78d3efff766e4b))
+
 ### [1.13.9](https://github.com/Dannebicque/oreof/compare/v1.13.8...v1.13.9) (2023-09-19)
 
 
