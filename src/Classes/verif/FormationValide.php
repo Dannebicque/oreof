@@ -39,7 +39,7 @@ class FormationValide extends AbstractValide
     {
        $this->valideOnlyFormation();
 
-        if ($this->formation->isHasParcours() === false and $this->formation->getParcours()->count() === 1) {
+        if ($this->formation->isHasParcours() === false && $this->formation->getParcours()->count() === 1) {
             $parcours = $this->formation->getParcours()->first();
             if ($parcours->isParcoursDefaut() === true) {
                 $this->etat['erreurHasParcours'] = self::COMPLET;
