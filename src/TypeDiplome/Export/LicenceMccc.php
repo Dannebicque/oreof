@@ -541,6 +541,7 @@ class LicenceMccc
 
                 $texteAvecTp = '';
                 $pourcentageTp = 0;
+                $pourcentageCc = 0;
                 $nb = 1;
                 $hasTp = false;
                 foreach ($mcccs[1]['cc'] as $mccc) {
@@ -555,6 +556,7 @@ class LicenceMccc
                     $texteEpreuve = '';
                     foreach ($mcccs[1]['et'] as $mccc) {
                         $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        $pourcentageCc += $mccc->getPourcentage();
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
@@ -566,16 +568,21 @@ class LicenceMccc
                     foreach ($mcccs[2]['et'] as $mccc) {
                         $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
                         $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTp);
+                        $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCc);
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texteEpreuve);
                     if ($hasTp) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne, str_replace(';', '+',  $texteAvecTp));
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+',  $texteAvecTp));
                     }
+                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne, str_replace(';', '+',  $texteCc));
+
                 }
 
                 //on garde CC et on complète avec le reste de pourcentage de l'ET
+
+
                 break;
             case 'ct':
                 if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
@@ -606,17 +613,17 @@ class LicenceMccc
 
         // Heures
         $this->excelWriter->writeCellXY(self::COL_ECTS, $ligne, $ec->getEcts());
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $ec->getVolumeCmPresentiel());
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $ec->getVolumeTdPresentiel());
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $ec->getVolumeTpPresentiel());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $ec->getVolumeCmPresentiel() === 0 ? '' : $ec->getVolumeCmPresentiel());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $ec->getVolumeTdPresentiel() === 0 ? '' : $ec->getVolumeTdPresentiel());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $ec->getVolumeTpPresentiel() === 0 ? '' : $ec->getVolumeTpPresentiel());
         $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TOTAL, $ligne, $ec->volumeTotalPresentiel());
 
         //si pas distanciel, griser...
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_CM, $ligne, $ec->getVolumeCmDistanciel());
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TD, $ligne, $ec->getVolumeTdDistanciel());
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TP, $ligne, $ec->getVolumeTpDistanciel());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_CM, $ligne, $ec->getVolumeCmDistanciel() === 0 ? '' : $ec->getVolumeCmDistanciel());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TD, $ligne, $ec->getVolumeTdDistanciel() === 0 ? '' : $ec->getVolumeTdDistanciel());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TP, $ligne, $ec->getVolumeTpDistanciel() === 0 ? '' : $ec->getVolumeTpDistanciel());
         $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TOTAL, $ligne, $ec->volumeTotalDistanciel());
-        $this->excelWriter->writeCellXY(self::COL_HEURES_AUTONOMIE, $ligne, $ec->getVolumeTe());
+        $this->excelWriter->writeCellXY(self::COL_HEURES_AUTONOMIE, $ligne, $ec->getVolumeTe() === 0 ? '' : $ec->getVolumeTe());
 
         $this->excelWriter->writeCellXY(self::COL_HEURES_TOTAL, $ligne, $ec->volumeTotal());
         $totalAnnee->addEc($ec);
