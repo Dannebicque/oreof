@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.8](https://github.com/Dannebicque/oreof/compare/v1.13.7...v1.13.8) (2023-09-19)
+
+
+### Bug Fixes
+
+* Affichage MCCC ([e5e822b](https://github.com/Dannebicque/oreof/commit/e5e822b16742e8e908dee748e465535cfe4b5f80))
+* gestion AC depuis fiche ([c8132a7](https://github.com/Dannebicque/oreof/commit/c8132a7332530ff1585167cdf80410d1c7b6746c))
+
 ### [1.13.7](https://github.com/Dannebicque/oreof/compare/v1.13.6...v1.13.7) (2023-09-19)
 
 
