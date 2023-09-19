@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.13](https://github.com/Dannebicque/oreof/compare/v1.13.12...v1.13.13) (2023-09-19)
+
+
+### Bug Fixes
+
+* Ajout UE Enfant si modificaiton ([bf0b7f7](https://github.com/Dannebicque/oreof/commit/bf0b7f72d49744a4feaa30620e26c608fe506df6))
+
 ### [1.13.12](https://github.com/Dannebicque/oreof/compare/v1.13.11...v1.13.12) (2023-09-19)
 
 ### [1.13.11](https://github.com/Dannebicque/oreof/compare/v1.13.10...v1.13.11) (2023-09-19)
