@@ -14,6 +14,7 @@ use App\Classes\verif\FicheMatiereState;
 use App\Entity\FicheMatiere;
 use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
+use App\Repository\ButApprentissageCritiqueRepository;
 use App\Repository\CompetenceRepository;
 use App\Repository\LangueRepository;
 use App\Repository\UserRepository;
@@ -31,14 +32,15 @@ class FicheMatiereSaveController extends BaseController
      */
     #[Route('/fiche_matiere/save/{ficheMatiere}', name: 'app_fiche_matiere_save')]
     public function save(
-        FicheMatiereState $ficheMatiereState,
+        ButApprentissageCritiqueRepository $butApprentissageCritiqueRepository,
+        FicheMatiereState      $ficheMatiereState,
         EntityManagerInterface $entityManager,
-        CompetenceRepository $competenceRepository,
-        UserRepository $userRepository,
-        LangueRepository $langueRepository,
-        UpdateEntity $updateEntity,
-        Request $request,
-        FicheMatiere $ficheMatiere
+        CompetenceRepository   $competenceRepository,
+        UserRepository         $userRepository,
+        LangueRepository       $langueRepository,
+        UpdateEntity           $updateEntity,
+        Request                $request,
+        FicheMatiere           $ficheMatiere
     ): Response {
         $ficheMatiereState->setFicheMatiere($ficheMatiere);
         $updateEntity->setGroups(['fiche_matiere:read']);
@@ -91,25 +93,49 @@ class FicheMatiereSaveController extends BaseController
             case 'int':
                 return $updateEntity->saveField($ficheMatiere, $data['field'], (int)$data['value']);
             case 'removeBcc':
-                $competences = $ficheMatiere->getCompetences();
-
-                foreach ($competences as $competence) {
-                    if ($competence->getBlocCompetence()?->getId() === $data['value']) {
-                        $competence->removeFicheMatiere($ficheMatiere);
-                        $ficheMatiere->removeCompetence($competence);
+                //utile ?
+                if ($ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
+                    $competence = $butApprentissageCritiqueRepository->find($data['value']);
+                    if ($competence !== null) {
+                        $ficheMatiere->removeApprentissagesCritique($competence);
+                        $entityManager->flush();
+                        return $this->json(true);
+                    }
+                } else {
+                    $competences = $ficheMatiere->getCompetences();
+                    foreach ($competences as $competence) {
+                        if ($competence->getBlocCompetence()?->getId() === $data['value']) {
+                            $competence->removeFicheMatiere($ficheMatiere);
+                            $ficheMatiere->removeCompetence($competence);
+                        }
                     }
                 }
                 $entityManager->flush();
 
                 return $this->json(true);
             case 'addCompetence':
-                $competence = $competenceRepository->find($data['value']);
-                if ($competence !== null) {
-                    $ficheMatiere->addCompetence($competence);
-                    $competence->addFicheMatiere($ficheMatiere);
-                    $entityManager->flush();
 
-                    return $this->json(true);
+                if ($ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
+                    $competence = $butApprentissageCritiqueRepository->find($data['value']);
+                    if ($competence !== null) {
+                        if ($data['checked'] === false) {
+                            $ficheMatiere->removeApprentissagesCritique($competence);
+                        } else {
+                            $ficheMatiere->addApprentissagesCritique($competence);
+                        }
+
+                        $entityManager->flush();
+                        return $this->json(true);
+                    }
+                } else {
+                    $competence = $competenceRepository->find($data['value']);
+                    if ($competence !== null) {
+                        $ficheMatiere->addCompetence($competence);
+                        $competence->addFicheMatiere($ficheMatiere);
+                        $entityManager->flush();
+
+                        return $this->json(true);
+                    }
                 }
 
                 return $this->json(false);
