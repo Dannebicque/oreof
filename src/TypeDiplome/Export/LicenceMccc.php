@@ -540,6 +540,7 @@ class LicenceMccc
                 }
 
                 $texteAvecTp = '';
+                $texteCc = '';
                 $pourcentageTp = 0;
                 $pourcentageCc = 0;
                 $nb = 1;
@@ -549,6 +550,7 @@ class LicenceMccc
                         $hasTp= true;
                         $pourcentageTp += $mccc->pourcentageTp();
                         $texteAvecTp .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
+
                     }
                 }
 
@@ -557,6 +559,7 @@ class LicenceMccc
                     foreach ($mcccs[1]['et'] as $mccc) {
                         $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
                         $pourcentageCc += $mccc->getPourcentage();
+                        $texteCc .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
@@ -572,9 +575,10 @@ class LicenceMccc
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
+                    $texteCc = substr($texteCc, 0, -2);
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texteEpreuve);
                     if ($hasTp) {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+',  $texteAvecTp));
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+',  $texteAvecTp));
                     }
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne, str_replace(';', '+',  $texteCc));
 
