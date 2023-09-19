@@ -141,6 +141,12 @@ class FicheMatiere
     #[ORM\ManyToMany(targetEntity: ButApprentissageCritique::class, inversedBy: 'ficheMatieres')]
     private Collection $apprentissagesCritiques;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $sansNote = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $sansHeures = null;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -736,5 +742,29 @@ class FicheMatiere
     public function getVolumeEtudiant(): float
     {
         return $this->getVolumeCmPresentiel() + $this->getVolumeTdPresentiel() + $this->getVolumeTpPresentiel() + $this->getVolumeTe();
+    }
+
+    public function isSansNote(): ?bool
+    {
+        return $this->sansNote;
+    }
+
+    public function setSansNote(?bool $sansNote): static
+    {
+        $this->sansNote = $sansNote;
+
+        return $this;
+    }
+
+    public function isSansHeures(): ?bool
+    {
+        return $this->sansHeures;
+    }
+
+    public function setSansHeures(?bool $sansHeures): static
+    {
+        $this->sansHeures = $sansHeures;
+
+        return $this;
     }
 }

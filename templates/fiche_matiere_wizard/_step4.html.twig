@@ -24,6 +24,7 @@
     {% endif %}
     {{ form_end(form) }}
 
+    <h3>Modalités de contrôle des connaissances et des compétences</h3>
     <form method="post"
           id="formMccc"
           action="{{ path('app_element_constitutif_mccc_but', {id:ficheMatiere.id}) }}" {{ stimulus_controller('ec--mccc') }}>

@@ -55,8 +55,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         protected EntityManagerInterface  $entityManager,
         protected TypeDiplomeRegistry     $typeDiplomeRegistry,
         protected But                     $synchronisationBut,
-        protected ButMccc  $butMccc
-
+        protected ButMccc                 $butMccc
     ) {
         parent::__construct($entityManager, $typeDiplomeRegistry);
     }
@@ -98,48 +97,44 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         ]);
     }
 
-
-    public function initMcccs(ElementConstitutif $elementConstitutif): void
-    {
-        // TODO: Implement initMcccs() method.
-    }
-
-
     public function saveMcccs(FicheMatiere $ficheMatiere, InputBag $request): void
     {
-    //    $elementConstitutif->setEcts($request->get('ec_ects'));
-
-        $type = $ficheMatiere->getTypeMatiere();
-        $total = 0.0;
-        $mcccs = $this->getMcccs($ficheMatiere);
-        foreach ($this->typeEpreuves[$type] as $ep) {
-            if ($request->has('pourcentage_' . $ep) && $request->has('nombre_' . $ep)) {
-                $pourcentage = $request->get('pourcentage_' . $ep);
-                $nombre = $request->get('nombre_' . $ep);
-                if (array_key_exists($ep, $mcccs)) {
-                    $mcccs[$ep]->setPourcentage(Tools::convertToFloat($pourcentage));
-                    $mcccs[$ep]->setNbEpreuves((int)$nombre);
-                    $mcccs[$ep]->setLibelle($ep);
-                    $mcccs[$ep]->setNumeroSession(1);
-                    $mcccs[$ep]->setControleContinu(true);
-                    $mcccs[$ep]->setExamenTerminal(false);
-                    $total += $mcccs[$ep]->getPourcentage() * $mcccs[$ep]->getNbEpreuves();
-                } else {
-                    $mccc = new Mccc();
-                    $mccc->setTypeEpreuve([$ep]);
-                    $mccc->setPourcentage(Tools::convertToFloat($pourcentage));
-                    $mccc->setNbEpreuves((int)$nombre);
-                    $mccc->setLibelle($ep);
-                    $mccc->setControleContinu(true);
-                    $mccc->setNumeroSession(1);
-                    $mccc->setExamenTerminal(false);
-                    $this->entityManager->persist($mccc);
-                    $ficheMatiere->addMccc($mccc);
-                    $total += $mccc->getPourcentage() * $mccc->getNbEpreuves();
+        if ($request->has('sansNote') && $request->get('sansNote') === 'on') {
+                $ficheMatiere->setSansNote(true);
+                $ficheMatiere->setEtatMccc('Complet');
+        } else {
+            $ficheMatiere->setSansNote(false);
+            $type = $ficheMatiere->getTypeMatiere();
+            $total = 0.0;
+            $mcccs = $this->getMcccs($ficheMatiere);
+            foreach ($this->typeEpreuves[$type] as $ep) {
+                if ($request->has('pourcentage_' . $ep) && $request->has('nombre_' . $ep)) {
+                    $pourcentage = $request->get('pourcentage_' . $ep);
+                    $nombre = $request->get('nombre_' . $ep);
+                    if (array_key_exists($ep, $mcccs)) {
+                        $mcccs[$ep]->setPourcentage(Tools::convertToFloat($pourcentage));
+                        $mcccs[$ep]->setNbEpreuves((int)$nombre);
+                        $mcccs[$ep]->setLibelle($ep);
+                        $mcccs[$ep]->setNumeroSession(1);
+                        $mcccs[$ep]->setControleContinu(true);
+                        $mcccs[$ep]->setExamenTerminal(false);
+                        $total += $mcccs[$ep]->getPourcentage() * $mcccs[$ep]->getNbEpreuves();
+                    } else {
+                        $mccc = new Mccc();
+                        $mccc->setTypeEpreuve([$ep]);
+                        $mccc->setPourcentage(Tools::convertToFloat($pourcentage));
+                        $mccc->setNbEpreuves((int)$nombre);
+                        $mccc->setLibelle($ep);
+                        $mccc->setControleContinu(true);
+                        $mccc->setNumeroSession(1);
+                        $mccc->setExamenTerminal(false);
+                        $this->entityManager->persist($mccc);
+                        $ficheMatiere->addMccc($mccc);
+                        $total += $mccc->getPourcentage() * $mccc->getNbEpreuves();
+                    }
                 }
             }
         }
-
         $ficheMatiere->setEtatMccc($total === 100.0 ? 'Complet' : 'Incomplet');
         $this->entityManager->flush();
     }
@@ -149,8 +144,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): StreamedResponse
-    {
+    ): StreamedResponse {
         //todo: exploiter la date...
         return $this->butMccc->exportExcelButMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
     }
@@ -160,8 +154,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): StreamedResponse
-    {
+    ): StreamedResponse {
         //todo: exploiter la date...
         return $this->butMccc->exportPdfButMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
     }
@@ -172,8 +165,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         Parcours           $parcours,
         DateTimeInterface  $dateEdition,
         bool               $versionFull = true
-    ): string
-    {
+    ): string {
         return $this->butMccc->exportAndSaveExcelbutMccc($anneeUniversitaire, $parcours, $dir, $dateEdition, $versionFull);
     }
 }
