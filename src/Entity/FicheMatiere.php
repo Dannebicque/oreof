@@ -291,11 +291,12 @@ class FicheMatiere
             $nbChampsRemplis++;
         }
 
-        if ($this->competences->isEmpty() === false) {
-            $nbChampsRemplis++;
-        }
+//        if ($this->competences->isEmpty() === false) {
+//            $nbChampsRemplis++;
+//        }
+        //todo: ajouter MCCC et Apprentissages critiques pour le BUT
 
-        $nbChampsObligatoires = 6;
+        $nbChampsObligatoires = 5;
 
         return round($nbChampsRemplis / $nbChampsObligatoires * 100, 2);
     }
@@ -725,5 +726,15 @@ class FicheMatiere
         $this->apprentissagesCritiques->removeElement($apprentissagesCritique);
 
         return $this;
+    }
+
+    public function getSemestre(): int
+    {
+        return $this->getElementConstitutifs()->first()->getUe()?->getSemestre()?->getOrdre();
+    }
+
+    public function getVolumeEtudiant(): float
+    {
+        return $this->getVolumeCmPresentiel() + $this->getVolumeTdPresentiel() + $this->getVolumeTpPresentiel() + $this->getVolumeTe();
     }
 }

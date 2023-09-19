@@ -554,7 +554,6 @@ class Formation
 
     public function remplissageBrut(): Remplissage
     {
-        $remplissage = new Remplissage();
         if ($this->hasParcours === true) {
             $valide = new FormationValide($this);
             $valide->valideOnlyFormation();
