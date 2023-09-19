@@ -55,7 +55,7 @@ class ParcoursEcController extends AbstractController
     public function ressourcesSae(
         FicheMatiereRepository $ficheMatiereRepository,
         Parcours               $parcours
-    ) {
+    ): Response {
         $fichesMatieres = $ficheMatiereRepository->findByParcours($parcours);
         $tabEcs = [];
         foreach ($fichesMatieres as $ficheMatiere) {
@@ -65,10 +65,15 @@ class ParcoursEcController extends AbstractController
                     if (array_key_exists($sem->getOrdre(), $tabEcs) === false) {
                         $tabEcs[$sem->getOrdre()] = [];
                     }
-                    $tabEcs[$sem->getOrdre()][] = $ficheMatiere;
+                    $tabEcs[$sem->getOrdre()][$ficheMatiere->getSigle()] = $ficheMatiere;
                 }
             }
         }
+
+        foreach ($tabEcs as $key => $tabEc) {
+            ksort($tabEcs[$key]);
+        }
+
         return $this->render('parcours_ec/ressources_saes.html.twig', [
             'parcours' => $parcours,
             'tabEcs' => $tabEcs,
