@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.14](https://github.com/Dannebicque/oreof/compare/v1.13.13...v1.13.14) (2023-09-20)
+
+
+### Bug Fixes
+
+* Au moins un parcours ([4addfec](https://github.com/Dannebicque/oreof/commit/4addfec974d44ace6e37bc0c09e77c8a56a41687))
+* Au moins un parcours sur le taux de remplissage ([5fae7e9](https://github.com/Dannebicque/oreof/commit/5fae7e9f67a968fe510e22e69bd89e816e6a06ea))
+
 ### [1.13.13](https://github.com/Dannebicque/oreof/compare/v1.13.12...v1.13.13) (2023-09-19)
 
 
