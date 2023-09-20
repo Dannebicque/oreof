@@ -7,6 +7,13 @@
             <a href="{{ url('app_fiche_matiere_show', {slug: ec.ficheMatiere.slug}) }}">
                 {{ ec.ficheMatiere.display }}
             </a>
+
+            {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) %}
+                {# todo: vérifier si éditable par moi? #}
+                <a href="{{ url('app_fiche_matiere_edit', {slug: ec.ficheMatiere.slug}) }}">
+                    <i class="{{ iconEdit }}">Modifier</i>
+                </a>
+            {% endif %}
         {% else %}
             {{ ec.libelle }}
         {% endif %}
