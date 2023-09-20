@@ -558,9 +558,13 @@ class Formation
             $valide = new FormationValide($this);
             $valide->valideOnlyFormation();
             $remplissage = $valide->calcul();
-            foreach ($this->getParcours() as $parcours) {
-                $remp = $parcours->getRemplissage();
-                $remplissage->addRemplissage($remp);
+            if ($this->getParcours()->count() > 0) {
+                foreach ($this->getParcours() as $parcours) {
+                    $remp = $parcours->getRemplissage();
+                    $remplissage->addRemplissage($remp);
+                }
+            } else {
+                $remplissage->add(0);
             }
         } else {
             $valide = new FormationValide($this);
@@ -868,7 +872,6 @@ class Formation
 
     public function setRemplissage(?Remplissage $remplissage = null): static
     {
-
         if (null === $remplissage) {
             $remplissage = $this->remplissageBrut();
         }
