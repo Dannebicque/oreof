@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.15](https://github.com/Dannebicque/oreof/compare/v1.13.14...v1.13.15) (2023-09-20)
+
+
+### Features
+
+* Recopie de parcours ([4ba3d09](https://github.com/Dannebicque/oreof/commit/4ba3d096e5df8e4b9aff8496d0667bd308dfb9c8))
+
+
+### Bug Fixes
+
+* Filtre sur les BCCC ([82e3f17](https://github.com/Dannebicque/oreof/commit/82e3f17812e6b71285b2b52e73a6cc0a38c60a2f))
+* Filtre sur les MCCC ([bb27873](https://github.com/Dannebicque/oreof/commit/bb278733e27994fa96fb8751a0bf6efd381668bd))
+* Modifier sur show des parcours ([3cb8997](https://github.com/Dannebicque/oreof/commit/3cb899767bc8af462f8eb183bd2792470018dc9f))
+
 ### [1.13.14](https://github.com/Dannebicque/oreof/compare/v1.13.13...v1.13.14) (2023-09-20)
 
 
