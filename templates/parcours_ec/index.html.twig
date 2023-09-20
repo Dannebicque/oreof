@@ -120,7 +120,7 @@
                                             {{ stimulus_controller('modal', {
                                                 size: 'lg',
                                                 modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-                                                modalUrl: path('app_element_constitutif_mccc',{'id': ec.id}) }) }}
+                                                modalUrl: path('app_element_constitutif_mccc',{'id': ec.id, parcours:parcours.id}) }) }}
                                             data-action="click->modal#openModal"
                                             class="btn btn-sm btn-outline-info"
                                             data-size="lg"

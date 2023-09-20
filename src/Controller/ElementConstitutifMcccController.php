@@ -40,16 +40,17 @@ class ElementConstitutifMcccController extends AbstractController
     /**
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
-    #[Route('/{id}/mccc-ec', name: 'app_element_constitutif_mccc', methods: ['GET', 'POST'])]
+    #[Route('/{id}/mccc-ec/{parcours}', name: 'app_element_constitutif_mccc', methods: ['GET', 'POST'])]
     public function mcccEc(
         TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
         Request                      $request,
         ElementConstitutifRepository $elementConstitutifRepository,
-        ElementConstitutif           $elementConstitutif
+        ElementConstitutif           $elementConstitutif,
+        Parcours                     $parcours
     ): Response
     {
-        $formation = $elementConstitutif->getParcours()?->getFormation();
+        $formation = $parcours?->getFormation();
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
         }
@@ -60,7 +61,7 @@ class ElementConstitutifMcccController extends AbstractController
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
         if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
-            $this->isGranted('CAN_PARCOURS_EDIT_MY', $elementConstitutif->getParcours())) { //todo: ajouter le workflow...
+            $this->isGranted('CAN_PARCOURS_EDIT_MY', $parcours)) {
             if ($request->isMethod('POST')) {
                 if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
                     $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
@@ -102,6 +103,7 @@ class ElementConstitutifMcccController extends AbstractController
                 'mcccs' => $typeD->getMcccs($elementConstitutif),
                 'wizard' => false,
                 'typeDiplome' => $typeDiplome,
+                'parcours' => $parcours
             ]);
         }
 
