@@ -44,7 +44,10 @@
         <td>{{ valide.etat.objectifsFormation|badgeValide }}</td>
     </tr>
     {% if formation.isHasparcours == true %}
-
+        <tr>
+            <td>Parcours présent ?</td>
+            <td>{{ valide.etat.erreurHasParcours|badgeValide }}</td>
+        </tr>
     {% else %}
         <tr>
             <td>Parcours unique présent ?</td>

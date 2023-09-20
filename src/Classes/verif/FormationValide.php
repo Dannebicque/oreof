@@ -63,6 +63,11 @@ class FormationValide extends AbstractValide
             }
         }
 
+        if ($this->formation->getParcours()->count() === 0) {
+            $this->etat['erreurHasParcours'] = self::ERREUR;
+            $this->etat['valideParcours'] = self::INCOMPLET;
+        }
+
         return $this;
     }
 
