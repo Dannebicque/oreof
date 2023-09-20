@@ -10,6 +10,8 @@
 namespace App\Controller;
 
 use App\Classes\CalculStructureParcours;
+use App\Classes\JsonReponse;
+use App\Classes\ParcoursDupliquer;
 use App\Classes\verif\ParcoursState;
 use App\DTO\HeuresEctsFormation;
 use App\DTO\HeuresEctsSemestre;
@@ -231,63 +233,34 @@ class ParcoursController extends BaseController
         ]);
     }
 
-    #[Route('/{id}/dupliquer', name: 'app_parcours_dupliquer', methods: ['GET'])]
-    public function dupliquer(
+    #[Route('/{id}/dupliquer/modal', name: 'app_parcours_dupliquer_modal', methods: ['GET'])]
+    public function dupliquerModal(
         EntityManagerInterface $entityManager,
         Parcours               $parcour,
     ): Response {
-        $formation = $parcour->getFormation();
-        $newParcours = clone $parcour;
-        $newParcours->setLibelle($parcour->getLibelle() . ' (copie)');
-        $entityManager->persist($newParcours);
+        return $this->render('parcours/_dupliquer.html.twig', [
+            'parcours' => $parcour,
+        ]);
+    }
+    #[Route('/{id}/dupliquer', name: 'app_parcours_dupliquer', methods: ['POST'])]
+    public function dupliquer(
+        Request                $request,
+        ParcoursDupliquer      $parcoursDupliquer,
+        Parcours               $parcours,
+    ): Response {
 
-        //dupliquer les blocs et les compétences
-        foreach ($parcour->getBlocCompetences() as $bloc) {
-            $newBloc = clone $bloc;
-            $newBloc->setParcours($newParcours);
-            $entityManager->persist($newBloc);
+        $typeDuplication = JsonRequest::getValueFromRequest($request, 'dupliquer');
 
-            foreach ($bloc->getCompetences() as $competence) {
-                $newCompetence = clone $competence;
-                $newCompetence->setBlocCompetence($newBloc);
-                $entityManager->persist($newCompetence);
-            }
+        if ($typeDuplication === 'recopie') {
+           return  $parcoursDupliquer->recopie($parcours);
         }
 
-        foreach ($parcour->getSemestreParcours() as $sp) {
-            if ($sp->getSemestre()->isTroncCommun()) {
-                //tronc commun, on duplique uniquement la liaison.
-                $newSp = clone $sp;
-                $newSp->setParcours($newParcours);
-                $entityManager->persist($newSp);
-            } else {
-                //Pas tronc commun, on duplique semestre, UE et EC
-                $newSemestre = clone $sp->getSemestre();
-                $entityManager->persist($newSemestre);
-                $newSp = new SemestreParcours($newSemestre, $newParcours);
-                $entityManager->persist($newSp);
-
-                foreach ($sp->getSemestre()->getUes() as $ue) {
-                    $newUe = clone $ue;
-                    $newUe->setSemestre($newSemestre);
-                    $entityManager->persist($newUe);
-
-                    //dupliquer les EC des ue
-                    foreach ($ue->getElementConstitutifs() as $ec) {
-                        //todo: on ne duplique pas les fiches EC/Matières ici ? Si on le fait, il faut reconstruire le lien vers les BC.
-                        //todo: dupliquer les MCCC
-                        $newEc = clone $ec;
-                        $newEc->setUe($newUe);
-                        $newEc->setParcours($newParcours);
-                        $entityManager->persist($newEc);
-                    }
-                }
-            }
+        if ($typeDuplication === 'mutualise') {
+           // return $parcoursDupliquer->recopieAvecMutualise($parcours);
+            return JsonReponse::error('Mutualisation non implémentée');
         }
 
-        $entityManager->flush();
-
-        return $this->json(true);
+        return JsonReponse::error('Modalite de recopie inconnue');
     }
 
     /**

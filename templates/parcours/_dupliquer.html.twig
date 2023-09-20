@@ -1,0 +1,38 @@
+<div
+        {{ stimulus_controller('parcours--manage', {
+            url: path('app_parcours_dupliquer', {id: parcours.id})
+        }) }}
+        data-action="parcours--manage:modalHide@window->base#modalHide"
+>
+    <div class="mb-1">
+        <label class="form-label" for="">
+            {{ 'parcours.fiche_recopie_mutualise.label'|trans({}, 'form') }}
+            <span class="required"></span>
+
+        </label>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="option" id="recopie" value="recopie">
+            <label class="form-check-label" for="recopie">
+                {{ 'parcours.fiche_recopie.label'|trans({}, 'form') }}
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   title="{{ 'parcours.fiche_recopie.helps'|trans({}, 'help') }}"></i>
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="option" id="mutualise" value="mutualise">
+            <label class="form-check-label" for="mutualise">
+                {{ 'parcours.fiche_mutualise.label'|trans({}, 'form') }} (non opérationnel pour le moment)
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   title="{{ 'parcours.fiche_mutualise.helps'|trans({}, 'help') }}"></i>
+            </label>
+        </div>
+    </div>
+
+    <button class="btn btn-success" {{ stimulus_action('parcours--manage', 'valideDupliquer') }}>
+        {{ 'parcours.dupliquer.bouton'|trans({}, 'form') }}
+    </button>
+</div>
