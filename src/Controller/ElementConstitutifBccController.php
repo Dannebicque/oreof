@@ -144,7 +144,6 @@ class ElementConstitutifBccController extends AbstractController
             $ecComps = [];
             //tester si BUT ou autre...
 
-
             if (($ficheMatiere !== null && $ficheMatiere->getParcours()?->getId() === $parcours->getId())) {
                 foreach ($ficheMatiere->getCompetences() as $competence) {
                     $ecComps[] = $competence->getId();
@@ -157,15 +156,10 @@ class ElementConstitutifBccController extends AbstractController
                 }
             }
 
-
-           /// if ($parcours !== null) {
-                $bccs = $blocCompetenceRepository->findByParcours($parcours);
-//            } else {
-//                $bccs = $blocCompetenceRepository->findBy(['parcours' => null]);
-//            }
+             $bccs = $blocCompetenceRepository->findByParcours($parcours);
 
             if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
-                $this->isGranted('CAN_PARCOURS_EDIT_MY', $elementConstitutif->getParcours())) { //todo: ajouter le workflow...
+                $this->isGranted('CAN_PARCOURS_EDIT_MY', $parcours)) {
                 return $this->render('element_constitutif/_bccEcModal.html.twig', [
                     'ec' => $elementConstitutif,
                     'bccs' => $bccs,
@@ -183,32 +177,4 @@ class ElementConstitutifBccController extends AbstractController
             ]);
         }
     }
-
-//    /**
-//     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
-//     */
-//    public function displayBccEc(
-//        TypeDiplomeRegistry   $typeDiplomeRegistry,
-//        TypeEpreuveRepository $typeEpreuveRepository,
-//        ElementConstitutif    $elementConstitutif
-//    ): Response {
-//        $formation = $elementConstitutif->getParcours()->getFormation();
-//        if ($formation === null) {
-//            throw new RuntimeException('Formation non trouvée');
-//        }
-//        $typeDiplome = $formation->getTypeDiplome();
-//
-//        if ($typeDiplome === null) {
-//            throw new RuntimeException('Type de diplome non trouvé');
-//        }
-//
-//        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-//
-//        return $this->render('element_constitutif/_mcccEcNonEditable.html.twig', [
-//            'ec' => $elementConstitutif,
-//            'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
-//            'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-//            'mcccs' => $typeD->getMcccs($elementConstitutif),
-//        ]);
-//    }
 }
