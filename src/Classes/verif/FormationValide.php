@@ -135,6 +135,7 @@ class FormationValide extends AbstractValide
         }
         $this->etat['objectifsFormation'] = $this->nonVide($this->formation->getObjectifsFormation());
         $this->etat['hasParcours'] = $this->formation->isHasParcours() === null ? self::VIDE : self::COMPLET;
+        $this->etat['erreurHasParcours'] = $this->formation->isHasParcours() === null ? self::VIDE : self::COMPLET;
 
         if ($this->formation->isHasParcours() === false and $this->formation->getParcours()->count() > 1) {
             $this->etat['erreurHasParcours'] = self::ERREUR;
