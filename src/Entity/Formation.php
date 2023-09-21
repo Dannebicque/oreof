@@ -564,7 +564,7 @@ class Formation
                     $remplissage->addRemplissage($remp);
                 }
             } else {
-                $remplissage->add(0);
+                $remplissage->total += 30;
             }
         } else {
             $valide = new FormationValide($this);
