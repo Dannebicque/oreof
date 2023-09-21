@@ -551,6 +551,7 @@ class LicenceMccc
                 }
 
                 if ($hasTp) {
+                    $texteAvecTp = substr($texteAvecTp, 0, -2);
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
                 }
 
