@@ -234,31 +234,38 @@ class ParcoursState
                     } else {
 
                         foreach ($ue->getElementConstitutifs() as $ec) {
-                            if ($ec->getNatureUeEc()?->isChoix()) {
+                            if ($ec->getEcParent() ===null && $ec->getNatureUeEc()?->isChoix() === true) {
                                 if ($ec->getEcts() === null) {
-                                    $tab['error'][] = 'Vous devez saisir les MCCC de l\'EC "' . $ec->getOrdre() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
+                                    $tab['error'][] = 'Vous devez saisir les MCCC de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
                                 }
                             } else {
                                 if ($ec->getFicheMatiere() === null) {
-                                    $tab['error'][] = 'Vous devez affecter une fiche EC/matière à l\'EC "' . $ec->getOrdre() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
+                                    $tab['error'][] = 'Vous devez affecter une fiche EC/matière à l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
                                 }
 
-                                if ($ec->getEtatMccc() === 'A Saisir') {//todo: tester car pourrait être une reprise du parent?
-                                    $tab['error'][] = 'Vous devez saisir les MCCC de l\'EC "' . $ec->getOrdre() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
+                                if ($ec->getEcParent() === null && $ec->getEtatMccc() === 'A Saisir') {
+                                    $tab['error'][] = 'Vous devez saisir les MCCC de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
                                 }
 
+                                if ($ec->getEcParent() !== null && !$ec->getEcParent()->isMcccEnfantsIdentique() && $ec->getEtatMccc() === 'A Saisir') {
+                                    $tab['error'][] = 'Vous devez saisir les MCCC de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
+                                }
 
-                                if ($ec->etatStructure() !== 'Complet') {
-                                    $tab['error'][] = 'Vous devez saisir les volumes horaires de l\'EC "' . $ec->getOrdre() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
+                                if ($ec->getEcParent() === null && $ec->etatStructure() !== 'Complet') {
+                                    $tab['error'][] = 'Vous devez saisir les volumes horaires de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
+                                }
+
+                                if ($ec->getEcParent() !== null && !$ec->getEcParent()->isHeuresEnfantsIdentiques() && $ec->etatStructure() !== 'Complet') {
+                                    $tab['error'][] = 'Vous devez saisir les volumes horaires de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
                                 }
 
                                 if ($ec->getEtatBcc($this->parcours) !== 'Complet') {
-                                    $tab['error'][] = 'Vous devez saisir les BCC de l\'EC "' . $ec->getOrdre() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
+                                    $tab['error'][] = 'Vous devez saisir les BCC de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
                                 }
 
                                 if ($ec->getEcParent() === null || !$ec->getEcParent()->getNatureUeEc()?->isChoix()) {
                                     if ($ec->getTypeEc() === null) {
-                                        $tab['error'][] = 'Vous devez indiquer le type d\'EC pour l\'EC "' . $ec->getOrdre() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
+                                        $tab['error'][] = 'Vous devez indiquer le type d\'EC pour l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
                                     }
                                 }
                             }
