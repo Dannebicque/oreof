@@ -104,7 +104,7 @@ class Ue
         return $this;
     }
 
-    public function display(Parcours $parcours): string
+    public function display(?Parcours $parcours = null): string
     {
         if ($this->ueParent === null) {
             $ordreue = $this->ordre;
@@ -112,18 +112,21 @@ class Ue
             $ordreue = $this->ueParent->ordre . '.' . chr($this->ordre + 64);
         }
 
-        foreach ($this->getSemestre()?->getSemestreParcours() as $semestreParcours) {
-            if ($semestreParcours->getParcours() === $parcours) {
-                if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
-                    return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue.' ('.$this->getLibelle() .')';
+        if ($parcours !== null) {
+            foreach ($this->getSemestre()?->getSemestreParcours() as $semestreParcours) {
+                if ($semestreParcours->getParcours() === $parcours) {
+                    if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
+                        return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue . ' (' . $this->getLibelle() . ')';
+                    }
+
+                    return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue;
                 }
-
-                return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue;
             }
-        }
 
-        if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
-            return 'UE ' . $this->getSemestre()?->getOrdre() . '.' . $ordreue.' ('.$this->getLibelle() .')';
+
+            if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
+                return 'UE ' . $this->getSemestre()?->getOrdre() . '.' . $ordreue . ' (' . $this->getLibelle() . ')';
+            }
         }
 
         return 'UE ' . $this->getSemestre()->getOrdre() . '.' . $ordreue;
