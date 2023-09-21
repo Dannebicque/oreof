@@ -533,6 +533,7 @@ class LicenceMccc
                         $hasTp = true;
                         $pourcentageTp += $mccc->pourcentageTp();
                         $texteAvecTp .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
+                        $nb++;
                     }
                 }
 
