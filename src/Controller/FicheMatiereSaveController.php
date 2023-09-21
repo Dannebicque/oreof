@@ -111,7 +111,7 @@ class FicheMatiereSaveController extends BaseController
                 if ($ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
                     $acs = $ficheMatiere->getApprentissagesCritiques();
                     foreach ($acs as $ac) {
-                        if ($ac->getNiveau()->getCompetence()->getId() === $data['value']) {
+                        if ($ac->getNiveau()?->getCompetence()?->getId() === $data['value']) {
                             $ficheMatiere->removeApprentissagesCritique($ac);
                         }
                     }

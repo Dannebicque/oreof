@@ -148,25 +148,6 @@ class FicheMatiereController extends AbstractController
             $link = $referer.'?step=4';
         }
 
-
-
-        //(is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) or is_granted
-        //                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec,
-        //                        'valider_ec')
-
-//        $access = (($this->isGranted(
-//            'ROLE_EC_EDIT_MY',
-//            $ficheMatiere
-//        ) && $this->ecWorkflow->can($ficheMatiere, 'valider_ec')) || ($this->isGranted(
-//                'ROLE_FORMATION_EDIT_MY',
-//                $parcours->getFormation()
-//            )) || ($this->ecWorkflow->can($ficheMatiere, 'valider_ec') || $this->ecWorkflow->can($ficheMatiere, 'initialiser')) || $this->isGranted('ROLE_ADMIN'));
-//
-//        if (!$access) {
-//            throw new AccessDeniedException();
-//        }
-
-
         return $this->render('fiche_matiere/edit.html.twig', [
             'fiche_matiere' => $ficheMatiere,
             'ficheMatiereState' => $ficheMatiereState,
@@ -195,59 +176,8 @@ class FicheMatiereController extends AbstractController
             $entityManager->flush();
         }
 
-//        foreach ($ficheMatiere->getElementConstitutifs() as $elementConstitutif) {
-//            $newElementConstitutif = clone $elementConstitutif;
-//            $newElementConstitutif->setFicheMatiere($newFicheMatiere);
-//
-//            if ($elementConstitutif->getEcParent() !== null) {
-//                $ordreMax = $elementConstitutifRepository->findLastEcEnfant($elementConstitutif);
-//                $newElementConstitutif->setOrdre($ordreMax);
-//            } else {
-//                $ordreMax = $elementConstitutifRepository->findLastEc($elementConstitutif->getUe());
-//                $newElementConstitutif->setOrdre($ordreMax + 1);
-//            }
-//            $newElementConstitutif->genereCode();
-//            $entityManager->persist($newElementConstitutif);
-//            $entityManager->flush();
-//        }
-
         return $this->json(true);
     }
-
-//    #[Route('/{id}/structure-ec', name: 'app_fiche_matiere_structure', methods: ['GET', 'POST'])]
-//    public function structureEc(
-//        Request $request,
-//        FicheMatiereRepository $ficheMatiereRepository,
-//        FicheMatiere $ficheMatiere
-//    ): Response {
-//        if ($this->isGranted(
-//            'ROLE_FORMATION_EDIT_MY',
-//            $ficheMatiere->getParcours()->getFormation()
-//        )) { //todo: ajouter le workflow...
-//            $form = $this->createForm(EcStep4Type::class, $ficheMatiere, [
-//                'isModal' => true,
-//                'action' => $this->generateUrl(
-//                    'app_fiche_matiere_structure',
-//                    ['id' => $ficheMatiere->getId()]
-//                ),
-//            ]);
-//            $form->handleRequest($request);
-//            if ($form->isSubmitted() && $form->isValid()) {
-//                $ficheMatiereRepository->save($ficheMatiere, true);
-//
-//                return $this->json(true);
-//            }
-//
-//            return $this->render('fiche_matiere/_structureEcModal.html.twig', [
-//                'ec' => $ficheMatiere,
-//                'form' => $form->createView(),
-//            ]);
-//        }
-//
-//        return $this->render('fiche_matiere/_structureEcNonEditable.html.twig', [
-//            'ec' => $ficheMatiere,
-//        ]);
-//    }
 
     #[Route('/{slug}', name: 'app_fiche_matiere_delete', methods: ['DELETE'])]
     public function delete(
@@ -259,6 +189,11 @@ class FicheMatiereController extends AbstractController
             'delete' . $ficheMatiere->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf')
         )) {
+
+            foreach ($ficheMatiere->getMcccs() as $mccc) {
+                $ficheMatiere->removeMccc($mccc);
+            }
+
             $ficheMatiereRepository->remove($ficheMatiere, true);
 
             return $this->json(true);
