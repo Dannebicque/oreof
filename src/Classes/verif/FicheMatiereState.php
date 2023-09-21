@@ -146,33 +146,34 @@ class FicheMatiereState
 
     private function etatOnglet4(): bool|array
     {
-        $totalHeures = $this->ficheMatiere->getVolumeCmPresentiel() + $this->ficheMatiere->getVolumeTdPresentiel()  + $this->ficheMatiere->getVolumeTpPresentiel() + $this->ficheMatiere->getVolumeTe();
+        $totalHeures = $this->ficheMatiere->getVolumeCmPresentiel() + $this->ficheMatiere->getVolumeTdPresentiel() + $this->ficheMatiere->getVolumeTpPresentiel() + $this->ficheMatiere->getVolumeTe();
 
         $tab['error'] = [];
 
         if ($totalHeures === 0.0 || ($this->ficheMatiere->getVolumeCmPresentiel() === null && $this->ficheMatiere->getVolumeTdPresentiel() === null && $this->ficheMatiere->getVolumeTpPresentiel() === null && $this->ficheMatiere->getVolumeTe() === null)) {
-            $tab['error'][] = 'Vous devez indiquer au moins un volume horaire.';
+            if ($this->ficheMatiere->isSansHeures() === false) {
+                $tab['error'][] = 'Vous devez indiquer au moins un volume horaire.';
+            }
         }
 
         //MCCC
-
-        if ($this->ficheMatiere->getMcccs()->count() === 0) {
-            $tab['error'][] = 'Vous devez associer au moins un MCCC.';
-        }
-        $somme = 0;
-        foreach ($this->ficheMatiere->getMcccs() as $mccc) {
-            if ($mccc->getNbEpreuves() > 0 && ($mccc->getPourcentage() === null || $mccc->getPourcentage() === 0.0)) {
-                $tab['error'][] = 'Vous devez indiquer un % pour chaque épreuve.';
+        if ($this->ficheMatiere->isSansNote() === false) {
+            if ($this->ficheMatiere->getMcccs()->count() === 0) {
+                $tab['error'][] = 'Vous devez associer au moins un MCCC.';
             }
-            $somme += $mccc->getPourcentage();
-        }
+            $somme = 0;
+            foreach ($this->ficheMatiere->getMcccs() as $mccc) {
+                if ($mccc->getNbEpreuves() > 0 && ($mccc->getPourcentage() === null || $mccc->getPourcentage() === 0.0)) {
+                    $tab['error'][] = 'Vous devez indiquer un % pour chaque épreuve.';
+                }
+                $somme += $mccc->getPourcentage();
+            }
 
-        if ($somme !== 100.0) {
-            $tab['error'][] = 'La somme des % des épreuves doit être égale à 100%.';
+            if ($somme !== 100.0) {
+                $tab['error'][] = 'La somme des % des épreuves doit être égale à 100%.';
+            }
         }
 
         return count($tab['error']) > 0 ? $tab : true;
-
-
     }
 }
