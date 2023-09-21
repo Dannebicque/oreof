@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.16](https://github.com/Dannebicque/oreof/compare/v1.13.15...v1.13.16) (2023-09-21)
+
+
+### Features
+
+* EC enfant libre ([4dfa3ee](https://github.com/Dannebicque/oreof/commit/4dfa3eecf59220b1c62f707904afc19c832c4bb1))
+
+
+### Bug Fixes
+
+* % si remplissage sans parcours ([eb59830](https://github.com/Dannebicque/oreof/commit/eb59830a85b31de4fd58139f087dce1d1f59048d))
+
 ### [1.13.15](https://github.com/Dannebicque/oreof/compare/v1.13.14...v1.13.15) (2023-09-20)
 
 
