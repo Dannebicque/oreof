@@ -109,11 +109,11 @@ class FicheMatiereSaveController extends BaseController
             case 'removeBcc':
                 //utile ?
                 if ($ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
-                    $competence = $butApprentissageCritiqueRepository->find($data['value']);
-                    if ($competence !== null) {
-                        $ficheMatiere->removeApprentissagesCritique($competence);
-                        $entityManager->flush();
-                        return $this->json(true);
+                    $acs = $ficheMatiere->getApprentissagesCritiques();
+                    foreach ($acs as $ac) {
+                        if ($ac->getNiveau()->getCompetence()->getId() === $data['value']) {
+                            $ficheMatiere->removeApprentissagesCritique($ac);
+                        }
                     }
                 } else {
                     $competences = $ficheMatiere->getCompetences();
