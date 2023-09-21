@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.19](https://github.com/Dannebicque/oreof/compare/v1.13.18...v1.13.19) (2023-09-21)
+
+
+### Bug Fixes
+
+* Affichage UE lors d'une mutualisation ([919c69d](https://github.com/Dannebicque/oreof/commit/919c69d3c1f62fb7a3bf8bd1513b729e73c2e63a))
+* BadgeNull? ([c8217ef](https://github.com/Dannebicque/oreof/commit/c8217efb2d0b0e98d34adc1282d9b6a736f1b2ae))
+* Pas d'erreur si parcours ([be55a8d](https://github.com/Dannebicque/oreof/commit/be55a8d1a71ee9c7b17860d4fd8fee24337b87be))
+* Typo sur MCCC ([273dbc3](https://github.com/Dannebicque/oreof/commit/273dbc31aa5c0620d76c2741a3bec9f6b468f9ef))
+* Typo sur MCCC ([1db0158](https://github.com/Dannebicque/oreof/commit/1db0158dd31d17adbb72d963eea56a391e0ee2f8))
+* Vérification structure avec les MCCC/heures reprises du parent ([8cb7ba1](https://github.com/Dannebicque/oreof/commit/8cb7ba18ff86332bcab86d6661ed851b09492c02))
+
 ### [1.13.18](https://github.com/Dannebicque/oreof/compare/v1.13.17...v1.13.18) (2023-09-21)
 
 
