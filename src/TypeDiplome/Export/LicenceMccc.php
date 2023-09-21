@@ -586,14 +586,14 @@ class LicenceMccc
                         $pourcentageTp += $mccc->pourcentageTp();
                         $texteAvecTp .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
                     }
+                    $pourcentageCc += $mccc->getPourcentage();
+                    $texteCc .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
                 }
 
                 if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
                     $texteEpreuve = '';
                     foreach ($mcccs[1]['et'] as $mccc) {
                         $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
-                        $pourcentageCc += $mccc->getPourcentage();
-                        $texteCc .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
