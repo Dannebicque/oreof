@@ -58,6 +58,7 @@ class ParcoursDupliquer
                 $newSemestre = clone $sp->getSemestre();
                 $this->entityManager->persist($newSemestre);
                 $newSp = new SemestreParcours($newSemestre, $newParcours);
+                $newSp->setOrdre($sp->getOrdre());
                 $this->entityManager->persist($newSp);
 
                 foreach ($sp->getSemestre()->getUes() as $ue) {
@@ -95,55 +96,112 @@ class ParcoursDupliquer
     {
         //dupliquer les EC des ue
         foreach ($ue->getElementConstitutifs() as $ec) {
-            $newEc = clone $ec;
-            $newEc->setUe($newUe);
-            $newEc->setParcours($newParcours);
-            $this->entityManager->persist($newEc);
+            if ($ec->getEcParent() === null) {
+                $newEc = clone $ec;
+                $newEc->setUe($newUe);
+                $newEc->setParcours($newParcours);
+                $this->entityManager->persist($newEc);
 
-            //dupliquer les compétences sur l'EC
-            foreach ($ec->getCompetences() as $competence) {
-                $newEc->addCompetence($tabCompetences[$competence->getCode()]);
-            }
-
-            //Dupliquer la fiche associée à l'EC
-            if (null !== $ec->getFicheMatiere()) {
-                $newFiche = clone $ec->getFicheMatiere();
-                $date = new DateTime();
-                $newFiche->setSlug($newFiche->getSlug() . '-'.$date->format('YmdHis'));
-                $newFiche->setParcours($newParcours);
-
-                foreach ($ec->getFicheMatiere()->getLangueDispense() as $langue) {
-                    $newFiche->addLangueDispense($langue);
+                //dupliquer les compétences sur l'EC
+                foreach ($ec->getCompetences() as $competence) {
+                    $newEc->addCompetence($tabCompetences[$competence->getCode()]);
                 }
 
-                foreach ($ec->getFicheMatiere()->getLangueSupport() as $langue) {
-                    $newFiche->addLangueSupport($langue);
+                //Dupliquer la fiche associée à l'EC
+                if (null !== $ec->getFicheMatiere()) {
+                    $newFiche = clone $ec->getFicheMatiere();
+                    $date = new DateTime();
+                    $newFiche->setSlug($newFiche->getSlug() . '-' . $date->format('YmdHis'));
+                    $newFiche->setParcours($newParcours);
+
+                    foreach ($ec->getFicheMatiere()->getLangueDispense() as $langue) {
+                        $newFiche->addLangueDispense($langue);
+                    }
+
+                    foreach ($ec->getFicheMatiere()->getLangueSupport() as $langue) {
+                        $newFiche->addLangueSupport($langue);
+                    }
+
+                    $newEc->setFicheMatiere($newFiche);
+                    $this->entityManager->persist($newFiche);
+
+                    //le cas échéant dupliquer les MCCC de la fiche
+                    foreach ($ec->getFicheMatiere()->getMcccs() as $mccc) {
+                        $newMccc = clone $mccc;
+                        $newFiche->addMccc($newMccc);
+                        $this->entityManager->persist($newMccc);
+                    }
+
+                    //le cas échéant dupliquer les compétences de la fiche
+                    foreach ($ec->getFicheMatiere()->getCompetences() as $competence) {
+                        if (isset($tabCompetences[$competence->getCode()])
+                            && null !== $tabCompetences[$competence->getCode()]) {
+                            $newFiche->addCompetence($tabCompetences[$competence->getCode()]);
+                        }
+                    }
                 }
 
-                $newEc->setFicheMatiere($newFiche);
-                $this->entityManager->persist($newFiche);
-
-                //le cas échéant dupliquer les MCCC de la fiche
-                foreach ($ec->getFicheMatiere()->getMcccs() as $mccc) {
+                //dupliquer les MCCC sur les EC
+                foreach ($ec->getMcccs() as $mccc) {
                     $newMccc = clone $mccc;
-                    $newFiche->addMccc($newMccc);
+                    $newEc->addMccc($newMccc);
                     $this->entityManager->persist($newMccc);
                 }
 
-                //le cas échéant dupliquer les compétences de la fiche
-                foreach ($ec->getFicheMatiere()->getCompetences() as $competence) {
-                    if (isset($tabCompetences[$competence->getCode()])
-                        && null !== $tabCompetences[$competence->getCode()]) {
-                        $newFiche->addCompetence($tabCompetences[$competence->getCode()]);
+                // EC enfants
+                foreach ($ec->getEcEnfants() as $ece) {
+                    $newEce = clone $ece;
+                    $newEce->setUe($newUe);
+                    $newEce->setParcours($newParcours);
+                    $newEce->setEcParent($newEc);
+                    $this->entityManager->persist($newEce);
+
+                    //dupliquer les compétences sur l'EC
+                    foreach ($ece->getCompetences() as $competence) {
+                        $newEce->addCompetence($tabCompetences[$competence->getCode()]);
+                    }
+
+                    //Dupliquer la fiche associée à l'EC
+                    if (null !== $ece->getFicheMatiere()) {
+                        $newFiche = clone $ece->getFicheMatiere();
+                        $date = new DateTime();
+                        $newFiche->setSlug($newFiche->getSlug() . '-' . $date->format('YmdHis'));
+                        $newFiche->setParcours($newParcours);
+
+                        foreach ($ece->getFicheMatiere()->getLangueDispense() as $langue) {
+                            $newFiche->addLangueDispense($langue);
+                        }
+
+                        foreach ($ece->getFicheMatiere()->getLangueSupport() as $langue) {
+                            $newFiche->addLangueSupport($langue);
+                        }
+
+                        $newEce->setFicheMatiere($newFiche);
+                        $this->entityManager->persist($newFiche);
+
+                        //le cas échéant dupliquer les MCCC de la fiche
+                        foreach ($ece->getFicheMatiere()->getMcccs() as $mccc) {
+                            $newMccc = clone $mccc;
+                            $newFiche->addMccc($newMccc);
+                            $this->entityManager->persist($newMccc);
+                        }
+
+                        //le cas échéant dupliquer les compétences de la fiche
+                        foreach ($ece->getFicheMatiere()->getCompetences() as $competence) {
+                            if (isset($tabCompetences[$competence->getCode()])
+                                && null !== $tabCompetences[$competence->getCode()]) {
+                                $newFiche->addCompetence($tabCompetences[$competence->getCode()]);
+                            }
+                        }
+                    }
+
+                    //dupliquer les MCCC sur les EC
+                    foreach ($ece->getMcccs() as $mccc) {
+                        $newMccc = clone $mccc;
+                        $newEce->addMccc($newMccc);
+                        $this->entityManager->persist($newMccc);
                     }
                 }
-            }
-
-            //dupliquer les MCCC sur les EC
-            foreach ($ec->getMcccs() as $mccc) {
-                $newMccc = clone $mccc;
-                $newEc->addMccc($newMccc);
-                $this->entityManager->persist($newMccc);
             }
         }
     }
