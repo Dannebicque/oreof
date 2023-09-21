@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.18](https://github.com/Dannebicque/oreof/compare/v1.13.17...v1.13.18) (2023-09-21)
+
+
+### Bug Fixes
+
+* MCCC ([2e3ca49](https://github.com/Dannebicque/oreof/commit/2e3ca4945d5ff32c73687081aa3ed9b4a48b041c))
+* Pourcentage to float ([61fa30e](https://github.com/Dannebicque/oreof/commit/61fa30ee95cc33c2d8508fcf3b9c06f180c589aa))
+
 ### [1.13.17](https://github.com/Dannebicque/oreof/compare/v1.13.16...v1.13.17) (2023-09-21)
 
 
