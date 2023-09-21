@@ -11,16 +11,25 @@ import { Controller } from '@hotwired/stimulus'
 export default class extends Controller {
   changePourcentage() {
     // récupérer chaque input avec la class pourcentage, faire la somme. Si > 100, alerter. Si < 100, alerter.
+    this._verifPourcentage()
+  }
+
+  changeNbNotes() {
+    // récupérer chaque input avec la class pourcentage, faire la somme. Si > 100, alerter. Si < 100, alerter.
+    this._verifPourcentage()
+  }
+
+  _verifPourcentage() {
     let total = 0.0
     this.element.querySelectorAll('.pourcentage').forEach((item) => {
-      console.log(parseFloat(item.value))
       if (item.value !== '') {
-        total += parseFloat(item.value)
+        // récupérer le champ "nbnotes" le plus proche juste après
+        const nbNotes = item.closest('.row').querySelector('.nbnotes').value
+        console.log(nbNotes)
+        total += parseFloat(item.value) * parseInt(nbNotes, 10)
       }
-      console.log(total)
     })
     let message = ''
-    console.log(total)
     if (total > 100) {
       message = '<div class="alert alert-danger">La somme des pourcentages ne peut pas dépasser 100</div>'
     }

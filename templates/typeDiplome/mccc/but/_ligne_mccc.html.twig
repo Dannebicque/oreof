@@ -35,9 +35,10 @@
                aria-label="{{ 'mccc_but.helps.nombre.help'|trans({}, 'but') }}"
                data-bs-original-title="{{ 'mccc_but.helps.nombre.help'|trans({}, 'but') }}"></i>
         </label>
-        <input type="number" class="form-control"
+        <input type="number" class="form-control nbnotes"
                step="1"
                min="0"
+                {{ stimulus_action('mccc--but', 'changeNbNotes', 'change') }}
                id="nombre_{{ prefix }}_{{ ep }}"
                name="nombre_{{ prefix }}_{{ ep }}"
                value="{% if mcccs[prefix ~ '_' ~ ep] is defined %}{{ mcccs[prefix ~ '_' ~ ep].nbEpreuves }}{% endif %}">
