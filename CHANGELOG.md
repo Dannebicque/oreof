@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.20](https://github.com/Dannebicque/oreof/compare/v1.13.19...v1.13.20) (2023-09-21)
+
+
+### Bug Fixes
+
+* Modification numéro EC pour BUT ([75ff73b](https://github.com/Dannebicque/oreof/commit/75ff73b01116163f39b94564ae29fe4a7cfb00e7))
+* state parcours structure BUT ([71d45f6](https://github.com/Dannebicque/oreof/commit/71d45f66dbfc73bf7d143b0716afb7b0a3b35865))
+* Suppression de tous les AC d'une compétence ([9c31ef0](https://github.com/Dannebicque/oreof/commit/9c31ef0e45f209f710c09d46e24bcb201aaa69d4))
+
 ### [1.13.19](https://github.com/Dannebicque/oreof/compare/v1.13.18...v1.13.19) (2023-09-21)
 
 
