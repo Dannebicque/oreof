@@ -422,6 +422,7 @@ class ElementConstitutifController extends AbstractController
             'POST'
         ])]
     public function editEnfant(
+        NatureUeEcRepository             $natureUeEcRepository,
         FicheMatiereRepository       $ficheMatiereRepository,
         Request                      $request,
         ElementConstitutifRepository $elementConstitutifRepository,
@@ -430,28 +431,28 @@ class ElementConstitutifController extends AbstractController
         Ue                           $ue
     ): Response {
         $isAdmin = $this->isGranted('ROLE_SES');
-//        $form = $this->createForm(ElementConstitutifEnfantType::class, $elementConstitutif, [
-//            'action' => $this->generateUrl(
-        //                'app_element_constitutif_edit_enfant',
-//                ['id' => $elementConstitutif->getId(), 'parcours' => $parcours->getId(), 'ue' => $ue->getId()]
-//            )
-//        ]);
-//        $form->handleRequest($request);
 
         if ($request->isMethod('POST')) {
-            if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
-                $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
-                    'id_',
-                    '',
-                    $request->request->get('ficheMatiere')
-                ));
+            if ($request->request->has('ficheMatiereLibre') && $request->request->get('ficheMatiereLibre') !== '') {
+                $natureEc = $natureUeEcRepository->find(9);
+                $elementConstitutif->setNatureUeEc($natureEc);
+                $elementConstitutif->setTexteEcLibre($request->request->get('ficheMatiereLibre'));
+                $elementConstitutif->setFicheMatiere(null);
             } else {
-                $ficheMatiere = new FicheMatiere();
-                $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
-                $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
-                $ficheMatiereRepository->save($ficheMatiere, true);
+                if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
+                    $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
+                        'id_',
+                        '',
+                        $request->request->get('ficheMatiere')
+                    ));
+                } else {
+                    $ficheMatiere = new FicheMatiere();
+                    $ficheMatiere->setLibelle($request->request->get('ficheMatiereLibelle'));
+                    $ficheMatiere->setParcours($parcours); //todo: ajouter le semestre
+                    $ficheMatiereRepository->save($ficheMatiere, true);
+                }
+                $elementConstitutif->setFicheMatiere($ficheMatiere);
             }
-            $elementConstitutif->setFicheMatiere($ficheMatiere);
 
             $elementConstitutifRepository->save($elementConstitutif, true);
 
@@ -515,7 +516,7 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/{id}/structure-but', name: 'app_element_constitutif_structure_but', methods: ['GET', 'POST'])]
     public function structureBut(
-        Request                      $request,
+        Request                $request,
         FicheMatiereRepository $ficheMatiereRepository,
         FicheMatiere           $ficheMatiere
     ): Response {
