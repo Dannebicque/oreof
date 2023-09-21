@@ -160,7 +160,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 break;
             case 'cc_ct':
                 $tab = [
-                    'pourcentage' => $request->get('cc_has_tp_pourcentage', 0),
+                    'pourcentage' => Tools::convertToFloat($request->get('cc_has_tp_pourcentage', 0)),
                     'cc_has_tp' => $request->get('cc_has_tp', false)
                 ];
                 //cas classique
@@ -547,6 +547,10 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
 
     private function typeEpreuveHasDuree(int|string $id): bool
     {
+        if (!array_key_exists($id, $this->typeEpreuves)) {
+            return false;
+        }
+
         return $this->typeEpreuves[$id]->isHasDuree() ?? false;
     }
 }
