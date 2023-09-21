@@ -412,7 +412,8 @@ class ElementConstitutifController extends AbstractController
             'form' => $form->createView(),
             'ue' => $elementConstitutif->getUe(),
             'parcours' => $parcours,
-            'isAdmin' => $isAdmin
+            'isAdmin' => $isAdmin,
+            'isBut' => $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT',
         ]);
     }
 

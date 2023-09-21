@@ -12,7 +12,7 @@
             'id': 'formEc'}
     }) }}
 
-    {% if isAdmin %}
+    {% if isAdmin or isBut %}
         {{ form_row(form.ordre) }}
         {{ form_row(form.code) }}
     {% endif %}
