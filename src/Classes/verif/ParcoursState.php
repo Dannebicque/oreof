@@ -234,7 +234,7 @@ class ParcoursState
                         $tab['error'][] = 'Vous devez ajouter au moins un EC à l\'UE "' . $ue->display($this->parcours) . '".';
                     } else {
                         foreach ($ue->getElementConstitutifs() as $ec) {
-                            if ($ec->getFicheMatiere() === null) {
+                            if ($ec->getEcEnfants()->count() === 0 && $ec->getFicheMatiere() === null) {
                                 $tab['error'][] = 'Vous devez affecter une fiche EC/matière à l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
                             }
 
