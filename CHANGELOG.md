@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.21](https://github.com/Dannebicque/oreof/compare/v1.13.20...v1.13.21) (2023-09-21)
+
+
+### Bug Fixes
+
+* gestion du cas sans heures ou sans MCCC ([d962056](https://github.com/Dannebicque/oreof/commit/d96205698a65f1a0be198cfea10dbdc093617977))
+* Recopie du parcours ([449c51b](https://github.com/Dannebicque/oreof/commit/449c51bd8a7124fc614f46c6fb6ccf0a6adaafd5))
+* Suppression de tous les AC d'une compétence ([b9e6361](https://github.com/Dannebicque/oreof/commit/b9e6361a5c25806412e169e823ce61cd3d4608f2))
+* UEs Enfant et EC Enfants dans la validation ([1ec5fde](https://github.com/Dannebicque/oreof/commit/1ec5fde915726badff65867433ef93ae40876c4f))
+* Vérification du % sur MCCC de BUT ([d16a0f5](https://github.com/Dannebicque/oreof/commit/d16a0f59a101bc6542a7dc1f79b203a0b816e687))
+* Vérification si fiches sur EC parent ([a087aba](https://github.com/Dannebicque/oreof/commit/a087abade550533c89df3437be0e0554b6cdafe0))
+
 ### [1.13.20](https://github.com/Dannebicque/oreof/compare/v1.13.19...v1.13.20) (2023-09-21)
 
 
