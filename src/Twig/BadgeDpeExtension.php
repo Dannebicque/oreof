@@ -66,7 +66,7 @@ class BadgeDpeExtension extends AbstractExtension
         return '<span class="badge bg-' . $type . ' me-1">' . $texte . '</span>';
     }
 
-    public function badgeValide(string $etat): string
+    public function badgeValide(?string $etat): string
     {
         return match ($etat) {
             'complet' => '<span class="badge bg-success me-1">Complet</span>',
@@ -74,6 +74,7 @@ class BadgeDpeExtension extends AbstractExtension
             'erreur' => '<span class="badge bg-danger me-1">Erreur de saisie</span>',
             'vide' => '<span class="badge bg-danger me-1">Non complété</span>',
             'non_concerne' => '<span class="badge bg-info me-1">Non concerné</span>',
+            null => '<span class="badge bg-warning me-1">NULL?</span>',
         };
     }
 
