@@ -51,9 +51,15 @@ class FicheMatiereSaveController extends BaseController
             $entityManager->flush();
         }
 
-        //todo: check si bonne formation...
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
+            case 'typeMatiere':
+
+                return $updateEntity->saveField(
+                    $ficheMatiere,
+                    'typeMatiere',
+                    $data['value']
+                );
             case 'checkbox':
                 return $updateEntity->saveYesNo(
                     $ficheMatiere,

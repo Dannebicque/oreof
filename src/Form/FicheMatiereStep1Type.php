@@ -14,6 +14,7 @@ use App\Entity\User;
 use App\Form\Type\YesNoType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -102,13 +103,27 @@ class FicheMatiereStep1Type extends AbstractType
                 ],
                 'help' => '-'
             ]);
+
+        if ($options['isBut']) {
+            $builder->add('typeMatiere', ChoiceType::class, [
+                'choices' => [
+                    'ressource' => 'ressource',
+                    'sae' => 'sae'
+                ],
+                'attr' => ['data-action' => 'change->fichematiere--step1#changeTypeMatiere'],
+                'expanded' => true,
+                'multiple' => false,
+                'required' => true,
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => FicheMatiere::class,
-            'translation_domain' => 'form'
+            'translation_domain' => 'form',
+            'isBut' => false,
         ]);
     }
 }

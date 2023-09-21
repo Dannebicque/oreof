@@ -112,6 +112,14 @@ export default class extends Controller {
     })
   }
 
+  changeTypeMatiere(event) {
+    this._save({
+      field: 'typeMatiere',
+      action: 'typeMatiere',
+      value: event.target.value,
+    })
+  }
+
   changeEnseignementMutualise(event) {
     this._save({
       field: 'enseignementMutualise',

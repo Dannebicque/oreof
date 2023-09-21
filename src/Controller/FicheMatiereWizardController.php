@@ -54,11 +54,20 @@ class FicheMatiereWizardController extends AbstractController
     #[Route('/{ficheMatiere}/1', name: 'app_fiche_matiere_wizard_step_1', methods: ['GET'])]
     public function step1(FicheMatiere $ficheMatiere): Response
     {
-        $form = $this->createForm(FicheMatiereStep1Type::class, $ficheMatiere);
+        if ($ficheMatiere->getParcours() !== null && $ficheMatiere->getParcours()->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
+            $isBut = true;
+        } else {
+            $isBut = false;
+        }
+
+        $form = $this->createForm(FicheMatiereStep1Type::class, $ficheMatiere, [
+            'isBut' => $isBut
+        ]);
 
         return $this->render('fiche_matiere_wizard/_step1.html.twig', [
             'form' => $form->createView(),
             'ficheMatiere' => $ficheMatiere,
+            'isBut' => $isBut
         ]);
     }
 
@@ -234,8 +243,7 @@ class FicheMatiereWizardController extends AbstractController
         FicheMatiere                       $ficheMatiere,
         mixed                              $parcours,
         EntityManagerInterface             $entityManager
-    ): void
-    {
+    ): void {
         $exist = $ficheMatiereParcoursRepository->findOneBy([
             'ficheMatiere' => $ficheMatiere,
             'parcours' => $parcours
