@@ -1,4 +1,4 @@
-{% if hasParcours == false %}
+{% if formation.hasParcours == false %}
     <div class="row">
         {# todo: ne doit pas être là? #}
         <div class=col-sm-12">
@@ -20,9 +20,19 @@
             </dl>
         </div>
     </div>
+    {% else %}
+<div class="row">
+    <div class="col-sm-12">
+        <dl>
+            <dt>Organisation et objectifs de la formation</dt>
+            <dd>{{ formation.objectifsFormation|raw }}</dd>
+        </dl>
+    </div>
+</div>
 {% endif %}
 {% if (print is defined and print == false) %}
     {% if formation.isHasParcours == true %}
+
         <div class="row">
             <div class="col-sm-12">
                 <h3>Parcours</h3>
