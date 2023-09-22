@@ -112,7 +112,7 @@
     </tr>
     {% for keyUe, ue in semestre.ues  %}
         <tr>
-            <td class="ps-4">UE {{ keyUe }}</td>
+            <td class="ps-4">{{ ue.ue.display(parcours) }}</td>
             <td>{{ ue.global|badgeValide }}</td>
         </tr>
         {% for keyEc, ec in ue.ecs  %}
