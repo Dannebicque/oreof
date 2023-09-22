@@ -56,7 +56,25 @@ class ParcoursEcController extends AbstractController
         FicheMatiereRepository $ficheMatiereRepository,
         Parcours               $parcours
     ): Response {
-        $fichesMatieres = $ficheMatiereRepository->findByParcours($parcours);
+        $fichesMatieres = [];
+        foreach ($parcours->getSemestreParcours() as $semP) {
+            if ($semP->getSemestre()->getSemestreRaccroche() !== null) {
+                $sem = $semP->getSemestre()->getSemestreRaccroche()->getSemestre();
+            } else {
+                $sem = $semP->getSemestre();
+            }
+            foreach ($sem->getUes() as $ue) {
+                if ($ue->getUeRaccrochee() !== null) {
+                    $ue = $ue->getUeRaccrochee();
+                }
+
+                foreach ($ue->getElementConstitutifs() as $ec) {
+                    $fichesMatieres[] = $ec->getFicheMatiere();
+                }
+            }
+        }
+
+
         $tabEcs = [];
         foreach ($fichesMatieres as $ficheMatiere) {
             if ($ficheMatiere->getElementConstitutifs()->count() > 0) {
@@ -88,8 +106,16 @@ class ParcoursEcController extends AbstractController
         $tabEcUes = [];
         $tabUes = [];
         foreach ($parcours->getSemestreParcours() as $semParc) {
+            if ($semParc->getSemestre()->getSemestreRaccroche() !== null) {
+                $semParc = $semParc->getSemestre()->getSemestreRaccroche();
+            }
+
             $tabEcs[$semParc->getOrdre()] = [];
             foreach ($semParc->getSemestre()->getUes() as $ue) {
+                if ($ue->getUeRaccrochee() !== null) {
+                    $ue = $ue->getUeRaccrochee();
+                }
+
                 $tabEcUes[$semParc->getOrdre()][$ue->getId()] = [];
                 $tabUes[$semParc->getOrdre()][$ue->getId()] = $ue;
                 foreach ($ue->getElementConstitutifs() as $ec) {
