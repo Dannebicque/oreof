@@ -14,17 +14,39 @@
                 <thead>
                 <tr>
                     <th colspan="2" rowspan="2">&nbsp;</th>
-                    {% for ue in semestre.semestre.ues %}
-                        <th colspan="{{ ue.elementConstitutifs|length }}"
-                            class="text-center">{{ ue.display(parcours) }}</th>
+                    {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
+                        {% if ue.ueEnfants|length == 0 %}
+                            <th colspan="{{ ue.elementConstitutifs|length }}"
+                                class="text-center">{{ ue.display(parcours) }}</th>
+                        {% else %}
+                            {% for uee in ue.ueEnfants %}
+                                <th colspan="{{ uee.elementConstitutifs|length }}"
+                                    class="text-center">{{ uee.display(parcours) }}</th>
+                            {% endfor %}
+                        {% endif %}
                     {% endfor %}
                 </tr>
                 <tr>
-                    {% for ue in semestre.semestre.ues %}
-                        {% for ec in ue.elementConstitutifs %}
-                            <th class="text-center">{{ ec.code }} <i class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom" title="{{ ec.display }}"></i>
-                            </th>
-                        {% endfor %}
+                    {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
+                        {% if ue.ueEnfants|length == 0 %}
+                            {% for ec in ue.elementConstitutifs %}
+                                <th class="text-center">{{ ec.code }} <i class="fal fa-question-circle ms-1"
+                                                                         data-controller="tooltip"
+                                                                         data-tooltip-placement-value="bottom"
+                                                                         title="{{ ec.display }}"></i>
+                                </th>
+                            {% endfor %}
+                        {% else %}
+                            {% for uee in ue.ueEnfants %}
+                                {% for ec in uee.elementConstitutifs %}
+                                <th class="text-center">{{ ec.code }} <i class="fal fa-question-circle ms-1"
+                                                                         data-controller="tooltip"
+                                                                         data-tooltip-placement-value="bottom"
+                                                                         title="{{ ec.display }}"></i>
+                                </th>
+                            {% endfor %}
+                            {% endfor %}
+                        {% endif %}
                     {% endfor %}
                 </tr>
                 </thead>
@@ -36,34 +58,68 @@
                                 <td rowspan="{{ bcc.competences|length }}">{{ bcc.display }}</td>
                             {% endif %}
                             <td>{{ competence.display }}</td>
-                            {% for ue in semestre.semestre.ues %}
-                                {% for ec in ue.elementConstitutifs %}
-                                    <td class="text-center">
-                                        {% set checked = "" %}
-                                        {% if ec.ficheMatiere != null and ec.ficheMatiere.parcours.id == parcours.id %}
-                                            {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
-                                                {% set checked = "X" %}
+                            {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
+                                {% if ue.ueEnfants|length == 0 %}
+                                    {% for ec in ue.elementConstitutifs %}
+                                        <td class="text-center">
+                                            {% set checked = "" %}
+                                            {% if ec.ficheMatiere != null and ec.ficheMatiere.parcours.id == parcours.id %}
+                                                {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
+                                                    {% set checked = "X" %}
+                                                {% endif %}
+                                            {% else %}
+                                                {% if competence.elementConstitutifs.contains(ec) %}
+                                                    {% set checked = "X" %}
+                                                {% endif %}
                                             {% endif %}
-                                        {% else %}
-                                            {% if competence.elementConstitutifs.contains(ec) %}
-                                                {% set checked = "X" %}
+                                            {% if editable == true %}
+                                                <label class="sr-only" for="competences_{{ competence.id }}_{{ ec.id }}">Compétence
+                                                    mobilisée</label>
+                                                <input type="checkbox" class="form-check"
+                                                       id="competences_{{ competence.id }}_{{ ec.id }}"
+                                                        {{ stimulus_action('parcours--bcc', 'updateCompetence', 'change', {
+                                                            competence: competence.id,
+                                                            ec: ec.id
+                                                        }) }}
+                                                       value="X"
+                                                        {% if checked == "X" %}checked{% endif %}>
+                                            {% else %}
+                                                {{ checked }}
                                             {% endif %}
-                                        {% endif %}
-                                        {% if editable == true %}
-                                            <label class="sr-only" for="competences_{{ competence.id }}_{{ ec.id }}">Compétence mobilisée</label>
-                                            <input type="checkbox" class="form-check"
-                                                   id="competences_{{ competence.id }}_{{ ec.id }}"
-                                                   {{ stimulus_action('parcours--bcc', 'updateCompetence', 'change', {
-                                                         competence: competence.id,
-                                                         ec: ec.id
-                                                   }) }}
-                                                   value="X"
-                                                   {% if checked == "X" %}checked{% endif %}>
-                                        {% else %}
-                                            {{ checked }}
-                                        {% endif %}
-                                    </td>
-                                {% endfor %}
+                                        </td>
+                                    {% endfor %}
+                                {% else %}
+                                    {% for uee in ue.ueEnfants %}
+                                        {% for ec in uee.elementConstitutifs %}
+                                            <td class="text-center">
+                                                {% set checked = "" %}
+                                                {% if ec.ficheMatiere != null and ec.ficheMatiere.parcours.id == parcours.id %}
+                                                    {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
+                                                        {% set checked = "X" %}
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% if competence.elementConstitutifs.contains(ec) %}
+                                                        {% set checked = "X" %}
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% if editable == true %}
+                                                    <label class="sr-only" for="competences_{{ competence.id }}_{{ ec.id }}">Compétence
+                                                        mobilisée</label>
+                                                    <input type="checkbox" class="form-check"
+                                                           id="competences_{{ competence.id }}_{{ ec.id }}"
+                                                            {{ stimulus_action('parcours--bcc', 'updateCompetence', 'change', {
+                                                                competence: competence.id,
+                                                                ec: ec.id
+                                                            }) }}
+                                                           value="X"
+                                                            {% if checked == "X" %}checked{% endif %}>
+                                                {% else %}
+                                                    {{ checked }}
+                                                {% endif %}
+                                            </td>
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endif %}
                             {% endfor %}
                         </tr>
                     {% endfor %}
