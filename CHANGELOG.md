@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.22](https://github.com/Dannebicque/oreof/compare/v1.13.21...v1.13.22) (2023-09-22)
+
+
+### Bug Fixes
+
+* Affichage ([40d022c](https://github.com/Dannebicque/oreof/commit/40d022ce693fa879a4f49a6c3d6d58c774ea3a71))
+* dupliquer UE avec recopie => Slug des fiches ([1f30d91](https://github.com/Dannebicque/oreof/commit/1f30d91ba0cf63cab85a649037d0889db41ac21b))
+* gestion des EC "fantomes" ([1c90eba](https://github.com/Dannebicque/oreof/commit/1c90eba8c8d7d783b1d56eb96c0fddc3b617218a))
+* liste sur les BUT ([53ada52](https://github.com/Dannebicque/oreof/commit/53ada527e0cc127e0dcc437b5645cfb8562fc56d))
+
 ### [1.13.21](https://github.com/Dannebicque/oreof/compare/v1.13.20...v1.13.21) (2023-09-21)
 
 
