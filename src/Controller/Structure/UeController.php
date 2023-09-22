@@ -130,24 +130,26 @@ class UeController extends AbstractController
             $ueRepository->save($ue, true);
 
             if ($ue->getNatureUeEc()?->isChoix() === true && $ue->getUeParent() === null) {
-                //on ajoute par défaut deux UE enfants
-                $ueEnfant1 = new Ue();
-                $ueEnfant1->setSemestre($semestre);
-                $ueEnfant1->setNatureUeEc(null);
-                $ueEnfant1->setNatureUeEc($ue->getNatureUeEc());
-                $ueEnfant1->setOrdre(1);
-                $ueEnfant1->setUeParent($ue);
-                $ueEnfant1->setLibelle('Choix 1');
-                $ueRepository->save($ueEnfant1, true);
+                if ($ue->getUeEnfants()->count() === 0) {
+                    //on ajoute par défaut deux UE enfants
+                    $ueEnfant1 = new Ue();
+                    $ueEnfant1->setSemestre($semestre);
+                    $ueEnfant1->setNatureUeEc(null);
+                    $ueEnfant1->setNatureUeEc($ue->getNatureUeEc());
+                    $ueEnfant1->setOrdre(1);
+                    $ueEnfant1->setUeParent($ue);
+                    $ueEnfant1->setLibelle('Choix 1');
+                    $ueRepository->save($ueEnfant1, true);
 
-                $ueEnfant2 = new Ue();
-                $ueEnfant2->setSemestre($semestre);
-                $ueEnfant2->setNatureUeEc(null);
-                $ueEnfant2->setNatureUeEc($ue->getNatureUeEc());
-                $ueEnfant2->setOrdre(2);
-                $ueEnfant2->setUeParent($ue);
-                $ueEnfant2->setLibelle('Choix 2');
-                $ueRepository->save($ueEnfant2, true);
+                    $ueEnfant2 = new Ue();
+                    $ueEnfant2->setSemestre($semestre);
+                    $ueEnfant2->setNatureUeEc(null);
+                    $ueEnfant2->setNatureUeEc($ue->getNatureUeEc());
+                    $ueEnfant2->setOrdre(2);
+                    $ueEnfant2->setUeParent($ue);
+                    $ueEnfant2->setLibelle('Choix 2');
+                    $ueRepository->save($ueEnfant2, true);
+                }
             }
 
 
@@ -273,15 +275,17 @@ class UeController extends AbstractController
 
             if ($form->get('natureUeEc')->getData() !== null) {
                 if ($form->get('natureUeEc')->getData()->isChoix() === true) {
-                    $ue1 = clone $ue;
-                    $ue1->setUeParent($ue);
-                    $ue1->setOrdre(1);
-                    $ueRepository->save($ue1, true);
+                    if ($ue->getUeEnfants()->count() === 0) {
+                        $ue1 = clone $ue;
+                        $ue1->setUeParent($ue);
+                        $ue1->setOrdre(1);
+                        $ueRepository->save($ue1, true);
 
-                    $ue2 = clone $ue;
-                    $ue2->setUeParent($ue);
-                    $ue2->setOrdre(2);
-                    $ueRepository->save($ue2, true);
+                        $ue2 = clone $ue;
+                        $ue2->setUeParent($ue);
+                        $ue2->setOrdre(2);
+                        $ueRepository->save($ue2, true);
+                    }
                 } else {
                     foreach ($ue->getUeEnfants() as $ueEnfant) {
                         $ueRepository->remove($ueEnfant, true);
@@ -305,10 +309,10 @@ class UeController extends AbstractController
      */
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(
-        EntityManagerInterface      $entityManager,
-        UeOrdre                      $ueOrdre,
-        Request                      $request,
-        Ue                           $ue
+        EntityManagerInterface $entityManager,
+        UeOrdre                $ueOrdre,
+        Request                $request,
+        Ue                     $ue
     ): Response {
         if ($this->isCsrfTokenValid(
             'delete' . $ue->getId(),
@@ -690,7 +694,7 @@ class UeController extends AbstractController
                             if ($ec->getFicheMatiere() !== null) {
                                 $newFm = clone $ec->getFicheMatiere();
                                 $newFm->setParcours($parcoursDestination);
-                                $newFm->setSlug($newFm->getSlug() . '-'.(new DateTime())->format('YmdHis'));
+                                $newFm->setSlug($newFm->getSlug() . '-' . (new DateTime())->format('YmdHis'));
                                 $newEc->setFicheMatiere($newFm);
                                 $entityManager->persist($newFm);
                             }
@@ -703,7 +707,7 @@ class UeController extends AbstractController
                                 if ($ecEnfant->getFicheMatiere() !== null) {
                                     $newFm = clone $ecEnfant->getFicheMatiere();
                                     $newFm->setParcours($parcoursDestination);
-                                    $newFm->setSlug($newFm->getSlug() . '-'.(new DateTime())->format('YmdHis'));
+                                    $newFm->setSlug($newFm->getSlug() . '-' . (new DateTime())->format('YmdHis'));
                                     $newEcEnfant->setFicheMatiere($newFm);
                                     $entityManager->persist($newFm);
                                 }
@@ -753,7 +757,7 @@ class UeController extends AbstractController
                                 if ($ec->getFicheMatiere() !== null) {
                                     $newFm = clone $ec->getFicheMatiere();
                                     $newFm->setParcours($parcoursDestination);
-                                    $newFm->setSlug($newFm->getSlug() . '-'.(new DateTime())->format('YmdHis'));
+                                    $newFm->setSlug($newFm->getSlug() . '-' . (new DateTime())->format('YmdHis'));
                                     $newEc->setFicheMatiere($newFm);
                                     $entityManager->persist($newFm);
                                 }
@@ -765,7 +769,7 @@ class UeController extends AbstractController
                                     if ($ec->getFicheMatiere() !== null) {
                                         $newFm = clone $ec->getFicheMatiere();
                                         $newFm->setParcours($parcoursDestination);
-                                        $newFm->setSlug($newFm->getSlug() . '-'.(new DateTime())->format('YmdHis'));
+                                        $newFm->setSlug($newFm->getSlug() . '-' . (new DateTime())->format('YmdHis'));
                                         $newEcEnfant->setFicheMatiere($newFm);
                                         $entityManager->persist($newFm);
                                     }
