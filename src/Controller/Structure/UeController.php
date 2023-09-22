@@ -29,6 +29,7 @@ use App\Repository\TypeUeRepository;
 use App\Repository\UeMutualisableRepository;
 use App\Repository\UeRepository;
 use App\Utils\JsonRequest;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -689,6 +690,7 @@ class UeController extends AbstractController
                             if ($ec->getFicheMatiere() !== null) {
                                 $newFm = clone $ec->getFicheMatiere();
                                 $newFm->setParcours($parcoursDestination);
+                                $newFm->setSlug($newFm->getSlug() . '-'.(new DateTime())->format('YmdHis'));
                                 $newEc->setFicheMatiere($newFm);
                                 $entityManager->persist($newFm);
                             }
@@ -701,6 +703,7 @@ class UeController extends AbstractController
                                 if ($ecEnfant->getFicheMatiere() !== null) {
                                     $newFm = clone $ecEnfant->getFicheMatiere();
                                     $newFm->setParcours($parcoursDestination);
+                                    $newFm->setSlug($newFm->getSlug() . '-'.(new DateTime())->format('YmdHis'));
                                     $newEcEnfant->setFicheMatiere($newFm);
                                     $entityManager->persist($newFm);
                                 }
@@ -750,6 +753,7 @@ class UeController extends AbstractController
                                 if ($ec->getFicheMatiere() !== null) {
                                     $newFm = clone $ec->getFicheMatiere();
                                     $newFm->setParcours($parcoursDestination);
+                                    $newFm->setSlug($newFm->getSlug() . '-'.(new DateTime())->format('YmdHis'));
                                     $newEc->setFicheMatiere($newFm);
                                     $entityManager->persist($newFm);
                                 }
@@ -761,6 +765,7 @@ class UeController extends AbstractController
                                     if ($ec->getFicheMatiere() !== null) {
                                         $newFm = clone $ec->getFicheMatiere();
                                         $newFm->setParcours($parcoursDestination);
+                                        $newFm->setSlug($newFm->getSlug() . '-'.(new DateTime())->format('YmdHis'));
                                         $newEcEnfant->setFicheMatiere($newFm);
                                         $entityManager->persist($newFm);
                                     }
