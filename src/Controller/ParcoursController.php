@@ -201,7 +201,8 @@ class ParcoursController extends BaseController
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
             'hasParcours' => $formation->isHasParcours(),
-            'dto' => $dto
+            'dto' => $dto,
+            'isBut' => $typeDiplome->getLibelleCourt() === 'BUT',
         ]);
     }
 

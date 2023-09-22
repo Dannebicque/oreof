@@ -12,10 +12,11 @@ namespace App\Classes;
 use App\DTO\HeuresEctsFormation;
 use App\DTO\HeuresEctsSemestre;
 use App\DTO\HeuresEctsUe;
+use App\Entity\Parcours;
 
 class CalculStructureParcours
 {
-    public function calcul(\App\Entity\Parcours $parcours): HeuresEctsFormation
+    public function calcul(Parcours $parcours): HeuresEctsFormation
     {
         $dto = new HeuresEctsFormation();
 

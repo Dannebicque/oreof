@@ -24,9 +24,11 @@ use Twig\TwigFunction;
  */
 class AppExtension extends AbstractExtension
 {
-    public function __construct(private readonly ParameterBagInterface $parameterBag) {
+    public function __construct(private readonly ParameterBagInterface $parameterBag)
+    {
 
     }
+
     public function getFilters(): array
     {
         return [
@@ -40,8 +42,18 @@ class AppExtension extends AbstractExtension
             new TwigFilter('badgeDroits', [$this, 'badgeDroits'], ['is_safe' => ['html']]),
             new TwigFilter('badgeCentre', [$this, 'badgeCentre'], ['is_safe' => ['html']]),
             new TwigFilter('etatRemplissage', [$this, 'etatRemplissage'], ['is_safe' => ['html']]),
-            new TwigFilter('printTexte', [$this, 'printTexte'], ['is_safe' => ['html']])
+            new TwigFilter('printTexte', [$this, 'printTexte'], ['is_safe' => ['html']]),
+            new TwigFilter('filtreHeures', [$this, 'filtreHeures'], ['is_safe' => ['html']])
         ];
+    }
+
+    public function filtreHeures(?float $heures): string
+    {
+        if ($heures === null) {
+            return '-';
+        }
+
+        return $heures > 0.0 ? $heures : '-';
     }
 
     public function printTexte(?string $texte): string
@@ -69,7 +81,7 @@ class AppExtension extends AbstractExtension
             $texte = mb_substr($texte, 0, -6);
         }
 
-        return '<div>'.$texte.'</div>';
+        return '<div>' . $texte . '</div>';
     }
 
     public function getFunctions(): array
@@ -83,7 +95,7 @@ class AppExtension extends AbstractExtension
     public function displaySort(string $field, ?string $sort, ?string $direction): ?string
     {
         if ($field === $sort) {
-            return '<i class="fal fa-caret-'.($direction === 'asc' ? 'up' : 'down').' fa-lg"></i>';
+            return '<i class="fal fa-caret-' . ($direction === 'asc' ? 'up' : 'down') . ' fa-lg"></i>';
         }
 
         return '<i class="fal fa-sort fa-lg"></i>';
@@ -112,7 +124,7 @@ class AppExtension extends AbstractExtension
     public function etatRemplissage(array $onglets, int $step, string $prefix = ''): string
     {
         if (array_key_exists($step, $onglets)) {
-            return '<span class="state state-'.$onglets[$step]->badge().'" id="'.$prefix.'_onglet'.$step.'"></span>';
+            return '<span class="state state-' . $onglets[$step]->badge() . '" id="' . $prefix . '_onglet' . $step . '"></span>';
         }
 
         return '';
@@ -134,9 +146,9 @@ class AppExtension extends AbstractExtension
     {
         $droit = count($userCentre->getDroits()) > 0 ? $userCentre->getDroits()[array_key_first($userCentre->getDroits())] : 'Erreur';
         return match ($userCentre->typeCentre()) {
-            CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => '<span class="badge bg-success me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' ('.$droit.')</span>',
-            CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => '<span class="badge bg-warning me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' ('.$droit.')</span>',
-            CentreGestionEnum::CENTRE_GESTION_FORMATION => '<span class="badge bg-info me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' ('.$droit.')</span>',
+            CentreGestionEnum::CENTRE_GESTION_COMPOSANTE => '<span class="badge bg-success me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' (' . $droit . ')</span>',
+            CentreGestionEnum::CENTRE_GESTION_ETABLISSEMENT => '<span class="badge bg-warning me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' (' . $droit . ')</span>',
+            CentreGestionEnum::CENTRE_GESTION_FORMATION => '<span class="badge bg-info me-1 mb-1 text-wrap">' . $userCentre->displaySimple() . ' (' . $droit . ')</span>',
             default => '<span class="badge bg-danger me-1 text-wrap">Inconnu</span>',
         };
     }

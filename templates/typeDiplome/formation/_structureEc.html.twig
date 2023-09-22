@@ -2,16 +2,19 @@
     <th>&nbsp;</th>
     <th>&nbsp;</th>
     <td>
-        <strong>{{ ec.code }}</strong>
+        {% if not isBut %}<strong>{{ ec.code }}</strong>{% endif %}
         {% if ec.ficheMatiere != null %}
             <a href="{{ url('app_fiche_matiere_show', {slug: ec.ficheMatiere.slug}) }}">
+                {% if isBut %}<strong>{{ ec.ficheMatiere.sigle }}</strong> {{ ec.ficheMatiere.libelle }}{% else %}
                 {{ ec.ficheMatiere.display }}
+                {% endif %}
             </a>
 
             {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) %}
                 {# todo: vérifier si éditable par moi? #}
-                <a href="{{ url('app_fiche_matiere_edit', {slug: ec.ficheMatiere.slug}) }}">
-                    <i class="{{ iconEdit }}">Modifier</i>
+                <a href="{{ url('app_fiche_matiere_edit', {slug: ec.ficheMatiere.slug}) }}"
+                   class="btn btn-sm text-warning">
+                    <i class="{{ iconEdit }}"></i>
                 </a>
             {% endif %}
         {% else %}
@@ -22,18 +25,24 @@
 
     {% if presentiel %}
         {% if ec.ecEnfants|length > 0 %}
-            <td colspan="4"></td>
+            <td colspan="{% if isBut %}5{% else %}4{% endif %}"></td>
         {% else %}
             {% if ec.ecParent != null and ec.ecParent.heuresEnfantsIdentiques == true %}
-                <td>{{ ec.ecParent.volumeCmPresentiel }}</td>
-                <td>{{ ec.ecParent.volumeTdPresentiel }}</td>
-                <td>{{ ec.ecParent.volumeTpPresentiel }}</td>
-                <td>{{ ec.ecParent.volumeTotalPresentiel }}</td>
+                <td>{{ ec.ecParent.volumeCmPresentiel|filtreHeures }}</td>
+                <td>{{ ec.ecParent.volumeTdPresentiel|filtreHeures }}</td>
+                <td>{{ ec.ecParent.volumeTpPresentiel|filtreHeures }}</td>
+                {% if isBut %}
+                    <td>{{ ec.ecParent.volumeTe|filtreHeures }}</td>
+                {% endif %}
+                <td>{{ ec.ecParent.volumeTotalPresentiel|filtreHeures }}</td>
             {% else %}
-                <td>{{ ec.volumeCmPresentiel }}</td>
-                <td>{{ ec.volumeTdPresentiel }}</td>
-                <td>{{ ec.volumeTpPresentiel }}</td>
-                <td>{{ ec.volumeTotalPresentiel }}</td>
+                <td>{{ ec.volumeCmPresentiel|filtreHeures }}</td>
+                <td>{{ ec.volumeTdPresentiel|filtreHeures }}</td>
+                <td>{{ ec.volumeTpPresentiel|filtreHeures }}</td>
+                {% if isBut %}
+                    <td>{{ ec.volumeTe|filtreHeures }}</td>
+                {% endif %}
+                <td>{{ ec.volumeTotalPresentiel|filtreHeures }}</td>
             {% endif %}
         {% endif %}
     {% endif %}

@@ -15,6 +15,7 @@ class HeuresEctsSemestre
     public float $sommeSemestreCmPres = 0;
     public float $sommeSemestreTdPres = 0;
     public float $sommeSemestreTpPres = 0;
+    public float $sommeSemestreTePres = 0;
     public float $sommeSemestreCmDist = 0;
     public float $sommeSemestreTdDist = 0;
     public float $sommeSemestreTpDist = 0;
@@ -42,6 +43,7 @@ class HeuresEctsSemestre
         $this->sommeSemestreCmPres += $dtoUe->sommeUeCmPres;
         $this->sommeSemestreTdPres += $dtoUe->sommeUeTdPres;
         $this->sommeSemestreTpPres += $dtoUe->sommeUeTpPres;
+        $this->sommeSemestreTePres += $dtoUe->sommeUeTePres;
         $this->sommeSemestreCmDist += $dtoUe->sommeUeCmDist;
         $this->sommeSemestreTdDist += $dtoUe->sommeUeTdDist;
         $this->sommeSemestreTpDist += $dtoUe->sommeUeTpDist;

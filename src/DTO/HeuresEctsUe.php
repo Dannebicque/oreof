@@ -17,6 +17,7 @@ class HeuresEctsUe
     public float $sommeUeCmPres = 0;
     public float $sommeUeTdPres = 0;
     public float $sommeUeTpPres = 0;
+    public float $sommeUeTePres = 0;
     public float $sommeUeCmDist = 0;
     public float $sommeUeTdDist = 0;
     public float $sommeUeTpDist = 0;
@@ -41,6 +42,7 @@ class HeuresEctsUe
         $this->sommeUeCmPres += $elementConstitutif->getVolumeCmPresentiel();
         $this->sommeUeTdPres += $elementConstitutif->getVolumeTdPresentiel();
         $this->sommeUeTpPres += $elementConstitutif->getVolumeTpPresentiel();
+        $this->sommeUeTePres += $elementConstitutif->getVolumeTe();
         $this->sommeUeCmDist += $elementConstitutif->getVolumeCmDistanciel();
         $this->sommeUeTdDist += $elementConstitutif->getVolumeTdDistanciel();
         $this->sommeUeTpDist += $elementConstitutif->getVolumeTpDistanciel();

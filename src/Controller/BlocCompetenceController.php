@@ -41,7 +41,6 @@ class BlocCompetenceController extends AbstractController
         BlocCompetenceRepository $blocCompetenceRepository,
         ?Parcours                $parcours = null
     ): Response {
-
         if ($parcours === null) {
             return $this->render('bloc_competence/_liste.html.twig', [
                 'bloc_competences' => $blocCompetenceRepository->findBy(['parcours' => null], ['ordre' => 'ASC']),
@@ -58,6 +57,19 @@ class BlocCompetenceController extends AbstractController
 
         return $this->render('bloc_competence/_liste.html.twig', [
             'bloc_competences' => $blocCompetenceRepository->findByParcours($parcours),
+            'parcours' => $parcours,
+        ]);
+    }
+
+    public function afficheBUTReferentiel(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        Parcours            $parcours
+    ): Response
+    {
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
+
+        return $this->render('typeDiplome/but/_refCompetences.html.twig', [
+            'competences' => $typeDiplome->getRefCompetences($parcours),
             'parcours' => $parcours,
         ]);
     }

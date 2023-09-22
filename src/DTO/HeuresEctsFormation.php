@@ -15,6 +15,7 @@ class HeuresEctsFormation
     public float $sommeFormationCmPres = 0;
     public float $sommeFormationTdPres = 0;
     public float $sommeFormationTpPres = 0;
+    public float $sommeFormationTePres = 0;
     public float $sommeFormationCmDist = 0;
     public float $sommeFormationTdDist = 0;
     public float $sommeFormationTpDist = 0;
@@ -42,6 +43,7 @@ class HeuresEctsFormation
         $this->sommeFormationCmPres += $dtoSemestre->sommeSemestreCmPres;
         $this->sommeFormationTdPres += $dtoSemestre->sommeSemestreTdPres;
         $this->sommeFormationTpPres += $dtoSemestre->sommeSemestreTpPres;
+        $this->sommeFormationTePres += $dtoSemestre->sommeSemestreTePres;
         $this->sommeFormationCmDist += $dtoSemestre->sommeSemestreCmDist;
         $this->sommeFormationTdDist += $dtoSemestre->sommeSemestreTdDist;
         $this->sommeFormationTpDist += $dtoSemestre->sommeSemestreTpDist;
