@@ -76,6 +76,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
             ->andWhere('fo.anneeUniversitaire = :annee')
+            ->andWhere('f.horsDiplome = 0')
             ->setParameter('annee', $anneeUniversitaire);
 
         $this->addFiltres($qb, $options);
@@ -90,6 +91,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
             ->andWhere('fo.anneeUniversitaire = :annee')
+            ->andWhere('f.horsDiplome = 0')
             ->setParameter('annee', $anneeUniversitaire);
 
         $this->addFiltres($qb, $options, true);
@@ -228,12 +230,17 @@ class FicheMatiereRepository extends ServiceEntityRepository
     {
         $start = $options['start'] ?? 0;
         $query = $this->createQueryBuilder('f')
-            ->where('f.parcours IS NULL')
+            ->where('f.horsDiplome = 1')
             ->orderBy('f.libelle', 'ASC')
             ->setFirstResult($start * 50)
             ->setMaxResults($options['length'] ?? 50);
 
         //$this->addFiltres($query, $options);
+
+        if (array_key_exists('q', $options) && null !== $options['q']) {
+            $query->andWhere('f.libelle LIKE :q')
+                ->setParameter('q', '%' . $options['q'] . '%');
+        }
 
         return $query->getQuery()
             ->getResult();
@@ -256,7 +263,12 @@ class FicheMatiereRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('f')
             ->select('count(f.id)')
-            ->where('f.parcours IS NULL');
+            ->andWhere('f.horsDiplome = 1');
+
+        if (array_key_exists('q', $options) && null !== $options['q']) {
+            $query->andWhere('f.libelle LIKE :q')
+                ->setParameter('q', '%' . $options['q'] . '%');
+        }
 
        // $this->addFiltres($query, $all);
 
@@ -273,6 +285,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->orWhere('(p.respParcours = :parcours OR p.coResponsable = :parcours)')
             ->orWhere('f.responsableFicheMatiere = :user')
             ->andWhere('fo.anneeUniversitaire = :annee') // Pour la troisième requête
+            ->andWhere('f.horsDiplome = 0')
             ->orderBy('f.libelle', 'ASC')
             ->setParameters([
                 'parcours' => $user,
@@ -298,6 +311,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->andWhere('fo.anneeUniversitaire = :annee') // Pour la troisième requête
             // Ajout condition à la derniere requete
             ->andWhere('f.responsableFicheMatiere = :user')
+            ->andWhere('f.horsDiplome = 0')
             ->orderBy('f.libelle', 'ASC')
             ->setParameters([
                 'parcours' => $user,

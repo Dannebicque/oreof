@@ -14,6 +14,7 @@ use App\Entity\FicheMatiereMutualisable;
 use App\Form\FicheMatiereStep1Type;
 use App\Form\FicheMatiereStep2Type;
 use App\Form\FicheMatiereStep3Type;
+use App\Form\FicheMatiereStep4HdType;
 use App\Form\FicheMatiereStep4Type;
 use App\Repository\BlocCompetenceRepository;
 use App\Repository\ButCompetenceRepository;
@@ -98,6 +99,7 @@ class FicheMatiereWizardController extends AbstractController
     ])]
     public function mutualiseAjax(
         EntityManagerInterface             $entityManager,
+        ComposanteRepository               $composanteRepository,
         Request                            $request,
         FormationRepository                $formationRepository,
         ParcoursRepository                 $parcoursRepository,
@@ -126,6 +128,17 @@ class FicheMatiereWizardController extends AbstractController
                 }
                 break;
             case 'save':
+
+                if ($data['formation'] === 'all') {
+                    $composante = $composanteRepository->find($data['composante']);
+                    if ($composante !== null and !$ficheMatiere->getComposante()->contains($composante)) {
+                        $ficheMatiere->addComposante($composante);
+                        $composante->addFicheMatiere($ficheMatiere);
+                        $entityManager->flush();
+                    }
+                    return $this->json(true);
+                }
+
                 if (!isset($data['parcours']) || $data['parcours'] === '') {
                     $formation = $formationRepository->find($data['formation']);
                     if ($formation !== null && $formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
@@ -222,20 +235,32 @@ class FicheMatiereWizardController extends AbstractController
         ]);
     }
 
-    #[Route('/{ficheMatiere}/4', name: 'app_fiche_matiere_wizard_step_4', methods: ['GET'])]
+    #[Route('/{ficheMatiere}/4/{type}', name: 'app_fiche_matiere_wizard_step_4', methods: ['GET'])]
     public function step4(
         TypeDiplomeRegistry $typeDiplomeRegistry,
         FicheMatiere        $ficheMatiere,
+        string              $type,
     ): Response {
-        $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
-        $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+        if ($type === 'but') {
+            $form = $this->createForm(FicheMatiereStep4Type::class, $ficheMatiere);
+            $typeDiplome = $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
+            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
-        return $this->render('fiche_matiere_wizard/_step4.html.twig', [
-            'mcccs' => $typeD->getMcccs($ficheMatiere),
-            'ficheMatiere' => $ficheMatiere,
-            'form' => $form->createView(),
-        ]);
+            return $this->render('fiche_matiere_wizard/_step4But.html.twig', [
+                'mcccs' => $typeD->getMcccs($ficheMatiere),
+                'ficheMatiere' => $ficheMatiere,
+                'form' => $form->createView(),
+            ]);
+        }
+
+        if ($type === 'hd') {
+            $form = $this->createForm(FicheMatiereStep4HdType::class, $ficheMatiere);
+
+            return $this->render('fiche_matiere_wizard/_step4Hd.html.twig', [
+                'ficheMatiere' => $ficheMatiere,
+                'form' => $form->createView(),
+            ]);
+        }
     }
 
     private function updateFicheMatiereMutualisable(

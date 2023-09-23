@@ -11,6 +11,7 @@ namespace App\TypeDiplome\Source;
 
 use App\Entity\AnneeUniversitaire;
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\Repository\TypeEpreuveRepository;
@@ -79,10 +80,11 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         return $this->licenceMccc->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $dateEdition, $versionFull);
     }
 
-    public function saveMcccs(ElementConstitutif $elementConstitutif, InputBag $request): void
+    public function saveMcccs(ElementConstitutif|FicheMatiere $elementConstitutif, InputBag $request): void
     {
         $mcccs = $this->getMcccs($elementConstitutif);
         $typeD = 'L';
+        $etatMccc = '';
 
         switch ($request->get('choix_type_mccc')) {
             case 'cc':
@@ -92,7 +94,11 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                         $mcccs[1]['cc'][1]->setNbEpreuves(2);
                     } else {
                         $mccc = new Mccc();
-                        $mccc->setEc($elementConstitutif);
+                        if ($elementConstitutif instanceof FicheMatiere) {
+                            $mccc->setFicheMatiere($elementConstitutif);
+                        } else {
+                            $mccc->setEc($elementConstitutif);
+                        }
                         $mccc->setLibelle('Contrôle continu');
                         $mccc->setPourcentage(50);
                         $mccc->setNbEpreuves(2);
@@ -143,7 +149,11 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                         $totPourcentage += (float)$pourcentage;
                     } else {
                         $mccc = new Mccc();
-                        $mccc->setEc($elementConstitutif);
+                        if ($elementConstitutif instanceof FicheMatiere) {
+                            $mccc->setFicheMatiere($elementConstitutif);
+                        } else {
+                            $mccc->setEc($elementConstitutif);
+                        }
                         $mccc->setLibelle('Contrôle continu intégral ' . $key);
                         $mccc->setPourcentage((float)$pourcentage);
                         $mccc->setNbEpreuves(1);
@@ -170,7 +180,11 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                     $mcccs[1]['cc'][1]->setOptions($tab);
                 } else {
                     $mccc = new Mccc();
-                    $mccc->setEc($elementConstitutif);
+                    if ($elementConstitutif instanceof FicheMatiere) {
+                        $mccc->setFicheMatiere($elementConstitutif);
+                    } else {
+                        $mccc->setEc($elementConstitutif);
+                    }
                     $mccc->setLibelle('Contrôle continu');
                     $mccc->setControleContinu(true);
                     $mccc->setExamenTerminal(false);
@@ -207,7 +221,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         $this->entityManager->flush();
     }
 
-    public function getMcccs(ElementConstitutif $elementConstitutif): array
+    public function getMcccs(ElementConstitutif|FicheMatiere $elementConstitutif): array
     {
         $mcccs = $elementConstitutif->getMcccs();
         $tabMcccs = [];
@@ -231,16 +245,16 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         return $tabMcccs;
     }
 
-    public function clearMcccs(ElementConstitutif $elementConstitutif): void
+    public function clearMcccs(ElementConstitutif|FicheMatiere $objet): void
     {
-        $mcccs = $elementConstitutif->getMcccs();
+        $mcccs = $objet->getMcccs();
         foreach ($mcccs as $mccc) {
             $this->entityManager->remove($mccc);
         }
         $this->entityManager->flush();
     }
 
-    private function sauvegardeCts(ElementConstitutif $elementConstitutif, array $mcccs, array $data, int $session, string $cle, bool $fixToCent = true): array
+    private function sauvegardeCts(ElementConstitutif|FicheMatiere $elementConstitutif, array $mcccs, array $data, int $session, string $cle, bool $fixToCent = true): array
     {
         $typeEpreuve_s1_ct = [];
         foreach ($data as $key => $value) {
@@ -267,7 +281,11 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
             } else {
                 //n'existe pas à créer.
                 $mccc = new Mccc();
-                $mccc->setEc($elementConstitutif);
+                if ($elementConstitutif instanceof FicheMatiere) {
+                    $mccc->setFicheMatiere($elementConstitutif);
+                } else {
+                    $mccc->setEc($elementConstitutif);
+                }
                 $mccc->setLibelle('Contrôle terminal');
                 $mccc->setControleContinu(false);
                 $mccc->setExamenTerminal(true);
@@ -310,7 +328,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         return $mcccs;
     }
 
-    private function sauvegardeCc(ElementConstitutif $elementConstitutif, array $mcccs, array $data, int $session, string $cle, string $typeD = 'L'): array
+    private function sauvegardeCc(ElementConstitutif|FicheMatiere $elementConstitutif, array $mcccs, array $data, int $session, string $cle, string $typeD = 'L'): array
     {
         $typeEpreuve_s1_cc = [];
         foreach ($data as $key => $value) {
@@ -345,7 +363,11 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 $mcccs[$session]['cc'][$numEp]->setNumeroEpreuve($numEp);
             } else {
                 $mccc = new Mccc();
-                $mccc->setEc($elementConstitutif);
+                if ($elementConstitutif instanceof FicheMatiere) {
+                    $mccc->setFicheMatiere($elementConstitutif);
+                } else {
+                    $mccc->setEc($elementConstitutif);
+                }
                 $mccc->setLibelle('Contrôle continu');
                 $mccc->setControleContinu(true);
                 $mccc->setExamenTerminal(false);
@@ -395,7 +417,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         return $mcccs;
     }
 
-    private function verificationMccc(ElementConstitutif $ec, array $mcccs, $type = 'L')
+    private function verificationMccc(ElementConstitutif|FicheMatiere $ec, array $mcccs, $type = 'L')
     {
         switch ($ec->getTypeMccc()) {
             case 'cc':

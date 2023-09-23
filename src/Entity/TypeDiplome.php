@@ -75,6 +75,9 @@ class TypeDiplome
     #[ORM\OneToMany(mappedBy: 'typeDiplome', targetEntity: FormationDemande::class)]
     private Collection $formationDemandes;
 
+    #[ORM\OneToMany(mappedBy: 'typeDiplome', targetEntity: FicheMatiere::class)]
+    private Collection $ficheMatieres;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -83,6 +86,7 @@ class TypeDiplome
         $this->typeUes = new ArrayCollection();
         $this->typeEpreuves = new ArrayCollection();
         $this->formationDemandes = new ArrayCollection();
+        $this->ficheMatieres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -423,6 +427,36 @@ class TypeDiplome
             // set the owning side to null (unless already changed)
             if ($formationDemande->getTypeDiplome() === $this) {
                 $formationDemande->setTypeDiplome(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FicheMatiere>
+     */
+    public function getFicheMatieres(): Collection
+    {
+        return $this->ficheMatieres;
+    }
+
+    public function addFicheMatiere(FicheMatiere $ficheMatiere): static
+    {
+        if (!$this->ficheMatieres->contains($ficheMatiere)) {
+            $this->ficheMatieres->add($ficheMatiere);
+            $ficheMatiere->setTypeDiplome($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFicheMatiere(FicheMatiere $ficheMatiere): static
+    {
+        if ($this->ficheMatieres->removeElement($ficheMatiere)) {
+            // set the owning side to null (unless already changed)
+            if ($ficheMatiere->getTypeDiplome() === $this) {
+                $ficheMatiere->setTypeDiplome(null);
             }
         }
 

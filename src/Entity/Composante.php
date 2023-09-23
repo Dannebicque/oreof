@@ -62,11 +62,15 @@ class Composante
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $sigle = null;
 
+    #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'composante')]
+    private Collection $ficheMatieres;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
         $this->userCentres = new ArrayCollection();
         $this->formationsPortees = new ArrayCollection();
+        $this->ficheMatieres = new ArrayCollection();
     }
 
     public function getEtatComposante(): array
@@ -284,6 +288,33 @@ class Composante
             if ($formationsPortee->getComposantePorteuse() === $this) {
                 $formationsPortee->setComposantePorteuse(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FicheMatiere>
+     */
+    public function getFicheMatieres(): Collection
+    {
+        return $this->ficheMatieres;
+    }
+
+    public function addFicheMatiere(FicheMatiere $ficheMatiere): static
+    {
+        if (!$this->ficheMatieres->contains($ficheMatiere)) {
+            $this->ficheMatieres->add($ficheMatiere);
+            $ficheMatiere->addComposante($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFicheMatiere(FicheMatiere $ficheMatiere): static
+    {
+        if ($this->ficheMatieres->removeElement($ficheMatiere)) {
+            $ficheMatiere->removeComposante($this);
         }
 
         return $this;

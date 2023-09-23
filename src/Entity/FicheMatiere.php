@@ -147,6 +147,39 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?bool $sansHeures = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $volumeCmDistanciel = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $volumeTdDistanciel = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $volumeTpDistanciel = null;
+
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $typeMccc = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $horsDiplome = null;
+
+    #[ORM\ManyToOne(inversedBy: 'ficheMatieres')]
+    private ?TypeDiplome $typeDiplome = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $volumesHorairesImpose = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $ectsImpose = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $mcccImpose = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $ects = null;
+
+    #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'ficheMatieres')]
+    private Collection $composante;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -161,6 +194,7 @@ class FicheMatiere
         $this->ficheMatiereParcours = new ArrayCollection();
         $this->historiqueFicheMatieres = new ArrayCollection();
         $this->apprentissagesCritiques = new ArrayCollection();
+        $this->composante = new ArrayCollection();
     }
 
     public function getEtatStep(int $step): bool
@@ -764,6 +798,150 @@ class FicheMatiere
     public function setSansHeures(?bool $sansHeures): static
     {
         $this->sansHeures = $sansHeures;
+
+        return $this;
+    }
+
+    public function getVolumeCmDistanciel(): ?float
+    {
+        return $this->volumeCmDistanciel;
+    }
+
+    public function setVolumeCmDistanciel(?float $volumeCmDistanciel): static
+    {
+        $this->volumeCmDistanciel = $volumeCmDistanciel;
+
+        return $this;
+    }
+
+    public function getVolumeTdDistanciel(): ?float
+    {
+        return $this->volumeTdDistanciel;
+    }
+
+    public function setVolumeTdDistanciel(?float $volumeTdDistanciel): static
+    {
+        $this->volumeTdDistanciel = $volumeTdDistanciel;
+
+        return $this;
+    }
+
+    public function getVolumeTpDistanciel(): ?float
+    {
+        return $this->volumeTpDistanciel;
+    }
+
+    public function setVolumeTpDistanciel(?float $volumeTpDistanciel): static
+    {
+        $this->volumeTpDistanciel = $volumeTpDistanciel;
+
+        return $this;
+    }
+
+    public function getTypeMccc(): ?string
+    {
+        return $this->typeMccc;
+    }
+
+    public function setTypeMccc(?string $typeMccc): static
+    {
+        $this->typeMccc = $typeMccc;
+
+        return $this;
+    }
+
+    public function isHorsDiplome(): ?bool
+    {
+        return $this->horsDiplome;
+    }
+
+    public function setHorsDiplome(?bool $horsDiplome): static
+    {
+        $this->horsDiplome = $horsDiplome;
+
+        return $this;
+    }
+
+    public function getTypeDiplome(): ?TypeDiplome
+    {
+        return $this->typeDiplome;
+    }
+
+    public function setTypeDiplome(?TypeDiplome $typeDiplome): static
+    {
+        $this->typeDiplome = $typeDiplome;
+
+        return $this;
+    }
+
+    public function isVolumesHorairesImpose(): ?bool
+    {
+        return $this->volumesHorairesImpose;
+    }
+
+    public function setVolumesHorairesImpose(?bool $volumesHorairesImpose): static
+    {
+        $this->volumesHorairesImpose = $volumesHorairesImpose;
+
+        return $this;
+    }
+
+    public function isEctsImpose(): ?bool
+    {
+        return $this->ectsImpose;
+    }
+
+    public function setEctsImpose(?bool $ectsImpose): static
+    {
+        $this->ectsImpose = $ectsImpose;
+
+        return $this;
+    }
+
+    public function isMcccImpose(): ?bool
+    {
+        return $this->mcccImpose;
+    }
+
+    public function setMcccImpose(?bool $mcccImpose): static
+    {
+        $this->mcccImpose = $mcccImpose;
+
+        return $this;
+    }
+
+    public function getEcts(): ?float
+    {
+        return $this->ects;
+    }
+
+    public function setEcts(?float $ects): static
+    {
+        $this->ects = $ects;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Composante>
+     */
+    public function getComposante(): Collection
+    {
+        return $this->composante;
+    }
+
+    public function addComposante(Composante $composante): static
+    {
+        if (!$this->composante->contains($composante)) {
+            $this->composante->add($composante);
+        }
+
+        return $this;
+    }
+
+    public function removeComposante(Composante $composante): static
+    {
+        $this->composante->removeElement($composante);
 
         return $this;
     }

@@ -19,6 +19,7 @@ export default class extends Controller {
   }
 
   async ajouter() {
+    const composante = document.getElementById('composante').value
     const formation = document.getElementById('formation').value
     const parcours = document.getElementById('parcours').value
     await fetch(this.urlValue, {
@@ -27,6 +28,7 @@ export default class extends Controller {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        composante,
         formation,
         parcours,
         field: 'save',
@@ -76,6 +78,13 @@ export default class extends Controller {
         const optionAll = document.createElement('option')
         optionAll.value = 'all'
         optionAll.text = 'Mutualiser avec tous les parcours de la mention'
+        select.add(optionAll, null)
+      }
+
+      if (field === 'formation') {
+        const optionAll = document.createElement('option')
+        optionAll.value = 'all'
+        optionAll.text = 'Mutualiser avec toutes les mentions de la composante'
         select.add(optionAll, null)
       }
     }

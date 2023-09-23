@@ -5,13 +5,17 @@
                 <dl>
                     <dt>Parcours porteur</dt>
                     <dd>
-                        {% if ficheMatiere.parcours != null %}
-                            {{ ficheMatiere.parcours.formation.display }}
-                            {% if ficheMatiere.parcours.formation.hasParcours == true %}
-                                / {{ ficheMatiere.parcours.libelle }}
-                            {% endif %}
+                        {% if ficheMatiere.horsDiplome == true %}
+                            <span class="badge bg-info">Fiche hors diplôme</span>
                         {% else %}
-                            Sans parcours
+                            {% if ficheMatiere.parcours != null %}
+                                {{ ficheMatiere.parcours.formation.display }}
+                                {% if ficheMatiere.parcours.formation.hasParcours == true %}
+                                    / {{ ficheMatiere.parcours.libelle }}
+                                {% endif %}
+                            {% else %}
+                                <span class="badge bg-warning">Sans parcours</span>
+                            {% endif %}
                         {% endif %}
                     </dd>
                 </dl>
@@ -29,12 +33,13 @@
                         {# todo: mettre une "coche" si réellement utilisée #}
                         {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 %}
                             <ul>
-                            {% for ec in ficheMatiere.ficheMatiereParcours %}
-                                <li>{{ (ec.parcours != null and ec.parcours.formation != null) ? ec.parcours.formation
-                                .display : 'non défini' }} / {{ ec.parcours != null ? ec.parcours.libelle : 'non défini' }}</li>
-                            {% endfor %}
+                                {% for ec in ficheMatiere.ficheMatiereParcours %}
+                                    <li>{{ (ec.parcours != null and ec.parcours.formation != null) ? ec.parcours.formation
+                                        .display : 'non défini' }}
+                                        / {{ ec.parcours != null ? ec.parcours.libelle : 'non défini' }}</li>
+                                {% endfor %}
                             </ul>
-                            {% else %}
+                        {% else %}
                             <span class="badge bg-info">Fiche EC/matière non mutualisée</span>
                         {% endif %}
                     </dd>

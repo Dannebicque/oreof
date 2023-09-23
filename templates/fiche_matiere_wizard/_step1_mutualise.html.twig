@@ -9,6 +9,21 @@
     </tr>
     </thead>
     <tbody>
+    {% for composante in ficheMatiere.composante %}
+        <tr>
+            <td>{{ composante.libelle }}</td>
+            <td colspan="2">Toutes les mentions</td>
+            <td></td>
+            <td class="text-end">
+{#                <button {{ stimulus_action('fichematiere--step1', 'delete', 'click', {#}
+{#                    url:path('app_fiche_matiere_wizard_step_1_mutualise_add_ajax', {ficheMatiere:ficheMatiere.id,#}
+{#                    }),fiche:fiche.id}) }} class="btn btn-sm text-danger">#}
+{#                    <i class="{{ iconDelete }}"></i> Supprimer#}
+{#                </button>#}
+            </td>
+        </tr>
+    {% endfor %}
+
     {% for fiche in ficheMatiere.ficheMatiereParcours %}
         <tr>
             <td>{{ fiche.parcours != null and fiche.parcours.formation != null ? fiche.parcours.formation

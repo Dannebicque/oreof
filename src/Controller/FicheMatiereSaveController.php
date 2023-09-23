@@ -54,7 +54,6 @@ class FicheMatiereSaveController extends BaseController
         $data = JsonRequest::getFromRequest($request);
         switch ($data['action']) {
             case 'typeMatiere':
-
                 return $updateEntity->saveField(
                     $ficheMatiere,
                     'typeMatiere',

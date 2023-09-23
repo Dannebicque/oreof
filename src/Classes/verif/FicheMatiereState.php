@@ -23,7 +23,7 @@ class FicheMatiereState
 
     public function onglets(): array
     {
-        $max = $this->ficheMatiere->getParcours()?->getTypeDiplome()?->getLibelleCourt() === 'BUT' ? 4 : 3;
+        $max = $this->ficheMatiere->getParcours()?->getTypeDiplome()?->getLibelleCourt() === 'BUT' || $this->ficheMatiere->isHorsDiplome() ? 4 : 3;
 
         for ($i = 1; $i <= $max; $i++) {
             $methodEmpty = 'isEmptyOnglet' . $i;

@@ -9,7 +9,9 @@
 
 namespace App\Controller\TypeDiplome;
 
+use App\Classes\JsonReponse;
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\TypeEpreuveRepository;
@@ -18,6 +20,7 @@ use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LicenceController extends AbstractController
@@ -31,7 +34,7 @@ class LicenceController extends AbstractController
         TypeDiplomeRepository $typeDiplomeRepository,
         TypeEpreuveRepository $typeEpreuveRepository,
         ElementConstitutifRepository $elementConstitutifRepository,
-        ElementConstitutif $elementConstitutif
+        ElementConstitutif $elementConstitutif,
     ) {
         $typeDiplome = $elementConstitutif->getParcours()->getFormation()->getTypeDiplome();
 
@@ -85,5 +88,92 @@ class LicenceController extends AbstractController
 
         return $this->render('typeDiplome/mccc/licence/_vide.html.twig', [
         ]);
+    }
+
+    #[Route('/type_diplome/change/licence/hd/{ficheMatiere}', name: 'type_diplome_licence_change_hd')]
+    public function changeTypeHd(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        LicenceTypeDiplome $licenceTypeDiplome,
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        TypeDiplomeRepository $typeDiplomeRepository,
+        TypeEpreuveRepository $typeEpreuveRepository,
+        ElementConstitutifRepository $elementConstitutifRepository,
+        FicheMatiere $ficheMatiere,
+    ) {
+        $typeDiplome = $typeDiplomeRepository->find(1);
+
+        if ($typeDiplome === null) {
+            throw new \Exception('Type de diplome non trouvé');
+        }
+
+        $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome);
+
+        if ($request->query->get('type') !== $ficheMatiere->getTypeMccc()) {
+            $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+            $ficheMatiere->setTypeMccc($request->query->get('type'));
+            $typeD->clearMcccs($ficheMatiere);
+            $entityManager->flush();
+        }
+
+        switch ($request->query->get('type')) {
+            case 'cc':
+                if ($typeDiplome->getLibelleCourt() !== 'L') {
+                    //seul cas particulier, pour les autres mêmes formulaires
+                    return $this->render('typeDiplome/mccc/licence/_cc_autres_diplomes.html.twig', [
+                        'mcccs' => $licenceTypeDiplome->getMcccs($ficheMatiere),
+                        'typeEpreuves' => $typeEpreuves,
+                    ]);
+                }
+
+                return $this->render('typeDiplome/mccc/licence/_cc.html.twig', [
+                    'mcccs' => $licenceTypeDiplome->getMcccs($ficheMatiere),
+                    'typeEpreuves' => $typeEpreuves,
+                ]);
+
+            // no break
+            case 'cci':
+                return $this->render('typeDiplome/mccc/licence/_cci.html.twig', [
+                    'mcccs' => $licenceTypeDiplome->getMcccs($ficheMatiere),
+                    'typeEpreuves' => $typeEpreuves,
+                ]);
+            case 'cc_ct':
+                return $this->render('typeDiplome/mccc/licence/_cc_ct.html.twig', [
+                    'mcccs' => $licenceTypeDiplome->getMcccs($ficheMatiere),
+                    'typeEpreuves' => $typeEpreuves,
+                ]);
+            case 'ct':
+                return $this->render('typeDiplome/mccc/licence/_ct.html.twig', [
+                    'mcccs' => $licenceTypeDiplome->getMcccs($ficheMatiere),
+                    'typeEpreuves' => $typeEpreuves,
+                ]);
+        }
+
+        return $this->render('typeDiplome/mccc/licence/_vide.html.twig', [
+        ]);
+    }
+
+    #[Route('/type_diplome/save/mccc/hd/{ficheMatiere}', name: 'app_fiche_matiere_mccc_hors_diplome')]
+    public function saveMcccHorsDiplome(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        TypeDiplomeRepository $typeDiplomeRepository,
+        Request $request,
+        FicheMatiere $ficheMatiere,
+    ): Response
+    {
+        $typeDiplome = $typeDiplomeRepository->find(1); //todo: prendre le type de la fiche
+
+        if ($typeDiplome === null) {
+            throw new \Exception('Type de diplome non trouvé');
+        }
+
+        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+
+        if ($request->isMethod('POST')) {
+            $typeD->saveMcccs($ficheMatiere, $request->request);
+            return JsonReponse::success('MCCCs enregistrés');
+        }
+
+        return JsonReponse::error('Erreur lors de l\'enregistrement des MCCCs');
     }
 }

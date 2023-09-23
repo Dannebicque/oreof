@@ -35,11 +35,16 @@ export default class extends Controller {
   }
 
   changeStep(event) {
-    this._loadStep(event.params.step)
+    this._loadStep(event.params.step, event.params.type ?? '')
   }
 
-  async _loadStep(step) {
-    const response = await fetch(`${this.urlValue + this.ficheMatiereValue}/${step}`)
-    this.contentTarget.innerHTML = await response.text()
+  async _loadStep(step, type = '') {
+    if (type !== '') {
+      const response = await fetch(`${this.urlValue + this.ficheMatiereValue}/${step}/${type}`)
+      this.contentTarget.innerHTML = await response.text()
+    } else {
+      const response = await fetch(`${this.urlValue + this.ficheMatiereValue}/${step}`)
+      this.contentTarget.innerHTML = await response.text()
+    }
   }
 }

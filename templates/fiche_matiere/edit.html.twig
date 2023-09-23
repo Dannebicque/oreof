@@ -29,10 +29,19 @@
                             {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 3}) }}
                     >Objectifs et Compétences  {{ ficheMatiereState.onglets|etatRemplissage(3, 'ec') }}</a>
                 </li>
-                {% if fiche_matiere.parcours is defined and fiche_matiere.parcours.formation.typeDiplome.libelleCourt == 'BUT' %}
+                {% if fiche_matiere.parcours is defined and fiche_matiere.parcours != null and fiche_matiere.parcours.formation.typeDiplome.libelleCourt == 'BUT' %}
                     <li class="nav-item" role="presentation">
                         <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
-                                {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 4}) }}
+                                {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 4, type:'but'}) }}
+                        >Volumes horaires et MCCC  {{ ficheMatiereState.onglets|etatRemplissage(4, 'ec') }}</a>
+                    </li>
+                {% endif %}
+
+                {% if fiche_matiere.horsDiplome == true %}
+                    {# fiche commune #}
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="tab" href="#" role="tab" aria-selected="false"
+                                {{ stimulus_action('fiche_matiere_wizard', 'changeStep', 'click', {step: 4, type:'hd'}) }}
                         >Volumes horaires et MCCC  {{ ficheMatiereState.onglets|etatRemplissage(4, 'ec') }}</a>
                     </li>
                 {% endif %}

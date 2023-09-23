@@ -39,6 +39,8 @@ class FicheMatiereController extends AbstractController
         if ($request->query->has('ue')) {
             $ue = $ueRepository->find($request->query->get('ue'));
             $ficheMatiere->setParcours($ue->getSemestre()?->getSemestreParcours()->first()->getParcours());
+        } else {
+            $ficheMatiere->setHorsDiplome(true);
         }
 
         //todo: initialiser les modalités par rapport au parcours

@@ -23,15 +23,43 @@ export default class extends Controller {
     updateStep: { type: Boolean, default: true },
   }
 
-  connect() {
-
-  }
-
   saveVolume(event) {
     this._save({
       field: event.params.type,
       action: 'float',
       value: event.target.value,
+    })
+  }
+
+  saveEcts(event) {
+    this._save({
+      field: event.params.type,
+      action: 'float',
+      value: event.target.value,
+    })
+  }
+
+  ectsImpose(event) {
+    this._save({
+      field: 'ectsImpose',
+      action: 'checkbox',
+      isChecked: event.target.checked,
+    })
+  }
+
+  mcccImpose(event) {
+    this._save({
+      field: 'mcccImpose',
+      action: 'checkbox',
+      isChecked: event.target.checked,
+    })
+  }
+
+  volumesHorairesImpose(event) {
+    this._save({
+      field: 'volumesHorairesImpose',
+      action: 'checkbox',
+      isChecked: event.target.checked,
     })
   }
 

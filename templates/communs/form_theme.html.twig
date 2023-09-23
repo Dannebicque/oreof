@@ -122,8 +122,8 @@
     {%- if help is not empty -%}
         {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
     {%- endif -%}
-    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %} {% if button_disabled == false %}{{
-    stimulus_controller('textarea') }}{% endif %} class="mt-3">
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %} {% if button_disabled == false %}{{ stimulus_controller('textarea') }}{% endif %}
+            class="mt-3">
         {{- form_label(form) -}}
         {{- form_errors(form) -}}
         {{- form_widget(form, widget_attr) -}}
@@ -156,14 +156,16 @@
     {{- block('form_label_content') -}}
     {% import _self as macros %}
 
-    {#    {% if help is defined and help != '' %} #}
     {% set help = macros.form_parent_help_name(form) %}
-    <i class="fal fa-question-circle ms-1"
-            {{ stimulus_controller('tooltip', {
-                'placement': 'bottom',
-            }) }}
-       title="{{ help|trim|trans({}, 'help')|raw }}"></i>
-    </{{ element|default('label') }}>
+    {% if help is defined and help|trim|trans({}, 'help') != '' %}
+
+        <i class="fal fa-question-circle ms-1"
+                {{ stimulus_controller('tooltip', {
+                    'placement': 'bottom',
+                }) }}
+           title="{{ help|trim|trans({}, 'help')|raw }}"></i>
+        </{{ element|default('label') }}>
+    {% endif %}
 {%- endblock form_label %}
 
 {% block textarea_with_save_widget %}
