@@ -41,13 +41,15 @@ class FicheMatiereController extends BaseController
         Request                $request,
         FicheMatiereRepository $ficheMatiereRepository
     ): Response {
-        $ficheMatieres = [];
+
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
-            $ficheMatieres[] = $ficheMatiereRepository->findByAdmin(
+            $ficheMatieres = $ficheMatiereRepository->findByAdmin(
                 $this->getAnneeUniversitaire(),
                 $request->query->all()
             );
+            $totalFiches = $ficheMatiereRepository->countByAdmin($this->getAnneeUniversitaire(), $request->query->all());
         } else {
+//            $ficheMatieres = [];
             // toutes les fiches en tant que responsable composante/DPE
 //            $ficheMatieres[] = $ficheMatiereRepository->findByComposanteDpe(
 //                $this->getUser(),
@@ -56,21 +58,32 @@ class FicheMatiereController extends BaseController
 //                $q
 //            );
             // toutes les fiches en tant que responsable formation
-            $ficheMatieres[] = $ficheMatiereRepository->findByResponsableFormation(
+
+            $ficheMatieres = $ficheMatiereRepository->findByResponsable(
                 $this->getUser(),
                 $this->getAnneeUniversitaire(),
                 $request->query->all()
             );
+//
+//            // toutes les fiches en tant que responsable parcours
+//            $ficheMatieres[] = $ficheMatiereRepository->findByResponsableParcours(
+//                $this->getUser(),
+//                $this->getAnneeUniversitaire(),
+//                $request->query->all()
+//            );
+//
+//            // toutes les fiches en tant que responsable fiche matière
+//            $ficheMatieres[] = $ficheMatiereRepository->findByResponsableFicheMatiere(
+//                $this->getUser(),
+//                $this->getAnneeUniversitaire(),
+//                $request->query->all()
+//            );
 
-            // toutes les fiches en tant que responsable parcours
-            $ficheMatieres[] = $ficheMatiereRepository->findByResponsableParcours(
-                $this->getUser(),
-                $this->getAnneeUniversitaire(),
-                $request->query->all()
-            );
-
-            // toutes les fiches en tant que responsable fiche matière
-            $ficheMatieres[] = $ficheMatiereRepository->findByResponsableFicheMatiere(
+//            $ficheMatieres = array_merge(...$ficheMatieres);
+//            $totalFiches = count($ficheMatieres);
+            // récupérer les éléments entre l'index strat * 50 et 50 suivants dans le tableau
+//            $ficheMatieres = array_slice($ficheMatieres, $request->query->get('start', 0) * 50, 50);
+            $totalFiches = $ficheMatiereRepository->countByResponsable(
                 $this->getUser(),
                 $this->getAnneeUniversitaire(),
                 $request->query->all()
@@ -78,11 +91,13 @@ class FicheMatiereController extends BaseController
         }
 
         $tFicheMatieres = [];
+
+
         $tMentions = [];
         $tParcours = [];
         $tUsers = [];
-        foreach ($ficheMatieres as $ficheMatiere) {
-            foreach ($ficheMatiere as $fiche) {
+        foreach ($ficheMatieres as $fiche) {
+            //foreach ($ficheMatiere as $fiche) {
                 $tFicheMatieres[$fiche->getId()] = $fiche;
 
                 if (null !== $fiche->getParcours()) {
@@ -95,8 +110,11 @@ class FicheMatiereController extends BaseController
                 if (null !== $fiche->getResponsableFicheMatiere()) {
                     $tUsers[$fiche->getResponsableFicheMatiere()->getId()] = $fiche->getResponsableFicheMatiere();
                 }
-            }
+            //}
         }
+
+
+        $nbPages = ceil($totalFiches / 50);
 
         return $this->render('structure/fiche_matiere/_liste.html.twig', [
             'ficheMatieres' => $tFicheMatieres,
@@ -105,7 +123,9 @@ class FicheMatiereController extends BaseController
             'mentions' => $tMentions,
             'parcours' => $tParcours,
             'users' => $tUsers,
-            'params' => $request->query->all()
+            'params' => $request->query->all(),
+            'totalFiches' => $totalFiches,
+            'nbPages' => $nbPages,
         ]);
     }
 
@@ -116,14 +136,20 @@ class FicheMatiereController extends BaseController
     ): Response {
         $ficheMatieres = $ficheMatiereRepository->findByHd(
             $this->getAnneeUniversitaire(),
-            $request->query->all()
+            $request->query->all(),
         );
+
+        $totalFiches = $ficheMatiereRepository->countByHd($this->getAnneeUniversitaire(), $request->query->all());
+        $nbPages = ceil($totalFiches / 50);
 
         return $this->render('structure/fiche_matiere/_listeHd.html.twig', [
             'ficheMatieres' => $ficheMatieres,
             'deplacer' => false,
             'mode' => 'liste',
-            'params' => $request->query->all()
+            'params' => $request->query->all(),
+            'totalFiches' => $totalFiches,
+            'nbPages' => $nbPages,
+
         ]);
     }
 

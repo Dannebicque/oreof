@@ -83,26 +83,63 @@ class FicheMatiereRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findByResponsableFicheMatiere(
-        UserInterface      $user,
-        AnneeUniversitaire $anneeUniversitaire,
-        array              $options = []
-    ): array {
+    public function countByAdmin(AnneeUniversitaire $anneeUniversitaire, array $options): ?int
+    {
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
-            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
             ->andWhere('fo.anneeUniversitaire = :annee')
-            ->andWhere('f.responsableFicheMatiere = :user')
-            ->setParameter('user', $user)
             ->setParameter('annee', $anneeUniversitaire);
 
-        $this->addFiltres($qb, $options);
+        $this->addFiltres($qb, $options, true);
 
-        return $qb->getQuery()->getResult();
+        return $qb->select('count(f.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
-    private function addFiltres(QueryBuilder $qb, array $options): void
+//    public function findByResponsableFicheMatiere(
+//        UserInterface      $user,
+//        AnneeUniversitaire $anneeUniversitaire,
+//        array              $options = []
+//    ): array {
+//        $qb = $this->createQueryBuilder('f')
+//            ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
+//            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
+//            ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+//            ->andWhere('fo.anneeUniversitaire = :annee')
+//            ->andWhere('f.responsableFicheMatiere = :user')
+//            ->setParameter('user', $user)
+//            ->setParameter('annee', $anneeUniversitaire);
+//
+//        $this->addFiltres($qb, $options);
+//
+//        return $qb->getQuery()->getResult();
+//    }
+
+//    public function countByResponsableFicheMatiere(
+//        UserInterface      $user,
+//        AnneeUniversitaire $anneeUniversitaire,
+//        array              $options = []
+//    ): int {
+//        $qb = $this->createQueryBuilder('f')
+//            ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
+//            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
+//            ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+//            ->andWhere('fo.anneeUniversitaire = :annee')
+//            ->andWhere('f.responsableFicheMatiere = :user')
+//            ->setParameter('user', $user)
+//            ->setParameter('annee', $anneeUniversitaire);
+//
+//        $this->addFiltres($qb, $options);
+//
+//        return $qb->select('count(f.id)')
+//            ->getQuery()
+//            ->getSingleScalarResult();
+//    }
+
+    private function addFiltres(QueryBuilder $qb, array $options, bool $count = false): void
     {
         $sort = $options['sort'] ?? 'mention';
         $direction = $options['direction'] ?? 'ASC';
@@ -147,46 +184,56 @@ class FicheMatiereRepository extends ServiceEntityRepository
         } else {
             $qb->addOrderBy('f.' . $sort, $direction);
         }
+
+        if ($count === false) {
+            $start = $options['start'] ?? 0;
+
+            $qb->setFirstResult($start * 50)
+                ->setMaxResults($options['length'] ?? 50);
+        }
     }
 
-    public function findByResponsableParcours(?UserInterface $user, AnneeUniversitaire $getAnneeUniversitaire, array $options): array
-    {
-        $query = $this->createQueryBuilder('f')
-            ->leftJoin('f.parcours', 'p')
-            ->join('p.formation', 'fo')
-            ->where('p.respParcours = :parcours')
-            ->orWhere('p.coResponsable = :parcours')
-            ->setParameter('parcours', $user)
-            ->orderBy('f.libelle', 'ASC');
-        $this->addFiltres($query, $options);
+//    public function findByResponsableParcours(?UserInterface $user, AnneeUniversitaire $getAnneeUniversitaire, array $options): array
+//    {
+//        $query = $this->createQueryBuilder('f')
+//            ->leftJoin('f.parcours', 'p')
+//            ->join('p.formation', 'fo')
+//            ->where('p.respParcours = :parcours')
+//            ->orWhere('p.coResponsable = :parcours')
+//            ->setParameter('parcours', $user)
+//            ->orderBy('f.libelle', 'ASC');
+//        $this->addFiltres($query, $options);
+//
+//        return $query->getQuery()
+//            ->getResult();
+//    }
 
-        return $query->getQuery()
-            ->getResult();
-    }
-
-    public function findByResponsableFormation(?UserInterface $user, AnneeUniversitaire $getAnneeUniversitaire, array $options): array
-    {
-        $query = $this->createQueryBuilder('f')
-            ->leftJoin('f.parcours', 'p')
-            ->join('p.formation', 'fo')
-            ->where('fo.responsableMention = :parcours')
-            ->orWhere('fo.coResponsable = :parcours')
-            ->setParameter('parcours', $user)
-            ->orderBy('f.libelle', 'ASC');
-
-        $this->addFiltres($query, $options);
-
-        return $query->getQuery()
-            ->getResult();
-    }
+//    public function findByResponsableFormation(?UserInterface $user, AnneeUniversitaire $getAnneeUniversitaire, array $options): array
+//    {
+//        $query = $this->createQueryBuilder('f')
+//            ->leftJoin('f.parcours', 'p')
+//            ->join('p.formation', 'fo')
+//            ->where('fo.responsableMention = :parcours')
+//            ->orWhere('fo.coResponsable = :parcours')
+//            ->setParameter('parcours', $user)
+//            ->orderBy('f.libelle', 'ASC');
+//
+//        $this->addFiltres($query, $options);
+//
+//        return $query->getQuery()
+//            ->getResult();
+//    }
 
     public function findByHd(AnneeUniversitaire $getAnneeUniversitaire, array $options): array
     {
+        $start = $options['start'] ?? 0;
         $query = $this->createQueryBuilder('f')
             ->where('f.parcours IS NULL')
-            ->orderBy('f.libelle', 'ASC');
+            ->orderBy('f.libelle', 'ASC')
+            ->setFirstResult($start * 50)
+            ->setMaxResults($options['length'] ?? 50);
 
-      //  $this->addFiltres($query, $options);
+        //$this->addFiltres($query, $options);
 
         return $query->getQuery()
             ->getResult();
@@ -204,4 +251,66 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function countByHd(AnneeUniversitaire $getAnneeUniversitaire, array $options): ?int
+    {
+        $query = $this->createQueryBuilder('f')
+            ->select('count(f.id)')
+            ->where('f.parcours IS NULL');
+
+       // $this->addFiltres($query, $all);
+
+        return $query->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function findByResponsable(?UserInterface $user, AnneeUniversitaire $anneeUniversitaire, array $options): array
+    {
+        $query = $this->createQueryBuilder('f')
+            ->leftJoin('f.parcours', 'p')
+            ->join('p.formation', 'fo')
+            ->orWhere('(fo.responsableMention = :parcours OR fo.coResponsable = :parcours)')
+            ->orWhere('(p.respParcours = :parcours OR p.coResponsable = :parcours)')
+            ->orWhere('f.responsableFicheMatiere = :user')
+            ->andWhere('fo.anneeUniversitaire = :annee') // Pour la troisième requête
+            ->orderBy('f.libelle', 'ASC')
+            ->setParameters([
+                'parcours' => $user,
+                'annee' => $anneeUniversitaire,
+                'user' => $user
+            ]);
+
+        $this->addFiltres($query, $options);
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
+    public function countByResponsable(?UserInterface $user, AnneeUniversitaire $anneeUniversitaire, array $options): ?int
+    {
+        $query = $this->createQueryBuilder('f')
+            ->leftJoin('f.parcours', 'p')
+            ->join('p.formation', 'fo')
+            // Pour la première requête
+            ->andWhere('(fo.responsableMention = :parcours OR fo.coResponsable = :parcours)')
+            // Pour la deuxième requête
+            ->orWhere('(p.respParcours = :parcours OR p.coResponsable = :parcours)')
+            ->andWhere('fo.anneeUniversitaire = :annee') // Pour la troisième requête
+            // Ajout condition à la derniere requete
+            ->andWhere('f.responsableFicheMatiere = :user')
+            ->orderBy('f.libelle', 'ASC')
+            ->setParameters([
+                'parcours' => $user,
+                'annee' => $anneeUniversitaire,
+                'user' => $user
+            ]);
+
+        $this->addFiltres($query, $options, true);
+
+        return $query->select('count(f.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+
 }

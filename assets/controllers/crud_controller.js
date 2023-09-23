@@ -16,7 +16,7 @@ export default class extends Controller {
 
   static values = { url: String }
 
-  static debounces = ['rechercher'];
+  static debounces = ['rechercher']
 
   fields = {}
 
@@ -31,6 +31,11 @@ export default class extends Controller {
     } else {
       this.fields[event.params.field] = event.target.value
     }
+    this._updateListe(this.fields)
+  }
+
+  page(event) {
+    this.fields.start = event.params.page
     this._updateListe(this.fields)
   }
 
@@ -54,7 +59,7 @@ export default class extends Controller {
     let modal = new Modal(document.getElementById('modal-delete'))
     modal.show()
     const btn = document.getElementById('btn-confirm-supprimer')
-    btn.replaceWith(btn.cloneNode(true));
+    btn.replaceWith(btn.cloneNode(true))
     document.getElementById('btn-confirm-supprimer').addEventListener('click', async () => {
       const body = {
         method: 'DELETE',

@@ -1,6 +1,6 @@
 <div>
-    <p><strong>{{ ficheMatieres|length }}</strong> fiches matières</p>
-    {% set sort = params.sort is defined ? params.sort : 'mention'  %}
+    <p><strong>{{ ficheMatieres|length }} sur {{ totalFiches }}</strong> fiches matières</p>
+    {% set sort = params.sort is defined ? params.sort : 'mention' %}
     {% set direction = params.direction is defined ? params.direction : 'asc' %}
 
     <table class="table table-striped {% if mode == 'detail' %}table-bordered table-condensed{% endif %} table-hover ">
@@ -115,7 +115,10 @@
                         {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
                         id="filter-referent" class="form-select">
                     <option value="">Tous les référents</option>
-                    <option value="vide" {% if params['referent'] is defined and params['referent']  == 'vide' %}selected{% endif %}>Non défini</option>
+                    <option value="vide"
+                            {% if params['referent'] is defined and params['referent']  == 'vide' %}selected{% endif %}>
+                        Non défini
+                    </option>
                     {% for user in users %}
                         <option value="{{ user.id }}"
                                 {% if params['referent'] is defined and params['referent']  == user.id %}selected{% endif %}
@@ -197,53 +200,57 @@
                     {#                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', ficheMatiere.parcours.formation) or is_granted #}
                     {#                        ('ROLE_PARCOURS_EDIT_MY', ficheMatiere)) and  (not workflow_can(ec, #}
                     {#                        'initialiser') ) %} #}
-                    <a
-                            href="{{ path('app_fiche_matiere_show',{slug: ficheMatiere.slug}) }}"
-                            class="btn btn-sm text-info"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Voir une fiche EC/matière"
-                            target="_blank"
-                    >
-                        <i class="{{ iconShow }}"></i>
-                        <span> voir</span>
-                    </a>
-                    {#                    {% endif %} #}
+                    {% if ficheMatiere.slug != "" %}
+                        <a
+                                href="{{ path('app_fiche_matiere_show',{slug: ficheMatiere.slug}) }}"
+                                class="btn btn-sm text-info"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="bottom"
+                                title="Voir une fiche EC/matière"
+                                target="_blank"
+                        >
+                            <i class="{{ iconShow }}"></i>
+                            <span> voir</span>
+                        </a>
+                        {#                    {% endif %} #}
 
 
-                    {#                    {% if ((is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and  (workflow_can(ec, #}
-                    {#                        'valider_ec') or workflow_can(ec, #}
-                    {#                        'initialiser'))) or (is_granted #}
-                    {#                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
-                    {#                        'valider_ec')) %} #}
-                    <a
-                            href="{{ path('app_fiche_matiere_edit',{slug: ficheMatiere.slug}) }}"
-                            class="btn btn-sm text-warning"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Modifier une fiche EC/matière"
-                    >
-                        <i class="{{ iconEdit }}"></i>
-                        <span> modifier</span>
-                    </a>
-                    <button {{ stimulus_action('crud', 'duplicate', 'click', {
-                        url:path('app_fiche_matiere_dupliquer',{slug: ficheMatiere.slug})
-                    }) }} class="btn btn-sm text-primary">
-                        <i class="{{ iconDuplicate }}"></i>
-                        <span> dupliquer</span>
-                    </button>
+                        {#                    {% if ((is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and  (workflow_can(ec, #}
+                        {#                        'valider_ec') or workflow_can(ec, #}
+                        {#                        'initialiser'))) or (is_granted #}
+                        {#                        ('ROLE_EC_EDIT_MY', ec)) and  workflow_can(ec, #}
+                        {#                        'valider_ec')) %} #}
+                        <a
+                                href="{{ path('app_fiche_matiere_edit',{slug: ficheMatiere.slug}) }}"
+                                class="btn btn-sm text-warning"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="bottom"
+                                title="Modifier une fiche EC/matière"
+                        >
+                            <i class="{{ iconEdit }}"></i>
+                            <span> modifier</span>
+                        </a>
+                        <button {{ stimulus_action('crud', 'duplicate', 'click', {
+                            url:path('app_fiche_matiere_dupliquer',{slug: ficheMatiere.slug})
+                        }) }} class="btn btn-sm text-primary">
+                            <i class="{{ iconDuplicate }}"></i>
+                            <span> dupliquer</span>
+                        </button>
 
-                    {#                {% endif %} #}
-                    {#                    {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and workflow_can(ec, #}
-                    {#                        'valider_ec') %} #}
+                        {#                {% endif %} #}
+                        {#                    {% if is_granted('ROLE_FORMATION_EDIT_MY', ec.parcours.formation) and workflow_can(ec, #}
+                        {#                        'valider_ec') %} #}
 
-                    <button {{ stimulus_action('crud', 'delete', 'click', {
-                        url:path('app_fiche_matiere_delete',{slug: ficheMatiere.slug}),
-                        csrf: csrf_token('delete' ~ ficheMatiere.id)
-                    }) }} class="btn btn-sm text-danger">
-                        <i class="{{ iconDelete }}"></i> Supprimer
-                    </button>
-                    {#                    {% endif %} #}
+                        <button {{ stimulus_action('crud', 'delete', 'click', {
+                            url:path('app_fiche_matiere_delete',{slug: ficheMatiere.slug}),
+                            csrf: csrf_token('delete' ~ ficheMatiere.id)
+                        }) }} class="btn btn-sm text-danger">
+                            <i class="{{ iconDelete }}"></i> Supprimer
+                        </button>
+                        {#                    {% endif %} #}
+                    {% else %}
+                        <span class="badge bg-danger">Erreur sur le lien</span>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -255,4 +262,6 @@
         {% endfor %}
         </tbody>
     </table>
+    {{ include('communs/_pagination.html.twig') }}
+
 </div>
