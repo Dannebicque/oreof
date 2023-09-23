@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.23](https://github.com/Dannebicque/oreof/compare/v1.13.22...v1.13.23) (2023-09-23)
+
+
+### Features
+
+* Affichage des BUT et de son référentiel ([31ef9ac](https://github.com/Dannebicque/oreof/commit/31ef9ac17d1a8613249194db0ab9f4cb50d64427))
+
+
+### Bug Fixes
+
+* Gestion des UE enfant dans les vérifications ([6dd3151](https://github.com/Dannebicque/oreof/commit/6dd315107c9b7e07a521d2635dd719217e87ae14))
+* Ne pas recréer des UE enfants si modification ([e661344](https://github.com/Dannebicque/oreof/commit/e6613440d6c5b9052952a02d1c512eceef1c585e))
+* Ordre UE sur Tableau de BCC ([c6a5011](https://github.com/Dannebicque/oreof/commit/c6a5011f93c91e2fe4adfb578226a2fc0ee64422))
+
 ### [1.13.22](https://github.com/Dannebicque/oreof/compare/v1.13.21...v1.13.22) (2023-09-22)
 
 
