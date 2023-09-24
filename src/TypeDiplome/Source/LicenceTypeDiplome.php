@@ -37,8 +37,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         EntityManagerInterface $entityManager,
         TypeDiplomeRegistry    $typeDiplomeRegistry,
         protected LicenceMccc  $licenceMccc
-    )
-    {
+    ) {
         parent::__construct($entityManager, $typeDiplomeRegistry);
         $this->typeEpreuves = [];
         $tyeE = $typeEpreuveRepository->findAll();
@@ -52,8 +51,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): StreamedResponse
-    {
+    ): StreamedResponse {
         //todo: exploiter la date...
         return $this->licenceMccc->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
     }
@@ -63,8 +61,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): StreamedResponse
-    {
+    ): StreamedResponse {
         //todo: exploiter la date...
         return $this->licenceMccc->exportPdfLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
     }
@@ -75,8 +72,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         Parcours           $parcours,
         DateTimeInterface  $dateEdition,
         bool               $versionFull = true
-    ): string
-    {
+    ): string {
         return $this->licenceMccc->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $dateEdition, $versionFull);
     }
 
@@ -213,6 +209,8 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 $mcccs = $this->sauvegardeCts($elementConstitutif, $mcccs, $data, 2, 's2_ct');
                 $etatMccc = $this->verificationMccc($elementConstitutif, $mcccs, $typeD);
                 break;
+            default:
+                $etatMccc = $this->verificationMccc($elementConstitutif, $mcccs, $typeD);
         }
 
         $elementConstitutif->setEtatMccc($etatMccc ? 'Complet' : 'A Saisir');
@@ -300,13 +298,11 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
             if (count($typeEpreuve_s1_ct) === 1 && $fixToCent === true) {
                 $mcccs[$session]['et'][$numEp]->setPourcentage(100);
             } else {
-
                 if (array_key_exists('pourcentage_' . $cle . $numEp, $data) && $data['pourcentage_' . $cle . $numEp] !== '') {
                     $mcccs[$session]['et'][$numEp]->setPourcentage(Tools::convertToFloat($data['pourcentage_' . $cle . $numEp]));
                 } else {
                     $mcccs[$session]['et'][$numEp]->setPourcentage(null);
                 }
-
             }
 
             if (array_key_exists('duree_' . $cle . $numEp, $data) && $data['duree_' . $cle . $numEp] !== '') {
