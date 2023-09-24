@@ -149,7 +149,7 @@
                                             {{ stimulus_controller('modal', {
                                                 size: 'lg',
                                                 modalTitle: 'Volumes Horaires',
-                                                modalUrl: path('app_element_constitutif_structure',{'id': ec.id}) }) }}
+                                                modalUrl: path('app_element_constitutif_structure',{'id': ec.id, parcours:parcours.id}) }) }}
 
                                             data-action="click->modal#openModal"
                                             class="btn btn-sm btn-outline-info"
@@ -187,7 +187,7 @@
                                         </div>
                                         <button class="btn text-primary">Recopier les ECTS  <i class="fal fa-question-circle ms-1" data-controller="tooltip"
                                                                                                data-tooltip-placement-value="bottom"
-                                                                                               title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></button>
+                                                                                               title="{{ 'parcours_ec.helps.recopieEcts'|trans({}, 'help') }}"></i></button>
                                     </td>
 
                                     <td>
@@ -209,7 +209,7 @@
                                         </div>
                                         <button class="btn text-primary">Recopier les MCCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip"
                                                                                                data-tooltip-placement-value="bottom"
-                                                                                               title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></button>
+                                                                                               title="{{ 'parcours_ec.helps.recopieMccc'|trans({}, 'help') }}"></i></button>
                                     </td>
                                     <td>
                                         <div class="form-check mb-2">
@@ -230,7 +230,7 @@
                                         </div>
                                         <button class="btn text-primary">Recopier les BCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip"
                                                                                                data-tooltip-placement-value="bottom"
-                                                                                               title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></button>
+                                                                                               title="{{ 'parcours_ec.helps.recopieBcc'|trans({}, 'help') }}"></i></button>
                                     </td>
                                     <td>
                                         <div class="form-check mb-2">
@@ -252,7 +252,7 @@
                                         </div>
                                         <button class="btn text-primary">Recopier les Heures  <i class="fal fa-question-circle ms-1" data-controller="tooltip"
                                                                                                data-tooltip-placement-value="bottom"
-                                                                                               title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></button>
+                                                                                               title="{{ 'parcours_ec.helps.recopieHeures'|trans({}, 'help') }}"></i></button>
                                     </td>
                                 </tr>
                             {% endif %}

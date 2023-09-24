@@ -1,18 +1,62 @@
+<div
+        {{ stimulus_controller('ec--structure', {
+            urlUpdate: path('app_parcours_ec_update'),
+        }) }}
+    >
+{% if raccroche == true %}
+    <div class="alert alert-info">
+        <div class="row">
+            <div class="col-12">
+                {% if ec.synchroHeures == true %}
+                    Les heures de cet EC sont raccrochées depuis l'EC du parcours "..." Les données ne sont pas éditable.
+                {% endif %}
+                <p>Cet EC est raccroché, vous pouvez modifier les éléments librement, ou bien les synchroniser ourecopier depuis l'EC d'origine.</p>
+            </div>
+            <div class="col-5">
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox"
+                           id="synchroHeures"
+                           name="synchroHeures"
+                            {{ stimulus_action('ec--structure', 'synchroHeures', 'change', {
+                                ec:ec.id
+                            }) }}
+                            {% if ec.synchroHeures == true %}checked{% endif %}
+                    >
+                    <label class="form-check-label"
+                           for="synchroHeures"> Raccrocher les Heures
+                        <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                           data-tooltip-placement-value="bottom"
+                           title="{{ 'parcours_ec.helps.synchroHeures'|trans({}, 'help') }}"></i>
+                    </label>
+                </div>
+
+            </div>
+            <div class="col-2">OU</div>
+            <div class="col-5">
+                <button class="btn text-primary">Recopier les Heures  <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                                                                         data-tooltip-placement-value="bottom"
+                                                                         title="{{ 'parcours_ec.helps.recopieHeures'|trans({}, 'help') }}"></i></button>
+            </div>
+        </div>
+    </div>
+
+{% endif %}
+
 {% if ec.parcours.modalitesEnseignement == null %}
     {{ component('alerte', {type:'warning', message:'Vous devez d\'abord définir les modalités d\'enseignement du
 parcours.'}) }}
 {% else %}
     {% if (ec.parcours.modalitesEnseignement != null and ec.parcours.modalitesEnseignement.value == 1) or ec
     .modaliteEnseignement == null %}
-        {{ form_row(form.modaliteEnseignement) }}
+        {{ form_row(form.modaliteEnseignement, {'disabled': ec.synchroHeures}) }}
     {% endif %}
     <div id="bloc_presentiel" style="display:{% if ec.modaliteEnseignement != null and ec.modaliteEnseignement.value != 2 %}block{% else
 %}none{% endif %}">
         <h3>Volume Présentiel</h3>
         <div class="row">
-            <div class="col-4">{{ form_row(form.volumeCmPresentiel) }}</div>
-            <div class="col-4">{{ form_row(form.volumeTdPresentiel) }}</div>
-            <div class="col-4">{{ form_row(form.volumeTpPresentiel) }}</div>
+            <div class="col-4">{{ form_row(form.volumeCmPresentiel, {'disabled': ec.synchroHeures}) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTdPresentiel, {'disabled': ec.synchroHeures}) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTpPresentiel, {'disabled': ec.synchroHeures}) }}</div>
         </div>
     </div>
 
@@ -21,16 +65,16 @@ parcours.'}) }}
 %}none{% endif %}">
         <h3>Volume Distanciel</h3>
         <div class="row">
-            <div class="col-4">{{ form_row(form.volumeCmDistanciel) }}</div>
-            <div class="col-4">{{ form_row(form.volumeTdDistanciel) }}</div>
-            <div class="col-4">{{ form_row(form.volumeTpDistanciel) }}</div>
+            <div class="col-4">{{ form_row(form.volumeCmDistanciel, {'disabled': ec.synchroHeures}) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTdDistanciel, {'disabled': ec.synchroHeures}) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTpDistanciel, {'disabled': ec.synchroHeures}) }}</div>
         </div>
     </div>
 
     <div>
         <h3>Volume horaire Travail Etudiant (TE)</h3>
         <div class="row">
-            <div class="col-4">{{ form_row(form.volumeTe) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTe, {'disabled': ec.synchroHeures}) }}</div>
             <div class="col-4"></div>
             <div class="col-4"></div>
         </div>
@@ -67,3 +111,4 @@ parcours.'}) }}
             </div>
 
         {% endif %}
+</div>

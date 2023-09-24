@@ -1,5 +1,5 @@
 <div {{ stimulus_controller('mccc--licence', {
-    url: path('type_diplome_licence_change', {elementConstitutif:ec.id}),
+    url: path('type_diplome_licence_change', {elementConstitutif:ec.id, parcours: parcours.id}),
     typeMccc: ec.typeMccc,
 }) }}>
     <label for="choix_type_mccc" class="form-label">{{ 'mccc_licence.labels.choix_type_mccc.label'|trans({},
@@ -10,8 +10,9 @@
            aria-label="{{ 'mccc_licence.helps.choix_type_mccc.help'|trans({}, 'help') }}"
            data-bs-original-title="{{ 'mccc_licence.helps.choix_type_mccc.help'|trans({}, 'help') }}"></i>
     </label>
-    <select id="choix_type_mccc" name="choix_type_mccc" class="form-select"
+    <select id="choix_type_mccc" name="choix_type_mccc" class="form-select synchro-mccc"
             {{ stimulus_action('mccc--licence', 'changeType') }}
+            {% if raccroche %}disabled{% endif %}
     >
         <option value="">{{ 'mccc_licence.placeholder.label'|trans({}, 'form') }}</option>
         <option value="ct" {% if ec.typeMccc == 'ct' %}selected{% endif %}>

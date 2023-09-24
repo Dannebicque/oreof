@@ -9,7 +9,8 @@
         {% endfor %}
     {% endif %}
 </div>
-<button class="btn btn-primary mb-2"
+<button class="btn btn-primary mb-2 synchro-mccc"
+        {% if elementConstitutif.synchroMccc %}disabled{% endif %}
         {{ stimulus_action('mccc--licence', 'addEpreuveCcAutresDiplomes', 'click') }}
 >Ajouter une épreuve
 </button>
@@ -27,7 +28,8 @@
     {% endif %}
 </div>
 
-<button class="btn btn-primary mb-2"
+<button class="btn btn-primary mb-2 synchro-mccc"
+        {% if elementConstitutif.synchroMccc %}disabled{% endif %}
         {{ stimulus_action('mccc--licence', 'addEpreuveSecondeSession', 'click') }}
 >Ajouter une épreuve pour la 2e session
 </button>

@@ -11,7 +11,8 @@
         {{ include('typeDiplome/mccc/licence/_epreuveCt.html.twig',{index:1}) }}
     {% endif %}
 </div>
-<button class="btn btn-primary mb-2"
+<button class="btn btn-primary mb-2 synchro-mccc"
+        {% if elementConstitutif.synchroMccc %}disabled{% endif %}
         {{ stimulus_action('mccc--licence', 'addEpreuveCt', 'click') }}
 >Ajouter une épreuve de contrôle terminal
 </button>
@@ -28,7 +29,8 @@
     {% endif %}
 </div>
 
-<button class="btn btn-primary mb-2"
+<button class="btn btn-primary mb-2 synchro-mccc"
+        {% if elementConstitutif.synchroMccc %}disabled{% endif %}
         {{ stimulus_action('mccc--licence', 'addEpreuveSecondeSession', 'click') }}
 >Ajouter une épreuve pour la 2e session
 </button>

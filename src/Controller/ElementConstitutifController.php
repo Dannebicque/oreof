@@ -10,6 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\EcOrdre;
+use App\Classes\GetElementConstitutif;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
@@ -65,8 +66,9 @@ class ElementConstitutifController extends AbstractController
 
         $natureEc = $natureUeEcRepository->find($request->query->get('choix'));
         if ($natureEc !== null) {
-            $matieres = $ficheMatiereRepository->findByParcours($parcours);
-
+            $matieres[] = $ficheMatiereRepository->findByParcours($parcours);
+            $matieres[] = $ficheMatiereRepository->findByComposante($parcours->getFormation()->getComposantePorteuse());
+            $matieres = array_merge(...$matieres);
 
             if ($natureEc->isChoix() === true) {
                 return $this->render('element_constitutif/_type_ec_matieres.html.twig', [
@@ -470,21 +472,26 @@ class ElementConstitutifController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/structure-ec', name: 'app_element_constitutif_structure', methods: ['GET', 'POST'])]
+    #[Route('/{id}/structure-ec/{parcours}', name: 'app_element_constitutif_structure', methods: ['GET', 'POST'])]
     public function structureEc(
         Request                      $request,
         ElementConstitutifRepository $elementConstitutifRepository,
-        ElementConstitutif           $elementConstitutif
+        ElementConstitutif           $elementConstitutif,
+        Parcours                     $parcours
     ): Response {
 //        if ($this->isGranted(
 //            'ROLE_FORMATION_EDIT_MY',
 //            $elementConstitutif->getParcours()->getFormation()
 //        )) { //todo: ajouter le workflow...
-        $form = $this->createForm(EcStep4Type::class, $elementConstitutif, [
+        $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours() !== $parcours;
+        $ecHeures = GetElementConstitutif::getElementConstitutifHeures($elementConstitutif, $raccroche);
+
+        $form = $this->createForm(EcStep4Type::class, $ecHeures, [
             'isModal' => true,
+            'data_class' => $ecHeures::class,
             'action' => $this->generateUrl(
                 'app_element_constitutif_structure',
-                ['id' => $elementConstitutif->getId()]
+                ['id' => $elementConstitutif->getId(), 'parcours' => $parcours->getId()]
             ),
         ]);
         $form->handleRequest($request);
@@ -504,9 +511,12 @@ class ElementConstitutifController extends AbstractController
             return $this->json(true);
         }
 
+
+
         return $this->render('element_constitutif/_structureEcModal.html.twig', [
             'ec' => $elementConstitutif,
             'form' => $form->createView(),
+            'raccroche' => $raccroche
         ]);
         // }
 //

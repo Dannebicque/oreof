@@ -85,7 +85,6 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         $mcccs = $this->getMcccs($elementConstitutif);
         $typeD = 'L';
         $etatMccc = '';
-
         switch ($request->get('choix_type_mccc')) {
             case 'cc':
                 if ($request->get('type_cc') === 'cc') {
@@ -215,7 +214,6 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 $etatMccc = $this->verificationMccc($elementConstitutif, $mcccs, $typeD);
                 break;
         }
-
 
         $elementConstitutif->setEtatMccc($etatMccc ? 'Complet' : 'A Saisir');
         $this->entityManager->flush();

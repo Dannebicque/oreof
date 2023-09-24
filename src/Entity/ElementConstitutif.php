@@ -84,7 +84,7 @@ class ElementConstitutif
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
     private ?FicheMatiere $ficheMatiere = null;
 
-    #[ORM\ManyToOne()]
+    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?Parcours $parcours = null;
 
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
@@ -722,7 +722,7 @@ class ElementConstitutif
 
     public function isSynchroMccc(): ?bool
     {
-        return $this->synchroMccc;
+        return $this->synchroMccc === null ? false : $this->synchroMccc;
     }
 
     public function setSynchroMccc(?bool $synchroMccc): static

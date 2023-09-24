@@ -10,6 +10,7 @@
 namespace App\Repository;
 
 use App\Entity\AnneeUniversitaire;
+use App\Entity\Composante;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Mention;
@@ -62,6 +63,17 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->where('p = :parcours')
             ->orWhere('pm.parcours = :parcours')
             ->setParameter('parcours', $parcours)
+            ->orderBy('f.libelle', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByComposante(Composante $composante): array
+    {
+        return $this->createQueryBuilder('f')
+            ->join('f.composante', 'c')
+            ->where('c = :composante')
+            ->setParameter('composante', $composante)
             ->orderBy('f.libelle', 'ASC')
             ->getQuery()
             ->getResult();

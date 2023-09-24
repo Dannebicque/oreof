@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ParcoursEcController extends AbstractController
 {
-    #[Route('/parcours/ec/{parcours}', name: 'app_parcours_ec')]
+    #[Route('/parcours/ec/liste/{parcours}', name: 'app_parcours_ec')]
     public function index(
         TypeEcRepository             $typeEcRepository,
         ElementConstitutifRepository $ecRepository,
@@ -138,13 +138,12 @@ class ParcoursEcController extends AbstractController
         ]);
     }
 
-    #[Route('/parcours/ec/{parcours}/update', name: 'app_parcours_ec_update')]
+    #[Route('/parcours/ec/update', name: 'app_parcours_ec_update')]
     public function updateParcoursEc(
         UeRepository                 $ueRepository,
         ElementConstitutifRepository $ecRepository,
         TypeEcRepository             $typeEcRepository,
         Request                      $request,
-        Parcours                     $parcours
     ): Response {
         $field = $request->request->get('field');
 

@@ -12,7 +12,7 @@
                data-bs-original-title="{{ 'mccc_licence.helps.ct.pourcentage_s2_et.help'|trans({}, 'help') }}"></i>
         </label>
         <div class="input-group">
-            <input type="text" class="form-control" id="pourcentage_s2_ct{{ index }}"
+            <input type="text" class="form-control synchro-mccc" id="pourcentage_s2_ct{{ index }}"
                    name="pourcentage_s2_ct{{ index }}"
                     {% if (mcccs[2]['et'] is defined and mcccs[2]['et']|length == 1 )or mcccs[2]['et'] is not defined %}
                         disabled
@@ -35,8 +35,9 @@
                aria-label="{{ 'mccc_licence.helps.ct.typeEpreuve_s2_et.help'|trans({}, 'help') }}"
                data-bs-original-title="{{ 'mccc_licence.helps.ct.typeEpreuve_s2_et.help'|trans({}, 'help') }}"></i>
         </label>
-        <select type="text" class="form-select typeEpreuveSelectEt" id="typeEpreuve_s2_ct{{ index }}"
+        <select type="text" class="form-select typeEpreuveSelectEt synchro-mccc" id="typeEpreuve_s2_ct{{ index }}"
                 name="typeEpreuve_s2_ct{{ index }}"
+                {% if elementConstitutif.synchroMccc %}disabled{% endif %}
                 {{ stimulus_action('mccc--licence', 'changeTypeEpreuveEt', 'change') }}
         >
             <option value="">Choisir</option>
@@ -65,7 +66,8 @@
                aria-label="{{ 'mccc_licence.helps.ct.duree_s2_et.help'|trans({}, 'help') }}"
                data-bs-original-title="{{ 'mccc_licence.helps.ct.duree_s2_et.help'|trans({}, 'help') }}"></i>
         </label>
-        <input type="time" class="form-control" id="duree_s2_ct{{ index }}" name="duree_s2_ct{{ index }}"
+        <input type="time" class="form-control synchro-mccc" id="duree_s2_ct{{ index }}" name="duree_s2_ct{{ index }}"
+               {% if elementConstitutif.synchroMccc %}disabled{% endif %}
                 {% if mcccs[2]['et'][index] is defined %}
                     value="{% if mcccs[2]['et'][index].duree != null %}{{ mcccs[2]['et'][index].duree|date('H:i') }}{% endif %}"
                 {% endif %}
@@ -74,7 +76,8 @@
     {% if index > 1 %}
         <div class="col-8">&nbsp;</div>
         <div class="col-4 d-grid mt-2">
-            <button type="button" class="btn btn-danger btn-sm d-block"
+            <button type="button" class="btn btn-danger btn-sm d-block synchro-mccc"
+                    {% if elementConstitutif.synchroMccc %}disabled{% endif %}
                     data-action="click->mccc--licence#removeEpreuveCt">
                 <i class="fas fa-trash"></i>
             </button>

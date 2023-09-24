@@ -10,10 +10,36 @@ import { Controller } from '@hotwired/stimulus'
 import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import { calculEtatStep } from '../../js/calculEtatStep'
+import JsonResponse from '../../js/JsonResponse'
 
 export default class extends Controller {
   static values = {
     urlSave: String,
+    urlUpdate: String,
+  }
+
+  async synchroHeures(event) {
+    const body = new FormData()
+    body.append('value', event.target.checked)
+    body.append('field', 'synchroHeures')
+    body.append('ec', event.params.ec)
+
+    await fetch(this.urlUpdateValue, {
+      method: 'POST',
+      body,
+    }).then((response) => {
+      if (response.ok) {
+        const inputs = document.querySelectorAll('input[name^="ec_step4"]')
+        inputs.forEach((input) => {
+          if (event.target.checked) {
+            input.setAttribute('disabled', 'disabled')
+          } else {
+            input.removeAttribute('disabled')
+          }
+        })
+      }
+      JsonResponse(response)
+    })
   }
 
   saveModaliteEnseignement(event) {

@@ -10,6 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\EcOrdre;
+use App\Classes\GetElementConstitutif;
 use App\Classes\JsonReponse;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
@@ -48,8 +49,7 @@ class ElementConstitutifMcccController extends AbstractController
         ElementConstitutifRepository $elementConstitutifRepository,
         ElementConstitutif           $elementConstitutif,
         Parcours                     $parcours
-    ): Response
-    {
+    ): Response {
         $formation = $parcours?->getFormation();
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
@@ -63,47 +63,62 @@ class ElementConstitutifMcccController extends AbstractController
         if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
             $this->isGranted('CAN_PARCOURS_EDIT_MY', $parcours)) {
             if ($request->isMethod('POST')) {
-                if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
-                    $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
-                } else {
-                    $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
-                }
-
-                if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
-                    $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
-                } else {
-                    $elementConstitutif->setQuitus(false);
-                }
-
-                if ($request->request->has('ec_step4') && array_key_exists('mcccEnfantsIdentique', $request->request->all()['ec_step4'])) {
-                    if ($elementConstitutif->getEcParent() !== null) {
-                        $elementConstitutif->getEcParent()->setMcccEnfantsIdentique((bool)$request->request->all()['ec_step4']['mcccEnfantsIdentique']);
+                if ($elementConstitutif->isSynchroEcts() === false) {
+                    if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
+                        $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
                     } else {
-                        $elementConstitutif->setMcccEnfantsIdentique((bool)$request->request->all()['ec_step4']['mcccEnfantsIdentique']);
+                        $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
                     }
-                } else {
-                    $elementConstitutif->setMcccEnfantsIdentique(false);
                 }
 
-                if ($request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
-                    $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
-                    $elementConstitutifRepository->save($elementConstitutif, true);
-                    $typeD->clearMcccs($elementConstitutif);
+                if ($elementConstitutif->isSynchroMccc() === false) {
+                    if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
+                        $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
+                    } else {
+                        $elementConstitutif->setQuitus(false);
+                    }
+
+                    if ($request->request->has('ec_step4') && array_key_exists('mcccEnfantsIdentique', $request->request->all()['ec_step4'])) {
+                        if ($elementConstitutif->getEcParent() !== null) {
+                            $elementConstitutif->getEcParent()->setMcccEnfantsIdentique((bool)$request->request->all()['ec_step4']['mcccEnfantsIdentique']);
+                        } else {
+                            $elementConstitutif->setMcccEnfantsIdentique((bool)$request->request->all()['ec_step4']['mcccEnfantsIdentique']);
+                        }
+                    } else {
+                        $elementConstitutif->setMcccEnfantsIdentique(false);
+                    }
+
+                    if ($request->request->get('choix_type_mccc') !== $elementConstitutif->getTypeMccc()) {
+                        $elementConstitutif->setTypeMccc($request->request->get('choix_type_mccc'));
+                        $elementConstitutifRepository->save($elementConstitutif, true);
+                        $typeD->clearMcccs($elementConstitutif);
+                    }
+
+                    $typeD->saveMcccs($elementConstitutif, $request->request);
                 }
-
-                $typeD->saveMcccs($elementConstitutif, $request->request);
-
                 return $this->json(true);
             }
+
+            $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours() !== $parcours;
+
+            // les MCCC peuvent venir de :
+            // - la fiche matière associée si imposé
+            // - l'EC d'origine si raccroché
+            // - l'EC parent
+            // - l'EC lui-même
+//dump($elementConstitutif->getId());
+
 
             return $this->render('element_constitutif/_mcccEcModal.html.twig', [
                 'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
                 'ec' => $elementConstitutif,
+                'ects' => GetElementConstitutif::getEcts($elementConstitutif, $raccroche),
                 'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-                'mcccs' => $typeD->getMcccs($elementConstitutif),
+                'mcccs' => GetElementConstitutif::getMcccs($elementConstitutif, $raccroche, $typeD),
                 'wizard' => false,
                 'typeDiplome' => $typeDiplome,
-                'parcours' => $parcours
+                'parcours' => $parcours,
+                'raccroche' => $raccroche
             ]);
         }
 
@@ -119,8 +134,7 @@ class ElementConstitutifMcccController extends AbstractController
         TypeEpreuveRepository $typeEpreuveRepository,
         Request               $request,
         FicheMatiere          $ficheMatiere
-    ): Response
-    {
+    ): Response {
         $formation = $ficheMatiere->getParcours()?->getFormation();
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');

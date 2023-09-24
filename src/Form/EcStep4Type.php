@@ -22,8 +22,9 @@ class EcStep4Type extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $isModal = $options['isModal'];
+
         $modalites = $options['data']->getModaliteEnseignement();
-        $modalitesParcours = $options['data']->getParcours()->getModalitesEnseignement();
+        $modalitesParcours = $options['data']->getParcours()?->getModalitesEnseignement();
 
         if ($modalitesParcours === ModaliteEnseignementEnum::HYBRIDE || $modalites === null || $modalites === ModaliteEnseignementEnum::NON_DEFINI) {
             $builder->add('modaliteEnseignement', EnumType::class, [

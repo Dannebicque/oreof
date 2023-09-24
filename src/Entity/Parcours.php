@@ -168,6 +168,9 @@ class Parcours
     #[ORM\Column(nullable: true)]
     private ?array $remplissage = [];
 
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ElementConstitutif::class)]
+    private Collection $elementConstitutifs;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -183,6 +186,7 @@ class Parcours
         $this->ueMutualisables = new ArrayCollection();
         $this->parcoursEnfants = new ArrayCollection();
         $this->historiqueParcours = new ArrayCollection();
+        $this->elementConstitutifs = new ArrayCollection();
     }
 
 
@@ -930,5 +934,35 @@ class Parcours
     {
         $remplissage = $this->remplissageBrut();
         $this->setRemplissage($remplissage);
+    }
+
+    /**
+     * @return Collection<int, ElementConstitutif>
+     */
+    public function getElementConstitutifs(): Collection
+    {
+        return $this->elementConstitutifs;
+    }
+
+    public function addElementConstitutif(ElementConstitutif $elementConstitutif): static
+    {
+        if (!$this->elementConstitutifs->contains($elementConstitutif)) {
+            $this->elementConstitutifs->add($elementConstitutif);
+            $elementConstitutif->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeElementConstitutif(ElementConstitutif $elementConstitutif): static
+    {
+        if ($this->elementConstitutifs->removeElement($elementConstitutif)) {
+            // set the owning side to null (unless already changed)
+            if ($elementConstitutif->getParcours() === $this) {
+                $elementConstitutif->setParcours(null);
+            }
+        }
+
+        return $this;
     }
 }
