@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.1](https://github.com/Dannebicque/oreof/compare/v1.14.0...v1.14.1) (2023-09-24)
+
+
+### Bug Fixes
+
+* masque des boutons inutiles ([b0e9167](https://github.com/Dannebicque/oreof/commit/b0e9167a75182a424d673d69e922aa48b17f2139))
+* Quitus remplace les MCCC ([ba2ee01](https://github.com/Dannebicque/oreof/commit/ba2ee01ec4807f7d1223041eb1d5c81d82c81fbc))
+
 ## [1.14.0](https://github.com/Dannebicque/oreof/compare/v1.13.23...v1.14.0) (2023-09-24)
 
 
