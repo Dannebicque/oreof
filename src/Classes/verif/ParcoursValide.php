@@ -197,7 +197,7 @@ class ParcoursValide extends AbstractValide
                 $sem = $semestreParcour->getSemestre();
             }
 
-            if ($sem !== null) {
+            if ($sem !== null && $sem->isNonDispense() !== true) {
                 $hasUe = count($sem->getUes()) === 0 ? self::VIDE : self::COMPLET;
                 $structure['semestres'][$semestreParcour->getOrdre()]['ues'] = [];
                 $structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::INCOMPLET;
