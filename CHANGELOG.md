@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0](https://github.com/Dannebicque/oreof/compare/v1.13.23...v1.14.0) (2023-09-24)
+
+
+### Features
+
+* MCCC/Heures/ECTS liés entre parcours source et fiches ([bfedb7b](https://github.com/Dannebicque/oreof/commit/bfedb7b7a4da96a84e7bff2ce8c0513bbf26a75f))
+* Mutualisation sur composante, gestion heures/MCCC sur fiche matière si hors diplôme ([6821588](https://github.com/Dannebicque/oreof/commit/68215880e1b491ac840514fb213902200be97ab6))
+* pagination sur les fiches matières ([46ed4ca](https://github.com/Dannebicque/oreof/commit/46ed4ca7419a35c1fe97feec10d869a965641a88))
+
+
+### Bug Fixes
+
+* typo sur page fiche matière ([b66cdc7](https://github.com/Dannebicque/oreof/commit/b66cdc7a981e6e583cb03f7d91557fe04da4d22d))
+* vérification sur semestre non dispensé ([88d2639](https://github.com/Dannebicque/oreof/commit/88d2639305a5a517ada5cc6126aea6d603c6567c))
+
 ### [1.13.23](https://github.com/Dannebicque/oreof/compare/v1.13.22...v1.13.23) (2023-09-23)
 
 
