@@ -36,6 +36,10 @@ class ParcoursEcController extends AbstractController
             }
 
             foreach ($semestre->getSemestre()->getUes() as $ue) {
+                if ($ue->getUeRaccrochee() !== null) {
+                    $ue = $ue->getUeRaccrochee()->getUe();
+                }
+
                 $tabEcs[$semestreParcour->getOrdre()][$ue->getId()] = [];
                 foreach ($ue->getElementConstitutifs() as $ec) {
                     $tabEcs[$semestreParcour->getOrdre()][$ue->getId()][] = $ec;
@@ -146,6 +150,46 @@ class ParcoursEcController extends AbstractController
 
 
         switch ($field) {
+            case 'synchroMccc':
+                $ec = $ecRepository->find($request->request->get('ec'));
+
+                if ($ec === null) {
+                    return JsonReponse::error('EC introuvable');
+                }
+
+                $ec->setSynchroMccc($request->request->get('value') === 'true');
+                $ecRepository->save($ec, true);
+                return JsonReponse::success('EC mis à jour, MCCC raccrochées');
+            case 'synchroBcc':
+                $ec = $ecRepository->find($request->request->get('ec'));
+
+                if ($ec === null) {
+                    return JsonReponse::error('EC introuvable');
+                }
+
+                $ec->setSynchroBcc($request->request->get('value') === 'true');
+                $ecRepository->save($ec, true);
+                return JsonReponse::success('EC mis à jour, BCC raccrochés');
+            case 'synchroHeures':
+                $ec = $ecRepository->find($request->request->get('ec'));
+
+                if ($ec === null) {
+                    return JsonReponse::error('EC introuvable');
+                }
+
+                $ec->setSynchroHeures($request->request->get('value') === 'true');
+                $ecRepository->save($ec, true);
+                return JsonReponse::success('EC mis à jour, Heures raccrochées');
+            case 'synchroEcts':
+                $ec = $ecRepository->find($request->request->get('ec'));
+
+                if ($ec === null) {
+                    return JsonReponse::error('EC introuvable');
+                }
+
+                $ec->setSynchroEcts($request->request->get('value') === 'true');
+                $ecRepository->save($ec, true);
+                return JsonReponse::success('EC mis à jour, ECTS raccrochés');
             case 'typeEc':
                 $ec = $ecRepository->find($request->request->get('ec'));
 

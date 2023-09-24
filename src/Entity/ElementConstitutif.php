@@ -131,6 +131,18 @@ class ElementConstitutif
     /** @deprecated */
     private Collection $apprentissagesCritiques;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $synchroMccc = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $synchroHeures = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $synchroBcc = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $synchroEcts = null;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -704,6 +716,54 @@ class ElementConstitutif
     public function removeApprentissagesCritique(ButApprentissageCritique $apprentissagesCritique): static
     {
         $this->apprentissagesCritiques->removeElement($apprentissagesCritique);
+
+        return $this;
+    }
+
+    public function isSynchroMccc(): ?bool
+    {
+        return $this->synchroMccc;
+    }
+
+    public function setSynchroMccc(?bool $synchroMccc): static
+    {
+        $this->synchroMccc = $synchroMccc;
+
+        return $this;
+    }
+
+    public function isSynchroHeures(): ?bool
+    {
+        return $this->synchroHeures;
+    }
+
+    public function setSynchroHeures(?bool $synchroHeures): static
+    {
+        $this->synchroHeures = $synchroHeures;
+
+        return $this;
+    }
+
+    public function isSynchroBcc(): ?bool
+    {
+        return $this->synchroBcc;
+    }
+
+    public function setSynchroBcc(?bool $synchroBcc): static
+    {
+        $this->synchroBcc = $synchroBcc;
+
+        return $this;
+    }
+
+    public function isSynchroEcts(): ?bool
+    {
+        return $this->synchroEcts;
+    }
+
+    public function setSynchroEcts(?bool $synchroEcts): static
+    {
+        $this->synchroEcts = $synchroEcts;
 
         return $this;
     }

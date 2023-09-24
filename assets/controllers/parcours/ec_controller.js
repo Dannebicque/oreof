@@ -29,6 +29,21 @@ export default class extends Controller {
     })
   }
 
+  async synchro(event) {
+    const body = new FormData()
+    body.append('value', event.target.checked)
+    body.append('field', event.params.type)
+    body.append('ec', event.params.ec)
+
+    await fetch(this.urlUpdateValue, {
+      method: 'POST',
+      body,
+    }).then((response) => {
+      // response.json()
+      JsonResponse(response)
+    })
+  }
+
   async updateEctsUe(event) {
     const body = new FormData()
     body.append('value', event.target.value)

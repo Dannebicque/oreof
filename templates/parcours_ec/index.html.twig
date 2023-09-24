@@ -3,35 +3,45 @@
 {% block content %}
     {{ component('alerte', {type:'warning', message: 'Actuellement les indicateurs ne sont pas mis à jour en temps réel. Merci d\'actualiser cette page si nécessaire.'}) }}
     <div class="card"
-    {{ stimulus_controller('parcours--ec', {
-        urlUpdate: path('app_parcours_ec_update',{parcours: parcours.id}),
-    }) }}
+            {{ stimulus_controller('parcours--ec', {
+                urlUpdate: path('app_parcours_ec_update',{parcours: parcours.id}),
+            }) }}
     >
         <div class="card-body">
             <table class="table table-bordered table-hover">
                 <tbody>
                 {% for semParc in parcours.semestreParcours|filter(semestre => semestre.semestre.nonDispense == false) %}
+
                     {% if semParc.semestre.semestreRaccroche != null %}
                         {% set semestre = semParc.semestre.semestreRaccroche %}
+                        {% set raccrocheSem = true %}
                     {% else %}
                         {% set semestre = semParc %}
+                        {% set raccrocheSem = false %}
                     {% endif %}
                     <tr>
-                        <th colspan="6" class="text-center font-weight-bold">
+                        <th colspan="7" class="text-center font-weight-bold">
                             {{ semParc.display }}</th>
                     </tr>
 
 
                     {% for ue in semestre.semestre.ues %}
+                        {% if ue.ueRaccrochee == true %}
+                            {% set ue = ue.ueRaccrochee.ue %}
+                            {% set raccrocheUe = true %}
+                        {% else %}
+                            {% set raccrocheUe = false %}
+                        {% endif %}
                         <tr>
-                            <th colspan="6" class="font-weight-bold">{{ ue.display(parcours) }}</th>
+                            <th colspan="7" class="font-weight-bold">{{ ue.display(parcours) }}</th>
                         </tr>
                         <tr>
                             <th class="font-weight-bold">EC</th>
                             <th class="font-weight-bold">Fiche</th>
                             <th class="font-weight-bold">Type EC</th>
-                            <th class="font-weight-bold">BCC</th>
+                            <th class="font-weight-bold">ECTS</th>
                             <th class="font-weight-bold">MCCC</th>
+                            <th class="font-weight-bold">BCC</th>
                             <th class="font-weight-bold">Vol. Horaire</th>
                         </tr>
                         {% for ec in tabEcs[semParc.ordre][ue.id] %}
@@ -39,7 +49,7 @@
                                 <th>{{ ec.display }}</th>
                                 <td>
                                     {% if ec.ficheMatiere != null %}
-                                        {% if ec.ficheMatiere.parcours.id == parcours.id %}
+                                        {% if ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false %}
                                             <a
                                                     href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
                                                     class="btn btn-sm btn-outline-info"
@@ -81,7 +91,7 @@
                                             {{ stimulus_action('parcours--ec', 'changeTypeEc', 'change', {
                                                 ec:ec.id
                                             }) }}
-                                            >
+                                    >
                                         <option value="">Choisir dans la liste</option>
                                         {% for typeEc in typesEc %}
                                             <option
@@ -92,28 +102,7 @@
                                         {% endfor %}
                                     </select>
                                 </td>
-                                <td>
-                                    <button
-
-
-                                            {{ stimulus_controller('modal', {
-                                                size: 'lg',
-                                                modalTitle: 'Blocs de compétences',
-                                                modalUrl: path('app_element_constitutif_bcc',{id: ec.id,parcours: parcours.id}) }) }}
-
-                                            data-action="click->modal#openModal"
-                                            class="btn btn-sm btn-outline-info"
-                                            data-size="lg"
-                                            data-bs-toggle="tooltip"
-                                            data-bs-placement="bottom"
-                                            title="Blocs de compétences"
-                                    >
-                                        <i class="fal fa-ballot-check"></i>
-                                        <span class="badge bg-{% if ec.etatBcc(parcours) == 'Complet' %}success{% else %}warning{% endif %}">
-                            {{ ec.etatBcc(parcours) }}
-                        </span>
-                                    </button>
-                                </td>
+                                <td>{{ ec.ects }}</td>
                                 <td>
                                     <button
 
@@ -131,6 +120,26 @@
                                         <i class="fal fa-marker"></i>
                                         <span class="badge bg-{% if ec.etatMccc == 'Complet' %}success{% else %}warning{% endif %}">
                             {{ ec.etatMccc }}
+                        </span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                modalTitle: 'Blocs de compétences',
+                                                modalUrl: path('app_element_constitutif_bcc',{id: ec.id,parcours: parcours.id}) }) }}
+
+                                            data-action="click->modal#openModal"
+                                            class="btn btn-sm btn-outline-info"
+                                            data-size="lg"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom"
+                                            title="Blocs de compétences"
+                                    >
+                                        <i class="fal fa-ballot-check"></i>
+                                        <span class="badge bg-{% if ec.etatBcc(parcours) == 'Complet' %}success{% else %}warning{% endif %}">
+                            {{ ec.etatBcc(parcours) }}
                         </span>
                                     </button>
                                 </td>
@@ -156,6 +165,97 @@
                                     </button>
                                 </td>
                             </tr>
+                            {% if ec.ficheMatiere != null and not (ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false) %}
+                                <tr>
+                                    <td colspan="3" class="text-end">Informations saisies sur la fiche EC/parcours</td>
+                                    <td>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox"
+                                                   id="synchroEcts"
+                                                   name="synchroEcts"
+                                                    {{ stimulus_action('parcours--ec', 'synchro', 'change', {
+                                                        ec:ec.id,
+                                                        type: 'synchroEcts'
+                                                    }) }}
+                                                   {% if ec.synchroEcts == true %}checked{% endif %}
+                                            >
+                                            <label class="form-check-label"
+                                                   for="synchroEcts"> Raccrocher les ECTS
+                                                <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                                                   data-tooltip-placement-value="bottom"
+                                                   title="{{ 'parcours_ec.helps.synchroEcts'|trans({}, 'help') }}"></i></label>
+                                        </div>
+                                        <button class="btn text-primary">Recopier les ECTS  <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                                                                                               data-tooltip-placement-value="bottom"
+                                                                                               title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></button>
+                                    </td>
+
+                                    <td>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox"
+                                                   id="synchroMccc"
+                                                   name="synchroMccc"
+                                                    {{ stimulus_action('parcours--ec', 'synchro', 'change', {
+                                                        ec:ec.id,
+                                                        type:'synchroMccc'
+                                                    }) }}
+                                                   {% if ec.synchroMccc == true %}checked{% endif %}
+                                            >
+                                            <label class="form-check-label"
+                                                   for="synchroMccc"> Raccrocher les MCCC
+                                                <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                                                   data-tooltip-placement-value="bottom"
+                                                   title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></label>
+                                        </div>
+                                        <button class="btn text-primary">Recopier les MCCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                                                                                               data-tooltip-placement-value="bottom"
+                                                                                               title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></button>
+                                    </td>
+                                    <td>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox"
+                                                   id="synchroBcc"
+                                                   name="synchroBcc"
+                                                    {{ stimulus_action('parcours--ec', 'synchro', 'change', {
+                                                        ec:ec.id,
+                                                        type:'synchroBcc'
+                                                    }) }}
+                                                   {% if ec.synchroBcc == true %}checked{% endif %}
+                                            >
+                                            <label class="form-check-label"
+                                                   for="synchroBcc"> Raccrocher les BCC
+                                                <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                                                   data-tooltip-placement-value="bottom"
+                                                   title="{{ 'parcours_ec.helps.synchroBcc'|trans({}, 'help') }}"></i></label>
+                                        </div>
+                                        <button class="btn text-primary">Recopier les BCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                                                                                               data-tooltip-placement-value="bottom"
+                                                                                               title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></button>
+                                    </td>
+                                    <td>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox"
+                                                   id="synchroHeures"
+                                                   name="synchroHeures"
+                                                    {{ stimulus_action('parcours--ec', 'synchro', 'change', {
+                                                        ec:ec.id,
+                                                        type:'synchroHeures'
+                                                    }) }}
+                                                   {% if ec.synchroHeures == true %}checked{% endif %}
+                                            >
+                                            <label class="form-check-label"
+                                                   for="synchroHeures"> Raccrocher les Heures
+                                                <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                                                   data-tooltip-placement-value="bottom"
+                                                   title="{{ 'parcours_ec.helps.synchroHeures'|trans({}, 'help') }}"></i>
+                                            </label>
+                                        </div>
+                                        <button class="btn text-primary">Recopier les Heures  <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                                                                                               data-tooltip-placement-value="bottom"
+                                                                                               title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></button>
+                                    </td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                     {% endfor %}
 
