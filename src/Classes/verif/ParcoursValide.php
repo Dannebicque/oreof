@@ -203,7 +203,10 @@ class ParcoursValide extends AbstractValide
                 $structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::INCOMPLET;
                 $structure['semestres'][$semestreParcour->getOrdre()]['erreur'] = [];
                 foreach ($sem->getUes() as $ue) {
-                    if ($ue->getUeEnfants()->count() > 0 && $ue->getNatureUeEc()?->isChoix() === true) {
+                    if ($ue !== null && $ue->getUeRaccrochee() !== null) {
+                        $ue = $ue->getUeRaccrochee()->getUe();
+                    }
+                    if ($ue !== null && $ue->getUeEnfants()->count() > 0 && $ue->getNatureUeEc()?->isChoix() === true) {
                         foreach ($ue->getUeEnfants() as $uee) {
                             foreach ($uee->getElementConstitutifs() as $ec) {
                                 if (!$ec->getNatureUeEc()?->isChoix()) {
@@ -214,6 +217,8 @@ class ParcoursValide extends AbstractValide
                                         $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'] = [];
                                         $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['global'] = self::INCOMPLET;
                                         $hasUe = self::INCOMPLET;
+
+                                        //todo: gérer les ECTS, BCC, si synchro...
 
                                         //pour chaque cas indiquer l'erreur
                                         if ($ec->getFicheMatiere() === null) {
