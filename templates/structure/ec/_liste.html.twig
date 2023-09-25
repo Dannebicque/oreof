@@ -490,7 +490,9 @@
                                                     {% if ece.ficheMatiere != null %}
                                                         <p class="mt-0 mb-0">
                                                         {{ ece.display }}
-                                                        {% if ece.ficheMatiere.parcours.id != parcours.id %}
+                                                        {% if ece.ficheMatiere != null and
+                                                            ece.ficheMatiere.parcours != null and
+                                                            ece.ficheMatiere.parcours.id != parcours.id %}
                                                             <i class="fal fa-link"
                                                                data-controller="tooltip"
                                                                data-tooltip-placement-value="bottom"
