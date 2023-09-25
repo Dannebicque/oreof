@@ -66,10 +66,20 @@ class ParcoursMcccExportController extends BaseController
             throw new \Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
         }
 
-        return $typeDiplome->exportExcelMccc(
-            $this->getAnneeUniversitaire(),
-            $parcours,
-            null,
-            false);
+        return match ($_format) {
+            'xlsx' => $typeDiplome->exportExcelMccc(
+                $this->getAnneeUniversitaire(),
+                $parcours,
+                null,
+                false
+            ),
+            'pdf' => $typeDiplome->exportPdfMccc(
+                $this->getAnneeUniversitaire(),
+                $parcours,
+                null,
+                false
+            ),
+            default => throw new \Exception('Format non géré'),
+        };
     }
 }
