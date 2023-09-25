@@ -7,10 +7,8 @@
     <div class="alert alert-info">
         <div class="row">
             <div class="col-12">
-                {% if ec.synchroHeures == true %}
-                    Les heures de cet EC sont raccrochées depuis l'EC du parcours "..." Les données ne sont pas éditable.
-                {% endif %}
-                <p>Cet EC est raccroché, vous pouvez modifier les éléments librement, ou bien les synchroniser ourecopier depuis l'EC d'origine.</p>
+
+                <p>Cet EC est raccroché, vous pouvez modifier les éléments librement, ou bien les synchroniser ou recopier depuis l'EC d'origine.</p>
             </div>
             <div class="col-5">
                 <div class="form-check mb-2">
@@ -37,6 +35,9 @@
                                                                          data-tooltip-placement-value="bottom"
                                                                          title="{{ 'parcours_ec.helps.recopieHeures'|trans({}, 'help') }}"></i></button>
             </div>
+            {% if ec.synchroHeures == true %}
+                Les heures de cet EC sont raccrochées depuis l'EC du parcours "...". Les données ne sont pas modifiables.
+            {% endif %}
         </div>
     </div>
 

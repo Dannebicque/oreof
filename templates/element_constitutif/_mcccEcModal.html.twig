@@ -10,12 +10,6 @@
             <div class="alert alert-info">
                 <div class="row">
                     <div class="col-12">
-                        {% if ec.synchroEcts == true %}
-                            Les ECTS sont raccrochées depuis l'EC du parcours "..." Les données ne sont pas éditable.
-                        {% endif %}
-                        {% if ec.synchroMccc == true %}
-                            Les MCCC sont raccrochées depuis l'EC du parcours "..." Les données ne sont pas éditable.
-                        {% endif %}
                         <p>Cet EC est raccroché, vous pouvez modifier les éléments librement, ou bien les synchroniser ou recopier depuis l'EC d'origine.</p>
                     </div>
                     <div class="col-5">
@@ -43,6 +37,9 @@
                                                                                  data-tooltip-placement-value="bottom"
                                                                                  title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></button>
                     </div>
+                    {% if ec.synchroEcts == true %}
+                        Les ECTS sont raccrochées depuis l'EC du parcours "...". Les données ne sont pas modifiables.
+                    {% endif %}
                     <div class="col-5">
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="checkbox"
@@ -68,6 +65,9 @@
                                                                                data-tooltip-placement-value="bottom"
                                                                                title="{{ 'parcours_ec.helps.recopieMccc'|trans({}, 'help') }}"></i></button>
                     </div>
+                    {% if ec.synchroMccc == true %}
+                        Les MCCC sont raccrochées depuis l'EC du parcours "...". Les données ne sont pas modifiables.
+                    {% endif %}
                 </div>
             </div>
 
