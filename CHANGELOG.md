@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.6](https://github.com/Dannebicque/oreof/compare/v1.14.5...v1.14.6) (2023-09-25)
+
+
+### Bug Fixes
+
+* Heures et GelElement ([383a17d](https://github.com/Dannebicque/oreof/commit/383a17d6f35891a46fa289deda3a1e731b6025fd))
+
 ### [1.14.5](https://github.com/Dannebicque/oreof/compare/v1.14.4...v1.14.5) (2023-09-25)
 
 
