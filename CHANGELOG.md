@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.3](https://github.com/Dannebicque/oreof/compare/v1.14.2...v1.14.3) (2023-09-25)
+
+
+### Bug Fixes
+
+* Affichage des EC avec fiche absente ([bac821a](https://github.com/Dannebicque/oreof/commit/bac821a834b0628ce188a0af12738ac292553c87))
+* Badge sur ECTS ([98e4967](https://github.com/Dannebicque/oreof/commit/98e496750d365159933748c0116e31b9d424e32e))
+
 ### [1.14.2](https://github.com/Dannebicque/oreof/compare/v1.14.1...v1.14.2) (2023-09-24)
 
 
