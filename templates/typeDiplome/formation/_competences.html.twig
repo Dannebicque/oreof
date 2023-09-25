@@ -22,7 +22,7 @@
         </div>
     {% endif %}
     <div class="col-sm-12">
-        {% if isBut %}
+        {% if isBut is defined and isBut == true %}
             {{ render(controller(
                 'App\\Controller\\BlocCompetenceController::afficheBUTReferentiel',
                 { 'parcours': parcours }

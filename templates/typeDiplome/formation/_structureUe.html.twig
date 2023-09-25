@@ -6,7 +6,7 @@
     <th colspan="3">{{ ue.display(parcours) }} | {{ ue.libelle }}</th>
     {% if presentiel %}
         {% if ue.ueEnfants|length == 0 %}
-            <th colspan="{% if isBut %}5{% else %}4{% endif %}">Présentiel</th>
+            <th colspan="{% if isBut is defined and isBut == true %}5{% else %}4{% endif %}">Présentiel</th>
         {% else %}
             <th colspan="4"></th>
         {% endif %}
@@ -33,7 +33,7 @@
         <th>CM</th>
         <th>TD</th>
         <th>TP</th>
-        {% if isBut %}
+        {% if isBut is defined and isBut == true %}
             <th>Autonom.</th>
         {% endif %}
         <th>Total Prés.</th>
@@ -70,7 +70,7 @@
         <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeCmPres|filtreHeures }}</th>
         <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeTdPres|filtreHeures }}</th>
         <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeTpPres|filtreHeures }}</th>
-        {% if isBut %}
+        {% if isBut is defined and isBut == true %}
             <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeTePres|filtreHeures }}</th>
         {% endif %}
         <th>{{ dto.semestres[semestreParc.id].ues[ue.id].sommeUeTotalPres|filtreHeures }}</th>

@@ -2,10 +2,10 @@
     <th>&nbsp;</th>
     <th>&nbsp;</th>
     <td>
-        {% if not isBut %}<strong>{{ ec.code }}</strong>{% endif %}
+        {% if isBut is defined and isBut == false %}<strong>{{ ec.code }}</strong>{% endif %}
         {% if ec.ficheMatiere != null %}
             <a href="{{ url('app_fiche_matiere_show', {slug: ec.ficheMatiere.slug}) }}">
-                {% if isBut %}<strong>{{ ec.ficheMatiere.sigle }}</strong> {{ ec.ficheMatiere.libelle }}{% else %}
+                {% if isBut is defined and isBut == true %}<strong>{{ ec.ficheMatiere.sigle }}</strong> {{ ec.ficheMatiere.libelle }}{% else %}
                 {{ ec.ficheMatiere.display }}
                 {% endif %}
             </a>
@@ -25,13 +25,13 @@
 
     {% if presentiel %}
         {% if ec.ecEnfants|length > 0 %}
-            <td colspan="{% if isBut %}5{% else %}4{% endif %}"></td>
+            <td colspan="{% if isBut is defined and isBut == true %}5{% else %}4{% endif %}"></td>
         {% else %}
             {% if ec.ecParent != null and ec.ecParent.heuresEnfantsIdentiques == true %}
                 <td>{{ ec.ecParent.volumeCmPresentiel|filtreHeures }}</td>
                 <td>{{ ec.ecParent.volumeTdPresentiel|filtreHeures }}</td>
                 <td>{{ ec.ecParent.volumeTpPresentiel|filtreHeures }}</td>
-                {% if isBut %}
+                {% if isBut is defined and isBut == true %}
                     <td>{{ ec.ecParent.volumeTe|filtreHeures }}</td>
                 {% endif %}
                 <td>{{ ec.ecParent.volumeTotalPresentiel|filtreHeures }}</td>
@@ -39,7 +39,7 @@
                 <td>{{ ec.volumeCmPresentiel|filtreHeures }}</td>
                 <td>{{ ec.volumeTdPresentiel|filtreHeures }}</td>
                 <td>{{ ec.volumeTpPresentiel|filtreHeures }}</td>
-                {% if isBut %}
+                {% if isBut is defined and isBut == true %}
                     <td>{{ ec.volumeTe|filtreHeures }}</td>
                 {% endif %}
                 <td>{{ ec.volumeTotalPresentiel|filtreHeures }}</td>
