@@ -70,7 +70,6 @@
                     {% endif %}
                 </div>
             </div>
-
         {% endif %}
 
 
@@ -97,7 +96,7 @@
         <input class="form-check-input" type="checkbox" id="ec_step4_quitus" name="ec_step4[quitus]"
                {% if ec.quitus == true %}checked{% endif %}
         >
-        <label class="form-check-label" for="ec_quitus"> {{ 'ec_step4.labels.quitus'|trans({}, 'form') }} <i
+        <label class="form-check-label" for="ec_step4_quitus"> {{ 'ec_step4.labels.quitus'|trans({}, 'form') }} <i
                     class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
                     title="{{ 'ec_step4.helps.quitus'|trans({}, 'help') }}"></i></label>
     </div>

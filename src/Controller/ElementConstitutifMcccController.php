@@ -43,6 +43,7 @@ class ElementConstitutifMcccController extends AbstractController
      */
     #[Route('/{id}/mccc-ec/{parcours}', name: 'app_element_constitutif_mccc', methods: ['GET', 'POST'])]
     public function mcccEc(
+        EntityManagerInterface       $entityManager,
         TypeDiplomeRegistry          $typeDiplomeRegistry,
         TypeEpreuveRepository        $typeEpreuveRepository,
         Request                      $request,
@@ -69,6 +70,7 @@ class ElementConstitutifMcccController extends AbstractController
                     } else {
                         $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
                     }
+                    $entityManager->flush();
                 }
 
                 if ($elementConstitutif->isSynchroMccc() === false) {
