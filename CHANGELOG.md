@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.5](https://github.com/Dannebicque/oreof/compare/v1.14.4...v1.14.5) (2023-09-25)
+
+
+### Bug Fixes
+
+* Affichage ([78c8400](https://github.com/Dannebicque/oreof/commit/78c8400abd21d721a5971ee61d34387cc6c36899))
+* Lien vers PDF ([87e72bb](https://github.com/Dannebicque/oreof/commit/87e72bb44de914351b0de833a3782a42dd9cbb81))
+* MCCC sur hors diplôme ([00facab](https://github.com/Dannebicque/oreof/commit/00facab64d7c34438ddbc41730bcf50d1bb85d83))
+* Organisation des textes et du bouton Quitus ([313e1f8](https://github.com/Dannebicque/oreof/commit/313e1f829c7647dbddfa57688d6ad461751f0287))
+
 ### [1.14.4](https://github.com/Dannebicque/oreof/compare/v1.14.3...v1.14.4) (2023-09-25)
 
 
