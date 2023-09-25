@@ -13,7 +13,7 @@
         </label>
         <div class="input-group">
             <input type="text" class="form-control synchro-mccc" id="pourcentage_s1_cc{{ index }}"
-                   {% if elementConstitutif.synchroMccc %}disabled{% endif %}
+                   {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
                    name="pourcentage_s1_cc{{ index }}"
                     {% if mcccs[1]['cc'][index] is defined %}
                         value="{{ mcccs[1]['cc'][index].pourcentage }}"
@@ -28,7 +28,7 @@
         <div class="form-check mb-2">
             <input class="form-check-input synchro-mccc" type="checkbox" id="cc_has_tp_s1_cc{{ index }}"
                    name="cc_has_tp_s1_cc{{ index }}"
-                   {% if elementConstitutif.synchroMccc %}disabled{% endif %}
+                   {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
                    {% if mcccs[1]['cc'][index].options is defined and mcccs[1]['cc'][index].options.cc_has_tp is defined and mcccs[1]['cc'][index].options.cc_has_tp == "on" %}checked{% endif %} >
             <label class="form-check-label"
                    for="cc_has_tp_s1_cc{{ index }}"> {{ 'mccc.licence.labels.cc_has_tp'|trans({}, 'form') }}
@@ -42,7 +42,7 @@
     <div class="col-8">&nbsp;</div>
     <div class="col-4 d-grid mt-2">
         <button type="button" class="btn btn-danger btn-sm d-block synchro-mccc"
-                {% if elementConstitutif.synchroMccc %}disabled{% endif %}
+                {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
                 data-action="click->mccc--licence#removeEpreuveCcAutre">
             <i class="fas fa-trash"></i>
         </button>

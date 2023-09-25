@@ -37,7 +37,7 @@
         </label>
         <select type="text" class="form-select typeEpreuveSelectEt synchro-mccc" id="typeEpreuve_s2_ct{{ index }}"
                 name="typeEpreuve_s2_ct{{ index }}"
-                {% if elementConstitutif.synchroMccc %}disabled{% endif %}
+                {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
                 {{ stimulus_action('mccc--licence', 'changeTypeEpreuveEt', 'change') }}
         >
             <option value="">Choisir</option>
@@ -67,7 +67,7 @@
                data-bs-original-title="{{ 'mccc_licence.helps.ct.duree_s2_et.help'|trans({}, 'help') }}"></i>
         </label>
         <input type="time" class="form-control synchro-mccc" id="duree_s2_ct{{ index }}" name="duree_s2_ct{{ index }}"
-               {% if elementConstitutif.synchroMccc %}disabled{% endif %}
+               {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
                 {% if mcccs[2]['et'][index] is defined %}
                     value="{% if mcccs[2]['et'][index].duree != null %}{{ mcccs[2]['et'][index].duree|date('H:i') }}{% endif %}"
                 {% endif %}
@@ -77,7 +77,7 @@
         <div class="col-8">&nbsp;</div>
         <div class="col-4 d-grid mt-2">
             <button type="button" class="btn btn-danger btn-sm d-block synchro-mccc"
-                    {% if elementConstitutif.synchroMccc %}disabled{% endif %}
+                    {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
                     data-action="click->mccc--licence#removeEpreuveCt">
                 <i class="fas fa-trash"></i>
             </button>
