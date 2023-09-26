@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.11](https://github.com/Dannebicque/oreof/compare/v1.14.10...v1.14.11) (2023-09-26)
+
+
+### Bug Fixes
+
+* Voter si plusieurs rôles/centres ([16efeef](https://github.com/Dannebicque/oreof/commit/16efeef769ea7f50fc202d31f23bc7c2e592d368))
+
 ### [1.14.10](https://github.com/Dannebicque/oreof/compare/v1.14.9...v1.14.10) (2023-09-26)
 
 
