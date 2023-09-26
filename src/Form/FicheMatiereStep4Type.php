@@ -27,7 +27,8 @@ class FicheMatiereStep4Type extends AbstractType
             'required' => false,
             'attr' => [
                 'data-action' => 'change->fichematiere--step4#saveVolume',
-                'data-fichematiere--step4-type-param' => 'volumeCmPresentiel'
+                'data-fichematiere--step4-type-param' => 'volumeCmPresentiel',
+                'min' => 0,
             ],
         ])
             ->add('volumeTdPresentiel', FloatType::class, [
@@ -36,7 +37,8 @@ class FicheMatiereStep4Type extends AbstractType
                 'required' => false,
                 'attr' => [
                     'data-action' => 'change->fichematiere--step4#saveVolume',
-                    'data-fichematiere--step4-type-param' => 'volumeTdPresentiel'
+                    'data-fichematiere--step4-type-param' => 'volumeTdPresentiel',
+                    'min' => 0,
                 ],
             ])
             ->add('volumeTpPresentiel', FloatType::class, [
@@ -45,7 +47,8 @@ class FicheMatiereStep4Type extends AbstractType
                 'required' => false,
                 'attr' => [
                     'data-action' => 'change->fichematiere--step4#saveVolume',
-                    'data-fichematiere--step4-type-param' => 'volumeTpPresentiel'
+                    'data-fichematiere--step4-type-param' => 'volumeTpPresentiel',
+                    'min' => 0,
                 ],
             ]);
 
@@ -56,7 +59,8 @@ class FicheMatiereStep4Type extends AbstractType
                 'required' => false,
                 'attr' => [
                     'data-action' => 'change->fichematiere--step4#saveVolume',
-                    'data-fichematiere--step4-type-param' => 'volumeTe'
+                    'data-fichematiere--step4-type-param' => 'volumeTe',
+                    'min' => 0,
                 ],
             ]);
             }

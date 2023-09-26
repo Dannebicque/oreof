@@ -26,7 +26,8 @@ class FicheMatiereStep4HdType extends AbstractType
             'required' => false,
             'attr' => [
                 'data-action' => 'change->fichematiere--step4#saveVolume',
-                'data-fichematiere--step4-type-param' => 'volumeCmPresentiel'
+                'data-fichematiere--step4-type-param' => 'volumeCmPresentiel',
+                'min' => 0,
             ],
         ])
             ->add('volumeTdPresentiel', FloatType::class, [
@@ -35,7 +36,8 @@ class FicheMatiereStep4HdType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'data-action' => 'change->fichematiere--step4#saveVolume',
-                    'data-fichematiere--step4-type-param' => 'volumeTdPresentiel'
+                    'data-fichematiere--step4-type-param' => 'volumeTdPresentiel',
+                    'min' => 0,
                 ],
             ])
             ->add('volumeTpPresentiel', FloatType::class, [
@@ -44,7 +46,8 @@ class FicheMatiereStep4HdType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'data-action' => 'change->fichematiere--step4#saveVolume',
-                    'data-fichematiere--step4-type-param' => 'volumeTpPresentiel'
+                    'data-fichematiere--step4-type-param' => 'volumeTpPresentiel',
+                    'min' => 0,
                 ],
             ]);
         $builder->add('volumeCmDistanciel', FloatType::class, [
@@ -53,7 +56,8 @@ class FicheMatiereStep4HdType extends AbstractType
             'required' => false,
             'attr' => [
                 'data-action' => 'change->fichematiere--step4#saveVolume',
-                'data-fichematiere--step4-type-param' => 'volumeCmDistanciel'
+                'data-fichematiere--step4-type-param' => 'volumeCmDistanciel',
+                'min' => 0,
             ],
         ])
             ->add('volumeTdDistanciel', FloatType::class, [
@@ -62,7 +66,8 @@ class FicheMatiereStep4HdType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'data-action' => 'change->fichematiere--step4#saveVolume',
-                    'data-fichematiere--step4-type-param' => 'volumeTdDistanciel'
+                    'data-fichematiere--step4-type-param' => 'volumeTdDistanciel',
+                    'min' => 0,
                 ],
             ])
             ->add('volumeTpDistanciel', FloatType::class, [
@@ -71,7 +76,8 @@ class FicheMatiereStep4HdType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'data-action' => 'change->fichematiere--step4#saveVolume',
-                    'data-fichematiere--step4-type-param' => 'volumeTpDistanciel'
+                    'data-fichematiere--step4-type-param' => 'volumeTpDistanciel',
+                    'min' => 0,
                 ],
             ])
             ->add('ects', FloatType::class, [
@@ -80,7 +86,8 @@ class FicheMatiereStep4HdType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'data-action' => 'change->fichematiere--step4#saveEcts',
-                    'data-fichematiere--step4-type-param' => 'ects'
+                    'data-fichematiere--step4-type-param' => 'ects',
+                    'min' => 0,
                 ],
             ]);
 
@@ -91,7 +98,8 @@ class FicheMatiereStep4HdType extends AbstractType
             'required' => false,
             'attr' => [
                 'data-action' => 'change->fichematiere--step4#saveVolume',
-                'data-fichematiere--step4-type-param' => 'volumeTe'
+                'data-fichematiere--step4-type-param' => 'volumeTe',
+                'min' => 0,
             ],
         ]);
     }

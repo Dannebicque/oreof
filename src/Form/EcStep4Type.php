@@ -47,7 +47,8 @@ class EcStep4Type extends AbstractType
             'required' => false,
             'attr' => [
                 'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
-                'data-ec--structure-type-param' => 'volumeCmPresentiel'
+                'data-ec--structure-type-param' => 'volumeCmPresentiel',
+                'min' => 0,
             ],
         ])
             ->add('volumeTdPresentiel', FloatType::class, [
@@ -56,7 +57,8 @@ class EcStep4Type extends AbstractType
                 'required' => false,
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
-                    'data-ec--structure-type-param' => 'volumeTdPresentiel'
+                    'data-ec--structure-type-param' => 'volumeTdPresentiel',
+                    'min' => 0,
                 ],
             ])
             ->add('volumeTpPresentiel', FloatType::class, [
@@ -65,7 +67,8 @@ class EcStep4Type extends AbstractType
                 'required' => false,
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
-                    'data-ec--structure-type-param' => 'volumeTpPresentiel'
+                    'data-ec--structure-type-param' => 'volumeTpPresentiel',
+                    'min' => 0,
                 ],
             ])
             ->add('volumeCmDistanciel', FloatType::class, [
@@ -75,6 +78,7 @@ class EcStep4Type extends AbstractType
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
                     'data-ec--structure-type-param' => 'volumeCmDistanciel',
+                    'min' => 0,
                 ],
             ])
             ->add('volumeTdDistanciel', FloatType::class, [
@@ -83,7 +87,8 @@ class EcStep4Type extends AbstractType
                 'required' => false,
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
-                    'data-ec--structure-type-param' => 'volumeTdDistanciel'
+                    'data-ec--structure-type-param' => 'volumeTdDistanciel',
+                    'min' => 0,
                 ],
             ])
             ->add('volumeTpDistanciel', FloatType::class, [
@@ -92,7 +97,8 @@ class EcStep4Type extends AbstractType
                 'required' => false,
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
-                    'data-ec--structure-type-param' => 'volumeTpDistanciel'
+                    'data-ec--structure-type-param' => 'volumeTpDistanciel',
+                    'min' => 0,
                 ],
             ])
             ->add('volumeTe', FloatType::class, [
@@ -101,7 +107,8 @@ class EcStep4Type extends AbstractType
                 'required' => false,
                 'attr' => [
                     'data-action' => !$isModal ? 'change->ec--structure#saveVolume' : '',
-                    'data-ec--structure-type-param' => 'volumeTe'
+                    'data-ec--structure-type-param' => 'volumeTe',
+                    'min' => 0,
                 ],
             ]);
     }
