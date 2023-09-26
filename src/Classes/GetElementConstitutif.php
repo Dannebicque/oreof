@@ -11,18 +11,14 @@ namespace App\Classes;
 
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
-use App\Entity\TypeDiplome;
 use App\TypeDiplome\Source\TypeDiplomeInterface;
-use ContainerJaU2YpB\getElementConstitutif2Service;
 
 abstract class GetElementConstitutif
 {
     public static function getElementConstitutif(ElementConstitutif $elementConstitutif, bool $raccroche)
     {
-
-
         if ($raccroche && $elementConstitutif->isSynchroMccc()) {
-            foreach ($elementConstitutif->getFicheMatiere()->getParcours()->getElementConstitutifs() as $ec) {
+            foreach ($elementConstitutif->getFicheMatiere()?->getParcours()?->getElementConstitutifs() as $ec) {
                 if ($ec->getFicheMatiere()?->getId() === $elementConstitutif->getFicheMatiere()?->getId()) {
                     return $ec;
                 }
@@ -47,10 +43,10 @@ abstract class GetElementConstitutif
     public static function getEcts(ElementConstitutif $elementConstitutif, bool $raccroche): ?float
     {
         if ($elementConstitutif->getFicheMatiere()?->isEctsImpose()) {
-            return $elementConstitutif->getFicheMatiere()->getEcts();
+            return $elementConstitutif->getFicheMatiere()?->getEcts();
         }
 
-        return self::getElementConstitutif($elementConstitutif, $raccroche)->getEcts();
+        return self::getElementConstitutif($elementConstitutif, $raccroche)?->getEcts();
     }
 
     public static function getElementConstitutifHeures(ElementConstitutif $elementConstitutif, bool $raccroche): ElementConstitutif|FicheMatiere
