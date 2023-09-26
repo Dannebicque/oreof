@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.12](https://github.com/Dannebicque/oreof/compare/v1.14.11...v1.14.12) (2023-09-26)
+
+
+### Bug Fixes
+
+* EC/SAE bug des parcours ([1bd8187](https://github.com/Dannebicque/oreof/commit/1bd8187b3ebdfc19e1321e02e5935e9008dd1568))
+* Voter sur gestionnaire ([b4aeba7](https://github.com/Dannebicque/oreof/commit/b4aeba757cee48696c473c792dfdd4d690cf9556))
+
 ### [1.14.11](https://github.com/Dannebicque/oreof/compare/v1.14.10...v1.14.11) (2023-09-26)
 
 
