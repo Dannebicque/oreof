@@ -722,7 +722,7 @@ class ElementConstitutif
 
     public function isSynchroMccc(): ?bool
     {
-        return $this->synchroMccc === null ? false : $this->synchroMccc;
+        return $this->synchroMccc ?? false;
     }
 
     public function setSynchroMccc(?bool $synchroMccc): static
@@ -734,7 +734,7 @@ class ElementConstitutif
 
     public function isSynchroHeures(): ?bool
     {
-        return $this->synchroHeures;
+        return $this->synchroHeures ?? false;
     }
 
     public function setSynchroHeures(?bool $synchroHeures): static
@@ -746,7 +746,7 @@ class ElementConstitutif
 
     public function isSynchroBcc(): ?bool
     {
-        return $this->synchroBcc;
+        return $this->synchroBcc ?? false;
     }
 
     public function setSynchroBcc(?bool $synchroBcc): static
@@ -758,7 +758,7 @@ class ElementConstitutif
 
     public function isSynchroEcts(): ?bool
     {
-        return $this->synchroEcts;
+        return $this->synchroEcts ?? false;
     }
 
     public function setSynchroEcts(?bool $synchroEcts): static
