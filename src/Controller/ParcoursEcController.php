@@ -111,11 +111,13 @@ class ParcoursEcController extends AbstractController
         $tabUes = [];
         foreach ($parcours->getSemestreParcours() as $semParc) {
             if ($semParc->getSemestre()->getSemestreRaccroche() !== null) {
-                $semParc = $semParc->getSemestre()->getSemestreRaccroche();
+                $semParc = $semParc->getSemestre()->getSemestreRaccroche()->getSemestre();
+            } else {
+                $semParc = $semParc->getSemestre();
             }
 
             $tabEcs[$semParc->getOrdre()] = [];
-            foreach ($semParc->getSemestre()->getUes() as $ue) {
+            foreach ($semParc->getUes() as $ue) {
                 if ($ue->getUeRaccrochee() !== null) {
                     $ue = $ue->getUeRaccrochee();
                 }
