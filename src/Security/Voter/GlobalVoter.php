@@ -176,7 +176,10 @@ class GlobalVoter extends Voter
                 $this->dpeWorkflow->can($subject->getFormation(), 'valide_rf');
         }
 
-        if ($subject->getFormation()->getComposantePorteuse() === $centre->getComposante() && $centre->getComposante()->getResponsableDpe() === $this->user) {
+        if (
+            $subject->getFormation()->getComposantePorteuse() === $centre->getComposante() &&
+            ($centre->getComposante()->getResponsableDpe() === $this->user || $subject->getFormation()->getComposantePorteuse() === $centre->getComposante())) {
+            //todo: filtre pas si les bons droits... Edit ou lecture ?
             $canEdit = $this->parcoursWorkflow->can($subject, 'autoriser') ||
                 $this->parcoursWorkflow->can($subject, 'valider_parcours') ||
                 $this->parcoursWorkflow->can($subject, 'valider_rf') ||
