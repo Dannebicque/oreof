@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.10](https://github.com/Dannebicque/oreof/compare/v1.14.9...v1.14.10) (2023-09-26)
+
+
+### Bug Fixes
+
+* GetElement sur parcours null ([3bcf254](https://github.com/Dannebicque/oreof/commit/3bcf25492541f1861a0bbedff6fc90d25f22a5a7))
+
 ### [1.14.9](https://github.com/Dannebicque/oreof/compare/v1.14.8...v1.14.9) (2023-09-26)
 
 
