@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.13](https://github.com/Dannebicque/oreof/compare/v1.14.12...v1.14.13) (2023-09-26)
+
+
+### Bug Fixes
+
+* [[#6](https://github.com/Dannebicque/oreof/issues/6)] Fix volume horaire non négatif dans les form ([1b19e32](https://github.com/Dannebicque/oreof/commit/1b19e327b97b234576c63271fd87fb79da1b125f))
+
 ### [1.14.12](https://github.com/Dannebicque/oreof/compare/v1.14.11...v1.14.12) (2023-09-26)
 
 
