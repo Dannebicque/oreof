@@ -25,8 +25,8 @@ class GlobalVoter extends Voter
     private User $user;
 
     public function __construct(
-        private WorkflowInterface $dpeWorkflow,
-        private WorkflowInterface $parcoursWorkflow,
+        private WorkflowInterface       $dpeWorkflow,
+        private WorkflowInterface       $parcoursWorkflow,
         private readonly Security       $security,
         private readonly RoleRepository $roleRepository,
     ) {
@@ -78,40 +78,41 @@ class GlobalVoter extends Voter
         // si oui, vérifier la portée du rôle, si besoin vérifier par hierarchie
         $roles = $this->roleRepository->findByPermission($this->getRoleFromAttribute()); // on récupère les rôles qui ont la permission demandée
         foreach ($this->user->getUserCentres() as $centre) {
-            if (!array_intersect($centre->getDroits(), $roles)) {
-                return false; //aucun centre en commun
-            }
-
-            // on a au moins un centre en commun, on vérifie la portée
-            if ($this->portee === PorteeEnum::ALL->value) {
-                return true; //pas de portée, c'est OK
-            }
-
-            // on a une portée, on vérifie si le centre est dans la portée
-            if ($this->portee === PorteeEnum::MY->value) {
-                // Soit formation ou composante, on vérifie si le centre est dans la portée
-                // soit par héritage
-
-                if ($subject instanceof Formation) {
-                   return $this->canAccessFormation($subject, $centre);
+            if (array_intersect($centre->getDroits(), $roles)) {
+                // on a au moins un centre en commun, on vérifie la portée
+                if ($this->portee === PorteeEnum::ALL->value) {
+                    return true; //pas de portée, c'est OK
                 }
 
-                if ($subject instanceof Parcours) {
+                // on a une portée, on vérifie si le centre est dans la portée
+                if ($this->portee === PorteeEnum::MY->value) {
+                    // Soit formation ou composante, on vérifie si le centre est dans la portée
+                    // soit par héritage
 
-                    return $this->canAccessParcours($subject, $centre);
-                }
-
-                if ($subject instanceof Composante) {
-                    if ($this->canAccessComposante($subject, $centre)) {
-                        //soit centre = composante et responsable ou dpe de la composante
-                        return true;
+                    if ($subject instanceof Formation) {
+                        if ($this->canAccessFormation($subject, $centre) === true) {
+                            return true;
+                        }
                     }
-                }
 
-                if ($subject instanceof User) {
-                    if ($this->canUserAccessComposante($subject, $centre)) {
-                        //soit centre = composante et responsable ou dpe de la composante
-                        return true;
+                    if ($subject instanceof Parcours) {
+                        if ($this->canAccessParcours($subject, $centre) === true) {
+                            return true;
+                        }
+                    }
+
+                    if ($subject instanceof Composante) {
+                        if ($this->canAccessComposante($subject, $centre)) {
+                            //soit centre = composante et responsable ou dpe de la composante
+                            return true;
+                        }
+                    }
+
+                    if ($subject instanceof User) {
+                        if ($this->canUserAccessComposante($subject, $centre)) {
+                            //soit centre = composante et responsable ou dpe de la composante
+                            return true;
+                        }
                     }
                 }
             }
@@ -147,7 +148,7 @@ class GlobalVoter extends Voter
 
         if (
             $subject->getComposantePorteuse() === $centre->getComposante()
-        ) {
+        ) { //todo: le gestionnaire n'est pas le DPE, gérer son cas spécifiquement ?
             //&& $centre->getComposante()->getResponsableDpe() === $this->user
             $canEdit =
                 $this->dpeWorkflow->can($subject, 'autoriser') ||
@@ -185,7 +186,7 @@ class GlobalVoter extends Voter
                 $this->dpeWorkflow->can($subject->getFormation(), 'valider_conseil');
         }
 
-        return  $canEdit;
+        return $canEdit;
     }
 
     private function canAccessComposante(Composante $subject, mixed $centre): bool
