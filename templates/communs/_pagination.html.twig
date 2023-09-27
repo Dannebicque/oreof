@@ -5,32 +5,33 @@
 {% set end = min(nbPages, currentPage + buffer) %}
 {% set endBuffer = min(nbPages, end + step * buffer) %}
 
-
 <nav class="d-flex justify-content-end">
     <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="First"
-                    {{ stimulus_action('crud', 'page', 'click', {
-                        'page': 0,
-                    }) }}
-            >
-                <i class="fal fa-chevrons-left"></i>
-            </a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous"
-                    {% if currentPage > 2 %}
+        {% if nbPages > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="First"
                         {{ stimulus_action('crud', 'page', 'click', {
-                            'page': currentPage-1,
+                            'page': 0,
                         }) }}
-                    {% else %}
-                        disabled
-                    {% endif %}
-            >
-                <i class="fal fa-chevron-left"></i>
-            </a>
-        </li>
+                >
+                    <i class="fal fa-chevrons-left"></i>
+                </a>
+            </li>
 
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous"
+                        {% if currentPage > 2 %}
+                            {{ stimulus_action('crud', 'page', 'click', {
+                                'page': currentPage-1,
+                            }) }}
+                        {% else %}
+                            disabled
+                        {% endif %}
+                >
+                    <i class="fal fa-chevron-left"></i>
+                </a>
+            </li>
+        {% endif %}
 
         {% for i in start .. end %}
             <li class="page-item {% if (currentPage == i) or (params.start is not defined and loop.first) %}active{% endif %}">
@@ -38,40 +39,42 @@
                         {{ stimulus_action('crud', 'page', 'click', {
                             'page': i,
                         }) }}
-                >{{ i+1 }}</a></li>
+                >{{ i }}</a></li>
         {% endfor %}
+        {% if end+step < endBuffer %}
+            {% for i in range(end+step, endBuffer, step) %}
+                <li class="page-item">
+                    <a class="page-link" href="#"
+                            {{ stimulus_action('crud', 'page', 'click', {
+                                'page': i,
+                            }) }}
+                    >{{ i }}</a></li>
+            {% endfor %}
+        {% endif %}
 
-        {% for i in range(end+step, endBuffer, step) %}
-            <li class="page-item {% if (currentPage == i) or (params.start is not defined and loop.first) %}active{% endif %}">
-                <a class="page-link" href="#"
+        {% if nbPages > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous"
+                        {% if currentPage < nbPages %}
+                            {{ stimulus_action('crud', 'page', 'click', {
+                                'page': currentPage+1,
+                            }) }}
+                        {% else %}
+                            disabled
+                        {% endif %}
+                >
+                    <i class="fal fa-chevron-right"></i>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous"
                         {{ stimulus_action('crud', 'page', 'click', {
-                            'page': i,
+                            'page': nbPages,
                         }) }}
-                >{{ i+1 }}</a></li>
-        {% endfor %}
-
-
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous"
-                    {% if currentPage < nbPages %}
-                        {{ stimulus_action('crud', 'page', 'click', {
-                            'page': currentPage+1,
-                        }) }}
-                    {% else %}
-                        disabled
-                    {% endif %}
-            >
-                <i class="fal fa-chevron-right"></i>
-            </a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous"
-                    {{ stimulus_action('crud', 'page', 'click', {
-                        'page': nbPages,
-                    }) }}
-            >
-                <i class="fal fa-chevrons-right"></i>
-            </a>
-        </li>
+                >
+                    <i class="fal fa-chevrons-right"></i>
+                </a>
+            </li>
+        {% endif %}
     </ul>
 </nav>

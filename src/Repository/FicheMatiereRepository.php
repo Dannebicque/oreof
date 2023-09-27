@@ -297,7 +297,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->orWhere('(p.respParcours = :parcours OR p.coResponsable = :parcours)')
             ->orWhere('f.responsableFicheMatiere = :user')
             ->andWhere('fo.anneeUniversitaire = :annee') // Pour la troisième requête
-            ->andWhere('f.horsDiplome = 0')
+            //->andWhere('f.horsDiplome = 0')
             ->orderBy('f.libelle', 'ASC')
             ->setParameters([
                 'parcours' => $user,
@@ -323,7 +323,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->andWhere('fo.anneeUniversitaire = :annee') // Pour la troisième requête
             // Ajout condition à la derniere requete
             ->andWhere('f.responsableFicheMatiere = :user')
-            ->andWhere('f.horsDiplome = 0')
+            //->andWhere('f.horsDiplome = 0')
             ->orderBy('f.libelle', 'ASC')
             ->setParameters([
                 'parcours' => $user,

@@ -852,7 +852,7 @@ class FicheMatiere
 
     public function isHorsDiplome(): ?bool
     {
-        return $this->horsDiplome;
+        return $this->horsDiplome ?? false;
     }
 
     public function setHorsDiplome(?bool $horsDiplome): static

@@ -27,7 +27,8 @@ class FicheMatiereController extends BaseController
     ]
     public function index(
         Request $request
-    ): Response {
+    ): Response
+    {
         return $this->render(
             'structure/fiche_matiere/index.html.twig',
             [
@@ -40,7 +41,8 @@ class FicheMatiereController extends BaseController
     public function liste(
         Request                $request,
         FicheMatiereRepository $ficheMatiereRepository
-    ): Response {
+    ): Response
+    {
 
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
             $ficheMatieres = $ficheMatiereRepository->findByAdmin(
@@ -49,40 +51,12 @@ class FicheMatiereController extends BaseController
             );
             $totalFiches = $ficheMatiereRepository->countByAdmin($this->getAnneeUniversitaire(), $request->query->all());
         } else {
-//            $ficheMatieres = [];
-            // toutes les fiches en tant que responsable composante/DPE
-//            $ficheMatieres[] = $ficheMatiereRepository->findByComposanteDpe(
-//                $this->getUser(),
-//                $this->getAnneeUniversitaire(),
-//                [$sort => $direction],
-//                $q
-//            );
-            // toutes les fiches en tant que responsable formation
-
             $ficheMatieres = $ficheMatiereRepository->findByResponsable(
                 $this->getUser(),
                 $this->getAnneeUniversitaire(),
                 $request->query->all()
             );
-//
-//            // toutes les fiches en tant que responsable parcours
-//            $ficheMatieres[] = $ficheMatiereRepository->findByResponsableParcours(
-//                $this->getUser(),
-//                $this->getAnneeUniversitaire(),
-//                $request->query->all()
-//            );
-//
-//            // toutes les fiches en tant que responsable fiche matière
-//            $ficheMatieres[] = $ficheMatiereRepository->findByResponsableFicheMatiere(
-//                $this->getUser(),
-//                $this->getAnneeUniversitaire(),
-//                $request->query->all()
-//            );
 
-//            $ficheMatieres = array_merge(...$ficheMatieres);
-//            $totalFiches = count($ficheMatieres);
-            // récupérer les éléments entre l'index strat * 50 et 50 suivants dans le tableau
-//            $ficheMatieres = array_slice($ficheMatieres, $request->query->get('start', 0) * 50, 50);
             $totalFiches = $ficheMatiereRepository->countByResponsable(
                 $this->getUser(),
                 $this->getAnneeUniversitaire(),
@@ -97,20 +71,18 @@ class FicheMatiereController extends BaseController
         $tParcours = [];
         $tUsers = [];
         foreach ($ficheMatieres as $fiche) {
-            //foreach ($ficheMatiere as $fiche) {
-                $tFicheMatieres[$fiche->getId()] = $fiche;
+            $tFicheMatieres[$fiche->getId()] = $fiche;
 
-                if (null !== $fiche->getParcours()) {
-                    $tParcours[$fiche->getParcours()->getId()] = $fiche->getParcours();
-                    if ($fiche->getParcours()->getFormation() !== null) {
-                        $tMentions[$fiche->getParcours()->getFormation()->getId()] = $fiche->getParcours()->getFormation();
-                    }
+            if (null !== $fiche->getParcours()) {
+                $tParcours[$fiche->getParcours()->getId()] = $fiche->getParcours();
+                if ($fiche->getParcours()->getFormation() !== null) {
+                    $tMentions[$fiche->getParcours()->getFormation()->getId()] = $fiche->getParcours()->getFormation();
                 }
+            }
 
-                if (null !== $fiche->getResponsableFicheMatiere()) {
-                    $tUsers[$fiche->getResponsableFicheMatiere()->getId()] = $fiche->getResponsableFicheMatiere();
-                }
-            //}
+            if (null !== $fiche->getResponsableFicheMatiere()) {
+                $tUsers[$fiche->getResponsableFicheMatiere()->getId()] = $fiche->getResponsableFicheMatiere();
+            }
         }
 
 
@@ -133,7 +105,8 @@ class FicheMatiereController extends BaseController
     public function listeHorsDiplome(
         Request                $request,
         FicheMatiereRepository $ficheMatiereRepository
-    ): Response {
+    ): Response
+    {
         $ficheMatieres = $ficheMatiereRepository->findByHd(
             $this->getAnneeUniversitaire(),
             $request->query->all(),
@@ -159,7 +132,8 @@ class FicheMatiereController extends BaseController
     public function detailComposante(
         ElementConstitutifRepository $elementConstitutifRepository,
         Ue                           $ue,
-    ): Response {
+    ): Response
+    {
         $ecs = $elementConstitutifRepository->findByUe($ue);
 
         return $this->render('structure/fiche_matiere/_liste.html.twig', [
