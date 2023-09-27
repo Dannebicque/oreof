@@ -29,14 +29,16 @@
                         </div>
 
                     </div>
-                    <div class="col-2">OU</div>
+                    <div class="col-2">
+{#                        OU#}
+                    </div>
                     <div class="col-5">
-                        <button class="btn text-primary">Recopier les BCC
-                            <i class="fal fa-question-circle ms-1"
-                                  data-controller="tooltip"
-                                  data-tooltip-placement-value="bottom"
-                                  title="{{ 'parcours_bcc.helps.synchroBcc'|trans({}, 'help') }}"></i>
-                        </button>
+{#                        <button class="btn text-primary">Recopier les BCC#}
+{#                            <i class="fal fa-question-circle ms-1"#}
+{#                                  data-controller="tooltip"#}
+{#                                  data-tooltip-placement-value="bottom"#}
+{#                                  title="{{ 'parcours_bcc.helps.synchroBcc'|trans({}, 'help') }}"></i>#}
+{#                        </button>#}
                     </div>
                     {% if ec.synchroBcc == true %}
                         Les BCC sont raccrochée depuis l'EC du parcours "...". Le raccrochement se fait sur le code de la compétence. Les données ne sont pas modifiables.
