@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.14](https://github.com/Dannebicque/oreof/compare/v1.14.13...v1.14.14) (2023-09-27)
+
+
+### Bug Fixes
+
+* Edit des EC libres ([2f16f20](https://github.com/Dannebicque/oreof/commit/2f16f20d3a36beec972651795e42de2b60dc3761))
+* Non affichage des BCC et Heures sur EC libre ([e84b380](https://github.com/Dannebicque/oreof/commit/e84b3801c0733f0fa2dba00bfb910742e7611796))
+* Vérification des fiches libres ([7c55ba3](https://github.com/Dannebicque/oreof/commit/7c55ba38c9012969742db6cd681f427cc2d596df))
+
 ### [1.14.13](https://github.com/Dannebicque/oreof/compare/v1.14.12...v1.14.13) (2023-09-26)
 
 
