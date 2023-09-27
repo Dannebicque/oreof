@@ -516,6 +516,7 @@ class ElementConstitutifController extends AbstractController
                 $elementConstitutif->setHeuresEnfantsIdentiques(false);
             }
 
+            $elementConstitutif->setSansHeure((bool)$request->request->get('sansHeure'));
             $elementConstitutifRepository->save($elementConstitutif, true);
 
             return $this->json(true);

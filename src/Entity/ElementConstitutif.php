@@ -143,6 +143,9 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $synchroEcts = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $sansHeure = false;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -276,11 +279,11 @@ class ElementConstitutif
 
         $nbHeures = $cmPresentiel + $tdPresentiel + $tpPresentiel + $cmDistanciel + $tdDistanciel + $tpDistanciel + $volumeTe;
 
-        if ($nbHeures === 0.0 && $this->modaliteEnseignement === null) {
+        if (($nbHeures === 0.0 && $this->isSansHeure() === false) && $this->modaliteEnseignement === null) {
             return 'À compléter';
         }
 
-        if ($nbHeures === 0.0) {
+        if ($nbHeures === 0.0 && $this->isSansHeure() === false) {
             return 'Pas d\'heures';
         }
 
@@ -785,6 +788,18 @@ class ElementConstitutif
     public function setSynchroEcts(?bool $synchroEcts): static
     {
         $this->synchroEcts = $synchroEcts;
+
+        return $this;
+    }
+
+    public function isSansHeure(): ?bool
+    {
+        return $this->sansHeure ?? false;
+    }
+
+    public function setSansHeure(?bool $sansHeure): static
+    {
+        $this->sansHeure = $sansHeure;
 
         return $this;
     }

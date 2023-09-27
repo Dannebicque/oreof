@@ -27,13 +27,12 @@
                            title="{{ 'parcours_ec.helps.synchroHeures'|trans({}, 'help') }}"></i>
                     </label>
                 </div>
-
             </div>
             <div class="col-2">OU</div>
             <div class="col-5">
                 <button class="btn text-primary">Recopier les Heures  <i class="fal fa-question-circle ms-1" data-controller="tooltip"
-                                                                         data-tooltip-placement-value="bottom"
-                                                                         title="{{ 'parcours_ec.helps.recopieHeures'|trans({}, 'help') }}"></i></button>
+                 data-tooltip-placement-value="bottom"
+                 title="{{ 'parcours_ec.helps.recopieHeures'|trans({}, 'help') }}"></i></button>
             </div>
             {% if ec.synchroHeures == true %}
                 Les heures de cet EC sont raccrochées depuis l'EC du parcours "...". Les données ne sont pas modifiables.
@@ -51,6 +50,16 @@ parcours.'}) }}
     .modaliteEnseignement == null %}
         {{ form_row(form.modaliteEnseignement, {'disabled': ec.synchroHeures}) }}
     {% endif %}
+
+    <div class="form-check mb-2">
+        <input class="form-check-input" type="checkbox" id="sansHeure" name="sansHeure"
+               {% if ec.sansHeure == true %}checked{% endif %}
+        >
+        <label class="form-check-label" for="sansHeure"> {{ 'mccc.ec.labels.sansHeures'|trans({}, 'form') }} <i
+                    class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
+                    title="{{ 'mccc.ec.helps.sansHeures'|trans({}, 'help') }}"></i></label>
+    </div>
+
     <div id="bloc_presentiel" style="display:{% if ec.modaliteEnseignement != null and ec.modaliteEnseignement.value != 2 %}block{% else
 %}none{% endif %}">
         <h3>Volume Présentiel</h3>
