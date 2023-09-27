@@ -63,8 +63,9 @@ class ElementConstitutifMcccController extends AbstractController
 
         if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
             $this->isGranted('CAN_PARCOURS_EDIT_MY', $parcours)) {
+
             if ($request->isMethod('POST')) {
-                if ($elementConstitutif->isSynchroEcts() === false) {
+                if ($elementConstitutif->isSynchroEcts() === false && $elementConstitutif->getFicheMatiere()?->isEctsImpose() === false) {
                     if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
                         $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
                     } else {
@@ -73,7 +74,7 @@ class ElementConstitutifMcccController extends AbstractController
                     $entityManager->flush();
                 }
 
-                if ($elementConstitutif->isSynchroMccc() === false) {
+                if ($elementConstitutif->isSynchroMccc() === false && $elementConstitutif->getFicheMatiere()?->isMcccImpose() === false) {
                     if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
                         $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
                     } else {
@@ -108,10 +109,18 @@ class ElementConstitutifMcccController extends AbstractController
             // - l'EC d'origine si raccroché
             // - l'EC parent
             // - l'EC lui-même
-//dump($elementConstitutif->getId());
+            //dump($elementConstitutif->getId());
 
+            if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
+                $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
+            } else {
+                $typeEpreuve = $elementConstitutif->getTypeMccc();
+            }
 
             return $this->render('element_constitutif/_mcccEcModal.html.twig', [
+                'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
+                'isEctsImpose' => $elementConstitutif->getFicheMatiere()?->isEctsImpose(),
+                'typeMccc' => $typeEpreuve,
                 'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
                 'ec' => $elementConstitutif,
                 'ects' => GetElementConstitutif::getEcts($elementConstitutif, $raccroche),

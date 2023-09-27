@@ -16,7 +16,7 @@
                 </label>
                 <div class="input-group">
                     <input type="text" class="form-control pourcentage synchro-mccc"
-                           {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
+                           {% if disabled %}disabled{% endif %}
                            id="pourcentage_s1_cc"
                            name="pourcentage[1]"
                             {{ stimulus_action('mccc--licence', 'saveDataCci', 'change') }}
@@ -41,7 +41,7 @@
                 </label>
                 <div class="input-group">
                     <input type="text" class="form-control pourcentage synchro-mccc"
-                           {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
+                           {% if disabled %}disabled{% endif %}
                            id="pourcentage_s2_cc"
                            name="pourcentage[2]"
                             {{ stimulus_action('mccc--licence', 'saveDataCci', 'change') }}
@@ -66,7 +66,7 @@
                 </label>
                 <div class="input-group">
                     <input type="text" class="form-control pourcentage synchro-mccc"
-                           {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
+                           {% if disabled %}disabled{% endif %}
                            id="pourcentage_s3_cc"
                            name="pourcentage[3]"
                             {{ stimulus_action('mccc--licence', 'saveDataCci', 'change') }}
@@ -93,7 +93,7 @@
                         </label>
                         <div class="input-group">
                             <input type="text" class="form-control pourcentage synchro-mccc"
-                                   {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
+                                   {% if disabled %}disabled{% endif %}
                                    id="pourcentage_s{{ i }}_cc"
                                    name="pourcentage[{{ i }}]"
                                     {{ stimulus_action('mccc--licence', 'saveDataCci', 'change') }}
@@ -114,7 +114,7 @@
 
     </div>
     <button class="btn btn-primary mb-2 synchro-mccc"
-            {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
+            {% if disabled %}disabled{% endif %}
             {{ stimulus_action('mccc--licence', 'addEpreuveCci', 'click') }}
     >Ajouter une épreuve
     </button>

@@ -41,7 +41,7 @@
         <div class="col-4">
             <div class="form-check mb-2">
                 <input class="form-check-input synchro-mccc" type="checkbox" id="cc_has_tp" name="cc_has_tp"
-                       {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
+                       {% if disabled %}disabled{% endif %}
                        {% if mcccs[1]['cc'][1].options is defined and mcccs[1]['cc'][1].options.cc_has_tp is defined and mcccs[1]['cc'][1].options.cc_has_tp == "on" %}checked{% endif %}
                 >
                 <label class="form-check-label" for="cc_has_tp"> {{ 'mccc.licence.labels.cc_has_tp'|trans({}, 'form') }}
@@ -85,7 +85,7 @@
 </div>
 
 <button class="btn btn-primary mb-2 synchro-mccc"
-        {% if elementConstitutif is defined and elementConstitutif.synchroMccc %}disabled{% endif %}
+        {% if disabled %}disabled{% endif %}
         {{ stimulus_action('mccc--licence', 'addEpreuveSecondeSession', 'click') }}
 >Ajouter une épreuve pour la 2e session
 </button>
