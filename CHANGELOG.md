@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.17](https://github.com/Dannebicque/oreof/compare/v1.14.16...v1.14.17) (2023-09-27)
+
+
+### Bug Fixes
+
+* disabled des BCC ([61e3f99](https://github.com/Dannebicque/oreof/commit/61e3f99efbebe475f7e62850f2b603d998d8f894))
+* EC sans heures ([af1c49e](https://github.com/Dannebicque/oreof/commit/af1c49e01e4b9363a095dd5d8d89f72ac913f964))
+* Export PDF fiches matières hors diplômes ([f99fc94](https://github.com/Dannebicque/oreof/commit/f99fc947e3a19a101f6626973546bc95640385e1))
+* Liste des matières ([c5781f4](https://github.com/Dannebicque/oreof/commit/c5781f45ae7100ced7e437178f643fa3f9211eec))
+* Masquer bouton recopier ([ded6469](https://github.com/Dannebicque/oreof/commit/ded6469bb37c85431cc983933149da234a0befab))
+* MCCC vide ([5e42a92](https://github.com/Dannebicque/oreof/commit/5e42a92e955e5be70920a629cdf60a855cfe20fd))
+* Reprise des BCC ([e39da8b](https://github.com/Dannebicque/oreof/commit/e39da8b3079cc42f2847ec7fb1f13b9df688ecd1))
+* Synchro BCC ([e47bcce](https://github.com/Dannebicque/oreof/commit/e47bcce5835a171e9566fbacac99ecdd39029793))
+
 ### [1.14.16](https://github.com/Dannebicque/oreof/compare/v1.14.15...v1.14.16) (2023-09-27)
 
 
