@@ -11,6 +11,7 @@ import { saveData } from '../../js/saveData'
 import { updateEtatOnglet } from '../../js/updateEtatOnglet'
 import { calculEtatStep } from '../../js/calculEtatStep'
 import trixEditor from '../../js/trixEditor'
+import JsonResponse from '../../js/JsonResponse'
 
 export default class extends Controller {
   static targets = [
@@ -19,6 +20,7 @@ export default class extends Controller {
 
   static values = {
     url: String,
+    urlUpdate: String,
     updateStep: { type: Boolean, default: true },
   }
 
@@ -61,6 +63,33 @@ export default class extends Controller {
       if (this.updateStepValue) {
         await updateEtatOnglet(this.urlValue, 'onglet3', 'ec')
       }
+    })
+  }
+
+  async synchroBcc(event) {
+    const body = new FormData()
+    body.append('value', event.target.checked)
+    body.append('field', 'synchroMccc')
+    body.append('ec', event.params.ec)
+
+    await fetch(this.urlUpdateValue, {
+      method: 'POST',
+      body,
+    }).then((response) => {
+      if (response.ok) {
+        // récupérer tous les inputs, sauf ceux ayant la classe "not-disabled" et les désactiver ou activer selon la valeur du checkbox
+
+        // récupérer tous les checkbox dont le nom commence par bcc_ et les désactiver ou activer selon la valeur du checkbox
+        const inputs = document.querySelectorAll('[name^="ec["]')
+        inputs.forEach((input) => {
+          if (event.target.checked) {
+            input.setAttribute('disabled', 'disabled')
+          } else {
+            input.removeAttribute('disabled')
+          }
+        })
+      }
+      JsonResponse(response)
     })
   }
 }

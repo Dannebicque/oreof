@@ -561,6 +561,27 @@ class ElementConstitutif
 
     public function getEtatMccc(): ?string
     {
+        if ($this->mcccs->count() === 0 && $this->ficheMatiere?->getMcccs()->count() === 0) {
+            return 'A Saisir';
+        }
+
+        if ($this->ficheMatiere !== null) {
+            if ($this->ficheMatiere->isMcccImpose() === true &&
+                $this->ficheMatiere->isEctsImpose() === true) {
+                return $this->ficheMatiere->getEtatMccc();
+            }
+            if ($this->ficheMatiere->isMcccImpose() === true &&
+                $this->ficheMatiere->isEctsImpose() === false) {
+                return $this->getEcts() === null ? 'A Saisir' : $this->ficheMatiere->getEtatMccc();
+            }
+
+            if ($this->ficheMatiere->isMcccImpose() === false &&
+                $this->ficheMatiere->isEctsImpose() === true) {
+                return $this->ficheMatiere->getEcts() === null ? 'A Saisir' : $this->etatMccc;
+            }
+        }
+
+
         return $this->etatMccc === null ? 'A Saisir' : $this->etatMccc;
     }
 

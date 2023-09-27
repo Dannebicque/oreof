@@ -413,9 +413,6 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
 
     private function verificationMccc(ElementConstitutif|FicheMatiere $ec, array $mcccs, $type = 'L'): bool
     {
-//        if ($ec->isQuitus() === true) {
-//            return true;
-//        }
 
         if (count($mcccs) === 0) {
             return false;
