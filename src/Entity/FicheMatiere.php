@@ -876,7 +876,7 @@ class FicheMatiere
 
     public function isVolumesHorairesImpose(): ?bool
     {
-        return $this->volumesHorairesImpose;
+        return $this->volumesHorairesImpose ?? false;
     }
 
     public function setVolumesHorairesImpose(?bool $volumesHorairesImpose): static
@@ -888,7 +888,7 @@ class FicheMatiere
 
     public function isEctsImpose(): ?bool
     {
-        return $this->ectsImpose;
+        return $this->ectsImpose ?? false;
     }
 
     public function setEctsImpose(?bool $ectsImpose): static
@@ -900,7 +900,7 @@ class FicheMatiere
 
     public function isMcccImpose(): ?bool
     {
-        return $this->mcccImpose;
+        return $this->mcccImpose ?? false;
     }
 
     public function setMcccImpose(?bool $mcccImpose): static
