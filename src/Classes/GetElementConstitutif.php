@@ -35,9 +35,12 @@ abstract class GetElementConstitutif
             return $typeD->getMcccs($elementConstitutif->getFicheMatiere());
         }
 
-        $ec = self::getElementConstitutif($elementConstitutif, $raccroche);
+        if ($elementConstitutif->isSynchroMccc() === true) {
+            return $typeD->getMcccs(self::getElementConstitutif($elementConstitutif, $raccroche));
+        }
+        //$ec = self::getElementConstitutif($elementConstitutif, $raccroche);
 
-        return $typeD->getMcccs($ec);
+        return $typeD->getMcccs($elementConstitutif);
     }
 
     public static function getEcts(ElementConstitutif $elementConstitutif, bool $raccroche): ?float
@@ -46,7 +49,11 @@ abstract class GetElementConstitutif
             return $elementConstitutif->getFicheMatiere()?->getEcts();
         }
 
-        return self::getElementConstitutif($elementConstitutif, $raccroche)?->getEcts();
+        if ($elementConstitutif->isSynchroEcts() === true) {
+            return self::getElementConstitutif($elementConstitutif, $raccroche)?->getEcts();
+        }
+
+        return $elementConstitutif->getEcts();
     }
 
     public static function getElementConstitutifHeures(ElementConstitutif $elementConstitutif, bool $raccroche): ElementConstitutif|FicheMatiere
@@ -55,6 +62,9 @@ abstract class GetElementConstitutif
             return $elementConstitutif->getFicheMatiere();
         }
 
-        return self::getElementConstitutif($elementConstitutif, $raccroche);
+        if ($elementConstitutif->isSynchroHeures() === true) {
+            return self::getElementConstitutif($elementConstitutif, $raccroche);
+        }
+        return $elementConstitutif;
     }
 }
