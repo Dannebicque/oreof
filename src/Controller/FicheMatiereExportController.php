@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Classes\MyDomPdf;
 use App\Classes\MyPDF;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
@@ -21,9 +22,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class FicheMatiereExportController extends AbstractController
 {
     public function __construct(
-        private readonly MyPDF $myPdf
-    )
-    {
+        private readonly MyDomPdf $myPdf
+    ) {
     }
 
     /**
@@ -35,9 +35,15 @@ class FicheMatiereExportController extends AbstractController
     #[Route('/fiche-matiere/export/{id}', name: 'app_fiche_matiere_export')]
     public function export(FicheMatiere $ficheMatiere): Response
     {
-        $formation = $ficheMatiere->getParcours()?->getFormation();
-        if ($formation === null) {
-            throw new RuntimeException('Formation non trouvée');
+        if ($ficheMatiere->isHorsDiplome() === false) {
+            $formation = $ficheMatiere->getParcours()?->getFormation();
+            if ($formation === null) {
+                throw new RuntimeException('Formation non trouvée');
+            }
+            $typeDiplome = $formation->getTypeDiplome();
+        } else {
+            $typeDiplome = null;
+            $formation = null;
         }
 
         $bccs = [];
@@ -49,18 +55,18 @@ class FicheMatiereExportController extends AbstractController
             $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
         }
 
-        $typeDiplome = $formation->getTypeDiplome();
 
-        return $this->myPdf::generePdf(
+
+        return $this->myPdf->render(
             'pdf/ec.html.twig',
             [
                 'ficheMatiere' => $ficheMatiere,
                 'formation' => $formation,
                 'typeDiplome' => $typeDiplome,
                 'bccs' => $bccs,
-                'titre' => 'Fiche EC/matière '.$ficheMatiere->getLibelle(),
+                'titre' => 'Fiche EC/matière ' . $ficheMatiere->getLibelle(),
             ],
-            'dpe_fiche_matiere_'.$ficheMatiere->getLibelle()
+            'dpe_fiche_matiere_' . $ficheMatiere->getLibelle()
         );
     }
 
@@ -77,7 +83,7 @@ class FicheMatiereExportController extends AbstractController
         $dompdf->loadHtml($html);
         $dompdf->render();
 
-        $dompdf->stream('FichesMatieres'.$parcours->getLibelle(), ["Attachment" => true]);
+        $dompdf->stream('FichesMatieres' . $parcours->getLibelle(), ["Attachment" => true]);
     }
 
     #[Route('/fiche-matiere/export/zip/{parcours}', name: 'fiche_matiere_export_zip')]
