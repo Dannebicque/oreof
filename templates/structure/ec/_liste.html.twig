@@ -68,7 +68,12 @@
                                                        title="Fiche matière/EC mutualisée globalement"></i></p>
                                                 {% endif %}
                                             {% else %}
-                                                {{ ec.texteEcLibre }}
+                                                {{ ec.libelle == null ? 'Définir le libellé' : ec.libelle }} <i
+                                                    class="fal fa-question-circle ms-1"
+                                                    data-controller="tooltip"
+                                                    data-tooltip-placement-value="bottom"
+                                                    aria-label="{{ ec.texteEcLibre }}"
+                                                    data-bs-original-title="{{ ec.texteEcLibre }}"></i>
                                             {% endif %}
                                         </div>
 
@@ -507,8 +512,12 @@
                                                             </p>
                                                         {% endif %}
                                                     {% else %}
-                                                        {{ ece.texteEcLibre }}
-                                                        <span class="badge bg-info">(EC Libre)</span>
+                                                        {{ ece.libelle == null ? 'Définir le libellé' : ece.libelle }}
+                                                        <i class="fal fa-question-circle ms-1"
+                                                           data-controller="tooltip"
+                                                           data-tooltip-placement-value="bottom"
+                                                           aria-label="{{ ece.texteEcLibre }}"
+                                                           data-bs-original-title="{{ ece.texteEcLibre }}"></i>
                                                     {% endif %}
                                                 </div>
                                                 <div class="col-md-1 d-flex flex-column justify-content-center">
@@ -533,7 +542,7 @@
                                                                 {% endif %}
                                                             </a>
                                                         {% else %}
-                                                            {{ ece.texteEcLibre }} (EC Libre)
+                                                            <span class="badge bg-info">EC Libre</span>
                                                         {% endif %}
                                                     {% endif %}
                                                 </div>

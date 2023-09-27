@@ -1,6 +1,18 @@
 <input type="hidden" id="element_constitutif_choixEc" value="libre">
 
 <div class="mt-2">
+    <label for="ficheMatiereLibreLibelle" class="form-label">
+        {{ 'ec_manage.labels.fiche_matiere_titre_libre_edit.label'|trans({}, 'form') }}
+        <i class="fal fa-question-circle ms-1"
+           data-controller="tooltip"
+           data-tooltip-placement-value="bottom"
+           aria-label="{{ 'ec_manage.helps.fiche_matiere_titre_libre_edit.help'|trans({}, 'help') }}"
+           data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_titre_libre_edit.help'|trans({}, 'help') }}"></i>
+    </label>
+    <input type="text" maxlength="255" id="ficheMatiereLibreLibelle" name="ficheMatiereLibreLibelle" class="form-control">
+</div>
+
+<div class="mt-2">
     <label for="ficheMatiereLibre" class="form-label">
         {{ 'ec_manage.labels.fiche_matiere_libelle_libre.label'|trans({}, 'form') }}
         <i class="fal fa-question-circle ms-1"

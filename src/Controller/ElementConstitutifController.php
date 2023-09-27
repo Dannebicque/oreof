@@ -192,6 +192,7 @@ class ElementConstitutifController extends AbstractController
             } else {
                 $lastEc = $ecOrdre->getOrdreSuivant($ue);
                 $elementConstitutif->setTexteEcLibre($request->request->get('ficheMatiereLibre'));
+                $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibreLibelle'));
                 $elementConstitutif->setOrdre($lastEc);
                 $elementConstitutif->genereCode();
                 $elementConstitutifRepository->save($elementConstitutif, true);
@@ -363,6 +364,12 @@ class ElementConstitutifController extends AbstractController
                     $ficheMatiereRepository->save($ficheMatiere, true);
                 }
                 $elementConstitutif->setFicheMatiere($ficheMatiere);
+            } elseif ($elementConstitutif->getNatureUeEc()?->isLibre() === true) {
+                $elementConstitutif->setTexteEcLibre($request->request->get('ficheMatiereLibre'));
+                $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibreLibelle'));
+                //todo: supprimer les EC enfants le cas échéant.
+                //todo: supprimer MCCC...
+
             } elseif ($elementConstitutif->getNatureUeEc()?->isChoix() === true) {
                 $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibre'));
                 $elementConstitutif->setFicheMatiere(null);
@@ -399,8 +406,6 @@ class ElementConstitutifController extends AbstractController
                         $elementConstitutifRepository->save($ec, true);
                     }
                 }
-            } else {
-                $elementConstitutif->setTexteEcLibre($request->request->get('ficheMatiereLibre'));
             }
 
             $elementConstitutif->genereCode();
@@ -440,6 +445,7 @@ class ElementConstitutifController extends AbstractController
                 $natureEc = $natureUeEcRepository->find(9);
                 $elementConstitutif->setNatureUeEc($natureEc);
                 $elementConstitutif->setTexteEcLibre($request->request->get('ficheMatiereLibre'));
+                $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibelle'));
                 $elementConstitutif->setFicheMatiere(null);
             } else {
                 if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {

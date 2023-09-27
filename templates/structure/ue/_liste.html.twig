@@ -37,7 +37,7 @@
             <div>{# class="scroll-out" #}
                 {% for ue in ues %}
                     {% set raccroche = ue.ueRaccrochee != null %}
-                    {% if (raccroche and ue.ueRaccrochee != null and ue.ueRaccrochee.ue != null and ue.ueRaccrochee.ue.ueParent == null) or (not raccroche and ue.ueParent==null) %}
+                    {% if (raccroche and ue.ueRaccrochee.ue != null and ue.ueRaccrochee.ue.ueParent == null) or (not raccroche and ue.ueParent==null) %}
                         <div {{ stimulus_controller('structure--ue', {
                             ue:ue.id,
                             parcours:parcours.id,
@@ -59,7 +59,7 @@
                                                     {{ ue.display(parcours) }}{% if ue.libelle != null %}</abbr>{% endif %}
                                                 {% endif %}
 
-                                                {% if ue.ueRaccrochee != null %}
+                                                {% if raccroche != null %}
                                                 <i class="fal fa-link"
                                                    data-controller="tooltip"
                                                    data-tooltip-placement-value="bottom"
