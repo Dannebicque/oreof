@@ -17,7 +17,7 @@ abstract class GetElementConstitutif
 {
     public static function getElementConstitutif(ElementConstitutif $elementConstitutif, bool $raccroche)
     {
-        if ($raccroche && $elementConstitutif->isSynchroMccc()) {
+        if ($raccroche) {
             foreach ($elementConstitutif->getFicheMatiere()?->getParcours()?->getElementConstitutifs() as $ec) {
                 if ($ec->getFicheMatiere()?->getId() === $elementConstitutif->getFicheMatiere()?->getId()) {
                     return $ec;

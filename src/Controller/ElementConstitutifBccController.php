@@ -10,6 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\EcOrdre;
+use App\Classes\GetElementConstitutif;
 use App\Classes\JsonReponse;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
@@ -55,6 +56,7 @@ class ElementConstitutifBccController extends AbstractController
         Parcours                           $parcours
     ): Response {
         $formation = $elementConstitutif->getParcours()?->getFormation();
+        $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours() !== $parcours;
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
         }
@@ -110,9 +112,9 @@ class ElementConstitutifBccController extends AbstractController
                     'parcours' => $parcours
                 ]);
             }
-        }
-        else {
-            if ($request->isMethod('POST')) {
+        } else {
+            if ($request->isMethod('POST') &&
+                ($elementConstitutif->isSynchroBcc() === false || $elementConstitutif->getParcours()->getid() === $parcours->getId())) {
                 $data = JsonRequest::getFromRequest($request);
                 if ($data['action'] === 'addCompetence') {
                     $competence = $competenceRepository->find($data['value']);
@@ -142,21 +144,51 @@ class ElementConstitutifBccController extends AbstractController
 
             $ecBccs = [];
             $ecComps = [];
-            //tester si BUT ou autre...
+            $bccs = $blocCompetenceRepository->findByParcours($parcours);
 
-            if (($ficheMatiere !== null && $ficheMatiere->getParcours()?->getId() === $parcours->getId())) {
-                foreach ($ficheMatiere->getCompetences() as $competence) {
-                    $ecComps[] = $competence->getId();
-                    $ecBccs[] = $competence->getBlocCompetence()?->getId();
+            if ($elementConstitutif->isSynchroBcc() === false ||
+                $elementConstitutif->getParcours()->getid() === $parcours->getId()
+            ) {
+                $editable= true;
+                if (($ficheMatiere !== null && $ficheMatiere->getParcours()?->getId() === $parcours->getId())) {
+                    foreach ($ficheMatiere->getCompetences() as $competence) {
+                        $ecComps[] = $competence->getId();
+                        $ecBccs[] = $competence->getBlocCompetence()?->getId();
+                    }
+                } else {
+                    foreach ($elementConstitutif->getCompetences() as $competence) {
+                        $ecComps[] = $competence->getId();
+                        $ecBccs[] = $competence->getBlocCompetence()?->getId();
+                    }
                 }
             } else {
-                foreach ($elementConstitutif->getCompetences() as $competence) {
-                    $ecComps[] = $competence->getId();
-                    $ecBccs[] = $competence->getBlocCompetence()?->getId();
+                $editable = false;
+                //faire le lien entre le parcours d'origine et le parcours en cours via le code des compétences
+                // competences du parcours
+                $tabCompetences = [];
+                foreach ($bccs as $bcc) {
+                    foreach ($bcc->getCompetences() as $competence) {
+                        $tabCompetences[$competence->getCode()] = $competence;
+                    }
+                }
+
+                // competences de l'EC du parcours d'origine
+                $ecParcours = GetElementConstitutif::getElementConstitutif($elementConstitutif, $raccroche);
+
+                if (($ecParcours->getFicheMatiere() !== null && $ecParcours->getFicheMatiere()->getParcours()?->getId() === $parcours->getId())) {
+                    $competences = $ecParcours->getCompetences();;
+                } else {
+                    $competences = $ecParcours->getFicheMatiere()->getCompetences();
+                }
+                //on fait le lien entre la compétence et le code
+                foreach ($competences as $competence) {
+                    if (array_key_exists($competence->getCode(), $tabCompetences)) {
+                        $ecComps[] = $tabCompetences[$competence->getCode()]->getId();
+                        $ecBccs[] = $tabCompetences[$competence->getCode()]->getBlocCompetence()?->getId();
+                    }
                 }
             }
 
-             $bccs = $blocCompetenceRepository->findByParcours($parcours);
 
             if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
                 $this->isGranted('CAN_PARCOURS_EDIT_MY', $parcours)) {
@@ -166,7 +198,9 @@ class ElementConstitutifBccController extends AbstractController
                     'wizard' => false,
                     'ecBccs' => array_flip(array_unique($ecBccs)),
                     'ecComps' => array_flip($ecComps),
-                    'parcours' => $parcours
+                    'parcours' => $parcours,
+                    'raccroche' => $raccroche,
+                    'editable' => $editable
                 ]);
             }
 

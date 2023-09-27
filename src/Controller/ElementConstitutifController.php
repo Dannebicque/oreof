@@ -489,7 +489,8 @@ class ElementConstitutifController extends AbstractController
 //            'ROLE_FORMATION_EDIT_MY',
 //            $elementConstitutif->getParcours()->getFormation()
 //        )) { //todo: ajouter le workflow...
-        $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours() !== $parcours;
+
+        $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $ecHeures = GetElementConstitutif::getElementConstitutifHeures($elementConstitutif, $raccroche);
 
         $form = $this->createForm(EcStep4Type::class, $ecHeures, [
@@ -501,7 +502,10 @@ class ElementConstitutifController extends AbstractController
             ),
         ]);
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() &&
+            ($elementConstitutif->isSynchroHeures() === false ||
+            $elementConstitutif->getParcours()?->getId() === $parcours->getId())
+        ) {
             if (array_key_exists('heuresEnfantsIdentiques', $request->request->all()['ec_step4'])) {
                 if ($elementConstitutif->getEcParent() !== null) {
                     $elementConstitutif->getEcParent()->setHeuresEnfantsIdentiques((bool)$request->request->all()['ec_step4']['heuresEnfantsIdentiques']);
@@ -522,7 +526,8 @@ class ElementConstitutifController extends AbstractController
         return $this->render('element_constitutif/_structureEcModal.html.twig', [
             'ec' => $elementConstitutif,
             'form' => $form->createView(),
-            'raccroche' => $raccroche
+            'raccroche' => $raccroche,
+            'parcours' => $parcours
         ]);
         // }
 //

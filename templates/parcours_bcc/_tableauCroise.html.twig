@@ -63,7 +63,9 @@
                                     {% for ec in ue.elementConstitutifs %}
                                         <td class="text-center">
                                             {% set checked = "" %}
-                                            {% if ec.ficheMatiere != null and ec.ficheMatiere.parcours.id == parcours.id %}
+                                            {% if ec.ficheMatiere != null and
+                                                ec.ficheMatiere.parcours != null and
+                                                ec.ficheMatiere.parcours.id == parcours.id %}
                                                 {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
                                                     {% set checked = "X" %}
                                                 {% endif %}
@@ -93,7 +95,9 @@
                                         {% for ec in uee.elementConstitutifs %}
                                             <td class="text-center">
                                                 {% set checked = "" %}
-                                                {% if ec.ficheMatiere != null and ec.ficheMatiere.parcours.id == parcours.id %}
+                                                {% if ec.ficheMatiere != null and
+                                                    ec.ficheMatiere.parcours != null and
+                                                    ec.ficheMatiere.parcours.id == parcours.id %}
                                                     {% if competence.ficheMatieress.contains(ec.ficheMatiere) %}
                                                         {% set checked = "X" %}
                                                     {% endif %}

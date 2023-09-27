@@ -6,7 +6,6 @@
       action="{{ path('app_element_constitutif_mccc', {id:ec.id, parcours:parcours.id}) }}" {{ stimulus_controller('ec--mccc') }}>
     {% if typeDiplome.libelleCourt != 'BUT' %}
         {% if raccroche == true %}
-
             <div class="alert alert-info">
                 <div class="row">
                     {% if isMcccImpose == false and isEctsImpose == false %}
@@ -147,7 +146,7 @@
         </div>
     {% endif %}
 
-    {{ include('typeDiplome/mccc/'~templateForm, {raccroche: ec.synchroMccc}) }}
+    {{ include('typeDiplome/mccc/'~templateForm, {raccroche: ec.synchroMccc and raccroche }) }}
 
     <button type="submit" class="btn btn-success"
             {{ stimulus_action('base','sauvegardeFormModal', 'click') }}

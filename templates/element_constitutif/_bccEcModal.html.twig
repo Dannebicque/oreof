@@ -2,10 +2,54 @@
     url: path('app_element_constitutif_bcc', {id:ec.id, parcours: parcours.id}),
     updateStep: false
 }) }}>
+    {% if raccroche == true %}
+        <div class="alert alert-info">
+            <div class="row">
+                    <div class="col-12">
+                        <p>Cet EC est raccroché, vous pouvez modifier les éléments librement, ou bien les
+                            synchroniser ou recopier depuis l'EC d'origine.</p>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox"
+                                   id="synchroBcc"
+                                   name="synchroBcc"
+                                    {{ stimulus_action('fichematiere--step3', 'synchroBcc', 'change', {
+                                        ec:ec.id
+                                    }) }}
+                                    {% if ec.synchroBcc == true %}checked{% endif %}
+                            >
+                            <label class="form-check-label"
+                                   for="synchroBcc"> Raccrocher les BCC
+                                <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                                   data-tooltip-placement-value="bottom"
+                                   title="{{ 'parcours_bcc.helps.synchroBcc'|trans({}, 'help') }}"></i>
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-2">OU</div>
+                    <div class="col-5">
+                        <button class="btn text-primary">Recopier les BCC
+                            <i class="fal fa-question-circle ms-1"
+                                  data-controller="tooltip"
+                                  data-tooltip-placement-value="bottom"
+                                  title="{{ 'parcours_bcc.helps.synchroBcc'|trans({}, 'help') }}"></i>
+                        </button>
+                    </div>
+                    {% if ec.synchroBcc == true %}
+                        Les BCC sont raccrochée depuis l'EC du parcours "...". Le raccrochement se fait sur le code de la compétence. Les données ne sont pas modifiables.
+                    {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+
     {% for bcc in bccs %}
         <div class=" mb-2">
             <input type="checkbox" name="ec[bccs][]" value="{{ bcc.id }}" id="bcc_{{ bcc.id }}"
                    {% if ecBccs[bcc.id] is defined %}checked{% endif %}
+                    {% if not editable %}disabled{% endif %}
                     {{ stimulus_action('fichematiere--step3', 'changeBcc', 'change', {id:bcc.id}) }}
             >
             <label for="bcc_{{ bcc.id }}"><strong>{{ bcc.display }}</strong></label>
@@ -14,6 +58,7 @@
                 {% for competence in bcc.competences %}
                     <div>
                         <input type="checkbox" name="ec[competences][]"
+                               {% if not editable %}disabled{% endif %}
                                {% if ecComps[competence.id] is defined %}checked{% endif %}
                                value="{{ competence.id }}"
                                id="competence_{{ competence.id }}"

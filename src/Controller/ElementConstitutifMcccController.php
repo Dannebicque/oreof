@@ -65,7 +65,11 @@ class ElementConstitutifMcccController extends AbstractController
             $this->isGranted('CAN_PARCOURS_EDIT_MY', $parcours)) {
 
             if ($request->isMethod('POST')) {
-                if ($elementConstitutif->isSynchroEcts() === false && $elementConstitutif->getFicheMatiere()?->isEctsImpose() === false) {
+                if (
+                    ($elementConstitutif->isSynchroEcts() === false &&
+                    $elementConstitutif->getFicheMatiere()?->isEctsImpose() === false) ||
+                    $elementConstitutif->getParcours()->getId() === $parcours->getId()
+                ) {
                     if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
                         $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
                     } else {
@@ -74,7 +78,9 @@ class ElementConstitutifMcccController extends AbstractController
                     $entityManager->flush();
                 }
 
-                if ($elementConstitutif->isSynchroMccc() === false && $elementConstitutif->getFicheMatiere()?->isMcccImpose() === false) {
+                if (($elementConstitutif->isSynchroMccc() === false
+                    && $elementConstitutif->getFicheMatiere()?->isMcccImpose() === false) ||
+                    $elementConstitutif->getParcours()->getId() === $parcours->getId()) {
                     if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
                         $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
                     } else {

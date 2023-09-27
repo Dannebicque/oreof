@@ -42,7 +42,7 @@
     </div>
 
 {% endif %}
-
+{% set disabled = ec.synchroHeures and ec.parcours.id != parcours.id %}
 {% if ec.parcours.modalitesEnseignement == null %}
     {{ component('alerte', {type:'warning', message:'Vous devez d\'abord définir les modalités d\'enseignement du
 parcours.'}) }}
@@ -55,9 +55,9 @@ parcours.'}) }}
 %}none{% endif %}">
         <h3>Volume Présentiel</h3>
         <div class="row">
-            <div class="col-4">{{ form_row(form.volumeCmPresentiel, {'disabled': ec.synchroHeures}) }}</div>
-            <div class="col-4">{{ form_row(form.volumeTdPresentiel, {'disabled': ec.synchroHeures}) }}</div>
-            <div class="col-4">{{ form_row(form.volumeTpPresentiel, {'disabled': ec.synchroHeures}) }}</div>
+            <div class="col-4">{{ form_row(form.volumeCmPresentiel, {'disabled': disabled}) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTdPresentiel, {'disabled': disabled}) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTpPresentiel, {'disabled': disabled}) }}</div>
         </div>
     </div>
 
@@ -66,16 +66,16 @@ parcours.'}) }}
 %}none{% endif %}">
         <h3>Volume Distanciel</h3>
         <div class="row">
-            <div class="col-4">{{ form_row(form.volumeCmDistanciel, {'disabled': ec.synchroHeures}) }}</div>
-            <div class="col-4">{{ form_row(form.volumeTdDistanciel, {'disabled': ec.synchroHeures}) }}</div>
-            <div class="col-4">{{ form_row(form.volumeTpDistanciel, {'disabled': ec.synchroHeures}) }}</div>
+            <div class="col-4">{{ form_row(form.volumeCmDistanciel, {'disabled': disabled}) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTdDistanciel, {'disabled': disabled}) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTpDistanciel, {'disabled': disabled}) }}</div>
         </div>
     </div>
 
     <div>
         <h3>Volume horaire Travail Etudiant (TE)</h3>
         <div class="row">
-            <div class="col-4">{{ form_row(form.volumeTe, {'disabled': ec.synchroHeures}) }}</div>
+            <div class="col-4">{{ form_row(form.volumeTe, {'disabled': disabled}) }}</div>
             <div class="col-4"></div>
             <div class="col-4"></div>
         </div>
