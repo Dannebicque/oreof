@@ -69,7 +69,7 @@ export default class extends Controller {
   async synchroBcc(event) {
     const body = new FormData()
     body.append('value', event.target.checked)
-    body.append('field', 'synchroMccc')
+    body.append('field', 'synchroBcc')
     body.append('ec', event.params.ec)
 
     await fetch(this.urlUpdateValue, {
