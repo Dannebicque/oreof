@@ -91,7 +91,7 @@
                         </div>
                     {% else %}
                         {% set semestre = semestres[i] %}
-                        {% if semestre.semestre.semestreRaccroche != null %}
+                        {% if semestre.semestre != null and semestre.semestre.semestreRaccroche != null %}
                             {% set sem = semestre.semestre.semestreRaccroche.semestre %}
                             {% set raccroche = true %}
                         {% else %}
@@ -110,7 +110,7 @@
                                                    data-controller="tooltip"
                                                    data-tooltip-placement-value="bottom"
                                                    title="Raccrochée au semestre {{ sem.display }}"></i>{% endif %}
-                                                {% if semestre.semestre.semestreMutualisables|length > 0 %}
+                                                {% if semestre.semestre != null and semestre.semestre.semestreMutualisables|length > 0 %}
                                                     <i class="fal fa-share-nodes"
                                                        data-controller="tooltip"
                                                        data-tooltip-placement-value="bottom"
