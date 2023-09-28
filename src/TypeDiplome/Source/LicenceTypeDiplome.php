@@ -132,8 +132,10 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
                 $totPourcentage = 0.0;
                 //supprimer les MCCC en trop
                 foreach ($mcccs as $mccc) {
-                    if (!array_key_exists($mccc->getNumeroSession(), $pourcentages)) {
-                        $this->entityManager->remove($mccc);
+                    if (is_array($pourcentages)) {
+                        if (!array_key_exists($mccc->getNumeroSession(), $pourcentages)) {
+                            $this->entityManager->remove($mccc);
+                        }
                     }
                 }
 
@@ -413,7 +415,6 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
 
     private function verificationMccc(ElementConstitutif|FicheMatiere $ec, array $mcccs, $type = 'L'): bool
     {
-
         if (count($mcccs) === 0) {
             return false;
         }
