@@ -69,7 +69,7 @@ class ParcoursStep2Type extends AbstractType
 
         //alors zone de saisi
         //si L ou M, nombre d'heures
-        if ($typeDiplome->isHasProjet() === true) {
+        //if ($typeDiplome->isHasProjet() === true) {
             $builder->
             add('hasProjet', YesNoType::class, [
                 'attr' => ['data-action' => 'change->parcours--step2#changeProjet'],
@@ -91,7 +91,7 @@ class ParcoursStep2Type extends AbstractType
                         'class' => 'col-sm-3',
                     ],
                 ]);
-        }
+       // }
 
        // if ($typeDiplome->isHasMemoire() === true) {
             $builder->add('hasMemoire', YesNoType::class, [
