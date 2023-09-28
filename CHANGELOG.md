@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.18](https://github.com/Dannebicque/oreof/compare/v1.14.17...v1.14.18) (2023-09-28)
+
+
+### Features
+
+* Formulaire erreur sur description ([8b6ab32](https://github.com/Dannebicque/oreof/commit/8b6ab3233a965261f9f442a3ce77f89cec15a18c))
+* MCCC BUT modèle ([de3f0f9](https://github.com/Dannebicque/oreof/commit/de3f0f905a605cb00f7a90075e59edfc362d1d47))
+
+
+### Bug Fixes
+
+* Si data vides ([6220df2](https://github.com/Dannebicque/oreof/commit/6220df2321e326bedeb51fc4c11c5f287e42eae4))
+
 ### [1.14.17](https://github.com/Dannebicque/oreof/compare/v1.14.16...v1.14.17) (2023-09-27)
 
 
