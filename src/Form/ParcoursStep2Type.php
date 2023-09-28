@@ -41,7 +41,7 @@ class ParcoursStep2Type extends AbstractType
                 'expanded' => false,
             ]);
 
-        if ($typeDiplome->isHasStage() === true) {
+       // if ($typeDiplome->isHasStage() === true) {
             $builder->add('hasStage', YesNoType::class, [
                 'help' => '-',
                 'attr' => ['data-action' => 'change->parcours--step2#changeStage'],
@@ -65,11 +65,11 @@ class ParcoursStep2Type extends AbstractType
                         'class' => 'col-sm-3',
                     ],
                 ]);
-        }
+       // }
 
         //alors zone de saisi
         //si L ou M, nombre d'heures
-        if ($typeDiplome->isHasStage() === true) {
+        if ($typeDiplome->isHasProjet() === true) {
             $builder->
             add('hasProjet', YesNoType::class, [
                 'attr' => ['data-action' => 'change->parcours--step2#changeProjet'],
@@ -93,7 +93,7 @@ class ParcoursStep2Type extends AbstractType
                 ]);
         }
 
-        if ($typeDiplome->isHasStage() === true) {
+       // if ($typeDiplome->isHasMemoire() === true) {
             $builder->add('hasMemoire', YesNoType::class, [
                 'attr' => ['data-action' => 'change->parcours--step2#changeMemoire'],
             ])
@@ -105,7 +105,7 @@ class ParcoursStep2Type extends AbstractType
                         'data-action' => 'change->parcours--step2#saveMemoireText'
                     ],
                 ]);
-        }
+       // }
 
 
         if ($typeDiplome !== null && $typeDiplome->isHasSituationPro()) {
@@ -115,14 +115,14 @@ class ParcoursStep2Type extends AbstractType
                     'data' => (bool)$typeDiplome?->isHasSituationPro(),
                 ])
                 ->add('nbHeuresSituationPro', NumberType::class, [
-                'html5' => true,
-                'scale' => 1,
-                'input_suffix_text' => 'heure(s)',
-                'attr' => ['data-action' => 'change->parcours--step2#changeNbHeuresSituationPro'],
-                'row_attr' => [
-                    'class' => 'col-sm-3',
-                ],
-            ])
+                    'html5' => true,
+                    'scale' => 1,
+                    'input_suffix_text' => 'heure(s)',
+                    'attr' => ['data-action' => 'change->parcours--step2#changeNbHeuresSituationPro'],
+                    'row_attr' => [
+                        'class' => 'col-sm-3',
+                    ],
+                ])
                 ->add('situationProText', TextareaAutoSaveType::class, [
                     'help' => '-',
                     'attr' => [
