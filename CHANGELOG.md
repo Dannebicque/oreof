@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.19](https://github.com/Dannebicque/oreof/compare/v1.14.18...v1.14.19) (2023-09-28)
+
+
+### Bug Fixes
+
+* Si data vides ([18af25c](https://github.com/Dannebicque/oreof/commit/18af25c0b54a1a6028a27e1ed89b7f9a766af023))
+
 ### [1.14.18](https://github.com/Dannebicque/oreof/compare/v1.14.17...v1.14.18) (2023-09-28)
 
 
