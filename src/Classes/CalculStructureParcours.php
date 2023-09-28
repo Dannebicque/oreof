@@ -22,32 +22,40 @@ class CalculStructureParcours
 
         foreach ($parcours->getSemestreParcours() as $semestreParcours) {
             //todo: vérifier si raccrochée ou non pour prendre les bonnes UES
-            $dtoSemestre = new HeuresEctsSemestre();
-            foreach ($semestreParcours->getSemestre()->getUes() as $ue) {
-                if ($ue->getUeRaccrochee() !== null) {
-                    $ue = $ue->getUeRaccrochee()->getUe();
-                }
-                if ($ue->getUeParent() === null) {
-                    $dtoUe = new HeuresEctsUe();//todo: les ECTS peuvent être sur l'UE
-                    foreach ($ue->getElementConstitutifs() as $elementConstitutif) {
-                        $dtoUe->addEc($elementConstitutif); //todo: les gérer les enfants et les heures communes ou pas
-                    }
-                    $dtoSemestre->addUe($ue->getId(), $dtoUe);
-
-                    foreach ($ue->getUeEnfants() as $ueEnfant) {
-                        if ($ueEnfant->getUeRaccrochee() !== null) {
-                            $ueEnfant = $ueEnfant->getUeRaccrochee()->getUe();
-                        }
-                        $dtoUeEnfant = new HeuresEctsUe();
-                        foreach ($ueEnfant->getElementConstitutifs() as $elementConstitutif) {
-                            $dtoUeEnfant->addEc($elementConstitutif);
-                        }
-                        $dtoSemestre->addUe($ueEnfant->getId(), $dtoUeEnfant);
-                    }
-
-                }
+            if ($semestreParcours->getSemestre()->getSemestreRaccroche() !== null) {
+                $semestre = $semestreParcours->getSemestre()->getSemestreRaccroche()->getSemestre();
+            } else {
+                $semestre = $semestreParcours->getSemestre();
             }
-            $dto->addSemestre($semestreParcours->getId(), $dtoSemestre);
+
+
+            $dtoSemestre = new HeuresEctsSemestre();
+            if ($semestre !== null) {
+                foreach ($semestre->getUes() as $ue) {
+                    if ($ue->getUeRaccrochee() !== null) {
+                        $ue = $ue->getUeRaccrochee()->getUe();
+                    }
+                    if ($ue !== null && $ue->getUeParent() === null) {
+                        $dtoUe = new HeuresEctsUe();//todo: les ECTS peuvent être sur l'UE
+                        foreach ($ue->getElementConstitutifs() as $elementConstitutif) {
+                            $dtoUe->addEc($elementConstitutif); //todo: les gérer les enfants et les heures communes ou pas
+                        }
+                        $dtoSemestre->addUe($ue->getId(), $dtoUe);
+
+                        foreach ($ue->getUeEnfants() as $ueEnfant) {
+                            if ($ueEnfant !== null && $ueEnfant->getUeRaccrochee() !== null) {
+                                $ueEnfant = $ueEnfant->getUeRaccrochee()->getUe();
+                            }
+                            $dtoUeEnfant = new HeuresEctsUe();
+                            foreach ($ueEnfant->getElementConstitutifs() as $elementConstitutif) {
+                                $dtoUeEnfant->addEc($elementConstitutif);
+                            }
+                            $dtoSemestre->addUe($ueEnfant->getId(), $dtoUeEnfant);
+                        }
+                    }
+                }
+                $dto->addSemestre($semestreParcours->getId(), $dtoSemestre);
+            }
         }
 
         return $dto;
