@@ -445,7 +445,7 @@ class ElementConstitutifController extends AbstractController
                 $natureEc = $natureUeEcRepository->find(9);
                 $elementConstitutif->setNatureUeEc($natureEc);
                 $elementConstitutif->setTexteEcLibre($request->request->get('ficheMatiereLibre'));
-                $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibelle'));
+                $elementConstitutif->setLibelle($request->request->get('ficheMatiereLibreLibelle'));
                 $elementConstitutif->setFicheMatiere(null);
             } else {
                 if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
