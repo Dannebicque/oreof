@@ -169,7 +169,7 @@
         </div>
     {% endif %}
 
-    {% if ec.natureUeEc != null and ec.natureUeEc.isLibre == false %}
+    {% if (ec.natureUeEc != null and ec.natureUeEc.isLibre == false) or ec.natureUeEc == null %}
         {{ include('typeDiplome/mccc/'~templateForm, {raccroche: ec.synchroMccc and raccroche }) }}
     {% endif %}
     <button type="submit" class="btn btn-success"
