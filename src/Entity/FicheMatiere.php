@@ -733,11 +733,14 @@ class FicheMatiere
         $cmPresentiel = $this->volumeCmPresentiel ?? 0.0;
         $tdPresentiel = $this->volumeTdPresentiel ?? 0.0;
         $tpPresentiel = $this->volumeTpPresentiel ?? 0.0;
+        $cmDistanciel = $this->volumeCmDistanciel ?? 0.0;
+        $tdDistanciel = $this->volumeTdDistanciel ?? 0.0;
+        $tpDistanciel = $this->volumeTpDistanciel ?? 0.0;
         $volumeTe = $this->volumeTe ?? 0.0;
 
-        $nbHeures = $cmPresentiel + $tdPresentiel + $tpPresentiel + $volumeTe;
+        $nbHeures = $cmPresentiel + $tdPresentiel + $tpPresentiel + $volumeTe + $cmDistanciel + $tdDistanciel + $tpDistanciel;
 
-        if ($nbHeures === 0.0 && $this->sansHeures === false) {
+        if ($nbHeures === 0.0 && $this->isSansHeures() === false) {
             return 'À compléter';
         }
 
@@ -792,7 +795,7 @@ class FicheMatiere
 
     public function isSansHeures(): ?bool
     {
-        return $this->sansHeures;
+        return $this->sansHeures ?? false;
     }
 
     public function setSansHeures(?bool $sansHeures): static

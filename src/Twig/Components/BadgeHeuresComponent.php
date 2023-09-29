@@ -24,15 +24,19 @@ final class BadgeHeuresComponent
     #[PostMount]
     public function mounted(): void
     {
-        $this->isSynchroHeures = $this->elementConstitutif->isSynchroHeures() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours->getId();
-        if ($this->isSynchroHeures) {
-            $raccroche = GetElementConstitutif::isRaccroche($this->elementConstitutif, $this->parcours);
-            $ec = GetElementConstitutif::getElementConstitutif($this->elementConstitutif, $raccroche);
-            $this->etatHeuresComplet = $ec->etatStructure() === 'Complet';
+        if ($this->elementConstitutif->getFicheMatiere() !== null && $this->elementConstitutif->getFicheMatiere()->isVolumesHorairesImpose() === true) {
+            $this->etatHeuresComplet = $this->elementConstitutif->getFicheMatiere()->etatStructure() === 'Complet';
+            $this->isSynchroHeures = true;
         } else {
-            $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
-            //todo: faux positif si Compétences mais d'un autre parcours ? Sans que ce soit attaché pour autant ??
+            $this->isSynchroHeures = $this->elementConstitutif->isSynchroHeures() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours->getId();
+            if ($this->isSynchroHeures) {
+                $raccroche = GetElementConstitutif::isRaccroche($this->elementConstitutif, $this->parcours);
+                $ec = GetElementConstitutif::getElementConstitutifHeures($this->elementConstitutif, $raccroche);
+                $this->etatHeuresComplet = $ec->etatStructure() === 'Complet';
+            } else {
+                $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
+                //todo: faux positif si Compétences mais d'un autre parcours ? Sans que ce soit attaché pour autant ??
+            }
         }
-
     }
 }
