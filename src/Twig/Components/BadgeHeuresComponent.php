@@ -35,7 +35,6 @@ final class BadgeHeuresComponent
                 $this->etatHeuresComplet = $ec->etatStructure() === 'Complet';
             } else {
                 $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';
-                //todo: faux positif si Compétences mais d'un autre parcours ? Sans que ce soit attaché pour autant ??
             }
         }
     }

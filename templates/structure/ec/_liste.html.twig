@@ -329,32 +329,13 @@
                                             {% if ec.ecEnfants|length > 0 and ec.heuresEnfantsIdentiques == false %}
                                                 <span class="badge bg-info ms-1 me-1">Vol. Horaire des enfants</span>
                                             {% else %}
-                                                <button
-                                                        {% if deplacer is defined and deplacer == true and editable ==
-                                                            true %}
-                                                            {{ stimulus_controller('modal', {
-                                                                size: 'lg',
-                                                                modalTitle: 'Volumes Horaires',
-                                                                nomEvenement: 'refreshListeEc' ,
-                                                                details: {ue: ue.id, parcours: parcours.id},
-                                                                modalUrl: path('app_element_constitutif_structure',{'id': ec.id, parcours:parcours.id}) }) }}
-                                                        {% else %}
-                                                            {{ stimulus_controller('modal', {
-                                                                size: 'lg',
-                                                                modalTitle: 'Volumes Horaires',
-                                                                modalUrl: path('app_element_constitutif_structure',{'id': ec.id, parcours:parcours.id}) }) }}
-                                                        {% endif %}
-                                                        data-action="click->modal#openModal"
-                                                        class="btn btn-sm btn-outline-info me-1"
-                                                        data-size="lg"
-                                                        data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom"
-                                                        title="Volumes Horaires"
-                                                >
-                                                    <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
-                            {{ ec.etatStructure }}
-                        </span>
-                                                </button>
+                                                {{ component('badge_heures', {
+                                                    elementConstitutif: ec,
+                                                    parcours: parcours,
+                                                    ue: ue,
+                                                    editable: true,
+                                                    deplacer: true,
+                                                }) }}
                                             {% endif %}
                                         </div>
                                         <div class="col-6 col-md-3 d-flex flex-column justify-content-center">
@@ -515,7 +496,7 @@
                                                     {% endif %}
                                                 </div>
                                                 <div class="col-md-1 d-flex flex-column justify-content-center">
-                                                    <div class="text-muted text-small d-md-none">bcc</div>
+                                                    <div class="text-muted text-small d-md-none">BCC</div>
                                                     {{ component('badge_bcc', {
                                                         elementConstitutif: ece,
                                                         parcours: parcours,
@@ -525,7 +506,7 @@
                                                     }) }}
                                                 </div>
                                                 <div class="col-md-1 d-flex flex-column justify-content-center">
-                                                    <div class="text-muted text-small d-md-none">mccc</div>
+                                                    <div class="text-muted text-small d-md-none">MCCC</div>
                                                     {{ component('badge_mccc', {
                                                         elementConstitutif: ece,
                                                         elementConstitutifParent: ec,
@@ -543,32 +524,13 @@
                                                         {% if ec.heuresEnfantsIdentiques == true %}
                                                             <span class="badge bg-info ms-1 me-1">Vol. horaires du parent</span>
                                                         {% else %}
-                                                            <button
-                                                                    {% if deplacer is defined and deplacer == true and editable ==
-                                                                        true %}
-                                                                        {{ stimulus_controller('modal', {
-                                                                            size: 'lg',
-                                                                            modalTitle: 'Volumes Horaires',
-                                                                            nomEvenement: 'refreshListeEc' ,
-                                                                            details: {ue: ue.id, parcours: parcours.id},
-                                                                            modalUrl: path('app_element_constitutif_structure',{'id': ece.id, parcours:parcours.id}) }) }}
-                                                                    {% else %}
-                                                                        {{ stimulus_controller('modal', {
-                                                                            size: 'lg',
-                                                                            modalTitle: 'Volumes Horaires',
-                                                                            modalUrl: path('app_element_constitutif_structure',{'id': ece.id, parcours:parcours.id}) }) }}
-                                                                    {% endif %}
-                                                                    data-action="click->modal#openModal"
-                                                                    class="btn btn-sm btn-outline-info  px-1"
-                                                                    data-size="lg"
-                                                                    data-bs-toggle="tooltip"
-                                                                    data-bs-placement="bottom"
-                                                                    title="Volumes Horaires"
-                                                            >
-                                                            <span class="badge bg-{% if ece.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
-                            Heures
-                        </span>
-                                                            </button>
+                                                            {{ component('badge_heures', {
+                                                                elementConstitutif: ece,
+                                                                parcours: parcours,
+                                                                ue: ue,
+                                                                editable: true,
+                                                                deplacer: true,
+                                                            }) }}
                                                         {% endif %}
                                                     {% endif %}
                                                 </div>
