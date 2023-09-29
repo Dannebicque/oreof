@@ -169,8 +169,9 @@
         </div>
     {% endif %}
 
-    {{ include('typeDiplome/mccc/'~templateForm, {raccroche: ec.synchroMccc and raccroche }) }}
-
+    {% if ec.natureUeEc != null and ec.natureUeEc.isLibre == false %}
+        {{ include('typeDiplome/mccc/'~templateForm, {raccroche: ec.synchroMccc and raccroche }) }}
+    {% endif %}
     <button type="submit" class="btn btn-success"
             {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
     >

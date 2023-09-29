@@ -54,6 +54,10 @@ abstract class GetElementConstitutif
             return self::getElementConstitutif($elementConstitutif, $raccroche)?->getEcts();
         }
 
+        if ($elementConstitutif->getEcParent() !== null) {
+            return $elementConstitutif->getEcParent()->getEcts();
+        }
+
         return $elementConstitutif->getEcts();
     }
 

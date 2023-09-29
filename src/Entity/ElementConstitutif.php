@@ -564,6 +564,16 @@ class ElementConstitutif
 
     public function getEtatMccc(): ?string
     {
+        if ($this->natureUeEc !== null && $this->natureUeEc->isLibre() === true) {
+            if (
+                ($this->ects !== null && $this->ects > 0.0) ||
+                ($this->ecParent !== null && $this->ecParent->getEcts() !== null && $this->ecParent->getEcts() > 0.0)
+            ) {
+                return 'Complet';
+            }
+            return 'A Saisir';
+        }
+
         if ($this->mcccs->count() === 0 && $this->ficheMatiere?->getMcccs()->count() === 0) {
             return 'A Saisir';
         }
