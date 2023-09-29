@@ -33,14 +33,14 @@
 
                         </div>
                         <div class="col-2">
-{#                            OU#}
+                            {#                            OU #}
                         </div>
                         <div class="col-5">
-{#                            <button class="btn text-primary">Recopier les ECTS <i class="fal fa-question-circle ms-1"#}
-{#                                                                                  data-controller="tooltip"#}
-{#                                                                                  data-tooltip-placement-value="bottom"#}
-{#                                                                                  title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i>#}
-{#                            </button>#}
+                            {#                            <button class="btn text-primary">Recopier les ECTS <i class="fal fa-question-circle ms-1" #}
+                            {#                                                                                  data-controller="tooltip" #}
+                            {#                                                                                  data-tooltip-placement-value="bottom" #}
+                            {#                                                                                  title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i> #}
+                            {#                            </button> #}
                         </div>
                         {% if ec.synchroEcts == true %}
                             Les ECTS sont raccrochées depuis l'EC du parcours "...". Les données ne sont pas modifiables.
@@ -65,14 +65,14 @@
 
                         </div>
                         <div class="col-2">
-{#                            OU#}
+                            {#                            OU #}
                         </div>
                         <div class="col-5">
-{#                            <button class="btn text-primary">Recopier les MCCC <i class="fal fa-question-circle ms-1"#}
-{#                                                                                  data-controller="tooltip"#}
-{#                                                                                  data-tooltip-placement-value="bottom"#}
-{#                                                                                  title="{{ 'parcours_ec.helps.recopieMccc'|trans({}, 'help') }}"></i>#}
-{#                            </button>#}
+                            {#                            <button class="btn text-primary">Recopier les MCCC <i class="fal fa-question-circle ms-1" #}
+                            {#                                                                                  data-controller="tooltip" #}
+                            {#                                                                                  data-tooltip-placement-value="bottom" #}
+                            {#                                                                                  title="{{ 'parcours_ec.helps.recopieMccc'|trans({}, 'help') }}"></i> #}
+                            {#                            </button> #}
                         </div>
                         {% if ec.synchroMccc == true %}
                             Les MCCC sont raccrochées depuis l'EC du parcours "...". Les données ne sont pas modifiables.
@@ -101,11 +101,32 @@
                 </label>
                 <div class="input-group">
                     <input type="number" id="ec_step4_ects" name="ec_step4[ects]"
-                           {% if isEctsImpose or (isEctsImpose == false and ec.synchroEcts) %}disabled{% endif %}
+                           {% if ec.synchroEcts %}disabled{% endif %}
                            value="{{ ects }}" min="0" max="60"
                            required="required" step="any" class="form-control">
                 </div>
             </div>
+        {% else %}
+            <div class="mb-2">
+                <label for="ec_step4_ects" class="form-label">
+                    {{ 'ec_step4.labels.ects'|trans({}, 'form') }}
+                    <span class="required"></span>
+                    <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                       data-tooltip-placement-value="bottom"
+                       title="{{ 'ec_step4.helps.ects'|trans({}, 'help') }}"></i>
+                </label>
+                <div class="input-group">
+                    <input type="number" id="ec_step4_ects" name="ec_step4[ects]"
+                           disabled
+                           value="{{ ects }}" min="0" max="60"
+                           required="required" step="any" class="form-control">
+                </div>
+            </div>
+            {% if ec.ecParent != null and isEctsImpose == false %}
+                <p>Les ECTS sont fixés par l'EC parent</p>
+            {% elseif isEctsImpose %}
+                <p>Les ECTS sont imposés par la fiche EC/matière</p>
+            {% endif %}
         {% endif %}
 
         {% if isMcccImpose == false %}

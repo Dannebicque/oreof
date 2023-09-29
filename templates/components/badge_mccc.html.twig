@@ -23,8 +23,9 @@
                 data-bs-placement="bottom"
                 title="Modalités de Contrôle des Connaissances et des Compétences"
         >
+            {% if this.texte == true%}<i class="fal fa-marker"></i>{% endif %}
                     <span class="badge bg-{% if this.etatMcccComplet == true %}success{% else %}warning{% endif %}">
-                    MCCC {% if this.isSynchroMccc %}<i class="fal fa-link"></i>{% endif %}
+               {% if this.texte == true%}{% if this.etatMcccComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}MCCC{% endif%} {% if this.isSynchroMccc %}<i class="fal fa-link"></i>{% endif %}
                 </span>
         </button>
     {% endif %}

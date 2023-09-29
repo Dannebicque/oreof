@@ -48,36 +48,41 @@
                             <tr>
                                 <th>{{ ec.display }}</th>
                                 <td>
-                                    {% if ec.ficheMatiere != null %}
-                                        {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false %}
-                                            <a
-                                                    href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
-                                                    class="btn btn-sm btn-outline-info"
-                                                    data-bs-toggle="tooltip"
-                                                    data-bs-placement="bottom"
-                                                    title="Modifier la fiche EC/matière"
-                                            >
-                                                <i class="fal fa-file"></i>
-                                                {% if ec.ficheMatiere.remplissage == 100 %}
-                                                    <span class="badge bg-success"> Complet</span>
+
+                                        {% if ec.natureUeEc != null and ec.natureUeEc.isLibre ==  true %}
+                                            <span class="badge bg-info">EC Libre</span>
+                                        {% elseif ec.ecParent == null and ec.natureUeEc != null and ec.natureUeEc.isChoix ==  true %}
+                                            <span class="badge bg-info">EC à choix</span>
+                                        {% elseif ec.ficheMatiere != null %}
+                                                {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false %}
+                                                    <a
+                                                            href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
+                                                            class="btn btn-sm btn-outline-info"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom"
+                                                            title="Modifier la fiche EC/matière"
+                                                    >
+                                                        <i class="fal fa-file"></i>
+                                                        {% if ec.ficheMatiere.remplissage == 100 %}
+                                                            <span class="badge bg-success"> Complet</span>
+                                                        {% else %}
+                                                            <span class="badge bg-warning"> À compléter</span>
+                                                        {% endif %}
+                                                    </a>
                                                 {% else %}
-                                                    <span class="badge bg-warning"> À compléter</span>
+                                                    <a
+                                                            href="{{ path('app_fiche_matiere_show',{slug: ec.ficheMatiere.slug}) }}"
+                                                            class="btn btn-sm btn-outline-info"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom"
+                                                            title="Voir la fiche EC/matière"
+                                                    >
+                                                        <span class="badge bg-info"> Voir la fiche</span>
+                                                    </a>
                                                 {% endif %}
-                                            </a>
-                                        {% else %}
-                                            <a
-                                                    href="{{ path('app_fiche_matiere_show',{slug: ec.ficheMatiere.slug}) }}"
-                                                    class="btn btn-sm btn-outline-info"
-                                                    data-bs-toggle="tooltip"
-                                                    data-bs-placement="bottom"
-                                                    title="Voir la fiche EC/matière"
-                                            >
-                                                <span class="badge bg-info"> Voir la fiche</span>
-                                            </a>
+                                            {% else %}
+                                                <span class="badge bg-danger"> Erreur</span>
                                         {% endif %}
-                                    {% else %}
-                                        <span class="badge bg-info">EC Libre</span>
-                                    {% endif %}
                                 </td>
                                 <td>
                                     <label for="typeEc_{{ ec.id }}" class="sr-only">Type EC</label>
@@ -102,67 +107,61 @@
                                         {% endfor %}
                                     </select>
                                 </td>
-                                <td>{{ ec.ects }}</td>
                                 <td>
-                                    <button
-
-                                            {{ stimulus_controller('modal', {
-                                                size: 'lg',
-                                                modalTitle: 'Modalités de Contrôle des Connaissances et des Compétences',
-                                                modalUrl: path('app_element_constitutif_mccc',{'id': ec.id, parcours:parcours.id}) }) }}
-                                            data-action="click->modal#openModal"
-                                            class="btn btn-sm btn-outline-info"
-                                            data-size="lg"
-                                            data-bs-toggle="tooltip"
-                                            data-bs-placement="bottom"
-                                            title="Modalités de Contrôle des Connaissances et des Compétences"
-                                    >
-                                        <i class="fal fa-marker"></i>
-                                        <span class="badge bg-{% if ec.etatMccc == 'Complet' %}success{% else %}warning{% endif %}">
-                            {{ ec.etatMccc }}
-                        </span>
-                                    </button>
+                                    {{ component('badge_ects', {
+                                        elementConstitutif: ec,
+                                        parcours: parcours,
+                                    }) }}
                                 </td>
                                 <td>
-                                    <button
-                                            {{ stimulus_controller('modal', {
-                                                size: 'lg',
-                                                modalTitle: 'Blocs de compétences',
-                                                modalUrl: path('app_element_constitutif_bcc',{id: ec.id,parcours: parcours.id}) }) }}
-
-                                            data-action="click->modal#openModal"
-                                            class="btn btn-sm btn-outline-info"
-                                            data-size="lg"
-                                            data-bs-toggle="tooltip"
-                                            data-bs-placement="bottom"
-                                            title="Blocs de compétences"
-                                    >
-                                        <i class="fal fa-ballot-check"></i>
-                                        <span class="badge bg-{% if ec.etatBcc(parcours) == 'Complet' %}success{% else %}warning{% endif %}">
-                            {{ ec.etatBcc(parcours) }}
-                        </span>
-                                    </button>
+                                    {{ component('badge_mccc', {
+                                        elementConstitutif: ec,
+                                        parcours: parcours,
+                                        ue: ue,
+                                        editable: true,
+                                        deplacer: true,
+                                        texte: true
+                                    }) }}
                                 </td>
                                 <td>
-                                    <button
+                                    {{ component('badge_bcc', {
+                                        elementConstitutif: ec,
+                                        parcours: parcours,
+                                        ue: ue,
+                                        editable: true,
+                                        deplacer: true,
+                                        texte: true
+                                    }) }}
+                                </td>
+                                <td>
+                                    {{ component('badge_heures', {
+                                        elementConstitutif: ec,
+                                        parcours: parcours,
+                                        ue: ue,
+                                        editable: true,
+                                        deplacer: true,
+                                        texte: true
+                                    }) }}
 
-                                            {{ stimulus_controller('modal', {
-                                                size: 'lg',
-                                                modalTitle: 'Volumes Horaires',
-                                                modalUrl: path('app_element_constitutif_structure',{'id': ec.id, parcours:parcours.id}) }) }}
+{#                                    <button#}
 
-                                            data-action="click->modal#openModal"
-                                            class="btn btn-sm btn-outline-info"
-                                            data-size="lg"
-                                            data-bs-toggle="tooltip"
-                                            data-bs-placement="bottom"
-                                            title="Volumes Horaires"
-                                    >
-                                        <i class="fal fa-clock"></i>
-                                        <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
-                            {{ ec.etatStructure }}
-                        </span>
-                                    </button>
+{#                                            {{ stimulus_controller('modal', {#}
+{#                                                size: 'lg',#}
+{#                                                modalTitle: 'Volumes Horaires',#}
+{#                                                modalUrl: path('app_element_constitutif_structure',{'id': ec.id, parcours:parcours.id}) }) }}#}
+
+{#                                            data-action="click->modal#openModal"#}
+{#                                            class="btn btn-sm btn-outline-info"#}
+{#                                            data-size="lg"#}
+{#                                            data-bs-toggle="tooltip"#}
+{#                                            data-bs-placement="bottom"#}
+{#                                            title="Volumes Horaires"#}
+{#                                    >#}
+{#                                        <i class="fal fa-clock"></i>#}
+{#                                        <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">#}
+{#                            {{ ec.etatStructure }}#}
+{#                        </span>#}
+{#                                    </button>#}
                                 </td>
                             </tr>
                             {% if ec.ficheMatiere != null and ec.ficheMatiere.parcours != null and not (ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false) %}
@@ -177,7 +176,7 @@
                                                         ec:ec.id,
                                                         type: 'synchroEcts'
                                                     }) }}
-                                                   {% if ec.synchroEcts == true %}checked{% endif %}
+                                                    {% if ec.synchroEcts == true %}checked{% endif %}
                                             >
                                             <label class="form-check-label"
                                                    for="synchroEcts"> Raccrocher les ECTS
@@ -185,9 +184,9 @@
                                                    data-tooltip-placement-value="bottom"
                                                    title="{{ 'parcours_ec.helps.synchroEcts'|trans({}, 'help') }}"></i></label>
                                         </div>
-{#                                        <button class="btn text-primary">Recopier les ECTS  <i class="fal fa-question-circle ms-1" data-controller="tooltip"#}
-{#                                                                                               data-tooltip-placement-value="bottom"#}
-{#                                                                                               title="{{ 'parcours_ec.helps.recopieEcts'|trans({}, 'help') }}"></i></button>#}
+                                        {#                                        <button class="btn text-primary">Recopier les ECTS  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
+                                        {#                                                                                               data-tooltip-placement-value="bottom" #}
+                                        {#                                                                                               title="{{ 'parcours_ec.helps.recopieEcts'|trans({}, 'help') }}"></i></button> #}
                                     </td>
 
                                     <td>
@@ -199,7 +198,7 @@
                                                         ec:ec.id,
                                                         type:'synchroMccc'
                                                     }) }}
-                                                   {% if ec.synchroMccc == true %}checked{% endif %}
+                                                    {% if ec.synchroMccc == true %}checked{% endif %}
                                             >
                                             <label class="form-check-label"
                                                    for="synchroMccc"> Raccrocher les MCCC
@@ -207,9 +206,9 @@
                                                    data-tooltip-placement-value="bottom"
                                                    title="{{ 'parcours_ec.helps.synchroMccc'|trans({}, 'help') }}"></i></label>
                                         </div>
-{#                                        <button class="btn text-primary">Recopier les MCCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip"#}
-{#                                                                                               data-tooltip-placement-value="bottom"#}
-{#                                                                                               title="{{ 'parcours_ec.helps.recopieMccc'|trans({}, 'help') }}"></i></button>#}
+                                        {#                                        <button class="btn text-primary">Recopier les MCCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
+                                        {#                                                                                               data-tooltip-placement-value="bottom" #}
+                                        {#                                                                                               title="{{ 'parcours_ec.helps.recopieMccc'|trans({}, 'help') }}"></i></button> #}
                                     </td>
                                     <td>
                                         <div class="form-check mb-2">
@@ -220,7 +219,7 @@
                                                         ec:ec.id,
                                                         type:'synchroBcc'
                                                     }) }}
-                                                   {% if ec.synchroBcc == true %}checked{% endif %}
+                                                    {% if ec.synchroBcc == true %}checked{% endif %}
                                             >
                                             <label class="form-check-label"
                                                    for="synchroBcc"> Raccrocher les BCC
@@ -228,9 +227,9 @@
                                                    data-tooltip-placement-value="bottom"
                                                    title="{{ 'parcours_ec.helps.synchroBcc'|trans({}, 'help') }}"></i></label>
                                         </div>
-{#                                        <button class="btn text-primary">Recopier les BCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip"#}
-{#                                                                                               data-tooltip-placement-value="bottom"#}
-{#                                                                                               title="{{ 'parcours_ec.helps.recopieBcc'|trans({}, 'help') }}"></i></button>#}
+                                        {#                                        <button class="btn text-primary">Recopier les BCC  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
+                                        {#                                                                                               data-tooltip-placement-value="bottom" #}
+                                        {#                                                                                               title="{{ 'parcours_ec.helps.recopieBcc'|trans({}, 'help') }}"></i></button> #}
                                     </td>
                                     <td>
                                         <div class="form-check mb-2">
@@ -241,7 +240,7 @@
                                                         ec:ec.id,
                                                         type:'synchroHeures'
                                                     }) }}
-                                                   {% if ec.synchroHeures == true %}checked{% endif %}
+                                                    {% if ec.synchroHeures == true %}checked{% endif %}
                                             >
                                             <label class="form-check-label"
                                                    for="synchroHeures"> Raccrocher les Heures
@@ -250,9 +249,9 @@
                                                    title="{{ 'parcours_ec.helps.synchroHeures'|trans({}, 'help') }}"></i>
                                             </label>
                                         </div>
-{#                                        <button class="btn text-primary">Recopier les Heures  <i class="fal fa-question-circle ms-1" data-controller="tooltip"#}
-{#                                                                                               data-tooltip-placement-value="bottom"#}
-{#                                                                                               title="{{ 'parcours_ec.helps.recopieHeures'|trans({}, 'help') }}"></i></button>#}
+                                        {#                                        <button class="btn text-primary">Recopier les Heures  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
+                                        {#                                                                                               data-tooltip-placement-value="bottom" #}
+                                        {#                                                                                               title="{{ 'parcours_ec.helps.recopieHeures'|trans({}, 'help') }}"></i></button> #}
                                     </td>
                                 </tr>
                             {% endif %}

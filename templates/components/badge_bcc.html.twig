@@ -23,7 +23,8 @@
                 data-bs-placement="bottom"
                 title="Blocs de compétences"
         >
-            <span class="badge bg-{% if this.etatBccComplet == true %}success{% else %}warning{% endif %}">BCC {% if this.isSynchroBcc %}
+                {% if this.texte == true%}<i class="fal fa-ballot-check"></i>{% endif %}
+            <span class="badge bg-{% if this.etatBccComplet == true %}success{% else %}warning{% endif %}">{% if this.texte == true%}{% if this.etatBccComplet == true %}Complet{% else %}A saisir{% endif %} {% else %}BCC{% endif%} {% if this.isSynchroBcc %}
                     <i class="fal fa-link"></i>{% endif %}</span>
         </button>
     {% endif %}

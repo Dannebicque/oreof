@@ -20,12 +20,17 @@ final class BadgeMcccComponent
     public ?Ue $ue = null;
     public ?bool $etatMcccComplet = false;
     public ?bool $isSynchroMccc = false;
+    public ?bool $texte = false;
+
 
     #[PostMount]
     public function mounted(): void
     {
+        if ($this->elementConstitutif !== null) {
+
+
         //todo: bug si imposé et synchro activé en même temps ?
-        $this->isSynchroMccc = $this->elementConstitutif->isSynchroMccc() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours->getId();
+        $this->isSynchroMccc = $this->elementConstitutif->isSynchroMccc() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours?->getId();
 
         if ($this->isSynchroMccc) {
             $raccroche = GetElementConstitutif::isRaccroche($this->elementConstitutif, $this->parcours);
@@ -33,6 +38,7 @@ final class BadgeMcccComponent
             $this->etatMcccComplet = $ec->getEtatMccc() === 'Complet';
         } else {
             $this->etatMcccComplet = $this->elementConstitutif->getEtatMccc() === 'Complet';
+        }
         }
 
     }
