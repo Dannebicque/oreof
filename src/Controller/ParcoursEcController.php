@@ -62,18 +62,22 @@ class ParcoursEcController extends AbstractController
     ): Response {
         $fichesMatieres = [];
         foreach ($parcours->getSemestreParcours() as $semP) {
-            if ($semP->getSemestre()->getSemestreRaccroche() !== null) {
-                $sem = $semP->getSemestre()->getSemestreRaccroche()->getSemestre();
+            if ($semP->getSemestre()?->getSemestreRaccroche() !== null) {
+                $sem = $semP->getSemestre()?->getSemestreRaccroche()?->getSemestre();
             } else {
                 $sem = $semP->getSemestre();
             }
-            foreach ($sem->getUes() as $ue) {
-                if ($ue->getUeRaccrochee() !== null) {
-                    $ue = $ue->getUeRaccrochee();
-                }
+            if ($sem !== null) {
+                foreach ($sem->getUes() as $ue) {
+                    if ($ue !== null) {
+                        if ($ue->getUeRaccrochee() !== null && $ue->getUeRaccrochee()->getUe() !== null) {
+                            $ue = $ue->getUeRaccrochee()->getUe();
+                        }
 
-                foreach ($ue->getElementConstitutifs() as $ec) {
-                    $fichesMatieres[] = $ec->getFicheMatiere();
+                        foreach ($ue->getElementConstitutifs() as $ec) {
+                            $fichesMatieres[] = $ec->getFicheMatiere();
+                        }
+                    }
                 }
             }
         }
@@ -110,23 +114,25 @@ class ParcoursEcController extends AbstractController
         $tabEcUes = [];
         $tabUes = [];
         foreach ($parcours->getSemestreParcours() as $semParc) {
-            if ($semParc->getSemestre()->getSemestreRaccroche() !== null) {
-                $semParc = $semParc->getSemestre()->getSemestreRaccroche()->getSemestre();
+            if ($semParc->getSemestre()?->getSemestreRaccroche() !== null) {
+                $semParc = $semParc->getSemestre()?->getSemestreRaccroche()?->getSemestre();
             } else {
                 $semParc = $semParc->getSemestre();
             }
 
-            $tabEcs[$semParc->getOrdre()] = [];
-            foreach ($semParc->getUes() as $ue) {
-                if ($ue->getUeRaccrochee() !== null) {
-                    $ue = $ue->getUeRaccrochee();
-                }
+            if ($semParc !== null) {
+                $tabEcs[$semParc->getOrdre()] = [];
+                foreach ($semParc->getUes() as $ue) {
+                    if ($ue->getUeRaccrochee() !== null) {
+                        $ue = $ue->getUeRaccrochee();
+                    }
 
-                $tabEcUes[$semParc->getOrdre()][$ue->getId()] = [];
-                $tabUes[$semParc->getOrdre()][$ue->getId()] = $ue;
-                foreach ($ue->getElementConstitutifs() as $ec) {
-                    $tabEcUes[$semParc->getOrdre()][$ue->getId()][$ec->getFicheMatiere()->getSigle()] = $ec;
-                    $tabEcs[$semParc->getOrdre()][$ec->getFicheMatiere()->getSigle()] = $ec;
+                    $tabEcUes[$semParc->getOrdre()][$ue->getId()] = [];
+                    $tabUes[$semParc->getOrdre()][$ue->getId()] = $ue;
+                    foreach ($ue->getElementConstitutifs() as $ec) {
+                        $tabEcUes[$semParc->getOrdre()][$ue->getId()][$ec->getFicheMatiere()->getSigle()] = $ec;
+                        $tabEcs[$semParc->getOrdre()][$ec->getFicheMatiere()->getSigle()] = $ec;
+                    }
                 }
             }
             ksort($tabEcs[$semParc->getOrdre()]);
