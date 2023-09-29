@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.25](https://github.com/Dannebicque/oreof/compare/v1.14.24...v1.14.25) (2023-09-29)
+
+
+### Bug Fixes
+
+* Badge MCCC ([7eadb66](https://github.com/Dannebicque/oreof/commit/7eadb667ac971f4f9ab4cf52404778f4f418e26e))
+
 ### [1.14.24](https://github.com/Dannebicque/oreof/compare/v1.14.23...v1.14.24) (2023-09-29)
 
 
