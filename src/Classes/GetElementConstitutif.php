@@ -11,13 +11,14 @@ namespace App\Classes;
 
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
+use App\Entity\Parcours;
 use App\TypeDiplome\Source\TypeDiplomeInterface;
 
 abstract class GetElementConstitutif
 {
-    public static function getElementConstitutif(ElementConstitutif $elementConstitutif, bool $raccroche)
+    public static function getElementConstitutif(ElementConstitutif $elementConstitutif, bool $raccroche): ElementConstitutif|FicheMatiere
     {
-        if ($raccroche) {
+        if ($raccroche && $elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->getParcours() !== null) {
             foreach ($elementConstitutif->getFicheMatiere()?->getParcours()?->getElementConstitutifs() as $ec) {
                 if ($ec->getFicheMatiere()?->getId() === $elementConstitutif->getFicheMatiere()?->getId()) {
                     return $ec;
@@ -66,5 +67,18 @@ abstract class GetElementConstitutif
             return self::getElementConstitutif($elementConstitutif, $raccroche);
         }
         return $elementConstitutif;
+    }
+
+    public static function isRaccroche(ElementConstitutif $elementConstitutif, Parcours $parcours)
+    {
+        if ($elementConstitutif->getFicheMatiere()?->isHorsDiplome()) {
+            return true;
+        }
+
+        if ($elementConstitutif->getFicheMatiere()?->getParcours() === null) {
+            return false;
+        }
+
+        return $elementConstitutif->getFicheMatiere()?->getParcours() !== $parcours;
     }
 }

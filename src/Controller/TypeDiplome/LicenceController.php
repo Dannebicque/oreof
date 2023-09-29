@@ -107,7 +107,8 @@ class LicenceController extends AbstractController
 
         $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome);
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours() !== $parcours;
-        $disabled = $raccroche || ($elementConstitutif->getFicheMatiere()->isMcccImpose());
+
+        $disabled = $elementConstitutif->isSynchroMccc() || $elementConstitutif->getFicheMatiere()?->isMcccImpose();
 
         if ($request->query->get('type') !== $elementConstitutif->getTypeMccc()) {
             $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());

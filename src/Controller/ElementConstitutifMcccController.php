@@ -119,6 +119,10 @@ class ElementConstitutifMcccController extends AbstractController
 
             if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
                 $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
+
+            } elseif ($raccroche) {
+                $ec =GetElementConstitutif::getElementConstitutif($elementConstitutif, $raccroche);
+                $typeEpreuve = $ec->getTypeMccc();
             } else {
                 $typeEpreuve = $elementConstitutif->getTypeMccc();
             }

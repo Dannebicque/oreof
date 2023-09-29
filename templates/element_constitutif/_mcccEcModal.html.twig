@@ -82,13 +82,12 @@
                             Les ECTS sont imposés par la fiche matière. Les données ne sont pas modifiables.
                         {% endif %}
                         {% if isMcccImpose == true %}
-                            Les MCCC sont imposése par la fiche matière. Les données ne sont pas modifiables.
+                            Les MCCC sont imposées par la fiche matière. Les données ne sont pas modifiables.
                         {% endif %}
                     {% endif %}
                 </div>
             </div>
         {% endif %}
-
 
         {% if ec.ecParent == null and isEctsImpose == false %}
             {# Uniquement sur le parent. #}
@@ -102,7 +101,7 @@
                 </label>
                 <div class="input-group">
                     <input type="number" id="ec_step4_ects" name="ec_step4[ects]"
-                           {% if ec.synchroEcts %}disabled{% endif %}
+                           {% if isEctsImpose or (isEctsImpose == false and ec.synchroEcts) %}disabled{% endif %}
                            value="{{ ects }}" min="0" max="60"
                            required="required" step="any" class="form-control">
                 </div>
@@ -120,7 +119,6 @@
                             data-tooltip-placement-value="bottom"
                             title="{{ 'ec_step4.helps.quitus'|trans({}, 'help') }}"></i></label>
             </div>
-
         {% endif %}
     {% endif %}
 
