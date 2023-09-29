@@ -27,20 +27,24 @@ final class BadgeMcccComponent
     public function mounted(): void
     {
         if ($this->elementConstitutif !== null) {
+            if ($this->elementConstitutif->getFicheMatiere() !== null &&
+                $this->elementConstitutif->getFicheMatiere()->isHorsDiplome() === true &&
+                $this->elementConstitutif->getFicheMatiere()->isMcccImpose() === true) {
+                $this->etatMcccComplet = $this->elementConstitutif->getFicheMatiere()->getEtatMccc() === 'Complet';
+                $this->isSynchroMccc = true;
+            } else {
+                //todo: bug si imposé et synchro activé en même temps ?
+                $this->isSynchroMccc = $this->elementConstitutif->isSynchroMccc() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours?->getId();
 
+                if ($this->isSynchroMccc) {
+                    $raccroche = GetElementConstitutif::isRaccroche($this->elementConstitutif, $this->parcours);
+                    $ec = GetElementConstitutif::getElementConstitutif($this->elementConstitutif, $raccroche);
 
-        //todo: bug si imposé et synchro activé en même temps ?
-        $this->isSynchroMccc = $this->elementConstitutif->isSynchroMccc() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours?->getId();
-//dump($this->elementConstitutif->getId());
-        if ($this->isSynchroMccc) {
-            $raccroche = GetElementConstitutif::isRaccroche($this->elementConstitutif, $this->parcours);
-            $ec = GetElementConstitutif::getElementConstitutif($this->elementConstitutif, $raccroche);
-//            dump($ec->getId());
-            $this->etatMcccComplet = $ec->getEtatMccc() === 'Complet';
-        } else {
-            $this->etatMcccComplet = $this->elementConstitutif->getEtatMccc() === 'Complet';
+                    $this->etatMcccComplet = $ec->getEtatMccc() === 'Complet';
+                } else {
+                    $this->etatMcccComplet = $this->elementConstitutif->getEtatMccc() === 'Complet';
+                }
+            }
         }
-        }
-
     }
 }
