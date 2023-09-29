@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.29](https://github.com/Dannebicque/oreof/compare/v1.14.28...v1.14.29) (2023-09-29)
+
+
+### Bug Fixes
+
+* structure si éléments du parents (heures) ([f512773](https://github.com/Dannebicque/oreof/commit/f512773ec91ef791f3bd7044b5a15031c873544d))
+
 ### [1.14.28](https://github.com/Dannebicque/oreof/compare/v1.14.27...v1.14.28) (2023-09-29)
 
 
