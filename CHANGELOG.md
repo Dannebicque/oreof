@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.20](https://github.com/Dannebicque/oreof/compare/v1.14.19...v1.14.20) (2023-09-29)
+
+
+### Bug Fixes
+
+* Badge MCCC et BCC + ECTS/MCCC inaccessible ([903270d](https://github.com/Dannebicque/oreof/commit/903270de256d7c187b9fa75a5644f265e6a7afeb))
+* Modifier EC libre Enfants ([789c55e](https://github.com/Dannebicque/oreof/commit/789c55eaf08ff14cf332847e7ed3f8e5fc5b9506))
+* show structure parcours ([190aad3](https://github.com/Dannebicque/oreof/commit/190aad345e8585e559fab9f3acc1798c33abf590))
+* Test si semestre null ([964ab98](https://github.com/Dannebicque/oreof/commit/964ab98fd50b974dddeea2d6787704dcb18710ec))
+
 ### [1.14.19](https://github.com/Dannebicque/oreof/compare/v1.14.18...v1.14.19) (2023-09-28)
 
 
