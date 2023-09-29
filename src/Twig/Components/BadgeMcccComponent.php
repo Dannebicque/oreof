@@ -31,10 +31,11 @@ final class BadgeMcccComponent
 
         //todo: bug si imposé et synchro activé en même temps ?
         $this->isSynchroMccc = $this->elementConstitutif->isSynchroMccc() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours?->getId();
-
+//dump($this->elementConstitutif->getId());
         if ($this->isSynchroMccc) {
             $raccroche = GetElementConstitutif::isRaccroche($this->elementConstitutif, $this->parcours);
             $ec = GetElementConstitutif::getElementConstitutif($this->elementConstitutif, $raccroche);
+//            dump($ec->getId());
             $this->etatMcccComplet = $ec->getEtatMccc() === 'Complet';
         } else {
             $this->etatMcccComplet = $this->elementConstitutif->getEtatMccc() === 'Complet';
