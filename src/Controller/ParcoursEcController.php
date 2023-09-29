@@ -134,8 +134,9 @@ class ParcoursEcController extends AbstractController
                         $tabEcs[$semParc->getOrdre()][$ec->getFicheMatiere()->getSigle()] = $ec;
                     }
                 }
+
+                ksort($tabEcs[$semParc->getOrdre()]);
             }
-            ksort($tabEcs[$semParc->getOrdre()]);
         }
 
         return $this->render('parcours_ec/ressources_saes_coeff.html.twig', [
