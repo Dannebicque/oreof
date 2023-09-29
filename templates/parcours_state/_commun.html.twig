@@ -57,13 +57,13 @@
 </tr>
 {% if typeDiplome.hasSituationPro %}
     <tr>
-        <td class="ps-5">Modalités de la  situation professionnelle</td>
+        <td class="ps-5">Modalités de la situation professionnelle</td>
         <td>
             {{ valide.etat.situationProModalite|badgeValide }}
         </td>
     </tr>
     <tr>
-        <td class="ps-5">Heures de la  situation professionnelle</td>
+        <td class="ps-5">Heures de la situation professionnelle</td>
         <td>
             {{ valide.etat.situationProHeures|badgeValide }}
         </td>
@@ -103,27 +103,34 @@
     <td>Structure</td>
     <td>{{ valide.etat.structure.global|badgeValide }}</td>
 </tr>
-{% for key, semestre in valide.etat.structure.semestres  %}
+{% for key, semestre in valide.etat.structure.semestres %}
     <tr>
         <td class="ps-2"><strong>Semestre {{ key }}</strong></td>
         <td>
             {{ semestre.erreur|displayErreurs }}
             {{ semestre.global|badgeValide }}</td>
     </tr>
-    {% for keyUe, ue in semestre.ues  %}
-        <tr>
-            <td class="ps-4">{{ ue.ue.display(parcours) }}</td>
-            <td>{{ ue.global|badgeValide }}</td>
-        </tr>
-        {% for keyEc, ec in ue.ecs  %}
+    {% for keyUe, ue in semestre.ues %}
+        {% if ue.ue is defined %}
             <tr>
-                {# todo: non prise en compte des enfants et des UE enfants... #}
-                <td class="ps-5">EC {{ ec.display }}</td>
-                <td>
-                    {{ ec.erreur|displayErreurs }}
-                    {{ ec.global|badgeValide }}</td>
+                <td class="ps-4">{{ ue.ue.display(parcours) }} {% if ue.enfants is defined %}<span
+                            class="badge bg-primary">UE à choix</span>{% endif %}</td>
+                <td>{{ ue.global|badgeValide }}</td>
             </tr>
-        {% endfor %}
+        {% endif %}
+        {% if ue.enfants is defined %}
+            {% for keyUee, uee in ue.enfants %}
+                <tr>
+                    <td class="ps-4"><span class="badge bg-primary">&nbsp;</span> {{ uee.ue.display(parcours) }} </td>
+                    <td>{{ uee.global|badgeValide }}</td>
+                </tr>
+                {{ include('parcours_state/_ec.html.twig', {ecs: uee.ecs}) }}
+            {% endfor %}
+        {% else %}
+            {% if ue.ecs is defined %}
+                {{ include('parcours_state/_ec.html.twig', {ecs: ue.ecs}) }}
+            {% endif %}
+        {% endif %}
     {% endfor %}
 {% endfor %}
 <tr>
@@ -136,24 +143,24 @@
     </td>
 </tr>
 {% if parcours.parcoursDefaut == false %}
-<tr>
-    <td>Composante inscription</td>
-    <td>
-        {{ valide.etat.composanteInscription|badgeValide }}
-    </td>
-</tr>
-<tr>
-    <td>Régime d'inscription</td>
-    <td>
-        {{ valide.etat.regimeInscription|badgeValide }}
-    </td>
-</tr>
-<tr>
-    <td>Modalité de l'alternance (le cas échéant)</td>
-    <td>
-        {{ valide.etat.modaliteAlternance|badgeValide }}
-    </td>
-</tr>
+    <tr>
+        <td>Composante inscription</td>
+        <td>
+            {{ valide.etat.composanteInscription|badgeValide }}
+        </td>
+    </tr>
+    <tr>
+        <td>Régime d'inscription</td>
+        <td>
+            {{ valide.etat.regimeInscription|badgeValide }}
+        </td>
+    </tr>
+    <tr>
+        <td>Modalité de l'alternance (le cas échéant)</td>
+        <td>
+            {{ valide.etat.modaliteAlternance|badgeValide }}
+        </td>
+    </tr>
 {% endif %}
 <tr>
     <td>Coordonnées du secrétariat pédagogique</td>

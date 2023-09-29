@@ -9,6 +9,7 @@
 
 namespace App\Classes\verif;
 
+use App\Classes\GetElementConstitutif;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
@@ -20,6 +21,10 @@ class ParcoursState
     private Parcours $parcours;
     private ?Formation $formation;
     private ?TypeDiplome $typeDiplome;
+
+    public function __construct()
+    {
+    }
 
     public function setParcours(Parcours $parcours): void
     {
@@ -208,98 +213,11 @@ class ParcoursState
             $tab['error'][] = 'Vous devez ajouter au moins un semestre.';
         }
 
-        foreach ($this->parcours->getSemestreParcours() as $semestre) {
-            if ($semestre->getSemestre() !== null && $semestre->getSemestre()->getSemestreRaccroche() !== null) {
-                $sem = $semestre->getSemestre()->getSemestreRaccroche()->getSemestre();
-            } else {
-                $sem = $semestre->getSemestre();
-            }
-
-            if ($sem?->isNonDispense() === false && $sem->totalEctsSemestre() !== 30) {
-                $tab['error'][] = 'Le semestre "' . $semestre->getSemestre()?->display() . '" doit faire 30 ECTS.';
-            }
-
-            if ($sem?->isNonDispense() === false && $sem?->getUes()->count() === 0) {
-                //todo: potentielle des UE raccrochées également
-                $tab['error'][] = 'Vous devez ajouter au moins une UE au semestre "' . $sem?->display() . '".';
-            }
-
-            if ($sem !== null) {
-                foreach ($sem?->getUes() as $ue) {
-                    if ($ue->getUeRaccrochee() !== null) {
-                        $ue = $ue->getUeRaccrochee()->getUe();
-                    }
-
-                    if ($ue->getUeEnfants()->count() === 0 && $ue->getElementConstitutifs()->count() === 0) {
-                        if ($ue->getUeParent() === null || ($ue->getUeParent() !== null && $ue->getUeParent()->getNatureUeEc()->isCHoix() === false)) {
-                            $tab['error'][] = '--Vous devez ajouter au moins un EC à l\'UE "' . $ue->display($this->parcours) . '".';
-                        }
-                    } else {
-                        if (($ue->getUeParent() !== null && $ue->getUeParent()->getNatureUeEc()->isCHoix() === true) || $ue->getUeParent() === null) {
-                            foreach ($ue->getElementConstitutifs() as $ec) {
-                                if ($ec->getEcEnfants()->count() === 0 && $ec->getNatureUeEc()?->isLibre() === false &&  $ec->getFicheMatiere() === null) {
-                                    $tab['error'][] = 'Vous devez affecter une fiche EC/matière à l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
-                                }
-
-                                if ($isBut) {
-                                    if ($ec->getFicheMatiere() !== null) {
-                                        if ($ec->getFicheMatiere()->getEtatMccc() === 'A Saisir') {
-                                            $tab['error'][] = 'Vous devez saisir les MCCC de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
-                                        }
-                                        if ($ec->getFicheMatiere()->etatStructure() !== 'Complet') {
-                                            $tab['error'][] = 'Vous devez saisir les volumes horaires de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
-                                        }
-
-                                        if ($ec->getTypeEc() === null) {
-                                            $tab['error'][] = 'Vous devez indiquer le type d\'EC pour l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
-                                        }
-
-                                        if ($ec->getFicheMatiere()->getApprentissagesCritiques()->count() === 0) {
-                                            $tab['error'][] = 'Vous devez indiquer des apprentissages critques pour l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
-                                        }
-                                    }
-                                } else {
-                                    if ($ec->getEcParent() === null && $ec->getNatureUeEc()?->isChoix() === true) {
-                                        if ($ec->getNatureUeEc()?->isLibre() === false && $ec->getEcts() === null) {
-                                            $tab['error'][] = 'Vous devez saisir les MCCC de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
-                                        }
-                                    } else {
-                                        if ($ec->getNatureUeEc()?->isLibre() === false) {
-                                            if ($ec->getEcParent() === null && $ec->getEtatMccc() === 'A Saisir') {
-                                                $tab['error'][] = 'Vous devez saisir les MCCC de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
-                                            }
-
-                                            if ($ec->getEcParent() !== null && !$ec->getEcParent()->isMcccEnfantsIdentique() && $ec->getEtatMccc() === 'A Saisir') {
-                                                $tab['error'][] = 'Vous devez saisir les MCCC de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
-                                            }
-
-                                            if ($ec->getEcParent() === null && $ec->etatStructure() !== 'Complet') {
-                                                $tab['error'][] = 'Vous devez saisir les volumes horaires de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
-                                            }
-
-                                            if ($ec->getEcParent() !== null && !$ec->getEcParent()->isHeuresEnfantsIdentiques() && $ec->etatStructure() !== 'Complet') {
-                                                $tab['error'][] = 'Vous devez saisir les volumes horaires de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
-                                            }
-
-                                            if ($ec->getEtatBcc($this->parcours) !== 'Complet') {
-                                                $tab['error'][] = 'Vous devez saisir les BCC de l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
-                                            }
-                                        }
-
-                                        if ($ec->getEcParent() === null || !$ec->getEcParent()->getNatureUeEc()?->isChoix()) {
-                                            if ($ec->getTypeEc() === null) {
-                                                $tab['error'][] = 'Vous devez indiquer le type d\'EC pour l\'"' . $ec->getCode() . '" de l\'UE "' . $ue->display($this->parcours) . '".';
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                $tab['error'][] = 'Le semestre "' . $semestre->getSemestre()?->display() . '" n\'existe pas.';
-            }
+        if ($isBut) {
+            //todo: a faire
+        } else {
+            ValideStructure::valideStructure($this->parcours);
+            $tab['error'] = array_merge($tab['error'], ValideStructure::getErrors());
         }
 
         return count($tab['error']) > 0 ? $tab : true;

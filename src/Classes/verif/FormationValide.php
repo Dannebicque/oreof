@@ -18,7 +18,8 @@ class FormationValide extends AbstractValide
 
     public array $etat = [];
 
-    public function __construct(protected Formation $formation)
+    public function __construct(
+        protected Formation $formation)
     {
     }
 

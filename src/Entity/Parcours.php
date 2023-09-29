@@ -453,7 +453,7 @@ class Parcours
 
     public function remplissageBrut(): Remplissage
     {
-        $verification = new ParcoursValide($this, $this->getFormation()->getTypeDiplome());
+        $verification = new ParcoursValide($this, $this->getFormation()?->getTypeDiplome());
         $verification->valideParcours();
 
         return $verification->calcul();

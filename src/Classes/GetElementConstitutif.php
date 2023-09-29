@@ -85,4 +85,37 @@ abstract class GetElementConstitutif
 
         return $elementConstitutif->getFicheMatiere()?->getParcours() !== $parcours;
     }
+
+    public static function getEtatsMccc(ElementConstitutif $elementConstitutif, bool $raccroche): ?string
+    {
+        if ($elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
+            return $elementConstitutif->getFicheMatiere()?->getEtatMccc();
+        }
+
+        if ($elementConstitutif->isSynchroMccc() === true) {
+            return self::getElementConstitutif($elementConstitutif, $raccroche)->getEtatMccc();
+        }
+
+        return $elementConstitutif->getEtatMccc();
+    }
+
+    public static function getEtatStructure(ElementConstitutif $elementConstitutif, bool $raccroche): ?string
+    {
+        if ($elementConstitutif->getFicheMatiere()?->isVolumesHorairesImpose()) {
+            return $elementConstitutif->getFicheMatiere()?->etatStructure();
+        }
+
+        if ($elementConstitutif->isSynchroHeures() === true) {
+            return self::getElementConstitutif($elementConstitutif, $raccroche)->etatStructure();
+        }
+        return $elementConstitutif->etatStructure();
+    }
+
+    public static function getEtatBcc(ElementConstitutif $elementConstitutif, bool $raccroche, Parcours $parcours): ?string
+    {
+        if ($elementConstitutif->isSynchroBcc() === true) {
+            return self::getElementConstitutif($elementConstitutif, $raccroche)->getEtatBcc($parcours);
+        }
+        return $elementConstitutif->getEtatBcc($parcours);
+    }
 }

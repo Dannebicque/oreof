@@ -1,0 +1,21 @@
+{% for keyEc, ec in ecs %}
+    <tr>
+        <td class="ps-5">
+            EC {{ ec.display }} {% if ec.enfants is defined %}<span
+                    class="badge bg-info">EC à choix</span>{% endif %}
+        </td>
+        <td>
+            {{ ec.erreur|displayErreurs }}
+            {{ ec.global|badgeValide }}</td>
+    </tr>
+    {% if ec.enfants is defined %}
+        {% for ece in ec.enfants %}
+            <tr>
+                <td class="ps-5"><span class="badge bg-info">&nbsp;</span> EC {{ ece.display }}</td>
+                <td>
+                    {{ ece.erreur|displayErreurs }}
+                    {{ ece.global|badgeValide }}</td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+{% endfor %}

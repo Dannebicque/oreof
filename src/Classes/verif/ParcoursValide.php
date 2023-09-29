@@ -19,7 +19,8 @@ class ParcoursValide extends AbstractValide
     public array $etat = [];
     public array $bccs = [];
 
-    public function __construct(protected Parcours $parcours, protected TypeDiplome $typeDiplome)
+    public function __construct(
+        protected Parcours $parcours, protected TypeDiplome $typeDiplome)
     {
     }
 
@@ -150,7 +151,8 @@ class ParcoursValide extends AbstractValide
             }
 
             // onglet 4
-            $this->etat['structure'] = $this->valideStructure($this->parcours);
+            ValideStructure::valideStructure($this->parcours);
+            $this->etat['structure'] = ValideStructure::getStructure();
         } else {
             $this->etat['competences'] = $this->parcours->getFormation()?->getButCompetences()->count() > 0 ? self::COMPLET : self::VIDE;
             $this->etat['structure'] = $this->valideStructureBut($this->parcours);
@@ -183,159 +185,6 @@ class ParcoursValide extends AbstractValide
         return $this;
     }
 
-
-    private function valideStructure(): array
-    {
-        //todo: gérer les semestres, UE, ... raccrochés, les UE/EC à choix...
-        $structure = [];
-        $etatGlobal = self::COMPLET;
-        $structure['semestres'] = [];
-        foreach ($this->parcours->getSemestreParcours() as $semestreParcour) {
-            if ($semestreParcour->getSemestre()?->getSemestreRaccroche() !== null) {
-                $sem = $semestreParcour->getSemestre()?->getSemestreRaccroche()?->getSemestre();
-            } else {
-                $sem = $semestreParcour->getSemestre();
-            }
-
-            if ($sem !== null && $sem->isNonDispense() !== true) {
-                $hasUe = count($sem->getUes()) === 0 ? self::VIDE : self::COMPLET;
-                $structure['semestres'][$semestreParcour->getOrdre()]['ues'] = [];
-                $structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::INCOMPLET;
-                $structure['semestres'][$semestreParcour->getOrdre()]['erreur'] = [];
-                foreach ($sem->getUes() as $ue) {
-                    if ($ue !== null && $ue->getUeRaccrochee() !== null) {
-                        $ue = $ue->getUeRaccrochee()->getUe();
-                    }
-
-                    if ($ue !== null && $ue->getUeParent() === null) {
-                        if ($ue->getUeEnfants()->count() === 0) {
-                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['global'] = count($ue->getElementConstitutifs()) === 0 ? self::VIDE : self::COMPLET;
-                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'] = [];
-                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ue'] = $ue;
-                            foreach ($ue->getElementConstitutifs() as $ec) {
-                                if (!$ec->getNatureUeEc()?->isChoix()) {
-                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['display'] = $ec->display();
-                                    if ($ec->getNatureUeEc()?->isLibre() === true) {
-                                        if ($ec->getTypeEc() !== null) {
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['global'] = self::COMPLET;
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'] = [];
-                                        } else {
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['global'] = self::INCOMPLET;
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'] = ['Type d\'EC non renseigné (disciplinaire, ...)'];
-                                        }
-                                    } else {
-                                        if ($ec->getFicheMatiere() === null || $ec->getMcccs()->count() === 0 || $ec->etatStructure() !== 'Complet' || $ec->getEtatBcc($this->parcours) !== 'Complet' || ($ec->getTypeEc() === null && ($ec->getEcParent() !== null && $ec->getEcParent()->getTypeEc() === null))) {
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['global'] = self::INCOMPLET;
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'] = [];
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['global'] = self::INCOMPLET;
-                                            $hasUe = self::INCOMPLET;
-
-                                            //pour chaque cas indiquer l'erreur
-                                            if ($ec->getFicheMatiere() === null) {
-                                                $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'][] = 'Fiche matière non renseignée';
-                                            }
-
-                                            if ($ec->getMcccs()->count() === 0) {
-                                                $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'][] = 'MCCC non renseignées';
-                                            }
-
-                                            if ($ec->etatStructure() !== 'Complet') {
-                                                $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'][] = 'Volumes horaires non resnsignés';
-                                            }
-
-                                            if ($ec->getEtatBcc($this->parcours) !== 'Complet') {
-                                                $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'][] = 'BCC incomplet ou non renseignés';
-                                            }
-
-                                            if ($ec->getTypeEc() === null && ($ec->getEcParent() !== null && $ec->getEcParent()->getTypeEc() === null)) {
-                                                $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'][] = 'Type d\'EC non renseigné (disciplinaire, ...)';
-                                            }
-                                        } elseif ($ec->getFicheMatiere() === null && $ec->getMcccs()->count() === 0 && $ec->getHeures() === 'À compléter' && $ec->getTypeEc() === null) {
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['global'] = self::VIDE;
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'] = [];
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['global'] = self::INCOMPLET;
-                                            $hasUe = self::INCOMPLET;
-                                        } else {
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['global'] = self::COMPLET;
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'] = [];
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            if ($ue !== null && $ue->getUeEnfants()->count() > 0 && $ue->getNatureUeEc()?->isChoix() === true) {
-                                foreach ($ue->getUeEnfants() as $uee) {
-                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ue'] = $uee;
-                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'] = [];
-                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['global'] = count($uee->getElementConstitutifs()) === 0 ? self::VIDE : self::COMPLET;
-                                    foreach ($uee->getElementConstitutifs() as $ec) {
-                                        if (!$ec->getNatureUeEc()?->isChoix()) {
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ue'] = $uee;
-                                            $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['display'] = $ec->display();
-                                            if ($ec->getNatureUeEc()?->isLibre() === true) {
-                                                if ($ec->getTypeEc() !== null) {
-                                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['global'] = self::COMPLET;
-                                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['erreur'] = [];
-                                                } else {
-                                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['global'] = self::INCOMPLET;
-                                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['erreur'] = ['Type d\'EC non renseigné (disciplinaire, ...)'];
-                                                }
-                                            } else {
-                                                if ($ec->getFicheMatiere() === null || $ec->getMcccs()->count() === 0 || $ec->etatStructure() !== 'Complet' || $ec->getEtatBcc($this->parcours) !== 'Complet' || ($ec->getTypeEc() === null && ($ec->getEcParent() !== null && $ec->getEcParent()->getTypeEc() === null))) {
-                                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['global'] = self::INCOMPLET;
-                                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['erreur'] = [];
-                                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['global'] = self::INCOMPLET;
-                                                    $hasUe = self::INCOMPLET;
-
-                                                    //todo: gérer les ECTS, BCC, si synchro...
-
-                                                    //pour chaque cas indiquer l'erreur
-                                                    if ($ec->getFicheMatiere() === null) {
-                                                        $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['erreur'][] = 'Fiche matière non renseignée';
-                                                    }
-
-                                                    if ($ec->getMcccs()->count() === 0) {
-                                                        $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['erreur'][] = 'MCCC non renseignées';
-                                                    }
-
-                                                    if ($ec->etatStructure() !== 'Complet') {
-                                                        $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['erreur'][] = 'Volumes horaires non resnsignés';
-                                                    }
-
-                                                    if ($ec->getEtatBcc($this->parcours) !== 'Complet') {
-                                                        $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['erreur'][] = 'BCC incomplet ou non renseignés';
-                                                    }
-
-                                                    if ($ec->getTypeEc() === null && ($ec->getEcParent() !== null && $ec->getEcParent()->getTypeEc() === null)) {
-                                                        $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['erreur'][] = 'Type d\'EC non renseigné (disciplinaire, ...)';
-                                                    }
-                                                } elseif ($ec->getFicheMatiere() === null && $ec->getMcccs()->count() === 0 && $ec->getHeures() === 'À compléter' && $ec->getTypeEc() === null) {
-                                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['global'] = self::VIDE;
-                                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['erreur'] = [];
-                                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['global'] = self::INCOMPLET;
-                                                    $hasUe = self::INCOMPLET;
-                                                } else {
-                                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['global'] = self::COMPLET;
-                                                    $structure['semestres'][$semestreParcour->getOrdre()]['ues'][$uee->getId()]['ecs'][$ec->getId()]['erreur'] = [];
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if ($sem->isNonDispense() === false) {
-                    $structure['semestres'][$semestreParcour->getOrdre()]['global'] = $sem->totalEctsSemestre() !== 30 ? self::ERREUR : $hasUe;
-                    $structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = $sem->totalEctsSemestre() !== 30 ? 'Le semestre doit faire 30 ECTS' : '';
-                }
-            }
-        }
-        $structure['global'] = $etatGlobal;
-
-        return $structure;
-    }
 
     public function verifierEtat($etat): bool
     {

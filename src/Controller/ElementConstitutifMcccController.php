@@ -63,11 +63,12 @@ class ElementConstitutifMcccController extends AbstractController
 
         if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
             $this->isGranted('CAN_PARCOURS_EDIT_MY', $parcours)) {
-
             if ($request->isMethod('POST')) {
+
                 if (
                     ($elementConstitutif->isSynchroEcts() === false &&
-                    $elementConstitutif->getFicheMatiere()?->isEctsImpose() === false) ||
+                        ($elementConstitutif->getFicheMatiere() === null ||
+                        $elementConstitutif->getFicheMatiere()?->isEctsImpose() === false)) ||
                     $elementConstitutif->getParcours()->getId() === $parcours->getId()
                 ) {
                     if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
@@ -79,7 +80,7 @@ class ElementConstitutifMcccController extends AbstractController
                 }
 
                 if (($elementConstitutif->isSynchroMccc() === false
-                    && $elementConstitutif->getFicheMatiere()?->isMcccImpose() === false) ||
+                        && $elementConstitutif->getFicheMatiere()?->isMcccImpose() === false) ||
                     $elementConstitutif->getParcours()->getId() === $parcours->getId()) {
                     if ($request->request->has('ec_step4') && array_key_exists('quitus', $request->request->all()['ec_step4'])) {
                         $elementConstitutif->setQuitus((bool)$request->request->all()['ec_step4']['quitus']);
@@ -119,9 +120,8 @@ class ElementConstitutifMcccController extends AbstractController
 
             if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
                 $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
-
             } elseif ($raccroche) {
-                $ec =GetElementConstitutif::getElementConstitutif($elementConstitutif, $raccroche);
+                $ec = GetElementConstitutif::getElementConstitutif($elementConstitutif, $raccroche);
                 $typeEpreuve = $ec->getTypeMccc();
             } else {
                 $typeEpreuve = $elementConstitutif->getTypeMccc();
