@@ -1,6 +1,6 @@
 <div {{ attributes }}>
     {% if this.elementConstitutifParent != null and this.elementConstitutifParent.mcccEnfantsIdentique == true %}
-        <span class="badge bg-info ms-1 me-1 w-100">MCCC du parent</span>
+        <span class="badge bg-info ms-1 w-100">MCCC du parent</span>
     {% else %}
         <button
                 {% if this.deplacer == true and this.editable == true %}
@@ -17,7 +17,7 @@
                         modalUrl: path('app_element_constitutif_mccc',{'id': this.elementConstitutif.id, parcours:this.parcours.id}) }) }}
                 {% endif %}
                 data-action="click->modal#openModal"
-                class="btn btn-sm btn-outline-info me-1 ms-1 px-1 w-100"
+                class="btn btn-sm btn-outline-info ms-1 px-1 w-100"
                 data-size="lg"
                 data-bs-toggle="tooltip"
                 data-bs-placement="bottom"

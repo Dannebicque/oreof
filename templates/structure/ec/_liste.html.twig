@@ -154,36 +154,43 @@
                                             </div>
                                             <div class="col-md-1 d-flex flex-column justify-content-center">
                                                 <div class="text-muted text-small d-md-none">Volumes Horaires</div>
-                                                {% if ec.natureUeEc != null and ec.natureUeEc.isLibre ==  true %}
-                                                    <span class="badge bg-info">EC Libre</span>
-                                                {% else %}
-                                                    <button
-                                                            {% if deplacer is defined and deplacer == true and editable ==
-                                                                true %}
-                                                                {{ stimulus_controller('modal', {
-                                                                    size: 'lg',
-                                                                    modalTitle: 'Volumes Horaires',
-                                                                    nomEvenement: 'refreshListeEc' ,
-                                                                    details: {ue: ue.id, parcours: parcours.id},
-                                                                    modalUrl: path('app_element_constitutif_structure',{'id': ec.id, parcours:parcours.id}) }) }}
-                                                            {% else %}
-                                                                {{ stimulus_controller('modal', {
-                                                                    size: 'lg',
-                                                                    modalTitle: 'Volumes Horaires',
-                                                                    modalUrl: path('app_element_constitutif_structure',{'id': ec.id, parcours:parcours.id}) }) }}
-                                                            {% endif %}
-                                                            data-action="click->modal#openModal"
-                                                            class="btn btn-sm btn-outline-info px-1"
-                                                            data-size="lg"
-                                                            data-bs-toggle="tooltip"
-                                                            data-bs-placement="bottom"
-                                                            title="Volumes Horaires"
-                                                    >
-                                                <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">
-                            Heures
-                        </span>
-                                                    </button>
-                                                {% endif %}
+                                                {{ component('badge_heures', {
+                                                    elementConstitutif: ec,
+                                                    parcours: parcours,
+                                                    ue: ue,
+                                                    editable: true,
+                                                    deplacer: true,
+                                                }) }}
+{#                                                {% if ec.natureUeEc != null and ec.natureUeEc.isLibre ==  true %}#}
+{#                                                    <span class="badge bg-info">EC Libre</span>#}
+{#                                                {% else %}#}
+{#                                                    <button#}
+{#                                                            {% if deplacer is defined and deplacer == true and editable ==#}
+{#                                                                true %}#}
+{#                                                                {{ stimulus_controller('modal', {#}
+{#                                                                    size: 'lg',#}
+{#                                                                    modalTitle: 'Volumes Horaires',#}
+{#                                                                    nomEvenement: 'refreshListeEc' ,#}
+{#                                                                    details: {ue: ue.id, parcours: parcours.id},#}
+{#                                                                    modalUrl: path('app_element_constitutif_structure',{'id': ec.id, parcours:parcours.id}) }) }}#}
+{#                                                            {% else %}#}
+{#                                                                {{ stimulus_controller('modal', {#}
+{#                                                                    size: 'lg',#}
+{#                                                                    modalTitle: 'Volumes Horaires',#}
+{#                                                                    modalUrl: path('app_element_constitutif_structure',{'id': ec.id, parcours:parcours.id}) }) }}#}
+{#                                                            {% endif %}#}
+{#                                                            data-action="click->modal#openModal"#}
+{#                                                            class="btn btn-sm btn-outline-info px-1"#}
+{#                                                            data-size="lg"#}
+{#                                                            data-bs-toggle="tooltip"#}
+{#                                                            data-bs-placement="bottom"#}
+{#                                                            title="Volumes Horaires"#}
+{#                                                    >#}
+{#                                                <span class="badge bg-{% if ec.etatStructure == 'Complet' %}success{% else %}warning{% endif %}">#}
+{#                            Heures#}
+{#                        </span>#}
+{#                                                    </button>#}
+{#                                                {% endif %}#}
                                             </div>
                                         {% endif %}
                                         <div class="col-md-4 d-flex flex-column justify-content-center">
