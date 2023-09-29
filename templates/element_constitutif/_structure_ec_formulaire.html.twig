@@ -2,125 +2,137 @@
         {{ stimulus_controller('ec--structure', {
             urlUpdate: path('app_parcours_ec_update'),
         }) }}
-    >
-{% if raccroche == true %}
-    <div class="alert alert-info">
-        <div class="row">
-            <div class="col-12">
+>
 
-                <p>Cet EC est raccroché, vous pouvez modifier les éléments librement, ou bien les synchroniser ou recopier depuis l'EC d'origine.</p>
-            </div>
-            <div class="col-5">
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox"
-                           id="synchroHeures"
-                           name="synchroHeures"
-                            {{ stimulus_action('ec--structure', 'synchroHeures', 'change', {
-                                ec:ec.id
-                            }) }}
-                            {% if ec.synchroHeures == true %}checked{% endif %}
-                    >
-                    <label class="form-check-label"
-                           for="synchroHeures"> Raccrocher les Heures
-                        <i class="fal fa-question-circle ms-1" data-controller="tooltip"
-                           data-tooltip-placement-value="bottom"
-                           title="{{ 'parcours_ec.helps.synchroHeures'|trans({}, 'help') }}"></i>
-                    </label>
+    {% if ec.ficheMatiere != null and ec.ficheMatiere.volumesHorairesImpose %}
+        <div class="alert alert-info">
+            <div class="row">
+                <div class="col-12">
+                    <p>Les heures de cette fiche EC/matière sont imposées</p>
                 </div>
             </div>
-            <div class="col-2">
-{#                OU#}
-            </div>
-            <div class="col-5">
-{#                <button class="btn text-primary">Recopier les Heures  <i class="fal fa-question-circle ms-1" data-controller="tooltip"#}
-{#                 data-tooltip-placement-value="bottom"#}
-{#                 title="{{ 'parcours_ec.helps.recopieHeures'|trans({}, 'help') }}"></i></button>#}
-            </div>
-            {% if ec.synchroHeures == true %}
-                Les heures de cet EC sont raccrochées depuis l'EC du parcours "...". Les données ne sont pas modifiables.
-            {% endif %}
         </div>
-    </div>
+    {% elseif raccroche == true %}
+        <div class="alert alert-info">
+            <div class="row">
+                <div class="col-12">
+                    <p>Cet EC est raccroché, vous pouvez modifier les éléments librement, ou bien les synchroniser ou
+                        recopier depuis l'EC d'origine.</p>
+                </div>
+                <div class="col-5">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox"
+                               id="synchroHeures"
+                               name="synchroHeures"
+                                {{ stimulus_action('ec--structure', 'synchroHeures', 'change', {
+                                    ec:ec.id
+                                }) }}
+                                {% if ec.synchroHeures == true %}checked{% endif %}
+                        >
+                        <label class="form-check-label"
+                               for="synchroHeures"> Raccrocher les Heures
+                            <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                               data-tooltip-placement-value="bottom"
+                               title="{{ 'parcours_ec.helps.synchroHeures'|trans({}, 'help') }}"></i>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-2">
+                    {#                OU #}
+                </div>
+                <div class="col-5">
+                    {#                <button class="btn text-primary">Recopier les Heures  <i class="fal fa-question-circle ms-1" data-controller="tooltip" #}
+                    {#                 data-tooltip-placement-value="bottom" #}
+                    {#                 title="{{ 'parcours_ec.helps.recopieHeures'|trans({}, 'help') }}"></i></button> #}
+                </div>
+                {% if ec.synchroHeures == true %}
+                    Les heures de cet EC sont raccrochées depuis l'EC du parcours "...". Les données ne sont pas modifiables.
+                {% endif %}
+            </div>
+        </div>
 
-{% endif %}
-{% set disabled = ec.synchroHeures and ec.parcours.id != parcours.id %}
-{% if ec.parcours.modalitesEnseignement == null %}
-    {{ component('alerte', {type:'warning', message:'Vous devez d\'abord définir les modalités d\'enseignement du
+    {% endif %}
+    {% set disabled = (ec.synchroHeures and ec.parcours.id != parcours.id) or (ec.ficheMatiere != null and ec.ficheMatiere.volumesHorairesImpose) %}
+    {% if ec.parcours.modalitesEnseignement == null %}
+        {{ component('alerte', {type:'warning', message:'Vous devez d\'abord définir les modalités d\'enseignement du
 parcours.'}) }}
-{% else %}
-    {% if (ec.parcours.modalitesEnseignement != null and ec.parcours.modalitesEnseignement.value == 1) or ec
-    .modaliteEnseignement == null %}
-        {{ form_row(form.modaliteEnseignement, {'disabled': ec.synchroHeures}) }}
+    {% else %}
+        {% if (ec.parcours.modalitesEnseignement != null and ec.parcours.modalitesEnseignement.value == 1) or ec
+        .modaliteEnseignement == null %}
+            {{ form_row(form.modaliteEnseignement, {disabled: ec.synchroHeures}) }}
+        {% endif %}
+
+
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="sansHeure" name="sansHeure"
+                   {% if ec.sansHeure == true %}checked{% endif %}
+                    {% if disabled %}disabled{% endif %}
+            >
+            <label class="form-check-label" for="sansHeure"> {{ 'mccc.ec.labels.sansHeures'|trans({}, 'form') }} <i
+                        class="fal fa-question-circle ms-1" data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        title="{{ 'mccc.ec.helps.sansHeures'|trans({}, 'help') }}"></i></label>
+        </div>
+
+        <div id="bloc_presentiel" style="display:{% if ec.modaliteEnseignement != null and ec.modaliteEnseignement.value != 2 %}block{% else
+%}none{% endif %}">
+            <h3>Volume Présentiel</h3>
+            <div class="row">
+                <div class="col-4">{{ form_row(form.volumeCmPresentiel, {'disabled': disabled}) }}</div>
+                <div class="col-4">{{ form_row(form.volumeTdPresentiel, {'disabled': disabled}) }}</div>
+                <div class="col-4">{{ form_row(form.volumeTpPresentiel, {'disabled': disabled}) }}</div>
+            </div>
+        </div>
+
+
+        <div id="bloc_distanciel" style="display:{% if ec.modaliteEnseignement != null and ec.modaliteEnseignement.value != 0 %}block{% else
+%}none{% endif %}">
+            <h3>Volume Distanciel</h3>
+            <div class="row">
+                <div class="col-4">{{ form_row(form.volumeCmDistanciel, {'disabled': disabled}) }}</div>
+                <div class="col-4">{{ form_row(form.volumeTdDistanciel, {'disabled': disabled}) }}</div>
+                <div class="col-4">{{ form_row(form.volumeTpDistanciel, {'disabled': disabled}) }}</div>
+            </div>
+        </div>
+
+        <div>
+            <h3>Volume horaire Travail Etudiant (TE)</h3>
+            <div class="row">
+                <div class="col-4">{{ form_row(form.volumeTe, {'disabled': disabled}) }}</div>
+                <div class="col-4"></div>
+                <div class="col-4"></div>
+            </div>
+        </div>
+
     {% endif %}
 
-    <div class="form-check mb-2">
-        <input class="form-check-input" type="checkbox" id="sansHeure" name="sansHeure"
-               {% if ec.sansHeure == true %}checked{% endif %}
-        >
-        <label class="form-check-label" for="sansHeure"> {{ 'mccc.ec.labels.sansHeures'|trans({}, 'form') }} <i
-                    class="fal fa-question-circle ms-1" data-controller="tooltip" data-tooltip-placement-value="bottom"
-                    title="{{ 'mccc.ec.helps.sansHeures'|trans({}, 'help') }}"></i></label>
-    </div>
-
-    <div id="bloc_presentiel" style="display:{% if ec.modaliteEnseignement != null and ec.modaliteEnseignement.value != 2 %}block{% else
-%}none{% endif %}">
-        <h3>Volume Présentiel</h3>
-        <div class="row">
-            <div class="col-4">{{ form_row(form.volumeCmPresentiel, {'disabled': disabled}) }}</div>
-            <div class="col-4">{{ form_row(form.volumeTdPresentiel, {'disabled': disabled}) }}</div>
-            <div class="col-4">{{ form_row(form.volumeTpPresentiel, {'disabled': disabled}) }}</div>
+    {% if ec.ecEnfants|length > 0 %}
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="ec_step4_heures_enfants_edentiques"
+                   name="ec_step4[heuresEnfantsIdentiques]"
+                   {% if ec.heuresEnfantsIdentiques == true %}checked{% endif %}
+            >
+            <label class="form-check-label"
+                   for="ec_step4_heures_enfants_edentiques"> {{ 'ec_step4.labels.heures_enfants_edentiques'|trans({}, 'form') }}
+                <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   title="{{ 'ec_step4.helps.heures_enfants_edentiques'|trans({}, 'help') }}"></i></label>
         </div>
-    </div>
 
+    {% endif %}
 
-    <div id="bloc_distanciel" style="display:{% if ec.modaliteEnseignement != null and ec.modaliteEnseignement.value != 0 %}block{% else
-%}none{% endif %}">
-        <h3>Volume Distanciel</h3>
-        <div class="row">
-            <div class="col-4">{{ form_row(form.volumeCmDistanciel, {'disabled': disabled}) }}</div>
-            <div class="col-4">{{ form_row(form.volumeTdDistanciel, {'disabled': disabled}) }}</div>
-            <div class="col-4">{{ form_row(form.volumeTpDistanciel, {'disabled': disabled}) }}</div>
+    {% if ec.ecParent != null %}
+        <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="ec_step4_heures_enfants_edentiques"
+                   name="ec_step4[heuresEnfantsIdentiques]"
+                   {% if ec.ecParent.heuresEnfantsIdentiques == true %}checked{% endif %}
+            >
+            <label class="form-check-label"
+                   for="ec_step4_heures_enfants_edentiques"> {{ 'ec_step4.labels.heures_enfants_edentiques_parent'|trans({}, 'form') }}
+                <i class="fal fa-question-circle ms-1" data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   title="{{ 'ec_step4.helps.heures_enfants_edentiques_parent'|trans({}, 'help') }}"></i></label>
         </div>
-    </div>
 
-    <div>
-        <h3>Volume horaire Travail Etudiant (TE)</h3>
-        <div class="row">
-            <div class="col-4">{{ form_row(form.volumeTe, {'disabled': disabled}) }}</div>
-            <div class="col-4"></div>
-            <div class="col-4"></div>
-        </div>
-    </div>
-
-{% endif %}
-
-        {% if ec.ecEnfants|length > 0 %}
-            <div class="form-check mb-2">
-                <input class="form-check-input" type="checkbox" id="ec_step4_heures_enfants_edentiques"
-                       name="ec_step4[heuresEnfantsIdentiques]"
-                       {% if ec.heuresEnfantsIdentiques == true %}checked{% endif %}
-                >
-                <label class="form-check-label"
-                       for="ec_step4_heures_enfants_edentiques"> {{ 'ec_step4.labels.heures_enfants_edentiques'|trans({}, 'form') }}
-                    <i class="fal fa-question-circle ms-1" data-controller="tooltip"
-                       data-tooltip-placement-value="bottom"
-                       title="{{ 'ec_step4.helps.heures_enfants_edentiques'|trans({}, 'help') }}"></i></label>
-            </div>
-
-        {% endif %}
-
-        {% if ec.ecParent != null %}
-            <div class="form-check mb-2">
-                <input class="form-check-input" type="checkbox" id="ec_step4_heures_enfants_edentiques"
-                       name="ec_step4[heuresEnfantsIdentiques]"
-                       {% if ec.ecParent.heuresEnfantsIdentiques == true %}checked{% endif %}
-                >
-                <label class="form-check-label"
-                       for="ec_step4_heures_enfants_edentiques"> {{ 'ec_step4.labels.heures_enfants_edentiques_parent'|trans({}, 'form') }}
-                    <i class="fal fa-question-circle ms-1" data-controller="tooltip"
-                       data-tooltip-placement-value="bottom"
-                       title="{{ 'ec_step4.helps.heures_enfants_edentiques_parent'|trans({}, 'help') }}"></i></label>
-            </div>
-
-        {% endif %}
+    {% endif %}
 </div>
