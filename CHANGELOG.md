@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.28](https://github.com/Dannebicque/oreof/compare/v1.14.27...v1.14.28) (2023-09-29)
+
+
+### Bug Fixes
+
+* reonfte vérification structure licence ([997564b](https://github.com/Dannebicque/oreof/commit/997564b5346edc49d6e21831497d725f63e00914))
+* Semestres null ([368bcdc](https://github.com/Dannebicque/oreof/commit/368bcdc34a2cda8e253735b5da09f13f0481763f))
+
 ### [1.14.27](https://github.com/Dannebicque/oreof/compare/v1.14.26...v1.14.27) (2023-09-29)
 
 
