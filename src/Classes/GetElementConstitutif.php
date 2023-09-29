@@ -67,6 +67,10 @@ abstract class GetElementConstitutif
             return $elementConstitutif->getFicheMatiere();
         }
 
+        if ($elementConstitutif->getEcParent() !== null && $elementConstitutif->getEcParent()->isHeuresEnfantsIdentiques() === true) {
+            return $elementConstitutif->getEcParent();
+        }
+
         if ($elementConstitutif->isSynchroHeures() === true) {
             return self::getElementConstitutif($elementConstitutif, $raccroche);
         }
@@ -103,6 +107,10 @@ abstract class GetElementConstitutif
     {
         if ($elementConstitutif->getFicheMatiere()?->isVolumesHorairesImpose()) {
             return $elementConstitutif->getFicheMatiere()?->etatStructure();
+        }
+
+        if ($elementConstitutif->getEcParent() !== null && $elementConstitutif->getEcParent()->isHeuresEnfantsIdentiques() === true) {
+            return $elementConstitutif->getEcParent()->etatStructure();
         }
 
         if ($elementConstitutif->isSynchroHeures() === true) {
