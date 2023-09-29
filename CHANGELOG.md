@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.23](https://github.com/Dannebicque/oreof/compare/v1.14.22...v1.14.23) (2023-09-29)
+
+
+### Bug Fixes
+
+* Competences sur EC ou fiches ([839e191](https://github.com/Dannebicque/oreof/commit/839e19183b185d7c8d771660c9427621d82cc037))
+* ECTS et EC sur enfants ([73f31a5](https://github.com/Dannebicque/oreof/commit/73f31a5c0a5575a2c539aae7c94e51cf1a37dca1))
+
 ### [1.14.22](https://github.com/Dannebicque/oreof/compare/v1.14.21...v1.14.22) (2023-09-29)
 
 
