@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.26](https://github.com/Dannebicque/oreof/compare/v1.14.25...v1.14.26) (2023-09-29)
+
+
+### Bug Fixes
+
+* Badge des heures corrigé ([4eeeb52](https://github.com/Dannebicque/oreof/commit/4eeeb5289cbdf474494b74bfdf99b0906a726f3f))
+* Blocage des heures ([e105cff](https://github.com/Dannebicque/oreof/commit/e105cff5e00620c3f7d4f61de2a1ef224b8cee69))
+
 ### [1.14.25](https://github.com/Dannebicque/oreof/compare/v1.14.24...v1.14.25) (2023-09-29)
 
 
