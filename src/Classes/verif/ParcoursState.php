@@ -214,7 +214,8 @@ class ParcoursState
         }
 
         if ($isBut) {
-            //todo: a faire
+            ValideStructure::valideStructureBut($this->parcours);
+            $tab['error'] = array_merge($tab['error'], ValideStructure::getErrors());
         } else {
             ValideStructure::valideStructure($this->parcours);
             $tab['error'] = array_merge($tab['error'], ValideStructure::getErrors());

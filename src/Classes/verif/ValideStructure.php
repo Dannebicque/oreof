@@ -226,4 +226,103 @@ abstract class ValideStructure extends AbstractValide
         }
         return $t;
     }
+
+    public static function valideStructureBut(Parcours $parcours)
+    {
+        self::$parcours = $parcours;
+        $etatGlobal = self::COMPLET;
+        self::$structure['semestres'] = [];
+        self::$structure['global'] = self::COMPLET;
+        foreach ( self::$parcours->getSemestreParcours() as $semestreParcour) {
+            if ($semestreParcour->getSemestre()?->getSemestreRaccroche() !== null) {
+                $sem = $semestreParcour->getSemestre()?->getSemestreRaccroche()?->getSemestre();
+            } else {
+                $sem = $semestreParcour->getSemestre();
+            }
+
+            if ($sem !== null) {
+                $hasUe = count($sem->getUes()) === 0 ? self::VIDE : self::COMPLET;
+                self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'] = [];
+                self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::INCOMPLET;
+                self::$structure['global'] = self::INCOMPLET;
+                self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'] = [];
+                foreach ($sem->getUes() as $ue) {
+                    if (count($ue->getElementConstitutifs()) === 0) {
+                        self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['global'] = self::VIDE ;
+                        self::$structure['global'] = self::INCOMPLET;
+                        self::$errors[] = 'Aucun EC renseigné pour l\'' . $ue->display(self::$parcours);
+                    } else {
+                        self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['global'] =  self::COMPLET;
+                    }
+
+
+                    self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'] = [];
+                    foreach ($ue->getElementConstitutifs() as $ec) {
+//                        if (!$ec->getNatureUeEc()?->isChoix()) {
+                        self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['display'] = $ec->display();
+                        if ($ec->getFicheMatiere() === null || ($ec->getFicheMatiere()->getMcccs()->count() === 0 && $ec->getFicheMatiere()->isSansNote() === false) || $ec->getEtatBcc( self::$parcours) !== 'Complet' || $ec->getFicheMatiere()->etatStructure() !== 'Complet' || ($ec->getTypeEc() === null)) {
+                            self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['global'] = self::INCOMPLET;
+                            self::$structure['global'] = self::INCOMPLET;
+                            self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'] = [];
+                            self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['global'] = self::INCOMPLET;
+                            $hasUe = self::INCOMPLET;
+
+                            //pour chaque cas indiquer l'erreur
+                            if ($ec->getFicheMatiere() === null) {
+                                self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'][] = 'Fiche matière non renseignée';
+                                self::$errors[] = 'Fiche matière non renseignée pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
+                                self::$structure['global'] = self::INCOMPLET;
+                            }
+
+                            if ($ec->getFicheMatiere() !== null && $ec->getFicheMatiere()->getMcccs()->count() === 0 && $ec->getFicheMatiere()->isSansNote() === false) {
+                                self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'][] = 'MCCC non renseignées';
+                                self::$errors[] = 'MCCC non renseignées pour l\'' . $ec->getFicheMatiere()->getSigle() . ' de l\'' . $ue->display(self::$parcours);
+                                self::$structure['global'] = self::INCOMPLET;
+                            }
+
+                            if ($ec->getEtatBcc( self::$parcours) !== 'Complet') {
+                                self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'][] = 'BCC incomplet ou non renseignés';
+                                self::$errors[] = 'BCC incomplet ou non renseignés pour l\'' . $ec->getFicheMatiere()->getSigle() . ' de l\'' . $ue->display(self::$parcours);
+                            }
+
+                            if ($ec->getFicheMatiere()->etatStructure() !== 'Complet') {
+                                self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'][] = 'Volumes horaires incomplet ou non renseignés';
+                                self::$errors[] = 'Volumes horaires incomplet ou non renseignés pour l\'' . $ec->getFicheMatiere()->getSigle() . ' de l\'' . $ue->display(self::$parcours);
+                            }
+
+                            if ($ec->getTypeEc() === null) {
+                                self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'][] = 'Type EC (ressource ou SAE) non renseignés';
+                                self::$errors[] = 'Type EC (ressource ou SAE) non renseignés l\'' . $ec->getFicheMatiere()->getSigle() . ' de l\'' . $ue->display(self::$parcours);
+                            }
+                        } elseif ($ec->getFicheMatiere() === null && $ec->getFicheMatiere()->getMcccs()->count() === 0 && $ec->getFicheMatiere()->etatStructure() === 'À compléter' && $ec->getTypeEc() === null) {
+                            self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['global'] = self::VIDE;
+                            self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'] = [];
+                            self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['global'] = self::INCOMPLET;
+                            self::$structure['global'] = self::INCOMPLET;
+                            $hasUe = self::INCOMPLET;
+                        } else {
+                            self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['global'] = self::COMPLET;
+                            self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'] = [];
+                        }
+                        //  }
+                    }
+                }
+                if ($sem->isNonDispense() === false) {
+                    if ($sem->totalEctsSemestre() !== 30) {
+                        self::$errors[] = 'Le semestre ' . $semestreParcour->getOrdre() . ' doit faire 30 ECTS';
+                        self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = 'Le semestre doit faire 30 ECTS';
+                        self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::ERREUR ;
+                        self::$structure['global'] = self::INCOMPLET;
+                    } else {
+                        self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = $hasUe;
+                    }
+
+                }
+            }
+        }
+
+        $structure['global'] = $etatGlobal;
+
+        return $structure;
+    }
 }
