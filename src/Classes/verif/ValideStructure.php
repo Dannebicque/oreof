@@ -170,7 +170,7 @@ abstract class ValideStructure extends AbstractValide
             self::$errors[] = 'Type d\'EC non renseigné (disciplinaire, ...) pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
         }
 
-        if ($ec->getFicheMatiere() === null) {
+        if ($ec->getNatureUeEc()?->isLibre() === false &&  $ec->getFicheMatiere() === null) {
             $t['global'] = self::VIDE;
             $t['erreur'][] = 'Fiche matière non renseignée';
             self::$errors[] = 'Fiche matière non renseignée pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
