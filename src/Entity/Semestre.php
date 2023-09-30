@@ -105,7 +105,7 @@ class Semestre
         return 'S' . $this->getOrdre();
     }
 
-    public function totalEctsSemestre(): int
+    public function totalEctsSemestre(): float
     {
         $total = 0;
         foreach ($this->getUes() as $ue) {

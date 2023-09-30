@@ -45,10 +45,10 @@ abstract class ValideStructure extends AbstractValide
                     $hasUe = count($sem->getUes()) === 0 ? self::VIDE : self::COMPLET;
 
                     if ($sem->isNonDispense() === false) {
-                        self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = $sem->totalEctsSemestre() !== 30 ? self::ERREUR : $hasUe;
-                        self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = $sem->totalEctsSemestre() !== 30 ? 'Le semestre doit faire 30 ECTS' : '';
+                        self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = $sem->totalEctsSemestre() !== 30.0 ? self::ERREUR : $hasUe;
+                        self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = $sem->totalEctsSemestre() !== 30.0 ? 'Le semestre doit faire 30 ECTS' : '';
 
-                        if ($sem->totalEctsSemestre() !== 30) {
+                        if ($sem->totalEctsSemestre() !== 30.0) {
                             self::$errors[] = 'Le semestre ' . $semestreParcour->getOrdre() . ' doit faire 30 ECTS';
                         }
                     }
@@ -136,7 +136,7 @@ abstract class ValideStructure extends AbstractValide
         //vérification des ECTS, d'un libellé et d'une description
         } elseif ($ec->getNatureUeEc()?->isChoix() || $ec->getEcEnfants()->count() > 0) {
             //si l'EC est un choix, on vérifie les enfants
-            if ($ec->getEcts() !== null && $ec->getEcts() >= 0.0 && $ec->getEcts() <= 30.0) {
+            if ($ec->getEcts() !== null && $ec->getEcts() > 0.0 && $ec->getEcts() <= 30.0) {
                 $t['global'] =  self::COMPLET;
             $t['erreur'] = [];
             } else {
@@ -173,8 +173,8 @@ abstract class ValideStructure extends AbstractValide
         if ($ec->getNatureUeEc()?->isLibre() === true) {
             $ects = GetElementConstitutif::getEcts($ec, $raccroche);
             if ($ects === null ||
-                $ects < 0.0 ||
-                $ects >= 30.0) {
+                $ects <= 0.0 ||
+                $ects > 30.0) {
                 $t['erreur'][] = 'ECTS non renseignés';
                 $etatEc = self::ERREUR;
                 self::$errors[] = 'ECTS non renseignés pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
@@ -201,8 +201,8 @@ abstract class ValideStructure extends AbstractValide
 
             $ects = GetElementConstitutif::getEcts($ec, $raccroche);
             if ($ects === null ||
-                $ects < 0.0 ||
-                $ects >= 30.0) {
+                $ects <= 0.0 ||
+                $ects > 30.0) {
                 $t['erreur'][] = 'ECTS non renseignés';
                 $etatEc = self::ERREUR;
                 self::$errors[] = 'ECTS non renseignés pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
@@ -317,7 +317,7 @@ abstract class ValideStructure extends AbstractValide
                     }
                 }
                 if ($sem->isNonDispense() === false) {
-                    if ($sem->totalEctsSemestre() !== 30) {
+                    if ($sem->totalEctsSemestre() !== 30.0) {
                         self::$errors[] = 'Le semestre ' . $semestreParcour->getOrdre() . ' doit faire 30 ECTS';
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = 'Le semestre doit faire 30 ECTS';
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::ERREUR ;
