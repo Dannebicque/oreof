@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
+use PhpOffice\PhpSpreadsheet\Worksheet\SheetView;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class ExcelWriter
 {
-    protected Spreadsheet $spreadsheet;
+    protected ?Spreadsheet $spreadsheet;
     protected ?Worksheet $sheet;
     protected string $dir;
 
@@ -26,7 +27,7 @@ class ExcelWriter
         $this->dir = $kernel->getProjectDir() . '/public/modeles/';
     }
 
-    public function nouveauFichier(string $libelle = '') : void
+    public function nouveauFichier(string $libelle = ''): void
     {
         $this->spreadsheet = new Spreadsheet();
         $this->spreadsheet->removeSheetByIndex(0);
@@ -175,8 +176,8 @@ class ExcelWriter
             $cell2 = Coordinate::stringFromColumnIndex($col2) . $lig2;
 
 
-        $this->sheet->getStyle($cell1 . ':' . $cell2)->getBorders()->getInside()->setBorderStyle(Border::BORDER_THIN);
-        $this->sheet->getStyle($cell1 . ':' . $cell2)->getBorders()->getOutline()->setBorderStyle(Border::BORDER_MEDIUM);
+            $this->sheet->getStyle($cell1 . ':' . $cell2)->getBorders()->getInside()->setBorderStyle(Border::BORDER_THIN);
+            $this->sheet->getStyle($cell1 . ':' . $cell2)->getBorders()->getOutline()->setBorderStyle(Border::BORDER_MEDIUM);
         }
     }
 
@@ -257,6 +258,8 @@ class ExcelWriter
             $sh->getPageMargins()->setLeft(0.75);
             $sh->getPageMargins()->setBottom(1);
         }
+        $this->setActiveSheetIndex(0);
+        $this->setSelectedCells('A1');
         $writer = new Xlsx($this->spreadsheet);
 
         return new StreamedResponse(
@@ -295,7 +298,7 @@ class ExcelWriter
             ->setOddFooter('&L&B' . $this->spreadsheet->getProperties()->getTitle() . '&RPage &P of &N');
     }
 
-    public function createFromTemplate(string $fichier): Spreadsheet
+    public function createFromTemplate(string $fichier): void
     {
         $inputFileType = 'Xlsx'; // Xlsx - Xml - Ods - Slk - Gnumeric - Csv
         $inputFileName = $this->dir . $fichier;
@@ -304,7 +307,7 @@ class ExcelWriter
         $reader = IOFactory::createReader($inputFileType);
 
         /**  Load $inputFileName to a Spreadsheet Object  **/
-        return $reader->load($inputFileName);
+        $this->spreadsheet = $reader->load($inputFileName);
     }
 
     public function orientationCellXY(int $col, int $ligne, string $orientation): void
@@ -345,10 +348,9 @@ class ExcelWriter
 
     public function genereFichierPdf(string $name): StreamedResponse
     {
-
         $this->pageSetup($name);
         $nbSheets = $this->spreadsheet->getSheetCount();
-        for($i = 0; $i<$nbSheets; $i++){
+        for ($i = 0; $i < $nbSheets; $i++) {
             $sh = $this->spreadsheet->setActiveSheetIndex($i);
             $sh->setShowGridlines(false);
             $sh->setPrintGridlines(false); //affichage de la grille
@@ -381,16 +383,70 @@ class ExcelWriter
                 'Content-Disposition' => 'attachment;filename="' . $name . '.pdf"',
             ]
         );
-
     }
 
     public function setPrintArea(string $string)
     {
-        $this->sheet->getPageSetup()->setPrintArea($string,0, PageSetup::SETPRINTRANGE_OVERWRITE);
+        $this->sheet->getPageSetup()->setPrintArea($string, 0, PageSetup::SETPRINTRANGE_OVERWRITE);
     }
 
     public function unMergeCells(string $string): void
     {
         $this->sheet->unmergeCells($string);
     }
+
+    public function setActiveSheetIndex(int $int)
+    {
+        $this->spreadsheet->setActiveSheetIndex($int);
+        $this->sheet = $this->spreadsheet->getActiveSheet();
+    }
+
+    public function setSelectedCells(string $string)
+    {
+        $this->sheet->setSelectedCells($string);
+    }
+
+    public function getSheetByName(string $page_modele): Worksheet
+    {
+        return $this->spreadsheet->getSheetByName($page_modele);
+    }
+
+    public function addSheet(Worksheet $clonedWorksheet, int $index)
+    {
+        $this->spreadsheet->addSheet($clonedWorksheet, $index);
+    }
+
+    public function removeSheetByIndex(int $int)
+    {
+        $this->spreadsheet->removeSheetByIndex($int);
+    }
+
+    public function getSpreadsheet(): ?Spreadsheet
+    {
+        return $this->spreadsheet;
+    }
+
+    public function getSheet(): ?Worksheet
+    {
+        return $this->sheet;
+    }
+
+    public function configSheet(array $array)
+    {
+        $sv = new SheetView();
+        if (array_key_exists('zoom', $array)) {
+            $sv->setZoomScale($array['zoom']);
+            $sv->setZoomScaleNormal($array['zoom']);
+        }
+
+        $this->sheet->setSheetView(
+            $sv
+        );
+
+        if (array_key_exists('topLeftCell', $array)) {
+            $this->sheet->setTopLeftCell($array['topLeftCell']);
+        }
+    }
+
+
 }

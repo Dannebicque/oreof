@@ -128,10 +128,10 @@ class LicenceMccc
         if (null === $formation) {
             throw new \Exception('La formation n\'existe pas');
         }
-        $spreadsheet = $this->excelWriter->createFromTemplate('Annexe_MCCC.xlsx');
+        $this->excelWriter->createFromTemplate('Annexe_MCCC.xlsx');
 
         // Prépare le modèle avant de dupliquer
-        $modele = $spreadsheet->getSheetByName(self::PAGE_MODELE);
+        $modele = $this->excelWriter->getSheetByName(self::PAGE_MODELE);
         if ($modele === null) {
             throw new \Exception('Le modèle n\'existe pas');
         }
@@ -190,7 +190,7 @@ class LicenceMccc
         foreach ($tabSemestresAnnee as $i => $semestres) {
             $clonedWorksheet = clone $modele;
             $clonedWorksheet->setTitle('Année ' . $i);
-            $spreadsheet->addSheet($clonedWorksheet, $index);
+            $this->excelWriter->addSheet($clonedWorksheet, $index);
             $index++;
             $anneeSheets[$i] = $clonedWorksheet;
 
@@ -255,7 +255,7 @@ class LicenceMccc
 
                                     $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne - 1);
 
-                                    $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne - 1);
+                                    //$this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne - 1);
                                     $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CT, $debut, self::COL_MCCC_SECONDE_CHANCE_CT, $ligne - 1);
 
                                     $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne - 1);
@@ -347,15 +347,15 @@ class LicenceMccc
             $this->updateIfNotFull();
             $this->excelWriter->mergeCellsCaR(1, $ligne + 4, 20, $ligne + 4);
             $this->excelWriter->setPrintArea('A1:AC' . $ligne + 5);
+            $this->excelWriter->configSheet(
+                ['zoom' => 60,
+                 'topLeftCell' => 'A1']
+            );
         }
-
-        $this->genereReferentielCompetences($spreadsheet, $parcours, $formation);
+        $this->genereReferentielCompetences($parcours, $formation);
 
         //supprimer la feuille de modèle
-        $spreadsheet->removeSheetByIndex(0);
-        $spreadsheet->setActiveSheetIndex(0);
-        $spreadsheet->getActiveSheet()->setSelectedCells('A1');
-        $this->excelWriter->setSpreadsheet($spreadsheet, true);
+        $this->excelWriter->removeSheetByIndex(0);
 
         $this->fileName = Tools::FileName('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle(), 40);
     }
@@ -431,9 +431,9 @@ class LicenceMccc
         return substr($texte, 0, -2);
     }
 
-    private function genereReferentielCompetences(Spreadsheet $spreadsheet, Parcours $parcours, Formation $formation): void
+    private function genereReferentielCompetences(Parcours $parcours, Formation $formation): void
     {
-        $modele = $spreadsheet->getSheetByName(self::PAGE_REF_COMPETENCES);
+        $modele = $this->excelWriter->getSheetByName(self::PAGE_REF_COMPETENCES);
         if ($modele === null) {
             throw new \Exception('Le modèle n\'existe pas');
         }
@@ -591,10 +591,10 @@ class LicenceMccc
                         if ($mccc->hasTp()) {
                             $hasTp = true;
                             $pourcentageTp += $mccc->pourcentageTp();
-                            $texteAvecTp .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
+                            $texteAvecTp .= 'TP' . $nb . ' (' . $pourcentageTp . '%); ';
                         }
                         $pourcentageCc += $mccc->getPourcentage();
-                        $texteCc .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
+                        $texteCc .= 'CC (' . $mccc->getPourcentage() . '%); ';
                     }
 
                     if (array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
@@ -618,6 +618,7 @@ class LicenceMccc
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
                     $texteCc = substr($texteCc, 0, -2);
+                    $texteAvecTp = substr($texteCc, 0, -2);
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texteEpreuve);
                     if ($hasTp) {
                         $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
