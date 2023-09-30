@@ -354,9 +354,8 @@
                             {% set enfants = ue.ueEnfants %}
                         {% endif %}
                         {% for uee in enfants %}
+                            {% set displayUee = uee.display(parcours) %}
                             {% if uee.ueRaccrochee != null %}
-                                {#                            {% set raccroche = uee.ueRaccrochee != null %} #}
-                                {% set displayUee = uee.display(parcours) %}
                                 {% set raccrocheEnfant = true %}
                                 {% set uee = uee.ueRaccrochee.ue %}
                             {% else %}
