@@ -169,14 +169,23 @@ abstract class ValideStructure extends AbstractValide
             $t['erreur'][] = 'Type d\'EC non renseigné (disciplinaire, ...)';
             self::$errors[] = 'Type d\'EC non renseigné (disciplinaire, ...) pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
         }
-
-        if ($ec->getNatureUeEc()?->isLibre() === false &&  $ec->getFicheMatiere() === null) {
+        $raccroche = GetElementConstitutif::isRaccroche($ec, self::$parcours);
+        if ($ec->getNatureUeEc()?->isLibre() === true) {
+            $ects = GetElementConstitutif::getEcts($ec, $raccroche);
+            if ($ects === null ||
+                $ects < 0.0 ||
+                $ects >= 30.0) {
+                $t['erreur'][] = 'ECTS non renseignés';
+                $etatEc = self::ERREUR;
+                self::$errors[] = 'ECTS non renseignés pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
+            }
+        } elseif ($ec->getFicheMatiere() === null) {
             $t['global'] = self::VIDE;
             $t['erreur'][] = 'Fiche matière non renseignée';
             self::$errors[] = 'Fiche matière non renseignée pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
             self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['global'] = self::INCOMPLET;
         } else {
-            $raccroche = GetElementConstitutif::isRaccroche($ec, self::$parcours);
+
 
             // MCCC
             // Si MCCC imposées
