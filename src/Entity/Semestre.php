@@ -107,7 +107,7 @@ class Semestre
 
     public function totalEctsSemestre(): float
     {
-        $total = 0;
+        $total = 0.0;
         foreach ($this->getUes() as $ue) {
             if ($ue->getUeRaccrochee() !== null &&
                 $ue->getUeRaccrochee()->getUe() !== null &&
