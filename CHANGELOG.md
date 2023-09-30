@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.33](https://github.com/Dannebicque/oreof/compare/v1.14.32...v1.14.33) (2023-09-30)
+
+
+### Bug Fixes
+
+* EC libre pas de fiche ([b68e0cb](https://github.com/Dannebicque/oreof/commit/b68e0cb3eea3b51174136ba153bdd505569b7e91))
+
 ### [1.14.32](https://github.com/Dannebicque/oreof/compare/v1.14.31...v1.14.32) (2023-09-30)
 
 
