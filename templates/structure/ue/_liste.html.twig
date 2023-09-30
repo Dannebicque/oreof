@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div>{# class="scroll-out" #}
-                {% for ue in ues %}
+                {% for ue in ues|filter(ue => ue.ueParent == null) %}
                     {% set raccroche = ue.ueRaccrochee != null %}
                     {% if (raccroche and ue.ueRaccrochee.ue != null and ue.ueRaccrochee.ue.ueParent == null) or (not raccroche and ue.ueParent==null) %}
                         <div {{ stimulus_controller('structure--ue', {
@@ -354,18 +354,26 @@
                             {% set enfants = ue.ueEnfants %}
                         {% endif %}
                         {% for uee in enfants %}
+                            {% if uee.ueRaccrochee != null %}
+                                {#                            {% set raccroche = uee.ueRaccrochee != null %} #}
+                                {% set displayUee = uee.display(parcours) %}
+                                {% set raccrocheEnfant = true %}
+                                {% set uee = uee.ueRaccrochee.ue %}
+                            {% else %}
+                                {% set raccrocheEnfant = false %}
+                            {% endif %}
                             {% if loop.first and raccroche == false %}
                                 <div class="text-divider">
                                     <button class="btn text-success btn-sm"
                                             {{ stimulus_controller('modal', {
                                                 size: 'lg',
-                                                modalTitle: 'Ajouter une UE avant l\'' ~uee.display(parcours),
+                                                modalTitle: 'Ajouter une UE avant l\'' ~displayUee,
                                                 modalUrl: path('structure_ue_add_ue_semestre', {parcours:parcours.id, semestre:semestre.id, ue: uee.id, sens:'before'})
                                             }) }}
                                             data-action="click->modal#openModal"
                                     >
                                         <i class="{{ iconAdd }}"></i>
-                                        Ajouter une UE avant l'<strong>{{ uee.display(parcours) }}</strong>
+                                        Ajouter une UE avant l'<strong>{{ displayUee }}</strong>
                                     </button>
                                 </div>
                             {% endif %}
@@ -381,14 +389,13 @@
                                             <div class="col-md-1 d-flex flex-column justify-content-center">
                                                 <div class="text-muted text-small d-md-none">ue</div>
                                                 <p>{% if uee.libelle != null %}
-                                                    <abbr title="{{ uee.libelle }}">{% endif %}{{ uee
-                                                            .display(parcours) }}{% if uee.libelle != null %}</abbr>{% endif %}
+                                                    <abbr title="{{ uee.libelle }}">{% endif %}{{ displayUee }}{% if uee.libelle != null %}</abbr>{% endif %}
 
-                                                    {% if raccroche == true %}
+                                                    {% if raccrocheEnfant == true %}
                                                         <i class="fal fa-link"
                                                            data-controller="tooltip"
                                                            data-tooltip-placement-value="bottom"
-                                                           title="Raccrochée à l'UE {{ ue.ueRaccrochee.display(parcours) }}"></i>
+                                                           title="Raccrochée à l'UE {{ uee.display(parcours) }}"></i>
                                                     {% endif %}
                                                 </p>
                                             </div>
@@ -428,7 +435,7 @@
                                                     <div class="col-4">
 
                                                         <button
-                                                                {% if raccroche == true %}
+                                                                {% if raccrocheEnfant == true %}
                                                                     disabled
                                                                     title="UE raccrochée, modifiable uniquement depuis le parcours d'origine"
                                                                 {% else %}
@@ -465,7 +472,7 @@
                                                                 aria-labelledby="dropdownMenuClickableInside">
                                                                 <li>
                                                                     <a
-                                                                            {% if raccroche == true %}
+                                                                            {% if raccrocheEnfant == true %}
                                                                                 disabled
                                                                                 title="UE raccrochée, modifiable uniquement depuis le parcours d'origine"
                                                                             {% else %}
@@ -490,7 +497,7 @@
                                                                 </li>
                                                                 <li>
                                                                     <a
-                                                                            {% if raccroche == true %}
+                                                                            {% if raccrocheEnfant == true %}
                                                                                 disabled
                                                                                 title="UE raccrochée, modifiable uniquement depuis le parcours d'origine"
                                                                             {% else %}
@@ -514,7 +521,7 @@
                                                                 </li>
                                                                 <li>
                                                                     <a
-                                                                            {% if raccroche == true %}
+                                                                            {% if raccrocheEnfant == true %}
                                                                                 disabled
                                                                                 title="UE raccrochée, modifiable uniquement depuis le parcours d'origine"
                                                                             {% else %}
