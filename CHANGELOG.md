@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.31](https://github.com/Dannebicque/oreof/compare/v1.14.30...v1.14.31) (2023-09-30)
+
+
+### Bug Fixes
+
+* Excel + CC_CT ([49fdacb](https://github.com/Dannebicque/oreof/commit/49fdacb888b4b8a7588a815a859e2a73a47d0f68))
+* rôle invité ([c850b08](https://github.com/Dannebicque/oreof/commit/c850b089e86cb546bd0f6a3cf8d62530d85e465e))
+* validation structure BUT ([e481c04](https://github.com/Dannebicque/oreof/commit/e481c0446ac505e6b30243269667a6f156929d80))
+
 ### [1.14.30](https://github.com/Dannebicque/oreof/compare/v1.14.29...v1.14.30) (2023-09-29)
 
 
