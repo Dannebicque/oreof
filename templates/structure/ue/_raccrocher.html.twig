@@ -13,6 +13,7 @@
                 name="raccrocher"
                 required="required"
                 class="form-select"
+                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
         >
             <option value="">Choisir une UE mutualisée</option>
             {% for u in ues %}
