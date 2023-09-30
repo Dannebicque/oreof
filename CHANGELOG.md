@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.36](https://github.com/Dannebicque/oreof/compare/v1.14.35...v1.14.36) (2023-09-30)
+
+
+### Bug Fixes
+
+* display ue enfant ([6ad0522](https://github.com/Dannebicque/oreof/commit/6ad0522fc20185ce39e8b08401ce311208267c5e))
+
 ### [1.14.35](https://github.com/Dannebicque/oreof/compare/v1.14.34...v1.14.35) (2023-09-30)
 
 
