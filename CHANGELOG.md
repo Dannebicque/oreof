@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.38](https://github.com/Dannebicque/oreof/compare/v1.14.37...v1.14.38) (2023-10-01)
+
+
+### Bug Fixes
+
+* Quitus ([caaf2c4](https://github.com/Dannebicque/oreof/commit/caaf2c4432f59d14533bae7b7e9786ecafb0f4af))
+* somme EC ([3f81665](https://github.com/Dannebicque/oreof/commit/3f8166512647ed6eb3eedaa14070bc68d685c662))
+
 ### [1.14.37](https://github.com/Dannebicque/oreof/compare/v1.14.36...v1.14.37) (2023-10-01)
 
 
