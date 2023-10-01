@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.37](https://github.com/Dannebicque/oreof/compare/v1.14.36...v1.14.37) (2023-10-01)
+
+
+### Bug Fixes
+
+* export Excel ([9851d85](https://github.com/Dannebicque/oreof/commit/9851d85ce480c8dfefa6205930f83fdb9eb09ea3))
+* liste autocomplete ([24195f1](https://github.com/Dannebicque/oreof/commit/24195f154f0135f1732813012568378cd3beaa0a))
+* liste autocomplete ([955a9b7](https://github.com/Dannebicque/oreof/commit/955a9b77d385bc6209205073249dc3fb17c4ef89))
+* refonte affichage de la structure ([0d2b26d](https://github.com/Dannebicque/oreof/commit/0d2b26de4c7d6d7991473c27486f9ae9fd0a5989))
+
 ### [1.14.36](https://github.com/Dannebicque/oreof/compare/v1.14.35...v1.14.36) (2023-09-30)
 
 
