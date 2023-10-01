@@ -45,6 +45,7 @@ class StructureEc
     public function addEcEnfant(?int $idEc, StructureEc $structureEc): void
     {
         $this->elementsConstitutifsEnfants[$idEc] = $structureEc;
+        $this->heuresEctsEcEnfants[] = $structureEc->getHeuresEctsEc();
         //gérer pour prendre le max des heures et ects sur tous les enfants de l'EC
     }
 
