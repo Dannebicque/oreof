@@ -1,6 +1,16 @@
-<div class="row">
-    {% if (print is defined and print == false) %}
+<div class="row"
+{{ stimulus_controller('structure--affichage') }}
+>
+    {% if (print is not defined or print == false) %}
         <div class="col-sm-12 text-end mb-2">
+            <div class="btn-group">
+            <button type="button"
+                    class="btn btn-sm btn-outline-info btn-icon w-sm-auto mx-2 mb-1"
+                    {{ stimulus_action('structure--affichage', 'toggleEc') }}
+                    >
+                <i class="fal fa-eye-slash"></i> Masquer les EC
+            </button>
+            </div>
             <div class="btn-group">
                 <button type="button"
                         class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1"
@@ -25,65 +35,59 @@
             {% set presentiel = parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
             {% set distanciel = parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 2 or parcours.modalitesEnseignement.value == 1) %}
 
-            {% for semestreParc in parcours.semestreParcours %}
-                {% if semestreParc.semestre.semestreRaccroche != null %}
-                    {% set semestre = semestreParc.semestre.semestreRaccroche.semestre %}
-                {% else %}
-                    {% set semestre = semestreParc.semestre %}
-                {% endif %}
+            {% for ordre, semestre in dto.semestres %}
                 <tr>
-                    <th colspan=" {% if presentiel %}8{% else %}13{% endif %}">{{ semestreParc.display }}</th>
+                    <th
+                            class="border-left-semestre-{{ ordre }}"
+                            colspan=" {% if presentiel %}8{% else %}13{% endif %}">{{ semestre.semestre.display }} {% if semestre.raccroche == true %}<i class="fal fa-link"></i>{% endif %}</th>
                 </tr>
 
-                {% for ue in semestre.ues|filter(ue => ue.ueParent == null) %}
-                    {% if dto.semestres[semestreParc.id].ues[ue.id] is defined %}
-                        {{ include('typeDiplome/formation/_structureUe.html.twig') }}
-                    {% endif %}
+                {% for ue in semestre.ues %}
+                    {{ include('typeDiplome/formation/_structureUe.html.twig', {semestreOrdre:ordre, enfant: false}) }}
                 {% endfor %}
                 <tr>
-                    <th>&nbsp;</th>
-                    <th colspan="2" class="text-end">Total Semestre</th>
-                    <th>{{ dto.semestres[semestreParc.id].sommeSemestreEcts }}</th>
+                    <th class="border-left-semestre-{{ ordre }} text-end" colspan="3">Total Semestre {{ ordre }}</th>
+                    <th>{{ semestre.heuresEctsSemestre.sommeSemestreEcts }}</th>
 
                     {% if presentiel %}
-                        <th>{{ dto.semestres[semestreParc.id].sommeSemestreCmPres }}</th>
-                        <th>{{ dto.semestres[semestreParc.id].sommeSemestreTdPres }}</th>
-                        <th>{{ dto.semestres[semestreParc.id].sommeSemestreTpPres }}</th>
-                        <th>{{ dto.semestres[semestreParc.id].sommeSemestreTotalPres }}</th>
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreCmPres }}</th>
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTdPres }}</th>
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTpPres }}</th>
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTotalPres }}</th>
                     {% endif %}
 
                     {% if distanciel %}
-                        <th>{{ dto.semestres[semestreParc.id].sommeSemestreCmDist }}</th>
-                        <th>{{ dto.semestres[semestreParc.id].sommeSemestreTdDist }}</th>
-                        <th>{{ dto.semestres[semestreParc.id].sommeSemestreTpDist }}</th>
-                        <th>{{ dto.semestres[semestreParc.id].sommeSemestreTotalDist }}</th>
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreCmDist }}</th>
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTdDist }}</th>
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTpDist }}</th>
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTotalDist }}</th>
                     {% endif %}
 
                     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-                        <th>{{ dto.semestres[semestreParc.id].sommeSemestreTotalPresDist }}</th>
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTotalPresDist }}</th>
                     {% endif %}
                 </tr>
             {% endfor %}
             <tr>
                 <th colspan="3" class="text-end">Total formation</th>
-                <th>{{ dto.sommeFormationEcts }}</th>
+                <th>{{ dto.heuresEctsFormation.sommeFormationEcts }}</th>
 
                 {% if presentiel %}
-                    <th>{{ dto.sommeFormationCmPres }}</th>
-                    <th>{{ dto.sommeFormationTdPres }}</th>
-                    <th>{{ dto.sommeFormationTpPres }}</th>
-                    <th>{{ dto.sommeFormationTotalPres }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationCmPres }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTdPres }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTpPres }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTotalPres }}</th>
                 {% endif %}
 
                 {% if distanciel %}
-                    <th>{{ dto.sommeFormationCmDist }}</th>
-                    <th>{{ dto.sommeFormationTdDist }}</th>
-                    <th>{{ dto.sommeFormationTpDist }}</th>
-                    <th>{{ dto.sommeFormationTotalDist }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationCmDist }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTdDist }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTpDist }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTotalDist }}</th>
                 {% endif %}
 
                 {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-                    <th>{{ dto.sommeFormationTotalPresDist }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTotalPresDist }}</th>
                 {% endif %}
             </tr>
         </table>

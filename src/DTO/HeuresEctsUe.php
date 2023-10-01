@@ -36,16 +36,15 @@ class HeuresEctsUe
         return $this->sommeUeTotalPres() + $this->sommeUeTotalDist();
     }
 
-    public function addEc(ElementConstitutif $elementConstitutif)
+    public function addEc(HeuresEctsEc $heuresEctsEc): void
     {
-        //todo: tester si heures reprises ou pas
-        $this->sommeUeCmPres += $elementConstitutif->getVolumeCmPresentiel();
-        $this->sommeUeTdPres += $elementConstitutif->getVolumeTdPresentiel();
-        $this->sommeUeTpPres += $elementConstitutif->getVolumeTpPresentiel();
-        $this->sommeUeTePres += $elementConstitutif->getVolumeTe();
-        $this->sommeUeCmDist += $elementConstitutif->getVolumeCmDistanciel();
-        $this->sommeUeTdDist += $elementConstitutif->getVolumeTdDistanciel();
-        $this->sommeUeTpDist += $elementConstitutif->getVolumeTpDistanciel();
-        $this->sommeUeEcts += $elementConstitutif->getEcts();
+        $this->sommeUeCmPres += $heuresEctsEc->cmPres;
+        $this->sommeUeTdPres += $heuresEctsEc->tdPres;
+        $this->sommeUeTpPres += $heuresEctsEc->tpPres;
+        $this->sommeUeTePres += $heuresEctsEc->tePres;
+        $this->sommeUeCmDist += $heuresEctsEc->cmDist;
+        $this->sommeUeTdDist += $heuresEctsEc->tdDist;
+        $this->sommeUeTpDist += $heuresEctsEc->tpDist;
+        $this->sommeUeEcts += $heuresEctsEc->ects;
     }
 }

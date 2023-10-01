@@ -20,7 +20,6 @@ class HeuresEctsSemestre
     public float $sommeSemestreTdDist = 0;
     public float $sommeSemestreTpDist = 0;
 
-    public array $ues = [];
 
     public function sommeSemestreTotalDist(): float
     {
@@ -37,9 +36,8 @@ class HeuresEctsSemestre
         return $this->sommeSemestreTotalPres() + $this->sommeSemestreTotalDist();
     }
 
-    public function addUe(?int $ordre, HeuresEctsUe $dtoUe): void
+    public function addUe(HeuresEctsUe $dtoUe): void
     {
-        $this->ues[$ordre] = $dtoUe;
         $this->sommeSemestreCmPres += $dtoUe->sommeUeCmPres;
         $this->sommeSemestreTdPres += $dtoUe->sommeUeTdPres;
         $this->sommeSemestreTpPres += $dtoUe->sommeUeTpPres;

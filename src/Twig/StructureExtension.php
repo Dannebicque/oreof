@@ -23,8 +23,12 @@ class StructureExtension extends AbstractExtension
         ];
     }
 
-    public function badgeNb(int $nb): string
+    public function badgeNb(?int $nb): string
     {
+        if ($nb === null) {
+            return '<span class="badge bg-warning">Erreur</span>';
+        }
+
         $color = $nb <= 0 ? 'danger' : 'primary';
         $badge = '<span class="badge bg-'.$color.' me-2">%s</span>';
         return sprintf($badge, $nb);

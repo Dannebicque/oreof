@@ -32,6 +32,20 @@
     border-left-color: var(--color-#{$i}) !important;
     padding-left: 15px;
   }
+
+  .border-left-semestre-#{$i} {
+    border-left:2px solid var(--color-#{$i}) !important;
+
+  }
+
+  .border-left-ue-#{$i} {
+    border-left:2px solid var(--color-#{$i}) !important;
+
+  }
+
+  .bg-ec-#{$i} {
+    background-color: var(--color-#{$i});
+  }
 }
 
 .logo-but {

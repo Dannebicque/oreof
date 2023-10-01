@@ -20,8 +20,6 @@ class HeuresEctsFormation
     public float $sommeFormationTdDist = 0;
     public float $sommeFormationTpDist = 0;
 
-    public array $semestres = [];
-
     public function sommeFormationTotalDist(): float
     {
         return $this->sommeFormationCmDist + $this->sommeFormationTdDist + $this->sommeFormationTpDist;
@@ -37,9 +35,8 @@ class HeuresEctsFormation
         return $this->sommeFormationTotalPres() + $this->sommeFormationTotalDist();
     }
 
-    public function addSemestre(?int $getOrdre, HeuresEctsSemestre $dtoSemestre)
+    public function addSemestre(HeuresEctsSemestre $dtoSemestre): void
     {
-        $this->semestres[$getOrdre] = $dtoSemestre;
         $this->sommeFormationCmPres += $dtoSemestre->sommeSemestreCmPres;
         $this->sommeFormationTdPres += $dtoSemestre->sommeSemestreTdPres;
         $this->sommeFormationTpPres += $dtoSemestre->sommeSemestreTpPres;

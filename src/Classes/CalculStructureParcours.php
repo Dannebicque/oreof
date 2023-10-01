@@ -12,52 +12,86 @@ namespace App\Classes;
 use App\DTO\HeuresEctsFormation;
 use App\DTO\HeuresEctsSemestre;
 use App\DTO\HeuresEctsUe;
+use App\DTO\StructureEc;
+use App\DTO\StructureParcours;
+use App\DTO\StructureSemestre;
+use App\DTO\StructureUe;
 use App\Entity\Parcours;
 
 class CalculStructureParcours
 {
-    public function calcul(Parcours $parcours): HeuresEctsFormation
+    public function calcul(Parcours $parcours): StructureParcours
     {
-        $dto = new HeuresEctsFormation();
+        $dtoStructure = new StructureParcours();
+        $dtoStructure->setParcours($parcours);
 
         foreach ($parcours->getSemestreParcours() as $semestreParcours) {
-            //todo: vérifier si raccrochée ou non pour prendre les bonnes UES
             if ($semestreParcours->getSemestre()->getSemestreRaccroche() !== null) {
                 $semestre = $semestreParcours->getSemestre()->getSemestreRaccroche()->getSemestre();
+                $raccrocheSemestre = true;
             } else {
                 $semestre = $semestreParcours->getSemestre();
+                $raccrocheSemestre = false;
             }
 
-
-            $dtoSemestre = new HeuresEctsSemestre();
+            $dtoSemestre = new StructureSemestre($semestre, $raccrocheSemestre);
             if ($semestre !== null) {
                 foreach ($semestre->getUes() as $ue) {
-                    if ($ue->getUeRaccrochee() !== null) {
-                        $ue = $ue->getUeRaccrochee()->getUe();
-                    }
                     if ($ue !== null && $ue->getUeParent() === null) {
-                        $dtoUe = new HeuresEctsUe();//todo: les ECTS peuvent être sur l'UE
-                        foreach ($ue->getElementConstitutifs() as $elementConstitutif) {
-                            $dtoUe->addEc($elementConstitutif); //todo: les gérer les enfants et les heures communes ou pas
+                        $display = $ue->display($parcours);
+                        if ($ue->getUeRaccrochee() !== null) {
+                            $ueOrigine = $ue;
+                            $ue = $ue->getUeRaccrochee()->getUe();
+                            $raccrocheUe = true;
+                        } else {
+                            $raccrocheUe = $raccrocheSemestre;
                         }
-                        $dtoSemestre->addUe($ue->getId(), $dtoUe);
+
+                        //si des UE enfants, on ne regarde pas s'il y a des EC
+                        $dtoUe = new StructureUe($ue, $raccrocheUe, $display, $ueOrigine ?? null);
+                        foreach ($ue->getElementConstitutifs() as $elementConstitutif) {
+                            if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
+                                $dtoEc = new StructureEc($elementConstitutif);
+                                $dtoUe->addEc($dtoEc);
+                                foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
+                                    $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $raccrocheUe);//todo: calculer...
+                                    $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
+                                }
+                            }
+                        }
 
                         foreach ($ue->getUeEnfants() as $ueEnfant) {
+                            $display = $ueEnfant->display($parcours);
                             if ($ueEnfant !== null && $ueEnfant->getUeRaccrochee() !== null) {
+                                $ueOrigine = $ueEnfant;
                                 $ueEnfant = $ueEnfant->getUeRaccrochee()->getUe();
+                                $raccrocheUeEnfant = true;
+                            } else {
+                                $raccrocheUeEnfant = $raccrocheUe;
                             }
-                            $dtoUeEnfant = new HeuresEctsUe();
-                            foreach ($ueEnfant->getElementConstitutifs() as $elementConstitutif) {
-                                $dtoUeEnfant->addEc($elementConstitutif);
+
+                            if ($ueEnfant !== null) {
+                                $dtoUeEnfant = new StructureUe($ueEnfant, $raccrocheUeEnfant, $display, $ueOrigine ?? null);
+                                $dtoUe->addUeEnfant($ueEnfant->getId(), $dtoUeEnfant);
+                                foreach ($ueEnfant->getElementConstitutifs() as $elementConstitutif) {
+                                    if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
+                                        $dtoEc = new StructureEc($elementConstitutif);
+                                        $dtoUeEnfant->addEc($dtoEc);
+                                        foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
+                                            $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $raccroche);
+                                            $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
+                                        }
+                                    }
+                                }
                             }
-                            $dtoSemestre->addUe($ueEnfant->getId(), $dtoUeEnfant);
                         }
+                        $dtoSemestre->addUe($ue->getId(), $dtoUe);
                     }
                 }
-                $dto->addSemestre($semestreParcours->getId(), $dtoSemestre);
+                $dtoStructure->addSemestre($semestreParcours->getOrdre(), $dtoSemestre);
             }
         }
 
-        return $dto;
+        return $dtoStructure;
     }
 }
