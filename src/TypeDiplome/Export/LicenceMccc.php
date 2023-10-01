@@ -575,7 +575,7 @@ class LicenceMccc
                 $pourcentageCc = 0;
                 $nb = 1;
                 $hasTp = false;
-                if (array_key_exists(1, $mcccs)) {
+                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
                     foreach ($mcccs[1]['cc'] as $mccc) {
                         if ($mccc->hasTp()) {
                             $hasTp = true;
@@ -620,10 +620,11 @@ class LicenceMccc
 
                 break;
             case 'ct':
+                $quitus = $ec->isQuitus();
                 if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
                     $texteEpreuve = '';
                     foreach ($mcccs[1]['et'] as $mccc) {
-                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $quitus);
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
@@ -634,7 +635,7 @@ class LicenceMccc
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
                     $texteEpreuve = '';
                     foreach ($mcccs[2]['et'] as $mccc) {
-                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $quitus);
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
@@ -742,17 +743,23 @@ class LicenceMccc
         }
     }
 
-    private function displayTypeEpreuveWithDureePourcentage(Mccc $mccc): string
+    private function displayTypeEpreuveWithDureePourcentage(Mccc $mccc, bool $quitus = false): string
     {
         $texte = '';
         foreach ($mccc->getTypeEpreuve() as $type) {
             if ($type !== "" && $this->typeEpreuves[$type] !== null) {
-                $duree = '';
-                if ($this->typeEpreuves[$type]->isHasDuree() === true) {
-                    $duree = ' ' . $this->displayDuree($mccc->getDuree());
+                if ($quitus === true)
+                {
+                    $texte .= 'QUITUS '. $this->typeEpreuves[$type]->getSigle();
+                } else {
+                    $duree = '';
+                    if ($this->typeEpreuves[$type]->isHasDuree() === true) {
+                        $duree = ' ' . $this->displayDuree($mccc->getDuree());
+                    }
+
+                    $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . $mccc->getPourcentage() . '%); ';
                 }
 
-                $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . $mccc->getPourcentage() . '%); ';
             } else {
                 $texte .= 'erreur épreuve; ';
             }
