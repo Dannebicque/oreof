@@ -10,6 +10,7 @@
 namespace App\DTO;
 
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 
 class HeuresEctsEc
 {
@@ -36,7 +37,11 @@ class HeuresEctsEc
         return $this->sommeEcTotalPres() + $this->sommeEcTotalDist();
     }
 
-    public function addEc(ElementConstitutif $elementConstitutif): void
+    public function addEcts(?float $ects = 0.0): void
+    {
+        $this->ects = $ects ?? 0.0;
+    }
+    public function addEc(ElementConstitutif|FicheMatiere $elementConstitutif): void
     {
         $this->cmPres = $elementConstitutif->getVolumeCmPresentiel() ?? 0.0;
         $this->tdPres = $elementConstitutif->getVolumeTdPresentiel() ?? 0.0;
@@ -45,6 +50,6 @@ class HeuresEctsEc
         $this->cmDist = $elementConstitutif->getVolumeCmDistanciel() ?? 0.0;
         $this->tdDist = $elementConstitutif->getVolumeTdDistanciel() ?? 0.0;
         $this->tpDist = $elementConstitutif->getVolumeTpDistanciel() ?? 0.0;
-        $this->ects = $elementConstitutif->getEcts() ?? 0.0;
+
     }
 }

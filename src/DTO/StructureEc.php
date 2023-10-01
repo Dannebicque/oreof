@@ -9,7 +9,11 @@
 
 namespace App\DTO;
 
+use App\Classes\GetElementConstitutif;
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
+use App\Entity\Parcours;
+use Doctrine\Common\Collections\Collection;
 
 class StructureEc
 {
@@ -17,15 +21,25 @@ class StructureEc
     public bool $raccroche = false;
     public array $elementsConstitutifsEnfants = [];
     public HeuresEctsEc $heuresEctsEc;
+    public ElementConstitutif|FicheMatiere|null $elementRaccroche = null;
     public array $heuresEctsEcEnfants = [];
+    public Collection $mcccs;
+    public ?string $typeMccc;
 
 
-    public function __construct(ElementConstitutif $elementConstitutif, bool $raccroche = false)
+    public function __construct(ElementConstitutif $elementConstitutif, Parcours $parcours)
     {
+
+        $this->raccroche = GetElementConstitutif::isRaccroche($elementConstitutif, $parcours);
+        $this->elementRaccroche = GetElementConstitutif::getElementConstitutif($elementConstitutif, $this->raccroche);
+
         $this->elementConstitutif = $elementConstitutif;
-        $this->raccroche = $raccroche;
         $this->heuresEctsEc = new HeuresEctsEc();
-        $this->heuresEctsEc->addEc($elementConstitutif);
+        $this->typeMccc = GetElementConstitutif::getTypeMccc($elementConstitutif, $this->raccroche);
+        $this->heuresEctsEc->addEc(GetElementConstitutif::getElementConstitutifHeures($elementConstitutif, $this->raccroche));
+        $this->heuresEctsEc->addEcts(GetElementConstitutif::getEcts($elementConstitutif, $this->raccroche));
+        $this->mcccs = GetElementConstitutif::getMcccsCollection($elementConstitutif, $this->raccroche);
+        $this->bccs = GetElementConstitutif::getBccs($elementConstitutif, $this->raccroche);
     }
 
     public function addEcEnfant(?int $idEc, StructureEc $structureEc): void

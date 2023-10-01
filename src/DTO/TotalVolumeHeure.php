@@ -22,17 +22,17 @@ class TotalVolumeHeure
     public float $totalTpDistanciel = 0;
     public float $totalVolumeTe = 0;
 
-    public function addEc(ElementConstitutif $ec): void
+    public function addSemestre(HeuresEctsSemestre $ec): void
     {
-        $this->totalCmPresentiel += $ec->getVolumeCmPresentiel();
-        $this->totalTdPresentiel += $ec->getVolumeTdPresentiel();
-        $this->totalTpPresentiel += $ec->getVolumeTpPresentiel();
+        $this->totalCmPresentiel += $ec->sommeSemestreCmPres;
+        $this->totalTdPresentiel += $ec->sommeSemestreTdPres;
+        $this->totalTpPresentiel += $ec->sommeSemestreTpPres;
 
-        $this->totalCmDistanciel += $ec->getVolumeCmDistanciel();
-        $this->totalTdDistanciel += $ec->getVolumeTdDistanciel();
-        $this->totalTpDistanciel += $ec->getVolumeTpDistanciel();
+        $this->totalCmDistanciel += $ec->sommeSemestreCmDist;
+        $this->totalTdDistanciel += $ec->sommeSemestreTdDist;
+        $this->totalTpDistanciel += $ec->sommeSemestreTpDist;
 
-        $this->totalVolumeTe += $ec->getVolumeTe();
+        $this->totalVolumeTe += $ec->sommeSemestreTePres;
     }
 
     public function getTotalPresentiel(): float

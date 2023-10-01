@@ -13,6 +13,7 @@ use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use App\TypeDiplome\Source\TypeDiplomeInterface;
+use Doctrine\Common\Collections\Collection;
 
 abstract class GetElementConstitutif
 {
@@ -42,6 +43,20 @@ abstract class GetElementConstitutif
         //$ec = self::getElementConstitutif($elementConstitutif, $raccroche);
 
         return $typeD->getMcccs($elementConstitutif);
+    }
+
+    public static function getMcccsCollection(ElementConstitutif $elementConstitutif, bool $raccroche): Collection
+    {
+        if ($elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
+            return $elementConstitutif->getFicheMatiere()->getMcccs();
+        }
+
+        if ($elementConstitutif->isSynchroMccc() === true) {
+            return self::getElementConstitutif($elementConstitutif, $raccroche)->getMcccs();
+        }
+        //$ec = self::getElementConstitutif($elementConstitutif, $raccroche);
+
+        return $elementConstitutif->getMcccs();
     }
 
     public static function getEcts(ElementConstitutif $elementConstitutif, bool $raccroche): ?float
@@ -125,5 +140,26 @@ abstract class GetElementConstitutif
             return self::getElementConstitutif($elementConstitutif, $raccroche)->getEtatBcc($parcours);
         }
         return $elementConstitutif->getEtatBcc($parcours);
+    }
+
+    public static function getTypeMccc(ElementConstitutif $elementConstitutif, bool $raccroche): ?string
+    {
+        if ($elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
+            return $elementConstitutif->getFicheMatiere()?->getTypeMccc();
+        }
+
+        if ($elementConstitutif->isSynchroMccc() === true) {
+            return self::getElementConstitutif($elementConstitutif, $raccroche)->getTypeMccc();
+        }
+
+        return $elementConstitutif->getTypeMccc();
+    }
+
+    public static function getBccs(ElementConstitutif $elementConstitutif, bool $raccroche): Collection
+    {
+        if ($elementConstitutif->isSynchroBcc() === true) {
+            return self::getElementConstitutif($elementConstitutif, $raccroche)->getCompetences();
+        }
+        return $elementConstitutif->getCompetences();
     }
 }

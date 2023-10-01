@@ -31,4 +31,14 @@ class StructureParcours
         $this->semestres[$ordre] = $structureSemestre;
         $this->heuresEctsFormation->addSemestre($structureSemestre->heuresEctsSemestre);
     }
+
+    public function getTabAnnee(): array
+    {
+        $tab = [];
+        foreach ($this->semestres as $semestre) {
+            $tab[$semestre->getAnnee()][$semestre->ordre] = $semestre;
+        }
+
+        return $tab;
+    }
 }
