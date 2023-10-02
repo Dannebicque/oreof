@@ -56,11 +56,12 @@ class ParcoursSaveController extends AbstractController
         $updateEntity->setGroups(['parcours:read']);
         $this->denyAccessUnlessGranted('CAN_PARCOURS_EDIT_MY', $parcours);
 
-        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
-            $parcours, 'autoriser')) && !$this->isGranted('ROLE_SES')) {
-            //si on est pas dans un état qui permet de modifier la formation
-            return $this->json('Vous ne pouvez plus modifier cette formation', Response::HTTP_FORBIDDEN);
-        }
+//        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
+//            $parcours, 'autoriser')) && !$this->isGranted('ROLE_SES')) {
+//            //si on est pas dans un état qui permet de modifier la formation
+//            return $this->json('Vous ne pouvez plus modifier cette formation', Response::HTTP_FORBIDDEN);
+        //todo: bloquant + pas erreur envoyée ou pas traitée dans JS
+//        }
 
         if ($this->parcoursWorkflow->can($parcours, 'autoriser')) {
             //un champ est modifié, on met à jour l'état

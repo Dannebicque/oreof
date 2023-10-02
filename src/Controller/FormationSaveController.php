@@ -55,13 +55,13 @@ class FormationSaveController extends BaseController
         $updateEntity->setGroups(['formation:read']);
         $this->denyAccessUnlessGranted('CAN_FORMATION_EDIT_MY', $formation);
 
-        if (!($this->dpeWorkflow->can($formation, 'valide_rf') || $this->dpeWorkflow->can(
-            $formation,
-            'autoriser'
-        )) && !$this->isGranted('ROLE_SES')) {
-            //si on est pas dans un état qui permet de modifier la formation
-            return $this->json('Vous ne pouvez plus modifier cette formation', Response::HTTP_FORBIDDEN);
-        }
+//        if (!($this->dpeWorkflow->can($formation, 'valide_rf') || $this->dpeWorkflow->can(
+//            $formation,
+//            'autoriser'
+//        )) && !$this->isGranted('ROLE_SES')) {
+//            //si on est pas dans un état qui permet de modifier la formation
+//            return $this->json('Vous ne pouvez plus modifier cette formation', Response::HTTP_FORBIDDEN);
+//        }
 
         if ($this->dpeWorkflow->can($formation, 'autoriser')) {
             //un champ est modifié, on met à jour l'état
