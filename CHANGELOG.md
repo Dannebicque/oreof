@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.43](https://github.com/Dannebicque/oreof/compare/v1.14.42...v1.14.43) (2023-10-02)
+
+
+### Bug Fixes
+
+* Récupération des MCCC des parents ([d87eb89](https://github.com/Dannebicque/oreof/commit/d87eb89b099c099c8e1021623ce8e3e8326b18d2))
+
 ### [1.14.42](https://github.com/Dannebicque/oreof/compare/v1.14.41...v1.14.42) (2023-10-02)
 
 
