@@ -40,6 +40,7 @@ abstract class ValideStructure extends AbstractValide
 
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::COMPLET;
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'] = [];
+                self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'] = [];
 
                 if ($sem !== null && $sem->isNonDispense() !== true) {
                     if ($sem->getUes()->count() === 0) {
@@ -61,9 +62,11 @@ abstract class ValideStructure extends AbstractValide
                     }
 
                 } else {
+                    if ($sem->isNonDispense() !== true) {
                     self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::VIDE;
                     self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = 'Semestre non renseigné';
                     self::$errors[] = 'Semestre ' . $semestreParcour->getOrdre() . ' non renseigné';
+                    }
                 }
             }
         }

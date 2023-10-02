@@ -176,6 +176,7 @@ class LicenceMccc
             $texte .= $typeEpreuve->getSigle() . ' : ' . $typeEpreuve->getLibelle() . '; ';
         }
         $texte = substr($texte, 0, -2);
+        $texte .= '. CCr : Note globale de CC de première session conservée. TPr : Note globale de TP de première session conservée.';
         $modele->setCellValue(self::COL_DETAIL_TYPE_EPREUVES, $texte);
 
         $index = 1;
@@ -563,7 +564,7 @@ class LicenceMccc
                 if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1]) && $mcccs[1]['cc'] !== null) {
                     $texte = '';
                     foreach ($mcccs[1]['cc'] as $mccc) {
-                        $texte .= 'CC' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
+                        $texte .= 'CC '.$mccc->getNbEpreuves().' épreuve(s) (' . $mccc->getPourcentage() . '%); ';
                     }
                     $texte = substr($texte, 0, -2);
                     $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
@@ -580,10 +581,14 @@ class LicenceMccc
                         if ($mccc->hasTp()) {
                             $hasTp = true;
                             $pourcentageTp += $mccc->pourcentageTp();
-                            $texteAvecTp .= 'TP' . $nb . ' (' . $pourcentageTp . '%); ';
+
                         }
                         $pourcentageCc += $mccc->getPourcentage();
                         $texteCc .= 'CC (' . $mccc->getPourcentage() . '%); ';
+                    }
+
+                    if ($hasTp) {
+                        $texteAvecTp .= 'TPr (' . $pourcentageTp . '%); ';
                     }
 
                     if (array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
@@ -603,14 +608,21 @@ class LicenceMccc
                         $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
                         $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTp);
                         $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCc);
+
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
                     $texteCc = substr($texteCc, 0, -2);
-                    $texteAvecTp = substr($texteCc, 0, -2);
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texteEpreuve);
+                    $texteCc = str_replace('CC', 'CCr', $texteCc);
+                    $texteAvecTp = substr($texteAvecTp, 0, -2);
+
+
+
                     if ($hasTp) {
                         $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
+                    } else {
+                        //si TP cette celulle est vide...
+                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texteEpreuve);
                     }
                     $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne, str_replace(';', '+', $texteCc));
                 }
