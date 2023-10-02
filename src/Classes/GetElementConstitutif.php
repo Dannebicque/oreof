@@ -37,11 +37,10 @@ abstract class GetElementConstitutif
             return $typeD->getMcccs($elementConstitutif->getFicheMatiere());
         }
 
-        if ($elementConstitutif->isSynchroMccc() === true) {
+        if ($elementConstitutif->isSynchroMccc() === true && $raccroche === true) {
             return $typeD->getMcccs(self::getElementConstitutif($elementConstitutif, $raccroche));
         }
         //$ec = self::getElementConstitutif($elementConstitutif, $raccroche);
-
         return $typeD->getMcccs($elementConstitutif);
     }
 
@@ -51,7 +50,7 @@ abstract class GetElementConstitutif
             return $elementConstitutif->getFicheMatiere()->getMcccs();
         }
 
-        if ($elementConstitutif->isSynchroMccc() === true) {
+        if ($elementConstitutif->isSynchroMccc() === true && $raccroche === true) {
             return self::getElementConstitutif($elementConstitutif, $raccroche)->getMcccs();
         }
         //$ec = self::getElementConstitutif($elementConstitutif, $raccroche);
@@ -65,7 +64,7 @@ abstract class GetElementConstitutif
             return $elementConstitutif->getFicheMatiere()?->getEcts();
         }
 
-        if ($elementConstitutif->isSynchroEcts() === true) {
+        if ($elementConstitutif->isSynchroEcts() === true && $raccroche === true) {
             return self::getElementConstitutif($elementConstitutif, $raccroche)?->getEcts();
         }
 
@@ -86,7 +85,7 @@ abstract class GetElementConstitutif
             return $elementConstitutif->getEcParent();
         }
 
-        if ($elementConstitutif->isSynchroHeures() === true) {
+        if ($elementConstitutif->isSynchroHeures() === true && $raccroche === true) {
             return self::getElementConstitutif($elementConstitutif, $raccroche);
         }
         return $elementConstitutif;
@@ -115,7 +114,7 @@ abstract class GetElementConstitutif
             return $elementConstitutif->getFicheMatiere()?->getEtatMccc();
         }
 
-        if ($elementConstitutif->isSynchroMccc() === true) {
+        if ($elementConstitutif->isSynchroMccc() === true && $raccroche === true) {
             return self::getElementConstitutif($elementConstitutif, $raccroche)->getEtatMccc();
         }
 
@@ -132,7 +131,7 @@ abstract class GetElementConstitutif
             return $elementConstitutif->getEcParent()->etatStructure();
         }
 
-        if ($elementConstitutif->isSynchroHeures() === true) {
+        if ($elementConstitutif->isSynchroHeures() === true && $raccroche === true) {
             return self::getElementConstitutif($elementConstitutif, $raccroche)->etatStructure();
         }
         return $elementConstitutif->etatStructure();
