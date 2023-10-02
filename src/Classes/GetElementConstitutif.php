@@ -107,6 +107,10 @@ abstract class GetElementConstitutif
 
     public static function getEtatsMccc(ElementConstitutif $elementConstitutif, bool $raccroche): ?string
     {
+        if ($elementConstitutif->getEcParent() !== null && $elementConstitutif->getEcParent()->isMcccEnfantsIdentique() === true) {
+            return $elementConstitutif->getEcParent()->getEtatMccc();
+        }
+
         if ($elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
             return $elementConstitutif->getFicheMatiere()?->getEtatMccc();
         }
@@ -144,6 +148,10 @@ abstract class GetElementConstitutif
 
     public static function getTypeMccc(ElementConstitutif $elementConstitutif, bool $raccroche): ?string
     {
+        if ($elementConstitutif->getEcParent() !== null && $elementConstitutif->getEcParent()->isMcccEnfantsIdentique() === true) {
+            return $elementConstitutif->getEcParent()->getTypeMccc();
+        }
+
         if ($elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
             return $elementConstitutif->getFicheMatiere()?->getTypeMccc();
         }
