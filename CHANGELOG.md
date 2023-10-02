@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.42](https://github.com/Dannebicque/oreof/compare/v1.14.41...v1.14.42) (2023-10-02)
+
+
+### Bug Fixes
+
+* Export + semestre non dispensé ([7ece845](https://github.com/Dannebicque/oreof/commit/7ece8450d9f458365be9c686379a9a3e96015b19))
+
 ### [1.14.41](https://github.com/Dannebicque/oreof/compare/v1.14.40...v1.14.41) (2023-10-02)
 
 
