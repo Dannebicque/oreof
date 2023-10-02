@@ -139,7 +139,7 @@ abstract class GetElementConstitutif
 
     public static function getEtatBcc(ElementConstitutif $elementConstitutif, bool $raccroche, Parcours $parcours): ?string
     {
-        if ($elementConstitutif->isSynchroBcc() === true) {
+        if ($elementConstitutif->isSynchroBcc() === true && $raccroche === true) {
             return self::getElementConstitutif($elementConstitutif, $raccroche)->getEtatBcc($parcours);
         }
         return $elementConstitutif->getEtatBcc($parcours);
