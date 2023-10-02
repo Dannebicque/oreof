@@ -1,14 +1,21 @@
 <div class="col-12">
     <dl>
-        <dt>Responsable du parcours</dt>
-        <dd>{{ parcours.respParcours != null ? parcours.respParcours.display : 'erreur' }}</dd>
-        <dt>Email</dt>
-        <dd>{{ parcours.respParcours != null ? parcours.respParcours.email : 'erreur' }}</dd>
-        {% if parcours.coResponsable != null %}
-            <dt>Co-responsable du parcours</dt>
-            <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.display : 'erreur' }}</dd>
+        {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
+            <dt>Responsable de formation</dt>
+            <dd>{{ parcours.formation.responsableMention != null ? parcours.formation.responsableMention.display : 'erreur' }}</dd>
+            <dt>Co-responsable de formation</dt>
+            <dd>{{ parcours.formation.coResponsable != null ? parcours.formation.coResponsable.display : 'erreur' }}</dd>
+        {% else %}
+            <dt>Responsable du parcours</dt>
+            <dd>{{ parcours.respParcours != null ? parcours.respParcours.display : 'erreur' }}</dd>
             <dt>Email</dt>
-            <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.email : 'erreur' }}</dd>
+            <dd>{{ parcours.respParcours != null ? parcours.respParcours.email : 'erreur' }}</dd>
+            {% if parcours.coResponsable != null %}
+                <dt>Co-responsable du parcours</dt>
+                <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.display : 'erreur' }}</dd>
+                <dt>Email</dt>
+                <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.email : 'erreur' }}</dd>
+            {% endif %}
         {% endif %}
         <dt>Coordonnées secrétariat</dt>
         <dd>{{ parcours.coordSecretariat|raw }}</dd>
