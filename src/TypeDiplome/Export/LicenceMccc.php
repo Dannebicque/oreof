@@ -743,7 +743,7 @@ class LicenceMccc
         }
     }
 
-    private function displayTypeEpreuveWithDureePourcentage(Mccc $mccc, bool $quitus = false): string
+    private function displayTypeEpreuveWithDureePourcentage(Mccc $mccc, ?bool $quitus = false): string
     {
         $texte = '';
         foreach ($mccc->getTypeEpreuve() as $type) {
