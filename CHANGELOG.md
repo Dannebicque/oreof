@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.39](https://github.com/Dannebicque/oreof/compare/v1.14.38...v1.14.39) (2023-10-02)
+
+
+### Bug Fixes
+
+* Affichage page contrôle avec UE enfants ([5ac807d](https://github.com/Dannebicque/oreof/commit/5ac807d212d232880054e610d8ad9abf7efda894))
+* responsable formation si pas de parcours ([1a070b8](https://github.com/Dannebicque/oreof/commit/1a070b88c65438f75653d38cbe19d4396d439915))
+
 ### [1.14.38](https://github.com/Dannebicque/oreof/compare/v1.14.37...v1.14.38) (2023-10-01)
 
 
