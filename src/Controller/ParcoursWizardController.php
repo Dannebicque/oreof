@@ -205,7 +205,7 @@ class ParcoursWizardController extends AbstractController
             case 'DELETE':
                 $codes = $parcours->getCodesRome();
                 foreach ($codes as $key => $value) {
-                    if ($value['code'] === $code) {
+                    if ((string)$value['code'] === (string)$code) {
                         unset($codes[$key]);
                     }
                 }
