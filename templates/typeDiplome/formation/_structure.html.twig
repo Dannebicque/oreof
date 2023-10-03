@@ -47,7 +47,7 @@
                 {% endfor %}
                 <tr>
                     <th class="border-left-semestre-{{ ordre }} text-end" colspan="3">Total Semestre {{ ordre }}</th>
-                    <th>{{ semestre.heuresEctsSemestre.sommeSemestreEcts }}</th>
+                    <th>{{ semestre.heuresEctsSemestre.sommeSemestreEcts|badgeEctsSemestre }}</th>
 
                     {% if presentiel %}
                         <th>{{ semestre.heuresEctsSemestre.sommeSemestreCmPres }}</th>
