@@ -155,7 +155,7 @@ abstract class GetElementConstitutif
             return $elementConstitutif->getFicheMatiere()?->getTypeMccc();
         }
 
-        if ($elementConstitutif->isSynchroMccc() === true) {
+        if ($elementConstitutif->isSynchroMccc() === true && $raccroche === true) {
             return self::getElementConstitutif($elementConstitutif, $raccroche)->getTypeMccc();
         }
 
@@ -164,9 +164,14 @@ abstract class GetElementConstitutif
 
     public static function getBccs(ElementConstitutif $elementConstitutif, bool $raccroche): Collection
     {
-        if ($elementConstitutif->isSynchroBcc() === true) {
+        if ($elementConstitutif->isSynchroBcc() === true && $raccroche === true) {
             return self::getElementConstitutif($elementConstitutif, $raccroche)->getCompetences();
         }
+
+        if ($elementConstitutif->getCompetences()->count() === 0) {
+            return $elementConstitutif->getFicheMatiere()?->getCompetences();
+        }
+
         return $elementConstitutif->getCompetences();
     }
 }
