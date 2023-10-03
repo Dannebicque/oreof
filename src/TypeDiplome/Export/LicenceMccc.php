@@ -100,8 +100,7 @@ class LicenceMccc
         protected CalculStructureParcours $calculStructureParcours,
         protected ExcelWriter             $excelWriter,
         TypeEpreuveRepository             $typeEpreuveRepository
-    )
-    {
+    ) {
         $epreuves = $typeEpreuveRepository->findAll();
 
         foreach ($epreuves as $epreuve) {
@@ -119,8 +118,7 @@ class LicenceMccc
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): void
-    {
+    ): void {
         //todo: gérer la date de publication et un "marquage" sur le document si pré-CFVU
         $this->versionFull = $versionFull;
         $formation = $parcours->getFormation();
@@ -269,6 +267,7 @@ class LicenceMccc
                             $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $debut, $uee->ue->getLibelle(), ['wrap' => true]);
                         }
                     }
+                    $ligne = $this->afficheSommeSemestre($ligne, $totalAnnee, $semestre);
 
                     $this->excelWriter->mergeCellsCaR(self::COL_SEMESTRE, $debutSemestre, self::COL_SEMESTRE, $ligne - 1);
                     $this->excelWriter->writeCellXY(self::COL_SEMESTRE, $debutSemestre, 'S' . $semestre->ordre);
@@ -277,53 +276,52 @@ class LicenceMccc
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $totalAnnee->totalTdPresentiel === 0.0 ? '' : $totalAnnee->totalTdPresentiel, ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $totalAnnee->totalTpPresentiel === 0.0 ? '' : $totalAnnee->totalTpPresentiel, ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TOTAL, $ligne, $totalAnnee->getTotalPresentiel() === 0.0 ? '' : $totalAnnee->getTotalPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
-
-                    $this->excelWriter->writeCellXY(
-                        self::COL_HEURES_DIST_CM,
-                        $ligne,
-                        $totalAnnee->totalCmDistanciel === 0.0 ? '' : $totalAnnee->totalCmDistanciel,
-                        ['style' => 'HORIZONTAL_CENTER']
-                    );
-                    $this->excelWriter->writeCellXY(
-                        self::COL_HEURES_DIST_TD,
-                        $ligne,
-                        $totalAnnee->totalTdDistanciel === 0.0 ? '' : $totalAnnee->totalTdDistanciel,
-                        ['style' => 'HORIZONTAL_CENTER']
-                    );
-                    $this->excelWriter->writeCellXY(
-                        self::COL_HEURES_DIST_TP,
-                        $ligne,
-                        $totalAnnee->totalTpDistanciel === 0.0 ? '' : $totalAnnee->totalTpDistanciel,
-                        ['style' => 'HORIZONTAL_CENTER']
-                    );
-                    $this->excelWriter->writeCellXY(
-                        self::COL_HEURES_DIST_TOTAL,
-                        $ligne,
-                        $totalAnnee->getTotalDistanciel() === 0.0 ? '' : $totalAnnee->getTotalDistanciel(),
-                        ['style' => 'HORIZONTAL_CENTER']
-                    );
-
-                    $this->excelWriter->writeCellXY(
-                        self::COL_HEURES_TOTAL,
-                        $ligne,
-                        $totalAnnee->getVolumeTotal() === 0.0 ? '' : $totalAnnee->getVolumeTotal(),
-                        ['style' => 'HORIZONTAL_CENTER']
-                    );
-
-                    $this->excelWriter->writeCellXY(
-                        self::COL_HEURES_AUTONOMIE,
-                        $ligne + 1,
-                        $totalAnnee->getTotalVolumeTe() === 0.0 ? '' : $totalAnnee->getTotalVolumeTe(),
-                        ['style' => 'HORIZONTAL_CENTER']
-                    );
-
-                    $this->excelWriter->writeCellXY(
-                        self::COL_HEURES_PRES_CM,
-                        $ligne + 2,
-                        $totalAnnee->getTotalEtudiant() === 0.0 ? '' : $totalAnnee->getTotalEtudiant(),
-                        ['style' => 'HORIZONTAL_CENTER']
-                    );
                 }
+                $this->excelWriter->writeCellXY(
+                    self::COL_HEURES_DIST_CM,
+                    $ligne,
+                    $totalAnnee->totalCmDistanciel === 0.0 ? '' : $totalAnnee->totalCmDistanciel,
+                    ['style' => 'HORIZONTAL_CENTER']
+                );
+                $this->excelWriter->writeCellXY(
+                    self::COL_HEURES_DIST_TD,
+                    $ligne,
+                    $totalAnnee->totalTdDistanciel === 0.0 ? '' : $totalAnnee->totalTdDistanciel,
+                    ['style' => 'HORIZONTAL_CENTER']
+                );
+                $this->excelWriter->writeCellXY(
+                    self::COL_HEURES_DIST_TP,
+                    $ligne,
+                    $totalAnnee->totalTpDistanciel === 0.0 ? '' : $totalAnnee->totalTpDistanciel,
+                    ['style' => 'HORIZONTAL_CENTER']
+                );
+                $this->excelWriter->writeCellXY(
+                    self::COL_HEURES_DIST_TOTAL,
+                    $ligne,
+                    $totalAnnee->getTotalDistanciel() === 0.0 ? '' : $totalAnnee->getTotalDistanciel(),
+                    ['style' => 'HORIZONTAL_CENTER']
+                );
+
+                $this->excelWriter->writeCellXY(
+                    self::COL_HEURES_TOTAL,
+                    $ligne,
+                    $totalAnnee->getVolumeTotal() === 0.0 ? '' : $totalAnnee->getVolumeTotal(),
+                    ['style' => 'HORIZONTAL_CENTER']
+                );
+
+                $this->excelWriter->writeCellXY(
+                    self::COL_HEURES_AUTONOMIE,
+                    $ligne + 1,
+                    $totalAnnee->getTotalVolumeTe() === 0.0 ? '' : $totalAnnee->getTotalVolumeTe(),
+                    ['style' => 'HORIZONTAL_CENTER']
+                );
+
+                $this->excelWriter->writeCellXY(
+                    self::COL_HEURES_PRES_CM,
+                    $ligne + 2,
+                    $totalAnnee->getTotalEtudiant() === 0.0 ? '' : $totalAnnee->getTotalEtudiant(),
+                    ['style' => 'HORIZONTAL_CENTER']
+                );
             }
             //suppression de la ligne modèle 18
             $this->excelWriter->removeRow(18);
@@ -348,8 +346,7 @@ class LicenceMccc
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): StreamedResponse
-    {
+    ): StreamedResponse {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
         return $this->excelWriter->genereFichier($this->fileName);
     }
@@ -359,8 +356,7 @@ class LicenceMccc
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): StreamedResponse
-    {
+    ): StreamedResponse {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
         return $this->excelWriter->genereFichierPdf($this->fileName);
     }
@@ -371,8 +367,7 @@ class LicenceMccc
         string             $dir,
         DateTimeInterface  $dateEdition,
         bool               $versionFull = true
-    ): string
-    {
+    ): string {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
         $this->excelWriter->saveFichier($this->fileName, $dir);
         return $this->fileName . '.xlsx';
@@ -564,7 +559,7 @@ class LicenceMccc
                 if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1]) && $mcccs[1]['cc'] !== null) {
                     $texte = '';
                     foreach ($mcccs[1]['cc'] as $mccc) {
-                        $texte .= 'CC '.$mccc->getNbEpreuves().' épreuve(s) (' . $mccc->getPourcentage() . '%); ';
+                        $texte .= 'CC ' . $mccc->getNbEpreuves() . ' épreuve(s) (' . $mccc->getPourcentage() . '%); ';
                     }
                     $texte = substr($texte, 0, -2);
                     $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
@@ -581,7 +576,6 @@ class LicenceMccc
                         if ($mccc->hasTp()) {
                             $hasTp = true;
                             $pourcentageTp += $mccc->pourcentageTp();
-
                         }
                         $pourcentageCc += $mccc->getPourcentage();
                         $texteCc .= 'CC (' . $mccc->getPourcentage() . '%); ';
@@ -608,14 +602,12 @@ class LicenceMccc
                         $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
                         $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTp);
                         $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCc);
-
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
                     $texteCc = substr($texteCc, 0, -2);
                     $texteCc = str_replace('CC', 'CCr', $texteCc);
                     $texteAvecTp = substr($texteAvecTp, 0, -2);
-
 
 
                     if ($hasTp) {
@@ -660,7 +652,7 @@ class LicenceMccc
         $this->excelWriter->writeCellXY(self::COL_TYPE_EC, $ligne, $ec->getTypeEc() ? $ec->getTypeEc()->getLibelle() : '');
 
         // Heures
-        $this->excelWriter->writeCellXY(self::COL_ECTS, $ligne, $structureEc->heuresEctsEc->ects=== 0.0 ? '' : $structureEc->heuresEctsEc->ects);
+        $this->excelWriter->writeCellXY(self::COL_ECTS, $ligne, $structureEc->heuresEctsEc->ects === 0.0 ? '' : $structureEc->heuresEctsEc->ects);
         $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $structureEc->heuresEctsEc->cmPres === 0.0 ? '' : $structureEc->heuresEctsEc->cmPres);
         $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $structureEc->heuresEctsEc->tdPres === 0.0 ? '' : $structureEc->heuresEctsEc->tdPres);
         $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $structureEc->heuresEctsEc->tpPres === 0.0 ? '' : $structureEc->heuresEctsEc->tpPres);
@@ -740,29 +732,13 @@ class LicenceMccc
         return $duree->format('H\hi');
     }
 
-    private function getNumSemestre(int $i, int|string $ordreAnnee): int
-    {
-        //$i => 1, 2 ou 3
-        //$ordreAnnee => 1 ou 2
-        if ($i === 1) {
-            return $ordreAnnee;
-        } elseif ($i === 2) {
-            return $ordreAnnee + 2;
-        } elseif ($i === 3) {
-            return $ordreAnnee + 4;
-        } else {
-            return 'erreur';
-        }
-    }
-
     private function displayTypeEpreuveWithDureePourcentage(Mccc $mccc, ?bool $quitus = false): string
     {
         $texte = '';
         foreach ($mccc->getTypeEpreuve() as $type) {
             if ($type !== "" && $this->typeEpreuves[$type] !== null) {
-                if ($quitus === true)
-                {
-                    $texte .= 'QUITUS '. $this->typeEpreuves[$type]->getSigle();
+                if ($quitus === true) {
+                    $texte .= 'QUITUS ' . $this->typeEpreuves[$type]->getSigle();
                 } else {
                     $duree = '';
                     if ($this->typeEpreuves[$type]->isHasDuree() === true) {
@@ -771,7 +747,6 @@ class LicenceMccc
 
                     $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . $mccc->getPourcentage() . '%); ';
                 }
-
             } else {
                 $texte .= 'erreur épreuve; ';
             }
@@ -813,5 +788,34 @@ class LicenceMccc
         }
 
         return $texte;
+    }
+
+    private function afficheSommeSemestre(int $ligne, TotalVolumeHeure $totalAnnee, StructureSemestre $semestre): int
+    {
+        $this->excelWriter->insertNewRowBefore($ligne);
+
+        $this->excelWriter->mergeCellsCaR(self::COL_UE, $ligne, self::COL_COMPETENCES, $ligne );
+        $this->excelWriter->writeCellXY(self::COL_UE, $ligne, 'Total semestre S'.$semestre->ordre, ['style' => 'HORIZONTAL_RIGHT']);
+        //somme ECTS semestre
+        $this->excelWriter->writeCellXY(self::COL_ECTS, $ligne, $semestre->heuresEctsSemestre->sommeSemestreEcts === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreEcts, ['style' => 'HORIZONTAL_CENTER']);
+
+        //ligne de somme du semestre
+        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $semestre->heuresEctsSemestre->sommeSemestreCmPres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreCmPres, ['style' => 'HORIZONTAL_CENTER']);
+        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTdPres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTdPres, ['style' => 'HORIZONTAL_CENTER']);
+        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTpPres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTpPres, ['style' => 'HORIZONTAL_CENTER']);
+        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TOTAL, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTotalPres() === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTotalPres(), ['style' => 'HORIZONTAL_CENTER']);
+
+        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_CM, $ligne, $semestre->heuresEctsSemestre->sommeSemestreCmDist === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreCmDist, ['style' => 'HORIZONTAL_CENTER']);
+        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TD, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTdDist === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTdDist, ['style' => 'HORIZONTAL_CENTER']);
+        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TP, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTpDist === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTpDist, ['style' => 'HORIZONTAL_CENTER']);
+        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TOTAL, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTotalDist() === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTotalDist(), ['style' => 'HORIZONTAL_CENTER']);
+
+        $this->excelWriter->writeCellXY(self::COL_HEURES_TOTAL, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTotalPresDist() === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTotalPresDist(), ['style' => 'HORIZONTAL_CENTER']);
+
+        $this->excelWriter->writeCellXY(self::COL_HEURES_AUTONOMIE, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTePres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTePres, ['style' => 'HORIZONTAL_CENTER']);
+
+
+        $ligne++;
+        return $ligne;
     }
 }
