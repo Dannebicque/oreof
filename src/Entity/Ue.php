@@ -152,8 +152,11 @@ class Ue
 
         $total = 0;
         if ($this->getUeEnfants()->count() === 0) {
+
             foreach ($this->getElementConstitutifs() as $ec) {
-                if ($ec->getEcParent() === null) {
+                if ($ec->getFicheMatiere() !== null && $ec->getFicheMatiere()->isEctsImpose()) {
+                    $total += $ec->getFicheMatiere()->getEcts();
+                } elseif ($ec->getEcParent() === null) {
                     $total += $ec->getEcts();
                 }
             }
