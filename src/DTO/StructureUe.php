@@ -36,7 +36,6 @@ class StructureUe
     {
         $this->uesEnfants[$idUe] = $structureUe;
         $this->heuresEctsUeEnfants[$idUe] = $structureUe->heuresEctsUe;
-
         //gérer pour prendre le max des heures et ects sur tous les enfants de l'EC
     }
 
@@ -56,6 +55,7 @@ class StructureUe
         if (count($this->heuresEctsUeEnfants) > 0) {
             //parcourir le tableau, comparer les objets et retourner celui dont la somme des heures est la plus grande
             foreach ($this->heuresEctsUeEnfants as $heuresEctsUeEnfant) {
+                $this->heuresEctsUe->sommeUeEcts = max($this->heuresEctsUe->sommeUeEcts, $heuresEctsUeEnfant->sommeUeEcts);
                 if ($heuresEctsUeEnfant->sommeUeTotalPresDist() > $this->heuresEctsUe->sommeUeTotalPresDist()) {
                     $this->heuresEctsUe = $heuresEctsUeEnfant;
                 }
