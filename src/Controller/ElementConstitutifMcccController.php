@@ -108,29 +108,17 @@ class ElementConstitutifMcccController extends AbstractController
                 }
                 return $this->json(true);
             }
-//dump($elementConstitutif->getFicheMatiere()?->getParcours()->getId());
-//dump($parcours->getId());
 
             $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()->getId() !== $parcours->getId();
-//dump($raccroche);
-            // les MCCC peuvent venir de :
-            // - la fiche matière associée si imposé
-            // - l'EC d'origine si raccroché
-            // - l'EC parent
-            // - l'EC lui-même
-//            dump($elementConstitutif->getId());
 
             if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
                 $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
-            } elseif ($raccroche) {
+            } elseif ($raccroche && $elementConstitutif->isSynchroMccc()) {
                 $ec = GetElementConstitutif::getElementConstitutif($elementConstitutif, $raccroche);
                 $typeEpreuve = $ec->getTypeMccc();
             } else {
                 $typeEpreuve = $elementConstitutif->getTypeMccc();
             }
-
-            //$typeEpreuve = GetElementConstitutif::getTypeMccc($elementConstitutif, $raccroche);
-//            dump($typeEpreuve);
 
             return $this->render('element_constitutif/_mcccEcModal.html.twig', [
                 'isMcccImpose' => $elementConstitutif->getFicheMatiere()?->isMcccImpose(),
