@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.49](https://github.com/Dannebicque/oreof/compare/v1.14.48...v1.14.49) (2023-10-03)
+
+
+### Features
+
+* Mise en valeurs ECTS ([4a2c0a0](https://github.com/Dannebicque/oreof/commit/4a2c0a0d0e5f3ced1968f920260a9f456d1aceb9))
+
+
+### Bug Fixes
+
+* Element constitutif si pas synchro ([e6d436a](https://github.com/Dannebicque/oreof/commit/e6d436a60b2a3befb7b7b9be6dc6065bd9909b3a))
+* Suppression des codes romes ([168eebd](https://github.com/Dannebicque/oreof/commit/168eebda265113d0462b48eefc4758fba0801915))
+
 ### [1.14.48](https://github.com/Dannebicque/oreof/compare/v1.14.47...v1.14.48) (2023-10-03)
 
 
