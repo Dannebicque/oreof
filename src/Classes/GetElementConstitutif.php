@@ -162,7 +162,7 @@ abstract class GetElementConstitutif
         return $elementConstitutif->getTypeMccc();
     }
 
-    public static function getBccs(ElementConstitutif $elementConstitutif, bool $raccroche): Collection
+    public static function getBccs(ElementConstitutif $elementConstitutif, bool $raccroche): ?Collection
     {
         if ($elementConstitutif->isSynchroBcc() === true && $raccroche === true) {
             return self::getElementConstitutif($elementConstitutif, $raccroche)->getCompetences();
