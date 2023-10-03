@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.52](https://github.com/Dannebicque/oreof/compare/v1.14.51...v1.14.52) (2023-10-03)
+
+
+### Bug Fixes
+
+* Export MCCC avec semestre ([92d96b6](https://github.com/Dannebicque/oreof/commit/92d96b67d9ec595180a73626f28523450d853f01))
+
 ### [1.14.51](https://github.com/Dannebicque/oreof/compare/v1.14.50...v1.14.51) (2023-10-03)
 
 
