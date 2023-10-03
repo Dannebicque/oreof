@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.50](https://github.com/Dannebicque/oreof/compare/v1.14.49...v1.14.50) (2023-10-03)
+
+
+### Bug Fixes
+
+* Element constitutif et fiche hors diplôme ([7f9daa6](https://github.com/Dannebicque/oreof/commit/7f9daa686d25d9ab228a150d549449be0f2777a9))
+* Element constitutif et fiche hors diplôme ([e8fd86f](https://github.com/Dannebicque/oreof/commit/e8fd86f1e82097469ca23e0b25812f8ce9741edf))
+
 ### [1.14.49](https://github.com/Dannebicque/oreof/compare/v1.14.48...v1.14.49) (2023-10-03)
 
 
