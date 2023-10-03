@@ -109,7 +109,7 @@ class ElementConstitutifMcccController extends AbstractController
                 return $this->json(true);
             }
 
-            $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()->getId() !== $parcours->getId();
+            $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
 
             if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
                 $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
