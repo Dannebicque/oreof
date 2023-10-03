@@ -68,7 +68,7 @@
     <th>&nbsp;</th>
     <th class="text-end">Total {{ ue.display}} {% if enfant == false and ue.ue.ueEnfants|length > 0 %}(Total max.){% endif %}</th>
 
-    <th>{{ ue.heuresEctsUe.sommeUeEcts }}</th>
+    <th>{{ ue.heuresEctsUe.sommeUeEcts|badgeEcts('primary') }}</th>
     {% if presentiel %}
         <th>{{ ue.heuresEctsUe.sommeUeCmPres|filtreHeures }}</th>
         <th>{{ ue.heuresEctsUe.sommeUeTdPres|filtreHeures }}</th>
