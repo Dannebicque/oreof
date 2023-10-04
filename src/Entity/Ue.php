@@ -150,9 +150,12 @@ class Ue
             return $this->getEcts();
         }
 
+        if ($this->getUeRaccrochee() !== null) {
+            return $this->getUeRaccrochee()->getUe()?->totalEctsUe();
+        }
+
         $total = 0;
         if ($this->getUeEnfants()->count() === 0) {
-
             foreach ($this->getElementConstitutifs() as $ec) {
                 if ($ec->getFicheMatiere() !== null && $ec->getFicheMatiere()->isEctsImpose()) {
                     $total += $ec->getFicheMatiere()->getEcts();
