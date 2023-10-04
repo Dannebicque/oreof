@@ -150,9 +150,9 @@ class Ue
             return $this->getEcts();
         }
 
-        if ($this->getUeRaccrochee() !== null) {
-            return $this->getUeRaccrochee()->getUe()?->totalEctsUe();
-        }
+//        if ($this->getUeRaccrochee() !== null) {
+//            return $this->getUeRaccrochee()->getUe()?->totalEctsUe();
+//        }
 
         $total = 0;
         if ($this->getUeEnfants()->count() === 0) {
