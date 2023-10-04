@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.53](https://github.com/Dannebicque/oreof/compare/v1.14.52...v1.14.53) (2023-10-04)
+
+
+### Bug Fixes
+
+* Suspendu reprise parcors ([de052ba](https://github.com/Dannebicque/oreof/commit/de052bae5a78e18bf2781531c0c32b8899303464))
+
 ### [1.14.52](https://github.com/Dannebicque/oreof/compare/v1.14.51...v1.14.52) (2023-10-03)
 
 
