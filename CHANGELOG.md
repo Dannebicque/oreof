@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.57](https://github.com/Dannebicque/oreof/compare/v1.14.56...v1.14.57) (2023-10-05)
+
+
+### Bug Fixes
+
+* BCC état + raccrocher ([28e311b](https://github.com/Dannebicque/oreof/commit/28e311b982ffb203d62095cd285005ee2eec9c4c))
+* Export Excel ([b8a90d6](https://github.com/Dannebicque/oreof/commit/b8a90d6170390cc0d726eb22bbbf00cf00c1c263))
+
 ### [1.14.56](https://github.com/Dannebicque/oreof/compare/v1.14.55...v1.14.56) (2023-10-05)
 
 
