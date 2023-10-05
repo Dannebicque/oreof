@@ -9,6 +9,7 @@
 
 namespace App\Entity;
 
+use App\Classes\GetElementConstitutif;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\ElementConstitutifRepository;
@@ -670,25 +671,19 @@ class ElementConstitutif
 
     public function getEtatBcc(Parcours $parcours): ?string
     {
-        //todo: déplacer les compétences des fiches dans l'EC ? Script de mise à jour
-        if ($this->getCompetences()->count() > 0) {
-            return 'Complet';
-        }
-        if ($this->getFicheMatiere() !== null) {
-            if ($this->getFicheMatiere()->getCompetences()->count() > 0) {
-                return 'Complet';
-            }
+        $raccroche = $this->getFicheMatiere()?->getParcours() !== $parcours;
+        return GetElementConstitutif::getEtatBcc($this, $raccroche);
 
-            if ($this->getFicheMatiere()->getApprentissagesCritiques()->count() > 0) {
-                //todo: les Ac doivent être dans la bonne compétence...
-                foreach ($this->getFicheMatiere()->getApprentissagesCritiques() as $ac) {
-                    if ($ac->getNiveau() !== null &&
-                        $ac->getNiveau()->getCompetence()?->getNumero() === $this->getUe()?->getOrdre()) {
-                        return 'Complet';
-                    }
-                }
-            }
-        }
+//        if ($this->getFicheMatiere()->getApprentissagesCritiques()->count() > 0) {
+//            //todo: les Ac doivent être dans la bonne compétence...
+//            foreach ($this->getFicheMatiere()->getApprentissagesCritiques() as $ac) {
+//                if ($ac->getNiveau() !== null &&
+//                    $ac->getNiveau()->getCompetence()?->getNumero() === $this->getUe()?->getOrdre()) {
+//                    return 'Complet';
+//                }
+//            }
+//        }
+
 
         return 'A saisir';
     }

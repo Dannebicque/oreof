@@ -178,16 +178,18 @@ class FormationStructure
                 $this->entityManager->persist($newSp);
 
                 foreach ($semestreParcour->getSemestre()?->getUes() as $ue) {
-                    $newUe = clone $ue;
-                    $newUe->setSemestre($newSemestre);
-                    $this->entityManager->persist($newUe);
+                    if ($ue->getUeParent() === null) {
+                        $newUe = clone $ue;
+                        $newUe->setSemestre($newSemestre);
+                        $this->entityManager->persist($newUe);
 
-                    //dupliquer les EC des ue
-                    foreach ($ue->getElementConstitutifs() as $ec) {
-                        $newEc = clone $ec;
-                        $newEc->setUe($newUe);
-                        $newEc->setParcours($parcours);
-                        $this->entityManager->persist($newEc);
+                        //dupliquer les EC des ue
+                        foreach ($ue->getElementConstitutifs() as $ec) {
+                            $newEc = clone $ec;
+                            $newEc->setUe($newUe);
+                            $newEc->setParcours($parcours);
+                            $this->entityManager->persist($newEc);
+                        }
                     }
                 }
             }

@@ -25,14 +25,13 @@ final class BadgeBccComponent
     public function mounted(): void
     {
         $this->isSynchroBcc = $this->elementConstitutif->isSynchroBcc() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours->getId();
-        if ($this->isSynchroBcc) {
+//        if ($this->isSynchroBcc) {
             $raccroche = GetElementConstitutif::isRaccroche($this->elementConstitutif, $this->parcours);
-            $ec = GetElementConstitutif::getElementConstitutif($this->elementConstitutif, $raccroche);
-            $this->etatBccComplet = $ec->getEtatBcc($this->parcours) === 'Complet';
-        } else {
-            $this->etatBccComplet = $this->elementConstitutif->getEtatBcc($this->parcours) === 'Complet';
-            //todo: faux positif si Compétences mais d'un autre parcours ? Sans que ce soit attaché pour autant ??
-        }
+            $this->etatBccComplet = GetElementConstitutif::getEtatBcc($this->elementConstitutif, $raccroche) === 'Complet';
+//        } else {
+//            $this->etatBccComplet = $this->elementConstitutif->getEtatBcc($this->parcours) === 'Complet';
+//            //todo: faux positif si Compétences mais d'un autre parcours ? Sans que ce soit attaché pour autant ??
+//        }
 
     }
 }

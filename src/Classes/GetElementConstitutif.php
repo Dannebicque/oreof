@@ -137,12 +137,34 @@ abstract class GetElementConstitutif
         return $elementConstitutif->etatStructure();
     }
 
-    public static function getEtatBcc(ElementConstitutif $elementConstitutif, bool $raccroche, Parcours $parcours): ?string
+    public static function getEtatBcc(ElementConstitutif $elementConstitutif, bool $raccroche): ?string
     {
-        if ($elementConstitutif->isSynchroBcc() === true && $raccroche === true) {
-            return self::getElementConstitutif($elementConstitutif, $raccroche)->getEtatBcc($parcours);
+        // cas du BUT
+        if ($elementConstitutif->getFicheMatiere()?->getApprentissagesCritiques()->count() > 0) {
+            //todo: les Ac doivent être dans la bonne compétence...
+            foreach ($elementConstitutif->getFicheMatiere()?->getApprentissagesCritiques() as $ac) {
+                if ($ac->getNiveau() !== null &&
+                    $ac->getNiveau()->getCompetence()?->getNumero() === $elementConstitutif->getUe()?->getOrdre()) {
+                    return 'Complet';
+                }
+            }
         }
-        return $elementConstitutif->getEtatBcc($parcours);
+
+
+        if ($raccroche === true && $elementConstitutif->isSynchroBcc() === true) {
+            $ec = self::getElementConstitutif($elementConstitutif, $raccroche);
+            if ($ec->getCompetences()->count() === 0) {
+                return $ec->getFicheMatiere()?->getCompetences()->count() > 0 ? 'Complet' : 'A saisir';
+            }
+            return $ec->getCompetences()->count() > 0 ? 'Complet' : 'A saisir';
+        }
+
+        if ($elementConstitutif->getCompetences()->count() === 0 && $raccroche === false) {
+            return $elementConstitutif->getFicheMatiere()?->getCompetences()->count() > 0 ? 'Complet' : 'A saisir';
+        }
+
+        return $elementConstitutif->getCompetences()->count() > 0 ? 'Complet' : 'A saisir';
+
     }
 
     public static function getTypeMccc(ElementConstitutif $elementConstitutif, bool $raccroche): ?string
@@ -164,8 +186,12 @@ abstract class GetElementConstitutif
 
     public static function getBccs(ElementConstitutif $elementConstitutif, bool $raccroche): ?Collection
     {
-        if ($elementConstitutif->isSynchroBcc() === true && $raccroche === true) {
-            return self::getElementConstitutif($elementConstitutif, $raccroche)->getCompetences();
+        if ($raccroche === true && $elementConstitutif->isSynchroBcc() === true) {
+            $ec = self::getElementConstitutif($elementConstitutif, $raccroche);
+            if ($ec->getCompetences()->count() === 0) {
+                return $ec->getFicheMatiere()?->getCompetences();
+            }
+            return $ec->getCompetences();
         }
 
         if ($elementConstitutif->getCompetences()->count() === 0) {

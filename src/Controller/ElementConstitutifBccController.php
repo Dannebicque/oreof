@@ -146,22 +146,7 @@ class ElementConstitutifBccController extends AbstractController
             $ecComps = [];
             $bccs = $blocCompetenceRepository->findByParcours($parcours);
 
-            if ($elementConstitutif->isSynchroBcc() === false ||
-                $elementConstitutif->getParcours()->getid() === $parcours->getId()
-            ) {
-                $editable= true;
-                if (($ficheMatiere !== null && $ficheMatiere->getParcours()?->getId() === $parcours->getId())) {
-                    foreach ($ficheMatiere->getCompetences() as $competence) {
-                        $ecComps[] = $competence->getId();
-                        $ecBccs[] = $competence->getBlocCompetence()?->getId();
-                    }
-                } else {
-                    foreach ($elementConstitutif->getCompetences() as $competence) {
-                        $ecComps[] = $competence->getId();
-                        $ecBccs[] = $competence->getBlocCompetence()?->getId();
-                    }
-                }
-            } else {
+            if ($raccroche === true && $elementConstitutif->isSynchroBcc() === true) {
                 $editable = false;
                 //faire le lien entre le parcours d'origine et le parcours en cours via le code des compétences
                 // competences du parcours
@@ -171,20 +156,27 @@ class ElementConstitutifBccController extends AbstractController
                         $tabCompetences[$competence->getCode()] = $competence;
                     }
                 }
-
                 // competences de l'EC du parcours d'origine
-                $ecParcours = GetElementConstitutif::getElementConstitutif($elementConstitutif, $raccroche);
+                $competences = GetElementConstitutif::getBccs($elementConstitutif, $raccroche);
 
-                //if (($ecParcours->getFicheMatiere() !== null && $ecParcours->getFicheMatiere()->getParcours()?->getId() === $parcours->getId())) {
-                    $competences = $ecParcours->getCompetences();;
-                //} else {
-                //    $competences = $ecParcours->getFicheMatiere()->getCompetences();
-                //}
                 //on fait le lien entre la compétence et le code
                 foreach ($competences as $competence) {
                     if (array_key_exists($competence->getCode(), $tabCompetences)) {
                         $ecComps[] = $tabCompetences[$competence->getCode()]->getId();
                         $ecBccs[] = $tabCompetences[$competence->getCode()]->getBlocCompetence()?->getId();
+                    }
+                }
+            } else {
+                $editable = true;
+                if (($ficheMatiere !== null && $ficheMatiere->getParcours()?->getId() === $parcours->getId())) {
+                    foreach ($ficheMatiere->getCompetences() as $competence) {
+                        $ecComps[] = $competence->getId();
+                        $ecBccs[] = $competence->getBlocCompetence()?->getId();
+                    }
+                } else {
+                    foreach ($elementConstitutif->getCompetences() as $competence) {
+                        $ecComps[] = $competence->getId();
+                        $ecBccs[] = $competence->getBlocCompetence()?->getId();
                     }
                 }
             }
