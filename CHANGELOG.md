@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.56](https://github.com/Dannebicque/oreof/compare/v1.14.55...v1.14.56) (2023-10-05)
+
+
+### Bug Fixes
+
+* BCC état + raccrocher ([8156155](https://github.com/Dannebicque/oreof/commit/81561556475a3dc4274c54314d89860e9a22c824))
+
 ### [1.14.55](https://github.com/Dannebicque/oreof/compare/v1.14.54...v1.14.55) (2023-10-04)
 
 
