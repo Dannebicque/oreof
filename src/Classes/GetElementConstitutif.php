@@ -159,7 +159,7 @@ abstract class GetElementConstitutif
             return $ec->getCompetences()->count() > 0 ? 'Complet' : 'A saisir';
         }
 
-        if ($elementConstitutif->getCompetences()->count() === 0 && $raccroche === false) {
+        if ($elementConstitutif->getCompetences()->count() === 0) {
             return $elementConstitutif->getFicheMatiere()?->getCompetences()->count() > 0 ? 'Complet' : 'A saisir';
         }
 
