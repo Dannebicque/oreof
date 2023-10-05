@@ -44,7 +44,7 @@ abstract class GetElementConstitutif
         return $typeD->getMcccs($elementConstitutif);
     }
 
-    public static function getMcccsCollection(ElementConstitutif $elementConstitutif, bool $raccroche): Collection
+    public static function getMcccsCollection(ElementConstitutif $elementConstitutif, bool $raccroche): ?Collection
     {
         if ($elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
             return $elementConstitutif->getFicheMatiere()->getMcccs();
@@ -53,7 +53,6 @@ abstract class GetElementConstitutif
         if ($elementConstitutif->isSynchroMccc() === true && $raccroche === true) {
             return self::getElementConstitutif($elementConstitutif, $raccroche)->getMcccs();
         }
-        //$ec = self::getElementConstitutif($elementConstitutif, $raccroche);
 
         return $elementConstitutif->getMcccs();
     }
