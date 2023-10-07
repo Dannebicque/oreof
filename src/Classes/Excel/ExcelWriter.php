@@ -52,6 +52,7 @@ class ExcelWriter
     public function writeCellXY(int $col, int $row, mixed $value = '', array $options = []): void
     {
         $this->sheet->setCellValue([$col, $row], $value);
+        //
         //traiter les options
         //style n'est pas un tableau
         if (is_array($options) && $this->sheet->getCell([$col, $row])) {
@@ -94,16 +95,20 @@ class ExcelWriter
                         $this->sheet->getCell([$col, $row])->getStyle()->getFont()->getColor()->setARGB('FF' . $valeur);
                         break;
                     case 'bgcolor':
-                        if (0 === mb_strpos($valeur, '#')) {
-                            $valeur = mb_substr($valeur, 1, mb_strlen($valeur));
+                        if ($valeur === 'none') {
+                            $this->sheet->getCell([$col, $row])->getStyle()->getFill()->setFillType(Fill::FILL_NONE);
+                        } else {
+                            if (0 === mb_strpos($valeur, '#')) {
+                                $valeur = mb_substr($valeur, 1, mb_strlen($valeur));
+                            }
+                            $this->sheet->getCell([$col, $row])->getStyle()->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($valeur);
                         }
-                        $this->sheet->getCell([$col, $row])->getStyle()->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($valeur);
                         break;
                     case 'font-size':
                         $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setSize($valeur);
                         break;
                     case 'font-weight':
-                        $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setBold(true);
+                        $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setBold($valeur);
                         break;
                     case 'font-italic':
                         $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setItalic(true);
@@ -274,11 +279,13 @@ class ExcelWriter
         );
     }
 
-    public function saveFichier(string $name, string $dir): void
+    public function saveFichier(string $name, string $dir): string
     {
         $this->pageSetup($name);
         $writer = new Xlsx($this->spreadsheet);
         $writer->save($dir . $name . '.xlsx');//todo: vérifier si / à la fin de dir
+
+        return $dir . $name . '.xlsx';
     }
 
     public function pageSetup(string $name): void
@@ -293,7 +300,7 @@ class ExcelWriter
             1
         ); //ligne a répéter en haut
         $this->spreadsheet->getActiveSheet()->getHeaderFooter()
-            ->setOddHeader('&C&HDocument généré depuis ORéBUT');
+            ->setOddHeader('&C&HDocument généré depuis ORéOF');
         $this->spreadsheet->getActiveSheet()->getHeaderFooter()
             ->setOddFooter('&L&B' . $this->spreadsheet->getProperties()->getTitle() . '&RPage &P of &N');
     }
@@ -346,6 +353,7 @@ class ExcelWriter
         $this->sheet->getRowDimension($ligne)->setRowHeight(-1);
     }
 
+    /** @deprecated  */
     public function genereFichierPdf(string $name): StreamedResponse
     {
         $this->pageSetup($name);
@@ -448,5 +456,13 @@ class ExcelWriter
         }
     }
 
+    public function setRangeStyle(string $string, array $array)
+    {
+        $this->sheet->getStyle($string)->applyFromArray($array);
+    }
 
+    public function cellStyle(string $string, array $array)
+    {
+        $this->sheet->getStyle($string)->applyFromArray($array);
+    }
 }
