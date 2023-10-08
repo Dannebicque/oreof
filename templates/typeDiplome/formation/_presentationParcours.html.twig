@@ -1,16 +1,18 @@
 <div class="row">
     <div class=col-sm-12">
         <dl>
-            <dt>Contenu de la formation</dt>
-            <dd>{{ parcours.contenuFormation|raw }}</dd>
-            <dt>Résultats attendus de la formation</dt>
-            <dd>{{ parcours.resultatsAttendus|raw }}</dd>
+            <dt>Organisation de la formation</dt>
+            <dd>{{ parcours.contenuFormation|printTexte }}</dd>
+            <dt>Objectifs du parcours</dt>
+            <dd>{{ parcours.objectifsParcours|printTexte }}</dd>
+            <dt>Résultats attendus du parcours</dt>
+            <dd>{{ parcours.resultatsAttendus|printTexte }}</dd>
             <dt>Rythme de formation</dt>
             <dd>
                 {{ parcours.rythmeFormation != null ? parcours.rythmeFormation.libelle : 'Non précisé' }}
             </dd>
             <dt>Précisions sur le rythme de formation</dt>
-            <dd>{{ parcours.rythmeFormationTexte|raw }}</dd>
+            <dd>{{ parcours.rythmeFormationTexte|printTexte }}</dd>
         </dl>
     </div>
 </div>
