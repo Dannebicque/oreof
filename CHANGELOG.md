@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.60](https://github.com/Dannebicque/oreof/compare/v1.14.59...v1.14.60) (2023-10-08)
+
+
+### Bug Fixes
+
+* affichage ([f40a599](https://github.com/Dannebicque/oreof/commit/f40a599a99d1a4f9798083225c110bba95157721))
+* mail processus + refactoring ([790c451](https://github.com/Dannebicque/oreof/commit/790c451d3e31042a00bcf796c6969b666ab0dd6f))
+* Ne pas prendre en compte les heures distanciels pour l'UE/EC max ([0fc4328](https://github.com/Dannebicque/oreof/commit/0fc43281851798e49cdb98778ca362497bd81ef6))
+
 ### [1.14.59](https://github.com/Dannebicque/oreof/compare/v1.14.58...v1.14.59) (2023-10-08)
 
 
