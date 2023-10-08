@@ -56,7 +56,7 @@ class StructureUe
             //parcourir le tableau, comparer les objets et retourner celui dont la somme des heures est la plus grande
             foreach ($this->heuresEctsUeEnfants as $heuresEctsUeEnfant) {
                 $this->heuresEctsUe->sommeUeEcts = max($this->heuresEctsUe->sommeUeEcts, $heuresEctsUeEnfant->sommeUeEcts);
-                if ($heuresEctsUeEnfant->sommeUeTotalPresDist() > $this->heuresEctsUe->sommeUeTotalPresDist()) {
+                if ($heuresEctsUeEnfant->sommeUeTotalPres() > $this->heuresEctsUe->sommeUeTotalPres()) {
                     $this->heuresEctsUe = $heuresEctsUeEnfant;
                 }
             }

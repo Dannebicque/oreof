@@ -54,7 +54,7 @@ class StructureEc
         if (count($this->heuresEctsEcEnfants) > 0) {
             //parcourir le tableau, comparer les objets et retourner celui dont la somme des heures est la plus grande
             foreach ($this->heuresEctsEcEnfants as $heuresEctsEcEnfant) {
-                if ($heuresEctsEcEnfant->sommeEcTotalPresDist() > $this->heuresEctsEc->sommeEcTotalPresDist()) {
+                if ($heuresEctsEcEnfant->sommeEcTotalPres() > $this->heuresEctsEc->sommeEcTotalPres()) {
                     $this->heuresEctsEc = $heuresEctsEcEnfant;
                 }
             }
