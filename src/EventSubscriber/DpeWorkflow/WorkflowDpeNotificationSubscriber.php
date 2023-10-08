@@ -1,13 +1,13 @@
 <?php
 /*
  * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
- * @file /Users/davidannebicque/Sites/oreof/src/EventSubscriber/WorkflowDpeNotificationSubscriber.php
+ * @file /Users/davidannebicque/Sites/oreof/src/EventSubscriber/DpeWorkflow/WorkflowDpeNotificationSubscriber.php
  * @author davidannebicque
  * @project oreof
- * @lastUpdate 17/03/2023 22:08
+ * @lastUpdate 17/03/2023 22:16
  */
 
-namespace App\EventSubscriber;
+namespace App\EventSubscriber\DpeWorkflow;
 
 use App\Entity\Formation;
 use App\Entity\Notification;

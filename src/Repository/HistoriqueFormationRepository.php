@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -39,28 +40,15 @@ class HistoriqueFormationRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return HistoriqueFormation[] Returns an array of HistoriqueFormation objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('h')
-//            ->andWhere('h.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('h.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?HistoriqueFormation
-//    {
-//        return $this->createQueryBuilder('h')
-//            ->andWhere('h.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByFormationLastStep(Formation $formation, string $step): ?HistoriqueFormation
+    {
+        return $this->createQueryBuilder('h')
+            ->where('h.formation = :formation')
+            ->andWhere('h.etape = :step')
+            ->setParameter('formation', $formation)
+            ->setParameter('step', $step)
+            ->orderBy('h.date', 'DESC')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

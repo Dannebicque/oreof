@@ -1,0 +1,19 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour {{ formation.responsableMention.display }}, {% if formation.coResponsable != null %}{{ formation.coResponsable.display }}, {% endif %}</p>
+
+    <p>Une ou des réserve(s) ont été émises sur votre formation <strong>{{ formation.displayLong }}</strong>, par le
+        conseil de votre composante.</p>
+
+    <p>Le motif est :</p>
+
+    <p>{{ motif|raw }}</p>
+
+    <p>Vous pouvez modifier votre formation en cliquant sur le lien suivant :</p>
+
+    <p>
+        <a href="{{ url('app_formation_edit', {'slug': formation.slug}) }}">{{ url('app_formation_edit', {'slug': formation.slug}) }}</a>
+    </p>
+
+{% endblock %}
