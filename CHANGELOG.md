@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.59](https://github.com/Dannebicque/oreof/compare/v1.14.58...v1.14.59) (2023-10-08)
+
+
+### Bug Fixes
+
+* Export Excel ([c1ded2b](https://github.com/Dannebicque/oreof/commit/c1ded2b9f463476c496be1fae99c2f19bdaadbb7))
+
 ### [1.14.58](https://github.com/Dannebicque/oreof/compare/v1.14.57...v1.14.58) (2023-10-08)
 
 
