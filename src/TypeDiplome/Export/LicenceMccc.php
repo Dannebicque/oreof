@@ -22,12 +22,16 @@ use App\Enums\RegimeInscriptionEnum;
 use App\Repository\TypeEpreuveRepository;
 use App\Utils\Tools;
 use DateTimeInterface;
+
 //use Gotenberg\Gotenberg;
 
 //use Gotenberg\Stream;
+use Gotenberg\Gotenberg;
+use Gotenberg\Stream;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LicenceMccc
@@ -87,7 +91,7 @@ class LicenceMccc
     public const COL_MCCC_SECONDE_CHANCE_CC_SUP_10 = 29;
     public const COL_MCCC_SECONDE_CHANCE_CT = 30;
 
-public const COL_DETAIL_TYPE_EPREUVES = "A27";
+    public const COL_DETAIL_TYPE_EPREUVES = "A27";
 
     protected array $typeEpreuves = [];
     private bool $versionFull = true;
@@ -96,10 +100,10 @@ public const COL_DETAIL_TYPE_EPREUVES = "A27";
     private array $lignesEcColorees = [];
 
     public function __construct(
-        //protected \Psr\Http\Client\ClientInterface                  $client,
-        protected CalculStructureParcours $calculStructureParcours,
-        protected ExcelWriter             $excelWriter,
-        TypeEpreuveRepository             $typeEpreuveRepository
+        protected \Psr\Http\Client\ClientInterface $client,
+        protected CalculStructureParcours          $calculStructureParcours,
+        protected ExcelWriter                      $excelWriter,
+        TypeEpreuveRepository                      $typeEpreuveRepository
     ) {
         $epreuves = $typeEpreuveRepository->findAll();
 
@@ -386,7 +390,7 @@ public const COL_DETAIL_TYPE_EPREUVES = "A27";
             $this->excelWriter->removeRow(18);
             $this->updateIfNotFull();
             // $this->excelWriter->mergeCellsCaR(1, $ligne + 4, 20, $ligne + 4);
-            $this->excelWriter->setPrintArea('A1:AC' . $ligne + 5);
+            $this->excelWriter->setPrintArea('A1:AD' . $ligne + 7);
             $this->excelWriter->configSheet(
                 ['zoom' => 60,
                     'topLeftCell' => 'A1']
@@ -397,7 +401,13 @@ public const COL_DETAIL_TYPE_EPREUVES = "A27";
         //supprimer la feuille de modèle
         $this->excelWriter->removeSheetByIndex(0);
 
-        $this->fileName = Tools::FileName('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle(), 40);
+        if ($formation->isHasParcours() === true) {
+            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle();
+        } else {
+            $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getDisplay();
+        }
+
+        $this->fileName = Tools::FileName('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $texte, 50);
     }
 
     public function exportExcelLicenceMccc(
@@ -415,21 +425,23 @@ public const COL_DETAIL_TYPE_EPREUVES = "A27";
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): StreamedResponse {
+    ): Response {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
 
-////        $request = Gotenberg::chromium('http://localhost:3000')
-////            //->outputFilename('my_file_name')
-////            ->url('https://oreof:8890/index.php/parcours/258');
-////
-////       // $response = $this->client->sendRequest($request);
-////        $filename = Gotenberg::save($request, '/Users/davidannebicque/Sites/oreof/public/pdftests/', $this->client);
-//
-//        $request = Gotenberg::libreOffice('http://localhost:3000')
-//            ->convert(Stream::path('/Users/davidannebicque/Sites/oreof/public/modeles/Annexe_MCCC.xlsx'));
-//        $filename = Gotenberg::save($request, '/Users/davidannebicque/Sites/oreof/public/pdftests/', $this->client);
+        $fichier = $this->excelWriter->saveFichier($this->fileName, '/Users/davidannebicque/Sites/oreof/public/temp/');
 
-        return $this->excelWriter->genereFichierPdf($this->fileName);
+        $request = Gotenberg::libreOffice('http://localhost:3000')
+            ->convert(Stream::path($fichier));
+
+        $reponse = $this->client->sendRequest($request);
+
+        // retourner une réponse avec le contenu du PDF
+        return new Response($reponse->getBody()->getContents(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $this->fileName . '.pdf"',
+        ]);
+
+        //todo: quand supprimer le fichier temp?
     }
 
     public function exportAndSaveExcelLicenceMccc(
@@ -658,10 +670,12 @@ public const COL_DETAIL_TYPE_EPREUVES = "A27";
 
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
                     $texteEpreuve = '';
+                    $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
+                    $pourcentageCcEt = $pourcentageCc / count($mcccs[2]['et']);
                     foreach ($mcccs[2]['et'] as $mccc) {
                         $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
-                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTp);
-                        $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCc);
+                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
+                        $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCcEt);
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
@@ -764,8 +778,8 @@ public const COL_DETAIL_TYPE_EPREUVES = "A27";
 
             $this->excelWriter->unMergeCells('D15:M16');
             foreach ($this->lignesSemestre as $ligneSemestre) {
-                $ligneSemestre --;
-                $this->excelWriter->unMergeCells('B'.$ligneSemestre.':L'.$ligneSemestre);
+                $ligneSemestre--;
+                $this->excelWriter->unMergeCells('B' . $ligneSemestre . ':L' . $ligneSemestre);
             }
             //suppression des colonnes
             $this->excelWriter->removeColumn('F', 6);
@@ -796,9 +810,8 @@ public const COL_DETAIL_TYPE_EPREUVES = "A27";
             $this->excelWriter->mergeCells('M13:Q13');
 
             foreach ($this->lignesSemestre as $ligneSemestre) {
-                $ligneSemestre --;
-                $this->excelWriter->mergeCells('B'.$ligneSemestre.':E'.$ligneSemestre);
-
+                $ligneSemestre--;
+                $this->excelWriter->mergeCells('B' . $ligneSemestre . ':E' . $ligneSemestre);
             }
         }
     }
