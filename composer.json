@@ -16,10 +16,12 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.14",
         "dompdf/dompdf": "^2.0",
+        "gotenberg/gotenberg-php": "^1.1",
         "knplabs/knp-snappy-bundle": "^1.9",
         "mpdf/mpdf": "^8.1",
         "php-translation/symfony-bundle": "^0.13.0",
         "phpoffice/phpspreadsheet": "^1.28",
+        "psr/http-client": "*",
         "stof/doctrine-extensions-bundle": "*",
         "symfony/console": "6.3.*",
         "symfony/doctrine-messenger": "6.3.*",
@@ -51,7 +53,8 @@
         "allow-plugins": {
             "symfony/flex": true,
             "symfony/runtime": true,
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "php-http/discovery": true
         },
         "sort-packages": true
     },
