@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.62](https://github.com/Dannebicque/oreof/compare/v1.14.61...v1.14.62) (2023-10-09)
+
+
+### Bug Fixes
+
+* composer ([8c79d55](https://github.com/Dannebicque/oreof/commit/8c79d5518d71336ff6ab36894a58bd7098167363))
+
 ### [1.14.61](https://github.com/Dannebicque/oreof/compare/v1.14.60...v1.14.61) (2023-10-09)
 
 
