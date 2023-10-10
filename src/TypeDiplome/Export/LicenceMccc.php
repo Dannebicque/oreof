@@ -372,7 +372,7 @@ class LicenceMccc
             }
 
             foreach ($this->lignesEcColorees as $lignesEcColoree) {
-                $this->excelWriter->setRangeStyle('B' . $lignesEcColoree . ':AD' . $lignesEcColoree, [
+                $this->excelWriter->setRangeStyle('D' . $lignesEcColoree . ':AD' . $lignesEcColoree, [
                     'fill' => [
                         'fillType' => Fill::FILL_SOLID,
                         'rotation' => 90,
@@ -428,7 +428,7 @@ class LicenceMccc
     ): Response {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
 
-        $fichier = $this->excelWriter->saveFichier($this->fileName, '/Users/davidannebicque/Sites/oreof/public/temp/');
+        $fichier = $this->excelWriter->saveFichier($this->fileName, '/var/www/html/oreof/public/temp/');
 
         $request = Gotenberg::libreOffice('http://localhost:3000')
             ->convert(Stream::path($fichier));
