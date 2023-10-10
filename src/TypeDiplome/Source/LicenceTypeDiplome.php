@@ -21,6 +21,7 @@ use App\Utils\Tools;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\InputBag;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
@@ -61,7 +62,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): StreamedResponse {
+    ): Response {
         //todo: exploiter la date...
         return $this->licenceMccc->exportPdfLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
     }
