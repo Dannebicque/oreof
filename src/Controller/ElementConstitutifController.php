@@ -307,6 +307,7 @@ class ElementConstitutifController extends AbstractController
         }
 
         $isAdmin = $this->isGranted('ROLE_SES');
+        $isBut = $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT';
         $form = $this->createForm(ElementConstitutifType::class, $elementConstitutif, [
             'action' => $this->generateUrl(
                 'app_element_constitutif_edit',
@@ -314,7 +315,7 @@ class ElementConstitutifController extends AbstractController
             ),
             'typeDiplome' => $typeDiplome,
             'formation' => $parcours->getFormation(),
-            'isAdmin' => $isAdmin
+            'isAdmin' => $isAdmin || $isBut
         ]);
 
         $form->handleRequest($request);
@@ -420,7 +421,7 @@ class ElementConstitutifController extends AbstractController
             'ue' => $elementConstitutif->getUe(),
             'parcours' => $parcours,
             'isAdmin' => $isAdmin,
-            'isBut' => $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT',
+            'isBut' => $isBut
         ]);
     }
 
