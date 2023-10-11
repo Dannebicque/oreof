@@ -10,11 +10,8 @@
 namespace App\Controller;
 
 use App\Classes\CalculStructureParcours;
-use App\Classes\MyDomPdf;
-use App\Classes\MyPDF;
+use App\Classes\MyGotenbergPdf;
 use App\Entity\Parcours;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ParcoursExportController extends AbstractController
 {
     public function __construct(
-        private readonly MyPDF $myPdf
+        private readonly MyGotenbergPdf $myPdf
     ) {
     }
 
@@ -34,7 +31,6 @@ class ParcoursExportController extends AbstractController
      */
     #[Route('/parcours/export/{parcours}', name: 'app_parcours_export')]
     public function export(
-        MyDomPdf $myDomPdf,
         Parcours                $parcours,
         CalculStructureParcours $calculStructureParcours
     ): Response {
@@ -43,11 +39,12 @@ class ParcoursExportController extends AbstractController
         if (null === $typeDiplome) {
             throw new \Exception('Type de diplôme non trouvé');
         }
-        return $myDomPdf->render('pdf/parcours.html.twig', [
+
+        return $this->myPdf->render('pdf/parcours.html.twig', [
             'formation' => $parcours->getFormation(),
             'typeDiplome' => $typeDiplome,
             'parcours' => $parcours,
-            'hasParcours' => $parcours->getFormation()->isHasParcours(),
+            'hasParcours' => $parcours->getFormation()?->isHasParcours(),
             'titre' => 'Détails du parcours '.$parcours->getLibelle(),
             'dto' => $calculStructureParcours->calcul($parcours)
         ], 'Parcours_'.$parcours->getLibelle());

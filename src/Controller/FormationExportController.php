@@ -10,8 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\CalculStructureParcours;
-use App\Classes\MyDomPdf;
-use App\Classes\MyPDF;
+use App\Classes\MyGotenbergPdf;
 use App\Entity\Formation;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -22,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class FormationExportController extends AbstractController
 {
     public function __construct(
-        private readonly MyPDF $myPdf
+        private readonly MyGotenbergPdf $myPdf
     )
     {
     }
@@ -35,7 +34,6 @@ class FormationExportController extends AbstractController
      */
     #[Route('/formation/export/{slug}', name: 'app_formation_export')]
     public function export(
-        MyDomPdf $myDomPdf,
         Formation $formation,
         CalculStructureParcours $calculStructureParcours
     ): Response
@@ -46,7 +44,7 @@ class FormationExportController extends AbstractController
             $tParcours[$parcours->getId()] =  $calculStructureParcours->calcul($parcours);
         }
 
-        return $myDomPdf->render('pdf/formation.html.twig', [
+        return $this->myPdf->render('pdf/formation.html.twig', [
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
             'titre' => 'Détails de la formation '.$formation->getDisplay(),

@@ -31,8 +31,10 @@ use Gotenberg\Stream;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Psr\Http\Client\ClientInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class LicenceMccc
 {
@@ -99,14 +101,17 @@ class LicenceMccc
     private array $lignesSemestre = [];
     private array $lignesEcColorees = [];
 
+    private string $dir;
+
     public function __construct(
-        protected \Psr\Http\Client\ClientInterface $client,
+        KernelInterface                            $kernel,
+        protected ClientInterface $client,
         protected CalculStructureParcours          $calculStructureParcours,
         protected ExcelWriter                      $excelWriter,
         TypeEpreuveRepository                      $typeEpreuveRepository
     ) {
         $epreuves = $typeEpreuveRepository->findAll();
-
+        $this->dir = $kernel->getProjectDir() . '/public';
         foreach ($epreuves as $epreuve) {
             $this->typeEpreuves[$epreuve->getId()] = $epreuve;
         }
@@ -183,15 +188,6 @@ class LicenceMccc
         $modele->setCellValue(self::COL_DETAIL_TYPE_EPREUVES, $texte);
 
         $index = 1;
-
-        //recopie du modèle sur chaque année, puis remplissage
-//        foreach ($tabSemestresAnnee as $i => $semestres) {
-//            if (array_key_exists($i, $tabSemestresAnnee)) {
-//                foreach ($tabSemestresAnnee[$i] as $semestre) {
-//                    $this->totalFormation += $semestre->heuresEctsSemestre->sommeSemestreTotalPresDist();
-//                }
-//            }
-//        }
 
         foreach ($tabSemestresAnnee as $i => $semestres) {
             $clonedWorksheet = clone $modele;
@@ -389,7 +385,6 @@ class LicenceMccc
             //suppression de la ligne modèle 18
             $this->excelWriter->removeRow(18);
             $this->updateIfNotFull();
-            // $this->excelWriter->mergeCellsCaR(1, $ligne + 4, 20, $ligne + 4);
             $this->excelWriter->setPrintArea('A1:AD' . $ligne + 7);
             $this->excelWriter->configSheet(
                 ['zoom' => 60,
@@ -428,7 +423,7 @@ class LicenceMccc
     ): Response {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
 
-        $fichier = $this->excelWriter->saveFichier($this->fileName, '/var/www/html/oreof/public/temp/');
+        $fichier = $this->excelWriter->saveFichier($this->fileName, $this->dir . '/temp/');
 
         $request = Gotenberg::libreOffice('http://localhost:3000')
             ->convert(Stream::path($fichier));

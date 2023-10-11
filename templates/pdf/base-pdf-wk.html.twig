@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>{% block title %}PDF{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style>
+        body {
+            font-family: "DejaVu Sans", serif;
+            font-size: 12px;
+        }
+
+        @page {
+            margin: 0cm 0cm;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin: 0;
+            border-bottom: 1px solid black;
+
+        }
+
+        h3 {
+            padding-top: 10px;
+            font-size: 1.2em;
+            margin: 0;
+            border-bottom: 1px solid black;
+        }
+
+        /** Define now the real margins of every page in the PDF **/
+        body {
+            margin-top: 1.5cm;
+            margin-left: 2cm;
+            margin-right: 2cm;
+            margin-bottom: 1.5cm;
+        }
+
+        .table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .table, .table th, .table td {
+            border: 1px solid black;
+            padding: 2px;
+        }
+
+
+        .page_break {
+            page-break-before: always;
+        }
+
+        dt {
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-2 {
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+<main>
+    {% block content %}
+
+    {% endblock %}
+</main>
+
+</body>
+</html>

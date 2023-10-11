@@ -9,8 +9,8 @@
 
 namespace App\Controller;
 
-use App\Classes\MyDomPdf;
-use App\Classes\MyPDF;
+
+use App\Classes\MyGotenbergPdf;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use Dompdf\Dompdf;
@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class FicheMatiereExportController extends AbstractController
 {
     public function __construct(
-        private readonly MyDomPdf $myPdf
+        private readonly MyGotenbergPdf $myPdf
     ) {
     }
 
@@ -73,17 +73,16 @@ class FicheMatiereExportController extends AbstractController
     #[Route('/fiche-matiere/export/all/{parcours}', name: 'fiche_matiere_export_all')]
     public function exportFichesMatieres(Parcours $parcours): Response
     {
-        $html = $this->renderView('pdf/ficheMatiereAll.html.twig', [
-            'formation' => $parcours->getFormation(),
-            'parcours' => $parcours,
-            'fiches' => $parcours->getFicheMatieres(),
-            'typeDiplome' => $parcours->getFormation()?->getTypeDiplome(),
-        ]);
-        $dompdf = new Dompdf();
-        $dompdf->loadHtml($html);
-        $dompdf->render();
-
-        $dompdf->stream('FichesMatieres' . $parcours->getLibelle(), ["Attachment" => true]);
+        return $this->myPdf->render(
+            'pdf/ficheMatiereAll.html.twig',
+            [
+                'formation' => $parcours->getFormation(),
+                'parcours' => $parcours,
+                'fiches' => $parcours->getFicheMatieres(),
+                'typeDiplome' => $parcours->getFormation()?->getTypeDiplome(),
+            ],
+            'FichesMatieres' . $parcours->getLibelle()
+        );
     }
 
     #[Route('/fiche-matiere/export/zip/{parcours}', name: 'fiche_matiere_export_zip')]

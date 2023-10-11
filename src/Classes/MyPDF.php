@@ -13,6 +13,7 @@ use App\Utils\Tools;
 use DateTime;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Knp\Snappy\Pdf;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -26,21 +27,29 @@ class MyPDF
 
     private static Pdf $pdf;
 
+    private static string $basePath;
+
     /**
      * MyPDF constructor.
      */
-    public function __construct(Environment $templating, Pdf $pdf)
-    {
+    public function __construct(
+        KernelInterface $kernel,
+        Environment     $templating,
+        Pdf             $pdf
+    ) {
         self::$templating = $templating;
         self::$pdf = $pdf;
         self::$options['enable-local-file-access'] = true; // https://yusufbiberoglu.medium.com/symfony-5-knpsnappybundle-wkhtmltopdf-setup-and-example-with-an-explanation-of-possible-errors-a890dbca238a
 
         $date = new DateTime('now');
-
+        self::$basePath = $kernel->getProjectDir() . '/public';
         self::setFooter([
-            'footer-left' => "Document généré depuis OReOF le ".$date->format('d/m/Y H:i').'.',
-            'footer-right' => '[page] / [topage]',
-            'footer-center' => '',
+            'footer-html' => self::$templating->render('pdf/footer.html.twig', [
+                'date' => $date,
+            ]),
+//            'footer-left' => "Document généré depuis OReOF le " . $date->format('d/m/Y H:i') . '.',
+//            'footer-right' => '[page] / [topage]',
+//            'footer-center' => '',
         ]);
     }
 
@@ -67,15 +76,15 @@ class MyPDF
      */
     public static function genereAndSavePdf(
         string $template,
-        array $data,
+        array  $data,
         string $name,
         string $dir
     ): string {
         $output = self::genereOutputPdf($template, $data, $name);
 
-        file_put_contents($dir.Tools::slug($name).'.pdf', $output);
+        file_put_contents($dir . Tools::FileName($name) . '.pdf', $output);
 
-        return Tools::slug($name).'.pdf';
+        return Tools::FileName($name) . '.pdf';
     }
 
     /**
@@ -86,8 +95,16 @@ class MyPDF
     private static function genereOutputPdf(string $template, array $data, string $name): PdfResponse
     {
         $name = Tools::slug($name);
+        $opts = array_merge(
+            $data,
+            ['baseUrl' => self::$basePath]
+        );
+        self::setHeaderHtml(
+            'pdf/header.html.twig',
+            $opts
+        );
 
-        $html = self::$templating->render($template, $data);
+        $html = self::$templating->render($template, $opts);
 
         if ('.pdf' !== mb_substr($name, -4)) {
             $name .= '.pdf';
@@ -114,5 +131,10 @@ class MyPDF
     public static function setFooterHtml(string $template, array $data = []): void
     {
         self::addOptions('footer-html', self::$templating->render($template, $data));
+    }
+
+    public static function setHeaderHtml(string $template, array $data = []): void
+    {
+        self::addOptions('header-html', self::$templating->render($template, $data));
     }
 }

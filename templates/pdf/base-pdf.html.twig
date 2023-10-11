@@ -10,9 +10,9 @@
             font-size: 12px;
         }
 
-        @page {
-            margin: 0cm 0cm;
-        }
+        /*@page {*/
+        /*    margin: 0cm 0cm;*/
+        /*}*/
 
         h1 {
             font-size: 1.5em;
@@ -34,12 +34,12 @@
         }
 
         /** Define now the real margins of every page in the PDF **/
-        body {
-            margin-top: 1.5cm;
-            margin-left: 2cm;
-            margin-right: 2cm;
-            margin-bottom: 1.5cm;
-        }
+        /*body {*/
+        /*    margin-top: 1.5cm;*/
+        /*    margin-left: 2cm;*/
+        /*    margin-right: 2cm;*/
+        /*    margin-bottom: 1.5cm;*/
+        /*}*/
 
         .table {
             border-collapse: collapse;
@@ -52,33 +52,33 @@
         }
 
         /** Define the header rules **/
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1.5cm;
+        /*header {*/
+        /*    position: fixed;*/
+        /*    top: 0;*/
+        /*    left: 0;*/
+        /*    right: 0;*/
+        /*    height: 1.5cm;*/
 
-            /** Extra personal styles **/
-            background-color: #03a9f4;
-            color: white;
-            text-align: center;
-        }
+        /*    !** Extra personal styles **!*/
+        /*    background-color: #03a9f4;*/
+        /*    color: white;*/
+        /*    text-align: center;*/
+        /*}*/
 
         /** Define the footer rules **/
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 1.5cm;
+        /*footer {*/
+        /*    position: fixed;*/
+        /*    bottom: 0;*/
+        /*    left: 0;*/
+        /*    right: 0;*/
+        /*    height: 1.5cm;*/
 
-            /** Extra personal styles **/
-            background-color: #03a9f4;
-            color: white;
-            text-align: center;
-            font-size: 10px;
-        }
+        /*    !** Extra personal styles **!*/
+        /*    background-color: #03a9f4;*/
+        /*    color: white;*/
+        /*    text-align: center;*/
+        /*    font-size: 10px;*/
+        /*}*/
 
         .page_break {
             page-break-before: always;
@@ -113,24 +113,24 @@
 </head>
 
 <body>
-{% block header %}
-    <header>
-        <div id="class_logo">
-        <img src="{{ baseUrl }}{{ asset('images/logo_urca.png') }}" alt="logo">
-        </div>
-        <div id="class_titre">
-        <h1>{{ titre }}</h1>
-        </div>
-    </header>
-{% endblock %}
+{#{% block header %}#}
+{#    <header>#}
+{#        <div id="class_logo">#}
+{#        <img src="{{ baseUrl }}{{ asset('images/logo_urca.png') }}" alt="logo">#}
+{#        </div>#}
+{#        <div id="class_titre">#}
+{#        <h1>{{ titre }}</h1>#}
+{#        </div>#}
+{#    </header>#}
+{#{% endblock %}#}
 
-<footer>
-    {% block footer %}
-        <p>Document généré le {{ 'now'|date('d/m/Y H:i') }} depuis
-            ORéOF - {% if final is defined and final == true %}Document voté le ... {% else %}Document provisoire non validé en CFVU{% endif %}</p>
-        <p>Université de Reims Champagne-Ardenne</p>
-    {% endblock %}
-</footer>
+{#<footer>#}
+{#    {% block footer %}#}
+{#        <p>Document généré le {{ 'now'|date('d/m/Y H:i') }} depuis#}
+{#            ORéOF - {% if final is defined and final == true %}Document voté le ... {% else %}Document provisoire non validé en CFVU{% endif %}</p>#}
+{#        <p>Université de Reims Champagne-Ardenne</p>#}
+{#    {% endblock %}#}
+{#</footer>#}
 
 <main>
     {% block content %}

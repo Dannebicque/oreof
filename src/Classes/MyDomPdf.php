@@ -9,6 +9,7 @@
 
 namespace App\Classes;
 
+use App\Utils\Tools;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -69,7 +70,7 @@ class MyDomPdf
             $name .= '.pdf';
         }
 
-        return $name;
+        return Tools::FileName($name);
     }
 }
 
