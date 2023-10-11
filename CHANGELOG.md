@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.66](https://github.com/Dannebicque/oreof/compare/v1.14.65...v1.14.66) (2023-10-11)
+
+
+### Bug Fixes
+
+* Accès aux fiches EC ([f6e732e](https://github.com/Dannebicque/oreof/commit/f6e732e557f66214a941ba745d11763661dd20cb))
+* MCCC export référentiel de compétences ([f5c5d4c](https://github.com/Dannebicque/oreof/commit/f5c5d4ccf86bbc594565cf98f760a7192cff71e7))
+* Ordre des events + mails du processus ([850b616](https://github.com/Dannebicque/oreof/commit/850b616e04b98a30ceb885cfe1224e61104ad2e0))
+* URL Image ([2cb16e3](https://github.com/Dannebicque/oreof/commit/2cb16e37f4695a2a4df2f604e660833da97f1420))
+
 ### [1.14.65](https://github.com/Dannebicque/oreof/compare/v1.14.64...v1.14.65) (2023-10-11)
 
 
