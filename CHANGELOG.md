@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.65](https://github.com/Dannebicque/oreof/compare/v1.14.64...v1.14.65) (2023-10-11)
+
+
+### Features
+
+* nouvelle librairie de PDF ([030f9c9](https://github.com/Dannebicque/oreof/commit/030f9c951a64fcec3bbcb4ff66691b75fbf43171))
+
+
+### Bug Fixes
+
+* accès fiches édition ([967b3ee](https://github.com/Dannebicque/oreof/commit/967b3ee55ce95f3e9bd505914eb914f2337ec92c))
+* export pdf des excels ([b068be7](https://github.com/Dannebicque/oreof/commit/b068be79b20924d4f6dfb9bede15082ad104e239))
+* export pdf des excels ([72d33a5](https://github.com/Dannebicque/oreof/commit/72d33a57a5f6bf9cfbe132513e39640c5d1528c4))
+
 ### [1.14.64](https://github.com/Dannebicque/oreof/compare/v1.14.63...v1.14.64) (2023-10-10)
 
 ### [1.14.63](https://github.com/Dannebicque/oreof/compare/v1.14.62...v1.14.63) (2023-10-10)
