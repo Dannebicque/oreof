@@ -78,7 +78,7 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
 
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
-            'mails/workflow/formation/valide_conseil_composante.html.twig',
+            'mails/workflow/formation/valide_central.html.twig',
             [
                 'formation' => $formation,
                 'dpe' => $dpe,
@@ -106,7 +106,7 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
         //todo: check si le responsable de formation accepte le mail
         $this->myMailer->initEmail();
         $this->myMailer->setTemplate(
-            'mails/workflow/formation/reserve_dpe_composante.html.twig',
+            'mails/workflow/formation/reserve_central.html.twig',
             ['formation' => $formation,
                 'dpe' => $dpe,
                 'motif' => $context['motif']]

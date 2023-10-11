@@ -24,12 +24,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FormationProcess extends AbstractProcess
 {
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        EventDispatcherInterface $eventDispatcher,
-        TranslatorInterface $translator,
-        private WorkflowInterface  $dpeWorkflow
+        EntityManagerInterface    $entityManager,
+        EventDispatcherInterface  $eventDispatcher,
+        TranslatorInterface       $translator,
+        private WorkflowInterface $dpeWorkflow
     ) {
         parent::__construct($entityManager, $eventDispatcher, $translator);
     }
@@ -54,29 +53,38 @@ class FormationProcess extends AbstractProcess
 
     public function valideFormation(Formation $formation, UserInterface $user, $process, $etape, $request): Response
     {
+        $reponse = $this->dispatchEventFormation($formation, $user, $etape, $request, 'valide');
+
         $this->dpeWorkflow->apply($formation, $process['canValide']);
         $this->entityManager->flush();
-        return $this->dispatchEventFormation($formation, $user, $etape, $request, 'valide');
+
+        return $reponse;
     }
 
     public function reserveFormation(Formation $formation, UserInterface $user, $process, $etape, $request): Response
     {
+        $reponse =  $this->dispatchEventFormation($formation, $user, $etape, $request, 'reserve');
+
         $this->dpeWorkflow->apply($formation, $process['canReserve'], ['motif' => $request->request->get('argumentaire')]);
         $this->entityManager->flush();
-        return $this->dispatchEventFormation($formation, $user, $etape, $request, 'reserve');
+
+        return $reponse;
     }
 
     public function refuseFormation(Formation $formation, UserInterface $user, $process, $etape, $request): Response
     {
+        $reponse = $this->dispatchEventFormation($formation, $user, $etape, $request, 'refuse');
+
         $this->dpeWorkflow->apply($formation, $process['canRefuse'], ['motif' => $request->request->get('argumentaire')]);
         $this->entityManager->flush();
-        return $this->dispatchEventFormation($formation, $user, $etape, $request, 'refuse');
+
+        return $reponse;
     }
 
     private function dispatchEventFormation(Formation $formation, UserInterface $user, string $etape, Request $request, string $etat): Response
     {
         $histoEvent = new HistoriqueFormationEvent($formation, $user, $etape, $etat, $request);
         $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
-        return JsonReponse::success($this->translator->trans('formation.'.$etat.'.' . $etape . '.flash.success', [], 'process'));
+        return JsonReponse::success($this->translator->trans('formation.' . $etat . '.' . $etape . '.flash.success', [], 'process'));
     }
 }

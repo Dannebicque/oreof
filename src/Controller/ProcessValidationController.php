@@ -47,10 +47,8 @@ class ProcessValidationController extends AbstractController
     ): Response {
         $type = $request->query->get('type');
         $id = $request->query->get('id');
-//        $definition = $dpeWorkflow->getDefinition();
 
         $process = $this->validationProcess->getEtape($etape);
-//        $valid = true;
         $laisserPasser = false;
         switch ($type) {
             case 'formation':
