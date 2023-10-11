@@ -3,6 +3,7 @@
 namespace App\Security\Voter;
 
 use App\Entity\Composante;
+use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\User;
@@ -95,6 +96,12 @@ class GlobalVoter extends Voter
                         }
                     }
 
+                    if ($subject instanceof FicheMatiere) {
+                        if ($this->canAccessFicheMatiere($subject, $centre) === true) {
+                            return true;
+                        }
+                    }
+
                     if ($subject instanceof Parcours) {
                         if ($this->canAccessParcours($subject, $centre) === true) {
                             return true;
@@ -168,7 +175,7 @@ class GlobalVoter extends Voter
             $canEdit = $this->parcoursWorkflow->can($subject, 'autoriser') || $this->parcoursWorkflow->can($subject, 'valider_parcours');
         }
 
-        if ($subject->getFormation()->getResponsableMention() === $this->user || $subject->getFormation()->getCoResponsable() === $this->user) {
+        if ($subject->getFormation()?->getResponsableMention() === $this->user || $subject->getFormation()->getCoResponsable() === $this->user) {
             $canEdit = $this->parcoursWorkflow->can($subject, 'autoriser') ||
                 $this->parcoursWorkflow->can($subject, 'valider_parcours') ||
                 $this->parcoursWorkflow->can($subject, 'valider_rf') ||
@@ -177,7 +184,7 @@ class GlobalVoter extends Voter
         }
 
         if (
-            $subject->getFormation()->getComposantePorteuse() === $centre->getComposante() &&
+            $subject->getFormation()?->getComposantePorteuse() === $centre->getComposante() &&
             ($centre->getComposante()->getResponsableDpe() === $this->user || $subject->getFormation()->getComposantePorteuse() === $centre->getComposante())) {
             //todo: filtre pas si les bons droits... Edit ou lecture ?
             $canEdit = $this->parcoursWorkflow->can($subject, 'autoriser') ||
@@ -197,7 +204,7 @@ class GlobalVoter extends Voter
         return true;
     }
 
-    private function canUserAccessComposante(User $subject, UserCentre $centre)
+    private function canUserAccessComposante(User $subject, UserCentre $centre): bool
     {
         if (
             $this->roleNiveau === RoleNiveauEnum::COMPOSANTE->value && //todo: ou un niveau supérieur
@@ -205,6 +212,26 @@ class GlobalVoter extends Voter
         ) {
             return true;
         }
+
+        return false;
+    }
+
+    private function canAccessFicheMatiere(FicheMatiere $subject, mixed $centre): bool
+    {
+        if ($subject->getResponsableFicheMatiere() === $this->user ||
+            $subject->getParcours()?->getRespParcours() === $this->user ||
+            $subject->getParcours()?->getCoResponsable() === $this->user ||
+            $subject->getParcours()?->getFormation()?->getResponsableMention() === $this->user ||
+            $subject->getParcours()?->getFormation()?->getCoResponsable() === $this->user ||
+            $subject->getParcours()?->getFormation()?->getComposantePorteuse()?->getResponsableDpe() === $this->user ||
+            ($subject->getParcours()?->getFormation()?->getComposantePorteuse() === $centre->getComposante() &&
+                in_array('gestionnaire', $centre->getDroits()))
+
+
+        ) {
+            return true;
+        }
+
 
         return false;
     }

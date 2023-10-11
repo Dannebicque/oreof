@@ -11,8 +11,7 @@
                 {% endif %}
             </a>
 
-            {% if is_granted('CAN_PARCOURS_SHOW_MY', parcours) %}
-                {# todo: vérifier si éditable par moi? #}
+            {% if is_granted('CAN_EC_EDIT_MY', ec.elementConstitutif.ficheMatiere) %}
                 <a href="{{ url('app_fiche_matiere_edit', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}"
                    class="btn btn-sm text-warning">
                     <i class="{{ iconEdit }}"></i>
