@@ -508,7 +508,7 @@ class LicenceMccc
             }
         }
 
-        $this->excelWriter->getColumnsAutoSize(4,4);
+        $this->excelWriter->getColumnsAutoSize('D','D');
         $this->excelWriter->setPrintArea('A1:D' . $ligne);
     }
 
