@@ -503,12 +503,13 @@ class LicenceMccc
             foreach ($bcc->getCompetences() as $competence) {
                 $this->excelWriter->writeCellXY(2, $ligne, $competence->getCode(), ['font-weight' => 'bold', 'style' => 'HORIZONTAL_RIGHT']);
                 $this->excelWriter->writeCellXY(3, $ligne, $competence->getLibelle(), ['wrap' => true]);
-
+                $this->excelWriter->getRowAutosize($ligne);
                 $ligne++;
             }
         }
 
-        $this->excelWriter->setPrintArea('A1:C' . $ligne);
+        $this->excelWriter->getColumnsAutoSize(4,4);
+        $this->excelWriter->setPrintArea('A1:D' . $ligne);
     }
 
     private function afficheEc(int $ligne, StructureEc $structureEc): int
