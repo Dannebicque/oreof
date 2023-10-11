@@ -43,7 +43,7 @@ class MyGotenbergPdf
 
         $request = Gotenberg::chromium('http://localhost:3000')
             ->assets(
-                Stream::path('/Users/davidannebicque/Sites/oreof/public/images/logo_urca.png'),
+                Stream::path($this->basePath.'/images/logo_urca.png'),
             )
             ->header(Stream::string('header.html', $this->getHeader($context['titre'])))
             ->footer(Stream::string('footer.html', $this->getFooter()))
