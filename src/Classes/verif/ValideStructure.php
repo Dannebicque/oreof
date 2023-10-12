@@ -251,7 +251,7 @@ abstract class ValideStructure extends AbstractValide
                 $sem = $semestreParcour->getSemestre();
             }
 
-            if ($sem !== null) {
+            if ($sem !== null && $sem->isNonDispense() === false) {
                 $hasUe = count($sem->getUes()) === 0 ? self::VIDE : self::COMPLET;
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'] = [];
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::INCOMPLET;
