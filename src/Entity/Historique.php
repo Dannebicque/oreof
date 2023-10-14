@@ -45,6 +45,12 @@ abstract class Historique
         $this->created = new \DateTime();
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+
     public function getCreated(): ?\DateTimeInterface
     {
         return $this->created;
