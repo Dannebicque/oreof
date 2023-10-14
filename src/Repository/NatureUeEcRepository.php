@@ -51,9 +51,11 @@ class NatureUeEcRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByBuilder(): QueryBuilder
+    public function findByBuilder(string $type): QueryBuilder
     {
         return $this->createQueryBuilder('n')
+            ->where('n.type = :type')
+            ->setParameter('type', $type)
             ->orderBy('n.libelle', 'ASC');
     }
 }

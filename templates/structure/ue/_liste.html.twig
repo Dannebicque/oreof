@@ -87,17 +87,21 @@
                                         </div>
                                         <div class="col-md-1 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">NB. EC</div>
-                                            {% if ue.ueRaccrochee != null %}
-                                                {% if ue.ueRaccrochee.ue != null %}
-                                                    {{ ue.ueRaccrochee.ue.nbElementConstitutifs|badgeNb }}
-                                                {% else %}
-                                                    {{ 'Erreur UE raccrochée'|badge('danger') }}
-                                                {% endif %}
+                                            {% if ue.natureUeEc != null and ue.natureUeEc.libre == true %}
+                                                <span class="badge bg-info">UE Libre</span>
                                             {% else %}
-                                                {% if ue.ueEnfants|length == 0 %}
-                                                    {{ ue.nbElementConstitutifs|badgeNb }}
+                                                {% if ue.ueRaccrochee != null %}
+                                                    {% if ue.ueRaccrochee.ue != null %}
+                                                        {{ ue.ueRaccrochee.ue.nbElementConstitutifs|badgeNb }}
+                                                    {% else %}
+                                                        {{ 'Erreur UE raccrochée'|badge('danger') }}
+                                                    {% endif %}
                                                 {% else %}
-                                                    &nbsp;
+                                                    {% if ue.ueEnfants|length == 0 %}
+                                                        {{ ue.nbElementConstitutifs|badgeNb }}
+                                                    {% else %}
+                                                        &nbsp;
+                                                    {% endif %}
                                                 {% endif %}
                                             {% endif %}
                                         </div>
@@ -406,7 +410,11 @@
                                             </div>
                                             <div class="col-md-1 d-flex flex-column justify-content-center">
                                                 <div class="text-muted text-small d-md-none">NB. EC</div>
-                                                {{ uee.nbElementConstitutifs|badgeNb }}
+                                                {% if uee.natureUeEc != null and uee.natureUeEc.libre == true %}
+                                                    <span class="badge bg-info">UE Libre</span>
+                                                {% else %}
+                                                    {{ uee.nbElementConstitutifs|badgeNb }}
+                                                {% endif %}
                                             </div>
                                             <div class="col-md-2 d-flex flex-column justify-content-center">
                                                 <div class="text-muted text-small d-md-none">ue</div>

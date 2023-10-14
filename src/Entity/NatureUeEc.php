@@ -15,6 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: NatureUeEcRepository::class)]
 class NatureUeEc
 {
+    public const Nature_EC = 'ec';
+    public const Nature_UE = 'ue';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -28,6 +31,9 @@ class NatureUeEc
 
     #[ORM\Column]
     private ?bool $libre = false;
+
+    #[ORM\Column(length: 2)]
+    private ?string $type = self::Nature_EC;
 
     public function getId(): ?int
     {
@@ -66,6 +72,18 @@ class NatureUeEc
     public function setLibre(bool $libre): self
     {
         $this->libre = $libre;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

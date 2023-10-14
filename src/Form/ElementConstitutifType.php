@@ -59,7 +59,7 @@ class ElementConstitutifType extends AbstractType
                 'choice_label' => 'libelle',
                 'query_builder' => fn (
                     NatureUeEcRepository $natureUeEcRepository
-                ) => $natureUeEcRepository->findByBuilder(),
+                ) => $natureUeEcRepository->findByBuilder(NatureUeEc::Nature_EC),
                 'required' => false,
                 'placeholder' => 'Choisissez une nature...',
                 'choice_attr' => function ($choice) {

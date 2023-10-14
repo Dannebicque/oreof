@@ -164,8 +164,9 @@
                     'placement': 'bottom',
                 }) }}
            title="{{ help|trim|trans({}, 'help')|raw }}"></i>
-        </{{ element|default('label') }}>
+
     {% endif %}
+    </{{ element|default('label') }}>
 {%- endblock form_label %}
 
 {% block textarea_with_save_widget %}

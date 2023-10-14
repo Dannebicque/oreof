@@ -12,6 +12,7 @@
     {{ form_row(form.ects) }}
     <div>
         {{ form_row(form.typeUe, {'row_attr' : {'id' : 'typeUe' }}) }}
+
         <button class="btn text-info"
                 {{ stimulus_action('ue','ajoutTypeUe', 'click') }}
         >
