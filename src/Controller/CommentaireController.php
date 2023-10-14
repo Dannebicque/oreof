@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Classes\GetCommentaires;
 use App\Classes\JsonReponse;
 use App\Entity\Commentaire;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,9 +14,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class CommentaireController extends AbstractController
 {
     #[Route('/commentaire', name: 'app_commentaire')]
-    public function index(): Response
+    public function index(
+        GetCommentaires $getCommentaires
+    ): Response
     {
         return $this->render('commentaire/index.html.twig', [
+            'commentaires' => $getCommentaires->getAllCommentairesByUser($this->getUser())
         ]);
     }
 

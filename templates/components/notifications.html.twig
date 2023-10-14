@@ -1,4 +1,11 @@
 <ul class="list-unstyled list-inline text-center menu-icons">
+    <li class="list-inline-item">
+        <a href="{{ path('app_commentaire') }}"
+           title="Mes commentaires"
+        >
+            <i class="fas fa-comments"></i>
+        </a>
+    </li>
     {% if is_granted('ROLE_SES') %}
     <li class="list-inline-item">
         <a href="#"

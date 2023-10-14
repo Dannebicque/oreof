@@ -46,4 +46,16 @@ class CommentaireFicheMatiereRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByUser(?UserInterface $getUser): array
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.ficheMatiere', 'f')
+            ->andWhere('c.user = :user')
+            ->setParameter('user', $getUser)
+            ->orderBy('f.libelle', 'DESC')
+            ->addOrderBy('c.created', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

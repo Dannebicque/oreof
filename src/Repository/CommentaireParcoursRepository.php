@@ -47,4 +47,16 @@ class CommentaireParcoursRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByUser(?UserInterface $getUser): array
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.parcours', 'p')
+            ->andWhere('c.user = :user')
+            ->setParameter('user', $getUser)
+            ->orderBy('p.libelle', 'DESC')
+            ->addOrderBy('c.created', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }
