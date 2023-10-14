@@ -1,8 +1,14 @@
 <div class="col">
     <section class="scroll-section" id="identite_formation">
-        <h3 class="small-title">Identité de la formation</h3>
+        <h3 class="small-title">Identité de la formation </h3>
         <div class="card mb-5">
             <div class="card-body">
+                {{ component('commentaire', {
+                    commentaires: formation.commentaires,
+                    id: formation.id,
+                    type: 'formation',
+                    zone: 'identite_formation',
+                }) }}
                 {{ include('typeDiplome/formation/_identiteFormation.html.twig') }}
             </div>
         </div>
@@ -12,6 +18,12 @@
         <h3 class="small-title">Localisation</h3>
         <div class="card mb-5">
             <div class="card-body">
+                {{ component('commentaire', {
+                    commentaires: formation.commentaires,
+                    id: formation.id,
+                    type: 'formation',
+                    zone: 'localisation',
+                }) }}
                 {{ include('typeDiplome/formation/_localisation.html.twig') }}
             </div>
         </div>
@@ -23,6 +35,12 @@
             <h3 class="small-title">Présentation</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {{ component('commentaire', {
+                        commentaires: formation.commentaires,
+                        id: formation.id,
+                        type: 'formation',
+                        zone: 'presentation',
+                    }) }}
                     {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours:true}) }}
                 </div>
             </div>
@@ -101,7 +119,7 @@
                 <h2>Parcours {{ parcours.libelle }}</h2>
             </div>
 
-            <div class="border-left-parcours border-left-parcours-{{ loop.index}} ">
+            <div class="border-left-parcours border-left-parcours-{{ loop.index }} ">
                 <section class="scroll-section" id="presentation_{{ parcours.id }}">
                     <h3 class="small-title">Présentation</h3>
                     <div class="card mb-5">

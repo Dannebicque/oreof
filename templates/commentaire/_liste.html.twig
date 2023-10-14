@@ -1,0 +1,21 @@
+<h2>Vos commentaires</h2>
+{% for commentaire in commentaires %}
+    <div class="border-left-sousEc border-left-sousEc-{{ loop.index }} mb-2 ps-3">
+        <p>
+            {{ commentaire.texte|raw }}
+        </p>
+        <p><span class="text-small">Le {{ commentaire.created|date('d/m/y H:i') }}</span>
+            <button class="btn text-warning text-small"><i class="{{ iconEdit }}"
+                        {{ stimulus_action('commentaire', 'edit', 'click', {commentaire:commentaire.id, texte:commentaire.texte}) }}
+                ></i> Modifier
+            </button>
+            <a
+                    href="{{ path('app_commentaire_delete',{id:commentaire.id}) }}"
+                    {{ stimulus_action('commentaire', 'delete') }}
+                    class="btn text-danger text-small"><i class="{{ iconDelete }}"
+                ></i> Supprimer</a>
+        </p>
+    </div>
+{% else %}
+    {{ component('alerte', {'message':'Pas de commentaire'}) }}
+{% endfor %}

@@ -1,0 +1,23 @@
+<div{{ attributes }}>
+    <button
+            {{ stimulus_controller('modal', {
+                size: 'large',
+                modalTitle: 'Mettre un commentaire',
+                right: true,
+                modalUrl: path('app_commentaire_ajout', {
+                    id: this.id,
+                    type: this.type,
+                    zone: this.zone,
+                }),
+            }) }}
+            data-action="click->modal#openModal"
+            data-size="lg"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Mettre un commentaire"
+            type="button"
+            class="btn btn-foreground hover-outline btn-icon btn-icon-only btn-sm position-absolute e-0 t-0 me-card mt-card z-index-1"
+    >
+        <i class="fal {% if this.hasComments %}fa-comment-lines{% else %}fa-comments{% endif %}"></i>
+    </button>
+</div>

@@ -157,6 +157,9 @@ class Formation
     #[ORM\Column(nullable: true)]
     private ?array $remplissage = [];
 
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: CommentaireFormation::class)]
+    private Collection $commentaires;
+
     public function __construct(AnneeUniversitaire $anneeUniversitaire)
     {
         $this->anneeUniversitaire = $anneeUniversitaire;
@@ -173,6 +176,7 @@ class Formation
         $this->typeEcs = new ArrayCollection();
         $this->butCompetences = new ArrayCollection();
         $this->historiqueFormations = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
     }
 
     #[ORM\PreFlush]
@@ -895,5 +899,35 @@ class Formation
     {
         $typeD = $this->getTypeDiplome() !== null ? $this->getTypeDiplome()->getLibelle() . ' - ' : '';
         return $typeD . $this->getDisplay();
+    }
+
+    /**
+     * @return Collection<int, CommentaireFormation>
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaires(CommentaireFormation $commentaireFormation): static
+    {
+        if (!$this->commentaires->contains($commentaireFormation)) {
+            $this->commentaires->add($commentaireFormation);
+            $commentaireFormation->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaires(CommentaireFormation $commentaireFormation): static
+    {
+        if ($this->commentaires->removeElement($commentaireFormation)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaireFormation->getFormation() === $this) {
+                $commentaireFormation->setFormation(null);
+            }
+        }
+
+        return $this;
     }
 }

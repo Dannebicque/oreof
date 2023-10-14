@@ -1,0 +1,28 @@
+<div {{ stimulus_controller('commentaire', {
+    urlListe: path('app_commentaire_liste', {
+        id: id ,
+        type: type ,
+        zone: zone,
+    }),
+}) }}>
+    <form id="formCommentaire" method="post" action="{{ path('app_commentaire_ajout', {
+        id: id ,
+        type: type ,
+        zone: zone,
+    }) }}">
+        <div class="mb-3">
+            <label for="message" class="form-label required">Message</label>
+            <textarea id="message" name="message" class="form-control" required rows="10"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success"
+                {{ stimulus_action('commentaire','sauvegarde', 'click') }}
+        >
+            <i class="{{ iconValidate }}"></i>
+            Sauvegarder
+        </button>
+    </form>
+
+    <div {{ stimulus_target('commentaire', 'liste') }} class="mt-2">
+
+    </div>
+</div>

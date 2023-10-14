@@ -171,6 +171,9 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ElementConstitutif::class)]
     private Collection $elementConstitutifs;
 
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: CommentaireParcours::class)]
+    private Collection $commentaires;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -187,6 +190,7 @@ class Parcours
         $this->parcoursEnfants = new ArrayCollection();
         $this->historiqueParcours = new ArrayCollection();
         $this->elementConstitutifs = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
     }
 
 
@@ -960,6 +964,36 @@ class Parcours
             // set the owning side to null (unless already changed)
             if ($elementConstitutif->getParcours() === $this) {
                 $elementConstitutif->setParcours(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CommentaireParcours>
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(CommentaireParcours $commentaireParcour): static
+    {
+        if (!$this->commentaires->contains($commentaireParcour)) {
+            $this->commentaires->add($commentaireParcour);
+            $commentaireParcour->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(CommentaireParcours $commentaireParcour): static
+    {
+        if ($this->commentaires->removeElement($commentaireParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaireParcour->getParcours() === $this) {
+                $commentaireParcour->setParcours(null);
             }
         }
 

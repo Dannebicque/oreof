@@ -180,6 +180,9 @@ class FicheMatiere
     #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'ficheMatieres')]
     private Collection $composante;
 
+    #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: CommentaireFicheMatiere::class)]
+    private Collection $commentaires;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -195,6 +198,7 @@ class FicheMatiere
         $this->historiqueFicheMatieres = new ArrayCollection();
         $this->apprentissagesCritiques = new ArrayCollection();
         $this->composante = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
     }
 
     public function getEtatStep(int $step): bool
@@ -945,6 +949,36 @@ class FicheMatiere
     public function removeComposante(Composante $composante): static
     {
         $this->composante->removeElement($composante);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CommentaireFicheMatiere>
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(CommentaireFicheMatiere $commentaireFicheMatiere): static
+    {
+        if (!$this->commentaires->contains($commentaireFicheMatiere)) {
+            $this->commentaires->add($commentaireFicheMatiere);
+            $commentaireFicheMatiere->setFicheMatiere($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(CommentaireFicheMatiere $commentaireFicheMatiere): static
+    {
+        if ($this->commentaires->removeElement($commentaireFicheMatiere)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaireFicheMatiere->getFicheMatiere() === $this) {
+                $commentaireFicheMatiere->setFicheMatiere(null);
+            }
+        }
 
         return $this;
     }

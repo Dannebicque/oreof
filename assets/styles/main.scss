@@ -34,12 +34,12 @@
   }
 
   .border-left-semestre-#{$i} {
-    border-left:2px solid var(--color-#{$i}) !important;
+    border-left: 2px solid var(--color-#{$i}) !important;
 
   }
 
   .border-left-ue-#{$i} {
-    border-left:2px solid var(--color-#{$i}) !important;
+    border-left: 2px solid var(--color-#{$i}) !important;
 
   }
 
@@ -375,7 +375,7 @@ html[data-show=true] .settings-button {
   position: fixed;
   top: 0;
   left: 0;
-  padding-top:100px;
+  padding-top: 100px;
   width: 100%;
   z-index: 1000;
   padding-left: var(--main-spacing-horizontal);
@@ -399,3 +399,4 @@ thead th {
   top: 0;
   background-color: #ddd; /* Changer la couleur de fond de votre choix*/
 }
+
