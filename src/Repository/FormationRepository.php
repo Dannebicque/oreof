@@ -116,6 +116,11 @@ class FormationRepository extends ServiceEntityRepository
                 ->setParameter('composante', $options['composantePorteuse']);
         }
 
+        if (array_key_exists('etatDpe', $options) && null !== $options['etatDpe']) {
+            $query->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+                ->setParameter('etatDpe', json_encode([$options['etatDpe'] => 1]));
+        }
+
         if ($sort === 'mention') {
             $query->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id');
             $query->addOrderBy(

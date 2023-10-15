@@ -22,6 +22,7 @@
         "php-translation/symfony-bundle": "^0.13.0",
         "phpoffice/phpspreadsheet": "^1.28",
         "psr/http-client": "*",
+        "scienta/doctrine-json-functions": "^5.3",
         "stof/doctrine-extensions-bundle": "*",
         "symfony/console": "6.3.*",
         "symfony/doctrine-messenger": "6.3.*",

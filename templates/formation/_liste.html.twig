@@ -103,10 +103,19 @@ bouton pour valider/invalide les étapes successives #}
                     <label for="filter-etat" class="sr-only">etat</label>
                     <select
                             {{ stimulus_action('crud', 'filter', 'change', {
-                                'field': 'etat'
+                                'field': 'etatDpe'
                             }) }}
                             id="filter-etat" class="form-select">
-
+                        <option value=""></option>
+                        <option value="autorisation_saisie" {% if params['etatDpe'] is defined and params['etatDpe'] == 'autorisation_saisie' %}selected{% endif %}>Saisie autorisée</option>
+                        <option value="en_cours_redaction" {% if params['etatDpe'] is defined and params['etatDpe'] == 'en_cours_redaction' %}selected{% endif %}>En cours de rédaction</option>
+                        <option value="soumis_rf" {% if params['etatDpe'] is defined and params['etatDpe'] == 'soumis_rf' %}selected{% endif %}>Soumis parcours</option>
+                        <option value="soumis_dpe_composante" {% if params['etatDpe'] is defined and params['etatDpe'] == 'soumis_dpe_composante' %}selected{% endif %}>Soumis DPE composante</option>
+                        <option value="soumis_conseil" {% if params['etatDpe'] is defined and params['etatDpe'] == 'soumis_conseil' %}selected{% endif %}>Soumis conseil composante</option>
+                        <option value="soumis_central" {% if params['etatDpe'] is defined and params['etatDpe'] == 'soumis_central' %}selected{% endif %}>Soumis central</option>
+                        <option value="soumis_cfvu" {% if params['etatDpe'] is defined and params['etatDpe'] == 'soumis_cfvu' %}selected{% endif %}>Soumis CFVU</option>
+                        <option value="valide_a_publier" {% if params['etatDpe'] is defined and params['etatDpe'] == 'valide_a_publier' %}selected{% endif %}>Validé pour publication</option>
+                        <option value="publie" {% if params['etatDpe'] is defined and params['etatDpe'] == 'publie' %}selected{% endif %}>Publié</option>
                     </select>
                 </th>
                 <th>
