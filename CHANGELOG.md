@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.15.0](https://github.com/Dannebicque/oreof/compare/v1.14.67...v1.15.0) (2023-10-15)
+
+
+### Features
+
+* Affichage d'une UE libre ([bb1d4b6](https://github.com/Dannebicque/oreof/commit/bb1d4b661db0c07e13513cec633dd55248c08c44))
+* Commentaire page bilan ([2bc46a9](https://github.com/Dannebicque/oreof/commit/2bc46a90b1698f61ae364748a806f2940e05296e))
+* commentaires (sur formation). WIP ([fda0afd](https://github.com/Dannebicque/oreof/commit/fda0afd71cdf3f8657a292458b6a866caff16a2f))
+* Filtre par état de remplissage ([f7d186a](https://github.com/Dannebicque/oreof/commit/f7d186a859befa8261523c1820698d224086e2fa))
+* GEstion UE libre dans Excel ([21c04d2](https://github.com/Dannebicque/oreof/commit/21c04d284e069849297989b6901055f5250b5c62))
+* Type de nature UE+EC pour filtrer les listes ([467e390](https://github.com/Dannebicque/oreof/commit/467e390b71fc6d838c036c2f8f9a9661939fd7ab))
+
+
+### Bug Fixes
+
+* But semestres non dispensés ([17d51f2](https://github.com/Dannebicque/oreof/commit/17d51f286f882349b8fa017f13aa0846328ccf21))
+* id ([e4b3bce](https://github.com/Dannebicque/oreof/commit/e4b3bce49d5022698dd8dff0663f8ab5cf1bd7ef))
+
 ### [1.14.67](https://github.com/Dannebicque/oreof/compare/v1.14.66...v1.14.67) (2023-10-11)
 
 
