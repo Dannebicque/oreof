@@ -100,7 +100,11 @@ class ElementConstitutifBccController extends AbstractController
             }
 
             $competence = $butCompetenceRepository->findOneByUe($elementConstitutif->getUe(), $formation);
-            $apprentissageCritiques = $butApprentissageCritiqueRepository->findByCompetenceSemestre($competence, $elementConstitutif->getUe()->getSemestre());
+            if ($competence !== null) {
+                $apprentissageCritiques = $butApprentissageCritiqueRepository->findByCompetenceSemestre($competence, $elementConstitutif->getUe()?->getSemestre());
+            } else {
+                $apprentissageCritiques = [];
+            }
 
             if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
                 $this->isGranted('CAN_PARCOURS_EDIT_MY', $elementConstitutif->getParcours())) { //todo: ajouter le workflow...
