@@ -13,6 +13,7 @@ use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
 use App\DTO\StructureEc;
 use App\DTO\StructureSemestre;
+use App\DTO\StructureUe;
 use App\DTO\TotalVolumeHeure;
 use App\Entity\AnneeUniversitaire;
 use App\Entity\Formation;
@@ -104,11 +105,11 @@ class LicenceMccc
     private string $dir;
 
     public function __construct(
-        KernelInterface                            $kernel,
-        protected ClientInterface $client,
-        protected CalculStructureParcours          $calculStructureParcours,
-        protected ExcelWriter                      $excelWriter,
-        TypeEpreuveRepository                      $typeEpreuveRepository
+        KernelInterface                   $kernel,
+        protected ClientInterface         $client,
+        protected CalculStructureParcours $calculStructureParcours,
+        protected ExcelWriter             $excelWriter,
+        TypeEpreuveRepository             $typeEpreuveRepository
     ) {
         $epreuves = $typeEpreuveRepository->findAll();
         $this->dir = $kernel->getProjectDir() . '/public';
@@ -214,65 +215,72 @@ class LicenceMccc
                         //UE
                         $debut = $ligne;
                         if (count($ue->uesEnfants) === 0) {
-                            //Si des UE enfants, on affiche pas les éventuels EC résiduels,
-                            foreach ($ue->elementConstitutifs as $ec) {
-                                $ligne = $this->afficheEc($ligne, $ec);
-                                foreach ($ec->elementsConstitutifsEnfants as $ece) {
-                                    $ligne = $this->afficheEc($ligne, $ece);
+                            if ($ue->ue->getNatureUeEc()->isLibre()) {
+                                $ligne = $this->afficheUeLibre($ligne, $ue);
+                            } else {
+                                //Si des UE enfants, on affiche pas les éventuels EC résiduels,
+                                foreach ($ue->elementConstitutifs as $ec) {
+                                    $ligne = $this->afficheEc($ligne, $ec);
+                                    foreach ($ec->elementsConstitutifsEnfants as $ece) {
+                                        $ligne = $this->afficheEc($ligne, $ece);
+                                    }
                                 }
-                            }
 
 
-                            if ($debut < $ligne - 1) {
-                                $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
-                                $this->excelWriter->mergeCellsCaR(self::COL_INTITULE_UE, $debut, self::COL_INTITULE_UE, $ligne - 1);
+                                if ($debut < $ligne - 1) {
+                                    $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
+                                    $this->excelWriter->mergeCellsCaR(self::COL_INTITULE_UE, $debut, self::COL_INTITULE_UE, $ligne - 1);
 
-                                // bordure fine
+                                    // bordure fine
 
-                                $this->excelWriter->borderOutsiteInside(self::COL_UE, $debut, self::COL_INTITULE_UE, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_NUM_EC, $debut, self::COL_INTITULE_EC, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_INTITULE_EC_EN, $debut, self::COL_INTITULE_EC_EN, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_RESP_EC, $debut, self::COL_RESP_EC, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_LANGUE_EC, $debut, self::COL_LANGUE_EC, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_SUPPORT_ANGLAIS, $debut, self::COL_SUPPORT_ANGLAIS, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_TYPE_EC, $debut, self::COL_TYPE_EC, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_COURS_MUTUALISE, $debut, self::COL_COURS_MUTUALISE, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_COMPETENCES, $debut, self::COL_COMPETENCES, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_ECTS, $debut, self::COL_ECTS, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_HEURES_PRES_CM, $debut, self::COL_HEURES_PRES_TP, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_HEURES_PRES_TOTAL, $debut, self::COL_HEURES_PRES_TOTAL, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_HEURES_DIST_CM, $debut, self::COL_HEURES_DIST_TP, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_HEURES_DIST_TOTAL, $debut, self::COL_HEURES_DIST_TOTAL, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_HEURES_AUTONOMIE, $debut, self::COL_HEURES_AUTONOMIE, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_HEURES_TOTAL, $debut, self::COL_HEURES_TOTAL, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_UE, $debut, self::COL_INTITULE_UE, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_NUM_EC, $debut, self::COL_INTITULE_EC, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_INTITULE_EC_EN, $debut, self::COL_INTITULE_EC_EN, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_RESP_EC, $debut, self::COL_RESP_EC, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_LANGUE_EC, $debut, self::COL_LANGUE_EC, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_SUPPORT_ANGLAIS, $debut, self::COL_SUPPORT_ANGLAIS, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_TYPE_EC, $debut, self::COL_TYPE_EC, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_COURS_MUTUALISE, $debut, self::COL_COURS_MUTUALISE, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_COMPETENCES, $debut, self::COL_COMPETENCES, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_ECTS, $debut, self::COL_ECTS, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_HEURES_PRES_CM, $debut, self::COL_HEURES_PRES_TP, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_HEURES_PRES_TOTAL, $debut, self::COL_HEURES_PRES_TOTAL, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_HEURES_DIST_CM, $debut, self::COL_HEURES_DIST_TP, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_HEURES_DIST_TOTAL, $debut, self::COL_HEURES_DIST_TOTAL, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_HEURES_AUTONOMIE, $debut, self::COL_HEURES_AUTONOMIE, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_HEURES_TOTAL, $debut, self::COL_HEURES_TOTAL, $ligne - 1);
 
-                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_CCI, $debut, self::COL_MCCC_CCI, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_CC, $debut, self::COL_MCCC_CC, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_CT, $debut, self::COL_MCCC_CT, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_MCCC_CCI, $debut, self::COL_MCCC_CCI, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_MCCC_CC, $debut, self::COL_MCCC_CC, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_MCCC_CT, $debut, self::COL_MCCC_CT, $ligne - 1);
 
-                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne - 1);
 
-                                //$this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne - 1);
-                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CT, $debut, self::COL_MCCC_SECONDE_CHANCE_CT, $ligne - 1);
+                                    //$this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CT, $debut, self::COL_MCCC_SECONDE_CHANCE_CT, $ligne - 1);
 
-                                $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne - 1);
+                                    $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne - 1);
+                                }
                             }
                             $this->excelWriter->writeCellXY(self::COL_UE, $debut, $ue->display, ['wrap' => true, 'style' => 'HORIZONTAL_CENTER', 'font-weight' => false]);
                             $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $debut, $ue->ue->getLibelle(), ['wrap' => true]);
                         }
                         foreach ($ue->uesEnfants as $uee) {
                             $debut = $ligne;
-                            foreach ($uee->elementConstitutifs as $ec) {
-                                $ligne = $this->afficheEc($ligne, $ec);
-                                foreach ($ec->elementsConstitutifsEnfants as $ece) {
-                                    $ligne = $this->afficheEc($ligne, $ece);
+                            if ($uee->ue->getNatureUeEc()->isLibre()) {
+                                $ligne = $this->afficheUeLibre($ligne, $uee);
+                            } else {
+                                foreach ($uee->elementConstitutifs as $ec) {
+                                    $ligne = $this->afficheEc($ligne, $ec);
+                                    foreach ($ec->elementsConstitutifsEnfants as $ece) {
+                                        $ligne = $this->afficheEc($ligne, $ece);
+                                    }
                                 }
-                            }
 
-                            if ($debut < $ligne - 1) {
-                                $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
-
-                                $this->excelWriter->mergeCellsCaR(self::COL_INTITULE_UE, $debut, self::COL_INTITULE_UE, $ligne - 1);
+                                if ($debut < $ligne - 1) {
+                                    $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
+                                    $this->excelWriter->mergeCellsCaR(self::COL_INTITULE_UE, $debut, self::COL_INTITULE_UE, $ligne - 1);
+                                }
                             }
                             $this->excelWriter->writeCellXY(self::COL_UE, $debut, $uee->display, ['wrap' => true, 'style' => 'HORIZONTAL_CENTER', 'font-weight' => false]);
                             $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $debut, $uee->ue->getLibelle(), ['wrap' => true]);
@@ -508,7 +516,7 @@ class LicenceMccc
             }
         }
 
-        $this->excelWriter->getColumnsAutoSize('D','D');
+        $this->excelWriter->getColumnsAutoSize('D', 'D');
         $this->excelWriter->setPrintArea('A1:D' . $ligne);
     }
 
@@ -736,6 +744,15 @@ class LicenceMccc
         $this->excelWriter->writeCellXY(self::COL_HEURES_AUTONOMIE, $ligne, $structureEc->heuresEctsEc->tePres === 0.0 ? '' : $structureEc->heuresEctsEc->tePres);
 
         $this->excelWriter->writeCellXY(self::COL_HEURES_TOTAL, $ligne, $structureEc->heuresEctsEc->sommeEcTotalPresDist() === 0.0 ? '' : $structureEc->heuresEctsEc->sommeEcTotalPresDist());
+
+        $ligne++;
+        return $ligne;
+    }
+
+    private function afficheUeLibre(int $ligne, StructureUe $ue): int
+    {
+        $this->excelWriter->insertNewRowBefore($ligne);
+        $this->excelWriter->writeCellXY(self::COL_INTITULE_EC, $ligne, $ue->ue->getDescriptionUeLibre(), ['wrap' => true]);
 
         $ligne++;
         return $ligne;
