@@ -119,7 +119,7 @@ class DpeComposanteMailSubscriber extends AbstractDpeMailSubscriber implements E
         );
         $this->myMailer->sendMessage(
             [$formation->getResponsableMention()?->getEmail(), $formation->getCoResponsable()?->getEmail()],
-            '[ORéOF]  Votre formation a reçu des réserves du DPE de votre composante'
+            '[ORéOF]  Votre formation a reçu des réserves de la part du DPE de votre composante'
         );
     }
 

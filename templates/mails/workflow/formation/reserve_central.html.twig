@@ -1,12 +1,11 @@
 {% extends 'mails/base_mail.html.twig' %}
 
 {% block content %}
-    <p>Bonjour {{ formation.responsableMention.display }}, {% if formation.coResponsable != null %}{{ formation.coResponsable.display }}, {% endif %}</p>
+    <p>Bonjour,</p>
 
-    <p>Une ou des réserve(s) ont été émises sur votre formation <strong>{{ formation.displayLong }}</strong>, par le
-        VP.</p>
+    <p>Le central a émis une ou des réserve(s) sur votre formation  <strong>{{ formation.displayLong }}</strong>.</p>
 
-    <p>Le motif est :</p>
+    <p>Détail des réserves :</p>
 
     <p>{{ motif|raw }}</p>
 
@@ -15,5 +14,6 @@
     <p>
         <a href="{{ url('app_formation_edit', {'slug': formation.slug}) }}">{{ url('app_formation_edit', {'slug': formation.slug}) }}</a>
     </p>
+    <p>Si les réserves portent sur un parcours, le responsable du parcours peut également procéder à la modification de son parcours. </p>
 
 {% endblock %}

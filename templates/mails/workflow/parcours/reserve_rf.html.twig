@@ -4,10 +4,9 @@
     <p>Bonjour {{ parcours.getRespParcours.display }}
         , {% if parcours.getCoResponsable != null %}{{ parcours.getCoResponsable.display }}, {% endif %}</p>
 
-    <p>Une ou des réserve(s) ont été émises sur votre parcours <strong>{{ parcours.libelle }}</strong> de la formation <strong>{{ formation.displayLong }}</strong>, par le
-        responsable de formation.</p>
+    <p>Le responsable de formation a émis une ou des réserve(s) ont été émises sur votre parcours <strong>{{ parcours.libelle }}</strong> de la formation <strong>{{ formation.displayLong }}</strong>.</p>
 
-    <p>Le motif est :</p>
+    <p>Détail des réserves :</p>
 
     <p>{{ motif|raw }}</p>
 

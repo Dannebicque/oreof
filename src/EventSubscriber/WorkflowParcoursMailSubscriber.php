@@ -101,7 +101,7 @@ class WorkflowParcoursMailSubscriber implements EventSubscriberInterface
         );
         $this->myMailer->sendMessage(
             [$parcours->getRespParcours()?->getEmail(), $parcours->getCoResponsable()?->getEmail()],
-            '[ORéOF]  Votre parcours a reçu des réserves par le responsable de formation'
+            '[ORéOF]  Votre parcours a reçu des réserves de la part du responsable de formation'
         );
     }
 }

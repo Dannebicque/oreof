@@ -1,11 +1,11 @@
 {% extends 'mails/base_mail.html.twig' %}
 
 {% block content %}
-    <p>Bonjour {{ formation.responsableMention.display }}, {% if formation.coResponsable != null %}{{ formation.coResponsable.display }}, {% endif %}</p>
+    <p>Bonjour,</p>
 
-    <p>Votre formation <strong>{{ formation.displayLong }}</strong>, a été refusée par les VP.</p>
+    <p>Votre formation <strong>{{ formation.displayLong }}</strong>, a été refusée par le central.</p>
 
-    <p>Le motif est :</p>
+    <p>Motif du refus :</p>
 
     <p>{{ motif|raw }}</p>
 {% endblock %}
