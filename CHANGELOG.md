@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.4](https://github.com/Dannebicque/oreof/compare/v1.15.3...v1.15.4) (2023-10-16)
+
+
+### Features
+
+* Ajout d'un utilisateur hors URCA ([9099161](https://github.com/Dannebicque/oreof/commit/9099161d0534749449e6f2bae63fb78c0f871e02))
+
+
+### Bug Fixes
+
+* erreur incomplet BUT ([9d0b751](https://github.com/Dannebicque/oreof/commit/9d0b7517dc9104f9c61fafb6fc95a9fd7fb0a0b4))
+
 ### [1.15.3](https://github.com/Dannebicque/oreof/compare/v1.15.2...v1.15.3) (2023-10-16)
 
 
