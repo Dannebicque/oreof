@@ -30,12 +30,19 @@ class StructureUe
         $this->raccroche = $raccroche;
         $this->ueOrigine = $ueOrigine;
         $this->heuresEctsUe = new HeuresEctsUe();
+
+        if ($this->ue->getNatureUeEc()?->isLibre()) {
+            // Si UE lbren prise en compte des ECTS de l'UE
+            //todo: faire idem pour BUT
+            $this->heuresEctsUe->sommeUeEcts = $this->ue->getEcts();
+        }
     }
 
     public function addUeEnfant(?int $idUe, StructureUe $structureUe): void
     {
         $this->uesEnfants[$idUe] = $structureUe;
         $this->heuresEctsUeEnfants[$idUe] = $structureUe->heuresEctsUe;
+
         //gérer pour prendre le max des heures et ects sur tous les enfants de l'EC
     }
 
