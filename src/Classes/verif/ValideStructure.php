@@ -60,12 +60,11 @@ abstract class ValideStructure extends AbstractValide
                     } else {
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = $hasUe;
                     }
-
                 } else {
                     if ($sem->isNonDispense() !== true) {
-                    self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::VIDE;
-                    self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = 'Semestre non renseigné';
-                    self::$errors[] = 'Semestre ' . $semestreParcour->getOrdre() . ' non renseigné';
+                        self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::VIDE;
+                        self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = 'Semestre non renseigné';
+                        self::$errors[] = 'Semestre ' . $semestreParcour->getOrdre() . ' non renseigné';
                     }
                 }
             }
@@ -80,7 +79,11 @@ abstract class ValideStructure extends AbstractValide
         }
 
         if ($ue !== null && $ue->getUeParent() === null) {
-            if ($ue->getUeEnfants()->count() === 0) {
+            if ($ue->getNatureUeEc()?->isLibre()) {
+                self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['global'] = $ue->getEcts() === 0.0 ? self::VIDE : self::COMPLET;
+                self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['ecs'] = [];
+                self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['ue'] = $ue;
+            } elseif ($ue->getUeEnfants()->count() === 0) {
                 self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['global'] = count($ue->getElementConstitutifs()) === 0 ? self::VIDE : self::COMPLET;
                 self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['ecs'] = [];
                 self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['ue'] = $ue;
@@ -95,12 +98,18 @@ abstract class ValideStructure extends AbstractValide
                     self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'] = [];
                     self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['global'] = self::COMPLET;
                     foreach ($ue->getUeEnfants() as $uee) {
-                        self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ue'] = $uee;
-                        self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['global'] = self::COMPLET;
-                        self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ecs'] = [];
-                        foreach ($uee->getElementConstitutifs() as $ec) {
-                            if ($ec->getEcParent() === null) {
-                                self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ecs'][$ec->getId()] = self::valideEc($ec, $ordreSemestre, $uee);
+                        if ($uee->getNatureUeEc()?->isLibre()) {
+                            self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ue'] = $uee;
+                            self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['global'] = self::COMPLET;
+                            self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ecs'] = [];
+                        } else {
+                            self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ue'] = $uee;
+                            self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['global'] = self::COMPLET;
+                            self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ecs'] = [];
+                            foreach ($uee->getElementConstitutifs() as $ec) {
+                                if ($ec->getEcParent() === null) {
+                                    self::$structure['semestres'][$ordreSemestre]['ues'][$ue->getId()]['enfants'][$uee->getId()]['ecs'][$ec->getId()] = self::valideEc($ec, $ordreSemestre, $uee);
+                                }
                             }
                         }
                     }
