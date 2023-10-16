@@ -1,0 +1,29 @@
+<div {{ stimulus_controller('register', {
+
+}) }}
+        data-action="register:refreshModale@window->base#refreshModale"
+>
+    {% form_theme form 'communs/form_theme.html.twig' %}
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-12">
+            {{ form_row(form.nom) }}
+            {{ form_row(form.prenom) }}
+            {{ form_row(form.email) }}
+        </div>
+    </div>
+
+    {{ component('alerte', {type: 'info', message: 'Un email sera envoyé avec un mot de passe temporaire. Le login sera l\'adresse email'}) }}
+
+    <div class="d-grid">
+        <button class="btn btn-success"
+                {{ stimulus_action('register','sauvegardeFormModalHorsUrca', 'click', {
+                    url: path('app_user_new_hors_urca_valide')
+                }) }}
+        >
+            <i class="fal fa-floppy-disk"></i>
+            Ajouter l'utilisateur
+        </button>
+    </div>
+    {{ form_end(form) }}
+</div>

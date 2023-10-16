@@ -93,6 +93,28 @@ export default class extends Controller {
     )
   }
 
+  async sauvegardeFormModalHorsUrca(event) {
+    event.preventDefault()
+    const { url } = event.params
+
+    // submit des data
+    const data = new FormData()
+    data.append('user_ldap_email', document.getElementById('user_hors_urca_email').value)
+    data.append('user_nom', document.getElementById('user_hors_urca_nom').value)
+    data.append('user_prenom', document.getElementById('user_hors_urca_prenom').value)
+
+    // fetch
+    const response = await fetch(url, {
+      method: 'POST',
+      body: data,
+    }).then((reponse) => reponse.json())
+
+    if (response.success) {
+      // fermer la modale
+      this.dispatch('refreshModale', { detail: { url: response.url } })
+    }
+  }
+
   async sauvegardeFormModal(event) {
     event.preventDefault()
     const { url } = event.params

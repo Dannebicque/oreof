@@ -14,6 +14,7 @@ use App\Classes\Mailer;
 use App\Controller\BaseController;
 use App\Entity\User;
 use App\Enums\CentreGestionEnum;
+use App\Form\UserHorsUrcaType;
 use App\Form\UserLdapType;
 use App\Form\UserType;
 use App\Repository\RoleRepository;
@@ -22,6 +23,7 @@ use App\Repository\UserRepository;
 use App\Utils\JsonRequest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -120,6 +122,20 @@ class UserController extends BaseController
         ]);
     }
 
+    #[Route('/ajouter-hors-urca', name: 'app_user_new_hors_urca', methods: ['GET'])]
+    public function horsUrca(
+        Request $request
+    ): Response {
+        $user = new User();
+        $form = $this->createForm(UserHorsUrcaType::class, $user, [
+            'action' => $this->generateUrl('app_user_new_hors_urca'),
+        ]);
+
+        return $this->render('config/user/new-hors-urca.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
     #[Route('/ajouter-ldap', name: 'app_user_new_ldap_valide', methods: ['POST'])]
     public function saveLdap(
         Mailer         $myMailer,
@@ -206,6 +222,56 @@ class UserController extends BaseController
         ]);
     }
 
+    #[Route('/ajouter-hors-urca', name: 'app_user_new_hors_urca_valide', methods: ['POST'])]
+    public function saveHorsUrca(
+        UserPasswordHasherInterface $passwordEncoder,
+        Mailer                      $myMailer,
+        Request                     $request,
+        UserRepository              $userRepository
+    ): Response {
+        $email = $request->request->get('user_ldap_email');
+        $nom = $request->request->get('user_nom');
+        $prenom = $request->request->get('user_prenom');
+
+        $user = $userRepository->findOneBy(['email' => $email]);
+
+        // genre un mot de passe aléatoire de 8 caractères
+        $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#!?&@'), 0, 8);
+
+        if ($user !== null) {
+            $user->setIsDeleted(false);
+            $passwordEncode = $passwordEncoder->hashPassword($user, $password);
+            $user->setPassword($passwordEncode);
+        } else {
+            $user = new User();
+            $passwordEncode = $passwordEncoder->hashPassword($user, $password);
+            $user->setEmail($email);
+            $user->setUsername($email);
+            $user->setNom($nom);
+            $user->setPrenom($prenom);
+            $user->setPassword($passwordEncode);
+        }
+
+        $user->setIsEnable(true);
+        $user->setIsValideAdministration(true);
+        $user->setDateValideAdministration(new \DateTime());
+        $this->addFlash('success', 'L\'utilisateur a été ajouté avec succès, un email lui a été envoyé.');
+
+        $myMailer->initEmail();
+        $myMailer->setTemplate(
+            'mails/user/acces_ajoute_hors_urca.html.twig',
+            ['user' => $user,
+                'password' => $password]
+        );
+        $myMailer->sendMessage([$user->getEmail()], '[ORéOF] Accès ORéOF');
+
+        $userRepository->save($user, true);
+
+        return $this->json([
+            'success' => true,
+            'url' => $this->generateUrl('app_user_gestion_centre', ['user' => $user->getId()])
+        ]);
+    }
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(

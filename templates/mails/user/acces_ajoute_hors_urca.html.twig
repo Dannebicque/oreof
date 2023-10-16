@@ -1,0 +1,17 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour {{ user.display }},</p>
+
+    <p>Vous venez d'être ajouté sur l'application {{ product_name }}. Vous pouvez maintenant y accéder en cliquant sur
+        le lien ci-dessous.</p>
+
+    <p><a href="{{ product_url }}" target="_blank">{{ product_url }}</a></p>
+
+    <p>Puis choisir "Se connecter avec un login/mot de passe" pour afficher le formulaire de connexion et saisir les éléments suivants.</p>
+    <ul>
+        <li>Login : {{ user.email }}</li>
+        <li>Mot de passe : {{ password }}</li>
+    </ul>
+
+{% endblock %}
