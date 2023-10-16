@@ -264,7 +264,7 @@ abstract class ValideStructure extends AbstractValide
                 $hasUe = count($sem->getUes()) === 0 ? self::VIDE : self::COMPLET;
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'] = [];
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::INCOMPLET;
-                self::$structure['global'] = self::INCOMPLET;
+
                 self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'] = [];
                 foreach ($sem->getUes() as $ue) {
                     if (count($ue->getElementConstitutifs()) === 0) {
