@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.3](https://github.com/Dannebicque/oreof/compare/v1.15.2...v1.15.3) (2023-10-16)
+
+
+### Bug Fixes
+
+* structure UE sans EC (UE libre) ([c86402c](https://github.com/Dannebicque/oreof/commit/c86402c7be6939bbeea6d5724b6a9174d650ca8c))
+
 ### [1.15.2](https://github.com/Dannebicque/oreof/compare/v1.15.1...v1.15.2) (2023-10-16)
 
 
