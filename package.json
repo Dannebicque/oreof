@@ -1,5 +1,5 @@
 {
-    "version": "1.15.8",
+    "version": "1.15.9",
     "devDependencies": {
         "@babel/core": "^7.17.0",
         "@babel/preset-env": "^7.16.0",
