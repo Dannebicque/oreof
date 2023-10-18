@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.17](https://github.com/Dannebicque/oreof/compare/v1.15.16...v1.15.17) (2023-10-18)
+
+
+### Bug Fixes
+
+* calcul ECT sur la vérification ([14ff36d](https://github.com/Dannebicque/oreof/commit/14ff36dc8159e9c7f07fa6de916ee3a4d87e0252))
+
 ### [1.15.16](https://github.com/Dannebicque/oreof/compare/v1.15.15...v1.15.16) (2023-10-18)
 
 
