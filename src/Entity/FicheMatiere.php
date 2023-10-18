@@ -19,7 +19,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-
 #[ORM\Entity(repositoryClass: FicheMatiereRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class FicheMatiere
@@ -581,7 +580,7 @@ class FicheMatiere
             $texte .= ' | ' . $this->sigle;
         }
 
-        if ($this->getFicheMatiereParcours()-> count() > 0) {
+        if ($this->getFicheMatiereParcours()->count() > 0) {
             $texte .= ' (mutualisée)';
         }
 
@@ -777,7 +776,10 @@ class FicheMatiere
 
     public function getSemestre(): int
     {
-        return $this->getElementConstitutifs()->first()->getUe()?->getSemestre()?->getOrdre();
+        if ($this->getElementConstitutifs()->count() > 0) {
+            return $this->getElementConstitutifs()->first()->getUe()?->getSemestre()?->getOrdre();
+        }
+        return 0;
     }
 
     public function getVolumeEtudiant(): float

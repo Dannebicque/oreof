@@ -113,10 +113,11 @@ class ButMccc
             throw new \Exception('La formation n\'existe pas');
         }
 
-        $spreadsheet = $this->excelWriter->createFromTemplate('Annexe_MCCC_BUT.xlsx');
+        $this->excelWriter->createFromTemplate('Annexe_MCCC_BUT.xlsx');
 
         // Prépare le modèle avant de dupliquer
-        $modele = $spreadsheet->getSheetByName(self::PAGE_MODELE);
+        $modele = $this->excelWriter->getSheetByName(self::PAGE_MODELE);
+
         if ($modele === null) {
             throw new \Exception('Le modèle n\'existe pas');
         }
@@ -181,7 +182,7 @@ class ButMccc
         foreach ($tabSemestres as $i => $semestres) {
             $clonedWorksheet = clone $modele;
             $clonedWorksheet->setTitle('Semestre S' . $i);
-            $spreadsheet->addSheet($clonedWorksheet, $index);
+            $this->excelWriter->addSheet($clonedWorksheet, $index);
             $index++;
             $semestreSheets[$i] = $clonedWorksheet;
 
@@ -257,10 +258,10 @@ class ButMccc
         // $this->genereReferentielCompetences($spreadsheet, $parcours, $formation);
 
         //supprimer la feuille de modèle
-        $spreadsheet->removeSheetByIndex(0);
-        $spreadsheet->setActiveSheetIndex(0);
-        $spreadsheet->getActiveSheet()->setSelectedCells('A1');
-        $this->excelWriter->setSpreadsheet($spreadsheet, true);
+        $this->excelWriter->removeSheetByIndex(0);
+        $this->excelWriter->setActiveSheetIndex(0);
+        $this->excelWriter->setSelectedCells('A1');
+//        $this->excelWriter->setSpreadsheet($spreadsheet, true);
 
         $this->fileName = Tools::FileName('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle(), 40);
     }
@@ -344,7 +345,7 @@ class ButMccc
                     ['style' => 'HORIZONTAL_CENTER']
                 );
                 $this->excelWriter->writeCellXY(
-                    Coordinate::columnIndexFromString($tabColonnes[$mccc->getLibelle()]['nombre'] === 0 ? '' : $mccc->getNbEpreuves()),
+                    Coordinate::columnIndexFromString($tabColonnes[$mccc->getLibelle()]['nombre']),
                     $ligne,
                     $mccc->getNbEpreuves(),
                     ['style' => 'HORIZONTAL_CENTER']
