@@ -71,8 +71,8 @@ class LicenceMccc
     public const COL_RESP_EC = 7;
     public const COL_LANGUE_EC = 8;
     public const COL_SUPPORT_ANGLAIS = 9;
-    public const COL_TYPE_EC = 10;
-    public const COL_COURS_MUTUALISE = 11;
+    public const COL_TYPE_EC = 11;
+    public const COL_COURS_MUTUALISE = 10;
     public const COL_COMPETENCES = 12;
     public const COL_ECTS = 13;
     public const COL_HEURES_PRES_CM = 14;
@@ -795,36 +795,36 @@ class LicenceMccc
                 $this->excelWriter->unMergeCells('B' . $ligneSemestre . ':L' . $ligneSemestre);
             }
             //suppression des colonnes
-            $this->excelWriter->removeColumn('F', 6);
-            $this->excelWriter->mergeCells('D15:G16');
-            $this->excelWriter->mergeCells('H5:L5');
-            $this->excelWriter->mergeCells('H6:L6');
-            $this->excelWriter->mergeCells('H7:L7');
-            $this->excelWriter->mergeCells('H9:L9');
-            $this->excelWriter->mergeCells('H11:L11');
-            $this->excelWriter->mergeCells('H13:L13');
+            $this->excelWriter->removeColumn('F', 5);
+            $this->excelWriter->mergeCells('D15:H16');
+            $this->excelWriter->mergeCells('I5:L5');
+            $this->excelWriter->mergeCells('I6:L6');
+            $this->excelWriter->mergeCells('I7:L7');
+            $this->excelWriter->mergeCells('I9:L9');
+            $this->excelWriter->mergeCells('I11:L11');
+            $this->excelWriter->mergeCells('I13:L13');
 
             $style = ['alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_RIGHT,
             ]];
 
-            $this->excelWriter->cellStyle('H5', $style);
-            $this->excelWriter->cellStyle('H6', $style);
-            $this->excelWriter->cellStyle('H7', $style);
-            $this->excelWriter->cellStyle('H9', $style);
-            $this->excelWriter->cellStyle('H11', $style);
-            $this->excelWriter->cellStyle('H13', $style);
+            $this->excelWriter->cellStyle('I5', $style);
+            $this->excelWriter->cellStyle('I6', $style);
+            $this->excelWriter->cellStyle('I7', $style);
+            $this->excelWriter->cellStyle('I9', $style);
+            $this->excelWriter->cellStyle('I11', $style);
+            $this->excelWriter->cellStyle('I13', $style);
 
-            $this->excelWriter->mergeCells('M5:Q5');
-            $this->excelWriter->mergeCells('M6:Q6');
-            $this->excelWriter->mergeCells('M7:Q7');
-            $this->excelWriter->mergeCells('M9:Q9');
-            $this->excelWriter->mergeCells('M11:Q11');
-            $this->excelWriter->mergeCells('M13:Q13');
+            $this->excelWriter->mergeCells('N5:Q5');
+            $this->excelWriter->mergeCells('N6:Q6');
+            $this->excelWriter->mergeCells('N7:Q7');
+            $this->excelWriter->mergeCells('N9:Q9');
+            $this->excelWriter->mergeCells('N11:Q11');
+            $this->excelWriter->mergeCells('N13:Q13');
 
             foreach ($this->lignesSemestre as $ligneSemestre) {
                 $ligneSemestre--;
-                $this->excelWriter->mergeCells('B' . $ligneSemestre . ':E' . $ligneSemestre);
+                $this->excelWriter->mergeCells('B' . $ligneSemestre . ':G' . $ligneSemestre);
             }
         }
     }
