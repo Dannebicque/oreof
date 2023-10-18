@@ -343,8 +343,11 @@ class ExcelWriter
         $this->sheet->setCellValue($dest, $this->sheet->getCell($source)->getValue());
     }
 
-    public function removeColumn(string $column, int $nbCol): void
+    public function removeColumn(string|int $column, int $nbCol): void
     {
+        if (is_int($column)) {
+            $column = Coordinate::stringFromColumnIndex($column);
+        }
         $this->sheet->removeColumn($column, $nbCol);
     }
 
@@ -353,7 +356,7 @@ class ExcelWriter
         $this->sheet->getRowDimension($ligne)->setRowHeight(-1);
     }
 
-    /** @deprecated  */
+    /** @deprecated */
     public function genereFichierPdf(string $name): StreamedResponse
     {
         $this->pageSetup($name);
@@ -464,5 +467,14 @@ class ExcelWriter
     public function cellStyle(string $string, array $array)
     {
         $this->sheet->getStyle($string)->applyFromArray($array);
+    }
+
+    public function insertNewColumnBefore(int|string $colUe): void
+    {
+        if (is_int($colUe)) {
+            $colUe = Coordinate::stringFromColumnIndex($colUe);
+        }
+
+        $this->sheet->insertNewColumnBefore($colUe);
     }
 }
