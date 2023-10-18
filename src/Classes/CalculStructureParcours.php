@@ -26,8 +26,8 @@ class CalculStructureParcours
         $dtoStructure->setParcours($parcours);
 
         foreach ($parcours->getSemestreParcours() as $semestreParcours) {
-            if ($semestreParcours->getSemestre()->getSemestreRaccroche() !== null) {
-                $semestre = $semestreParcours->getSemestre()->getSemestreRaccroche()->getSemestre();
+            if ($semestreParcours->getSemestre()?->getSemestreRaccroche() !== null) {
+                $semestre = $semestreParcours->getSemestre()?->getSemestreRaccroche()?->getSemestre();
                 $raccrocheSemestre = true;
             } else {
                 $semestre = $semestreParcours->getSemestre();
