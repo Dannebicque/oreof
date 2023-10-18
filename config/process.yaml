@@ -95,10 +95,10 @@ process:
     isTimeline: false
     hasDate: false
     transition: 'soumis_central'
-    canValide: 'valider_central'
+    canValide: 'transmettre_cfvu'
     canRefuse: 'refuser_central'
     canReserve: 'reserver_central'
-  vp:
+  vp: #todo: sur cette phase VP = SES
     page: 'formation'
     icon: 'fa-handshake'
     label: 'validation.vp'
@@ -108,10 +108,10 @@ process:
     hasUpload: false
     isTimeline: false
     hasDate: false
-    transition: 'soumis_vp'
+    transition: 'soumis_central'
     canValide: 'transmettre_cfvu'
-    canRefuse: ''
-    canReserve: ''
+    canRefuse: 'refuser_central'
+    canReserve: 'reserver_central'
   cfvu:
     page: 'formation'
     icon: 'fa-stamp'

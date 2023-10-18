@@ -34,30 +34,12 @@ class DpePublicationMailSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.dpe.transition.refuser_central' => 'onRefuseCentral',
-            'workflow.dpe.transition.valider_central' => 'onValideCentral',
-            'workflow.dpe.transition.reserver_central' => 'onReserveCentral',
-            'workflow.dpe.transition.transmettre_cfvu' => 'onTransmettreCfvu',
-            'workflow.dpe.transition.refuser_definitif_cfvu' => 'onRefuseDefinitifCfvu',
-            'workflow.dpe.transition.refuser_revoir_cfvu' => 'onRefuseRevoirCfvu',
-            'workflow.dpe.transition.valider_reserve_cfvu' => 'onValideReserveCfvu',
-            'workflow.dpe.transition.valider_reserve_conseil_cfvu' => 'onValideReserveConseilCfvu',
-            'workflow.dpe.transition.valider_reserve_central_cfvu' => 'onValideReserveCentralCfvu',
-            'workflow.dpe.transition.valider_cfvu' => 'onValideCfvu',
             'workflow.dpe.transition.valider_publication' => 'onValidePublication',
             'workflow.dpe.transition.publier' => 'onPublie',
         ];
     }
 
 
-    public function onValideCentral(Event $event)
-    {
-    }
-
-    public function onTransmettreCfvu(Event $event)
-    {
-        //mail aux conseillers ?
-    }
 
     public function onValideCfvu(Event $event)
     {

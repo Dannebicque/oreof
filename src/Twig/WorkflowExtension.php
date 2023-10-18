@@ -45,13 +45,14 @@ class WorkflowExtension extends AbstractExtension
 
     public function hasHistorique(
         Parcours|FicheMatiere|Formation $entity,
-        string $key,
-        array $historique
-    ): string
-    {
+        string                          $key,
+        array                           $historique
+    ): string {
+        if ($key === 'vp') { //todo: temporaire pour phase 1 ou VP = SES
+            $key = 'ses';
+        }
         if (array_key_exists($key, $historique)) {
-            return match($historique[$key]->getEtat())
-            {
+            return match ($historique[$key]->getEtat()) {
                 'valide' => 'btn-success',
                 'reserve' => 'btn-warning',
                 'laisserPasser' => 'btn-warning',
@@ -65,50 +66,46 @@ class WorkflowExtension extends AbstractExtension
 
     public function isPlace(string $workflow, Parcours|FicheMatiere|Formation $entity, string $place): bool
     {
-
         $actualPlaces = $this->getWorkflow($workflow)->getMarking($entity)->getPlaces();
 
-        if (array_key_exists('en_cours_redaction',$actualPlaces)  && $entity instanceof Formation && $place==='formation') {
+        if (array_key_exists('en_cours_redaction', $actualPlaces) && $entity instanceof Formation && $place === 'formation') {
             return true;
         }
 
-        if (array_key_exists('soumis_dpe_composante',$actualPlaces)  && $entity instanceof Formation && $place==='dpe') {
+        if (array_key_exists('soumis_dpe_composante', $actualPlaces) && $entity instanceof Formation && $place === 'dpe') {
             return true;
         }
 
-        if (array_key_exists('soumis_conseil',$actualPlaces)  && $entity instanceof Formation && $place==='conseil') {
-            return true;
-        }
-
-        if (
-            array_key_exists('soumis_central',$actualPlaces)  && $entity instanceof Formation && $place==='ses') {
+        if (array_key_exists('soumis_conseil', $actualPlaces) && $entity instanceof Formation && $place === 'conseil') {
             return true;
         }
 
         if (
-            array_key_exists('soumis_vp',$actualPlaces)  && $entity instanceof Formation && $place==='vp') {
+            (array_key_exists('soumis_central', $actualPlaces) && $entity instanceof Formation && ($place === 'ses' || $place === 'vp')) ||
+            (array_key_exists('soumis_vp', $actualPlaces) && $entity instanceof Formation && ($place === 'ses' || $place === 'vp'))) {
+            //todo: sur cette phase SES et VP sont confondus
             return true;
         }
 
         if (
-            array_key_exists('soumis_cfvu',$actualPlaces)  && $entity instanceof Formation && $place==='cfvu') {
+            array_key_exists('soumis_cfvu', $actualPlaces) && $entity instanceof Formation && $place === 'cfvu') {
             return true;
         }
 
         if (
-            array_key_exists('valide_pour_publication',$actualPlaces)  && $entity instanceof Formation && $place==='publication') {
+            array_key_exists('valide_pour_publication', $actualPlaces) && $entity instanceof Formation && $place === 'publication') {
             return true;
         }
 
-        if (array_key_exists('en_cours_redaction',$actualPlaces) && $entity instanceof Parcours && $place==='parcours') {
+        if (array_key_exists('en_cours_redaction', $actualPlaces) && $entity instanceof Parcours && $place === 'parcours') {
             return true;
         }
 
-        if (array_key_exists('soumis_parcours',$actualPlaces) && $entity instanceof Parcours && $place==='parcours_rf') {
+        if (array_key_exists('soumis_parcours', $actualPlaces) && $entity instanceof Parcours && $place === 'parcours_rf') {
             return true;
         }
 
-        if (array_key_exists($place,$actualPlaces)) {
+        if (array_key_exists($place, $actualPlaces)) {
             return true;
         }
 
@@ -125,7 +122,6 @@ class WorkflowExtension extends AbstractExtension
 
         $indexActualPlace = array_search(array_keys($actualPlaces)[0], $places);
         $indexPlace = array_search($place, $places);
-
         if ($indexActualPlace > $indexPlace) {
             return true;
         }
@@ -137,7 +133,7 @@ class WorkflowExtension extends AbstractExtension
     {
         $places = $this->getWorkflow($workflow)->getMarking($entity)->getPlaces();
         if (count($places) > 0) {
-          return str_starts_with(array_keys($places)[0], 'refuse');
+            return str_starts_with(array_keys($places)[0], 'refuse');
         }
 
         return false;
@@ -147,7 +143,7 @@ class WorkflowExtension extends AbstractExtension
     {
         if ($type === 'formation') {
             $formation = $entity;
-        } else if ($type === 'parcours') {
+        } elseif ($type === 'parcours') {
             $formation = $entity->getFormation();
         }
 
@@ -162,7 +158,7 @@ class WorkflowExtension extends AbstractExtension
 
     private function getWorkflow(string $workflow): WorkflowInterface
     {
-        return match($workflow) {
+        return match ($workflow) {
             'dpe' => $this->dpeWorkflow,
             'parcours' => $this->parcoursWorkflow,
         };

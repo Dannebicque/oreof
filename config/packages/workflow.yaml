@@ -60,20 +60,17 @@ framework:
                 reserver_conseil:
                     from: 'soumis_conseil'
                     to: 'en_cours_redaction'
-                laisser_passer_conseil:
-                    from: 'soumis_conseil'
-                    to: 'soumis_central'
                 refuser_central:
                     from: 'soumis_central'
                     to: 'refuse_central'
                 valider_central:
                     from: 'soumis_central'
-                    to: 'soumis_vp'
+                    to: 'soumis_cfvu'
                 reserver_central:
                     from: 'soumis_central'
                     to: 'en_cours_redaction'
                 transmettre_cfvu:
-                    from: 'soumis_vp'
+                    from: 'soumis_central' #TODO: VP + Central fusionné
                     to: 'soumis_cfvu'
                 refuser_definitif_cfvu:
                     from: 'soumis_cfvu'
