@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.16](https://github.com/Dannebicque/oreof/compare/v1.15.15...v1.15.16) (2023-10-18)
+
+
+### Features
+
+* modifs sur affichag parcours dans une formation ([e340a9c](https://github.com/Dannebicque/oreof/commit/e340a9cd6ba3df6e755510c98fa13e7c83e60389))
+
+
+### Bug Fixes
+
+* BUT avec MCCC si semestre raccroché ([f0031b1](https://github.com/Dannebicque/oreof/commit/f0031b105ae7a316eaf30c02e9bc208c368ecf5d))
+* structure UE/Semestre badge calculé ([86fe542](https://github.com/Dannebicque/oreof/commit/86fe5424325e9bd330343e9d96804609606b9c4e))
+
 ### [1.15.15](https://github.com/Dannebicque/oreof/compare/v1.15.14...v1.15.15) (2023-10-18)
 
 
