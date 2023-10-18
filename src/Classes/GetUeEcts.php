@@ -20,6 +20,10 @@ abstract class GetUeEcts
             return $ue->getEcts();
         }
 
+        if ($ue->getNatureUeEc()?->isLibre()) {
+            return $ue->getEcts();
+        }
+
         if ($ue->getUeEnfants()->count() === 0) {
             return self::totalEctsUe($ue, $parcours);
         }
