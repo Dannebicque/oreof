@@ -23,14 +23,20 @@ use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\Source\ButTypeDiplome;
 use App\Utils\Tools;
 use DateTimeInterface;
+use Gotenberg\Gotenberg;
+use Gotenberg\Stream;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Settings;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Style;
+use Psr\Http\Client\ClientInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class ButMccc
 {
@@ -39,7 +45,6 @@ class ButMccc
 
     // Pages
     public const PAGE_MODELE = 'modele';
-    public const PAGE_REF_COMPETENCES = 'ref. compétences';
     // Cellules
     public const CEL_DOMAINE = 'K1';
     public const CEL_INTITULE_FORMATION = 'K4';
@@ -66,14 +71,20 @@ class ButMccc
     public const COL_TP = 7;
     public const COL_HEURE_AUTONOMIE = 8;
     public const COL_FIRST_UE = 39;
-    private bool $versionFull = true;
     private string $fileName;
     private Parcours $parcours;
 
+    private string $dir;
+
+
     public function __construct(
+        KernelInterface                  $kernel,
+        protected ClientInterface        $client,
         protected FicheMatiereRepository $ficheMatiereRepository,
         protected ExcelWriter            $excelWriter,
-    ) {
+    )
+    {
+        $this->dir = $kernel->getProjectDir() . '/public';
     }
 
 
@@ -86,7 +97,8 @@ class ButMccc
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): void {
+    ): void
+    {
         $tabColonnes = [
             'td_tp_oral' => ['pourcentage' => 'L', 'nombre' => 'M'],
             'td_tp_ecrit' => ['pourcentage' => 'N', 'nombre' => 'O'],
@@ -104,7 +116,6 @@ class ButMccc
         ];
 
         //todo: gérer la date de publication et un "marquage" sur le document si pré-CFVU
-        $this->versionFull = $versionFull;
         $formation = $parcours->getFormation();
         $this->parcours = $parcours;
 
@@ -128,8 +139,10 @@ class ButMccc
         foreach ($semestres as $semParc) {
             if ($semParc->getSemestre()?->getSemestreRaccroche() !== null) {
                 $tabSemestres[$semParc->getOrdre()] = $semParc->getSemestre()?->getSemestreRaccroche();
+                $raccroche = true;
             } else {
                 $tabSemestres[$semParc->getOrdre()] = $semParc;
+                $raccroche = false;
             }
         }
 
@@ -145,22 +158,6 @@ class ButMccc
             $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->getLibelle());
             $modele->setCellValue(self::CEL_PARCOURS_ECTS, $parcours->getLibelle());
             $modele->setCellValue(self::CEL_PARCOURS, $parcours->getLibelle());
-        }
-
-        // fiches
-        $tabFichesRessources = [];
-        $fiches = $this->ficheMatiereRepository->findByParcours($parcours);
-        foreach ($fiches as $fiche) {
-            if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_RESSOURCE) {
-                $tabFichesRessources[$fiche->getSemestre()][$fiche->getSigle()] = $fiche;
-            }
-        }
-
-        $tabFichesSaes = [];
-        foreach ($fiches as $fiche) {
-            if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE) {
-                $tabFichesSaes[$fiche->getSemestre()][$fiche->getSigle()] = $fiche;
-            }
         }
 
         foreach ($parcours->getRegimeInscription() as $regimeInscription) {
@@ -190,23 +187,40 @@ class ButMccc
             $semestreSheets[$i] = $clonedWorksheet;
 
 
-
             //remplissage de chaque année
             //ligne départ 18
             $ligne = 24;
             if (array_key_exists($i, $tabSemestres)) {
-                $totalAnnee = new TotalVolumeHeure();
                 $this->excelWriter->setSheet($clonedWorksheet);
                 $this->excelWriter->writeCellName(self::CEL_SEMESTRE_ETUDE, 'Semestre S' . $i);
 
-//                $locale = 'fr';
-//                $validLocale = Settings::setLocale($locale);
-
                 $colUe = self::COL_FIRST_UE;
+
+                if ($tabSemestres[$i]->getSemestre()->getSemestreRaccroche() !== null) {
+                    $semestre = $tabSemestres[$i]->getSemestre()->getSemestreRaccroche()->getSemestre();
+                } else {
+                    $semestre = $tabSemestres[$i]->getSemestre();
+                }
+
                 // Affichage des UE + gestion des colonnes
-                foreach ($tabSemestres[$i]->getSemestre()->getUes() as $ue) {
+                foreach ($semestre->getUes() as $ue) {
+                    $tabFichesRessources = [];
+                    foreach ($ue->getElementConstitutifs() as $ec) {
+                        $fiche = $ec->getFicheMatiere();
+                        if ($fiche !== null) {
+                            if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_RESSOURCE) {
+                                $tabFichesRessources[$fiche->getSemestre()][$fiche->getSigle()] = $ec;
+                            }
+
+                            if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE) {
+                                $tabFichesSaes[$fiche->getSemestre()][$fiche->getSigle()] = $ec;
+                            }
+                        }
+                    }
+
+
                     $tabColUes[$ue->getId()] = $colUe;
-                    $this->excelWriter->writeCellXY($colUe, 18, 'BC' . $ue->getOrdre(), ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY($colUe, 18, 'BC' . $ue->getId(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY($colUe, 26, $ue->getEcts(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY($colUe, 19, $ue->getLibelle(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->mergeCellsCaR($colUe, 19, $colUe, 22);
@@ -217,13 +231,16 @@ class ButMccc
                 //supprimer les cols en trop ?
                 $this->excelWriter->removeColumn($colUe, 2);
                 $this->excelWriter->mergeCellsCaR(self::COL_FIRST_UE, 17, $colUe - 1, 17);
-                $this->excelWriter->cellStyle('AM17', ['style' => 'HORIZONTAL_CENTER', 'bold' => true]);
+                $this->excelWriter->cellStyle('AM17', ['alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ]]);
 
 
                 ksort($tabFichesRessources[$i]);
                 ksort($tabFichesSaes[$i]);
 
-                foreach ($tabFichesRessources[$i] as $fiche) {
+                foreach ($tabFichesRessources[$i] as $ec) {
+                    $fiche = $ec->getFicheMatiere();
                     $this->excelWriter->insertNewRowBefore($ligne);
                     $this->excelWriter->writeCellXY(self::COL_CODE_ELEMENT, $ligne, '', ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_CODE_EC, $ligne, $fiche->getSigle(), ['style' => 'HORIZONTAL_CENTER']);
@@ -235,7 +252,7 @@ class ButMccc
 
                     //MCCC
                     $this->writeMccc($fiche, $tabColonnes, $ligne);
-                    $this->writeAcUe($fiche, $ligne, $tabColUes);
+                    $this->writeAcUe($ec, $ligne, $tabColUes);
 
 
                     $ligne++;
@@ -247,7 +264,8 @@ class ButMccc
                 $ligne++;
                 $debutSae = $ligne;
 
-                foreach ($tabFichesSaes[$i] as $fiche) {
+                foreach ($tabFichesSaes[$i] as $ec) {
+                    $fiche = $ec->getFicheMatiere();
                     $this->excelWriter->insertNewRowBefore($ligne);
                     $this->excelWriter->writeCellXY(self::COL_CODE_ELEMENT, $ligne, '', ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_CODE_EC, $ligne, $fiche->getSigle(), ['style' => 'HORIZONTAL_CENTER']);
@@ -260,7 +278,7 @@ class ButMccc
 
                     //MCCC
                     $this->writeMccc($fiche, $tabColonnes, $ligne);
-                    $this->writeAcUe($fiche, $ligne, $tabColUes);
+                    $this->writeAcUe($ec, $ligne, $tabColUes);
 
                     $ligne++;
                 }
@@ -273,10 +291,10 @@ class ButMccc
                 foreach ($tabColUes as $colUe) {
                     $lettreCol = Coordinate::stringFromColumnIndex($colUe);
                     //pour chaque colonne d'uE on met à jour la somme des ECTS dans la formule
-                    $this->excelWriter->writeCellXY($colUe, $ligne+3, '=SUM(' . Coordinate::stringFromColumnIndex($colUe) . '23:' . $lettreCol . ($ligne - 1) . ')', ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY($colUe, $ligne+4, '=SUM(' . $lettreCol . $debutSae.':' . $lettreCol . ($ligne - 1) . ')', ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY($colUe, $ligne + 3, '=SUM(' . Coordinate::stringFromColumnIndex($colUe) . '23:' . $lettreCol . ($ligne - 1) . ')', ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY($colUe, $ligne + 4, '=SUM(' . $lettreCol . $debutSae . ':' . $lettreCol . ($ligne - 1) . ')', ['style' => 'HORIZONTAL_CENTER']);
 
-                    $this->excelWriter->writeCellXY($colUe, $ligne+5, '=' . $lettreCol . $a.'/' . $lettreCol . $b, ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY($colUe, $ligne + 5, '=' . $lettreCol . $a . '/' . $lettreCol . $b, ['style' => 'HORIZONTAL_CENTER']);
                 }
             }
 
@@ -284,13 +302,10 @@ class ButMccc
             $this->excelWriter->removeRow(23);
         }
 
-        // $this->genereReferentielCompetences($spreadsheet, $parcours, $formation);
-
         //supprimer la feuille de modèle
         $this->excelWriter->removeSheetByIndex(0);
         $this->excelWriter->setActiveSheetIndex(0);
         $this->excelWriter->setSelectedCells('A1');
-//        $this->excelWriter->setSpreadsheet($spreadsheet, true);
 
         $this->fileName = Tools::FileName('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle(), 40);
     }
@@ -300,7 +315,8 @@ class ButMccc
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): StreamedResponse {
+    ): StreamedResponse
+    {
         $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
         return $this->excelWriter->genereFichier($this->fileName);
     }
@@ -310,9 +326,22 @@ class ButMccc
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): StreamedResponse {
+    ): Response
+    {
         $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
-        return $this->excelWriter->genereFichierPdf($this->fileName);
+
+        $fichier = $this->excelWriter->saveFichier($this->fileName, $this->dir . '/temp/');
+
+        $request = Gotenberg::libreOffice('http://localhost:3000')
+            ->convert(Stream::path($fichier));
+
+        $reponse = $this->client->sendRequest($request);
+
+        // retourner une réponse avec le contenu du PDF
+        return new Response($reponse->getBody()->getContents(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $this->fileName . '.pdf"',
+        ]);
     }
 
     public function exportAndSaveExcelbutMccc(
@@ -321,45 +350,12 @@ class ButMccc
         string             $dir,
         DateTimeInterface  $dateEdition,
         bool               $versionFull = true
-    ): string {
+    ): string
+    {
         $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
         $this->excelWriter->saveFichier($this->fileName, $dir);
         return $this->fileName . '.xlsx';
     }
-
-    private function genereReferentielCompetences(Spreadsheet $spreadsheet, Parcours $parcours, Formation $formation): void
-    {
-        $modele = $spreadsheet->getSheetByName(self::PAGE_REF_COMPETENCES);
-        if ($modele === null) {
-            throw new \Exception('Le modèle n\'existe pas');
-        }
-
-        //en-tête du fichier
-        $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, 'Année Universitaire ' . $formation->getAnneeUniversitaire()?->getLibelle());
-        $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
-        $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->isParcoursDefaut() === false ? $parcours->getLibelle() : '');
-        $modele->setCellValue(self::CEL_COMPOSANTE, $formation->getComposantePorteuse()?->getLibelle());
-        $modele->setCellValue(self::CEL_SITE_FORMATION, $parcours->getLocalisation()?->getLibelle());
-
-        $bccs = $parcours->getBlocCompetences();
-
-        $ligne = 16;
-        $this->excelWriter->setSheet($modele);
-        foreach ($bccs as $bcc) {
-            $this->excelWriter->writeCellXY(1, $ligne, $bcc->getCode());
-            $this->excelWriter->writeCellXY(2, $ligne, $bcc->getLibelle(), ['wrap' => true]);
-            $ligne++;
-            foreach ($bcc->getCompetences() as $competence) {
-                $this->excelWriter->writeCellXY(2, $ligne, $competence->getCode());
-                $this->excelWriter->writeCellXY(3, $ligne, $competence->getLibelle(), ['wrap' => true]);
-
-                $ligne++;
-            }
-        }
-
-        $this->excelWriter->setPrintArea('A1:C' . $ligne);
-    }
-
 
     private function writeMccc(mixed $fiche, array $tabColonnes, int $ligne): void
     {
@@ -367,7 +363,7 @@ class ButMccc
         foreach ($mcccs as $mccc) {
             if ($mccc->getLibelle() !== '' && array_key_exists($mccc->getLibelle(), $tabColonnes)) {
                 $this->excelWriter->writeCellXY(
-                    //convertir chiffre en lettre excel
+                //convertir chiffre en lettre excel
                     Coordinate::columnIndexFromString($tabColonnes[$mccc->getLibelle()]['pourcentage']),
                     $ligne,
                     $mccc->getPourcentage() === 0.0 ? '' : $mccc->getPourcentage() . '%',
@@ -376,28 +372,22 @@ class ButMccc
                 $this->excelWriter->writeCellXY(
                     Coordinate::columnIndexFromString($tabColonnes[$mccc->getLibelle()]['nombre']),
                     $ligne,
-                    $mccc->getNbEpreuves(),
+                    $mccc->getNbEpreuves() === 0 ? '' : $mccc->getNbEpreuves(),
                     ['style' => 'HORIZONTAL_CENTER']
                 );
             }
         }
     }
 
-    private function writeAcUe(FicheMatiere $fiche, int $ligne, array $tabColUes)
+    private function writeAcUe(ElementConstitutif $ec, int $ligne, array $tabColUes)
     {
-        $ecs = $fiche->getElementConstitutifs();
-
-        foreach ($ecs as $ec) {
-            if ($ec->getParcours()?->getId() === $this->parcours->getId() && $ec->getUe() !== null) {
-                if (array_key_exists($ec->getUe()?->getId(), $tabColUes)) {
-                    $this->excelWriter->writeCellXY(
-                        $tabColUes[$ec->getUe()?->getId()],
-                        $ligne,
-                        $ec->getEcts() === 0.0 ? '' : $ec->getEcts(),
-                        ['style' => 'HORIZONTAL_CENTER']
-                    );
-                }
-            }
+        if (array_key_exists($ec->getUe()?->getId(), $tabColUes)) {
+            $this->excelWriter->writeCellXY(
+                $tabColUes[$ec->getUe()?->getId()],
+                $ligne,
+                $ec->getEcts() === 0.0 ? '' : $ec->getEcts(),
+                ['style' => 'HORIZONTAL_CENTER']
+            );
         }
     }
 }
