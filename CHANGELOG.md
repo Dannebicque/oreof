@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.11](https://github.com/Dannebicque/oreof/compare/v1.15.10...v1.15.11) (2023-10-18)
+
+
+### Features
+
+* Ajout d'une colonne sur la version simplifiée ([e875df9](https://github.com/Dannebicque/oreof/commit/e875df903f686d7ba70cea8454ba4d3847247f44))
+
 ### [1.15.10](https://github.com/Dannebicque/oreof/compare/v1.15.9...v1.15.10) (2023-10-18)
 
 
