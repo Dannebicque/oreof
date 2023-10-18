@@ -34,7 +34,7 @@ class StructureUe
         if ($this->ue->getNatureUeEc()?->isLibre()) {
             // Si UE lbren prise en compte des ECTS de l'UE
             //todo: faire idem pour BUT
-            $this->heuresEctsUe->sommeUeEcts = $this->ue->getEcts();
+            $this->heuresEctsUe->sommeUeEcts = $this->ue->getEcts() ?? 0.0;
         }
     }
 

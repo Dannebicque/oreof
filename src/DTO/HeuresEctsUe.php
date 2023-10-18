@@ -13,7 +13,7 @@ use App\Entity\ElementConstitutif;
 
 class HeuresEctsUe
 {
-    public float $sommeUeEcts = 0;
+    public ?float $sommeUeEcts = 0;
     public float $sommeUeCmPres = 0;
     public float $sommeUeTdPres = 0;
     public float $sommeUeTpPres = 0;
