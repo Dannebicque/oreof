@@ -9,6 +9,7 @@
 
 namespace App\Controller\API;
 
+use App\Classes\GetElementConstitutif;
 use App\Entity\Parcours;
 use App\Entity\Ue;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,7 +31,13 @@ class EctsController extends AbstractController
             if ($ec->getEcParent() !== null) {
                 $totalEctsUe += $ec->getEcParent()->getEcts();
             } else {
-                $totalEctsUe += $ec->getEcts();
+                if ($ec->isSynchroEcts()) {
+                    $raccroche = $ec->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
+                    $ects = GetElementConstitutif::getEcts($ec, $raccroche);
+                    $totalEctsUe += $ects;
+                } else {
+                    $totalEctsUe += $ec->getEcts();
+                }
             }
         }
 
@@ -43,7 +50,13 @@ class EctsController extends AbstractController
                 if ($ec->getEcParent() !== null) {
                     $ectsSemestre += $ec->getEcParent()->getEcts();
                 } else {
-                    $ectsSemestre += $ec->getEcts();
+                    if ($ec->isSynchroEcts()) {
+                        $raccroche = $ec->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
+                        $ects = GetElementConstitutif::getEcts($ec, $raccroche);
+                        $ectsSemestre += $ects;
+                    } else {
+                        $ectsSemestre += $ec->getEcts();
+                    }
                 }
             }
         }
