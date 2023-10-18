@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.13](https://github.com/Dannebicque/oreof/compare/v1.15.12...v1.15.13) (2023-10-18)
+
+
+### Bug Fixes
+
+* excel ([cbf7836](https://github.com/Dannebicque/oreof/commit/cbf78362a6c27662e0dc6cef85f250264b222413))
+
 ### [1.15.12](https://github.com/Dannebicque/oreof/compare/v1.15.11...v1.15.12) (2023-10-18)
 
 
