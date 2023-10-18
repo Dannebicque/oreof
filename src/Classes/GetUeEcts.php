@@ -20,10 +20,6 @@ abstract class GetUeEcts
             return $ue->getEcts();
         }
 
-        if ($ue->getNatureUeEc()?->isLibre()) {
-            return $ue->getEcts();
-        }
-
         if ($ue->getUeEnfants()->count() === 0) {
             return self::totalEctsUe($ue, $parcours);
         }
@@ -36,6 +32,11 @@ abstract class GetUeEcts
     }
 
     private static function totalEcts($ue, $parcours): float {
+
+        if ($ue->getNatureUeEc()?->isLibre()) {
+            return $ue->getEcts();
+        }
+
         $ecsInUe = $ue->getElementConstitutifs();
         $totalEctsUe = 0.0;
         foreach ($ecsInUe as $ec) {
@@ -58,14 +59,10 @@ abstract class GetUeEcts
     {
         if ($ue->getUeRaccrochee() !== null) {
             if ($ue->getUeRaccrochee()->getUe() !== null) {
-                $ects = self::totalEcts($ue->getUeRaccrochee()->getUe(), $parcours);
-            } else {
-                $ects = 'Erreur UE raccrochée';
+                $ue = $ue->getUeRaccrochee()->getUe();
             }
-        } else {
-            $ects = self::totalEcts($ue, $parcours);
         }
 
-        return $ects;
+        return self::totalEcts($ue->getUeRaccrochee()->getUe(), $parcours);
     }
 }
