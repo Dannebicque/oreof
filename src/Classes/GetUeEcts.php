@@ -31,7 +31,7 @@ abstract class GetUeEcts
         return min($tEcts) ?? 0.0;
     }
 
-    private static function totalEcts($ue, $parcours): float {
+    private static function totalEcts(Ue $ue, Parcours $parcours): float {
 
         if ($ue->getNatureUeEc()?->isLibre()) {
             return $ue->getEcts();
@@ -55,7 +55,7 @@ abstract class GetUeEcts
         return $totalEctsUe;
     }
 
-    private static function totalEctsUe(Ue $ue, $parcours): float
+    private static function totalEctsUe(Ue $ue, Parcours $parcours): float
     {
         if ($ue->getUeRaccrochee() !== null) {
             if ($ue->getUeRaccrochee()->getUe() !== null) {
@@ -63,6 +63,6 @@ abstract class GetUeEcts
             }
         }
 
-        return self::totalEcts($ue->getUeRaccrochee()->getUe(), $parcours);
+        return self::totalEcts($ue, $parcours);
     }
 }
