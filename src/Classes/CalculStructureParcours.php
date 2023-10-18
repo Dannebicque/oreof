@@ -34,8 +34,9 @@ class CalculStructureParcours
                 $raccrocheSemestre = false;
             }
 
-            $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre);
             if ($semestre !== null) {
+                $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre);
+
                 foreach ($semestre->getUes() as $ue) {
                     if ($ue !== null && $ue->getUeParent() === null) {
                         $display = $ue->display($parcours);
