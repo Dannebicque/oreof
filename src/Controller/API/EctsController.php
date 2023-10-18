@@ -19,7 +19,7 @@ class EctsController extends AbstractController
 {
     #[Route('/api/ects/ue/{ue}/{parcours}', name: 'api_ects_ue')]
     public function getComposante(
-        Ue $ue,
+        Ue       $ue,
         Parcours $parcours,
     ): Response {
         $totalEctsUe = 0;
@@ -27,7 +27,11 @@ class EctsController extends AbstractController
 
         $ecsInUe = $ue->getElementConstitutifs();
         foreach ($ecsInUe as $ec) {
-            $totalEctsUe += $ec->getEcts();
+            if ($ec->getEcParent() !== null) {
+                $totalEctsUe += $ec->getEcParent()->getEcts();
+            } else {
+                $totalEctsUe += $ec->getEcts();
+            }
         }
 
         $semestre = $ue->getSemestre();
@@ -36,7 +40,11 @@ class EctsController extends AbstractController
         foreach ($uesInSemestre as $u) {
             $ecsInUe = $u->getElementConstitutifs();
             foreach ($ecsInUe as $ec) {
-                $ectsSemestre += $ec->getEcts();
+                if ($ec->getEcParent() !== null) {
+                    $ectsSemestre += $ec->getEcParent()->getEcts();
+                } else {
+                    $ectsSemestre += $ec->getEcts();
+                }
             }
         }
 
