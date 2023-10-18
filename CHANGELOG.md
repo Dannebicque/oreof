@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.8](https://github.com/Dannebicque/oreof/compare/v1.15.7...v1.15.8) (2023-10-18)
+
+
+### Bug Fixes
+
+* Semestre raccroché null ([e79f64b](https://github.com/Dannebicque/oreof/commit/e79f64bb5e325e87e5419c725d1a7ce84abdec72))
+
 ### [1.15.7](https://github.com/Dannebicque/oreof/compare/v1.15.6...v1.15.7) (2023-10-18)
 
 
