@@ -10,6 +10,7 @@
 namespace App\Controller\API;
 
 use App\Classes\GetElementConstitutif;
+use App\Classes\GetUeEcts;
 use App\Entity\Parcours;
 use App\Entity\Ue;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,20 +27,7 @@ class EctsController extends AbstractController
         $totalEctsUe = 0;
         $ectsSemestre = 0;
 
-        $ecsInUe = $ue->getElementConstitutifs();
-        foreach ($ecsInUe as $ec) {
-            if ($ec->getEcParent() !== null) {
-                $totalEctsUe += $ec->getEcParent()->getEcts();
-            } else {
-                if ($ec->isSynchroEcts()) {
-                    $raccroche = $ec->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
-                    $ects = GetElementConstitutif::getEcts($ec, $raccroche);
-                    $totalEctsUe += $ects;
-                } else {
-                    $totalEctsUe += $ec->getEcts();
-                }
-            }
-        }
+        GetUeEcts::getEcts($ue, $parcours);
 
         $semestre = $ue->getSemestre();
         $uesInSemestre = $semestre->getUes();
@@ -50,8 +38,8 @@ class EctsController extends AbstractController
                 if ($ec->getEcParent() !== null) {
                     $ectsSemestre += $ec->getEcParent()->getEcts();
                 } else {
-                    if ($ec->isSynchroEcts()) {
-                        $raccroche = $ec->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
+                    $raccroche = $ec->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
+                    if ($raccroche && $ec->isSynchroEcts()) {
                         $ects = GetElementConstitutif::getEcts($ec, $raccroche);
                         $ectsSemestre += $ects;
                     } else {

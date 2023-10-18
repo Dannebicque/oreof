@@ -119,9 +119,13 @@
                                         </div>
                                         <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                             <div class="text-muted text-small d-md-none">ECTS</div>
-                                            <span id="ects_semestre_{{ semestre.semestre.id }}_{{ parcours.id }}">
-                                            {{ sem.totalEctsSemestre|badgeEctsSemestre }}
-                                        </span>
+                                            {{ component('badge_ects_semestre', {
+                                                semestre: sem,
+                                                parcours: parcours,
+                                            }) }}
+{#                                            <span id="ects_semestre_{{ sem.id }}_{{ parcours.id }}">#}
+{#                                            {{ sem.totalEctsSemestre|badgeEctsSemestre }}#}
+{#                                        </span>#}
                                         </div>
                                         <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                             <div class="text-muted text-small d-md-none">Nb UE</div>

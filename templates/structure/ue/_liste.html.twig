@@ -73,17 +73,11 @@
                                         </div>
                                         <div class="col-md-1 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">ECTS</div>
-                                            <span id="ects_ue_{{ ue.id }}_{{ parcours.id }}">
-                                                {% if ue.ueRaccrochee != null %}
-                                                    {% if ue.ueRaccrochee.ue != null %}
-                                                        {{ ue.ueRaccrochee.ue.totalEctsUe|badgeEctsUe(typeDiplome.nbEctsMaxUe) }}
-                                                    {% else %}
-                                                        {{ 'Erreur UE raccrochée'|badge('danger') }}
-                                                    {% endif %}
-                                                {% else %}
-                                                    {{ ue.totalEctsUe|badgeEctsUe(typeDiplome.nbEctsMaxUe) }}
-                                                {% endif %}
-                                            </span>
+                                            {{ component('badge_ects_ue', {
+                                                ue: ue,
+                                                parcours: parcours,
+                                                typeDiplome: typeDiplome
+                                            }) }}
                                         </div>
                                         <div class="col-md-1 d-flex flex-column justify-content-center">
                                             <div class="text-muted text-small d-md-none">NB. EC</div>
@@ -404,9 +398,11 @@
                                             </div>
                                             <div class="col-md-1 d-flex flex-column justify-content-center">
                                                 <div class="text-muted text-small d-md-none">ECTS</div>
-                                                <span id="ects_ue_{{ uee.id }}_{{ parcours.id }}">
-                                                    {{ uee.totalEctsUe|badgeEctsUe(typeDiplome.nbEctsMaxUe) }}
-                                                </span>
+                                                {{ component('badge_ects_ue', {
+                                                    ue: uee,
+                                                    parcours: parcours,
+                                                    typeDiplome: typeDiplome
+                                                }) }}
                                             </div>
                                             <div class="col-md-1 d-flex flex-column justify-content-center">
                                                 <div class="text-muted text-small d-md-none">NB. EC</div>
