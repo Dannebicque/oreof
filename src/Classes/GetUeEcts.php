@@ -15,7 +15,8 @@ use App\Entity\Ue;
 
 abstract class GetUeEcts
 {
-    public static function getEcts(Ue $ue, Parcours $parcours, TypeDiplome $typeDiplome): float {
+    public static function getEcts(Ue $ue, Parcours $parcours, TypeDiplome $typeDiplome): float
+    {
         if ($typeDiplome->getLibelleCourt() === 'BUT') {
             return $ue->getEcts();
         }
@@ -31,8 +32,8 @@ abstract class GetUeEcts
         return min($tEcts) ?? 0.0;
     }
 
-    private static function totalEcts(Ue $ue, Parcours $parcours): float {
-
+    private static function totalEcts(Ue $ue, Parcours $parcours): float
+    {
         if ($ue->getNatureUeEc()?->isLibre()) {
             return $ue->getEcts();
         }
@@ -42,8 +43,9 @@ abstract class GetUeEcts
         foreach ($ecsInUe as $ec) {
             if ($ec->getEcParent() === null) {
                 $raccroche = $ec->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
-                if ($raccroche && $ec->isSynchroEcts()) {
-
+                if ($ec->getFicheMatiere() !== null && $ec->getFicheMatiere()?->isEctsImpose()) {
+                    $totalEctsUe += $ec->getFicheMatiere()?->getEcts();
+                } elseif ($raccroche && $ec->isSynchroEcts()) {
                     $ects = GetElementConstitutif::getEcts($ec, $raccroche);
                     $totalEctsUe += $ects;
                 } else {
