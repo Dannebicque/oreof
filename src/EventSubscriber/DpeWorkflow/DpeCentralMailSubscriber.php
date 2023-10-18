@@ -34,6 +34,7 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
         return [
             'workflow.dpe.transition.refuser_central' => 'onRefuseCentral',
             'workflow.dpe.transition.valider_central' => 'onValideCentral',
+            'workflow.dpe.transition.transmettre_cfvu' => 'onValideCentral',
             'workflow.dpe.transition.reserver_central' => 'onReserveCentral',
         ];
     }
@@ -60,7 +61,7 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
                 $dpe->getEmail(),
                 $formation->getResponsableMention()?->getEmail(),
                 $formation->getCoResponsable()?->getEmail()],
-            '[ORéOF]  Votre formation a été refusée par les VP'
+            '[ORéOF]  Votre formation a été refusée par le central'
         );
     }
 
@@ -90,7 +91,7 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
                 $dpe->getEmail(),
                 $formation->getResponsableMention()?->getEmail(),
                 $formation->getCoResponsable()?->getEmail()],
-            '[ORéOF]  La formation ' . $formation->getDisplayLong() . ' a été validé par les VP'
+            '[ORéOF]  La formation ' . $formation->getDisplayLong() . ' a été validé par le central'
         );
     }
 
@@ -116,7 +117,7 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
                 $dpe->getEmail(),
                 $formation->getResponsableMention()?->getEmail(),
                 $formation->getCoResponsable()?->getEmail()],
-            '[ORéOF]  Votre formation a reçu des réserves des VP'
+            '[ORéOF]  Votre formation a reçu des réserves du central'
         );
     }
 }
