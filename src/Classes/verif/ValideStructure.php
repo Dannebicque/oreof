@@ -10,6 +10,7 @@
 namespace App\Classes\verif;
 
 use App\Classes\GetElementConstitutif;
+use App\Classes\GetUeEcts;
 use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
 use App\Entity\Ue;
@@ -53,7 +54,7 @@ abstract class ValideStructure extends AbstractValide
                             self::valideUe($ue, $semestreParcour->getOrdre());
                         }
                     }
-                    if ($sem->isNonDispense() === false && $sem->totalEctsSemestre() !== 30.0) {
+                    if ($sem->isNonDispense() === false && self::totalEctsSemestre($sem) !== 30.0) {
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::ERREUR;
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = 'Le semestre doit faire 30 ECTS';
                         self::$errors[] = 'Le semestre ' . $semestreParcour->getOrdre() . ' doit faire 30 ECTS';
@@ -328,7 +329,7 @@ abstract class ValideStructure extends AbstractValide
                     }
                 }
 
-                if ($sem->isNonDispense() === false && $sem->totalEctsSemestre() !== 30.0) {
+                if ($sem->isNonDispense() === false && self::totalEctsSemestre($sem) !== 30.0) {
                     self::$errors[] = 'Le semestre ' . $semestreParcour->getOrdre() . ' doit faire 30 ECTS';
                     self::$structure['semestres'][$semestreParcour->getOrdre()]['erreur'][] = 'Le semestre doit faire 30 ECTS';
                     self::$structure['semestres'][$semestreParcour->getOrdre()]['global'] = self::ERREUR;
@@ -342,5 +343,18 @@ abstract class ValideStructure extends AbstractValide
         $structure['global'] = $etatGlobal;
 
         return $structure;
+    }
+
+    private static function totalEctsSemestre(\App\Entity\Semestre $semestre): float
+    {
+        $ects = 0.0;
+        $typeDiplome = self::$parcours->getTypeDiplome();
+        foreach ($semestre->getUes() as $ue) {
+            if ($ue->getUeParent() === null) {
+                $ects += GetUeEcts::getEcts($ue, self::$parcours, $typeDiplome);
+            }
+        }
+
+        return $ects;
     }
 }

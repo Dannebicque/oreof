@@ -23,7 +23,7 @@ final class BadgeEctsSemestreComponent
 {
     public ?Semestre $semestre = null;
     public ?Parcours $parcours = null;
-    public null|float|string $ects = null;
+    public null|float|string $ects = 0.0;
 
     #[PostMount]
     public function mounted(): void
