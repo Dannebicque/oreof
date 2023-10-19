@@ -201,19 +201,24 @@ class ButMccc
                 } else {
                     $semestre = $tabSemestres[$i]->getSemestre();
                 }
-
+                $tabFichesRessources = [];
+                $tabFichesSaes = [];
                 // Affichage des UE + gestion des colonnes
                 foreach ($semestre->getUes() as $ue) {
-                    $tabFichesRessources = [];
+                    if ($ue->getUeRaccrochee() !== null) {
+                        $ue = $ue->getUeRaccrochee()->getUe();
+                    }
+
+
                     foreach ($ue->getElementConstitutifs() as $ec) {
                         $fiche = $ec->getFicheMatiere();
                         if ($fiche !== null) {
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_RESSOURCE) {
-                                $tabFichesRessources[$fiche->getSemestre()][$fiche->getSigle()] = $ec;
+                                $tabFichesRessources[$fiche->getSigle()] = $ec;
                             }
 
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE) {
-                                $tabFichesSaes[$fiche->getSemestre()][$fiche->getSigle()] = $ec;
+                                $tabFichesSaes[$fiche->getSigle()] = $ec;
                             }
                         }
                     }
@@ -236,10 +241,10 @@ class ButMccc
                 ]]);
 
 
-                ksort($tabFichesRessources[$i]);
-                ksort($tabFichesSaes[$i]);
+                ksort($tabFichesRessources);
+                ksort($tabFichesSaes);
 
-                foreach ($tabFichesRessources[$i] as $ec) {
+                foreach ($tabFichesRessources as $ec) {
                     $fiche = $ec->getFicheMatiere();
                     $this->excelWriter->insertNewRowBefore($ligne);
                     $this->excelWriter->writeCellXY(self::COL_CODE_ELEMENT, $ligne, '', ['style' => 'HORIZONTAL_CENTER']);
@@ -264,7 +269,7 @@ class ButMccc
                 $ligne++;
                 $debutSae = $ligne;
 
-                foreach ($tabFichesSaes[$i] as $ec) {
+                foreach ($tabFichesSaes as $ec) {
                     $fiche = $ec->getFicheMatiere();
                     $this->excelWriter->insertNewRowBefore($ligne);
                     $this->excelWriter->writeCellXY(self::COL_CODE_ELEMENT, $ligne, '', ['style' => 'HORIZONTAL_CENTER']);
