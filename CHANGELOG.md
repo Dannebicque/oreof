@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.18](https://github.com/Dannebicque/oreof/compare/v1.15.17...v1.15.18) (2023-10-19)
+
+
+### Bug Fixes
+
+* BCC de BUT ([eb4b4de](https://github.com/Dannebicque/oreof/commit/eb4b4de2542e34b15c6b98a32ae429de5000a852))
+* calcul ECT sur la vérification ([dfd6c6a](https://github.com/Dannebicque/oreof/commit/dfd6c6a8da28c40a0502d40e624d56ec7c4327a7))
+* calcul ECT sur la vérification ([5a6505b](https://github.com/Dannebicque/oreof/commit/5a6505b6e109b9267e3106cfb1fc8e87bfa7ca5b))
+* calcul ECT sur la vérification ([ecd44bc](https://github.com/Dannebicque/oreof/commit/ecd44bc2b1c6306dfc935f78efb9e59280003176))
+* calcul ECT sur la vérification ([149f772](https://github.com/Dannebicque/oreof/commit/149f772acfc627edbbc12ec6a7c35e2b490e34fa))
+* ECTS null ([5884732](https://github.com/Dannebicque/oreof/commit/5884732b7072470e314e7273f37c570269f07dc2))
+* Ressources BUT Excel ([6a04923](https://github.com/Dannebicque/oreof/commit/6a04923df2557e4e317a16ada8524dd26ac9a8b8))
+* Ressources BUT Excel ([9efc475](https://github.com/Dannebicque/oreof/commit/9efc47559d2034d59773ad81a98892007a39f79c))
+
 ### [1.15.17](https://github.com/Dannebicque/oreof/compare/v1.15.16...v1.15.17) (2023-10-18)
 
 
