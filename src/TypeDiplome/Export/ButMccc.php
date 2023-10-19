@@ -201,6 +201,7 @@ class ButMccc
                 }
                 $tabFichesRessources = [];
                 $tabFichesSaes = [];
+                $tabFichesUes = [];
                 // Affichage des UE + gestion des colonnes
                 foreach ($semestre->getUes() as $ue) {
                     if ($ue->getUeRaccrochee() !== null) {
@@ -213,10 +214,12 @@ class ButMccc
                         if ($fiche !== null) {
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_RESSOURCE) {
                                 $tabFichesRessources[$fiche->getSigle()] = $ec;
+                                $tabFichesUes[$fiche->getSigle()][$ue->getId()] = $ec->getEcts();
                             }
 
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE) {
                                 $tabFichesSaes[$fiche->getSigle()] = $ec;
+                                $tabFichesUes[$fiche->getSigle()][$ue->getId()] = $ec->getEcts();
                             }
                         }
                     }
@@ -255,7 +258,7 @@ class ButMccc
 
                     //MCCC
                     $this->writeMccc($fiche, $tabColonnes, $ligne);
-                    $this->writeAcUe($fiche, $ligne, $tabColUes);
+                    $this->writeAcUe($fiche, $ligne, $tabColUes, $tabFichesUes);
 
 
                     $ligne++;
@@ -281,7 +284,7 @@ class ButMccc
 
                     //MCCC
                     $this->writeMccc($fiche, $tabColonnes, $ligne);
-                    $this->writeAcUe($fiche, $ligne, $tabColUes);
+                    $this->writeAcUe($fiche, $ligne, $tabColUes, $tabFichesUes);
 
                     $ligne++;
                 }
@@ -379,16 +382,18 @@ class ButMccc
         }
     }
 
-    private function writeAcUe(FicheMatiere $fiche, int $ligne, array $tabColUes)
+    private function writeAcUe(FicheMatiere $fiche, int $ligne, array $tabColUes, array $tabFichesUes)
     {
-        foreach ($fiche->getElementConstitutifs() as $ec) {
-            if (array_key_exists($ec->getUe()?->getId(), $tabColUes)) {
-                $this->excelWriter->writeCellXY(
-                    $tabColUes[$ec->getUe()?->getId()],
-                    $ligne,
-                    $ec->getEcts() === 0.0 ? '' : $ec->getEcts(),
-                    ['style' => 'HORIZONTAL_CENTER']
-                );
+        if (array_key_exists($fiche->getSigle(), $tabFichesUes)) {
+            foreach ($tabFichesUes[$fiche->getSigle()] as $ueId => $ects) {
+                if (array_key_exists($ueId, $tabColUes)) {
+                    $this->excelWriter->writeCellXY(
+                        $tabColUes[$ueId],
+                        $ligne,
+                        $ects === 0.0 ? '' : $ects,
+                        ['style' => 'HORIZONTAL_CENTER']
+                    );
+                }
             }
         }
     }
