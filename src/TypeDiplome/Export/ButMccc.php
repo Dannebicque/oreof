@@ -82,8 +82,7 @@ class ButMccc
         protected ClientInterface        $client,
         protected FicheMatiereRepository $ficheMatiereRepository,
         protected ExcelWriter            $excelWriter,
-    )
-    {
+    ) {
         $this->dir = $kernel->getProjectDir() . '/public';
     }
 
@@ -97,8 +96,7 @@ class ButMccc
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): void
-    {
+    ): void {
         $tabColonnes = [
             'td_tp_oral' => ['pourcentage' => 'L', 'nombre' => 'M'],
             'td_tp_ecrit' => ['pourcentage' => 'N', 'nombre' => 'O'],
@@ -225,7 +223,7 @@ class ButMccc
 
 
                     $tabColUes[$ue->getId()] = $colUe;
-                    $this->excelWriter->writeCellXY($colUe, 18, 'BC' . $ue->getId(), ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY($colUe, 18, 'BC' . $ue->getOrdre(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY($colUe, 26, $ue->getEcts(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY($colUe, 19, $ue->getLibelle(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->mergeCellsCaR($colUe, 19, $colUe, 22);
@@ -257,7 +255,7 @@ class ButMccc
 
                     //MCCC
                     $this->writeMccc($fiche, $tabColonnes, $ligne);
-                    $this->writeAcUe($ec, $ligne, $tabColUes);
+                    $this->writeAcUe($fiche, $ligne, $tabColUes);
 
 
                     $ligne++;
@@ -283,7 +281,7 @@ class ButMccc
 
                     //MCCC
                     $this->writeMccc($fiche, $tabColonnes, $ligne);
-                    $this->writeAcUe($ec, $ligne, $tabColUes);
+                    $this->writeAcUe($fiche, $ligne, $tabColUes);
 
                     $ligne++;
                 }
@@ -320,8 +318,7 @@ class ButMccc
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): StreamedResponse
-    {
+    ): StreamedResponse {
         $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
         return $this->excelWriter->genereFichier($this->fileName);
     }
@@ -331,8 +328,7 @@ class ButMccc
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): Response
-    {
+    ): Response {
         $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
 
         $fichier = $this->excelWriter->saveFichier($this->fileName, $this->dir . '/temp/');
@@ -355,8 +351,7 @@ class ButMccc
         string             $dir,
         DateTimeInterface  $dateEdition,
         bool               $versionFull = true
-    ): string
-    {
+    ): string {
         $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
         $this->excelWriter->saveFichier($this->fileName, $dir);
         return $this->fileName . '.xlsx';
@@ -368,7 +363,7 @@ class ButMccc
         foreach ($mcccs as $mccc) {
             if ($mccc->getLibelle() !== '' && array_key_exists($mccc->getLibelle(), $tabColonnes)) {
                 $this->excelWriter->writeCellXY(
-                //convertir chiffre en lettre excel
+                    //convertir chiffre en lettre excel
                     Coordinate::columnIndexFromString($tabColonnes[$mccc->getLibelle()]['pourcentage']),
                     $ligne,
                     $mccc->getPourcentage() === 0.0 ? '' : $mccc->getPourcentage() . '%',
@@ -384,15 +379,17 @@ class ButMccc
         }
     }
 
-    private function writeAcUe(ElementConstitutif $ec, int $ligne, array $tabColUes)
+    private function writeAcUe(FicheMatiere $fiche, int $ligne, array $tabColUes)
     {
-        if (array_key_exists($ec->getUe()?->getId(), $tabColUes)) {
-            $this->excelWriter->writeCellXY(
-                $tabColUes[$ec->getUe()?->getId()],
-                $ligne,
-                $ec->getEcts() === 0.0 ? '' : $ec->getEcts(),
-                ['style' => 'HORIZONTAL_CENTER']
-            );
+        foreach ($fiche->getElementConstitutifs() as $ec) {
+            if (array_key_exists($ec->getUe()?->getId(), $tabColUes)) {
+                $this->excelWriter->writeCellXY(
+                    $tabColUes[$ec->getUe()?->getId()],
+                    $ligne,
+                    $ec->getEcts() === 0.0 ? '' : $ec->getEcts(),
+                    ['style' => 'HORIZONTAL_CENTER']
+                );
+            }
         }
     }
 }
