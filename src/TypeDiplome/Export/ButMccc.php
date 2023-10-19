@@ -135,12 +135,14 @@ class ButMccc
         $tabSemestres = [];
         $semestres = $parcours->getSemestreParcours();
         foreach ($semestres as $semParc) {
-            if ($semParc->getSemestre()?->getSemestreRaccroche() !== null) {
-                $tabSemestres[$semParc->getOrdre()] = $semParc->getSemestre()?->getSemestreRaccroche();
-                $raccroche = true;
-            } else {
-                $tabSemestres[$semParc->getOrdre()] = $semParc;
-                $raccroche = false;
+            if ($semParc->getSemestre()?->isNonDispense() === false) {
+                if ($semParc->getSemestre()?->getSemestreRaccroche() !== null) {
+                    $tabSemestres[$semParc->getOrdre()] = $semParc->getSemestre()?->getSemestreRaccroche();
+                    $raccroche = true;
+                } else {
+                    $tabSemestres[$semParc->getOrdre()] = $semParc;
+                    $raccroche = false;
+                }
             }
         }
 
