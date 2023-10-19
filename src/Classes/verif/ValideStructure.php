@@ -281,7 +281,7 @@ abstract class ValideStructure extends AbstractValide
                     foreach ($ue->getElementConstitutifs() as $ec) {
 //                        if (!$ec->getNatureUeEc()?->isChoix()) {
                         self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['display'] = $ec->display();
-                        if ($ec->getFicheMatiere() === null || ($ec->getFicheMatiere()->getMcccs()->count() === 0 && $ec->getFicheMatiere()->isSansNote() === false) || $ec->getEtatBcc(self::$parcours) !== 'Complet' || $ec->getFicheMatiere()->etatStructure() !== 'Complet' || ($ec->getTypeEc() === null)) {
+                        if ($ec->getFicheMatiere() === null || ($ec->getFicheMatiere()->getMcccs()->count() === 0 && $ec->getFicheMatiere()->isSansNote() === false) || $ec->getFicheMatiere()->etatStructure() !== 'Complet' || ($ec->getTypeEc() === null)) {
                             self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['global'] = self::INCOMPLET;
                             self::$structure['global'] = self::INCOMPLET;
                             self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'] = [];
@@ -301,7 +301,14 @@ abstract class ValideStructure extends AbstractValide
                                 self::$structure['global'] = self::INCOMPLET;
                             }
 
-                            if ($ec->getEtatBcc(self::$parcours) !== 'Complet') {
+                            $etatBcc = '';
+                            foreach ($ec->getFicheMatiere()->getElementConstitutifs() as $ece) {
+                                if ($ece->getEtatBcc(self::$parcours) === 'Complet') {
+                                    $etatBcc ='Complet';
+                                }
+                            }
+
+                            if ($etatBcc !== 'Complet') {
                                 self::$structure['semestres'][$semestreParcour->getOrdre()]['ues'][$ue->getId()]['ecs'][$ec->getId()]['erreur'][] = 'BCC incomplet ou non renseignés';
                                 self::$errors[] = 'BCC incomplet ou non renseignés pour l\'' . $ec->getFicheMatiere()->getSigle() . ' de l\'' . $ue->display(self::$parcours);
                             }
