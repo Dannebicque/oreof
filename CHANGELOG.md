@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.19](https://github.com/Dannebicque/oreof/compare/v1.15.18...v1.15.19) (2023-10-20)
+
+
+### Features
+
+* replyto sur mails central ([c559fee](https://github.com/Dannebicque/oreof/commit/c559fee3b134ecae9286612db2765c4ebacd8cc0))
+
+
+### Bug Fixes
+
+* BCC de BUT ([681a931](https://github.com/Dannebicque/oreof/commit/681a931057f7b48ae4fcf94320cd53bbe08d3d5f))
+* Ne pas générer les onglets si semestre non dispensé ([ba1b3e0](https://github.com/Dannebicque/oreof/commit/ba1b3e05c9874af61cd2c6feab21ebd78ffa59be))
+* Ne pas générer les onglets si semestre non dispensé ([343a194](https://github.com/Dannebicque/oreof/commit/343a1942c15919e092bffc69ffd61166c89a79e4))
+
 ### [1.15.18](https://github.com/Dannebicque/oreof/compare/v1.15.17...v1.15.18) (2023-10-19)
 
 
