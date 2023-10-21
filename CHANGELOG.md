@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.20](https://github.com/Dannebicque/oreof/compare/v1.15.19...v1.15.20) (2023-10-21)
+
+
+### Bug Fixes
+
+* ec sans fiche matière en BUT ([b951050](https://github.com/Dannebicque/oreof/commit/b951050f1083384a66b3e022a79ee2dcd1b462a0))
+
 ### [1.15.19](https://github.com/Dannebicque/oreof/compare/v1.15.18...v1.15.19) (2023-10-20)
 
 
