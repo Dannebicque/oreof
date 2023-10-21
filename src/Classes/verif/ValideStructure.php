@@ -302,7 +302,7 @@ abstract class ValideStructure extends AbstractValide
                             }
 
                             $etatBcc = '';
-                            foreach ($ec->getFicheMatiere()->getElementConstitutifs() as $ece) {
+                            foreach ($ec->getFicheMatiere()?->getElementConstitutifs() as $ece) {
                                 if ($ece->getEtatBcc(self::$parcours) === 'Complet') {
                                     $etatBcc ='Complet';
                                 }
