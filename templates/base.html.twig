@@ -378,7 +378,7 @@
                         <li class="mega">
                             <a href="#administration" data-href="administration">
                                 <i class="fal fa-wrench icon"></i>
-                                <span class="label">Administration</span>
+                                <span class="label">Mes composantes</span>
                             </a>
                             <ul id="administration">
                                 <li>
@@ -398,6 +398,32 @@
                                         </li>
                                     </ul>
                                 </li>
+                                {% for composante in app.user.composanteResponsableDpe %}
+                                    {% if is_granted('CAN_COMPOSANTE_VALIDATE_MY', composante) %}
+                                        <li>
+                                            <a href="#utilisateurs">
+                                                <span class="label">{{ composante.libelle }}</span>
+                                            </a>
+                                            <ul id="utilisateurs">
+                                                <li>
+                                                    <a href="{{ path('app_composante', {composante:composante.id}) }}">
+                                                        <span class="label">Détails de la composante</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ path('app_validation_composante_index', {composante:composante.id}) }}">
+                                                        <span class="label">Processus validation</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ path('app_export_composante_index', {composante:composante.id}) }}">
+                                                        <span class="label">Export</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
                             </ul>
                         </li>
                     {% endif %}
