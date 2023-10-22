@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.21](https://github.com/Dannebicque/oreof/compare/v1.15.20...v1.15.21) (2023-10-22)
+
+
+### Features
+
+* commentaire en pdf ([936f8c0](https://github.com/Dannebicque/oreof/commit/936f8c0404ecd87cadd0466f3392f638bc4e8a2d))
+* commentaire sur parcours ([d093611](https://github.com/Dannebicque/oreof/commit/d093611677f5cf1e5dd4a364c5fe665972dd971e))
+* validation/composante ([7456389](https://github.com/Dannebicque/oreof/commit/7456389df8137ad78997d2d46c98869e0336700c))
+* validation/composante ([b66a267](https://github.com/Dannebicque/oreof/commit/b66a267ecc3e5269ad566297e14e8f2e74959623))
+
+
+### Bug Fixes
+
+* ec sans fiche matière en BUT ([b7522c4](https://github.com/Dannebicque/oreof/commit/b7522c418d83d3b8ecdf20ba52ae7ac000648b3c))
+* ec sans fiche matière en BUT ([11e3e37](https://github.com/Dannebicque/oreof/commit/11e3e37c2e236943553ee44e59d2356fecd05140))
+* export pdf ([94175a2](https://github.com/Dannebicque/oreof/commit/94175a258046bdcaccb7fe69388ec325663770fb))
+* Exports des fichiers en "masse" ([9b107f7](https://github.com/Dannebicque/oreof/commit/9b107f79528fcb14266d0f7abd562fc6936824d6))
+* ue sans nature ([edb3d56](https://github.com/Dannebicque/oreof/commit/edb3d5666f47ac55062f86813cb37e70ef376d72))
+
 ### [1.15.20](https://github.com/Dannebicque/oreof/compare/v1.15.19...v1.15.20) (2023-10-21)
 
 
