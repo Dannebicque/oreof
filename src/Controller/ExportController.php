@@ -48,6 +48,7 @@ class ExportController extends BaseController
         return $this->render('export/index.html.twig', [
             'annees' => $anneeUniversitaireRepository->findAll(),
             'composante' => $composante,
+            'types_document' => self::TYPES_DOCUMENT,
         ]);
     }
 
@@ -77,8 +78,6 @@ class ExportController extends BaseController
         ComposanteRepository         $composanteRepository,
         Request                      $request,
     ): Response {
-        $this->denyAccessUnlessGranted('ROLE_SES');//todo: ou DPE
-
         $composante = $composanteRepository->find($request->request->get('composante'));
 
         if (!$composante) {

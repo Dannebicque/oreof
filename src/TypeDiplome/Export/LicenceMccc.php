@@ -407,7 +407,7 @@ class LicenceMccc
         if ($formation->isHasParcours() === true) {
             $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle();
         } else {
-            $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getDisplay();
+            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getDisplay();
         }
 
         $this->fileName = Tools::FileName('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $texte, 50);
@@ -470,13 +470,13 @@ class LicenceMccc
     ): string {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
 
-        $fichier = $this->excelWriter->saveFichier($this->fileName, $this->dir . '/temp/');
+        $fichier = $this->excelWriter->saveFichier($this->fileName, $dir);
 
         $request = Gotenberg::libreOffice('http://localhost:3000')
             ->outputFilename($this->fileName)
             ->convert(Stream::path($fichier));
 
-        return Gotenberg::save($request, $this->dir . '/temp/');
+        return Gotenberg::save($request, $dir);
     }
 
     public function getMcccs(StructureEc $structureEc): array

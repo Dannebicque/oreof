@@ -462,6 +462,4 @@ class TypeDiplome
 
         return $this;
     }
-
-
 }

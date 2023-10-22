@@ -30,8 +30,7 @@ class ExportMccc
 
     public function __construct(
         protected FormationRepository $formationRepository
-    )
-    {
+    ) {
     }
 
     public function exportZip(): string
@@ -42,13 +41,21 @@ class ExportMccc
         $zip->open($zipName, \ZipArchive::CREATE);
 
         $tabFiles = [];
-        $dir = $this->dir . '/mccc/';
+
+        $dir = $this->dir;
+        if ($this->format === 'xlsx') {
+            $dir = $this->dir . '/mccc/';
+        } elseif ($this->format === 'pdf') {
+            $dir = $this->dir  . '/pdf/';
+        }
+
         foreach ($this->formations as $formationId) {
             $formation = $this->formationRepository->findOneBy(['id' => $formationId, 'anneeUniversitaire' => $this->annee->getId()]);
             if ($formation !== null && $formation->getTypeDiplome()?->getModeleMcc() !== null) {
                 $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
                 if (null !== $typeDiplome) {
                     foreach ($formation->getParcours() as $parcours) {
+                        $dir = $this->dir;
                         if ($this->format === 'xlsx') {
                             $fichier = $typeDiplome->exportAndSaveExcelMccc(
                                 $dir,
