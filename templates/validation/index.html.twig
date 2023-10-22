@@ -17,9 +17,17 @@
     <div class="row gy-2">
         <div class="col-12 p-0">
             <div class="card"
-                    {{ stimulus_controller('validation--index', {
-                        urlListe: path('app_validation_formation_liste')
-                    }) }}
+                    {% if ses is defined and ses == true %}
+                        {{ stimulus_controller('validation--index',
+                            {
+                                urlListe: path('app_validation_formation_liste', {})
+                            }) }}
+                    {% else %}
+                        {{ stimulus_controller('validation--index',
+                            {
+                                urlListe: path('app_validation_formation_liste', {composante:composante.id}),
+                            }) }}
+                    {% endif %}
             >
                 <div class="card-body">
                     {{ include('communs/_recherche.html.twig') }}
