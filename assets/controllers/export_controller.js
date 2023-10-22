@@ -19,6 +19,7 @@ export default class extends Controller {
   static targets = ['liste']
 
   connect() {
+    this._updateListe()
   }
 
   valideExport(event) {
@@ -48,8 +49,13 @@ export default class extends Controller {
       document.getElementById('type_document').classList.remove('is-invalid')
     }
 
+    const liste = document.querySelectorAll('.check-all:checked')
+    if (liste.length === 0) {
+      isValid = false
+      callOut('Veuillez sélectionner au moins une formation', 'danger')
+    }
+
     if (isValid) {
-      const liste = document.querySelectorAll('.check-all:checked')
       const data = new FormData()
 
       // ajoute les données de la liste au formulaire
@@ -76,10 +82,13 @@ export default class extends Controller {
   }
 
   async changeListe() {
+    this._updateListe()
+  }
+
+  async _updateListe() {
     const annee = document.getElementById('annee_universitaire').value
     const composante = document.getElementById('composante').value
-
-    if (annee !== '' || composante !== '') {
+    if (annee !== '' && composante !== '') {
       const body = new URLSearchParams({
         annee,
         composante,

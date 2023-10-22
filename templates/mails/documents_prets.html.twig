@@ -1,8 +1,10 @@
-Bonjour {{ user.prenom }},<br>
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+Bonjour {{ user.display }},<br>
 
 <p>Les documents sont générés et peuvent être téléchargés depuis le lien ci-dessous (ce lien est valable 15 jours).</p>
 
 <p><a href="{{ ('/temp/zip/'~lien)|url }}" target="_blank">{{ lien }}</a></p>
 
-<p>Cordialement,</p>
-
+{% endblock %}

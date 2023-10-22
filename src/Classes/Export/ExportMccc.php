@@ -10,6 +10,7 @@
 namespace App\Classes\Export;
 
 use App\Entity\AnneeUniversitaire;
+use App\Repository\FormationRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
 use DateTime;
@@ -19,38 +20,52 @@ use ZipArchive;
 
 class ExportMccc
 {
+    private string $dir;
+    private TypeDiplomeRegistry $typeDiplomeRegistry;
+    private array $formations;
+    private AnneeUniversitaire $annee;
+    private DateTimeInterface $date;
+    private string $format = 'xlsx';
+    private bool $isLight = false;
+
     public function __construct(
-        private string $dir,
-        private TypeDiplomeRegistry $typeDiplomeRegistry,
-        private array               $formations,
-        private AnneeUniversitaire  $annee,
-        private DateTimeInterface   $date
-    ) {
+        protected FormationRepository $formationRepository
+    )
+    {
     }
 
     public function exportZip(): string
     {
         $zip = new \ZipArchive();
         $fileName = 'export_mccc_' . date('YmdHis') . '.zip';
-        $zipName = $this->dir.'/zip/' . $fileName;
+        $zipName = $this->dir . '/zip/' . $fileName;
         $zip->open($zipName, \ZipArchive::CREATE);
 
-
         $tabFiles = [];
-        $dir = $this->dir.'/mccc/';
-
-        foreach ($this->formations as $formation) {
-            if ($formation->getTypeDiplome()?->getModeleMcc() !== null) {
-
-                $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()->getModeleMcc());
+        $dir = $this->dir . '/mccc/';
+        foreach ($this->formations as $formationId) {
+            $formation = $this->formationRepository->findOneBy(['id' => $formationId, 'anneeUniversitaire' => $this->annee->getId()]);
+            if ($formation !== null && $formation->getTypeDiplome()?->getModeleMcc() !== null) {
+                $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
                 if (null !== $typeDiplome) {
                     foreach ($formation->getParcours() as $parcours) {
-                        $fichier = $typeDiplome->exportAndSaveExcelMccc(
-                            $dir,
-                            $this->annee,
-                            $parcours,
-                            $this->date
-                        );
+                        if ($this->format === 'xlsx') {
+                            $fichier = $typeDiplome->exportAndSaveExcelMccc(
+                                $dir,
+                                $this->annee,
+                                $parcours,
+                                $this->date,
+                                $this->isLight
+                            );
+                        } elseif ($this->format === 'pdf') {
+                            $fichier = $typeDiplome->exportAndSavePdfMccc(
+                                $dir,
+                                $this->annee,
+                                $parcours,
+                                $this->date,
+                                $this->isLight
+                            );
+                        }
 
                         $tabFiles[] = $fichier;
                         $zip->addFile(
@@ -63,8 +78,7 @@ class ExportMccc
         }
 
         $zip->close();
-
-        // suppression des PDF
+        // suppression des fichiers temporaires
         foreach ($tabFiles as $file) {
             if (file_exists($dir . $file)) {
                 unlink($dir . $file);
@@ -72,5 +86,23 @@ class ExportMccc
         }
 
         return $fileName;
+    }
+
+    public function export(
+        string              $dir,
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        array               $formations,
+        AnneeUniversitaire  $annee,
+        DateTimeInterface   $date,
+        string              $format = 'xlsx',
+        bool                $isLight = false
+    ): void {
+        $this->dir = $dir;
+        $this->typeDiplomeRegistry = $typeDiplomeRegistry;
+        $this->formations = $formations;
+        $this->annee = $annee;
+        $this->date = $date;
+        $this->format = $format;
+        $this->isLight = $isLight;
     }
 }

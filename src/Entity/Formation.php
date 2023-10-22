@@ -130,7 +130,7 @@ class Formation
     #[ORM\Column]
     private ?array $etatSteps = [];
 
-    #[ORM\ManyToOne(inversedBy: 'formations')]
+    #[ORM\ManyToOne(inversedBy: 'formations', fetch: 'EAGER')]
     private ?TypeDiplome $typeDiplome = null;
 
     #[ORM\Column(length: 255, nullable: true)]
