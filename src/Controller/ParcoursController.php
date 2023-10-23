@@ -31,6 +31,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Test\Constraint\ResponseIsUnprocessable;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 #[Route('/parcours')]
 class ParcoursController extends BaseController
@@ -327,5 +329,170 @@ class ParcoursController extends BaseController
         }
 
         return $this->json(false);
+    }
+
+    /**
+     * Retire les <div></div> et <!--block-->
+     * et renvoie la chaîne épurée
+     * @param ?string $stringToClean Chaîne de caractère à nettoyer
+     * @return string Chaîne nettoyée
+     */
+    public function removeHTMLEntitiesFromString(?string $stringToClean) : string {
+        if($stringToClean !== null && gettype($stringToClean) === 'string'){
+            $cleanedString = preg_replace('/(\&nbsp;)+/', '', $stringToClean);
+            $cleanedString = preg_replace('/(<([^>]+)>)/', '', $cleanedString);
+            return $cleanedString;
+        }
+        else {
+            return "";
+        }
+    }
+
+    /**
+     * Génère du contenu XML de l'offre de formation, à partir d'un parcours.
+     * Le format est généré selon les spécifications du LHEO
+     * @param Parcours $parcours Parcours à transformer en XML
+     * @return string $xml Contenu XML
+     */
+    public function generateLheoXMLFromParcours(Parcours $parcours) : string {
+        // Paramètres de l'encodeur
+        $contextOptions = [
+            'xml_root_node_name' => 'lheo',
+            'xml_format_output' => true,
+        ];
+
+        //Récupération des valeurs
+        // Codes ROME
+        $codesRome = [];
+        foreach($parcours->getCodesRome() as $code){
+            $codesRome[] = $code['code'];
+        }
+        // Intitulé de la formation
+        $intituleFormation = $parcours->getFormation()->getTypeDiplome()->getLibelle() . " " . $parcours->getLibelle();
+
+        // Génération du XML
+        $encoder = new XmlEncoder();
+        $xml = $encoder->encode([
+            // Attribut de l'élément racine
+            '@xmlns' => 'http://lheo.gouv.fr/2.3',
+            '@xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+            '@xsi:schemaLocation' => 'http://lheo.gouv.fr/2.3/lheo.xsd',
+            'offres' => [ 
+                'formation' => [
+                    'domaine-formation' => [
+                        // Formacode et code nsf optionnels
+                        // 'code-FORMACODE' => '',
+                        // 'code-NSF' => '',
+                        'code-ROME' => $codesRome,
+                    ],
+                    'intitule-formation' => $intituleFormation,
+                    'objectif-formation' => $this->removeHTMLEntitiesFromString($parcours->getObjectifsParcours()),
+                    'resultats-attendus' => $this->removeHTMLEntitiesFromString($parcours->getResultatsAttendus()),
+                    'contenu-formation' => $this->removeHTMLEntitiesFromString($parcours->getContenuFormation()),
+                    // Tous les parcours sont certifiants ?
+                    'certifiante' => 1,
+                    'contact-formation' => [
+                        // Référent pédagogique
+                        'type-contact' => 3,
+                        'coordonnees' => [
+                            'nom' => $parcours->getRespParcours()->getNom(),
+                            'prenom' => $parcours->getRespParcours()->getPrenom(),
+                            'courriel' => $parcours->getRespParcours()->getEmail(),
+                            ]
+                        ],
+                    // tous les parcours sont en groupe (non personnalisés) ?
+                    'parcours-de-formation' => 1,
+                    'code-niveau-entree' => $parcours->getFormation()->getNiveauEntree()->value,
+                    'action' => [
+                        'rythme-formation' => $this->removeHTMLEntitiesFromString($parcours->getRythmeFormationTexte()),
+                        // Code FORMACODE
+                        'code-public-vise' => '31057', // A CHANGER
+                        'niveau-entree-obligatoire' => 1,
+                        'modalites-alternance' => $this->removeHTMLEntitiesFromString($parcours->getModalitesAlternance()),
+                        'modalites-enseignement' => $parcours->getModalitesEnseignement()->value,
+                        'conditions-specifiques' => 'Aucune', // A CHANGER
+                        'prise-en-charge-frais-possible' => 1, // A CHANGER - 1 oui | 0 non
+                        'modalites-entrees-sorties' => 0, // Entrées sorties à dates fixes : 0 | entrées / sorties permanentes : 1
+                        'session' => [
+                            'periode' => [
+                                'debut' => '00000000', //AAAAMMJJ - A CHANGER
+                                'fin' => '00000000' // AAAAMMJJ - A CHANGER
+                            ],
+                            'adresse-inscription' => [
+                                'adresse' => [
+                                    'ligne' => 'XXXXXXX', // A CHANGER
+                                    'codepostal' => '51100', // A CHANGER
+                                    'ville' => 'REIMS', // A CHANGER
+                                ]
+                            ]
+                        ]
+
+                    ],
+                    'organisme-formation-responsable' => [
+                        'numero-activite' => 'XXXXXXXXXXX', // A CHANGER 
+                        'SIRET-organisme-formation' => ['SIRET' => '19511296600799'], // A VERIFIER
+                        'nom-organisme' => 'UNIVERSITE DE REIMS CHAMPAGNE-ARDENNE (URCA)',
+                        'raison-sociale' => 'XXXXXXXXXXXX', // A CHANGER
+                        'coordonnees-organisme' => [
+                            'coordonnees' => [
+                                // Coordonnées complètes de l'organisme responsable de l'offre
+                                // COORDONNEES DU SECRETARIAT ?
+                            ]
+                        ],
+                        'contact-organisme' => [
+                            'coordonnees' => [
+                                // Coordonnées d'une personne de l'organisme responsable de l'offre
+                                // Quelles coordonnées ?
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+
+        ], 'xml', $contextOptions);
+
+        return $xml;
+       
+    }
+
+    /**
+     * Valide le XML selon le format LHEO
+     * @param string $xml Chaîne contenant le XML
+     * @return bool Vrai si le XML est valide, Faux sinon
+     */
+    public function validateLheoSchema(string $xml) : bool {
+        
+        $xmlValidator = new \DOMDocument();
+        $xmlValidator->loadXML($xml);
+        $isValid = $xmlValidator->schemaValidate(__DIR__ . '/../../lheo.xsd');
+        
+        return $isValid;
+    }
+
+    #[Route('/{parcours}/export-xml-lheo', name: 'app_parcours_export_xml_lheo')]
+    public function getXmlLheoFromParcours(Parcours $parcours) : Response {
+        $xml = $this->generateLheoXMLFromParcours($parcours);
+        // Validation
+        libxml_use_internal_errors(true);
+        $isValid = $this->validateLheoSchema($xml);
+        $htmlValidator = '<h1>Le schéma XML est valide !<h1>';
+        if(!$isValid){
+            $htmlValidator = "";
+            $xml_errors = libxml_get_errors();
+            foreach($xml_errors as $error){
+                $htmlValidator .= "<p>Line : {$error->line} | {$error->message}</p>";
+            }
+        }
+        libxml_clear_errors();
+        // Si le XML généré est valide, on le renvoie
+        if($isValid){
+            return new Response($xml, 200, ['Content-Type' => 'application/xml']);
+        }
+        // Sinon, on avertit le client
+        else {
+            return new Response("<p>La ressource demandée est incomplète ou invalide</p>" . $htmlValidator, 422, [
+                'Content-Type' => 'text/html'
+            ]);
+        }
     }
 }
