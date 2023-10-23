@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.15.22](https://github.com/Dannebicque/oreof/compare/v1.15.21...v1.15.22) (2023-10-23)
+
+
+### Bug Fixes
+
+* Somme ECTS sur UE ([9ae878c](https://github.com/Dannebicque/oreof/commit/9ae878c915a5f5f5546776a016e1ec01dba95697))
+
 ### [1.15.21](https://github.com/Dannebicque/oreof/compare/v1.15.20...v1.15.21) (2023-10-22)
 
 
