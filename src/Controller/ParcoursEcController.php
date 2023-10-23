@@ -103,7 +103,9 @@ class ParcoursEcController extends AbstractController
                     if (array_key_exists($sem->getOrdre(), $tabEcs) === false) {
                         $tabEcs[$sem->getOrdre()] = [];
                     }
-                    $tabEcs[$sem->getOrdre()][$ficheMatiere->getSigle()] = $ficheMatiere;
+                    if ($ficheMatiere !== null) {
+                        $tabEcs[$sem->getOrdre()][$ficheMatiere->getSigle()] = $ficheMatiere;
+                    }
                 }
             }
         }
@@ -142,8 +144,10 @@ class ParcoursEcController extends AbstractController
                     $tabEcUes[$semParc->getOrdre()][$ue->getId()] = [];
                     $tabUes[$semParc->getOrdre()][$ue->getId()] = $ue;
                     foreach ($ue->getElementConstitutifs() as $ec) {
-                        $tabEcUes[$semParc->getOrdre()][$ue->getId()][$ec->getFicheMatiere()->getSigle()] = $ec;
-                        $tabEcs[$semParc->getOrdre()][$ec->getFicheMatiere()->getSigle()] = $ec;
+                        if ($ec->getFicheMatiere() !== null) {
+                            $tabEcUes[$semParc->getOrdre()][$ue->getId()][$ec->getFicheMatiere()?->getSigle()] = $ec;
+                            $tabEcs[$semParc->getOrdre()][$ec->getFicheMatiere()?->getSigle()] = $ec;
+                        }
                     }
                 }
 
