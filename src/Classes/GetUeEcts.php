@@ -21,6 +21,10 @@ abstract class GetUeEcts
             return $ue->getEcts() ?? 0.0;
         }
 
+        if ($ue->getUeRaccrochee() !== null) {
+            $ue= $ue->getUeRaccrochee()->getUe();
+        }
+
         if ($ue->getUeEnfants()->count() === 0) {
             return self::totalEctsUe($ue, $parcours) ?? 0.0;
         }
