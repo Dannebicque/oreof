@@ -76,7 +76,7 @@ class ParcoursController extends BaseController
                     $this->isGranted('CAN_FORMATION_SHOW_MY', $p->getFormation()) ||
                     ($this->isGranted('CAN_PARCOURS_EDIT_MY', $p) && ($p->getRespParcours() === $this->getUser() || $p->getCoResponsable() === $this->getUser()))
                 ) {
-                    $tParcours[] = $p;
+                    $tParcours[] = ['p' => $p, 'isValidLHEO' => $this->isValidLHEO($p)];
                 }
             }
         }
@@ -349,6 +349,19 @@ class ParcoursController extends BaseController
     }
 
     /**
+     * Nettoie une chaîne de caractères
+     * - Apostrophes ’ ---> '
+     * - Caractères non imprimables
+     * @param ?string $stringToClean Chaîne à nettoyer
+     * @return string Chaîne épurée
+     */
+    public function cleanString(?string $stringToClean) : string {
+        $cleanedString = preg_replace('/’/m', "'", $stringToClean);
+        $cleanedString = preg_replace('/[\x00-\x1F\x7F]/m', '', $cleanedString);
+        return $cleanedString;
+    }
+
+    /**
      * Génère du contenu XML de l'offre de formation, à partir d'un parcours.
      * Le format est généré selon les spécifications du LHEO
      * @param Parcours $parcours Parcours à transformer en XML
@@ -359,16 +372,34 @@ class ParcoursController extends BaseController
         $contextOptions = [
             'xml_root_node_name' => 'lheo',
             'xml_format_output' => true,
+            'xml_encoding' => 'utf-8'
         ];
 
         //Récupération des valeurs
         // Codes ROME
         $codesRome = [];
         foreach($parcours->getCodesRome() as $code){
-            $codesRome[] = $code['code'];
+            preg_match_all('/([A-Za-z][0-9]{4})/m', $code['code'], $matches);
+            if(isset($matches[1][0])){
+                $codesRome[] = $matches[1][0];
+            }
         }
+        // 5 codes ROME max
+        $codesRome = array_slice($codesRome, 0, 5);
+
         // Intitulé de la formation
         $intituleFormation = $parcours->getFormation()->getTypeDiplome()->getLibelle() . " " . $parcours->getLibelle();
+
+        // Rythme de la formation
+        $rythmeFormation = 'Non renseigné.';
+        if($parcours->getRythmeFormationTexte() !== null && !empty($parcours->getRythmeFormationTexte())){
+            $rythmeFormation = $parcours->getRythmeFormationTexte();
+        }
+        else {
+            if($parcours->getRythmeFormation()->getLibelle() !== null){
+                $rythmeFormation = $parcours->getRythmeFormation()->getLibelle();
+            }
+        }
 
         // Génération du XML
         $encoder = new XmlEncoder();
@@ -385,10 +416,10 @@ class ParcoursController extends BaseController
                         // 'code-NSF' => '',
                         'code-ROME' => $codesRome,
                     ],
-                    'intitule-formation' => $intituleFormation,
-                    'objectif-formation' => $this->removeHTMLEntitiesFromString($parcours->getObjectifsParcours()),
-                    'resultats-attendus' => $this->removeHTMLEntitiesFromString($parcours->getResultatsAttendus()),
-                    'contenu-formation' => $this->removeHTMLEntitiesFromString($parcours->getContenuFormation()),
+                    'intitule-formation' => $this->cleanString($intituleFormation),
+                    'objectif-formation' => $this->cleanString($parcours->getObjectifsParcours()),
+                    'resultats-attendus' => $this->cleanString($parcours->getResultatsAttendus()),
+                    'contenu-formation' => $this->cleanString($parcours->getContenuFormation()),
                     // Tous les parcours sont certifiants ?
                     'certifiante' => 1,
                     'contact-formation' => [
@@ -404,11 +435,12 @@ class ParcoursController extends BaseController
                     'parcours-de-formation' => 1,
                     'code-niveau-entree' => $parcours->getFormation()->getNiveauEntree()->value,
                     'action' => [
-                        'rythme-formation' => $this->removeHTMLEntitiesFromString($parcours->getRythmeFormationTexte()),
+                                                    // A CHANGER
+                        'rythme-formation' => $rythmeFormation,
                         // Code FORMACODE
                         'code-public-vise' => '31057', // A CHANGER
                         'niveau-entree-obligatoire' => 1,
-                        'modalites-alternance' => $this->removeHTMLEntitiesFromString($parcours->getModalitesAlternance()),
+                        'modalites-alternance' => $this->cleanString($parcours->getModalitesAlternance() ?? 'Non renseigné.'),
                         'modalites-enseignement' => $parcours->getModalitesEnseignement()->value,
                         'conditions-specifiques' => 'Aucune', // A CHANGER
                         'prise-en-charge-frais-possible' => 1, // A CHANGER - 1 oui | 0 non
@@ -462,11 +494,16 @@ class ParcoursController extends BaseController
      */
     public function validateLheoSchema(string $xml) : bool {
         
-        $xmlValidator = new \DOMDocument();
+        $xmlValidator = new \DOMDocument('1.0', 'UTF-8');
         $xmlValidator->loadXML($xml);
         $isValid = $xmlValidator->schemaValidate(__DIR__ . '/../../lheo.xsd');
         
         return $isValid;
+        
+    }
+
+    public function isValidLHEO(Parcours $parcours) : bool {
+        return $this->validateLheoSchema($this->generateLheoXMLFromParcours($parcours));
     }
 
     #[Route('/{parcours}/export-xml-lheo', name: 'app_parcours_export_xml_lheo')]
