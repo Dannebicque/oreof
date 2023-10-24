@@ -83,6 +83,11 @@
             </td>
             <td>
                 {{ parcour.remplissage|remplissage }}
+                <a href="{{ path('app_parcours_export_xml_lheo', {'parcours': parcour.id}) }}">
+                    <span class="mt-4 badge {{ lheoXML.isValidLheo(parcour) ? 'bg-success' : 'bg-danger' }}">
+                        LHEO
+                    </span>
+                </a>
             </td>
             <td>
                 <a href="{{ path('app_parcours_show',{'id': parcour.id}) }} }}"
