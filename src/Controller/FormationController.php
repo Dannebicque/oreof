@@ -43,6 +43,31 @@ class FormationController extends BaseController
         return $this->render('formation/index.html.twig');
     }
 
+    #[Route('/liste-cfvu', name: 'app_formation_liste_cfvu', methods: ['GET'])]
+    public function listeCfvu(
+        MentionRepository     $mentionRepository,
+        ComposanteRepository  $composanteRepository,
+        TypeDiplomeRepository $typeDiplomeRepository,
+        FormationRepository   $formationRepository,
+        Request               $request
+    ) {
+        $q = $request->query->get('q') ?? null;
+
+        if ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL')) {
+            $formationsCfvu = $formationRepository->findBySearchAndCfvu($q, $this->getAnneeUniversitaire(), $request->query->all());
+            $isCfvu = true;
+        }
+
+        return $this->render('formation/_liste.html.twig', [
+            'formations' => $formationsCfvu,
+            'mentions' => $mentionRepository->findBy([], ['libelle' => 'ASC']),
+            'composantes' => $composanteRepository->findBy([], ['libelle' => 'ASC']),
+            'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
+            'params' => $request->query->all(),
+            'isCfvu' => $isCfvu ?? false,
+        ]);
+    }
+
     #[Route('/liste', name: 'app_formation_liste', methods: ['GET'])]
     public function liste(
         MentionRepository     $mentionRepository,
@@ -50,8 +75,7 @@ class FormationController extends BaseController
         TypeDiplomeRepository $typeDiplomeRepository,
         FormationRepository   $formationRepository,
         Request               $request
-    ): Response
-    {
+    ): Response {
         $sort = $request->query->get('sort') ?? 'typeDiplome';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
@@ -63,45 +87,41 @@ class FormationController extends BaseController
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
             $formations = $formationRepository->findBySearch($q, $this->getAnneeUniversitaire(), $request->query->all());
         } else {
-            if ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL')) {
-                $formations = $formationRepository->findBySearchAndCfvu($q, $this->getAnneeUniversitaire(), $request->query->all());
-                $isCfvu = true;
-            } else {
-                $formations = [];
-                //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
-                $centres = $this->getUser()?->getUserCentres();
-                foreach ($centres as $centre) {
-                    //todo: gérer avec un voter
-                    if ($centre->getComposante() !== null && (
-                            in_array('Gestionnaire', $centre->getDroits()) ||
-                            in_array('Invité', $centre->getDroits()) ||
-                            in_array('Directeur', $centre->getDroits()))) {
-                        //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
-                        $formations[] = $formationRepository->findByComposante(
-                            $centre->getComposante(),
-                            $this->getAnneeUniversitaire(),
-                            [$sort => $direction]
-                        );
-                    }
+            $formations = [];
+            //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
+            $centres = $this->getUser()?->getUserCentres();
+            foreach ($centres as $centre) {
+                //todo: gérer avec un voter
+                if ($centre->getComposante() !== null && (
+                    in_array('Gestionnaire', $centre->getDroits()) ||
+                    in_array('Invité', $centre->getDroits()) ||
+                    in_array('Directeur', $centre->getDroits())
+                )) {
+                    //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
+                    $formations[] = $formationRepository->findByComposante(
+                        $centre->getComposante(),
+                        $this->getAnneeUniversitaire(),
+                        [$sort => $direction]
+                    );
                 }
-
-                $formations[] = $formationRepository->findByComposanteDpe(
-                    $this->getUser(),
-                    $this->getAnneeUniversitaire(),
-                    [$sort => $direction]
-                );
-                $formations[] = $formationRepository->findByResponsableOuCoResponsable(
-                    $this->getUser(),
-                    $this->getAnneeUniversitaire(),
-                    [$sort => $direction]
-                );
-                $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
-                    $this->getUser(),
-                    $this->getAnneeUniversitaire(),
-                    [$sort => $direction]
-                );
-                $formations = array_merge(...$formations);
             }
+
+            $formations[] = $formationRepository->findByComposanteDpe(
+                $this->getUser(),
+                $this->getAnneeUniversitaire(),
+                [$sort => $direction]
+            );
+            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
+                $this->getUser(),
+                $this->getAnneeUniversitaire(),
+                [$sort => $direction]
+            );
+            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
+                $this->getUser(),
+                $this->getAnneeUniversitaire(),
+                [$sort => $direction]
+            );
+            $formations = array_merge(...$formations);
         }
 
         $tFormations = [];
@@ -115,7 +135,7 @@ class FormationController extends BaseController
             'composantes' => $composanteRepository->findBy([], ['libelle' => 'ASC']),
             'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
             'params' => $request->query->all(),
-            'isCfvu' => $isCfvu
+            'isCfvu' => false,
         ]);
     }
 
@@ -127,8 +147,7 @@ class FormationController extends BaseController
         FormationRepository   $formationRepository,
         Composante            $composante,
         Request               $request
-    ): Response
-    {
+    ): Response {
         $sort = $request->query->get('sort') ?? 'typeDiplome';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
@@ -167,8 +186,7 @@ class FormationController extends BaseController
         UserCentreRepository $userCentreRepository,
         Request              $request,
         FormationRepository  $formationRepository
-    ): Response
-    {
+    ): Response {
         $formationDemande = new FormationDemande();
         $form = $this->createForm(FormationDemandeType::class, $formationDemande, [
             'action' => $this->generateUrl('app_formation_demande_new'),
@@ -177,9 +195,9 @@ class FormationController extends BaseController
 
         if ($form->isSubmitted()) {
             if (array_key_exists(
-                    'mention',
-                    $request->request->all()['formation_ses']
-                ) && $request->request->all()['formation_ses']['mention'] !== null && $request->request->all()['formation_ses']['mention'] !== 'autre') {
+                'mention',
+                $request->request->all()['formation_ses']
+            ) && $request->request->all()['formation_ses']['mention'] !== null && $request->request->all()['formation_ses']['mention'] !== 'autre') {
                 $mention = $mentionRepository->find($request->request->all()['formation_ses']['mention']);
                 $formation->setMentionTexte(null);
                 $formation->setMention($mention);
@@ -218,8 +236,7 @@ class FormationController extends BaseController
         UserCentreRepository $userCentreRepository,
         Request              $request,
         FormationRepository  $formationRepository
-    ): Response
-    {
+    ): Response {
         $this->denyAccessUnlessGranted('CAN_FORMATION_CREATE_ALL', $this->getUser());
 
         $formation = new Formation($this->getAnneeUniversitaire());
@@ -230,9 +247,9 @@ class FormationController extends BaseController
 
         if ($form->isSubmitted()) {
             if (array_key_exists(
-                    'mention',
-                    $request->request->all()['formation_ses']
-                ) && $request->request->all()['formation_ses']['mention'] !== null && $request->request->all()['formation_ses']['mention'] !== 'autre') {
+                'mention',
+                $request->request->all()['formation_ses']
+            ) && $request->request->all()['formation_ses']['mention'] !== null && $request->request->all()['formation_ses']['mention'] !== 'autre') {
                 $mention = $mentionRepository->find($request->request->all()['formation_ses']['mention']);
                 $formation->setMentionTexte(null);
                 $formation->setMention($mention);
@@ -272,8 +289,7 @@ class FormationController extends BaseController
         Request                  $request,
         FormationRepository      $formationRepository,
         Formation                $formation
-    ): Response
-    {
+    ): Response {
         $form = $this->createForm(FormationSesType::class, $formation, [
             'action' => $this->generateUrl('app_formation_edit_modal', ['slug' => $formation->getSlug()]),
         ]);
@@ -281,9 +297,9 @@ class FormationController extends BaseController
 
         if ($form->isSubmitted()) {//todo: si validate le choice de mention ne fonctionne pas
             if (array_key_exists(
-                    'mention',
-                    $request->request->all()['formation_ses']
-                ) && $request->request->all()['formation_ses']['mention'] !== null && $request->request->all()['formation_ses']['mention'] !== 'autre') {
+                'mention',
+                $request->request->all()['formation_ses']
+            ) && $request->request->all()['formation_ses']['mention'] !== null && $request->request->all()['formation_ses']['mention'] !== 'autre') {
                 $mention = $mentionRepository->find($request->request->all()['formation_ses']['mention']);
                 $formation->setMentionTexte(null);
                 $formation->setMention($mention);
@@ -322,8 +338,7 @@ class FormationController extends BaseController
         TypeDiplomeRepository $typeDiplomeRepository,
         DomaineRepository     $domaineRepository,
         Request               $request
-    ): Response
-    {
+    ): Response {
         $domaine = $domaineRepository->find($request->query->get('domaine'));
 
         if ($domaine === null) {
@@ -347,8 +362,7 @@ class FormationController extends BaseController
     public function show(
         Formation               $formation,
         CalculStructureParcours $calculStructureParcours
-    ): Response
-    {
+    ): Response {
         $typeDiplome = $formation->getTypeDiplome();
         $tParcours = [];
         foreach ($formation->getParcours() as $parcours) {
@@ -372,9 +386,7 @@ class FormationController extends BaseController
         Request             $request,
         Formation           $formation,
         TypeDiplomeRegistry $typeDiplomeRegistry
-    ): Response
-    {
-
+    ): Response {
         if (!$this->isGranted('CAN_FORMATION_EDIT_MY', $formation)) {
             return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
         }
@@ -401,8 +413,7 @@ class FormationController extends BaseController
         Request                $request,
         Formation              $formation,
         FormationRepository    $formationRepository
-    ): Response
-    {
+    ): Response {
         if ($this->isCsrfTokenValid(
             'delete' . $formation->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf')

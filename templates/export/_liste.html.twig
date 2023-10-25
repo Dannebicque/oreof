@@ -1,58 +1,64 @@
-    <div class="card-body">
-        <table class="table" {{ stimulus_controller('check_all') }}>
-            <thead>
+<div class="card-body">
+    <table class="table" {{ stimulus_controller('check_all') }}>
+        <thead>
+        <tr>
+            <th>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
+                    </label>
+                </div>
+            </th>
+            <th>
+                Type de diplôme
+            </th>
+            <th>
+                Libellé
+            </th>
+            <th>
+                Remplissage
+            </th>
+            <th>
+                Etat
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for formation in formations %}
             <tr>
-                <th>
+                <td>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
+                            <input
+                                    {{ stimulus_action('check_all', 'check') }}
+                                    type="checkbox"
+                                    class="check-all"
+                                    name="formations[]"
+                                    value="{{ formation.id }}"
+                            >
                         </label>
                     </div>
-                </th>
-                <th>
-                    Type de diplôme
-                </th>
-                <th>
-                    Libellé
-                </th>
-                <th>
-                    Remplissage
-                </th>
-                <th>
-                    Etat
-                </th>
+                </td>
+                <td>
+                    {{ formation.typeDiplome != null ? formation.typeDiplome.libelle : 'Non défini' }}
+                </td>
+                <td>
+                    {{ formation.display }}
+                </td>
+                <td>
+                    {{ formation.remplissage|remplissage }}
+                </td>
+                <td>
+                    {{ formation.etatDpe|badgeDpe }}
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            {% for formation in formations %}
-                <tr>
-                    <td>
-                        <div class="checkbox">
-                            <label>
-                                <input
-                                        {{ stimulus_action('check_all', 'check') }}
-                                        type="checkbox"
-                                       class="check-all"
-                                       name="formations[]"
-                                       value="{{ formation.id }}"
-                                >
-                            </label>
-                        </div>
-                    </td>
-                    <td>
-                        {{ formation.typeDiplome != null ? formation.typeDiplome.libelle : 'Non défini' }}
-                    </td>
-                    <td>
-                        {{ formation.display }}
-                    </td>
-                    <td>
-                        {{ formation.remplissage|remplissage }}
-                    </td>
-                    <td>
-                        {{ formation.etatDpe|badgeDpe }}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+        {% else %}
+            <tr >
+                <td colspan="5" class="bg-warning text-white">
+                    Aucune formation
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

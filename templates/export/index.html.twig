@@ -21,6 +21,12 @@
                         url: path('app_export_liste'),
                         urlValide: path('app_export_valide')
                     }) }}
+            {% elseif isCfvu is defined and isCfvu == true %}
+                {{ stimulus_controller('export',
+                    {
+                        url: path('app_export_liste', {cfvu:true}),
+                        urlValide: path('app_export_valide')
+                    }) }}
             {% else %}
                 {{ stimulus_controller('export',
                     {
@@ -45,7 +51,7 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        {% if ses is defined and ses == true %}
+                        {% if ses is defined and ses == true or isCfvu is defined and isCfvu == true %}
                             <div>
                                 <label for="composante" class="required">Composante</label>
                                 <select name="composante" id="composante" class="form-select"
@@ -75,16 +81,18 @@
                             <select name="type_document" id="type_document" class="form-select">
                                 <option value="">Choisir le format</option>
                                 {% for value, type in types_document %}
-                                <option value="{{ value }}">{{ type }}</option>
+                                    <option value="{{ value }}">{{ type }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div>
-                            <label for="date">Préciser, si besoin, la date du conseil ou de la commission</label>
-                            <input type="date" name="date" id="date" class="form-control">
-                        </div>
+                        {% if isCfvu is defined and isCfvu != true %}
+                            <div>
+                                <label for="date">Préciser, si besoin, la date du conseil ou de la commission</label>
+                                <input type="date" name="date" id="date" class="form-control">
+                            </div>
+                        {% endif %}
                         <div class="mt-2">
                             <button class="btn btn-outline-success" type="button"
                                     {{ stimulus_action('export', 'valideExport') }}
@@ -100,7 +108,7 @@
                 </div>
             </div>
         </div>
-        // choix formation/parcours, mutliples, filtres, composante, type de diplôme
+        {# todo: choix formation/parcours, mutliples, filtres, composante, type de diplôme #}
 
         <div class="card mt-2" {{ stimulus_target('export', 'liste') }}>
         </div>

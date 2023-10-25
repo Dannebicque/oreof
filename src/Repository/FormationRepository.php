@@ -341,4 +341,25 @@ class FormationRepository extends ServiceEntityRepository
             )->getQuery()
             ->getResult();
     }
+
+    public function findByComposanteCfvu(Composante $composante, AnneeUniversitaire $anneeUniversitaire): array
+    {
+        return $this->createQueryBuilder('f')
+            ->where('f.composantePorteuse = :composante')
+            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            ->setParameter('etatDpe', json_encode(['soumis_cfvu' => 1]))
+            ->setParameter('composante', $composante)
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
+            ->addOrderBy(
+                'CASE
+                            WHEN f.mention IS NOT NULL THEN m.libelle
+                            WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
+                            ELSE f.mentionTexte
+                            END',
+                'ASC'
+            )->getQuery()
+            ->getResult();
+    }
 }

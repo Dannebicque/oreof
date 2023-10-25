@@ -101,7 +101,6 @@
             <!-- Menu Start -->
             <div class="menu-container flex-grow-1">
                 <ul id="menu" class="menu">
-
                     <li>
                         <a href="{{ path('app_homepage') }}">
                             <i class="fal fa-home icon"></i>
@@ -109,47 +108,55 @@
                         </a>
                     </li>
 
-                    <li>
-                        <a href="#offre_formation" data-href="offre_formation">
-                            <i class="fal fa-chalkboard-user icon"></i>
-                            <span class="label">Offre de formation</span>
-                        </a>
-                        <ul id="offre_formation">
-                            <li>
-                                <a href="{{ path('app_formation_index') }}">
-                                    <i class="fal fa-book icon"></i>
-                                    <span class="label">Détail des mentions/spécialités</span>
-                                </a>
-                            </li>
+                    {% if not is_granted('CAN_ETABLISSEMENT_CONSEILLER_ALL') %}
+                        <li>
+                            <a href="#offre_formation" data-href="offre_formation">
+                                <i class="fal fa-chalkboard-user icon"></i>
+                                <span class="label">Offre de formation</span>
+                            </a>
+                            <ul id="offre_formation">
+                                <li>
+                                    <a href="{{ path('app_formation_index') }}">
+                                        <i class="fal fa-book icon"></i>
+                                        <span class="label">Détail des mentions/spécialités</span>
+                                    </a>
+                                </li>
 
-                            <li>
-                                <a href="{{ path('app_parcours_index') }}">
-                                    <i class="fal fa-shuffle icon"></i>
-                                    <span class="label">Détail des parcours</span>
-                                </a>
-                            </li>
+                                <li>
+                                    <a href="{{ path('app_parcours_index') }}">
+                                        <i class="fal fa-shuffle icon"></i>
+                                        <span class="label">Détail des parcours</span>
+                                    </a>
+                                </li>
 
-                            <li>
-                                <a href="{{ path('structure_fiche_matiere_index') }}">
-                                    <i class="fal fa-person-chalkboard icon"></i>
-                                    <span class="label">Détail des fiches EC/matière</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ path('structure_fiche_matiere_index', {type:'hd'}) }}">
-                                    <i class="fal fa-person-chalkboard icon"></i>
-                                    <span class="label">Fiches EC/matière "hors diplôme"</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ path('app_mutualise_index') }}">
-                                    <i class="fal fa-share-nodes icon"></i>
-                                    <span class="label">Détail des éléments mutualisés</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
+                                <li>
+                                    <a href="{{ path('structure_fiche_matiere_index') }}">
+                                        <i class="fal fa-person-chalkboard icon"></i>
+                                        <span class="label">Détail des fiches EC/matière</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('structure_fiche_matiere_index', {type:'hd'}) }}">
+                                        <i class="fal fa-person-chalkboard icon"></i>
+                                        <span class="label">Fiches EC/matière "hors diplôme"</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_mutualise_index') }}">
+                                        <i class="fal fa-share-nodes icon"></i>
+                                        <span class="label">Détail des éléments mutualisés</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ path('app_export_cfvu') }}" data-href="exports">
+                                <i class="fal fa-chalkboard-user icon"></i>
+                                <span class="label">Exports</span>
+                            </a>
+                        </li>
+                    {% endif %}
 
                     {% if is_granted('ROLE_SES') %}
                         <li>

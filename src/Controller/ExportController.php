@@ -36,6 +36,23 @@ class ExportController extends BaseController
             'annees' => $anneeUniversitaireRepository->findAll(),
             'composantes' => $composanteRepository->findAll(),
             'ses' => true,
+            'isCfvu' => false,
+            'types_document' => self::TYPES_DOCUMENT,
+        ]);
+    }
+
+    #[Route('/export/cfvu', name: 'app_export_cfvu')]
+    public function exportCfvu(
+        AnneeUniversitaireRepository $anneeUniversitaireRepository,
+        ComposanteRepository         $composanteRepository,
+    ): Response {
+        $this->denyAccessUnlessGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser());
+
+        return $this->render('export/index.html.twig', [
+            'annees' => $anneeUniversitaireRepository->findAll(),
+            'composantes' => $composanteRepository->findAll(),
+            'ses' => false,
+            'isCfvu' => true,
             'types_document' => self::TYPES_DOCUMENT,
         ]);
     }
@@ -48,6 +65,8 @@ class ExportController extends BaseController
         return $this->render('export/index.html.twig', [
             'annees' => $anneeUniversitaireRepository->findAll(),
             'composante' => $composante,
+            'isCfvu' => false,
+            'ses' => false,
             'types_document' => self::TYPES_DOCUMENT,
         ]);
     }
@@ -58,13 +77,17 @@ class ExportController extends BaseController
         FormationRepository  $formationRepository,
         Request              $request
     ): Response {
-        $composante = $composanteRepository->find($request->query->get('composante'));
+        $composante = $composanteRepository->find($request->query->get('composante', null));
 
         if (!$composante) {
             throw $this->createNotFoundException('La composante n\'existe pas');
         }
 
-        $formations = $formationRepository->findByComposante($composante, $this->getAnneeUniversitaire());
+        if ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser())) {
+            $formations = $formationRepository->findByComposanteCfvu($composante, $this->getAnneeUniversitaire());
+        } else {
+            $formations = $formationRepository->findByComposante($composante, $this->getAnneeUniversitaire());
+        }
 
         return $this->render('export/_liste.html.twig', [
             'formations' => $formations
