@@ -44,6 +44,7 @@ bouton pour valider/invalide les étapes successives #}
             <th>Etat</th>
             <th>Remplissage</th>
             <th></th>
+            <th></th>
         </tr>
         {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SHOW_ALL', app.user) %}
             <tr>
@@ -99,7 +100,9 @@ bouton pour valider/invalide les étapes successives #}
 
                     </select>
                 </th>
+                {% if not isCfvu %}
                 <th>
+
                     <label for="filter-etat" class="sr-only">etat</label>
                     <select
                             {{ stimulus_action('crud', 'filter', 'change', {
@@ -118,6 +121,7 @@ bouton pour valider/invalide les étapes successives #}
                         <option value="publie" {% if params['etatDpe'] is defined and params['etatDpe'] == 'publie' %}selected{% endif %}>Publié</option>
                     </select>
                 </th>
+                {% endif %}
                 <th>
                     <label for="filter-remplissage" class="sr-only">remplissage</label>
                     <select
@@ -130,6 +134,7 @@ bouton pour valider/invalide les étapes successives #}
                         <option value="100" {% if params['remplissage'] is defined and params['remplissage'] == 100 %}selected{% endif %}>Complet</option>
                     </select>
                 </th>
+{#                <th></th>#}
                 <th>
                     <button class="btn btn-outline-danger"
                             {{ stimulus_action('crud', 'effaceFiltre', 'click', {
@@ -169,6 +174,10 @@ bouton pour valider/invalide les étapes successives #}
                     <td>
                         {{ formation.remplissage|remplissage }}
                     </td>
+{#                    <td>#}
+{#                        <span class="badge bg-warning"><i class="fal fa-circle-exclamation"></i></span>#}
+{#                        <span class="badge bg-warning"><i class="fal fa-file-slash"></i></span>#}
+{#                    </td>#}
                     <td class="text-end">
                         {% if formation.hasParcours and formation.parcours|length > 0 %}
                             <button class="btn btn-sm btn-outline-primary"

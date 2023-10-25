@@ -19,6 +19,7 @@ enum PermissionEnum: string
     case SUBMIT = 'submit';
     case MANAGE = 'manage';
     case EXPORT = 'export';
+    case CONSEILLER = 'conseiller';
 
     public static function getAvailableTypes()
     {
@@ -31,6 +32,7 @@ enum PermissionEnum: string
             strtoupper(self::SUBMIT->value),
             strtoupper(self::MANAGE->value),
             strtoupper(self::EXPORT->value),
+            strtoupper(self::CONSEILLER->value),
         ];
     }
 
@@ -45,6 +47,7 @@ enum PermissionEnum: string
             self::SUBMIT => 'Soumettre (et passer à l\'étape suivante)',
             self::MANAGE => 'Gérer les droits',
             self::EXPORT => 'Exporter',
+            self::CONSEILLER => 'Conseiller',
         };
     }
 }
