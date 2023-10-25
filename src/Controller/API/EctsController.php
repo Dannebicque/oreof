@@ -26,10 +26,15 @@ class EctsController extends AbstractController
     ): Response {
         $totalEctsUe = 0;
         $ectsSemestre = 0;
-
-        GetUeEcts::getEcts($ue, $parcours);
-
+        $typeDiplome = $parcours->getTypeDiplome();
         $semestre = $ue->getSemestre();
+
+        if ($semestre === null || $typeDiplome === null) {
+            throw $this->createNotFoundException();
+        }
+        GetUeEcts::getEcts($ue, $parcours, $typeDiplome);
+
+
         $uesInSemestre = $semestre->getUes();
 
         foreach ($uesInSemestre as $u) {
