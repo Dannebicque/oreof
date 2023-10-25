@@ -42,13 +42,15 @@ class HistoriqueFormationRepository extends ServiceEntityRepository
 
     public function findByFormationLastStep(Formation $formation, string $step): ?HistoriqueFormation
     {
-        return $this->createQueryBuilder('h')
+        $data = $this->createQueryBuilder('h')
             ->where('h.formation = :formation')
             ->andWhere('h.etape = :step')
             ->setParameter('formation', $formation)
             ->setParameter('step', $step)
             ->orderBy('h.date', 'DESC')
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getResult();
+
+        return count($data) > 0 ? $data[0] : null;
     }
 }
