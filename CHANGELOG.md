@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://github.com/Dannebicque/oreof/compare/v1.15.25...v1.16.0) (2023-10-25)
+
+
+### Features
+
+* Affichage pour les conseillers ([6f1050a](https://github.com/Dannebicque/oreof/commit/6f1050a7723706db190b27f7498f8b851348ae28))
+
+
+### Bug Fixes
+
+* Réécriture mail CFVU/Hors URCA ([bd3e70a](https://github.com/Dannebicque/oreof/commit/bd3e70aa8c5e1af9fe6822469fd6bfd1413d5b2e))
+
 ### [1.15.25](https://github.com/Dannebicque/oreof/compare/v1.15.24...v1.15.25) (2023-10-25)
 
 
