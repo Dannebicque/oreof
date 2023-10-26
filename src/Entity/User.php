@@ -19,6 +19,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -40,11 +42,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Etablissement $etablissement = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'directeur', targetEntity: Composante::class)]
     private Collection $composantes;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'responsableDpe', targetEntity: Composante::class)]
     private Collection $composanteResponsableDpe;
+
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'responsableMention', targetEntity: Formation::class)]
     private Collection $formationsResponsableMention;
 
@@ -90,24 +96,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $telPortable = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'destinataire', targetEntity: Notification::class)]
     private Collection $notifications;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserCentre::class)]
     private Collection $userCentres;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'coResponsable', targetEntity: Parcours::class)]
     private Collection $coParcours;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'coResponsable', targetEntity: Formation::class)]
     private Collection $coFormations;
 
+    #[Ignore]
     #[ORM\ManyToOne]
     private ?Composante $composanteDemande = null;
 
     #[ORM\ManyToOne]
     private ?Etablissement $etablissementDemande = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Historique::class)]
     private Collection $historiques;
 

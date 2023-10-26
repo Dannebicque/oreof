@@ -17,11 +17,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: ElementConstitutifRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class ElementConstitutif
 {
     use LifeCycleTrait;
+
+    // Fix serializing | Non relié à la BD
+    public ?string $updatedValue = null;
+    public ?string $updatedEntity = null;
+    public ?string $createdValue = null;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -82,12 +89,15 @@ class ElementConstitutif
     #[ORM\Column]
     private ?int $ordre = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
     private ?FicheMatiere $ficheMatiere = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?Parcours $parcours = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
     private ?Ue $ue = null;
 
@@ -100,6 +110,7 @@ class ElementConstitutif
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?TypeEc $typeEc = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ecEnfants')]
     private ?self $ecParent = null;
 
@@ -125,6 +136,7 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $quitus = false;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'elementConstitutifs')]
     private Collection $competences;
 

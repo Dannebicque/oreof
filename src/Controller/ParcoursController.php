@@ -26,6 +26,7 @@ use App\Repository\ParcoursRepository;
 use App\Service\LheoXML;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,7 +34,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Test\Constraint\ResponseIsUnprocessable;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 #[Route('/parcours')]
 class ParcoursController extends BaseController
@@ -359,5 +366,14 @@ class ParcoursController extends BaseController
                 'Content-Type' => 'text/html'
             ]);
         }
+    }
+
+    #[Route('/{parcours}/versioning/save', name: 'app_parcours_versioning_save')]
+    public function saveIntoVersioning(Parcours $parcours) : Response {
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)], [new JsonEncoder()]);
+        $json = $serializer->serialize($parcours, 'json');
+
+        return new Response($json, 200, ['Content-Type' => 'application/json']);
     }
 }

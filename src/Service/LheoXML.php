@@ -33,7 +33,16 @@ class LheoXML {
         $codesRome = array_slice($codesRome, 0, 5);
 
         // Intitulé de la formation
-        $intituleFormation = $parcours->getFormation()->getTypeDiplome()->getLibelle() . " " . $parcours->getLibelle();
+        $intituleFormation = 'Non renseigné.';
+        if($parcours->getFormation()){
+            if($parcours->getFormation()->getTypeDiplome()){
+                if($parcours->getFormation()->getTypeDiplome()->getLibelle()){
+                    if($parcours->getLibelle()){
+                        $intituleFormation = $parcours->getFormation()->getTypeDiplome()->getLibelle() . " " . $parcours->getLibelle();
+                    }
+                }
+            }
+        }
 
         // Rythme de la formation
         $rythmeFormation = 'Non renseigné.';
@@ -43,6 +52,54 @@ class LheoXML {
         else {
             if($parcours->getRythmeFormation() !== null && $parcours->getRythmeFormation()->getLibelle() !== null){
                 $rythmeFormation = $parcours->getRythmeFormation()->getLibelle();
+            }
+        }
+
+        // Contact de la formation
+        $referentPedagogique = [];
+        if($parcours->getRespParcours()){
+            $referentPedagogique = [
+                // Référent pédagogique
+                'type-contact' => 3,
+                'coordonnees' => [
+                    'nom' => $parcours->getRespParcours()  ? $parcours->getRespParcours()->getNom() : 'Non renseigné.' ,
+                    'prenom' => $parcours->getRespParcours()  ? $parcours->getRespParcours()->getPrenom() : 'Non renseigné.' ,
+                    'courriel' => $parcours->getRespParcours()  ? $parcours->getRespParcours()->getEmail() : 'Non renseigné.' ,
+                ]
+            ];
+        }
+
+        // Niveau d'entree
+        $niveauEntree = -1;
+        if($parcours->getFormation()){
+            if($parcours->getFormation()->getNiveauEntree()){
+                $niveauEntree = $parcours->getFormation()->getNiveauEntree()->value;
+            }
+        }
+        
+        // Adresse de la composante d'inscription
+        $adresseComposanteInscription = [
+            'denomination' => '',
+            'ligne' => '', 
+            'codepostal' => '',
+            'ville' => '',
+        ];
+        
+        if($parcours->getComposanteInscription()){
+            if($parcours->getComposanteInscription()->getAdresse()){
+                $adresseComp = $parcours->getComposanteInscription()->getAdresse();
+                $adresseComposanteInscription['denomination'] = $parcours->getComposanteInscription()->getLibelle();
+                $adresseComposanteInscription['ligne'] = $adresseComp->getAdresse1() . " " . ($adresseComp->getAdresse2() ?? '');
+                $adresseComposanteInscription['codepostal'] = $adresseComp->getCodePostal();
+                $adresseComposanteInscription['ville'] = $adresseComp->getVille();
+            }
+        }
+        
+        // Modalités de l'alternance
+        $modalitesAlternance = 'Non renseigné.';
+        if($parcours->getModalitesAlternance()){
+            if(!empty($parcours->getModalitesAlternance())){
+                $modalitesAlternance = $this->cleanString($parcours->getModalitesAlternance());
             }
         }
 
@@ -62,45 +119,31 @@ class LheoXML {
                         'code-ROME' => $codesRome,
                     ],
                     'intitule-formation' => $this->cleanString($intituleFormation),
-                    'objectif-formation' => $this->cleanString($parcours->getObjectifsParcours()),
-                    'resultats-attendus' => $this->cleanString($parcours->getResultatsAttendus()),
-                    'contenu-formation' => $this->cleanString($parcours->getContenuFormation()),
-                    // Tous les parcours sont certifiants ?
+                    'objectif-formation' => $this->cleanString(($parcours->getObjectifsParcours() ?? 'Non renseigné.')),
+                    'resultats-attendus' => $this->cleanString(($parcours->getResultatsAttendus() ?? 'Non renseigné.')),
+                    'contenu-formation' => $this->cleanString(($parcours->getContenuFormation() ?? 'Non renseigné.')),
+                    // Tous les parcours ne sont pas forcément certifiants
                     'certifiante' => 1,
-                    'contact-formation' => [
-                        // Référent pédagogique
-                        'type-contact' => 3,
-                        'coordonnees' => [
-                            'nom' => $parcours->getRespParcours()  ? $parcours->getRespParcours()->getNom() : 'Non renseigné.' ,
-                            'prenom' => $parcours->getRespParcours()  ? $parcours->getRespParcours()->getPrenom() : 'Non renseigné.' ,
-                            'courriel' => $parcours->getRespParcours()  ? $parcours->getRespParcours()->getEmail() : 'Non renseigné.' ,
-                            ]
-                        ],
-                    // tous les parcours sont en groupe (non personnalisés) ?
+                    'contact-formation' => $referentPedagogique,
                     'parcours-de-formation' => 1,
-                    'code-niveau-entree' => $parcours->getFormation()->getNiveauEntree()->value,
+                    'code-niveau-entree' => $niveauEntree,
                     'action' => [
-                                                    // A CHANGER
+                                                    
                         'rythme-formation' => $rythmeFormation,
-                        // Code FORMACODE
-                        'code-public-vise' => '31057', // A CHANGER
+                        'code-public-vise' => '00000',
                         'niveau-entree-obligatoire' => 1,
-                        'modalites-alternance' => $this->cleanString($parcours->getModalitesAlternance() ?? 'Non renseigné.'),
-                        'modalites-enseignement' => $parcours->getModalitesEnseignement()->value ?? 'Non renseigné.', // A CHANGER
-                        'conditions-specifiques' => 'Aucune', // A CHANGER
+                        'modalites-alternance' => $modalitesAlternance,
+                        'modalites-enseignement' => $parcours->getModalitesEnseignement() ? $parcours->getModalitesEnseignement()->value : 1,
+                        'conditions-specifiques' => $parcours->getPrerequis() ?? 'Aucune condition spécifique.',
                         'prise-en-charge-frais-possible' => 1, // A CHANGER - 1 oui | 0 non
-                        'modalites-entrees-sorties' => 0, // Entrées sorties à dates fixes : 0 | entrées / sorties permanentes : 1
+                        'modalites-entrees-sorties' => 0,
                         'session' => [
                             'periode' => [
-                                'debut' => '00000000', //AAAAMMJJ - A CHANGER
-                                'fin' => '00000000' // AAAAMMJJ - A CHANGER
+                                'debut' => '00000000',
+                                'fin' => '00000000' 
                             ],
                             'adresse-inscription' => [
-                                'adresse' => [
-                                    'ligne' => 'XXXXXXX', // A CHANGER
-                                    'codepostal' => '51100', // A CHANGER
-                                    'ville' => 'REIMS', // A CHANGER
-                                ]
+                                'adresse' => $adresseComposanteInscription
                             ]
                         ]
 
@@ -108,18 +151,23 @@ class LheoXML {
                     'organisme-formation-responsable' => [
                         'numero-activite' => 'XXXXXXXXXXX', // A CHANGER 
                         'SIRET-organisme-formation' => ['SIRET' => '19511296600799'], // A VERIFIER
-                        'nom-organisme' => 'UNIVERSITE DE REIMS CHAMPAGNE-ARDENNE (URCA)',
+                        'nom-organisme' => 'UNIVERSITE DE REIMS CHAMPAGNE-ARDENNE',
                         'raison-sociale' => 'XXXXXXXXXXXX', // A CHANGER
                         'coordonnees-organisme' => [
+                            // Coordonnées de l'URCA
                             'coordonnees' => [
-                                // Coordonnées complètes de l'organisme responsable de l'offre
-                                // COORDONNEES DU SECRETARIAT ?
+                                'adresse' => [
+                                    'denomination' => 'Université de Reims Champagne-Ardenne',
+                                    'ligne' => '2 Avenue Robert Schuman',
+                                    'codepostal' => '51724',
+                                    'ville' => 'REIMS CEDEX'
+                                ]              
                             ]
                         ],
                         'contact-organisme' => [
                             'coordonnees' => [
-                                // Coordonnées d'une personne de l'organisme responsable de l'offre
-                                // Quelles coordonnées ?
+                                // Coordonnées secrétariat global de l'URCA
+                                'web' => ['urlweb' => 'https://www.univ-reims.fr/contact/contactez-nous,23,32.html']
                             ]
                         ]
                     ]

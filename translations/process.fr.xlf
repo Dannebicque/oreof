@@ -769,5 +769,35 @@
         <target>voir.le.pv</target>
       </segment>
     </unit>
+    <unit id="qj8QRom" name="historique.validation.conseil">
+      <segment>
+        <source>historique.validation.conseil</source>
+        <target>historique.validation.conseil</target>
+      </segment>
+    </unit>
+    <unit id="kzVOrKc" name="historique.validation.dpe">
+      <segment>
+        <source>historique.validation.dpe</source>
+        <target>historique.validation.dpe</target>
+      </segment>
+    </unit>
+    <unit id="gALWzz7" name="historique.validation.formation">
+      <segment>
+        <source>historique.validation.formation</source>
+        <target>historique.validation.formation</target>
+      </segment>
+    </unit>
+    <unit id="p3aMpra" name="historique.validation.parcours_rf">
+      <segment>
+        <source>historique.validation.parcours_rf</source>
+        <target>historique.validation.parcours_rf</target>
+      </segment>
+    </unit>
+    <unit id="emue.kQ" name="historique.validation.parcours">
+      <segment>
+        <source>historique.validation.parcours</source>
+        <target>historique.validation.parcours</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

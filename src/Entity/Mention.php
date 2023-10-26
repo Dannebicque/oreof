@@ -14,6 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: MentionRepository::class)]
 class Mention
 {
@@ -31,12 +33,14 @@ class Mention
 //    #[ORM\Column(length: 255)]
 //    private ?string $typeDiplome = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'mentions')]
     private ?Domaine $domaine = null;
 
     #[ORM\ManyToOne(inversedBy: 'mentions')]
     private ?TypeDiplome $typeDiplome = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'mention', targetEntity: Formation::class)]
     private Collection $formations;
 

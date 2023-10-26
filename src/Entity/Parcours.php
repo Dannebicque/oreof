@@ -21,6 +21,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: ParcoursRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Parcours
@@ -28,6 +30,11 @@ class Parcours
     use LifeCycleTrait;
 
     public const PARCOURS_DEFAUT = 'Parcours par défaut';
+
+    // Fix serializing | Non relié à la BD
+    public ?string $updatedValue = null;
+    public ?string $updatedEntity = null;
+    public ?string $createdValue = null;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -37,6 +44,7 @@ class Parcours
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours', fetch: 'EAGER')]
     private ?Formation $formation;
 
@@ -156,6 +164,7 @@ class Parcours
     #[ORM\ManyToOne(inversedBy: 'coParcours')]
     private ?User $coResponsable = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'parcoursEnfants')]
     private ?self $parcoursParent = null;
 

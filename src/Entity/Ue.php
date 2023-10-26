@@ -15,6 +15,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: UeRepository::class)]
 class Ue
 {
@@ -26,6 +28,7 @@ class Ue
     #[ORM\Column]
     private ?int $ordre = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?Semestre $semestre = null;
 
@@ -40,6 +43,7 @@ class Ue
         'persist',
         'remove'
     ], orphanRemoval: true)]
+    
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $elementConstitutifs;
 
@@ -49,6 +53,7 @@ class Ue
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class)]
     private Collection $ueMutualisables;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?UeMutualisable $ueRaccrochee = null;
 

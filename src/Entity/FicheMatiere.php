@@ -19,6 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: FicheMatiereRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class FicheMatiere
@@ -28,6 +30,11 @@ class FicheMatiere
     public const TYPE_MATIERE_COURS = 'matiere';
     public const TYPE_MATIERE_SAE = 'sae';
     public const TYPE_MATIERE_RESSOURCE = 'ressource';
+
+    // Fix serializing | Non relié à la BD
+    public ?string $updatedValue = null;
+    public ?string $updatedEntity = null;
+    public ?string $createdValue = null;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -55,6 +62,7 @@ class FicheMatiere
     #[Groups(['fiche_matiere:read'])]
     private ?string $objectifs = null;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'ficheMatieres', cascade: ['persist'])]
     private Collection $competences;
 
@@ -99,6 +107,7 @@ class FicheMatiere
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: ElementConstitutif::class, cascade: ['persist', 'remove'])]
     private Collection $elementConstitutifs;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'ficheMatieres')]
     private ?Parcours $parcours = null;
 
@@ -176,6 +185,7 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?float $ects = null;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'ficheMatieres')]
     private Collection $composante;
 

@@ -24,6 +24,8 @@ use Gedmo\Sluggable\Handler\RelativeSlugHandler;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Formation

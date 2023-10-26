@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: TypeDiplomeRepository::class)]
 class TypeDiplome
 {
@@ -39,18 +41,23 @@ class TypeDiplome
     #[ORM\Column(length: 255)]
     private ?string $ModeleMcc = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'typeDiplome', targetEntity: Formation::class)]
     private Collection $formations;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'typeDiplome', targetEntity: Mention::class)]
     private Collection $mentions;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: TypeEc::class, mappedBy: 'typeDiplomes')]
     private Collection $typeEcs;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: TypeUe::class, mappedBy: 'typeDiplomes')]
     private Collection $typeUes;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: TypeEpreuve::class, mappedBy: 'typeDiplomes')]
     private Collection $typeEpreuves;
 

@@ -12,6 +12,8 @@ namespace App\Entity;
 use App\Repository\SemestreParcoursRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: SemestreParcoursRepository::class)]
 class SemestreParcours
 {
@@ -19,9 +21,12 @@ class SemestreParcours
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
     private ?Semestre $semestre = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
     private ?Parcours $parcours = null;
 
