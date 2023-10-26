@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.1](https://github.com/Dannebicque/oreof/compare/v1.16.0...v1.16.1) (2023-10-26)
+
+
+### Bug Fixes
+
+* Inversion colonne MCCC ([54f3a33](https://github.com/Dannebicque/oreof/commit/54f3a337eee21c2c73e86fd8199d85f9914a4e63))
+
 ## [1.16.0](https://github.com/Dannebicque/oreof/compare/v1.15.25...v1.16.0) (2023-10-25)
 
 
