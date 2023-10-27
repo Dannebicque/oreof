@@ -178,6 +178,10 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: CommentaireParcours::class)]
     private Collection $commentaires;
 
+    #[Ignore]
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ParcoursVersioning::class)]
+    private Collection $parcoursVersionings;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -195,6 +199,7 @@ class Parcours
         $this->historiqueParcours = new ArrayCollection();
         $this->elementConstitutifs = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
+        $this->parcoursVersionings = new ArrayCollection();
     }
 
 
@@ -998,6 +1003,36 @@ class Parcours
             // set the owning side to null (unless already changed)
             if ($commentaireParcour->getParcours() === $this) {
                 $commentaireParcour->setParcours(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ParcoursVersioning>
+     */
+    public function getParcoursVersionings(): Collection
+    {
+        return $this->parcoursVersionings;
+    }
+
+    public function addParcoursVersioning(ParcoursVersioning $parcoursVersioning): static
+    {
+        if (!$this->parcoursVersionings->contains($parcoursVersioning)) {
+            $this->parcoursVersionings->add($parcoursVersioning);
+            $parcoursVersioning->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParcoursVersioning(ParcoursVersioning $parcoursVersioning): static
+    {
+        if ($this->parcoursVersionings->removeElement($parcoursVersioning)) {
+            // set the owning side to null (unless already changed)
+            if ($parcoursVersioning->getParcours() === $this) {
+                $parcoursVersioning->setParcours(null);
             }
         }
 

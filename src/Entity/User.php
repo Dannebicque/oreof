@@ -73,12 +73,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isValidDpe = false;
 
+    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $dateValideDpe = null;
 
     #[ORM\Column]
     private ?bool $isValideAdministration = false;
 
+    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $dateValideAdministration = null;
 

@@ -53,10 +53,10 @@ class Ue
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class)]
     private Collection $ueMutualisables;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?UeMutualisable $ueRaccrochee = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ueEnfants')]
     private ?self $ueParent = null;
 

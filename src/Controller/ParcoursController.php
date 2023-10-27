@@ -18,6 +18,7 @@ use App\DTO\HeuresEctsSemestre;
 use App\DTO\HeuresEctsUe;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Entity\ParcoursVersioning;
 use App\Entity\SemestreParcours;
 use App\Events\AddCentreParcoursEvent;
 use App\Form\ParcoursType;
@@ -26,6 +27,7 @@ use App\Repository\ParcoursRepository;
 use App\Service\LheoXML;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
+use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,6 +36,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Test\Constraint\ResponseIsUnprocessable;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -369,18 +372,58 @@ class ParcoursController extends BaseController
         }
     }
 
-    #[Route('/{parcours}/versioning/save', name: 'app_parcours_versioning_save')]
-    public function saveIntoVersioning(Parcours $parcours) : Response {
+    #[Route('/{parcours}/versioning/json_data', name: 'app_parcours_versioning_json_data')]
+    public function displayParcoursJsonData(Parcours $parcours) : Response {
+        // Définition du serializer
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)], [new JsonEncoder()]);
         try {
+            // Création de la réponse JSON au client
             $json = $serializer->serialize($parcours, 'json');
             return new Response($json, 200, ['Content-Type' => 'application/json']);
         }
         catch(\Exception $e){
-            return new Response(json_encode(['error' => 'Une erreur interne est survenue.']), 200, ['Content-Type' => 'application/json']);
+            // Si erreur lors de la serialization
+            return new Response(json_encode(['error' => 'Une erreur interne est survenue.']), 422, ['Content-Type' => 'application/json']);
         }
 
+    }
+
+    #[Route('/{parcours}/versioning/save', name: 'app_parcours_versioning_save')]
+    public function saveParcoursIntoJson(Parcours $parcours, Filesystem $fileSystem, EntityManagerInterface $entityManager){
+        // Définition du serializer
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)], [new JsonEncoder()]);
+        try{
+            $now = new DateTimeImmutable('now');
+            $dateHeure = $now->format('d-m-Y_H-i-s');
+            // Objet BD Parcours Versioning
+            $parcoursVersioning = new ParcoursVersioning();
+            $parcoursVersioning->setParcours($parcours);
+            $parcoursVersioning->setVersionTimestamp($now);
+            // Nom du fichier
+            $fileName = "parcours-{$parcours->getId()}-{$dateHeure}";
+            $parcoursVersioning->setFileName($fileName);
+            $entityManager->persist($parcoursVersioning);
+            $entityManager->flush();
+
+            $json = $serializer->serialize($parcours, 'json');
+            $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$fileName}", $json);
+
+            return new Response(
+                json_encode(['success' => 'Parcours versionné avec succès']), 
+                200,
+                ['Content-Type' => 'application/json']
+            );
+
+        }catch(\Exception $e){
+            return new Response(
+                json_encode(['error' => 'Une erreur interne est survenue.']), 
+                422,
+                ['Content-Type' => 'application/json']
+            );
+        }
+        
     }
 
     // #[Route('/versioning/save_all')]

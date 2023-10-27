@@ -14,22 +14,53 @@ class ParcoursVersioning
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $json_data = null;
+    #[ORM\ManyToOne(inversedBy: 'parcoursVersionings')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Parcours $parcours = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $version_timestamp = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $fileName = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getJsonData(): ?string
+    public function getParcours(): ?Parcours
     {
-        return $this->json_data;
+        return $this->parcours;
     }
 
-    public function setJsonData(string $json_data): static
+    public function setParcours(?Parcours $parcours): static
     {
-        $this->json_data = $json_data;
+        $this->parcours = $parcours;
+
+        return $this;
+    }
+
+    public function getVersionTimestamp(): ?\DateTimeImmutable
+    {
+        return $this->version_timestamp;
+    }
+
+    public function setVersionTimestamp(\DateTimeImmutable $version_timestamp): static
+    {
+        $this->version_timestamp = $version_timestamp;
+
+        return $this;
+    }
+
+    public function getFileName(): ?string
+    {
+        return $this->fileName;
+    }
+
+    public function setFileName(string $fileName): static
+    {
+        $this->fileName = $fileName;
 
         return $this;
     }
