@@ -31,11 +31,6 @@ class FicheMatiere
     public const TYPE_MATIERE_SAE = 'sae';
     public const TYPE_MATIERE_RESSOURCE = 'ressource';
 
-    // Fix serializing | Non relié à la BD
-    public ?string $updatedValue = null;
-    public ?string $updatedEntity = null;
-    public ?string $createdValue = null;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -140,6 +135,7 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?float $volumeTe = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: Mccc::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $mcccs;
 

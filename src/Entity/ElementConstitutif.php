@@ -25,11 +25,6 @@ class ElementConstitutif
 {
     use LifeCycleTrait;
 
-    // Fix serializing | Non relié à la BD
-    public ?string $updatedValue = null;
-    public ?string $updatedEntity = null;
-    public ?string $createdValue = null;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

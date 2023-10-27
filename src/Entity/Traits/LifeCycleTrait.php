@@ -62,4 +62,18 @@ trait LifeCycleTrait
     {
         $this->created = new DateTimeImmutable('now');
     }
+
+    // Fix pour la serialization
+    public function getUpdatedValue(){
+        return $this->updated;
+    }
+    // Fix pour la serialization
+    public function getUpdatedEntity(){
+        return new DateTimeImmutable('now');
+    }
+    // Fix pour la serialization
+    public function getCreatedValue(){
+        return $this->created;
+    }
+
 }

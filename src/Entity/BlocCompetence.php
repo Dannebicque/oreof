@@ -39,6 +39,7 @@ class BlocCompetence
     #[ORM\ManyToOne(inversedBy: 'blocCompetences')]
     private ?Parcours $parcours = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'blocCompetences')]
     private ?Formation $formation = null;
 

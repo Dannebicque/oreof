@@ -34,6 +34,7 @@ class TypeEc
     #[ORM\OneToMany(mappedBy: 'typeEc', targetEntity: ElementConstitutif::class)]
     private Collection $elementConstitutifs;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'typeEcs')]
     private ?Formation $formation = null;
 

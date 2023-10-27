@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: ButCompetenceRepository::class)]
 class ButCompetence
 {
@@ -25,6 +27,7 @@ class ButCompetence
     #[ORM\Column]
     private ?int $numero = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'butCompetences')]
     private ?Formation $formation = null;
 
@@ -34,6 +37,7 @@ class ButCompetence
     #[ORM\Column(nullable: true)]
     private array $composantes = [];
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'competence', targetEntity: ButNiveau::class)]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $butNiveaux;

@@ -27,6 +27,7 @@ use App\Service\LheoXML;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -372,8 +373,29 @@ class ParcoursController extends BaseController
     public function saveIntoVersioning(Parcours $parcours) : Response {
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)], [new JsonEncoder()]);
-        $json = $serializer->serialize($parcours, 'json');
+        try {
+            $json = $serializer->serialize($parcours, 'json');
+            return new Response($json, 200, ['Content-Type' => 'application/json']);
+        }
+        catch(\Exception $e){
+            return new Response(json_encode(['error' => 'Une erreur interne est survenue.']), 200, ['Content-Type' => 'application/json']);
+        }
 
-        return new Response($json, 200, ['Content-Type' => 'application/json']);
     }
+
+    // #[Route('/versioning/save_all')]
+    // public function testVersioningAllParcours(EntityManagerInterface $entityManager) : Response {
+    //     $json = ['État' => 'OK', 'Message' => "Le versioning de tous les parcours s'est déroulé avec succès"];
+    //     $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+    //     $serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)], [new JsonEncoder()]);
+
+    //     $allParcours = $entityManager->getRepository(Parcours::class)->findAllParcoursId();
+
+    //     foreach($allParcours as $parcoursId){
+    //         $parcours = $entityManager->getRepository(Parcours::class)->find(['id' => $parcoursId['id']]);
+    //         $serializer->serialize($parcours, 'json');
+    //     }
+
+    //     return new Response(json_encode($json), 200, ['Content-Type' => 'application/json']);
+    // }
 }

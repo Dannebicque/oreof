@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: ButApprentissageCritiqueRepository::class)]
 class ButApprentissageCritique
 {
@@ -29,6 +31,7 @@ class ButApprentissageCritique
     /** @deprecated  */
     private Collection $elementConstitutifs;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'apprentissagesCritiques')]
     private Collection $ficheMatieres;
 

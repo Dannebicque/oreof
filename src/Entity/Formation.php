@@ -123,6 +123,7 @@ class Formation
     #[ORM\Column(length: 10)]
     private ?string $version = '0.1';
 
+    #[Ignore]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'formationsAnterieures')]
     private ?self $versionParent = null;
 
