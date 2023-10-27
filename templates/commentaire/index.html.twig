@@ -10,8 +10,17 @@
 {% endblock %}
 
 {% block bouton_header %}
-
+    <a href="{{ path('app_commentaire_export')  }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Télécharger en PDF"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Télécharger en PDF</span>
+    </a>
 {% endblock %}
+
 {% block content %}
     <h2 class="small-title">Vos commentaires</h2>
     <div class="card">
@@ -24,12 +33,12 @@
                             <div class="card-body d-flex flex-row pt-0 pb-0 ps-3 pe-0 h-100 align-items-center justify-content-between">
                                 <div class="d-flex flex-column">
                                     <div>
-                                        {% if commentaire.formation != null %}
-                                            {{ commentaire.formation.displayLong }}
-                                        {% elseif commentaire.parcours != null %}
-                                            {{ commentaire.parcours.libelle }} / {{ commentaire.parcours.formation.displayLong }}
-                                        {% elseif commentaire.ficheMatiere != null %}
-                                            {{ commentaire.ficheMatiere.display }}
+                                        {% if commentaire.formation is defined and commentaire.formation != null %}
+                                            <span class="badge bg-info">Formation</span> {{ commentaire.formation.displayLong }}
+                                        {% elseif commentaire.parcours is defined and commentaire.parcours != null %}
+                                            <span class="badge bg-primary">Parcours</span> {{ commentaire.parcours.libelle }} / {{ commentaire.parcours.formation.displayLong }}
+                                        {% elseif commentaire.ficheMatiere is defined and commentaire.ficheMatiere != null %}
+                                            <span class="badge bg-warning">Fiche EC</span> {{ commentaire.ficheMatiere.display }}
                                         {% else %}
                                             Erreur
                                         {% endif %}
@@ -41,11 +50,11 @@
                                 </div>
                                 <div class="d-flex">
                                     <a class="btn btn-outline-info btn-sm ms-1" type="button"
-                                            {% if commentaire.formation != null %}
+                                            {% if commentaire.formation is defined and commentaire.formation != null %}
                                                 {% set url = path('app_formation_show', {slug:commentaire.formation.slug})~'#'~commentaire.zone %}
-                                            {% elseif commentaire.parcours != null %}
+                                            {% elseif commentaire.parcours is defined and commentaire.parcours != null %}
                                                 {% set url = path('app_parcours_show', {id:commentaire.parcours.id})~'#'~commentaire.zone %}
-                                            {% elseif commentaire.ficheMatiere != null %}
+                                            {% elseif commentaire.ficheMatiere is defined and commentaire.ficheMatiere != null %}
                                                 {% set url = path('app_fiche_matiere_show', {slug:commentaire.ficheMatiere.slug})~'#'~commentaire.zone %}
                                             {% else %}
                                                 {% set url = '' %}

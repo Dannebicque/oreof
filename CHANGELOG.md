@@ -2,6 +2,109 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.1](https://github.com/Dannebicque/oreof/compare/v1.16.0...v1.16.1) (2023-10-26)
+
+
+### Bug Fixes
+
+* Inversion colonne MCCC ([54f3a33](https://github.com/Dannebicque/oreof/commit/54f3a337eee21c2c73e86fd8199d85f9914a4e63))
+
+## [1.16.0](https://github.com/Dannebicque/oreof/compare/v1.15.25...v1.16.0) (2023-10-25)
+
+
+### Features
+
+* Affichage pour les conseillers ([6f1050a](https://github.com/Dannebicque/oreof/commit/6f1050a7723706db190b27f7498f8b851348ae28))
+
+
+### Bug Fixes
+
+* Réécriture mail CFVU/Hors URCA ([bd3e70a](https://github.com/Dannebicque/oreof/commit/bd3e70aa8c5e1af9fe6822469fd6bfd1413d5b2e))
+
+### [1.15.25](https://github.com/Dannebicque/oreof/compare/v1.15.24...v1.15.25) (2023-10-25)
+
+
+### Features
+
+* affichage CFVU ([da3f811](https://github.com/Dannebicque/oreof/commit/da3f811bcf524f8e615d665a675c6afe8386f9d3))
+
+### [1.15.24](https://github.com/Dannebicque/oreof/compare/v1.15.23...v1.15.24) (2023-10-25)
+
+
+### Bug Fixes
+
+* ECTS des UE ([3464b81](https://github.com/Dannebicque/oreof/commit/3464b8152366e7e523a8e10dba83b94e293a867f))
+* Historique réponse unique ([57794da](https://github.com/Dannebicque/oreof/commit/57794da3e971856a5fa4db9d9489471c33f5b1ff))
+* vérif % MCCC ([8be4565](https://github.com/Dannebicque/oreof/commit/8be456527a4fbc260f2b971a8a524e24e18459a3))
+
+### [1.15.23](https://github.com/Dannebicque/oreof/compare/v1.15.22...v1.15.23) (2023-10-23)
+
+
+### Bug Fixes
+
+* sigle sur null ([cbe2e86](https://github.com/Dannebicque/oreof/commit/cbe2e861d4e8a6206541ee13627cc8d57e1f20a4))
+
+### [1.15.22](https://github.com/Dannebicque/oreof/compare/v1.15.21...v1.15.22) (2023-10-23)
+
+
+### Bug Fixes
+
+* Somme ECTS sur UE ([9ae878c](https://github.com/Dannebicque/oreof/commit/9ae878c915a5f5f5546776a016e1ec01dba95697))
+
+### [1.15.21](https://github.com/Dannebicque/oreof/compare/v1.15.20...v1.15.21) (2023-10-22)
+
+
+### Features
+
+* commentaire en pdf ([936f8c0](https://github.com/Dannebicque/oreof/commit/936f8c0404ecd87cadd0466f3392f638bc4e8a2d))
+* commentaire sur parcours ([d093611](https://github.com/Dannebicque/oreof/commit/d093611677f5cf1e5dd4a364c5fe665972dd971e))
+* validation/composante ([7456389](https://github.com/Dannebicque/oreof/commit/7456389df8137ad78997d2d46c98869e0336700c))
+* validation/composante ([b66a267](https://github.com/Dannebicque/oreof/commit/b66a267ecc3e5269ad566297e14e8f2e74959623))
+
+
+### Bug Fixes
+
+* ec sans fiche matière en BUT ([b7522c4](https://github.com/Dannebicque/oreof/commit/b7522c418d83d3b8ecdf20ba52ae7ac000648b3c))
+* ec sans fiche matière en BUT ([11e3e37](https://github.com/Dannebicque/oreof/commit/11e3e37c2e236943553ee44e59d2356fecd05140))
+* export pdf ([94175a2](https://github.com/Dannebicque/oreof/commit/94175a258046bdcaccb7fe69388ec325663770fb))
+* Exports des fichiers en "masse" ([9b107f7](https://github.com/Dannebicque/oreof/commit/9b107f79528fcb14266d0f7abd562fc6936824d6))
+* ue sans nature ([edb3d56](https://github.com/Dannebicque/oreof/commit/edb3d5666f47ac55062f86813cb37e70ef376d72))
+
+### [1.15.20](https://github.com/Dannebicque/oreof/compare/v1.15.19...v1.15.20) (2023-10-21)
+
+
+### Bug Fixes
+
+* ec sans fiche matière en BUT ([b951050](https://github.com/Dannebicque/oreof/commit/b951050f1083384a66b3e022a79ee2dcd1b462a0))
+
+### [1.15.19](https://github.com/Dannebicque/oreof/compare/v1.15.18...v1.15.19) (2023-10-20)
+
+
+### Features
+
+* replyto sur mails central ([c559fee](https://github.com/Dannebicque/oreof/commit/c559fee3b134ecae9286612db2765c4ebacd8cc0))
+
+
+### Bug Fixes
+
+* BCC de BUT ([681a931](https://github.com/Dannebicque/oreof/commit/681a931057f7b48ae4fcf94320cd53bbe08d3d5f))
+* Ne pas générer les onglets si semestre non dispensé ([ba1b3e0](https://github.com/Dannebicque/oreof/commit/ba1b3e05c9874af61cd2c6feab21ebd78ffa59be))
+* Ne pas générer les onglets si semestre non dispensé ([343a194](https://github.com/Dannebicque/oreof/commit/343a1942c15919e092bffc69ffd61166c89a79e4))
+
+### [1.15.18](https://github.com/Dannebicque/oreof/compare/v1.15.17...v1.15.18) (2023-10-19)
+
+
+### Bug Fixes
+
+* BCC de BUT ([eb4b4de](https://github.com/Dannebicque/oreof/commit/eb4b4de2542e34b15c6b98a32ae429de5000a852))
+* calcul ECT sur la vérification ([dfd6c6a](https://github.com/Dannebicque/oreof/commit/dfd6c6a8da28c40a0502d40e624d56ec7c4327a7))
+* calcul ECT sur la vérification ([5a6505b](https://github.com/Dannebicque/oreof/commit/5a6505b6e109b9267e3106cfb1fc8e87bfa7ca5b))
+* calcul ECT sur la vérification ([ecd44bc](https://github.com/Dannebicque/oreof/commit/ecd44bc2b1c6306dfc935f78efb9e59280003176))
+* calcul ECT sur la vérification ([149f772](https://github.com/Dannebicque/oreof/commit/149f772acfc627edbbc12ec6a7c35e2b490e34fa))
+* ECTS null ([5884732](https://github.com/Dannebicque/oreof/commit/5884732b7072470e314e7273f37c570269f07dc2))
+* Ressources BUT Excel ([6a04923](https://github.com/Dannebicque/oreof/commit/6a04923df2557e4e317a16ada8524dd26ac9a8b8))
+* Ressources BUT Excel ([9efc475](https://github.com/Dannebicque/oreof/commit/9efc47559d2034d59773ad81a98892007a39f79c))
+
 ### [1.15.17](https://github.com/Dannebicque/oreof/compare/v1.15.16...v1.15.17) (2023-10-18)
 
 

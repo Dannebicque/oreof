@@ -15,14 +15,18 @@ use App\Entity\Ue;
 
 abstract class GetUeEcts
 {
-    public static function getEcts(Ue $ue, Parcours $parcours, TypeDiplome $typeDiplome): float
+    public static function getEcts(Ue $ue, Parcours $parcours, TypeDiplome $typeDiplome): ?float
     {
         if ($typeDiplome->getLibelleCourt() === 'BUT') {
-            return $ue->getEcts();
+            return $ue->getEcts() ?? 0.0;
+        }
+
+        if ($ue->getUeRaccrochee() !== null) {
+            $ue= $ue->getUeRaccrochee()->getUe();
         }
 
         if ($ue->getUeEnfants()->count() === 0) {
-            return self::totalEctsUe($ue, $parcours);
+            return self::totalEctsUe($ue, $parcours) ?? 0.0;
         }
 
         $tEcts = [];
@@ -32,7 +36,7 @@ abstract class GetUeEcts
         return min($tEcts) ?? 0.0;
     }
 
-    private static function totalEcts(Ue $ue, Parcours $parcours): float
+    private static function totalEcts(Ue $ue, Parcours $parcours): ?float
     {
         if ($ue->getNatureUeEc()?->isLibre()) {
             return $ue->getEcts();
@@ -57,7 +61,7 @@ abstract class GetUeEcts
         return $totalEctsUe;
     }
 
-    private static function totalEctsUe(Ue $ue, Parcours $parcours): float
+    private static function totalEctsUe(Ue $ue, Parcours $parcours): ?float
     {
         if ($ue->getUeRaccrochee() !== null) {
             if ($ue->getUeRaccrochee()->getUe() !== null) {

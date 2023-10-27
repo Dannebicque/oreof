@@ -11,10 +11,10 @@ namespace App\Classes\Export;
 
 use App\Classes\MyPDF;
 use App\Entity\AnneeUniversitaire;
+use App\Repository\FormationRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use DateTimeInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class Export
 {
@@ -24,8 +24,10 @@ class Export
     private AnneeUniversitaire $annee;
     private DateTimeInterface $date;
     private string $dir;
+    private mixed $export;
 
     public function __construct(
+        protected ExportMccc $exportMccc,
         KernelInterface $kernel,
         private TypeDiplomeRegistry $typeDiplomeRegistry,
         private MyPDF $myPDF
@@ -56,10 +58,12 @@ class Export
     private function export(): string
     {
         switch ($this->typeDocument) {
-            case 'conseil':
+            case 'fiche':
                 return $this->exportConseil();
             case 'mccc':
                 return $this->exportMccc();
+            case 'light_mccc':
+                return $this->exportMccc(true);
         }
     }
 
@@ -74,14 +78,16 @@ class Export
         return $this->export->exportZip();
     }
 
-    private function exportMccc() : string
+    private function exportMccc(bool $isLight = false) : string
     {
-        $this->export = new ExportMccc(
+        $this->exportMccc->export(
             $this->dir,
             $this->typeDiplomeRegistry,
             $this->formations,
             $this->annee,
-            $this->date);
-        return $this->export->exportZip();
+            $this->date,
+            $this->format,
+            $isLight);
+        return $this->exportMccc->exportZip();
     }
 }

@@ -101,7 +101,6 @@
             <!-- Menu Start -->
             <div class="menu-container flex-grow-1">
                 <ul id="menu" class="menu">
-
                     <li>
                         <a href="{{ path('app_homepage') }}">
                             <i class="fal fa-home icon"></i>
@@ -109,47 +108,55 @@
                         </a>
                     </li>
 
-                    <li>
-                        <a href="#offre_formation" data-href="offre_formation">
-                            <i class="fal fa-chalkboard-user icon"></i>
-                            <span class="label">Offre de formation</span>
-                        </a>
-                        <ul id="offre_formation">
-                            <li>
-                                <a href="{{ path('app_formation_index') }}">
-                                    <i class="fal fa-book icon"></i>
-                                    <span class="label">Détail des mentions/spécialités</span>
-                                </a>
-                            </li>
+                    {% if not is_granted('CAN_ETABLISSEMENT_CONSEILLER_ALL') %}
+                        <li>
+                            <a href="#offre_formation" data-href="offre_formation">
+                                <i class="fal fa-chalkboard-user icon"></i>
+                                <span class="label">Offre de formation</span>
+                            </a>
+                            <ul id="offre_formation">
+                                <li>
+                                    <a href="{{ path('app_formation_index') }}">
+                                        <i class="fal fa-book icon"></i>
+                                        <span class="label">Détail des mentions/spécialités</span>
+                                    </a>
+                                </li>
 
-                            <li>
-                                <a href="{{ path('app_parcours_index') }}">
-                                    <i class="fal fa-shuffle icon"></i>
-                                    <span class="label">Détail des parcours</span>
-                                </a>
-                            </li>
+                                <li>
+                                    <a href="{{ path('app_parcours_index') }}">
+                                        <i class="fal fa-shuffle icon"></i>
+                                        <span class="label">Détail des parcours</span>
+                                    </a>
+                                </li>
 
-                            <li>
-                                <a href="{{ path('structure_fiche_matiere_index') }}">
-                                    <i class="fal fa-person-chalkboard icon"></i>
-                                    <span class="label">Détail des fiches EC/matière</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ path('structure_fiche_matiere_index', {type:'hd'}) }}">
-                                    <i class="fal fa-person-chalkboard icon"></i>
-                                    <span class="label">Fiches EC/matière "hors diplôme"</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ path('app_mutualise_index') }}">
-                                    <i class="fal fa-share-nodes icon"></i>
-                                    <span class="label">Détail des éléments mutualisés</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
+                                <li>
+                                    <a href="{{ path('structure_fiche_matiere_index') }}">
+                                        <i class="fal fa-person-chalkboard icon"></i>
+                                        <span class="label">Détail des fiches EC/matière</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('structure_fiche_matiere_index', {type:'hd'}) }}">
+                                        <i class="fal fa-person-chalkboard icon"></i>
+                                        <span class="label">Fiches EC/matière "hors diplôme"</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_mutualise_index') }}">
+                                        <i class="fal fa-share-nodes icon"></i>
+                                        <span class="label">Détail des éléments mutualisés</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ path('app_export_cfvu') }}" data-href="exports">
+                                <i class="fal fa-chalkboard-user icon"></i>
+                                <span class="label">Exports</span>
+                            </a>
+                        </li>
+                    {% endif %}
 
                     {% if is_granted('ROLE_SES') %}
                         <li>
@@ -378,7 +385,7 @@
                         <li class="mega">
                             <a href="#administration" data-href="administration">
                                 <i class="fal fa-wrench icon"></i>
-                                <span class="label">Administration</span>
+                                <span class="label">Mes composantes</span>
                             </a>
                             <ul id="administration">
                                 <li>
@@ -398,6 +405,32 @@
                                         </li>
                                     </ul>
                                 </li>
+                                {% for composante in app.user.composanteResponsableDpe %}
+                                    {% if is_granted('CAN_COMPOSANTE_VALIDATE_MY', composante) %}
+                                        <li>
+                                            <a href="#utilisateurs">
+                                                <span class="label">{{ composante.libelle }}</span>
+                                            </a>
+                                            <ul id="utilisateurs">
+                                                <li>
+                                                    <a href="{{ path('app_composante', {composante:composante.id}) }}">
+                                                        <span class="label">Détails de la composante</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ path('app_validation_composante_index', {composante:composante.id}) }}">
+                                                        <span class="label">Processus validation</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ path('app_export_composante_index', {composante:composante.id}) }}">
+                                                        <span class="label">Export</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
                             </ul>
                         </li>
                     {% endif %}

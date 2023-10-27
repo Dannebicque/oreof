@@ -25,16 +25,16 @@ export default class extends Controller {
       if (item.value !== '') {
         // récupérer le champ "nbnotes" le plus proche juste après
         const nbNotes = item.closest('.row').querySelector('.nbnotes').value
-        console.log(nbNotes)
         total += parseFloat(item.value) * parseInt(nbNotes, 10)
       }
     })
+
     let message = ''
-    if (total > 100) {
+    if (total > 100.0) {
       message = '<div class="alert alert-danger">La somme des pourcentages ne peut pas dépasser 100</div>'
     }
 
-    if (total < 100) {
+    if (total < 100.0) {
       message = '<div class="alert alert-danger">La somme des pourcentages doit être égale à 100</div>'
     }
 

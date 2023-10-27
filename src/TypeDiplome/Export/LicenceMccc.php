@@ -215,7 +215,7 @@ class LicenceMccc
                         //UE
                         $debut = $ligne;
                         if (count($ue->uesEnfants) === 0) {
-                            if ($ue->ue->getNatureUeEc()->isLibre()) {
+                            if ($ue->ue->getNatureUeEc() !== null && $ue->ue->getNatureUeEc()->isLibre()) {
                                 $ligne = $this->afficheUeLibre($ligne, $ue);
                             } else {
                                 //Si des UE enfants, on affiche pas les éventuels EC résiduels,
@@ -267,7 +267,7 @@ class LicenceMccc
                         }
                         foreach ($ue->uesEnfants as $uee) {
                             $debut = $ligne;
-                            if ($uee->ue->getNatureUeEc()->isLibre()) {
+                            if ($uee->ue->getNatureUeEc() !== null && $uee->ue->getNatureUeEc()->isLibre()) {
                                 $ligne = $this->afficheUeLibre($ligne, $uee);
                             } else {
                                 foreach ($uee->elementConstitutifs as $ec) {
@@ -407,7 +407,7 @@ class LicenceMccc
         if ($formation->isHasParcours() === true) {
             $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle();
         } else {
-            $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getDisplay();
+            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getDisplay();
         }
 
         $this->fileName = Tools::FileName('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $texte, 50);
@@ -438,13 +438,15 @@ class LicenceMccc
 
         $reponse = $this->client->sendRequest($request);
 
+        if ($reponse) {
+            unlink($this->dir . '/temp/'. $this->fileName . '.xlsx');
+        }
+
         // retourner une réponse avec le contenu du PDF
         return new Response($reponse->getBody()->getContents(), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'attachment; filename="' . $this->fileName . '.pdf"',
         ]);
-
-        //todo: quand supprimer le fichier temp?
     }
 
     public function exportAndSaveExcelLicenceMccc(
@@ -457,6 +459,24 @@ class LicenceMccc
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
         $this->excelWriter->saveFichier($this->fileName, $dir);
         return $this->fileName . '.xlsx';
+    }
+
+    public function exportAndSavePdfLicenceMccc(
+        AnneeUniversitaire $anneeUniversitaire,
+        Parcours           $parcours,
+        string             $dir,
+        DateTimeInterface  $dateEdition,
+        bool               $versionFull = true
+    ): string {
+        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+
+        $fichier = $this->excelWriter->saveFichier($this->fileName, $dir);
+
+        $request = Gotenberg::libreOffice('http://localhost:3000')
+            ->outputFilename($this->fileName)
+            ->convert(Stream::path($fichier));
+
+        return Gotenberg::save($request, $dir);
     }
 
     public function getMcccs(StructureEc $structureEc): array
@@ -909,5 +929,9 @@ class LicenceMccc
 
         $ligne++;
         return $ligne;
+    }
+
+    private function generePdfLicenceMccc(AnneeUniversitaire $anneeUniversitaire, Parcours $parcours, DateTimeInterface $dateEdition, bool $versionFull)
+    {
     }
 }

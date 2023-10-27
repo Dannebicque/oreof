@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Classes\JsonReponse;
+use App\Entity\Composante;
 use App\Message\Export;
 use App\Repository\AnneeUniversitaireRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Utils\Tools;
-use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -16,37 +16,78 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ExportController extends BaseController
 {
+    public const TYPES_DOCUMENT = [
+        "xlsx-mccc" => 'MCCC format Excel (xslx)',
+        "pdf-mccc" => 'MCCC format PDF',
+        "xlsx-light_mccc" => 'MCCC simplifiés format Excel (xslx)',
+        "pdf-light_mccc" => 'MCCC simplifiés format PDF',
+        "pdf-fiches" => 'Fiches descriptions format PDF'
+    ];
+
+
     #[Route('/export', name: 'app_export_index')]
     public function index(
         AnneeUniversitaireRepository $anneeUniversitaireRepository,
-        ComposanteRepository $composanteRepository,
-
-    ): Response
-    {
+        ComposanteRepository         $composanteRepository,
+    ): Response {
         $this->denyAccessUnlessGranted('ROLE_SES');
 
         return $this->render('export/index.html.twig', [
             'annees' => $anneeUniversitaireRepository->findAll(),
             'composantes' => $composanteRepository->findAll(),
+            'ses' => true,
+            'isCfvu' => false,
+            'types_document' => self::TYPES_DOCUMENT,
+        ]);
+    }
+
+    #[Route('/export/cfvu', name: 'app_export_cfvu')]
+    public function exportCfvu(
+        AnneeUniversitaireRepository $anneeUniversitaireRepository,
+        ComposanteRepository         $composanteRepository,
+    ): Response {
+        $this->denyAccessUnlessGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser());
+
+        return $this->render('export/index.html.twig', [
+            'annees' => $anneeUniversitaireRepository->findAll(),
+            'composantes' => $composanteRepository->findAll(),
+            'ses' => false,
+            'isCfvu' => true,
+            'types_document' => self::TYPES_DOCUMENT,
+        ]);
+    }
+
+    #[Route('/export/composante/{composante}', name: 'app_export_composante_index')]
+    public function composante(
+        AnneeUniversitaireRepository $anneeUniversitaireRepository,
+        Composante                   $composante,
+    ): Response {
+        return $this->render('export/index.html.twig', [
+            'annees' => $anneeUniversitaireRepository->findAll(),
+            'composante' => $composante,
+            'isCfvu' => false,
+            'ses' => false,
+            'types_document' => self::TYPES_DOCUMENT,
         ]);
     }
 
     #[Route('/export/liste', name: 'app_export_liste')]
     public function liste(
         ComposanteRepository $composanteRepository,
-        FormationRepository $formationRepository,
-        Request $request
-    ): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_SES');//todo: ou DPE
-
-        $composante = $composanteRepository->find($request->query->get('composante'));
+        FormationRepository  $formationRepository,
+        Request              $request
+    ): Response {
+        $composante = $composanteRepository->find($request->query->get('composante', null));
 
         if (!$composante) {
             throw $this->createNotFoundException('La composante n\'existe pas');
         }
 
-        $formations = $formationRepository->findByComposante($composante, $this->getAnneeUniversitaire());
+        if ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser())) {
+            $formations = $formationRepository->findByComposanteCfvu($composante, $this->getAnneeUniversitaire());
+        } else {
+            $formations = $formationRepository->findByComposante($composante, $this->getAnneeUniversitaire());
+        }
 
         return $this->render('export/_liste.html.twig', [
             'formations' => $formations
@@ -55,15 +96,11 @@ class ExportController extends BaseController
 
     #[Route('/export/valide', name: 'app_export_valide')]
     public function valide(
-        MessageBusInterface $messageBus,
+        MessageBusInterface          $messageBus,
         AnneeUniversitaireRepository $anneeUniversitaireRepository,
-        ComposanteRepository $composanteRepository,
-        FormationRepository $formationRepository,
-        Request $request,
-    ): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_SES');//todo: ou DPE
-
+        ComposanteRepository         $composanteRepository,
+        Request                      $request,
+    ): Response {
         $composante = $composanteRepository->find($request->request->get('composante'));
 
         if (!$composante) {
@@ -75,22 +112,13 @@ class ExportController extends BaseController
             throw $this->createNotFoundException('L\'année universitaire n\'existe pas');
         }
 
-        $formations = [];
-
-        foreach ($request->request->all()['liste'] as $formationId) {
-            $formation = $formationRepository->findOneBy(['id' => $formationId, 'anneeUniversitaire' => $annee->getId()]);
-            if ($formation && $formation->getComposantePorteuse() === $composante) {
-                $formations[] = $formation;
-            }
-        }
-
         $messageBus->dispatch(new Export(
-            $this->getUser()->getId(),
+            $this->getUser()?->getId(),
             $request->request->get('type_document'),
-            $formations,
+            $request->request->all()['liste'],
             $annee->getId(),
             Tools::convertDate($request->request->get('date', null))
-        ) );
+        ));
 
         return JsonReponse::success('Les documents sont en cours de génération, vous recevrez un mail lorsque les documents seront prêts');
     }

@@ -82,8 +82,7 @@ class ButMccc
         protected ClientInterface        $client,
         protected FicheMatiereRepository $ficheMatiereRepository,
         protected ExcelWriter            $excelWriter,
-    )
-    {
+    ) {
         $this->dir = $kernel->getProjectDir() . '/public';
     }
 
@@ -97,8 +96,7 @@ class ButMccc
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): void
-    {
+    ): void {
         $tabColonnes = [
             'td_tp_oral' => ['pourcentage' => 'L', 'nombre' => 'M'],
             'td_tp_ecrit' => ['pourcentage' => 'N', 'nombre' => 'O'],
@@ -137,12 +135,14 @@ class ButMccc
         $tabSemestres = [];
         $semestres = $parcours->getSemestreParcours();
         foreach ($semestres as $semParc) {
-            if ($semParc->getSemestre()?->getSemestreRaccroche() !== null) {
-                $tabSemestres[$semParc->getOrdre()] = $semParc->getSemestre()?->getSemestreRaccroche();
-                $raccroche = true;
-            } else {
-                $tabSemestres[$semParc->getOrdre()] = $semParc;
-                $raccroche = false;
+            if ($semParc->getSemestre()?->isNonDispense() === false) {
+                if ($semParc->getSemestre()?->getSemestreRaccroche() !== null) {
+                    $tabSemestres[$semParc->getOrdre()] = $semParc->getSemestre()?->getSemestreRaccroche();
+                    $raccroche = true;
+                } else {
+                    $tabSemestres[$semParc->getOrdre()] = $semParc;
+                    $raccroche = false;
+                }
             }
         }
 
@@ -201,26 +201,34 @@ class ButMccc
                 } else {
                     $semestre = $tabSemestres[$i]->getSemestre();
                 }
-
+                $tabFichesRessources = [];
+                $tabFichesSaes = [];
+                $tabFichesUes = [];
                 // Affichage des UE + gestion des colonnes
                 foreach ($semestre->getUes() as $ue) {
-                    $tabFichesRessources = [];
+                    if ($ue->getUeRaccrochee() !== null) {
+                        $ue = $ue->getUeRaccrochee()->getUe();
+                    }
+
+
                     foreach ($ue->getElementConstitutifs() as $ec) {
                         $fiche = $ec->getFicheMatiere();
                         if ($fiche !== null) {
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_RESSOURCE) {
-                                $tabFichesRessources[$fiche->getSemestre()][$fiche->getSigle()] = $ec;
+                                $tabFichesRessources[$fiche->getSigle()] = $ec;
+                                $tabFichesUes[$fiche->getSigle()][$ue->getId()] = $ec->getEcts();
                             }
 
                             if ($fiche->getTypeMatiere() === FicheMatiere::TYPE_MATIERE_SAE) {
-                                $tabFichesSaes[$fiche->getSemestre()][$fiche->getSigle()] = $ec;
+                                $tabFichesSaes[$fiche->getSigle()] = $ec;
+                                $tabFichesUes[$fiche->getSigle()][$ue->getId()] = $ec->getEcts();
                             }
                         }
                     }
 
 
                     $tabColUes[$ue->getId()] = $colUe;
-                    $this->excelWriter->writeCellXY($colUe, 18, 'BC' . $ue->getId(), ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY($colUe, 18, 'BC' . $ue->getOrdre(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY($colUe, 26, $ue->getEcts(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY($colUe, 19, $ue->getLibelle(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->mergeCellsCaR($colUe, 19, $colUe, 22);
@@ -236,23 +244,23 @@ class ButMccc
                 ]]);
 
 
-                ksort($tabFichesRessources[$i]);
-                ksort($tabFichesSaes[$i]);
+                ksort($tabFichesRessources);
+                ksort($tabFichesSaes);
 
-                foreach ($tabFichesRessources[$i] as $ec) {
+                foreach ($tabFichesRessources as $ec) {
                     $fiche = $ec->getFicheMatiere();
                     $this->excelWriter->insertNewRowBefore($ligne);
                     $this->excelWriter->writeCellXY(self::COL_CODE_ELEMENT, $ligne, '', ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_CODE_EC, $ligne, $fiche->getSigle(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_INTITULE, $ligne, $fiche->getLibelle(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_VOL_ETUDIANT, $ligne, $fiche->getVolumeEtudiant(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_CM, $ligne, $fiche->getVolumeCmPresentiel() === 0 ? '' : $fiche->getVolumeCmPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_TD, $ligne, $fiche->getVolumeTdPresentiel() === 0 ? '' : $fiche->getVolumeTdPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_TP, $ligne, $fiche->getVolumeTpPresentiel() === 0 ? '' : $fiche->getVolumeTpPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY(self::COL_CM, $ligne, $fiche->getVolumeCmPresentiel() === 0.0 ? '' : $fiche->getVolumeCmPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY(self::COL_TD, $ligne, $fiche->getVolumeTdPresentiel() === 0.0 ? '' : $fiche->getVolumeTdPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXY(self::COL_TP, $ligne, $fiche->getVolumeTpPresentiel() === 0.0 ? '' : $fiche->getVolumeTpPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
 
                     //MCCC
                     $this->writeMccc($fiche, $tabColonnes, $ligne);
-                    $this->writeAcUe($ec, $ligne, $tabColUes);
+                    $this->writeAcUe($fiche, $ligne, $tabColUes, $tabFichesUes);
 
 
                     $ligne++;
@@ -264,7 +272,7 @@ class ButMccc
                 $ligne++;
                 $debutSae = $ligne;
 
-                foreach ($tabFichesSaes[$i] as $ec) {
+                foreach ($tabFichesSaes as $ec) {
                     $fiche = $ec->getFicheMatiere();
                     $this->excelWriter->insertNewRowBefore($ligne);
                     $this->excelWriter->writeCellXY(self::COL_CODE_ELEMENT, $ligne, '', ['style' => 'HORIZONTAL_CENTER']);
@@ -274,11 +282,11 @@ class ButMccc
                     $this->excelWriter->writeCellXY(self::COL_CM, $ligne, $fiche->getVolumeCmPresentiel() === 0.0 ? '' : $fiche->getVolumeCmPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_TD, $ligne, $fiche->getVolumeTdPresentiel() === 0.0 ? '' : $fiche->getVolumeTdPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
                     $this->excelWriter->writeCellXY(self::COL_TP, $ligne, $fiche->getVolumeTpPresentiel() === 0.0 ? '' : $fiche->getVolumeTpPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_HEURE_AUTONOMIE, $ligne, $fiche->getVolumeTe());
+                    $this->excelWriter->writeCellXY(self::COL_HEURE_AUTONOMIE, $ligne, $fiche->getVolumeTe() === 0.0 ? '' : $fiche->getVolumeTe());
 
                     //MCCC
                     $this->writeMccc($fiche, $tabColonnes, $ligne);
-                    $this->writeAcUe($ec, $ligne, $tabColUes);
+                    $this->writeAcUe($fiche, $ligne, $tabColUes, $tabFichesUes);
 
                     $ligne++;
                 }
@@ -315,8 +323,7 @@ class ButMccc
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): StreamedResponse
-    {
+    ): StreamedResponse {
         $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
         return $this->excelWriter->genereFichier($this->fileName);
     }
@@ -326,8 +333,7 @@ class ButMccc
         Parcours           $parcours,
         ?DateTimeInterface $dateEdition = null,
         bool               $versionFull = true
-    ): Response
-    {
+    ): Response {
         $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
 
         $fichier = $this->excelWriter->saveFichier($this->fileName, $this->dir . '/temp/');
@@ -350,8 +356,7 @@ class ButMccc
         string             $dir,
         DateTimeInterface  $dateEdition,
         bool               $versionFull = true
-    ): string
-    {
+    ): string {
         $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
         $this->excelWriter->saveFichier($this->fileName, $dir);
         return $this->fileName . '.xlsx';
@@ -363,7 +368,7 @@ class ButMccc
         foreach ($mcccs as $mccc) {
             if ($mccc->getLibelle() !== '' && array_key_exists($mccc->getLibelle(), $tabColonnes)) {
                 $this->excelWriter->writeCellXY(
-                //convertir chiffre en lettre excel
+                    //convertir chiffre en lettre excel
                     Coordinate::columnIndexFromString($tabColonnes[$mccc->getLibelle()]['pourcentage']),
                     $ligne,
                     $mccc->getPourcentage() === 0.0 ? '' : $mccc->getPourcentage() . '%',
@@ -379,15 +384,19 @@ class ButMccc
         }
     }
 
-    private function writeAcUe(ElementConstitutif $ec, int $ligne, array $tabColUes)
+    private function writeAcUe(FicheMatiere $fiche, int $ligne, array $tabColUes, array $tabFichesUes)
     {
-        if (array_key_exists($ec->getUe()?->getId(), $tabColUes)) {
-            $this->excelWriter->writeCellXY(
-                $tabColUes[$ec->getUe()?->getId()],
-                $ligne,
-                $ec->getEcts() === 0.0 ? '' : $ec->getEcts(),
-                ['style' => 'HORIZONTAL_CENTER']
-            );
+        if (array_key_exists($fiche->getSigle(), $tabFichesUes)) {
+            foreach ($tabFichesUes[$fiche->getSigle()] as $ueId => $ects) {
+                if (array_key_exists($ueId, $tabColUes)) {
+                    $this->excelWriter->writeCellXY(
+                        $tabColUes[$ueId],
+                        $ligne,
+                        $ects === 0.0 ? '' : $ects,
+                        ['style' => 'HORIZONTAL_CENTER']
+                    );
+                }
+            }
         }
     }
 }

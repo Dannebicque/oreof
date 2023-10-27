@@ -11,12 +11,6 @@ use App\Entity\Ue;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 
-/*
- * <span id="ects_ue_{{ ue.id }}_{{ parcours.id }}">
-
-                                            </span>
- */
-
 #[AsTwigComponent('badge_ects_ue')]
 final class BadgeEctsUeComponent
 {

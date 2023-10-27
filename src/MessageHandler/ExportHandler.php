@@ -42,11 +42,7 @@ class ExportHandler
                 ->from('oreof@univ-reims.fr')
                 ->to($user->getEmail())
                 ->subject('Documents prêts')
-
-                // path of the Twig template to render
                 ->htmlTemplate('mails/documents_prets.html.twig')
-
-                // pass variables (name => value) to the template
                 ->context([
                     'user' => $user,
                     'lien' => $lien,

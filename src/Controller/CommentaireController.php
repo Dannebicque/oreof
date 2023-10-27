@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Classes\GetCommentaires;
 use App\Classes\JsonReponse;
+use App\Classes\MyGotenbergPdf;
 use App\Entity\Commentaire;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +23,18 @@ class CommentaireController extends AbstractController
         return $this->render('commentaire/index.html.twig', [
             'commentaires' => $getCommentaires->getAllCommentairesByUser($this->getUser())
         ]);
+    }
+
+    #[Route('/commentaire/export', name: 'app_commentaire_export')]
+    public function export(
+        MyGotenbergPdf $myGotenbergPdf,
+        GetCommentaires $getCommentaires
+    ): Response
+    {
+        return $myGotenbergPdf->render('pdf/commentaires.html.twig', [
+            'titre' => 'Liste des commentaires',
+            'commentaires' => $getCommentaires->getAllCommentairesByUser($this->getUser())
+        ], 'commentaires_'.(new DateTime())->format('d-m-Y_H-i-s'));
     }
 
     #[Route('/commentaire/ajout', name: 'app_commentaire_ajout')]

@@ -166,7 +166,7 @@ class FicheMatiereState
                 if ($mccc->getNbEpreuves() > 0 && ($mccc->getPourcentage() === null || $mccc->getPourcentage() === 0.0)) {
                     $tab['error'][] = 'Vous devez indiquer un % pour chaque épreuve.';
                 }
-                $somme += $mccc->getPourcentage();
+                $somme += $mccc->getPourcentage() * $mccc->getNbEpreuves();
             }
 
             if ($somme !== 100.0) {

@@ -35,10 +35,6 @@ class GlobalVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-//        if (str_starts_with($attribute, 'ROLE_')) {
-//            return true;
-//        }
-
         // Attribute = CAN_{roleNiveau}_{Permission}_{portee}
         if (str_starts_with($attribute, 'CAN_')) {
             if ($this->decomposeAttribute($attribute) === false) {

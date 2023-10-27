@@ -1,0 +1,23 @@
+{% extends 'pdf/base-pdf.html.twig' %}
+
+{% block content %}
+    <h1>Vos commentaires</h1>
+    {% for commentaire in commentaires %}
+        <div>
+            {% if commentaire.formation is defined and commentaire.formation != null %}
+                <span class="badge bg-info">Formation</span> {{ commentaire.formation.displayLong }}
+            {% elseif commentaire.parcours is defined and commentaire.parcours != null %}
+                <span class="badge bg-primary">Parcours</span> {{ commentaire.parcours.libelle }} / {{ commentaire.parcours.formation.displayLong }}
+            {% elseif commentaire.ficheMatiere is defined and commentaire.ficheMatiere != null %}
+                <span class="badge bg-warning">Fiche EC</span> {{ commentaire.ficheMatiere.display }}
+            {% else %}
+                Erreur
+            {% endif %}
+            <p>
+                {{ commentaire.texte|raw }}
+            </p>
+        </div>
+        <hr>
+    {% endfor %}
+
+{% endblock %}
