@@ -202,6 +202,7 @@ class ParcoursController extends BaseController
             'typeDiplome' => $typeDiplome,
             'hasParcours' => $formation->isHasParcours(),
             'dto' => $dto,
+            'typeD' => $typeD
         ]);
     }
 

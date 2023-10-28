@@ -49,7 +49,11 @@
             <!-- Logo End -->
 
             <!-- Notifications -->
-            {{ component('notifications', {user: app.user}) }}
+            {{ component('notifications', {
+                user: app.user,
+                formation: formation is defined ? formation : null,
+                parcours: parcours is defined ? parcours : null,
+            }) }}
 
 
             <!-- Language Switch Start -->

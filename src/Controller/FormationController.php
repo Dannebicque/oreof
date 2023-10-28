@@ -380,7 +380,8 @@ class FormationController extends BaseController
         return $this->render('formation/show.html.twig', [
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
-            'tParcours' => $tParcours
+            'tParcours' => $tParcours,
+            'typeD' => $typeD
         ]);
     }
 

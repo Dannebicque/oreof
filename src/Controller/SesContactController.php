@@ -27,8 +27,13 @@ class SesContactController extends AbstractController
         ParcoursRepository  $parcoursRepository,
         Request             $request,
     ): Response {
-        $url = $request->headers->get('referer');
-        if (str_contains($url, 'formations')) {
+        if ($request->query->has('formation') && $request->query->get('formation') !== '') {
+            $formation = $formationRepository->find($request->query->get('formation'));
+        }
+
+        if ($request->query->has('parcours') && $request->query->get('parcours') !== '') {
+            $parcours = $parcoursRepository->find($request->query->get('parcours'));
+            $formation = $parcours?->getFormation();
         }
 
         if ($request->isMethod('POST')) {
@@ -60,6 +65,8 @@ class SesContactController extends AbstractController
 
         return $this->render('ses_contact/_index.html.twig', [
             'users' => $this->userRepository->findAll(),
+            'formation' => $formation ?? null,
+            'parcours' => $parcours ?? null,
         ]);
     }
 

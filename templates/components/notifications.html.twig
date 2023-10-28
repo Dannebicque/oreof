@@ -8,12 +8,13 @@
     </li>
     {% if is_granted('ROLE_SES') %}
     <li class="list-inline-item">
+        {% block contact %}
         <a href="#"
                 {{ stimulus_controller('modal', {
                     size: 'large',
                     modalTitle: 'Contacter',
                     right: true,
-                    modalUrl: path('app_ses_contact') }) }}
+                    modalUrl: path('app_ses_contact', {formation: this.formation != null ? this.formation.id : '', parcours: this.parcours != null ? this.parcours.id : ''}) }) }}
            data-action="click->modal#openModal"
            data-size="lg"
            data-bs-toggle="tooltip"
@@ -22,6 +23,7 @@
         >
             <i class="fas fa-comments"></i>
         </a>
+        {% endblock %}
     </li>
     {% endif %}
     <li class="list-inline-item">
