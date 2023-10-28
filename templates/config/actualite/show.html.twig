@@ -1,12 +1,20 @@
 <table class="table">
     <tbody>
     <tr>
-        <th>Libelle</th>
-        <td>{{ domaine.libelle }}</td>
+        <th>Titre</th>
+        <td>{{ actualite.titre }}</td>
     </tr>
     <tr>
-        <th>Sigle</th>
-        <td>{{ domaine.sigle }}</td>
+        <th>Date publication</th>
+        <td>{{ actualite.datePublication|date('d/m/y H:i') }}</td>
+    </tr>
+    <tr>
+        <th>Texte</th>
+        <td>{{ actualite.texte|raw }}</td>
+    </tr>
+    <tr>
+        <th>Affiché</th>
+        <td>{{ actualite.affiche|badgeBoolean }}</td>
     </tr>
     </tbody>
 </table>
