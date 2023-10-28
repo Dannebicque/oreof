@@ -15,7 +15,7 @@ use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\Parcours;
 
-class CalculStructureParcours
+class CalculButStructureParcours
 {
     public function calcul(Parcours $parcours): StructureParcours
     {
@@ -57,34 +57,9 @@ class CalculStructureParcours
                                 }
                                 $dtoUe->addEc($dtoEc);
                             }
+
                         }
-
-                        foreach ($ue->getUeEnfants() as $ueEnfant) {
-                            $display = $ueEnfant->display($parcours);
-                            if ($ueEnfant !== null && $ueEnfant->getUeRaccrochee() !== null) {
-                                $ueOrigine = $ueEnfant;
-                                $ueEnfant = $ueEnfant->getUeRaccrochee()->getUe();
-                                $raccrocheUeEnfant = true;
-                            } else {
-                                $raccrocheUeEnfant = $raccrocheUe;
-                            }
-
-                            if ($ueEnfant !== null) {
-                                $dtoUeEnfant = new StructureUe($ueEnfant, $raccrocheUeEnfant, $display, $ueOrigine ?? null);
-                                foreach ($ueEnfant->getElementConstitutifs() as $elementConstitutif) {
-                                    if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
-                                        $dtoEc = new StructureEc($elementConstitutif, $parcours);
-
-                                        foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
-                                            $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours);
-                                            $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
-                                        }
-                                        $dtoUeEnfant->addEc($dtoEc);
-                                    }
-                                }
-                                $dtoUe->addUeEnfant($ueEnfant->getId(), $dtoUeEnfant);
-                            }
-                        }
+                        $dtoUe->heuresEctsUe->sommeUeEcts = $ue->getEcts();
                         $dtoSemestre->addUe($ue->getId(), $dtoUe);
                     }
                 }

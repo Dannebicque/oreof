@@ -9,6 +9,8 @@
 
 namespace App\TypeDiplome\Source;
 
+use App\Classes\CalculStructureParcours;
+use App\DTO\StructureParcours;
 use App\Entity\AnneeUniversitaire;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
@@ -34,6 +36,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
     public array $typeEpreuves = [];
 
     public function __construct(
+        protected CalculStructureParcours $calculStructureParcours,
         TypeEpreuveRepository  $typeEpreuveRepository,
         EntityManagerInterface $entityManager,
         TypeDiplomeRegistry    $typeDiplomeRegistry,
@@ -45,6 +48,11 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         foreach ($tyeE as $typeEpreuve) {
             $this->typeEpreuves[$typeEpreuve->getId()] = $typeEpreuve;
         }
+    }
+
+    public function calculStructureParcours(Parcours $parcours): StructureParcours
+    {
+        return $this->calculStructureParcours->calcul($parcours);
     }
 
     public function exportExcelMccc(

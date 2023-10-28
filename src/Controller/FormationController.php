@@ -360,13 +360,21 @@ class FormationController extends BaseController
      */
     #[Route('/{slug}', name: 'app_formation_show', methods: ['GET'])]
     public function show(
+        TypeDiplomeRegistry     $typeDiplomeRegistry,
         Formation               $formation,
         CalculStructureParcours $calculStructureParcours
     ): Response {
         $typeDiplome = $formation->getTypeDiplome();
+
+        if ($typeDiplome === null) {
+            throw new \Exception('Type de diplôme non trouvé');
+        }
+
+        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+
         $tParcours = [];
         foreach ($formation->getParcours() as $parcours) {
-            $tParcours[$parcours->getId()] = $calculStructureParcours->calcul($parcours);
+            $tParcours[$parcours->getId()] = $typeD->calculStructureParcours($parcours);
         }
 
         return $this->render('formation/show.html.twig', [
