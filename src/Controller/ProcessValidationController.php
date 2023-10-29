@@ -27,11 +27,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ProcessValidationController extends AbstractController
 {
     public function __construct(
-        private EventDispatcherInterface $eventDispatcher,
-        private EntityManagerInterface   $entityManager,
-        private ValidationProcess        $validationProcess,
-        private FormationProcess         $formationProcess,
-        private ParcoursProcess          $parcoursProcess,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly EntityManagerInterface   $entityManager,
+        private readonly ValidationProcess        $validationProcess,
+        private readonly FormationProcess         $formationProcess,
+        private readonly ParcoursProcess          $parcoursProcess,
     )
     {
     }
@@ -252,7 +252,6 @@ class ProcessValidationController extends AbstractController
     public function edit(
         ParcoursRepository  $parcoursRepository,
         FormationRepository $formationRepository,
-        WorkflowInterface   $dpeWorkflow,
         Request             $request,
         string              $type,
         int                 $id
@@ -293,7 +292,6 @@ class ProcessValidationController extends AbstractController
 
             return JsonReponse::success('Validation modifiée');
         }
-
 
         return $this->render('process_validation/_edit.html.twig', [
             'etats' => $this->validationProcess->getProcess(),
