@@ -15,7 +15,6 @@ class FicheMatiereMutualisable
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'ficheMatiereParcours')]
     private ?FicheMatiere $ficheMatiere = null;
 

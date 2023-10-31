@@ -25,7 +25,6 @@ class UeMutualisable
     #[ORM\ManyToOne(inversedBy: 'ueMutualisables')]
     private ?Parcours $parcours = null;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'ueRaccrochee', targetEntity: Ue::class)]
     private Collection $ues;
 

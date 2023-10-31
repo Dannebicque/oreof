@@ -39,7 +39,6 @@ class Parcours
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
-    #[Ignore]
     #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours', fetch: 'EAGER')]
     private ?Formation $formation;
 

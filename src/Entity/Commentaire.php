@@ -38,7 +38,7 @@ abstract class Commentaire
     #[ORM\Column(length: 100)]
     private ?string $zone = null;
 
-    public function __construct(UserInterface|User $user, string $message, string $zone)
+    public function __construct(UserInterface|User|null $user, ?string $message, string $zone)
     {
         $this->created = new \DateTime();
         $this->user = $user;

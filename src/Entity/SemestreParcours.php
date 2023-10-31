@@ -22,7 +22,6 @@ class SemestreParcours
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
     private ?Semestre $semestre = null;
 
@@ -36,14 +35,17 @@ class SemestreParcours
     #[ORM\Column]
     private ?bool $porteur = false;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
     private ?SemestreMutualisable $semestreRaccroche = null;
 
-    public function __construct(Semestre $semestre, Parcours $parcours)
+    public function __construct(?Semestre $semestre, ?Parcours $parcours)
     {
         $this->setSemestre($semestre);
         $this->setParcours($parcours);
-        $this->setOrdre($semestre->getOrdre());
+        if($semestre){
+            $this->setOrdre($semestre->getOrdre());
+        }
     }
 
     public function getId(): ?int

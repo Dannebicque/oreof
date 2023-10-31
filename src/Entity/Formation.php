@@ -105,6 +105,7 @@ class Formation
     #[ORM\Column(nullable: true)]
     private ?array $structureSemestres = [];
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: Parcours::class)]
     private Collection $parcours;
 

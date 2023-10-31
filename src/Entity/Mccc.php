@@ -45,6 +45,7 @@ class Mccc
     #[ORM\ManyToOne(inversedBy: 'mcccs')]
     private ?ElementConstitutif $ec = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'mcccs')]
     private ?FicheMatiere $ficheMatiere = null;
 
@@ -54,6 +55,7 @@ class Mccc
     #[ORM\Column]
     private ?bool $examenTerminal = null;
 
+    #[Ignore]
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $duree = null;
 

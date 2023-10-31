@@ -38,7 +38,7 @@ class Ue
 
     #[ORM\ManyToOne]
     private ?NatureUeEc $natureUeEc = null;
-
+    
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: ElementConstitutif::class, cascade: [
         'persist',
         'remove'
@@ -53,6 +53,7 @@ class Ue
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class)]
     private Collection $ueMutualisables;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?UeMutualisable $ueRaccrochee = null;
 
@@ -60,6 +61,7 @@ class Ue
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ueEnfants')]
     private ?self $ueParent = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'ueParent', targetEntity: self::class, cascade: [
         'persist',
         'remove'
@@ -73,6 +75,7 @@ class Ue
     #[ORM\Column(nullable: true)]
     private ?float $ects = null;
 
+    
     public function __construct()
     {
         $this->elementConstitutifs = new ArrayCollection();
@@ -118,13 +121,17 @@ class Ue
         }
 
         if ($parcours !== null) {
-            foreach ($this->getSemestre()?->getSemestreParcours() as $semestreParcours) {
-                if ($semestreParcours->getParcours() === $parcours) {
-                    if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
-                        return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue . ' (' . $this->getLibelle() . ')';
+            if($this->getSemestre()){
+                if($this->getSemestre()->getSemestreParcours()){
+                    foreach ($this->getSemestre()?->getSemestreParcours() as $semestreParcours) {
+                        if ($semestreParcours->getParcours() === $parcours) {
+                            if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
+                                return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue . ' (' . $this->getLibelle() . ')';
+                            }
+        
+                            return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue;
+                        }
                     }
-
-                    return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue;
                 }
             }
 

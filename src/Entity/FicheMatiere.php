@@ -99,6 +99,7 @@ class FicheMatiere
     #[Groups(['fiche_matiere:read'])]
     private ?array $etatSteps = [];
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: ElementConstitutif::class, cascade: ['persist', 'remove'])]
     private Collection $elementConstitutifs;
 
@@ -106,6 +107,7 @@ class FicheMatiere
     #[ORM\ManyToOne(inversedBy: 'ficheMatieres')]
     private ?Parcours $parcours = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereMutualisable::class)]
     private Collection $ficheMatiereParcours;
 
@@ -649,7 +651,7 @@ class FicheMatiere
 
     public function getVolumeCmPresentiel(): ?float
     {
-        return $this->volumeCmPresentiel;
+        return $this->volumeCmPresentiel ?? 0;
     }
 
     public function setVolumeCmPresentiel(?float $volumeCmPresentiel = 0.0): self
@@ -661,7 +663,7 @@ class FicheMatiere
 
     public function getVolumeTdPresentiel(): ?float
     {
-        return $this->volumeTdPresentiel;
+        return $this->volumeTdPresentiel ?? 0;
     }
 
     public function setVolumeTdPresentiel(?float $volumeTdPresentiel = 0.0): self
@@ -673,7 +675,7 @@ class FicheMatiere
 
     public function getVolumeTpPresentiel(): ?float
     {
-        return $this->volumeTpPresentiel;
+        return $this->volumeTpPresentiel ?? 0;
     }
 
     public function setVolumeTpPresentiel(?float $volumeTpPresentiel = 0.0): self
@@ -685,7 +687,7 @@ class FicheMatiere
 
     public function getVolumeTe(): ?float
     {
-        return $this->volumeTe;
+        return $this->volumeTe ?? 0;
     }
 
     public function setVolumeTe(?float $volumeTe = 0.0): self

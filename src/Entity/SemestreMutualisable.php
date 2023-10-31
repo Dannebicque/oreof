@@ -17,7 +17,6 @@ class SemestreMutualisable
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'semestreMutualisables')]
     private ?Semestre $semestre = null;
 
@@ -28,7 +27,6 @@ class SemestreMutualisable
     #[ORM\OneToMany(mappedBy: 'semestreRaccroche', targetEntity: SemestreParcours::class)]
     private Collection $semestreParcours;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'semestreRaccroche', targetEntity: Semestre::class)]
     private Collection $semestres;
 

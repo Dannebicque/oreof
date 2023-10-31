@@ -84,7 +84,6 @@ class ElementConstitutif
     #[ORM\Column]
     private ?int $ordre = null;
 
-    #[Ignore]
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
     private ?FicheMatiere $ficheMatiere = null;
 
@@ -131,7 +130,6 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $quitus = false;
 
-    #[Ignore]
     #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'elementConstitutifs')]
     private Collection $competences;
 
@@ -193,7 +191,7 @@ class ElementConstitutif
 
     public function getEcts(): ?float
     {
-        return $this->ects;
+        return $this->ects ?? 0;
     }
 
     public function setEcts(?float $ects): self
@@ -205,7 +203,7 @@ class ElementConstitutif
 
     public function getVolumeCmPresentiel(): ?float
     {
-        return $this->volumeCmPresentiel;
+        return $this->volumeCmPresentiel ?? 0;
     }
 
     public function setVolumeCmPresentiel(float $volumeCmPresentiel): self
@@ -217,7 +215,7 @@ class ElementConstitutif
 
     public function getVolumeTdPresentiel(): ?float
     {
-        return $this->volumeTdPresentiel;
+        return $this->volumeTdPresentiel ?? 0;
     }
 
     public function setVolumeTdPresentiel(float $volumeTdPresentiel): self
@@ -229,7 +227,7 @@ class ElementConstitutif
 
     public function getVolumeTpPresentiel(): ?float
     {
-        return $this->volumeTpPresentiel;
+        return $this->volumeTpPresentiel ?? 0;
     }
 
     public function setVolumeTpPresentiel(float $volumeTpPresentiel): self
@@ -241,7 +239,7 @@ class ElementConstitutif
 
     public function getVolumeCmDistanciel(): ?float
     {
-        return $this->volumeCmDistanciel;
+        return $this->volumeCmDistanciel ?? 0;
     }
 
     public function setVolumeCmDistanciel(float $volumeCmDistanciel): self
@@ -253,7 +251,7 @@ class ElementConstitutif
 
     public function getVolumeTdDistanciel(): ?float
     {
-        return $this->volumeTdDistanciel;
+        return $this->volumeTdDistanciel ?? 0;
     }
 
     public function setVolumeTdDistanciel(float $volumeTdDistanciel): self
@@ -265,7 +263,7 @@ class ElementConstitutif
 
     public function getVolumeTpDistanciel(): ?float
     {
-        return $this->volumeTpDistanciel;
+        return $this->volumeTpDistanciel ?? 0;
     }
 
     public function setVolumeTpDistanciel(float $volumeTpDistanciel): self
