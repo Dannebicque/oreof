@@ -5,6 +5,22 @@
 {% block content %}
     {{ component('mention_manage', {parcours:parcours, type:'parcours'}) }}
 
+    <div class="row my-3">
+        <div class="col-lg-3 col-sm-6">
+            <h3 class="small-title">Versions de ce parcours</h3>
+            {% if parcours.parcoursVersionings|length > 0 %}
+                <select class="form-select">
+                    <option value="" selected="selected">Choisir...</option>
+                    {% for p in parcours.parcoursVersionings %}
+                        <option>Version du : {{ p.getVersionTimestamp()|date('d/m/Y') }} à {{ p.getVersionTimestamp()|date('H:i') }}</option>
+                    {% endfor %}
+                </select>
+            {% else %}
+                : Aucune version enregistrée.
+            {% endif %}
+        </div>  
+    </div>
+
     <div class="row">
         {{ include('typeDiplome/parcours/common/_licence.html.twig') }}
         <!-- Scrollspy Start -->
