@@ -16,6 +16,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: SemestreRepository::class)]
 class Semestre
@@ -39,11 +40,10 @@ class Semestre
     #[ORM\Column]
     private ?bool $troncCommun = false;
 
-    #[Ignore]
+    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: SemestreMutualisable::class)]
     private Collection $semestreMutualisables;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'semestres')]
     private ?SemestreMutualisable $semestreRaccroche = null;
 

@@ -24,9 +24,11 @@ class SemestreMutualisable
     #[ORM\ManyToOne(inversedBy: 'semestreMutualisables')]
     private ?Parcours $parcours = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'semestreRaccroche', targetEntity: SemestreParcours::class)]
     private Collection $semestreParcours;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'semestreRaccroche', targetEntity: Semestre::class)]
     private Collection $semestres;
 

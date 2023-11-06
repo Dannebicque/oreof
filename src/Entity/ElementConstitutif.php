@@ -18,6 +18,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+
 
 #[ORM\Entity(repositoryClass: ElementConstitutifRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -104,10 +106,11 @@ class ElementConstitutif
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?TypeEc $typeEc = null;
 
-    #[Ignore]
+    #[MaxDepth(1)]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ecEnfants')]
     private ?self $ecParent = null;
 
+    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'ecParent', targetEntity: self::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ecEnfants;

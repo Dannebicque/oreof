@@ -98,102 +98,103 @@ class CalculStructureParcours
         return $dtoStructure;
     }
 
-    public function calculVersioning(Parcours $parcours): StructureParcours
-    {
-        $dtoStructure = new StructureParcours();
-        $dtoStructure->setParcours($parcours);
-
-        $indexSemestre = 0;
-        $indexUe = 0;
-        $indexUeEnfant = 0;
-        $indexEc = 0;
-        $indexEcEnfant = 0;
-        $indexEcUeEnfant = 0;
-        $indexEcEnfantFromEcEnfant = 0;
-        $indexEcFromUeEnfant = 0;
-
-        foreach ($parcours->getSemestreParcours() as $semestreParcours) {
-            $indexSemestre++;
-            if ($semestreParcours->getSemestre()?->getSemestreRaccroche() !== null) {
-                $semestre = $semestreParcours->getSemestre()?->getSemestreRaccroche()?->getSemestre();
-                $raccrocheSemestre = true;
-            } else {
-                $semestre = $semestreParcours->getSemestre();
-                $raccrocheSemestre = false;
-            }
-
-            if ($semestre !== null) {
-                $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre);
-
-                foreach ($semestre->getUes() as $ue) {
-                    if($ue){
-                        $indexUe++;
-                        if ($ue !== null && $ue->getUeParent() === null) {
-                            $display = $ue->display($parcours);
-                            if ($ue->getUeRaccrochee() !== null) {
-                                $ueOrigine = $ue;
-                                $ue = $ue->getUeRaccrochee()->getUe();
-                                $raccrocheUe = true;
-                            } else {
-                                $raccrocheUe = $raccrocheSemestre;
-                            }
-
-                            //si des UE enfants, on ne regarde pas s'il y a des EC
-                            $dtoUe = new StructureUe($ue, $raccrocheUe, $display, $ueOrigine ?? null);
-                            foreach ($ue->getElementConstitutifs() as $elementConstitutif) {
-                                $indexEc++;
-                                if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
-                                    //récupérer le bon EC selon tous les liens
-                                    $dtoEc = new StructureEc($elementConstitutif, $parcours);
-                                    foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
-                                        $indexEcEnfant++;
-                                        $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours);
-                                        $dtoEc->addEcEnfant($indexEcEnfant, $dtoEcEnfant);
-                                    }
-                                    $dtoUe->addEc($dtoEc);
-                                }
-                            }
-
-                            foreach ($ue->getUeEnfants() as $ueEnfant) {
-                                $indexUeEnfant++;
-                                $display = $ueEnfant->display($parcours);
-                                if ($ueEnfant !== null && $ueEnfant->getUeRaccrochee() !== null) {
-                                    $ueOrigine = $ueEnfant;
-                                    $ueEnfant = $ueEnfant->getUeRaccrochee()->getUe();
-                                    $raccrocheUeEnfant = true;
-                                } else {
-                                    $raccrocheUeEnfant = $raccrocheUe;
-                                }
-
-                                if ($ueEnfant !== null) {
-                                    $dtoUeEnfant = new StructureUe($ueEnfant, $raccrocheUeEnfant, $display, $ueOrigine ?? null);
-                                    foreach ($ueEnfant->getElementConstitutifs() as $elementConstitutif) {
-                                        $indexEcFromUeEnfant++;
-                                        if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
-                                            $dtoEc = new StructureEc($elementConstitutif, $parcours);
-
-                                            foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
-                                                $indexEcEnfantFromEcEnfant++;
-                                                $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours);
-                                                $dtoEc->addEcEnfant($indexEcEnfantFromEcEnfant, $dtoEcEnfant);
-                                            }
-                                            $dtoUeEnfant->addEc($dtoEc);
-                                        }
-                                    }
-                                    $dtoUe->addUeEnfant($indexUeEnfant, $dtoUeEnfant);
-                                }
-                            }
-                            $dtoSemestre->addUe($indexUe, $dtoUe);
-                        }
-                    }
-                }
-                $dtoStructure->addSemestre($semestreParcours->getOrdre(), $dtoSemestre);
-            }
-        }
-
-        return $dtoStructure;
-    }
 }
+//     public function calculVersioning(Parcours $parcours): StructureParcours
+//     {
+//         $dtoStructure = new StructureParcours();
+//         $dtoStructure->setParcours($parcours);
+
+//         $indexSemestre = 0;
+//         $indexUe = 0;
+//         $indexUeEnfant = 0;
+//         $indexEc = 0;
+//         $indexEcEnfant = 0;
+//         $indexEcUeEnfant = 0;
+//         $indexEcEnfantFromEcEnfant = 0;
+//         $indexEcFromUeEnfant = 0;
+
+//         foreach ($parcours->getSemestreParcours() as $semestreParcours) {
+//             $indexSemestre++;
+//             if ($semestreParcours->getSemestre()?->getSemestreRaccroche() !== null) {
+//                 $semestre = $semestreParcours->getSemestre()?->getSemestreRaccroche()?->getSemestre();
+//                 $raccrocheSemestre = true;
+//             } else {
+//                 $semestre = $semestreParcours->getSemestre();
+//                 $raccrocheSemestre = false;
+//             }
+
+//             if ($semestre !== null) {
+//                 $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre);
+
+//                 foreach ($semestre->getUes() as $ue) {
+//                     if($ue){
+//                         $indexUe++;
+//                         if ($ue !== null && $ue->getUeParent() === null) {
+//                             $display = $ue->display($parcours);
+//                             if ($ue->getUeRaccrochee() !== null) {
+//                                 $ueOrigine = $ue;
+//                                 $ue = $ue->getUeRaccrochee()->getUe();
+//                                 $raccrocheUe = true;
+//                             } else {
+//                                 $raccrocheUe = $raccrocheSemestre;
+//                             }
+
+//                             //si des UE enfants, on ne regarde pas s'il y a des EC
+//                             $dtoUe = new StructureUe($ue, $raccrocheUe, $display, $ueOrigine ?? null);
+//                             foreach ($ue->getElementConstitutifs() as $elementConstitutif) {
+//                                 $indexEc++;
+//                                 if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
+//                                     //récupérer le bon EC selon tous les liens
+//                                     $dtoEc = new StructureEc($elementConstitutif, $parcours);
+//                                     foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
+//                                         $indexEcEnfant++;
+//                                         $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours);
+//                                         $dtoEc->addEcEnfant($indexEcEnfant, $dtoEcEnfant);
+//                                     }
+//                                     $dtoUe->addEc($dtoEc);
+//                                 }
+//                             }
+
+//                             foreach ($ue->getUeEnfants() as $ueEnfant) {
+//                                 $indexUeEnfant++;
+//                                 $display = $ueEnfant->display($parcours);
+//                                 if ($ueEnfant !== null && $ueEnfant->getUeRaccrochee() !== null) {
+//                                     $ueOrigine = $ueEnfant;
+//                                     $ueEnfant = $ueEnfant->getUeRaccrochee()->getUe();
+//                                     $raccrocheUeEnfant = true;
+//                                 } else {
+//                                     $raccrocheUeEnfant = $raccrocheUe;
+//                                 }
+
+//                                 if ($ueEnfant !== null) {
+//                                     $dtoUeEnfant = new StructureUe($ueEnfant, $raccrocheUeEnfant, $display, $ueOrigine ?? null);
+//                                     foreach ($ueEnfant->getElementConstitutifs() as $elementConstitutif) {
+//                                         $indexEcFromUeEnfant++;
+//                                         if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
+//                                             $dtoEc = new StructureEc($elementConstitutif, $parcours);
+
+//                                             foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
+//                                                 $indexEcEnfantFromEcEnfant++;
+//                                                 $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours);
+//                                                 $dtoEc->addEcEnfant($indexEcEnfantFromEcEnfant, $dtoEcEnfant);
+//                                             }
+//                                             $dtoUeEnfant->addEc($dtoEc);
+//                                         }
+//                                     }
+//                                     $dtoUe->addUeEnfant($indexUeEnfant, $dtoUeEnfant);
+//                                 }
+//                             }
+//                             $dtoSemestre->addUe($indexUe, $dtoUe);
+//                         }
+//                     }
+//                 }
+//                 $dtoStructure->addSemestre($semestreParcours->getOrdre(), $dtoSemestre);
+//             }
+//         }
+
+//         return $dtoStructure;
+//     }
+// }
 
 //     public function calculVersioning(Parcours $parcours) {
 //         $dtoStructure = new StructureParcours();

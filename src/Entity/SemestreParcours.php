@@ -35,7 +35,6 @@ class SemestreParcours
     #[ORM\Column]
     private ?bool $porteur = false;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
     private ?SemestreMutualisable $semestreRaccroche = null;
 

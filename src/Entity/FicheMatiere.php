@@ -20,6 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: FicheMatiereRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -57,7 +58,6 @@ class FicheMatiere
     #[Groups(['fiche_matiere:read'])]
     private ?string $objectifs = null;
 
-    #[Ignore]
     #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'ficheMatieres', cascade: ['persist'])]
     private Collection $competences;
 
@@ -107,7 +107,7 @@ class FicheMatiere
     #[ORM\ManyToOne(inversedBy: 'ficheMatieres')]
     private ?Parcours $parcours = null;
 
-    #[Ignore]
+    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereMutualisable::class)]
     private Collection $ficheMatiereParcours;
 
@@ -137,7 +137,6 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?float $volumeTe = null;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: Mccc::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $mcccs;
 

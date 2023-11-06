@@ -385,21 +385,26 @@ class ParcoursController extends BaseController
         $serializer = new Serializer([
             new DateTimeNormalizer(),
             new BackedEnumNormalizer(),
-            new ObjectNormalizer($classMetadataFactory),
+            new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor:  new ReflectionExtractor()),
         ], 
             [new JsonEncoder()]);
         try {
             // Création de la réponse JSON au client
             $json = $serializer->serialize($parcours, 'json', [
+                'circular_reference_limit' => 3,
+                AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
-                ObjectNormalizer::PRESERVE_EMPTY_OBJECTS => true
+                ObjectNormalizer::PRESERVE_EMPTY_OBJECTS => true,
             ]);
             return new Response($json, 200, ['Content-Type' => 'application/json']);
         }
         catch(\Exception $e){
             // Si erreur lors de la serialization
-            return new Response(json_encode(['error' => 'Une erreur interne est survenue.']), 422, ['Content-Type' => 'application/json']);
+            return new Response(json_encode([
+                'error' => 'Une erreur interne est survenue.',
+                'message' => "{$e->getMessage()}",
+            ]), 422, ['Content-Type' => 'application/json']);
         }
 
     }
@@ -428,7 +433,9 @@ class ParcoursController extends BaseController
             $entityManager->flush();
 
             $json = $serializer->serialize($parcours, 'json', [
+                'circular_reference_limit' => 3,
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
+                AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
             ]);
             $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$fileName}", $json);
@@ -454,19 +461,19 @@ class ParcoursController extends BaseController
             ParcoursVersioning $parcours_versioning, 
             CalculStructureParcours $calculStructureParcours
         ) : Response {
-        $parcours = new Parcours(new Formation(new AnneeUniversitaire));
+        // $parcours = new Parcours(new Formation(new AnneeUniversitaire));
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $serializer = new Serializer([
-                new ArrayDenormalizer(),
                 new DateTimeNormalizer(),
                 new BackedEnumNormalizer(), 
-                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor())
+                new ArrayDenormalizer(),
+                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
             ], 
             [new JsonEncoder()]);
         $file = file_get_contents(__DIR__ . "/../../versioning_json/parcours/{$parcours_versioning->getFileName()}");
-        $serializer->deserialize($file, Parcours::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $parcours]);
+        $parcours = $serializer->deserialize($file, Parcours::class, 'json');
 
-        $dto = $calculStructureParcours->calculVersioning($parcours);
+        $dto = $calculStructureParcours->calcul($parcours);
 
         return $this->render('parcours/show_version.html.twig', [
             'parcours' => $parcours,
@@ -474,6 +481,7 @@ class ParcoursController extends BaseController
             'typeDiplome' => $parcours->getTypeDiplome(),
             'dto' => $dto,
             'hasParcours' => $parcours->getFormation()->isHasParcours(),
+            'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
         ]);
     }
 
