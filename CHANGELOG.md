@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.3](https://github.com/Dannebicque/oreof/compare/v1.16.2...v1.16.3) (2023-11-06)
+
+
+### Features
+
+* Affichage BUT ([c60876e](https://github.com/Dannebicque/oreof/commit/c60876ee2227e143aab203464cde0c7c38f49165))
+
+
+### Bug Fixes
+
+* Actualités ([91074b4](https://github.com/Dannebicque/oreof/commit/91074b40f33d347b22a361d8998b078cf7de19a1))
+* Contact, avec champs pré-remplis ([2eca668](https://github.com/Dannebicque/oreof/commit/2eca668a7a986c385e9fb5ab0aadaf82adb1cd28))
+* Droits sur fiche éditable ([3d8423f](https://github.com/Dannebicque/oreof/commit/3d8423f761a4413b25ed4ef276b603966ebb796b))
+* modification du statut ([05d24da](https://github.com/Dannebicque/oreof/commit/05d24da4b367d629fa319ad44e1c924570f75a6c))
+
 ### [1.16.2](https://github.com/Dannebicque/oreof/compare/v1.16.1...v1.16.2) (2023-10-27)
 
 
