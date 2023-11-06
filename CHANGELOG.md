@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.4](https://github.com/Dannebicque/oreof/compare/v1.16.3...v1.16.4) (2023-11-06)
+
+
+### Bug Fixes
+
+* Droits sur fiche éditable ([95f1bf5](https://github.com/Dannebicque/oreof/commit/95f1bf5fce9a7017233c6b3de6dabf248bcbb862))
+
 ### [1.16.3](https://github.com/Dannebicque/oreof/compare/v1.16.2...v1.16.3) (2023-11-06)
 
 
