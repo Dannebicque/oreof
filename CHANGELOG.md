@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.6](https://github.com/Dannebicque/oreof/compare/v1.16.5...v1.16.6) (2023-11-07)
+
+
+### Bug Fixes
+
+* ECTS si ECTS Synchro ([28bad84](https://github.com/Dannebicque/oreof/commit/28bad840424faaa827dacc136d3b1619f49635c0))
+* MCCC: Si une seule épreuve pas de prise en compte du %de TP potentiellement différent du % de CC ([4de5230](https://github.com/Dannebicque/oreof/commit/4de5230f9015974b2f652abd52ca432e1bb08b5c))
+* menu CFVU uniquement CFVU et pas Admin ou SES ([c9cf3d7](https://github.com/Dannebicque/oreof/commit/c9cf3d75f1e784d9a15f5c620b0ef842eabbea28))
+
 ### [1.16.5](https://github.com/Dannebicque/oreof/compare/v1.16.4...v1.16.5) (2023-11-07)
 
 
