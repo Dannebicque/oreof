@@ -137,21 +137,26 @@ class Parcours
     #[ORM\Column(length: 15, nullable: true)]
     private ?string $sigle = null;
 
+    #[Ignore]
     #[ORM\Column]
     private ?array $etatSteps = [];
 
     #[ORM\Column(nullable: true)]
     private ?array $etatParcours = [];
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: FicheMatiere::class)]
     private Collection $ficheMatieres;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: FicheMatiereMutualisable::class)]
     private Collection $ficheMatiereParcours;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: SemestreMutualisable::class)]
     private Collection $semestreMutualisables;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: UeMutualisable::class)]
     private Collection $ueMutualisables;
 
@@ -171,6 +176,7 @@ class Parcours
     #[ORM\Column(nullable: true)]
     private ?array $remplissage = [];
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ElementConstitutif::class)]
     private Collection $elementConstitutifs;
 

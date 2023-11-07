@@ -2,6 +2,19 @@
 
 {% block title %}Parcours{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function showVersion(){
+            let select = document.querySelector('#selectVersion');
+            let versionSelected = select.options[select.selectedIndex].value;
+            if(versionSelected !== "#"){
+                window.location = `/parcours/${versionSelected}/versioning/view`;
+            }
+        }
+    </script>   
+{% endblock %}
+
 {% block content %}
     {{ component('mention_manage', {parcours:parcours, type:'parcours'}) }}
 
@@ -9,16 +22,27 @@
         <div class="col-lg-3 col-sm-6">
             <h3 class="small-title">Versions de ce parcours</h3>
             {% if parcours.parcoursVersionings|length > 0 %}
-                <select class="form-select">
-                    <option value="" selected="selected">Choisir...</option>
+                <select class="form-select" id="selectVersion">
+                    <option value="#" selected="selected">Choisir...</option>
                     {% for p in parcours.parcoursVersionings %}
-                        <option>Version du : {{ p.getVersionTimestamp()|date('d/m/Y') }} à {{ p.getVersionTimestamp()|date('H:i') }}</option>
+                        <option value="{{ p.getId }}">
+                            Version du : {{ p.getVersionTimestamp()|date('d/m/Y') }} à {{ p.getVersionTimestamp()|date('H:i') }}
+                        </option>
                     {% endfor %}
                 </select>
             {% else %}
-                : Aucune version enregistrée.
+                Aucune version enregistrée.
             {% endif %}
         </div>  
+            {% if parcours.parcoursVersionings|length > 0 %}
+            <div class="d-flex col-3 align-items-end">
+                <a href="#">
+                    <button class="btn btn-sm btn-primary mb-1" id="buttonShowVersion" onclick="showVersion()">
+                        Visionner
+                    </button>
+                </a>
+            </div>
+            {% endif %}
     </div>
 
     <div class="row">

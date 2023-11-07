@@ -456,7 +456,7 @@ class ParcoursController extends BaseController
         
     }
 
-    #[Route('/{parcours_versioning}/versioning/view')]
+    #[Route('/{parcours_versioning}/versioning/view', name: 'app_parcours_versioning_view')]
     public function parcoursVersion(
             ParcoursVersioning $parcours_versioning, 
             CalculStructureParcours $calculStructureParcours
@@ -484,20 +484,4 @@ class ParcoursController extends BaseController
             'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
         ]);
     }
-
-    // #[Route('/versioning/save_all')]
-    // public function testVersioningAllParcours(EntityManagerInterface $entityManager) : Response {
-    //     $json = ['État' => 'OK', 'Message' => "Le versioning de tous les parcours s'est déroulé avec succès"];
-    //     $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-    //     $serializer = new Serializer([new ObjectNormalizer($classMetadataFactory)], [new JsonEncoder()]);
-
-    //     $allParcours = $entityManager->getRepository(Parcours::class)->findAllParcoursId();
-
-    //     foreach($allParcours as $parcoursId){
-    //         $parcours = $entityManager->getRepository(Parcours::class)->find(['id' => $parcoursId['id']]);
-    //         $serializer->serialize($parcours, 'json');
-    //     }
-
-    //     return new Response(json_encode($json), 200, ['Content-Type' => 'application/json']);
-    // }
 }

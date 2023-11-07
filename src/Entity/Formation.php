@@ -150,6 +150,7 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: ButCompetence::class)]
     private Collection $butCompetences;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: HistoriqueFormation::class)]
     #[ORM\OrderBy(['created' => 'DESC'])]
     private Collection $historiqueFormations;
