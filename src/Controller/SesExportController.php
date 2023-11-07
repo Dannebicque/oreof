@@ -25,9 +25,8 @@ class SesExportController extends BaseController
         ExcelWriter $excelWriter,
     ): Response {
         $formations = $formationRepository->findBySearch('', $this->getAnneeUniversitaire(), []);
-        $spreadsheet = $excelWriter->createFromTemplate('export_offre_formation.xlsx');
-        $spreadsheet->setActiveSheetIndex(0);
-        $excelWriter->setSheet($spreadsheet->getActiveSheet());
+        $excelWriter->createFromTemplate('export_offre_formation.xlsx');
+        $excelWriter->setActiveSheetIndex(0);
         $ligne = 2;
         foreach ($formations as $formation) {
             //Composante	Type de diplôme	mention	parcours	état	remplissage	nom responsable
@@ -61,7 +60,6 @@ class SesExportController extends BaseController
                 }
             }
         }
-        $excelWriter->setSpreadsheet($spreadsheet, true);
         //MCCC -2023-2024 -  M Psychologie sociale, du travail et des organisations
         $fileName = substr('OF - ' . (new DateTime())->format('d-m-Y-h-i'), 0, 30);
         return  $excelWriter->genereFichier($fileName);
