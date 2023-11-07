@@ -64,17 +64,18 @@ class ElementConstitutifMcccController extends AbstractController
         if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
             $this->isGranted('CAN_PARCOURS_EDIT_MY', $parcours)) {
             if ($request->isMethod('POST')) {
-
                 if (
                     ($elementConstitutif->isSynchroEcts() === false &&
                         ($elementConstitutif->getFicheMatiere() === null ||
-                        $elementConstitutif->getFicheMatiere()?->isEctsImpose() === false)) ||
+                            $elementConstitutif->getFicheMatiere()?->isEctsImpose() === false)) ||
                     $elementConstitutif->getParcours()->getId() === $parcours->getId()
                 ) {
                     if ($request->request->has('ec_step4') && array_key_exists('ects', $request->request->all()['ec_step4'])) {
                         $elementConstitutif->setEcts((float)$request->request->all()['ec_step4']['ects']);
                     } else {
-                        $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
+                        if ($elementConstitutif->getEcParent() !== null) {
+                            $elementConstitutif->setEcts($elementConstitutif->getEcParent()?->getEcts());
+                        }
                     }
                     $entityManager->flush();
                 }
