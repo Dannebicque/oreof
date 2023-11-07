@@ -29,6 +29,7 @@ class Semestre
     #[ORM\Column]
     private ?int $ordre = null;
 
+    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: Ue::class)]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ues;

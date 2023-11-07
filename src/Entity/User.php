@@ -126,6 +126,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Historique::class)]
     private Collection $historiques;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Commentaire::class)]
     private Collection $commentaires;
 

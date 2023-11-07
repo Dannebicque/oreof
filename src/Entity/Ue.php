@@ -29,14 +29,14 @@ class Ue
     #[ORM\Column]
     private ?int $ordre = null;
 
-    #[Ignore]
+    #[MaxDepth(1)]
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?Semestre $semestre = null;
 
     #[ORM\ManyToOne]
     private ?TypeUe $typeUe = null;
 
-
+    
     #[ORM\ManyToOne]
     private ?NatureUeEc $natureUeEc = null;
     

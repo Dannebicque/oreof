@@ -391,7 +391,7 @@ class ParcoursController extends BaseController
         try {
             // Création de la réponse JSON au client
             $json = $serializer->serialize($parcours, 'json', [
-                'circular_reference_limit' => 3,
+                'circular_reference_limit' => 5,
                 AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
@@ -433,7 +433,7 @@ class ParcoursController extends BaseController
             $entityManager->flush();
 
             $json = $serializer->serialize($parcours, 'json', [
-                'circular_reference_limit' => 3,
+                'circular_reference_limit' => 5,
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
                 AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',

@@ -27,6 +27,7 @@ class ButApprentissageCritique
     #[ORM\ManyToOne(inversedBy: 'butApprentissageCritiques')]
     private ?ButNiveau $niveau = null;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'apprentissagesCritiques')]
     /** @deprecated  */
     private Collection $elementConstitutifs;
