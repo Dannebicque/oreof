@@ -112,7 +112,14 @@
                         </a>
                     </li>
 
-                    {% if not is_granted('CAN_ETABLISSEMENT_CONSEILLER_ALL') %}
+                    {% if is_granted('CAN_ETABLISSEMENT_CONSEILLER_ALL') and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_SES') %}
+                        <li>
+                            <a href="{{ path('app_export_cfvu') }}" data-href="exports">
+                                <i class="fal fa-chalkboard-user icon"></i>
+                                <span class="label">Exports</span>
+                            </a>
+                        </li>
+                    {% else %}
                         <li>
                             <a href="#offre_formation" data-href="offre_formation">
                                 <i class="fal fa-chalkboard-user icon"></i>
@@ -152,13 +159,6 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
-                    {% else %}
-                        <li>
-                            <a href="{{ path('app_export_cfvu') }}" data-href="exports">
-                                <i class="fal fa-chalkboard-user icon"></i>
-                                <span class="label">Exports</span>
-                            </a>
                         </li>
                     {% endif %}
 
