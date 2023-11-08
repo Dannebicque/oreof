@@ -786,6 +786,7 @@ class LicenceMccc
     {
         $this->excelWriter->insertNewRowBefore($ligne);
         $this->excelWriter->writeCellXY(self::COL_INTITULE_EC, $ligne, $ue->ue->getDescriptionUeLibre(), ['wrap' => true]);
+        $this->excelWriter->writeCellXY(self::COL_ECTS, $ligne, $ue->ue->getEcts() === 0.0 ? '' : $ue->ue->getEcts());
 
         $ligne++;
         return $ligne;
