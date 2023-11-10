@@ -170,6 +170,7 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcoursParent', targetEntity: self::class)]
     private Collection $parcoursEnfants;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: HistoriqueParcours::class)]
     private Collection $historiqueParcours;
 

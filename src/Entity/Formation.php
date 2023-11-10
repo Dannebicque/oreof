@@ -118,6 +118,7 @@ class Formation
     #[ORM\Column(nullable: true)]
     private ?array $etatDpe = [];
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: UserCentre::class, cascade: ['persist', 'remove'])]
     private Collection $userCentres;
 

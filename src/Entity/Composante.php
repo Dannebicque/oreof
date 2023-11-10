@@ -31,6 +31,7 @@ class Composante
     #[ORM\ManyToOne(inversedBy: 'composantes')]
     private ?User $directeur = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'composanteResponsableDpe')]
     private ?User $responsableDpe = null;
 

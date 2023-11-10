@@ -37,7 +37,6 @@ class ButCompetence
     #[ORM\Column(nullable: true)]
     private array $composantes = [];
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'competence', targetEntity: ButNiveau::class)]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $butNiveaux;

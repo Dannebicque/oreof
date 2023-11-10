@@ -26,11 +26,11 @@ class ButNiveau
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'niveau', targetEntity: ButApprentissageCritique::class)]
     #[ORM\OrderBy(['code' => 'ASC'])]
     private Collection $butApprentissageCritiques;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'butNiveaux')]
     private ?ButCompetence $competence = null;
 

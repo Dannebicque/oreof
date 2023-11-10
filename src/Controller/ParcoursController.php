@@ -449,12 +449,6 @@ class ParcoursController extends BaseController
             $this->addFlashBag('error', 'Une erreur est survenue lors de la sauvegarde.');
 
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
-
-            // return new Response(
-            //     json_encode(['error' => 'Une erreur interne est survenue.', 'message' => "{$e->getMessage()}"]), 
-            //     422,
-            //     ['Content-Type' => 'application/json']
-            // );
         }
         
     }
@@ -477,6 +471,8 @@ class ParcoursController extends BaseController
         $parcours = $serializer->deserialize($file, Parcours::class, 'json');
         $dto = $calculStructureParcours->calcul($parcours);
 
+        $dateVersion = $parcours_versioning->getVersionTimestamp()->format('d-m-Y à H:i');
+
         return $this->render('parcours/show_version.html.twig', [
             'parcours' => $parcours,
             'formation' => $parcours->getFormation(),
@@ -484,6 +480,7 @@ class ParcoursController extends BaseController
             'dto' => $dto,
             'hasParcours' => $parcours->getFormation()->isHasParcours(),
             'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
+            'dateVersion' => $dateVersion
         ]);
     }
 }

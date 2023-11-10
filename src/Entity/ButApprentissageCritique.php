@@ -24,6 +24,7 @@ class ButApprentissageCritique
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $libelle = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'butApprentissageCritiques')]
     private ?ButNiveau $niveau = null;
 

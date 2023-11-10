@@ -51,7 +51,7 @@
             {% endif %}
         </div>  
             {% if parcours.parcoursVersionings|length > 0 %}
-            <div class="d-flex col-lg-1 col-sm-4 align-items-end">
+            <div class="d-flex col-lg-1 col-sm-3 align-items-end">
                 <a href="#">
                     <button class="btn btn-sm btn-primary mb-1" id="buttonShowVersion" onclick="showVersion()">
                         Visionner
@@ -59,14 +59,14 @@
                 </a>
             </div>
             {% endif %}
-        <div class="d-flex col-lg-1 col-sm-4 align-items-end">
+        <div class="d-flex col-lg-1 col-sm-3 align-items-end">
             <a href="{{ path('app_parcours_versioning_save', {parcours: parcours.id}) }}" onclick="saveVersion(event)">
                 <button class="btn btn-sm btn-success mb-1 ms-lg-1">
                     Sauvegarder la version
                 </button>
             </a>
         </div>
-        <div class="d-none col-lg-2 align-items-end justify-content-center" id="spinner">
+        <div class="d-none col-lg-2 align-items-end justify-content-xl-center justify-content-end" id="spinner">
             <div class="spinner-border text-primary mb-1"></div>
         </div>
     </div>
