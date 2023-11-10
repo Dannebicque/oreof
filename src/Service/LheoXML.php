@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Classes\CalculStructureParcours;
 use App\Entity\Parcours;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
@@ -12,7 +13,7 @@ class LheoXML {
      * @param Parcours $parcours Parcours à transformer en XML
      * @return string $xml Contenu XML
      */
-    public function generateLheoXMLFromParcours(Parcours $parcours) : string {
+    public function generateLheoXMLFromParcours(Parcours $parcours, bool $with_extras = false) : string {
         // Paramètres de l'encodeur
         $contextOptions = [
             'xml_root_node_name' => 'lheo',
@@ -103,8 +104,31 @@ class LheoXML {
             }
         }
 
+        // Durée de la formation (durée cycle)
+        $dureeCycle = 0;
+        if($parcours->getTypeDiplome()){
+            if($parcours->getTypeDiplome()->getSemestreFin() && $parcours->getTypeDiplome()->getSemestreDebut()){
+                $dureeCycle = (($parcours->getTypeDiplome()->getSemestreFin() - $parcours->getTypeDiplome()->getSemestreDebut()) + 1) / 2;
+            }
+        }
+
+        // Calculs ECTS
+        $ects = 0;
+        if($with_extras){
+            $dto = new CalculStructureParcours();
+            $ects = $dto->calcul($parcours)->heuresEctsFormation->sommeFormationEcts;
+        }
+
+
+        // code RNCP
+        $rncp = 'RNCP00000';
+        if($parcours->getFormation()->getCodeRNCP()){
+           $rncp = 'RNCP' . $parcours->getFormation()->getCodeRNCP();
+        }
+
         // Génération du XML
-        $encoder = new XmlEncoder();
+        $encoder = new XmlEncoder([
+        ]);
         $xml = $encoder->encode([
             // Attribut de l'élément racine
             '@xmlns' => 'http://lheo.gouv.fr/2.3',
@@ -127,6 +151,10 @@ class LheoXML {
                     'contact-formation' => $referentPedagogique,
                     'parcours-de-formation' => 1,
                     'code-niveau-entree' => $niveauEntree,
+                    'certification' => [
+                        'code-RNCP' => $rncp
+                    ],
+                    'code-niveau-sortie' => $parcours->getFormation()?->getNiveauSortie()->value ?? 0, // A CHANGER
                     'action' => [
                                                     
                         'rythme-formation' => $rythmeFormation,
@@ -136,7 +164,18 @@ class LheoXML {
                         'modalites-enseignement' => $parcours->getModalitesEnseignement() ? $parcours->getModalitesEnseignement()->value : 1,
                         'conditions-specifiques' => $parcours->getPrerequis() ?? 'Aucune condition spécifique.',
                         'prise-en-charge-frais-possible' => 1, // A CHANGER - 1 oui | 0 non
+                        'lieu-de-formation' => [
+                             // A CHANGER
+                             'coordonnees' => [
+                                'adresse' => [
+                                    'ligne' => 'XXX',
+                                    'codepostal' => 'XXXXX',
+                                    'ville' => 'XX'
+                                ]
+                            ]
+                        ], 
                         'modalites-entrees-sorties' => 0,
+                        'duree-cycle' => $dureeCycle,
                         'session' => [
                             'periode' => [
                                 'debut' => '00000000',
@@ -145,7 +184,10 @@ class LheoXML {
                             'adresse-inscription' => [
                                 'adresse' => $adresseComposanteInscription
                             ]
-                        ]
+                        ],
+                        'restauration' => "Restaurants Universitaires CROUS", // A CHANGER ? 
+                        'hebergement' => "Résidences Universitaires CROUS", // A CHANGER ?
+                        'transport' => "Transports en commun" // A CHANGER ?
 
                     ],
                     'organisme-formation-responsable' => [
@@ -169,6 +211,11 @@ class LheoXML {
                                 // Coordonnées secrétariat global de l'URCA
                                 'web' => ['urlweb' => 'https://www.univ-reims.fr/contact/contactez-nous,23,32.html']
                             ]
+                        ]
+                            ],
+                    'extras' => [
+                        'extra' => [
+                            'ects' => $ects
                         ]
                     ]
                 ]

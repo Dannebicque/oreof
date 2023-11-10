@@ -38,6 +38,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Test\Constraint\ResponseIsUnprocessable;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -353,7 +354,7 @@ class ParcoursController extends BaseController
 
     #[Route('/{parcours}/export-xml-lheo', name: 'app_parcours_export_xml_lheo')]
     public function getXmlLheoFromParcours(Parcours $parcours, LheoXML $lheoXML) : Response {
-        $xml = $lheoXML->generateLheoXMLFromParcours($parcours);
+        $xml = $lheoXML->generateLheoXMLFromParcours($parcours, true);
         // Validation
         libxml_use_internal_errors(true);
         $isValid = $lheoXML->validateLheoSchema($xml);
@@ -439,19 +440,21 @@ class ParcoursController extends BaseController
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
             ]);
             $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$fileName}", $json);
+            $this->addFlashBag('success', 'La version du parcours à bien été sauvegardée.');
 
-            return new Response(
-                json_encode(['success' => 'Parcours versionné avec succès']), 
-                200,
-                ['Content-Type' => 'application/json']
-            );
+            return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
 
         }catch(\Exception $e){
-            return new Response(
-                json_encode(['error' => 'Une erreur interne est survenue.', 'message' => "{$e->getMessage()}"]), 
-                422,
-                ['Content-Type' => 'application/json']
-            );
+
+            $this->addFlashBag('error', 'Une erreur est survenue lors de la sauvegarde.');
+
+            return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
+
+            // return new Response(
+            //     json_encode(['error' => 'Une erreur interne est survenue.', 'message' => "{$e->getMessage()}"]), 
+            //     422,
+            //     ['Content-Type' => 'application/json']
+            // );
         }
         
     }
@@ -472,7 +475,6 @@ class ParcoursController extends BaseController
             [new JsonEncoder()]);
         $file = file_get_contents(__DIR__ . "/../../versioning_json/parcours/{$parcours_versioning->getFileName()}");
         $parcours = $serializer->deserialize($file, Parcours::class, 'json');
-
         $dto = $calculStructureParcours->calcul($parcours);
 
         return $this->render('parcours/show_version.html.twig', [
