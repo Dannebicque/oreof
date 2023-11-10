@@ -358,13 +358,9 @@ class ParcoursController extends BaseController
         // Validation
         libxml_use_internal_errors(true);
         $isValid = $lheoXML->validateLheoSchema($xml);
-        $htmlValidator = '<h1>Le schéma XML est valide !<h1>';
+        $xml_errors = [];
         if(!$isValid){
-            $htmlValidator = "";
             $xml_errors = libxml_get_errors();
-            foreach($xml_errors as $error){
-                $htmlValidator .= "<p>Line : {$error->line} | {$error->message}</p>";
-            }
         }
         libxml_clear_errors();
         // Si le XML généré est valide, on le renvoie
@@ -373,8 +369,8 @@ class ParcoursController extends BaseController
         }
         // Sinon, on avertit le client
         else {
-            return new Response("<p>La ressource demandée est incomplète ou invalide</p>" . $htmlValidator, 422, [
-                'Content-Type' => 'text/html'
+            return $this->render('lheo/error.html.twig', [
+                'errors' => $xml_errors
             ]);
         }
     }
