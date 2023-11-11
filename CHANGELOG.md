@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.17.0](https://github.com/Dannebicque/oreof/compare/v1.16.6...v1.17.0) (2023-11-11)
+
+
+### Features
+
+* Ajout des exports ([d42738d](https://github.com/Dannebicque/oreof/commit/d42738d88e28b89b4b4fa6003f3f00f4dcf4506a))
+
+
+### Bug Fixes
+
+* Affichage des ECTS des UE libres ([a884ae8](https://github.com/Dannebicque/oreof/commit/a884ae8d5495bd6fd12b1142cbce2c73895ec6d1))
+
 ### [1.16.6](https://github.com/Dannebicque/oreof/compare/v1.16.5...v1.16.6) (2023-11-07)
 
 
