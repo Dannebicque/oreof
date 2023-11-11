@@ -920,7 +920,6 @@ class Parcours
 
     public function setRemplissage(?Remplissage $remplissage = null): static
     {
-
         if (null === $remplissage) {
             $remplissage = $this->remplissageBrut();
         }
@@ -998,5 +997,22 @@ class Parcours
         }
 
         return $this;
+    }
+
+    public function isAlternance(): bool
+    {
+        // regarder si dans le tableau regimeInscription il y a les valeurs alternance ou apprentissage
+        return in_array(RegimeInscriptionEnum::FI_APPRENTISSAGE, $this->getRegimeInscription(), true) ||
+            in_array(RegimeInscriptionEnum::FC_CONTRAT_PRO, $this->getRegimeInscription(), true);
+    }
+
+    public function displayRegimeInscription(): string
+    {
+        $texte = '';
+        foreach ($this->getRegimeInscription() as $regime) {
+            $texte .= $regime->value . ', ';
+        }
+
+        return substr($texte, 0, -2);
     }
 }
