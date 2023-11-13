@@ -19,7 +19,7 @@
             {% for u in ues %}
                 <option value="{{ u.id }}"
                 {% if ue.ueRaccrochee != null and  ue.ueRaccrochee.id == u.id %}selected{% endif %}
-                >{{ u.ue.display() }} - {{ u.ue.libelle }}</option> {# todo: display nul pour se baser sur le numéro du semestre de l'UE de départ...  #}
+                >{{ u.ue.display() }} - {{ u.ue.libelle }} ({{ u.ue.semestre.semestreParcours[0].parcours.libelle }})</option> {# todo: display nul pour se baser sur le numéro du semestre de l'UE de départ... O mais est-ce pertinent ?  #}
             {% endfor %}
         </select>
     </div>
