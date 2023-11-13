@@ -457,10 +457,13 @@ class Parcours
 
     public function remplissageBrut(): Remplissage
     {
-        $verification = new ParcoursValide($this, $this->getFormation()?->getTypeDiplome());
-        $verification->valideParcours();
+        if (null !== $this->getFormation()) {
+            $verification = new ParcoursValide($this, $this->getFormation()?->getTypeDiplome());
+            $verification->valideParcours();
 
-        return $verification->calcul();
+            return $verification->calcul();
+        }
+        return new Remplissage();
     }
 
     public function getRythmeFormation(): ?RythmeFormation
