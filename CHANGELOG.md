@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.1](https://github.com/Dannebicque/oreof/compare/v1.17.0...v1.17.1) (2023-11-13)
+
+
+### Features
+
+* Affichage du parcours d'origine d'une UE ([d1635e7](https://github.com/Dannebicque/oreof/commit/d1635e7aa12b4cc57241a0139d0179f05c72839f))
+
 ## [1.17.0](https://github.com/Dannebicque/oreof/compare/v1.16.6...v1.17.0) (2023-11-11)
 
 
