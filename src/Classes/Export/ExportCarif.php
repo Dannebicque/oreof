@@ -54,7 +54,8 @@ class ExportCarif
                     $this->excelWriter->writeCellXY(6, $ligne, $parcours->getRespParcours()?->getDisplay());
                     $this->excelWriter->writeCellXY(7, $ligne, $formation->getCodeRNCP());
                     $this->excelWriter->writeCellXY(8, $ligne, $parcours->displayRegimeInscription());
-                    $this->excelWriter->writeCellXY(9, $ligne, $formation->getCodeRNCP());
+                    $this->excelWriter->writeCellXY(9, $ligne, $parcours->getVille()?->getLibelle());
+                    //$this->excelWriter->writeCellXY(10, $ligne, $formation->getCodeRNCP());
                     $this->excelWriter->getColumnsAutoSize('A', 'I');
                     $ligne++;
                 }
