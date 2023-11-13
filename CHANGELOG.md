@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.2](https://github.com/Dannebicque/oreof/compare/v1.17.1...v1.17.2) (2023-11-13)
+
+
+### Bug Fixes
+
+* Bug si parcours sans formation (cas des parcours supprimés) ([060d00f](https://github.com/Dannebicque/oreof/commit/060d00faae551507c333940220228d772a80e4cb))
+* Tableau CARIF avec lieu de formation ([e515efe](https://github.com/Dannebicque/oreof/commit/e515efe968475ff972aa42335f50e76862dea6fd))
+
 ### [1.17.1](https://github.com/Dannebicque/oreof/compare/v1.17.0...v1.17.1) (2023-11-13)
 
 
