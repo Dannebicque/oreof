@@ -12,8 +12,6 @@ namespace App\Controller;
 use App\Classes\CalculStructureParcours;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\Formation;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

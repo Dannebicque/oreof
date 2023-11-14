@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
+use App\Classes\ValidationProcess;
 use App\Entity\Composante;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,35 +14,59 @@ use Symfony\Component\Routing\Annotation\Route;
 class ValidationController extends BaseController
 {
     #[Route('/validation', name: 'app_validation_index')]
-    public function index(): Response
-    {
+    public function index(
+        ValidationProcess    $validationProcess,
+        ComposanteRepository $composanteRepository,
+    ): Response {
+        //todo:  Affichage des bons boutons selon le process et le status choisi sur la liste en bas et haut de page.
         return $this->render('validation/index.html.twig', [
+            'ses' => true,
+            'composantes' => $composanteRepository->findAll(),
+            'types_validation' => $validationProcess->getProcess(),
         ]);
     }
 
     #[Route('/validation/composante/{composante}', name: 'app_validation_composante_index')]
-    public function composante(Composante $composante): Response
-    {
+    public function composante(
+        ComposanteRepository $composanteRepository,
+        Composante           $composante
+    ): Response {
         return $this->render('validation/index.html.twig', [
-            'composante' => $composante
+            'composante' => $composante,
+            'composantes' => $composanteRepository->findAll(),
+
         ]);
     }
 
     #[Route('/validation/liste', name: 'app_validation_formation_liste')]
     public function liste(
+        ValidationProcess    $validationProcess,
         ComposanteRepository $composanteRepository,
         FormationRepository  $formationRepository,
         Request              $request
     ): Response {
-        $composante = $composanteRepository->find($request->query->get('composante'));
+        if ($request->query->has('composante')) {
+            $composante = $composanteRepository->find($request->query->get('composante'));
+            $typeValidation = $request->query->get('typeValidation');
 
-        if (!$composante) {
-            throw $this->createNotFoundException('La composante n\'existe pas');
+            if (!$composante) {
+                throw $this->createNotFoundException('La composante n\'existe pas');
+            }
+
+            $process = $validationProcess->getEtape($typeValidation);
+
+            $formations = $formationRepository->findByComposanteTypeValidation($composante, $this->getAnneeUniversitaire(), $process['transition']);
+        } else {
+            $formations = [];
+            $process = null;
         }
 
-        $formations = $formationRepository->findByComposante($composante, $this->getAnneeUniversitaire());
+        $composantes = $composanteRepository->findAll();
         return $this->render('validation/_liste.html.twig', [
-            'formations' => $formations
+            'process' => $process,
+            'formations' => $formations,
+            'composantes' => $composantes,
+            'etape' => $typeValidation ?? null,
         ]);
     }
 }

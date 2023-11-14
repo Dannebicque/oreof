@@ -12,7 +12,6 @@ namespace App\Classes\Export;
 use App\Classes\CalculStructureParcours;
 use App\Classes\MyPDF;
 use App\Entity\AnneeUniversitaire;
-use App\TypeDiplome\TypeDiplomeRegistry;
 use DateTimeInterface;
 
 class ExportConseil

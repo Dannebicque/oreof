@@ -14,7 +14,51 @@
                 <td>{{ actualite.titre }}</td>
                 <td>{{ actualite.datePublication|date('d/m/Y H:i') }}</td>
                 <td>{{ actualite.affiche|badgeBoolean }}</td>
-                <td>&nbsp;</td>
+                <td class="text-end">
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Voir une actualité',
+                                modalUrl: path('app_actualite_show',{'id': actualite.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm text-info"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Voir une actualité"
+                    >
+                        <i class="{{ iconShow }}"></i>
+                        <span> voir</span>
+                    </button>
+
+                    <button
+                            {{ stimulus_controller('modal', {
+                                size: 'lg',
+                                modalTitle: 'Modifier une actualité',
+                                modalUrl: path('app_actualite_edit',{'id': actualite.id}) }) }}
+                            data-action="click->modal#openModal"
+                            class="btn btn-sm text-warning"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Modifier une actualité"
+                    >
+                        <i class="{{ iconEdit }}"></i>
+                        <span> modifier</span>
+                    </button>
+
+                    <button {{ stimulus_action('crud', 'duplicate', 'click', {
+                        url:path('app_actualite_duplicate',{'id': actualite.id})
+                    }) }} class="btn btn-sm text-success">
+                        <i class="{{ iconDuplicate }}"></i> Dupliquer
+                    </button>
+                    <button {{ stimulus_action('crud', 'delete', 'click', {
+                        url:path('app_actualite_delete',{'id': actualite.id}),
+                        csrf: csrf_token('delete' ~ actualite.id)
+                    }) }} class="btn btn-sm text-danger">
+                        <i class="{{ iconDelete }}"></i> Supprimer
+                    </button>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

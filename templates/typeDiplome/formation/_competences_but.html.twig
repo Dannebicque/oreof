@@ -22,17 +22,9 @@
         </div>
     {% endif %}
     <div class="col-sm-12">
-        <ul class="list-unstyled">
-            {% for bc in parcours.blocCompetences %}
-                <li>{{ bc.display }}</li>
-                <li>
-                    <ul>
-                        {% for c in bc.competences %}
-                            <li>{{ c.display }}</li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endfor %}
-        </ul>
+        {{ render(controller(
+            'App\\Controller\\BlocCompetenceController::afficheBUTReferentiel',
+            { 'parcours': parcours }
+        )) }}
     </div>
 </div>

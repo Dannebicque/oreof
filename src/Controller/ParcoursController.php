@@ -32,6 +32,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -208,7 +209,7 @@ class ParcoursController extends BaseController
 
     #[Route('/{id}', name: 'app_parcours_show', methods: ['GET'])]
     public function show(
-        CalculStructureParcours $calculStructureParcours,
+        TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours            $parcours
     ): Response {
         $formation = $parcours->getFormation();
@@ -216,8 +217,12 @@ class ParcoursController extends BaseController
             throw $this->createNotFoundException();
         }
         $typeDiplome = $formation->getTypeDiplome();
+        if ($typeDiplome === null) {
+            throw $this->createNotFoundException();
+        }
 
-        $dto = $calculStructureParcours->calcul($parcours);
+        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+        $dto = $typeD->calculStructureParcours($parcours);
 
         return $this->render('parcours/show.html.twig', [
             'parcours' => $parcours,
@@ -225,7 +230,7 @@ class ParcoursController extends BaseController
             'typeDiplome' => $typeDiplome,
             'hasParcours' => $formation->isHasParcours(),
             'dto' => $dto,
-            'isBut' => $typeDiplome->getLibelleCourt() === 'BUT',
+            'typeD' => $typeD
         ]);
     }
 

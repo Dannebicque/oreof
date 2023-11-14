@@ -25,7 +25,8 @@ export default class extends Controller {
   valideExport(event) {
     event.preventDefault()
     // récupère les données du formulaire + les données de la liste
-
+    let liste = []
+    let typeDocs = null
     let isValid = true
     // vérifier les champs obligatoires et mettre en surbrillance les champs non remplis
     if (document.getElementById('annee_universitaire').value === '') {
@@ -35,24 +36,29 @@ export default class extends Controller {
       document.getElementById('annee_universitaire').classList.remove('is-invalid')
     }
 
-    if (document.getElementById('composante').value === '') {
-      document.getElementById('composante').classList.add('is-invalid')
-      isValid = false
-    } else {
-      document.getElementById('composante').classList.remove('is-invalid')
-    }
+    if (document.getElementById('type_document_global').value === '') {
+      if (document.getElementById('composante').value === '') {
+        document.getElementById('composante').classList.add('is-invalid')
+        isValid = false
+      } else {
+        document.getElementById('composante').classList.remove('is-invalid')
+      }
 
-    if (document.getElementById('type_document').value === '') {
-      document.getElementById('type_document').classList.add('is-invalid')
-      isValid = false
-    } else {
-      document.getElementById('type_document').classList.remove('is-invalid')
-    }
+      if (document.getElementById('type_document').value === '') {
+        document.getElementById('type_document').classList.add('is-invalid')
+        isValid = false
+      } else {
+        document.getElementById('type_document').classList.remove('is-invalid')
+        typeDocs = document.getElementById('type_document').value
+      }
 
-    const liste = document.querySelectorAll('.check-all:checked')
-    if (liste.length === 0) {
-      isValid = false
-      callOut('Veuillez sélectionner au moins une formation', 'danger')
+      liste = document.querySelectorAll('.check-all:checked')
+      if (liste.length === 0) {
+        isValid = false
+        callOut('Veuillez sélectionner au moins une formation', 'danger')
+      }
+    } else {
+      typeDocs = document.getElementById('type_document_global').value
     }
 
     if (isValid) {
@@ -66,7 +72,8 @@ export default class extends Controller {
       // ajoute les données du formulaire au formulaire
       data.append('annee_universitaire', document.getElementById('annee_universitaire').value)
       data.append('composante', document.getElementById('composante').value)
-      data.append('type_document', document.getElementById('type_document').value)
+      data.append('type_document', typeDocs)
+      data.append('type_document_global', document.getElementById('type_document_global').value)
       data.append('date', document.getElementById('date').value)
 
       // envoie le formulaire

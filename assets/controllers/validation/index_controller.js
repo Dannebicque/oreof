@@ -19,12 +19,21 @@ export default class extends Controller {
     this._updateListe()
   }
 
+  async changeListe() {
+    this._updateListe()
+  }
+
   async _updateListe() {
-    this.listeTarget.innerHTML = window.da.loaderStimulus
-    fetch(this.urlListeValue)
-      .then((response) => response.text())
-      .then((html) => {
-        this.listeTarget.innerHTML = html
+    const composante = document.getElementById('composante').value
+    const typeValidation = document.getElementById('type_validation').value
+    if (composante !== '' && typeValidation !== '') {
+      const body = new URLSearchParams({
+        composante,
+        typeValidation,
       })
+
+      const response = await fetch(`${this.urlListeValue}?${body.toString()}`)
+      this.listeTarget.innerHTML = await response.text()
+    }
   }
 }

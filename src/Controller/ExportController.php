@@ -24,6 +24,11 @@ class ExportController extends BaseController
         "pdf-fiches" => 'Fiches descriptions format PDF'
     ];
 
+    public const TYPES_DOCUMENT_GLOBAL = [
+        "xlsx-synthese" => 'Tableau de synthèse des formations (xslx)',
+        "xlsx-carif" => 'Tableau CARIF (xslx)',
+    ];
+
 
     #[Route('/export', name: 'app_export_index')]
     public function index(
@@ -38,6 +43,7 @@ class ExportController extends BaseController
             'ses' => true,
             'isCfvu' => false,
             'types_document' => self::TYPES_DOCUMENT,
+            'types_document_global' => self::TYPES_DOCUMENT_GLOBAL,
         ]);
     }
 
@@ -98,15 +104,8 @@ class ExportController extends BaseController
     public function valide(
         MessageBusInterface          $messageBus,
         AnneeUniversitaireRepository $anneeUniversitaireRepository,
-        ComposanteRepository         $composanteRepository,
         Request                      $request,
     ): Response {
-        $composante = $composanteRepository->find($request->request->get('composante'));
-
-        if (!$composante) {
-            throw $this->createNotFoundException('La composante n\'existe pas');
-        }
-
         $annee = $anneeUniversitaireRepository->find($request->request->get('annee_universitaire'));
         if (!$annee) {
             throw $this->createNotFoundException('L\'année universitaire n\'existe pas');
@@ -115,7 +114,7 @@ class ExportController extends BaseController
         $messageBus->dispatch(new Export(
             $this->getUser()?->getId(),
             $request->request->get('type_document'),
-            $request->request->all()['liste'],
+            $request->request->all()['liste'] ?? [],
             $annee->getId(),
             Tools::convertDate($request->request->get('date', null))
         ));
