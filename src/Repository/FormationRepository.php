@@ -156,7 +156,7 @@ class FormationRepository extends ServiceEntityRepository
             ->where('f.anneeUniversitaire = :anneeUniversitaire')
             ->andWhere('m.libelle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q ')
             ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
-                ->setParameter('etatDpe', json_encode(['soumis_cfvu' => 1]))
+            ->setParameter('etatDpe', json_encode(['soumis_cfvu' => 1]))
             ->setParameter('anneeUniversitaire', $anneeUniversitaire)
             ->setParameter('q', '%' . $q . '%')
             ->orderBy('f.' . $sort, $direction);
@@ -250,6 +250,22 @@ class FormationRepository extends ServiceEntityRepository
                 $query->addOrderBy('f.' . $sort, $direction);
             }
         }
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
+    public function findByComposanteTypeValidation(Composante $composante, AnneeUniversitaire $anneeUniversitaire, string $typeValidation): array
+    {
+        $query = $this->createQueryBuilder('f')
+            ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
+            ->andWhere('c.id = :composante')
+            ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
+            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('composante', $composante);
+
 
         return $query->getQuery()
             ->getResult();

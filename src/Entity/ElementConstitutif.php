@@ -673,19 +673,6 @@ class ElementConstitutif
     {
         $raccroche = $this->getFicheMatiere()?->getParcours() !== $parcours;
         return GetElementConstitutif::getEtatBcc($this, $raccroche);
-
-//        if ($this->getFicheMatiere()->getApprentissagesCritiques()->count() > 0) {
-//            //todo: les Ac doivent être dans la bonne compétence...
-//            foreach ($this->getFicheMatiere()->getApprentissagesCritiques() as $ac) {
-//                if ($ac->getNiveau() !== null &&
-//                    $ac->getNiveau()->getCompetence()?->getNumero() === $this->getUe()?->getOrdre()) {
-//                    return 'Complet';
-//                }
-//            }
-//        }
-
-
-        return 'A saisir';
     }
 
     public function isFicheFromParcours(): bool
