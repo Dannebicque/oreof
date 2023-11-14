@@ -13,6 +13,7 @@ use App\Classes\AddUser;
 use App\Entity\Composante;
 use App\Form\ComposanteType;
 use App\Repository\ComposanteRepository;
+use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -124,10 +125,11 @@ class ComposanteController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_composante_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_composante_delete', methods: ['POST', 'DELETE'])]
     public function delete(Request $request, Composante $composante, ComposanteRepository $composanteRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$composante->getId(), $request->request->get('_token'))) {
+
+        if ($this->isCsrfTokenValid('delete'.$composante->getId(), JsonRequest::getValueFromRequest($request, 'csrf'))) {
             $composanteRepository->remove($composante, true);
         }
 

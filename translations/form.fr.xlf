@@ -2059,5 +2059,35 @@
         <target>Actualité publiée ?</target>
       </segment>
     </unit>
+    <unit id="CbJEiFv" name="composante.labels.composanteInformation.label">
+      <segment>
+        <source>composante.labels.composanteInformation.label</source>
+        <target>composante.labels.composanteInformation.label</target>
+      </segment>
+    </unit>
+    <unit id="A7qU5xg" name="Restauration">
+      <segment>
+        <source>Restauration</source>
+        <target>Restauration</target>
+      </segment>
+    </unit>
+    <unit id="2AN3RNx" name="Hébergement">
+      <segment>
+        <source>Hébergement</source>
+        <target>Hébergement</target>
+      </segment>
+    </unit>
+    <unit id="qurUq.X" name="Transport">
+      <segment>
+        <source>Transport</source>
+        <target>Transport</target>
+      </segment>
+    </unit>
+    <unit id="f0ZvCiJ" name="Information complémentaires">
+      <segment>
+        <source>Information complémentaires</source>
+        <target>Information complémentaires</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

@@ -57,7 +57,7 @@ class LheoXML {
         }
 
         // Contact de la formation
-        $referentPedagogique = [];
+        $referentsPedagogiques = [];
         if($parcours->getRespParcours()){
             $referentPedagogique = [
                 // Référent pédagogique
@@ -68,6 +68,19 @@ class LheoXML {
                     'courriel' => $parcours->getRespParcours()  ? $parcours->getRespParcours()->getEmail() : 'Non renseigné.' ,
                 ]
             ];
+            $referentsPedagogiques[] = $referentPedagogique;
+        }
+        if($parcours->getCoResponsable()){
+            $coReferentPedagogique = [
+                // Référent pédagogique
+                'type-contact' => 3,
+                'coordonnees' => [
+                    'nom' => $parcours->getCoResponsable()  ? $parcours->getCoResponsable()->getNom() : 'Non renseigné.' ,
+                    'prenom' => $parcours->getCoResponsable()  ? $parcours->getCoResponsable()->getPrenom() : 'Non renseigné.' ,
+                    'courriel' => $parcours->getCoResponsable()  ? $parcours->getCoResponsable()->getEmail() : 'Non renseigné.' ,
+                ]
+            ];
+            $referentsPedagogiques[] = $coReferentPedagogique;
         }
 
         // Niveau d'entree
@@ -97,7 +110,7 @@ class LheoXML {
         }
         
         // Modalités de l'alternance
-        $modalitesAlternance = 'Non renseigné.';
+        $modalitesAlternance = "La formation n'est pas dispensée en alternance";
         if($parcours->getModalitesAlternance()){
             if(!empty($parcours->getModalitesAlternance())){
                 $modalitesAlternance = $this->cleanString($parcours->getModalitesAlternance());
@@ -126,6 +139,12 @@ class LheoXML {
            $rncp = 'RNCP' . $parcours->getFormation()->getCodeRNCP();
         }
 
+        // Contact Organisme (composante)
+        $coordonneesComposante = [
+
+        ];
+
+
         // Génération du XML
         $encoder = new XmlEncoder([
         ]);
@@ -148,7 +167,7 @@ class LheoXML {
                     'contenu-formation' => $this->cleanString(($parcours->getContenuFormation() ?? 'Non renseigné.')),
                     // Tous les parcours ne sont pas forcément certifiants
                     'certifiante' => 1,
-                    'contact-formation' => $referentPedagogique,
+                    'contact-formation' => $referentsPedagogiques,
                     'parcours-de-formation' => 1,
                     'code-niveau-entree' => $niveauEntree,
                     'certification' => [
@@ -165,7 +184,7 @@ class LheoXML {
                         'conditions-specifiques' => $parcours->getPrerequis() ?? 'Aucune condition spécifique.',
                         'prise-en-charge-frais-possible' => 1, // A CHANGER - 1 oui | 0 non
                         'lieu-de-formation' => [
-                             // A CHANGER
+                             // PAS DEPUIS LE LHEO
                              'coordonnees' => [
                                 'adresse' => [
                                     'ligne' => 'XXX',
@@ -185,16 +204,16 @@ class LheoXML {
                                 'adresse' => $adresseComposanteInscription
                             ]
                         ],
-                        'restauration' => "Restaurants Universitaires CROUS", // A CHANGER ? 
-                        'hebergement' => "Résidences Universitaires CROUS", // A CHANGER ?
-                        'transport' => "Transports en commun" // A CHANGER ?
+                        'restauration' => "Restaurants Universitaires CROUS", // A AJOUTER DANS LE FORMULAIRE
+                        'hebergement' => "Résidences Universitaires CROUS", // A AJOUTER DANS LE FORMULAIRE
+                        'transport' => "Transports en commun" // A AJOUTER DANS LE FORMULAIRE
 
                     ],
                     'organisme-formation-responsable' => [
-                        'numero-activite' => 'XXXXXXXXXXX', // A CHANGER 
-                        'SIRET-organisme-formation' => ['SIRET' => '19511296600799'], // A VERIFIER
-                        'nom-organisme' => 'UNIVERSITE DE REIMS CHAMPAGNE-ARDENNE',
-                        'raison-sociale' => 'XXXXXXXXXXXX', // A CHANGER
+                        'numero-activite' => '2151P001151',
+                        'SIRET-organisme-formation' => ['SIRET' => '19511296600799'],
+                        'nom-organisme' => 'Université de Reims Champagne-Ardenne',
+                        'raison-sociale' => 'Université de Reims Champagne-Ardenne',
                         'coordonnees-organisme' => [
                             // Coordonnées de l'URCA
                             'coordonnees' => [
@@ -208,7 +227,9 @@ class LheoXML {
                         ],
                         'contact-organisme' => [
                             'coordonnees' => [
-                                // Coordonnées secrétariat global de l'URCA
+                                // Coordonnées secrétariat de la composante
+                                'adresse' => $adresseComposanteInscription,
+                                'telfixe' => ['numtel' => $parcours->getComposanteInscription()?->getTelStandard() ?? 'Non renseigné'],
                                 'web' => ['urlweb' => 'https://www.univ-reims.fr/contact/contactez-nous,23,32.html']
                             ]
                         ]

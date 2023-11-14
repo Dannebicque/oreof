@@ -799,5 +799,17 @@
         <target>historique.validation.parcours</target>
       </segment>
     </unit>
+    <unit id="PNUa_ql" name="validation.ses.valide.alerte">
+      <segment>
+        <source>validation.ses.valide.alerte</source>
+        <target>validation.ses.valide.alerte</target>
+      </segment>
+    </unit>
+    <unit id="d5s1Tov" name="btn.validation.ses.valide">
+      <segment>
+        <source>btn.validation.ses.valide</source>
+        <target>btn.validation.ses.valide</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
