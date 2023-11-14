@@ -9,8 +9,9 @@
 
 namespace App\TypeDiplome\Source;
 
+use App\Classes\CalculButStructureParcours;
+use App\DTO\StructureParcours;
 use App\Entity\AnneeUniversitaire;
-use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Mccc;
@@ -51,6 +52,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
     ];
 
     public function __construct(
+        protected CalculButStructureParcours $calculStructureParcours,
         protected ButCompetenceRepository $butCompetenceRepository,
         protected EntityManagerInterface  $entityManager,
         protected TypeDiplomeRegistry     $typeDiplomeRegistry,
@@ -58,6 +60,11 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         protected ButMccc                 $butMccc
     ) {
         parent::__construct($entityManager, $typeDiplomeRegistry);
+    }
+
+    public function calculStructureParcours(Parcours $parcours): StructureParcours
+    {
+        return $this->calculStructureParcours->calcul($parcours);
     }
 
     public function getMcccs(FicheMatiere $elementConstitutif): array|Collection

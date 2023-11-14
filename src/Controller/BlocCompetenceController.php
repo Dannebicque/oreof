@@ -64,8 +64,7 @@ class BlocCompetenceController extends AbstractController
     public function afficheBUTReferentiel(
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours            $parcours
-    ): Response
-    {
+    ): Response {
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
 
         return $this->render('typeDiplome/but/_refCompetences.html.twig', [

@@ -1,7 +1,4 @@
-<div {{ stimulus_controller('validation--index') }}>
-    {% set sort = params.sort is defined ? params.sort : 'typeDiplome' %}
-    {% set direction = params.direction is defined ? params.direction : 'asc' %}
-
+<div class="card-body">
     <table class="table" {{ stimulus_controller('check_all') }}>
         <thead>
         <tr>
@@ -13,216 +10,103 @@
                 </div>
             </th>
             <th>
-                <a href="#"
-                        {{ stimulus_action('crud', 'sort', 'click', {
-                            'sort': 'composantePorteuse',
-                            'direction': getDirection('composantePorteuse', sort, direction)
-                        }) }}
-                >
-                    Composante
-                    {{ displaySort('composantePorteuse', sort, direction) }}
-                </a>
+                Composante
             </th>
             <th>
-                <a href="#"
-                        {{ stimulus_action('crud', 'sort', 'click', {
-                            'sort': 'typeDiplome',
-                            'direction': getDirection('typeDiplome', sort, direction)
-                        }) }}
-                >
-                    Type de formation
-                    {{ displaySort('typeDiplome', sort, direction) }}
-                </a>
+                Type de formation
             </th>
             <th>
-                <a href="#"
-                        {{ stimulus_action('crud', 'sort', 'click', {
-                            'sort': 'mention',
-                            'direction': getDirection('mention', sort, direction)
-                        }) }}
-                >
-                    Mention/spécialité
-
-                    {{ displaySort('mention', sort, direction) }}
-                </a>
+                Mention/spécialité
             </th>
             <th>Etat</th>
             <th>Remplissage</th>
             <th></th>
         </tr>
-        {% if is_granted('ROLE_SES') %}
-            <tr>
-                <th></th>
-                <th>
-                    <label for="filter-composante" class="sr-only">Composante</label>
-                    <select
-                            {{ stimulus_action('crud', 'filter', 'change', {
-                                'field': 'composantePorteuse'
-                            }) }}
-                            id="filter-composante"
-                            {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
-                            class="form-select">
-                        <option value="">Toutes les composantes</option>
-                        {% for composante in composantes %}
-                            <option value="{{ composante.id }}"
-                                    {% if params['composantePorteuse'] is defined and params['composantePorteuse']  == composante.id %}selected{% endif %}
-                            >{{ composante.libelle }}</option>
-                        {% endfor %}
-                    </select>
-                </th>
-                <th>
-                    <label for="filter-type_formation" class="sr-only">type formation</label>
-                    <select
-                            {{ stimulus_action('crud', 'filter', 'change', {
-                                'field': 'typeDiplome'
-                            }) }}
-                            {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
-                            id="filter-type_formation" class="form-select"
-                    >
-                        <option value="">Tous les types de formation</option>
-                        {% for type in typeDiplomes %}
-                            <option value="{{ type.id }}"
-                                    {% if params['typeDiplome'] is defined and params['typeDiplome']  == type.id %}selected{% endif %}
-                            >{{ type.libelle }}</option>
-                        {% endfor %}
-                    </select>
-                </th>
-                <th>
-                    <label for="filter-mention" class="sr-only">mention</label>
-                    <select
-                            {{ stimulus_action('crud', 'filter', 'change', {
-                                'field': 'mention'
-                            }) }}
-                            id="filter-mention" class="form-select"
-                            {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
-                    >
-                        <option value="">Toutes les mentions</option>
-                        {% for mention in mentions %}
-                            <option value="{{ mention.id }}"
-                                    {% if params['mention'] is defined and params['mention']  == mention.id %}selected{% endif %}
-                            >{{ mention.libelle }}</option>
-                        {% endfor %}
 
-                    </select>
-                </th>
-                <th>
-                    <label for="filter-etat" class="sr-only">etat</label>
-                    <select
-                            {{ stimulus_action('crud', 'filter', 'change', {
-                                'field': 'etat'
-                            }) }}
-                            id="filter-etat" class="form-select">
-
-                    </select>
-                </th>
-                <th>
-                    <label for="filter-remplissage" class="sr-only">remplissage</label>
-                    <select
-                            {{ stimulus_action('crud', 'filter', 'change', {
-                                'field': 'remplissage'
-                            }) }}
-                            id="filter-remplissage" class="form-select">
-                        <option value=""></option>
-                        <option value="0" {% if params['remplissage'] is defined and params['remplissage'] == 0 %}selected{% endif %}>Non complété</option>
-                        <option value="100" {% if params['remplissage'] is defined and params['remplissage'] == 100 %}selected{% endif %}>Complet</option>
-                    </select>
-                </th>
-                <th>
-                    <button class="btn btn-outline-danger"
-                            {{ stimulus_action('crud', 'effaceFiltre', 'click', {
-                            }) }}
-                    >
-                        Effacer les filtres
-                    </button>
-                </th>
-            </tr>
-        {% endif %}
         </thead>
         <tbody>
         {% for formation in formations %}
-            {% if (params['remplissage'] is defined and formation.remplissage == params['remplissage']) or  params['remplissage'] is not defined %}
-                <tr>
-                    <td>
-                        <div class="checkbox">
-                            <label>
-                                <input
-                                        {{ stimulus_action('check_all', 'check') }}
-                                        type="checkbox"
-                                        class="check-all"
-                                        name="formations[]"
-                                        value="{{ formation.id }}"
-                                >
-                            </label>
-                        </div>
-                    </td>
-                    <td>
-                        {% if formation.composantePorteuse != null %}
-                            {{ formation.composantePorteuse.libelle }}
-                        {% else %}
-                            <span class="badge bg-danger">Non définie</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ formation.typeDiplome|typeDiplome }}
-                    </td>
-                    <td>
-                        {% if formation.mention != null or formation.mentionTexte != null %}
-                            {{ formation.display }}
-                        {% else %}
-                            <span class="badge bg-danger">Non définie</span>
-                        {% endif %}
-                    </td>
-
-                    <td>
-                        {{ formation.etatDpe|badgeDpe }}
-                    </td>
-                    <td>
-                        {{ formation.remplissage|remplissage }}
-                    </td>
-                    <td class="text-end">
-                        {% if formation.hasParcours and formation.parcours|length > 0 %}
-                            <button class="btn btn-sm btn-outline-primary"
-                                    {{ stimulus_action('structure--formation', 'afficherParcours', 'click',
-                                        {formation:formation.id}) }}
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input
+                                    {{ stimulus_action('check_all', 'check') }}
+                                    type="checkbox"
+                                    class="check-all"
+                                    name="formations[]"
+                                    value="{{ formation.id }}"
                             >
-                                <i class="fal fa-caret-right"></i>
-                                {{ formation.parcours|length }} parcours
-                            </button>
-                        {% endif %}
+                        </label>
+                    </div>
+                </td>
+                <td>
+                    {% if formation.composantePorteuse != null %}
+                        {{ formation.composantePorteuse.libelle }}
+                    {% else %}
+                        <span class="badge bg-danger">Non définie</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {{ formation.typeDiplome|typeDiplome }}
+                </td>
+                <td>
+                    {% if formation.mention != null or formation.mentionTexte != null %}
+                        {{ formation.display }}
+                    {% else %}
+                        <span class="badge bg-danger">Non définie</span>
+                    {% endif %}
+                </td>
 
-                        <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}"
-                           class="btn btn-sm text-info"
+                <td>
+                    {{ formation.etatDpe|badgeDpe }}
+                </td>
+                <td>
+                    {{ formation.remplissage|remplissage }}
+                </td>
+                <td class="text-end">
+                    {% if formation.hasParcours and formation.parcours|length > 0 %}
+                        <button class="btn btn-sm btn-outline-primary"
+                                {{ stimulus_action('structure--formation', 'afficherParcours', 'click',
+                                    {formation:formation.id}) }}
+                        >
+                            <i class="fal fa-caret-right"></i>
+                            {{ formation.parcours|length }} parcours
+                        </button>
+                    {% endif %}
+
+                    <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}"
+                       class="btn btn-sm text-info"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="Voir une formation"
+                    >
+                        <i class="{{ iconShow }}"></i>
+                        <span> Voir</span>
+                    </a>
+
+                    {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
+                        <a href="{{ path('app_formation_edit',{'slug': formation.slug}) }}"
+                           class="btn btn-sm text-warning"
                            data-bs-toggle="tooltip"
                            data-bs-placement="bottom"
-                           title="Voir une formation"
+                           title="Modifier la fiche d'identité de la formation"
                         >
-                            <i class="{{ iconShow }}"></i>
-                            <span> Voir</span>
+                            <i class="{{ iconEdit }}"></i>
+                            <span> Modifier</span>
                         </a>
+                    {% endif %}
 
-                        {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
-                            <a href="{{ path('app_formation_edit',{'slug': formation.slug}) }}"
-                               class="btn btn-sm text-warning"
-                               data-bs-toggle="tooltip"
-                               data-bs-placement="bottom"
-                               title="Modifier la fiche d'identité de la formation"
-                            >
-                                <i class="{{ iconEdit }}"></i>
-                                <span> Modifier</span>
-                            </a>
-                        {% endif %}
-
-                        {% if is_granted('ROLE_SES') %}
-                            <button {{ stimulus_action('crud', 'delete', 'click', {
-                                url:path('app_formation_delete',{'id': formation.id}),
-                                csrf: csrf_token('delete' ~ formation.id)
-                            }) }} class="btn btn-sm text-danger">
-                                <i class="{{ iconDelete }}"></i> Supprimer
-                            </button>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endif %}
+                    {% if is_granted('ROLE_SES') %}
+                        <button {{ stimulus_action('crud', 'delete', 'click', {
+                            url:path('app_formation_delete',{'id': formation.id}),
+                            csrf: csrf_token('delete' ~ formation.id)
+                        }) }} class="btn btn-sm text-danger">
+                            <i class="{{ iconDelete }}"></i> Supprimer
+                        </button>
+                    {% endif %}
+                </td>
+            </tr>
         {% else %}
             <tr>
                 <td colspan="8" class="bg-warning">Aucun enregistrement trouvé</td>
@@ -230,4 +114,88 @@
         {% endfor %}
         </tbody>
     </table>
+    <div class="row mt-2">
+        {% if process.hasValid %}
+            <div class="col-2 d-grid">
+                <button class="btn btn-sm d-block btn-outline-success"
+                        type="button"
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            updateComponent: {
+                                id: 'mention_manage',
+                                event: 'mention_manage:valide'
+                            },
+                            modalTitle: ('validation.valider.'~etape~'.title')|trans({}, 'process'),
+                            modalUrl: path('app_validation_valide_lot', {
+                                etape:etape,
+                            }) }) }}
+                        data-action="click->modal#openModal"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
+                >
+                    <i class="fal fa-check"></i> {{ ('validation.valider.'~etape)|trans({}, 'process') }}
+                </button>
+            </div>
+        {% else %}
+            <div class="col-2 d-grid">
+            </div>
+        {% endif %}
+        {% if process.hasReserve %}
+            <div class="col-2 d-grid">
+                <button
+                        class="btn btn-sm d-block btn-outline-warning"
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            updateComponent: {
+                                id: 'mention_manage',
+                                event: 'mention_manage:reserve'
+                            },
+                            modalTitle: ('validation.reserve.'~etape~'.title')|trans({}, 'process'),
+                            modalUrl: path('app_validation_reserve_lot', {
+                                etape:etape,
+                            }) }) }}
+                        data-action="click->modal#openModal"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}"
+                        type="button">
+                    <i class="fal fa-circle-exclamation-check"></i> {{ ('validation.reserve.'~etape)|trans({}, 'process') }}
+                </button>
+            </div>
+        {% else %}
+            <div class="col-2 d-grid">
+            </div>
+
+        {% endif %}
+        {% if process.hasRefuse %}
+            <div class="col-2 d-grid">
+                <button class="btn btn-sm d-block btn-outline-danger"
+                        type="button"
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            updateComponent: {
+                                id: 'mention_manage',
+                                event: 'mention_manage:refuse'
+                            },
+                            modalTitle: ('validation.refuser.'~etape~'.title')|trans({}, 'process'),
+                            modalUrl: path('app_validation_refuse_lot', {
+                                etape:etape,
+                            }) }) }}
+                        data-action="click->modal#openModal"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"
+                >
+                    <i class="fal fa-ban"></i> {{ ('validation.refuser.'~etape)|trans({}, 'process') }}
+                </button>
+            </div>
+        {% else %}
+            <div class="col-2 d-grid">
+            </div>
+        {% endif %}
+    </div>
 </div>

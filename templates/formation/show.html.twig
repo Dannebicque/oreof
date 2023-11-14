@@ -5,9 +5,8 @@
 {% block content %}
 
     {{ component('mention_manage', {formation:formation, type:'formation'}) }}
-
     <div class="row">
-        {{ include('typeDiplome/formation/common/_licence.html.twig', {print:false}) }}
+        {{ include('typeDiplome/formation/common/_'~constant('SOURCE', typeD)~'.html.twig', {print:false}) }}
         <!-- Scrollspy Start -->
         <div class="col-md-auto d-none d-lg-block" id="scrollSpyMenu">
             <ul class="nav flex-column">

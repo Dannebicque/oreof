@@ -38,7 +38,7 @@
         <div class="card mt-2">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-12">
                         <div>
                             <label for="annee_universitaire" class="required">Annnée Universitaire</label>
                             <select name="annee_universitaire"
@@ -51,6 +51,8 @@
                                 {% endfor %}
                             </select>
                         </div>
+                    </div>
+                    <div class="col-6">
                         {% if ses is defined and ses == true or isCfvu is defined and isCfvu == true %}
                             <div>
                                 <label for="composante" class="required">Composante</label>
@@ -85,14 +87,28 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    </div>
-                    <div class="col-6">
+
                         {% if isCfvu is defined and isCfvu != true %}
                             <div>
                                 <label for="date">Préciser, si besoin, la date du conseil ou de la commission</label>
                                 <input type="date" name="date" id="date" class="form-control">
                             </div>
                         {% endif %}
+                    </div>
+                    <div class="col-6">
+                        {% if types_document_global is defined %}
+                        <div>
+                            <label for="type_document_global" class="required">Exports spécifiques (sans choix de composante)</label>
+                            <select name="type_document_global" id="type_document_global" class="form-select">
+                                <option value="">Choisir le format</option>
+                                {% for value, type in types_document_global %}
+                                    <option value="{{ value }}">{{ type }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-12">
                         <div class="mt-2">
                             <button class="btn btn-outline-success" type="button"
                                     {{ stimulus_action('export', 'valideExport') }}

@@ -23,10 +23,6 @@ use App\Enums\RegimeInscriptionEnum;
 use App\Repository\TypeEpreuveRepository;
 use App\Utils\Tools;
 use DateTimeInterface;
-
-//use Gotenberg\Gotenberg;
-
-//use Gotenberg\Stream;
 use Gotenberg\Gotenberg;
 use Gotenberg\Stream;
 use PhpOffice\PhpSpreadsheet\Exception;
@@ -581,13 +577,14 @@ class LicenceMccc
 
 
             // BCC
-            $texte = '';
+            $texte = [];
             foreach ($structureEc->bccs as $comp) {
-                $texte .= $comp->getCode() . "; ";
+                $texte[] = $comp->getCode();
             }
 
-            $texte = substr($texte, 0, -2);
-
+            //suppression des doublons
+            $texte = array_unique($texte);
+            $texte = implode(', ', $texte);
             $this->excelWriter->writeCellXY(self::COL_COMPETENCES, $ligne, $texte);
         } else {
             $this->excelWriter->writeCellXY(self::COL_INTITULE_EC, $ligne, $ec->getTexteEcLibre(), ['wrap' => true]);
@@ -613,8 +610,17 @@ class LicenceMccc
 
                         if ($mccc->hasTp()) {
                             $hasTp = true;
-                            $pourcentageTp += $mccc->pourcentageTp();
-                            $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
+                            if ($mccc->getNbEpreuves() === 1) {
+                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
+                                //todo: interdire la saisie d'un pourcentage de TP si une seule épreuve de CC
+                                $pourcentageTp += $mccc->getPourcentage();
+                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
+                            } else {
+                                $pourcentageTp += $mccc->pourcentageTp();
+                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
+                            }
+
+
                             $nb2++;
                         }
                     }
@@ -671,7 +677,14 @@ class LicenceMccc
                     foreach ($mcccs[1]['cc'] as $mccc) {
                         if ($mccc->hasTp()) {
                             $hasTp = true;
-                            $pourcentageTp += $mccc->pourcentageTp();
+                            if ($mccc->getNbEpreuves() === 1) {
+                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
+                                $pourcentageTp += $mccc->getPourcentage();
+                            } else {
+                                $pourcentageTp += $mccc->pourcentageTp();
+                            }
+
+
                         }
                         $pourcentageCc += $mccc->getPourcentage();
                         $texteCc .= 'CC (' . $mccc->getPourcentage() . '%); ';
@@ -773,6 +786,7 @@ class LicenceMccc
     {
         $this->excelWriter->insertNewRowBefore($ligne);
         $this->excelWriter->writeCellXY(self::COL_INTITULE_EC, $ligne, $ue->ue->getDescriptionUeLibre(), ['wrap' => true]);
+        $this->excelWriter->writeCellXY(self::COL_ECTS, $ligne, $ue->ue->getEcts() === 0.0 ? '' : $ue->ue->getEcts());
 
         $ligne++;
         return $ligne;

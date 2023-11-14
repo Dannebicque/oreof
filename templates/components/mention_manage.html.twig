@@ -332,8 +332,7 @@
                                                 id: 'mention_manage',
                                                 event: 'mention_manage:edit'
                                             },
-                                            modalUrl: path('app_validation_edit', {id:this.formation.id,
-                                                type:this.type}) }) }}
+                                            modalUrl: path('app_validation_edit', {id:this.type == 'formation' ? this.formation.id : this.parcours.id, type:this.type}) }) }}
                                    data-action="click->modal#openModal"
                                    data-size="lg"
                                 >

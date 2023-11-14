@@ -57,6 +57,7 @@
                             {% if loop.first %}
                                 <td rowspan="{{ bcc.competences|length }}">{{ bcc.display }}</td>
                             {% endif %}
+                            {# todo: faire une classe qui calcul le référentiel en amaont, nootamment pour gérer le raccrocher #}
                             <td>{{ competence.display }}</td>
                             {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
                                 {% if ue.ueEnfants|length == 0 %}

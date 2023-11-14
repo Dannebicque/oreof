@@ -14,6 +14,7 @@ use App\Entity\AnneeUniversitaire;
 use App\Repository\FormationRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use DateTimeInterface;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class Export
@@ -27,6 +28,8 @@ class Export
     private mixed $export;
 
     public function __construct(
+        protected ExportCarif $exportCarif,
+        protected ExportSynthese $exportSynthese,
         protected ExportMccc $exportMccc,
         KernelInterface $kernel,
         private TypeDiplomeRegistry $typeDiplomeRegistry,
@@ -64,6 +67,10 @@ class Export
                 return $this->exportMccc();
             case 'light_mccc':
                 return $this->exportMccc(true);
+            case 'carif':
+                return $this->exportCarif();
+            case 'synthese':
+                return $this->exportSynthese();
         }
     }
 
@@ -89,5 +96,15 @@ class Export
             $this->format,
             $isLight);
         return $this->exportMccc->exportZip();
+    }
+
+    private function exportCarif()
+    {
+        return $this->exportCarif->exportLink($this->annee);
+    }
+
+    private function exportSynthese(): string
+    {
+        return $this->exportSynthese->exportLink($this->annee);
     }
 }

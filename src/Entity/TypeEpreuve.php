@@ -25,9 +25,6 @@ class TypeEpreuve
     #[ORM\Column(length: 100)]
     private ?string $libelle = null;
 
-//    #[ORM\Column(type: Types::JSON, nullable: true)]
-//    private array $typeDiplome = [];
-
     #[ORM\ManyToMany(targetEntity: TypeDiplome::class, inversedBy: 'typeEpreuves')]
     private Collection $typeDiplomes;
 

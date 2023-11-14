@@ -2,6 +2,78 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.3](https://github.com/Dannebicque/oreof/compare/v1.17.2...v1.17.3) (2023-11-14)
+
+
+### Bug Fixes
+
+* Validation + affichage ([feb982b](https://github.com/Dannebicque/oreof/commit/feb982b2b59d23c6643283c4fa117905cb405a68))
+
+### [1.17.2](https://github.com/Dannebicque/oreof/compare/v1.17.1...v1.17.2) (2023-11-13)
+
+
+### Bug Fixes
+
+* Bug si parcours sans formation (cas des parcours supprimés) ([060d00f](https://github.com/Dannebicque/oreof/commit/060d00faae551507c333940220228d772a80e4cb))
+* Tableau CARIF avec lieu de formation ([e515efe](https://github.com/Dannebicque/oreof/commit/e515efe968475ff972aa42335f50e76862dea6fd))
+
+### [1.17.1](https://github.com/Dannebicque/oreof/compare/v1.17.0...v1.17.1) (2023-11-13)
+
+
+### Features
+
+* Affichage du parcours d'origine d'une UE ([d1635e7](https://github.com/Dannebicque/oreof/commit/d1635e7aa12b4cc57241a0139d0179f05c72839f))
+
+## [1.17.0](https://github.com/Dannebicque/oreof/compare/v1.16.6...v1.17.0) (2023-11-11)
+
+
+### Features
+
+* Ajout des exports ([d42738d](https://github.com/Dannebicque/oreof/commit/d42738d88e28b89b4b4fa6003f3f00f4dcf4506a))
+
+
+### Bug Fixes
+
+* Affichage des ECTS des UE libres ([a884ae8](https://github.com/Dannebicque/oreof/commit/a884ae8d5495bd6fd12b1142cbce2c73895ec6d1))
+
+### [1.16.6](https://github.com/Dannebicque/oreof/compare/v1.16.5...v1.16.6) (2023-11-07)
+
+
+### Bug Fixes
+
+* ECTS si ECTS Synchro ([28bad84](https://github.com/Dannebicque/oreof/commit/28bad840424faaa827dacc136d3b1619f49635c0))
+* MCCC: Si une seule épreuve pas de prise en compte du %de TP potentiellement différent du % de CC ([4de5230](https://github.com/Dannebicque/oreof/commit/4de5230f9015974b2f652abd52ca432e1bb08b5c))
+* menu CFVU uniquement CFVU et pas Admin ou SES ([c9cf3d7](https://github.com/Dannebicque/oreof/commit/c9cf3d75f1e784d9a15f5c620b0ef842eabbea28))
+
+### [1.16.5](https://github.com/Dannebicque/oreof/compare/v1.16.4...v1.16.5) (2023-11-07)
+
+
+### Bug Fixes
+
+* Export bilan ([ee8eab4](https://github.com/Dannebicque/oreof/commit/ee8eab4265e14f789a3f3b70cd24b1cc08d03912))
+
+### [1.16.4](https://github.com/Dannebicque/oreof/compare/v1.16.3...v1.16.4) (2023-11-06)
+
+
+### Bug Fixes
+
+* Droits sur fiche éditable ([95f1bf5](https://github.com/Dannebicque/oreof/commit/95f1bf5fce9a7017233c6b3de6dabf248bcbb862))
+
+### [1.16.3](https://github.com/Dannebicque/oreof/compare/v1.16.2...v1.16.3) (2023-11-06)
+
+
+### Features
+
+* Affichage BUT ([c60876e](https://github.com/Dannebicque/oreof/commit/c60876ee2227e143aab203464cde0c7c38f49165))
+
+
+### Bug Fixes
+
+* Actualités ([91074b4](https://github.com/Dannebicque/oreof/commit/91074b40f33d347b22a361d8998b078cf7de19a1))
+* Contact, avec champs pré-remplis ([2eca668](https://github.com/Dannebicque/oreof/commit/2eca668a7a986c385e9fb5ab0aadaf82adb1cd28))
+* Droits sur fiche éditable ([3d8423f](https://github.com/Dannebicque/oreof/commit/3d8423f761a4413b25ed4ef276b603966ebb796b))
+* modification du statut ([05d24da](https://github.com/Dannebicque/oreof/commit/05d24da4b367d629fa319ad44e1c924570f75a6c))
+
 ### [1.16.2](https://github.com/Dannebicque/oreof/compare/v1.16.1...v1.16.2) (2023-10-27)
 
 
