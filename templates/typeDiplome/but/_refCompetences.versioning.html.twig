@@ -1,0 +1,18 @@
+<ul class="nav nav-pills responsive-tabs nav-justified" role="tablist">
+    {% for competence in competences %}
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if loop.first %}active{% endif %}"
+                    data-bs-toggle="tab"
+                    data-bs-target="#competence_{{ loop.index }}"
+                    role="tab" aria-selected="false" type="button">{{ competence.nomCourt }}</button>
+        </li>
+    {% endfor %}
+</ul>
+
+<div class="tab-content">
+    {% for competence in competences %}
+        <div class="tab-pane {% if loop.first %}fade active show{% endif %}" id="competence_{{ loop.index }}">
+            {{ include('typeDiplome/but/_competence.html.twig') }}
+        </div>
+    {% endfor %}
+</div>

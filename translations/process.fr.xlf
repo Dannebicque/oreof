@@ -1,0 +1,803 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="fr" trgLang="fr">
+  <file id="process.fr">
+    <unit id="2zPeMNo" name="validation.parcours.soumis_rf">
+      <segment>
+        <source>validation.parcours.soumis_rf</source>
+        <target>validation.parcours.soumis_rf</target>
+      </segment>
+    </unit>
+    <unit id="PtGeXA3" name="validation.parcours.en_cours_redaction">
+      <segment>
+        <source>validation.parcours.en_cours_redaction</source>
+        <target>validation.parcours.en_cours_redaction</target>
+      </segment>
+    </unit>
+    <unit id="Ri6tZ7T" name="validation.parcours.soumis_parcours">
+      <segment>
+        <source>validation.parcours.soumis_parcours</source>
+        <target>validation.parcours.soumis_parcours</target>
+      </segment>
+    </unit>
+    <unit id="ZaRcjc8" name="validation.cfvu.valide_a_publier">
+      <segment>
+        <source>validation.cfvu.valide_a_publier</source>
+        <target>validation.cfvu.valide_a_publier</target>
+      </segment>
+    </unit>
+    <unit id="mK_2xt6" name="validation.formation.autorisation_saisie">
+      <segment>
+        <source>validation.formation.autorisation_saisie</source>
+        <target>validation.formation.autorisation_saisie</target>
+      </segment>
+    </unit>
+    <unit id="Qz4DeBQ" name="validation.valider.formation.title">
+      <segment>
+        <source>validation.valider.formation.title</source>
+        <target>validation.valider.formation.title</target>
+      </segment>
+    </unit>
+    <unit id="CBmtKkU" name="validation.valider.formation">
+      <segment>
+        <source>validation.valider.formation</source>
+        <target>validation.valider.formation</target>
+      </segment>
+    </unit>
+    <unit id="UDSy.qM" name="validation.valider.parcours.title">
+      <segment>
+        <source>validation.valider.parcours.title</source>
+        <target>validation.valider.parcours.title</target>
+      </segment>
+    </unit>
+    <unit id="ptW_o70" name="validation.valider.parcours">
+      <segment>
+        <source>validation.valider.parcours</source>
+        <target>validation.valider.parcours</target>
+      </segment>
+    </unit>
+    <unit id="5oGnluE" name="validation.valider.dpe.title">
+      <segment>
+        <source>validation.valider.dpe.title</source>
+        <target>validation.valider.dpe.title</target>
+      </segment>
+    </unit>
+    <unit id="8NljPnh" name="validation.valider.dpe">
+      <segment>
+        <source>validation.valider.dpe</source>
+        <target>validation.valider.dpe</target>
+      </segment>
+    </unit>
+    <unit id="4ixQNYY" name="validation.reserve.dpe.title">
+      <segment>
+        <source>validation.reserve.dpe.title</source>
+        <target>validation.reserve.dpe.title</target>
+      </segment>
+    </unit>
+    <unit id="oiMdOGq" name="validation.reserve.dpe">
+      <segment>
+        <source>validation.reserve.dpe</source>
+        <target>validation.reserve.dpe</target>
+      </segment>
+    </unit>
+    <unit id="Q1t521W" name="validation.refuser.dpe.title">
+      <segment>
+        <source>validation.refuser.dpe.title</source>
+        <target>validation.refuser.dpe.title</target>
+      </segment>
+    </unit>
+    <unit id="3h7KnJa" name="validation.refuser.dpe">
+      <segment>
+        <source>validation.refuser.dpe</source>
+        <target>validation.refuser.dpe</target>
+      </segment>
+    </unit>
+    <unit id="40Iv7nJ" name="validation.valider.publication.title">
+      <segment>
+        <source>validation.valider.publication.title</source>
+        <target>validation.valider.publication.title</target>
+      </segment>
+    </unit>
+    <unit id="8ZGNSf6" name="validation.valider.publication">
+      <segment>
+        <source>validation.valider.publication</source>
+        <target>validation.valider.publication</target>
+      </segment>
+    </unit>
+    <unit id="n3Sb408" name="validation.dpe.reserve.soumis_dpe_composante">
+      <segment>
+        <source>validation.dpe.reserve.soumis_dpe_composante</source>
+        <target>validation.dpe.reserve.soumis_dpe_composante</target>
+      </segment>
+    </unit>
+    <unit id="IgmRpTG" name="validation.dpe.valide.soumis_dpe_composante">
+      <segment>
+        <source>validation.dpe.valide.soumis_dpe_composante</source>
+        <target>validation.dpe.valide.soumis_dpe_composante</target>
+      </segment>
+    </unit>
+    <unit id="Q7srMeQ" name="validation.dpe.refuse.soumis_dpe_composante">
+      <segment>
+        <source>validation.dpe.refuse.soumis_dpe_composante</source>
+        <target>validation.dpe.refuse.soumis_dpe_composante</target>
+      </segment>
+    </unit>
+    <unit id="2yB2KUl" name="validation.parcours.valide.en_cours_redaction">
+      <segment>
+        <source>validation.parcours.valide.en_cours_redaction</source>
+        <target>validation.parcours.valide.en_cours_redaction</target>
+      </segment>
+    </unit>
+    <unit id="Bvs1xMg" name="validation.parcours.valide.soumis_parcours">
+      <segment>
+        <source>validation.parcours.valide.soumis_parcours</source>
+        <target>validation.parcours.valide.soumis_parcours</target>
+      </segment>
+    </unit>
+    <unit id="6X19HIJ" name="validation.reserve.formation.title">
+      <segment>
+        <source>validation.reserve.formation.title</source>
+        <target>validation.reserve.formation.title</target>
+      </segment>
+    </unit>
+    <unit id="vUegMBF" name="validation.reserve.formation">
+      <segment>
+        <source>validation.reserve.formation</source>
+        <target>validation.reserve.formation</target>
+      </segment>
+    </unit>
+    <unit id="txzuSnf" name="validation.formation.valide.en_cours_redaction">
+      <segment>
+        <source>validation.formation.valide.en_cours_redaction</source>
+        <target>validation.formation.valide.en_cours_redaction</target>
+      </segment>
+    </unit>
+    <unit id="zjGlpKO" name="validation.valider.conseil.title">
+      <segment>
+        <source>validation.valider.conseil.title</source>
+        <target>validation.valider.conseil.title</target>
+      </segment>
+    </unit>
+    <unit id="eGrSwms" name="validation.valider.conseil">
+      <segment>
+        <source>validation.valider.conseil</source>
+        <target>validation.valider.conseil</target>
+      </segment>
+    </unit>
+    <unit id="pZSxw1O" name="validation.reserve.conseil.title">
+      <segment>
+        <source>validation.reserve.conseil.title</source>
+        <target>validation.reserve.conseil.title</target>
+      </segment>
+    </unit>
+    <unit id="lYyEZ3j" name="validation.reserve.conseil">
+      <segment>
+        <source>validation.reserve.conseil</source>
+        <target>validation.reserve.conseil</target>
+      </segment>
+    </unit>
+    <unit id="u5RL4ir" name="validation.refuser.conseil.title">
+      <segment>
+        <source>validation.refuser.conseil.title</source>
+        <target>validation.refuser.conseil.title</target>
+      </segment>
+    </unit>
+    <unit id="gxxchWf" name="validation.refuser.conseil">
+      <segment>
+        <source>validation.refuser.conseil</source>
+        <target>validation.refuser.conseil</target>
+      </segment>
+    </unit>
+    <unit id="Lh21aI1" name="validation.conseil.valide.soumis_conseil">
+      <segment>
+        <source>validation.conseil.valide.soumis_conseil</source>
+        <target>validation.conseil.valide.soumis_conseil</target>
+      </segment>
+    </unit>
+    <unit id="MdjSbJQ" name="validation.valider.ses.title">
+      <segment>
+        <source>validation.valider.ses.title</source>
+        <target>validation.valider.ses.title</target>
+      </segment>
+    </unit>
+    <unit id="7qfIL98" name="validation.valider.ses">
+      <segment>
+        <source>validation.valider.ses</source>
+        <target>validation.valider.ses</target>
+      </segment>
+    </unit>
+    <unit id="mVwZPMm" name="validation.reserve.ses.title">
+      <segment>
+        <source>validation.reserve.ses.title</source>
+        <target>validation.reserve.ses.title</target>
+      </segment>
+    </unit>
+    <unit id="Tt7VRVE" name="validation.reserve.ses">
+      <segment>
+        <source>validation.reserve.ses</source>
+        <target>validation.reserve.ses</target>
+      </segment>
+    </unit>
+    <unit id="w9Q3QHH" name="validation.refuser.ses.title">
+      <segment>
+        <source>validation.refuser.ses.title</source>
+        <target>validation.refuser.ses.title</target>
+      </segment>
+    </unit>
+    <unit id="X2X99QL" name="validation.refuser.ses">
+      <segment>
+        <source>validation.refuser.ses</source>
+        <target>validation.refuser.ses</target>
+      </segment>
+    </unit>
+    <unit id="4uts3pD" name="validation.ses.valide.soumis_central">
+      <segment>
+        <source>validation.ses.valide.soumis_central</source>
+        <target>validation.ses.valide.soumis_central</target>
+      </segment>
+    </unit>
+    <unit id="UilDBcT" name="validation.valider.vp.title">
+      <segment>
+        <source>validation.valider.vp.title</source>
+        <target>validation.valider.vp.title</target>
+      </segment>
+    </unit>
+    <unit id="naIlprU" name="validation.valider.vp">
+      <segment>
+        <source>validation.valider.vp</source>
+        <target>validation.valider.vp</target>
+      </segment>
+    </unit>
+    <unit id="hur4nG3" name="validation.reserve.vp.title">
+      <segment>
+        <source>validation.reserve.vp.title</source>
+        <target>validation.reserve.vp.title</target>
+      </segment>
+    </unit>
+    <unit id="R7Q7KGQ" name="validation.reserve.vp">
+      <segment>
+        <source>validation.reserve.vp</source>
+        <target>validation.reserve.vp</target>
+      </segment>
+    </unit>
+    <unit id="3OYTP8I" name="validation.refuser.vp.title">
+      <segment>
+        <source>validation.refuser.vp.title</source>
+        <target>validation.refuser.vp.title</target>
+      </segment>
+    </unit>
+    <unit id="jcxpiiW" name="validation.refuser.vp">
+      <segment>
+        <source>validation.refuser.vp</source>
+        <target>validation.refuser.vp</target>
+      </segment>
+    </unit>
+    <unit id="CUtC8gu" name="validation.vp.valide.soumis_vp">
+      <segment>
+        <source>validation.vp.valide.soumis_vp</source>
+        <target>validation.vp.valide.soumis_vp</target>
+      </segment>
+    </unit>
+    <unit id="CboJmZX" name="validation.valider.cfvu.title">
+      <segment>
+        <source>validation.valider.cfvu.title</source>
+        <target>validation.valider.cfvu.title</target>
+      </segment>
+    </unit>
+    <unit id="VgEFasP" name="validation.valider.cfvu">
+      <segment>
+        <source>validation.valider.cfvu</source>
+        <target>validation.valider.cfvu</target>
+      </segment>
+    </unit>
+    <unit id="Pn1wJC6" name="validation.refuser.cfvu.title">
+      <segment>
+        <source>validation.refuser.cfvu.title</source>
+        <target>validation.refuser.cfvu.title</target>
+      </segment>
+    </unit>
+    <unit id="jxylcHD" name="validation.refuser.cfvu">
+      <segment>
+        <source>validation.refuser.cfvu</source>
+        <target>validation.refuser.cfvu</target>
+      </segment>
+    </unit>
+    <unit id="cHCrFrU" name="validation.cfvu.valide.soumis_cfvu">
+      <segment>
+        <source>validation.cfvu.valide.soumis_cfvu</source>
+        <target>validation.cfvu.valide.soumis_cfvu</target>
+      </segment>
+    </unit>
+    <unit id="f5MnKHc" name="validation.cfvu.valide.cas.sousReserveModifications.soumis_cfvu">
+      <segment>
+        <source>validation.cfvu.valide.cas.sousReserveModifications.soumis_cfvu</source>
+        <target>validation.cfvu.valide.cas.sousReserveModifications.soumis_cfvu</target>
+      </segment>
+    </unit>
+    <unit id="RRdGmv7" name="validation.cfvu.valide.cas.sousReserveConseil.soumis_cfvu">
+      <segment>
+        <source>validation.cfvu.valide.cas.sousReserveConseil.soumis_cfvu</source>
+        <target>validation.cfvu.valide.cas.sousReserveConseil.soumis_cfvu</target>
+      </segment>
+    </unit>
+    <unit id="e69NH8." name="validation.cfvu.refuse.cas.projetARevoir.soumis_cfvu">
+      <segment>
+        <source>validation.cfvu.refuse.cas.projetARevoir.soumis_cfvu</source>
+        <target>validation.cfvu.refuse.cas.projetARevoir.soumis_cfvu</target>
+      </segment>
+    </unit>
+    <unit id="9vZyrAb" name="btn.validation.cfvu.valide.soumis_cfvu">
+      <segment>
+        <source>btn.validation.cfvu.valide.soumis_cfvu</source>
+        <target>btn.validation.cfvu.valide.soumis_cfvu</target>
+      </segment>
+    </unit>
+    <unit id="9MPFA4X" name="btn.validation.formation.valide.en_cours_redaction">
+      <segment>
+        <source>btn.validation.formation.valide.en_cours_redaction</source>
+        <target>btn.validation.formation.valide.en_cours_redaction</target>
+      </segment>
+    </unit>
+    <unit id="LzCmcBl" name="btn.validation.dpe.valide.soumis_dpe_composante">
+      <segment>
+        <source>btn.validation.dpe.valide.soumis_dpe_composante</source>
+        <target>btn.validation.dpe.valide.soumis_dpe_composante</target>
+      </segment>
+    </unit>
+    <unit id="KIa2fU5" name="btn.validation.conseil.valide.soumis_conseil">
+      <segment>
+        <source>btn.validation.conseil.valide.soumis_conseil</source>
+        <target>btn.validation.conseil.valide.soumis_conseil</target>
+      </segment>
+    </unit>
+    <unit id="_L4XFWW" name="btn.validation.ses.valide.soumis_central">
+      <segment>
+        <source>btn.validation.ses.valide.soumis_central</source>
+        <target>btn.validation.ses.valide.soumis_central</target>
+      </segment>
+    </unit>
+    <unit id="0iNV2IQ" name="btn.validation.vp.valide.soumis_vp">
+      <segment>
+        <source>btn.validation.vp.valide.soumis_vp</source>
+        <target>btn.validation.vp.valide.soumis_vp</target>
+      </segment>
+    </unit>
+    <unit id="0yu6isL" name="validation.dpe.timeline">
+      <segment>
+        <source>validation.dpe.timeline</source>
+        <target>validation.dpe.timeline</target>
+      </segment>
+    </unit>
+    <unit id="BoeB0ck" name="validation.conseil.timeline">
+      <segment>
+        <source>validation.conseil.timeline</source>
+        <target>validation.conseil.timeline</target>
+      </segment>
+    </unit>
+    <unit id="AGQP3HG" name="validation.cfvu.timeline">
+      <segment>
+        <source>validation.cfvu.timeline</source>
+        <target>validation.cfvu.timeline</target>
+      </segment>
+    </unit>
+    <unit id="9EnCZ3Y" name="validation.publication.timeline">
+      <segment>
+        <source>validation.publication.timeline</source>
+        <target>validation.publication.timeline</target>
+      </segment>
+    </unit>
+    <unit id="T5MIBhg" name="validation.formation">
+      <segment>
+        <source>validation.formation</source>
+        <target>validation.formation</target>
+      </segment>
+    </unit>
+    <unit id="sYUo6_x" name="validation.dpe">
+      <segment>
+        <source>validation.dpe</source>
+        <target>validation.dpe</target>
+      </segment>
+    </unit>
+    <unit id="VGa_smC" name="validation.conseil">
+      <segment>
+        <source>validation.conseil</source>
+        <target>validation.conseil</target>
+      </segment>
+    </unit>
+    <unit id="trl4T6e" name="validation.ses">
+      <segment>
+        <source>validation.ses</source>
+        <target>validation.ses</target>
+      </segment>
+    </unit>
+    <unit id="_Ya1xxY" name="validation.vp">
+      <segment>
+        <source>validation.vp</source>
+        <target>validation.vp</target>
+      </segment>
+    </unit>
+    <unit id="BofmJCG" name="validation.cfvu">
+      <segment>
+        <source>validation.cfvu</source>
+        <target>validation.cfvu</target>
+      </segment>
+    </unit>
+    <unit id="7yaoRIt" name="validation.publication">
+      <segment>
+        <source>validation.publication</source>
+        <target>validation.publication</target>
+      </segment>
+    </unit>
+    <unit id="2SFQKQ1" name="validation.formation.valide.autorisation_saisie">
+      <segment>
+        <source>validation.formation.valide.autorisation_saisie</source>
+        <target>validation.formation.valide.autorisation_saisie</target>
+      </segment>
+    </unit>
+    <unit id="nckju0P" name="btn.validation.formation.valide.autorisation_saisie">
+      <segment>
+        <source>btn.validation.formation.valide.autorisation_saisie</source>
+        <target>btn.validation.formation.valide.autorisation_saisie</target>
+      </segment>
+    </unit>
+    <unit id="TPb.G88" name="validation.formation.reserve.autorisation_saisie">
+      <segment>
+        <source>validation.formation.reserve.autorisation_saisie</source>
+        <target>validation.formation.reserve.autorisation_saisie</target>
+      </segment>
+    </unit>
+    <unit id="GyuyMQ5" name="reserve.validation.formation.argumentaire.label">
+      <segment>
+        <source>reserve.validation.formation.argumentaire.label</source>
+        <target>reserve.validation.formation.argumentaire.label</target>
+      </segment>
+    </unit>
+    <unit id="2hGc_r." name="reserve.validation.formation.helps.date.help">
+      <segment>
+        <source>reserve.validation.formation.helps.date.help</source>
+        <target>reserve.validation.formation.helps.date.help</target>
+      </segment>
+    </unit>
+    <unit id="WwfTGGl" name="btn.validation.formation.reserve.autorisation_saisie">
+      <segment>
+        <source>btn.validation.formation.reserve.autorisation_saisie</source>
+        <target>btn.validation.formation.reserve.autorisation_saisie</target>
+      </segment>
+    </unit>
+    <unit id="aqfD0yj" name="validation.parcours">
+      <segment>
+        <source>validation.parcours</source>
+        <target>validation.parcours</target>
+      </segment>
+    </unit>
+    <unit id="mwA.bKY" name="validation.formation.reserve.en_cours_redaction">
+      <segment>
+        <source>validation.formation.reserve.en_cours_redaction</source>
+        <target>validation.formation.reserve.en_cours_redaction</target>
+      </segment>
+    </unit>
+    <unit id="6L0Fc16" name="btn.validation.formation.reserve.en_cours_redaction">
+      <segment>
+        <source>btn.validation.formation.reserve.en_cours_redaction</source>
+        <target>btn.validation.formation.reserve.en_cours_redaction</target>
+      </segment>
+    </unit>
+    <unit id="xFS1o9Q" name=".helps.date.help">
+      <segment>
+        <source>.helps.date.help</source>
+        <target>.helps.date.help</target>
+      </segment>
+    </unit>
+    <unit id="WXwPMq0" name="valide.validation.conseil.helps.fichier.help">
+      <segment>
+        <source>valide.validation.conseil.helps.fichier.help</source>
+        <target>valide.validation.conseil.helps.fichier.help</target>
+      </segment>
+    </unit>
+    <unit id="KMvb8_0" name=".helps.laisserPasser.texte">
+      <segment>
+        <source>.helps.laisserPasser.texte</source>
+        <target>.helps.laisserPasser.texte</target>
+      </segment>
+    </unit>
+    <unit id="mLz8usz" name="valide.validation.conseil.helps.laisserPasser.help">
+      <segment>
+        <source>valide.validation.conseil.helps.laisserPasser.help</source>
+        <target>valide.validation.conseil.helps.laisserPasser.help</target>
+      </segment>
+    </unit>
+    <unit id="f215Uoa" name="valide.validation.cfvu.helps.sousReserveModifications.help">
+      <segment>
+        <source>valide.validation.cfvu.helps.sousReserveModifications.help</source>
+        <target>valide.validation.cfvu.helps.sousReserveModifications.help</target>
+      </segment>
+    </unit>
+    <unit id="U92TG2b" name="valide.validation.cfvu.helps.sousReserveConseil.help">
+      <segment>
+        <source>valide.validation.cfvu.helps.sousReserveConseil.help</source>
+        <target>valide.validation.cfvu.helps.sousReserveConseil.help</target>
+      </segment>
+    </unit>
+    <unit id="O4g8RAQ" name="workflow.validation.fiche_matiere">
+      <segment>
+        <source>workflow.validation.fiche_matiere</source>
+        <target>workflow.validation.fiche_matiere</target>
+      </segment>
+    </unit>
+    <unit id="i41Nr2H" name="workflow.validation.parcours">
+      <segment>
+        <source>workflow.validation.parcours</source>
+        <target>workflow.validation.parcours</target>
+      </segment>
+    </unit>
+    <unit id="S1EsfvH" name="workflow.validation.formation">
+      <segment>
+        <source>workflow.validation.formation</source>
+        <target>workflow.validation.formation</target>
+      </segment>
+    </unit>
+    <unit id="UX0IYD4" name="workflow.validation.dpe">
+      <segment>
+        <source>workflow.validation.dpe</source>
+        <target>workflow.validation.dpe</target>
+      </segment>
+    </unit>
+    <unit id="5JcgstF" name="workflow.validation.conseil">
+      <segment>
+        <source>workflow.validation.conseil</source>
+        <target>workflow.validation.conseil</target>
+      </segment>
+    </unit>
+    <unit id="LdHKnad" name="workflow.validation.ses">
+      <segment>
+        <source>workflow.validation.ses</source>
+        <target>workflow.validation.ses</target>
+      </segment>
+    </unit>
+    <unit id="Pt29lg9" name="workflow.validation.vp">
+      <segment>
+        <source>workflow.validation.vp</source>
+        <target>workflow.validation.vp</target>
+      </segment>
+    </unit>
+    <unit id="zchjRDQ" name="workflow.validation.cfvu">
+      <segment>
+        <source>workflow.validation.cfvu</source>
+        <target>workflow.validation.cfvu</target>
+      </segment>
+    </unit>
+    <unit id=".u.lfuM" name="workflow.validation.publication">
+      <segment>
+        <source>workflow.validation.publication</source>
+        <target>workflow.validation.publication</target>
+      </segment>
+    </unit>
+    <unit id="b9VIanK" name="validation.formation.valide.impossible.en_cours_redaction">
+      <segment>
+        <source>validation.formation.valide.impossible.en_cours_redaction</source>
+        <target>validation.formation.valide.impossible.en_cours_redaction</target>
+      </segment>
+    </unit>
+    <unit id="pQf6CQQ" name="btn.validation.parcours.valide.en_cours_redaction">
+      <segment>
+        <source>btn.validation.parcours.valide.en_cours_redaction</source>
+        <target>btn.validation.parcours.valide.en_cours_redaction</target>
+      </segment>
+    </unit>
+    <unit id="XSBZ0Xk" name="validation.parcours_rf">
+      <segment>
+        <source>validation.parcours_rf</source>
+        <target>validation.parcours_rf</target>
+      </segment>
+    </unit>
+    <unit id="JYwVePQ" name="workflow.validation.parcours_rf">
+      <segment>
+        <source>workflow.validation.parcours_rf</source>
+        <target>workflow.validation.parcours_rf</target>
+      </segment>
+    </unit>
+    <unit id="W9tv9zi" name="btn.validation.parcours.valide.soumis_parcours">
+      <segment>
+        <source>btn.validation.parcours.valide.soumis_parcours</source>
+        <target>btn.validation.parcours.valide.soumis_parcours</target>
+      </segment>
+    </unit>
+    <unit id="a4qHDiv" name="validation.valider.parcours_rf.title">
+      <segment>
+        <source>validation.valider.parcours_rf.title</source>
+        <target>validation.valider.parcours_rf.title</target>
+      </segment>
+    </unit>
+    <unit id="VoCioJB" name="validation.valider.parcours_rf">
+      <segment>
+        <source>validation.valider.parcours_rf</source>
+        <target>validation.valider.parcours_rf</target>
+      </segment>
+    </unit>
+    <unit id="KucUOBS" name="validation.reserve.parcours_rf.title">
+      <segment>
+        <source>validation.reserve.parcours_rf.title</source>
+        <target>validation.reserve.parcours_rf.title</target>
+      </segment>
+    </unit>
+    <unit id="pdyTjXh" name="validation.reserve.parcours_rf">
+      <segment>
+        <source>validation.reserve.parcours_rf</source>
+        <target>validation.reserve.parcours_rf</target>
+      </segment>
+    </unit>
+    <unit id="uepHdRF" name="validation.parcours_rf.valide.soumis_parcours">
+      <segment>
+        <source>validation.parcours_rf.valide.soumis_parcours</source>
+        <target>validation.parcours_rf.valide.soumis_parcours</target>
+      </segment>
+    </unit>
+    <unit id="bCwGARb" name="btn.validation.parcours_rf.valide.soumis_parcours">
+      <segment>
+        <source>btn.validation.parcours_rf.valide.soumis_parcours</source>
+        <target>btn.validation.parcours_rf.valide.soumis_parcours</target>
+      </segment>
+    </unit>
+    <unit id="CwwiBNh" name="validation.parcours.valide.valide_parcours_rf">
+      <segment>
+        <source>validation.parcours.valide.valide_parcours_rf</source>
+        <target>validation.parcours.valide.valide_parcours_rf</target>
+      </segment>
+    </unit>
+    <unit id="fHFWOD9" name="btn.validation.parcours.valide.valide_parcours_rf">
+      <segment>
+        <source>btn.validation.parcours.valide.valide_parcours_rf</source>
+        <target>btn.validation.parcours.valide.valide_parcours_rf</target>
+      </segment>
+    </unit>
+    <unit id="AOwgzPd" name="validation.parcours.valide.autorisation_saisie">
+      <segment>
+        <source>validation.parcours.valide.autorisation_saisie</source>
+        <target>validation.parcours.valide.autorisation_saisie</target>
+      </segment>
+    </unit>
+    <unit id="s132XQd" name="btn.validation.parcours.valide.autorisation_saisie">
+      <segment>
+        <source>btn.validation.parcours.valide.autorisation_saisie</source>
+        <target>btn.validation.parcours.valide.autorisation_saisie</target>
+      </segment>
+    </unit>
+    <unit id="QSz6etY" name="transmis.parcours.formation">
+      <segment>
+        <source>transmis.parcours.formation</source>
+        <target>transmis.parcours.formation</target>
+      </segment>
+    </unit>
+    <unit id="b4RV0yP" name="parcours.valides.rf">
+      <segment>
+        <source>parcours.valides.rf</source>
+        <target>parcours.valides.rf</target>
+      </segment>
+    </unit>
+    <unit id="jkpKmcC" name="verifier.la.saisie.formation.title">
+      <segment>
+        <source>verifier.la.saisie.formation.title</source>
+        <target>verifier.la.saisie.formation.title</target>
+      </segment>
+    </unit>
+    <unit id="GPvwnwJ" name="verifier.la.saisie.formation.infobulle">
+      <segment>
+        <source>verifier.la.saisie.formation.infobulle</source>
+        <target>verifier.la.saisie.formation.infobulle</target>
+      </segment>
+    </unit>
+    <unit id="5sy8KBs" name="deposer.le.pv.title">
+      <segment>
+        <source>deposer.le.pv.title</source>
+        <target>deposer.le.pv.title</target>
+      </segment>
+    </unit>
+    <unit id="PY7y9_b" name="deposer.le.pv.infobulle">
+      <segment>
+        <source>deposer.le.pv.infobulle</source>
+        <target>deposer.le.pv.infobulle</target>
+      </segment>
+    </unit>
+    <unit id="SzJxvF5" name="deposer.le.pv">
+      <segment>
+        <source>deposer.le.pv</source>
+        <target>deposer.le.pv</target>
+      </segment>
+    </unit>
+    <unit id=".q10D3v" name="historique.de.validation.formation.title">
+      <segment>
+        <source>historique.de.validation.formation.title</source>
+        <target>historique.de.validation.formation.title</target>
+      </segment>
+    </unit>
+    <unit id="YJcTYdm" name="historique.de.validation.formation.infobulle">
+      <segment>
+        <source>historique.de.validation.formation.infobulle</source>
+        <target>historique.de.validation.formation.infobulle</target>
+      </segment>
+    </unit>
+    <unit id="6w6Co_T" name="modifier.la.validation.infobulle">
+      <segment>
+        <source>modifier.la.validation.infobulle</source>
+        <target>modifier.la.validation.infobulle</target>
+      </segment>
+    </unit>
+    <unit id="1hAzq0N" name="modifier.la.validation.title">
+      <segment>
+        <source>modifier.la.validation.title</source>
+        <target>modifier.la.validation.title</target>
+      </segment>
+    </unit>
+    <unit id="0YAMp0c" name="verifier.la.saisie.parcours.title">
+      <segment>
+        <source>verifier.la.saisie.parcours.title</source>
+        <target>verifier.la.saisie.parcours.title</target>
+      </segment>
+    </unit>
+    <unit id="9hFo.PP" name="verifier.la.saisie.parcours.infobulle">
+      <segment>
+        <source>verifier.la.saisie.parcours.infobulle</source>
+        <target>verifier.la.saisie.parcours.infobulle</target>
+      </segment>
+    </unit>
+    <unit id="9p7xOTb" name="historique.de.validation.parcours.title">
+      <segment>
+        <source>historique.de.validation.parcours.title</source>
+        <target>historique.de.validation.parcours.title</target>
+      </segment>
+    </unit>
+    <unit id="U0TG8bw" name="historique.de.validation.parcours.infobulle">
+      <segment>
+        <source>historique.de.validation.parcours.infobulle</source>
+        <target>historique.de.validation.parcours.infobulle</target>
+      </segment>
+    </unit>
+    <unit id="nRcQQjG" name="validation.indisponible">
+      <segment>
+        <source>validation.indisponible</source>
+        <target>validation.indisponible</target>
+      </segment>
+    </unit>
+    <unit id="7g4irt7" name="voir.le.pv.infobulle">
+      <segment>
+        <source>voir.le.pv.infobulle</source>
+        <target>voir.le.pv.infobulle</target>
+      </segment>
+    </unit>
+    <unit id="UhqGkpq" name="voir.le.pv">
+      <segment>
+        <source>voir.le.pv</source>
+        <target>voir.le.pv</target>
+      </segment>
+    </unit>
+    <unit id="qj8QRom" name="historique.validation.conseil">
+      <segment>
+        <source>historique.validation.conseil</source>
+        <target>historique.validation.conseil</target>
+      </segment>
+    </unit>
+    <unit id="kzVOrKc" name="historique.validation.dpe">
+      <segment>
+        <source>historique.validation.dpe</source>
+        <target>historique.validation.dpe</target>
+      </segment>
+    </unit>
+    <unit id="gALWzz7" name="historique.validation.formation">
+      <segment>
+        <source>historique.validation.formation</source>
+        <target>historique.validation.formation</target>
+      </segment>
+    </unit>
+    <unit id="p3aMpra" name="historique.validation.parcours_rf">
+      <segment>
+        <source>historique.validation.parcours_rf</source>
+        <target>historique.validation.parcours_rf</target>
+      </segment>
+    </unit>
+    <unit id="emue.kQ" name="historique.validation.parcours">
+      <segment>
+        <source>historique.validation.parcours</source>
+        <target>historique.validation.parcours</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

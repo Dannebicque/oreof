@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\FicheMatiereMutualisableRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: FicheMatiereMutualisableRepository::class)]
 class FicheMatiereMutualisable
 {
@@ -16,6 +18,7 @@ class FicheMatiereMutualisable
     #[ORM\ManyToOne(inversedBy: 'ficheMatiereParcours')]
     private ?FicheMatiere $ficheMatiere = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'ficheMatiereParcours')]
     private ?Parcours $parcours = null;
 

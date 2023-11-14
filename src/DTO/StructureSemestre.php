@@ -30,7 +30,12 @@ class StructureSemestre
 
     public function addUe(?int $idUe, StructureUe $structureUe): void
     {
-        $this->ues[$idUe] = $structureUe;
+        if($idUe !== null){
+            $this->ues[$idUe] = $structureUe;
+        }
+        else {
+            $this->ues[] = $structureUe;
+        }
         $this->heuresEctsSemestre->addUe($structureUe->getHeuresEctsUe());
     }
 

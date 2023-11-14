@@ -17,6 +17,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+
+
 #[ORM\Entity(repositoryClass: ElementConstitutifRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class ElementConstitutif
@@ -85,9 +89,11 @@ class ElementConstitutif
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
     private ?FicheMatiere $ficheMatiere = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?Parcours $parcours = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
     private ?Ue $ue = null;
 
@@ -100,9 +106,11 @@ class ElementConstitutif
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?TypeEc $typeEc = null;
 
+    #[MaxDepth(1)]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ecEnfants')]
     private ?self $ecParent = null;
 
+    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'ecParent', targetEntity: self::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ecEnfants;
@@ -186,7 +194,7 @@ class ElementConstitutif
 
     public function getEcts(): ?float
     {
-        return $this->ects;
+        return $this->ects ?? 0;
     }
 
     public function setEcts(?float $ects): self
@@ -198,7 +206,7 @@ class ElementConstitutif
 
     public function getVolumeCmPresentiel(): ?float
     {
-        return $this->volumeCmPresentiel;
+        return $this->volumeCmPresentiel ?? 0;
     }
 
     public function setVolumeCmPresentiel(float $volumeCmPresentiel): self
@@ -210,7 +218,7 @@ class ElementConstitutif
 
     public function getVolumeTdPresentiel(): ?float
     {
-        return $this->volumeTdPresentiel;
+        return $this->volumeTdPresentiel ?? 0;
     }
 
     public function setVolumeTdPresentiel(float $volumeTdPresentiel): self
@@ -222,7 +230,7 @@ class ElementConstitutif
 
     public function getVolumeTpPresentiel(): ?float
     {
-        return $this->volumeTpPresentiel;
+        return $this->volumeTpPresentiel ?? 0;
     }
 
     public function setVolumeTpPresentiel(float $volumeTpPresentiel): self
@@ -234,7 +242,7 @@ class ElementConstitutif
 
     public function getVolumeCmDistanciel(): ?float
     {
-        return $this->volumeCmDistanciel;
+        return $this->volumeCmDistanciel ?? 0;
     }
 
     public function setVolumeCmDistanciel(float $volumeCmDistanciel): self
@@ -246,7 +254,7 @@ class ElementConstitutif
 
     public function getVolumeTdDistanciel(): ?float
     {
-        return $this->volumeTdDistanciel;
+        return $this->volumeTdDistanciel ?? 0;
     }
 
     public function setVolumeTdDistanciel(float $volumeTdDistanciel): self
@@ -258,7 +266,7 @@ class ElementConstitutif
 
     public function getVolumeTpDistanciel(): ?float
     {
-        return $this->volumeTpDistanciel;
+        return $this->volumeTpDistanciel ?? 0;
     }
 
     public function setVolumeTpDistanciel(float $volumeTpDistanciel): self

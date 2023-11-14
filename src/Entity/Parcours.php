@@ -21,6 +21,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: ParcoursRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Parcours
@@ -135,44 +137,56 @@ class Parcours
     #[ORM\Column(length: 15, nullable: true)]
     private ?string $sigle = null;
 
+    #[Ignore]
     #[ORM\Column]
     private ?array $etatSteps = [];
 
     #[ORM\Column(nullable: true)]
     private ?array $etatParcours = [];
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: FicheMatiere::class)]
     private Collection $ficheMatieres;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: FicheMatiereMutualisable::class)]
     private Collection $ficheMatiereParcours;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: SemestreMutualisable::class)]
     private Collection $semestreMutualisables;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: UeMutualisable::class)]
     private Collection $ueMutualisables;
 
     #[ORM\ManyToOne(inversedBy: 'coParcours')]
     private ?User $coResponsable = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'parcoursEnfants')]
     private ?self $parcoursParent = null;
 
     #[ORM\OneToMany(mappedBy: 'parcoursParent', targetEntity: self::class)]
     private Collection $parcoursEnfants;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: HistoriqueParcours::class)]
     private Collection $historiqueParcours;
 
     #[ORM\Column(nullable: true)]
     private ?array $remplissage = [];
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ElementConstitutif::class)]
     private Collection $elementConstitutifs;
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: CommentaireParcours::class)]
     private Collection $commentaires;
+
+    #[Ignore]
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ParcoursVersioning::class)]
+    private Collection $parcoursVersionings;
 
     public function __construct(Formation $formation)
     {
@@ -191,6 +205,7 @@ class Parcours
         $this->historiqueParcours = new ArrayCollection();
         $this->elementConstitutifs = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
+        $this->parcoursVersionings = new ArrayCollection();
     }
 
 
@@ -1002,6 +1017,36 @@ class Parcours
         return $this;
     }
 
+    /**
+     * @return Collection<int, ParcoursVersioning>
+     */
+    public function getParcoursVersionings(): Collection
+    {
+        return $this->parcoursVersionings;
+    }
+
+    public function addParcoursVersioning(ParcoursVersioning $parcoursVersioning): static
+    {
+        if (!$this->parcoursVersionings->contains($parcoursVersioning)) {
+            $this->parcoursVersionings->add($parcoursVersioning);
+            $parcoursVersioning->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParcoursVersioning(ParcoursVersioning $parcoursVersioning): static
+    {
+        if ($this->parcoursVersionings->removeElement($parcoursVersioning)) {
+            // set the owning side to null (unless already changed)
+            if ($parcoursVersioning->getParcours() === $this) {
+                $parcoursVersioning->setParcours(null);
+            }
+        }
+
+        return $this;
+    }
+  
     public function isAlternance(): bool
     {
         // regarder si dans le tableau regimeInscription il y a les valeurs alternance ou apprentissage

@@ -5,9 +5,12 @@ namespace App\Entity;
 use App\Repository\HistoriqueParcoursRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: HistoriqueParcoursRepository::class)]
 class HistoriqueParcours extends Historique
 {
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'historiqueParcours')]
     private ?Parcours $parcours = null;
 

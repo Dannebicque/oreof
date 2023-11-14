@@ -1,0 +1,3270 @@
+
+<!ENTITY % NS.prefixed  "IGNORE">
+
+<!ENTITY % LHEO.prefixed  "%NS.prefixed;">
+
+<!ENTITY % LHEO.prefix  "LHEO">
+
+<!ENTITY % LHEO.xmlns  "http://lheo.gouv.fr/2.3">
+<![%LHEO.prefixed;[
+
+<!ENTITY % LHEO.pfx  "%LHEO.prefix;:">
+
+<!ENTITY % LHEO.xmlns.attrib  "xmlns:%LHEO.prefix; CDATA #FIXED '%LHEO.xmlns;'">
+]]>
+
+<!ENTITY % LHEO.pfx  "">
+
+<!ENTITY % LHEO.xmlns.attrib  "xmlns CDATA #FIXED '%LHEO.xmlns;'">
+
+<!ENTITY % domaine-formation.qname  "%LHEO.pfx;domaine-formation">
+
+<!ENTITY % intitule-formation.qname  "%LHEO.pfx;intitule-formation">
+
+<!ENTITY % nom-organisme.qname  "%LHEO.pfx;nom-organisme">
+
+<!ENTITY % objectif-formation.qname  "%LHEO.pfx;objectif-formation">
+
+<!ENTITY % resultats-attendus.qname  "%LHEO.pfx;resultats-attendus">
+
+<!ENTITY % contenu-formation.qname  "%LHEO.pfx;contenu-formation">
+
+<!ENTITY % certifiante.qname  "%LHEO.pfx;certifiante">
+
+<!ENTITY % rythme-formation.qname  "%LHEO.pfx;rythme-formation">
+
+<!ENTITY % duree-indicative.qname  "%LHEO.pfx;duree-indicative">
+
+<!ENTITY % contact-formation.qname  "%LHEO.pfx;contact-formation">
+
+<!ENTITY % contact-session.qname  "%LHEO.pfx;contact-session">
+
+<!ENTITY % parcours-de-formation.qname  "%LHEO.pfx;parcours-de-formation">
+
+<!ENTITY % objectif-general-formation.qname  "%LHEO.pfx;objectif-general-formation">
+
+<!ENTITY % certification.qname  "%LHEO.pfx;certification">
+
+<!ENTITY % reference-certification.qname  "%LHEO.pfx;reference-certification">
+
+<!ENTITY % code-type-formation.qname  "%LHEO.pfx;code-type-formation">
+
+<!ENTITY % lheo.qname  "%LHEO.pfx;lheo">
+
+<!ENTITY % offres.qname  "%LHEO.pfx;offres">
+
+<!ENTITY % formation.qname  "%LHEO.pfx;formation">
+
+<!ENTITY % action.qname  "%LHEO.pfx;action">
+
+<!ENTITY % organisme-formation-responsable.qname  "%LHEO.pfx;organisme-formation-responsable">
+
+<!ENTITY % potentiel.qname  "%LHEO.pfx;potentiel">
+
+<!ENTITY % organisme-formateur.qname  "%LHEO.pfx;organisme-formateur">
+
+<!ENTITY % niveau-entree-obligatoire.qname  "%LHEO.pfx;niveau-entree-obligatoire">
+
+<!ENTITY % code-niveau-entree.qname  "%LHEO.pfx;code-niveau-entree">
+
+<!ENTITY % code-niveau-sortie.qname  "%LHEO.pfx;code-niveau-sortie">
+
+<!ENTITY % url-formation.qname  "%LHEO.pfx;url-formation">
+
+<!ENTITY % modalites-alternance.qname  "%LHEO.pfx;modalites-alternance">
+
+<!ENTITY % modalites-enseignement.qname  "%LHEO.pfx;modalites-enseignement">
+
+<!ENTITY % conditions-specifiques.qname  "%LHEO.pfx;conditions-specifiques">
+
+<!ENTITY % code-modalite-pedagogique.qname  "%LHEO.pfx;code-modalite-pedagogique">
+
+<!ENTITY % prise-en-charge-frais-possible.qname  "%LHEO.pfx;prise-en-charge-frais-possible">
+
+<!ENTITY % frais-restants.qname  "%LHEO.pfx;frais-restants">
+
+<!ENTITY % langue-formation.qname  "%LHEO.pfx;langue-formation">
+
+<!ENTITY % lieu-de-formation.qname  "%LHEO.pfx;lieu-de-formation">
+
+<!ENTITY % nb-places.qname  "%LHEO.pfx;nb-places">
+
+<!ENTITY % recrutement.qname  "%LHEO.pfx;recrutement">
+
+<!ENTITY % a-distance.qname  "%LHEO.pfx;a-distance">
+
+<!ENTITY % enseignement.qname  "%LHEO.pfx;enseignement">
+
+<!ENTITY % equipement.qname  "%LHEO.pfx;equipement">
+
+<!ENTITY % type-equipement.qname  "%LHEO.pfx;type-equipement">
+
+<!ENTITY % cout-indicatif-equipement.qname  "%LHEO.pfx;cout-indicatif-equipement">
+
+<!ENTITY % obligatoire.qname  "%LHEO.pfx;obligatoire">
+
+<!ENTITY % modalite-recrutement.qname  "%LHEO.pfx;modalite-recrutement">
+
+<!ENTITY % libelle-enseignement.qname  "%LHEO.pfx;libelle-enseignement">
+
+<!ENTITY % type-enseignement.qname  "%LHEO.pfx;type-enseignement">
+
+<!ENTITY % modalites-entrees-sorties.qname  "%LHEO.pfx;modalites-entrees-sorties">
+
+<!ENTITY % effectif-minimal.qname  "%LHEO.pfx;effectif-minimal">
+
+<!ENTITY % capacite-simultanee.qname  "%LHEO.pfx;capacite-simultanee">
+
+<!ENTITY % capacite-cumulee.qname  "%LHEO.pfx;capacite-cumulee">
+
+<!ENTITY % type-alternance.qname  "%LHEO.pfx;type-alternance">
+
+<!ENTITY % unite-rythme-alternance.qname  "%LHEO.pfx;unite-rythme-alternance">
+
+<!ENTITY % unites-entreprise.qname  "%LHEO.pfx;unites-entreprise">
+
+<!ENTITY % unites-centre.qname  "%LHEO.pfx;unites-centre">
+
+<!ENTITY % rythme-alternance.qname  "%LHEO.pfx;rythme-alternance">
+
+<!ENTITY % type-cycle.qname  "%LHEO.pfx;type-cycle">
+
+<!ENTITY % duree-cycle.qname  "%LHEO.pfx;duree-cycle">
+
+<!ENTITY % annee-cycle.qname  "%LHEO.pfx;annee-cycle">
+
+<!ENTITY % alternance.qname  "%LHEO.pfx;alternance">
+
+<!ENTITY % cycle.qname  "%LHEO.pfx;cycle">
+
+<!ENTITY % session.qname  "%LHEO.pfx;session">
+
+<!ENTITY % adresse-inscription.qname  "%LHEO.pfx;adresse-inscription">
+
+<!ENTITY % adresse-information.qname  "%LHEO.pfx;adresse-information">
+
+<!ENTITY % date-information.qname  "%LHEO.pfx;date-information">
+
+<!ENTITY % url-action.qname  "%LHEO.pfx;url-action">
+
+<!ENTITY % url-session.qname  "%LHEO.pfx;url-session">
+
+<!ENTITY % numero-activite.qname  "%LHEO.pfx;numero-activite">
+
+<!ENTITY % SIRET-organisme-formation.qname  "%LHEO.pfx;SIRET-organisme-formation">
+
+<!ENTITY % code-UAI-organisme-formation.qname  "%LHEO.pfx;code-UAI-organisme-formation">
+
+<!ENTITY % SIRET-lieu-formation.qname  "%LHEO.pfx;SIRET-lieu-formation">
+
+<!ENTITY % code-UAI-lieu-formation.qname  "%LHEO.pfx;code-UAI-lieu-formation">
+
+<!ENTITY % raison-sociale.qname  "%LHEO.pfx;raison-sociale">
+
+<!ENTITY % coordonnees-organisme.qname  "%LHEO.pfx;coordonnees-organisme">
+
+<!ENTITY % type-contact.qname  "%LHEO.pfx;type-contact">
+
+<!ENTITY % contact-organisme.qname  "%LHEO.pfx;contact-organisme">
+
+<!ENTITY % contact-formateur.qname  "%LHEO.pfx;contact-formateur">
+
+<!ENTITY % renseignements-specifiques.qname  "%LHEO.pfx;renseignements-specifiques">
+
+<!ENTITY % organisme-financeur.qname  "%LHEO.pfx;organisme-financeur">
+
+<!ENTITY % nb-places-financees.qname  "%LHEO.pfx;nb-places-financees">
+
+<!ENTITY % modalites-recrutement.qname  "%LHEO.pfx;modalites-recrutement">
+
+<!ENTITY % modalites-pedagogiques.qname  "%LHEO.pfx;modalites-pedagogiques">
+
+<!ENTITY % SIRET-formateur.qname  "%LHEO.pfx;SIRET-formateur">
+
+<!ENTITY % code-UAI-formateur.qname  "%LHEO.pfx;code-UAI-formateur">
+
+<!ENTITY % raison-sociale-formateur.qname  "%LHEO.pfx;raison-sociale-formateur">
+
+<!ENTITY % code-perimetre-recrutement.qname  "%LHEO.pfx;code-perimetre-recrutement">
+
+<!ENTITY % infos-perimetre-recrutement.qname  "%LHEO.pfx;infos-perimetre-recrutement">
+
+<!ENTITY % prix-horaire-TTC.qname  "%LHEO.pfx;prix-horaire-TTC">
+
+<!ENTITY % prix-total-TTC.qname  "%LHEO.pfx;prix-total-TTC">
+
+<!ENTITY % nombre-heures-centre.qname  "%LHEO.pfx;nombre-heures-centre">
+
+<!ENTITY % nombre-heures-entreprise.qname  "%LHEO.pfx;nombre-heures-entreprise">
+
+<!ENTITY % nombre-heures-total.qname  "%LHEO.pfx;nombre-heures-total">
+
+<!ENTITY % detail-conditions-prise-en-charge.qname  "%LHEO.pfx;detail-conditions-prise-en-charge">
+
+<!ENTITY % conventionnement.qname  "%LHEO.pfx;conventionnement">
+
+<!ENTITY % duree-conventionnee.qname  "%LHEO.pfx;duree-conventionnee">
+
+<!ENTITY % code-financeur.qname  "%LHEO.pfx;code-financeur">
+
+<!ENTITY % restauration.qname  "%LHEO.pfx;restauration">
+
+<!ENTITY % hebergement.qname  "%LHEO.pfx;hebergement">
+
+<!ENTITY % transport.qname  "%LHEO.pfx;transport">
+
+<!ENTITY % acces-handicapes.qname  "%LHEO.pfx;acces-handicapes">
+
+<!ENTITY % positionnement.qname  "%LHEO.pfx;positionnement">
+
+<!ENTITY % etat-recrutement.qname  "%LHEO.pfx;etat-recrutement">
+
+<!ENTITY % identifiant-module.qname  "%LHEO.pfx;identifiant-module">
+
+<!ENTITY % reference-module.qname  "%LHEO.pfx;reference-module">
+
+<!ENTITY % reference-code-FORMACODE.qname  "%LHEO.pfx;reference-code-FORMACODE">
+
+<!ENTITY % reference-code-CERTIFINFO.qname  "%LHEO.pfx;reference-code-CERTIFINFO">
+
+<!ENTITY % reference-code-RNCP.qname  "%LHEO.pfx;reference-code-RNCP">
+
+<!ENTITY % reference-code-RS.qname  "%LHEO.pfx;reference-code-RS">
+
+<!ENTITY % libelle-bloc.qname  "%LHEO.pfx;libelle-bloc">
+
+<!ENTITY % code-bloc.qname  "%LHEO.pfx;code-bloc">
+
+<!ENTITY % bloc-competences.qname  "%LHEO.pfx;bloc-competences">
+
+<!ENTITY % validation-blocs.qname  "%LHEO.pfx;validation-blocs">
+
+<!ENTITY % blocs-competences.qname  "%LHEO.pfx;blocs-competences">
+
+<!ENTITY % sous-modules.qname  "%LHEO.pfx;sous-modules">
+
+<!ENTITY % modules-prerequis.qname  "%LHEO.pfx;modules-prerequis">
+
+<!ENTITY % sous-module.qname  "%LHEO.pfx;sous-module">
+
+<!ENTITY % type-module.qname  "%LHEO.pfx;type-module">
+
+<!ENTITY % code-NSF.qname  "%LHEO.pfx;code-NSF">
+
+<!ENTITY % code-FORMACODE.qname  "%LHEO.pfx;code-FORMACODE">
+
+<!ENTITY % code-ROME.qname  "%LHEO.pfx;code-ROME">
+
+<!ENTITY % code-public-vise.qname  "%LHEO.pfx;code-public-vise">
+
+<!ENTITY % info-public-vise.qname  "%LHEO.pfx;info-public-vise">
+
+<!ENTITY % code-RNCP.qname  "%LHEO.pfx;code-RNCP">
+
+<!ENTITY % code-CERTIFINFO.qname  "%LHEO.pfx;code-CERTIFINFO">
+
+<!ENTITY % code-UAI.qname  "%LHEO.pfx;code-UAI">
+
+<!ENTITY % code-RS.qname  "%LHEO.pfx;code-RS">
+
+<!ENTITY % code-CPF.qname  "%LHEO.pfx;code-CPF">
+
+<!ENTITY % code-ELU.qname  "%LHEO.pfx;code-ELU">
+
+<!ENTITY % coordonnees.qname  "%LHEO.pfx;coordonnees">
+
+<!ENTITY % SIRET.qname  "%LHEO.pfx;SIRET">
+
+<!ENTITY % adresse.qname  "%LHEO.pfx;adresse">
+
+<!ENTITY % ligne.qname  "%LHEO.pfx;ligne">
+
+<!ENTITY % denomination.qname  "%LHEO.pfx;denomination">
+
+<!ENTITY % prenom.qname  "%LHEO.pfx;prenom">
+
+<!ENTITY % civilite.qname  "%LHEO.pfx;civilite">
+
+<!ENTITY % nom.qname  "%LHEO.pfx;nom">
+
+<!ENTITY % codepostal.qname  "%LHEO.pfx;codepostal">
+
+<!ENTITY % code-INSEE-commune.qname  "%LHEO.pfx;code-INSEE-commune">
+
+<!ENTITY % code-INSEE-canton.qname  "%LHEO.pfx;code-INSEE-canton">
+
+<!ENTITY % ville.qname  "%LHEO.pfx;ville">
+
+<!ENTITY % departement.qname  "%LHEO.pfx;departement">
+
+<!ENTITY % region.qname  "%LHEO.pfx;region">
+
+<!ENTITY % pays.qname  "%LHEO.pfx;pays">
+
+<!ENTITY % geolocalisation.qname  "%LHEO.pfx;geolocalisation">
+
+<!ENTITY % latitude.qname  "%LHEO.pfx;latitude">
+
+<!ENTITY % longitude.qname  "%LHEO.pfx;longitude">
+
+<!ENTITY % courriel.qname  "%LHEO.pfx;courriel">
+
+<!ENTITY % web.qname  "%LHEO.pfx;web">
+
+<!ENTITY % urlweb.qname  "%LHEO.pfx;urlweb">
+
+<!ENTITY % commentaire.qname  "%LHEO.pfx;commentaire">
+
+<!ENTITY % telfixe.qname  "%LHEO.pfx;telfixe">
+
+<!ENTITY % portable.qname  "%LHEO.pfx;portable">
+
+<!ENTITY % fax.qname  "%LHEO.pfx;fax">
+
+<!ENTITY % numtel.qname  "%LHEO.pfx;numtel">
+
+<!ENTITY % modalites-inscription.qname  "%LHEO.pfx;modalites-inscription">
+
+<!ENTITY % periode.qname  "%LHEO.pfx;periode">
+
+<!ENTITY % periode-inscription.qname  "%LHEO.pfx;periode-inscription">
+
+<!ENTITY % debut.qname  "%LHEO.pfx;debut">
+
+<!ENTITY % fin.qname  "%LHEO.pfx;fin">
+
+<!ENTITY % heure-debut.qname  "%LHEO.pfx;heure-debut">
+
+<!ENTITY % heure-fin.qname  "%LHEO.pfx;heure-fin">
+
+<!ENTITY % date.qname  "%LHEO.pfx;date">
+
+<!ENTITY % extras.qname  "%LHEO.pfx;extras">
+
+<!ENTITY % extra.qname  "%LHEO.pfx;extra">
+
+<!ENTITY % lheo-index.qname  "%LHEO.pfx;lheo-index">
+
+<!ENTITY % resumes-offres.qname  "%LHEO.pfx;resumes-offres">
+
+<!ENTITY % resumes-organismes.qname  "%LHEO.pfx;resumes-organismes">
+
+<!ENTITY % resume-offre.qname  "%LHEO.pfx;resume-offre">
+
+<!ENTITY % resume-organisme.qname  "%LHEO.pfx;resume-organisme">
+
+<!ENTITY % contact-formation-resume.qname  "%LHEO.pfx;contact-formation-resume">
+
+<!ENTITY % lheo-plus.qname  "%LHEO.pfx;lheo-plus">
+
+<!ENTITY % domaine-formation.fields  "%code-FORMACODE.qname;*,%code-NSF.qname;*,%code-ROME.qname;*,%extras.qname;*">
+
+<!ENTITY % intitule-formation.fields  "">
+
+<!ENTITY % nom-organisme.fields  "">
+
+<!ENTITY % objectif-formation.fields  "">
+
+<!ENTITY % resultats-attendus.fields  "">
+
+<!ENTITY % contenu-formation.fields  "">
+
+<!ENTITY % certifiante.fields  "">
+
+<!ENTITY % rythme-formation.fields  "">
+
+<!ENTITY % duree-indicative.fields  "">
+
+<!ENTITY % contact-formation.fields  "%type-contact.qname;?,%coordonnees.qname;,%extras.qname;*">
+
+<!ENTITY % contact-session.fields  "%type-contact.qname;?,%coordonnees.qname;,%extras.qname;*">
+
+<!ENTITY % parcours-de-formation.fields  "">
+
+<!ENTITY % objectif-general-formation.fields  "">
+
+<!ENTITY % certification.fields  "%code-RNCP.qname;?,%code-CERTIFINFO.qname;?,%code-RS.qname;?,%code-CPF.qname;?,%reference-code-FORMACODE.qname;?,%extras.qname;*">
+
+<!ENTITY % reference-certification.fields  "%reference-code-RNCP.qname;?,%reference-code-CERTIFINFO.qname;?,%reference-code-RS.qname;?,%extras.qname;*">
+
+<!ENTITY % code-type-formation.fields  "%code-CPF.qname;?,%code-ELU.qname;?,%extras.qname;*">
+
+<!ENTITY % lheo.fields  "%offres.qname;,%extras.qname;*">
+
+<!ENTITY % offres.fields  "%formation.qname;+,%extras.qname;*">
+
+<!ENTITY % formation.fields  "%domaine-formation.qname;,%intitule-formation.qname;,%objectif-formation.qname;,%resultats-attendus.qname;,%contenu-formation.qname;,%certifiante.qname;,%contact-formation.qname;+,%parcours-de-formation.qname;,%code-niveau-entree.qname;,%objectif-general-formation.qname;?,%certification.qname;*,%code-type-formation.qname;*,%code-niveau-sortie.qname;?,%url-formation.qname;?,%action.qname;+,%organisme-formation-responsable.qname;,%identifiant-module.qname;?,%positionnement.qname;?,%sous-modules.qname;?,%modules-prerequis.qname;?,%extras.qname;*">
+
+<!ENTITY % action.fields  "%rythme-formation.qname;,%code-public-vise.qname;+,%info-public-vise.qname;?,%niveau-entree-obligatoire.qname;,%modalites-alternance.qname;,%modalites-enseignement.qname;,%conditions-specifiques.qname;,%prise-en-charge-frais-possible.qname;,%lieu-de-formation.qname;*,%modalites-entrees-sorties.qname;,%url-action.qname;?,%duree-cycle.qname;?,%session.qname;+,%adresse-information.qname;?,%date-information.qname;*,%restauration.qname;?,%hebergement.qname;?,%transport.qname;?,%acces-handicapes.qname;?,%langue-formation.qname;*,%modalites-recrutement.qname;?,%modalites-pedagogiques.qname;?,%code-modalite-pedagogique.qname;*,%equipement.qname;*,%frais-restants.qname;?,%code-perimetre-recrutement.qname;?,%infos-perimetre-recrutement.qname;?,%prix-horaire-TTC.qname;?,%prix-total-TTC.qname;?,%duree-indicative.qname;?,%nombre-heures-centre.qname;?,%nombre-heures-entreprise.qname;?,%nombre-heures-total.qname;?,%detail-conditions-prise-en-charge.qname;?,%conventionnement.qname;?,%duree-conventionnee.qname;?,%organisme-formateur.qname;*,%organisme-financeur.qname;*,%enseignement.qname;*,%extras.qname;*">
+
+<!ENTITY % organisme-formation-responsable.fields  "%numero-activite.qname;,%SIRET-organisme-formation.qname;,%nom-organisme.qname;,%raison-sociale.qname;,%coordonnees-organisme.qname;,%contact-organisme.qname;+,%renseignements-specifiques.qname;?,%potentiel.qname;?,%code-UAI-organisme-formation.qname;?,%extras.qname;*">
+
+<!ENTITY % potentiel.fields  "%code-FORMACODE.qname;+,%extras.qname;*">
+
+<!ENTITY % organisme-formateur.fields  "%SIRET-formateur.qname;,%raison-sociale-formateur.qname;,%contact-formateur.qname;*,%potentiel.qname;?,%code-UAI-formateur.qname;?,%reference-certification.qname;*,%extras.qname;*">
+
+<!ENTITY % niveau-entree-obligatoire.fields  "">
+
+<!ENTITY % code-niveau-entree.fields  "">
+
+<!ENTITY % code-niveau-sortie.fields  "">
+
+<!ENTITY % url-formation.fields  "%urlweb.qname;+,%extras.qname;*">
+
+<!ENTITY % modalites-alternance.fields  "">
+
+<!ENTITY % modalites-enseignement.fields  "">
+
+<!ENTITY % conditions-specifiques.fields  "">
+
+<!ENTITY % code-modalite-pedagogique.fields  "">
+
+<!ENTITY % prise-en-charge-frais-possible.fields  "">
+
+<!ENTITY % frais-restants.fields  "">
+
+<!ENTITY % langue-formation.fields  "">
+
+<!ENTITY % lieu-de-formation.fields  "%SIRET-lieu-formation.qname;?,%code-UAI-lieu-formation.qname;?,%coordonnees.qname;,%extras.qname;*">
+
+<!ENTITY % nb-places.fields  "">
+
+<!ENTITY % recrutement.fields  "%modalite-recrutement.qname;,%code-perimetre-recrutement.qname;?,%infos-perimetre-recrutement.qname;?,%a-distance.qname;?,%adresse.qname;?,%urlweb.qname;?,%nb-places.qname;?,%periode.qname;?,%heure-debut.qname;?,%heure-fin.qname;?,%commentaire.qname;?,%extras.qname;*">
+
+<!ENTITY % a-distance.fields  "">
+
+<!ENTITY % enseignement.fields  "%libelle-enseignement.qname;,%type-enseignement.qname;,%obligatoire.qname;,%commentaire.qname;?,%extras.qname;*">
+
+<!ENTITY % equipement.fields  "%type-equipement.qname;,%cout-indicatif-equipement.qname;?,%commentaire.qname;?,%extras.qname;*">
+
+<!ENTITY % type-equipement.fields  "">
+
+<!ENTITY % cout-indicatif-equipement.fields  "">
+
+<!ENTITY % obligatoire.fields  "">
+
+<!ENTITY % modalite-recrutement.fields  "">
+
+<!ENTITY % libelle-enseignement.fields  "">
+
+<!ENTITY % type-enseignement.fields  "">
+
+<!ENTITY % modalites-entrees-sorties.fields  "">
+
+<!ENTITY % effectif-minimal.fields  "">
+
+<!ENTITY % capacite-simultanee.fields  "">
+
+<!ENTITY % capacite-cumulee.fields  "">
+
+<!ENTITY % type-alternance.fields  "">
+
+<!ENTITY % unite-rythme-alternance.fields  "">
+
+<!ENTITY % unites-entreprise.fields  "">
+
+<!ENTITY % unites-centre.fields  "">
+
+<!ENTITY % rythme-alternance.fields  "%unite-rythme-alternance.qname;,%unites-entreprise.qname;,%unites-centre.qname;,%extras.qname;*">
+
+<!ENTITY % type-cycle.fields  "">
+
+<!ENTITY % duree-cycle.fields  "">
+
+<!ENTITY % annee-cycle.fields  "">
+
+<!ENTITY % alternance.fields  "%type-alternance.qname;,%rythme-alternance.qname;?,%extras.qname;*">
+
+<!ENTITY % cycle.fields  "%type-cycle.qname;,%annee-cycle.qname;*,%effectif-minimal.qname;?,%capacite-simultanee.qname;?,%capacite-cumulee.qname;?,%alternance.qname;?,%extras.qname;*">
+
+<!ENTITY % session.fields  "%periode.qname;,%adresse-inscription.qname;,%modalites-inscription.qname;?,%periode-inscription.qname;?,%etat-recrutement.qname;?,%recrutement.qname;*,%url-session.qname;?,%contact-session.qname;*,%reference-certification.qname;*,%blocs-competences.qname;*,%cycle.qname;*,%extras.qname;*">
+
+<!ENTITY % adresse-inscription.fields  "%adresse.qname;,%extras.qname;*">
+
+<!ENTITY % adresse-information.fields  "%adresse.qname;,%extras.qname;*">
+
+<!ENTITY % date-information.fields  "%date.qname;,%extras.qname;*">
+
+<!ENTITY % url-action.fields  "%urlweb.qname;+,%extras.qname;*">
+
+<!ENTITY % url-session.fields  "%urlweb.qname;+,%extras.qname;*">
+
+<!ENTITY % numero-activite.fields  "">
+
+<!ENTITY % SIRET-organisme-formation.fields  "%SIRET.qname;,%extras.qname;*">
+
+<!ENTITY % code-UAI-organisme-formation.fields  "%code-UAI.qname;,%extras.qname;*">
+
+<!ENTITY % SIRET-lieu-formation.fields  "%SIRET.qname;,%extras.qname;*">
+
+<!ENTITY % code-UAI-lieu-formation.fields  "%code-UAI.qname;,%extras.qname;*">
+
+<!ENTITY % raison-sociale.fields  "">
+
+<!ENTITY % coordonnees-organisme.fields  "%coordonnees.qname;,%extras.qname;*">
+
+<!ENTITY % type-contact.fields  "">
+
+<!ENTITY % contact-organisme.fields  "%type-contact.qname;?,%coordonnees.qname;,%extras.qname;*">
+
+<!ENTITY % contact-formateur.fields  "%type-contact.qname;?,%coordonnees.qname;,%extras.qname;*">
+
+<!ENTITY % renseignements-specifiques.fields  "">
+
+<!ENTITY % organisme-financeur.fields  "%code-financeur.qname;,%nb-places-financees.qname;?,%extras.qname;*">
+
+<!ENTITY % nb-places-financees.fields  "">
+
+<!ENTITY % modalites-recrutement.fields  "">
+
+<!ENTITY % modalites-pedagogiques.fields  "">
+
+<!ENTITY % SIRET-formateur.fields  "%SIRET.qname;,%extras.qname;*">
+
+<!ENTITY % code-UAI-formateur.fields  "%code-UAI.qname;,%extras.qname;*">
+
+<!ENTITY % raison-sociale-formateur.fields  "">
+
+<!ENTITY % code-perimetre-recrutement.fields  "">
+
+<!ENTITY % infos-perimetre-recrutement.fields  "">
+
+<!ENTITY % prix-horaire-TTC.fields  "">
+
+<!ENTITY % prix-total-TTC.fields  "">
+
+<!ENTITY % nombre-heures-centre.fields  "">
+
+<!ENTITY % nombre-heures-entreprise.fields  "">
+
+<!ENTITY % nombre-heures-total.fields  "">
+
+<!ENTITY % detail-conditions-prise-en-charge.fields  "">
+
+<!ENTITY % conventionnement.fields  "">
+
+<!ENTITY % duree-conventionnee.fields  "">
+
+<!ENTITY % code-financeur.fields  "">
+
+<!ENTITY % restauration.fields  "">
+
+<!ENTITY % hebergement.fields  "">
+
+<!ENTITY % transport.fields  "">
+
+<!ENTITY % acces-handicapes.fields  "">
+
+<!ENTITY % positionnement.fields  "">
+
+<!ENTITY % etat-recrutement.fields  "">
+
+<!ENTITY % identifiant-module.fields  "">
+
+<!ENTITY % reference-module.fields  "">
+
+<!ENTITY % reference-code-FORMACODE.fields  "">
+
+<!ENTITY % reference-code-CERTIFINFO.fields  "">
+
+<!ENTITY % reference-code-RNCP.fields  "">
+
+<!ENTITY % reference-code-RS.fields  "">
+
+<!ENTITY % libelle-bloc.fields  "">
+
+<!ENTITY % code-bloc.fields  "">
+
+<!ENTITY % bloc-competences.fields  "%libelle-bloc.qname;,%code-bloc.qname;,%extras.qname;*">
+
+<!ENTITY % validation-blocs.fields  "">
+
+<!ENTITY % blocs-competences.fields  "%validation-blocs.qname;,%reference-certification.qname;,%bloc-competences.qname;+,%extras.qname;*">
+
+<!ENTITY % sous-modules.fields  "%sous-module.qname;+,%extras.qname;*">
+
+<!ENTITY % modules-prerequis.fields  "%reference-module.qname;+,%extras.qname;*">
+
+<!ENTITY % sous-module.fields  "%reference-module.qname;,%type-module.qname;,%extras.qname;*">
+
+<!ENTITY % type-module.fields  "">
+
+<!ENTITY % code-NSF.fields  "">
+
+<!ENTITY % code-FORMACODE.fields  "">
+
+<!ENTITY % code-ROME.fields  "">
+
+<!ENTITY % code-public-vise.fields  "">
+
+<!ENTITY % info-public-vise.fields  "">
+
+<!ENTITY % code-RNCP.fields  "">
+
+<!ENTITY % code-CERTIFINFO.fields  "">
+
+<!ENTITY % code-UAI.fields  "">
+
+<!ENTITY % code-RS.fields  "">
+
+<!ENTITY % code-CPF.fields  "">
+
+<!ENTITY % code-ELU.fields  "">
+
+<!ENTITY % coordonnees.fields  "%civilite.qname;?,%nom.qname;?,%prenom.qname;?,%ligne.qname;*,%adresse.qname;?,%telfixe.qname;?,%portable.qname;?,%fax.qname;?,%courriel.qname;?,%web.qname;?,%extras.qname;*">
+
+<!ENTITY % SIRET.fields  "">
+
+<!ENTITY % adresse.fields  "%denomination.qname;?,%ligne.qname;+,%codepostal.qname;,%ville.qname;,%departement.qname;?,%code-INSEE-commune.qname;?,%code-INSEE-canton.qname;?,%region.qname;?,%pays.qname;?,%geolocalisation.qname;?,%extras.qname;*">
+
+<!ENTITY % ligne.fields  "">
+
+<!ENTITY % denomination.fields  "">
+
+<!ENTITY % prenom.fields  "">
+
+<!ENTITY % civilite.fields  "">
+
+<!ENTITY % nom.fields  "">
+
+<!ENTITY % codepostal.fields  "">
+
+<!ENTITY % code-INSEE-commune.fields  "">
+
+<!ENTITY % code-INSEE-canton.fields  "">
+
+<!ENTITY % ville.fields  "">
+
+<!ENTITY % departement.fields  "">
+
+<!ENTITY % region.fields  "">
+
+<!ENTITY % pays.fields  "">
+
+<!ENTITY % geolocalisation.fields  "%latitude.qname;,%longitude.qname;,%extras.qname;*">
+
+<!ENTITY % latitude.fields  "">
+
+<!ENTITY % longitude.fields  "">
+
+<!ENTITY % courriel.fields  "">
+
+<!ENTITY % web.fields  "%urlweb.qname;+,%extras.qname;*">
+
+<!ENTITY % urlweb.fields  "">
+
+<!ENTITY % commentaire.fields  "">
+
+<!ENTITY % telfixe.fields  "%numtel.qname;+,%extras.qname;*">
+
+<!ENTITY % portable.fields  "%numtel.qname;+,%extras.qname;*">
+
+<!ENTITY % fax.fields  "%numtel.qname;+,%extras.qname;*">
+
+<!ENTITY % numtel.fields  "">
+
+<!ENTITY % modalites-inscription.fields  "">
+
+<!ENTITY % periode.fields  "%debut.qname;,%fin.qname;,%extras.qname;*">
+
+<!ENTITY % periode-inscription.fields  "%periode.qname;">
+
+<!ENTITY % debut.fields  "">
+
+<!ENTITY % fin.fields  "">
+
+<!ENTITY % heure-debut.fields  "">
+
+<!ENTITY % heure-fin.fields  "">
+
+<!ENTITY % date.fields  "">
+
+<!ENTITY % extras.fields  "%extras.qname;|%extra.qname;">
+
+<!ENTITY % extra.fields  "">
+
+<!ENTITY % lheo-index.fields  "%resumes-offres.qname;?,%resumes-organismes.qname;?,%extras.qname;*">
+
+<!ENTITY % resumes-offres.fields  "%resume-offre.qname;*,%extras.qname;*">
+
+<!ENTITY % resumes-organismes.fields  "%resume-organisme.qname;*,%extras.qname;*">
+
+<!ENTITY % resume-offre.fields  "%domaine-formation.qname;,%intitule-formation.qname;,%nom-organisme.qname;,%SIRET.qname;,%codepostal.qname;?,%code-INSEE-commune.qname;?,%ville.qname;,%departement.qname;,%region.qname;?,%certifiante.qname;,%code-niveau-entree.qname;,%prise-en-charge-frais-possible.qname;,%modalites-enseignement.qname;?,%code-public-vise.qname;+,%nombre-heures-total.qname;?,%session.qname;*,%contact-formation-resume.qname;*,%certification.qname;*,%extras.qname;*">
+
+<!ENTITY % resume-organisme.fields  "%nom-organisme.qname;,%raison-sociale.qname;,%SIRET.qname;,%numero-activite.qname;,%extras.qname;*">
+
+<!ENTITY % contact-formation-resume.fields  "%type-contact.qname;?,%nom.qname;?,%telfixe.qname;?,%courriel.qname;?,%extras.qname;*">
+
+<!ENTITY % lheo-plus.fields  "%lheo.qname;?,%organisme-formation-responsable.qname;*,%extras.qname;*">
+
+<!ELEMENT %domaine-formation.qname; (%domaine-formation.fields;)>
+
+<!ATTLIST %domaine-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %intitule-formation.qname; (#PCDATA)>
+
+<!ATTLIST %intitule-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %nom-organisme.qname; (#PCDATA)>
+
+<!ATTLIST %nom-organisme.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %objectif-formation.qname; (#PCDATA)>
+
+<!ATTLIST %objectif-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %resultats-attendus.qname; (#PCDATA)>
+
+<!ATTLIST %resultats-attendus.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %contenu-formation.qname; (#PCDATA)>
+
+<!ATTLIST %contenu-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %certifiante.qname; (#PCDATA)>
+
+<!ATTLIST %certifiante.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %rythme-formation.qname; (#PCDATA)>
+
+<!ATTLIST %rythme-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %duree-indicative.qname; (#PCDATA)>
+
+<!ATTLIST %duree-indicative.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %contact-formation.qname; (%contact-formation.fields;)>
+
+<!ATTLIST %contact-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %contact-session.qname; (%contact-session.fields;)>
+
+<!ATTLIST %contact-session.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %parcours-de-formation.qname; (#PCDATA)>
+
+<!ATTLIST %parcours-de-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %objectif-general-formation.qname; (#PCDATA)>
+
+<!ATTLIST %objectif-general-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %certification.qname; (%certification.fields;)>
+
+<!ATTLIST %certification.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %reference-certification.qname; (%reference-certification.fields;)>
+
+<!ATTLIST %reference-certification.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-type-formation.qname; (%code-type-formation.fields;)>
+
+<!ATTLIST %code-type-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %lheo.qname; (%lheo.fields;)>
+
+<!ATTLIST %lheo.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  datemaj  CDATA #IMPLIED
+  datecrea  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %offres.qname; (%offres.fields;)>
+
+<!ATTLIST %offres.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %formation.qname; (%formation.fields;)>
+
+<!ATTLIST %formation.qname; 
+  %LHEO.xmlns.attrib;
+  href  CDATA #IMPLIED
+  file  CDATA #IMPLIED
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  datemaj  CDATA #IMPLIED
+  datecrea  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %action.qname; (%action.fields;)>
+
+<!ATTLIST %action.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  datemaj  CDATA #IMPLIED
+  datecrea  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %organisme-formation-responsable.qname; (%organisme-formation-responsable.fields;)>
+
+<!ATTLIST %organisme-formation-responsable.qname; 
+  %LHEO.xmlns.attrib;
+  href  CDATA #IMPLIED
+  file  CDATA #IMPLIED
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %potentiel.qname; (%potentiel.fields;)>
+
+<!ATTLIST %potentiel.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %organisme-formateur.qname; (%organisme-formateur.fields;)>
+
+<!ATTLIST %organisme-formateur.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %niveau-entree-obligatoire.qname; (#PCDATA)>
+
+<!ATTLIST %niveau-entree-obligatoire.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-niveau-entree.qname; (#PCDATA)>
+
+<!ATTLIST %code-niveau-entree.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-niveau-sortie.qname; (#PCDATA)>
+
+<!ATTLIST %code-niveau-sortie.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %url-formation.qname; (%url-formation.fields;)>
+
+<!ATTLIST %url-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %modalites-alternance.qname; (#PCDATA)>
+
+<!ATTLIST %modalites-alternance.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %modalites-enseignement.qname; (#PCDATA)>
+
+<!ATTLIST %modalites-enseignement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %conditions-specifiques.qname; (#PCDATA)>
+
+<!ATTLIST %conditions-specifiques.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-modalite-pedagogique.qname; (#PCDATA)>
+
+<!ATTLIST %code-modalite-pedagogique.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #REQUIRED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %prise-en-charge-frais-possible.qname; (#PCDATA)>
+
+<!ATTLIST %prise-en-charge-frais-possible.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %frais-restants.qname; (#PCDATA)>
+
+<!ATTLIST %frais-restants.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %langue-formation.qname; (#PCDATA)>
+
+<!ATTLIST %langue-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %lieu-de-formation.qname; (%lieu-de-formation.fields;)>
+
+<!ATTLIST %lieu-de-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %nb-places.qname; (#PCDATA)>
+
+<!ATTLIST %nb-places.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %recrutement.qname; (%recrutement.fields;)>
+
+<!ATTLIST %recrutement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %a-distance.qname; (#PCDATA)>
+
+<!ATTLIST %a-distance.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %enseignement.qname; (%enseignement.fields;)>
+
+<!ATTLIST %enseignement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %equipement.qname; (%equipement.fields;)>
+
+<!ATTLIST %equipement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %type-equipement.qname; (#PCDATA)>
+
+<!ATTLIST %type-equipement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %cout-indicatif-equipement.qname; (#PCDATA)>
+
+<!ATTLIST %cout-indicatif-equipement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %obligatoire.qname; (#PCDATA)>
+
+<!ATTLIST %obligatoire.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %modalite-recrutement.qname; (#PCDATA)>
+
+<!ATTLIST %modalite-recrutement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %libelle-enseignement.qname; (#PCDATA)>
+
+<!ATTLIST %libelle-enseignement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %type-enseignement.qname; (#PCDATA)>
+
+<!ATTLIST %type-enseignement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %modalites-entrees-sorties.qname; (#PCDATA)>
+
+<!ATTLIST %modalites-entrees-sorties.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %effectif-minimal.qname; (#PCDATA)>
+
+<!ATTLIST %effectif-minimal.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %capacite-simultanee.qname; (#PCDATA)>
+
+<!ATTLIST %capacite-simultanee.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %capacite-cumulee.qname; (#PCDATA)>
+
+<!ATTLIST %capacite-cumulee.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %type-alternance.qname; (#PCDATA)>
+
+<!ATTLIST %type-alternance.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %unite-rythme-alternance.qname; (#PCDATA)>
+
+<!ATTLIST %unite-rythme-alternance.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %unites-entreprise.qname; (#PCDATA)>
+
+<!ATTLIST %unites-entreprise.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %unites-centre.qname; (#PCDATA)>
+
+<!ATTLIST %unites-centre.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %rythme-alternance.qname; (%rythme-alternance.fields;)>
+
+<!ATTLIST %rythme-alternance.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %type-cycle.qname; (#PCDATA)>
+
+<!ATTLIST %type-cycle.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %duree-cycle.qname; (#PCDATA)>
+
+<!ATTLIST %duree-cycle.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %annee-cycle.qname; (#PCDATA)>
+
+<!ATTLIST %annee-cycle.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %alternance.qname; (%alternance.fields;)>
+
+<!ATTLIST %alternance.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %cycle.qname; (%cycle.fields;)>
+
+<!ATTLIST %cycle.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %session.qname; (%session.fields;)>
+
+<!ATTLIST %session.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  datemaj  CDATA #IMPLIED
+  datecrea  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %adresse-inscription.qname; (%adresse-inscription.fields;)>
+
+<!ATTLIST %adresse-inscription.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %adresse-information.qname; (%adresse-information.fields;)>
+
+<!ATTLIST %adresse-information.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %date-information.qname; (%date-information.fields;)>
+
+<!ATTLIST %date-information.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %url-action.qname; (%url-action.fields;)>
+
+<!ATTLIST %url-action.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %url-session.qname; (%url-session.fields;)>
+
+<!ATTLIST %url-session.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %numero-activite.qname; (#PCDATA)>
+
+<!ATTLIST %numero-activite.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %SIRET-organisme-formation.qname; (%SIRET-organisme-formation.fields;)>
+
+<!ATTLIST %SIRET-organisme-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-UAI-organisme-formation.qname; (%code-UAI-organisme-formation.fields;)>
+
+<!ATTLIST %code-UAI-organisme-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %SIRET-lieu-formation.qname; (%SIRET-lieu-formation.fields;)>
+
+<!ATTLIST %SIRET-lieu-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-UAI-lieu-formation.qname; (%code-UAI-lieu-formation.fields;)>
+
+<!ATTLIST %code-UAI-lieu-formation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %raison-sociale.qname; (#PCDATA)>
+
+<!ATTLIST %raison-sociale.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %coordonnees-organisme.qname; (%coordonnees-organisme.fields;)>
+
+<!ATTLIST %coordonnees-organisme.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %type-contact.qname; (#PCDATA)>
+
+<!ATTLIST %type-contact.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %contact-organisme.qname; (%contact-organisme.fields;)>
+
+<!ATTLIST %contact-organisme.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %contact-formateur.qname; (%contact-formateur.fields;)>
+
+<!ATTLIST %contact-formateur.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %renseignements-specifiques.qname; (#PCDATA)>
+
+<!ATTLIST %renseignements-specifiques.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %organisme-financeur.qname; (%organisme-financeur.fields;)>
+
+<!ATTLIST %organisme-financeur.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %nb-places-financees.qname; (#PCDATA)>
+
+<!ATTLIST %nb-places-financees.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %modalites-recrutement.qname; (#PCDATA)>
+
+<!ATTLIST %modalites-recrutement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %modalites-pedagogiques.qname; (#PCDATA)>
+
+<!ATTLIST %modalites-pedagogiques.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %SIRET-formateur.qname; (%SIRET-formateur.fields;)>
+
+<!ATTLIST %SIRET-formateur.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-UAI-formateur.qname; (%code-UAI-formateur.fields;)>
+
+<!ATTLIST %code-UAI-formateur.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %raison-sociale-formateur.qname; (#PCDATA)>
+
+<!ATTLIST %raison-sociale-formateur.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-perimetre-recrutement.qname; (#PCDATA)>
+
+<!ATTLIST %code-perimetre-recrutement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %infos-perimetre-recrutement.qname; (#PCDATA)>
+
+<!ATTLIST %infos-perimetre-recrutement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %prix-horaire-TTC.qname; (#PCDATA)>
+
+<!ATTLIST %prix-horaire-TTC.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %prix-total-TTC.qname; (#PCDATA)>
+
+<!ATTLIST %prix-total-TTC.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %nombre-heures-centre.qname; (#PCDATA)>
+
+<!ATTLIST %nombre-heures-centre.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %nombre-heures-entreprise.qname; (#PCDATA)>
+
+<!ATTLIST %nombre-heures-entreprise.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %nombre-heures-total.qname; (#PCDATA)>
+
+<!ATTLIST %nombre-heures-total.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %detail-conditions-prise-en-charge.qname; (#PCDATA)>
+
+<!ATTLIST %detail-conditions-prise-en-charge.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %conventionnement.qname; (#PCDATA)>
+
+<!ATTLIST %conventionnement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %duree-conventionnee.qname; (#PCDATA)>
+
+<!ATTLIST %duree-conventionnee.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-financeur.qname; (#PCDATA)>
+
+<!ATTLIST %code-financeur.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %restauration.qname; (#PCDATA)>
+
+<!ATTLIST %restauration.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %hebergement.qname; (#PCDATA)>
+
+<!ATTLIST %hebergement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %transport.qname; (#PCDATA)>
+
+<!ATTLIST %transport.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %acces-handicapes.qname; (#PCDATA)>
+
+<!ATTLIST %acces-handicapes.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %positionnement.qname; (#PCDATA)>
+
+<!ATTLIST %positionnement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %etat-recrutement.qname; (#PCDATA)>
+
+<!ATTLIST %etat-recrutement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %identifiant-module.qname; (#PCDATA)>
+
+<!ATTLIST %identifiant-module.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %reference-module.qname; (#PCDATA)>
+
+<!ATTLIST %reference-module.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %reference-code-FORMACODE.qname; (#PCDATA)>
+
+<!ATTLIST %reference-code-FORMACODE.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %reference-code-CERTIFINFO.qname; (#PCDATA)>
+
+<!ATTLIST %reference-code-CERTIFINFO.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %reference-code-RNCP.qname; (#PCDATA)>
+
+<!ATTLIST %reference-code-RNCP.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %reference-code-RS.qname; (#PCDATA)>
+
+<!ATTLIST %reference-code-RS.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %libelle-bloc.qname; (#PCDATA)>
+
+<!ATTLIST %libelle-bloc.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-bloc.qname; (#PCDATA)>
+
+<!ATTLIST %code-bloc.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %bloc-competences.qname; (%bloc-competences.fields;)>
+
+<!ATTLIST %bloc-competences.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %validation-blocs.qname; (#PCDATA)>
+
+<!ATTLIST %validation-blocs.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %blocs-competences.qname; (%blocs-competences.fields;)>
+
+<!ATTLIST %blocs-competences.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %sous-modules.qname; (%sous-modules.fields;)>
+
+<!ATTLIST %sous-modules.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %modules-prerequis.qname; (%modules-prerequis.fields;)>
+
+<!ATTLIST %modules-prerequis.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %sous-module.qname; (%sous-module.fields;)>
+
+<!ATTLIST %sous-module.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %type-module.qname; (#PCDATA)>
+
+<!ATTLIST %type-module.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-NSF.qname; (#PCDATA)>
+
+<!ATTLIST %code-NSF.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-FORMACODE.qname; (#PCDATA)>
+
+<!ATTLIST %code-FORMACODE.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #REQUIRED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-ROME.qname; (#PCDATA)>
+
+<!ATTLIST %code-ROME.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-public-vise.qname; (#PCDATA)>
+
+<!ATTLIST %code-public-vise.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #REQUIRED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %info-public-vise.qname; (#PCDATA)>
+
+<!ATTLIST %info-public-vise.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-RNCP.qname; (#PCDATA)>
+
+<!ATTLIST %code-RNCP.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-CERTIFINFO.qname; (#PCDATA)>
+
+<!ATTLIST %code-CERTIFINFO.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-UAI.qname; (#PCDATA)>
+
+<!ATTLIST %code-UAI.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-RS.qname; (#PCDATA)>
+
+<!ATTLIST %code-RS.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-CPF.qname; (#PCDATA)>
+
+<!ATTLIST %code-CPF.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-ELU.qname; (#PCDATA)>
+
+<!ATTLIST %code-ELU.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %coordonnees.qname; (%coordonnees.fields;)>
+
+<!ATTLIST %coordonnees.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %SIRET.qname; (#PCDATA)>
+
+<!ATTLIST %SIRET.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %adresse.qname; (%adresse.fields;)>
+
+<!ATTLIST %adresse.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %ligne.qname; (#PCDATA)>
+
+<!ATTLIST %ligne.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %denomination.qname; (#PCDATA)>
+
+<!ATTLIST %denomination.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %prenom.qname; (#PCDATA)>
+
+<!ATTLIST %prenom.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %civilite.qname; (#PCDATA)>
+
+<!ATTLIST %civilite.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %nom.qname; (#PCDATA)>
+
+<!ATTLIST %nom.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %codepostal.qname; (#PCDATA)>
+
+<!ATTLIST %codepostal.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-INSEE-commune.qname; (#PCDATA)>
+
+<!ATTLIST %code-INSEE-commune.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %code-INSEE-canton.qname; (#PCDATA)>
+
+<!ATTLIST %code-INSEE-canton.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %ville.qname; (#PCDATA)>
+
+<!ATTLIST %ville.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %departement.qname; (#PCDATA)>
+
+<!ATTLIST %departement.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %region.qname; (#PCDATA)>
+
+<!ATTLIST %region.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %pays.qname; (#PCDATA)>
+
+<!ATTLIST %pays.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %geolocalisation.qname; (%geolocalisation.fields;)>
+
+<!ATTLIST %geolocalisation.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %latitude.qname; (#PCDATA)>
+
+<!ATTLIST %latitude.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %longitude.qname; (#PCDATA)>
+
+<!ATTLIST %longitude.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %courriel.qname; (#PCDATA)>
+
+<!ATTLIST %courriel.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %web.qname; (%web.fields;)>
+
+<!ATTLIST %web.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %urlweb.qname; (#PCDATA)>
+
+<!ATTLIST %urlweb.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %commentaire.qname; (#PCDATA)>
+
+<!ATTLIST %commentaire.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %telfixe.qname; (%telfixe.fields;)>
+
+<!ATTLIST %telfixe.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %portable.qname; (%portable.fields;)>
+
+<!ATTLIST %portable.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %fax.qname; (%fax.fields;)>
+
+<!ATTLIST %fax.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %numtel.qname; (#PCDATA)>
+
+<!ATTLIST %numtel.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %modalites-inscription.qname; (#PCDATA)>
+
+<!ATTLIST %modalites-inscription.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %periode.qname; (%periode.fields;)>
+
+<!ATTLIST %periode.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %periode-inscription.qname; (%periode-inscription.fields;)>
+
+<!ATTLIST %periode-inscription.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %debut.qname; (#PCDATA)>
+
+<!ATTLIST %debut.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %fin.qname; (#PCDATA)>
+
+<!ATTLIST %fin.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %heure-debut.qname; (#PCDATA)>
+
+<!ATTLIST %heure-debut.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %heure-fin.qname; (#PCDATA)>
+
+<!ATTLIST %heure-fin.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %date.qname; (#PCDATA)>
+
+<!ATTLIST %date.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %extras.qname; (%extras.fields;)*>
+
+<!ATTLIST %extras.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %extra.qname; ANY>
+
+<!ATTLIST %extra.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %lheo-index.qname; (%lheo-index.fields;)>
+
+<!ATTLIST %lheo-index.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  datemaj  CDATA #IMPLIED
+  datecrea  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %resumes-offres.qname; (%resumes-offres.fields;)>
+
+<!ATTLIST %resumes-offres.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %resumes-organismes.qname; (%resumes-organismes.fields;)>
+
+<!ATTLIST %resumes-organismes.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %resume-offre.qname; (%resume-offre.fields;)>
+
+<!ATTLIST %resume-offre.qname; 
+  %LHEO.xmlns.attrib;
+  href  CDATA #IMPLIED
+  file  CDATA #IMPLIED
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  datemaj  CDATA #IMPLIED
+  datecrea  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %resume-organisme.qname; (%resume-organisme.fields;)>
+
+<!ATTLIST %resume-organisme.qname; 
+  %LHEO.xmlns.attrib;
+  href  CDATA #IMPLIED
+  file  CDATA #IMPLIED
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  datemaj  CDATA #IMPLIED
+  datecrea  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %contact-formation-resume.qname; (%contact-formation-resume.fields;)>
+
+<!ATTLIST %contact-formation-resume.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>
+
+<!ELEMENT %lheo-plus.qname; (%lheo-plus.fields;)>
+
+<!ATTLIST %lheo-plus.qname; 
+  %LHEO.xmlns.attrib;
+  numero  CDATA #IMPLIED
+  info  CDATA #IMPLIED
+  ref  CDATA #IMPLIED
+  id  ID #IMPLIED
+  idref  IDREF #IMPLIED
+  tag  CDATA #IMPLIED
+  horodatage-creation  CDATA #IMPLIED
+  horodatage-modification  CDATA #IMPLIED
+  horodatage-export  CDATA #IMPLIED
+  uri  CDATA #IMPLIED>

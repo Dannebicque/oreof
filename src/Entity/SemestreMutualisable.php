@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: SemestreMutualisableRepository::class)]
 class SemestreMutualisable
 {
@@ -18,12 +20,15 @@ class SemestreMutualisable
     #[ORM\ManyToOne(inversedBy: 'semestreMutualisables')]
     private ?Semestre $semestre = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'semestreMutualisables')]
     private ?Parcours $parcours = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'semestreRaccroche', targetEntity: SemestreParcours::class)]
     private Collection $semestreParcours;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'semestreRaccroche', targetEntity: Semestre::class)]
     private Collection $semestres;
 

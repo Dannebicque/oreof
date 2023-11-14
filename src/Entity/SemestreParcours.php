@@ -12,6 +12,8 @@ namespace App\Entity;
 use App\Repository\SemestreParcoursRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: SemestreParcoursRepository::class)]
 class SemestreParcours
 {
@@ -19,9 +21,11 @@ class SemestreParcours
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
     private ?Semestre $semestre = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
     private ?Parcours $parcours = null;
 
@@ -34,11 +38,13 @@ class SemestreParcours
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
     private ?SemestreMutualisable $semestreRaccroche = null;
 
-    public function __construct(Semestre $semestre, Parcours $parcours)
+    public function __construct(?Semestre $semestre, ?Parcours $parcours)
     {
         $this->setSemestre($semestre);
         $this->setParcours($parcours);
-        $this->setOrdre($semestre->getOrdre());
+        if($semestre){
+            $this->setOrdre($semestre->getOrdre());
+        }
     }
 
     public function getId(): ?int
