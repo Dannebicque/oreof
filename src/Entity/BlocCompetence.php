@@ -14,6 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: BlocCompetenceRepository::class)]
 class BlocCompetence
 {
@@ -28,13 +30,16 @@ class BlocCompetence
     #[ORM\Column(type: 'text')]
     private ?string $libelle = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'blocCompetence', targetEntity: Competence::class, cascade: ['persist', 'remove'])]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $competences;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'blocCompetences')]
     private ?Parcours $parcours = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'blocCompetences')]
     private ?Formation $formation = null;
 

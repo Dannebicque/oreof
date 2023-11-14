@@ -26,6 +26,7 @@ use App\Repository\MentionRepository;
 use App\Repository\RoleRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserCentreRepository;
+use App\Service\LheoXML;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -74,7 +75,8 @@ class FormationController extends BaseController
         ComposanteRepository  $composanteRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
         FormationRepository   $formationRepository,
-        Request               $request
+        Request               $request,
+        LheoXML               $lheoXML
     ): Response {
         $sort = $request->query->get('sort') ?? 'typeDiplome';
         $direction = $request->query->get('direction') ?? 'asc';
@@ -135,6 +137,7 @@ class FormationController extends BaseController
             'composantes' => $composanteRepository->findBy([], ['libelle' => 'ASC']),
             'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
             'params' => $request->query->all(),
+            'lheoXML' => $lheoXML,
             'isCfvu' => false,
         ]);
     }

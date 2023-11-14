@@ -73,6 +73,20 @@ class BlocCompetenceController extends AbstractController
         ]);
     }
 
+    public function afficheBUTReferentielVersioning(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        Parcours            $parcours
+    ): Response
+    {
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
+
+        return $this->render('typeDiplome/but/_refCompetences.versioning.html.twig', [
+            'competences' => $parcours->getFormation()->getButCompetences(),
+            'parcours' => $parcours,
+        ]);
+    }
+
+
     /**
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\NoResultException

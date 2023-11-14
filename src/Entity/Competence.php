@@ -14,6 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: CompetenceRepository::class)]
 class Competence
 {
@@ -31,12 +33,14 @@ class Competence
     #[ORM\Column(type: 'text')]
     private ?string $libelle = null;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'competences')]
     private Collection $ficheMatieres;
 
     #[ORM\Column]
     private ?int $ordre = null;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'competences')]
     private Collection $elementConstitutifs;
 
@@ -91,7 +95,7 @@ class Competence
     /**
      * @return Collection<int, FicheMatiere>
      */
-    public function getFicheMatieress(): Collection
+    public function getFicheMatieres(): Collection
     {
         return $this->ficheMatieres;
     }

@@ -16,14 +16,14 @@ class StructureUe
 {
     public string $display = '';
     public ?Ue $ueOrigine;
-    public Ue $ue;
+    public ?Ue $ue;
     public bool $raccroche = false;
     public array $elementConstitutifs = [];
     public array $uesEnfants = [];
     public array $heuresEctsUeEnfants = [];
     public HeuresEctsUe $heuresEctsUe;
 
-    public function __construct(Ue $ue, bool $raccroche = false, ?string $display = null, ?Ue $ueOrigine = null)
+    public function __construct(?Ue $ue, bool $raccroche = false, ?string $display = null, ?Ue $ueOrigine = null)
     {
         $this->ue = $ue;
         $this->display = $display ?? '';
@@ -31,17 +31,25 @@ class StructureUe
         $this->ueOrigine = $ueOrigine;
         $this->heuresEctsUe = new HeuresEctsUe();
 
-        if ($this->ue->getNatureUeEc()?->isLibre()) {
-            // Si UE lbren prise en compte des ECTS de l'UE
-            //todo: faire idem pour BUT
-            $this->heuresEctsUe->sommeUeEcts = $this->ue->getEcts() ?? 0.0;
+        if($this->ue){
+            if ($this->ue->getNatureUeEc()?->isLibre()) {
+                // Si UE lbren prise en compte des ECTS de l'UE
+                //todo: faire idem pour BUT
+                $this->heuresEctsUe->sommeUeEcts = $this->ue->getEcts() ?? 0.0;
+            }
         }
     }
 
     public function addUeEnfant(?int $idUe, StructureUe $structureUe): void
     {
-        $this->uesEnfants[$idUe] = $structureUe;
-        $this->heuresEctsUeEnfants[$idUe] = $structureUe->heuresEctsUe;
+        if($idUe !== null){
+            $this->uesEnfants[$idUe] = $structureUe;
+            $this->heuresEctsUeEnfants[$idUe] = $structureUe->heuresEctsUe;
+        }
+        else {
+            $this->uesEnfants[] = $structureUe;
+            $this->heuresEctsUeEnfants[] = $structureUe->heuresEctsUe;
+        }
 
         //gérer pour prendre le max des heures et ects sur tous les enfants de l'EC
     }

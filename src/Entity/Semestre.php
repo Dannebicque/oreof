@@ -15,6 +15,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+
 #[ORM\Entity(repositoryClass: SemestreRepository::class)]
 class Semestre
 {
@@ -26,16 +29,19 @@ class Semestre
     #[ORM\Column]
     private ?int $ordre = null;
 
+    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: Ue::class)]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ues;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: SemestreParcours::class, cascade: ['persist', 'remove'])]
     private Collection $semestreParcours;
 
     #[ORM\Column]
     private ?bool $troncCommun = false;
 
+    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: SemestreMutualisable::class)]
     private Collection $semestreMutualisables;
 

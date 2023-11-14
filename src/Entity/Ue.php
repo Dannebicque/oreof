@@ -15,6 +15,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+
 #[ORM\Entity(repositoryClass: UeRepository::class)]
 class Ue
 {
@@ -26,35 +29,40 @@ class Ue
     #[ORM\Column]
     private ?int $ordre = null;
 
+    #[MaxDepth(1)]
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?Semestre $semestre = null;
 
     #[ORM\ManyToOne]
     private ?TypeUe $typeUe = null;
 
-
+    
     #[ORM\ManyToOne]
     private ?NatureUeEc $natureUeEc = null;
-
+    
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: ElementConstitutif::class, cascade: [
         'persist',
         'remove'
     ], orphanRemoval: true)]
+    
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $elementConstitutifs;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelle = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class)]
     private Collection $ueMutualisables;
 
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?UeMutualisable $ueRaccrochee = null;
 
+    #[MaxDepth(1)]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ueEnfants')]
     private ?self $ueParent = null;
 
+    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'ueParent', targetEntity: self::class, cascade: [
         'persist',
         'remove'
@@ -68,6 +76,7 @@ class Ue
     #[ORM\Column(nullable: true)]
     private ?float $ects = null;
 
+    
     public function __construct()
     {
         $this->elementConstitutifs = new ArrayCollection();
@@ -113,13 +122,17 @@ class Ue
         }
 
         if ($parcours !== null) {
-            foreach ($this->getSemestre()?->getSemestreParcours() as $semestreParcours) {
-                if ($semestreParcours->getParcours() === $parcours) {
-                    if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
-                        return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue . ' (' . $this->getLibelle() . ')';
+            if($this->getSemestre()){
+                if($this->getSemestre()->getSemestreParcours()){
+                    foreach ($this->getSemestre()?->getSemestreParcours() as $semestreParcours) {
+                        if ($semestreParcours->getParcours() === $parcours) {
+                            if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
+                                return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue . ' (' . $this->getLibelle() . ')';
+                            }
+        
+                            return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue;
+                        }
                     }
-
-                    return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue;
                 }
             }
 
