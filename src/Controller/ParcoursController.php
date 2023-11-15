@@ -30,20 +30,15 @@ use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Test\Constraint\ResponseIsUnprocessable;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -388,7 +383,7 @@ class ParcoursController extends BaseController
             new DateTimeNormalizer(),
             new BackedEnumNormalizer(),
             new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor:  new ReflectionExtractor()),
-        ], 
+        ],
             [new JsonEncoder()]);
         try {
             // Création de la réponse JSON au client
@@ -419,7 +414,7 @@ class ParcoursController extends BaseController
             new DateTimeNormalizer(),
             new BackedEnumNormalizer(),
             new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor())
-        ], 
+        ],
         [new JsonEncoder()]);
         try{
             $now = new DateTimeImmutable('now');
@@ -451,22 +446,22 @@ class ParcoursController extends BaseController
 
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
         }
-        
+
     }
 
     #[Route('/{parcours_versioning}/versioning/view', name: 'app_parcours_versioning_view')]
     public function parcoursVersion(
-            ParcoursVersioning $parcours_versioning, 
+            ParcoursVersioning $parcours_versioning,
             CalculStructureParcours $calculStructureParcours
         ) : Response {
         // $parcours = new Parcours(new Formation(new AnneeUniversitaire));
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $serializer = new Serializer([
                 new DateTimeNormalizer(),
-                new BackedEnumNormalizer(), 
+                new BackedEnumNormalizer(),
                 new ArrayDenormalizer(),
                 new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
-            ], 
+            ],
             [new JsonEncoder()]);
         $file = file_get_contents(__DIR__ . "/../../versioning_json/parcours/{$parcours_versioning->getFileName()}");
         $parcours = $serializer->deserialize($file, Parcours::class, 'json');
