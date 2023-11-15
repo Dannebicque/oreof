@@ -11,10 +11,8 @@ namespace App\Classes\Export;
 
 use App\Classes\MyPDF;
 use App\Entity\AnneeUniversitaire;
-use App\Repository\FormationRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use DateTimeInterface;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class Export
@@ -28,6 +26,8 @@ class Export
     private mixed $export;
 
     public function __construct(
+        protected ExportRegime $exportRegime,
+        protected ExportCfvu $exportCfvu,
         protected ExportCarif $exportCarif,
         protected ExportSynthese $exportSynthese,
         protected ExportMccc $exportMccc,
@@ -69,6 +69,11 @@ class Export
                 return $this->exportMccc(true);
             case 'carif':
                 return $this->exportCarif();
+            case 'regime':
+                return $this->exportRegime();
+            case 'cfvu':
+                return $this->exportCfvu();
+
             case 'synthese':
                 return $this->exportSynthese();
         }
@@ -106,5 +111,15 @@ class Export
     private function exportSynthese(): string
     {
         return $this->exportSynthese->exportLink($this->annee);
+    }
+
+    private function exportRegime()
+    {
+        return $this->exportRegime->exportLink($this->annee);
+    }
+
+    private function exportCfvu()
+    {
+        return $this->exportCfvu->exportLink($this->annee);
     }
 }

@@ -25,8 +25,9 @@ class ExportController extends BaseController
     ];
 
     public const TYPES_DOCUMENT_GLOBAL = [
-        "xlsx-synthese" => 'Tableau de synthèse des formations (xslx)',
         "xlsx-carif" => 'Tableau CARIF (xslx)',
+        "xlsx-regime" => 'Tableau Régimes Inscriptions (xslx)',
+        "xlsx-cfvu" => 'Tableau Synthèse CFVU (xslx)',
     ];
 
 
