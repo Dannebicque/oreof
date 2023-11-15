@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.4](https://github.com/Dannebicque/oreof/compare/v1.17.3...v1.17.4) (2023-11-15)
+
+
+### Features
+
+* Exports ([4aa7e88](https://github.com/Dannebicque/oreof/commit/4aa7e882d600bec7c4ce7e058156dac1b9e126b4))
+
+
+### Bug Fixes
+
+* libellé bouton ([39bbf49](https://github.com/Dannebicque/oreof/commit/39bbf49eaa4d51197e8d3083f95ce79c5825c8da))
+
 ### [1.17.3](https://github.com/Dannebicque/oreof/compare/v1.17.2...v1.17.3) (2023-11-14)
 
 
