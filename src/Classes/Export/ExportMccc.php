@@ -55,7 +55,6 @@ class ExportMccc
                 $typeDiplome = $this->typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
                 if (null !== $typeDiplome) {
                     foreach ($formation->getParcours() as $parcours) {
-                        $dir = $this->dir;
                         if ($this->format === 'xlsx') {
                             $fichier = $typeDiplome->exportAndSaveExcelMccc(
                                 $dir,
@@ -73,7 +72,6 @@ class ExportMccc
                                 $this->isLight
                             );
                         }
-
                         $tabFiles[] = $fichier;
                         $zip->addFile(
                             $dir . $fichier,
