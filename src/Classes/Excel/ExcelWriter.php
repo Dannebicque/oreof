@@ -396,6 +396,11 @@ class ExcelWriter
         );
     }
 
+    public function setOrientationPage(string $orientation = PageSetup::ORIENTATION_LANDSCAPE): void
+    {
+        $this->sheet->getPageSetup()->setOrientation($orientation);
+    }
+
     public function setPrintArea(string $string)
     {
         $this->sheet->getPageSetup()->setPrintArea($string, 0, PageSetup::SETPRINTRANGE_OVERWRITE);

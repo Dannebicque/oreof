@@ -28,6 +28,7 @@ use Gotenberg\Stream;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use Psr\Http\Client\ClientInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -435,7 +436,7 @@ class LicenceMccc
         $reponse = $this->client->sendRequest($request);
 
         if ($reponse) {
-            unlink($this->dir . '/temp/'. $this->fileName . '.xlsx');
+            unlink($this->dir . '/temp/' . $this->fileName . '.xlsx');
         }
 
         // retourner une réponse avec le contenu du PDF
@@ -533,7 +534,12 @@ class LicenceMccc
         }
 
         $this->excelWriter->getColumnsAutoSize('D', 'D');
-        $this->excelWriter->setPrintArea('A1:D' . $ligne);
+        $this->excelWriter->setPrintArea('A1:I' . $ligne);
+        $this->excelWriter->setOrientationPage(PageSetup::ORIENTATION_LANDSCAPE);
+        $this->excelWriter->configSheet(
+            ['zoom' => 60,
+                'topLeftCell' => 'A1']
+        );
     }
 
     private function afficheEc(int $ligne, StructureEc $structureEc): int
@@ -683,8 +689,6 @@ class LicenceMccc
                             } else {
                                 $pourcentageTp += $mccc->pourcentageTp();
                             }
-
-
                         }
                         $pourcentageCc += $mccc->getPourcentage();
                         $texteCc .= 'CC (' . $mccc->getPourcentage() . '%); ';
