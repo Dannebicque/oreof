@@ -33,6 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;
 
+    #[Ignore]
     #[ORM\Column]
     private array $roles = [];
 
@@ -67,9 +68,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['fiche_matiere:read'])]
     private ?string $email = null;
 
+    #[Ignore]
     #[ORM\Column]
     private ?bool $isEnable = false;
 
+    #[Ignore]
     #[ORM\Column]
     private ?bool $isValidDpe = false;
 
@@ -77,6 +80,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $dateValideDpe = null;
 
+    #[Ignore]
     #[ORM\Column]
     private ?bool $isValideAdministration = false;
 
@@ -87,6 +91,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $dateDemande = null;
 
+    #[Ignore]
     #[ORM\Column]
     private ?bool $isDeleted = false;
 

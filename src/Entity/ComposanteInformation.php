@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ComposanteInformationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: ComposanteInformationRepository::class)]
 class ComposanteInformation
@@ -23,6 +24,7 @@ class ComposanteInformation
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $transport = null;
 
+    #[Ignore]
     #[ORM\OneToOne(mappedBy: 'composanteInformation', cascade: ['persist', 'remove'])]
     private ?Composante $composante = null;
 

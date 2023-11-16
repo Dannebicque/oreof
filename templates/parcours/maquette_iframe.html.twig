@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ asset('maquette/bootstrap.min.css') }}">
+    <script src="{{ asset('maquette/bootstrap.min.js') }}"></script>
+</head>
+    <body>
+    {% if parcours is defined and parcours is not null %}
+        <div class="accordion" id="accordionMaquetteParcours{{ parcours.parcours.id }}">
+        {% for semestre in parcours.semestres %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" 
+                            data-bs-target="#collapseSemestre{{semestre.semestre.ordre}}" aria-expanded="true" 
+                            aria-controls="collapseSemestre{{semestre.semestre.ordre}}"
+                    >
+                        Semestre {{ semestre.semestre.ordre}} - {{ parcours.parcours.libelle }}
+                    </button>
+                </h2>
+                <div id="collapseSemestre{{semestre.semestre.ordre}}" class="accordion-collapse collapse" 
+                    data-bs-parent="#accordionMaquetteParcours{{ parcours.parcours.id }}"
+                >
+                    <div class="accordion-body">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <tr>
+                                        <th></th>
+                                        <th colspan="3">Présentiel</th>
+                                        <th colspan="3">Distanciel</th>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th>CM</th>
+                                        <th>TD</th>
+                                        <th>TP</th>
+                                        <th>CM</th>
+                                        <th>TD</th>
+                                        <th>TP</th>
+                                    </tr>
+                                <tr>
+                            <thead>
+                            <tbody>
+                                {% for ue in semestre.ues %}
+                                    <tr>
+                                        <td>
+                                            {{'UE' ~ ue.ue.ordre}} - {{ ue.ue.libelle }}
+                                        </td>
+                                        <td>{{ ue.heuresEctsUe.sommeUeCmPres > 0 ? ue.heuresEctsUe.sommeUeCmPres : '-'  }}</td>
+                                        <td>{{ ue.heuresEctsUe.sommeUeTdPres > 0 ? ue.heuresEctsUe.sommeUeTdPres : '-'  }}</td>
+                                        <td>{{ ue.heuresEctsUe.sommeUeTpPres > 0 ? ue.heuresEctsUe.sommeUeTpPres : '-'  }}</td>
+                                        <td>{{ ue.heuresEctsUe.sommeUeCmDist > 0 ? ue.heuresEctsUe.sommeUeCmDist : '-'  }}</td>
+                                        <td>{{ ue.heuresEctsUe.sommeUeTdDist > 0 ? ue.heuresEctsUe.sommeUeTdDist : '-'  }}</td>
+                                        <td>{{ ue.heuresEctsUe.sommeUeTpDist > 0 ? ue.heuresEctsUe.sommeUeTpDist : '-'  }}</td>
+                                    </tr>
+                                    {% for ec in ue.elementConstitutifs %}
+                                        <tr>
+                                            <td>{{ ec.elementConstitutif.display() }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    {% if ue.uesEnfants|length > 0 %}
+                                        {% for ecEnfant in ue.uesEnfants %}
+                                            {% if ecEnfant.elementConstitutifs is defined and ecEnfant.elementConstitutifs is not null %}
+                                                {% for ecE in ecEnfant.elementConstitutifs %}
+                                                <tr>
+                                                    <td>
+                                                        {{ ecE.elementConstitutif.display() }}
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    </body>
+</html>
