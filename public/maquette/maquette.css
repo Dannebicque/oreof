@@ -1,0 +1,9 @@
+th, td {
+    padding: .75em;
+    font-size: 1.15em;
+}
+
+.table-center {
+    margin-left: auto;
+    margin-right: auto;
+}

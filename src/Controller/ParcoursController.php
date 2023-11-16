@@ -359,7 +359,7 @@ class ParcoursController extends BaseController
     #[Route('/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
     public function getMaquetteIframe(Parcours $parcours, CalculStructureParcours $calcul){
 
-        //dump($calcul->calcul($parcours));exit;
+        // dump($calcul->calcul($parcours));exit;
 
         return $this->render('parcours/maquette_iframe.html.twig', [
             'parcours' => $calcul->calcul($parcours)

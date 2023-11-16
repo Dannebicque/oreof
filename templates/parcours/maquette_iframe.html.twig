@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="{{ asset('maquette/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('maquette/maquette.css') }}">
     <script src="{{ asset('maquette/bootstrap.min.js') }}"></script>
 </head>
     <body>
@@ -21,7 +22,7 @@
                     data-bs-parent="#accordionMaquetteParcours{{ parcours.parcours.id }}"
                 >
                     <div class="accordion-body">
-                        <table>
+                        <table class="table-center">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -43,7 +44,7 @@
                             <thead>
                             <tbody>
                                 {% for ue in semestre.ues %}
-                                    <tr>
+                                    <tr class="bg-secondary text-light">
                                         <td>
                                             {{'UE' ~ ue.ue.ordre}} - {{ ue.ue.libelle }}
                                         </td>
@@ -55,18 +56,42 @@
                                         <td>{{ ue.heuresEctsUe.sommeUeTpDist > 0 ? ue.heuresEctsUe.sommeUeTpDist : '-'  }}</td>
                                     </tr>
                                     {% for ec in ue.elementConstitutifs %}
-                                        <tr>
-                                            <td>{{ ec.elementConstitutif.display() }}</td>
-                                        </tr>
+                                        {% if ec.elementsConstitutifsEnfants|length is same as (0) %}
+                                            <tr>
+                                                <td>{{ ec.elementConstitutif.display() }}</td>
+                                                <td>{{ ec.heuresEctsEc.cmPres > 0 ? ec.heuresEctsEc.cmPres : '-' }}</td>
+                                                <td>{{ ec.heuresEctsEc.tdPres > 0 ? ec.heuresEctsEc.tdPres : '-' }}</td>
+                                                <td>{{ ec.heuresEctsEc.tpPres > 0 ? ec.heuresEctsEc.tpPres : '-' }}</td>
+                                                <td>{{ ec.heuresEctsEc.cmDist > 0 ? ec.heuresEctsEc.cmDist : '-' }}</td>
+                                                <td>{{ ec.heuresEctsEc.tdDist > 0 ? ec.heuresEctsEc.tdDist : '-' }}</td>
+                                                <td>{{ ec.heuresEctsEc.tpDist > 0 ? ec.heuresEctsEc.tpDist : '-' }}</td>
+                                            </tr>
+                                        {% else %}
+                                            {% for ecE in ec.elementsConstitutifsEnfants %}
+                                                <tr>
+                                                    <td>{{ ecE.elementConstitutif.ficheMatiere.libelle ?? ecE.elementConstitutif.libelle }}</td>
+                                                    <td>{{ ecE.heuresEctsEc.cmPres > 0 ? ecE.heuresEctsEc.cmPres : '-' }}</td>
+                                                    <td>{{ ecE.heuresEctsEc.tdPres > 0 ? ecE.heuresEctsEc.tdPres : '-' }}</td>
+                                                    <td>{{ ecE.heuresEctsEc.tpPres > 0 ? ecE.heuresEctsEc.tpPres : '-' }}</td>
+                                                    <td>{{ ecE.heuresEctsEc.cmDist > 0 ? ecE.heuresEctsEc.cmDist : '-' }}</td>
+                                                    <td>{{ ecE.heuresEctsEc.tdDist > 0 ? ecE.heuresEctsEc.tdDist : '-' }}</td>
+                                                    <td>{{ ecE.heuresEctsEc.tpDist > 0 ? ecE.heuresEctsEc.tpDist : '-' }}</td>
+                                                </tr>   
+                                            {% endfor %}
+                                        {% endif %}
                                     {% endfor %}
                                     {% if ue.uesEnfants|length > 0 %}
                                         {% for ecEnfant in ue.uesEnfants %}
                                             {% if ecEnfant.elementConstitutifs is defined and ecEnfant.elementConstitutifs is not null %}
                                                 {% for ecE in ecEnfant.elementConstitutifs %}
                                                 <tr>
-                                                    <td>
-                                                        {{ ecE.elementConstitutif.display() }}
-                                                    </td>
+                                                    <td>{{ ecE.elementConstitutif.display() }}</td>
+                                                    <td>{{ ecE.heuresEctsEc.cmPres > 0 ? ecE.heuresEctsEc.cmPres : '-' }}</td>
+                                                    <td>{{ ecE.heuresEctsEc.tdPres > 0 ? ecE.heuresEctsEc.tdPres : '-' }}</td>
+                                                    <td>{{ ecE.heuresEctsEc.tpPres > 0 ? ecE.heuresEctsEc.tpPres : '-' }}</td>
+                                                    <td>{{ ecE.heuresEctsEc.cmDist > 0 ? ecE.heuresEctsEc.cmDist : '-' }}</td>
+                                                    <td>{{ ecE.heuresEctsEc.tdDist > 0 ? ecE.heuresEctsEc.tdDist : '-' }}</td>
+                                                    <td>{{ ecE.heuresEctsEc.tpDist > 0 ? ecE.heuresEctsEc.tpDist : '-' }}</td>
                                                 </tr>
                                                 {% endfor %}
                                             {% endif %}
