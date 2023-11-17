@@ -15,6 +15,7 @@ use App\Classes\verif\ParcoursState;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\FormationDemande;
+use App\Entity\User;
 use App\Entity\UserCentre;
 use App\Events\AddCentreFormationEvent;
 use App\Form\FormationDemandeType;
@@ -34,6 +35,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/formation')]
 class FormationController extends BaseController

@@ -3,7 +3,7 @@
     {% for semestre in parcours.semestres %}
         <div class="accordion-item">
             <h2 class="accordion-header">
-                <button class="accordion-button bg-button-semestre" type="button" data-bs-toggle="collapse" 
+                <button class="accordion-button bg-button-semestre fs-6" type="button" data-bs-toggle="collapse" 
                         data-bs-target="#collapseSemestre{{semestre.semestre.ordre}}Parcours{{ indexParcours }}" aria-expanded="true" 
                         aria-controls="collapseSemestre{{semestre.semestre.ordre}}Parcours{{ indexParcours }}"
                 >
@@ -13,7 +13,7 @@
             <div id="collapseSemestre{{semestre.semestre.ordre}}Parcours{{ indexParcours }}" class="accordion-collapse collapse" 
                 data-bs-parent="#accordionMaquetteParcours{{ parcours.parcours.id }}Index{{ indexParcours }}"
             >
-                <div class="accordion-body">
+                <div class="accordion-body global-bg">
                     <table class="table">
                         <thead>                  
                             <tr>

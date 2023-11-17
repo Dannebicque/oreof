@@ -5,9 +5,9 @@
     <link rel="stylesheet" href="{{ asset('maquette/maquette.css') }}">
     <script src="{{ asset('maquette/bootstrap.min.js') }}"></script>
 </head>
-<body>
+<body class="global-bg">
     {% for parcours in listeParcours %}
-        <h2 class="fs-4 mt-5 mb-2 ms-4">{{ parcours.parcours.libelle }}</h2>
+        <h2 class="fs-4 mt-5 mb-4 ms-4">{{ parcours.parcours.libelle }}</h2>
         {{ include('parcours/maquette_iframe.html.twig', {parcours: parcours, indexParcours: loop.index} ) }}
     {% endfor %}
 </body>
