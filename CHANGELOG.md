@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.6](https://github.com/Dannebicque/oreof/compare/v1.17.5...v1.17.6) (2023-11-17)
+
+
+### Bug Fixes
+
+* Menu export pour les rôles lecteurs ([b502306](https://github.com/Dannebicque/oreof/commit/b502306250319b00f8305d4d23acef166ed455e1))
+* Orientation page des compétences ([728dfdf](https://github.com/Dannebicque/oreof/commit/728dfdfb5a12e03f203f5064b11ffb24b939b866))
+
 ### [1.17.5](https://github.com/Dannebicque/oreof/compare/v1.17.4...v1.17.5) (2023-11-15)
 
 
