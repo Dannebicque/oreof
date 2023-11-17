@@ -6,10 +6,11 @@ th, td {
 .table-center {
     margin-left: auto;
     margin-right: auto;
+    border-collapse: collapse;
 }
 
 .bg-button-semestre {
-    background-color: rgb(255, 234, 207) !important;
+    background-color: rgb(235, 198, 149) !important;
 }
 
 .bg-button-semestre::after {
@@ -17,8 +18,9 @@ th, td {
 }
 
 .total-semestre {
-    background-color: rgb(252, 158, 123);
+    background-color: rgb(255, 199, 179);
     color: black;
+    padding: .5em;
 }
 
 .ects-badge {
@@ -28,4 +30,38 @@ th, td {
     color: white;
     padding: .4em;
     font-size: .9em;
+}
+
+td:not(#UELibelle, #ECLibelle, #TotalSemestre) {
+    text-align: center;
+    border-width: 0 .1em 0;
+    border-color: black;
+}
+
+tr.table-dark td:not(#UELibelle, td:last-child) {
+    border-width: 0 .1em 0;
+    border-color: white;
+}
+
+tr.total-semestre > td:not(#TotalSemestre) {
+    border-width: .1em 0 .1em !important;
+    border-color: black;
+}
+
+tr.total-semestre:last-child {
+    border-right-width: .1em;
+    border-right-color: black;
+}
+
+tr > th {
+    text-align: center;
+}
+
+#ECLibelle, #TotalSemestre {
+    border-width: .1em;
+    border-color: black;
+}
+
+#ECLibelle {
+    background-color: burlywood;
 }
