@@ -73,8 +73,8 @@
                                     {% for ecEnfant in ue.uesEnfants %}
                                         {% if ecEnfant.elementConstitutifs is defined and ecEnfant.elementConstitutifs is not null %}
                                             {% for ecE in ecEnfant.elementConstitutifs %}
-                                            <tr id="ECLibelle">
-                                                <td>{{ ecE.elementConstitutif.display() }}</td>
+                                            <tr>
+                                                <td id="ECLibelle">{{ ecE.elementConstitutif.display() }}</td>
                                                 <td>{{ ecE.heuresEctsEc.cmPres > 0 ? ecE.heuresEctsEc.cmPres : '-' }}</td>
                                                 <td>{{ ecE.heuresEctsEc.tdPres > 0 ? ecE.heuresEctsEc.tdPres : '-' }}</td>
                                                 <td>{{ ecE.heuresEctsEc.tpPres > 0 ? ecE.heuresEctsEc.tpPres : '-' }}</td>

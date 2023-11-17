@@ -1,14 +1,26 @@
+:root {
+    --urca-black: #12142B;
+    --urca-yellow: #F2C52C;
+    --urca-teal: #20c997;
+    --urca-cyan: #0dcaf0;
+    --urca-gray: #6c757d;
+    --urca-gray-300: #dee2e6;
+    --urca-gray-500: #adb5bd;
+    --urca-gray-600: #6c757d;
+}
+
 .global-bg {
-    background-color: #12142B;
+    background-color: var(--urca-black);
 }
 
 h2 {
     color: #ffffff;
 }
 
-th, td {
+td {
     padding: .75em;
     font-size: 1em;
+    color: var(--urca-black);
 }
 
 .table-center {
@@ -18,7 +30,8 @@ th, td {
 }
 
 .bg-button-semestre {
-    background-color: #F2C52C !important;
+    background-color: var(--urca-yellow) !important;
+    color: var(--urca-black);
 }
 
 .bg-button-semestre::before {
@@ -68,7 +81,7 @@ th, td {
 td:not(#UELibelle, #ECLibelle, #TotalSemestre) {
     text-align: center;
     border-width: 0 .1em 0;
-    border-color: black;
+    border-color: var(--urca-black);
 }
 
 tr.table-dark td:not(#UELibelle, td:last-child) {
@@ -78,23 +91,50 @@ tr.table-dark td:not(#UELibelle, td:last-child) {
 
 tr.total-semestre > td:not(#TotalSemestre) {
     border-width: .1em 0 .1em !important;
-    border-color: black;
+    border-color: var(--urca-black);
 }
 
 tr.total-semestre:last-child {
     border-right-width: .1em;
-    border-right-color: black;
+    border-right-color: var(--urca-black);
 }
 
 tr > th {
     text-align: center;
+    --bs-table-bg: var(--urca-gray-200);
 }
 
 #ECLibelle, #TotalSemestre {
     border-width: .1em;
-    border-color: black;
+    border-color: var(--urca-black);
 }
 
 #ECLibelle {
-    background-color: burlywood;
+    background-color: var(--urca-teal);
+}
+
+.accordion-item {
+    border-width: .1em;
+    border-color: var(--urca-cyan);
+    margin-bottom: .2em;
+}
+
+.table-dark {
+    --bs-table-bg: var(--urca-gray-600) !important;
+}
+
+tr th:not(:first-child) {
+    border-width: .1em .1em .1em .1em;
+    border-color: white;
+    border-style: solid;
+    background-color: var(--urca-gray-500);
+    color: var(--urca-black);
+}
+
+tr th:first-child {
+    border-width: 0;
+}
+
+tr.total-semestre {
+    --bs-table-bg: var(--urca-yellow);
 }
