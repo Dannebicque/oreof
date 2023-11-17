@@ -64,6 +64,22 @@ class ExportController extends BaseController
         ]);
     }
 
+    #[Route('/export/consultation', name: 'app_export_show')]
+    public function exportShow(
+        AnneeUniversitaireRepository $anneeUniversitaireRepository,
+        ComposanteRepository         $composanteRepository,
+    ): Response {
+        $this->denyAccessUnlessGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser());
+
+        return $this->render('export/index.html.twig', [
+            'annees' => $anneeUniversitaireRepository->findAll(),
+            'composantes' => $composanteRepository->findAll(),
+            'ses' => false,
+            'isCfvu' => true,
+            'types_document' => self::TYPES_DOCUMENT,
+        ]);
+    }
+
     #[Route('/export/composante/{composante}', name: 'app_export_composante_index')]
     public function composante(
         AnneeUniversitaireRepository $anneeUniversitaireRepository,

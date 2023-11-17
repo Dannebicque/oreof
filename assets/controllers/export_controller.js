@@ -36,7 +36,7 @@ export default class extends Controller {
       document.getElementById('annee_universitaire').classList.remove('is-invalid')
     }
 
-    if (document.getElementById('type_document_global').value === '') {
+    if (!document.getElementById('type_document_global') || document.getElementById('type_document_global').value === '') {
       if (document.getElementById('composante').value === '') {
         document.getElementById('composante').classList.add('is-invalid')
         isValid = false
@@ -73,8 +73,8 @@ export default class extends Controller {
       data.append('annee_universitaire', document.getElementById('annee_universitaire').value)
       data.append('composante', document.getElementById('composante').value)
       data.append('type_document', typeDocs)
-      data.append('type_document_global', document.getElementById('type_document_global').value)
-      data.append('date', document.getElementById('date').value)
+      // data.append('type_document_global', document.getElementById('type_document_global').value)
+      data.append('date', document.getElementById('date') ? document.getElementById('date').value : '')
 
       // envoie le formulaire
       fetch(this.urlValideValue, {
