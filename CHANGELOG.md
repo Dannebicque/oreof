@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.9](https://github.com/Dannebicque/oreof/compare/v1.17.8...v1.17.9) (2023-11-20)
+
+
+### Bug Fixes
+
+* Exports ([f8a8a44](https://github.com/Dannebicque/oreof/commit/f8a8a44b1af98d332d65ac6fa89f8ce1cf14800a))
+* Exports BCC croisé global ([796f792](https://github.com/Dannebicque/oreof/commit/796f79234c6d14b0d07ee828653d44b04dfd773f))
+* Exports PDF et titres ([84e8275](https://github.com/Dannebicque/oreof/commit/84e827543d5e6d05de6d508af00959bff334bf21))
+* Traductions ([39b705a](https://github.com/Dannebicque/oreof/commit/39b705af80396256c897fce85134a2a185ccca85))
+
 ### [1.17.8](https://github.com/Dannebicque/oreof/compare/v1.17.7...v1.17.8) (2023-11-20)
 
 
