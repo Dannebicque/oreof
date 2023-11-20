@@ -77,6 +77,7 @@ class ExportController extends BaseController
             'ses' => false,
             'isCfvu' => true,
             'types_document' => self::TYPES_DOCUMENT,
+            'types_document_global' => self::TYPES_DOCUMENT_GLOBAL,
         ]);
     }
 
