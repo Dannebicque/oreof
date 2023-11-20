@@ -2,13 +2,12 @@
     <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
     <th {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %}>&nbsp;</th>
     <td>{% if ecEnfant %}<span class="badge bg-ec-{{ ec.elementConstitutif.ordre }}">&nbsp;</span>{% endif %}
-        {% if isBut is defined and isBut == false %}<strong>{{ ec.elementConstitutif.code }}</strong>{% endif %}
+        {% if (isBut is defined and isBut == false) or isBut is not defined %}<strong>{{ ec.elementConstitutif.code }}</strong>{% endif %}
         {% if ec.elementConstitutif.ficheMatiere != null %}
             <a href="{{ url('app_fiche_matiere_show', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}">
                 {% if isBut is defined and isBut == true %}
                     <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }}
                 {% else %}
-                    <strong>{{ ec.elementConstitutif.code }}</strong>
                     {{ ec.elementConstitutif.ficheMatiere.display }}
                 {% endif %}
             </a>
