@@ -9,6 +9,7 @@
 
 namespace App\Classes\Export;
 
+use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
 use App\Entity\AnneeUniversitaire;
 use App\Repository\FormationRepository;
@@ -41,22 +42,34 @@ class ExportCarif implements ExportInterface
             foreach ($formation->getParcours() as $parcours) {
                 if ($parcours->isAlternance()) {
                     //Composante	Type de diplôme	mention	parcours	état	remplissage	nom responsable
-                    $this->excelWriter->writeCellXY(1, $ligne, $formation->getComposantePorteuse()?->getLibelle());
-                    $this->excelWriter->writeCellXY(2, $ligne, $formation->getTypeDiplome()?->getLibelle());
-                    $this->excelWriter->writeCellXY(3, $ligne, $formation->getDisplay());
+                    $this->excelWriter->writeCellXY('A', $ligne, $formation->getComposantePorteuse()?->getLibelle());
+                    $this->excelWriter->writeCellXY('B', $ligne, $formation->getTypeDiplome()?->getLibelle());
+                    $this->excelWriter->writeCellXY('C', $ligne, $formation->getDisplay());
                     if ($formation->isHasParcours()) {
-                        $this->excelWriter->writeCellXY(4, $ligne, $parcours->getLibelle());
+                        $this->excelWriter->writeCellXY('D', $ligne, $parcours->getLibelle());
+                        $this->excelWriter->writeCellXY('E', $ligne, $parcours->getObjectifsParcours(), ['wrap' => true]);
+                        $this->excelWriter->writeCellXY('F', $ligne, $parcours->getContenuFormation(), ['wrap' => true]);
+                        $this->excelWriter->writeCellXY('G', $ligne, $parcours->getRespParcours()?->getDisplay());
                     } else {
-                        $this->excelWriter->writeCellXY(4, $ligne, 'Pas de parcours');
+                        $this->excelWriter->writeCellXY('E', $ligne, $formation->getObjectifsFormation(), ['wrap' => true]);
+                        $this->excelWriter->writeCellXY('F', $ligne, $formation->getContenuFormation(), ['wrap' => true]);
+                        $this->excelWriter->writeCellXY('G', $ligne, $formation->getResponsableMention()?->getDisplay());
                     }
 
-                    $this->excelWriter->writeCellXY(5, $ligne, $formation->getResponsableMention()?->getDisplay());
-                    $this->excelWriter->writeCellXY(6, $ligne, $parcours->getRespParcours()?->getDisplay());
-                    $this->excelWriter->writeCellXY(7, $ligne, $formation->getCodeRNCP());
-                    $this->excelWriter->writeCellXY(8, $ligne, $parcours->getLocalisation()?->getLibelle());
-                    $this->excelWriter->writeCellXY(9, $ligne, $parcours->displayRegimeInscription());
-                    //$this->excelWriter->writeCellXY(10, $ligne, $formation->getCodeRNCP());
-                    $this->excelWriter->getColumnsAutoSize('A', 'I');
+//                    $calcul = new CalculStructureParcours();
+//                    $dureeFormation = $calcul->calcul($parcours)->heuresEctsFormation->sommeFormationTotalPres();
+//                    $dureeEntreprise = 1607 - $dureeFormation;
+//                    unset($calcul);
+
+                    $this->excelWriter->writeCellXY('K', $ligne, $parcours->getModalitesEnseignement()?->value);
+                    $this->excelWriter->writeCellXY('I', $ligne, $formation->getNiveauEntree()->libelle());
+                    $this->excelWriter->writeCellXY('J', $ligne, $formation->getNiveauSortie()->libelle());
+                    $this->excelWriter->writeCellXY('L', $ligne, $parcours->getPrerequis(), ['wrap' => true]);
+//                    $this->excelWriter->writeCellXY('N', $ligne, $dureeEntreprise);
+//                    $this->excelWriter->writeCellXY('O', $ligne, $dureeFormation);
+                    $this->excelWriter->writeCellXY('R', $ligne, $parcours->getLocalisation()?->getLibelle());
+                   ;
+//                    $this->excelWriter->getColumnsAutoSize('A', 'R');
                     $ligne++;
                 }
             }

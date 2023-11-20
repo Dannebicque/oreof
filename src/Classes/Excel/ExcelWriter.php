@@ -49,8 +49,12 @@ class ExcelWriter
     }
 
 
-    public function writeCellXY(int $col, int $row, mixed $value = '', array $options = []): void
+    public function writeCellXY(int|string $col, int $row, mixed $value = '', array $options = []): void
     {
+        if (is_string($col)) {
+            $col = (int)Coordinate::columnIndexFromString($col);
+        }
+
         $this->sheet->setCellValue([$col, $row], $value);
         //
         //traiter les options

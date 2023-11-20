@@ -47,7 +47,8 @@ class ExportRegime implements ExportInterface
         $this->excelWriter->writeCellXY(5, 1, 'Lieu de formation');
         $this->excelWriter->writeCellXY(6, 1, 'Resp. Mention');
         $this->excelWriter->writeCellXY(7, 1, 'Resp. Parcours');
-        $this->excelWriter->writeCellXY(8, 1, 'Validation CFVU');
+        $this->excelWriter->writeCellXY(8, 1, 'RNCP');
+        $this->excelWriter->writeCellXY(9, 1, 'Validation CFVU');
         $i = 0;
         foreach (RegimeInscriptionEnum::cases() as $regime) {
             $this->excelWriter->writeCellXY(9 + $i, 1, $regime->value);
@@ -73,7 +74,8 @@ class ExportRegime implements ExportInterface
                 }
                 $this->excelWriter->writeCellXY(6, $ligne, $formation->getResponsableMention()?->getDisplay());
                 $this->excelWriter->writeCellXY(7, $ligne, $parcours->getRespParcours()?->getDisplay());
-                $this->excelWriter->writeCellXY(8, $ligne, $this->getHistorique->getHistoriqueFormationLastStep($formation, 'cfvu')?->getDate()?->format('d/m/Y') ?? 'Non validé');
+                $this->excelWriter->writeCellXY(7, $ligne, $formation->getCodeRNCP());
+                $this->excelWriter->writeCellXY(9, $ligne, $this->getHistorique->getHistoriqueFormationLastStep($formation, 'cfvu')?->getDate()?->format('d/m/Y') ?? 'Non validé');
                 $i = 0;
                 foreach (RegimeInscriptionEnum::cases() as $regime) {
                     if (in_array($regime, $parcours->getRegimeInscription())) {
