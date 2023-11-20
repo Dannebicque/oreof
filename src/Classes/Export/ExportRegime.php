@@ -74,7 +74,7 @@ class ExportRegime implements ExportInterface
                 }
                 $this->excelWriter->writeCellXY(6, $ligne, $formation->getResponsableMention()?->getDisplay());
                 $this->excelWriter->writeCellXY(7, $ligne, $parcours->getRespParcours()?->getDisplay());
-                $this->excelWriter->writeCellXY(7, $ligne, $formation->getCodeRNCP());
+                $this->excelWriter->writeCellXY(8, $ligne, $formation->getCodeRNCP());
                 $this->excelWriter->writeCellXY(9, $ligne, $this->getHistorique->getHistoriqueFormationLastStep($formation, 'cfvu')?->getDate()?->format('d/m/Y') ?? 'Non validé');
                 $i = 0;
                 foreach (RegimeInscriptionEnum::cases() as $regime) {
