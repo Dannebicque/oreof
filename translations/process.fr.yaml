@@ -1,110 +1,260 @@
+verifier.la.saisie.parcours.title: 'Vérification de la fiche parcours'
+verifier.la.saisie.parcours.infobulle: 'Vérifier les informations saisies dans la fiche parcours'
+historique.de.validation.parcours.title: 'Historique des validations du parcours'
+historique.de.validation.parcours.infobulle: 'Historique de validation'
+modifier.la.validation.infobulle: "Modifier l'état de validation du projet DPE"
+modifier.la.validation.title: "Modifier l'état de validation du projet DPE"
+verifier.la.saisie.formation.title: 'Vérification de la fiche formation'
+verifier.la.saisie.formation.infobulle: 'Vérifier les informations saisies dans la fiche formation'
+historique.de.validation.formation.title: 'Historique des validations de la formation'
+historique.de.validation.formation.infobulle: 'Historique de validation'
+parcours.valide.parcours.flash.success: 'Le parcours est transmis'
+parcours.valide.parcours_rf.flash.success: 'Le parcours est validé'
+validation.indisponible: 'Parcours validé'
+reserve.validation.parcours_rf.helps.date.help: ' '
+parcours.reserve.parcours_rf.flash.success: 'Réserves sur le parcours émises'
+btn.validation.parcours.valide.reserve_parcours_rf: btn.validation.parcours.valide.reserve_parcours_rf
+validation.parcours.valide.impossible.reserve_parcours_rf: validation.parcours.valide.impossible.reserve_parcours_rf
+historique.validation.parcours_rf: 'Validation du parcours %parcours% par le responsable de formation'
+formation.valide.formation.flash.success: 'Validation de la formation pour transmission du responsable DPE'
+formation.valide.dpe.flash.success: 'Validation de la formation pour passage en Conseil de composante'
+historique.validation.dpe: 'Validation de la formation par le responsable DPE de la formation pour passage en Conseil de composante'
+historique.validation.formation: 'Validation de la formation par le responsable de formation'
+.date.label: .date.label
+valide.validation.conseil.fichier.label: 'Pièce justifiant la validation du projet DPE (PV, relevé de décision, délibération) :'
+deposer.le.pv.title: "Déposer l'avis du Conseil de composante"
+deposer.le.pv: 'Déposer le PV'
+formation.valide.ses.flash.success: 'Validation de la formation par le SES'
+historique.validation.ses: 'Visa du SES'
+formation.valide.vp.flash.success: 'Validation de la formation pour passage en CFVU'
+validation.cfvu.valide.cas.acceptation.directe.soumis_cfvu: 'Validation du projet DPE "formation"'
+valide.validation.cfvu.helps.acceptation.directe.help: ' '
+validation.cfvu.valide.cas.sous.reserve.conseil.soumis_cfvu: 'Validation CFVU - sous réserve de validation en Conseil de composante'
+valide.validation.cfvu.helps.sous.reserve.conseil.help: ' '
+validation.cfvu.valide.cas.sous.reserve.modifications.soumis_cfvu: 'Validation CFVU - sous réserve de modifications'
+valide.validation.cfvu.helps.sous.reserve.modifications.help: ' '
+validation.cfvu.valide.commentaire.cas.sous.reserve.modifications.argumentaire.soumis_cfvu: 'Modifications attendues pour une validation définitive :'
+validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argumentaire.soumis_cfvu: ' '
+validation.cfvu.valide.cas.acceptation.non.directe.soumis_cfvu: 'Validation du projet DPE "formation" SOUS RESERVE :'
+valide.validation.cfvu.helps.acceptation.non.directe.help: ' '
+formation.valide.cfvu.flash.success: 'Validation de la formation par la CFVU'
+historique.validation.cfvu: 'Validation de la CFVU'
+historique.validation.vp: 'Visa des VP'
+validation.publication.valide.alerte: 'La validation  entraîne la publication de la formation à la date indiquée.'
+btn.validation.publication.valide: 'A publier'
+formation.valide.publication.flash.success: 'Validation de la formation pour publication'
+historique.validation.publication: 'Visa de publication'
+reserve.validation.dpe.helps.date.help: ' '
+formation.reserve.dpe.flash.success: 'Réserves sur la formation émises'
 validation.parcours.soumis_rf: validation.parcours.soumis_rf
 validation.parcours.en_cours_redaction: validation.parcours.en_cours_redaction
 validation.parcours.soumis_parcours: validation.parcours.soumis_parcours
 validation.cfvu.valide_a_publier: validation.cfvu.valide_a_publier
 validation.formation.autorisation_saisie: validation.formation.autorisation_saisie
-validation.valider.formation.title: validation.valider.formation.title
-validation.valider.formation: validation.valider.formation
-validation.valider.parcours.title: validation.valider.parcours.title
-validation.valider.parcours: validation.valider.parcours
-validation.valider.dpe.title: validation.valider.dpe.title
-validation.valider.dpe: validation.valider.dpe
-validation.reserve.dpe.title: validation.reserve.dpe.title
-validation.reserve.dpe: validation.reserve.dpe
-validation.refuser.dpe.title: validation.refuser.dpe.title
-validation.refuser.dpe: validation.refuser.dpe
-validation.valider.publication.title: validation.valider.publication.title
-validation.valider.publication: validation.valider.publication
+validation.valider.formation.title: 'Validation du projet DPE "formation" par le responsable de formation'
+validation.valider.formation: 'Valider et soumettre la formation'
+validation.valider.parcours.title: 'Soumettre le projet DPE "parcours"'
+validation.valider.parcours: 'Soumettre le parcours'
+validation.valider.dpe.title: 'Validation du projet DPE "formation" par le responsable DPE'
+validation.valider.dpe: 'Valider et transmettre la formation'
+validation.reserve.dpe.title: 'Emettre des réserves sur le projet DPE "formation"'
+validation.reserve.dpe: 'Emettre des réserves'
+validation.refuser.dpe.title: 'Refuser le projet DPE "formation"'
+validation.refuser.dpe: 'Refuser la formation'
+validation.valider.publication.title: 'Validation du projet DPE "formation" pour publication'
+validation.valider.publication: 'Valider pour publication'
 validation.dpe.reserve.soumis_dpe_composante: validation.dpe.reserve.soumis_dpe_composante
 validation.dpe.valide.soumis_dpe_composante: validation.dpe.valide.soumis_dpe_composante
 validation.dpe.refuse.soumis_dpe_composante: validation.dpe.refuse.soumis_dpe_composante
 validation.parcours.valide.en_cours_redaction: validation.parcours.valide.en_cours_redaction
-validation.parcours.valide.soumis_parcours: validation.parcours.valide.soumis_parcours
-validation.reserve.formation.title: validation.reserve.formation.title
-validation.reserve.formation: validation.reserve.formation
-validation.formation.valide.en_cours_redaction: validation.formation.valide.en_cours_redaction
-validation.valider.conseil.title: validation.valider.conseil.title
-validation.valider.conseil: validation.valider.conseil
-validation.reserve.conseil.title: validation.reserve.conseil.title
-validation.reserve.conseil: validation.reserve.conseil
-validation.refuser.conseil.title: validation.refuser.conseil.title
-validation.refuser.conseil: validation.refuser.conseil
+validation.parcours.valide.soumis_parcours: 'Le projet DPE "parcours" a bien été transmis au responsable de formation pour visa.'
+validation.reserve.formation.title: 'Emettre des réserves sur le projet DPE "formation"'
+validation.reserve.formation: 'Emettre des réserves'
+validation.formation.valide.en_cours_redaction: 'La validation de la formation permet la transmission du projet DPE "formation" au responsable DPE de votre composante pour visa en vue du passage en conseil de composante.  Après validation, la fiche "formation" ne sera plus modifiable.'
+validation.valider.conseil.title: 'Validation du projet DPE "formation" par le Conseil'
+validation.valider.conseil: 'Valider et transmettre la formation'
+validation.reserve.conseil.title: 'Emettre des réserves sur le projet DPE "formation"'
+validation.reserve.conseil: 'Emettre des réserves'
+validation.refuser.conseil.title: 'Refuser le projet DPE "formation"'
+validation.refuser.conseil: 'Refuser la formation'
 validation.conseil.valide.soumis_conseil: validation.conseil.valide.soumis_conseil
-validation.valider.ses.title: validation.valider.ses.title
-validation.valider.ses: validation.valider.ses
-validation.reserve.ses.title: validation.reserve.ses.title
-validation.reserve.ses: validation.reserve.ses
-validation.refuser.ses.title: validation.refuser.ses.title
-validation.refuser.ses: validation.refuser.ses
+validation.valider.ses.title: 'Validation du projet DPE "formation" par le SES'
+validation.valider.ses: 'Valider la formation'
+validation.reserve.ses.title: 'Emettre des réserves sur le projet DPE "formation"'
+validation.reserve.ses: 'Emettre des réserves'
+validation.refuser.ses.title: 'Refuser le projet DPE "formation"'
+validation.refuser.ses: 'Refuser la formation'
 validation.ses.valide.soumis_central: validation.ses.valide.soumis_central
-validation.valider.vp.title: validation.valider.vp.title
-validation.valider.vp: validation.valider.vp
-validation.reserve.vp.title: validation.reserve.vp.title
-validation.reserve.vp: validation.reserve.vp
-validation.refuser.vp.title: validation.refuser.vp.title
-validation.refuser.vp: validation.refuser.vp
+validation.valider.vp.title: 'Validation du projet DPE "formation" par la présidence'
+validation.valider.vp: 'Valider la formation'
+validation.reserve.vp.title: 'Emettre des réserves sur le projet DPE "formation"'
+validation.reserve.vp: 'Emettre des réserves'
+validation.refuser.vp.title: 'Refuser le projet DPE "formation"'
+validation.refuser.vp: 'Refuser la formation'
 validation.vp.valide.soumis_vp: validation.vp.valide.soumis_vp
-validation.valider.cfvu.title: validation.valider.cfvu.title
-validation.valider.cfvu: validation.valider.cfvu
-validation.refuser.cfvu.title: validation.refuser.cfvu.title
-validation.refuser.cfvu: validation.refuser.cfvu
+validation.valider.cfvu.title: 'Validation du projet DPE "formation" par la CFVU'
+validation.valider.cfvu: 'Valider la formation'
+validation.refuser.cfvu.title: 'Refuser le projet DPE "formation"'
+validation.refuser.cfvu: 'Refuser la formation'
 validation.cfvu.valide.soumis_cfvu: validation.cfvu.valide.soumis_cfvu
-validation.cfvu.valide.cas.sousReserveModifications.soumis_cfvu: validation.cfvu.valide.cas.sousReserveModifications.soumis_cfvu
-validation.cfvu.valide.cas.sousReserveConseil.soumis_cfvu: validation.cfvu.valide.cas.sousReserveConseil.soumis_cfvu
-validation.cfvu.refuse.cas.projetARevoir.soumis_cfvu: validation.cfvu.refuse.cas.projetARevoir.soumis_cfvu
-btn.validation.cfvu.valide.soumis_cfvu: btn.validation.cfvu.valide.soumis_cfvu
-btn.validation.formation.valide.en_cours_redaction: btn.validation.formation.valide.en_cours_redaction
-btn.validation.dpe.valide.soumis_dpe_composante: btn.validation.dpe.valide.soumis_dpe_composante
-btn.validation.conseil.valide.soumis_conseil: btn.validation.conseil.valide.soumis_conseil
+validation.cfvu.refuse.cas.projetARevoir.soumis_cfvu: ' '
+btn.validation.cfvu.valide.soumis_cfvu: 'Valider et soumettre à la CFVU'
+btn.validation.formation.valide.en_cours_redaction: 'Valider et soumettre la formation'
+btn.validation.dpe.valide.soumis_dpe_composante: 'Valider et transmettre au responsable DPE'
+btn.validation.conseil.valide.soumis_conseil: 'Valider et soumettre au conseil de composante'
 btn.validation.ses.valide.soumis_central: btn.validation.ses.valide.soumis_central
 btn.validation.vp.valide.soumis_vp: btn.validation.vp.valide.soumis_vp
-validation.dpe.timeline: validation.dpe.timeline
-validation.conseil.timeline: validation.conseil.timeline
-validation.cfvu.timeline: validation.cfvu.timeline
-validation.publication.timeline: validation.publication.timeline
-validation.formation: validation.formation
-validation.dpe: validation.dpe
-validation.conseil: validation.conseil
-validation.ses: validation.ses
-validation.vp: validation.vp
-validation.cfvu: validation.cfvu
-validation.publication: validation.publication
+validation.dpe.timeline: 'Validation par le responsable DPE'
+validation.conseil.timeline: 'Validation par le Conseil de composante'
+validation.cfvu.timeline: 'Validation par la CFVU'
+validation.publication.timeline: 'Validation pour publication'
+validation.formation: 'Formation validée'
+validation.dpe: 'Validé Responsable DPE'
+validation.conseil: 'Validé Conseil de composante'
+validation.ses: 'Validé central'
+validation.vp: 'Validé VP'
+validation.cfvu: 'Validé CFVU'
+validation.publication: 'A publier'
 validation.formation.valide.autorisation_saisie: validation.formation.valide.autorisation_saisie
 btn.validation.formation.valide.autorisation_saisie: btn.validation.formation.valide.autorisation_saisie
 validation.formation.reserve.autorisation_saisie: validation.formation.reserve.autorisation_saisie
-reserve.validation.formation.argumentaire.label: reserve.validation.formation.argumentaire.label
-reserve.validation.formation.helps.date.help: reserve.validation.formation.helps.date.help
+reserve.validation.formation.argumentaire.label: 'Argumentaire :'
+reserve.validation.formation.helps.date.help: ' '
 btn.validation.formation.reserve.autorisation_saisie: btn.validation.formation.reserve.autorisation_saisie
-validation.parcours: validation.parcours
+validation.parcours: 'Parcours transmis'
 validation.formation.reserve.en_cours_redaction: validation.formation.reserve.en_cours_redaction
 btn.validation.formation.reserve.en_cours_redaction: btn.validation.formation.reserve.en_cours_redaction
 .helps.date.help: .helps.date.help
-valide.validation.conseil.helps.fichier.help: valide.validation.conseil.helps.fichier.help
+valide.validation.conseil.helps.fichier.help: ' '
 .helps.laisserPasser.texte: .helps.laisserPasser.texte
-valide.validation.conseil.helps.laisserPasser.help: valide.validation.conseil.helps.laisserPasser.help
-valide.validation.cfvu.helps.sousReserveModifications.help: valide.validation.cfvu.helps.sousReserveModifications.help
-valide.validation.cfvu.helps.sousReserveConseil.help: valide.validation.cfvu.helps.sousReserveConseil.help
-workflow.validation.fiche_matiere: workflow.validation.fiche_matiere
-workflow.validation.parcours: workflow.validation.parcours
-workflow.validation.formation: workflow.validation.formation
-workflow.validation.dpe: workflow.validation.dpe
-workflow.validation.conseil: workflow.validation.conseil
-workflow.validation.ses: workflow.validation.ses
-workflow.validation.vp: workflow.validation.vp
-workflow.validation.cfvu: workflow.validation.cfvu
-workflow.validation.publication: workflow.validation.publication
-validation.formation.valide.impossible.en_cours_redaction: validation.formation.valide.impossible.en_cours_redaction
-btn.validation.parcours.valide.en_cours_redaction: btn.validation.parcours.valide.en_cours_redaction
-validation.parcours_rf: validation.parcours_rf
-workflow.validation.parcours_rf: workflow.validation.parcours_rf
+valide.validation.conseil.helps.laisserPasser.help: ' '
+valide.validation.cfvu.helps.sousReserveModifications.help: ' '
+valide.validation.cfvu.helps.sousReserveConseil.help: ' '
+workflow.validation.fiche_matiere: 'Validation de la fiche EC/matière'
+workflow.validation.parcours: 'Validation du parcours par le rédacteur (= transmission)'
+workflow.validation.formation: 'Validation de la formation par le responsable de formation'
+workflow.validation.dpe: 'Validation de la formation par le responsable DPE'
+workflow.validation.conseil: 'Validation de la formation par le conseil de composante'
+workflow.validation.ses: 'Validation du SES'
+workflow.validation.vp: 'Validation du VP'
+workflow.validation.cfvu: 'Validation de la formation par la CFVU'
+workflow.validation.publication: 'Validation du DPE pour publication'
+validation.formation.valide.impossible.en_cours_redaction: 'La validation du projet DPE "formation" est impossible. Vous devez valider l''ensemble des fiches parcours avant de valider la formation  et/ou les informations saisies sur la fiche formation sont incomplètes.'
+btn.validation.parcours.valide.en_cours_redaction: 'Soumettre le parcours'
+validation.parcours_rf: 'Parcours validé'
+workflow.validation.parcours_rf: 'Validation du parcours par le responsable de formation'
 btn.validation.parcours.valide.soumis_parcours: btn.validation.parcours.valide.soumis_parcours
-validation.valider.parcours_rf.title: validation.valider.parcours_rf.title
-validation.valider.parcours_rf: validation.valider.parcours_rf
-validation.reserve.parcours_rf.title: validation.reserve.parcours_rf.title
-validation.reserve.parcours_rf: validation.reserve.parcours_rf
+validation.valider.parcours_rf.title: 'Validation du projet DPE "parcours" par le responsable de formation'
+validation.valider.parcours_rf: 'Valider le parcours'
+validation.reserve.parcours_rf.title: 'Emettre des réserves sur le projet DPE "parcours"'
+validation.reserve.parcours_rf: 'Emettre des réserves'
 validation.parcours_rf.valide.soumis_parcours: validation.parcours_rf.valide.soumis_parcours
-btn.validation.parcours_rf.valide.soumis_parcours: btn.validation.parcours_rf.valide.soumis_parcours
+btn.validation.parcours_rf.valide.soumis_parcours: 'Valider le parcours'
 validation.parcours.valide.valide_parcours_rf: validation.parcours.valide.valide_parcours_rf
 btn.validation.parcours.valide.valide_parcours_rf: btn.validation.parcours.valide.valide_parcours_rf
 validation.parcours.valide.autorisation_saisie: validation.parcours.valide.autorisation_saisie
 btn.validation.parcours.valide.autorisation_saisie: btn.validation.parcours.valide.autorisation_saisie
+validation.parcours.valide.alerte: 'La validation du parcours permet la transmission du projet DPE "parcours" au responsable de formation pour visa. Après transmission, la fiche "parcours" ne sera plus modifiable.'
+btn.validation.parcours.valide.initialisation_parcours: 'Soumettre le parcours'
+validation.parcours.valide.impossible.initialisation_parcours: 'La transmission du projet DPE "parcours" est impossible. Les informations de ce parcours sont incomplètes/erronées et/ou une ou des fiches EC/matières ne sont pas initiées.'
+validation.formation.valide.alerte: 'La validation de la formation permet la transmission du projet DPE "formation" au responsable DPE de la composante pour visa. Après validation, le projet DPE "formation" ne sera plus modifiable.'
+validation.formation.valide.impossible.soumis_dpe_composante: 'La validation du projet DPE "formation" est impossible. Vous devez valider l''ensemble des fiches parcours avant de valider la formation  et/ou les informations saisies sur la fiche formation sont incomplètes.'
+validation.parcours_rf.valide.alerte: 'Après validation, le projet DPE "parcours" ne sera plus modifiable.'
+validation.parcours_rf.valide.impossible.soumis_parcours: 'La validation du projet DPE "parcours" est impossible. Les informations de ce parcours sont incomplètes/erronées et/ou une ou des fiches EC/matières ne sont pas initiées.'
+btn.validation.parcours_rf.reserve: 'Emettre des réserves'
+reserve.validation.parcours_rf.argumentaire.label: 'Argumentaire :'
+process.modification: "Retour à l'étape de validation de :"
+validation.parcours_rf.reserve.alerte: 'Emettre des réserves sur le projet DPE "parcours" rend la fiche parcours de nouveau modifiable.'
+btn.validation.parcours_rf.valide.valide_parcours_rf: 'Valider le parcours'
+validation.parcours_rf.valide.impossible.valide_parcours_rf: 'La validation du projet DPE "parcours" est impossible. Les informations de ce parcours sont incomplètes/erronées et/ou une ou des fiches EC/matières ne sont pas initiées.'
+refuse.validation.conseil.date.label: 'Date du conseil de composante'
+refuse.validation.conseil.argumentaire.label: 'Motif(s) du refus :'
+btn.validation.conseil.refuse: 'Refuser la formation'
+validation.conseil.refuse.alerte: 'Le projet DPE "formation" reste non modifiable. Il devra être retravaillé et présenté en vue d’une campagne ultérieure.'
+reserve.validation.conseil.date.label: 'Date du conseil de composante'
+reserve.validation.conseil.argumentaire.label: 'Argumentaire :'
+validation.conseil.reserve.alerte: 'Le projet DPE "formation" est de nouveau modifiable. Il devra être retravaillé en vue d’une nouvelle présentation.'
+btn.validation.conseil.reserve: 'Emettre des réserves'
+valide.validation.conseil.helps.laisserPasser.texte: 'Demande de laissez-passer, le conseil de composante ne pouvant avoir lieu avant le passage en CFVU.'
+validation.conseil.valide.alerte: 'Après transmission pour passage en CFVU, le projet DPE "formation" n''est plus modifiable par la composante.'
+btn.validation.conseil.valide: 'Valider et transmettre la formation'
+refuse.validation.ses.argumentaire.label: 'Motif(s) du refus :'
+validation.ses.refuse.alerte: 'Le projet DPE "formation" reste non modifiable. Il devra être retravaillé et présenté en vue d’une campagne ultérieure.'
+btn.validation.ses.refuse: 'Refuser la formation'
+validation.ses.reserve.alerte: 'Le projet DPE "formation" est de nouveau modifiable. Il devra être retravaillé en vue d’une nouvelle présentation.'
+reserve.validation.ses.argumentaire.label: 'Argumentaire :'
+btn.validation.ses.reserve: 'Emettre des réserves'
+validation.ses.valide.alerte: RAS
+btn.validation.ses.valide: 'Valider la formation'
+btn.validation.vp.valide: 'Autoriser le passage en CFVU'
+validation.vp.reserve.alerte: 'Le projet DPE "formation" est de nouveau modifiable. Il devra être retravaillé en vue d’une nouvelle présentation.'
+reserve.validation.vp.argumentaire.label: 'Argumentaire :'
+btn.validation.vp.reserve: 'Emettre des réserves'
+refuse.validation.vp.argumentaire.label: 'Motif(s) du refus :'
+validation.vp.refuse.alerte: 'Le projet DPE "formation" reste non modifiable. Il devra être retravaillé et présenté en vue d’une campagne ultérieure.'
+btn.validation.vp.refuse: 'Refuser la formation'
+refuse.validation.cfvu.date.label: 'Date de la CFVU'
+valide.validation.cfvu.date.label: 'Date de la CFVU'
+validation.parcours.valide.impossible.en_cours_redaction: 'La validation du projet DPE "parcours" est impossible. Les informations de ce parcours sont incomplètes/erronées et/ou une ou des fiches EC/matières ne sont pas initiées.'
+btn.validation.parcours.en_cours_redaction: 'Valider et soumettre le parcours'
+validation.dpe.refuse.alerte: 'Le projet DPE "formation" reste non modifiable. Il devra être retravaillé et présenté en vue d’une campagne ultérieure.'
+refuse.validation.dpe.argumentaire.label: 'Motif(s) du refus :'
+btn.validation.dpe.refuse: 'Refuser la formation'
+validation.dpe.reserve.alerte: 'Le projet DPE "formation" est de nouveau modifiable. Il devra être retravaillé en vue d’une nouvelle présentation.'
+reserve.validation.dpe.argumentaire.label: 'Argumentaire :'
+btn.validation.dpe.reserve: 'Emettre des réserves'
+validation.dpe.valide.alerte: 'La validation du projet DPE "formation" permet le passage en Conseil de composante. Après transmission pour passage en Conseil, le projet DPE "formation" n''est plus modifiable par la composante.'
+btn.validation.dpe.valide: 'Valider la formation'
+btn.validation.cfvu.valide: 'Valider la formation'
+validation.cfvu.valide.alerte: "> La \"validation CFVU -  sous réserve de modifications\" rend le projet de DPE de nouveau modifiable par la composante. Il devra être ensuite de nouveau soumis au central pour obtenir un visa définitif (sans nouvelle présentation en CFVU). \n> La \"validation CFVU -  sous réserve de validation en conseil\" ne rend pas le projet DPE \"formation\" modifiable. Le visa définitif est conditionné par le dépôt d'une pièce justifiant la validation par le conseil de composante."
+btn.validation.formation.valide.soumis_dpe_composante: 'Valider et soumettre la formation'
+btn.validation.cfvu.refuse: 'Refuser la formation'
+validation.cfvu.refuse.alerte: "> Le \"refus CFVU - projet à revoir\" rend le projet de DPE de nouveau modifiable par la composante. Il devra être ensuite de nouveau soumis au central pour passage en CFVU. \n > Après le refus définitif CFVU, le projet de DPE reste non modifiable. Il pourra être retravaillé et présenté en vue d’une campagne ultérieure."
+refuse.validation.cfvu.argumentaire.label: 'Motif(s) du refus :'
+validation.cfvu.refuse.commentaire.cas.projetARevoir.: 'Point(s) du projet à revoir :'
+valide.validation.conseil.date.label: 'Date du conseil de composante'
+reserve.validation.cfvu.helps.projetARevoir..label: 'Refus CFVU - projet à revoir'
+reserve.validation.cfvu.helps.projetARevoir.label: 'Refus CFVU - projet à revoir'
+historique.validation.parcours: 'Transmission du parcours "%parcours%" par le rédacteur'
+deposer.le.pv.formation.infobulle: 'Déposer la pièce justifiant la validation par le Conseil de composante (PV, Relevé de décisions, délibération)'
+refuse.validation.ses.helps.argumentaire.help: ' '
+validation.vp.valide.alerte: 'La validation du projet DPE "formation" permet le passage en CFVU.'
+valide.validation.cfvu.helps.date.help: ' '
+refuse.validation.cfvu.helps.date.help: ' '
+refuse.validation.cfvu.helps.argumentaire.help: ' '
+reserve.validation.cfvu.helps.projet.a.revoir.label: 'Projet de DPE à revoir pour nouveau passage en CFVU'
+refuse.validation.cfvu.helps.projet.a.revoir.help: 'Projet de DPE à revoir pour nouveau passage en CFVU'
+reserve.validation.cfvu.helps.projet.refus.definitif.label: 'Projet de DPE refusé définitivement par la CFVU'
+refuse.validation.cfvu.helps.projet.refus.definitif.help: 'Projet de DPE refusé définitivement par la CFVU'
+validation.cfvu.refuse.commentaire.cas: 'Préciser les raisons du refus définitif ou à revoir du DPE'
+validation.cfvu.refuse.helps.commentaire.cas: 'Préciser les raisons du refus définitif ou à revoir du DPE'
+reserve.validation.ses.helps.date.help: ' '
+refuse.validation.vp.helps.argumentaire.help: ' '
+reserve.validation.vp.helps.argumentaire.help: ' '
+reserve.validation.parcours_rf.helps.argumentaire.help: ' '
+reserve.validation.dpe.helps.argumentaire.help: ' '
+refuse.validation.dpe.helps.argumentaire.help: ' '
+formation.refuse.dpe.flash.success: formation.refuse.dpe.flash.success
+validation.etat.refuser.dpe: validation.etat.refuser.dpe
+valide.validation.publication.date.label: 'Date de publication'
+valide.validation.publication.helps.date.help: ' '
+validation.etat.publie: 'DPE publié'
+historique.validation.conseil: 'Validation du Conseil de composante du %date%'
+voir.le.pv: 'Voir le PV'
+voir.le.pv.infobulle: 'Voir la pièce justifiant la validation par le Conseil de composante (PV, Relevé de décisions, délibération)'
+deposer.fichier.valide.alerte: 'Pour obtenir la validation définitive du projet "DPE", il est obligatoire de déposer une pièce justifiant sa validation en Conseil de composante.'
+valide.deposer.fichier.label: 'Avis du Conseil de composante (PV, Relevé de décisions, délibération)'
+valide.deposer.helps.fichier.help: ' '
+btn.deposer.valide: 'Déposer la pièce'
+deposer.pv.flash.success: 'Pièce déposée'
+deposer.pv.flash.error: "Erreur de dépôt. La pièce n'a pas pu être déposée."
+historique.laisserPasser.conseil: 'Laissez-passer demandé.'
+valide.validation.conseil.helps.date.help: ' '
+refuse.validation.conseil.helps.date.help: ' '
+refuse.validation.conseil.helps.argumentaire.help: ' '
+reserve.validation.ses.helps.argumentaire.help: ' '
+reserve.validation.conseil.helps.argumentaire.help: ' '
+reserve.validation.conseil.helps.date.help: ' '
+transmis.parcours.formation: 'Parcours transmis'
+parcours.valides.rf: 'Parcours validé'
+deposer.le.pv.infobulle: 'Déposer la pièce justifiant la validation par le Conseil de composante (PV, Relevé de décisions, délibération)'
