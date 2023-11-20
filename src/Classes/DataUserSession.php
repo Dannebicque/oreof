@@ -41,7 +41,7 @@ class DataUserSession
         return $this->anneeUniversitaire;
     }
 
-    public function version(): string
+    public function version(): ?string
     {
         $filename = $this->dir . '/package.json';
         $composerData = json_decode(file_get_contents($filename), true);
