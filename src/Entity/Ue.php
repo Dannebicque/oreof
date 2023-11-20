@@ -113,7 +113,10 @@ class Ue
         return $this;
     }
 
-    public function display(?Parcours $parcours = null): string
+    /**
+     * @var ?int $semestreOrdre Fix l'affichage du versioning
+     */
+    public function display(?Parcours $parcours = null, ?int $semestreOrdre = null): string
     {
         if ($this->ueParent === null) {
             $ordreue = $this->ordre;
@@ -142,7 +145,7 @@ class Ue
             }
         }
 
-        return 'UE ' . $this->getSemestre()?->getOrdre() . '.' . $ordreue;
+        return 'UE ' . ($this->getSemestre()?->getOrdre() ?? $semestreOrdre ?? "") . '.' . $ordreue;
     }
 
     public function getTypeUe(): ?TypeUe
