@@ -9,6 +9,7 @@
 
 namespace App\Classes;
 
+use App\Entity\Parcours;
 use App\Utils\Tools;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -25,12 +26,17 @@ class MyGotenbergPdf
     protected array $options;
     private string $basePath;
 
+    private array $paperSizes = [
+        'A4' => [8.27, 11.7],
+        'A3' => [11.7, 16.5],
+        'A2' => [16.5, 23.4],
+    ];
+
     public function __construct(
         protected Environment     $twig,
         protected ClientInterface $client,
         KernelInterface           $kernel
-    )
-    {
+    ) {
         $this->basePath = $kernel->getProjectDir() . '/public';
     }
 
@@ -41,17 +47,31 @@ class MyGotenbergPdf
         $this->options = $resolver->resolve($options);
         $html = $this->generateHtml($template, $context);
 
+        if (array_key_exists('parcours', $context) && $context['parcours'] instanceof Parcours) {
+            $parcours = $context['parcours'];
+            //formation + mention + parcours + intitulé parcours
+            $formation = $parcours->getFormation();
+            $title = $formation->getDisplayLong().'<br> Parcours : '.$parcours->getLibelle().'<br>'.$context['titre'];
+        } else {
+            $title = $context['titre'];
+        }
+
         $request = Gotenberg::chromium('http://localhost:3000')
             ->assets(
-                Stream::path($this->basePath.'/images/logo_urca.png'),
+                Stream::path($this->basePath . '/images/logo_urca.png'),
             )
-            ->header(Stream::string('header.html', $this->getHeader($context['titre'])))
+            ->header(Stream::string('header.html', $this->getHeader($title)))
             ->footer(Stream::string('footer.html', $this->getFooter()))
-            ->paperSize(8.27, 11.7)
+            ->paperSize($this->paperSizes[$this->options['paperSize']][0], $this->paperSizes[$this->options['paperSize']][1])
             ->margins(1, 1, 0.8, 0.8)
             ->outputFilename($name)
-            ->html(Stream::string('fichier.html', $html))
             ;
+
+        if ($this->options['landscape']) {
+            $request->landscape();
+        }
+
+        $request = $request->html(Stream::string('fichier.html', $html));
 
         // $response = $this->client->sendRequest($request);
         //$filename = Gotenberg::save($request, '/Users/davidannebicque/Sites/oreof/public/pdftests/', $this->client);
@@ -69,7 +89,6 @@ class MyGotenbergPdf
 
 
         return $this->twig->render($template, $context);
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -78,6 +97,8 @@ class MyGotenbergPdf
             'isRemoteEnabled' => true,
             'attachment' => true,
             'baseUrl' => $this->basePath,
+            'landscape' => false,
+            'paperSize' => 'A4',
         ]);
     }
 
@@ -103,13 +124,9 @@ class MyGotenbergPdf
 
     private function getFooter(): string
     {
-
         return $this->twig->render('pdf/footer.html.twig', [
             'baseUrl' => $this->options['baseUrl'],
 
         ]);
     }
 }
-
-
-
