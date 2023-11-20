@@ -16,10 +16,11 @@ class CompetenceExportController extends AbstractController
         MyGotenbergPdf $myGotenbergPdf,
         Parcours $parcours): Response
     {
+        $formation = $parcours->getFormation();
         return $myGotenbergPdf->render('pdf/bcc_export.html.twig', [
-            'formation' => $parcours->getFormation(),
+            'formation' => $formation,
             'parcours' => $parcours,
-            'titre' => 'BCC du parcours '.$parcours->getLibelle(),
+            'titre' => 'BCC du parcours '.$parcours->getLibelle().'<br>'.$formation->getDisplayLong(),
         ], 'BCC du parcours_'.$parcours->getLibelle().'.pdf');
 
     }
@@ -29,10 +30,11 @@ class CompetenceExportController extends AbstractController
         MyGotenbergPdf $myGotenbergPdf,
         Parcours $parcours): Response
     {
+        $formation = $parcours->getFormation();
          return $myGotenbergPdf->render('pdf/bcc_export_croise.html.twig', [
-             'formation' => $parcours->getFormation(),
+             'formation' => $formation,
              'parcours' => $parcours,
              'titre' => 'BCC du parcours '.$parcours->getLibelle(),
-         ], 'BCC Croisé du parcours_'.$parcours->getLibelle());
+         ], 'BCC Croisé du parcours_'.$parcours->getLibelle().'<br>'.$formation->getDisplayLong());
     }
 }
