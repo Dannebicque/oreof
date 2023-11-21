@@ -78,6 +78,9 @@ class TypeDiplome
     #[ORM\OneToMany(mappedBy: 'typeDiplome', targetEntity: FicheMatiere::class)]
     private Collection $ficheMatieres;
 
+    #[ORM\Column(length: 1)]
+    private ?string $codeApogee = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -459,6 +462,18 @@ class TypeDiplome
                 $ficheMatiere->setTypeDiplome(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCodeApogee(): ?string
+    {
+        return $this->codeApogee;
+    }
+
+    public function setCodeApogee(string $codeApogee): static
+    {
+        $this->codeApogee = $codeApogee;
 
         return $this;
     }

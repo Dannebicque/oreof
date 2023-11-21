@@ -6,6 +6,7 @@ use App\Entity\TypeDiplome;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,6 +22,11 @@ class TypeDiplomeType extends AbstractType
         $builder
             ->add('libelle')
             ->add('libelle_court')
+            ->add('codeApogee', TextType::class, [
+                'label' => 'Code Apogée',
+                'attr' => ['maxlength' => 1],
+                'required' => true,
+            ])
             ->add('semestreDebut')
             ->add('semestreFin')
             ->add('nbUeMin')
