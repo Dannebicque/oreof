@@ -5,6 +5,7 @@
     --urca-cyan: #0dcaf0;
     --urca-gray: #6c757d;
     --urca-gray-300: #dee2e6;
+    --urca-gray-400: #ced4da;
     --urca-gray-500: #adb5bd;
     --urca-gray-600: #6c757d;
 }
@@ -78,7 +79,7 @@ td {
     font-size: .9em;
 }
 
-td:not(#UELibelle, #ECLibelle, #TotalSemestre) {
+td:not(#UELibelle, #ECLibelle, #ECEnfantLibelle, #TotalSemestre) {
     text-align: center;
     border-width: 0 .1em 0;
     border-color: var(--urca-black);
@@ -104,13 +105,9 @@ tr > th {
     --bs-table-bg: var(--urca-gray-200);
 }
 
-#ECLibelle, #TotalSemestre {
+#ECLibelle, #ECEnfantLibelle, #TotalSemestre {
     border-width: .1em;
     border-color: var(--urca-black);
-}
-
-#ECLibelle {
-    background-color: var(--urca-teal);
 }
 
 .accordion-item {
@@ -120,7 +117,11 @@ tr > th {
 }
 
 .table-dark {
-    --bs-table-bg: var(--urca-gray-600) !important;
+    --bs-table-bg: var(--urca-teal) !important;
+}
+
+.table-dark > td {
+    color: var(--urca-black);
 }
 
 tr th:not(:first-child) {
@@ -137,4 +138,24 @@ tr th:first-child {
 
 tr.total-semestre {
     --bs-table-bg: var(--urca-yellow);
+}
+
+#ECLibelle {
+    background-color: var(--urca-gray);
+    color: white;
+}
+
+#ECEnfantLibelle {
+    background-color: var(--urca-gray-400);
+    color: var(--urca-black);
+}
+
+.arrow-down {
+    height: 1.5em; 
+    width: 1.5em;
+    margin-left: 1.5em;
+}
+
+#tdEcRestreint {
+    background-color: var(--urca-gray-400);
 }

@@ -33,9 +33,20 @@
                         </thead>
                         <tbody>
                             {% for ue in semestre.ues %}
+                                {% set ueChoix = false %}
                                 <tr class="table-dark">
                                     <td id="UELibelle">
                                         {{'UE' ~ ue.ue.ordre}} - {{ ue.ue.libelle }}
+                                        {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
+                                            <span class="badge bg-secondary">UE à choix libre</span>
+                                        {% endif %}
+                                        {% if ue.uesEnfants|length > 0 %}
+                                        {% set ueChoix = true %}
+                                            <span class="badge bg-primary">
+                                                UE à choix restreint : {{ ue.uesEnfants|length }} choix possible
+                                            </span>
+                                            <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down">
+                                        {% endif %}
                                     </td>
                                     <td>{{ ue.heuresEctsUe.sommeUeCmPres > 0 ? ue.heuresEctsUe.sommeUeCmPres : '-'  }}</td>
                                     <td>{{ ue.heuresEctsUe.sommeUeTdPres > 0 ? ue.heuresEctsUe.sommeUeTdPres : '-'  }}</td>
@@ -57,8 +68,19 @@
                                         </tr>
                                     {% else %}
                                         {% for ecE in ec.elementsConstitutifsEnfants %}
+                                            {% if ec.elementsConstitutifsEnfants|length > 0 and loop.index == 1 %}
+                                                <tr>
+                                                    <td id="ECLibelle">
+                                                        <span class="badge bg-info">
+                                                            Élément constitutif à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possible
+                                                        </span>
+                                                        <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down">
+                                                    </td>
+                                                    <td colspan="6" id="tdEcRestreint"></td>
+                                                </tr>
+                                            {% endif %}
                                             <tr>
-                                                <td id="ECLibelle">{{ ecE.elementConstitutif.ficheMatiere.libelle ?? ecE.elementConstitutif.libelle }}</td>
+                                                <td id="ECEnfantLibelle">{{ ecE.elementConstitutif.ficheMatiere.libelle ?? ecE.elementConstitutif.libelle }}</td>
                                                 <td>{{ ecE.heuresEctsEc.cmPres > 0 ? ecE.heuresEctsEc.cmPres : '-' }}</td>
                                                 <td>{{ ecE.heuresEctsEc.tdPres > 0 ? ecE.heuresEctsEc.tdPres : '-' }}</td>
                                                 <td>{{ ecE.heuresEctsEc.tpPres > 0 ? ecE.heuresEctsEc.tpPres : '-' }}</td>
@@ -70,11 +92,24 @@
                                     {% endif %}
                                 {% endfor %}
                                 {% if ue.uesEnfants|length > 0 %}
-                                    {% for ecEnfant in ue.uesEnfants %}
-                                        {% if ecEnfant.elementConstitutifs is defined and ecEnfant.elementConstitutifs is not null %}
-                                            {% for ecE in ecEnfant.elementConstitutifs %}
+                                    {% for ueEnfant in ue.uesEnfants %} 
+                                        {% if ueEnfant.ue.natureUeEc is defined and ueEnfant.ue.natureUeEc != null and ueEnfant.ue.natureUeEc.libre == true %}
                                             <tr>
-                                                <td id="ECLibelle">{{ ecE.elementConstitutif.display() }}</td>
+                                                <td id="ECEnfantLibelle">
+                                                    {{ ueEnfant.ue.descriptionUeLibre }}
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        {% endif %}
+                                        {% if ueEnfant.elementConstitutifs is defined and ueEnfant.elementConstitutifs is not null %}
+                                            {% for ecE in ueEnfant.elementConstitutifs %}
+                                            <tr>
+                                                <td id="ECEnfantLibelle">{{ ecE.elementConstitutif.display() }}</td>
                                                 <td>{{ ecE.heuresEctsEc.cmPres > 0 ? ecE.heuresEctsEc.cmPres : '-' }}</td>
                                                 <td>{{ ecE.heuresEctsEc.tdPres > 0 ? ecE.heuresEctsEc.tdPres : '-' }}</td>
                                                 <td>{{ ecE.heuresEctsEc.tpPres > 0 ? ecE.heuresEctsEc.tpPres : '-' }}</td>
