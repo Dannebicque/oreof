@@ -9,6 +9,7 @@
 
 namespace App\Form;
 
+use App\Controller\Config\DomaineController;
 use App\Entity\Domaine;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,6 +27,11 @@ class DomaineType extends AbstractType
             ])
             ->add('sigle', TextType::class, [
                 'label' => 'Sigle',
+                'required' => true,
+            ])
+            ->add('codeApogee', TextType::class, [
+                'label' => 'Code Apogée',
+                'attr' => ['maxlength' => 1],
                 'required' => true,
             ])
         ;

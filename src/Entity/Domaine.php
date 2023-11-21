@@ -31,6 +31,9 @@ class Domaine
     #[ORM\OneToMany(mappedBy: 'domaine', targetEntity: Mention::class)]
     private Collection $mentions;
 
+    #[ORM\Column(length: 1)]
+    private ?string $codeApogee = null;
+
     public function __construct()
     {
         $this->mentions = new ArrayCollection();
@@ -89,6 +92,18 @@ class Domaine
         if ($this->mentions->removeElement($mention) && $mention->getDomaine() === $this) {
             $mention->setDomaine(null);
         }
+
+        return $this;
+    }
+
+    public function getCodeApogee(): ?string
+    {
+        return $this->codeApogee;
+    }
+
+    public function setCodeApogee(string $codeApogee): static
+    {
+        $this->codeApogee = $codeApogee;
 
         return $this;
     }
