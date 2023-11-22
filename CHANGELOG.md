@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.10](https://github.com/Dannebicque/oreof/compare/v1.17.9...v1.17.10) (2023-11-22)
+
+
+### Features
+
+* Ajout de la lettre apogée sur Année Universitaire ([e889ced](https://github.com/Dannebicque/oreof/commit/e889ced8528e6b07f6923286194d6857f5d1512c))
+* Ajout de la lettre apogée sur Domaine ([9827e2a](https://github.com/Dannebicque/oreof/commit/9827e2acdf83472d6a220ebb3466846a5f30cf04))
+* Ajout de la lettre apogée sur Type Diplôme ([778ab88](https://github.com/Dannebicque/oreof/commit/778ab885c034e27cf783087260e02878a930f133))
+
+
+### Bug Fixes
+
+* tableau Régime, décalage CFVU ([190a91e](https://github.com/Dannebicque/oreof/commit/190a91eda8b658371e16d29f647bf6bb58079f0f))
+
 ### [1.17.9](https://github.com/Dannebicque/oreof/compare/v1.17.8...v1.17.9) (2023-11-20)
 
 
