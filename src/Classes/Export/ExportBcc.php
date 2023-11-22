@@ -9,8 +9,8 @@
 
 namespace App\Classes\Export;
 
-use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
+use App\Classes\GetElementConstitutif;
 use App\Entity\AnneeUniversitaire;
 use App\Entity\Parcours;
 use App\Repository\FormationRepository;
@@ -143,14 +143,18 @@ class ExportBcc implements ExportInterface
                         $this->excelWriter->writeCellXY(1, $ligne, $bcc->display(), ['wrap' => true]);
                         $this->excelWriter->writeCellXY(2, $ligne, $competence->display(), ['wrap' => true]);
                         $col = $debutCol;
-                        //foreach ($parcours->getSemestreParcours() as $semParc) {
-                        // if ($semParc->getSemestre() !== null && $semParc->getSemestre()->isNonDispense() == false) {
 
                         foreach ($semestre->getUes() as $ue) {
                             if ($ue->getUeParent() === null) {
                                 if ($ue->getUeEnfants()->count() == 0) {
                                     foreach ($ue->getElementConstitutifs() as $ec) {
-                                        $this->excelWriter->writeCellXY($col, $ligne, $competence->getFicheMatieress()->contains($ec->getFicheMatiere()) ? 'X' : '', [
+                                        $raccroche = $ec->getFicheMatiere()?->getParcours() !== $parcours;
+                                        if ($raccroche) {
+                                            $competences = GetElementConstitutif::getBccs($ec, $raccroche);
+                                        } else {
+                                            $competences = $ec->getFicheMatiere()?->getCompetences();
+                                        }
+                                        $this->excelWriter->writeCellXY($col, $ligne, $competences?->contains($competence) ? 'X' : '', [
                                             'style' => 'HORIZONTAL_CENTER',
                                             'valign' => 'VERTICAL_CENTER'
                                         ]);
@@ -169,8 +173,6 @@ class ExportBcc implements ExportInterface
                                 }
                             }
                         }
-                        // }
-                        // }
                         $ligne++;
                     }
                 }
