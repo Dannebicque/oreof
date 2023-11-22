@@ -11,6 +11,7 @@ namespace App\Classes\Export;
 
 use App\Classes\Excel\ExcelWriter;
 use App\Entity\AnneeUniversitaire;
+use App\Enums\RegimeInscriptionEnum;
 use App\Repository\FormationRepository;
 use App\Utils\Tools;
 use DateTime;
@@ -117,6 +118,12 @@ class ExportSynthese
         $this->excelWriter->writeCellXY(34, 1, 'P modalitesAlternance');
         $this->excelWriter->writeCellXY(35, 1, 'P coordSecretariat');
 
+        $i = 0;
+        foreach (RegimeInscriptionEnum::cases() as $regime) {
+            $this->excelWriter->writeCellXY(35 + $i, 1, $regime->value);
+            $i++;
+        }
+
 
         $ligne = 2;
         foreach ($formations as $formation) {
@@ -142,6 +149,16 @@ class ExportSynthese
             $this->excelWriter->writeCellXY(12, $ligne, $formation->getContenuFormation());
             $this->excelWriter->writeCellXY(13, $ligne, $formation->getResultatsAttendus());
             $this->excelWriter->writeCellXY(14, $ligne, $formation->getRythmeFormationTexte());
+            $i = 0;
+            foreach (RegimeInscriptionEnum::cases() as $regime) {
+                if (in_array($regime, $formation->getRegimeInscription())) {
+                    $this->excelWriter->writeCellXY(35 + $i, $ligne, 'X', [
+                        'style' => 'HORIZONTAL_CENTER'
+                    ]);
+                }
+                $i++;
+            }
+
             $ligne++;
             foreach ($formation->getParcours() as $parcours) {
                 if ($parcours->isParcoursDefaut() === false) {
@@ -176,6 +193,16 @@ class ExportSynthese
                     $this->excelWriter->writeCellXY(33, $ligne, $parcours->getDebouches());
                     $this->excelWriter->writeCellXY(34, $ligne, $parcours->getModalitesAlternance());
                     $this->excelWriter->writeCellXY(35, $ligne, $parcours->getCoordSecretariat());
+
+                    $i = 0;
+                    foreach (RegimeInscriptionEnum::cases() as $regime) {
+                        if (in_array($regime, $parcours->getRegimeInscription())) {
+                            $this->excelWriter->writeCellXY(35 + $i, $ligne, 'X', [
+                                'style' => 'HORIZONTAL_CENTER'
+                            ]);
+                        }
+                        $i++;
+                    }
                     $ligne++;
                 }
             }
