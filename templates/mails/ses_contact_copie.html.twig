@@ -1,9 +1,13 @@
 Destinataire : {% for adresse in destinataires %}{{ adresse.address }} - {{ adresse.name }}, {% endfor %}<br>
 Copie : {% for adresse in cc %}{{ adresse.address }} - {{ adresse.name }}, {% endfor %}<br><br>
 
+Formation : {{ formation.displayLong }}<br>
+Parcours : {{ parcours != null ? parcours.display : '-' }}<br>
+Expéditeur : {{ expediteur.display }}<br><br>
+
 Message :<br><br>
 
-<p>{{ message|raw }}</p>
+<p>{{ message|nl2br|raw }}</p>
 
 Cordialement,<br>
 Le Service des Enseignements et de la Scolarité
