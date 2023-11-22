@@ -51,7 +51,7 @@ class ExportRegime implements ExportInterface
         $this->excelWriter->writeCellXY(9, 1, 'Validation CFVU');
         $i = 0;
         foreach (RegimeInscriptionEnum::cases() as $regime) {
-            $this->excelWriter->writeCellXY(9 + $i, 1, $regime->value);
+            $this->excelWriter->writeCellXY(10 + $i, 1, $regime->value);
             $i++;
         }
 
@@ -79,14 +79,14 @@ class ExportRegime implements ExportInterface
                 $i = 0;
                 foreach (RegimeInscriptionEnum::cases() as $regime) {
                     if (in_array($regime, $parcours->getRegimeInscription())) {
-                        $this->excelWriter->writeCellXY(9 + $i, $ligne, 'X', [
+                        $this->excelWriter->writeCellXY(10 + $i, $ligne, 'X', [
                             'style' => 'HORIZONTAL_CENTER'
                         ]);
                     }
                     $i++;
                 }
 
-                $this->excelWriter->getColumnsAutoSize('A', 'L');
+                $this->excelWriter->getColumnsAutoSize('A', 'M');
                 $ligne++;
             }
         }
