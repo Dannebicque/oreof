@@ -26,4 +26,11 @@ class SesExportController extends BaseController
     ): Response {
         return $exportSynthese->export($this->getAnneeUniversitaire());
     }
+
+    #[Route('/ses/export/offre-formtion-brut', name: 'ses_export_offre_formation_brut')]
+    public function exportOffreFormationBrut(
+        ExportSynthese $exportSynthese,
+    ): Response {
+        return $exportSynthese->exportBrut($this->getAnneeUniversitaire());
+    }
 }

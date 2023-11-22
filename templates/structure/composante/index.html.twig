@@ -21,6 +21,15 @@
 
 {% block bouton_header %}
     {% if is_granted('ROLE_SES') %}
+        <a href="{{ path('ses_export_offre_formation_brut') }}"
+           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Export brut"
+        >
+            <i class="{{ iconDownload }}"></i>
+            <span> Export "brut"</span>
+        </a>
         <a href="{{ path('ses_export_offre_formation') }}"
            class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
            data-bs-toggle="tooltip"
