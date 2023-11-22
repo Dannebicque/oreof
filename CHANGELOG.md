@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.12](https://github.com/Dannebicque/oreof/compare/v1.17.11...v1.17.12) (2023-11-22)
+
+
+### Bug Fixes
+
+* Export Brut des données SES. Ajout du régime ([8b57e97](https://github.com/Dannebicque/oreof/commit/8b57e972b4abb206260b147172cd6e25799fb889))
+* Mail contact avec DPE + Mise en forme + champs formation ([aafa41c](https://github.com/Dannebicque/oreof/commit/aafa41cf2437c96ca1d17e453ea5e5936f771aa9))
+
 ### [1.17.11](https://github.com/Dannebicque/oreof/compare/v1.17.10...v1.17.11) (2023-11-22)
 
 
