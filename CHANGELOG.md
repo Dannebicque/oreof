@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.11](https://github.com/Dannebicque/oreof/compare/v1.17.10...v1.17.11) (2023-11-22)
+
+
+### Features
+
+* Export Brut des données SES ([935d439](https://github.com/Dannebicque/oreof/commit/935d4394fc7f59db1a97ef56cae0f69caddab9c4))
+* Mail validation/refus CFVU ([049e349](https://github.com/Dannebicque/oreof/commit/049e3494f63abc30cc8120750d61f220de651e66))
+
+
+### Bug Fixes
+
+* Export BCC global avec BCC raccrochées ([4ec1356](https://github.com/Dannebicque/oreof/commit/4ec1356c06c1699a0380f4609d3f66fca6ed8301))
+
 ### [1.17.10](https://github.com/Dannebicque/oreof/compare/v1.17.9...v1.17.10) (2023-11-22)
 
 
