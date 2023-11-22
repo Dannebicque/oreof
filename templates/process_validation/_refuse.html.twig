@@ -27,7 +27,10 @@
 
     {% if etape == 'cfvu' %}
         <div class="form-check mt-2">
-            <input class="form-check-input" type="radio" value="projetARevoir" id="projetARevoir">
+            <input class="form-check-input" type="radio"
+                   name="etatRefus"
+                   value="projetARevoir"
+                   id="projetARevoir">
             <label class="form-check-label" for="projetARevoir">
                 <strong>{{ ('reserve.'~process.label~'.helps.projet.a.revoir.label')|trans({}, 'process') }}</strong> <i
                         class="fal fa-question-circle ms-1"
@@ -38,7 +41,8 @@
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" value="projetRefusDefinitif" id="projetRefusDefinitif">
+            <input class="form-check-input" type="radio" value="projetRefusDefinitif" id="projetRefusDefinitif"
+                   name="etatRefus">
             <label class="form-check-label" for="projetRefusDefinitif">
                 <strong>{{ ('reserve.'~process.label~'.helps.projet.refus.definitif.label')|trans({}, 'process') }}</strong> <i
                         class="fal fa-question-circle ms-1"

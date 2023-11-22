@@ -1,0 +1,33 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour,</p>
+
+    {% if context.acceptationDirecte is defined and context.acceptationDirecte  == true %}
+        <p>La CFVU du {{ context.date|date('d/m/Y')}} a validé la formation <strong>{{ formation.displayLong }}</strong>.</p>
+    {% else %}
+        <p>La CFVU du {{ context.date|date('d/m/Y')}} a validé la formation <strong>{{ formation.displayLong }}</strong> avec les réserves ci-dessous :
+        </p>
+        <ul>
+            {% if context.sousReserveConseil is defined and context.sousReserveConseil  == true %}
+                <p>- Sous réserve du dépôt du PV du conseil de composante. Vous pouvez retourner sur la fiche descriptive de cette formation et téléverser le PV dans le menu du processus de validation ou vous pouvez déposer un même PV pour un ensemble de formation en accédant au menu "mes composantes" puis "Processus validation"</p>
+            {% endif %}
+            {% if context.sousReserveModifications is defined and context.sousReserveModifications  == true %}
+                <p>- Sous réserve des modifications suivantes
+                    : {% if context.argumentaire_sousReserveModifications is defined %}
+                        {{ context.argumentaire_sousReserveModifications }}.
+
+                    {% else %}
+                        Erreur commentaires modifications
+                    {% endif %}
+                </p>
+                <p>Vous pouvez modifier votre formation en cliquant sur le lien suivant :</p>
+
+                <p>
+                    <a href="{{ url('app_formation_edit', {'slug': formation.slug}) }}">{{ url('app_formation_edit', {'slug': formation.slug}) }}</a>
+                </p>
+            {% endif %}
+        </ul>
+
+    {% endif %}
+{% endblock %}
