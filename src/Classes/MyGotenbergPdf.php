@@ -27,7 +27,7 @@ class MyGotenbergPdf
     private string $basePath;
 
     private array $paperSizes = [
-        'A4' => [8.27, 11.7],
+        'A4' => [8.3, 11.7],
         'A3' => [11.7, 16.5],
         'A2' => [16.5, 23.4],
     ];
@@ -57,8 +57,10 @@ class MyGotenbergPdf
         }
 
         $request = Gotenberg::chromium('http://localhost:3000')
+            ->emulatePrintMediaType()
             ->assets(
                 Stream::path($this->basePath . '/images/logo_urca.png'),
+                Stream::path($this->basePath . '/build/print.css'),
             )
             ->header(Stream::string('header.html', $this->getHeader($title)))
             ->footer(Stream::string('footer.html', $this->getFooter()))

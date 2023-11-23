@@ -3,12 +3,14 @@
         <h3 class="small-title">Identité de la formation </h3>
         <div class="card mb-5">
             <div class="card-body">
+                {% if (print is not defined or print == false) %}
                 {{ component('commentaire', {
                     commentaires: formation.commentaires,
                     id: formation.id,
                     type: 'formation',
                     zone: 'identite_formation',
                 }) }}
+                {% endif %}
                 {{ include('typeDiplome/formation/_identiteFormation.html.twig') }}
             </div>
         </div>
@@ -18,12 +20,14 @@
         <h3 class="small-title">Localisation</h3>
         <div class="card mb-5">
             <div class="card-body">
+                {% if (print is not defined or print == false) %}
                 {{ component('commentaire', {
                     commentaires: formation.commentaires,
                     id: formation.id,
                     type: 'formation',
                     zone: 'localisation',
                 }) }}
+                {% endif %}
                 {{ include('typeDiplome/formation/_localisation.html.twig') }}
             </div>
         </div>
@@ -35,12 +39,14 @@
             <h3 class="small-title">Présentation</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'presentation',
                     }) }}
+                    {% endif %}
                     {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours:true}) }}
                 </div>
             </div>
@@ -51,12 +57,14 @@
             <h3 class="small-title">Descriptif</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'descriptif',
                     }) }}
+                    {% endif %}
                     {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours:formation.parcours[0]}) }}
                 </div>
             </div>
@@ -66,12 +74,14 @@
             <h3 class="small-title">Compétences acquises</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'competences',
                     }) }}
+                    {% endif %}
                     {{ include('typeDiplome/formation/_competences.html.twig', {parcours:formation.parcours[0]}) }}
                 </div>
             </div>
@@ -81,12 +91,14 @@
             <h3 class="small-title">Structure</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'structure',
                     }) }}
+                    {% endif %}
                     {{ include('typeDiplome/formation/_structure.html.twig', {parcours:formation.parcours[0], dto: dto}) }}
                 </div>
             </div>
@@ -96,12 +108,14 @@
             <h3 class="small-title">Admission</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'admission',
                     }) }}
+                    {% endif %}
                     {{ include('typeDiplome/formation/_admission.html.twig', {parcours:formation.parcours[0]}) }}
 
                 </div>
@@ -112,12 +126,14 @@
             <h3 class="small-title">Et après ?</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'et_apres',
                     }) }}
+                    {% endif %}
                     {{ include('typeDiplome/formation/_etApres.html.twig', {parcours:formation.parcours[0]}) }}
 
                 </div>
@@ -128,12 +144,14 @@
             <h3 class="small-title">Contacts pédagogiques</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'contacts',
                     }) }}
+                    {% endif %}
                     {{ include('typeDiplome/formation/_contacts.html.twig', {parcours:formation.parcours[0]}) }}
 
                 </div>
@@ -145,12 +163,14 @@
             <h3 class="small-title">Présentation</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'presentation',
                     }) }}
+                    {% endif %}
                     {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours:true}) }}
                 </div>
             </div>
@@ -166,12 +186,14 @@
                     <h3 class="small-title">Présentation</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'presentation_'~ parcours.id,
                             }) }}
+                            {% endif %}
                             {{ include('typeDiplome/formation/_presentationParcours.html.twig', {parcours:parcours}) }}
 
                         </div>
@@ -182,12 +204,14 @@
                     <h3 class="small-title">Descriptif de la formation</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'descriptif_'~ parcours.id,
                             }) }}
+                            {% endif %}
                             {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours:parcours}) }}
                         </div>
                     </div>
@@ -197,12 +221,14 @@
                     <h3 class="small-title">Localisation</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'localisation_'~ parcours.id,
                             }) }}
+                            {% endif %}
                             {{ include('typeDiplome/formation/_localisationParcours.html.twig', {parcours:parcours}) }}
 
                         </div>
@@ -213,12 +239,14 @@
                     <h3 class="small-title">Compétences Acquises</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'competences_'~ parcours.id,
                             }) }}
+                            {% endif %}
                             {{ include('typeDiplome/formation/_competences.html.twig', {parcours:parcours}) }}
 
                         </div>
@@ -229,12 +257,14 @@
                     <h3 class="small-title">Structure</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'structure_'~ parcours.id,
                             }) }}
+                            {% endif %}
                             {{ include('typeDiplome/formation/_structure.html.twig', {parcours:parcours, dto:dto}) }}
                         </div>
                     </div>
@@ -244,12 +274,14 @@
                     <h3 class="small-title">Admission</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'admission_'~ parcours.id,
                             }) }}
+                            {% endif %}
                             {{ include('typeDiplome/formation/_admission.html.twig', {parcours:parcours}) }}
                         </div>
                     </div>
@@ -259,12 +291,14 @@
                     <h3 class="small-title">Inscription</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'inscription_'~ parcours.id,
                             }) }}
+                            {% endif %}
                             {{ include('typeDiplome/formation/_inscription.html.twig', {parcours:parcours}) }}
                         </div>
                     </div>
@@ -274,12 +308,14 @@
                     <h3 class="small-title"> Et après...</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'et_apres_'~ parcours.id,
                             }) }}
+                            {% endif %}
                             {{ include('typeDiplome/formation/_etApres.html.twig', {parcours:parcours}) }}
                         </div>
                     </div>
@@ -289,12 +325,14 @@
                     <h3 class="small-title">Contacts pédagogiques</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'contacts_'~ parcours.id,
                             }) }}
+                            {% endif %}
                             {{ include('typeDiplome/formation/_contacts.html.twig', {parcours:parcours}) }}
                         </div>
                     </div>
