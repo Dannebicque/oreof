@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.17.13](https://github.com/Dannebicque/oreof/compare/v1.17.12...v1.17.13) (2023-11-23)
+
+
+### Bug Fixes
+
+* Export PDF + CSS dédié ([5975fcc](https://github.com/Dannebicque/oreof/commit/5975fccc5b72e40adf6dcc84242c0dfde8041fc6))
+* GlobalVoter ([128f944](https://github.com/Dannebicque/oreof/commit/128f944b400d665b45a2f0186c56f7f55b37deb0))
+
 ### [1.17.12](https://github.com/Dannebicque/oreof/compare/v1.17.11...v1.17.12) (2023-11-22)
 
 
