@@ -6,6 +6,7 @@
     <script src="{{ asset('maquette/bootstrap.min.js') }}"></script>
 </head>
 <body class="global-bg">
+    <h2 class="fs-3 mt-5 mb-4 ms-4">Programme des enseignements</h2>
     {% for parcours in listeParcours %}
         <h2 class="fs-4 mt-5 mb-4 ms-4">{{ parcours.parcours.libelle }}</h2>
         {{ include('parcours/maquette_iframe.html.twig', {parcours: parcours, indexParcours: loop.index} ) }}

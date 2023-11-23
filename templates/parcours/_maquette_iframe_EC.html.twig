@@ -1,0 +1,23 @@
+{% if IsEcEnfant and loop.index == 1 %}
+<tr>
+    <td id="ECLibelle">
+        <span class="badge bg-info">
+            Élément constitutif à choix restreint : {{ arrayLength }} choix possible
+        </span>
+        <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down">
+    </td>
+    <td colspan="7" id="tdEcRestreint"></td>
+</tr>
+{% endif %}
+<tr>
+    <td id="{{ IsEcEnfant ? 'ECEnfantLibelle' : 'ECLibelle' }}">
+        {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
+    </td>
+    <td>{{ ec.heuresEctsEc.cmPres > 0 ? ec.heuresEctsEc.cmPres : '-' }}</td>
+    <td>{{ ec.heuresEctsEc.tdPres > 0 ? ec.heuresEctsEc.tdPres : '-' }}</td>
+    <td>{{ ec.heuresEctsEc.tpPres > 0 ? ec.heuresEctsEc.tpPres : '-' }}</td>
+    <td>{{ ec.heuresEctsEc.cmDist > 0 ? ec.heuresEctsEc.cmDist : '-' }}</td>
+    <td>{{ ec.heuresEctsEc.tdDist > 0 ? ec.heuresEctsEc.tdDist : '-' }}</td>
+    <td>{{ ec.heuresEctsEc.tpDist > 0 ? ec.heuresEctsEc.tpDist : '-' }}</td>
+    <td>{{ ec.heuresEctsEc.tePres > 0 ? ec.heuresEctsEc.tePres : '-' }}</td>
+</tr>

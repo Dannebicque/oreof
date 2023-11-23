@@ -8,6 +8,9 @@
     --urca-gray-400: #ced4da;
     --urca-gray-500: #adb5bd;
     --urca-gray-600: #6c757d;
+    --urca-light-green: #15ADAA;
+    --urca-blue: #0d6efd;
+    --urca-indigo: #6610f2;
 }
 
 .global-bg {
@@ -70,19 +73,21 @@ td {
     padding: .5em;
 }
 
-.ects-badge {
+.ects-badge-ue {
     border-radius: 45%;
     border-width: 1em;
-    background-color: rgb(55, 55, 199);
+    background-color: var(--urca-indigo);
     color: white;
-    padding: .4em;
+    padding: .35em;
     font-size: .9em;
+    margin-left: 1em;
 }
 
 td:not(#UELibelle, #ECLibelle, #ECEnfantLibelle, #TotalSemestre) {
     text-align: center;
     border-width: 0 .1em 0;
     border-color: var(--urca-black);
+    vertical-align: middle;
 }
 
 tr.table-dark td:not(#UELibelle, td:last-child) {
@@ -112,12 +117,12 @@ tr > th {
 
 .accordion-item {
     border-width: .1em;
-    border-color: var(--urca-cyan);
+    border-color: white;
     margin-bottom: .2em;
 }
 
 .table-dark {
-    --bs-table-bg: var(--urca-teal) !important;
+    --bs-table-bg: var(--urca-light-green) !important;
 }
 
 .table-dark > td {
@@ -153,7 +158,7 @@ tr.total-semestre {
 .arrow-down {
     height: 1.5em; 
     width: 1.5em;
-    margin-left: 1.5em;
+    margin-left: 1em;
 }
 
 #tdEcRestreint {

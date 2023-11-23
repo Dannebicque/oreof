@@ -481,6 +481,8 @@ class FormationController extends BaseController
             $listeParcours[] = $calcul->calcul($parcours);
         }
 
+        //dump($listeParcours[0]->semestres[1]->ues[9466]);exit;
+
         return $this->render('formation/maquette_iframe.html.twig', [
             'listeParcours' => $listeParcours
         ]);

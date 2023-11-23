@@ -7,7 +7,7 @@
                         data-bs-target="#collapseSemestre{{semestre.semestre.ordre}}Parcours{{ indexParcours }}" aria-expanded="true" 
                         aria-controls="collapseSemestre{{semestre.semestre.ordre}}Parcours{{ indexParcours }}"
                 >
-                    Semestre {{ semestre.semestre.ordre}} - {{ parcours.parcours.libelle }}
+                    Semestre {{ semestre.semestre.ordre}}
                 </button>
             </h2>
             <div id="collapseSemestre{{semestre.semestre.ordre}}Parcours{{ indexParcours }}" class="accordion-collapse collapse" 
@@ -29,113 +29,21 @@
                                 <th>CM</th>
                                 <th>TD</th>
                                 <th>TP</th>
+                                <th>TE</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for ue in semestre.ues %}
-                                {% set ueChoix = false %}
-                                <tr class="table-dark">
-                                    <td id="UELibelle">
-                                        {{'UE' ~ ue.ue.ordre}} - {{ ue.ue.libelle }}
-                                        {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
-                                            <span class="badge bg-secondary">UE à choix libre</span>
-                                        {% endif %}
-                                        {% if ue.uesEnfants|length > 0 %}
-                                        {% set ueChoix = true %}
-                                            <span class="badge bg-primary">
-                                                UE à choix restreint : {{ ue.uesEnfants|length }} choix possible
-                                            </span>
-                                            <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down">
-                                        {% endif %}
-                                    </td>
-                                    <td>{{ ue.heuresEctsUe.sommeUeCmPres > 0 ? ue.heuresEctsUe.sommeUeCmPres : '-'  }}</td>
-                                    <td>{{ ue.heuresEctsUe.sommeUeTdPres > 0 ? ue.heuresEctsUe.sommeUeTdPres : '-'  }}</td>
-                                    <td>{{ ue.heuresEctsUe.sommeUeTpPres > 0 ? ue.heuresEctsUe.sommeUeTpPres : '-'  }}</td>
-                                    <td>{{ ue.heuresEctsUe.sommeUeCmDist > 0 ? ue.heuresEctsUe.sommeUeCmDist : '-'  }}</td>
-                                    <td>{{ ue.heuresEctsUe.sommeUeTdDist > 0 ? ue.heuresEctsUe.sommeUeTdDist : '-'  }}</td>
-                                    <td>{{ ue.heuresEctsUe.sommeUeTpDist > 0 ? ue.heuresEctsUe.sommeUeTpDist : '-'  }}</td>
-                                </tr>
-                                {% for ec in ue.elementConstitutifs %}
-                                    {% if ec.elementsConstitutifsEnfants|length is same as (0) %}
-                                        <tr>
-                                            <td id="ECLibelle">{{ ec.elementConstitutif.display() }}</td>
-                                            <td>{{ ec.heuresEctsEc.cmPres > 0 ? ec.heuresEctsEc.cmPres : '-' }}</td>
-                                            <td>{{ ec.heuresEctsEc.tdPres > 0 ? ec.heuresEctsEc.tdPres : '-' }}</td>
-                                            <td>{{ ec.heuresEctsEc.tpPres > 0 ? ec.heuresEctsEc.tpPres : '-' }}</td>
-                                            <td>{{ ec.heuresEctsEc.cmDist > 0 ? ec.heuresEctsEc.cmDist : '-' }}</td>
-                                            <td>{{ ec.heuresEctsEc.tdDist > 0 ? ec.heuresEctsEc.tdDist : '-' }}</td>
-                                            <td>{{ ec.heuresEctsEc.tpDist > 0 ? ec.heuresEctsEc.tpDist : '-' }}</td>
-                                        </tr>
-                                    {% else %}
-                                        {% for ecE in ec.elementsConstitutifsEnfants %}
-                                            {% if ec.elementsConstitutifsEnfants|length > 0 and loop.index == 1 %}
-                                                <tr>
-                                                    <td id="ECLibelle">
-                                                        <span class="badge bg-info">
-                                                            Élément constitutif à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possible
-                                                        </span>
-                                                        <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down">
-                                                    </td>
-                                                    <td colspan="6" id="tdEcRestreint"></td>
-                                                </tr>
-                                            {% endif %}
-                                            <tr>
-                                                <td id="ECEnfantLibelle">{{ ecE.elementConstitutif.ficheMatiere.libelle ?? ecE.elementConstitutif.libelle }}</td>
-                                                <td>{{ ecE.heuresEctsEc.cmPres > 0 ? ecE.heuresEctsEc.cmPres : '-' }}</td>
-                                                <td>{{ ecE.heuresEctsEc.tdPres > 0 ? ecE.heuresEctsEc.tdPres : '-' }}</td>
-                                                <td>{{ ecE.heuresEctsEc.tpPres > 0 ? ecE.heuresEctsEc.tpPres : '-' }}</td>
-                                                <td>{{ ecE.heuresEctsEc.cmDist > 0 ? ecE.heuresEctsEc.cmDist : '-' }}</td>
-                                                <td>{{ ecE.heuresEctsEc.tdDist > 0 ? ecE.heuresEctsEc.tdDist : '-' }}</td>
-                                                <td>{{ ecE.heuresEctsEc.tpDist > 0 ? ecE.heuresEctsEc.tpDist : '-' }}</td>
-                                            </tr>   
-                                        {% endfor %}
-                                    {% endif %}
-                                {% endfor %}
-                                {% if ue.uesEnfants|length > 0 %}
-                                    {% for ueEnfant in ue.uesEnfants %} 
-                                        {% if ueEnfant.ue.natureUeEc is defined and ueEnfant.ue.natureUeEc != null and ueEnfant.ue.natureUeEc.libre == true %}
-                                            <tr>
-                                                <td id="ECEnfantLibelle">
-                                                    {{ ueEnfant.ue.descriptionUeLibre }}
-                                                </td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        {% endif %}
-                                        {% if ueEnfant.elementConstitutifs is defined and ueEnfant.elementConstitutifs is not null %}
-                                            {% for ecE in ueEnfant.elementConstitutifs %}
-                                            <tr>
-                                                <td id="ECEnfantLibelle">{{ ecE.elementConstitutif.display() }}</td>
-                                                <td>{{ ecE.heuresEctsEc.cmPres > 0 ? ecE.heuresEctsEc.cmPres : '-' }}</td>
-                                                <td>{{ ecE.heuresEctsEc.tdPres > 0 ? ecE.heuresEctsEc.tdPres : '-' }}</td>
-                                                <td>{{ ecE.heuresEctsEc.tpPres > 0 ? ecE.heuresEctsEc.tpPres : '-' }}</td>
-                                                <td>{{ ecE.heuresEctsEc.cmDist > 0 ? ecE.heuresEctsEc.cmDist : '-' }}</td>
-                                                <td>{{ ecE.heuresEctsEc.tdDist > 0 ? ecE.heuresEctsEc.tdDist : '-' }}</td>
-                                                <td>{{ ecE.heuresEctsEc.tpDist > 0 ? ecE.heuresEctsEc.tpDist : '-' }}</td>
-                                            </tr>
-                                            {% endfor %}
-                                        {% endif %}
+                                {{ include('parcours/_maquette_iframe_UE.html.twig', {ue: ue, IsUeEnfant: false}) }}
+                                {% if ue.uesEnfants|length > 0 %}              
+                                    {% for ueEnfant in ue.uesEnfants %}
+                                        {{ include('parcours/_maquette_iframe_UE.html.twig', 
+                                        {ue: ueEnfant, IsUeEnfant: true, arrayLength: ue.uesEnfants|length }) 
+                                    }}
                                     {% endfor %}
                                 {% endif %}
                             {% endfor %}
-                                <tr class="total-semestre">
-                                    <td id="TotalSemestre">
-                                        Total Semestre {{ semestre.semestre.ordre }} - 
-                                        <span class="ects-badge">
-                                            {{semestre.heuresEctsSemestre.sommeSemestreEcts}} ECTS
-                                        </span>
-                                    </td>
-                                    <td>{{ semestre.heuresEctsSemestre.sommeSemestreCmPres > 0 ? semestre.heuresEctsSemestre.sommeSemestreCmPres : '-'}}</td>
-                                    <td>{{ semestre.heuresEctsSemestre.sommeSemestreTdPres > 0 ? semestre.heuresEctsSemestre.sommeSemestreTdPres : '-'}}</td>
-                                    <td>{{ semestre.heuresEctsSemestre.sommeSemestreTpPres > 0 ? semestre.heuresEctsSemestre.sommeSemestreTpPres : '-'}}</td>
-                                    <td>{{ semestre.heuresEctsSemestre.sommeSemestreCmDist > 0 ? semestre.heuresEctsSemestre.sommeSemestreCmDist : '-'}}</td>
-                                    <td>{{ semestre.heuresEctsSemestre.sommeSemestreTdDist > 0 ? semestre.heuresEctsSemestre.sommeSemestreTdDist : '-'}}</td>
-                                    <td>{{ semestre.heuresEctsSemestre.sommeSemestreTpDist > 0 ? semestre.heuresEctsSemestre.sommeSemestreTpDist : '-'}}</td>
-                                </tr>
+                            {{ include('parcours/_maquette_iframe_TotalSemestre.html.twig', {semestre: semestre}) }}
                         </tbody>
                     </table>
                 </div>
