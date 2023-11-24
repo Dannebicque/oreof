@@ -164,3 +164,27 @@ tr.total-semestre {
 #tdEcRestreint {
     background-color: var(--urca-gray-400);
 }
+
+p.card-text, h5.card-title, h5.titre-section {
+    color: var(--urca-black);
+}
+
+.global-bg-matiere {
+    background-color: white;
+}
+
+.card-body > .row {
+    margin-top: 2em;
+    justify-content: center;
+}
+
+.arrow-left-circle-fill {
+    content: url('/maquette/arrow-left-circle-fill.svg');
+    height: 2.5em; 
+    width: 2.5em;
+    display: flex;
+}
+
+#ECLibelle > a {
+    color: white;
+}

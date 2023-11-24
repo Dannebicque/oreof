@@ -11,7 +11,17 @@
 {% endif %}
 <tr>
     <td id="{{ IsEcEnfant ? 'ECEnfantLibelle' : 'ECLibelle' }}">
-        {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
+        {% if ec.elementConstitutif.ficheMatiere is defined and ec.elementConstitutif.ficheMatiere is not null %}
+        <a href="{{ path(
+                    'app_fiche_matiere_maquette_iframe',
+                    { slug: ec.elementConstitutif.ficheMatiere.slug, id: parcours.parcours.id }
+                    ) 
+                }}">
+            {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
+        </a>
+        {% else %}
+            {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}    
+        {% endif %}
     </td>
     <td>{{ ec.heuresEctsEc.cmPres > 0 ? ec.heuresEctsEc.cmPres : '-' }}</td>
     <td>{{ ec.heuresEctsEc.tdPres > 0 ? ec.heuresEctsEc.tdPres : '-' }}</td>

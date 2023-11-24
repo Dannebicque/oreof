@@ -12,6 +12,7 @@ namespace App\Controller;
 use App\Classes\verif\FicheMatiereState;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
+use App\Entity\Parcours;
 use App\Form\FicheMatiereType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
@@ -202,5 +203,17 @@ class FicheMatiereController extends AbstractController
         }
 
         return $this->json(false);
+    }
+
+    #[Route('/{slug}/{id}/maquette_iframe', name: 'app_fiche_matiere_maquette_iframe')]
+    public function getMaquetteIframe(string $slug, Parcours $parcours, EntityManagerInterface $entityManager) : Response {
+        $ficheMatiere = $entityManager->getRepository(FicheMatiere::class)->findOneBy(['slug' => $slug]);
+
+        return $this->render('fiche_matiere/maquette_iframe.html.twig', [
+            'fiche_matiere' => $ficheMatiere,
+            'typeDiplome' => $ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome(),
+            'formation' => $ficheMatiere->getParcours()?->getFormation(),
+            'maquetteOrigineURL' => $parcours ? $this->generateUrl('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()]) : "#",
+        ]);
     }
 }

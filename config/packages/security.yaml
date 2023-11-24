@@ -30,7 +30,8 @@ security:
         - { path: ^/connexion, roles: PUBLIC_ACCESS }
         - { path: ^/demande-acces, roles: PUBLIC_ACCESS }
         - { path: ^/sso/cas, roles: PUBLIC_ACCESS }
-        - { path: ^/formation/.+/maquette_iframe, roles: PUBLIC_ACCESS }
+        - { path: ^/parcours/.+/maquette_iframe, roles: PUBLIC_ACCESS }
+        - { path: ^/fiche/matiere/.+/maquette_iframe, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 when@test:
     security:
