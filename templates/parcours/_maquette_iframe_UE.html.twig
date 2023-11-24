@@ -25,10 +25,12 @@
 
 {% for ec in ue.elementConstitutifs %}
         {% if ec.elementsConstitutifsEnfants|length == 0 %}
-            {{ include('parcours/_maquette_iframe_EC.html.twig', {ec:ec, IsEcEnfant: false}) }}
+            {{ include('parcours/_maquette_iframe_EC.html.twig', {ec:ec, IsEcEnfant: false, indexUeEnfant: indexUeEnfant ?? -1 }) }}
         {% else %}
             {% for ece in ec.elementsConstitutifsEnfants %}
-                {{ include('parcours/_maquette_iframe_EC.html.twig', {ec:ece, IsEcEnfant: true, arrayLength: ec.elementsConstitutifsEnfants|length}) }}
+                {{ include('parcours/_maquette_iframe_EC.html.twig', 
+                    {ec:ece, IsEcEnfant: true, arrayLength: ec.elementsConstitutifsEnfants|length, indexUeEnfant: indexUeEnfant ?? -1 }) 
+                }}
             {% endfor %}
         {% endif %}
 {% endfor %}

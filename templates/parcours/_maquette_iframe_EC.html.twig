@@ -10,6 +10,7 @@
 </tr>
 {% endif %}
 <tr>
+    {# <td id="{{ IsEcEnfant ? 'ECEnfantLibelle' : 'ECLibelle' }}" class="{{ indexUeEnfant != -1  ? 'indexUeEnfant' ~ indexUeEnfant : '' }}"> #}
     <td id="{{ IsEcEnfant ? 'ECEnfantLibelle' : 'ECLibelle' }}">
         {% if ec.elementConstitutif.ficheMatiere is defined and ec.elementConstitutif.ficheMatiere is not null %}
         <a href="{{ path(
@@ -21,6 +22,14 @@
         </a>
         {% else %}
             {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}    
+        {% endif %}
+        {% if indexUeEnfant != -1 %}
+            {% set colorBadge = indexUeEnfant == 1 ? 'bg-primary' 
+                : indexUeEnfant == 2 ? 'bg-danger' 
+                : indexUeEnfant == 3 ? 'bg-success' 
+                : 'bg-warning' 
+            %}
+            <span class="ms-3 badge {{ colorBadge }}">Choix {{ indexUeEnfant }}</span>
         {% endif %}
     </td>
     <td>{{ ec.heuresEctsEc.cmPres > 0 ? ec.heuresEctsEc.cmPres : '-' }}</td>

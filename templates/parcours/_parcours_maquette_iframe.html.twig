@@ -14,7 +14,7 @@
                 data-bs-parent="#accordionMaquetteParcours{{ parcours.parcours.id }}Index{{ indexParcours }}"
             >
                 <div class="accordion-body global-bg">
-                    <table class="table">
+                    <table class="table table-parcours">
                         <thead>                  
                             <tr>
                                 <th></th>
@@ -38,7 +38,7 @@
                                 {% if ue.uesEnfants|length > 0 %}              
                                     {% for ueEnfant in ue.uesEnfants %}
                                         {{ include('parcours/_maquette_iframe_UE.html.twig', 
-                                        {ue: ueEnfant, IsUeEnfant: true, arrayLength: ue.uesEnfants|length }) 
+                                        {ue: ueEnfant, IsUeEnfant: true, arrayLength: ue.uesEnfants|length, indexUeEnfant: loop.index }) 
                                     }}
                                     {% endfor %}
                                 {% endif %}
