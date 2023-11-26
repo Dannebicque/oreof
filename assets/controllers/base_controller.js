@@ -66,11 +66,10 @@ export default class extends Controller {
       document.getElementById('stimulus_modal').parentElement.classList.remove('modal-right')
       document.getElementById('stimulus_modal').classList.add(`modal-${event.detail.size}`)
     }
-
     this.modal = new Modal(this.modalTarget)
     this.modal.show()
     let response = null
-    if (event.detail.params.lenth > 0) {
+    if (event.detail.params.length > 0) {
       const params = new URLSearchParams(event.detail.params)
       response = await fetch(`${event.detail.url}?${params.toString()}`)
     } else {
