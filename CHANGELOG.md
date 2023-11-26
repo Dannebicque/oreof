@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.18.0](https://github.com/Dannebicque/oreof/compare/v1.17.13...v1.18.0) (2023-11-26)
+
+
+### Features
+
+* export des fiches au format 1pdf/zip ([4c68274](https://github.com/Dannebicque/oreof/commit/4c6827434b77d5c31e43479e08aace1d08dabfdb))
+
+
+### Bug Fixes
+
+* type sur modal js ([8637597](https://github.com/Dannebicque/oreof/commit/86375971c58a982c7aafaf92b90743a926ba0833))
+* validation en lot ([901cb8a](https://github.com/Dannebicque/oreof/commit/901cb8ab8d4764b6edf04aa4c103d104272244f7))
+* validation/reserve/refuse en lot ([939ce56](https://github.com/Dannebicque/oreof/commit/939ce5690c044211fc1e2e501b243ad4a6aad1b7))
+
 ### [1.17.13](https://github.com/Dannebicque/oreof/compare/v1.17.12...v1.17.13) (2023-11-23)
 
 
