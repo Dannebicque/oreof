@@ -116,20 +116,11 @@
     </table>
     <div class="row mt-2">
         {% if process.hasValid %}
-            <div class="col-2 d-grid">
+            <div class="col-3 d-grid">
                 <button class="btn btn-sm d-block btn-outline-success"
                         type="button"
-                        {{ stimulus_controller('modal', {
-                            size: 'lg',
-                            updateComponent: {
-                                id: 'mention_manage',
-                                event: 'mention_manage:valide'
-                            },
-                            modalTitle: ('validation.valider.'~etape~'.title')|trans({}, 'process'),
-                            modalUrl: path('app_validation_valide_lot', {
-                                etape:etape,
-                            }) }) }}
-                        data-action="click->modal#openModal"
+                        data-action="validation--index#valide"
+                        data-validation--index-url-param="{{ path('app_validation_valide_lot', {etape:etape}) }}"
                         data-controller="tooltip"
                         data-tooltip-placement-value="bottom"
                         aria-label="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
@@ -139,24 +130,16 @@
                 </button>
             </div>
         {% else %}
-            <div class="col-2 d-grid">
+            <div class="col-3 d-grid">
             </div>
         {% endif %}
+
         {% if process.hasReserve %}
-            <div class="col-2 d-grid">
+            <div class="col-3 d-grid">
                 <button
                         class="btn btn-sm d-block btn-outline-warning"
-                        {{ stimulus_controller('modal', {
-                            size: 'lg',
-                            updateComponent: {
-                                id: 'mention_manage',
-                                event: 'mention_manage:reserve'
-                            },
-                            modalTitle: ('validation.reserve.'~etape~'.title')|trans({}, 'process'),
-                            modalUrl: path('app_validation_reserve_lot', {
-                                etape:etape,
-                            }) }) }}
-                        data-action="click->modal#openModal"
+                        data-action="validation--index#reserve"
+                        data-validation--index-url-param="{{ path('app_validation_reserve_lot', {etape:etape}) }}"
                         data-controller="tooltip"
                         data-tooltip-placement-value="bottom"
                         aria-label="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}"
@@ -166,25 +149,16 @@
                 </button>
             </div>
         {% else %}
-            <div class="col-2 d-grid">
+            <div class="col-3 d-grid">
             </div>
-
         {% endif %}
+
         {% if process.hasRefuse %}
-            <div class="col-2 d-grid">
+            <div class="col-3 d-grid">
                 <button class="btn btn-sm d-block btn-outline-danger"
                         type="button"
-                        {{ stimulus_controller('modal', {
-                            size: 'lg',
-                            updateComponent: {
-                                id: 'mention_manage',
-                                event: 'mention_manage:refuse'
-                            },
-                            modalTitle: ('validation.refuser.'~etape~'.title')|trans({}, 'process'),
-                            modalUrl: path('app_validation_refuse_lot', {
-                                etape:etape,
-                            }) }) }}
-                        data-action="click->modal#openModal"
+                        data-action="validation--index#refuse"
+                        data-validation--index-url-param="{{ path('app_validation_refuse_lot', {etape:etape}) }}"
                         data-controller="tooltip"
                         data-tooltip-placement-value="bottom"
                         aria-label="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"
@@ -194,8 +168,11 @@
                 </button>
             </div>
         {% else %}
-            <div class="col-2 d-grid">
+            <div class="col-3 d-grid">
             </div>
         {% endif %}
+    </div>
+    <div class="row mt-2" {{ stimulus_target('validation--index', 'action') }}>
+
     </div>
 </div>
