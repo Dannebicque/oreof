@@ -24,7 +24,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ProcessValidationController extends AbstractController
+class ProcessValidationController extends BaseController
 {
     public function __construct(
         private readonly EventDispatcherInterface $eventDispatcher,
@@ -316,7 +316,8 @@ class ProcessValidationController extends AbstractController
         }
 
         if ($request->isMethod('POST')) {
-            return JsonReponse::success('Formations validées');
+            $this->toast('success', 'Formations validées');
+            return $this->redirectToRoute('app_validation_index');
         }
 
 
@@ -357,8 +358,13 @@ class ProcessValidationController extends AbstractController
             $processData = $this->formationProcess->etatFormation($objet, $process);
 
             if ($request->isMethod('POST')) {
-                return $this->formationProcess->refuseFormation($objet, $this->getUser(), $process, $etape, $request);
+                $this->formationProcess->refuseFormation($objet, $this->getUser(), $process, $etape, $request);
             }
+        }
+
+        if ($request->isMethod('POST')) {
+            $this->toast('success', 'Formations refusées');
+            return $this->redirectToRoute('app_validation_index');
         }
 
         return $this->render('process_validation/_refuse_lot.html.twig', [
@@ -398,8 +404,13 @@ class ProcessValidationController extends AbstractController
             $processData = $this->formationProcess->etatFormation($objet, $process);
 
             if ($request->isMethod('POST')) {
-                return $this->formationProcess->reserveFormation($objet, $this->getUser(), $process, $etape, $request);
+                $this->formationProcess->reserveFormation($objet, $this->getUser(), $process, $etape, $request);
             }
+        }
+
+        if ($request->isMethod('POST')) {
+            $this->toast('success', 'Formations marquées avec des réserves');
+            return $this->redirectToRoute('app_validation_index');
         }
 
         return $this->render('process_validation/_reserve_lot.html.twig', [
