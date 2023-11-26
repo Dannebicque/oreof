@@ -9,14 +9,18 @@
 
 namespace App\Controller;
 
-
+use App\Classes\JsonReponse;
 use App\Classes\MyGotenbergPdf;
 use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
+use App\Message\Export;
+use App\Utils\Tools;
 use Dompdf\Dompdf;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class FicheMatiereExportController extends AbstractController
@@ -56,7 +60,6 @@ class FicheMatiereExportController extends AbstractController
         }
 
 
-
         return $this->myPdf->render(
             'pdf/ec.html.twig',
             [
@@ -80,13 +83,23 @@ class FicheMatiereExportController extends AbstractController
                 'parcours' => $parcours,
                 'fiches' => $parcours->getFicheMatieres(),
                 'typeDiplome' => $parcours->getFormation()?->getTypeDiplome(),
+                'titre' => 'Fiches EC/matières ',
             ],
             'FichesMatieres' . $parcours->getLibelle()
         );
     }
 
     #[Route('/fiche-matiere/export/zip/{parcours}', name: 'fiche_matiere_export_zip')]
-    public function exportFichesMatieresZip(Parcours $parcours): Response
+    public function exportFichesMatieresZip(
+        MessageBusInterface          $messageBus,
+        Parcours $parcours): Response
     {
+        $messageBus->dispatch(new Export(
+            $this->getUser()?->getId(),
+            'zip-fiches_matieres',
+            [$parcours->getId()]
+        ));
+
+        return JsonReponse::success('Les documents sont en cours de génération, vous recevrez un mail lorsque les documents seront prêts');
     }
 }

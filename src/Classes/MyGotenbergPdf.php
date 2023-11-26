@@ -42,6 +42,17 @@ class MyGotenbergPdf
 
     public function render(string $template, array $context = [], string $name = 'fichier', array $options = [])
     {
+        $request = $this->calculPdf($template, $context, $name, $options);
+        $reponse = $this->client->sendRequest($request);
+
+        return new Response($reponse->getBody()->getContents(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $name . '.pdf"',
+        ]);
+    }
+
+    private function calculPdf(string $template, array $context = [], string $name = 'fichier', array $options = [])
+    {
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
         $this->options = $resolver->resolve($options);
@@ -51,7 +62,7 @@ class MyGotenbergPdf
             $parcours = $context['parcours'];
             //formation + mention + parcours + intitulé parcours
             $formation = $parcours->getFormation();
-            $title = $formation->getDisplayLong().'<br> Parcours : '.$parcours->getLibelle().'<br>'.$context['titre'];
+            $title = $formation->getDisplayLong() . '<br> Parcours : ' . $parcours->getLibelle() . '<br>' . $context['titre'];
         } else {
             $title = $context['titre'];
         }
@@ -66,23 +77,22 @@ class MyGotenbergPdf
             ->footer(Stream::string('footer.html', $this->getFooter()))
             ->paperSize($this->paperSizes[$this->options['paperSize']][0], $this->paperSizes[$this->options['paperSize']][1])
             ->margins(1, 1, 0.8, 0.8)
-            ->outputFilename($name)
-            ;
+            ->outputFilename($name);
 
         if ($this->options['landscape']) {
             $request->landscape();
         }
 
-        $request = $request->html(Stream::string('fichier.html', $html));
+        return $request->html(Stream::string('fichier.html', $html));
+    }
 
-        // $response = $this->client->sendRequest($request);
-        //$filename = Gotenberg::save($request, '/Users/davidannebicque/Sites/oreof/public/pdftests/', $this->client);
-        $reponse = $this->client->sendRequest($request);
+    public function renderAndSave(string $template, string $dir, array $context = [], string $name = 'fichier', array $options = []): string
+    {
+        $request = $this->calculPdf($template, $context, $name, $options);
 
-        return new Response($reponse->getBody()->getContents(), 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="' . $name . '.pdf"',
-        ]);
+        $filename = Gotenberg::save($request, $this->basePath . '/' . $dir, $this->client);
+
+        return $filename;
     }
 
     private function generateHtml(string $template, array $context = [])

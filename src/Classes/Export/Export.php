@@ -12,6 +12,7 @@ namespace App\Classes\Export;
 use App\Classes\MyPDF;
 use App\Entity\AnneeUniversitaire;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Utils\Tools;
 use DateTimeInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -20,12 +21,13 @@ class Export
     private string $format;
     private string $typeDocument;
     private array $formations;
-    private AnneeUniversitaire $annee;
-    private DateTimeInterface $date;
+    private ?AnneeUniversitaire $annee;
+    private ?DateTimeInterface $date;
     private string $dir;
     private mixed $export;
 
     public function __construct(
+        protected ExportFicheMatiere $exportFicheMatiere,
         protected ExportRegime $exportRegime,
         protected ExportCfvu $exportCfvu,
         protected ExportCarif $exportCarif,
@@ -39,7 +41,7 @@ class Export
         $this->dir = $kernel->getProjectDir().'/public/temp';
     }
 
-    public  function setDate(DateTimeInterface $date):void
+    public  function setDate(?DateTimeInterface $date):void
     {
         $this->date = $date;
     }
@@ -51,7 +53,7 @@ class Export
         $this->typeDocument = $t[1];
     }
 
-    public function exportFormations(array $formations, AnneeUniversitaire $annee): string
+    public function exportFormations(array $formations, ?AnneeUniversitaire $annee = null): string
     {
         $this->formations = $formations;
         $this->annee = $annee;
@@ -73,7 +75,8 @@ class Export
                 return $this->exportRegime();
             case 'cfvu':
                 return $this->exportCfvu();
-
+            case 'fiches_matieres':
+                return $this->exportFicheMatiere();
             case 'synthese':
                 return $this->exportSynthese();
         }
@@ -121,5 +124,10 @@ class Export
     private function exportCfvu()
     {
         return $this->exportCfvu->exportLink($this->annee);
+    }
+
+    private function exportFicheMatiere()
+    {
+        return $this->exportFicheMatiere->exportLink($this->formations);
     }
 }

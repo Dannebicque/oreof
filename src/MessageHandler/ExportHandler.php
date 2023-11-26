@@ -23,7 +23,8 @@ class ExportHandler
         private UserRepository $userRepository,
         private AnneeUniversitaireRepository $anneeUniversitaireRepository,
         private readonly MailerInterface $mailer,
-        private Export $export)
+        private Export $export
+    )
     {
     }
 
@@ -33,9 +34,11 @@ class ExportHandler
         $this->export->setDate($exportMessage->getDate());
 
         $user = $this->userRepository->find($exportMessage->getUser());
-        $annee = $this->anneeUniversitaireRepository->find($exportMessage->getAnnee());
+        if ($exportMessage->getAnnee() !== null) {
+            $annee = $this->anneeUniversitaireRepository->find($exportMessage->getAnnee());
+        }
 
-        $lien = $this->export->exportFormations($exportMessage->getFormations(), $annee);
+        $lien = $this->export->exportFormations($exportMessage->getFormations(), $annee ?? null);
 
         if (null !== $user && $lien !== null) {
             $mail = (new TemplatedEmail())
