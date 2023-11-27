@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="fr" trgLang="fr">
+  <file id="enum.fr">
+    <unit id="CTFpo6h" name="TEMPS_PLEIN">
+      <segment>
+        <source>TEMPS_PLEIN</source>
+        <target>Temps plein</target>
+      </segment>
+    </unit>
+    <unit id="sQbH.SQ" name="TEMPS_PARTIEL">
+      <segment>
+        <source>TEMPS_PARTIEL</source>
+        <target>Temps partiel</target>
+      </segment>
+    </unit>
+    <unit id="DfRNQGO" name="TEMPS_MIXTE">
+      <segment>
+        <source>TEMPS_MIXTE</source>
+        <target>Temps plein et partiel</target>
+      </segment>
+    </unit>
+    <unit id="zcKZN4h" name="but">
+      <segment>
+        <source>but</source>
+        <target>Bachelor Universitaire de Technologie</target>
+      </segment>
+    </unit>
+    <unit id="De2XkIB" name="licence_professionnelle">
+      <segment>
+        <source>licence_professionnelle</source>
+        <target>Licence professionnelle</target>
+      </segment>
+    </unit>
+    <unit id="gXiscrK" name="licence">
+      <segment>
+        <source>licence</source>
+        <target>Licence</target>
+      </segment>
+    </unit>
+    <unit id="Ho2Laq." name="master_meef">
+      <segment>
+        <source>master_meef</source>
+        <target>Master MEEF</target>
+      </segment>
+    </unit>
+    <unit id=".GE7Tf1" name="master">
+      <segment>
+        <source>master</source>
+        <target>Master</target>
+      </segment>
+    </unit>
+    <unit id="aJFdWhs" name="FI">
+      <segment>
+        <source>FI</source>
+        <target>Formation initiale</target>
+      </segment>
+    </unit>
+    <unit id="8aW4.6K" name="FI_APPRENTISSAGE">
+      <segment>
+        <source>FI_APPRENTISSAGE</source>
+        <target>Formation initiale en apprentissage</target>
+      </segment>
+    </unit>
+    <unit id="tHd8zBc" name="FC">
+      <segment>
+        <source>FC</source>
+        <target>Formation continue</target>
+      </segment>
+    </unit>
+    <unit id="qPNR5oP" name="FC_CONTRAT_PRO">
+      <segment>
+        <source>FC_CONTRAT_PRO</source>
+        <target>Formation continue en contrat de professionnalisation</target>
+      </segment>
+    </unit>
+    <unit id="TiV7xjY" name="Régime d'inscription">
+      <segment>
+        <source>Régime d'inscription</source>
+        <target>Régime d'inscription</target>
+      </segment>
+    </unit>
+    <unit id="oAO2G2g" name="formation_step1.labels.regimeInscription.label">
+      <segment>
+        <source>formation_step1.labels.regimeInscription.label</source>
+        <target>Régime(s) d'inscription</target>
+      </segment>
+    </unit>
+    <unit id="qb9hnBe" name="parcours_step5.labels.regimeInscription.label">
+      <segment>
+        <source>parcours_step5.labels.regimeInscription.label</source>
+        <target>Régime(s) d'inscription</target>
+      </segment>
+    </unit>
+    <unit id="d3Xa370" name="Type de diplôme">
+      <segment>
+        <source>Type de diplôme</source>
+        <target>Type de diplôme</target>
+      </segment>
+    </unit>
+    <unit id="5VEzQ_o" name="deust">
+      <segment>
+        <source>deust</source>
+        <target>DEUST</target>
+      </segment>
+    </unit>
+    <unit id="YW5jWTW" name="parcours_step5.labels.regimeInscription">
+      <segment>
+        <source>parcours_step5.labels.regimeInscription</source>
+        <target>parcours_step5.labels.regimeInscription</target>
+      </segment>
+    </unit>
+    <unit id="s8I040t" name="Type(s) de diplôme proposant ce type d'UE">
+      <segment>
+        <source>Type(s) de diplôme proposant ce type d'UE</source>
+        <target>Type(s) de diplôme proposant ce type d'UE</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

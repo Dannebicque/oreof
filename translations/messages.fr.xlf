@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="fr" trgLang="fr">
+  <file id="messages.fr">
+    <unit id="Tyz1OPq" name="Localisation(s) de la formation">
+      <segment>
+        <source>Localisation(s) de la formation</source>
+        <target>Localisation(s) de la formation</target>
+      </segment>
+    </unit>
+    <unit id="FKiCnGI" name="Composante d'inscription">
+      <segment>
+        <source>Composante d'inscription</source>
+        <target>Composante(s) d'inscription</target>
+      </segment>
+    </unit>
+    <unit id="GHM131Y" name="Modalités de l'alternance">
+      <segment>
+        <source>Modalités de l'alternance</source>
+        <target>Modalités de l'alternance</target>
+      </segment>
+    </unit>
+    <unit id="hYv0fBx" name="Contenu de la formation">
+      <segment>
+        <source>Contenu de la formation</source>
+        <target>Contenu de la formation</target>
+      </segment>
+    </unit>
+    <unit id="ty3SM1g" name="Résultats attendus de la formation">
+      <segment>
+        <source>Résultats attendus de la formation</source>
+        <target>Résultats attendus de la formation</target>
+      </segment>
+    </unit>
+    <unit id="M1QA6Wp" name="Rythme de la formation">
+      <segment>
+        <source>Rythme de la formation</source>
+        <target>Rythme de la formation</target>
+      </segment>
+    </unit>
+    <unit id="b4Nzh3o" name="Choisissez un rythme de formation ou complétez le champ ci-dessous">
+      <segment>
+        <source>Choisissez un rythme de formation ou complétez le champ ci-dessous</source>
+        <target>Choisissez un rythme de formation ou complétez le champ ci-dessous</target>
+      </segment>
+    </unit>
+    <unit id="8WMrqGD" name="Compléments sur le rythme de formation">
+      <segment>
+        <source>Compléments sur le rythme de formation</source>
+        <target>Compléments sur le rythme de formation</target>
+      </segment>
+    </unit>
+    <unit id="LuG9iqZ" name="Modalités d'enseignement du parcours">
+      <segment>
+        <source>Modalités d'enseignement du parcours</source>
+        <target>Modalités d'enseignement du parcours</target>
+      </segment>
+    </unit>
+    <unit id="g2oPkAD" name="En présentiel">
+      <segment>
+        <source>En présentiel</source>
+        <target>En présentiel</target>
+      </segment>
+    </unit>
+    <unit id="Rv2Utp1" name="En distanciel">
+      <segment>
+        <source>En distanciel</source>
+        <target>En distanciel</target>
+      </segment>
+    </unit>
+    <unit id="0_oqnXf" name="Hybride">
+      <segment>
+        <source>Hybride</source>
+        <target>Hybride</target>
+      </segment>
+    </unit>
+    <unit id="kkFlYEo" name="Stage ?">
+      <segment>
+        <source>Stage ?</source>
+        <target>Stage ?</target>
+      </segment>
+    </unit>
+    <unit id="CpBAdjn" name="Oui">
+      <segment>
+        <source>Oui</source>
+        <target>Oui</target>
+      </segment>
+    </unit>
+    <unit id="f2JJawy" name="Non">
+      <segment>
+        <source>Non</source>
+        <target>Non</target>
+      </segment>
+    </unit>
+    <unit id="q22aspU" name="Nombre d'heures de stage prévu">
+      <segment>
+        <source>Nombre d'heures de stage prévu</source>
+        <target>Nombre d'heures de stage prévu</target>
+      </segment>
+    </unit>
+    <unit id="PvaxcEa" name="Description du stage">
+      <segment>
+        <source>Description du stage</source>
+        <target>Description du stage</target>
+      </segment>
+    </unit>
+    <unit id="PsxdG4m" name="Projets tuteurés ?">
+      <segment>
+        <source>Projets tuteurés ?</source>
+        <target>Projets tuteurés ?</target>
+      </segment>
+    </unit>
+    <unit id=".KJ6.1T" name="Nombre d'heures de projets tutorés prévu">
+      <segment>
+        <source>Nombre d'heures de projets tutorés prévu</source>
+        <target>Nombre d'heures de projets tutorés prévu</target>
+      </segment>
+    </unit>
+    <unit id="0sfxYXN" name="Description du projet">
+      <segment>
+        <source>Description du projet</source>
+        <target>Description du projet</target>
+      </segment>
+    </unit>
+    <unit id="LRLh1d7" name="TER/Mémoire ?">
+      <segment>
+        <source>TER/Mémoire ?</source>
+        <target>TER/Mémoire ?</target>
+      </segment>
+    </unit>
+    <unit id="TKXBOih" name="bloc_competence.labels.libelle">
+      <segment>
+        <source>bloc_competence.labels.libelle</source>
+        <target>bloc_competence.labels.libelle</target>
+      </segment>
+    </unit>
+    <unit id="fjBKQ3R" name="competence.labels.libelle">
+      <segment>
+        <source>competence.labels.libelle</source>
+        <target>competence.labels.libelle</target>
+      </segment>
+    </unit>
+    <unit id="zVuDKsX" name="Libellé">
+      <segment>
+        <source>Libellé</source>
+        <target>Libellé</target>
+      </segment>
+    </unit>
+    <unit id="p7V8Y15" name="Responsable de l'EC">
+      <segment>
+        <source>Responsable de l'EC</source>
+        <target>Responsable de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="UW0EiO6" name="Prérequis recommandés">
+      <segment>
+        <source>Prérequis recommandés</source>
+        <target>Prérequis recommandés</target>
+      </segment>
+    </unit>
+    <unit id="YPDd_Zb" name="Poursuites d'études envisageables">
+      <segment>
+        <source>Poursuites d'études envisageables</source>
+        <target>Poursuites d'études envisageables</target>
+      </segment>
+    </unit>
+    <unit id="7JtJsK8" name="Débouchés">
+      <segment>
+        <source>Débouchés</source>
+        <target>Débouchés</target>
+      </segment>
+    </unit>
+    <unit id="Fdkh88S" name="Code ROME">
+      <segment>
+        <source>Code ROME</source>
+        <target>Code ROME</target>
+      </segment>
+    </unit>
+    <unit id="3yr69wJ" name="Libellé du code ROME">
+      <segment>
+        <source>Libellé du code ROME</source>
+        <target>Libellé du code ROME</target>
+      </segment>
+    </unit>
+    <unit id="NqUU1lg" name="Responsable du parcours (si existant)">
+      <segment>
+        <source>Responsable du parcours (si existant)</source>
+        <target>Responsable du parcours (si existant)</target>
+      </segment>
+    </unit>
+    <unit id="OLvNZ0K" name="Coordonnées du secrétariat">
+      <segment>
+        <source>Coordonnées du secrétariat</source>
+        <target>Coordonnées du secrétariat</target>
+      </segment>
+    </unit>
+    <unit id="24yD9m0" name="Modalité d'enseignement">
+      <segment>
+        <source>Modalité d'enseignement</source>
+        <target>Modalité d'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="1JUaCEx" name="PRESENTIELLE">
+      <segment>
+        <source>PRESENTIELLE</source>
+        <target>PRESENTIELLE</target>
+      </segment>
+    </unit>
+    <unit id="NDDU1CW" name="DISTANCIELLE">
+      <segment>
+        <source>DISTANCIELLE</source>
+        <target>Distancielle</target>
+      </segment>
+    </unit>
+    <unit id="ESiVS84" name="HYBRIDE">
+      <segment>
+        <source>HYBRIDE</source>
+        <target>HYBRIDE</target>
+      </segment>
+    </unit>
+    <unit id="w_ucPZa" name="ECTS">
+      <segment>
+        <source>ECTS</source>
+        <target>ECTS</target>
+      </segment>
+    </unit>
+    <unit id="Mv0WCVX" name="Volume CM">
+      <segment>
+        <source>Volume CM</source>
+        <target>Volume CM</target>
+      </segment>
+    </unit>
+    <unit id="27dT8U0" name="Volume TD">
+      <segment>
+        <source>Volume TD</source>
+        <target>Volume TD</target>
+      </segment>
+    </unit>
+    <unit id="cQKtH36" name="Volume TP">
+      <segment>
+        <source>Volume TP</source>
+        <target>Volume TP</target>
+      </segment>
+    </unit>
+    <unit id="u6ZMM0_" name="Sigle">
+      <segment>
+        <source>Sigle</source>
+        <target>Sigle</target>
+      </segment>
+    </unit>
+    <unit id="4yW.j5A" name="Prénom">
+      <segment>
+        <source>Prénom</source>
+        <target>Prénom</target>
+      </segment>
+    </unit>
+    <unit id="ssEkU20" name="Nom">
+      <segment>
+        <source>Nom</source>
+        <target>Nom</target>
+      </segment>
+    </unit>
+    <unit id="xypKrkG" name="Email URCA">
+      <segment>
+        <source>Email URCA</source>
+        <target>Email URCA</target>
+      </segment>
+    </unit>
+    <unit id="H5vcfBh" name="register.labels.centreDemande">
+      <segment>
+        <source>register.labels.centreDemande</source>
+        <target>register.labels.centreDemande</target>
+      </segment>
+    </unit>
+    <unit id="nMBCXn_" name="Indiquez un centre de gestion">
+      <segment>
+        <source>Indiquez un centre de gestion</source>
+        <target>Indiquez un centre de gestion</target>
+      </segment>
+    </unit>
+    <unit id="7Su4UMO" name="Etablissement">
+      <segment>
+        <source>Etablissement</source>
+        <target>Etablissement</target>
+      </segment>
+    </unit>
+    <unit id="6dHgFvV" name="Composante">
+      <segment>
+        <source>Composante</source>
+        <target>Composante</target>
+      </segment>
+    </unit>
+    <unit id="SaY9cr4" name="Formation">
+      <segment>
+        <source>Formation</source>
+        <target>Formation</target>
+      </segment>
+    </unit>
+    <unit id="nWMiwfT" name="Login">
+      <segment>
+        <source>Login</source>
+        <target>Login</target>
+      </segment>
+    </unit>
+    <unit id="kBziTMq" name="Civilité">
+      <segment>
+        <source>Civilité</source>
+        <target>Civilité</target>
+      </segment>
+    </unit>
+    <unit id="5FLvsEA" name="Indiquez votre civilité">
+      <segment>
+        <source>Indiquez votre civilité</source>
+        <target>Indiquez votre civilité</target>
+      </segment>
+    </unit>
+    <unit id="0enz9GY" name="Monsieur">
+      <segment>
+        <source>Monsieur</source>
+        <target>Monsieur</target>
+      </segment>
+    </unit>
+    <unit id="CsFcabt" name="Madame">
+      <segment>
+        <source>Madame</source>
+        <target>Madame</target>
+      </segment>
+    </unit>
+    <unit id="szwn32b" name="Adresse email">
+      <segment>
+        <source>Adresse email</source>
+        <target>Adresse email</target>
+      </segment>
+    </unit>
+    <unit id="YP5oZIU" name="Téléphone fixe">
+      <segment>
+        <source>Téléphone fixe</source>
+        <target>Téléphone fixe</target>
+      </segment>
+    </unit>
+    <unit id="e..K3BS" name="Téléphone portable">
+      <segment>
+        <source>Téléphone portable</source>
+        <target>Téléphone portable</target>
+      </segment>
+    </unit>
+    <unit id="yz7L68e" name="Droits">
+      <segment>
+        <source>Droits</source>
+        <target>Droits</target>
+      </segment>
+    </unit>
+    <unit id="B9i.Q0j" name="Indiquez les droits accordés">
+      <segment>
+        <source>Indiquez les droits accordés</source>
+        <target>Indiquez les droits accordés</target>
+      </segment>
+    </unit>
+    <unit id="718iPw6" name="ROLE_ADMIN">
+      <segment>
+        <source>ROLE_ADMIN</source>
+        <target>ROLE_ADMIN</target>
+      </segment>
+    </unit>
+    <unit id="GDJcjzS" name="ROLE_VP">
+      <segment>
+        <source>ROLE_VP</source>
+        <target>ROLE_VP</target>
+      </segment>
+    </unit>
+    <unit id="ksLCU71" name="Responsable du parcours">
+      <segment>
+        <source>Responsable du parcours</source>
+        <target>Responsable du parcours</target>
+      </segment>
+    </unit>
+    <unit id="VKr.ld_" name="Numéro de l'UE">
+      <segment>
+        <source>Numéro de l'UE</source>
+        <target>Numéro de l'UE</target>
+      </segment>
+    </unit>
+    <unit id="xjKhmJg" name="ue.labels.typeUe">
+      <segment>
+        <source>ue.labels.typeUe</source>
+        <target>ue.labels.typeUe</target>
+      </segment>
+    </unit>
+    <unit id="njVRpdu" name="Type d'UE si non présent dans la liste">
+      <segment>
+        <source>Type d'UE si non présent dans la liste</source>
+        <target>Type d'UE si non présent dans la liste</target>
+      </segment>
+    </unit>
+    <unit id="A5nP3TI" name="ue.labels.ueObligatoire">
+      <segment>
+        <source>ue.labels.ueObligatoire</source>
+        <target>ue.labels.ueObligatoire</target>
+      </segment>
+    </unit>
+    <unit id="GalnDGn" name="Libellé du parcours">
+      <segment>
+        <source>Libellé du parcours</source>
+        <target>Libellé du parcours</target>
+      </segment>
+    </unit>
+    <unit id="Qk7TDVy" name="Disciplinaire">
+      <segment>
+        <source>Disciplinaire</source>
+        <target>Disciplinaire</target>
+      </segment>
+    </unit>
+    <unit id="O.MCFAt" name="Ouverture">
+      <segment>
+        <source>Ouverture</source>
+        <target>Ouverture</target>
+      </segment>
+    </unit>
+    <unit id="YPVmbdZ" name="TER – travail d’étude et de recherche">
+      <segment>
+        <source>TER – travail d’étude et de recherche</source>
+        <target>TER – travail d’étude et de recherche</target>
+      </segment>
+    </unit>
+    <unit id="hJ.PUUP" name="Libellé de l'EC">
+      <segment>
+        <source>Libellé de l'EC</source>
+        <target>Libellé de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="9Bhlmi4" name="form.labels.email">
+      <segment>
+        <source>form.labels.email</source>
+        <target>form.labels.email</target>
+      </segment>
+    </unit>
+    <unit id="ULrWMAO" name="user_add.labels.email">
+      <segment>
+        <source>user_add.labels.email</source>
+        <target>Indiquer l'email URCA du collègue à ajouter</target>
+      </segment>
+    </unit>
+    <unit id="0iWO2p3" name="form.labels.objectifsFormation">
+      <segment>
+        <source>form.labels.objectifsFormation</source>
+        <target>Description générale de la formation</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

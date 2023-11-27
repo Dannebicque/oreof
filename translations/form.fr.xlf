@@ -1,0 +1,2309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="fr" trgLang="fr">
+  <file id="form.fr">
+    <unit id="hoLb4O8" name="formation_step3.labels.semestreDebut">
+      <segment>
+        <source>formation_step3.labels.semestreDebut</source>
+        <target>Semestre de début de la formation</target>
+      </segment>
+    </unit>
+    <unit id="RW9.uKl" name="fiche_matiere_step1.labels.preciserMutualisation">
+      <segment>
+        <source>fiche_matiere_step1.labels.preciserMutualisation</source>
+        <target>Précisez les mutualisations</target>
+      </segment>
+    </unit>
+    <unit id="GalnDGn" name="Libellé du parcours">
+      <segment>
+        <source>Libellé du parcours</source>
+        <target>Libellé du parcours</target>
+      </segment>
+    </unit>
+    <unit id="ksLCU71" name="Responsable du parcours">
+      <segment>
+        <source>Responsable du parcours</source>
+        <target>Responsable du parcours</target>
+      </segment>
+    </unit>
+    <unit id="u6ZMM0_" name="Sigle">
+      <segment>
+        <source>Sigle</source>
+        <target>Sigle</target>
+      </segment>
+    </unit>
+    <unit id="waBJRiB" name="fiche_matiere_step1.labels.previserMutualisation">
+      <segment>
+        <source>fiche_matiere_step1.labels.previserMutualisation</source>
+        <target>Précisez les mutualisations</target>
+      </segment>
+    </unit>
+    <unit id="da59d8s" name="ue.labels.ordre">
+      <segment>
+        <source>ue.labels.ordre</source>
+        <target>Numéro de l'UE</target>
+      </segment>
+    </unit>
+    <unit id="xjKhmJg" name="ue.labels.typeUe">
+      <segment>
+        <source>ue.labels.typeUe</source>
+        <target>Type de l'UE</target>
+      </segment>
+    </unit>
+    <unit id="vmN7lzb" name="ue.labels.typeUeTexte">
+      <segment>
+        <source>ue.labels.typeUeTexte</source>
+        <target>Type de l'UE si non présent dans la liste</target>
+      </segment>
+    </unit>
+    <unit id="A5nP3TI" name="ue.labels.ueObligatoire">
+      <segment>
+        <source>ue.labels.ueObligatoire</source>
+        <target>Nature de l'UE</target>
+      </segment>
+    </unit>
+    <unit id="_Vi_Jgo" name="ue.labels.ueObligatoireTexte">
+      <segment>
+        <source>ue.labels.ueObligatoireTexte</source>
+        <target>Nature de l'UE si non présent dans la liste</target>
+      </segment>
+    </unit>
+    <unit id="cnDyv9g" name="parcours_step5.labels.composanteInscription.label">
+      <segment>
+        <source>parcours_step5.labels.composanteInscription.label</source>
+        <target>Régime(s) d'inscription</target>
+      </segment>
+    </unit>
+    <unit id="zf.EmgS" name="parcours_step5.labels.modalitesAlternance">
+      <segment>
+        <source>parcours_step5.labels.modalitesAlternance</source>
+        <target>Précisez les modalités de l'alternance</target>
+      </segment>
+    </unit>
+    <unit id="K1rNUEg" name="parcours_step5.labels.coordSecretariat">
+      <segment>
+        <source>parcours_step5.labels.coordSecretariat</source>
+        <target>Coordonnées du secrétariat pédagogique</target>
+      </segment>
+    </unit>
+    <unit id="n4bQgYh" name="test">
+      <segment>
+        <source>test</source>
+        <target>test</target>
+      </segment>
+    </unit>
+    <unit id="0MXAikH" name="element_constitutif.labels.libelle">
+      <segment>
+        <source>element_constitutif.labels.libelle</source>
+        <target>Libellé de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="gDiInyV" name="element_constitutif.labels.responsableEc">
+      <segment>
+        <source>element_constitutif.labels.responsableEc</source>
+        <target>element_constitutif.labels.responsableEc</target>
+      </segment>
+    </unit>
+    <unit id="Hm_yDxA" name="parcours_step2.labels.hasSituationPro.label">
+      <segment>
+        <source>parcours_step2.labels.hasSituationPro.label</source>
+        <target>La formation prévoit-elle une/des mise(s) en situation professionnelle ?</target>
+      </segment>
+    </unit>
+    <unit id="qzdnLu8" name="parcours_step2.labels.situationProText">
+      <segment>
+        <source>parcours_step2.labels.situationProText</source>
+        <target>Description de la/des mise(s) en situation professionnelle</target>
+      </segment>
+    </unit>
+    <unit id="zcKZN4h" name="but">
+      <segment>
+        <source>but</source>
+        <target>Bachelor Universitaire de Technologie</target>
+      </segment>
+    </unit>
+    <unit id="De2XkIB" name="licence_professionnelle">
+      <segment>
+        <source>licence_professionnelle</source>
+        <target>Licence professionnelle</target>
+      </segment>
+    </unit>
+    <unit id="gXiscrK" name="licence">
+      <segment>
+        <source>licence</source>
+        <target>Licence</target>
+      </segment>
+    </unit>
+    <unit id="Ho2Laq." name="master_meef">
+      <segment>
+        <source>master_meef</source>
+        <target>Master MEEF</target>
+      </segment>
+    </unit>
+    <unit id=".GE7Tf1" name="master">
+      <segment>
+        <source>master</source>
+        <target>Master</target>
+      </segment>
+    </unit>
+    <unit id="GfkPROA" name="Choisir la composante porteuse du projet">
+      <segment>
+        <source>Choisir la composante porteuse du projet</source>
+        <target>Choisissez la composante porteuse de la mention</target>
+      </segment>
+    </unit>
+    <unit id="nJO7gbN" name="Choisir une mention">
+      <segment>
+        <source>Choisir une mention</source>
+        <target>Choisissez une mention / spécialité</target>
+      </segment>
+    </unit>
+    <unit id="oMf.lYp" name="Autre mention">
+      <segment>
+        <source>Autre mention</source>
+        <target>Autre</target>
+      </segment>
+    </unit>
+    <unit id="fYCxP6T" name="Information non communiquée">
+      <segment>
+        <source>Information non communiquée</source>
+        <target>Information non communiquée</target>
+      </segment>
+    </unit>
+    <unit id="UJ8FT6Z" name="Sans niveau spécifique">
+      <segment>
+        <source>Sans niveau spécifique</source>
+        <target>Sans niveau spécifique</target>
+      </segment>
+    </unit>
+    <unit id="hewH4n_" name="niveau V (CAP, BEP, CFPA du premier degré)">
+      <segment>
+        <source>niveau V (CAP, BEP, CFPA du premier degré)</source>
+        <target>niveau V (CAP, BEP, CFPA du premier degré)</target>
+      </segment>
+    </unit>
+    <unit id="lZajqrC" name="niveau IV (BP, BT, baccalauréat professionnel ou technologique)">
+      <segment>
+        <source>niveau IV (BP, BT, baccalauréat professionnel ou technologique)</source>
+        <target>niveau IV (BP, BT, baccalauréat professionnel ou technologique)</target>
+      </segment>
+    </unit>
+    <unit id="1sx93eE" name="niveau III (BTS, DUT)">
+      <segment>
+        <source>niveau III (BTS, DUT)</source>
+        <target>niveau III (BTS, DUT)</target>
+      </segment>
+    </unit>
+    <unit id="xAZQ.37" name="niveau II (licence ou maîtrise universitaire)">
+      <segment>
+        <source>niveau II (licence ou maîtrise universitaire)</source>
+        <target>niveau II (licence ou maîtrise universitaire)</target>
+      </segment>
+    </unit>
+    <unit id="8xE.YHh" name="niveau I (supérieur à la maîtrise)">
+      <segment>
+        <source>niveau I (supérieur à la maîtrise)</source>
+        <target>niveau I (supérieur à la maîtrise)</target>
+      </segment>
+    </unit>
+    <unit id="CpBAdjn" name="Oui">
+      <segment>
+        <source>Oui</source>
+        <target>Oui</target>
+      </segment>
+    </unit>
+    <unit id="f2JJawy" name="Non">
+      <segment>
+        <source>Non</source>
+        <target>Non</target>
+      </segment>
+    </unit>
+    <unit id="jP510Da" name="formation_ses.labels.typeDiplome">
+      <segment>
+        <source>formation_ses.labels.typeDiplome</source>
+        <target>Type de diplôme</target>
+      </segment>
+    </unit>
+    <unit id="KG99N8A" name="formation_ses.labels.domaine">
+      <segment>
+        <source>formation_ses.labels.domaine</source>
+        <target>Domaine de formation</target>
+      </segment>
+    </unit>
+    <unit id="DzwCvdw" name="formation_ses.labels.mention">
+      <segment>
+        <source>formation_ses.labels.mention</source>
+        <target>Mention  / Spécialité</target>
+      </segment>
+    </unit>
+    <unit id="4ARYyjk" name="formation_ses.labels.composantePorteuse">
+      <segment>
+        <source>formation_ses.labels.composantePorteuse</source>
+        <target>Composante porteuse de la formation</target>
+      </segment>
+    </unit>
+    <unit id="SOqHZsI" name="formation_ses.labels.mentionTexte">
+      <segment>
+        <source>formation_ses.labels.mentionTexte</source>
+        <target>Autre mention/spécialité</target>
+      </segment>
+    </unit>
+    <unit id="hRB6vmv" name="formation_ses.labels.niveauEntree">
+      <segment>
+        <source>formation_ses.labels.niveauEntree</source>
+        <target>Niveau d'entrée en formation</target>
+      </segment>
+    </unit>
+    <unit id="l8KzzfR" name="formation_ses.labels.codeRNCP">
+      <segment>
+        <source>formation_ses.labels.codeRNCP</source>
+        <target>Code RNCP</target>
+      </segment>
+    </unit>
+    <unit id="TLLIJ2k" name="formation_ses.labels.niveauSortie">
+      <segment>
+        <source>formation_ses.labels.niveauSortie</source>
+        <target>Niveau de sortie de la formation</target>
+      </segment>
+    </unit>
+    <unit id="iQURUSE" name="formation_ses.labels.inRncp.label">
+      <segment>
+        <source>formation_ses.labels.inRncp.label</source>
+        <target>La formation est-elle inscrite au RNCP ?</target>
+      </segment>
+    </unit>
+    <unit id="b3jIdZD" name="formation_ses.labels.responsableMention">
+      <segment>
+        <source>formation_ses.labels.responsableMention</source>
+        <target>Responsable de la formation</target>
+      </segment>
+    </unit>
+    <unit id="hVfgK1K" name="formation_step1.labels.localisationMention.label">
+      <segment>
+        <source>formation_step1.labels.localisationMention.label</source>
+        <target>Localisation(s) de la formation</target>
+      </segment>
+    </unit>
+    <unit id="GfPnOb3" name="formation_step1.labels.composantesInscription.label">
+      <segment>
+        <source>formation_step1.labels.composantesInscription.label</source>
+        <target>Composante(s) d'inscription</target>
+      </segment>
+    </unit>
+    <unit id="oAO2G2g" name="formation_step1.labels.regimeInscription.label">
+      <segment>
+        <source>formation_step1.labels.regimeInscription.label</source>
+        <target>Régime(s) d'inscription</target>
+      </segment>
+    </unit>
+    <unit id="Nhu4gvc" name="formation_step1.labels.modalitesAlternance">
+      <segment>
+        <source>formation_step1.labels.modalitesAlternance</source>
+        <target>Précisez les modalités de l'alternance</target>
+      </segment>
+    </unit>
+    <unit id="_IxkCFm" name="fiche_matiere_step1.labels.responsableEc">
+      <segment>
+        <source>fiche_matiere_step1.labels.responsableEc</source>
+        <target>Responsable de l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="x8fw0v6" name="fiche_matiere_step2.labels.description">
+      <segment>
+        <source>fiche_matiere_step2.labels.description</source>
+        <target>Description de l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="FVqz9B6" name="fiche_matiere_step2.labels.langueDispense.label">
+      <segment>
+        <source>fiche_matiere_step2.labels.langueDispense.label</source>
+        <target>Enseignement dispensé en :</target>
+      </segment>
+    </unit>
+    <unit id="v47m7_V" name="fiche_matiere_step2.labels.langueSupport.label">
+      <segment>
+        <source>fiche_matiere_step2.labels.langueSupport.label</source>
+        <target>Support de cours en :</target>
+      </segment>
+    </unit>
+    <unit id="ngJ20r2" name="fiche_matiere_step3.labels.objectifs">
+      <segment>
+        <source>fiche_matiere_step3.labels.objectifs</source>
+        <target>Objectifs de l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id=".PjL3mn" name="ec_step4.labels.modaliteEnseignement.label">
+      <segment>
+        <source>ec_step4.labels.modaliteEnseignement.label</source>
+        <target>Modalité(s) d'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="Z3LskOx" name="ec_step4.labels.ects">
+      <segment>
+        <source>ec_step4.labels.ects</source>
+        <target>Nombre d’ECTS</target>
+      </segment>
+    </unit>
+    <unit id="Kt2iKKV" name="ec_step4.labels.volumeCmPresentiel">
+      <segment>
+        <source>ec_step4.labels.volumeCmPresentiel</source>
+        <target>Volume horaire CM présentiel</target>
+      </segment>
+    </unit>
+    <unit id="j9OcuJJ" name="ec_step4.labels.volumeTdPresentiel">
+      <segment>
+        <source>ec_step4.labels.volumeTdPresentiel</source>
+        <target>Volume horaire TD présentiel</target>
+      </segment>
+    </unit>
+    <unit id="Oi._DWu" name="ec_step4.labels.volumeTpPresentiel">
+      <segment>
+        <source>ec_step4.labels.volumeTpPresentiel</source>
+        <target>Volume horaire TP présentiel</target>
+      </segment>
+    </unit>
+    <unit id="s5cicCm" name="ec_step4.labels.volumeCmDistanciel">
+      <segment>
+        <source>ec_step4.labels.volumeCmDistanciel</source>
+        <target>Volume horaire CM distanciel</target>
+      </segment>
+    </unit>
+    <unit id="cDhRznU" name="ec_step4.labels.volumeTdDistanciel">
+      <segment>
+        <source>ec_step4.labels.volumeTdDistanciel</source>
+        <target>Volume horaire TD distanciel</target>
+      </segment>
+    </unit>
+    <unit id="dpVRqnc" name="ec_step4.labels.volumeTpDistanciel">
+      <segment>
+        <source>ec_step4.labels.volumeTpDistanciel</source>
+        <target>Volume horaire TP distanciel</target>
+      </segment>
+    </unit>
+    <unit id="g2oPkAD" name="En présentiel">
+      <segment>
+        <source>En présentiel</source>
+        <target>En présentiel</target>
+      </segment>
+    </unit>
+    <unit id="Rv2Utp1" name="En distanciel">
+      <segment>
+        <source>En distanciel</source>
+        <target>En distanciel</target>
+      </segment>
+    </unit>
+    <unit id="0_oqnXf" name="Hybride">
+      <segment>
+        <source>Hybride</source>
+        <target>Hybride</target>
+      </segment>
+    </unit>
+    <unit id="b4Nzh3o" name="Choisissez un rythme de formation ou complétez le champ ci-dessous">
+      <segment>
+        <source>Choisissez un rythme de formation ou complétez le champ ci-dessous</source>
+        <target>Choisissez un rythme de formation ou complétez le champ ci-dessous</target>
+      </segment>
+    </unit>
+    <unit id="8WMrqGD" name="Compléments sur le rythme de formation">
+      <segment>
+        <source>Compléments sur le rythme de formation</source>
+        <target>Si besoin, précisez le rythme de formation</target>
+      </segment>
+    </unit>
+    <unit id="uWMxMMF" name="formation_step2.labels.contenuFormation">
+      <segment>
+        <source>formation_step2.labels.contenuFormation</source>
+        <target>Contenu de la formation</target>
+      </segment>
+    </unit>
+    <unit id="dNaSosg" name="formation_step2.labels.resultatsAttendus">
+      <segment>
+        <source>formation_step2.labels.resultatsAttendus</source>
+        <target>Résultats attendus de la formation</target>
+      </segment>
+    </unit>
+    <unit id="IRG0WUo" name="formation_step2.labels.rythmeFormation">
+      <segment>
+        <source>formation_step2.labels.rythmeFormation</source>
+        <target>Rythme de la formation</target>
+      </segment>
+    </unit>
+    <unit id="hR1WIri" name="formation_step2.labels.rythmeFormationTexte">
+      <segment>
+        <source>formation_step2.labels.rythmeFormationTexte</source>
+        <target>Si besoin, précisez le rythme de formation</target>
+      </segment>
+    </unit>
+    <unit id="_trJsFq" name="parcours_step2.labels.modalitesEnseignement.label">
+      <segment>
+        <source>parcours_step2.labels.modalitesEnseignement.label</source>
+        <target>"</target>
+      </segment>
+    </unit>
+    <unit id="mziZQu8" name="parcours_step2.labels.hasStage.label">
+      <segment>
+        <source>parcours_step2.labels.hasStage.label</source>
+        <target>La formation prévoit-elle un/des stage(s) ?</target>
+      </segment>
+    </unit>
+    <unit id="Y5BoG2K" name="parcours_step2.labels.nbHeuresStages">
+      <segment>
+        <source>parcours_step2.labels.nbHeuresStages</source>
+        <target>Nombre d'heures de stage(s) prévu</target>
+      </segment>
+    </unit>
+    <unit id="z3pkkld" name="parcours_step2.labels.stageText">
+      <segment>
+        <source>parcours_step2.labels.stageText</source>
+        <target>Description du/des stage(s)</target>
+      </segment>
+    </unit>
+    <unit id="gmy39Mt" name="parcours_step2.labels.hasProjet.label">
+      <segment>
+        <source>parcours_step2.labels.hasProjet.label</source>
+        <target>La formation prévoit-elle un/des projet(s) tutoré(s) ?</target>
+      </segment>
+    </unit>
+    <unit id="kqeZU86" name="parcours_step2.labels.nbHeuresProjet">
+      <segment>
+        <source>parcours_step2.labels.nbHeuresProjet</source>
+        <target>Nombre d'heures de projet(s) tutoré(s) prévu</target>
+      </segment>
+    </unit>
+    <unit id="i0HPAn_" name="parcours_step2.labels.projetText">
+      <segment>
+        <source>parcours_step2.labels.projetText</source>
+        <target>Description du/des projet(s) tutoré(s)</target>
+      </segment>
+    </unit>
+    <unit id="1YelMF." name="parcours_step2.labels.hasMemoire.label">
+      <segment>
+        <source>parcours_step2.labels.hasMemoire.label</source>
+        <target>La formation prévoit-elle un TER/Mémoire de recherche ?</target>
+      </segment>
+    </unit>
+    <unit id="xlpzVKw" name="parcours_step2.labels.memoireText">
+      <segment>
+        <source>parcours_step2.labels.memoireText</source>
+        <target>Description TER/Mémoire</target>
+      </segment>
+    </unit>
+    <unit id="u9u9IYf" name="parcours_step5.labels.prerequis">
+      <segment>
+        <source>parcours_step5.labels.prerequis</source>
+        <target>Prérequis recommandés</target>
+      </segment>
+    </unit>
+    <unit id="BhDUiOe" name="parcours_step7.labels.poursuitesEtudes">
+      <segment>
+        <source>parcours_step7.labels.poursuitesEtudes</source>
+        <target>Poursuites d'études envisageables</target>
+      </segment>
+    </unit>
+    <unit id="M5917SV" name="parcours_step7.labels.debouches">
+      <segment>
+        <source>parcours_step7.labels.debouches</source>
+        <target>Débouchés</target>
+      </segment>
+    </unit>
+    <unit id="S7kNkKF" name="parcours_step8.labels.respParcours">
+      <segment>
+        <source>parcours_step8.labels.respParcours</source>
+        <target>Responsable du parcours</target>
+      </segment>
+    </unit>
+    <unit id="OmA_R2H" name="parcours_step8.labels.coordSecretariat">
+      <segment>
+        <source>parcours_step8.labels.coordSecretariat</source>
+        <target>Coordonnées du secrétariat</target>
+      </segment>
+    </unit>
+    <unit id="tt6Bv5a" name="parcours_step1.labels.contenuFormation">
+      <segment>
+        <source>parcours_step1.labels.contenuFormation</source>
+        <target>Contenu du parcours</target>
+      </segment>
+    </unit>
+    <unit id="Ao8RCHq" name="parcours_step1.labels.resultatsAttendus">
+      <segment>
+        <source>parcours_step1.labels.resultatsAttendus</source>
+        <target>Résultats attendus du parcours</target>
+      </segment>
+    </unit>
+    <unit id="JJazNYY" name="parcours_step1.labels.rythmeFormation">
+      <segment>
+        <source>parcours_step1.labels.rythmeFormation</source>
+        <target>Rythme de formation du parcours</target>
+      </segment>
+    </unit>
+    <unit id="vvmfC3W" name="parcours_step1.labels.rythmeFormationTexte">
+      <segment>
+        <source>parcours_step1.labels.rythmeFormationTexte</source>
+        <target>Si besoin, précisez le rythme de formation</target>
+      </segment>
+    </unit>
+    <unit id="Eep7gY3" name="parcours_step1.labels.localisation.label">
+      <segment>
+        <source>parcours_step1.labels.localisation.label</source>
+        <target>Localisation du parcours</target>
+      </segment>
+    </unit>
+    <unit id="3JN7WYk" name="None">
+      <segment>
+        <source>None</source>
+        <target>Aucun</target>
+      </segment>
+    </unit>
+    <unit id="tVZtFEr" name="Reims">
+      <segment>
+        <source>Reims</source>
+        <target>Reims</target>
+      </segment>
+    </unit>
+    <unit id="fjBKQ3R" name="competence.labels.libelle">
+      <segment>
+        <source>competence.labels.libelle</source>
+        <target>Libellé de la compétence</target>
+      </segment>
+    </unit>
+    <unit id="TKXBOih" name="bloc_competence.labels.libelle">
+      <segment>
+        <source>bloc_competence.labels.libelle</source>
+        <target>Libellé du bloc de compétences</target>
+      </segment>
+    </unit>
+    <unit id="_J209Pc" name="register.labels.prenom">
+      <segment>
+        <source>register.labels.prenom</source>
+        <target>Prénom</target>
+      </segment>
+    </unit>
+    <unit id="Hm1M5tG" name="register.labels.nom">
+      <segment>
+        <source>register.labels.nom</source>
+        <target>Nom</target>
+      </segment>
+    </unit>
+    <unit id="PPY55dU" name="register.labels.email">
+      <segment>
+        <source>register.labels.email</source>
+        <target>Email URCA</target>
+      </segment>
+    </unit>
+    <unit id="H5vcfBh" name="register.labels.centreDemande">
+      <segment>
+        <source>register.labels.centreDemande</source>
+        <target>Centre demandé</target>
+      </segment>
+    </unit>
+    <unit id="nMBCXn_" name="Indiquez un centre de gestion">
+      <segment>
+        <source>Indiquez un centre de gestion</source>
+        <target>Indiquez un centre de gestion</target>
+      </segment>
+    </unit>
+    <unit id="7Su4UMO" name="Etablissement">
+      <segment>
+        <source>Etablissement</source>
+        <target>Etablissement</target>
+      </segment>
+    </unit>
+    <unit id="6dHgFvV" name="Composante">
+      <segment>
+        <source>Composante</source>
+        <target>Composante</target>
+      </segment>
+    </unit>
+    <unit id="SaY9cr4" name="Formation">
+      <segment>
+        <source>Formation</source>
+        <target>Formation</target>
+      </segment>
+    </unit>
+    <unit id="deoB6pB" name="Etbalissement">
+      <segment>
+        <source>Etbalissement</source>
+        <target>Etablissement</target>
+      </segment>
+    </unit>
+    <unit id="5VEzQ_o" name="deust">
+      <segment>
+        <source>deust</source>
+        <target>deust</target>
+      </segment>
+    </unit>
+    <unit id="aJFdWhs" name="FI">
+      <segment>
+        <source>FI</source>
+        <target>Formation initiale</target>
+      </segment>
+    </unit>
+    <unit id="8aW4.6K" name="FI_APPRENTISSAGE">
+      <segment>
+        <source>FI_APPRENTISSAGE</source>
+        <target>Formation initiale en apprentissage</target>
+      </segment>
+    </unit>
+    <unit id="tHd8zBc" name="FC">
+      <segment>
+        <source>FC</source>
+        <target>Formation continue</target>
+      </segment>
+    </unit>
+    <unit id="qPNR5oP" name="FC_CONTRAT_PRO">
+      <segment>
+        <source>FC_CONTRAT_PRO</source>
+        <target>Formation continue en contrat de professionnalisation</target>
+      </segment>
+    </unit>
+    <unit id="fpHghg1" name="formation_step2.labels.objectifsFormation">
+      <segment>
+        <source>formation_step2.labels.objectifsFormation</source>
+        <target>Objectif de la formation</target>
+      </segment>
+    </unit>
+    <unit id="zuzFgsz" name="parcours_step1.labels.objectifsParcours">
+      <segment>
+        <source>parcours_step1.labels.objectifsParcours</source>
+        <target>Objectif du parcours</target>
+      </segment>
+    </unit>
+    <unit id="XehQJtK" name="Troyes">
+      <segment>
+        <source>Troyes</source>
+        <target>Troyes</target>
+      </segment>
+    </unit>
+    <unit id="0kmgSab" name="parcours_step2.labels.nbHeuresSituationPro">
+      <segment>
+        <source>parcours_step2.labels.nbHeuresSituationPro</source>
+        <target>Nombre d'heures de mise en situation professionnelle prévu</target>
+      </segment>
+    </unit>
+    <unit id="2YBbjRo" name="formation_step3.labels.hasParcours">
+      <segment>
+        <source>formation_step3.labels.hasParcours</source>
+        <target>La formation propose-t-elle un(des) parcours ?</target>
+      </segment>
+    </unit>
+    <unit id="9Yhc5l0" name="formation_step3.labels.libelleParcours">
+      <segment>
+        <source>formation_step3.labels.libelleParcours</source>
+        <target>Précisez le libellé de chaque parcours</target>
+      </segment>
+    </unit>
+    <unit id="JwhuL2B" name="formation_step3.labels.structureFormation">
+      <segment>
+        <source>formation_step3.labels.structureFormation</source>
+        <target>Structure de la formation</target>
+      </segment>
+    </unit>
+    <unit id="svyBGaV" name="fiche_matiere_step3.labels.competence">
+      <segment>
+        <source>fiche_matiere_step3.labels.competence</source>
+        <target>Compétences travaillées dans l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="2CDY3nD" name="Mention">
+      <segment>
+        <source>Mention</source>
+        <target>Mention</target>
+      </segment>
+    </unit>
+    <unit id="63LhaDu" name="Autre">
+      <segment>
+        <source>Autre</source>
+        <target>Autre</target>
+      </segment>
+    </unit>
+    <unit id="ph4svr." name="Châlons en Champagne">
+      <segment>
+        <source>Châlons en Champagne</source>
+        <target>Châlons en Champagne</target>
+      </segment>
+    </unit>
+    <unit id="FKiCnGI" name="Composante d'inscription">
+      <segment>
+        <source>Composante d'inscription</source>
+        <target>Composante d'inscription</target>
+      </segment>
+    </unit>
+    <unit id="GHM131Y" name="Modalités de l'alternance">
+      <segment>
+        <source>Modalités de l'alternance</source>
+        <target>Modalités de l'alternance</target>
+      </segment>
+    </unit>
+    <unit id="X_zrZv." name="0">
+      <segment>
+        <source>0</source>
+        <target>0</target>
+      </segment>
+    </unit>
+    <unit id="a4ayc.8" name="1">
+      <segment>
+        <source>1</source>
+        <target>1</target>
+      </segment>
+    </unit>
+    <unit id="1HNeOiZ" name="2">
+      <segment>
+        <source>2</source>
+        <target>2</target>
+      </segment>
+    </unit>
+    <unit id="TgdAhWK" name="3">
+      <segment>
+        <source>3</source>
+        <target>3</target>
+      </segment>
+    </unit>
+    <unit id="SyJ3d9T" name="4">
+      <segment>
+        <source>4</source>
+        <target>4</target>
+      </segment>
+    </unit>
+    <unit id="7y0SfeN" name="5">
+      <segment>
+        <source>5</source>
+        <target>5</target>
+      </segment>
+    </unit>
+    <unit id="5.bAEXd" name="6">
+      <segment>
+        <source>6</source>
+        <target>6</target>
+      </segment>
+    </unit>
+    <unit id="eQJpm_Q" name="7">
+      <segment>
+        <source>7</source>
+        <target>7</target>
+      </segment>
+    </unit>
+    <unit id="mlJ9XTw" name="formation_step3.labels.semestreDebut.option.vide">
+      <segment>
+        <source>formation_step3.labels.semestreDebut.option.vide</source>
+        <target>-</target>
+      </segment>
+    </unit>
+    <unit id="HaAjq2B" name="parcours_step1.labels.localisation">
+      <segment>
+        <source>parcours_step1.labels.localisation</source>
+        <target>Localisation du parcours</target>
+      </segment>
+    </unit>
+    <unit id="AwOIJfJ" name="Choisissez une ville">
+      <segment>
+        <source>Choisissez une ville</source>
+        <target>-</target>
+      </segment>
+    </unit>
+    <unit id="ot3Xk3L" name="Veuillez choisir la localisation du parcours">
+      <segment>
+        <source>Veuillez choisir la localisation du parcours</source>
+        <target>-</target>
+      </segment>
+    </unit>
+    <unit id="t2G7g9X" name="parcours_step2.labels.modalitesEnseignement">
+      <segment>
+        <source>parcours_step2.labels.modalitesEnseignement</source>
+        <target>Précisez les modalités d'enseignement de la formation</target>
+      </segment>
+    </unit>
+    <unit id="tMpLWeG" name="Choisissez une modalité d'enseignement">
+      <segment>
+        <source>Choisissez une modalité d'enseignement</source>
+        <target>-</target>
+      </segment>
+    </unit>
+    <unit id="VYpGpFA" name="parcours_step5.labels.composanteInscription">
+      <segment>
+        <source>parcours_step5.labels.composanteInscription</source>
+        <target>Composante d'inscription</target>
+      </segment>
+    </unit>
+    <unit id="apvm7_." name="Choisissez une composante d'inscription">
+      <segment>
+        <source>Choisissez une composante d'inscription</source>
+        <target>-</target>
+      </segment>
+    </unit>
+    <unit id="2TP0I2Q" name="parcours_step7.labels.codeRome">
+      <segment>
+        <source>parcours_step7.labels.codeRome</source>
+        <target>Code(s) ROME</target>
+      </segment>
+    </unit>
+    <unit id="m3hjWzO" name="Choisir une modalité">
+      <segment>
+        <source>Choisir une modalité</source>
+        <target>Choisir une modalité</target>
+      </segment>
+    </unit>
+    <unit id="uCD8QM1" name="fiche_matiere_step2.labels.typeEnseignement">
+      <segment>
+        <source>fiche_matiere_step2.labels.typeEnseignement</source>
+        <target>Précisez la nature de l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="0R70RjX" name="Choisissez un type d'enseignement">
+      <segment>
+        <source>Choisissez un type d'enseignement</source>
+        <target>-</target>
+      </segment>
+    </unit>
+    <unit id="215mSPV" name="fiche_matiere_step3.alerte.no_bcc">
+      <segment>
+        <source>fiche_matiere_step3.alerte.no_bcc</source>
+        <target>fiche_matiere_step3.alerte.no_bcc</target>
+      </segment>
+    </unit>
+    <unit id="pyRDC8A" name="parcours.labels.libelle">
+      <segment>
+        <source>parcours.labels.libelle</source>
+        <target>Libellé du parcours</target>
+      </segment>
+    </unit>
+    <unit id="GckdKkG" name="parcours.labels.respParcours">
+      <segment>
+        <source>parcours.labels.respParcours</source>
+        <target>Responsable du parcours</target>
+      </segment>
+    </unit>
+    <unit id="8BDQFW4" name="parcours.labels.sigle">
+      <segment>
+        <source>parcours.labels.sigle</source>
+        <target>Sigle du parcours</target>
+      </segment>
+    </unit>
+    <unit id="QewBIWW" name="Mise en situation professionnelle">
+      <segment>
+        <source>Mise en situation professionnelle</source>
+        <target>Mise en situation professionnelle</target>
+      </segment>
+    </unit>
+    <unit id="45zKirQ" name="Renforcement">
+      <segment>
+        <source>Renforcement</source>
+        <target>Renforcement</target>
+      </segment>
+    </unit>
+    <unit id="3oOIVeS" name="Stage">
+      <segment>
+        <source>Stage</source>
+        <target>Stage</target>
+      </segment>
+    </unit>
+    <unit id="Qk7TDVy" name="Disciplinaire">
+      <segment>
+        <source>Disciplinaire</source>
+        <target>Disciplinaire</target>
+      </segment>
+    </unit>
+    <unit id="kMMKvO6" name="Mémoire">
+      <segment>
+        <source>Mémoire</source>
+        <target>Mémoire</target>
+      </segment>
+    </unit>
+    <unit id="pAvVYaB" name="Outils et Langages (transversale)">
+      <segment>
+        <source>Outils et Langages (transversale)</source>
+        <target>Outils et Langages (transversale)</target>
+      </segment>
+    </unit>
+    <unit id="O.MCFAt" name="Ouverture">
+      <segment>
+        <source>Ouverture</source>
+        <target>Ouverture</target>
+      </segment>
+    </unit>
+    <unit id="YPVmbdZ" name="TER – travail d’étude et de recherche">
+      <segment>
+        <source>TER – travail d’étude et de recherche</source>
+        <target>TER (travail d’étude et de recherche)</target>
+      </segment>
+    </unit>
+    <unit id="zVuDKsX" name="Libellé">
+      <segment>
+        <source>Libellé</source>
+        <target>Libellé</target>
+      </segment>
+    </unit>
+    <unit id="rwpYeFr" name="mention.labels.domaine">
+      <segment>
+        <source>mention.labels.domaine</source>
+        <target>Domaine de formation</target>
+      </segment>
+    </unit>
+    <unit id="6sMojV7" name="type_enseignement.labels.libelle">
+      <segment>
+        <source>type_enseignement.labels.libelle</source>
+        <target>type_enseignement.labels.libelle</target>
+      </segment>
+    </unit>
+    <unit id="MMcpJcG" name="Directeur de composante">
+      <segment>
+        <source>Directeur de composante</source>
+        <target>Directeur de composante</target>
+      </segment>
+    </unit>
+    <unit id="1llkQ.F" name="Choisir dans la liste ou choisir &quot;+&quot; pour ajouter un nouveau directeur">
+      <segment>
+        <source>Choisir dans la liste ou choisir "+" pour ajouter un nouveau directeur</source>
+        <target>Choisir dans la liste ou choisir "+" pour ajouter un nouveau directeur</target>
+      </segment>
+    </unit>
+    <unit id="RhwwRdW" name="Responsable &quot;DPE&quot; de la composante">
+      <segment>
+        <source>Responsable "DPE" de la composante</source>
+        <target>Responsable DPE de la composante</target>
+      </segment>
+    </unit>
+    <unit id="yBfVC3d" name="Choisir dans la liste ou choisir &quot;+&quot; pour ajouter un nouveau responsable">
+      <segment>
+        <source>Choisir dans la liste ou choisir "+" pour ajouter un nouveau responsable</source>
+        <target>Choisir dans la liste ou choisir "+" pour ajouter un nouveau responsable</target>
+      </segment>
+    </unit>
+    <unit id="GmygC6U" name="Adresse du site principal de la composante">
+      <segment>
+        <source>Adresse du site principal de la composante</source>
+        <target>Adresse du site principal de la composante</target>
+      </segment>
+    </unit>
+    <unit id="eeXPIN4" name="Adresse">
+      <segment>
+        <source>Adresse</source>
+        <target>Adresse</target>
+      </segment>
+    </unit>
+    <unit id="tqqrTi3" name="Complément d'adresse">
+      <segment>
+        <source>Complément d'adresse</source>
+        <target>Complément d'adresse</target>
+      </segment>
+    </unit>
+    <unit id="vnBxYSs" name="Code postal">
+      <segment>
+        <source>Code postal</source>
+        <target>Code postal</target>
+      </segment>
+    </unit>
+    <unit id="Dr0lo0H" name="Ville">
+      <segment>
+        <source>Ville</source>
+        <target>Ville</target>
+      </segment>
+    </unit>
+    <unit id="6ns6ZDB" name="Téléphone standard de la composante">
+      <segment>
+        <source>Téléphone standard de la composante</source>
+        <target>Téléphone de l'accueil de la composante</target>
+      </segment>
+    </unit>
+    <unit id="aqRI5Ym" name="Autre téléphone de la composante">
+      <segment>
+        <source>Autre téléphone de la composante</source>
+        <target>Autre téléphone de la composante</target>
+      </segment>
+    </unit>
+    <unit id="_5FEXsm" name="Adresse mail de contact de la composante">
+      <segment>
+        <source>Adresse mail de contact de la composante</source>
+        <target>Adresse mail de contact de la composante</target>
+      </segment>
+    </unit>
+    <unit id="Krs.W3m" name="URL du site de la composante">
+      <segment>
+        <source>URL du site de la composante</source>
+        <target>Site internet de la composante</target>
+      </segment>
+    </unit>
+    <unit id="HE.vXQk" name="type_diplome.labels.libelle">
+      <segment>
+        <source>type_diplome.labels.libelle</source>
+        <target>Libellé long</target>
+      </segment>
+    </unit>
+    <unit id="ltuWs21" name="type_diplome.labels.libelle_court">
+      <segment>
+        <source>type_diplome.labels.libelle_court</source>
+        <target>Libellé court</target>
+      </segment>
+    </unit>
+    <unit id="YYF6blJ" name="type_diplome.labels.semestreDebut">
+      <segment>
+        <source>type_diplome.labels.semestreDebut</source>
+        <target>N° du semestre de début de formation</target>
+      </segment>
+    </unit>
+    <unit id="c4dS3Iz" name="type_diplome.labels.semestreFin">
+      <segment>
+        <source>type_diplome.labels.semestreFin</source>
+        <target>N° du semestre de fin de formation</target>
+      </segment>
+    </unit>
+    <unit id="8K_30R5" name="type_diplome.labels.nbUeMin">
+      <segment>
+        <source>type_diplome.labels.nbUeMin</source>
+        <target>Nombre minimum d'UE par semestre</target>
+      </segment>
+    </unit>
+    <unit id="bRKX0qu" name="type_diplome.labels.nbUeMax">
+      <segment>
+        <source>type_diplome.labels.nbUeMax</source>
+        <target>Nombre maximum d'UE par semestre</target>
+      </segment>
+    </unit>
+    <unit id="77CqYIY" name="type_diplome.labels.nbEctsMaxUe">
+      <segment>
+        <source>type_diplome.labels.nbEctsMaxUe</source>
+        <target>Nombre maximum d'ECTS par UE</target>
+      </segment>
+    </unit>
+    <unit id="xCBdU5x" name="type_diplome.labels.ModeleMcc">
+      <segment>
+        <source>type_diplome.labels.ModeleMcc</source>
+        <target>Modèle de MCC prédéfini</target>
+      </segment>
+    </unit>
+    <unit id="YG6l79p" name="type_diplome.labels.debutSemestreFlexible">
+      <segment>
+        <source>type_diplome.labels.debutSemestreFlexible</source>
+        <target>Le semestre de début de formation est flexible</target>
+      </segment>
+    </unit>
+    <unit id="KIdY9bY" name="type_diplome.labels.hasMemoire">
+      <segment>
+        <source>type_diplome.labels.hasMemoire</source>
+        <target>Le diplôme prévoit un/des mémoire(s)/TER</target>
+      </segment>
+    </unit>
+    <unit id="UoVGDQD" name="type_diplome.labels.hasStage">
+      <segment>
+        <source>type_diplome.labels.hasStage</source>
+        <target>Le diplôme prévoit un/des stage(s)</target>
+      </segment>
+    </unit>
+    <unit id="0fINogY" name="type_diplome.labels.hasSituationPro">
+      <segment>
+        <source>type_diplome.labels.hasSituationPro</source>
+        <target>Le diplôme prévoit de la mise en situation professionnelle</target>
+      </segment>
+    </unit>
+    <unit id="XdXPN8r" name="type_diplome.labels.hasProjet">
+      <segment>
+        <source>type_diplome.labels.hasProjet</source>
+        <target>Le diplôme prévoit un/des projet tutoré(s)</target>
+      </segment>
+    </unit>
+    <unit id="d3Xa370" name="Type de diplôme">
+      <segment>
+        <source>Type de diplôme</source>
+        <target>Type de diplôme</target>
+      </segment>
+    </unit>
+    <unit id="_3E3s5R" name="nature_ue_ec.labels.libelle">
+      <segment>
+        <source>nature_ue_ec.labels.libelle</source>
+        <target>Libellé</target>
+      </segment>
+    </unit>
+    <unit id="pbvhPBh" name="nature_ue_ec.labels.choix.label">
+      <segment>
+        <source>nature_ue_ec.labels.choix.label</source>
+        <target>Précisez si l'élément est à choix :</target>
+      </segment>
+    </unit>
+    <unit id="S6ww5iS" name="Type(s) de diplôme proposant ce type d'EC">
+      <segment>
+        <source>Type(s) de diplôme proposant ce type d'EC</source>
+        <target>Type(s) de diplôme proposant ce type d'EC</target>
+      </segment>
+    </unit>
+    <unit id="D0hUlpo" name="Libellé de la ville">
+      <segment>
+        <source>Libellé de la ville</source>
+        <target>Libellé de la ville</target>
+      </segment>
+    </unit>
+    <unit id="9q2dZwf" name="etablissement.labels.libelle">
+      <segment>
+        <source>etablissement.labels.libelle</source>
+        <target>Libellé</target>
+      </segment>
+    </unit>
+    <unit id="FjF33pO" name="Adresse du siège de l'établissement">
+      <segment>
+        <source>Adresse du siège de l'établissement</source>
+        <target>Adresse du siège de l'établissement</target>
+      </segment>
+    </unit>
+    <unit id="s8I040t" name="Type(s) de diplôme proposant ce type d'UE">
+      <segment>
+        <source>Type(s) de diplôme proposant ce type d'UE</source>
+        <target>Type(s) de diplôme proposant ce type d'UE</target>
+      </segment>
+    </unit>
+    <unit id="y.dN3y2" name="Type(s) de diplôme proposant ce type d'épreuve">
+      <segment>
+        <source>Type(s) de diplôme proposant ce type d'épreuve</source>
+        <target>Type(s) de diplôme proposant ce type d'épreuve</target>
+      </segment>
+    </unit>
+    <unit id="szwn32b" name="Adresse email">
+      <segment>
+        <source>Adresse email</source>
+        <target>Adresse email</target>
+      </segment>
+    </unit>
+    <unit id="yz7L68e" name="Droits">
+      <segment>
+        <source>Droits</source>
+        <target>Rôle</target>
+      </segment>
+    </unit>
+    <unit id="718iPw6" name="ROLE_ADMIN">
+      <segment>
+        <source>ROLE_ADMIN</source>
+        <target>ROLE_ADMIN</target>
+      </segment>
+    </unit>
+    <unit id="GDJcjzS" name="ROLE_VP">
+      <segment>
+        <source>ROLE_VP</source>
+        <target>ROLE_VP</target>
+      </segment>
+    </unit>
+    <unit id="QRoctyy" name="user_ldap.labels.centreDemande">
+      <segment>
+        <source>user_ldap.labels.centreDemande</source>
+        <target>Centre de gestion</target>
+      </segment>
+    </unit>
+    <unit id="mMIsPps" name="Envoyer un email de conformation à l'utilisateur">
+      <segment>
+        <source>Envoyer un email de conformation à l'utilisateur</source>
+        <target>Envoyer un email de conformation à l'utilisateur</target>
+      </segment>
+    </unit>
+    <unit id="27TAU6p" name="role.labels.libelle">
+      <segment>
+        <source>role.labels.libelle</source>
+        <target>Libellé</target>
+      </segment>
+    </unit>
+    <unit id="dmkfjOU" name="role.labels.code_role">
+      <segment>
+        <source>role.labels.code_role</source>
+        <target>Sigle</target>
+      </segment>
+    </unit>
+    <unit id="AQKYxTl" name="role.labels.porte.label">
+      <segment>
+        <source>role.labels.porte.label</source>
+        <target>Périmètre du rôle</target>
+      </segment>
+    </unit>
+    <unit id="asl.55D" name="Tous les éléments">
+      <segment>
+        <source>Tous les éléments</source>
+        <target>Tous les éléments</target>
+      </segment>
+    </unit>
+    <unit id="CqFvFLn" name="Uniquement les éléments dont on a la propriété">
+      <segment>
+        <source>Uniquement les éléments dont on a la propriété</source>
+        <target>Uniquement les éléments dont l'utilisateur a la propriété</target>
+      </segment>
+    </unit>
+    <unit id="nWMiwfT" name="Login">
+      <segment>
+        <source>Login</source>
+        <target>Login</target>
+      </segment>
+    </unit>
+    <unit id="kBziTMq" name="Civilité">
+      <segment>
+        <source>Civilité</source>
+        <target>Civilité</target>
+      </segment>
+    </unit>
+    <unit id="5FLvsEA" name="Indiquez votre civilité">
+      <segment>
+        <source>Indiquez votre civilité</source>
+        <target>Indiquez la civilité</target>
+      </segment>
+    </unit>
+    <unit id="0enz9GY" name="Monsieur">
+      <segment>
+        <source>Monsieur</source>
+        <target>Monsieur</target>
+      </segment>
+    </unit>
+    <unit id="CsFcabt" name="Madame">
+      <segment>
+        <source>Madame</source>
+        <target>Madame</target>
+      </segment>
+    </unit>
+    <unit id="ssEkU20" name="Nom">
+      <segment>
+        <source>Nom</source>
+        <target>Nom</target>
+      </segment>
+    </unit>
+    <unit id="4yW.j5A" name="Prénom">
+      <segment>
+        <source>Prénom</source>
+        <target>Prénom</target>
+      </segment>
+    </unit>
+    <unit id="YP5oZIU" name="Téléphone fixe">
+      <segment>
+        <source>Téléphone fixe</source>
+        <target>Téléphone fixe</target>
+      </segment>
+    </unit>
+    <unit id="e..K3BS" name="Téléphone portable">
+      <segment>
+        <source>Téléphone portable</source>
+        <target>Téléphone portable</target>
+      </segment>
+    </unit>
+    <unit id="B9i.Q0j" name="Indiquez les droits accordés">
+      <segment>
+        <source>Indiquez les droits accordés</source>
+        <target>Indiquez le rôle accordé</target>
+      </segment>
+    </unit>
+    <unit id="0HPVV5k" name="Libellé Année Universitaire">
+      <segment>
+        <source>Libellé Année Universitaire</source>
+        <target>Année universitaire concernée par les projets de DPE</target>
+      </segment>
+    </unit>
+    <unit id="TIHhBg." name="Ex: 2019-2020">
+      <segment>
+        <source>Ex: 2019-2020</source>
+        <target>Ex: 2019-2020</target>
+      </segment>
+    </unit>
+    <unit id="VhQI.8p" name="Année">
+      <segment>
+        <source>Année</source>
+        <target>Année de collecte</target>
+      </segment>
+    </unit>
+    <unit id="05iynT2" name="2023">
+      <segment>
+        <source>2023</source>
+        <target>2023</target>
+      </segment>
+    </unit>
+    <unit id="ZVdzmmc" name="2024">
+      <segment>
+        <source>2024</source>
+        <target>2024</target>
+      </segment>
+    </unit>
+    <unit id="srLxBNM" name="2025">
+      <segment>
+        <source>2025</source>
+        <target>2025</target>
+      </segment>
+    </unit>
+    <unit id="FYoyOnu" name="2026">
+      <segment>
+        <source>2026</source>
+        <target>2026</target>
+      </segment>
+    </unit>
+    <unit id="UxPlvxc" name="2027">
+      <segment>
+        <source>2027</source>
+        <target>2027</target>
+      </segment>
+    </unit>
+    <unit id="aunk0ix" name="2028">
+      <segment>
+        <source>2028</source>
+        <target>2028</target>
+      </segment>
+    </unit>
+    <unit id="jw_X4UD" name="2029">
+      <segment>
+        <source>2029</source>
+        <target>2029</target>
+      </segment>
+    </unit>
+    <unit id="jh8ZL_J" name="2030">
+      <segment>
+        <source>2030</source>
+        <target>2030</target>
+      </segment>
+    </unit>
+    <unit id="YfJ8sz0" name="Campagne de collecte DPE active ?">
+      <segment>
+        <source>Campagne de collecte DPE active ?</source>
+        <target>La campagne de collecte des projets de DPE est-elle active ?</target>
+      </segment>
+    </unit>
+    <unit id="I6EiYWF" name="Date d'ouverture du DPE">
+      <segment>
+        <source>Date d'ouverture du DPE</source>
+        <target>Date d'ouverture de la campagne de collecte des projets de DPE</target>
+      </segment>
+    </unit>
+    <unit id="Jt6Ry0H" name="Date de clôture du DPE">
+      <segment>
+        <source>Date de clôture du DPE</source>
+        <target>Date de clôture de la campagne de collecte des projets de DPE</target>
+      </segment>
+    </unit>
+    <unit id="REfNjZ6" name="Date limite de transmission des dossiers">
+      <segment>
+        <source>Date limite de transmission des dossiers</source>
+        <target>Date limite de transmission des projets de DPE</target>
+      </segment>
+    </unit>
+    <unit id="g159Uk0" name="Date de la CFVU">
+      <segment>
+        <source>Date de la CFVU</source>
+        <target>Date prévue de passage des projets de DPE en CFVU</target>
+      </segment>
+    </unit>
+    <unit id="2.uDw7I" name="Date de publication">
+      <segment>
+        <source>Date de publication</source>
+        <target>Date de publication des DPE</target>
+      </segment>
+    </unit>
+    <unit id="3V_ojtK" name="Code ISO">
+      <segment>
+        <source>Code ISO</source>
+        <target>Code ISO</target>
+      </segment>
+    </unit>
+    <unit id="4iC1mBK" name="type_diplome.labels.nbEcParUe">
+      <segment>
+        <source>type_diplome.labels.nbEcParUe</source>
+        <target>Nombre maximum d'EC par UE</target>
+      </segment>
+    </unit>
+    <unit id="c.XCfJC" name="ue.labels.natureUeEc">
+      <segment>
+        <source>ue.labels.natureUeEc</source>
+        <target>Nature de l'UE</target>
+      </segment>
+    </unit>
+    <unit id="qztbyhK" name="ue.labels.natureUeEcTexte">
+      <segment>
+        <source>ue.labels.natureUeEcTexte</source>
+        <target>Nature de l'UE si non présente dans la liste</target>
+      </segment>
+    </unit>
+    <unit id="3v0Goar" name="parcours_step6.labels.poursuitesEtudes">
+      <segment>
+        <source>parcours_step6.labels.poursuitesEtudes</source>
+        <target>Poursuites d'études envisageables</target>
+      </segment>
+    </unit>
+    <unit id="JNDzGij" name="parcours_step6.labels.debouches">
+      <segment>
+        <source>parcours_step6.labels.debouches</source>
+        <target>Débouchés</target>
+      </segment>
+    </unit>
+    <unit id="fceQQ5b" name="parcours_step6.labels.codeRome">
+      <segment>
+        <source>parcours_step6.labels.codeRome</source>
+        <target>Code(s) ROME</target>
+      </segment>
+    </unit>
+    <unit id="eezKQfO" name="element_constitutif.labels.natureUeEc">
+      <segment>
+        <source>element_constitutif.labels.natureUeEc</source>
+        <target>Nature de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="acCQZdd" name="element_constitutif.labels.ficheMatiere">
+      <segment>
+        <source>element_constitutif.labels.ficheMatiere</source>
+        <target>element_constitutif.labels.ficheMatiere</target>
+      </segment>
+    </unit>
+    <unit id="5gJ8n4M" name="fiche_matiere.labels.libelle">
+      <segment>
+        <source>fiche_matiere.labels.libelle</source>
+        <target>Libellé de l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="S7oZnez" name="fiche_matiere.labels.responsableFicheMatiere">
+      <segment>
+        <source>fiche_matiere.labels.responsableFicheMatiere</source>
+        <target>Référent de l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="8mR8HuN" name="SES">
+      <segment>
+        <source>SES</source>
+        <target>SES</target>
+      </segment>
+    </unit>
+    <unit id="E_W1wSV" name="fiche_matiere_step1.labels.libelle">
+      <segment>
+        <source>fiche_matiere_step1.labels.libelle</source>
+        <target>Libellé de l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="4aYdep1" name="fiche_matiere_step1.labels.libelleAnglais">
+      <segment>
+        <source>fiche_matiere_step1.labels.libelleAnglais</source>
+        <target>Libellé de l'enseignement en anglais</target>
+      </segment>
+    </unit>
+    <unit id="jwBkAWF" name="fiche_matiere_step1.labels.enseignementMutualise.label">
+      <segment>
+        <source>fiche_matiere_step1.labels.enseignementMutualise.label</source>
+        <target>L'enseignement est-il mutualisé ?</target>
+      </segment>
+    </unit>
+    <unit id="n4Ibs_." name="fiche_matiere_step1.labels.isCmPresentielMutualise.label">
+      <segment>
+        <source>fiche_matiere_step1.labels.isCmPresentielMutualise.label</source>
+        <target>Les CM présentiels sont-ils mutualisés ?</target>
+      </segment>
+    </unit>
+    <unit id="Oa5Ea4p" name="fiche_matiere_step1.labels.isTdPresentielMutualise.label">
+      <segment>
+        <source>fiche_matiere_step1.labels.isTdPresentielMutualise.label</source>
+        <target>Les TD présentiels sont-ils mutualisés ?</target>
+      </segment>
+    </unit>
+    <unit id="nNZ4NUC" name="fiche_matiere_step1.labels.isTpPresentielMutualise.label">
+      <segment>
+        <source>fiche_matiere_step1.labels.isTpPresentielMutualise.label</source>
+        <target>Les TP présentiels sont-ils mutualisés ?</target>
+      </segment>
+    </unit>
+    <unit id="xFnSOxd" name="fiche_matiere_step1.labels.isCmDistancielMutualise.label">
+      <segment>
+        <source>fiche_matiere_step1.labels.isCmDistancielMutualise.label</source>
+        <target>Les CM distanciels sont-ils mutualisés ?</target>
+      </segment>
+    </unit>
+    <unit id="G72T_Uq" name="fiche_matiere_step1.labels.isTdDistancielMutualise.label">
+      <segment>
+        <source>fiche_matiere_step1.labels.isTdDistancielMutualise.label</source>
+        <target>Les TD distanciels sont-ils mutualisés ?</target>
+      </segment>
+    </unit>
+    <unit id="nAE6nHP" name="fiche_matiere_step1.labels.isTpDistancielMutualise.label">
+      <segment>
+        <source>fiche_matiere_step1.labels.isTpDistancielMutualise.label</source>
+        <target>Les TP distanciels sont-ils mutualisés ?</target>
+      </segment>
+    </unit>
+    <unit id="gvcuR.3" name="Choisissez une nature...">
+      <segment>
+        <source>Choisissez une nature...</source>
+        <target>Choisissez une nature...</target>
+      </segment>
+    </unit>
+    <unit id="XFhDBY." name="ec_manage.labels.fiche_matiere_label">
+      <segment>
+        <source>ec_manage.labels.fiche_matiere_label</source>
+        <target>ec_manage.labels.fiche_matiere_label</target>
+      </segment>
+    </unit>
+    <unit id=".TOp_Ky" name="ec_manage.labels.fiche_matiere_libelle_label">
+      <segment>
+        <source>ec_manage.labels.fiche_matiere_libelle_label</source>
+        <target>ec_manage.labels.fiche_matiere_libelle_label</target>
+      </segment>
+    </unit>
+    <unit id="69rDyL0" name="nature_ue_ec.labels.libre.label">
+      <segment>
+        <source>nature_ue_ec.labels.libre.label</source>
+        <target>Pour les éléments à choix, précisez si celui-ci est libre :</target>
+      </segment>
+    </unit>
+    <unit id="svxoiaA" name="ec_manage.labels.fiche_matiere_libelle_libre.label">
+      <segment>
+        <source>ec_manage.labels.fiche_matiere_libelle_libre.label</source>
+        <target>Décrivez les choix possibles pour cet EC</target>
+      </segment>
+    </unit>
+    <unit id="tu9ikF2" name="ec_manage.labels.fiche_matiere_multiple.label">
+      <segment>
+        <source>ec_manage.labels.fiche_matiere_multiple.label</source>
+        <target>Choisissez la fiche EC/matière à raccrocher à cet EC </target>
+      </segment>
+    </unit>
+    <unit id="elwkH9H" name="ec_manage.labels.fiche_matiere_libelle_multiple.label">
+      <segment>
+        <source>ec_manage.labels.fiche_matiere_libelle_multiple.label</source>
+        <target>Si non existant, précisez le libellé de la fiche EC/matière à raccrocher à cet EC</target>
+      </segment>
+    </unit>
+    <unit id="wCZxjV_" name="ec_manage.labels.fiche_matiere_unique.label">
+      <segment>
+        <source>ec_manage.labels.fiche_matiere_unique.label</source>
+        <target>Choisissez la fiche EC/matière à raccrocher à cet EC </target>
+      </segment>
+    </unit>
+    <unit id="z7zgsOT" name="ec_manage.labels.fiche_matiere_libelle_unique.label">
+      <segment>
+        <source>ec_manage.labels.fiche_matiere_libelle_unique.label</source>
+        <target>Si non existant, précisez le libellé de la fiche EC/matière  à raccrocher à cet EC </target>
+      </segment>
+    </unit>
+    <unit id="qb9hnBe" name="parcours_step5.labels.regimeInscription.label">
+      <segment>
+        <source>parcours_step5.labels.regimeInscription.label</source>
+        <target>Régime(s) d'inscription</target>
+      </segment>
+    </unit>
+    <unit id="0Rnb2HU" name="fiche_matiere_step1.labels.responsableFicheMatiere">
+      <segment>
+        <source>fiche_matiere_step1.labels.responsableFicheMatiere</source>
+        <target>Référent de l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="8RB1h8k" name="fiche_matiere.step1_collegue_manquant.title">
+      <segment>
+        <source>fiche_matiere.step1_collegue_manquant.title</source>
+        <target>Ajouter un utilisateur manquant</target>
+      </segment>
+    </unit>
+    <unit id="WnSLI3h" name="fiche_matiere.step1_collegue_manquant.label">
+      <segment>
+        <source>fiche_matiere.step1_collegue_manquant.label</source>
+        <target>Ajouter un utilisateur manquant</target>
+      </segment>
+    </unit>
+    <unit id="OHeP_F0" name="user.add_missing.email.label">
+      <segment>
+        <source>user.add_missing.email.label</source>
+        <target>Indiquer l'email URCA de l'utilisateur à ajouter</target>
+      </segment>
+    </unit>
+    <unit id="nXOlMyS" name="ue.labels.libelle">
+      <segment>
+        <source>ue.labels.libelle</source>
+        <target>Libellé de l'UE</target>
+      </segment>
+    </unit>
+    <unit id="LGJCMs3" name="8">
+      <segment>
+        <source>8</source>
+        <target>8</target>
+      </segment>
+    </unit>
+    <unit id="GVgeJ95" name="9">
+      <segment>
+        <source>9</source>
+        <target>9</target>
+      </segment>
+    </unit>
+    <unit id="SkTcFTZ" name="10">
+      <segment>
+        <source>10</source>
+        <target>10</target>
+      </segment>
+    </unit>
+    <unit id="HbokGKN" name="element_constitutif.labels.typeEc">
+      <segment>
+        <source>element_constitutif.labels.typeEc</source>
+        <target>Type de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="REchmUn" name="fiche_matiere.alerte.no_bcc">
+      <segment>
+        <source>fiche_matiere.alerte.no_bcc</source>
+        <target>fiche_matiere.alerte.no_bcc</target>
+      </segment>
+    </unit>
+    <unit id="C4XVMuy" name="element_constitutif.labels.typeEcTexte">
+      <segment>
+        <source>element_constitutif.labels.typeEcTexte</source>
+        <target>Type de l'EC si non présent dans la liste</target>
+      </segment>
+    </unit>
+    <unit id="tEuP3Z1" name="ec_step4.labels.modaliteEnseignement">
+      <segment>
+        <source>ec_step4.labels.modaliteEnseignement</source>
+        <target>Modalités d'enseignement de l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="mc0Tw_N" name="ROLE_SES">
+      <segment>
+        <source>ROLE_SES</source>
+        <target>ROLE_SES</target>
+      </segment>
+    </unit>
+    <unit id="Upn_m1d" name="semestre.type_semestre.label">
+      <segment>
+        <source>semestre.type_semestre.label</source>
+        <target>Le semestre est-il mutualisé ?</target>
+      </segment>
+    </unit>
+    <unit id="PpVT_JC" name="semestre.choix.semestre_standard.label">
+      <segment>
+        <source>semestre.choix.semestre_standard.label</source>
+        <target>Semestre standard</target>
+      </segment>
+    </unit>
+    <unit id="Ntke5Vq" name="semestre.choix.semestre_mutualise.label">
+      <segment>
+        <source>semestre.choix.semestre_mutualise.label</source>
+        <target>Mutualiser un semestre</target>
+      </segment>
+    </unit>
+    <unit id="jf2NQyc" name="semestre.choix.semestre_reutilise.label">
+      <segment>
+        <source>semestre.choix.semestre_reutilise.label</source>
+        <target>Raccrocher un semestre mutualisé</target>
+      </segment>
+    </unit>
+    <unit id="Q5dIWB2" name="element_constitutif_edit.labels.libelle">
+      <segment>
+        <source>element_constitutif_edit.labels.libelle</source>
+        <target>Libellé de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="bSJ2jKs" name="element_constitutif_edit.labels.typeEc">
+      <segment>
+        <source>element_constitutif_edit.labels.typeEc</source>
+        <target>Type de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="jBpaKgy" name="element_constitutif_edit.labels.typeEcTexte">
+      <segment>
+        <source>element_constitutif_edit.labels.typeEcTexte</source>
+        <target>Type d'EC si non présent dans la liste</target>
+      </segment>
+    </unit>
+    <unit id="Lm13WRf" name="semestre.reutilise.label">
+      <segment>
+        <source>semestre.reutilise.label</source>
+        <target>Précisez le semestre à raccrocher</target>
+      </segment>
+    </unit>
+    <unit id="t40EQqR" name="semestre.raccrocher.label">
+      <segment>
+        <source>semestre.raccrocher.label</source>
+        <target>Précisez le semestre à raccrocher</target>
+      </segment>
+    </unit>
+    <unit id="sRpz9Xw" name="semestre.raccrocher.bouton">
+      <segment>
+        <source>semestre.raccrocher.bouton</source>
+        <target>Raccrocher</target>
+      </segment>
+    </unit>
+    <unit id=".nrl704" name="semestre.mutualiser.label">
+      <segment>
+        <source>semestre.mutualiser.label</source>
+        <target>Précisez les mutualisations</target>
+      </segment>
+    </unit>
+    <unit id="mWSXmAN" name="ue.mutualiser.label">
+      <segment>
+        <source>ue.mutualiser.label</source>
+        <target>Précisez les mutualisations</target>
+      </segment>
+    </unit>
+    <unit id="WdVdwSP" name="ue.raccrocher.label">
+      <segment>
+        <source>ue.raccrocher.label</source>
+        <target>Précisez l'UE à raccrocher</target>
+      </segment>
+    </unit>
+    <unit id="208PMhs" name="ue.raccrocher.bouton">
+      <segment>
+        <source>ue.raccrocher.bouton</source>
+        <target>Raccrocher</target>
+      </segment>
+    </unit>
+    <unit id="p7yFDNf" name="ec_manage.labels.fiche_matieres_libelle_choix.label">
+      <segment>
+        <source>ec_manage.labels.fiche_matieres_libelle_choix.label</source>
+        <target>Libellé de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="l3F2B0J" name="element_constitutif_enfant.labels.libelle">
+      <segment>
+        <source>element_constitutif_enfant.labels.libelle</source>
+        <target>Libellé de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="7pLlNd9" name="fiche_matiere_step1.labels.sigle">
+      <segment>
+        <source>fiche_matiere_step1.labels.sigle</source>
+        <target>Sigle de l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="TNuiNfA" name="formation_step1.labels.sigle">
+      <segment>
+        <source>formation_step1.labels.sigle</source>
+        <target>Sigle de la formation</target>
+      </segment>
+    </unit>
+    <unit id="0iWO2p3" name="form.labels.objectifsFormation">
+      <segment>
+        <source>form.labels.objectifsFormation</source>
+        <target>Décrivez l'organisation de la formation</target>
+      </segment>
+    </unit>
+    <unit id="EokX7Qt" name="mccc_licence.labels.choix_type_mccc.label">
+      <segment>
+        <source>mccc_licence.labels.choix_type_mccc.label</source>
+        <target>Modalités de contrôle de connaissance</target>
+      </segment>
+    </unit>
+    <unit id="YEeyieW" name="mccc_licence.ct.label">
+      <segment>
+        <source>mccc_licence.ct.label</source>
+        <target>Contrôle terminal (CT)</target>
+      </segment>
+    </unit>
+    <unit id="kn4xtok" name="mccc_licence.cc_ct.label">
+      <segment>
+        <source>mccc_licence.cc_ct.label</source>
+        <target>Contrôle continu + Contrôle terminal (CC+CT)</target>
+      </segment>
+    </unit>
+    <unit id="F0FUBYh" name="mccc_licence.cc.label">
+      <segment>
+        <source>mccc_licence.cc.label</source>
+        <target>Contrôle continu (CC)</target>
+      </segment>
+    </unit>
+    <unit id="RlamUp7" name="mccc_licence.cci.label">
+      <segment>
+        <source>mccc_licence.cci.label</source>
+        <target>Contrôle continu intégral (CCi)</target>
+      </segment>
+    </unit>
+    <unit id="ncTW1Ts" name="mccc_licence.placeholder.label">
+      <segment>
+        <source>mccc_licence.placeholder.label</source>
+        <target>Choisissez les MCCC de cet EC</target>
+      </segment>
+    </unit>
+    <unit id="sHequ.g" name="fiche_matiere_step3.labels.competence_transverse">
+      <segment>
+        <source>fiche_matiere_step3.labels.competence_transverse</source>
+        <target>fiche_matiere_step3.labels.competence_transverse</target>
+      </segment>
+    </unit>
+    <unit id="uTlPHzI" name="formation_step1.labels.responsableMention">
+      <segment>
+        <source>formation_step1.labels.responsableMention</source>
+        <target>Responsable de la formation</target>
+      </segment>
+    </unit>
+    <unit id="wNLJxWf" name="formation_step1.labels.coResponsable">
+      <segment>
+        <source>formation_step1.labels.coResponsable</source>
+        <target>Co-responsable de la formation</target>
+      </segment>
+    </unit>
+    <unit id="DhRV2Qw" name="parcours_step1.labels.respParcours">
+      <segment>
+        <source>parcours_step1.labels.respParcours</source>
+        <target>Responsable du parcours</target>
+      </segment>
+    </unit>
+    <unit id="tEHGyML" name="parcours_step1.labels.coResponsable">
+      <segment>
+        <source>parcours_step1.labels.coResponsable</source>
+        <target>Co-responsable du parcours</target>
+      </segment>
+    </unit>
+    <unit id="GpoCxzZ" name="parcours.labels.coResponsable">
+      <segment>
+        <source>parcours.labels.coResponsable</source>
+        <target>Co-responsable du parcours</target>
+      </segment>
+    </unit>
+    <unit id="IsO.4eS" name="meef">
+      <segment>
+        <source>meef</source>
+        <target>meef</target>
+      </segment>
+    </unit>
+    <unit id="oRp14P7" name="option">
+      <segment>
+        <source>option</source>
+        <target>option</target>
+      </segment>
+    </unit>
+    <unit id="cqbE_Ay" name="options.labels.libelle">
+      <segment>
+        <source>options.labels.libelle</source>
+        <target>Libellé de l'option</target>
+      </segment>
+    </unit>
+    <unit id="16o1RKh" name="options.labels.respParcours">
+      <segment>
+        <source>options.labels.respParcours</source>
+        <target>Responsable de l'option</target>
+      </segment>
+    </unit>
+    <unit id="Zq_WBV3" name="options.labels.coResponsable">
+      <segment>
+        <source>options.labels.coResponsable</source>
+        <target>Co-responsable de l'option</target>
+      </segment>
+    </unit>
+    <unit id="8nz5TIy" name="options.labels.sigle">
+      <segment>
+        <source>options.labels.sigle</source>
+        <target>Sigle</target>
+      </segment>
+    </unit>
+    <unit id="JdoyUTw" name="role.labels.onlyAdmin.label">
+      <segment>
+        <source>role.labels.onlyAdmin.label</source>
+        <target>Rôle uniquement utilisable en admin ?</target>
+      </segment>
+    </unit>
+    <unit id="sZjtomK" name="role.labels.centre">
+      <segment>
+        <source>role.labels.centre</source>
+        <target>Centre(s) pour ce rôle</target>
+      </segment>
+    </unit>
+    <unit id="b121F2j" name="role.labels.centre.label">
+      <segment>
+        <source>role.labels.centre.label</source>
+        <target>Centre(s) pour ce rôle</target>
+      </segment>
+    </unit>
+    <unit id="NVUZ9yJ" name="Charleville-Mézières">
+      <segment>
+        <source>Charleville-Mézières</source>
+        <target>Charleville-Mézières</target>
+      </segment>
+    </unit>
+    <unit id="0sbjeKo" name="ec_step4.labels.volumeTe">
+      <segment>
+        <source>ec_step4.labels.volumeTe</source>
+        <target>Volume horaire TE (stage, projet, autonomie, ...)</target>
+      </segment>
+    </unit>
+    <unit id="P7YQdiq" name="semestre.changer.label">
+      <segment>
+        <source>semestre.changer.label</source>
+        <target>Choisir le parcours dans lequel déplacer le semestre</target>
+      </segment>
+    </unit>
+    <unit id="od0r0wt" name="semestre.position.label">
+      <segment>
+        <source>semestre.position.label</source>
+        <target>Position du semestre dans le parcours de destination</target>
+      </segment>
+    </unit>
+    <unit id="mMIUYfY" name="semestre.changer.bouton">
+      <segment>
+        <source>semestre.changer.bouton</source>
+        <target>Déplacer le semestre</target>
+      </segment>
+    </unit>
+    <unit id="diKHQH_" name="semestre.dupliquer.label">
+      <segment>
+        <source>semestre.dupliquer.label</source>
+        <target>Choisir le parcours dans lequel dupliquer le semestre</target>
+      </segment>
+    </unit>
+    <unit id="GVBuo6N" name="ue.dupliquer.label">
+      <segment>
+        <source>ue.dupliquer.label</source>
+        <target>Choisir le parcours dans lequel dupliquer le'UE</target>
+      </segment>
+    </unit>
+    <unit id="gFWFRFb" name="ue.semestre.dupliquer.label">
+      <segment>
+        <source>ue.semestre.dupliquer.label</source>
+        <target>Choisir le semestre dans lequel dupliquer le'UE</target>
+      </segment>
+    </unit>
+    <unit id="xM_oD4u" name="ue.position.label">
+      <segment>
+        <source>ue.position.label</source>
+        <target>Position de l'UE dans le semestre de destination</target>
+      </segment>
+    </unit>
+    <unit id="5s53jyr" name="ue.fiche_recopie_mutualise.label">
+      <segment>
+        <source>ue.fiche_recopie_mutualise.label</source>
+        <target>Précisez si vous souhaitez recopier ou mutualiser les fiches EC/matières</target>
+      </segment>
+    </unit>
+    <unit id="K.110z6" name="ue.fiche_recopie.label">
+      <segment>
+        <source>ue.fiche_recopie.label</source>
+        <target>Dupliquer en recopiant les fiches EC/matières (permet une modification dans chaque parcours)</target>
+      </segment>
+    </unit>
+    <unit id="LmQeOS_" name="ue.fiche_mutualise.label">
+      <segment>
+        <source>ue.fiche_mutualise.label</source>
+        <target>Dupliquer en mutualisant les fiches EC/matières (les éléments seront liés sur les deux parcours, toutes les modifications seront répercutées)</target>
+      </segment>
+    </unit>
+    <unit id="m1_R4NR" name="ue.dupliquer.bouton">
+      <segment>
+        <source>ue.dupliquer.bouton</source>
+        <target>Dupliquer l'UE</target>
+      </segment>
+    </unit>
+    <unit id="LKi5.3X" name="ue.changer.bouton">
+      <segment>
+        <source>ue.changer.bouton</source>
+        <target>Déplacer l'UE</target>
+      </segment>
+    </unit>
+    <unit id="5iwO6io" name="semestre.dupliquer.bouton">
+      <segment>
+        <source>semestre.dupliquer.bouton</source>
+        <target>Dupliquer le semestre</target>
+      </segment>
+    </unit>
+    <unit id="sLp2Ocu" name="semestre.fiche_recopie.label">
+      <segment>
+        <source>semestre.fiche_recopie.label</source>
+        <target>Dupliquer en recopiant les fiches EC/matières (permet une modification dans chaque parcours)</target>
+      </segment>
+    </unit>
+    <unit id="ytKXihk" name="semestre.fiche_mutualise.label">
+      <segment>
+        <source>semestre.fiche_mutualise.label</source>
+        <target>Dupliquer en mutualisant les fiches EC/matières (les éléments seront liés sur les deux parcours, toutes les modifications seront répercutées)</target>
+      </segment>
+    </unit>
+    <unit id="rsh_bDZ" name="semestre.fiche_recopie_mutualise.label">
+      <segment>
+        <source>semestre.fiche_recopie_mutualise.label</source>
+        <target>Précisez si vous souhaitez recopier ou mutualiser les fiches EC/matières</target>
+      </segment>
+    </unit>
+    <unit id="EqRAzUR" name="ec_step4.labels.mccc_enfants_identique">
+      <segment>
+        <source>ec_step4.labels.mccc_enfants_identique</source>
+        <target>Appliquer ces MCCC à tous les EC enfants ?</target>
+      </segment>
+    </unit>
+    <unit id="MOsSfrd" name="ec_step4.labels.heures_enfants_edentiques">
+      <segment>
+        <source>ec_step4.labels.heures_enfants_edentiques</source>
+        <target>Appliquer les volumes horaires à tous les EC enfants ?</target>
+      </segment>
+    </unit>
+    <unit id="R86jbRE" name="ec_step4.labels.mccc_enfants_identique_parent">
+      <segment>
+        <source>ec_step4.labels.mccc_enfants_identique_parent</source>
+        <target>Utiliser les MCCC de l'EC parent (s'appliquera pour tous les enfants de l'EC) ?</target>
+      </segment>
+    </unit>
+    <unit id="xl9Wq0A" name="ec_step4.labels.heures_enfants_edentiques_parent">
+      <segment>
+        <source>ec_step4.labels.heures_enfants_edentiques_parent</source>
+        <target>Utiliser les volumes horaires de l'EC parent (s'appliquera pour tous les enfants de l'EC) ?</target>
+      </segment>
+    </unit>
+    <unit id="5QLSIAl" name="ue.labels.descriptionUeLibre">
+      <segment>
+        <source>ue.labels.descriptionUeLibre</source>
+        <target>Description de l'UE libre</target>
+      </segment>
+    </unit>
+    <unit id="g94g35w" name="ec_step4.labels.quitus">
+      <segment>
+        <source>ec_step4.labels.quitus</source>
+        <target>Cet EC donne lieu à un quitus</target>
+      </segment>
+    </unit>
+    <unit id="tLusuYI" name="ue.labels.ects">
+      <segment>
+        <source>ue.labels.ects</source>
+        <target>ECTS de l'UE (uniquement si BUT ou pas d'EC associé)</target>
+      </segment>
+    </unit>
+    <unit id="UQyYugs" name="actualite.labels.datePublication.label">
+      <segment>
+        <source>actualite.labels.datePublication.label</source>
+        <target>Date de publication de l'actualité</target>
+      </segment>
+    </unit>
+    <unit id="ZiKa8vf" name="actualite.labels.titre">
+      <segment>
+        <source>actualite.labels.titre</source>
+        <target>Titre de l'actualité</target>
+      </segment>
+    </unit>
+    <unit id="kAsLcHF" name="actualite.labels.texte">
+      <segment>
+        <source>actualite.labels.texte</source>
+        <target>Texte de l'actualité</target>
+      </segment>
+    </unit>
+    <unit id="JrJ37FF" name="actualite.labels.affiche">
+      <segment>
+        <source>actualite.labels.affiche</source>
+        <target>Actualité publiée ?</target>
+      </segment>
+    </unit>
+    <unit id="hpB_OOv" name="mccc.licence.labels.cc_has_tp">
+      <segment>
+        <source>mccc.licence.labels.cc_has_tp</source>
+        <target>Le CC comprend du TP</target>
+      </segment>
+    </unit>
+    <unit id="WpaGy2P" name="mccc_licence.labels.cc.cc_has_tp_pourcentage">
+      <segment>
+        <source>mccc_licence.labels.cc.cc_has_tp_pourcentage</source>
+        <target>Pourcentage du TP</target>
+      </segment>
+    </unit>
+    <unit id="WSsHhRJ" name="ec_step4.but.labels.ects">
+      <segment>
+        <source>ec_step4.but.labels.ects</source>
+        <target>ECTS</target>
+      </segment>
+    </unit>
+    <unit id="L2FKD8X" name="fiche_matiere_step4.labels.objectifs">
+      <segment>
+        <source>fiche_matiere_step4.labels.objectifs</source>
+        <target>Objectifs</target>
+      </segment>
+    </unit>
+    <unit id="X6awyRm" name="fiche_matiere_step4.labels.volumeCmPresentiel">
+      <segment>
+        <source>fiche_matiere_step4.labels.volumeCmPresentiel</source>
+        <target>Volume heures CM</target>
+      </segment>
+    </unit>
+    <unit id="F1caEcR" name="fiche_matiere_step4.labels.volumeTdPresentiel">
+      <segment>
+        <source>fiche_matiere_step4.labels.volumeTdPresentiel</source>
+        <target>Volume heures TD</target>
+      </segment>
+    </unit>
+    <unit id="lEpqZc_" name="fiche_matiere_step4.labels.volumeTpPresentiel">
+      <segment>
+        <source>fiche_matiere_step4.labels.volumeTpPresentiel</source>
+        <target>Volume heures TP</target>
+      </segment>
+    </unit>
+    <unit id="SOXpHJt" name="fiche_matiere_step4.labels.volumeTe">
+      <segment>
+        <source>fiche_matiere_step4.labels.volumeTe</source>
+        <target>Volume heures SAE en autonomie</target>
+      </segment>
+    </unit>
+    <unit id="YqPQ_Vz" name="mccc_licence.helps.ct.duree_s1_et.help">
+      <segment>
+        <source>mccc_licence.helps.ct.duree_s1_et.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="2sIQYUG" name="mccc_licence.helps.ct.duree_s2_et.help">
+      <segment>
+        <source>mccc_licence.helps.ct.duree_s2_et.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="yJe9LKz" name="element_constitutif.labels.code">
+      <segment>
+        <source>element_constitutif.labels.code</source>
+        <target>Code de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="Cdmms04" name="element_constitutif.labels.ordre">
+      <segment>
+        <source>element_constitutif.labels.ordre</source>
+        <target>Numéro de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="WKAUWBQ" name="element_constitutif.helps.ordre">
+      <segment>
+        <source>element_constitutif.helps.ordre</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="7Ml08A1" name="element_constitutif.helps.code">
+      <segment>
+        <source>element_constitutif.helps.code</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="0w4fTav" name="mccc.but.labels.sansNote">
+      <segment>
+        <source>mccc.but.labels.sansNote</source>
+        <target>Pas de note pour cette ressource ou SAÉ</target>
+      </segment>
+    </unit>
+    <unit id="FWgGsZY" name="mccc.but.labels.sansHeures">
+      <segment>
+        <source>mccc.but.labels.sansHeures</source>
+        <target>Pas d'heures pour cette ressource ou SAÉ</target>
+      </segment>
+    </unit>
+    <unit id="4.nfRY6" name="parcours.fiche_recopie_mutualise.label">
+      <segment>
+        <source>parcours.fiche_recopie_mutualise.label</source>
+        <target>Choisissez le mode de recopie/mutualisation du parcours</target>
+      </segment>
+    </unit>
+    <unit id="4t4nup6" name="parcours.fiche_recopie.label">
+      <segment>
+        <source>parcours.fiche_recopie.label</source>
+        <target>Recopie intégrale du parcours (y compris les fiches), ce mode est à privilégier si vous souhaitez modifier le parcours notamment si le parcours est sur plusieurs sites ou des modalités différentes.</target>
+      </segment>
+    </unit>
+    <unit id="QUGhjEC" name="parcours.fiche_mutualise.label">
+      <segment>
+        <source>parcours.fiche_mutualise.label</source>
+        <target>Recopie des éléments avec mise en commun des fiches EC/matière entre les deux parcours.</target>
+      </segment>
+    </unit>
+    <unit id="uX81eqL" name="parcours.dupliquer.bouton">
+      <segment>
+        <source>parcours.dupliquer.bouton</source>
+        <target>Valider la duplication du parcours</target>
+      </segment>
+    </unit>
+    <unit id="nsc6zpo" name="mccc_licence_labels.cc.cc_has_tp_pourcentage">
+      <segment>
+        <source>mccc_licence_labels.cc.cc_has_tp_pourcentage</source>
+        <target>Pourcentage du TP</target>
+      </segment>
+    </unit>
+    <unit id="ZLBiGlU" name="fiche_matiere_step1.labels.typeMatiere.label">
+      <segment>
+        <source>fiche_matiere_step1.labels.typeMatiere.label</source>
+        <target>Type de "matière" pour les BUT</target>
+      </segment>
+    </unit>
+    <unit id="UlrPid6" name="ressource">
+      <segment>
+        <source>ressource</source>
+        <target>Ressource</target>
+      </segment>
+    </unit>
+    <unit id="mI0Juq0" name="sae">
+      <segment>
+        <source>sae</source>
+        <target>SAÉ</target>
+      </segment>
+    </unit>
+    <unit id="FrHOl5c" name="mccc.but.labels.volumesHorairesImpose">
+      <segment>
+        <source>mccc.but.labels.volumesHorairesImpose</source>
+        <target>Les volumes horaires sont imposées aux formations utilisatrices</target>
+      </segment>
+    </unit>
+    <unit id="p6qtErj" name="mccc.but.labels.mcccImpose">
+      <segment>
+        <source>mccc.but.labels.mcccImpose</source>
+        <target>Les MCCC sont imposées aux formations utilisatrices</target>
+      </segment>
+    </unit>
+    <unit id="ZXKl6Au" name="mccc.but.labels.ectsImpose">
+      <segment>
+        <source>mccc.but.labels.ectsImpose</source>
+        <target>Les ECTS sont imposés aux formations utilisatrices</target>
+      </segment>
+    </unit>
+    <unit id="WwlGY2i" name="fiche_matiere_step4_hd.labels.ects">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.ects</source>
+        <target>Nombre d'ECTS</target>
+      </segment>
+    </unit>
+    <unit id="8E.sdAW" name="fiche_matiere_step4_hd.labels.volumeTe">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeTe</source>
+        <target>Volume horaire Travail Etudiant (TE)</target>
+      </segment>
+    </unit>
+    <unit id="mNgxqKc" name="fiche_matiere_step4_hd.labels.volumeCmPresentiel">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeCmPresentiel</source>
+        <target>Volume horaire CM présentiel</target>
+      </segment>
+    </unit>
+    <unit id="MNYvOCl" name="fiche_matiere_step4_hd.labels.volumeCmDistanciel">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeCmDistanciel</source>
+        <target>Volume horaire CM distanciel</target>
+      </segment>
+    </unit>
+    <unit id="ks71oG7" name="fiche_matiere_step4_hd.labels.volumeTdPresentiel">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeTdPresentiel</source>
+        <target>Volume horaire TD présentiel</target>
+      </segment>
+    </unit>
+    <unit id="drZ7JUe" name="fiche_matiere_step4_hd.labels.volumeTdDistanciel">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeTdDistanciel</source>
+        <target>Volume horaire TD distanciel</target>
+      </segment>
+    </unit>
+    <unit id="zAs4J28" name="fiche_matiere_step4_hd.labels.volumeTpPresentiel">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeTpPresentiel</source>
+        <target>Volume horaire TP présentiel</target>
+      </segment>
+    </unit>
+    <unit id="77isIev" name="fiche_matiere_step4_hd.labels.volumeTpDistanciel">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeTpDistanciel</source>
+        <target>Volume horaire TP distanciel</target>
+      </segment>
+    </unit>
+    <unit id="bLQq8eH" name="mccc.ec.labels.sansHeures">
+      <segment>
+        <source>mccc.ec.labels.sansHeures</source>
+        <target>EC sans volume horaire</target>
+      </segment>
+    </unit>
+    <unit id="ynjqnA." name="etablissement.labels.etablissement_information.label">
+      <segment>
+        <source>etablissement.labels.etablissement_information.label</source>
+        <target>etablissement.labels.etablissement_information.label</target>
+      </segment>
+    </unit>
+    <unit id="9rVZvNG" name="Calendrier universitaire">
+      <segment>
+        <source>Calendrier universitaire</source>
+        <target>Calendrier universitaire</target>
+      </segment>
+    </unit>
+    <unit id="NLypKIT" name="Calendrier d'inscription">
+      <segment>
+        <source>Calendrier d'inscription</source>
+        <target>Calendrier d'inscription</target>
+      </segment>
+    </unit>
+    <unit id="xnVBmg." name="Informations pratiques">
+      <segment>
+        <source>Informations pratiques</source>
+        <target>Informations pratiques</target>
+      </segment>
+    </unit>
+    <unit id="TEzVVua" name="Informations diverses">
+      <segment>
+        <source>Informations diverses</source>
+        <target>Informations diverses</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

@@ -1,0 +1,1932 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="fr" trgLang="fr">
+  <file id="help.fr">
+    <unit id="s3jVVGI" name="formation_step2.helps.objectifsFormation">
+      <segment>
+        <source>formation_step2.helps.objectifsFormation</source>
+        <target>Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu. L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : "A la fin de la formation, le diplômé sera capable de..." et peut être rédigé selon 3 axes : *le savoir et la connaissance *le savoir-faire et la compétence professionnelle *le savoir-être et la capacité d'adaptation à différentes situations.</target>
+      </segment>
+    </unit>
+    <unit id="uSJEAWh" name="parcours_step1.helps.objectifsParcours">
+      <segment>
+        <source>parcours_step1.helps.objectifsParcours</source>
+        <target>Décrivez en 3000 caractères maximum la finalité de la formation et/ou les activités visées par l’apprenant une fois le diplôme obtenu. L'objectif de formation est souvent exprimé au moyen d'une phrase courte qui commence par : 'A la fin de la formation, le diplômé sera capable de...' et peut être rédigé selon 3 axes : •	le savoir et la connaissance •	le savoir-faire et la compétence professionnelle •	le savoir-être et la capacité d'adaptation à différentes situations</target>
+      </segment>
+    </unit>
+    <unit id="Pndyc4M" name="parcours_step2.helps.nbHeuresSituationPro">
+      <segment>
+        <source>parcours_step2.helps.nbHeuresSituationPro</source>
+        <target>Précisez le nombre d'heures de mise en situation professionnelle prévu.</target>
+      </segment>
+    </unit>
+    <unit id="1Le.Mpi" name="user.helps.username">
+      <segment>
+        <source>user.helps.username</source>
+        <target>Indiquez le login URCA de l'utilisateur.</target>
+      </segment>
+    </unit>
+    <unit id="7QxYN7S" name="user.helps.email">
+      <segment>
+        <source>user.helps.email</source>
+        <target>Indiquez l'adresse mail professionnelle.</target>
+      </segment>
+    </unit>
+    <unit id="sRy41pq" name="formation_step3.helps.hasParcours.help">
+      <segment>
+        <source>formation_step3.helps.hasParcours.help</source>
+        <target>Indiquez si la formation comporte des parcours</target>
+      </segment>
+    </unit>
+    <unit id="_18GeUm" name="formation_step3.helps.libelleParcours.help">
+      <segment>
+        <source>formation_step3.helps.libelleParcours.help</source>
+        <target>help</target>
+      </segment>
+    </unit>
+    <unit id="NLsqrck" name="formation_step3.helps.structureFormation.help">
+      <segment>
+        <source>formation_step3.helps.structureFormation.help</source>
+        <target>Précisez la structure de la formation (semestre en tronc commun ou semestre spécifique au parcours).</target>
+      </segment>
+    </unit>
+    <unit id="xqojCE6" name="Plusieurs choix possibles">
+      <segment>
+        <source>Plusieurs choix possibles</source>
+        <target>Plusieurs choix possibles</target>
+      </segment>
+    </unit>
+    <unit id="TiV7xjY" name="Régime d'inscription">
+      <segment>
+        <source>Régime d'inscription</source>
+        <target>Régime d'inscription</target>
+      </segment>
+    </unit>
+    <unit id="lLsv9NI">
+      <segment>
+        <source>Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.</source>
+        <target>Indiquez en 3000 caractères maximum les périodes et leurs durées en centre ou en entreprise.</target>
+      </segment>
+    </unit>
+    <unit id="rc9pxCK" name="ec_step3.labels.competence">
+      <segment>
+        <source>ec_step3.labels.competence</source>
+        <target>Choisissez d'abord le/les bloc(s) de compétences pour accéder aux compétences associées.</target>
+      </segment>
+    </unit>
+    <unit id="rn0_Z7_" name="Optionnel, sigle/code ou appelation courte du parcours">
+      <segment>
+        <source>Optionnel, sigle/code ou appelation courte du parcours</source>
+        <target>Optionnel, sigle/code ou appelation courte du parcours</target>
+      </segment>
+    </unit>
+    <unit id="B0zJ83X">
+      <segment>
+        <source>Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation</source>
+        <target>Indiquer la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation</target>
+      </segment>
+    </unit>
+    <unit id="3c1eav9" name="Si la mention n'existe pas, veuillez la créer dans la section &quot;Autre mention&quot;">
+      <segment>
+        <source>Si la mention n'existe pas, veuillez la créer dans la section "Autre mention"</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="RkoWxLz" name="Si la mention existe, veuillez la sélectionner dans la liste déroulante">
+      <segment>
+        <source>Si la mention existe, veuillez la sélectionner dans la liste déroulante</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="9Nut05V" name="formation_step3.helps.semestreDebut.help">
+      <segment>
+        <source>formation_step3.helps.semestreDebut.help</source>
+        <target>Indiquez le semestre de début de la formation.</target>
+      </segment>
+    </unit>
+    <unit id="pyYX9W0" name="parcours_step6.helps.modalitesAlternance">
+      <segment>
+        <source>parcours_step6.helps.modalitesAlternance</source>
+        <target>parcours_step6.helps.modalitesAlternance</target>
+      </segment>
+    </unit>
+    <unit id="r318GE5" name="ec_step1.helps.preciserMutualisation.help">
+      <segment>
+        <source>ec_step1.helps.preciserMutualisation.help</source>
+        <target>Indiquez toutes les formations avec lesquelles cet enseignement est mutualisé</target>
+      </segment>
+    </unit>
+    <unit id="yhPRzKN" name="ue.helps.ordre">
+      <segment>
+        <source>ue.helps.ordre</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="iF6z.02" name="ue.helps.typeUe">
+      <segment>
+        <source>ue.helps.typeUe</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="8rI031." name="ue.helps.typeUeTexte">
+      <segment>
+        <source>ue.helps.typeUeTexte</source>
+        <target>Précisez le type d'UE si il n'est pas présent dans la liste déroulante du champ précédent.</target>
+      </segment>
+    </unit>
+    <unit id="cRa0hsB" name="ue.helps.ueObligatoire">
+      <segment>
+        <source>ue.helps.ueObligatoire</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="ZXEcZDD" name="ue.helps.ueObligatoireTexte">
+      <segment>
+        <source>ue.helps.ueObligatoireTexte</source>
+        <target>Précisez la nature de l'UE si elle n'est pas présente dans la liste déroulante du champ précédent.</target>
+      </segment>
+    </unit>
+    <unit id="rOqDFN4" name="formation_ses.helps.typeDiplome">
+      <segment>
+        <source>formation_ses.helps.typeDiplome</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="gnfWmqR" name="formation_ses.helps.domaine">
+      <segment>
+        <source>formation_ses.helps.domaine</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="Mukf.8L" name="formation_ses.helps.niveauEntree">
+      <segment>
+        <source>formation_ses.helps.niveauEntree</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="eQvRAW6" name="formation_ses.helps.niveauSortie">
+      <segment>
+        <source>formation_ses.helps.niveauSortie</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="rH8Mhfw" name="formation_ses.helps.inRncp.help">
+      <segment>
+        <source>formation_ses.helps.inRncp.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="2J1w088" name="formation_ses.helps.codeRNCP">
+      <segment>
+        <source>formation_ses.helps.codeRNCP</source>
+        <target>Indiquez le code RNCP (cf. www.francecompetences.fr).</target>
+      </segment>
+    </unit>
+    <unit id="iEmiFlK" name="formation_ses.helps.responsableMention">
+      <segment>
+        <source>formation_ses.helps.responsableMention</source>
+        <target>Indiquez le porteur du projet de formation (futur responsable de formation), qui aura en charge le dépôt de la demande de création de la formation.</target>
+      </segment>
+    </unit>
+    <unit id=".Sihx58" name="parcours_step5.helps.composanteInscription.help">
+      <segment>
+        <source>parcours_step5.helps.composanteInscription.help</source>
+        <target>parcours_step5.helps.composanteInscription.help</target>
+      </segment>
+    </unit>
+    <unit id="rrJMA6t" name="parcours_step5.helps.regimeInscription.help">
+      <segment>
+        <source>parcours_step5.helps.regimeInscription.help</source>
+        <target>Plusieurs choix possibles.</target>
+      </segment>
+    </unit>
+    <unit id="Uw1sNzi" name="parcours_step5.helps.modalitesAlternance">
+      <segment>
+        <source>parcours_step5.helps.modalitesAlternance</source>
+        <target>Indiquez en 3000 caractères maximum le rythme de l'alternance c'est à dire les périodes et les durées en centre de formation ou en entreprise (en nombre de semaines). Par exemple : 1 semaine en centre de formation et 3 semaines en entreprise.</target>
+      </segment>
+    </unit>
+    <unit id="AQNmG7k" name="parcours_step5.helps.coordSecretariat">
+      <segment>
+        <source>parcours_step5.helps.coordSecretariat</source>
+        <target>Indiquez les coordonnées postales et téléphoniques du secrétariat ainsi que son adresse mail générique.</target>
+      </segment>
+    </unit>
+    <unit id="UJ_qLey" name="element_constitutif.helps.libelle">
+      <segment>
+        <source>element_constitutif.helps.libelle</source>
+        <target>Indiquez le libellé exact de l'EC.</target>
+      </segment>
+    </unit>
+    <unit id="_7XrOZF" name="element_constitutif.helps.responsableEc">
+      <segment>
+        <source>element_constitutif.helps.responsableEc</source>
+        <target>element_constitutif.helps.responsableEc</target>
+      </segment>
+    </unit>
+    <unit id="t7OBh8V" name="parcours_step2.helps.hasSituationPro.help">
+      <segment>
+        <source>parcours_step2.helps.hasSituationPro.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="oufQ4ML" name="parcours_step2.helps.situationProText">
+      <segment>
+        <source>parcours_step2.helps.situationProText</source>
+        <target>Décrivez en quoi consiste la mise en situation professionnelle.</target>
+      </segment>
+    </unit>
+    <unit id="m5RC4S1" name="formation_ses.helps.composantePorteuse">
+      <segment>
+        <source>formation_ses.helps.composantePorteuse</source>
+        <target>Indiquez la composante porteuse du projet, qui aura en charge le dépôt de la demande de création de la formation.</target>
+      </segment>
+    </unit>
+    <unit id="3YaUk.4" name="formation_ses.helps.mention">
+      <segment>
+        <source>formation_ses.helps.mention</source>
+        <target>Si l'intitulé existe, veuillez le sélectionner dans la liste déroulante. Si l'intitulé n'existe pas, veuillez le créer dans la section "Autre mention".</target>
+      </segment>
+    </unit>
+    <unit id="VPFKmGI" name="formation_ses.helps.mentionTexte">
+      <segment>
+        <source>formation_ses.helps.mentionTexte</source>
+        <target>Précisez le libellé de la mention/spécialité si il n'est pas présent dans la liste déroulante du champ précédent.</target>
+      </segment>
+    </unit>
+    <unit id="Y71NcVZ" name="formation_step1.helps.localisationMention.help">
+      <segment>
+        <source>formation_step1.helps.localisationMention.help</source>
+        <target>Plusieurs choix possibles.</target>
+      </segment>
+    </unit>
+    <unit id="W9QJJ_H" name="formation_step1.helps.modalitesAlternance">
+      <segment>
+        <source>formation_step1.helps.modalitesAlternance</source>
+        <target>Indiquez en 3000 caractères maximum le rythme de l'alternance c'est à dire les périodes et les durées en centre de formation ou en entreprise (en nombre de semaines). Par exemple : 1 semaine en centre de formation et 3 semaines en entreprise.</target>
+      </segment>
+    </unit>
+    <unit id="hTvhEm6" name="formation_step1.helps.composantesInscription.help">
+      <segment>
+        <source>formation_step1.helps.composantesInscription.help</source>
+        <target>Plusieurs choix possibles.</target>
+      </segment>
+    </unit>
+    <unit id="MAxz0AR" name="formation_step1.helps.regimeInscription.help">
+      <segment>
+        <source>formation_step1.helps.regimeInscription.help</source>
+        <target>Plusieurs choix possibles.</target>
+      </segment>
+    </unit>
+    <unit id="npMGY7Z" name="formation_step2.helps.contenuFormation">
+      <segment>
+        <source>formation_step2.helps.contenuFormation</source>
+        <target>Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différentes thématiques traitées dans la formation, en fonction des objectifs pédagogiques définis précédemment.</target>
+      </segment>
+    </unit>
+    <unit id="kcpvTL1" name="formation_step2.helps.resultatsAttendus">
+      <segment>
+        <source>formation_step2.helps.resultatsAttendus</source>
+        <target>Indiquez en 3000 caractères maximum les compétences acquises via la formation (compétences à acquérir, à améliorer ou à entretenir). La description des compétences doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que 'savoir, maitriser, être capable de…'.</target>
+      </segment>
+    </unit>
+    <unit id="bng3ER9" name="formation_step2.helps.rythmeFormation">
+      <segment>
+        <source>formation_step2.helps.rythmeFormation</source>
+        <target>Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir, etc.).</target>
+      </segment>
+    </unit>
+    <unit id="ssWEwNY" name="formation_step2.helps.rythmeFormationTexte">
+      <segment>
+        <source>formation_step2.helps.rythmeFormationTexte</source>
+        <target>Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (déroulé, calendrier, périodes, etc.).</target>
+      </segment>
+    </unit>
+    <unit id="5_fDU4x" name="parcours_step2.helps.stageText">
+      <segment>
+        <source>parcours_step2.helps.stageText</source>
+        <target>Indiquez en quoi consiste le stage (nombre, sur quel(s) semestre(s) ils sont prévus, les modalités, etc.).</target>
+      </segment>
+    </unit>
+    <unit id="ScMclq2" name="parcours_step2.helps.projetText">
+      <segment>
+        <source>parcours_step2.helps.projetText</source>
+        <target>Indiquez en quoi consiste le projet tutoré (nombre, sur quel(s) semestre(s) ils sont prévus, les modalités, etc.).</target>
+      </segment>
+    </unit>
+    <unit id="ajfwqWx" name="parcours_step2.helps.memoireText">
+      <segment>
+        <source>parcours_step2.helps.memoireText</source>
+        <target>Décrivez en quoi consiste le TER/mémoire.</target>
+      </segment>
+    </unit>
+    <unit id="zKnwo.I" name="bloc_competence.helps.libelle">
+      <segment>
+        <source>bloc_competence.helps.libelle</source>
+        <target>Indiquez le libellé du bloc de compétences.</target>
+      </segment>
+    </unit>
+    <unit id="w.fpUUL" name="competence.helps.libelle">
+      <segment>
+        <source>competence.helps.libelle</source>
+        <target>Le libellé de la compétence doit commencer par un verbe d'action, et ne doit pas dépasser 255 caractères. Doit être cohérente avec la fiche RNCP du diplôme.</target>
+      </segment>
+    </unit>
+    <unit id="WWfnGWA" name="parcours_step5.helps.prerequis">
+      <segment>
+        <source>parcours_step5.helps.prerequis</source>
+        <target>Précisez en 3000 caractères maximum les connaissances et compétences recommandées, les profils/cursus les plus adaptés pour suivre cette formation dans de bonnes conditions.</target>
+      </segment>
+    </unit>
+    <unit id="3sOLIx9" name="parcours_step7.helps.poursuitesEtudes">
+      <segment>
+        <source>parcours_step7.helps.poursuitesEtudes</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="KwmBONi" name="parcours_step7.helps.debouches">
+      <segment>
+        <source>parcours_step7.helps.debouches</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="GHkoe6B" name="parcours_step8.helps.coordSecretariat">
+      <segment>
+        <source>parcours_step8.helps.coordSecretariat</source>
+        <target>Indiquez les coordonnées postales et téléphoniques du secrétariat ainsi que son adresse mail générique.</target>
+      </segment>
+    </unit>
+    <unit id="awU0wFh" name="ec_step1.helps.responsableEc">
+      <segment>
+        <source>ec_step1.helps.responsableEc</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="uYdVCTX" name="ec_step1.helps.libelle">
+      <segment>
+        <source>ec_step1.helps.libelle</source>
+        <target>N'est modifiable que par le responsable de la formation.</target>
+      </segment>
+    </unit>
+    <unit id="T9mTDHV" name="ec_step1.helps.libelleAnglais">
+      <segment>
+        <source>ec_step1.helps.libelleAnglais</source>
+        <target>Précisez la version anglaise du libellé de l'EC.</target>
+      </segment>
+    </unit>
+    <unit id="RWzW.mN" name="ec_step1.helps.enseignementMutualise.help">
+      <segment>
+        <source>ec_step1.helps.enseignementMutualise.help</source>
+        <target>Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez oui.</target>
+      </segment>
+    </unit>
+    <unit id="8qw.jeG" name="ec_step2.helps.description">
+      <segment>
+        <source>ec_step2.helps.description</source>
+        <target>Indiquez en 3000 caractères maximum le contenu de l’enseignement. Faites une description détaillée des différents sujets traités dans cet enseignement.</target>
+      </segment>
+    </unit>
+    <unit id="buMMrIb" name="ec_step3.helps.objectifs">
+      <segment>
+        <source>ec_step3.helps.objectifs</source>
+        <target>Indiquez en 3000 caractères maximum les objectifs de l’enseignement.</target>
+      </segment>
+    </unit>
+    <unit id="UNY1HgS" name="ec_step4.helps.modaliteEnseignement.help">
+      <segment>
+        <source>ec_step4.helps.modaliteEnseignement.help</source>
+        <target>Indiquez les modalités d’enseignement de l'EC.</target>
+      </segment>
+    </unit>
+    <unit id="5BTN1._" name="ec_step4.helps.ects">
+      <segment>
+        <source>ec_step4.helps.ects</source>
+        <target>Indiquez le nombre d’ECTS attribués à l'enseignement.</target>
+      </segment>
+    </unit>
+    <unit id="9BTa4ac" name="ec_step4.helps.volumeCmPresentiel">
+      <segment>
+        <source>ec_step4.helps.volumeCmPresentiel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="gBssmn_" name="ec_step4.helps.volumeTdPresentiel">
+      <segment>
+        <source>ec_step4.helps.volumeTdPresentiel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="W45Dm1K" name="ec_step4.helps.volumeTpPresentiel">
+      <segment>
+        <source>ec_step4.helps.volumeTpPresentiel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="R3IIs3I" name="ec_step4.helps.volumeCmDistanciel">
+      <segment>
+        <source>ec_step4.helps.volumeCmDistanciel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="phcCwu4" name="ec_step4.helps.volumeTdDistanciel">
+      <segment>
+        <source>ec_step4.helps.volumeTdDistanciel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="d0Nz.03" name="ec_step4.helps.volumeTpDistanciel">
+      <segment>
+        <source>ec_step4.helps.volumeTpDistanciel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="yMP2Udi" name="parcours_step2.helps.modalitesEnseignement.help">
+      <segment>
+        <source>parcours_step2.helps.modalitesEnseignement.help</source>
+        <target>Précisez les modalités d'enseignement.</target>
+      </segment>
+    </unit>
+    <unit id="lANij1f" name="parcours_step2.helps.hasStage.help">
+      <segment>
+        <source>parcours_step2.helps.hasStage.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="QcjqAWN" name="parcours_step2.helps.nbHeuresStages">
+      <segment>
+        <source>parcours_step2.helps.nbHeuresStages</source>
+        <target>Précisez le nombre d'heures de stage prévu.</target>
+      </segment>
+    </unit>
+    <unit id="BeFQ5yI" name="parcours_step2.helps.hasProjet.help">
+      <segment>
+        <source>parcours_step2.helps.hasProjet.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="QlIXemT" name="parcours_step2.helps.nbHeuresProjet">
+      <segment>
+        <source>parcours_step2.helps.nbHeuresProjet</source>
+        <target>Précisez le nombre d'heures du projet tutoré prévu.</target>
+      </segment>
+    </unit>
+    <unit id="34g7zaD" name="parcours_step2.helps.hasMemoire.help">
+      <segment>
+        <source>parcours_step2.helps.hasMemoire.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="747LF.t" name="parcours_step8.helps.respParcours">
+      <segment>
+        <source>parcours_step8.helps.respParcours</source>
+        <target>Indiquez le responsable de parcours.</target>
+      </segment>
+    </unit>
+    <unit id="EXU5kwL" name="parcours.helps.sigle">
+      <segment>
+        <source>parcours.helps.sigle</source>
+        <target>Le cas échéant, indiquez le sigle/code utilisé pour ce parcours.</target>
+      </segment>
+    </unit>
+    <unit id="3pWkEhE" name="parcours_step1.helps.contenuFormation">
+      <segment>
+        <source>parcours_step1.helps.contenuFormation</source>
+        <target>Indiquez en 3000 caractères maximum le contenu de la formation. Faites une description détaillée des différentes thématiques traitées dans la formation, en fonction des objectifs pédagogiques définis précédemment.</target>
+      </segment>
+    </unit>
+    <unit id="r2C9Wdb" name="parcours_step1.helps.resultatsAttendus">
+      <segment>
+        <source>parcours_step1.helps.resultatsAttendus</source>
+        <target>Indiquez en 3000 caractères maximum les compétences acquises via la  formation (compétences à acquérir, à améliorer ou à entretenir). La description des compétences doit être précise et courte et doit utiliser des verbes d’action exprimant un savoir ou une capacité tels que 'savoir, maitriser, être capable de…'.</target>
+      </segment>
+    </unit>
+    <unit id="OzgQk_g" name="parcours_step1.helps.rythmeFormation">
+      <segment>
+        <source>parcours_step1.helps.rythmeFormation</source>
+        <target>Indiquez le rythme de la formation (temps plein, temps partiel, cours du soir, etc.).</target>
+      </segment>
+    </unit>
+    <unit id="MTj7YJD" name="parcours_step1.helps.rythmeFormationTexte">
+      <segment>
+        <source>parcours_step1.helps.rythmeFormationTexte</source>
+        <target>Le cas échéant, précisez en 3000 caractères maximum le rythme de la formation (déroulé, calendrier, périodes, etc.).</target>
+      </segment>
+    </unit>
+    <unit id="nNJN.J4" name="parcours_step1.helps.localisation.help">
+      <segment>
+        <source>parcours_step1.helps.localisation.help</source>
+        <target>Choisissez le lieu où le parcours est proposé. Si le parcours est dispensé sur plusieurs sites, créer autant de parcours que de lieux de formation.</target>
+      </segment>
+    </unit>
+    <unit id="bmLF6oT" name="ec_step1.helps.isCmPresentielMutualise.help">
+      <segment>
+        <source>ec_step1.helps.isCmPresentielMutualise.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="BJLfGpC" name="ec_step1.helps.isTdPresentielMutualise.help">
+      <segment>
+        <source>ec_step1.helps.isTdPresentielMutualise.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="wFUFOkF" name="ec_step1.helps.isTpPresentielMutualise.help">
+      <segment>
+        <source>ec_step1.helps.isTpPresentielMutualise.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="cPX1zK_" name="ec_step1.helps.isCmDistancielMutualise.help">
+      <segment>
+        <source>ec_step1.helps.isCmDistancielMutualise.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="orzlsQS" name="ec_step1.helps.isTdDistancielMutualise.help">
+      <segment>
+        <source>ec_step1.helps.isTdDistancielMutualise.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="TKZxbC5" name="ec_step1.helps.isTpDistancielMutualise.help">
+      <segment>
+        <source>ec_step1.helps.isTpDistancielMutualise.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="LKgkwU." name="ec_step2.helps.langueDispense.help">
+      <segment>
+        <source>ec_step2.helps.langueDispense.help</source>
+        <target>Plusieurs choix possibles.</target>
+      </segment>
+    </unit>
+    <unit id="qeT5qnN" name="ec_step2.helps.langueSupport.help">
+      <segment>
+        <source>ec_step2.helps.langueSupport.help</source>
+        <target>Plusieurs choix possibles.</target>
+      </segment>
+    </unit>
+    <unit id="DNgOEEY" name="ec_step2.helps.typeEnseignement.help">
+      <segment>
+        <source>ec_step2.helps.typeEnseignement.help</source>
+        <target>ec_step2.helps.typeEnseignement.help</target>
+      </segment>
+    </unit>
+    <unit id="N8SMzam" name="register.helps.email">
+      <segment>
+        <source>register.helps.email</source>
+        <target>Email URCA valide. Permettra de faire le lien avec vos accès CAS.</target>
+      </segment>
+    </unit>
+    <unit id="rAcok.3" name="register.helps.centreDemande">
+      <segment>
+        <source>register.helps.centreDemande</source>
+        <target>Précisez le centre souhaité. Le responsable du centre précisera vos droits d'accès.</target>
+      </segment>
+    </unit>
+    <unit id="SQWAnwc" name="parcours_step1.helps.localisation">
+      <segment>
+        <source>parcours_step1.helps.localisation</source>
+        <target>Choisissez le lieu où le parcours est proposé. Si le parcours est dispensé sur plusieurs sites, créer autant de parcours que de lieux de formation.</target>
+      </segment>
+    </unit>
+    <unit id="i3LTy5C" name="parcours_step2.helps.modalitesEnseignement">
+      <segment>
+        <source>parcours_step2.helps.modalitesEnseignement</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="Oq.jTc." name="parcours_step5.helps.composanteInscription">
+      <segment>
+        <source>parcours_step5.helps.composanteInscription</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="Vl0IANT" name="parcours_step5.helps.regimeInscription">
+      <segment>
+        <source>parcours_step5.helps.regimeInscription</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="F4uRDMH" name="parcours_step7.helps.codeRome.help">
+      <segment>
+        <source>parcours_step7.helps.codeRome.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="EuFl2Fh" name="ec_step4.helps.modaliteEnseignement">
+      <segment>
+        <source>ec_step4.helps.modaliteEnseignement</source>
+        <target>ec_step4.helps.modaliteEnseignement</target>
+      </segment>
+    </unit>
+    <unit id="FkI4zVJ" name="ec_step2.helps.typeEnseignement">
+      <segment>
+        <source>ec_step2.helps.typeEnseignement</source>
+        <target>Précisez si l'enseignement est obligatoire / facultatif ou s'il fait partie d'une liste d'éléments à choisir.</target>
+      </segment>
+    </unit>
+    <unit id="h60XrhD" name="langue.helps.libelle">
+      <segment>
+        <source>langue.helps.libelle</source>
+        <target>Indiquez le libellé exact de la langue à ajouter.</target>
+      </segment>
+    </unit>
+    <unit id="lZNGSbt" name="langue.helps.codeIso">
+      <segment>
+        <source>langue.helps.codeIso</source>
+        <target>2 caractères, selon la norme ISO 639-1   (cf. https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1).
+</target>
+      </segment>
+    </unit>
+    <unit id="cf3PxVW" name="type_enseignement.helps.libelle">
+      <segment>
+        <source>type_enseignement.helps.libelle</source>
+        <target>type_enseignement.helps.libelle</target>
+      </segment>
+    </unit>
+    <unit id="txGkq9w" name="type_ue.helps.libelle">
+      <segment>
+        <source>type_ue.helps.libelle</source>
+        <target>Indiquez le libellé exact du type d'UE.</target>
+      </segment>
+    </unit>
+    <unit id="8JM6mU2" name="type_ue.helps.typeDiplome.help">
+      <segment>
+        <source>type_ue.helps.typeDiplome.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="3PCk3HO" name="rythme_formation.helps.libelle">
+      <segment>
+        <source>rythme_formation.helps.libelle</source>
+        <target>Indiquez le libellé exact du rythme de formation.</target>
+      </segment>
+    </unit>
+    <unit id="WQum0D1" name="parcours.helps.libelle">
+      <segment>
+        <source>parcours.helps.libelle</source>
+        <target>Indiquez le libellé exact de ce parcours.</target>
+      </segment>
+    </unit>
+    <unit id="mj2IBU9" name="parcours.helps.respParcours">
+      <segment>
+        <source>parcours.helps.respParcours</source>
+        <target>Indiquez le responsable de ce parcours.</target>
+      </segment>
+    </unit>
+    <unit id="yso84ls" name="mention.helps.typeDiplome">
+      <segment>
+        <source>mention.helps.typeDiplome</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="VQ93Vic" name="mention.helps.libelle">
+      <segment>
+        <source>mention.helps.libelle</source>
+        <target>Indiquez le libellé exact de la mention/spécialité.</target>
+      </segment>
+    </unit>
+    <unit id="zy.0EJO" name="mention.helps.sigle">
+      <segment>
+        <source>mention.helps.sigle</source>
+        <target>Le cas échéant, indiquez le sigle/code utilisé pour cette mention/spécialité.</target>
+      </segment>
+    </unit>
+    <unit id="VXSEwbC" name="mention.helps.domaine">
+      <segment>
+        <source>mention.helps.domaine</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="dycYEK0" name="domaine.helps.libelle">
+      <segment>
+        <source>domaine.helps.libelle</source>
+        <target>Indiquez le libellé exact du domaine de formation.</target>
+      </segment>
+    </unit>
+    <unit id="v1EybLv" name="domaine.helps.sigle">
+      <segment>
+        <source>domaine.helps.sigle</source>
+        <target>Indiquez le sigle utilisé pour ce domaine.</target>
+      </segment>
+    </unit>
+    <unit id="qwGxj7O" name="composante.helps.libelle">
+      <segment>
+        <source>composante.helps.libelle</source>
+        <target>Indiquez le libellé exact de la composante.</target>
+      </segment>
+    </unit>
+    <unit id="wPgdlle" name="composante.helps.sigle">
+      <segment>
+        <source>composante.helps.sigle</source>
+        <target>Le cas échéant, indiquez le sigle utilisé pour cette composante.</target>
+      </segment>
+    </unit>
+    <unit id="hx5gQG." name="composante.helps.directeur">
+      <segment>
+        <source>composante.helps.directeur</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="vdEqysx" name="composante.helps.responsableDpe">
+      <segment>
+        <source>composante.helps.responsableDpe</source>
+        <target>Indiquez le nom de la personne en charge de l'administration de ORéOF dans la composante.</target>
+      </segment>
+    </unit>
+    <unit id="rrHQBDW" name="composante.helps.adresse.help">
+      <segment>
+        <source>composante.helps.adresse.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="C8Il4Gw" name="composante.helps.adresse.adresse1">
+      <segment>
+        <source>composante.helps.adresse.adresse1</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="hEzU21L" name="composante.helps.adresse.adresse2">
+      <segment>
+        <source>composante.helps.adresse.adresse2</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="GobUDFe" name="composante.helps.adresse.codePostal">
+      <segment>
+        <source>composante.helps.adresse.codePostal</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="oUI4SwN" name="composante.helps.adresse.ville">
+      <segment>
+        <source>composante.helps.adresse.ville</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="2GJt8Kx" name="composante.helps.telStandard">
+      <segment>
+        <source>composante.helps.telStandard</source>
+        <target>Indiquez le numéro de téléphone de l'accueil de la composante.</target>
+      </segment>
+    </unit>
+    <unit id="lZytEBi" name="composante.helps.telComplementaire">
+      <segment>
+        <source>composante.helps.telComplementaire</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="VCVfnEs" name="composante.helps.mailContact">
+      <segment>
+        <source>composante.helps.mailContact</source>
+        <target>Indiquez l'adresse mail générique de l'accueil de la composante.</target>
+      </segment>
+    </unit>
+    <unit id="7JKqOJZ" name="composante.helps.urlSite">
+      <segment>
+        <source>composante.helps.urlSite</source>
+        <target>Indiquez le lien court vers le mini-site de la composante.</target>
+      </segment>
+    </unit>
+    <unit id="fo3Uvg6" name="ville.helps.libelle">
+      <segment>
+        <source>ville.helps.libelle</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="xe9HImz" name="ville.helps.etablissement">
+      <segment>
+        <source>ville.helps.etablissement</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="QaYHN5R" name="etablissement.helps.libelle">
+      <segment>
+        <source>etablissement.helps.libelle</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="9W8Ol6x" name="etablissement.helps.adresse.help">
+      <segment>
+        <source>etablissement.helps.adresse.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="GNcuVtP" name="etablissement.helps.adresse.adresse1">
+      <segment>
+        <source>etablissement.helps.adresse.adresse1</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="S4VYdpv" name="etablissement.helps.adresse.adresse2">
+      <segment>
+        <source>etablissement.helps.adresse.adresse2</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="sxHKLOg" name="etablissement.helps.adresse.codePostal">
+      <segment>
+        <source>etablissement.helps.adresse.codePostal</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="X1shGSv" name="etablissement.helps.adresse.ville">
+      <segment>
+        <source>etablissement.helps.adresse.ville</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="Fy02dFU" name="type_epreuve.helps.libelle">
+      <segment>
+        <source>type_epreuve.helps.libelle</source>
+        <target>Indiquez le libellé exact du type d'épreuve.</target>
+      </segment>
+    </unit>
+    <unit id="tLjAMDa" name="type_epreuve.helps.typeDiplome.help">
+      <segment>
+        <source>type_epreuve.helps.typeDiplome.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="qWwIprP" name="type_diplome.helps.libelle">
+      <segment>
+        <source>type_diplome.helps.libelle</source>
+        <target>Indiquez le libellé exact du type de diplôme.</target>
+      </segment>
+    </unit>
+    <unit id="AT14qD_" name="type_diplome.helps.libelle_court">
+      <segment>
+        <source>type_diplome.helps.libelle_court</source>
+        <target>Le cas échéant, indiquez le libellé court du type de diplôme.</target>
+      </segment>
+    </unit>
+    <unit id=".JOI.ji" name="type_diplome.helps.semestreDebut">
+      <segment>
+        <source>type_diplome.helps.semestreDebut</source>
+        <target>Le semestre de début d'un diplôme est toujours 1 sauf dans le cas des LP.</target>
+      </segment>
+    </unit>
+    <unit id="rJAhZRG" name="type_diplome.helps.semestreFin">
+      <segment>
+        <source>type_diplome.helps.semestreFin</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="4MNa3bX" name="type_diplome.helps.nbUeMin">
+      <segment>
+        <source>type_diplome.helps.nbUeMin</source>
+        <target>Précisez la contrainte. Si pas de contrainte, mettre "0".</target>
+      </segment>
+    </unit>
+    <unit id="6IZkAkI" name="type_diplome.helps.nbUeMax">
+      <segment>
+        <source>type_diplome.helps.nbUeMax</source>
+        <target>Précisez la contrainte. Si pas de contrainte, mettre "0".</target>
+      </segment>
+    </unit>
+    <unit id="A5PLUsW" name="type_diplome.helps.nbEctsMaxUe">
+      <segment>
+        <source>type_diplome.helps.nbEctsMaxUe</source>
+        <target>Précisez la contrainte. Si pas de contrainte, mettre "0".</target>
+      </segment>
+    </unit>
+    <unit id="d135iYu" name="type_diplome.helps.ModeleMcc">
+      <segment>
+        <source>type_diplome.helps.ModeleMcc</source>
+        <target>Indiquez si le diplôme est cadré par un modèle prédéfini de MCC (ex. BUT).</target>
+      </segment>
+    </unit>
+    <unit id="jasSfdg" name="nature_ue_ec.helps.libelle">
+      <segment>
+        <source>nature_ue_ec.helps.libelle</source>
+        <target>Indiquez le libellé exact de la nature d'UE/EC.</target>
+      </segment>
+    </unit>
+    <unit id="LTYz4X6" name="nature_ue_ec.helps.choix.help">
+      <segment>
+        <source>nature_ue_ec.helps.choix.help</source>
+        <target>Indiquez le type d'UE.</target>
+      </segment>
+    </unit>
+    <unit id="E59fRVf" name="type_ec.helps.libelle">
+      <segment>
+        <source>type_ec.helps.libelle</source>
+        <target>Indiquez le libellé exact du type d'EC.</target>
+      </segment>
+    </unit>
+    <unit id="mbtZIa5" name="type_ec.helps.typeDiplomes.help">
+      <segment>
+        <source>type_ec.helps.typeDiplomes.help</source>
+        <target>Sélectionnez les diplômes concernés par ce type d'EC.</target>
+      </segment>
+    </unit>
+    <unit id="i5No36J" name="type_ue.helps.typeDiplomes.help">
+      <segment>
+        <source>type_ue.helps.typeDiplomes.help</source>
+        <target>Sélectionnez les diplômes concernés par ce type d'UE.</target>
+      </segment>
+    </unit>
+    <unit id="C1fHOxy" name="type_epreuve.helps.typeDiplomes.help">
+      <segment>
+        <source>type_epreuve.helps.typeDiplomes.help</source>
+        <target>Sélectionnez les diplômes concernés par ce type d'épreuve.</target>
+      </segment>
+    </unit>
+    <unit id="n9XHmcS" name="user_ldap.helps.email">
+      <segment>
+        <source>user_ldap.helps.email</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="p.1HffU" name="user_ldap.helps.role.help">
+      <segment>
+        <source>user_ldap.helps.role.help</source>
+        <target>Définissez le rôle de l'utilisateur (et donc ses droits d'accès).</target>
+      </segment>
+    </unit>
+    <unit id="RR2n2pb" name="user_ldap.helps.centreDemande">
+      <segment>
+        <source>user_ldap.helps.centreDemande</source>
+        <target>Définissez le périmètre d’action et/ou de visualisation de l'utilisateur.</target>
+      </segment>
+    </unit>
+    <unit id="kpsz3JA" name="role.helps.libelle">
+      <segment>
+        <source>role.helps.libelle</source>
+        <target>Indiquez le libellé exact du rôle.</target>
+      </segment>
+    </unit>
+    <unit id="FOYoApj" name="role.helps.code_role">
+      <segment>
+        <source>role.helps.code_role</source>
+        <target>Indiquez le signe du rôle.</target>
+      </segment>
+    </unit>
+    <unit id="F7.JWPK" name="role.helps.porte.help">
+      <segment>
+        <source>role.helps.porte.help</source>
+        <target>Indiquez si le périmètre en action et visualisation accordé au rôle.</target>
+      </segment>
+    </unit>
+    <unit id="dE8oCCE" name="user.helps.civilite">
+      <segment>
+        <source>user.helps.civilite</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="u55TwhZ" name="user.helps.nom">
+      <segment>
+        <source>user.helps.nom</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="lFdT105" name="user.helps.prenom">
+      <segment>
+        <source>user.helps.prenom</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="qHu.anb" name="user.helps.telFixe">
+      <segment>
+        <source>user.helps.telFixe</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="cejB8Ed" name="user.helps.telPortable">
+      <segment>
+        <source>user.helps.telPortable</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="jdOkm.4" name="user.helps.role">
+      <segment>
+        <source>user.helps.role</source>
+        <target>Définissez le rôle de l'utilisateur (et donc ses droits d'accès).</target>
+      </segment>
+    </unit>
+    <unit id="V7EHr98" name="annee_universitaire.helps.libelle">
+      <segment>
+        <source>annee_universitaire.helps.libelle</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="yNxZkYQ" name="annee_universitaire.helps.annee">
+      <segment>
+        <source>annee_universitaire.helps.annee</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="j1XSVQZ" name="annee_universitaire.helps.defaut.help">
+      <segment>
+        <source>annee_universitaire.helps.defaut.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="2iE0bRq" name="annee_universitaire.helps.dateOuvertureDpe">
+      <segment>
+        <source>annee_universitaire.helps.dateOuvertureDpe</source>
+        <target>Correspond à la date de début de la période d'enrichissement des projets de DPE.</target>
+      </segment>
+    </unit>
+    <unit id="kF.LE4s" name="annee_universitaire.helps.dateClotureDpe">
+      <segment>
+        <source>annee_universitaire.helps.dateClotureDpe</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="fndvTiG" name="annee_universitaire.helps.dateTransmissionSes">
+      <segment>
+        <source>annee_universitaire.helps.dateTransmissionSes</source>
+        <target>Correspond à la date de fin de la période d'enrichissement des projets de DPE.</target>
+      </segment>
+    </unit>
+    <unit id="XAVYbBm" name="annee_universitaire.helps.dateCfvu">
+      <segment>
+        <source>annee_universitaire.helps.dateCfvu</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="S4HrHbj" name="annee_universitaire.helps.datePublication">
+      <segment>
+        <source>annee_universitaire.helps.datePublication</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="7JHqIWi" name="ec_manage.helps.fiche_matiere_label.help">
+      <segment>
+        <source>ec_manage.helps.fiche_matiere_label.help</source>
+        <target>ec_manage.helps.fiche_matiere_label.help</target>
+      </segment>
+    </unit>
+    <unit id="YAUNn4y" name="register.helps.prenom">
+      <segment>
+        <source>register.helps.prenom</source>
+        <target>register.helps.prenom</target>
+      </segment>
+    </unit>
+    <unit id="hiu69bM" name="register.helps.nom">
+      <segment>
+        <source>register.helps.nom</source>
+        <target>register.helps.nom</target>
+      </segment>
+    </unit>
+    <unit id="3797qc_" name="type_diplome.helps.nbEcParUe">
+      <segment>
+        <source>type_diplome.helps.nbEcParUe</source>
+        <target>Précisez la contrainte. Si pas de contrainte, mettre "0".</target>
+      </segment>
+    </unit>
+    <unit id="nGWP6WK" name="ue.helps.natureUeEc">
+      <segment>
+        <source>ue.helps.natureUeEc</source>
+        <target>"</target>
+      </segment>
+    </unit>
+    <unit id="ScRTjcy" name="ue.helps.natureUeEcTexte">
+      <segment>
+        <source>ue.helps.natureUeEcTexte</source>
+        <target>Précisez la nature de l'UE si elle n'est pas présente dans la liste déroulante du champ précédent.</target>
+      </segment>
+    </unit>
+    <unit id="nTiedwN" name="parcours_step6.helps.poursuitesEtudes">
+      <segment>
+        <source>parcours_step6.helps.poursuitesEtudes</source>
+        <target>Indiquez en 3000 caractères maximum quelles sont les poursuites d’études envisageables.</target>
+      </segment>
+    </unit>
+    <unit id="9UYoOBz" name="parcours_step6.helps.debouches">
+      <segment>
+        <source>parcours_step6.helps.debouches</source>
+        <target>Indiquez les principaux débouchés professionnels accessibles à l’issue de cette formation.</target>
+      </segment>
+    </unit>
+    <unit id="wfOF6qk" name="parcours_step6.helps.codeRome.help">
+      <segment>
+        <source>parcours_step6.helps.codeRome.help</source>
+        <target>Ajoutez les codes ROME pour préciser les métiers accessibles aux diplômés     (cf. https://www.pole-emploi.fr/employeur/vos-recrutements/le-rome-et-les-fiches-metiers.html).</target>
+      </segment>
+    </unit>
+    <unit id="1DvSYD7" name="element_constitutif.helps.natureUeEc">
+      <segment>
+        <source>element_constitutif.helps.natureUeEc</source>
+        <target>"</target>
+      </segment>
+    </unit>
+    <unit id="xMTt0_q" name="element_constitutif.helps.ficheMatiere">
+      <segment>
+        <source>element_constitutif.helps.ficheMatiere</source>
+        <target>element_constitutif.helps.ficheMatiere</target>
+      </segment>
+    </unit>
+    <unit id="sjHXgT6" name="fiche_matiere.helps.libelle">
+      <segment>
+        <source>fiche_matiere.helps.libelle</source>
+        <target>Indiquez le libellé exact de l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="m2Ljvu5" name="fiche_matiere.helps.responsableFicheMatiere">
+      <segment>
+        <source>fiche_matiere.helps.responsableFicheMatiere</source>
+        <target>Indiquez le référent de l'enseignement.</target>
+      </segment>
+    </unit>
+    <unit id="fPkzM.R" name="fiche_matiere_step1.helps.libelle">
+      <segment>
+        <source>fiche_matiere_step1.helps.libelle</source>
+        <target>Indiquez le libellé exact de l'enseignement.</target>
+      </segment>
+    </unit>
+    <unit id="mz1cu_Q" name="fiche_matiere_step1.helps.libelleAnglais">
+      <segment>
+        <source>fiche_matiere_step1.helps.libelleAnglais</source>
+        <target>Précisez la version anglaise du libellé de l'enseignement.</target>
+      </segment>
+    </unit>
+    <unit id="EHoXGa9" name="fiche_matiere_step1.helps.enseignementMutualise.help">
+      <segment>
+        <source>fiche_matiere_step1.helps.enseignementMutualise.help</source>
+        <target>Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez oui.</target>
+      </segment>
+    </unit>
+    <unit id="rj0XqQd" name="fiche_matiere_step1.helps.isCmPresentielMutualise.help">
+      <segment>
+        <source>fiche_matiere_step1.helps.isCmPresentielMutualise.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="WOH_og6" name="fiche_matiere_step1.helps.isTdPresentielMutualise.help">
+      <segment>
+        <source>fiche_matiere_step1.helps.isTdPresentielMutualise.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="w2V16Le" name="fiche_matiere_step1.helps.isTpPresentielMutualise.help">
+      <segment>
+        <source>fiche_matiere_step1.helps.isTpPresentielMutualise.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="_wVu.fy" name="fiche_matiere_step1.helps.isCmDistancielMutualise.help">
+      <segment>
+        <source>fiche_matiere_step1.helps.isCmDistancielMutualise.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="rlWmfiX" name="fiche_matiere_step1.helps.isTdDistancielMutualise.help">
+      <segment>
+        <source>fiche_matiere_step1.helps.isTdDistancielMutualise.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="A7SEe3E" name="fiche_matiere_step1.helps.isTpDistancielMutualise.help">
+      <segment>
+        <source>fiche_matiere_step1.helps.isTpDistancielMutualise.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="BlGFG.F" name="fiche_matiere_step1.helps.preciserMutualisation.help">
+      <segment>
+        <source>fiche_matiere_step1.helps.preciserMutualisation.help</source>
+        <target>Indiquez toutes les formations avec lesquelles cet enseignement est mutualisé.</target>
+      </segment>
+    </unit>
+    <unit id="nEZAj3a" name="ec_manage.helps.fiche_matiere.help">
+      <segment>
+        <source>ec_manage.helps.fiche_matiere.help</source>
+        <target>ec_manage.helps.fiche_matiere.help</target>
+      </segment>
+    </unit>
+    <unit id="V7i0sG3" name="ec_manage.helps.fiche_matiere_libelle.help">
+      <segment>
+        <source>ec_manage.helps.fiche_matiere_libelle.help</source>
+        <target>ec_manage.helps.fiche_matiere_libelle.help</target>
+      </segment>
+    </unit>
+    <unit id="2tJN4Kz" name="nature_ue_ec.helps.libre.help">
+      <segment>
+        <source>nature_ue_ec.helps.libre.help</source>
+        <target>nature_ue_ec.helps.libre.help</target>
+      </segment>
+    </unit>
+    <unit id="mRZ._41" name="ec_manage.helps.fiche_matiere_libelle_libre.help">
+      <segment>
+        <source>ec_manage.helps.fiche_matiere_libelle_libre.help</source>
+        <target>par exemple : valorisation de l'engagement étudiant OU UET OU Option libre de la composante X  OU une matière supplémentaire du S6  </target>
+      </segment>
+    </unit>
+    <unit id="DG6Ukiv" name="ec_manage.helps.fiche_matiere_multiple.help">
+      <segment>
+        <source>ec_manage.helps.fiche_matiere_multiple.help</source>
+        <target>Si la fiche EC/matière est déjà créée.</target>
+      </segment>
+    </unit>
+    <unit id="pxpN_YS" name="ec_manage.helps.fiche_matiere_libelle_multiple.help">
+      <segment>
+        <source>ec_manage.helps.fiche_matiere_libelle_multiple.help</source>
+        <target>Seulement si la fiche EC/matière n'est pas présente dans la liste déroulante du champ précédent.</target>
+      </segment>
+    </unit>
+    <unit id="dKYIcV6" name="ec_manage.helps.fiche_matiere_unique.help">
+      <segment>
+        <source>ec_manage.helps.fiche_matiere_unique.help</source>
+        <target>Si la fiche EC/matière est déjà créée.</target>
+      </segment>
+    </unit>
+    <unit id="ZcUXlf6" name="ec_manage.helps.fiche_matiere_libelle_unique.help">
+      <segment>
+        <source>ec_manage.helps.fiche_matiere_libelle_unique.help</source>
+        <target>Seulement si la fiche EC/matière n'est pas présente dans la liste déroulante du champ précédent.</target>
+      </segment>
+    </unit>
+    <unit id="1o8ZllN" name="fiche_matiere_step2.helps.description">
+      <segment>
+        <source>fiche_matiere_step2.helps.description</source>
+        <target>Indiquez en 3000 caractères maximum le contenu de l’enseignement. Faites une description détaillée des différents sujets traités dans cet enseignement.</target>
+      </segment>
+    </unit>
+    <unit id="6fZnMLK" name="fiche_matiere_step2.helps.langueDispense.help">
+      <segment>
+        <source>fiche_matiere_step2.helps.langueDispense.help</source>
+        <target>Plusieurs choix possibles.</target>
+      </segment>
+    </unit>
+    <unit id="9KorG.F" name="fiche_matiere_step2.helps.langueSupport.help">
+      <segment>
+        <source>fiche_matiere_step2.helps.langueSupport.help</source>
+        <target>Plusieurs choix possibles.</target>
+      </segment>
+    </unit>
+    <unit id="7NOpidn" name="fiche_matiere_step3.helps.objectifs">
+      <segment>
+        <source>fiche_matiere_step3.helps.objectifs</source>
+        <target>Indiquez en 3000 caractères maximum les objectifs de l’enseignement.</target>
+      </segment>
+    </unit>
+    <unit id="svyBGaV" name="fiche_matiere_step3.labels.competence">
+      <segment>
+        <source>fiche_matiere_step3.labels.competence</source>
+        <target>Choisissez d'abord le/les bloc(s) de compétences pour accéder aux compétences associées.</target>
+      </segment>
+    </unit>
+    <unit id="yPBu4Rz" name="fiche_matiere_step1.helps.responsableFicheMatiere">
+      <segment>
+        <source>fiche_matiere_step1.helps.responsableFicheMatiere</source>
+        <target>Indiquez le référent de l'enseignement.</target>
+      </segment>
+    </unit>
+    <unit id="YM.NEBE" name="user.add_missing.email.help">
+      <segment>
+        <source>user.add_missing.email.help</source>
+        <target>Indiquez un email valide de l'utilisateur à ajouter pour récupérer ses informations.</target>
+      </segment>
+    </unit>
+    <unit id="SbquQ9V" name="form.helps.email">
+      <segment>
+        <source>form.helps.email</source>
+        <target>form.helps.email</target>
+      </segment>
+    </unit>
+    <unit id="mQM.CiG" name="user_add.helps.email">
+      <segment>
+        <source>user_add.helps.email</source>
+        <target>Indiquez un email valide de l'utilisateur à ajouter pour récupérer ses informations.</target>
+      </segment>
+    </unit>
+    <unit id="AOhg7wW" name="ue.helps.libelle">
+      <segment>
+        <source>ue.helps.libelle</source>
+        <target>Vous pouvez indiquer un libellé pour une UE, notamment si elle est à choix pour expliquer les modalités</target>
+      </segment>
+    </unit>
+    <unit id="ijqYKTj" name="element_constitutif.helps.typeEc">
+      <segment>
+        <source>element_constitutif.helps.typeEc</source>
+        <target>"</target>
+      </segment>
+    </unit>
+    <unit id="IIm6Z5B" name="element_constitutif.helps.typeEcTexte">
+      <segment>
+        <source>element_constitutif.helps.typeEcTexte</source>
+        <target>Précisez le type d'EC si il n'est pas présent dans la liste déroulante du champ précédent.</target>
+      </segment>
+    </unit>
+    <unit id="gnGpDPx" name="semestre.type_semestre.helps">
+      <segment>
+        <source>semestre.type_semestre.helps</source>
+        <target>semestre.type_semestre.helps</target>
+      </segment>
+    </unit>
+    <unit id="DUwnYFX" name="element_constitutif_edit.helps.libelle">
+      <segment>
+        <source>element_constitutif_edit.helps.libelle</source>
+        <target>Indiquez le libellé exact de l'EC.</target>
+      </segment>
+    </unit>
+    <unit id="U9z8Oll" name="element_constitutif_edit.helps.typeEc">
+      <segment>
+        <source>element_constitutif_edit.helps.typeEc</source>
+        <target>"</target>
+      </segment>
+    </unit>
+    <unit id="_ep4dI3" name="element_constitutif_edit.helps.typeEcTexte">
+      <segment>
+        <source>element_constitutif_edit.helps.typeEcTexte</source>
+        <target>Précisez le type d'EC si il n'est pas présent dans la liste déroulante du champ précédent.</target>
+      </segment>
+    </unit>
+    <unit id=".KlNLQJ" name="semestre.reutilise.helps">
+      <segment>
+        <source>semestre.reutilise.helps</source>
+        <target>semestre.reutilise.helps</target>
+      </segment>
+    </unit>
+    <unit id="tBK0gVV" name="semestre.raccrocher.helps">
+      <segment>
+        <source>semestre.raccrocher.helps</source>
+        <target>Sélectionnez le semestre mutualisé que vous souhaitez raccrocher à votre maquette.</target>
+      </segment>
+    </unit>
+    <unit id="QReoLdG" name="semestre.mutualiser.helps">
+      <segment>
+        <source>semestre.mutualiser.helps</source>
+        <target>Indiquez toutes les formations avec lesquelles ce semestre est mutualisé.</target>
+      </segment>
+    </unit>
+    <unit id="dsW06C_" name="ue.mutualiser.helps">
+      <segment>
+        <source>ue.mutualiser.helps</source>
+        <target>Indiquez toutes les formations avec lesquelles cette UE est mutualisée.</target>
+      </segment>
+    </unit>
+    <unit id="TgdJZi2" name="ue.raccrocher.helps">
+      <segment>
+        <source>ue.raccrocher.helps</source>
+        <target>Sélectionnez l'UE mutualisée que vous souhaitez raccrocher à votre maquette.</target>
+      </segment>
+    </unit>
+    <unit id="uK.RUxt" name="ec_manage.helps.fiche_matieres_libelle_choix.help">
+      <segment>
+        <source>ec_manage.helps.fiche_matieres_libelle_choix.help</source>
+        <target>Indiquez le libellé de l'EC s'il y en a un.</target>
+      </segment>
+    </unit>
+    <unit id="8qcei4v" name="element_constitutif_enfant.helps.libelle">
+      <segment>
+        <source>element_constitutif_enfant.helps.libelle</source>
+        <target>Indiquez le libellé exact de l'EC.</target>
+      </segment>
+    </unit>
+    <unit id="0RlKGkB" name="form.helps.objectifsFormation">
+      <segment>
+        <source>form.helps.objectifsFormation</source>
+        <target>Décrivez en 3000 caractères maximum la finalité de la mention ainsi que l'organisation pédagogique de la formation en tronc commun et parcours.</target>
+      </segment>
+    </unit>
+    <unit id="euUvor1" name="fiche_matiere_step1.helps.sigle">
+      <segment>
+        <source>fiche_matiere_step1.helps.sigle</source>
+        <target>Le cas échéant, indiquez le sigle/code utilisé pour cet enseignement.</target>
+      </segment>
+    </unit>
+    <unit id="w6VdeHm" name="formation_step1.helps.sigle">
+      <segment>
+        <source>formation_step1.helps.sigle</source>
+        <target>Le cas échéant, indiquez le sigle utilisé pour cette mention/spécialité.</target>
+      </segment>
+    </unit>
+    <unit id="TqaYwZy" name="mccc_licence.helps.choix_type_mccc.help">
+      <segment>
+        <source>mccc_licence.helps.choix_type_mccc.help</source>
+        <target>Indiquez les modalités de MCCC pour l'EC.</target>
+      </segment>
+    </unit>
+    <unit id="S2K4IGb" name="mccc_licence.helps.ct.pourcentage_s1_et.help">
+      <segment>
+        <source>mccc_licence.helps.ct.pourcentage_s1_et.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="lLeRx.G" name="mccc_licence.helps.ct.typeEpreuve_s1_et.help">
+      <segment>
+        <source>mccc_licence.helps.ct.typeEpreuve_s1_et.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="CUitijM" name="mccc_licence.helps.ct.pourcentage_s2_et.help">
+      <segment>
+        <source>mccc_licence.helps.ct.pourcentage_s2_et.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="AayLNsN" name="mccc_licence.helps.ct.typeEpreuve_s2_et.help">
+      <segment>
+        <source>mccc_licence.helps.ct.typeEpreuve_s2_et.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="Wd9Hagx" name="mccc_licence.helps.cc_ct.pourcentage_s1_cc.help">
+      <segment>
+        <source>mccc_licence.helps.cc_ct.pourcentage_s1_cc.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="3gRkLPT" name="mccc_licence.helps.cc_ct.nbepreuve_s1_cc.help">
+      <segment>
+        <source>mccc_licence.helps.cc_ct.nbepreuve_s1_cc.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="X.Oot.P" name="mccc_licence.helps.cc_ct.pourcentage_s1_et.help">
+      <segment>
+        <source>mccc_licence.helps.cc_ct.pourcentage_s1_et.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="FjpJFDi" name="mccc_licence.helps.cc_ct.typeEpreuve_s1_et.help">
+      <segment>
+        <source>mccc_licence.helps.cc_ct.typeEpreuve_s1_et.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="WYbe_lF" name="mccc_licence.helps.cc_ct.pourcentage_s2_et.help">
+      <segment>
+        <source>mccc_licence.helps.cc_ct.pourcentage_s2_et.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="Ak7LF8M" name="mccc_licence.helps.cc_ct.typeEpreuve_s2_et.help">
+      <segment>
+        <source>mccc_licence.helps.cc_ct.typeEpreuve_s2_et.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="IJYufNQ" name="mccc_licence.helps.cc.pourcentage_s1_et.help">
+      <segment>
+        <source>mccc_licence.helps.cc.pourcentage_s1_et.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="M.pzyvh" name="mccc_licence.helps.cc.typeEpreuve_s1_cc.help">
+      <segment>
+        <source>mccc_licence.helps.cc.typeEpreuve_s1_cc.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="sHequ.g" name="fiche_matiere_step3.labels.competence_transverse">
+      <segment>
+        <source>fiche_matiere_step3.labels.competence_transverse</source>
+        <target>fiche_matiere_step3.labels.competence_transverse</target>
+      </segment>
+    </unit>
+    <unit id="mv0rKfG" name="formation_step1.helps.responsableMention">
+      <segment>
+        <source>formation_step1.helps.responsableMention</source>
+        <target>Non modifiable. Veuillez contacter le SES en cas de changement.</target>
+      </segment>
+    </unit>
+    <unit id="GnbWcPZ" name="formation_step1.helps.coResponsable">
+      <segment>
+        <source>formation_step1.helps.coResponsable</source>
+        <target>Le cas échéant, précisez le nom du co-responsable de la formation.</target>
+      </segment>
+    </unit>
+    <unit id="By4uTZ7" name="parcours_step1.helps.respParcours">
+      <segment>
+        <source>parcours_step1.helps.respParcours</source>
+        <target>Non modifiable. Veuillez contacter le responsable de la mention/spécialité en cas de changement.</target>
+      </segment>
+    </unit>
+    <unit id="aeFachP" name="parcours_step1.helps.coResponsable">
+      <segment>
+        <source>parcours_step1.helps.coResponsable</source>
+        <target>Le cas échéant, indiquez le co-responsable de ce parcours.</target>
+      </segment>
+    </unit>
+    <unit id="b7da_Dw" name="parcours.helps.coResponsable">
+      <segment>
+        <source>parcours.helps.coResponsable</source>
+        <target>Le cas échéant, indiquez le co-responsable de ce parcours.</target>
+      </segment>
+    </unit>
+    <unit id="odlXTQH" name="role.helps.onlyAdmin.help">
+      <segment>
+        <source>role.helps.onlyAdmin.help</source>
+        <target>Indiquez si ce rôle est uniquement disponible si l''utilisateur est un administrateur</target>
+      </segment>
+    </unit>
+    <unit id="XHYlNDP" name="role.helps.centre">
+      <segment>
+        <source>role.helps.centre</source>
+        <target>Préciser quelles sont les centres qui peuvent utiliser ce rôle</target>
+      </segment>
+    </unit>
+    <unit id="8KE6nN4" name="role.helps.centre.help">
+      <segment>
+        <source>role.helps.centre.help</source>
+        <target>Préciser quelles sont les centres qui peuvent utiliser ce rôle</target>
+      </segment>
+    </unit>
+    <unit id="fbUJ3ve" name="ec_step4.helps.volumeTe">
+      <segment>
+        <source>ec_step4.helps.volumeTe</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="4jPXusK" name="actualite.helps.datePublication.help">
+      <segment>
+        <source>actualite.helps.datePublication.help</source>
+        <target>actualite.helps.datePublication.help</target>
+      </segment>
+    </unit>
+    <unit id="8G4tulU" name="actualite.helps.titre">
+      <segment>
+        <source>actualite.helps.titre</source>
+        <target>actualite.helps.titre</target>
+      </segment>
+    </unit>
+    <unit id="b12S1J_" name="actualite.helps.texte">
+      <segment>
+        <source>actualite.helps.texte</source>
+        <target>actualite.helps.texte</target>
+      </segment>
+    </unit>
+    <unit id="abP7YJ4" name="actualite.helps.affiche.help">
+      <segment>
+        <source>actualite.helps.affiche.help</source>
+        <target>actualite.helps.affiche.help</target>
+      </segment>
+    </unit>
+    <unit id="B4KSMSs" name="ue.dupliquer.helps">
+      <segment>
+        <source>ue.dupliquer.helps</source>
+        <target>ue.dupliquer.helps</target>
+      </segment>
+    </unit>
+    <unit id="hMznoca" name="ue.semestre.dupliquer.helps">
+      <segment>
+        <source>ue.semestre.dupliquer.helps</source>
+        <target>ue.semestre.dupliquer.helps</target>
+      </segment>
+    </unit>
+    <unit id="vRGSiSZ" name="ue.position.helps">
+      <segment>
+        <source>ue.position.helps</source>
+        <target>ue.position.helps</target>
+      </segment>
+    </unit>
+    <unit id="CyWLv6a" name="ue.fiche_recopie.helps">
+      <segment>
+        <source>ue.fiche_recopie.helps</source>
+        <target>ue.fiche_recopie.helps</target>
+      </segment>
+    </unit>
+    <unit id=".afc.mE" name="semestre.changer.helps">
+      <segment>
+        <source>semestre.changer.helps</source>
+        <target>semestre.changer.helps</target>
+      </segment>
+    </unit>
+    <unit id="YfSGh7e" name="semestre.position.helps">
+      <segment>
+        <source>semestre.position.helps</source>
+        <target>semestre.position.helps</target>
+      </segment>
+    </unit>
+    <unit id="yPhiEBl" name="semestre.dupliquer.helps">
+      <segment>
+        <source>semestre.dupliquer.helps</source>
+        <target>semestre.dupliquer.helps</target>
+      </segment>
+    </unit>
+    <unit id="tB_UGag" name="semestre.fiche_recopie.helps">
+      <segment>
+        <source>semestre.fiche_recopie.helps</source>
+        <target>semestre.fiche_recopie.helps</target>
+      </segment>
+    </unit>
+    <unit id="h48JsdV" name="semestre.fiche_mutualise.helps">
+      <segment>
+        <source>semestre.fiche_mutualise.helps</source>
+        <target>semestre.fiche_mutualise.helps</target>
+      </segment>
+    </unit>
+    <unit id="XrnLUsa" name="ec_step4.helps.mccc_enfants_identique">
+      <segment>
+        <source>ec_step4.helps.mccc_enfants_identique</source>
+        <target>Cocher cette case pour appliquer les mêmes modalités de contrôle des connaissances et compétences à tous les EC enfants de cet EC.</target>
+      </segment>
+    </unit>
+    <unit id="nfOiYqn" name="ec_step4.helps.heures_enfants_edentiques">
+      <segment>
+        <source>ec_step4.helps.heures_enfants_edentiques</source>
+        <target>Cocher cette case pour appliquer les mêmes volumes horaires d'enseignement à tous les EC enfants de cet EC.</target>
+      </segment>
+    </unit>
+    <unit id="A3oWStX" name="ec_step4.helps.mccc_enfants_identique_parent">
+      <segment>
+        <source>ec_step4.helps.mccc_enfants_identique_parent</source>
+        <target>Cocher cette case pour récupérer les mêmes modalités de contrôle des connaissances et compétences de l'EC parent, s'appliquera à tous les EC enfants.</target>
+      </segment>
+    </unit>
+    <unit id="sNSTC2x" name="ec_step4.helps.heures_enfants_edentiques_parent">
+      <segment>
+        <source>ec_step4.helps.heures_enfants_edentiques_parent</source>
+        <target>Cocher cette case pour récupérer les mêmes volumes horaires d'enseignement de l'EC parent, s'appliquera à tous les EC enfants.</target>
+      </segment>
+    </unit>
+    <unit id="UgzZBPP" name="ue.helps.descriptionUeLibre">
+      <segment>
+        <source>ue.helps.descriptionUeLibre</source>
+        <target>Décrivez en quelques mots les choix pour cette UE libre (255 caractères maximum).</target>
+      </segment>
+    </unit>
+    <unit id="L3eOqxw" name="ec_step4.helps.quitus">
+      <segment>
+        <source>ec_step4.helps.quitus</source>
+        <target>L'utilisation du quitus est exceptionnelle. Son utilisation est soumise à autorisation de la présidence.</target>
+      </segment>
+    </unit>
+    <unit id="3b_G.Lb" name="ue.helps.ects">
+      <segment>
+        <source>ue.helps.ects</source>
+        <target>ECTS associés à l'UE, uniquement pour les UE libres ou les BUT, ne seront pas pris en compte dans les autres cas.</target>
+      </segment>
+    </unit>
+    <unit id="2sIQYUG" name="mccc_licence.helps.ct.duree_s2_et.help">
+      <segment>
+        <source>mccc_licence.helps.ct.duree_s2_et.help</source>
+        <target>mccc_licence.helps.ct.duree_s2_et.help</target>
+      </segment>
+    </unit>
+    <unit id="YqPQ_Vz" name="mccc_licence.helps.ct.duree_s1_et.help">
+      <segment>
+        <source>mccc_licence.helps.ct.duree_s1_et.help</source>
+        <target>mccc_licence.helps.ct.duree_s1_et.help</target>
+      </segment>
+    </unit>
+    <unit id="TkvexLj" name="type_epreuve.helps.sigle">
+      <segment>
+        <source>type_epreuve.helps.sigle</source>
+        <target>type_epreuve.helps.sigle</target>
+      </segment>
+    </unit>
+    <unit id="Gor5FI4" name="type_epreuve.helps.hasDuree.help">
+      <segment>
+        <source>type_epreuve.helps.hasDuree.help</source>
+        <target>type_epreuve.helps.hasDuree.help</target>
+      </segment>
+    </unit>
+    <unit id=".LpZmoM" name="mccc.licence.helps.cc_has_tp">
+      <segment>
+        <source>mccc.licence.helps.cc_has_tp</source>
+        <target>mccc.licence.helps.cc_has_tp</target>
+      </segment>
+    </unit>
+    <unit id="cBx4jNO" name="mccc.licence.helps.ct_has_tp">
+      <segment>
+        <source>mccc.licence.helps.ct_has_tp</source>
+        <target>mccc.licence.helps.ct_has_tp</target>
+      </segment>
+    </unit>
+    <unit id="HcWRwjD" name="mccc_licence.helps.cc.nbepreuve_s1_cc.help">
+      <segment>
+        <source>mccc_licence.helps.cc.nbepreuve_s1_cc.help</source>
+        <target>mccc_licence.helps.cc.nbepreuve_s1_cc.help</target>
+      </segment>
+    </unit>
+    <unit id="qyVxXPq" name="ec_step4.but.helps.ects">
+      <segment>
+        <source>ec_step4.but.helps.ects</source>
+        <target>ec_step4.but.helps.ects</target>
+      </segment>
+    </unit>
+    <unit id="BN76M9V" name="fiche_matiere_step4.helps.objectifs">
+      <segment>
+        <source>fiche_matiere_step4.helps.objectifs</source>
+        <target>fiche_matiere_step4.helps.objectifs</target>
+      </segment>
+    </unit>
+    <unit id="n5kSNnx" name="fiche_matiere_step4.helps.volumeCmPresentiel">
+      <segment>
+        <source>fiche_matiere_step4.helps.volumeCmPresentiel</source>
+        <target>fiche_matiere_step4.helps.volumeCmPresentiel</target>
+      </segment>
+    </unit>
+    <unit id="bAzpK_O" name="fiche_matiere_step4.helps.volumeTdPresentiel">
+      <segment>
+        <source>fiche_matiere_step4.helps.volumeTdPresentiel</source>
+        <target>fiche_matiere_step4.helps.volumeTdPresentiel</target>
+      </segment>
+    </unit>
+    <unit id="sefdIoU" name="fiche_matiere_step4.helps.volumeTpPresentiel">
+      <segment>
+        <source>fiche_matiere_step4.helps.volumeTpPresentiel</source>
+        <target>fiche_matiere_step4.helps.volumeTpPresentiel</target>
+      </segment>
+    </unit>
+    <unit id="1jOhsUu" name="fiche_matiere_step4.helps.volumeTe">
+      <segment>
+        <source>fiche_matiere_step4.helps.volumeTe</source>
+        <target>Volume en autonomie</target>
+      </segment>
+    </unit>
+    <unit id="CUypXFj" name="mccc.but.helps.sansNote">
+      <segment>
+        <source>mccc.but.helps.sansNote</source>
+        <target>Exemple portfolio de semestre impair</target>
+      </segment>
+    </unit>
+    <unit id="qlfc3ko" name="mccc.but.helps.sansHeures">
+      <segment>
+        <source>mccc.but.helps.sansHeures</source>
+        <target>Exemple pour les stages ou l'alternance</target>
+      </segment>
+    </unit>
+    <unit id="QO5EhHm" name="parcours.fiche_recopie.helps">
+      <segment>
+        <source>parcours.fiche_recopie.helps</source>
+        <target>Recopie intégrale du parcours (y compris les fiches), ce mode est à privilégier si vous souhaitez modifier le parcours notamment si le parcours est sur plusieurs sites ou des modalités différente.</target>
+      </segment>
+    </unit>
+    <unit id="eIm3kFq" name="parcours.fiche_mutualise.helps">
+      <segment>
+        <source>parcours.fiche_mutualise.helps</source>
+        <target>Recopie des éléments avec mise en commun des fiches EC/matière entre les deux parcours.</target>
+      </segment>
+    </unit>
+    <unit id="kHjmsh2" name="ec_manage.helps.fiche_matiere_libelle_libre_edit.help">
+      <segment>
+        <source>ec_manage.helps.fiche_matiere_libelle_libre_edit.help</source>
+        <target>Précisez les modalités de choixd ans le cas d'un EC libre</target>
+      </segment>
+    </unit>
+    <unit id="eB0azRb" name="fiche_matiere_step1.helps.typeMatiere.help">
+      <segment>
+        <source>fiche_matiere_step1.helps.typeMatiere.help</source>
+        <target>Précisez si c'est une SAÉ ou une Ressource</target>
+      </segment>
+    </unit>
+    <unit id="7uDLok_" name="mccc_licence.helps.cc_has_tp">
+      <segment>
+        <source>mccc_licence.helps.cc_has_tp</source>
+        <target>Précisez si l'évaluation en CC de cet enseignement prévoit une/plusieurs épreuves de TP</target>
+      </segment>
+    </unit>
+    <unit id="3I5if44" name="mccc_licence.helps.cc.cc_has_tp_pourcentage.help">
+      <segment>
+        <source>mccc_licence.helps.cc.cc_has_tp_pourcentage.help</source>
+        <target>Précisez le pourcentage de la note de TP par rapport à la note globale de l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="SuZoF90" name="fiche_matiere_step4_hd.helps.volumeCmPresentiel">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeCmPresentiel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="0lrpwOx" name="fiche_matiere_step4_hd.helps.volumeTdPresentiel">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeTdPresentiel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="rcoXvEc" name="fiche_matiere_step4_hd.helps.volumeTpPresentiel">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeTpPresentiel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="opcOt24" name="fiche_matiere_step4_hd.helps.volumeCmDistanciel">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeCmDistanciel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="NpoCxaq" name="fiche_matiere_step4_hd.helps.volumeTdDistanciel">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeTdDistanciel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="SS0zMRd" name="fiche_matiere_step4_hd.helps.volumeTpDistanciel">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeTpDistanciel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="uZ_qkYb" name="fiche_matiere_step4_hd.helps.volumeTe">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeTe</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="OXPgIuk" name="-">
+      <segment>
+        <source>-</source>
+        <target>-</target>
+      </segment>
+    </unit>
+    <unit id="1n.yuYl" name="mccc.but.helps.volumesHorairesImpose">
+      <segment>
+        <source>mccc.but.helps.volumesHorairesImpose</source>
+        <target>Si cette case est cochée, les volumes horaires seront imposés pour tous les EC utilisant cette fiche EC/matière sans possibilité de modifier.</target>
+      </segment>
+    </unit>
+    <unit id="zzpXWCd" name="fiche_matiere_step4_hd.helps.ects">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.ects</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="sg05fBF" name="mccc.but.helps.mcccImpose">
+      <segment>
+        <source>mccc.but.helps.mcccImpose</source>
+        <target>Si cette case est cochée, les modalités de contrôle des connaissances et compétences seront imposées pour tous les EC utilisant cette fiche EC/matière sans possibilité de modifier.</target>
+      </segment>
+    </unit>
+    <unit id="NRV6_lj" name="mccc.but.helps.ectsImpose">
+      <segment>
+        <source>mccc.but.helps.ectsImpose</source>
+        <target>Si cette case est cochée, les ECTS seront imposés pour tous les EC utilisant cette fiche EC/matière sans possibilité de modifier.</target>
+      </segment>
+    </unit>
+    <unit id="xp5PrYm" name="parcours_ec.helps.synchroEcts">
+      <segment>
+        <source>parcours_ec.helps.synchroEcts</source>
+        <target>parcours_ec.helps.synchroEcts</target>
+      </segment>
+    </unit>
+    <unit id=".2M6QPI" name="parcours_ec.helps.synchroMccc">
+      <segment>
+        <source>parcours_ec.helps.synchroMccc</source>
+        <target>parcours_ec.helps.synchroMccc</target>
+      </segment>
+    </unit>
+    <unit id="zGyXwJ7" name="parcours_ec.helps.synchroBcc">
+      <segment>
+        <source>parcours_ec.helps.synchroBcc</source>
+        <target>parcours_ec.helps.synchroBcc</target>
+      </segment>
+    </unit>
+    <unit id="8gRgHRV" name="parcours_ec.helps.synchroHeures">
+      <segment>
+        <source>parcours_ec.helps.synchroHeures</source>
+        <target>parcours_ec.helps.synchroHeures</target>
+      </segment>
+    </unit>
+    <unit id="JnUytaU" name="parcours_ec.helps.recopieMccc">
+      <segment>
+        <source>parcours_ec.helps.recopieMccc</source>
+        <target>parcours_ec.helps.recopieMccc</target>
+      </segment>
+    </unit>
+    <unit id="yCHD5zC" name="parcours_ec.helps.recopieEcts">
+      <segment>
+        <source>parcours_ec.helps.recopieEcts</source>
+        <target>parcours_ec.helps.recopieEcts</target>
+      </segment>
+    </unit>
+    <unit id="yetUUHS" name="parcours_ec.helps.recopieBcc">
+      <segment>
+        <source>parcours_ec.helps.recopieBcc</source>
+        <target>parcours_ec.helps.recopieBcc</target>
+      </segment>
+    </unit>
+    <unit id="uw8Gkcj" name="parcours_ec.helps.recopieHeures">
+      <segment>
+        <source>parcours_ec.helps.recopieHeures</source>
+        <target>parcours_ec.helps.recopieHeures</target>
+      </segment>
+    </unit>
+    <unit id="hLrjR8M" name="mccc.ec.helps.sansHeures">
+      <segment>
+        <source>mccc.ec.helps.sansHeures</source>
+        <target>Cochez cette case si votre EC ne contient pas de volume horaire.</target>
+      </segment>
+    </unit>
+    <unit id="32SQ6QY" name="etablissement.helps.etablissement_information.help">
+      <segment>
+        <source>etablissement.helps.etablissement_information.help</source>
+        <target>etablissement.helps.etablissement_information.help</target>
+      </segment>
+    </unit>
+    <unit id="LO_vUxy" name="etablissement.helps.etablissement_information.calendrier_universitaire">
+      <segment>
+        <source>etablissement.helps.etablissement_information.calendrier_universitaire</source>
+        <target>etablissement.helps.etablissement_information.calendrier_universitaire</target>
+      </segment>
+    </unit>
+    <unit id="hMl_1M0" name="etablissement.helps.etablissement_information.calendrier_inscription">
+      <segment>
+        <source>etablissement.helps.etablissement_information.calendrier_inscription</source>
+        <target>etablissement.helps.etablissement_information.calendrier_inscription</target>
+      </segment>
+    </unit>
+    <unit id="aUlYn3Y" name="etablissement.helps.etablissement_information.informations_pratiques">
+      <segment>
+        <source>etablissement.helps.etablissement_information.informations_pratiques</source>
+        <target>etablissement.helps.etablissement_information.informations_pratiques</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

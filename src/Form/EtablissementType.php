@@ -23,6 +23,9 @@ class EtablissementType extends AbstractType
             ->add('adresse', AdresseType::class, [
                 'label' => 'Adresse du siège de l\'établissement',
             ])
+            ->add('etablissement_information', EtablissementInformationType::class, [
+                'label' => "Informations diverses"
+            ])
         ;
     }
 

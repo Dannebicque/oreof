@@ -11,6 +11,7 @@ namespace App\Controller\Config;
 
 use App\Controller\BaseController;
 use App\Entity\Etablissement;
+use App\Entity\EtablissementInformation;
 use App\Form\EtablissementType;
 use App\Repository\EtablissementRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,6 +80,7 @@ class EtablissementController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $etablissement = $form->getData();
             $etablissementRepository->save($etablissement, true);
 
             return $this->json(true);
