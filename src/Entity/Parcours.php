@@ -174,6 +174,9 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: CommentaireParcours::class)]
     private Collection $commentaires;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $modalitesAdmission = null;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -1017,5 +1020,17 @@ class Parcours
         }
 
         return substr($texte, 0, -2);
+    }
+
+    public function getModalitesAdmission(): ?string
+    {
+        return $this->modalitesAdmission;
+    }
+
+    public function setModalitesAdmission(?string $modalitesAdmission): static
+    {
+        $this->modalitesAdmission = $modalitesAdmission;
+
+        return $this;
     }
 }

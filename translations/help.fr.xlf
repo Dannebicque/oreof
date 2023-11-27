@@ -1940,5 +1940,11 @@
         <target>type_diplome.helps.modalites_admission</target>
       </segment>
     </unit>
+    <unit id=".Al7q2G" name="parcours_step5.helps.modalitesAdmission">
+      <segment>
+        <source>parcours_step5.helps.modalitesAdmission</source>
+        <target>parcours_step5.helps.modalitesAdmission</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

@@ -32,7 +32,8 @@ class TypeDiplomeType extends AbstractType
                 'label' => "Modalités d'admission",
                 'required' => true,
                 'attr' => [
-                    'rows' => 6
+                    'rows' => 6,
+                    'maxlength' => 3000
                 ]
             ])
             ->add('semestreDebut')

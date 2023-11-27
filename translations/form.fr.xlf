@@ -2317,5 +2317,11 @@
         <target>Modalités d'admission</target>
       </segment>
     </unit>
+    <unit id="yr1s_K8" name="parcours_step5.labels.modalitesAdmission">
+      <segment>
+        <source>parcours_step5.labels.modalitesAdmission</source>
+        <target>parcours_step5.labels.modalitesAdmission</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
