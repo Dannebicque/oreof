@@ -15,7 +15,7 @@
         {% if ec.elementConstitutif.ficheMatiere is defined and ec.elementConstitutif.ficheMatiere is not null %}
         <a href="{{ path(
                     'app_fiche_matiere_maquette_iframe',
-                    { slug: ec.elementConstitutif.ficheMatiere.slug, id: parcours.parcours.id }
+                    { ec: ec.elementConstitutif.id, parcours: parcours.parcours.id }
                     ) 
                 }}">
             {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
