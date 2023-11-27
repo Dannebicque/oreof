@@ -1,8 +1,9 @@
 {% if IsEcEnfant and loop.index == 1 %}
 <tr>
     <td id="ECLibelle">
+        Élément constitutif à choix :
         <span class="badge bg-info">
-            Élément constitutif à choix restreint : {{ arrayLength }} choix possible
+            1 choix possible parmi {{ arrayLength }} 
         </span>
         <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down">
     </td>
