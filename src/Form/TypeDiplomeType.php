@@ -36,6 +36,14 @@ class TypeDiplomeType extends AbstractType
                     'maxlength' => 3000
                 ]
             ])
+            ->add('insertionProfessionnelle', TextareaType::class, [
+                'label' => 'Insertion professionnelle',
+                'required' => true,
+                'attr' => [
+                    'rows' => 4,
+                    'maxlength' => 3000
+                ]
+            ])
             ->add('semestreDebut')
             ->add('semestreFin')
             ->add('nbUeMin')

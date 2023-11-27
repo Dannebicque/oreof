@@ -85,6 +85,9 @@ class TypeDiplome
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $modalites_admission = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $insertionProfessionnelle = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -490,6 +493,18 @@ class TypeDiplome
     public function setModalitesAdmission(?string $modalites_admission): static
     {
         $this->modalites_admission = $modalites_admission;
+
+        return $this;
+    }
+
+    public function getInsertionProfessionnelle(): ?string
+    {
+        return $this->insertionProfessionnelle;
+    }
+
+    public function setInsertionProfessionnelle(?string $insertionProfessionnelle): static
+    {
+        $this->insertionProfessionnelle = $insertionProfessionnelle;
 
         return $this;
     }

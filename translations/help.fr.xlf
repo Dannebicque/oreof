@@ -1946,5 +1946,11 @@
         <target>parcours_step5.helps.modalitesAdmission</target>
       </segment>
     </unit>
+    <unit id="TZ2yxU1" name="type_diplome.helps.insertionProfessionnelle">
+      <segment>
+        <source>type_diplome.helps.insertionProfessionnelle</source>
+        <target>type_diplome.helps.insertionProfessionnelle</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

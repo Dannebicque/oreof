@@ -9,10 +9,20 @@
         <td>{{ type_diplome.libelleCourt }}</td>
     </tr>
     {% if type_diplome.getModalitesAdmission is defined and type_diplome.getModalitesAdmission is not null %}
-        <th>Modalités d'admission</th>
-        <td>
-            {{ type_diplome.getModalitesAdmission|raw }}
-        </td>
+        <tr>
+            <th>Modalités d'admission</th>
+            <td>
+                {{ type_diplome.getModalitesAdmission|raw }}
+            </td>
+        </tr>
+    {% endif %}
+    {% if type_diplome.getInsertionProfessionnelle is defined and type_diplome.getInsertionProfessionnelle is not null %}
+        <tr>
+            <th>Insertion professionnelle</th>
+            <td>
+                {{ type_diplome.getInsertionProfessionnelle|raw }}
+            </td>
+        </tr>
     {% endif %}
     </tbody>
 </table>
