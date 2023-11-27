@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TypeDiplomeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TypeDiplomeRepository::class)]
@@ -80,6 +81,9 @@ class TypeDiplome
 
     #[ORM\Column(length: 1)]
     private ?string $codeApogee = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $modalites_admission = null;
 
     public function __construct()
     {
@@ -474,6 +478,18 @@ class TypeDiplome
     public function setCodeApogee(string $codeApogee): static
     {
         $this->codeApogee = $codeApogee;
+
+        return $this;
+    }
+
+    public function getModalitesAdmission(): ?string
+    {
+        return $this->modalites_admission;
+    }
+
+    public function setModalitesAdmission(?string $modalites_admission): static
+    {
+        $this->modalites_admission = $modalites_admission;
 
         return $this;
     }

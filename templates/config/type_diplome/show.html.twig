@@ -8,5 +8,11 @@
         <th>Libellé court</th>
         <td>{{ type_diplome.libelleCourt }}</td>
     </tr>
+    {% if type_diplome.getModalitesAdmission is defined and type_diplome.getModalitesAdmission is not null %}
+        <th>Modalités d'admission</th>
+        <td>
+            {{ type_diplome.getModalitesAdmission|raw }}
+        </td>
+    {% endif %}
     </tbody>
 </table>

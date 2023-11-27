@@ -6,6 +6,7 @@ use App\Entity\TypeDiplome;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,6 +27,13 @@ class TypeDiplomeType extends AbstractType
                 'label' => 'Code Apogée',
                 'attr' => ['maxlength' => 1],
                 'required' => true,
+            ])
+            ->add('modalites_admission', TextareaType::class, [
+                'label' => "Modalités d'admission",
+                'required' => true,
+                'attr' => [
+                    'rows' => 6
+                ]
             ])
             ->add('semestreDebut')
             ->add('semestreFin')

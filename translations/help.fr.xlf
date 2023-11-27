@@ -1928,5 +1928,17 @@
         <target>etablissement.helps.etablissement_information.informations_pratiques</target>
       </segment>
     </unit>
+    <unit id="1ve22xb" name="type_diplome.helps.codeApogee">
+      <segment>
+        <source>type_diplome.helps.codeApogee</source>
+        <target>type_diplome.helps.codeApogee</target>
+      </segment>
+    </unit>
+    <unit id="fx6V9rR" name="type_diplome.helps.modalites_admission">
+      <segment>
+        <source>type_diplome.helps.modalites_admission</source>
+        <target>type_diplome.helps.modalites_admission</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

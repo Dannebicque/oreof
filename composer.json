@@ -88,7 +88,12 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "server:start": [
+            "Composer\\Config::disableProcessTimeout",
+            "symfony server:start --port=8001"
+        ],
+        "server:stop": "symfony server:stop"
     },
     "conflict": {
         "symfony/symfony": "*"

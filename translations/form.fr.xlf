@@ -2305,5 +2305,17 @@
         <target>Informations diverses</target>
       </segment>
     </unit>
+    <unit id="hvsLsYs" name="Code Apogée">
+      <segment>
+        <source>Code Apogée</source>
+        <target>Code Apogée</target>
+      </segment>
+    </unit>
+    <unit id="sGE3Cde" name="Modalités d'admission">
+      <segment>
+        <source>Modalités d'admission</source>
+        <target>Modalités d'admission</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
