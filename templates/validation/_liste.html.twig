@@ -19,6 +19,9 @@
                 Mention/spécialité
             </th>
             <th>Etat</th>
+            {% if etape == 'cfvu' %}
+            <th>PV ?</th>
+            {% endif %}
             <th>Remplissage</th>
             <th></th>
         </tr>
@@ -61,6 +64,11 @@
                 <td>
                     {{ formation.etatDpe|badgeDpe }}
                 </td>
+                {% if etape == 'cfvu' %}
+                    <td>
+                        {{ component('historique_pv', {formation:formation}) }}
+                    </td>
+                {% endif %}
                 <td>
                     {{ formation.remplissage|remplissage }}
                 </td>
