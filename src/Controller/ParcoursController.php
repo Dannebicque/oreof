@@ -352,6 +352,15 @@ class ParcoursController extends BaseController
         return $this->json(false);
     }
 
+    #[Route('/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
+    public function getMaquetteIframe(Parcours $parcours){
+        $calcul = new CalculStructureParcours();
+
+        return $this->render('parcours/maquette_iframe.html.twig', [
+            'parcours' => $calcul->calcul($parcours)
+        ]);
+    }
+
     #[Route('/{parcours}/export-xml-lheo', name: 'app_parcours_export_xml_lheo')]
     public function getXmlLheoFromParcours(Parcours $parcours, LheoXML $lheoXML) : Response {
         $xml = $lheoXML->generateLheoXMLFromParcours($parcours, true);
@@ -426,9 +435,7 @@ class ParcoursController extends BaseController
             // Nom du fichier
             $fileName = "parcours-{$parcours->getId()}-{$dateHeure}";
             $parcoursVersioning->setFileName($fileName);
-            $entityManager->persist($parcoursVersioning);
-            $entityManager->flush();
-
+            // Création du fichier JSON
             $json = $serializer->serialize($parcours, 'json', [
                 'circular_reference_limit' => 5,
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
@@ -436,13 +443,16 @@ class ParcoursController extends BaseController
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
             ]);
             $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$fileName}", $json);
+            // Enregistrement de la référence en BD
+            $entityManager->persist($parcoursVersioning);
+            $entityManager->flush();
+            // Message de réussite + redirection
             $this->addFlashBag('success', 'La version du parcours à bien été sauvegardée.');
-
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
 
         }catch(\Exception $e){
 
-            $this->addFlashBag('error', 'Une erreur est survenue lors de la sauvegarde.');
+            $this->addFlashBag('error', "Une erreur est survenue lors de la sauvegarde.");
 
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
         }

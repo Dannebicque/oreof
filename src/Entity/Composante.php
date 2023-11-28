@@ -72,6 +72,9 @@ class Composante
     #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'composante')]
     private Collection $ficheMatieres;
 
+    #[ORM\OneToOne(inversedBy: 'composante', cascade: ['persist', 'remove'])]
+    private ?ComposanteInformation $composanteInformation = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -323,6 +326,18 @@ class Composante
         if ($this->ficheMatieres->removeElement($ficheMatiere)) {
             $ficheMatiere->removeComposante($this);
         }
+
+        return $this;
+    }
+
+    public function getComposanteInformation(): ?ComposanteInformation
+    {
+        return $this->composanteInformation;
+    }
+
+    public function setComposanteInformation(?ComposanteInformation $composanteInformation): static
+    {
+        $this->composanteInformation = $composanteInformation;
 
         return $this;
     }

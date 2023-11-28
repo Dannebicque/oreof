@@ -76,6 +76,9 @@ class ComposanteType extends AbstractType
                 'required' => false,
                 'attr' => ['maxlength' => 255]
             ])
+            ->add('composanteInformation', ComposanteInformationType::class, [
+                'label' => 'Information complémentaires'
+            ])
         ;
     }
 

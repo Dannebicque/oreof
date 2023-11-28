@@ -1652,5 +1652,29 @@
         <target>ECTS associés à l'UE, uniquement pour les UE libres ou les BUT, ne seront pas pris en compte dans les autres cas.</target>
       </segment>
     </unit>
+    <unit id="j4ZV1JG" name="composante.helps.composanteInformation.help">
+      <segment>
+        <source>composante.helps.composanteInformation.help</source>
+        <target>composante.helps.composanteInformation.help</target>
+      </segment>
+    </unit>
+    <unit id=".ofCvYF" name="composante.helps.composanteInformation.restauration">
+      <segment>
+        <source>composante.helps.composanteInformation.restauration</source>
+        <target>composante.helps.composanteInformation.restauration</target>
+      </segment>
+    </unit>
+    <unit id="OIKUcL8" name="composante.helps.composanteInformation.hebergement">
+      <segment>
+        <source>composante.helps.composanteInformation.hebergement</source>
+        <target>composante.helps.composanteInformation.hebergement</target>
+      </segment>
+    </unit>
+    <unit id="91C8te7" name="composante.helps.composanteInformation.transport">
+      <segment>
+        <source>composante.helps.composanteInformation.transport</source>
+        <target>composante.helps.composanteInformation.transport</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
