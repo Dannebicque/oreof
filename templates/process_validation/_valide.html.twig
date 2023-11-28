@@ -18,7 +18,6 @@
             <input type="date" name="date"
                    class="form-control"
                    id="date"
-                    {% if laisserPasser is defined and laisserPasser != false and laisserPasser.etat == "valide" %} value="{{ 'now'|date('Y-m-d') }}" {% endif %}
             >
         </div>
     {% endif %}
