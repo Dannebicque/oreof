@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.18.5](https://github.com/Dannebicque/oreof/compare/v1.18.4...v1.18.5) (2023-11-28)
+
+
+### Bug Fixes
+
+* Texte sur le process validé CFVU ([991988a](https://github.com/Dannebicque/oreof/commit/991988ab70804b7840681d3336781fcf8eccaf54))
+
 ### [1.18.4](https://github.com/Dannebicque/oreof/compare/v1.18.3...v1.18.4) (2023-11-28)
 
 
