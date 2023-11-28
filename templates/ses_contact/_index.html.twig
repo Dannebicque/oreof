@@ -1,4 +1,7 @@
-<form method="post" action="{{ path('app_ses_contact') }}">
+<form method="post" action="{{ path('app_ses_contact', {
+    formation: formation != null ? formation.id : '',
+    parcours: parcours != null ? parcours.id : ''
+}) }}">
     <div class="mb-3">
         <label for="destinataires" class="form-label required">Destinataire</label>
         <select id="destinataires" name="destinataires[]" multiple class="form-select" required
@@ -22,6 +25,9 @@
                 <option value="{{ user.id }}"
                         {% if formation != null and formation.coResponsable.id == user.id or
                             parcours != null and parcours.coResponsable.id == user.id
+                        %}selected{% endif %}
+                        {% if formation != null and formation.composantePorteuse.responsableDpe != null
+                            and formation.composantePorteuse.responsableDpe.id == user.id
                         %}selected{% endif %}
                 >{{ user.display }}</option>
             {% endfor %}

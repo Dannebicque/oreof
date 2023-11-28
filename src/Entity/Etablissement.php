@@ -41,6 +41,9 @@ class Etablissement
     #[ORM\Column]
     private ?array $options = [];
 
+    #[ORM\OneToOne(mappedBy: 'etablissement', cascade: ['persist', 'remove'])]
+    private ?EtablissementInformation $etablissement_information = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -182,6 +185,28 @@ class Etablissement
     public function setOptions(array $options = []): static
     {
         $this->options = $options;
+
+        return $this;
+    }
+
+    public function getEtablissementInformation(): ?EtablissementInformation
+    {
+        return $this->etablissement_information;
+    }
+
+    public function setEtablissementInformation(?EtablissementInformation $etablissement_information): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($etablissement_information === null && $this->etablissement_information !== null) {
+            $this->etablissement_information->setEtablissement(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($etablissement_information !== null && $etablissement_information->getEtablissement() !== $this) {
+            $etablissement_information->setEtablissement($this);
+        }
+
+        $this->etablissement_information = $etablissement_information;
 
         return $this;
     }

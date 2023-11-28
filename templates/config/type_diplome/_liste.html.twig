@@ -2,7 +2,13 @@
     <thead>
     <tr>
         <th>Libellé</th>
-        <th>Type(s) diplôme</th>
+        <th>Libellé Court</th>
+        <th>Code Apogée</th>
+        <th>Sem. Début / Sem. Fin</th>
+        <th>Mémoire ?</th>
+        <th>Stage ?</th>
+        <th>Situation Pro. ?</th>
+        <th>Projet ?</th>
         <th></th>
     </tr>
     </thead>
@@ -11,6 +17,12 @@
         <tr>
             <td>{{ type_diplome.libelle }}</td>
             <td>{{ type_diplome.libelleCourt }}</td>
+            <td>{{ type_diplome.codeApogee|displayOrBadge }}</td>
+            <td>S{{ type_diplome.semestreDebut }} / S{{ type_diplome.semestreFin }}</td>
+            <td>{{ type_diplome.hasMemoire|badgeBoolean }}</td>
+            <td>{{ type_diplome.hasStage|badgeBoolean }}</td>
+            <td>{{ type_diplome.hasSituationPro|badgeBoolean }}</td>
+            <td>{{ type_diplome.hasProjet|badgeBoolean }}</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {
@@ -29,19 +41,16 @@
                 </button>
 
                 <button
-                        {{ stimulus_controller('modal', {
-                            size: 'lg',
-                            modalTitle: 'Modifier un type de diplôme',
-                            modalUrl: path('app_type_diplome_edit',{'id': type_diplome.id}) }) }}
-                        data-action="click->modal#openModal"
-                        class="btn btn-sm text-warning"
-                        data-size="lg"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Modifier un type de diplôme"
+                    class="btn btn-sm text-warning"
+                    data-size="lg"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="Modifier un type de diplôme"
                 >
-                    <i class="{{ iconEdit }}"></i>
-                    <span> modifier</span>
+                    <a href="{{ path('app_type_diplome_edit', { id: type_diplome.id } ) }}" class="text-warning">
+                        <i class="{{ iconEdit }}"></i>
+                        <span> modifier</span>
+                    </a>
                 </button>
 
                 <button {{ stimulus_action('crud', 'duplicate', 'click', {

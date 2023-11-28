@@ -52,6 +52,10 @@ class ParcoursStep5Type extends AbstractType
                 'attr' => ['rows' => 5, 'maxlength' => 3000, 'data-action' => 'change->parcours--step5#coordSecretariat'],
                 'help' => '-',
             ])
+            ->add('modalitesAdmission', TextareaAutoSaveType::class, [
+                'attr' => ['rows' => 8, 'maxlength' => 3000, 'data-action' => 'change->parcours--step5#saveModalitesAdmission'],
+                'label' => "Modalités d'admission"
+            ])
         ;
     }
 

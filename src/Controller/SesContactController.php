@@ -29,6 +29,7 @@ class SesContactController extends AbstractController
     ): Response {
         if ($request->query->has('formation') && $request->query->get('formation') !== '') {
             $formation = $formationRepository->find($request->query->get('formation'));
+            $parcours = null;
         }
 
         if ($request->query->has('parcours') && $request->query->get('parcours') !== '') {
@@ -39,6 +40,9 @@ class SesContactController extends AbstractController
         if ($request->isMethod('POST')) {
             $mailer->initEmail();
             $mailer->setTemplate('mails/ses_contact.html.twig', [
+                'expediteur' => $this->getUser(),
+                'formation' => $formation ?? null,
+                'parcours' => $parcours ?? null,
                 'message' => $request->request->get('message'),
             ]);
             $mailer->sendMessage(

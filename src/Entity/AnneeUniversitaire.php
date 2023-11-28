@@ -52,6 +52,9 @@ class AnneeUniversitaire
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $datePublication = null;
 
+    #[ORM\Column(length: 1)]
+    private ?string $codeApogee = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -149,6 +152,18 @@ class AnneeUniversitaire
     public function setDatePublication(?DateTimeInterface $datePublication): self
     {
         $this->datePublication = $datePublication;
+
+        return $this;
+    }
+
+    public function getCodeApogee(): ?string
+    {
+        return $this->codeApogee;
+    }
+
+    public function setCodeApogee(string $codeApogee): static
+    {
+        $this->codeApogee = $codeApogee;
 
         return $this;
     }

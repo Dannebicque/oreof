@@ -478,7 +478,11 @@
     <unit id="1YelMF." name="parcours_step2.labels.hasMemoire.label">
       <segment>
         <source>parcours_step2.labels.hasMemoire.label</source>
+<<<<<<< HEAD
         <target>La formation prévoit-elle un TER/Mémoire ?</target>
+=======
+        <target>La formation prévoit-elle un TER/Mémoire de recherche ?</target>
+>>>>>>> formulaire-saisie
       </segment>
     </unit>
     <unit id="xlpzVKw" name="parcours_step2.labels.memoireText">
@@ -922,7 +926,11 @@
     <unit id="YPVmbdZ" name="TER – travail d’étude et de recherche">
       <segment>
         <source>TER – travail d’étude et de recherche</source>
+<<<<<<< HEAD
         <target>TER – travail d’étude et de recherche</target>
+=======
+        <target>TER (travail d’étude et de recherche)</target>
+>>>>>>> formulaire-saisie
       </segment>
     </unit>
     <unit id="zVuDKsX" name="Libellé">
@@ -2059,10 +2067,281 @@
         <target>Actualité publiée ?</target>
       </segment>
     </unit>
+<<<<<<< HEAD
     <unit id="CbJEiFv" name="composante.labels.composanteInformation.label">
       <segment>
         <source>composante.labels.composanteInformation.label</source>
         <target>composante.labels.composanteInformation.label</target>
+=======
+    <unit id="hpB_OOv" name="mccc.licence.labels.cc_has_tp">
+      <segment>
+        <source>mccc.licence.labels.cc_has_tp</source>
+        <target>Le CC comprend du TP</target>
+      </segment>
+    </unit>
+    <unit id="WpaGy2P" name="mccc_licence.labels.cc.cc_has_tp_pourcentage">
+      <segment>
+        <source>mccc_licence.labels.cc.cc_has_tp_pourcentage</source>
+        <target>Pourcentage du TP</target>
+      </segment>
+    </unit>
+    <unit id="WSsHhRJ" name="ec_step4.but.labels.ects">
+      <segment>
+        <source>ec_step4.but.labels.ects</source>
+        <target>ECTS</target>
+      </segment>
+    </unit>
+    <unit id="L2FKD8X" name="fiche_matiere_step4.labels.objectifs">
+      <segment>
+        <source>fiche_matiere_step4.labels.objectifs</source>
+        <target>Objectifs</target>
+      </segment>
+    </unit>
+    <unit id="X6awyRm" name="fiche_matiere_step4.labels.volumeCmPresentiel">
+      <segment>
+        <source>fiche_matiere_step4.labels.volumeCmPresentiel</source>
+        <target>Volume heures CM</target>
+      </segment>
+    </unit>
+    <unit id="F1caEcR" name="fiche_matiere_step4.labels.volumeTdPresentiel">
+      <segment>
+        <source>fiche_matiere_step4.labels.volumeTdPresentiel</source>
+        <target>Volume heures TD</target>
+      </segment>
+    </unit>
+    <unit id="lEpqZc_" name="fiche_matiere_step4.labels.volumeTpPresentiel">
+      <segment>
+        <source>fiche_matiere_step4.labels.volumeTpPresentiel</source>
+        <target>Volume heures TP</target>
+      </segment>
+    </unit>
+    <unit id="SOXpHJt" name="fiche_matiere_step4.labels.volumeTe">
+      <segment>
+        <source>fiche_matiere_step4.labels.volumeTe</source>
+        <target>Volume heures SAE en autonomie</target>
+      </segment>
+    </unit>
+    <unit id="YqPQ_Vz" name="mccc_licence.helps.ct.duree_s1_et.help">
+      <segment>
+        <source>mccc_licence.helps.ct.duree_s1_et.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="2sIQYUG" name="mccc_licence.helps.ct.duree_s2_et.help">
+      <segment>
+        <source>mccc_licence.helps.ct.duree_s2_et.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="yJe9LKz" name="element_constitutif.labels.code">
+      <segment>
+        <source>element_constitutif.labels.code</source>
+        <target>Code de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="Cdmms04" name="element_constitutif.labels.ordre">
+      <segment>
+        <source>element_constitutif.labels.ordre</source>
+        <target>Numéro de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="WKAUWBQ" name="element_constitutif.helps.ordre">
+      <segment>
+        <source>element_constitutif.helps.ordre</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="7Ml08A1" name="element_constitutif.helps.code">
+      <segment>
+        <source>element_constitutif.helps.code</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="0w4fTav" name="mccc.but.labels.sansNote">
+      <segment>
+        <source>mccc.but.labels.sansNote</source>
+        <target>Pas de note pour cette ressource ou SAÉ</target>
+      </segment>
+    </unit>
+    <unit id="FWgGsZY" name="mccc.but.labels.sansHeures">
+      <segment>
+        <source>mccc.but.labels.sansHeures</source>
+        <target>Pas d'heures pour cette ressource ou SAÉ</target>
+      </segment>
+    </unit>
+    <unit id="4.nfRY6" name="parcours.fiche_recopie_mutualise.label">
+      <segment>
+        <source>parcours.fiche_recopie_mutualise.label</source>
+        <target>Choisissez le mode de recopie/mutualisation du parcours</target>
+      </segment>
+    </unit>
+    <unit id="4t4nup6" name="parcours.fiche_recopie.label">
+      <segment>
+        <source>parcours.fiche_recopie.label</source>
+        <target>Recopie intégrale du parcours (y compris les fiches), ce mode est à privilégier si vous souhaitez modifier le parcours notamment si le parcours est sur plusieurs sites ou des modalités différentes.</target>
+      </segment>
+    </unit>
+    <unit id="QUGhjEC" name="parcours.fiche_mutualise.label">
+      <segment>
+        <source>parcours.fiche_mutualise.label</source>
+        <target>Recopie des éléments avec mise en commun des fiches EC/matière entre les deux parcours.</target>
+      </segment>
+    </unit>
+    <unit id="uX81eqL" name="parcours.dupliquer.bouton">
+      <segment>
+        <source>parcours.dupliquer.bouton</source>
+        <target>Valider la duplication du parcours</target>
+      </segment>
+    </unit>
+    <unit id="nsc6zpo" name="mccc_licence_labels.cc.cc_has_tp_pourcentage">
+      <segment>
+        <source>mccc_licence_labels.cc.cc_has_tp_pourcentage</source>
+        <target>Pourcentage du TP</target>
+      </segment>
+    </unit>
+    <unit id="ZLBiGlU" name="fiche_matiere_step1.labels.typeMatiere.label">
+      <segment>
+        <source>fiche_matiere_step1.labels.typeMatiere.label</source>
+        <target>Type de "matière" pour les BUT</target>
+      </segment>
+    </unit>
+    <unit id="UlrPid6" name="ressource">
+      <segment>
+        <source>ressource</source>
+        <target>Ressource</target>
+      </segment>
+    </unit>
+    <unit id="mI0Juq0" name="sae">
+      <segment>
+        <source>sae</source>
+        <target>SAÉ</target>
+      </segment>
+    </unit>
+    <unit id="FrHOl5c" name="mccc.but.labels.volumesHorairesImpose">
+      <segment>
+        <source>mccc.but.labels.volumesHorairesImpose</source>
+        <target>Les volumes horaires sont imposées aux formations utilisatrices</target>
+      </segment>
+    </unit>
+    <unit id="p6qtErj" name="mccc.but.labels.mcccImpose">
+      <segment>
+        <source>mccc.but.labels.mcccImpose</source>
+        <target>Les MCCC sont imposées aux formations utilisatrices</target>
+      </segment>
+    </unit>
+    <unit id="ZXKl6Au" name="mccc.but.labels.ectsImpose">
+      <segment>
+        <source>mccc.but.labels.ectsImpose</source>
+        <target>Les ECTS sont imposés aux formations utilisatrices</target>
+      </segment>
+    </unit>
+    <unit id="WwlGY2i" name="fiche_matiere_step4_hd.labels.ects">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.ects</source>
+        <target>Nombre d'ECTS</target>
+      </segment>
+    </unit>
+    <unit id="8E.sdAW" name="fiche_matiere_step4_hd.labels.volumeTe">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeTe</source>
+        <target>Volume horaire Travail Etudiant (TE)</target>
+      </segment>
+    </unit>
+    <unit id="mNgxqKc" name="fiche_matiere_step4_hd.labels.volumeCmPresentiel">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeCmPresentiel</source>
+        <target>Volume horaire CM présentiel</target>
+      </segment>
+    </unit>
+    <unit id="MNYvOCl" name="fiche_matiere_step4_hd.labels.volumeCmDistanciel">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeCmDistanciel</source>
+        <target>Volume horaire CM distanciel</target>
+      </segment>
+    </unit>
+    <unit id="ks71oG7" name="fiche_matiere_step4_hd.labels.volumeTdPresentiel">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeTdPresentiel</source>
+        <target>Volume horaire TD présentiel</target>
+      </segment>
+    </unit>
+    <unit id="drZ7JUe" name="fiche_matiere_step4_hd.labels.volumeTdDistanciel">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeTdDistanciel</source>
+        <target>Volume horaire TD distanciel</target>
+      </segment>
+    </unit>
+    <unit id="zAs4J28" name="fiche_matiere_step4_hd.labels.volumeTpPresentiel">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeTpPresentiel</source>
+        <target>Volume horaire TP présentiel</target>
+      </segment>
+    </unit>
+    <unit id="77isIev" name="fiche_matiere_step4_hd.labels.volumeTpDistanciel">
+      <segment>
+        <source>fiche_matiere_step4_hd.labels.volumeTpDistanciel</source>
+        <target>Volume horaire TP distanciel</target>
+      </segment>
+    </unit>
+    <unit id="bLQq8eH" name="mccc.ec.labels.sansHeures">
+      <segment>
+        <source>mccc.ec.labels.sansHeures</source>
+        <target>EC sans volume horaire</target>
+      </segment>
+    </unit>
+    <unit id="ynjqnA." name="etablissement.labels.etablissement_information.label">
+      <segment>
+        <source>etablissement.labels.etablissement_information.label</source>
+        <target>etablissement.labels.etablissement_information.label</target>
+      </segment>
+    </unit>
+    <unit id="9rVZvNG" name="Calendrier universitaire">
+      <segment>
+        <source>Calendrier universitaire</source>
+        <target>Calendrier universitaire</target>
+      </segment>
+    </unit>
+    <unit id="NLypKIT" name="Calendrier d'inscription">
+      <segment>
+        <source>Calendrier d'inscription</source>
+        <target>Calendrier d'inscription</target>
+      </segment>
+    </unit>
+    <unit id="xnVBmg." name="Informations pratiques">
+      <segment>
+        <source>Informations pratiques</source>
+        <target>Informations pratiques</target>
+      </segment>
+    </unit>
+    <unit id="TEzVVua" name="Informations diverses">
+      <segment>
+        <source>Informations diverses</source>
+        <target>Informations diverses</target>
+      </segment>
+    </unit>
+    <unit id="hvsLsYs" name="Code Apogée">
+      <segment>
+        <source>Code Apogée</source>
+        <target>Code Apogée</target>
+      </segment>
+    </unit>
+    <unit id="sGE3Cde" name="Modalités d'admission">
+      <segment>
+        <source>Modalités d'admission</source>
+        <target>Modalités d'admission</target>
+      </segment>
+    </unit>
+    <unit id="yr1s_K8" name="parcours_step5.labels.modalitesAdmission">
+      <segment>
+        <source>parcours_step5.labels.modalitesAdmission</source>
+        <target>parcours_step5.labels.modalitesAdmission</target>
+      </segment>
+    </unit>
+    <unit id="lyLNqFw" name="Insertion professionnelle">
+      <segment>
+        <source>Insertion professionnelle</source>
+        <target>Insertion professionnelle</target>
+>>>>>>> formulaire-saisie
       </segment>
     </unit>
     <unit id="A7qU5xg" name="Restauration">
@@ -2083,10 +2362,17 @@
         <target>Transport</target>
       </segment>
     </unit>
+<<<<<<< HEAD
     <unit id="f0ZvCiJ" name="Information complémentaires">
       <segment>
         <source>Information complémentaires</source>
         <target>Information complémentaires</target>
+=======
+    <unit id="Ub5cCfi" name="Prérequis obligatoires">
+      <segment>
+        <source>Prérequis obligatoires</source>
+        <target>Prérequis obligatoires</target>
+>>>>>>> formulaire-saisie
       </segment>
     </unit>
   </file>

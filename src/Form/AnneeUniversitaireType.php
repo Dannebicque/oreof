@@ -29,6 +29,11 @@ class AnneeUniversitaireType extends AbstractType
                     'placeholder' => 'Ex: 2019-2020',
                 ],
             ])
+            ->add('codeApogee', TextType::class, [
+                'label' => 'Code Apogée',
+                'attr' => ['maxlength' => 1],
+                'required' => true,
+            ])
             ->add('annee', ChoiceType::class, [
                 'label' => 'Année',
                 'choices' => [

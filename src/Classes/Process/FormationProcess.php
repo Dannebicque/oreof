@@ -14,6 +14,8 @@ use App\Classes\verif\FormationValide;
 use App\DTO\ProcessData;
 use App\Entity\Formation;
 use App\Events\HistoriqueFormationEvent;
+use App\Utils\Tools;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,7 +57,42 @@ class FormationProcess extends AbstractProcess
     {
         $reponse = $this->dispatchEventFormation($formation, $user, $etape, $request, 'valide');
 
-        $this->dpeWorkflow->apply($formation, $process['canValide']);
+        $motifs = [];
+
+        //                refuser_definitif_cfvu:
+        //                    from: 'soumis_cfvu'
+        //                    to: 'refuse_definitif_cfvu'
+        //                refuser_revoir_cfvu:
+        //                    from: 'soumis_cfvu'
+        //                    to: 'en_cours_redaction'
+
+
+        $valid = $process['canValide'];
+
+        if ($request->request->has('date')) {
+            $motifs['date'] = Tools::convertDate($request->request->get('date'));
+        }
+
+        if ($request->request->has('acceptationDirecte')) {
+            $motifs['acceptationDirecte'] = $request->request->get('acceptationDirecte') === 'acceptationDirecte' ? true : false;
+            $valid = 'valider_cfvu';
+        }
+
+        if ($request->request->has('sousReserveConseil')) {
+            $motifs['sousReserveConseil'] = (bool)$request->request->get('sousReserveConseil');
+            $valid = 'valider_reserve_conseil_cfvu';
+        }
+
+        if ($request->request->has('sousReserveModifications')) {
+            $motifs['sousReserveModifications'] = (bool)$request->request->get('sousReserveModifications');
+            $valid = 'valider_reserve_cfvu';
+
+            if ($request->request->has('argumentaire_sousReserveModifications')) {
+                $motifs['argumentaire_sousReserveModifications'] = $request->request->get('argumentaire_sousReserveModifications');
+            }
+        }
+
+        $this->dpeWorkflow->apply($formation, $valid, $motifs);
         $this->entityManager->flush();
 
         return $reponse;
@@ -63,7 +100,7 @@ class FormationProcess extends AbstractProcess
 
     public function reserveFormation(Formation $formation, UserInterface $user, $process, $etape, $request): Response
     {
-        $reponse =  $this->dispatchEventFormation($formation, $user, $etape, $request, 'reserve');
+        $reponse = $this->dispatchEventFormation($formation, $user, $etape, $request, 'reserve');
 
         $this->dpeWorkflow->apply($formation, $process['canReserve'], ['motif' => $request->request->get('argumentaire')]);
         $this->entityManager->flush();
@@ -75,7 +112,28 @@ class FormationProcess extends AbstractProcess
     {
         $reponse = $this->dispatchEventFormation($formation, $user, $etape, $request, 'refuse');
 
-        $this->dpeWorkflow->apply($formation, $process['canRefuse'], ['motif' => $request->request->get('argumentaire')]);
+        $motifs = [];
+        $refus = $process['canRefuse'];
+
+        if ($request->request->has('date')) {
+            $motifs['date'] = Tools::convertDate($request->request->get('date'));
+        }
+
+        if ($request->request->has('etatRefus')) {
+            $motifs['etatRefus'] = $request->request->get('etatRefus');
+
+            if ($motifs['etatRefus'] === 'projetRefusDefinitif') {
+                $refus = 'refuser_definitif_cfvu';
+            } elseif ($motifs['etatRefus'] === 'projetARevoir') {
+                $refus = 'refuser_revoir_cfvu';
+            }
+
+            if ($request->request->has('argumentaire')) {
+                $motifs['motif'] = $request->request->get('argumentaire');
+            }
+        }
+
+        $this->dpeWorkflow->apply($formation, $refus, $motifs);
         $this->entityManager->flush();
 
         return $reponse;

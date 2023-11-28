@@ -7,13 +7,15 @@
  */
 
 import { Controller } from '@hotwired/stimulus'
+import callOut from '../../js/callOut'
+import JsonResponse from '../../js/JsonResponse'
 
 export default class extends Controller {
   static values = {
     urlListe: String,
   }
 
-  static targets = ['liste']
+  static targets = ['liste', 'action']
 
   connect() {
     this._updateListe()
@@ -34,6 +36,27 @@ export default class extends Controller {
 
       const response = await fetch(`${this.urlListeValue}?${body.toString()}`)
       this.listeTarget.innerHTML = await response.text()
+    }
+  }
+
+  async valide(event) {
+    const liste = document.querySelectorAll('.check-all:checked')
+    if (liste.length === 0) {
+      this.actionTarget.innerHTML = ''
+      callOut('Veuillez sélectionner au moins une formation', 'danger')
+    } else {
+      const formations = []
+      liste.forEach((item) => {
+        formations.push(item.value)
+      })
+
+      const body = new URLSearchParams({
+        formations,
+      })
+
+      this.actionTarget.innerHTML = ''
+      const reponse = await fetch(`${event.params.url}?${body.toString()}`)
+      this.actionTarget.innerHTML = await reponse.text()
     }
   }
 }

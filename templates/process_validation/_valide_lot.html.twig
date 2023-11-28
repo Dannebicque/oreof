@@ -1,0 +1,162 @@
+{{ component('alerte', {
+    type: 'info',
+    message: (process.label~'.valide.alerte')|trans({}, 'process')|nl2br|raw
+}) }}
+
+<form action="{{ path('app_validation_valide_lot', {etape:etape}) }}" method="post"
+      enctype="multipart/form-data">
+    <input type="hidden" name="formations" value="{{ sFormations }}">
+
+    {% if process.hasDate %}
+        <div>
+            <label for="date" class="form-label">{{ ('valide.'~process.label~'.date.label')|trans({}, 'process') }}
+                <span class="required"></span> <i
+                        class="fal fa-question-circle ms-1"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('valide.'~process.label~'.helps.date.help')|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('valide.'~process.label~'.helps.date.help')|trans({}, 'process') }}"></i></label>
+            <input type="date" name="date"
+                   class="form-control"
+                   id="date"
+            >
+        </div>
+    {% endif %}
+
+{#    {% if process.check is defined and process.check == true %}#}
+{#        {{ include('process_validation/_check'~etape|capitalize~'.html.twig') }}#}
+{#    {% endif %}#}
+
+    {% if etape == 'cfvu' %}
+
+        {# regarder si dans l'historique on à un laissez-passer sur le conseil  #}
+        {% if laisserPasser is defined and laisserPasser != false %}
+            {{ component('alerte', {type:'warning', message: 'Un laissez-passer a été demandé le '~laisserPasser.created|date('d/m/Y')~'.'}) }}
+        {% endif %}
+
+        <div class="form-check mt-2">
+            <input class="form-check-input" type="radio" value="acceptationDirecte" id="acceptationDirecte"
+                   name="acceptationDirecte">
+            <label class="form-check-label" for="acceptationDirecte">
+                <strong>{{ (process.label~'.valide.cas.acceptation.directe.'~processData.placeTexte)|trans({}, 'process') }}</strong>
+                <i
+                        class="fal fa-question-circle ms-1"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('valide.'~process.label~'.helps.acceptation.directe.help')|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('valide.'~process.label~'.helps.acceptation.directe.help')|trans({}, 'process') }}"></i>
+            </label>
+        </div>
+        <div class="form-check mt-2">
+            <input class="form-check-input" type="radio" value="acceptationNonDirecte" id="acceptationDirecte"
+                    {% if laisserPasser is defined and laisserPasser != false %} checked {% endif %}
+                   name="acceptationDirecte">
+            <label class="form-check-label" for="acceptationDirecte">
+                <strong>{{ (process.label~'.valide.cas.acceptation.non.directe.'~processData.placeTexte)|trans({}, 'process') }}</strong>
+                <i
+                        class="fal fa-question-circle ms-1"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('valide.'~process.label~'.helps.acceptation.non.directe.help')|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('valide.'~process.label~'.helps.acceptation.non.directe.help')|trans({}, 'process') }}"></i>
+            </label>
+        </div>
+        <div class="form-check ms-3">
+            <input class="form-check-input" type="checkbox" value="true" id="sousReserveConseil"
+                    {% if laisserPasser is defined and laisserPasser != false %} checked {% endif %}
+                   name="sousReserveConseil">
+            <label class="form-check-label" for="sousReserveConseil">
+                {{ (process.label~'.valide.cas.sous.reserve.conseil.'~processData.placeTexte)|trans({}, 'process') }} <i
+                        class="fal fa-question-circle ms-1"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('valide.'~process.label~'.helps.sous.reserve.conseil.help')|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('valide.'~process.label~'.helps.sous.reserve.conseil.help')|trans({}, 'process') }}"></i>
+            </label>
+        </div>
+        <div class="form-check ms-3">
+            <input class="form-check-input" type="checkbox" value="true" id="sousReserveModifications"
+                   name="sousReserveModifications">
+            <label class="form-check-label" for="sousReserveModifications">
+                {{ (process.label~'.valide.cas.sous.reserve.modifications.'~processData.placeTexte)|trans({}, 'process') }}
+                <i
+                        class="fal fa-question-circle ms-1"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('valide.'~process.label~'.helps.sous.reserve.modifications.help')|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('valide.'~process.label~'.helps.sous.reserve.modifications.help')|trans({}, 'process') }}"></i>
+            </label>
+        </div>
+        <div>
+            <label for="argumentaire_sousReserveModifications"
+                   class="form-label"> {{ (process.label~'.valide.commentaire.cas.sous.reserve.modifications.argumentaire.'~processData.placeTexte)|trans({}, 'process') }}
+                <span class="required"></span>
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="{{ (process.label~'.valide.helps.commentaire.cas.sous.reserve.modifications.argumentaire.'~processData.placeTexte)|trans({}, 'process') }}"
+                   data-bs-original-title="{{ (process.label~'.valide.helps.commentaire.cas.sous.reserve.modifications.argumentaire.'~processData.placeTexte)|trans({}, 'process') }}"></i>
+            </label>
+            <textarea name="argumentaire_sousReserveModifications"
+                      class="form-control"
+                      required
+                      id="argumentaire_sousReserveModifications"
+                      rows="5"
+            > </textarea>
+        </div>
+
+    {% endif %}
+
+    {% if process.hasUpload %}
+        <div>
+            <label for="file" class="form-label">{{ ('valide.'~process.label~'.fichier.label')|trans({}, 'process') }}
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="{{ ('valide.'~process.label~'.helps.fichier.help')|trans({}, 'process') }}"
+                   data-bs-original-title="{{ ('valide.'~process.label~'.helps.fichier.help')|trans({}, 'process') }}"></i></label>
+            <input type="file" name="file" id="file" accept="application/pdf" class="form-control">
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="laisserPasser" id="laisserPasser"
+                   name="laisserPasser">
+            <label class="form-check-label" for="laisserPasser">
+                {{ ('valide.'~process.label~'.helps.laisserPasser.texte')|trans({}, 'process') }}
+                <i
+                        class="fal fa-question-circle ms-1"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('valide.'~process.label~'.helps.laisserPasser.help')|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('valide.'~process.label~'.helps.laisserPasser.help')|trans({}, 'process') }}"></i>
+            </label>
+        </div>
+    {% endif %}
+
+
+{#    {% if (process.check is defined and process.check == true) %}#}
+{#        {% if processData.valid == true %}#}
+{#            <div class="mt-2">#}
+{#                <button type="submit" class="btn btn-success"#}
+{#                        {{ stimulus_action('base','sauvegardeFormModal', 'click') }}#}
+{#                        data-action="live#emit"#}
+{#                        data-event="valide"#}
+{#                >#}
+{#                    <i class="fal fa-floppy-disk"></i>#}
+{#                    {{ ('btn.'~process.label~'.valide.'~processData.placeTexte)|trans({}, 'process') }}#}
+{#                </button>#}
+{#            </div>#}
+{#        {% else %}#}
+{#            {{ component('alerte', {#}
+{#                type: 'danger',#}
+{#                message: (process.label~'.valide.impossible.'~processData.placeTexte)|trans({}, 'process')#}
+{#            }) }}#}
+{#        {% endif %}#}
+{#    {% else %}#}
+        <div class="mt-2">
+            <button type="submit" class="btn btn-success">
+                <i class="fal fa-floppy-disk"></i>
+                {{ ('btn.'~process.label~'.valide')|trans({}, 'process') }}
+            </button>
+        </div>
+{#    {% endif %}#}
+</form>

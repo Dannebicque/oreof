@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "4b754cd5f718af8b6f9a7c17e3c60222",
+=======
+    "content-hash": "cd2287209d95180e1217aa29fa6b2834",
+>>>>>>> formulaire-saisie
     "packages": [
         {
             "name": "apereo/phpcas",
@@ -474,6 +478,7 @@
         },
         {
             "name": "doctrine/dbal",
+<<<<<<< HEAD
             "version": "3.7.1",
             "source": {
                 "type": "git",
@@ -484,6 +489,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/dbal/zipball/5b7bd66c9ff58c04c5474ab85edce442f8081cb2",
                 "reference": "5b7bd66c9ff58c04c5474ab85edce442f8081cb2",
+=======
+            "version": "3.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/dbal.git",
+                "reference": "0ac3c270590e54910715e9a1a044cc368df282b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/0ac3c270590e54910715e9a1a044cc368df282b2",
+                "reference": "0ac3c270590e54910715e9a1a044cc368df282b2",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -499,7 +516,11 @@
                 "doctrine/coding-standard": "12.0.0",
                 "fig/log-test": "^1",
                 "jetbrains/phpstorm-stubs": "2023.1",
+<<<<<<< HEAD
                 "phpstan/phpstan": "1.10.35",
+=======
+                "phpstan/phpstan": "1.10.42",
+>>>>>>> formulaire-saisie
                 "phpstan/phpstan-strict-rules": "^1.5",
                 "phpunit/phpunit": "9.6.13",
                 "psalm/plugin-phpunit": "0.18.4",
@@ -567,7 +588,11 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/doctrine/dbal/tree/3.7.1"
+=======
+                "source": "https://github.com/doctrine/dbal/tree/3.7.2"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -583,7 +608,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-06T05:06:20+00:00"
+=======
+            "time": "2023-11-19T08:06:58+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "doctrine/deprecations",
@@ -634,6 +663,7 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
+<<<<<<< HEAD
             "version": "2.10.2",
             "source": {
                 "type": "git",
@@ -644,46 +674,75 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/f28b1f78de3a2938ff05cfe751233097624cc756",
                 "reference": "f28b1f78de3a2938ff05cfe751233097624cc756",
+=======
+            "version": "2.11.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/DoctrineBundle.git",
+                "reference": "4089f1424b724786c062aea50aae5f773449b94b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/4089f1424b724786c062aea50aae5f773449b94b",
+                "reference": "4089f1424b724786c062aea50aae5f773449b94b",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
                 "doctrine/cache": "^1.11 || ^2.0",
+<<<<<<< HEAD
                 "doctrine/dbal": "^3.6.0",
+=======
+                "doctrine/dbal": "^3.7.0 || ^4.0",
+>>>>>>> formulaire-saisie
                 "doctrine/persistence": "^2.2 || ^3",
                 "doctrine/sql-formatter": "^1.0.1",
                 "php": "^7.4 || ^8.0",
-                "symfony/cache": "^5.4 || ^6.0",
-                "symfony/config": "^5.4 || ^6.0",
-                "symfony/console": "^5.4 || ^6.0",
-                "symfony/dependency-injection": "^5.4 || ^6.0",
+                "symfony/cache": "^5.4 || ^6.0 || ^7.0",
+                "symfony/config": "^5.4 || ^6.0 || ^7.0",
+                "symfony/console": "^5.4 || ^6.0 || ^7.0",
+                "symfony/dependency-injection": "^5.4 || ^6.0 || ^7.0",
                 "symfony/deprecation-contracts": "^2.1 || ^3",
-                "symfony/doctrine-bridge": "^5.4.19 || ^6.0.7",
-                "symfony/framework-bundle": "^5.4 || ^6.0",
+                "symfony/doctrine-bridge": "^5.4.19 || ^6.0.7 || ^7.0",
+                "symfony/framework-bundle": "^5.4 || ^6.0 || ^7.0",
+                "symfony/polyfill-php80": "^1.15",
                 "symfony/service-contracts": "^1.1.1 || ^2.0 || ^3"
             },
             "conflict": {
                 "doctrine/annotations": ">=3.0",
+<<<<<<< HEAD
                 "doctrine/orm": "<2.11 || >=3.0",
+=======
+                "doctrine/orm": "<2.14 || >=4.0",
+>>>>>>> formulaire-saisie
                 "twig/twig": "<1.34 || >=2.0 <2.4"
             },
             "require-dev": {
                 "doctrine/annotations": "^1 || ^2",
+<<<<<<< HEAD
                 "doctrine/coding-standard": "^9.0",
                 "doctrine/deprecations": "^1.0",
                 "doctrine/orm": "^2.11 || ^3.0",
+=======
+                "doctrine/coding-standard": "^12",
+                "doctrine/deprecations": "^1.0",
+                "doctrine/orm": "^2.14 || ^3.0",
+>>>>>>> formulaire-saisie
                 "friendsofphp/proxy-manager-lts": "^1.0",
                 "phpunit/phpunit": "^9.5.26 || ^10.0",
                 "psalm/plugin-phpunit": "^0.18.4",
                 "psalm/plugin-symfony": "^4",
                 "psr/log": "^1.1.4 || ^2.0 || ^3.0",
-                "symfony/phpunit-bridge": "^6.1",
-                "symfony/property-info": "^5.4 || ^6.0",
-                "symfony/proxy-manager-bridge": "^5.4 || ^6.0",
-                "symfony/security-bundle": "^5.4 || ^6.0",
-                "symfony/twig-bridge": "^5.4 || ^6.0",
-                "symfony/validator": "^5.4 || ^6.0",
-                "symfony/web-profiler-bundle": "^5.4 || ^6.0",
-                "symfony/yaml": "^5.4 || ^6.0",
+                "symfony/phpunit-bridge": "^6.1 || ^7.0",
+                "symfony/property-info": "^5.4 || ^6.0 || ^7.0",
+                "symfony/proxy-manager-bridge": "^5.4 || ^6.0 || ^7.0",
+                "symfony/security-bundle": "^5.4 || ^6.0 || ^7.0",
+                "symfony/string": "^5.4 || ^6.0 || ^7.0",
+                "symfony/twig-bridge": "^5.4 || ^6.0 || ^7.0",
+                "symfony/validator": "^5.4 || ^6.0 || ^7.0",
+                "symfony/var-exporter": "^5.4 || ^6.2 || ^7.0",
+                "symfony/web-profiler-bundle": "^5.4 || ^6.0 || ^7.0",
+                "symfony/yaml": "^5.4 || ^6.0 || ^7.0",
                 "twig/twig": "^1.34 || ^2.12 || ^3.0",
                 "vimeo/psalm": "^4.30"
             },
@@ -730,7 +789,11 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/DoctrineBundle/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/doctrine/DoctrineBundle/tree/2.10.2"
+=======
+                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.11.1"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -746,6 +809,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-08-06T09:31:40+00:00"
         },
         {
@@ -760,24 +824,57 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/94e6b0fe1a50901d52f59dbb9b4b0737718b2c1e",
                 "reference": "94e6b0fe1a50901d52f59dbb9b4b0737718b2c1e",
+=======
+            "time": "2023-11-15T20:01:50+00:00"
+        },
+        {
+            "name": "doctrine/doctrine-migrations-bundle",
+            "version": "3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/DoctrineMigrationsBundle.git",
+                "reference": "1dd42906a5fb9c5960723e2ebb45c68006493835"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/1dd42906a5fb9c5960723e2ebb45c68006493835",
+                "reference": "1dd42906a5fb9c5960723e2ebb45c68006493835",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
-                "doctrine/doctrine-bundle": "~1.0|~2.0",
+                "doctrine/doctrine-bundle": "^2.4",
                 "doctrine/migrations": "^3.2",
                 "php": "^7.2|^8.0",
-                "symfony/framework-bundle": "~3.4|~4.0|~5.0|~6.0"
+                "symfony/deprecation-contracts": "^2.1 || ^3",
+                "symfony/framework-bundle": "^5.4 || ^6.0 || ^7.0"
             },
             "require-dev": {
+<<<<<<< HEAD
                 "doctrine/coding-standard": "^9",
                 "doctrine/orm": "^2.6",
                 "doctrine/persistence": "^1.3||^2.0",
+=======
+                "doctrine/coding-standard": "^12",
+                "doctrine/orm": "^2.6 || ^3",
+                "doctrine/persistence": "^2.0 || ^3 ",
+>>>>>>> formulaire-saisie
                 "phpstan/phpstan": "^1.4",
                 "phpstan/phpstan-deprecation-rules": "^1",
                 "phpstan/phpstan-phpunit": "^1",
                 "phpstan/phpstan-strict-rules": "^1.1",
+<<<<<<< HEAD
                 "phpunit/phpunit": "^8.5|^9.5",
                 "vimeo/psalm": "^4.22"
+=======
+                "phpstan/phpstan-symfony": "^1.3",
+                "phpunit/phpunit": "^8.5|^9.5",
+                "psalm/plugin-phpunit": "^0.18.4",
+                "psalm/plugin-symfony": "^3 || ^5",
+                "symfony/phpunit-bridge": "^6.3 || ^7",
+                "symfony/var-exporter": "^5.4 || ^6 || ^7",
+                "vimeo/psalm": "^4.30 || ^5.15"
+>>>>>>> formulaire-saisie
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -815,7 +912,11 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/DoctrineMigrationsBundle/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/doctrine/DoctrineMigrationsBundle/tree/3.2.4"
+=======
+                "source": "https://github.com/doctrine/DoctrineMigrationsBundle/tree/3.3.0"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -831,7 +932,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-06-02T08:19:26+00:00"
+=======
+            "time": "2023-11-13T19:44:41+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "doctrine/event-manager",
@@ -1165,47 +1270,47 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "3.6.0",
+            "version": "3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "e542ad8bcd606d7a18d0875babb8a6d963c9c059"
+                "reference": "e4e0855ea993d169c8adb50e19b014e64bbdda46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/e542ad8bcd606d7a18d0875babb8a6d963c9c059",
-                "reference": "e542ad8bcd606d7a18d0875babb8a6d963c9c059",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/e4e0855ea993d169c8adb50e19b014e64bbdda46",
+                "reference": "e4e0855ea993d169c8adb50e19b014e64bbdda46",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2",
-                "doctrine/dbal": "^3.5.1",
+                "doctrine/dbal": "^3.5.1 || ^4",
                 "doctrine/deprecations": "^0.5.3 || ^1",
                 "doctrine/event-manager": "^1.2 || ^2.0",
                 "php": "^8.1",
                 "psr/log": "^1.1.3 || ^2 || ^3",
-                "symfony/console": "^4.4.16 || ^5.4 || ^6.0",
-                "symfony/stopwatch": "^4.4 || ^5.4 || ^6.0",
-                "symfony/var-exporter": "^6.2"
+                "symfony/console": "^5.4 || ^6.0 || ^7.0",
+                "symfony/stopwatch": "^5.4 || ^6.0 || ^7.0",
+                "symfony/var-exporter": "^6.2 || ^7.0"
             },
             "conflict": {
-                "doctrine/orm": "<2.12"
+                "doctrine/orm": "<2.12 || >=4"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^9",
-                "doctrine/orm": "^2.13",
+                "doctrine/coding-standard": "^12",
+                "doctrine/orm": "^2.13 || ^3",
                 "doctrine/persistence": "^2 || ^3",
                 "doctrine/sql-formatter": "^1.0",
                 "ext-pdo_sqlite": "*",
-                "phpstan/phpstan": "^1.5",
-                "phpstan/phpstan-deprecation-rules": "^1",
-                "phpstan/phpstan-phpunit": "^1.1",
-                "phpstan/phpstan-strict-rules": "^1.1",
-                "phpstan/phpstan-symfony": "^1.1",
-                "phpunit/phpunit": "^9.5.24",
-                "symfony/cache": "^4.4 || ^5.4 || ^6.0",
-                "symfony/process": "^4.4 || ^5.4 || ^6.0",
-                "symfony/yaml": "^4.4 || ^5.4 || ^6.0"
+                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan-deprecation-rules": "^1.1",
+                "phpstan/phpstan-phpunit": "^1.3",
+                "phpstan/phpstan-strict-rules": "^1.4",
+                "phpstan/phpstan-symfony": "^1.3",
+                "phpunit/phpunit": "^10.3",
+                "symfony/cache": "^5.4 || ^6.0 || ^7.0",
+                "symfony/process": "^5.4 || ^6.0 || ^7.0",
+                "symfony/yaml": "^5.4 || ^6.0 || ^7.0"
             },
             "suggest": {
                 "doctrine/sql-formatter": "Allows to generate formatted SQL with the diff command.",
@@ -1247,7 +1352,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/migrations/issues",
-                "source": "https://github.com/doctrine/migrations/tree/3.6.0"
+                "source": "https://github.com/doctrine/migrations/tree/3.7.1"
             },
             "funding": [
                 {
@@ -1263,10 +1368,11 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-15T18:49:46+00:00"
+            "time": "2023-11-19T06:55:22+00:00"
         },
         {
             "name": "doctrine/orm",
+<<<<<<< HEAD
             "version": "2.16.2",
             "source": {
                 "type": "git",
@@ -1277,6 +1383,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/orm/zipball/17500f56eaa930f5cd14d765bc2cd851c7d37cc0",
                 "reference": "17500f56eaa930f5cd14d765bc2cd851c7d37cc0",
+=======
+            "version": "2.17.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/orm.git",
+                "reference": "1a4fe6e0bb67762370937a7e6cee3da40a9122d1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/1a4fe6e0bb67762370937a7e6cee3da40a9122d1",
+                "reference": "1a4fe6e0bb67762370937a7e6cee3da40a9122d1",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -1294,7 +1412,7 @@
                 "ext-ctype": "*",
                 "php": "^7.1 || ^8.0",
                 "psr/cache": "^1 || ^2 || ^3",
-                "symfony/console": "^4.2 || ^5.0 || ^6.0",
+                "symfony/console": "^4.2 || ^5.0 || ^6.0 || ^7.0",
                 "symfony/polyfill-php72": "^1.23",
                 "symfony/polyfill-php80": "^1.16"
             },
@@ -1305,14 +1423,22 @@
                 "doctrine/annotations": "^1.13 || ^2",
                 "doctrine/coding-standard": "^9.0.2 || ^12.0",
                 "phpbench/phpbench": "^0.16.10 || ^1.0",
+<<<<<<< HEAD
                 "phpstan/phpstan": "~1.4.10 || 1.10.28",
+=======
+                "phpstan/phpstan": "~1.4.10 || 1.10.35",
+>>>>>>> formulaire-saisie
                 "phpunit/phpunit": "^7.5 || ^8.5 || ^9.6",
                 "psr/log": "^1 || ^2 || ^3",
                 "squizlabs/php_codesniffer": "3.7.2",
                 "symfony/cache": "^4.4 || ^5.4 || ^6.0",
                 "symfony/var-exporter": "^4.4 || ^5.4 || ^6.2",
                 "symfony/yaml": "^3.4 || ^4.0 || ^5.0 || ^6.0",
+<<<<<<< HEAD
                 "vimeo/psalm": "4.30.0 || 5.14.1"
+=======
+                "vimeo/psalm": "4.30.0 || 5.15.0"
+>>>>>>> formulaire-saisie
             },
             "suggest": {
                 "ext-dom": "Provides support for XSD validation for XML mapping files",
@@ -1362,9 +1488,15 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/doctrine/orm/tree/2.16.2"
             },
             "time": "2023-08-27T18:21:56+00:00"
+=======
+                "source": "https://github.com/doctrine/orm/tree/2.17.1"
+            },
+            "time": "2023-11-17T06:25:40+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "doctrine/persistence",
@@ -1647,20 +1779,20 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.16.0",
+            "version": "v4.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "523407fb06eb9e5f3d59889b3978d5bfe94299c8"
+                "reference": "bbc513d79acf6691fa9cf10f192c90dd2957f18c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/523407fb06eb9e5f3d59889b3978d5bfe94299c8",
-                "reference": "523407fb06eb9e5f3d59889b3978d5bfe94299c8",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/bbc513d79acf6691fa9cf10f192c90dd2957f18c",
+                "reference": "bbc513d79acf6691fa9cf10f192c90dd2957f18c",
                 "shasum": ""
             },
             "require": {
-                "php": "~5.6.0 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0"
+                "php": "~5.6.0 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0"
             },
             "require-dev": {
                 "cerdic/css-tidy": "^1.7 || ^2.0",
@@ -1702,9 +1834,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ezyang/htmlpurifier/issues",
-                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.16.0"
+                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.17.0"
             },
-            "time": "2022-09-18T07:06:19+00:00"
+            "time": "2023-11-17T15:01:25+00:00"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -1835,6 +1967,7 @@
         },
         {
             "name": "gotenberg/gotenberg-php",
+<<<<<<< HEAD
             "version": "v1.1.5",
             "source": {
                 "type": "git",
@@ -1845,13 +1978,29 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/gotenberg/gotenberg-php/zipball/aff1f17a5af3ac970196aa6f6db216bfcf17175d",
                 "reference": "aff1f17a5af3ac970196aa6f6db216bfcf17175d",
+=======
+            "version": "v1.1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gotenberg/gotenberg-php.git",
+                "reference": "cfe70a9693a9ca58ebdcda6ec6a4ea404219d592"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gotenberg/gotenberg-php/zipball/cfe70a9693a9ca58ebdcda6ec6a4ea404219d592",
+                "reference": "cfe70a9693a9ca58ebdcda6ec6a4ea404219d592",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-mbstring": "*",
                 "guzzlehttp/psr7": "^1 || ^2.1",
+<<<<<<< HEAD
                 "php": "^7.4|^8.0|^8.1|^8.2",
+=======
+                "php": "^7.4|^8.0|^8.1|^8.2|^8.3",
+>>>>>>> formulaire-saisie
                 "php-http/discovery": "^1.14",
                 "psr/http-client": "^1.0",
                 "psr/http-message": "^1.0|^2.0"
@@ -1904,9 +2053,15 @@
             ],
             "support": {
                 "issues": "https://github.com/gotenberg/gotenberg-php/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/gotenberg/gotenberg-php/tree/v1.1.5"
             },
             "time": "2023-09-07T15:06:56+00:00"
+=======
+                "source": "https://github.com/gotenberg/gotenberg-php/tree/v1.1.7"
+            },
+            "time": "2023-11-22T19:42:36+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "guzzlehttp/psr7",
@@ -2418,6 +2573,7 @@
         },
         {
             "name": "monolog/monolog",
+<<<<<<< HEAD
             "version": "3.4.0",
             "source": {
                 "type": "git",
@@ -2428,6 +2584,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/Seldaek/monolog/zipball/e2392369686d420ca32df3803de28b5d6f76867d",
                 "reference": "e2392369686d420ca32df3803de28b5d6f76867d",
+=======
+            "version": "3.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/monolog.git",
+                "reference": "c915e2634718dbc8a4a15c61b0e62e7a44e14448"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/c915e2634718dbc8a4a15c61b0e62e7a44e14448",
+                "reference": "c915e2634718dbc8a4a15c61b0e62e7a44e14448",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -2503,7 +2671,11 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/Seldaek/monolog/tree/3.4.0"
+=======
+                "source": "https://github.com/Seldaek/monolog/tree/3.5.0"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -2515,6 +2687,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-06-21T08:46:11+00:00"
         },
         {
@@ -2529,6 +2702,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/mpdf/mpdf/zipball/170a236a588d177c2aa7447ce490a030ca68e6f4",
                 "reference": "170a236a588d177c2aa7447ce490a030ca68e6f4",
+=======
+            "time": "2023-10-27T15:32:31+00:00"
+        },
+        {
+            "name": "mpdf/mpdf",
+            "version": "v8.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mpdf/mpdf.git",
+                "reference": "596a87b876d7793be7be060a8ac13424de120dd5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/596a87b876d7793be7be060a8ac13424de120dd5",
+                "reference": "596a87b876d7793be7be060a8ac13424de120dd5",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -2538,7 +2727,11 @@
                 "mpdf/psr-log-aware-trait": "^2.0 || ^3.0",
                 "myclabs/deep-copy": "^1.7",
                 "paragonie/random_compat": "^1.4|^2.0|^9.99.99",
+<<<<<<< HEAD
                 "php": "^5.6 || ^7.0 || ~8.0.0 || ~8.1.0 || ~8.2.0",
+=======
+                "php": "^5.6 || ^7.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0",
+>>>>>>> formulaire-saisie
                 "psr/http-message": "^1.0 || ^2.0",
                 "psr/log": "^1.0 || ^2.0 || ^3.0",
                 "setasign/fpdi": "^2.1"
@@ -2596,7 +2789,11 @@
                     "type": "custom"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-09-01T11:44:52+00:00"
+=======
+            "time": "2023-11-07T13:52:14+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "mpdf/psr-http-message-shim",
@@ -4114,6 +4311,7 @@
         },
         {
             "name": "stof/doctrine-extensions-bundle",
+<<<<<<< HEAD
             "version": "v1.8.0",
             "source": {
                 "type": "git",
@@ -4124,6 +4322,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/b40623da645d0e206331f506fb1065d8b0a0f3d6",
                 "reference": "b40623da645d0e206331f506fb1065d8b0a0f3d6",
+=======
+            "version": "v1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stof/StofDoctrineExtensionsBundle.git",
+                "reference": "eb677bf8aa05d741029dc4874e1884498236d531"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/eb677bf8aa05d741029dc4874e1884498236d531",
+                "reference": "eb677bf8aa05d741029dc4874e1884498236d531",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -4183,6 +4393,7 @@
             ],
             "support": {
                 "issues": "https://github.com/stof/StofDoctrineExtensionsBundle/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/stof/StofDoctrineExtensionsBundle/tree/v1.8.0"
             },
             "time": "2023-07-07T15:34:33+00:00"
@@ -4199,6 +4410,24 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/asset/zipball/b77a4cc8e266b7e0db688de740f9ee7253aa411c",
                 "reference": "b77a4cc8e266b7e0db688de740f9ee7253aa411c",
+=======
+                "source": "https://github.com/stof/StofDoctrineExtensionsBundle/tree/v1.9.0"
+            },
+            "time": "2023-08-31T08:08:51+00:00"
+        },
+        {
+            "name": "symfony/asset",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/asset.git",
+                "reference": "b2382a403f2111836301623d89e9af3d84989525"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/asset/zipball/b2382a403f2111836301623d89e9af3d84989525",
+                "reference": "b2382a403f2111836301623d89e9af3d84989525",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -4238,7 +4467,11 @@
             "description": "Manages URL generation and versioning of web assets such as CSS stylesheets, JavaScript files and image files",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/asset/tree/v6.3.0"
+=======
+                "source": "https://github.com/symfony/asset/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -4254,6 +4487,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-04-21T14:41:17+00:00"
         },
         {
@@ -4268,6 +4502,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/cache/zipball/84aff8d948d6292d2b5a01ac622760be44dddc72",
                 "reference": "84aff8d948d6292d2b5a01ac622760be44dddc72",
+=======
+            "time": "2023-10-31T08:07:48+00:00"
+        },
+        {
+            "name": "symfony/cache",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/cache.git",
+                "reference": "ba33517043c22c94c7ab04b056476f6f86816cf8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/ba33517043c22c94c7ab04b056476f6f86816cf8",
+                "reference": "ba33517043c22c94c7ab04b056476f6f86816cf8",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -4334,7 +4584,11 @@
                 "psr6"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/cache/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/cache/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -4350,6 +4604,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-17T14:44:58+00:00"
         },
         {
@@ -4364,6 +4619,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/ad945640ccc0ae6e208bcea7d7de4b39b569896b",
                 "reference": "ad945640ccc0ae6e208bcea7d7de4b39b569896b",
+=======
+            "time": "2023-11-07T10:17:15+00:00"
+        },
+        {
+            "name": "symfony/cache-contracts",
+            "version": "v3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/cache-contracts.git",
+                "reference": "1d74b127da04ffa87aa940abe15446fa89653778"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/1d74b127da04ffa87aa940abe15446fa89653778",
+                "reference": "1d74b127da04ffa87aa940abe15446fa89653778",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -4410,7 +4681,11 @@
                 "standards"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/cache-contracts/tree/v3.3.0"
+=======
+                "source": "https://github.com/symfony/cache-contracts/tree/v3.4.0"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -4426,7 +4701,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-05-23T14:45:45+00:00"
+=======
+            "time": "2023-09-25T12:52:38+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "symfony/clock",
@@ -4503,6 +4782,7 @@
         },
         {
             "name": "symfony/config",
+<<<<<<< HEAD
             "version": "v6.3.2",
             "source": {
                 "type": "git",
@@ -4513,6 +4793,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/config/zipball/b47ca238b03e7b0d7880ffd1cf06e8d637ca1467",
                 "reference": "b47ca238b03e7b0d7880ffd1cf06e8d637ca1467",
+=======
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/config.git",
+                "reference": "b7a63887960359e5b59b15826fa9f9be10acbe88"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/config/zipball/b7a63887960359e5b59b15826fa9f9be10acbe88",
+                "reference": "b7a63887960359e5b59b15826fa9f9be10acbe88",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -4558,7 +4850,11 @@
             "description": "Helps you find, load, combine, autofill and validate configuration values of any kind",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/config/tree/v6.3.2"
+=======
+                "source": "https://github.com/symfony/config/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -4574,6 +4870,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-07-19T20:22:16+00:00"
         },
         {
@@ -4588,6 +4885,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/console/zipball/eca495f2ee845130855ddf1cf18460c38966c8b6",
                 "reference": "eca495f2ee845130855ddf1cf18460c38966c8b6",
+=======
+            "time": "2023-11-09T08:28:21+00:00"
+        },
+        {
+            "name": "symfony/console",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/console.git",
+                "reference": "0d14a9f6d04d4ac38a8cea1171f4554e325dae92"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/console/zipball/0d14a9f6d04d4ac38a8cea1171f4554e325dae92",
+                "reference": "0d14a9f6d04d4ac38a8cea1171f4554e325dae92",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -4648,7 +4961,11 @@
                 "terminal"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/console/tree/v6.3.4"
+=======
+                "source": "https://github.com/symfony/console/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -4664,6 +4981,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-08-16T10:10:12+00:00"
         },
         {
@@ -4678,6 +4996,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/2ed62b3bf98346e1f45529a7b6be2196739bb993",
                 "reference": "2ed62b3bf98346e1f45529a7b6be2196739bb993",
+=======
+            "time": "2023-10-31T08:09:35+00:00"
+        },
+        {
+            "name": "symfony/dependency-injection",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dependency-injection.git",
+                "reference": "1f30f545c4151f611148fc19e28d54d39e0a00bc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/1f30f545c4151f611148fc19e28d54d39e0a00bc",
+                "reference": "1f30f545c4151f611148fc19e28d54d39e0a00bc",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -4729,7 +5063,11 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/dependency-injection/tree/v6.3.5"
+=======
+                "source": "https://github.com/symfony/dependency-injection/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -4745,11 +5083,19 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-09-25T16:46:40+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
             "version": "v3.3.0",
+=======
+            "time": "2023-10-31T08:07:48+00:00"
+        },
+        {
+            "name": "symfony/deprecation-contracts",
+            "version": "v3.4.0",
+>>>>>>> formulaire-saisie
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/deprecation-contracts.git",
@@ -4796,7 +5142,11 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/deprecation-contracts/tree/v3.3.0"
+=======
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.4.0"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -4816,6 +5166,7 @@
         },
         {
             "name": "symfony/doctrine-bridge",
+<<<<<<< HEAD
             "version": "v6.3.6",
             "source": {
                 "type": "git",
@@ -4826,6 +5177,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/doctrine-bridge/zipball/6479c0b2cb2fa94338a5fb5b810a82d573ca15c2",
                 "reference": "6479c0b2cb2fa94338a5fb5b810a82d573ca15c2",
+=======
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/doctrine-bridge.git",
+                "reference": "8842d289d41320a0f725e996b4e58d84af398a9e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/doctrine-bridge/zipball/8842d289d41320a0f725e996b4e58d84af398a9e",
+                "reference": "8842d289d41320a0f725e996b4e58d84af398a9e",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -4906,7 +5269,11 @@
             "description": "Provides integration for Doctrine with various Symfony components",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/doctrine-bridge/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/doctrine-bridge/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -4922,6 +5289,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-17T16:20:28+00:00"
         },
         {
@@ -4936,6 +5304,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/doctrine-messenger/zipball/9fec1e5af3b11432faf9f95d793c5e2f79b23df5",
                 "reference": "9fec1e5af3b11432faf9f95d793c5e2f79b23df5",
+=======
+            "time": "2023-10-31T08:07:48+00:00"
+        },
+        {
+            "name": "symfony/doctrine-messenger",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/doctrine-messenger.git",
+                "reference": "6fa8a21e013ea22dd490cc6060508b14f7ad4b51"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/doctrine-messenger/zipball/6fa8a21e013ea22dd490cc6060508b14f7ad4b51",
+                "reference": "6fa8a21e013ea22dd490cc6060508b14f7ad4b51",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -4978,7 +5362,11 @@
             "description": "Symfony Doctrine Messenger Bridge",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/doctrine-messenger/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/doctrine-messenger/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -4994,6 +5382,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-12T15:02:41+00:00"
         },
         {
@@ -5008,6 +5397,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/dotenv/zipball/ceadb434fe2a6763a03d2d110441745834f3dd1e",
                 "reference": "ceadb434fe2a6763a03d2d110441745834f3dd1e",
+=======
+            "time": "2023-11-07T10:17:15+00:00"
+        },
+        {
+            "name": "symfony/dotenv",
+            "version": "v6.3.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dotenv.git",
+                "reference": "7dfbe2976f3c1b7cfa8fac2212a050bfa9bd7d9e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dotenv/zipball/7dfbe2976f3c1b7cfa8fac2212a050bfa9bd7d9e",
+                "reference": "7dfbe2976f3c1b7cfa8fac2212a050bfa9bd7d9e",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -5052,7 +5457,11 @@
                 "environment"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/dotenv/tree/v6.3.0"
+=======
+                "source": "https://github.com/symfony/dotenv/tree/v6.3.7"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -5068,7 +5477,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-04-21T14:41:17+00:00"
+=======
+            "time": "2023-10-26T18:15:14+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "symfony/error-handler",
@@ -5226,7 +5639,11 @@
         },
         {
             "name": "symfony/event-dispatcher-contracts",
+<<<<<<< HEAD
             "version": "v3.3.0",
+=======
+            "version": "v3.4.0",
+>>>>>>> formulaire-saisie
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher-contracts.git",
@@ -5282,7 +5699,11 @@
                 "standards"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/event-dispatcher-contracts/tree/v3.3.0"
+=======
+                "source": "https://github.com/symfony/event-dispatcher-contracts/tree/v3.4.0"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -5493,6 +5914,7 @@
         },
         {
             "name": "symfony/flex",
+<<<<<<< HEAD
             "version": "v2.4.0",
             "source": {
                 "type": "git",
@@ -5503,6 +5925,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/flex/zipball/46bebc3d097d1bb1dce04c5ba83658afd79988f9",
                 "reference": "46bebc3d097d1bb1dce04c5ba83658afd79988f9",
+=======
+            "version": "v2.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/flex.git",
+                "reference": "ae6dea68771c5fca9d172e0c0910bdd06199f6f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/ae6dea68771c5fca9d172e0c0910bdd06199f6f4",
+                "reference": "ae6dea68771c5fca9d172e0c0910bdd06199f6f4",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -5538,7 +5972,11 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/flex/tree/v2.4.0"
+=======
+                "source": "https://github.com/symfony/flex/tree/v2.4.1"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -5554,6 +5992,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-22T18:05:25+00:00"
         },
         {
@@ -5568,6 +6007,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/form/zipball/6af3c25eda0f2a028aeab7d81c2597dfedecd96a",
                 "reference": "6af3c25eda0f2a028aeab7d81c2597dfedecd96a",
+=======
+            "time": "2023-10-30T18:35:17+00:00"
+        },
+        {
+            "name": "symfony/form",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/form.git",
+                "reference": "b7a8098163cce87c0b6ce05d0f361dc12d5a2788"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/form/zipball/b7a8098163cce87c0b6ce05d0f361dc12d5a2788",
+                "reference": "b7a8098163cce87c0b6ce05d0f361dc12d5a2788",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -5635,7 +6090,11 @@
             "description": "Allows to easily create, process and reuse HTML forms",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/form/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/form/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -5651,6 +6110,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-17T11:32:53+00:00"
         },
         {
@@ -5665,6 +6125,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/5b5dca452a70d06d0463d3aeae640b2d034ef485",
                 "reference": "5b5dca452a70d06d0463d3aeae640b2d034ef485",
+=======
+            "time": "2023-11-06T10:58:05+00:00"
+        },
+        {
+            "name": "symfony/framework-bundle",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/framework-bundle.git",
+                "reference": "e88be137ea0652ee2caf2eacb21283820904be4f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/e88be137ea0652ee2caf2eacb21283820904be4f",
+                "reference": "e88be137ea0652ee2caf2eacb21283820904be4f",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -5779,7 +6255,11 @@
             "description": "Provides a tight integration between Symfony components and the Symfony full-stack framework",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/framework-bundle/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/framework-bundle/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -5795,6 +6275,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-12T17:41:20+00:00"
         },
         {
@@ -5809,6 +6290,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/http-client/zipball/ab8446f997efb9913627e9da10fa784d2182fe92",
                 "reference": "ab8446f997efb9913627e9da10fa784d2182fe92",
+=======
+            "time": "2023-11-09T14:35:42+00:00"
+        },
+        {
+            "name": "symfony/http-client",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-client.git",
+                "reference": "0314e2d49939a9831929d6fc81c01c6df137fd0a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/0314e2d49939a9831929d6fc81c01c6df137fd0a",
+                "reference": "0314e2d49939a9831929d6fc81c01c6df137fd0a",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -5871,7 +6368,11 @@
                 "http"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/http-client/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/http-client/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -5887,6 +6388,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-06T10:08:56+00:00"
         },
         {
@@ -5901,6 +6403,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/3b66325d0176b4ec826bffab57c9037d759c31fb",
                 "reference": "3b66325d0176b4ec826bffab57c9037d759c31fb",
+=======
+            "time": "2023-11-06T18:31:59+00:00"
+        },
+        {
+            "name": "symfony/http-client-contracts",
+            "version": "v3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-client-contracts.git",
+                "reference": "1ee70e699b41909c209a0c930f11034b93578654"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-client-contracts/zipball/1ee70e699b41909c209a0c930f11034b93578654",
+                "reference": "1ee70e699b41909c209a0c930f11034b93578654",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -5949,7 +6467,11 @@
                 "standards"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/http-client-contracts/tree/v3.3.0"
+=======
+                "source": "https://github.com/symfony/http-client-contracts/tree/v3.4.0"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -5965,6 +6487,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-05-23T14:45:45+00:00"
         },
         {
@@ -5979,6 +6502,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/http-foundation/zipball/c186627f52febe09c6d5270b04f8462687a250a6",
                 "reference": "c186627f52febe09c6d5270b04f8462687a250a6",
+=======
+            "time": "2023-07-30T20:28:31+00:00"
+        },
+        {
+            "name": "symfony/http-foundation",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-foundation.git",
+                "reference": "ce332676de1912c4389222987193c3ef38033df6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/ce332676de1912c4389222987193c3ef38033df6",
+                "reference": "ce332676de1912c4389222987193c3ef38033df6",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -6026,7 +6565,11 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/http-foundation/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/http-foundation/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -6042,6 +6585,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-17T11:32:53+00:00"
         },
         {
@@ -6056,6 +6600,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/http-kernel/zipball/4945f5001b06ff9080cd3d8f1f9f069094c0d156",
                 "reference": "4945f5001b06ff9080cd3d8f1f9f069094c0d156",
+=======
+            "time": "2023-11-07T10:17:15+00:00"
+        },
+        {
+            "name": "symfony/http-kernel",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-kernel.git",
+                "reference": "929202375ccf44a309c34aeca8305408442ebcc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/929202375ccf44a309c34aeca8305408442ebcc1",
+                "reference": "929202375ccf44a309c34aeca8305408442ebcc1",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -6139,7 +6699,11 @@
             "description": "Provides a structured process for converting a Request into a Response",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/http-kernel/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/http-kernel/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -6155,6 +6719,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-21T13:12:51+00:00"
         },
         {
@@ -6169,6 +6734,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/intl/zipball/1f8cb145c869ed089a8531c51a6a4b31ed0b3c69",
                 "reference": "1f8cb145c869ed089a8531c51a6a4b31ed0b3c69",
+=======
+            "time": "2023-11-10T13:47:32+00:00"
+        },
+        {
+            "name": "symfony/intl",
+            "version": "v6.3.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/intl.git",
+                "reference": "4cc98c05f2c55150a6aa5b3e20667f7a6d06cca9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/intl/zipball/4cc98c05f2c55150a6aa5b3e20667f7a6d06cca9",
+                "reference": "4cc98c05f2c55150a6aa5b3e20667f7a6d06cca9",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -6221,7 +6802,11 @@
                 "localization"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/intl/tree/v6.3.2"
+=======
+                "source": "https://github.com/symfony/intl/tree/v6.3.7"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -6237,7 +6822,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-07-20T07:43:09+00:00"
+=======
+            "time": "2023-10-28T23:11:45+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "symfony/ldap",
@@ -6397,6 +6986,7 @@
         },
         {
             "name": "symfony/messenger",
+<<<<<<< HEAD
             "version": "v6.3.6",
             "source": {
                 "type": "git",
@@ -6407,6 +6997,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/messenger/zipball/6cd7045016ebf9c96fcb13e33e3250d466004a53",
                 "reference": "6cd7045016ebf9c96fcb13e33e3250d466004a53",
+=======
+            "version": "v6.3.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/messenger.git",
+                "reference": "a0a8860ca625116c474c9c1f5570bd7ec752c599"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/messenger/zipball/a0a8860ca625116c474c9c1f5570bd7ec752c599",
+                "reference": "a0a8860ca625116c474c9c1f5570bd7ec752c599",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -6464,7 +7066,11 @@
             "description": "Helps applications send and receive messages to/from other applications or via message queues",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/messenger/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/messenger/tree/v6.3.7"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -6480,7 +7086,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-20T05:42:09+00:00"
+=======
+            "time": "2023-10-26T18:15:14+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "symfony/mime",
@@ -6568,6 +7178,7 @@
         },
         {
             "name": "symfony/monolog-bridge",
+<<<<<<< HEAD
             "version": "v6.3.1",
             "source": {
                 "type": "git",
@@ -6578,6 +7189,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/monolog-bridge/zipball/04b04b8e465e0fa84940e5609b6796a8b4e51bf1",
                 "reference": "04b04b8e465e0fa84940e5609b6796a8b4e51bf1",
+=======
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/monolog-bridge.git",
+                "reference": "2bbfc8bd9d6f966b69eda20c66762580a0410c78"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/monolog-bridge/zipball/2bbfc8bd9d6f966b69eda20c66762580a0410c78",
+                "reference": "2bbfc8bd9d6f966b69eda20c66762580a0410c78",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -6626,7 +7249,11 @@
             "description": "Provides integration for Monolog with various Symfony components",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/monolog-bridge/tree/v6.3.1"
+=======
+                "source": "https://github.com/symfony/monolog-bridge/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -6642,34 +7269,38 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-06-08T11:13:32+00:00"
+=======
+            "time": "2023-10-31T08:07:48+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "symfony/monolog-bundle",
-            "version": "v3.8.0",
+            "version": "v3.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/monolog-bundle.git",
-                "reference": "a41bbcdc1105603b6d73a7d9a43a3788f8e0fb7d"
+                "reference": "414f951743f4aa1fd0f5bf6a0e9c16af3fe7f181"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/a41bbcdc1105603b6d73a7d9a43a3788f8e0fb7d",
-                "reference": "a41bbcdc1105603b6d73a7d9a43a3788f8e0fb7d",
+                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/414f951743f4aa1fd0f5bf6a0e9c16af3fe7f181",
+                "reference": "414f951743f4aa1fd0f5bf6a0e9c16af3fe7f181",
                 "shasum": ""
             },
             "require": {
-                "monolog/monolog": "^1.22 || ^2.0 || ^3.0",
-                "php": ">=7.1.3",
-                "symfony/config": "~4.4 || ^5.0 || ^6.0",
-                "symfony/dependency-injection": "^4.4 || ^5.0 || ^6.0",
-                "symfony/http-kernel": "~4.4 || ^5.0 || ^6.0",
-                "symfony/monolog-bridge": "~4.4 || ^5.0 || ^6.0"
+                "monolog/monolog": "^1.25.1 || ^2.0 || ^3.0",
+                "php": ">=7.2.5",
+                "symfony/config": "^5.4 || ^6.0 || ^7.0",
+                "symfony/dependency-injection": "^5.4 || ^6.0 || ^7.0",
+                "symfony/http-kernel": "^5.4 || ^6.0 || ^7.0",
+                "symfony/monolog-bridge": "^5.4 || ^6.0 || ^7.0"
             },
             "require-dev": {
-                "symfony/console": "~4.4 || ^5.0 || ^6.0",
-                "symfony/phpunit-bridge": "^5.2 || ^6.0",
-                "symfony/yaml": "~4.4 || ^5.0 || ^6.0"
+                "symfony/console": "^5.4 || ^6.0 || ^7.0",
+                "symfony/phpunit-bridge": "^6.3 || ^7.0",
+                "symfony/yaml": "^5.4 || ^6.0 || ^7.0"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -6707,7 +7338,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/monolog-bundle/issues",
-                "source": "https://github.com/symfony/monolog-bundle/tree/v3.8.0"
+                "source": "https://github.com/symfony/monolog-bundle/tree/v3.10.0"
             },
             "funding": [
                 {
@@ -6723,7 +7354,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-10T14:24:36+00:00"
+            "time": "2023-11-06T17:08:13+00:00"
         },
         {
             "name": "symfony/options-resolver",
@@ -6794,6 +7425,7 @@
         },
         {
             "name": "symfony/password-hasher",
+<<<<<<< HEAD
             "version": "v6.3.5",
             "source": {
                 "type": "git",
@@ -6804,6 +7436,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/password-hasher/zipball/278d3a49715073879f75e372ad80b8cfeca949d3",
                 "reference": "278d3a49715073879f75e372ad80b8cfeca949d3",
+=======
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/password-hasher.git",
+                "reference": "82161c4bebf77900372083ec6e484b5f055b0cba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/password-hasher/zipball/82161c4bebf77900372083ec6e484b5f055b0cba",
+                "reference": "82161c4bebf77900372083ec6e484b5f055b0cba",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -6846,7 +7490,11 @@
                 "password"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/password-hasher/tree/v6.3.5"
+=======
+                "source": "https://github.com/symfony/password-hasher/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -6862,7 +7510,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-09-25T17:05:16+00:00"
+=======
+            "time": "2023-11-06T10:58:05+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "symfony/polyfill-intl-grapheme",
@@ -7751,6 +8403,7 @@
         },
         {
             "name": "symfony/security-bundle",
+<<<<<<< HEAD
             "version": "v6.3.6",
             "source": {
                 "type": "git",
@@ -7761,6 +8414,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/security-bundle/zipball/0b07f3820370aba96e1633993c5c561364f88f30",
                 "reference": "0b07f3820370aba96e1633993c5c561364f88f30",
+=======
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/security-bundle.git",
+                "reference": "57889ebb1ac3403d550c787c4fde127261abacb6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/security-bundle/zipball/57889ebb1ac3403d550c787c4fde127261abacb6",
+                "reference": "57889ebb1ac3403d550c787c4fde127261abacb6",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -7842,7 +8507,11 @@
             "description": "Provides a tight integration of the Security component into the Symfony full-stack framework",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/security-bundle/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/security-bundle/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -7858,6 +8527,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-12T16:11:32+00:00"
         },
         {
@@ -7872,6 +8542,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/security-core/zipball/ec8f24dc1195f46483510892271d01a5202bba70",
                 "reference": "ec8f24dc1195f46483510892271d01a5202bba70",
+=======
+            "time": "2023-11-09T09:33:10+00:00"
+        },
+        {
+            "name": "symfony/security-core",
+            "version": "v6.3.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/security-core.git",
+                "reference": "7ceb30fed93f5ea40ccde3173d1f7712527c0d62"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/security-core/zipball/7ceb30fed93f5ea40ccde3173d1f7712527c0d62",
+                "reference": "7ceb30fed93f5ea40ccde3173d1f7712527c0d62",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -7927,7 +8613,11 @@
             "description": "Symfony Security Component - Core Library",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/security-core/tree/v6.3.5"
+=======
+                "source": "https://github.com/symfony/security-core/tree/v6.3.7"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -7943,7 +8633,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-09-10T17:47:23+00:00"
+=======
+            "time": "2023-10-28T23:11:45+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "symfony/security-csrf",
@@ -8015,6 +8709,7 @@
         },
         {
             "name": "symfony/security-http",
+<<<<<<< HEAD
             "version": "v6.3.6",
             "source": {
                 "type": "git",
@@ -8025,6 +8720,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/security-http/zipball/573ef96ab62d509ac953362fa61f9d1bd283f3a7",
                 "reference": "573ef96ab62d509ac953362fa61f9d1bd283f3a7",
+=======
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/security-http.git",
+                "reference": "19f7b5f5d20879a976d6d376e359bc975dfc6002"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/security-http/zipball/19f7b5f5d20879a976d6d376e359bc975dfc6002",
+                "reference": "19f7b5f5d20879a976d6d376e359bc975dfc6002",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -8083,7 +8790,11 @@
             "description": "Symfony Security Component - HTTP Integration",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/security-http/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/security-http/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -8099,6 +8810,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-13T10:26:24+00:00"
         },
         {
@@ -8113,6 +8825,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/serializer/zipball/8c5fb7144889839751ad9680cf4f183f60f8fbce",
                 "reference": "8c5fb7144889839751ad9680cf4f183f60f8fbce",
+=======
+            "time": "2023-11-09T21:20:12+00:00"
+        },
+        {
+            "name": "symfony/serializer",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/serializer.git",
+                "reference": "b3ad1515a276473f7919ac97e560017284a7c4bf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/b3ad1515a276473f7919ac97e560017284a7c4bf",
+                "reference": "b3ad1515a276473f7919ac97e560017284a7c4bf",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -8177,7 +8905,11 @@
             "description": "Handles serializing and deserializing data structures, including object graphs, into array structures or other formats like XML and JSON.",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/serializer/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/serializer/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -8193,6 +8925,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-17T11:32:53+00:00"
         },
         {
@@ -8207,6 +8940,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/service-contracts/zipball/40da9cc13ec349d9e4966ce18b5fbcd724ab10a4",
                 "reference": "40da9cc13ec349d9e4966ce18b5fbcd724ab10a4",
+=======
+            "time": "2023-11-07T10:11:25+00:00"
+        },
+        {
+            "name": "symfony/service-contracts",
+            "version": "v3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/service-contracts.git",
+                "reference": "b3313c2dbffaf71c8de2934e2ea56ed2291a3838"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/b3313c2dbffaf71c8de2934e2ea56ed2291a3838",
+                "reference": "b3313c2dbffaf71c8de2934e2ea56ed2291a3838",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -8259,7 +9008,11 @@
                 "standards"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/service-contracts/tree/v3.3.0"
+=======
+                "source": "https://github.com/symfony/service-contracts/tree/v3.4.0"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -8275,7 +9028,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-05-23T14:45:45+00:00"
+=======
+            "time": "2023-07-30T20:28:31+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "symfony/stopwatch",
@@ -8341,6 +9098,7 @@
         },
         {
             "name": "symfony/string",
+<<<<<<< HEAD
             "version": "v6.3.5",
             "source": {
                 "type": "git",
@@ -8351,6 +9109,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/string/zipball/13d76d0fb049051ed12a04bef4f9de8715bea339",
                 "reference": "13d76d0fb049051ed12a04bef4f9de8715bea339",
+=======
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/string.git",
+                "reference": "13880a87790c76ef994c91e87efb96134522577a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/string/zipball/13880a87790c76ef994c91e87efb96134522577a",
+                "reference": "13880a87790c76ef994c91e87efb96134522577a",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -8407,7 +9177,11 @@
                 "utf8"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/string/tree/v6.3.5"
+=======
+                "source": "https://github.com/symfony/string/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -8423,6 +9197,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-09-18T10:38:32+00:00"
         },
         {
@@ -8437,6 +9212,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/translation/zipball/869b26c7a9d4b8a48afdd77ab36031909c87e3a2",
                 "reference": "869b26c7a9d4b8a48afdd77ab36031909c87e3a2",
+=======
+            "time": "2023-11-09T08:28:21+00:00"
+        },
+        {
+            "name": "symfony/translation",
+            "version": "v6.3.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/translation.git",
+                "reference": "30212e7c87dcb79c83f6362b00bde0e0b1213499"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/30212e7c87dcb79c83f6362b00bde0e0b1213499",
+                "reference": "30212e7c87dcb79c83f6362b00bde0e0b1213499",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -8502,7 +9293,11 @@
             "description": "Provides tools to internationalize your application",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/translation/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/translation/tree/v6.3.7"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -8518,6 +9313,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-17T11:32:53+00:00"
         },
         {
@@ -8532,6 +9328,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/02c24deb352fb0d79db5486c0c79905a85e37e86",
                 "reference": "02c24deb352fb0d79db5486c0c79905a85e37e86",
+=======
+            "time": "2023-10-28T23:11:45+00:00"
+        },
+        {
+            "name": "symfony/translation-contracts",
+            "version": "v3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/translation-contracts.git",
+                "reference": "dee0c6e5b4c07ce851b462530088e64b255ac9c5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/dee0c6e5b4c07ce851b462530088e64b255ac9c5",
+                "reference": "dee0c6e5b4c07ce851b462530088e64b255ac9c5",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -8580,7 +9392,11 @@
                 "standards"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/translation-contracts/tree/v3.3.0"
+=======
+                "source": "https://github.com/symfony/translation-contracts/tree/v3.4.0"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -8596,6 +9412,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-05-30T17:17:10+00:00"
         },
         {
@@ -8610,6 +9427,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/18f2cbe1d46ad43c4d3bd45e5e6279172068e064",
                 "reference": "18f2cbe1d46ad43c4d3bd45e5e6279172068e064",
+=======
+            "time": "2023-07-25T15:08:44+00:00"
+        },
+        {
+            "name": "symfony/twig-bridge",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/twig-bridge.git",
+                "reference": "c51407623959a626784ff302419026f56dc4e1ba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/c51407623959a626784ff302419026f56dc4e1ba",
+                "reference": "c51407623959a626784ff302419026f56dc4e1ba",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -8688,7 +9521,11 @@
             "description": "Provides integration for Twig with various Symfony components",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/twig-bridge/tree/v6.3.5"
+=======
+                "source": "https://github.com/symfony/twig-bridge/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -8704,6 +9541,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-09-12T06:57:20+00:00"
         },
         {
@@ -8718,6 +9556,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/twig-bundle/zipball/d0cd4d1675c0582d27c2e8bb0dc27c0303d8e3ea",
                 "reference": "d0cd4d1675c0582d27c2e8bb0dc27c0303d8e3ea",
+=======
+            "time": "2023-11-09T21:20:12+00:00"
+        },
+        {
+            "name": "symfony/twig-bundle",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/twig-bundle.git",
+                "reference": "82429320fe931dd50825ec08140c54b3a315bf79"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/twig-bundle/zipball/82429320fe931dd50825ec08140c54b3a315bf79",
+                "reference": "82429320fe931dd50825ec08140c54b3a315bf79",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -8773,7 +9627,11 @@
             "description": "Provides a tight integration of Twig into the Symfony full-stack framework",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/twig-bundle/tree/v6.3.0"
+=======
+                "source": "https://github.com/symfony/twig-bundle/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -8789,6 +9647,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-05-06T09:53:41+00:00"
         },
         {
@@ -8803,15 +9662,39 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/6a1851b8ed5e51c0a285728b0e51522e62ae6fdd",
                 "reference": "6a1851b8ed5e51c0a285728b0e51522e62ae6fdd",
+=======
+            "time": "2023-10-31T08:07:48+00:00"
+        },
+        {
+            "name": "symfony/ux-autocomplete",
+            "version": "v2.13.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/ux-autocomplete.git",
+                "reference": "40b329b45559624a6c26f0edcedc379cf0ebe9a0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/ux-autocomplete/zipball/40b329b45559624a6c26f0edcedc379cf0ebe9a0",
+                "reference": "40b329b45559624a6c26f0edcedc379cf0ebe9a0",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
+<<<<<<< HEAD
                 "symfony/dependency-injection": "^5.4|^6.0",
                 "symfony/http-foundation": "^5.4|^6.0",
                 "symfony/http-kernel": "^5.4|^6.0",
                 "symfony/property-access": "^5.4|^6.0",
                 "symfony/string": "^5.4|^6.0"
+=======
+                "symfony/dependency-injection": "^6.3|^7.0",
+                "symfony/http-foundation": "^6.3|^7.0",
+                "symfony/http-kernel": "^6.3|^7.0",
+                "symfony/property-access": "^6.3|^7.0",
+                "symfony/string": "^6.3|^7.0"
+>>>>>>> formulaire-saisie
             },
             "conflict": {
                 "doctrine/orm": "2.9.0 || 2.9.1"
@@ -8822,6 +9705,7 @@
                 "doctrine/orm": "^2.9.4",
                 "fakerphp/faker": "^1.22",
                 "mtdowling/jmespath.php": "^2.6",
+<<<<<<< HEAD
                 "symfony/form": "^5.4|^6.0",
                 "symfony/framework-bundle": "^5.4|^6.0",
                 "symfony/maker-bundle": "^1.40",
@@ -8832,6 +9716,18 @@
                 "symfony/security-csrf": "^5.4|^6.0",
                 "symfony/twig-bundle": "^5.4|^6.0",
                 "symfony/uid": "^5.4|^6.0",
+=======
+                "symfony/form": "^6.3|^7.0",
+                "symfony/framework-bundle": "^6.3|^7.0",
+                "symfony/maker-bundle": "^1.40",
+                "symfony/options-resolver": "^6.3|^7.0",
+                "symfony/phpunit-bridge": "^6.3|^7.0",
+                "symfony/process": "^6.3|^7.0",
+                "symfony/security-bundle": "^6.3|^7.0",
+                "symfony/security-csrf": "^6.3|^7.0",
+                "symfony/twig-bundle": "^6.3|^7.0",
+                "symfony/uid": "^6.3|^7.0",
+>>>>>>> formulaire-saisie
                 "twig/twig": "^2.14.7|^3.0.4",
                 "zenstruck/browser": "^1.1",
                 "zenstruck/foundry": "^1.33"
@@ -8864,7 +9760,11 @@
                 "symfony-ux"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/ux-autocomplete/tree/v2.12.0"
+=======
+                "source": "https://github.com/symfony/ux-autocomplete/tree/v2.13.2"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -8880,6 +9780,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-09-13T14:01:24+00:00"
         },
         {
@@ -8894,12 +9795,33 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/fa06930aa718b0120ab067e0235416378ce26b05",
                 "reference": "fa06930aa718b0120ab067e0235416378ce26b05",
+=======
+            "time": "2023-11-11T01:20:31+00:00"
+        },
+        {
+            "name": "symfony/ux-live-component",
+            "version": "v2.13.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/ux-live-component.git",
+                "reference": "7dd2c62986caa2a683539050cb0a3929d2d0bfe2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/7dd2c62986caa2a683539050cb0a3929d2d0bfe2",
+                "reference": "7dd2c62986caa2a683539050cb0a3929d2d0bfe2",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
+<<<<<<< HEAD
                 "symfony/property-access": "^5.4.5|^6.0",
                 "symfony/serializer": "^5.4|^6.0",
+=======
+                "symfony/property-access": "^5.4.5|^6.0|^7.0",
+                "symfony/serializer": "^5.4|^6.0|^7.0",
+>>>>>>> formulaire-saisie
                 "symfony/ux-twig-component": "^2.8",
                 "twig/twig": "^2.14.7|^3.0.4"
             },
@@ -8913,6 +9835,7 @@
                 "doctrine/orm": "^2.9.4",
                 "doctrine/persistence": "^2.5.2|^3.0",
                 "phpdocumentor/reflection-docblock": "5.x-dev",
+<<<<<<< HEAD
                 "symfony/dependency-injection": "^5.4|^6.0",
                 "symfony/form": "^5.4|^6.0",
                 "symfony/framework-bundle": "^5.4|^6.0",
@@ -8922,6 +9845,18 @@
                 "symfony/security-csrf": "^5.4|^6.0",
                 "symfony/twig-bundle": "^5.4|^6.0",
                 "symfony/validator": "^5.4|^6.0",
+=======
+                "symfony/dependency-injection": "^5.4|^6.0|^7.0",
+                "symfony/expression-language": "^5.4|^6.0|^7.0",
+                "symfony/form": "^5.4|^6.0|^7.0",
+                "symfony/framework-bundle": "^5.4|^6.0|^7.0",
+                "symfony/options-resolver": "^5.4|^6.0|^7.0",
+                "symfony/phpunit-bridge": "^6.0|^7.0",
+                "symfony/property-info": "^5.4|^6.0|^7.0",
+                "symfony/security-csrf": "^5.4|^6.0|^7.0",
+                "symfony/twig-bundle": "^5.4|^6.0|^7.0",
+                "symfony/validator": "^5.4|^6.0|^7.0",
+>>>>>>> formulaire-saisie
                 "zenstruck/browser": "^1.2.0",
                 "zenstruck/foundry": "^1.33"
             },
@@ -8955,7 +9890,11 @@
                 "twig"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/ux-live-component/tree/v2.12.0"
+=======
+                "source": "https://github.com/symfony/ux-live-component/tree/v2.13.2"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -8971,6 +9910,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-09-22T13:26:20+00:00"
         },
         {
@@ -8985,20 +9925,44 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/adafcd7b561a7e6bf4c8e7d05af99c8fe0dd35f7",
                 "reference": "adafcd7b561a7e6bf4c8e7d05af99c8fe0dd35f7",
+=======
+            "time": "2023-11-11T01:20:31+00:00"
+        },
+        {
+            "name": "symfony/ux-twig-component",
+            "version": "v2.13.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/ux-twig-component.git",
+                "reference": "7635b2e41f222724aa7d806965da46600cf3aad4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/7635b2e41f222724aa7d806965da46600cf3aad4",
+                "reference": "7635b2e41f222724aa7d806965da46600cf3aad4",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
+<<<<<<< HEAD
                 "symfony/dependency-injection": "^5.4|^6.0",
                 "symfony/deprecation-contracts": "^2.2|^3.0",
                 "symfony/event-dispatcher": "^5.4|^6.0",
                 "symfony/property-access": "^5.4|^6.0",
+=======
+                "symfony/dependency-injection": "^5.4|^6.0|^7.0",
+                "symfony/deprecation-contracts": "^2.2|^3.0",
+                "symfony/event-dispatcher": "^5.4|^6.0|^7.0",
+                "symfony/property-access": "^5.4|^6.0|^7.0",
+>>>>>>> formulaire-saisie
                 "twig/twig": "^2.14.7|^3.0.4"
             },
             "conflict": {
                 "symfony/config": "<5.4.0"
             },
             "require-dev": {
+<<<<<<< HEAD
                 "symfony/console": "^5.4|^6.0",
                 "symfony/css-selector": "^5.4|^6.0",
                 "symfony/dom-crawler": "^5.4|^6.0",
@@ -9006,6 +9970,16 @@
                 "symfony/phpunit-bridge": "^6.0",
                 "symfony/stimulus-bundle": "^2.9.1",
                 "symfony/twig-bundle": "^5.4|^6.0",
+=======
+                "symfony/console": "^5.4|^6.0|^7.0",
+                "symfony/css-selector": "^5.4|^6.0|^7.0",
+                "symfony/dom-crawler": "^5.4|^6.0|^7.0",
+                "symfony/framework-bundle": "^5.4|^6.0|^7.0",
+                "symfony/phpunit-bridge": "^6.0|^7.0",
+                "symfony/stimulus-bundle": "^2.9.1",
+                "symfony/stopwatch": "^5.4|^6.0|^7.0",
+                "symfony/twig-bundle": "^5.4|^6.0|^7.0",
+>>>>>>> formulaire-saisie
                 "symfony/webpack-encore-bundle": "^1.15"
             },
             "type": "symfony-bundle",
@@ -9038,7 +10012,11 @@
                 "twig"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/ux-twig-component/tree/v2.12.0"
+=======
+                "source": "https://github.com/symfony/ux-twig-component/tree/v2.13.1"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -9054,6 +10032,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-09-22T13:26:20+00:00"
         },
         {
@@ -9068,6 +10047,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/validator/zipball/254290aa13d591883eb36327cbe80689cee38ffb",
                 "reference": "254290aa13d591883eb36327cbe80689cee38ffb",
+=======
+            "time": "2023-11-08T14:37:05+00:00"
+        },
+        {
+            "name": "symfony/validator",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/validator.git",
+                "reference": "f75b40e088d095db1e788b81605a76f4563cb80e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/f75b40e088d095db1e788b81605a76f4563cb80e",
+                "reference": "f75b40e088d095db1e788b81605a76f4563cb80e",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -9134,7 +10129,11 @@
             "description": "Provides tools to validate values",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/validator/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/validator/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -9150,6 +10149,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-20T16:20:17+00:00"
         },
         {
@@ -9164,6 +10164,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/var-dumper/zipball/999ede244507c32b8e43aebaa10e9fce20de7c97",
                 "reference": "999ede244507c32b8e43aebaa10e9fce20de7c97",
+=======
+            "time": "2023-11-07T10:17:15+00:00"
+        },
+        {
+            "name": "symfony/var-dumper",
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/var-dumper.git",
+                "reference": "81acabba9046550e89634876ca64bfcd3c06aa0a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/81acabba9046550e89634876ca64bfcd3c06aa0a",
+                "reference": "81acabba9046550e89634876ca64bfcd3c06aa0a",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -9218,7 +10234,11 @@
                 "dump"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/var-dumper/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/var-dumper/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -9234,7 +10254,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-12T18:45:56+00:00"
+=======
+            "time": "2023-11-08T10:42:36+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "symfony/var-exporter",
@@ -9470,6 +10494,7 @@
         },
         {
             "name": "symfony/yaml",
+<<<<<<< HEAD
             "version": "v6.3.3",
             "source": {
                 "type": "git",
@@ -9480,6 +10505,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/yaml/zipball/e23292e8c07c85b971b44c1c4b87af52133e2add",
                 "reference": "e23292e8c07c85b971b44c1c4b87af52133e2add",
+=======
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "3493af8a8dad7fa91c77fa473ba23ecd95334a92"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/3493af8a8dad7fa91c77fa473ba23ecd95334a92",
+                "reference": "3493af8a8dad7fa91c77fa473ba23ecd95334a92",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -9522,7 +10559,11 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/yaml/tree/v6.3.3"
+=======
+                "source": "https://github.com/symfony/yaml/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -9538,6 +10579,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-07-31T07:08:24+00:00"
         },
         {
@@ -9552,10 +10594,27 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/twigphp/twig-extra-bundle/zipball/f10baafe6eb0ecd615d52d5cbfb713a39f68e8f3",
                 "reference": "f10baafe6eb0ecd615d52d5cbfb713a39f68e8f3",
+=======
+            "time": "2023-11-06T10:58:05+00:00"
+        },
+        {
+            "name": "twig/extra-bundle",
+            "version": "v3.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twigphp/twig-extra-bundle.git",
+                "reference": "32807183753de0388c8e59f7ac2d13bb47311140"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twigphp/twig-extra-bundle/zipball/32807183753de0388c8e59f7ac2d13bb47311140",
+                "reference": "32807183753de0388c8e59f7ac2d13bb47311140",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
+<<<<<<< HEAD
                 "symfony/framework-bundle": "^5.4|^6.0",
                 "symfony/twig-bundle": "^5.4|^6.0",
                 "twig/twig": "^2.7|^3.0"
@@ -9563,6 +10622,15 @@
             "require-dev": {
                 "league/commonmark": "^1.0|^2.0",
                 "symfony/phpunit-bridge": "^5.4|^6.3",
+=======
+                "symfony/framework-bundle": "^5.4|^6.0|^7.0",
+                "symfony/twig-bundle": "^5.4|^6.0|^7.0",
+                "twig/twig": "^3.0"
+            },
+            "require-dev": {
+                "league/commonmark": "^1.0|^2.0",
+                "symfony/phpunit-bridge": "^6.4|^7.0",
+>>>>>>> formulaire-saisie
                 "twig/cache-extra": "^3.0",
                 "twig/cssinliner-extra": "^2.12|^3.0",
                 "twig/html-extra": "^2.12|^3.0",
@@ -9600,7 +10668,11 @@
                 "twig"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/twigphp/twig-extra-bundle/tree/v3.7.1"
+=======
+                "source": "https://github.com/twigphp/twig-extra-bundle/tree/v3.8.0"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -9612,6 +10684,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-07-29T15:34:56+00:00"
         },
         {
@@ -9626,16 +10699,37 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/twigphp/Twig/zipball/a0ce373a0ca3bf6c64b9e3e2124aca502ba39554",
                 "reference": "a0ce373a0ca3bf6c64b9e3e2124aca502ba39554",
+=======
+            "time": "2023-11-21T14:02:01+00:00"
+        },
+        {
+            "name": "twig/twig",
+            "version": "v3.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twigphp/Twig.git",
+                "reference": "9d15f0ac07f44dc4217883ec6ae02fd555c6f71d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/9d15f0ac07f44dc4217883ec6ae02fd555c6f71d",
+                "reference": "9d15f0ac07f44dc4217883ec6ae02fd555c6f71d",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
                 "symfony/polyfill-ctype": "^1.8",
-                "symfony/polyfill-mbstring": "^1.3"
+                "symfony/polyfill-mbstring": "^1.3",
+                "symfony/polyfill-php80": "^1.22"
             },
             "require-dev": {
                 "psr/container": "^1.0|^2.0",
+<<<<<<< HEAD
                 "symfony/phpunit-bridge": "^5.4.9|^6.3"
+=======
+                "symfony/phpunit-bridge": "^5.4.9|^6.3|^7.0"
+>>>>>>> formulaire-saisie
             },
             "type": "library",
             "autoload": {
@@ -9671,7 +10765,11 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/twigphp/Twig/tree/v3.7.1"
+=======
+                "source": "https://github.com/twigphp/Twig/tree/v3.8.0"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -9683,7 +10781,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-08-28T11:09:02+00:00"
+=======
+            "time": "2023-11-21T18:54:41+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "webmozart/assert",
@@ -9747,6 +10849,7 @@
     "packages-dev": [
         {
             "name": "doctrine/data-fixtures",
+<<<<<<< HEAD
             "version": "1.6.7",
             "source": {
                 "type": "git",
@@ -9757,10 +10860,23 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/ae4e845decbe177348fdbecd04331f4fb96aa301",
                 "reference": "ae4e845decbe177348fdbecd04331f4fb96aa301",
+=======
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/data-fixtures.git",
+                "reference": "bbcb74f2ac6dbe81a14b3c3687d7623490a0448f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/bbcb74f2ac6dbe81a14b3c3687d7623490a0448f",
+                "reference": "bbcb74f2ac6dbe81a14b3c3687d7623490a0448f",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
                 "doctrine/deprecations": "^0.5.3 || ^1.0",
+<<<<<<< HEAD
                 "doctrine/persistence": "^1.3.3 || ^2.0 || ^3.0",
                 "php": "^7.2 || ^8.0"
             },
@@ -9779,6 +10895,28 @@
                 "phpunit/phpunit": "^8.5 || ^9.5 || ^10.0",
                 "symfony/cache": "^5.0 || ^6.0",
                 "vimeo/psalm": "^4.10 || ^5.9"
+=======
+                "doctrine/persistence": "^2.0|^3.0",
+                "php": "^7.4 || ^8.0"
+            },
+            "conflict": {
+                "doctrine/dbal": "<3.5 || >=5",
+                "doctrine/orm": "<2.14 || >=4",
+                "doctrine/phpcr-odm": "<1.3.0"
+            },
+            "require-dev": {
+                "doctrine/annotations": "^1.12 || ^2",
+                "doctrine/coding-standard": "^12",
+                "doctrine/dbal": "^3.5 || ^4",
+                "doctrine/mongodb-odm": "^1.3.0 || ^2.0.0",
+                "doctrine/orm": "^2.14 || ^3",
+                "ext-sqlite3": "*",
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^9.6.13 || ^10.4.2",
+                "symfony/cache": "^5.4 || ^6.3 || ^7",
+                "symfony/var-exporter": "^5.4 || ^6.3 || ^7",
+                "vimeo/psalm": "^5.9"
+>>>>>>> formulaire-saisie
             },
             "suggest": {
                 "alcaeus/mongo-php-adapter": "For using MongoDB ODM 1.3 with PHP 7 (deprecated)",
@@ -9809,7 +10947,11 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/data-fixtures/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/doctrine/data-fixtures/tree/1.6.7"
+=======
+                "source": "https://github.com/doctrine/data-fixtures/tree/1.7.0"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -9825,6 +10967,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-08-17T21:15:33+00:00"
         },
         {
@@ -9839,26 +10982,46 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/9ec3139c52a42e94c9fd1e95f8d2bca94326edfb",
                 "reference": "9ec3139c52a42e94c9fd1e95f8d2bca94326edfb",
+=======
+            "time": "2023-11-24T11:18:31+00:00"
+        },
+        {
+            "name": "doctrine/doctrine-fixtures-bundle",
+            "version": "3.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/DoctrineFixturesBundle.git",
+                "reference": "c808a0c85c38c8ee265cc8405b456c1d2b38567d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/c808a0c85c38c8ee265cc8405b456c1d2b38567d",
+                "reference": "c808a0c85c38c8ee265cc8405b456c1d2b38567d",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
                 "doctrine/data-fixtures": "^1.3",
-                "doctrine/doctrine-bundle": "^1.11|^2.0",
-                "doctrine/orm": "^2.6.0",
-                "doctrine/persistence": "^1.3.7|^2.0|^3.0",
-                "php": "^7.1 || ^8.0",
-                "symfony/config": "^3.4|^4.3|^5.0|^6.0",
-                "symfony/console": "^3.4|^4.3|^5.0|^6.0",
-                "symfony/dependency-injection": "^3.4.47|^4.3|^5.0|^6.0",
-                "symfony/doctrine-bridge": "^3.4|^4.1|^5.0|^6.0",
-                "symfony/http-kernel": "^3.4|^4.3|^5.0|^6.0"
+                "doctrine/doctrine-bundle": "^2.2",
+                "doctrine/orm": "^2.14.0 || ^3.0",
+                "doctrine/persistence": "^2.4|^3.0",
+                "php": "^7.4 || ^8.0",
+                "symfony/config": "^5.4|^6.0|^7.0",
+                "symfony/console": "^5.4|^6.0|^7.0",
+                "symfony/dependency-injection": "^5.4|^6.0|^7.0",
+                "symfony/deprecation-contracts": "^2.1|^3",
+                "symfony/doctrine-bridge": "^5.4|^6.0|^7.0",
+                "symfony/http-kernel": "^5.4|^6.0|^7.0"
+            },
+            "conflict": {
+                "doctrine/dbal": "< 3"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^9",
-                "phpstan/phpstan": "^1.4.10",
-                "phpunit/phpunit": "^7.5.20 || ^8.5.26 || ^9.5.20",
-                "symfony/phpunit-bridge": "^6.0.8",
-                "vimeo/psalm": "^4.22"
+                "doctrine/coding-standard": "^12",
+                "phpstan/phpstan": "^1.10.39",
+                "phpunit/phpunit": "^9.6.13",
+                "symfony/phpunit-bridge": "^6.3.6",
+                "vimeo/psalm": "^5.15"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -9892,7 +11055,11 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/DoctrineFixturesBundle/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/doctrine/DoctrineFixturesBundle/tree/3.4.4"
+=======
+                "source": "https://github.com/doctrine/DoctrineFixturesBundle/tree/3.5.1"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -9908,7 +11075,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-05-02T15:12:16+00:00"
+=======
+            "time": "2023-11-19T12:48:54+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "phpstan/extension-installer",
@@ -9956,6 +11127,7 @@
         },
         {
             "name": "phpstan/phpstan",
+<<<<<<< HEAD
             "version": "1.10.39",
             "source": {
                 "type": "git",
@@ -9966,6 +11138,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d9dedb0413f678b4d03cbc2279a48f91592c97c4",
                 "reference": "d9dedb0413f678b4d03cbc2279a48f91592c97c4",
+=======
+            "version": "1.10.44",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/bf84367c53a23f759513985c54ffe0d0c249825b",
+                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -10014,6 +11198,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-17T15:46:26+00:00"
         },
         {
@@ -10028,6 +11213,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/383855999db6a7d65d0bf580ce2762e17188c2a5",
                 "reference": "383855999db6a7d65d0bf580ce2762e17188c2a5",
+=======
+            "time": "2023-11-21T16:30:46+00:00"
+        },
+        {
+            "name": "phpstan/phpstan-symfony",
+            "version": "1.3.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan-symfony.git",
+                "reference": "27ff6339f83796a7e0dd963cf445cd3c456fc620"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/27ff6339f83796a7e0dd963cf445cd3c456fc620",
+                "reference": "27ff6339f83796a7e0dd963cf445cd3c456fc620",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
@@ -10084,9 +11285,15 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/phpstan/phpstan-symfony/tree/1.3.4"
             },
             "time": "2023-09-29T14:10:11+00:00"
+=======
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.3.5"
+            },
+            "time": "2023-10-30T14:52:15+00:00"
+>>>>>>> formulaire-saisie
         },
         {
             "name": "symfony/maker-bundle",
@@ -10182,6 +11389,7 @@
         },
         {
             "name": "symfony/web-profiler-bundle",
+<<<<<<< HEAD
             "version": "v6.3.6",
             "source": {
                 "type": "git",
@@ -10192,12 +11400,28 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/web-profiler-bundle/zipball/249cb2486597d3ab810d8bcc8e4db5ad0fc3e3bd",
                 "reference": "249cb2486597d3ab810d8bcc8e4db5ad0fc3e3bd",
+=======
+            "version": "v6.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/web-profiler-bundle.git",
+                "reference": "4167c20cbdbb1152007fa731718c8c0362f28617"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/web-profiler-bundle/zipball/4167c20cbdbb1152007fa731718c8c0362f28617",
+                "reference": "4167c20cbdbb1152007fa731718c8c0362f28617",
+>>>>>>> formulaire-saisie
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
                 "symfony/config": "^5.4|^6.0",
+<<<<<<< HEAD
                 "symfony/framework-bundle": "^5.4|^6.0",
+=======
+                "symfony/framework-bundle": "^5.4|^6.0,<6.4",
+>>>>>>> formulaire-saisie
                 "symfony/http-kernel": "^6.3",
                 "symfony/routing": "^5.4|^6.0",
                 "symfony/twig-bundle": "^5.4|^6.0",
@@ -10243,7 +11467,11 @@
                 "dev"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/web-profiler-bundle/tree/v6.3.6"
+=======
+                "source": "https://github.com/symfony/web-profiler-bundle/tree/v6.3.8"
+>>>>>>> formulaire-saisie
             },
             "funding": [
                 {
@@ -10259,7 +11487,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-10-11T18:18:20+00:00"
+=======
+            "time": "2023-10-31T14:41:59+00:00"
+>>>>>>> formulaire-saisie
         }
     ],
     "aliases": [],

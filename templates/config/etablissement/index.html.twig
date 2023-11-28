@@ -26,19 +26,16 @@
 {% endblock %}
 
 {% block bouton_header %}
-    <button
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'Ajouter un établissement',
-                modalUrl: path('app_etablissement_new') }) }}
-            data-action="click->modal#openModal"
-            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+    <a href="{{ path('app_etablissement_new') }}">
+        <button class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"     
             data-size="lg"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
             title="Ajouter un établissement"
-    >
-        <i class="{{ iconAdd }}"></i>
-        <span> Ajouter un établissement</span>
-    </button>
+            type="button"
+        >
+            <i class="{{ iconAdd }}"></i>
+            <span> Ajouter un établissement</span>
+        </button>
+    </a>
 {% endblock %}

@@ -2,11 +2,12 @@
     <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
     <th {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %}>&nbsp;</th>
     <td>{% if ecEnfant %}<span class="badge bg-ec-{{ ec.elementConstitutif.ordre }}">&nbsp;</span>{% endif %}
-        {% if isBut is defined and isBut == false %}<strong>{{ ec.elementConstitutif.code }}</strong>{% endif %}
+        {% if (isBut is defined and isBut == false) or isBut is not defined %}<strong>{{ ec.elementConstitutif.code }}</strong>{% endif %}
         {% if ec.elementConstitutif.ficheMatiere != null %}
             <a href="{{ url('app_fiche_matiere_show', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}">
                 {% if isBut is defined and isBut == true %}
-                    <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }}{% else %}
+                    <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }}
+                {% else %}
                     {{ ec.elementConstitutif.ficheMatiere.display }}
                 {% endif %}
             </a>
@@ -19,10 +20,13 @@
         {% else %}
             {{ ec.elementConstitutif.libelle }}
         {% endif %}
-        {% if ec.elementConstitutif.natureEcUe is defined and ec.elementConstitutif.natureEcUe.isLibre == true %}<span
-                class="badge bg-success">EC à choix libre</span>{% endif %}
-        {% if ec.elementsConstitutifsEnfants|length > 0 %}<span class="badge bg-info">
-            EC à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possible</span>{% endif %}
+        {% if ec.elementConstitutif.natureEcUe is defined and ec.elementConstitutif.natureEcUe.isLibre == true %}
+            <span class="badge bg-success">EC à choix libre</span>
+        {% endif %}
+        {% if ec.elementsConstitutifsEnfants|length > 0 %}
+            <span class="badge bg-info">
+            EC à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possible</span>
+        {% endif %}
     </td>
     <td>{{ ec.heuresEctsEc.ects|badgeEcts }}</td>
 
@@ -70,7 +74,7 @@
     {% endif %}
 
     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-            <td>{{ ec.heuresEctsEc.sommeEcTotalPresDist }}</td>
+        <td>{{ ec.heuresEctsEc.sommeEcTotalPresDist }}</td>
     {% endif %}
 </tr>
 

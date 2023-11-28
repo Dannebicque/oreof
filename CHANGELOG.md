@@ -2,6 +2,117 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.18.0](https://github.com/Dannebicque/oreof/compare/v1.17.13...v1.18.0) (2023-11-26)
+
+
+### Features
+
+* export des fiches au format 1pdf/zip ([4c68274](https://github.com/Dannebicque/oreof/commit/4c6827434b77d5c31e43479e08aace1d08dabfdb))
+
+
+### Bug Fixes
+
+* type sur modal js ([8637597](https://github.com/Dannebicque/oreof/commit/86375971c58a982c7aafaf92b90743a926ba0833))
+* validation en lot ([901cb8a](https://github.com/Dannebicque/oreof/commit/901cb8ab8d4764b6edf04aa4c103d104272244f7))
+* validation/reserve/refuse en lot ([939ce56](https://github.com/Dannebicque/oreof/commit/939ce5690c044211fc1e2e501b243ad4a6aad1b7))
+
+### [1.17.13](https://github.com/Dannebicque/oreof/compare/v1.17.12...v1.17.13) (2023-11-23)
+
+
+### Bug Fixes
+
+* Export PDF + CSS dédié ([5975fcc](https://github.com/Dannebicque/oreof/commit/5975fccc5b72e40adf6dcc84242c0dfde8041fc6))
+* GlobalVoter ([128f944](https://github.com/Dannebicque/oreof/commit/128f944b400d665b45a2f0186c56f7f55b37deb0))
+
+### [1.17.12](https://github.com/Dannebicque/oreof/compare/v1.17.11...v1.17.12) (2023-11-22)
+
+
+### Bug Fixes
+
+* Export Brut des données SES. Ajout du régime ([8b57e97](https://github.com/Dannebicque/oreof/commit/8b57e972b4abb206260b147172cd6e25799fb889))
+* Mail contact avec DPE + Mise en forme + champs formation ([aafa41c](https://github.com/Dannebicque/oreof/commit/aafa41cf2437c96ca1d17e453ea5e5936f771aa9))
+
+### [1.17.11](https://github.com/Dannebicque/oreof/compare/v1.17.10...v1.17.11) (2023-11-22)
+
+
+### Features
+
+* Export Brut des données SES ([935d439](https://github.com/Dannebicque/oreof/commit/935d4394fc7f59db1a97ef56cae0f69caddab9c4))
+* Mail validation/refus CFVU ([049e349](https://github.com/Dannebicque/oreof/commit/049e3494f63abc30cc8120750d61f220de651e66))
+
+
+### Bug Fixes
+
+* Export BCC global avec BCC raccrochées ([4ec1356](https://github.com/Dannebicque/oreof/commit/4ec1356c06c1699a0380f4609d3f66fca6ed8301))
+
+### [1.17.10](https://github.com/Dannebicque/oreof/compare/v1.17.9...v1.17.10) (2023-11-22)
+
+
+### Features
+
+* Ajout de la lettre apogée sur Année Universitaire ([e889ced](https://github.com/Dannebicque/oreof/commit/e889ced8528e6b07f6923286194d6857f5d1512c))
+* Ajout de la lettre apogée sur Domaine ([9827e2a](https://github.com/Dannebicque/oreof/commit/9827e2acdf83472d6a220ebb3466846a5f30cf04))
+* Ajout de la lettre apogée sur Type Diplôme ([778ab88](https://github.com/Dannebicque/oreof/commit/778ab885c034e27cf783087260e02878a930f133))
+
+
+### Bug Fixes
+
+* tableau Régime, décalage CFVU ([190a91e](https://github.com/Dannebicque/oreof/commit/190a91eda8b658371e16d29f647bf6bb58079f0f))
+
+### [1.17.9](https://github.com/Dannebicque/oreof/compare/v1.17.8...v1.17.9) (2023-11-20)
+
+
+### Bug Fixes
+
+* Exports ([f8a8a44](https://github.com/Dannebicque/oreof/commit/f8a8a44b1af98d332d65ac6fa89f8ce1cf14800a))
+* Exports BCC croisé global ([796f792](https://github.com/Dannebicque/oreof/commit/796f79234c6d14b0d07ee828653d44b04dfd773f))
+* Exports PDF et titres ([84e8275](https://github.com/Dannebicque/oreof/commit/84e827543d5e6d05de6d508af00959bff334bf21))
+* Traductions ([39b705a](https://github.com/Dannebicque/oreof/commit/39b705af80396256c897fce85134a2a185ccca85))
+
+### [1.17.8](https://github.com/Dannebicque/oreof/compare/v1.17.7...v1.17.8) (2023-11-20)
+
+
+### Bug Fixes
+
+* Export pour le "Show" ([cf14ae0](https://github.com/Dannebicque/oreof/commit/cf14ae0baff5e15edeb6c44e2a0c4a0be5faeaf6))
+* Exports ([05cdc44](https://github.com/Dannebicque/oreof/commit/05cdc44b238ee4a6231f8df853a9d7611fc6beec))
+
+### [1.17.7](https://github.com/Dannebicque/oreof/compare/v1.17.6...v1.17.7) (2023-11-20)
+
+
+### Bug Fixes
+
+* Code EC sur détail des structures ([c993897](https://github.com/Dannebicque/oreof/commit/c993897fb4b35a17e2842c4c920677cd2176cd5c))
+* Code EC sur détail des structures ([d9d83f7](https://github.com/Dannebicque/oreof/commit/d9d83f7fcbad7110749af9c0d831044c49320816))
+* Export pour le "Show" ([5dc7e38](https://github.com/Dannebicque/oreof/commit/5dc7e383a404731c1c2915ad69186e61d1dba61f))
+
+### [1.17.6](https://github.com/Dannebicque/oreof/compare/v1.17.5...v1.17.6) (2023-11-17)
+
+
+### Bug Fixes
+
+* Menu export pour les rôles lecteurs ([b502306](https://github.com/Dannebicque/oreof/commit/b502306250319b00f8305d4d23acef166ed455e1))
+* Orientation page des compétences ([728dfdf](https://github.com/Dannebicque/oreof/commit/728dfdfb5a12e03f203f5064b11ffb24b939b866))
+
+### [1.17.5](https://github.com/Dannebicque/oreof/compare/v1.17.4...v1.17.5) (2023-11-15)
+
+
+### Bug Fixes
+
+* export PDF/Zip ([58ded80](https://github.com/Dannebicque/oreof/commit/58ded80eab4b5b0b88d63d211c313fb00a9fa017))
+
+### [1.17.4](https://github.com/Dannebicque/oreof/compare/v1.17.3...v1.17.4) (2023-11-15)
+
+
+### Features
+
+* Exports ([4aa7e88](https://github.com/Dannebicque/oreof/commit/4aa7e882d600bec7c4ce7e058156dac1b9e126b4))
+
+
+### Bug Fixes
+
+* libellé bouton ([39bbf49](https://github.com/Dannebicque/oreof/commit/39bbf49eaa4d51197e8d3083f95ce79c5825c8da))
+
 ### [1.17.3](https://github.com/Dannebicque/oreof/compare/v1.17.2...v1.17.3) (2023-11-14)
 
 

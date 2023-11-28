@@ -24,7 +24,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ProcessValidationController extends AbstractController
+class ProcessValidationController extends BaseController
 {
     public function __construct(
         private readonly EventDispatcherInterface $eventDispatcher,
@@ -273,45 +273,59 @@ class ProcessValidationController extends AbstractController
             'id' => $id,
         ]);
     }
+
     #[Route('/validation/valide-lot/{etape}', name: 'app_validation_valide_lot')]
     public function valideLot(
         FormationRepository $formationRepository,
         string              $etape,
         Request             $request
     ): Response {
-        $formations = $request->request->get('formations');
+        if ($request->isMethod('POST')) {
+            $sFormations = $request->request->get('formations');
+        } else {
+            $sFormations = $request->query->get('formations');
+        }
+        $formations = explode(',', $sFormations);
 
         $process = $this->validationProcess->getEtape($etape);
         $laisserPasser = false;
+        $tFormations = [];
+        foreach ($formations as $id) {
+            $objet = $formationRepository->find($id);
 
-        $objet = $formationRepository->find($id);
-
-        if ($objet === null) {
-            return JsonReponse::error('Formation non trouvée');
-        }
-
-        if ($etape === 'cfvu') {
-            $histo = $objet->getHistoriqueFormations();
-            foreach ($histo as $h) {
-                if ($h->getEtape() === 'conseil' && $h->getEtat() === 'laisserPasser') {
-                    if ($laisserPasser === false || $laisserPasser->getCreated() < $h->getCreated()) {
-                        $laisserPasser = $h;
+            if ($objet === null) {
+                return JsonReponse::error('Formation non trouvée');
+            }
+            $tFormations[] = $objet;
+            if ($etape === 'cfvu') {
+                $histo = $objet->getHistoriqueFormations();
+                foreach ($histo as $h) {
+                    if ($h->getEtape() === 'conseil' && $h->getEtat() === 'laisserPasser') {
+                        if ($laisserPasser === false || $laisserPasser->getCreated() < $h->getCreated()) {
+                            $laisserPasser = $h;
+                        }
                     }
                 }
             }
-        }
 
-        $processData = $this->formationProcess->etatFormation($objet, $process);
+            $processData = $this->formationProcess->etatFormation($objet, $process);
+
+            if ($request->isMethod('POST')) {
+                $this->formationProcess->valideFormation($objet, $this->getUser(), $process, $etape, $request);
+            }
+        }
 
         if ($request->isMethod('POST')) {
-            return $this->formationProcess->valideFormation($objet, $this->getUser(), $process, $etape, $request);
+            $this->toast('success', 'Formations validées');
+            return $this->redirectToRoute('app_validation_index');
         }
 
 
-        return $this->render('process_validation/_valide.html.twig', [
-            'objet' => $objet,
+        return $this->render('process_validation/_valide_lot.html.twig', [
+            'formations' => $tFormations,
+            'sFormations' => $sFormations,
             'process' => $process,
-            'type' => $type,
+            'type' => 'lot',
             'id' => $id,
             'etape' => $etape,
             'processData' => $processData ?? null,
@@ -321,55 +335,43 @@ class ProcessValidationController extends AbstractController
 
     #[Route('/validation/refuse-lot/{etape}', name: 'app_validation_refuse_lot')]
     public function refuseLot(
-        ParcoursRepository  $parcoursRepository,
         FormationRepository $formationRepository,
         string              $etape,
         Request             $request
     ): Response {
-        $formations = $request->request->get('formations');
+        if ($request->isMethod('POST')) {
+            $sFormations = $request->request->get('formations');
+        } else {
+            $sFormations = $request->query->get('formations');
+        }
+        $formations = explode(',', $sFormations);
 
         $process = $this->validationProcess->getEtape($etape);
+        $tFormations = [];
+        foreach ($formations as $id) {
+            $objet = $formationRepository->find($id);
 
-        switch ($type) {
-            case 'formation':
-                $objet = $formationRepository->find($id);
+            if ($objet === null) {
+                return JsonReponse::error('Formation non trouvée');
+            }
+            $tFormations[] = $objet;
+            $processData = $this->formationProcess->etatFormation($objet, $process);
 
-                if ($objet === null) {
-                    return JsonReponse::error('Formation non trouvée');
-                }
-
-                $processData = $this->formationProcess->etatFormation($objet, $process);
-
-                if ($request->isMethod('POST')) {
-                    return $this->formationProcess->refuseFormation($objet, $this->getUser(), $process, $etape, $request);
-                }
-                break;
-            case 'parcours':
-                $objet = $parcoursRepository->find($id);
-
-                if ($objet === null) {
-                    return JsonReponse::error('Parcours non trouvé');
-                }
-
-                $processData = $this->parcoursProcess->etatParcours($objet, $process);
-
-                if ($request->isMethod('POST')) {
-                    return $this->parcoursProcess->refuseParcours($objet, $this->getUser(), $process, $etape, $request);
-                }
-                break;
-            case 'ficheMatiere':
-                $objet = $formationRepository->find($id);
-                if ($objet === null) {
-                    return JsonReponse::error('Fiche EC/matière non trouvée');
-                }
-//                $place = $dpeWorkflow->getMarking($objet);
-//                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
-                break;
+            if ($request->isMethod('POST')) {
+                $this->formationProcess->refuseFormation($objet, $this->getUser(), $process, $etape, $request);
+            }
         }
 
-        return $this->render('process_validation/_refuse.html.twig', [
+        if ($request->isMethod('POST')) {
+            $this->toast('success', 'Formations refusées');
+            return $this->redirectToRoute('app_validation_index');
+        }
+
+        return $this->render('process_validation/_refuse_lot.html.twig', [
+            'formations' => $tFormations,
+            'sFormations' => $sFormations,
             'process' => $process,
-            'type' => $type,
+            'type' => 'lot',
             'id' => $id,
             'etape' => $etape,
             'objet' => $objet,
@@ -379,58 +381,45 @@ class ProcessValidationController extends AbstractController
 
     #[Route('/validation/reserve-lot/{etape}', name: 'app_validation_reserve_lot')]
     public function reserveLot(
-        ParcoursRepository  $parcoursRepository,
         FormationRepository $formationRepository,
         string              $etape,
         Request             $request
     ): Response {
-        $type = $request->query->get('type');
-        $id = $request->query->get('id');
+        if ($request->isMethod('POST')) {
+            $sFormations = $request->request->get('formations');
+        } else {
+            $sFormations = $request->query->get('formations');
+        }
+        $formations = explode(',', $sFormations);
 
         $process = $this->validationProcess->getEtape($etape);
+        $tFormations = [];
+        foreach ($formations as $id) {
+            $objet = $formationRepository->find($id);
 
-        switch ($type) {
-            case 'formation':
-                $objet = $formationRepository->find($id);
+            if ($objet === null) {
+                return JsonReponse::error('Formation non trouvée');
+            }
+            $tFormations[] = $objet;
+            $processData = $this->formationProcess->etatFormation($objet, $process);
 
-                if ($objet === null) {
-                    return JsonReponse::error('Formation non trouvée');
-                }
-
-                $processData = $this->formationProcess->etatFormation($objet, $process);
-
-                if ($request->isMethod('POST')) {
-                    return $this->formationProcess->reserveFormation($objet, $this->getUser(), $process, $etape, $request);
-                }
-                break;
-            case 'parcours':
-                $objet = $parcoursRepository->find($id);
-
-                if ($objet === null) {
-                    return JsonReponse::error('Parcours non trouvé');
-                }
-
-                $processData = $this->parcoursProcess->etatParcours($objet, $process);
-
-                if ($request->isMethod('POST')) {
-                    return $this->parcoursProcess->reserveParcours($objet, $this->getUser(), $process, $etape, $request);
-                }
-                break;
-            case 'ficheMatiere':
-                $objet = $formationRepository->find($id);
-                if ($objet === null) {
-                    return JsonReponse::error('Fiche EC/matière non trouvée');
-                }
-                $place = $dpeWorkflow->getMarking($objet);
-                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
-                break;
+            if ($request->isMethod('POST')) {
+                $this->formationProcess->reserveFormation($objet, $this->getUser(), $process, $etape, $request);
+            }
         }
 
-        return $this->render('process_validation/_reserve.html.twig', [
+        if ($request->isMethod('POST')) {
+            $this->toast('success', 'Formations marquées avec des réserves');
+            return $this->redirectToRoute('app_validation_index');
+        }
+
+        return $this->render('process_validation/_reserve_lot.html.twig', [
+            'formations' => $tFormations,
+            'sFormations' => $sFormations,
             'process' => $process,
             'objet' => $objet,
             'processData' => $processData ?? null,
-            'type' => $type,
+            'type' => 'lot',
             'id' => $id,
             'etape' => $etape,
         ]);

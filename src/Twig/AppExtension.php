@@ -41,10 +41,16 @@ class AppExtension extends AbstractExtension
             new TwigFilter('badgeBoolean', [$this, 'badgeBoolean'], ['is_safe' => ['html']]),
             new TwigFilter('badgeDroits', [$this, 'badgeDroits'], ['is_safe' => ['html']]),
             new TwigFilter('badgeCentre', [$this, 'badgeCentre'], ['is_safe' => ['html']]),
+            new TwigFilter('displayOrBadge', [$this, 'displayOrBadge'], ['is_safe' => ['html']]),
             new TwigFilter('etatRemplissage', [$this, 'etatRemplissage'], ['is_safe' => ['html']]),
             new TwigFilter('printTexte', [$this, 'printTexte'], ['is_safe' => ['html']]),
             new TwigFilter('filtreHeures', [$this, 'filtreHeures'], ['is_safe' => ['html']])
         ];
+    }
+
+    public function displayOrBadge(?string $value): string
+    {
+        return ($value !== null && trim($value) !== '') ? $value : '<span class="badge bg-danger">Non renseigné</span>';
     }
 
     public function filtreHeures(?float $heures): string

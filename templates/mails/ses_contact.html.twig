@@ -1,4 +1,9 @@
-<p>{{ message|raw }}</p>
+
+<p>Formation : {{ formation.displayLong }}</p>
+<p>Parcours : {{ parcours != null ? parcours.display : '-' }}</p>
+<p>Expéditeur : {{ expediteur.display }}</p>
+
+<p>{{ message|nl2br|raw }}</p>
 
 Cordialement,<br>
 Le Service des Enseignements et de la Scolarité

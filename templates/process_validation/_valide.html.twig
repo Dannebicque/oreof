@@ -22,6 +22,7 @@
         </div>
     {% endif %}
 
+    {% if type != 'lot' %}
     {% if process.check is defined and process.check == true %}
         {{ include('process_validation/_check'~etape|capitalize~'.html.twig') }}
     {% endif %}

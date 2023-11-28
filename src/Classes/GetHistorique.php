@@ -33,7 +33,13 @@ class GetHistorique
         return $this->historiqueFormationRepository->findByFormation($formation);
     }
 
-    public  function getHistoriqueFormationLastStep(Formation $formation, string $step): HistoriqueFormation {
+    public  function getHistoriqueFormationLastStep(Formation $formation, string $step): ?HistoriqueFormation {
         return $this->historiqueFormationRepository->findByFormationLastStep($formation, $step);
+    }
+
+    public function getHistoriqueFormationHasPv(Formation $formation): bool
+    {
+        $conseil = $this->historiqueFormationRepository->findByFormationLastStep($formation, 'conseil');
+        return $conseil !== null && array_key_exists('fichier', $conseil->getComplements());
     }
 }

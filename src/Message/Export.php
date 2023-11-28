@@ -19,11 +19,11 @@ class Export
         private readonly int $userId,
         private readonly string $typeDocument,
         private readonly array $formations,
-        private readonly int $anneeUniversitaireId,
-        private readonly DateTimeInterface $date)
+        private readonly ?int $anneeUniversitaireId = null,
+        private readonly ?DateTimeInterface $date = null)
     {
     }
-    public  function getDate(): DateTimeInterface
+    public  function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
@@ -40,7 +40,7 @@ class Export
     {
         return $this->formations;
     }
-    public  function getAnnee(): int
+    public  function getAnnee(): ?int
     {
         return $this->anneeUniversitaireId;
     }

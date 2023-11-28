@@ -11,10 +11,9 @@ namespace App\Classes\Export;
 
 use App\Classes\MyPDF;
 use App\Entity\AnneeUniversitaire;
-use App\Repository\FormationRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Utils\Tools;
 use DateTimeInterface;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class Export
@@ -22,12 +21,15 @@ class Export
     private string $format;
     private string $typeDocument;
     private array $formations;
-    private AnneeUniversitaire $annee;
-    private DateTimeInterface $date;
+    private ?AnneeUniversitaire $annee;
+    private ?DateTimeInterface $date;
     private string $dir;
     private mixed $export;
 
     public function __construct(
+        protected ExportFicheMatiere $exportFicheMatiere,
+        protected ExportRegime $exportRegime,
+        protected ExportCfvu $exportCfvu,
         protected ExportCarif $exportCarif,
         protected ExportSynthese $exportSynthese,
         protected ExportMccc $exportMccc,
@@ -39,7 +41,7 @@ class Export
         $this->dir = $kernel->getProjectDir().'/public/temp';
     }
 
-    public  function setDate(DateTimeInterface $date):void
+    public  function setDate(?DateTimeInterface $date):void
     {
         $this->date = $date;
     }
@@ -51,7 +53,7 @@ class Export
         $this->typeDocument = $t[1];
     }
 
-    public function exportFormations(array $formations, AnneeUniversitaire $annee): string
+    public function exportFormations(array $formations, ?AnneeUniversitaire $annee = null): string
     {
         $this->formations = $formations;
         $this->annee = $annee;
@@ -69,6 +71,12 @@ class Export
                 return $this->exportMccc(true);
             case 'carif':
                 return $this->exportCarif();
+            case 'regime':
+                return $this->exportRegime();
+            case 'cfvu':
+                return $this->exportCfvu();
+            case 'fiches_matieres':
+                return $this->exportFicheMatiere();
             case 'synthese':
                 return $this->exportSynthese();
         }
@@ -106,5 +114,20 @@ class Export
     private function exportSynthese(): string
     {
         return $this->exportSynthese->exportLink($this->annee);
+    }
+
+    private function exportRegime()
+    {
+        return $this->exportRegime->exportLink($this->annee);
+    }
+
+    private function exportCfvu()
+    {
+        return $this->exportCfvu->exportLink($this->annee);
+    }
+
+    private function exportFicheMatiere()
+    {
+        return $this->exportFicheMatiere->exportLink($this->formations);
     }
 }

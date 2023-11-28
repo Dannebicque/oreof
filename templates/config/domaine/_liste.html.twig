@@ -3,6 +3,7 @@
     <tr>
         <th>Libellé</th>
         <th>Sigle</th>
+        <th>Lettre Apogée</th>
         <th></th>
     </tr>
     </thead>
@@ -11,6 +12,7 @@
         <tr>
             <td>{{ domaine.libelle }}</td>
             <td>{{ domaine.sigle }}</td>
+            <td>{{ domaine.codeApogee|displayOrBadge }}</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TypeDiplomeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Ignore;
@@ -84,6 +85,18 @@ class TypeDiplome
 
     #[ORM\OneToMany(mappedBy: 'typeDiplome', targetEntity: FicheMatiere::class)]
     private Collection $ficheMatieres;
+
+    #[ORM\Column(length: 1)]
+    private ?string $codeApogee = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $modalites_admission = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $insertionProfessionnelle = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $prerequis_obligatoires = null;
 
     public function __construct()
     {
@@ -466,6 +479,54 @@ class TypeDiplome
                 $ficheMatiere->setTypeDiplome(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCodeApogee(): ?string
+    {
+        return $this->codeApogee;
+    }
+
+    public function setCodeApogee(string $codeApogee): static
+    {
+        $this->codeApogee = $codeApogee;
+
+        return $this;
+    }
+
+    public function getModalitesAdmission(): ?string
+    {
+        return $this->modalites_admission;
+    }
+
+    public function setModalitesAdmission(?string $modalites_admission): static
+    {
+        $this->modalites_admission = $modalites_admission;
+
+        return $this;
+    }
+
+    public function getInsertionProfessionnelle(): ?string
+    {
+        return $this->insertionProfessionnelle;
+    }
+
+    public function setInsertionProfessionnelle(?string $insertionProfessionnelle): static
+    {
+        $this->insertionProfessionnelle = $insertionProfessionnelle;
+
+        return $this;
+    }
+
+    public function getPrerequisObligatoires(): ?string
+    {
+        return $this->prerequis_obligatoires;
+    }
+
+    public function setPrerequisObligatoires(?string $prerequis_obligatoires): static
+    {
+        $this->prerequis_obligatoires = $prerequis_obligatoires;
 
         return $this;
     }

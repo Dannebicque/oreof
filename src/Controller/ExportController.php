@@ -25,8 +25,9 @@ class ExportController extends BaseController
     ];
 
     public const TYPES_DOCUMENT_GLOBAL = [
-        "xlsx-synthese" => 'Tableau de synthèse des formations (xslx)',
         "xlsx-carif" => 'Tableau CARIF (xslx)',
+        "xlsx-regime" => 'Tableau Régimes Inscriptions (xslx)',
+        "xlsx-cfvu" => 'Tableau Synthèse CFVU (xslx)',
     ];
 
 
@@ -60,6 +61,23 @@ class ExportController extends BaseController
             'ses' => false,
             'isCfvu' => true,
             'types_document' => self::TYPES_DOCUMENT,
+        ]);
+    }
+
+    #[Route('/export/consultation', name: 'app_export_show')]
+    public function exportShow(
+        AnneeUniversitaireRepository $anneeUniversitaireRepository,
+        ComposanteRepository         $composanteRepository,
+    ): Response {
+        $this->denyAccessUnlessGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser());
+
+        return $this->render('export/index.html.twig', [
+            'annees' => $anneeUniversitaireRepository->findAll(),
+            'composantes' => $composanteRepository->findAll(),
+            'ses' => false,
+            'isCfvu' => true,
+            'types_document' => self::TYPES_DOCUMENT,
+            'types_document_global' => self::TYPES_DOCUMENT_GLOBAL,
         ]);
     }
 

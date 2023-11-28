@@ -1469,7 +1469,11 @@
     <unit id="M.pzyvh" name="mccc_licence.helps.cc.typeEpreuve_s1_cc.help">
       <segment>
         <source>mccc_licence.helps.cc.typeEpreuve_s1_cc.help</source>
+<<<<<<< HEAD
         <target>"</target>
+=======
+        <target></target>
+>>>>>>> formulaire-saisie
       </segment>
     </unit>
     <unit id="sHequ.g" name="fiche_matiere_step3.labels.competence_transverse">
@@ -1652,6 +1656,309 @@
         <target>ECTS associés à l'UE, uniquement pour les UE libres ou les BUT, ne seront pas pris en compte dans les autres cas.</target>
       </segment>
     </unit>
+<<<<<<< HEAD
+=======
+    <unit id="2sIQYUG" name="mccc_licence.helps.ct.duree_s2_et.help">
+      <segment>
+        <source>mccc_licence.helps.ct.duree_s2_et.help</source>
+        <target>mccc_licence.helps.ct.duree_s2_et.help</target>
+      </segment>
+    </unit>
+    <unit id="YqPQ_Vz" name="mccc_licence.helps.ct.duree_s1_et.help">
+      <segment>
+        <source>mccc_licence.helps.ct.duree_s1_et.help</source>
+        <target>mccc_licence.helps.ct.duree_s1_et.help</target>
+      </segment>
+    </unit>
+    <unit id="TkvexLj" name="type_epreuve.helps.sigle">
+      <segment>
+        <source>type_epreuve.helps.sigle</source>
+        <target>type_epreuve.helps.sigle</target>
+      </segment>
+    </unit>
+    <unit id="Gor5FI4" name="type_epreuve.helps.hasDuree.help">
+      <segment>
+        <source>type_epreuve.helps.hasDuree.help</source>
+        <target>type_epreuve.helps.hasDuree.help</target>
+      </segment>
+    </unit>
+    <unit id=".LpZmoM" name="mccc.licence.helps.cc_has_tp">
+      <segment>
+        <source>mccc.licence.helps.cc_has_tp</source>
+        <target>mccc.licence.helps.cc_has_tp</target>
+      </segment>
+    </unit>
+    <unit id="cBx4jNO" name="mccc.licence.helps.ct_has_tp">
+      <segment>
+        <source>mccc.licence.helps.ct_has_tp</source>
+        <target>mccc.licence.helps.ct_has_tp</target>
+      </segment>
+    </unit>
+    <unit id="HcWRwjD" name="mccc_licence.helps.cc.nbepreuve_s1_cc.help">
+      <segment>
+        <source>mccc_licence.helps.cc.nbepreuve_s1_cc.help</source>
+        <target>mccc_licence.helps.cc.nbepreuve_s1_cc.help</target>
+      </segment>
+    </unit>
+    <unit id="qyVxXPq" name="ec_step4.but.helps.ects">
+      <segment>
+        <source>ec_step4.but.helps.ects</source>
+        <target>ec_step4.but.helps.ects</target>
+      </segment>
+    </unit>
+    <unit id="BN76M9V" name="fiche_matiere_step4.helps.objectifs">
+      <segment>
+        <source>fiche_matiere_step4.helps.objectifs</source>
+        <target>fiche_matiere_step4.helps.objectifs</target>
+      </segment>
+    </unit>
+    <unit id="n5kSNnx" name="fiche_matiere_step4.helps.volumeCmPresentiel">
+      <segment>
+        <source>fiche_matiere_step4.helps.volumeCmPresentiel</source>
+        <target>fiche_matiere_step4.helps.volumeCmPresentiel</target>
+      </segment>
+    </unit>
+    <unit id="bAzpK_O" name="fiche_matiere_step4.helps.volumeTdPresentiel">
+      <segment>
+        <source>fiche_matiere_step4.helps.volumeTdPresentiel</source>
+        <target>fiche_matiere_step4.helps.volumeTdPresentiel</target>
+      </segment>
+    </unit>
+    <unit id="sefdIoU" name="fiche_matiere_step4.helps.volumeTpPresentiel">
+      <segment>
+        <source>fiche_matiere_step4.helps.volumeTpPresentiel</source>
+        <target>fiche_matiere_step4.helps.volumeTpPresentiel</target>
+      </segment>
+    </unit>
+    <unit id="1jOhsUu" name="fiche_matiere_step4.helps.volumeTe">
+      <segment>
+        <source>fiche_matiere_step4.helps.volumeTe</source>
+        <target>Volume en autonomie</target>
+      </segment>
+    </unit>
+    <unit id="CUypXFj" name="mccc.but.helps.sansNote">
+      <segment>
+        <source>mccc.but.helps.sansNote</source>
+        <target>Exemple portfolio de semestre impair</target>
+      </segment>
+    </unit>
+    <unit id="qlfc3ko" name="mccc.but.helps.sansHeures">
+      <segment>
+        <source>mccc.but.helps.sansHeures</source>
+        <target>Exemple pour les stages ou l'alternance</target>
+      </segment>
+    </unit>
+    <unit id="QO5EhHm" name="parcours.fiche_recopie.helps">
+      <segment>
+        <source>parcours.fiche_recopie.helps</source>
+        <target>Recopie intégrale du parcours (y compris les fiches), ce mode est à privilégier si vous souhaitez modifier le parcours notamment si le parcours est sur plusieurs sites ou des modalités différente.</target>
+      </segment>
+    </unit>
+    <unit id="eIm3kFq" name="parcours.fiche_mutualise.helps">
+      <segment>
+        <source>parcours.fiche_mutualise.helps</source>
+        <target>Recopie des éléments avec mise en commun des fiches EC/matière entre les deux parcours.</target>
+      </segment>
+    </unit>
+    <unit id="kHjmsh2" name="ec_manage.helps.fiche_matiere_libelle_libre_edit.help">
+      <segment>
+        <source>ec_manage.helps.fiche_matiere_libelle_libre_edit.help</source>
+        <target>Précisez les modalités de choixd ans le cas d'un EC libre</target>
+      </segment>
+    </unit>
+    <unit id="eB0azRb" name="fiche_matiere_step1.helps.typeMatiere.help">
+      <segment>
+        <source>fiche_matiere_step1.helps.typeMatiere.help</source>
+        <target>Précisez si c'est une SAÉ ou une Ressource</target>
+      </segment>
+    </unit>
+    <unit id="7uDLok_" name="mccc_licence.helps.cc_has_tp">
+      <segment>
+        <source>mccc_licence.helps.cc_has_tp</source>
+        <target>Précisez si l'évaluation en CC de cet enseignement prévoit une/plusieurs épreuves de TP</target>
+      </segment>
+    </unit>
+    <unit id="3I5if44" name="mccc_licence.helps.cc.cc_has_tp_pourcentage.help">
+      <segment>
+        <source>mccc_licence.helps.cc.cc_has_tp_pourcentage.help</source>
+        <target>Précisez le pourcentage de la note de TP par rapport à la note globale de l'enseignement</target>
+      </segment>
+    </unit>
+    <unit id="SuZoF90" name="fiche_matiere_step4_hd.helps.volumeCmPresentiel">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeCmPresentiel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="0lrpwOx" name="fiche_matiere_step4_hd.helps.volumeTdPresentiel">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeTdPresentiel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="rcoXvEc" name="fiche_matiere_step4_hd.helps.volumeTpPresentiel">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeTpPresentiel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="opcOt24" name="fiche_matiere_step4_hd.helps.volumeCmDistanciel">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeCmDistanciel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="NpoCxaq" name="fiche_matiere_step4_hd.helps.volumeTdDistanciel">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeTdDistanciel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="SS0zMRd" name="fiche_matiere_step4_hd.helps.volumeTpDistanciel">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeTpDistanciel</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="uZ_qkYb" name="fiche_matiere_step4_hd.helps.volumeTe">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.volumeTe</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="OXPgIuk" name="-">
+      <segment>
+        <source>-</source>
+        <target>-</target>
+      </segment>
+    </unit>
+    <unit id="1n.yuYl" name="mccc.but.helps.volumesHorairesImpose">
+      <segment>
+        <source>mccc.but.helps.volumesHorairesImpose</source>
+        <target>Si cette case est cochée, les volumes horaires seront imposés pour tous les EC utilisant cette fiche EC/matière sans possibilité de modifier.</target>
+      </segment>
+    </unit>
+    <unit id="zzpXWCd" name="fiche_matiere_step4_hd.helps.ects">
+      <segment>
+        <source>fiche_matiere_step4_hd.helps.ects</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="sg05fBF" name="mccc.but.helps.mcccImpose">
+      <segment>
+        <source>mccc.but.helps.mcccImpose</source>
+        <target>Si cette case est cochée, les modalités de contrôle des connaissances et compétences seront imposées pour tous les EC utilisant cette fiche EC/matière sans possibilité de modifier.</target>
+      </segment>
+    </unit>
+    <unit id="NRV6_lj" name="mccc.but.helps.ectsImpose">
+      <segment>
+        <source>mccc.but.helps.ectsImpose</source>
+        <target>Si cette case est cochée, les ECTS seront imposés pour tous les EC utilisant cette fiche EC/matière sans possibilité de modifier.</target>
+      </segment>
+    </unit>
+    <unit id="xp5PrYm" name="parcours_ec.helps.synchroEcts">
+      <segment>
+        <source>parcours_ec.helps.synchroEcts</source>
+        <target>parcours_ec.helps.synchroEcts</target>
+      </segment>
+    </unit>
+    <unit id=".2M6QPI" name="parcours_ec.helps.synchroMccc">
+      <segment>
+        <source>parcours_ec.helps.synchroMccc</source>
+        <target>parcours_ec.helps.synchroMccc</target>
+      </segment>
+    </unit>
+    <unit id="zGyXwJ7" name="parcours_ec.helps.synchroBcc">
+      <segment>
+        <source>parcours_ec.helps.synchroBcc</source>
+        <target>parcours_ec.helps.synchroBcc</target>
+      </segment>
+    </unit>
+    <unit id="8gRgHRV" name="parcours_ec.helps.synchroHeures">
+      <segment>
+        <source>parcours_ec.helps.synchroHeures</source>
+        <target>parcours_ec.helps.synchroHeures</target>
+      </segment>
+    </unit>
+    <unit id="JnUytaU" name="parcours_ec.helps.recopieMccc">
+      <segment>
+        <source>parcours_ec.helps.recopieMccc</source>
+        <target>parcours_ec.helps.recopieMccc</target>
+      </segment>
+    </unit>
+    <unit id="yCHD5zC" name="parcours_ec.helps.recopieEcts">
+      <segment>
+        <source>parcours_ec.helps.recopieEcts</source>
+        <target>parcours_ec.helps.recopieEcts</target>
+      </segment>
+    </unit>
+    <unit id="yetUUHS" name="parcours_ec.helps.recopieBcc">
+      <segment>
+        <source>parcours_ec.helps.recopieBcc</source>
+        <target>parcours_ec.helps.recopieBcc</target>
+      </segment>
+    </unit>
+    <unit id="uw8Gkcj" name="parcours_ec.helps.recopieHeures">
+      <segment>
+        <source>parcours_ec.helps.recopieHeures</source>
+        <target>parcours_ec.helps.recopieHeures</target>
+      </segment>
+    </unit>
+    <unit id="hLrjR8M" name="mccc.ec.helps.sansHeures">
+      <segment>
+        <source>mccc.ec.helps.sansHeures</source>
+        <target>Cochez cette case si votre EC ne contient pas de volume horaire.</target>
+      </segment>
+    </unit>
+    <unit id="32SQ6QY" name="etablissement.helps.etablissement_information.help">
+      <segment>
+        <source>etablissement.helps.etablissement_information.help</source>
+        <target>etablissement.helps.etablissement_information.help</target>
+      </segment>
+    </unit>
+    <unit id="LO_vUxy" name="etablissement.helps.etablissement_information.calendrier_universitaire">
+      <segment>
+        <source>etablissement.helps.etablissement_information.calendrier_universitaire</source>
+        <target>etablissement.helps.etablissement_information.calendrier_universitaire</target>
+      </segment>
+    </unit>
+    <unit id="hMl_1M0" name="etablissement.helps.etablissement_information.calendrier_inscription">
+      <segment>
+        <source>etablissement.helps.etablissement_information.calendrier_inscription</source>
+        <target>etablissement.helps.etablissement_information.calendrier_inscription</target>
+      </segment>
+    </unit>
+    <unit id="aUlYn3Y" name="etablissement.helps.etablissement_information.informations_pratiques">
+      <segment>
+        <source>etablissement.helps.etablissement_information.informations_pratiques</source>
+        <target>etablissement.helps.etablissement_information.informations_pratiques</target>
+      </segment>
+    </unit>
+    <unit id="1ve22xb" name="type_diplome.helps.codeApogee">
+      <segment>
+        <source>type_diplome.helps.codeApogee</source>
+        <target>type_diplome.helps.codeApogee</target>
+      </segment>
+    </unit>
+    <unit id="fx6V9rR" name="type_diplome.helps.modalites_admission">
+      <segment>
+        <source>type_diplome.helps.modalites_admission</source>
+        <target>type_diplome.helps.modalites_admission</target>
+      </segment>
+    </unit>
+    <unit id=".Al7q2G" name="parcours_step5.helps.modalitesAdmission">
+      <segment>
+        <source>parcours_step5.helps.modalitesAdmission</source>
+        <target>parcours_step5.helps.modalitesAdmission</target>
+      </segment>
+    </unit>
+    <unit id="TZ2yxU1" name="type_diplome.helps.insertionProfessionnelle">
+      <segment>
+        <source>type_diplome.helps.insertionProfessionnelle</source>
+        <target>type_diplome.helps.insertionProfessionnelle</target>
+      </segment>
+    </unit>
+>>>>>>> formulaire-saisie
     <unit id="j4ZV1JG" name="composante.helps.composanteInformation.help">
       <segment>
         <source>composante.helps.composanteInformation.help</source>
@@ -1676,5 +1983,32 @@
         <target>composante.helps.composanteInformation.transport</target>
       </segment>
     </unit>
+<<<<<<< HEAD
+=======
+    <unit id="80zuU8d" name="etablissement.helps.etablissement_information.restauration">
+      <segment>
+        <source>etablissement.helps.etablissement_information.restauration</source>
+        <target>etablissement.helps.etablissement_information.restauration</target>
+      </segment>
+    </unit>
+    <unit id="pm08l9a" name="etablissement.helps.etablissement_information.hebergement">
+      <segment>
+        <source>etablissement.helps.etablissement_information.hebergement</source>
+        <target>etablissement.helps.etablissement_information.hebergement</target>
+      </segment>
+    </unit>
+    <unit id="VFlCtWv" name="etablissement.helps.etablissement_information.transport">
+      <segment>
+        <source>etablissement.helps.etablissement_information.transport</source>
+        <target>etablissement.helps.etablissement_information.transport</target>
+      </segment>
+    </unit>
+    <unit id="TN6JQQy" name="type_diplome.helps.prerequis_obligatoires">
+      <segment>
+        <source>type_diplome.helps.prerequis_obligatoires</source>
+        <target>type_diplome.helps.prerequis_obligatoires</target>
+      </segment>
+    </unit>
+>>>>>>> formulaire-saisie
   </file>
 </xliff>
