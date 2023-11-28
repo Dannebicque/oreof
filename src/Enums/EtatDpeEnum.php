@@ -84,7 +84,7 @@ enum EtatDpeEnum: string
             self::refuse_definitif_cfvu => 'Refusé définitif CFVU',
             self::valide_a_publier => 'Validé à publier',
             self::publie => 'Publié',
-            self::valide_pour_publication => 'Validé pour publication',
+            self::valide_pour_publication => 'Validé CFVU',
             self::soumis_conseil_reserve => 'Soumis Conseil réservé',
         };
     }
