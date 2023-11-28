@@ -292,18 +292,18 @@ class ProcessValidationController extends BaseController
                 return JsonReponse::error('Formation non trouvée');
             }
             $tFormations[] = $objet;
-            if ($etape === 'cfvu') {
-                $histo = $objet->getHistoriqueFormations();
-                foreach ($histo as $h) {
-                    if ($h->getEtape() === 'conseil') {
-                        if ($h->getEtat() === 'laisserPasser' && ($laisserPasser === false || $laisserPasser->getCreated() < $h->getCreated())) {
-                            $laisserPasser = $h;
-                        } elseif ($h->getEtat() === 'valide' && $laisserPasser->getCreated() < $h->getCreated()) {
-                            $laisserPasser = false;
-                        }
-                    }
-                }
-            }
+//            if ($etape === 'cfvu') {
+//                $histo = $objet->getHistoriqueFormations();
+//                foreach ($histo as $h) {
+//                    if ($h->getEtape() === 'conseil') {
+//                        if ($h->getEtat() === 'laisserPasser' && ($laisserPasser === false || $laisserPasser->getCreated() < $h->getCreated())) {
+//                            $laisserPasser = $h;
+//                        } elseif ($h->getEtat() === 'valide' && $laisserPasser->getCreated() < $h->getCreated()) {
+//                            $laisserPasser = false;
+//                        }
+//                    }
+//                }
+//            }
 
             $processData = $this->formationProcess->etatFormation($objet, $process);
 
