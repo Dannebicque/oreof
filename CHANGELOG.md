@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.18.1](https://github.com/Dannebicque/oreof/compare/v1.18.0...v1.18.1) (2023-11-28)
+
+
+### Bug Fixes
+
+* test inutile template ([def2177](https://github.com/Dannebicque/oreof/commit/def21776efb9ad5344454e5bee961fad5717a711))
+
 ## [1.18.0](https://github.com/Dannebicque/oreof/compare/v1.17.13...v1.18.0) (2023-11-26)
 
 
