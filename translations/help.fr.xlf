@@ -1469,11 +1469,7 @@
     <unit id="M.pzyvh" name="mccc_licence.helps.cc.typeEpreuve_s1_cc.help">
       <segment>
         <source>mccc_licence.helps.cc.typeEpreuve_s1_cc.help</source>
-<<<<<<< HEAD
-        <target>"</target>
-=======
         <target></target>
->>>>>>> formulaire-saisie
       </segment>
     </unit>
     <unit id="sHequ.g" name="fiche_matiere_step3.labels.competence_transverse">
@@ -1656,8 +1652,6 @@
         <target>ECTS associés à l'UE, uniquement pour les UE libres ou les BUT, ne seront pas pris en compte dans les autres cas.</target>
       </segment>
     </unit>
-<<<<<<< HEAD
-=======
     <unit id="2sIQYUG" name="mccc_licence.helps.ct.duree_s2_et.help">
       <segment>
         <source>mccc_licence.helps.ct.duree_s2_et.help</source>
@@ -1958,7 +1952,6 @@
         <target>type_diplome.helps.insertionProfessionnelle</target>
       </segment>
     </unit>
->>>>>>> formulaire-saisie
     <unit id="j4ZV1JG" name="composante.helps.composanteInformation.help">
       <segment>
         <source>composante.helps.composanteInformation.help</source>
@@ -1983,8 +1976,6 @@
         <target>composante.helps.composanteInformation.transport</target>
       </segment>
     </unit>
-<<<<<<< HEAD
-=======
     <unit id="80zuU8d" name="etablissement.helps.etablissement_information.restauration">
       <segment>
         <source>etablissement.helps.etablissement_information.restauration</source>
@@ -2009,6 +2000,5 @@
         <target>type_diplome.helps.prerequis_obligatoires</target>
       </segment>
     </unit>
->>>>>>> formulaire-saisie
   </file>
 </xliff>

@@ -478,11 +478,7 @@
     <unit id="1YelMF." name="parcours_step2.labels.hasMemoire.label">
       <segment>
         <source>parcours_step2.labels.hasMemoire.label</source>
-<<<<<<< HEAD
-        <target>La formation prévoit-elle un TER/Mémoire ?</target>
-=======
         <target>La formation prévoit-elle un TER/Mémoire de recherche ?</target>
->>>>>>> formulaire-saisie
       </segment>
     </unit>
     <unit id="xlpzVKw" name="parcours_step2.labels.memoireText">
@@ -926,11 +922,7 @@
     <unit id="YPVmbdZ" name="TER – travail d’étude et de recherche">
       <segment>
         <source>TER – travail d’étude et de recherche</source>
-<<<<<<< HEAD
-        <target>TER – travail d’étude et de recherche</target>
-=======
         <target>TER (travail d’étude et de recherche)</target>
->>>>>>> formulaire-saisie
       </segment>
     </unit>
     <unit id="zVuDKsX" name="Libellé">
@@ -2067,12 +2059,6 @@
         <target>Actualité publiée ?</target>
       </segment>
     </unit>
-<<<<<<< HEAD
-    <unit id="CbJEiFv" name="composante.labels.composanteInformation.label">
-      <segment>
-        <source>composante.labels.composanteInformation.label</source>
-        <target>composante.labels.composanteInformation.label</target>
-=======
     <unit id="hpB_OOv" name="mccc.licence.labels.cc_has_tp">
       <segment>
         <source>mccc.licence.labels.cc_has_tp</source>
@@ -2341,7 +2327,6 @@
       <segment>
         <source>Insertion professionnelle</source>
         <target>Insertion professionnelle</target>
->>>>>>> formulaire-saisie
       </segment>
     </unit>
     <unit id="A7qU5xg" name="Restauration">
@@ -2362,17 +2347,10 @@
         <target>Transport</target>
       </segment>
     </unit>
-<<<<<<< HEAD
-    <unit id="f0ZvCiJ" name="Information complémentaires">
-      <segment>
-        <source>Information complémentaires</source>
-        <target>Information complémentaires</target>
-=======
     <unit id="Ub5cCfi" name="Prérequis obligatoires">
       <segment>
         <source>Prérequis obligatoires</source>
         <target>Prérequis obligatoires</target>
->>>>>>> formulaire-saisie
       </segment>
     </unit>
   </file>
