@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.18.4](https://github.com/Dannebicque/oreof/compare/v1.18.3...v1.18.4) (2023-11-28)
+
+
+### Features
+
+* Affichage état du PV ([dcd6fb3](https://github.com/Dannebicque/oreof/commit/dcd6fb3a8027e177f655106a807c62fcd25168a7))
+
+
+### Bug Fixes
+
+* Valide lot (pas de gestion du PV)) ([5ba57cd](https://github.com/Dannebicque/oreof/commit/5ba57cd4fc773227c3fbc8ca625dc358abb9ba9f))
+
 ### [1.18.3](https://github.com/Dannebicque/oreof/compare/v1.18.2...v1.18.3) (2023-11-28)
 
 
