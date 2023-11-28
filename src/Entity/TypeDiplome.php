@@ -88,6 +88,9 @@ class TypeDiplome
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $insertionProfessionnelle = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $prerequis_obligatoires = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -505,6 +508,18 @@ class TypeDiplome
     public function setInsertionProfessionnelle(?string $insertionProfessionnelle): static
     {
         $this->insertionProfessionnelle = $insertionProfessionnelle;
+
+        return $this;
+    }
+
+    public function getPrerequisObligatoires(): ?string
+    {
+        return $this->prerequis_obligatoires;
+    }
+
+    public function setPrerequisObligatoires(?string $prerequis_obligatoires): static
+    {
+        $this->prerequis_obligatoires = $prerequis_obligatoires;
 
         return $this;
     }

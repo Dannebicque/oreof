@@ -26,6 +26,15 @@ class EtablissementInformation
     #[ORM\OneToOne(inversedBy: 'etablissement_information', cascade: ['persist', 'remove'])]
     private ?Etablissement $etablissement = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $restauration = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $hebergement = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $transport = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +84,42 @@ class EtablissementInformation
     public function setEtablissement(?Etablissement $etablissement): static
     {
         $this->etablissement = $etablissement;
+
+        return $this;
+    }
+
+    public function getRestauration(): ?string
+    {
+        return $this->restauration;
+    }
+
+    public function setRestauration(?string $restauration): static
+    {
+        $this->restauration = $restauration;
+
+        return $this;
+    }
+
+    public function getHebergement(): ?string
+    {
+        return $this->hebergement;
+    }
+
+    public function setHebergement(?string $hebergement): static
+    {
+        $this->hebergement = $hebergement;
+
+        return $this;
+    }
+
+    public function getTransport(): ?string
+    {
+        return $this->transport;
+    }
+
+    public function setTransport(?string $transport): static
+    {
+        $this->transport = $transport;
 
         return $this;
     }

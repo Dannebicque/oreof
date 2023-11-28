@@ -3,10 +3,10 @@
 namespace App\Form;
 
 use App\Entity\TypeDiplome;
+use App\Form\Type\TextareaAutoSaveType;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,7 +28,7 @@ class TypeDiplomeType extends AbstractType
                 'attr' => ['maxlength' => 1],
                 'required' => true,
             ])
-            ->add('modalites_admission', TextareaType::class, [
+            ->add('modalites_admission', TextareaAutoSaveType::class, [
                 'label' => "Modalités d'admission",
                 'required' => true,
                 'attr' => [
@@ -36,7 +36,15 @@ class TypeDiplomeType extends AbstractType
                     'maxlength' => 3000
                 ]
             ])
-            ->add('insertionProfessionnelle', TextareaType::class, [
+            ->add('prerequis_obligatoires', TextareaAutoSaveType::class, [
+                'label' => "Prérequis obligatoires",
+                'required' => true,
+                'attr' => [
+                    'rows' => 6,
+                    'maxlength' => 3000
+                ]
+            ])
+            ->add('insertionProfessionnelle', TextareaAutoSaveType::class, [
                 'label' => 'Insertion professionnelle',
                 'required' => true,
                 'attr' => [

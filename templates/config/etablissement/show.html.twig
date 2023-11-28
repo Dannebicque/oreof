@@ -35,6 +35,36 @@
             }}
         </td>
     </tr>
+    <tr>
+        <th>Restauration</th>
+        <td>
+            {{
+                etablissement.getEtablissementInformation.getRestauration
+                ? etablissement.getEtablissementInformation.getRestauration|raw
+                : 'Non renseigné'
+            }}
+        </td>
+    </tr>
+    <tr>
+        <th>Hébergement</th>
+        <td>
+            {{
+                etablissement.getEtablissementInformation.getHebergement
+                ? etablissement.getEtablissementInformation.getHebergement|raw
+                : 'Non renseigné'
+            }}
+        </td>
+    </tr>
+    <tr>
+        <th>Transport</th>
+        <td>
+            {{
+                etablissement.getEtablissementInformation.getTransport
+                ? etablissement.getEtablissementInformation.getTransport|raw
+                : 'Non renseigné'
+            }}
+        </td>
+    </tr>
     </tbody>
 </table>
 

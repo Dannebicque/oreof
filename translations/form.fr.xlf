@@ -2329,5 +2329,29 @@
         <target>Insertion professionnelle</target>
       </segment>
     </unit>
+    <unit id="A7qU5xg" name="Restauration">
+      <segment>
+        <source>Restauration</source>
+        <target>Restauration</target>
+      </segment>
+    </unit>
+    <unit id="2AN3RNx" name="Hébergement">
+      <segment>
+        <source>Hébergement</source>
+        <target>Hébergement</target>
+      </segment>
+    </unit>
+    <unit id="qurUq.X" name="Transport">
+      <segment>
+        <source>Transport</source>
+        <target>Transport</target>
+      </segment>
+    </unit>
+    <unit id="Ub5cCfi" name="Prérequis obligatoires">
+      <segment>
+        <source>Prérequis obligatoires</source>
+        <target>Prérequis obligatoires</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

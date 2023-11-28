@@ -47,12 +47,17 @@ class EtablissementController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             $etablissementRepository->save($etablissement, true);
 
-            return $this->json(true);
+            // Abandon de la fenêtre modale
+            // return $this->json(true);
+
+            $this->addFlashBag('success', 'Établissement créé avec succès');
+            return $this->redirectToRoute('app_etablissement_index');
         }
 
         return $this->render('config/etablissement/new.html.twig', [
             'etablissement' => $etablissement,
             'form' => $form->createView(),
+            'titre' => "Création d'un établissement"
         ]);
     }
 
@@ -83,12 +88,17 @@ class EtablissementController extends BaseController
             $etablissement = $form->getData();
             $etablissementRepository->save($etablissement, true);
 
-            return $this->json(true);
+            // Abandon de la fenêtre modale
+            // return $this->json(true);
+
+            $this->addFlashBag('success', 'Établissement modifié avec succès');
+            return $this->redirectToRoute('app_etablissement_index');
         }
 
         return $this->render('config/etablissement/new.html.twig', [
             'etablissement' => $etablissement,
             'form' => $form->createView(),
+            'titre' => "Modification d'un établissement"
         ]);
     }
 

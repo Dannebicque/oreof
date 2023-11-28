@@ -1952,5 +1952,53 @@
         <target>type_diplome.helps.insertionProfessionnelle</target>
       </segment>
     </unit>
+    <unit id="j4ZV1JG" name="composante.helps.composanteInformation.help">
+      <segment>
+        <source>composante.helps.composanteInformation.help</source>
+        <target>composante.helps.composanteInformation.help</target>
+      </segment>
+    </unit>
+    <unit id=".ofCvYF" name="composante.helps.composanteInformation.restauration">
+      <segment>
+        <source>composante.helps.composanteInformation.restauration</source>
+        <target>composante.helps.composanteInformation.restauration</target>
+      </segment>
+    </unit>
+    <unit id="OIKUcL8" name="composante.helps.composanteInformation.hebergement">
+      <segment>
+        <source>composante.helps.composanteInformation.hebergement</source>
+        <target>composante.helps.composanteInformation.hebergement</target>
+      </segment>
+    </unit>
+    <unit id="91C8te7" name="composante.helps.composanteInformation.transport">
+      <segment>
+        <source>composante.helps.composanteInformation.transport</source>
+        <target>composante.helps.composanteInformation.transport</target>
+      </segment>
+    </unit>
+    <unit id="80zuU8d" name="etablissement.helps.etablissement_information.restauration">
+      <segment>
+        <source>etablissement.helps.etablissement_information.restauration</source>
+        <target>etablissement.helps.etablissement_information.restauration</target>
+      </segment>
+    </unit>
+    <unit id="pm08l9a" name="etablissement.helps.etablissement_information.hebergement">
+      <segment>
+        <source>etablissement.helps.etablissement_information.hebergement</source>
+        <target>etablissement.helps.etablissement_information.hebergement</target>
+      </segment>
+    </unit>
+    <unit id="VFlCtWv" name="etablissement.helps.etablissement_information.transport">
+      <segment>
+        <source>etablissement.helps.etablissement_information.transport</source>
+        <target>etablissement.helps.etablissement_information.transport</target>
+      </segment>
+    </unit>
+    <unit id="TN6JQQy" name="type_diplome.helps.prerequis_obligatoires">
+      <segment>
+        <source>type_diplome.helps.prerequis_obligatoires</source>
+        <target>type_diplome.helps.prerequis_obligatoires</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
