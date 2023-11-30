@@ -45,8 +45,8 @@ h2 {
 .table-parcours .ects-badge-ue {
     border-radius: 45%;
     border-width: 1em;
-    background-color: var(--urca-indigo);
-    color: white;
+    background-color: var(--urca-gray-300);
+    color: var(--urca-black);
     padding: .35em;
     font-size: .9em;
     margin-left: 1em;
@@ -92,6 +92,10 @@ h2 {
     color: var(--urca-black);
 }
 
+.table-parcours .table-dark-child {
+    --bs-table-bg: var(--urca-teal) !important;
+}
+
 .table-parcours tr th:not(:first-child) {
     border-width: .1em .1em .1em .1em;
     border-color: white;
@@ -134,6 +138,12 @@ h2 {
 
 .table-parcours #ECLibelle > a {
     color: white;
+}
+
+.table-parcours tr #UEEnfantLibelle {
+    color: var(--urca-black);
+    background-color: var(--urca-teal);
+    text-align: start;
 }
 
 /* ## Fin tableau maquette parcours ## */

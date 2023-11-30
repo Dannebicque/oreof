@@ -1,7 +1,7 @@
 {% if IsUeEnfant == false %}
     <tr class="table-dark">
         <td id="UELibelle">
-            {{'UE' ~ ue.ue.ordre}} - {{ ue.ue.libelle }}
+            {{ ue.ue.display}} - {{ ue.ue.libelle }}
             {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
                 <span class="badge bg-secondary">UE à choix libre</span>
             {% endif %}
@@ -23,13 +23,48 @@
     </tr>
 {% endif %}
 
+{% if IsUeEnfant %}
+{% set colorBadge = indexUeEnfant == 1 ? 'bg-primary' 
+    : indexUeEnfant == 2 ? 'bg-danger' 
+    : indexUeEnfant == 3 ? 'bg-warning' 
+    : 'bg-success'
+%}
+<tr class="table-dark-child">
+    <td id="UEEnfantLibelle">
+        {{ ue.ue.display }} - {{ ue.ue.libelle }} <span class="ms-3 badge {{ colorBadge }}">Choix {{ indexUeEnfant }}</span>
+    </td>
+    <td>{{ ue.heuresEctsUe.sommeUeCmPres > 0 ? ue.heuresEctsUe.sommeUeCmPres : '-'  }}</td>
+    <td>{{ ue.heuresEctsUe.sommeUeTdPres > 0 ? ue.heuresEctsUe.sommeUeTdPres : '-'  }}</td>
+    <td>{{ ue.heuresEctsUe.sommeUeTpPres > 0 ? ue.heuresEctsUe.sommeUeTpPres : '-'  }}</td>
+    <td>{{ ue.heuresEctsUe.sommeUeCmDist > 0 ? ue.heuresEctsUe.sommeUeCmDist : '-'  }}</td>
+    <td>{{ ue.heuresEctsUe.sommeUeTdDist > 0 ? ue.heuresEctsUe.sommeUeTdDist : '-'  }}</td>
+    <td>{{ ue.heuresEctsUe.sommeUeTpDist > 0 ? ue.heuresEctsUe.sommeUeTpDist : '-'  }}</td>
+    <td>{{ ue.heuresEctsUe.sommeUeTePres > 0 ? ue.heuresEctsUe.sommeUeTePres : '-' }}</td>
+</tr>
+
+{% endif %}
+
 {% for ec in ue.elementConstitutifs %}
+        {% set indexEC = loop.index %}
         {% if ec.elementsConstitutifsEnfants|length == 0 %}
-            {{ include('parcours/_maquette_iframe_EC.html.twig', {ec:ec, IsEcEnfant: false, indexUeEnfant: indexUeEnfant ?? -1 }) }}
+            {{ include('parcours/_maquette_iframe_EC.html.twig', 
+                {
+                    ec:ec, 
+                    IsEcEnfant: false,
+                    indexUeEnfant: indexUeEnfant ?? -1,
+                    indexEC: indexEC
+                }) 
+            }}
         {% else %}
             {% for ece in ec.elementsConstitutifsEnfants %}
                 {{ include('parcours/_maquette_iframe_EC.html.twig', 
-                    {ec:ece, IsEcEnfant: true, arrayLength: ec.elementsConstitutifsEnfants|length, indexUeEnfant: indexUeEnfant ?? -1 }) 
+                    {
+                    ec:ece, IsEcEnfant: true,
+                    arrayLength: ec.elementsConstitutifsEnfants|length, 
+                    indexUeEnfant: indexUeEnfant ?? -1,
+                    indexEC: indexEC,
+                    indexECEnfant: loop.index
+                    }) 
                 }}
             {% endfor %}
         {% endif %}

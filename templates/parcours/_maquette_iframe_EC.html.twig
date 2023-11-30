@@ -4,17 +4,18 @@
     : 'bg-warning' 
 %}
 
+{% set alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
 
 {% if IsEcEnfant and loop.index == 1 %}
 <tr>
     <td id="ECLibelle">
-        Élément constitutif à choix :
+        EC {{ indexEC }} à choix :
         <span class="badge bg-info">
             1 choix possible parmi {{ arrayLength }} 
         </span>
-        {% if indexUeEnfant != -1 %} 
+        {# {% if indexUeEnfant != -1 %} 
             <span class="ms-3 badge {{ colorBadge }}">Choix {{ indexUeEnfant }}</span>
-        {% endif %}
+        {% endif %} #}
         <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down">
     </td>
     <td colspan="7" id="tdEcRestreint"></td>
@@ -29,14 +30,16 @@
                     { ec: ec.elementConstitutif.id, parcours: parcours.parcours.id }
                     ) 
                 }}">
+            EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} - 
             {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
         </a>
         {% else %}
-            {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}    
+            EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} - 
+            {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
         {% endif %}
-        {% if indexUeEnfant != -1 and IsEcEnfant is same as(false) %} 
+        {# {% if indexUeEnfant != -1 and IsEcEnfant is same as(false) %} 
             <span class="ms-3 badge {{ colorBadge }}">Choix {{ indexUeEnfant }}</span>
-        {% endif %}
+        {% endif %} #}
     </td>
     <td>{{ ec.heuresEctsEc.cmPres > 0 ? ec.heuresEctsEc.cmPres : '-' }}</td>
     <td>{{ ec.heuresEctsEc.tdPres > 0 ? ec.heuresEctsEc.tdPres : '-' }}</td>
