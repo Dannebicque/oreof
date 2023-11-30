@@ -31,112 +31,111 @@ h2 {
 }
 
 /* ## Tableau pour la maquette d'un parcours ### */
-.table-parcours {
-    td {
-        padding: .75em;
-        font-size: 1em;
-        color: var(--urca-black);
-    }
-    .total-semestre {
-        background-color: rgb(255, 199, 179);
-        color: black;
-        padding: .5em;
-    }
-    
-    .ects-badge-ue {
-        border-radius: 45%;
-        border-width: 1em;
-        background-color: var(--urca-indigo);
-        color: white;
-        padding: .35em;
-        font-size: .9em;
-        margin-left: 1em;
-    }
-    
-    td:not(#UELibelle, #ECLibelle, #ECEnfantLibelle, #TotalSemestre) {
-        text-align: center;
-        border-width: 0 .1em 0;
-        border-color: var(--urca-black);
-        vertical-align: middle;
-    }
-    
-    tr.table-dark td:not(#UELibelle, td:last-child) {
-        border-width: 0 .1em 0;
-        border-color: white;
-    }
-    
-    tr.total-semestre > td:not(#TotalSemestre) {
-        border-width: .1em 0 .1em !important;
-        border-color: var(--urca-black);
-    }
-    
-    tr.total-semestre:last-child {
-        border-right-width: .1em;
-        border-right-color: var(--urca-black);
-    }
-    
-    tr > th {
-        text-align: center;
-        --bs-table-bg: var(--urca-gray-200);
-    }
-    
-    #ECLibelle, #ECEnfantLibelle, #TotalSemestre {
-        border-width: .1em;
-        border-color: var(--urca-black);
-    }
-
-    .table-dark {
-        --bs-table-bg: var(--urca-light-green) !important;
-    }
-    
-    .table-dark > td {
-        color: var(--urca-black);
-    }
-    
-    tr th:not(:first-child) {
-        border-width: .1em .1em .1em .1em;
-        border-color: white;
-        border-style: solid;
-        background-color: var(--urca-gray-500);
-        color: var(--urca-black);
-    }
-    
-    tr th:first-child {
-        border-width: 0;
-    }
-    
-    tr.total-semestre {
-        --bs-table-bg: var(--urca-yellow);
-    }
-    
-    #ECLibelle {
-        background-color: var(--urca-gray);
-        color: white;
-    }
-    
-    #ECEnfantLibelle {
-        background-color: var(--urca-gray-400);
-        color: var(--urca-black);
-    }
-
-    #ECEnfantLibelle > a {
-        color: var(--urca-black)
-    }
-
-    .arrow-down {
-        height: 1.5em; 
-        width: 1.5em;
-        margin-left: 1em;
-    }
-    
-    #tdEcRestreint {
-        background-color: var(--urca-gray-400);
-    }
-
-    #ECLibelle > a {
-        color: white;
-    }
+.table-parcours td {
+    padding: .75em;
+    font-size: 1em;
+    color: var(--urca-black);
 }
+.table-parcours .total-semestre {
+    background-color: rgb(255, 199, 179);
+    color: black;
+    padding: .5em;
+}
+
+.table-parcours .ects-badge-ue {
+    border-radius: 45%;
+    border-width: 1em;
+    background-color: var(--urca-indigo);
+    color: white;
+    padding: .35em;
+    font-size: .9em;
+    margin-left: 1em;
+}
+
+.table-parcours td:not(#UELibelle, #ECLibelle, #ECEnfantLibelle, #TotalSemestre) {
+    text-align: center;
+    border-width: 0 .1em 0;
+    border-color: var(--urca-black);
+    vertical-align: middle;
+}
+
+.table-parcours tr.table-dark td:not(#UELibelle, td:last-child) {
+    border-width: 0 .1em 0;
+    border-color: white;
+}
+
+.table-parcours tr.total-semestre > td:not(#TotalSemestre) {
+    border-width: .1em 0 .1em !important;
+    border-color: var(--urca-black);
+}
+
+.table-parcours tr.total-semestre:last-child {
+    border-right-width: .1em;
+    border-right-color: var(--urca-black);
+}
+
+.table-parcours tr > th {
+    text-align: center;
+    --bs-table-bg: var(--urca-gray-200);
+}
+
+.table-parcours #ECLibelle, #ECEnfantLibelle, #TotalSemestre {
+    border-width: .1em;
+    border-color: var(--urca-black);
+}
+
+.table-parcours .table-dark {
+    --bs-table-bg: var(--urca-light-green) !important;
+}
+
+.table-parcours .table-dark > td {
+    color: var(--urca-black);
+}
+
+.table-parcours tr th:not(:first-child) {
+    border-width: .1em .1em .1em .1em;
+    border-color: white;
+    border-style: solid;
+    background-color: var(--urca-gray-500);
+    color: var(--urca-black);
+}
+
+.table-parcours tr th:first-child {
+    border-width: 0;
+}
+
+.table-parcours tr.total-semestre {
+    --bs-table-bg: var(--urca-yellow);
+}
+
+.table-parcours #ECLibelle {
+    background-color: var(--urca-gray);
+    color: white;
+}
+
+.table-parcours #ECEnfantLibelle {
+    background-color: var(--urca-gray-400);
+    color: var(--urca-black);
+}
+
+.table-parcours #ECEnfantLibelle > a {
+    color: var(--urca-black)
+}
+
+.table-parcours .arrow-down {
+    height: 1.5em; 
+    width: 1.5em;
+    margin-left: 1em;
+}
+
+.table-parcours #tdEcRestreint {
+    background-color: var(--urca-gray-400);
+}
+
+.table-parcours #ECLibelle > a {
+    color: white;
+}
+
 /* ## Fin tableau maquette parcours ## */
 
 .bg-button-semestre {
@@ -159,19 +158,17 @@ h2 {
 }
 
 /* Détails d'un EC */ 
-.table-fiche-matiere {
  
-    th {
-        border: .125em solid var(--urca-black);
-        background-color: var(--urca-gray-400);
-        color: black;
-        text-align: center;
-    }
-    
-    td {
-        border: .125em solid var(--urca-black);
-        text-align: center;
-    }
+.table-fiche-matiere th {
+    border: .125em solid var(--urca-black);
+    background-color: var(--urca-gray-400);
+    color: black;
+    text-align: center;
+}
+
+.table-fiche-matiere td {
+    border: .125em solid var(--urca-black);
+    text-align: center;
 }
 
 .card-body > .row {

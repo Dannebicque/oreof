@@ -7,7 +7,7 @@
             {% endif %}
             {% if ue.uesEnfants|length > 0 %}
                 <span class="badge bg-primary">
-                    UE à choix restreint : {{ ue.uesEnfants|length }} choix possible
+                    UE à choix restreint : 1 choix possible parmi {{ ue.uesEnfants|length }} 
                 </span>
                 <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down">
             {% endif %}

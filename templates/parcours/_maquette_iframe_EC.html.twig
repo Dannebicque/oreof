@@ -1,3 +1,10 @@
+{% set colorBadge = indexUeEnfant == 1 ? 'bg-primary' 
+    : indexUeEnfant == 2 ? 'bg-danger' 
+    : indexUeEnfant == 3 ? 'bg-success' 
+    : 'bg-warning' 
+%}
+
+
 {% if IsEcEnfant and loop.index == 1 %}
 <tr>
     <td id="ECLibelle">
@@ -5,6 +12,9 @@
         <span class="badge bg-info">
             1 choix possible parmi {{ arrayLength }} 
         </span>
+        {% if indexUeEnfant != -1 %} 
+            <span class="ms-3 badge {{ colorBadge }}">Choix {{ indexUeEnfant }}</span>
+        {% endif %}
         <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down">
     </td>
     <td colspan="7" id="tdEcRestreint"></td>
@@ -24,12 +34,7 @@
         {% else %}
             {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}    
         {% endif %}
-        {% if indexUeEnfant != -1 %}
-            {% set colorBadge = indexUeEnfant == 1 ? 'bg-primary' 
-                : indexUeEnfant == 2 ? 'bg-danger' 
-                : indexUeEnfant == 3 ? 'bg-success' 
-                : 'bg-warning' 
-            %}
+        {% if indexUeEnfant != -1 and IsEcEnfant is same as(false) %} 
             <span class="ms-3 badge {{ colorBadge }}">Choix {{ indexUeEnfant }}</span>
         {% endif %}
     </td>
