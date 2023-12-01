@@ -210,4 +210,14 @@ p.card-text, h5.card-title, h5.titre-section {
     font-size: 1.15em;
 }
 
+.btn-urca-blue, .btn-urca-blue:hover {
+    background-color: var(--urca-blue) !important;
+    color: white;
+}
+
+.btn-urca-light-green, .btn-urca-light-green:hover {
+    background-color: var(--urca-light-green);
+    color: white;
+}
+
 /* Fin du détail d'un EC */

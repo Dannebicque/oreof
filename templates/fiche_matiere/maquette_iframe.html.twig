@@ -10,12 +10,23 @@
         <div class="card global-bg-matiere m-3">
             <div class="card-header p-3 text-center">
                 <div class="row">
-                    <div class="col-2 d-flex justify-content-center align-items-center">
-                        <a href="{{ maquetteOrigineURL }}">
-                            <span class="arrow-left-circle-fill"></span>
-                        </a>
+                    <div class="col-3">
+                        <div class="col-12 d-flex justify-content-center align-items-center">
+                            <a href="{{ maquetteOrigineURL }}">
+                                <button type="button" class="btn btn-sm btn-urca-blue">
+                                    Retour aux semestres
+                                </button>
+                            </a>
+                        </div>
+                        <div class="col-12">
+                            <a href="{{ path('app_fiche_matiere_export', {id: fiche_matiere.id }) }}">
+                                <button type="button" class="btn btn-sm btn-urca-light-green mt-4">
+                                    Imprimer la fiche
+                                </button>
+                            </a>
+                        </div>
                     </div>
-                    <div class="d-flex col-8 align-items-center justify-content-center">
+                    <div class="d-flex col-7 align-items-center justify-content-center">
                         <span class="card-title mt-2">Détails de la matière : {{ fiche_matiere.libelle }}</span>
                     </div>
                     <div class="col-2 d-flex justify-content-center align-items-center">
