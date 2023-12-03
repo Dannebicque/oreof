@@ -2,6 +2,7 @@
     <thead>
     <tr>
         <th>Libellé</th>
+        <th>Code Apogée</th>
         <th>Etablissement</th>
         <th></th>
     </tr>
@@ -10,6 +11,7 @@
     {% for ville in villes %}
         <tr>
             <td>{{ ville.libelle }}</td>
+            <td>{{ ville.codeApogee|displayOrBadge }}</td>
             <td>{{ ville.etablissement ? ville.etablissement.libelle : 'Non défini' }}</td>
             <td class="text-end">
                 <button

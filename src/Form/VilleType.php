@@ -30,6 +30,11 @@ class VilleType extends AbstractType
                 'choice_label' => 'libelle',
                 'label' => 'Etablissement',
             ])
+            ->add('codeApogee', TextType::class, [
+                'label' => 'Code Apogée',
+                'attr' => ['maxlength' => 1],
+                'required' => true,
+            ])
         ;
     }
 
