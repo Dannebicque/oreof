@@ -221,7 +221,7 @@ class GlobalVoter extends Voter
             $subject->getParcours()?->getFormation()?->getCoResponsable() === $this->user ||
             $subject->getParcours()?->getFormation()?->getComposantePorteuse()?->getResponsableDpe() === $this->user ||
             ($subject->getParcours()?->getFormation()?->getComposantePorteuse() === $centre->getComposante() &&
-                in_array('gestionnaire', $centre->getDroits()))
+                in_array('Gestionnaire', $centre->getDroits()))
         ) {
             return true;
         }
