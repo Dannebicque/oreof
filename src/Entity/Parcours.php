@@ -174,6 +174,9 @@ class Parcours
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: CommentaireParcours::class)]
     private Collection $commentaires;
 
+    #[ORM\Column(length: 1, nullable: true)]
+    private ?string $codeApogee = null;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -1017,5 +1020,21 @@ class Parcours
         }
 
         return substr($texte, 0, -2);
+    }
+
+    public function getCodeApogee(): ?string
+    {
+        if ($this->isParcoursDefaut()) {
+            return 'X';
+        }
+
+        return $this->codeApogee;
+    }
+
+    public function setCodeApogee(?string $codeApogee): static
+    {
+        $this->codeApogee = $codeApogee;
+
+        return $this;
     }
 }

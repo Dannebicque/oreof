@@ -20,11 +20,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Sluggable\Handler\RelativeSlugHandler;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
+#[ORM\Index(name: 'sigle_formation', columns: ['sigle'], flags: ['fulltext'])]
+#[ORM\Index(name: 'slug_formation', columns: ['slug'], flags: ['fulltext'])]
 #[ORM\HasLifecycleCallbacks]
 class Formation
 {
@@ -104,6 +105,7 @@ class Formation
     private ?array $structureSemestres = [];
 
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: Parcours::class)]
+    #[ORM\OrderBy(['libelle' => 'ASC'])]
     private Collection $parcours;
 
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: BlocCompetence::class)]
