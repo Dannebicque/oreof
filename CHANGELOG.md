@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.18.7](https://github.com/Dannebicque/oreof/compare/v1.18.6...v1.18.7) (2023-12-03)
+
+
+### Features
+
+* Code apgée sur mention ([5484228](https://github.com/Dannebicque/oreof/commit/5484228cd4f411e17d53acebce9dbc57fbff2855))
+* Code apogée sur parcours ([ff96e81](https://github.com/Dannebicque/oreof/commit/ff96e815dae06724c3941d878df6ddd27fbb8a69))
+* Code apogée sur UE, Semestre, Etape (semestre parcours), diplôme et version (parcours) ([152dbd3](https://github.com/Dannebicque/oreof/commit/152dbd3c8f148119fd77a47ea3006bec53e23eea))
+* Code composante ([225f3a2](https://github.com/Dannebicque/oreof/commit/225f3a2ea0c6b4e7169f29cbb3b51c000509a1a5))
+* Code ville ([3bc0dea](https://github.com/Dannebicque/oreof/commit/3bc0dea675c306a76f7fd967dd1251ca553b01f2))
+* Codification ([56f9b83](https://github.com/Dannebicque/oreof/commit/56f9b836ad815d1913569259d214a348a713139e))
+
 ### [1.18.6](https://github.com/Dannebicque/oreof/compare/v1.18.5...v1.18.6) (2023-12-03)
 
 
