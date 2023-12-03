@@ -26,7 +26,7 @@ class Semestre
     #[ORM\Column]
     private ?int $ordre = null;
 
-    #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: Ue::class)]
+    #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: Ue::class, fetch: 'EAGER')]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ues;
 
@@ -39,7 +39,7 @@ class Semestre
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: SemestreMutualisable::class)]
     private Collection $semestreMutualisables;
 
-    #[ORM\ManyToOne(inversedBy: 'semestres')]
+    #[ORM\ManyToOne(inversedBy: 'semestres', fetch: 'EAGER')]
     private ?SemestreMutualisable $semestreRaccroche = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -47,6 +47,9 @@ class Semestre
 
     #[ORM\Column]
     private ?bool $nonDispense = false;
+
+    #[ORM\Column(length: 5, nullable: true)]
+    private ?string $codeApogee = null;
 
     public function __construct()
     {
@@ -234,6 +237,18 @@ class Semestre
     public function setNonDispense(bool $nonDispense): self
     {
         $this->nonDispense = $nonDispense;
+
+        return $this;
+    }
+
+    public function getCodeApogee(): ?string
+    {
+        return $this->codeApogee;
+    }
+
+    public function setCodeApogee(?string $codeApogee): static
+    {
+        $this->codeApogee = $codeApogee;
 
         return $this;
     }

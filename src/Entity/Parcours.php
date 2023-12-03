@@ -177,6 +177,12 @@ class Parcours
     #[ORM\Column(length: 1, nullable: true)]
     private ?string $codeApogee = null;
 
+    #[ORM\Column(length: 5, nullable: true)]
+    private ?string $codeApogeeDiplome = null;
+
+    #[ORM\Column(length: 3, nullable: true)]
+    private ?string $codeApogeeVersion = null;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -1036,5 +1042,55 @@ class Parcours
         $this->codeApogee = $codeApogee;
 
         return $this;
+    }
+
+    public function getCodeApogeeDiplome(): ?string
+    {
+        return $this->codeApogeeDiplome;
+    }
+
+    public function setCodeApogeeDiplome(?string $codeApogeeDiplome): static
+    {
+        $this->codeApogeeDiplome = $codeApogeeDiplome;
+
+        return $this;
+    }
+
+    public function getCodeApogeeVersion(): ?string
+    {
+        return $this->codeApogeeVersion;
+    }
+
+    public function setCodeApogeeVersion(?string $codeApogeeVersion): static
+    {
+        $this->codeApogeeVersion = $codeApogeeVersion;
+
+        return $this;
+    }
+
+    public function getCodeRegimeInscription()
+    {
+        $t = [];
+        foreach ($this->getRegimeInscription() as $regime) {
+            $t[] = $regime->value;
+        }
+
+        if (count($t) >= 3) {
+            return 1;
+        }
+
+        if (count($t) === 1 && in_array(RegimeInscriptionEnum::FC, $t, true)) {
+            return 2;
+        }
+
+        if (in_array(RegimeInscriptionEnum::FI_APPRENTISSAGE, $t, true) || in_array(RegimeInscriptionEnum::FC_CONTRAT_PRO, $t, true)) {
+            return 3;
+        }
+
+        //todo: gérer la LAS?
+
+
+
+
     }
 }

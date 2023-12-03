@@ -29,11 +29,11 @@ class Ue
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?Semestre $semestre = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(fetch: 'EAGER')]
     private ?TypeUe $typeUe = null;
 
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(fetch: 'EAGER')]
     private ?NatureUeEc $natureUeEc = null;
 
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: ElementConstitutif::class, cascade: [
@@ -49,7 +49,7 @@ class Ue
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class)]
     private Collection $ueMutualisables;
 
-    #[ORM\ManyToOne(inversedBy: 'ues')]
+    #[ORM\ManyToOne(inversedBy: 'ues', fetch: 'EAGER')]
     private ?UeMutualisable $ueRaccrochee = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ueEnfants')]
@@ -67,6 +67,9 @@ class Ue
 
     #[ORM\Column(nullable: true)]
     private ?float $ects = null;
+
+    #[ORM\Column(length: 6, nullable: true)]
+    private ?string $codeApogee = null;
 
     public function __construct()
     {
@@ -343,6 +346,18 @@ class Ue
     public function setEcts(?float $ects): self
     {
         $this->ects = $ects;
+
+        return $this;
+    }
+
+    public function getCodeApogee(): ?string
+    {
+        return $this->codeApogee;
+    }
+
+    public function setCodeApogee(?string $codeApogee): static
+    {
+        $this->codeApogee = $codeApogee;
 
         return $this;
     }
