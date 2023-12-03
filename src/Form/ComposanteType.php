@@ -36,6 +36,11 @@ class ComposanteType extends AbstractType
                 'attr' => ['maxlength' => 3],
                 'required' => true,
             ])
+            ->add('codeApogee', TextType::class, [
+                'label' => 'Code Apogée',
+                'attr' => ['maxlength' => 1],
+                'required' => true,
+            ])
             ->add('directeur', EntityWithAddType::class, [
                 'class' => User::class,
                 'choice_label' => 'display',

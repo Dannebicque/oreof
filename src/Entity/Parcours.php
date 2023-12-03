@@ -1089,7 +1089,7 @@ class Parcours
 
         //todo: gérer la LAS?
 
-
+        return 1;
 
 
     }

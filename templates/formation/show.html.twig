@@ -5,6 +5,9 @@
 {% block content %}
 
     {{ component('mention_manage', {formation:formation, type:'formation'}) }}
+    {% if is_granted('ROLE_SES') %}
+    <a href="{{ path('app_codification', {formation: formation.id}) }}">Génére les codes</a>
+    {% endif %}
     <div class="row">
         {{ include('typeDiplome/formation/common/_'~constant('SOURCE', typeD)~'.html.twig', {print:false}) }}
         <!-- Scrollspy Start -->
