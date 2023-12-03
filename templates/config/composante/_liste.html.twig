@@ -3,6 +3,7 @@
     <tr>
         <th>Nom Composante</th>
         <th>Sigle</th>
+        <th>Code compo.</th>
         <th>Directeur</th>
         <th>Responsable DPE</th>
         <th>Adresse</th>
@@ -14,6 +15,7 @@
         <tr>
             <td>{{ composante.libelle }}</td>
             <td>{{ composante.sigle }}</td>
+            <td>{{ composante.codeComposante|displayOrBadge }}</td>
             <td>{{ composante.directeur ? composante.directeur.display : 'Non défini' }}</td>
             <td>{{ composante.responsableDpe ? composante.responsableDpe.display : 'Non défini' }}</td>
             <td>{{ composante.adresse ? composante.adresse.display|raw : 'Non définie' }}</td>

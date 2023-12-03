@@ -65,6 +65,9 @@ class Composante
     #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'composante')]
     private Collection $ficheMatieres;
 
+    #[ORM\Column(length: 3, nullable: true)]
+    private ?string $codeComposante = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -316,6 +319,18 @@ class Composante
         if ($this->ficheMatieres->removeElement($ficheMatiere)) {
             $ficheMatiere->removeComposante($this);
         }
+
+        return $this;
+    }
+
+    public function getCodeComposante(): ?string
+    {
+        return $this->codeComposante;
+    }
+
+    public function setCodeComposante(?string $codeComposante): static
+    {
+        $this->codeComposante = $codeComposante;
 
         return $this;
     }

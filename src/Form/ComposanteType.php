@@ -31,6 +31,11 @@ class ComposanteType extends AbstractType
                 'help' => 'Le sigle est la dénomination courte de la composante, s\'il existe.',
                 'required' => false,
             ])
+            ->add('codeComposante', TextType::class, [
+                'label' => 'Code Composante',
+                'attr' => ['maxlength' => 3],
+                'required' => true,
+            ])
             ->add('directeur', EntityWithAddType::class, [
                 'class' => User::class,
                 'choice_label' => 'display',
