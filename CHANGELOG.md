@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.18.6](https://github.com/Dannebicque/oreof/compare/v1.18.5...v1.18.6) (2023-12-03)
+
+
+### Bug Fixes
+
+* Accès gestionnaire fiches matières ([a2aad6b](https://github.com/Dannebicque/oreof/commit/a2aad6b625dc0485da496101e29cd49421a8f1a0))
+
 ### [1.18.5](https://github.com/Dannebicque/oreof/compare/v1.18.4...v1.18.5) (2023-11-28)
 
 
