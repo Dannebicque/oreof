@@ -52,6 +52,11 @@ class MentionType extends AbstractType
                 'class' => Domaine::class,
                 'choice_label' => 'libelle',
             ])
+            ->add('codeApogee', TextType::class, [
+                'label' => 'Code Apogée',
+                'attr' => ['maxlength' => 1],
+                'required' => true,
+            ])
         ;
     }
 

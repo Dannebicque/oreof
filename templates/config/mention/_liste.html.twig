@@ -26,6 +26,17 @@
         <th>
             <a href="#"
                     {{ stimulus_action('crud', 'sort', 'click', {
+                        'sort': 'codeApogee',
+                        'direction': getDirection('codeApogee', sort, direction)
+                    }) }}
+            >
+                Code Apogée
+                {{ displaySort('codeApogee', sort, direction) }}
+            </a>
+        </th>
+        <th>
+            <a href="#"
+                    {{ stimulus_action('crud', 'sort', 'click', {
                         'sort': 'type_diplome',
                         'direction': getDirection('type_diplome', sort, direction)
                     }) }}
@@ -43,6 +54,7 @@
         <tr>
             <td>{{ mention.libelle }}</td>
             <td>{{ mention.sigle }}</td>
+            <td>{{ mention.codeApogee|displayOrBadge }}</td>
             <td>{{ mention.typeDiplome|typeDiplome }}</td>
             <td>
                 {% if mention.formations|length > 0 %}

@@ -40,6 +40,9 @@ class Mention
     #[ORM\OneToMany(mappedBy: 'mention', targetEntity: Formation::class)]
     private Collection $formations;
 
+    #[ORM\Column(length: 1, nullable: true)]
+    private ?string $codeApogee = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -131,5 +134,17 @@ class Mention
     public function display(): string
     {
         return $this->typeDiplome?->getLibelleCourt().' '.$this->getLibelle();
+    }
+
+    public function getCodeApogee(): ?string
+    {
+        return $this->codeApogee;
+    }
+
+    public function setCodeApogee(?string $codeApogee): static
+    {
+        $this->codeApogee = $codeApogee;
+
+        return $this;
     }
 }
