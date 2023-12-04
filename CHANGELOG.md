@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.18.9](https://github.com/Dannebicque/oreof/compare/v1.18.8...v1.18.9) (2023-12-04)
+
+
+### Bug Fixes
+
+* fiche matière en PDF ([a5ccce7](https://github.com/Dannebicque/oreof/commit/a5ccce77fc0b28308288fe3c5a87bf716651b869))
+* Mise à jour Doctrine ([d5734f7](https://github.com/Dannebicque/oreof/commit/d5734f76cebba9e9fae903176951b5fd519cbd8d))
+* Mise à jour Doctrine ([2ae1569](https://github.com/Dannebicque/oreof/commit/2ae1569036408c5bb6f03b5406c81ac1423d1e77))
+* Mise à jour Doctrine ([128f98a](https://github.com/Dannebicque/oreof/commit/128f98a69a1fbfaa844704e904b1032c44b9259c))
+* Typo sur variable ([0fef64f](https://github.com/Dannebicque/oreof/commit/0fef64ff20789a728d222c74f7979d69f213612f))
+
 ### [1.18.8](https://github.com/Dannebicque/oreof/compare/v1.18.7...v1.18.8) (2023-12-04)
 
 
