@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Classes\JsonReponse;
 use App\Classes\verif\FicheMatiereState;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
@@ -183,6 +184,7 @@ class FicheMatiereController extends AbstractController
 
     #[Route('/{slug}', name: 'app_fiche_matiere_delete', methods: ['DELETE'])]
     public function delete(
+        EntityManagerInterface $entityManager,
         Request $request,
         FicheMatiere $ficheMatiere,
         FicheMatiereRepository $ficheMatiereRepository
@@ -192,13 +194,22 @@ class FicheMatiereController extends AbstractController
             JsonRequest::getValueFromRequest($request, 'csrf')
         )) {
 
+            if ($ficheMatiere->getElementConstitutifs()->count() > 0) {
+                return JsonReponse::error('Impossible de supprimer la fiche matière car elle est utilisée par au moins un élément constitutif.');
+            }
+
+            if ($ficheMatiere->getFicheMatiereParcours()->count() > 0) {
+                return JsonReponse::error('Impossible de supprimer la fiche matière car elle est potentiellement mutualisée avec d\'autres parcours.');
+            }
+
             foreach ($ficheMatiere->getMcccs() as $mccc) {
                 $ficheMatiere->removeMccc($mccc);
+                $entityManager->remove($mccc);
             }
 
             $ficheMatiereRepository->remove($ficheMatiere, true);
 
-            return $this->json(true);
+            return JsonReponse::success('La fiche matière a bien été supprimée.');
         }
 
         return $this->json(false);
