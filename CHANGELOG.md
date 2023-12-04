@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.18.8](https://github.com/Dannebicque/oreof/compare/v1.18.7...v1.18.8) (2023-12-04)
+
+
+### Bug Fixes
+
+* Mise à jour Doctrine ([4802d40](https://github.com/Dannebicque/oreof/commit/4802d4032e3d20b167656f9a3e2c065efc5ad370))
+* Suppression d'une fiche, vérification si pas d'EC ou de mutualisation ([e8aec88](https://github.com/Dannebicque/oreof/commit/e8aec889e636d71166f1d8ffb8bb77e865e02701))
+
 ### [1.18.7](https://github.com/Dannebicque/oreof/compare/v1.18.6...v1.18.7) (2023-12-03)
 
 
