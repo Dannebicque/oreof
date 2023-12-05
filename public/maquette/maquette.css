@@ -126,6 +126,7 @@ h2 {
 .table-parcours #ECEnfantLibelleLibre {
     background-color: white;
     color: var(--urca-black);
+    text-align: start !important;
 }
 
 .table-parcours #ECEnfantLibelle > a {
