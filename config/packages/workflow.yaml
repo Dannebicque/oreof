@@ -89,9 +89,9 @@ framework:
                     to: 'valide_pour_publication'
                 valider_cfvu:
                     from: 'soumis_cfvu'
-                    to: 'valide_pour_publication'
+                    to: 'valide_pour_publication' #todo: renommer en valide_cfvu
                 valider_publication:
-                    from: 'valide_pour_publication'
+                    from: 'valide_pour_publication' #todo: renommer en valide_cfvu
                     to: 'valide_a_publier'
                 publier:
                     from: 'valide_a_publier'
@@ -151,3 +151,38 @@ framework:
                 refuser_resp_dpe:
                     from: 'en_cours_redaction'
                     to: 'refuse_dpe'
+        fiche:
+            type: 'workflow'
+            marking_store:
+                type: 'method'
+                property: 'etatFiche'
+            supports:
+                - App\Entity\FicheMatiere
+            initial_marking: 'en_cours_redaction'
+            places:
+                - 'en_cours_redaction'
+                - 'transmis_rf'
+                - 'transmis_dpe'
+                - 'transmis_central'
+            transitions:
+                valider_parcours:
+                    from: 'en_cours_redaction'
+                    to: 'transmis_rf'
+                valider_rf:
+                    from: 'transmis_rf'
+                    to: 'transmis_dpe'
+                refuser_rf:
+                    from: 'transmis_rf'
+                    to: 'en_cours_redaction'
+                reserver_rf:
+                    from: 'transmis_rf'
+                    to: 'en_cours_redaction'
+                valider_dpe:
+                    from: 'transmis_dpe'
+                    to: 'transmis_central'
+                refuser_dpe:
+                    from: 'transmis_dpe'
+                    to: 'en_cours_redaction'
+                reserver_dpe:
+                    from: 'transmis_dpe'
+                    to: 'en_cours_redaction'

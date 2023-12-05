@@ -224,13 +224,23 @@
 
                         <div class="col-6 d-flex justify-content-center">
                             {% if this.type == 'parcours' %}
+                                <a
+                                        href="{{ path('fiche_matiere_valide_parcours', {parcours: this.parcours.id})}}"
+                                        class="btn btn-outline-success btn-sm"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom"
+                                        title="{{ 'verifier.fiches.ec.matieres.infobulle'|trans({}, 'process') }}"
+                                >
+                                    <i class="fas fa-check"></i>
+                                    <span> Valider les fiches EC/matières</span>
+                                </a>
                                 <button
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
                                             modalTitle: 'verifier.la.saisie.parcours.title'|trans({}, 'process'),
                                             modalUrl: path('app_parcours_state', {parcours:parcours.id}) }) }}
                                         data-action="click->modal#openModal"
-                                        class="btn btn-outline-success btn-sm"
+                                        class="btn btn-outline-success btn-sm ms-1"
                                         data-size="lg"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
@@ -284,13 +294,23 @@
                                     <i class="fal fa-timeline"></i>
                                 </button>
                             {% else %}
+                                <a
+                                        href="{{ path('fiche_matiere_valide_formation', {formation: this.formation.id})}}"
+                                        class="btn btn-outline-success btn-sm"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom"
+                                        title="{{ 'verifier.fiches.ec.matieres.infobulle'|trans({}, 'process') }}"
+                                >
+                                    <i class="fas fa-check"></i>
+                                    <span> Valider les fiches EC/matières</span>
+                                </a>
                                 <button
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
                                             modalTitle: 'verifier.la.saisie.formation.title'|trans({}, 'process'),
                                             modalUrl: path('app_formation_state', {formation:formation.id}) }) }}
                                         data-action="click->modal#openModal"
-                                        class="btn btn-outline-success btn-sm"
+                                        class="btn btn-outline-success btn-sm ms-1"
                                         data-size="lg"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
