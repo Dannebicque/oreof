@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.19.1](https://github.com/Dannebicque/oreof/compare/v1.19.0...v1.19.1) (2023-12-05)
+
+
+### Features
+
+* Validation fiches matières ([1b4354d](https://github.com/Dannebicque/oreof/commit/1b4354d5554ed703093b543c3981ca72936f02d9))
+
 ## [1.19.0](https://github.com/Dannebicque/oreof/compare/v1.18.9...v1.19.0) (2023-12-05)
 
 
