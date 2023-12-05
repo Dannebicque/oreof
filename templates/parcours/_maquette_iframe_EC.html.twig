@@ -8,7 +8,7 @@
 
 {% if IsEcEnfant and loop.index == 1 %}
 <tr>
-    <td id="ECLibelle">
+    <td id="ECLibelle" style="{{ 'padding-left: ' ~ paddingCascade * 1.5 ~ 'em;' }}">
         EC {{ indexEC }} à choix :
         <span class="badge bg-info">
             1 choix possible parmi {{ arrayLength }} 
@@ -16,14 +16,20 @@
         {# {% if indexUeEnfant != -1 %} 
             <span class="ms-3 badge {{ colorBadge }}">Choix {{ indexUeEnfant }}</span>
         {% endif %} #}
-        <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down">
+        {# <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down"> #}
     </td>
     <td colspan="7" id="tdEcRestreint"></td>
 </tr>
 {% endif %}
 <tr>
     {# <td id="{{ IsEcEnfant ? 'ECEnfantLibelle' : 'ECLibelle' }}" class="{{ indexUeEnfant != -1  ? 'indexUeEnfant' ~ indexUeEnfant : '' }}"> #}
-    <td id="{{ IsEcEnfant ? 'ECEnfantLibelle' : 'ECLibelle' }}">
+    <td id="{{ IsEcEnfant ? 'ECEnfantLibelle' : 'ECLibelle' }}"
+        style="{{
+            IsEcEnfant 
+            ? 'padding-left: ' ~ (paddingCascade + 1) * 1.5 ~ 'em;'
+            : 'padding-left: ' ~ (paddingCascade * 1.5) ~ 'em;' 
+        }}"
+    >
         {% if ec.elementConstitutif.ficheMatiere is defined and ec.elementConstitutif.ficheMatiere is not null %}
         <a href="{{ path(
                     'app_fiche_matiere_maquette_iframe',

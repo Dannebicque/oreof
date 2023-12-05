@@ -9,7 +9,7 @@
                 <span class="badge bg-primary">
                     UE à choix restreint : 1 choix possible parmi {{ ue.uesEnfants|length }} 
                 </span>
-                <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down">
+                {# <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down"> #}
             {% endif %}
             <span class="ects-badge-ue">{{ ue.heuresEctsUe.sommeUeEcts }}&nbsp;ECTS</span>
         </td>
@@ -30,8 +30,9 @@
     : 'bg-success'
 %}
 <tr class="table-dark-child">
-    <td id="UEEnfantLibelle">
-        {{ ue.ue.display }} - {{ ue.ue.libelle }} <span class="ms-3 badge {{ colorBadge }}">Choix {{ indexUeEnfant }}</span>
+    <td id="UEEnfantLibelle" style="{{ 'padding-left: ' ~ paddingCascade * 1.5 ~ 'em;' }}">
+        {{ ue.ue.display }} - {{ ue.ue.libelle }} 
+        {# <span class="ms-3 badge {{ colorBadge }}">Choix {{ indexUeEnfant }}</span> #}
     </td>
     <td>{{ ue.heuresEctsUe.sommeUeCmPres > 0 ? ue.heuresEctsUe.sommeUeCmPres : '-'  }}</td>
     <td>{{ ue.heuresEctsUe.sommeUeTdPres > 0 ? ue.heuresEctsUe.sommeUeTdPres : '-'  }}</td>
@@ -52,7 +53,8 @@
                     ec:ec, 
                     IsEcEnfant: false,
                     indexUeEnfant: indexUeEnfant ?? -1,
-                    indexEC: indexEC
+                    indexEC: indexEC,
+                    paddingCascade: paddingCascade + 1
                 }) 
             }}
         {% else %}
@@ -63,7 +65,8 @@
                     arrayLength: ec.elementsConstitutifsEnfants|length, 
                     indexUeEnfant: indexUeEnfant ?? -1,
                     indexEC: indexEC,
-                    indexECEnfant: loop.index
+                    indexECEnfant: loop.index,
+                    paddingCascade: paddingCascade + 2
                     }) 
                 }}
             {% endfor %}
@@ -72,7 +75,7 @@
 
 {% if IsUeEnfant and ue.elementConstitutifs|length == 0 %}
     <tr>
-        <td id="ECEnfantLibelle">
+        <td id="ECEnfantLibelleLibre" style="{{ 'padding-left: ' ~ (paddingCascade + 1) * 1.5 ~ 'em;' }}">
             {{ ue.ue.descriptionUeLibre }}
         </td>
         <td colspan="7" id="tdEcRestreint"></td>

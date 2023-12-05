@@ -14,6 +14,7 @@
     --urca-light-green: #15ADAA;
     --urca-blue: #0d6efd;
     --urca-indigo: #6610f2;
+    --urca-green-child: #39cac8;
 }
 
 .table-center {
@@ -93,7 +94,7 @@ h2 {
 }
 
 .table-parcours .table-dark-child {
-    --bs-table-bg: var(--urca-teal) !important;
+    --bs-table-bg: var(--urca-green-child) !important;
 }
 
 .table-parcours tr th:not(:first-child) {
@@ -122,6 +123,11 @@ h2 {
     color: var(--urca-black);
 }
 
+.table-parcours #ECEnfantLibelleLibre {
+    background-color: white;
+    color: var(--urca-black);
+}
+
 .table-parcours #ECEnfantLibelle > a {
     color: var(--urca-black)
 }
@@ -142,7 +148,7 @@ h2 {
 
 .table-parcours tr #UEEnfantLibelle {
     color: var(--urca-black);
-    background-color: var(--urca-teal);
+    background-color: var(--urca-green-child);
     text-align: start;
 }
 

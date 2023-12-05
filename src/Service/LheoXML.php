@@ -35,14 +35,8 @@ class LheoXML {
 
         // Intitulé de la formation
         $intituleFormation = 'Non renseigné.';
-        if($parcours->getFormation()){
-            if($parcours->getFormation()->getTypeDiplome()){
-                if($parcours->getFormation()->getTypeDiplome()->getLibelle()){
-                    if($parcours->getLibelle()){
-                        $intituleFormation = $parcours->getFormation()->getTypeDiplome()->getLibelle() . " " . $parcours->getLibelle();
-                    }
-                }
-            }
+        if($typeDiplomeLibelle = $parcours->getFormation()?->getTypeDiplome()?->getLibelle()){
+            $intituleFormation = $typeDiplomeLibelle . " " . $parcours->getLibelle();
         }
 
         // Rythme de la formation
@@ -85,29 +79,43 @@ class LheoXML {
 
         // Niveau d'entree
         $niveauEntree = -1;
-        if($parcours->getFormation()){
-            if($parcours->getFormation()->getNiveauEntree()){
-                $niveauEntree = $parcours->getFormation()->getNiveauEntree()->value;
-            }
+        if($niveau = $parcours->getFormation()?->getNiveauEntree()){
+            $niveauEntree = $niveau->value;
         }
         
-        // Adresse de la composante d'inscription
-        $adresseComposanteInscription = [
-            'denomination' => '',
-            'ligne' => '', 
-            'codepostal' => '',
-            'ville' => '',
-        ];
-        
-        if($parcours->getComposanteInscription()){
-            if($parcours->getComposanteInscription()->getAdresse()){
-                $adresseComp = $parcours->getComposanteInscription()->getAdresse();
-                $adresseComposanteInscription['denomination'] = $parcours->getComposanteInscription()->getLibelle();
-                $adresseComposanteInscription['ligne'] = $adresseComp->getAdresse1() . " " . ($adresseComp->getAdresse2() ?? '');
-                $adresseComposanteInscription['codepostal'] = $adresseComp->getCodePostal();
-                $adresseComposanteInscription['ville'] = $adresseComp->getVille();
-            }
+        // Adresses de la composante d'inscription       
+        $composantesInscription = [];
+
+        if($composante = $parcours->getComposanteInscription()){
+            $adresse = [
+                'denomination' => '',
+                'ligne' => '', 
+                'codepostal' => '',
+                'ville' => '',
+            ];
+            // Adresse de l'accueil
+            $adresseComp = $composante->getAdresse();
+            $adresse['denomination'] = $composante->getLibelle();
+            $adresse['ligne'] = $adresseComp->getAdresse1() . " " . ($adresseComp->getAdresse2() ?? '');
+            $adresse['codepostal'] = $adresseComp->getCodePostal();
+            $adresse['ville'] = $adresseComp->getVille();
+            // Téléphone 
+            $telephone = ['numtel' => $composante->getTelStandard() ?? $composante->getTelComplementaire() ?? 'Non renseigné'];
+            // Résultat 
+            $result = [
+                'type-contact' => 4 ,
+                'coordonnees' => [
+                    'adresse' => $adresse,
+                    'telfixe' => $telephone,
+                    'courriel' => $composante->getMailContact(),
+                    'web' => ['urlweb' => $composante->getUrlSite()]
+                ]
+            ];
+    
+            $composantesInscription[] = $result;
         }
+            
+        
         
         // Modalités de l'alternance
         $modalitesAlternance = "La formation n'est pas dispensée en alternance";
@@ -120,7 +128,7 @@ class LheoXML {
         // Durée de la formation (durée cycle)
         $dureeCycle = 0;
         if($parcours->getTypeDiplome()){
-            if($parcours->getTypeDiplome()->getSemestreFin() && $parcours->getTypeDiplome()->getSemestreDebut()){
+            if($parcours->getTypeDiplome()->getSemestreFin() !== null && $parcours->getTypeDiplome()->getSemestreDebut() !== null){
                 $dureeCycle = (($parcours->getTypeDiplome()->getSemestreFin() - $parcours->getTypeDiplome()->getSemestreDebut()) + 1) / 2;
             }
         }
@@ -135,7 +143,7 @@ class LheoXML {
 
         // code RNCP
         $rncp = 'RNCP00000';
-        if($parcours->getFormation()->getCodeRNCP()){
+        if($parcours->getFormation()?->getCodeRNCP()){
            $rncp = 'RNCP' . $parcours->getFormation()->getCodeRNCP();
         }
 
@@ -165,7 +173,6 @@ class LheoXML {
                     'objectif-formation' => $this->cleanString(($parcours->getObjectifsParcours() ?? 'Non renseigné.')),
                     'resultats-attendus' => $this->cleanString(($parcours->getResultatsAttendus() ?? 'Non renseigné.')),
                     'contenu-formation' => $this->cleanString(($parcours->getContenuFormation() ?? 'Non renseigné.')),
-                    // Tous les parcours ne sont pas forcément certifiants
                     'certifiante' => 1,
                     'contact-formation' => $referentsPedagogiques,
                     'parcours-de-formation' => 1,
@@ -182,17 +189,7 @@ class LheoXML {
                         'modalites-alternance' => $modalitesAlternance,
                         'modalites-enseignement' => $parcours->getModalitesEnseignement() ? $parcours->getModalitesEnseignement()->value : 1,
                         'conditions-specifiques' => $parcours->getPrerequis() ?? 'Aucune condition spécifique.',
-                        'prise-en-charge-frais-possible' => 1, // A CHANGER - 1 oui | 0 non
-                        'lieu-de-formation' => [
-                             // PAS DEPUIS LE LHEO
-                             'coordonnees' => [
-                                'adresse' => [
-                                    'ligne' => 'XXX',
-                                    'codepostal' => 'XXXXX',
-                                    'ville' => 'XX'
-                                ]
-                            ]
-                        ], 
+                        'prise-en-charge-frais-possible' => 1, // A CHANGER - 1 oui | 0 non 
                         'modalites-entrees-sorties' => 0,
                         'duree-cycle' => $dureeCycle,
                         'session' => [
@@ -201,12 +198,16 @@ class LheoXML {
                                 'fin' => '00000000' 
                             ],
                             'adresse-inscription' => [
-                                'adresse' => $adresseComposanteInscription
+                                'adresse' => [
+                                    'ligne' => '-',
+                                    'codepostal' => '00000',
+                                    'ville' => '-' 
+                                ]
                             ]
                         ],
-                        'restauration' => "Restaurants Universitaires CROUS", // A AJOUTER DANS LE FORMULAIRE
-                        'hebergement' => "Résidences Universitaires CROUS", // A AJOUTER DANS LE FORMULAIRE
-                        'transport' => "Transports en commun" // A AJOUTER DANS LE FORMULAIRE
+                        'restauration' => $parcours->getVille()?->getEtablissement()?->getEtablissementInformation()?->getRestauration() ?? "Non renseigné.",
+                        'hebergement' => $parcours->getVille()?->getEtablissement()?->getEtablissementInformation()?->getHebergement() ?? "Non renseigné.",
+                        'transport' => $parcours->getVille()?->getEtablissement()?->getEtablissementInformation()?->getTransport() ?? "Non renseigné" 
 
                     ],
                     'organisme-formation-responsable' => [
@@ -225,20 +226,8 @@ class LheoXML {
                                 ]              
                             ]
                         ],
-                        'contact-organisme' => [
-                            'coordonnees' => [
-                                // Coordonnées secrétariat de la composante
-                                'adresse' => $adresseComposanteInscription,
-                                'telfixe' => ['numtel' => $parcours->getComposanteInscription()?->getTelStandard() ?? 'Non renseigné'],
-                                'web' => ['urlweb' => 'https://www.univ-reims.fr/contact/contactez-nous,23,32.html']
-                            ]
-                        ]
-                            ],
-                    'extras' => [
-                        'extra' => [
-                            'ects' => $ects
-                        ]
-                    ]
+                        'contact-organisme' => $composantesInscription
+                    ],
                 ]
             ]
 

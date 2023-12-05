@@ -33,12 +33,19 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% set paddingCascade = 0 %}
                             {% for ue in semestre.ues %}
-                                {{ include('parcours/_maquette_iframe_UE.html.twig', {ue: ue, IsUeEnfant: false}) }}
+                                {{ include('parcours/_maquette_iframe_UE.html.twig', {ue: ue, IsUeEnfant: false, paddingCascade: paddingCascade }) }}
                                 {% if ue.uesEnfants|length > 0 %}              
                                     {% for ueEnfant in ue.uesEnfants %}
                                         {{ include('parcours/_maquette_iframe_UE.html.twig', 
-                                        {ue: ueEnfant, IsUeEnfant: true, arrayLength: ue.uesEnfants|length, indexUeEnfant: loop.index }) 
+                                        {
+                                            ue: ueEnfant, 
+                                            IsUeEnfant: true, 
+                                            arrayLength: ue.uesEnfants|length,
+                                            indexUeEnfant: loop.index,
+                                            paddingCascade: paddingCascade + 1
+                                        }) 
                                     }}
                                     {% endfor %}
                                 {% endif %}
