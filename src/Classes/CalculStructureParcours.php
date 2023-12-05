@@ -14,9 +14,17 @@ use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\Parcours;
+use App\Repository\ElementConstitutifRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class CalculStructureParcours
 {
+    public function __construct(
+        protected EntityManagerInterface $entityManager,
+        protected ElementConstitutifRepository $elementConstitutifRepository
+    )
+    {
+    }
     public function calcul(Parcours $parcours): StructureParcours
     {
         $dtoStructure = new StructureParcours();
@@ -47,6 +55,8 @@ class CalculStructureParcours
 
                         //si des UE enfants, on ne regarde pas s'il y a des EC
                         $dtoUe = new StructureUe($ue, $raccrocheUe, $display, $ueOrigine ?? null);
+                       // $ecs = $this->elementConstitutifRepository->getByUe($ue);
+
                         foreach ($ue->getElementConstitutifs() as $elementConstitutif) {
                             if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
                                 //récupérer le bon EC selon tous les liens
@@ -71,6 +81,8 @@ class CalculStructureParcours
 
                             if ($ueEnfant !== null) {
                                 $dtoUeEnfant = new StructureUe($ueEnfant, $raccrocheUeEnfant, $display, $ueOrigine ?? null);
+                                //$ecsEnfant = $this->elementConstitutifRepository->getByUe($ueEnfant);
+
                                 foreach ($ueEnfant->getElementConstitutifs() as $elementConstitutif) {
                                     if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
                                         $dtoEc = new StructureEc($elementConstitutif, $parcours);
@@ -82,10 +94,10 @@ class CalculStructureParcours
                                         $dtoUeEnfant->addEc($dtoEc);
                                     }
                                 }
-                                $dtoUe->addUeEnfant($ueEnfant->getId(), $dtoUeEnfant);
+                                $dtoUe->addUeEnfant($ueEnfant->getOrdre(), $dtoUeEnfant);
                             }
                         }
-                        $dtoSemestre->addUe($ue->getId(), $dtoUe);
+                        $dtoSemestre->addUe($ue->getOrdre(), $dtoUe);
                     }
                 }
                 $dtoStructure->addSemestre($semestreParcours->getOrdre(), $dtoSemestre);

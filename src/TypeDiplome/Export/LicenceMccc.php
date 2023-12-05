@@ -208,7 +208,7 @@ class LicenceMccc
                 foreach ($semestres as $semestre) {
                     $totalAnnee->addSemestre($semestre->heuresEctsSemestre);
                     $debutSemestre = $ligne;
-                    foreach ($semestre->ues as $ue) {
+                    foreach ($semestre->ues() as $ue) {
                         //UE
                         $debut = $ligne;
                         if (count($ue->uesEnfants) === 0) {
