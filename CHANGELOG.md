@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.19.0](https://github.com/Dannebicque/oreof/compare/v1.18.9...v1.19.0) (2023-12-05)
+
+
+### Features
+
+* Validation fiches matières ([0ce9e75](https://github.com/Dannebicque/oreof/commit/0ce9e750122ccaa2822428d08c534782071d767b))
+
+
+### Bug Fixes
+
+* Affichage "non concerné" si pas de co-resp/co-rf ([3f90bc1](https://github.com/Dannebicque/oreof/commit/3f90bc1cb10dc2e90743eeacbb4d9984f64c2557))
+* Affichage du rythme de formation ([daa7c80](https://github.com/Dannebicque/oreof/commit/daa7c80910c9aa09cdfa932e73267eb538748d45))
+* Ordre des UE dans les affichages ([cc668ea](https://github.com/Dannebicque/oreof/commit/cc668ea3faecb4dab5f81e48fb4f014dbc0ba6d0))
+
 ### [1.18.9](https://github.com/Dannebicque/oreof/compare/v1.18.8...v1.18.9) (2023-12-04)
 
 
