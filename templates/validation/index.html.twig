@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block header %}
-    Gestion des validations des DPE
+    Gestion des validations des formations par le DPE
 {% endblock %}
 
 {% block breadcrumb %}
@@ -39,6 +39,9 @@
                                         {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
                                 >
                                     <option value="">Choisir une composante</option>
+                                    {% if is_granted('ROLE_SES') %}
+                                        <option value="all">Toutes les composantes de l'établissement</option>
+                                    {% endif %}
                                     {% for composante in composantes %}
                                         <option value="{{ composante.id }}">{{ composante.libelle }}</option>
                                     {% endfor %}
@@ -59,11 +62,11 @@
                     </div>
                     <div class="col-6">
                         <div>
-                            <label for="type_validation" class="required">Etat de validation</label>
+                            <label for="type_validation" class="required">Etat actuel des formations</label>
                             <select name="type_validation" id="type_validation" class="form-select"
                                     {{ stimulus_action('validation--index', 'changeListe') }}
                             >
-                                <option value="">Choisir le format</option>
+                                <option value="">Choisir l'état</option>
                                 {% for value, type in types_validation|filter(type => type.page == 'formation') %}
                                     <option value="{{ value }}">{{ type.transition|trans({}, 'process') }}</option>
                                 {% endfor %}
