@@ -211,7 +211,7 @@ class LicenceMccc
                     foreach ($semestre->ues() as $ue) {
                         //UE
                         $debut = $ligne;
-                        if (count($ue->uesEnfants) === 0) {
+                        if (count($ue->uesEnfants()) === 0) {
                             if ($ue->ue->getNatureUeEc() !== null && $ue->ue->getNatureUeEc()->isLibre()) {
                                 $ligne = $this->afficheUeLibre($ligne, $ue);
                             } else {
