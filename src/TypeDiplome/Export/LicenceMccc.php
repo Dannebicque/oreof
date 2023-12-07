@@ -262,7 +262,7 @@ class LicenceMccc
                             $this->excelWriter->writeCellXY(self::COL_UE, $debut, $ue->display, ['wrap' => true, 'style' => 'HORIZONTAL_CENTER', 'font-weight' => false]);
                             $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $debut, $ue->ue->getLibelle(), ['wrap' => true]);
                         }
-                        foreach ($ue->uesEnfants as $uee) {
+                        foreach ($ue->uesEnfants() as $uee) {
                             $debut = $ligne;
                             if ($uee->ue->getNatureUeEc() !== null && $uee->ue->getNatureUeEc()->isLibre()) {
                                 $ligne = $this->afficheUeLibre($ligne, $uee);
