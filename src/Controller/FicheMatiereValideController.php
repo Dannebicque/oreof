@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\DTO\StatsFichesMatieresParcours;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Repository\ElementConstitutifRepository;
@@ -27,11 +28,13 @@ class FicheMatiereValideController extends BaseController
     public function valideFormation(Formation $formation): Response
     {
         $tabEcs = [];
+        $stats = [];
         $parcourss = $formation->getParcours();
 
         foreach ($parcourss as $parcours) {
             foreach ($parcours->getSemestreParcours() as $semestreParcour) {
                 $tabEcs[$parcours->getId()][$semestreParcour->getOrdre()] = [];
+                $stats[$parcours->getId()] = new StatsFichesMatieresParcours();
 
                 if ($semestreParcour->getSemestre()->getSemestreRaccroche() !== null) {
                     $semestre = $semestreParcour->getSemestre()->getSemestreRaccroche();
@@ -48,6 +51,7 @@ class FicheMatiereValideController extends BaseController
                         $tabEcs[$parcours->getId()][$semestreParcour->getOrdre()][$ue->getId()] = [];
                         foreach ($ue->getElementConstitutifs() as $ec) {
                             $tabEcs[$parcours->getId()][$semestreParcour->getOrdre()][$ue->getId()][] = $ec;
+                            $stats[$parcours->getId()]->addEc($ec);
                         }
                     }
                     foreach ($ue->getUeEnfants() as $uee) {
@@ -58,16 +62,20 @@ class FicheMatiereValideController extends BaseController
                         $tabEcs[$parcours->getId()][$semestreParcour->getOrdre()][$uee->getId()] = [];
                         foreach ($uee->getElementConstitutifs() as $ec) {
                             $tabEcs[$parcours->getId()][$semestreParcour->getOrdre()][$uee->getId()][] = $ec;
+                            $stats[$parcours->getId()]->addEc($ec);
                         }
                     }
                 }
             }
         }
 
+
+
         return $this->render('fiche_matiere_valide/valide_formation.html.twig', [
             'parcourss' => $parcourss,
             'formation' => $formation,
             'tabParcoursEcs' => $tabEcs,
+            'statsParcours' => $stats,
         ]);
     }
 
@@ -134,7 +142,7 @@ class FicheMatiereValideController extends BaseController
         foreach ($tFiches as $fiche) {
             $ficheMatiere = $ficheMatiereRepository->find($fiche);
 
-            if (null !== $ficheMatiere) {
+            if (null !== $ficheMatiere && $ficheMatiere->remplissage() === 100.0) {
                 if ($ficheWorkflow->getMarking($ficheMatiere)->has('en_cours_redaction')) {
                     $ficheWorkflow->apply($ficheMatiere, 'valider_parcours'); //passage au RF
                 }
@@ -160,7 +168,11 @@ class FicheMatiereValideController extends BaseController
         foreach ($tFiches as $fiche) {
             $ficheMatiere = $ficheMatiereRepository->find($fiche);
 
-            if (null !== $ficheMatiere) {
+            if (null !== $ficheMatiere && $ficheMatiere->remplissage() === 100.0) {
+                if ($ficheWorkflow->getMarking($ficheMatiere)->has('en_cours_redaction')) {
+                    $ficheWorkflow->apply($ficheMatiere, 'valider_parcours'); //On force le passage au RF
+                }
+
                 if ($ficheWorkflow->getMarking($ficheMatiere)->has('transmis_rf')) {
                     $ficheWorkflow->apply($ficheMatiere, 'valider_rf'); //passage au DPE
                 }

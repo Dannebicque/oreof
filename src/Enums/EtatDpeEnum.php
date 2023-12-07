@@ -43,6 +43,7 @@ enum EtatDpeEnum: string
     case soumis_dpe_composante = 'soumis_dpe_composante';
     case refuse_rf = 'refuse_rf';
     case transmis_rf = 'transmis_rf';
+    case transmis_dpe = 'transmis_dpe';
     case refuse_ec = 'refuse_ec';
     case refuse_dpe_composante = 'refuse_dpe_composante';
     case soumis_conseil = 'soumis_conseil';
@@ -69,6 +70,7 @@ enum EtatDpeEnum: string
             self::en_cours_redaction => 'En cours de rédaction',
             self::soumis_rf => 'Soumis RF',
             self::transmis_rf => 'Transmis RF',
+            self::transmis_dpe => 'Transmis DPE',
             self::soumis_ec => 'Soumis EC',
             self::soumis_dpe_composante => 'Soumis DPE composante',
             self::refuse_rf => 'Refusé RF',
@@ -98,7 +100,7 @@ enum EtatDpeEnum: string
             self::autorisation_saisie, self::en_cours_redaction, self::reserve_parcours_rf => 'warning',
             self::soumis_rf, self::soumis_ec, self::soumis_dpe_composante, self::soumis_conseil, self::soumis_central, self::soumis_vp, self::soumis_cfvu, self::soumis_conseil_reserve, self::soumis_parcours, self::valide_parcours_rf => 'info',
             self::refuse_rf, self::refuse_ec, self::refuse_dpe_composante, self::refuse_conseil, self::refuse_central, self::refuse_definitif_cfvu => 'danger',
-            self::valide_a_publier, self::publie, self::valide_pour_publication, self::transmis_rf  => 'success',
+            self::valide_a_publier, self::publie, self::valide_pour_publication, self::transmis_rf, self::transmis_dpe  => 'success',
         };
     }
 }

@@ -18,18 +18,59 @@
             >
                 <i class="fal fa-check"></i> {{ ('validation.valider.fiches_matieres.formation')|trans({}, 'process') }}
             </button>
-
+            <div class="card mb-2 bg-transparent no-shadow d-none d-md-block sh-3">
+                <div class="card-body pt-0 pb-0 h-100">
+                    <div class="row g-0 h-100 align-content-center">
+                        <div class="col-12 col-md-5 d-flex align-items-center mb-2 text-secondary mb-md-0">
+                            Parcours
+                        </div>
+                        <div class="col-6 col-md-3 d-flex align-items-center
+                        text-secondary">
+                            Etat remplissage
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center
+                        text-secondary">
+                            En attente validation RP
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center
+                        text-medium text-secondary">
+                            En attente validation RF
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center text-medium
+                         text-secondary">
+                            En attente validation DPE
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center text-medium
+                        justify-content-end text-secondary">
+                            Détails
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% for parcours in parcourss %}
                 <div>
                     <div class="card mb-2 sh-19 sh-md-8">
                         <div class="card-body pt-0 pb-0 h-100">
                             <div class="row g-0 h-100 align-content-center">
-                                <div class="col-12 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                <div class="col-12 col-md-5 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                     <div class="text-muted d-md-none">Parcours</div>
                                     {{ parcours.libelle }}
                                 </div>
-                                <div class="col-6 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
-
+                                <div class="col-6 col-md-3 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted d-md-none">Etat remplissage</div>
+                                    {{ statsParcours[parcours.id].nbFichesCompletes }} / {{ statsParcours[parcours.id].nbFiches }}
+                                </div>
+                                <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted d-md-none">En attente validation RP</div>
+                                    {{ statsParcours[parcours.id].nbFichesNonValidees }}
+                                </div>
+                                <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted d-md-none">En attente validation RF</div>
+                                    {{ statsParcours[parcours.id].nbFichesValideesRP }}
+                                </div>
+                                <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted d-md-none">En attente validation DPE</div>
+                                    {{ statsParcours[parcours.id].nbFichesValideesRF }}
                                 </div>
                                 <div class="col-6 col-md-1 d-flex flex-column justify-content-center
                                             mb-1 mb-md-0">
@@ -42,11 +83,6 @@
                                     >
                                         <i class="fal fa-caret-right"></i> Détails
                                     </button>
-                                </div>
-                                <div class="col-6 col-md-3 d-flex flex-column justify-content-end
-                                    align-items-md-end mb-1 mb-md-0">
-                                    <div class="text-muted d-md-none">Actions</div>
-
                                 </div>
                             </div>
                         </div>
