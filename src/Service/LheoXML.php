@@ -3,10 +3,19 @@
 namespace App\Service;
 
 use App\Classes\CalculStructureParcours;
+use App\Entity\Etablissement;
 use App\Entity\Parcours;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 class LheoXML {
+
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager){
+        $this->entityManager = $entityManager;
+    }
+
     /**
      * Génère du contenu XML de l'offre de formation, à partir d'un parcours.
      * Le format est généré selon les spécifications du LHEO
@@ -36,7 +45,8 @@ class LheoXML {
         // Intitulé de la formation
         $intituleFormation = 'Non renseigné.';
         if($typeDiplomeLibelle = $parcours->getFormation()?->getTypeDiplome()?->getLibelle()){
-            $intituleFormation = $typeDiplomeLibelle . " " . $parcours->getLibelle();
+            $mention = $parcours->getFormation()?->getMention()?->getLibelle() ?? "";
+            $intituleFormation = $typeDiplomeLibelle . " " . $mention . " - " . $parcours->getLibelle();
         }
 
         // Rythme de la formation
@@ -147,11 +157,75 @@ class LheoXML {
            $rncp = 'RNCP' . $parcours->getFormation()->getCodeRNCP();
         }
 
-        // Contact Organisme (composante)
-        $coordonneesComposante = [
+        // Coordonnées Organisme (composante)
+        $coordonneesComposante = [];
+        if($composante = $parcours->getComposanteInscription()){
+            if($adresse = $composante->getAdresse()){
+                $coordonneesComposante = [
+                    'denomination' => $composante->getLibelle(),
+                    'ligne' => $adresse->getAdresse1() . $adresse->getAdresse2() ?? '',
+                    'codepostal' => $adresse->getCodePostal(),
+                    'ville' => $adresse->getVille(),
+                ];    
+            }
+        }
 
+        //Adresse du siège de l'URCA
+        $adresseSiegeURCA = [ 
+            'denomination' => 'Université de Reims Champagne-Ardenne',
+            'ligne' => '2 Avenue Robert Schuman',
+            'codepostal' => '51724',
+            'ville' => 'REIMS CEDEX' 
         ];
 
+        // Référentiel de compétences
+        $competencesAcquisesExtra = "Non renseigné.";
+
+        // Si Parcours NON BUT
+        if($parcours->getTypeDiplome()?->getLibelleCourt() !== "BUT"){    
+            if($blocCompetences = $parcours->getBlocCompetences()){
+                $competencesAcquisesExtra = "<ul style=\"list-style: none;\">";
+                foreach($blocCompetences as $bloc){
+                    $competencesHTML = "";
+                    foreach($bloc->getCompetences() as $competence){
+                        $competencesHTML .= "<li>{$competence->display()}</li>";
+                    }
+                    $competencesAcquisesExtra .= <<<HTML
+                    <li>{$bloc->display()}</li>
+                    <li>
+                        <ul>{$competencesHTML}</ul>
+                    </li>
+        HTML;
+                }
+                $competencesAcquisesExtra .= "</ul>";
+            }
+        }
+        // Si le Parcours EST un BUT
+        if($parcours->getTypeDiplome()?->getLibelleCourt() === "BUT"){
+
+        }
+
+        $etablissementInformation = $this->entityManager->getRepository(Etablissement::class)
+        ->findOneById(1)->getEtablissementInformation();
+
+        // Stage et projet tuteuré (Organisation pédagogique)
+        $stage = "";
+        $projetTuteure = "";
+        $calendrierInscription = $etablissementInformation->getCalendrierUniversitaire() ?? "";
+        if($parcours->isHasStage()){
+            $stage = $parcours->getStageText();
+        }
+        if($parcours->isHasProjet()){
+            $projetTuteure = $parcours->getProjetText();
+        }
+        $organisationPedagogique = $stage . $projetTuteure . $calendrierInscription;
+
+        // Informations pratiques
+        $informationsPratiques = $etablissementInformation->getInformationsPratiques() ?? "Non renseigné.";
+
+        // Modalités d'admission
+        $admissionParcours = $parcours->getTypeDiplome()?->getModalitesAdmission() ?? "";
+        $admissionParcours .= $etablissementInformation->getCalendrierInscription() ?? "";
 
         // Génération du XML
         $encoder = new XmlEncoder([
@@ -177,6 +251,7 @@ class LheoXML {
                     'contact-formation' => $referentsPedagogiques,
                     'parcours-de-formation' => 1,
                     'code-niveau-entree' => $niveauEntree,
+                    'objectif-general-formation' => 6, // (Certification) A CHANGER OU FAIRE EVOLUER 
                     'certification' => [
                         'code-RNCP' => $rncp
                     ],
@@ -199,12 +274,11 @@ class LheoXML {
                             ],
                             'adresse-inscription' => [
                                 'adresse' => [
-                                    'ligne' => '-',
-                                    'codepostal' => '00000',
-                                    'ville' => '-' 
+                                    $adresseSiegeURCA
                                 ]
                             ]
                         ],
+                        'adresse-information' => ['adresse' => $adresseSiegeURCA],
                         'restauration' => $parcours->getVille()?->getEtablissement()?->getEtablissementInformation()?->getRestauration() ?? "Non renseigné.",
                         'hebergement' => $parcours->getVille()?->getEtablissement()?->getEtablissementInformation()?->getHebergement() ?? "Non renseigné.",
                         'transport' => $parcours->getVille()?->getEtablissement()?->getEtablissementInformation()?->getTransport() ?? "Non renseigné" 
@@ -219,15 +293,28 @@ class LheoXML {
                             // Coordonnées de l'URCA
                             'coordonnees' => [
                                 'adresse' => [
-                                    'denomination' => 'Université de Reims Champagne-Ardenne',
-                                    'ligne' => '2 Avenue Robert Schuman',
-                                    'codepostal' => '51724',
-                                    'ville' => 'REIMS CEDEX'
+                                    $coordonneesComposante
                                 ]              
                             ]
                         ],
                         'contact-organisme' => $composantesInscription
                     ],
+                    'sous-modules' => [
+                        'sous-module' => [
+                            'reference-module' => "<p>/</p>",
+                            'type-module' => 0
+                        ]
+                    ],
+                    'extras' => [
+                        'extra' => [
+                            'competences-acquises' => $competencesAcquisesExtra,
+                            'organisation-pedagogique' => $organisationPedagogique,
+                            'poursuite-etudes' => $parcours->getPoursuitesEtudes() ?? 'Non renseigné.',
+                            'informations-pratiques' => $informationsPratiques,
+                            'admission' => $admissionParcours,
+                            'formation-continue-et-apprentissage' => [],
+                        ],
+                    ]
                 ]
             ]
 
