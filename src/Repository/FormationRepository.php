@@ -378,4 +378,18 @@ class FormationRepository extends ServiceEntityRepository
             )->getQuery()
             ->getResult();
     }
+
+    public function findByTypeValidation(AnneeUniversitaire $anneeUniversitaire, mixed $typeValidation): array
+    {
+        $query = $this->createQueryBuilder('f')
+            ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
+            ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
+            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire);
+
+
+        return $query->getQuery()
+            ->getResult();
+    }
 }
