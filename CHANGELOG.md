@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.19.2](https://github.com/Dannebicque/oreof/compare/v1.19.1...v1.19.2) (2023-12-07)
+
+
+### Features
+
+* Affichages données sur validation des fiches RF ([d0d144e](https://github.com/Dannebicque/oreof/commit/d0d144e063cdab1c38d7e74dd7515573442333f6))
+* fiche matière possible sans référent. ([52b4119](https://github.com/Dannebicque/oreof/commit/52b41195f8a2a80ba570d5140aa2f3e7e001af26))
+* Validation sur l'établissement ([51ebb72](https://github.com/Dannebicque/oreof/commit/51ebb727b922363861a402643c5620ad0b4f435c))
+
+
+### Bug Fixes
+
+* Export MCCC ([c396c52](https://github.com/Dannebicque/oreof/commit/c396c5294e78b9cdc57f4931e6f25940835e3b08))
+* traductions ([d357472](https://github.com/Dannebicque/oreof/commit/d3574729ae1719e45da8ada8985df1abbccf20d6))
+* typos sur validation globale ([59aa386](https://github.com/Dannebicque/oreof/commit/59aa3865d4823933af7ac92708b52a6cea53c884))
+
 ### [1.19.1](https://github.com/Dannebicque/oreof/compare/v1.19.0...v1.19.1) (2023-12-05)
 
 
