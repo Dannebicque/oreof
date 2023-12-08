@@ -1,71 +1,157 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+    <div {{ stimulus_controller('composante--gestion') }}>
+        <div class="row">
+            <div class="col-6">
+                <h2 class="small-title mt-3">Identité de la composante</h2>
+                <div class="card">
+                    <div class="card-title"></div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <th>Libellé</th>
+                                <td>{{ composante.libelle }}</td>
+                            </tr>
+                            <tr>
+                                <th>Sigle</th>
+                                <td>{{ composante.sigle }}</td>
+                            </tr>
+                            <tr>
+                                <th>Directeur</th>
+                                <td>{{ composante.directeur ? composante.directeur.display : 'Non défini' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Responsable DPE</th>
+                                <td>{{ composante.responsableDpe ? composante.responsableDpe.display : 'Non défini' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Adresse</th>
+                                <td>{{ composante.adresse ? composante.adresse.display|raw : 'Non définie' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Téléphone standard de la composante</th>
+                                <td>{{ composante.telStandard|tel_format }}</td>
+                            </tr>
+                            <tr>
+                                <th>Autre téléphone de la composante</th>
+                                <td>{{ composante.telComplementaire|tel_format }}</td>
+                            </tr>
+                            <tr>
+                                <th>Adresse mail de contact de la composante</th>
+                                <td>{{ composante.mailContact|mailto }}</td>
+                            </tr>
+                            <tr>
+                                <th>URL du site de la composante</th>
+                                <td>{{ composante.urlSite }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
 
 
-<div class="row">
-    <div class="col-6">
-        <h2 class="small-title mt-3">Identité de la composante</h2>
-        <div class="card">
-            <div class="card-title"></div>
-            <div class="card-body">
-                <table class="table">
-                    <tbody>
-                    <tr>
-                        <th>Libellé</th>
-                        <td>{{ composante.libelle }}</td>
-                    </tr>
-                    <tr>
-                        <th>Sigle</th>
-                        <td>{{ composante.sigle }}</td>
-                    </tr>
-                    <tr>
-                        <th>Directeur</th>
-                        <td>{{ composante.directeur ? composante.directeur.display : 'Non défini' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Responsable DPE</th>
-                        <td>{{ composante.responsableDpe ? composante.responsableDpe.display : 'Non défini' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Adresse</th>
-                        <td>{{ composante.adresse ? composante.adresse.display|raw : 'Non définie' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Téléphone standard de la composante</th>
-                        <td>{{ composante.telStandard|tel_format }}</td>
-                    </tr>
-                    <tr>
-                        <th>Autre téléphone de la composante</th>
-                        <td>{{ composante.telComplementaire|tel_format }}</td>
-                    </tr>
-                    <tr>
-                        <th>Adresse mail de contact de la composante</th>
-                        <td>{{ composante.mailContact|mailto }}</td>
-                    </tr>
-                    <tr>
-                        <th>URL du site de la composante</th>
-                        <td>{{ composante.urlSite }}</td>
-                    </tr>
-                    </tbody>
-                </table>
+                    </div>
+                </div>
 
-
+                <h2 class="small-title mt-3">Déposer un PV</h2>
+                <div class="card">
+                    <div class="card-title"></div>
+                    <div class="card-body">
+                        <div>
+                            <label for="date"
+                                   class="form-label">{{ ('valide.conseil.date.label')|trans({}, 'process') }}
+                                <span class="required"></span> <i
+                                        class="fal fa-question-circle ms-1"
+                                        data-controller="tooltip"
+                                        data-tooltip-placement-value="bottom"
+                                        aria-label="{{ ('valide.conseil.helps.date.help')|trans({}, 'process') }}"
+                                        data-bs-original-title="{{ ('valide.conseil.helps.date.help')|trans({}, 'process') }}"></i></label>
+                            <input type="date" name="date"
+                                   class="form-control"
+                                   id="date"
+                            >
+                        </div>
+                        <div>
+                            <label for="file"
+                                   class="form-label">{{ ('valide.conseil.fichier.label')|trans({}, 'process') }}
+                                <i class="fal fa-question-circle ms-1"
+                                   data-controller="tooltip"
+                                   data-tooltip-placement-value="bottom"
+                                   aria-label="{{ ('valide.conseil.helps.fichier.help')|trans({}, 'process') }}"
+                                   data-bs-original-title="{{ ('valide.conseil.helps.fichier.help')|trans({}, 'process') }}"></i></label>
+                            <input type="file" name="file" id="file" accept="application/pdf" class="form-control">
+                        </div>
+                        <div class="mt-2">
+                            <button type="submit" class="btn btn-success"
+                                    {{ stimulus_action('composante--gestion', 'valideConseil') }}
+                            >
+                                <i class="fal fa-floppy-disk"></i>
+                                {{ ('btn.conseil.valide')|trans({}, 'process') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <h2 class="small-title mt-3">Vos formations</h2>
+                <div class="card">
+                    <div class="card-title"></div>
+                    <div class="card-body">
+                        <table class="table table-striped" {{ stimulus_controller('check_all') }}>
+                            <thead>
+                            <tr>
+                                <th>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox"
+                                                   id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
+                                        </label>
+                                    </div>
+                                </th>
+                                <th>Type de formation</th>
+                                <th>Mention</th>
+                                <th>Etat</th>
+                                <th>Parcours</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for formation in composante.formations %}
+                                <tr>
+                                    <td>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input
+                                                        {{ stimulus_action('check_all', 'check') }}
+                                                        type="checkbox"
+                                                        class="check-all"
+                                                        name="formations[]"
+                                                        value="{{ formation.id }}"
+                                                >
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>{{ formation.typeDiplome.libelle }}</td>
+                                    <td>{{ formation.mention.libelle }}</td>
+                                    <td>{{ formation.etatDpe|badgeDpe }}</td>
+                                    <td>{{ formation.parcours|length }}</td>
+                                    <td>
+                                        {#                                <a href="{{ path('structure_formation_show', {'id': formation.id}) }}" class="btn btn-sm btn-primary">Voir</a> #}
+                                        {#                                <a href="{{ path('structure_formation_edit', {'id': formation.id}) }}" class="btn btn-sm btn-primary">Modifier</a> #}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="6">Aucune formation n'est rattachée à cette composante</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-6">
-        <h2 class="small-title mt-3">Vos formations</h2>
-        <div class="card">
-            <div class="card-title"></div>
-            <div class="card-body">
-
-                b
-            </div>
-        </div>
-    </div>
-
-</div>
 {% endblock %}
 
 {% block header %}

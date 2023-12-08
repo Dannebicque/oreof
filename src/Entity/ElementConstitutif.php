@@ -70,7 +70,7 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $isTpDistancielMutualise;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(fetch: 'EAGER')]
     private ?NatureUeEc $natureUeEc = null;
 
     #[ORM\OneToMany(mappedBy: 'ec', targetEntity: Mccc::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
@@ -85,10 +85,10 @@ class ElementConstitutif
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
     private ?FicheMatiere $ficheMatiere = null;
 
-    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
+    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
     private ?Parcours $parcours = null;
 
-    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
+    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?Ue $ue = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -97,7 +97,7 @@ class ElementConstitutif
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelle = null;
 
-    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
+    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
     private ?TypeEc $typeEc = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ecEnfants')]
