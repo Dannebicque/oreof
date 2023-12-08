@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.20.0](https://github.com/Dannebicque/oreof/compare/v1.19.3...v1.20.0) (2023-12-08)
+
+
+### Features
+
+* Liste de toutes les formations/Parcours et liens Json ([13282af](https://github.com/Dannebicque/oreof/commit/13282afbab5f0513bd21939499794bee093937f1))
+
+
+### Bug Fixes
+
+* Doublons sur use ([af64e1f](https://github.com/Dannebicque/oreof/commit/af64e1f3ceeebeb63fec6080914b96a598ace911))
+* export PDF parcours hors sécurité ([57dd9b1](https://github.com/Dannebicque/oreof/commit/57dd9b176d22736ebf2c08e23caedd0ab798145d))
+
 ### [1.19.3](https://github.com/Dannebicque/oreof/compare/v1.19.2...v1.19.3) (2023-12-08)
 
 
