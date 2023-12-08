@@ -23,6 +23,8 @@ use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: FicheMatiereRepository::class)]
+#[ORM\Index(name: 'sigle_fiche', columns: ['sigle'], flags: ['fulltext'])]
+#[ORM\Index(name: 'slug_fiche', columns: ['slug'], flags: ['fulltext'])]
 #[ORM\HasLifecycleCallbacks]
 class FicheMatiere
 {
@@ -188,6 +190,9 @@ class FicheMatiere
 
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: CommentaireFicheMatiere::class)]
     private Collection $commentaires;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $etatFiche = [];
 
     public function __construct()
     {
@@ -988,6 +993,18 @@ class FicheMatiere
                 $commentaireFicheMatiere->setFicheMatiere(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEtatFiche(): ?array
+    {
+        return $this->etatFiche ?? [];
+    }
+
+    public function setEtatFiche(?array $etatFiche): static
+    {
+        $this->etatFiche = $etatFiche;
 
         return $this;
     }

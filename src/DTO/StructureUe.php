@@ -19,7 +19,7 @@ class StructureUe
     public ?Ue $ue;
     public bool $raccroche = false;
     public array $elementConstitutifs = [];
-    public array $uesEnfants = [];
+    private array $uesEnfants = [];
     public array $heuresEctsUeEnfants = [];
     public HeuresEctsUe $heuresEctsUe;
 
@@ -78,5 +78,11 @@ class StructureUe
         }
 
         return $this->heuresEctsUe;
+    }
+
+    public function uesEnfants(): array
+    {
+        sort($this->uesEnfants);
+        return $this->uesEnfants;
     }
 }

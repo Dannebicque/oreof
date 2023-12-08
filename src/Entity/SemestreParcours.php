@@ -38,6 +38,9 @@ class SemestreParcours
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
     private ?SemestreMutualisable $semestreRaccroche = null;
 
+    #[ORM\Column(length: 6, nullable: true)]
+    private ?string $codeApogeeEtapeAnnee = null;
+
     public function __construct(?Semestre $semestre, ?Parcours $parcours)
     {
         $this->setSemestre($semestre);
@@ -145,5 +148,17 @@ class SemestreParcours
     public function display(): string
     {
         return 'S'.$this->getOrdre();
+    }
+
+    public function getCodeApogeeEtapeAnnee(): ?string
+    {
+        return $this->codeApogeeEtapeAnnee;
+    }
+
+    public function setCodeApogeeEtapeAnnee(?string $codeApogeeEtapeAnnee): static
+    {
+        $this->codeApogeeEtapeAnnee = $codeApogeeEtapeAnnee;
+
+        return $this;
     }
 }

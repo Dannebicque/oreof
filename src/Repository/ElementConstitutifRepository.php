@@ -196,4 +196,16 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getByUe(?Ue $ue): array
+    {
+        return $this->createQueryBuilder('ec')
+            ->select('ec', 'fm')
+            ->leftJoin('ec.ficheMatiere', 'fm')
+            ->andWhere('ec.ue = :ue')
+            ->setParameter('ue', $ue)
+            ->orderBy('ec.ordre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

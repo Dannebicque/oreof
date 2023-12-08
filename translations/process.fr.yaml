@@ -125,7 +125,7 @@ validation.parcours: 'Parcours transmis'
 validation.formation.reserve.en_cours_redaction: validation.formation.reserve.en_cours_redaction
 btn.validation.formation.reserve.en_cours_redaction: btn.validation.formation.reserve.en_cours_redaction
 .helps.date.help: .helps.date.help
-valide.validation.conseil.helps.fichier.help: ' '
+valide.validation.conseil.helps.fichier.help: 'Le fichier doit être au format PDF'
 .helps.laisserPasser.texte: .helps.laisserPasser.texte
 valide.validation.conseil.helps.laisserPasser.help: ' '
 valide.validation.cfvu.helps.sousReserveModifications.help: ' '
@@ -258,3 +258,23 @@ reserve.validation.conseil.helps.date.help: ' '
 transmis.parcours.formation: 'Parcours transmis'
 parcours.valides.rf: 'Parcours validé'
 deposer.le.pv.infobulle: 'Déposer la pièce justifiant la validation par le Conseil de composante (PV, Relevé de décisions, délibération)'
+formation.refuse.cfvu.flash.success: formation.refuse.cfvu.flash.success
+validation.etat.refuser.cfvu: validation.etat.refuser.cfvu
+en_cours_redaction: En cours de rédaction
+soumis_dpe_composante: Soumis DPE
+soumis_conseil: Soumis Conseil
+soumis_central: Soumis Central/VP
+soumis_cfvu: Soumis CFVU
+valide_pour_publication: Validé CFVU
+btn.validation.formation.valide: 'Valider et soumettre la formation'
+valide.conseil.fichier.label: 'Pièce justifiant la validation du projet DPE (PV, relevé de décision, délibération) :'
+valide.conseil.helps.fichier.help: 'Le fichier doit être au format PDF'
+valide.conseil.helps.laisserPasser.texte: 'Demande de laissez-passer, le conseil de composante ne pouvant avoir lieu avant le passage en CFVU.'
+valide.conseil.helps.laisserPasser.help: ' '
+valide.conseil.date.label: Date du conseil de composante
+valide.conseil.helps.date.help: ' '
+btn.conseil.valide: 'Valider et transmettre la formation'
+validation.formation.indisponible: 'Validation formation impossible'
+verifier.fiches.ec.matieres.infobulle: 'Vérifier les informations saisies dans les fiches EC/matières'
+validation.valider.fiches_matieres.parcours: 'Valider et soumettre au RF les fiches EC/matières'
+validation.valider.fiches_matieres.formation: 'Valider et soumettre au DPE les fiches EC/matières'

@@ -1,8 +1,9 @@
+{% set ficheMatiere = ec.ficheMatiere %}
 <header>
-    <h1>{{ ec.ficheMatiere.libelle }}</h1>
+    <h1>{{ ficheMatiere != null ? ficheMatiere.libelle : 'Erreur fiche' }}</h1>
 </header>
 
-{% set ficheMatiere = ec.ficheMatiere %}
+
 <h2>Identité de la fiche EC/matière</h2>
 <div class="row">
     <div class="col-12">
@@ -14,30 +15,33 @@
             <dt>Parcours</dt>
             <dd>
                 {% if parcours.parcoursDefaut == false %}
-                {{ parcours.libelle }}
+                    {{ parcours.libelle }}
                 {% else %}
-                Mention sans parcours
+                    Mention sans parcours
                 {% endif %}
             </dd>
             <dt>Composante porteuse</dt>
             <dd>{{ (formation != null and formation.composantePorteuse != null) ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
             <dt>Semestre / UE</dt>
-            <dd>{{ semestre.display }} / {{ ec.ue.display(parcours) }}</dd>
+            <dd>{{ semestre != null ? semestre.display  : 'erreur semestre' }}
+                / {{ ec.ue != null ? ec.ue.display(parcours) : 'erreur UE' }}</dd>
             <dt>Intitulé de l'EC</dt>
-            <dd>{{ ficheMatiere.libelle }}</dd>
+            <dd>{{ ficheMatiere != null ? ficheMatiere.libelle : 'Erreur fiche' }}</dd>
             <dt>Intitulé de l'EC en anglais</dt>
-            <dd>{{ ficheMatiere.libelleAnglais }}</dd>
+            <dd>{{ ficheMatiere != null ? ficheMatiere.libelleAnglais : 'Erreur fiche' }}</dd>
             <dt>Enseignement mutualisé ?</dt>
-            <dd>{{ ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 ? 'Oui' : 'Non' }}</dd>
-            {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 %}
-                <dt>Formation(s) partageant l’enseignement mutualisé</dt>
-                <dd>
-                    <ul>
-                        {% for parc in ficheMatiere.ficheMatiereParcours %}
-                            <li>{{ parc.parcours.libelle }} ({{ parc.parcours.formation.display }})</li>
-                        {% endfor %}
-                    </ul>
-                </dd>
+            {% if ficheMatiere != null %}
+                <dd>{{ ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 ? 'Oui' : 'Non' }}</dd>
+                {% if ficheMatiere.enseignementMutualise == true or ficheMatiere.ficheMatiereParcours|length > 0 %}
+                    <dt>Formation(s) partageant l’enseignement mutualisé</dt>
+                    <dd>
+                        <ul>
+                            {% for parc in ficheMatiere.ficheMatiereParcours %}
+                                <li>{{ parc.parcours.libelle }} ({{ parc.parcours.formation.display }})</li>
+                            {% endfor %}
+                        </ul>
+                    </dd>
+                {% endif %}
             {% endif %}
         </dl>
     </div>
@@ -73,30 +77,33 @@
         <div class="row">
             <div class="col-sm-12">
                 <dl>
-                    <dt>Description de l’enseignement</dt>
-                    <dd>
-                        {{ ficheMatiere.description|raw }}
-                    </dd>
-                    <dt>Enseignement dispensé en</dt>
-                    <dd>
-                        <ul>
-                            {% for langue in ficheMatiere.langueDispense %}
-                                <li>{{ langue.libelle }}</li>
-                            {% endfor %}
-                        </ul>
-                    </dd>
-                    <dt>Support de cours en</dt>
-                    <dd>
-                        <ul>
-                            {% for langue in ficheMatiere.langueSupport %}
-                                <li>{{ langue.libelle }}</li>
-                            {% endfor %}
-                        </ul>
-                    </dd>
-                    <dt>Objectifs de l'enseignement</dt>
-                    <dd>
-                        {{ ficheMatiere.objectifs|raw }}
-                    </dd>
+                    {% if ficheMatiere != null %}
+                        <dt>Description de l’enseignement</dt>
+                        <dd>
+                            {{ ficheMatiere.description|raw }}
+                        </dd>
+
+                        <dt>Enseignement dispensé en</dt>
+                        <dd>
+                            <ul>
+                                {% for langue in ficheMatiere.langueDispense %}
+                                    <li>{{ langue.libelle }}</li>
+                                {% endfor %}
+                            </ul>
+                        </dd>
+                        <dt>Support de cours en</dt>
+                        <dd>
+                            <ul>
+                                {% for langue in ficheMatiere.langueSupport %}
+                                    <li>{{ langue.libelle }}</li>
+                                {% endfor %}
+                            </ul>
+                        </dd>
+                        <dt>Objectifs de l'enseignement</dt>
+                        <dd>
+                            {{ ficheMatiere.objectifs|raw }}
+                        </dd>
+                    {% endif %}
                 </dl>
             </div>
             {#    <div class="col-sm-12"> #}
@@ -115,7 +122,7 @@
     <div class="col-12 mt-2">
         <h2>BCC pour le parcours</h2>
         <ul>
-            {% if ec.ficheMatiere.parcours.id == parcours.id %}
+            {% if ficheMatiere != null and ficheMatiere.parcours != null and  ficheMatiere.parcours.id == parcours.id %}
                 {% for competence in ec.ficheMatiere.competences %}
                     <li>{{ competence.display }}</li>
                 {% endfor %}
@@ -127,6 +134,6 @@
         </ul>
     </div>
     <div class="col-12 mt-2">
-    <h2>MCCC pour le parcours</h2>
+        <h2>MCCC pour le parcours</h2>
     </div>
 </div>

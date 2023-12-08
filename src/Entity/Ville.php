@@ -29,6 +29,9 @@ class Ville
     #[ORM\ManyToOne(inversedBy: 'villes')]
     private ?Etablissement $etablissement = null;
 
+    #[ORM\Column(length: 1, nullable: true)]
+    private ?string $codeApogee = null;
+
 
     public function __construct()
     {
@@ -64,6 +67,18 @@ class Ville
     public function setEtablissement(?Etablissement $etablissement): self
     {
         $this->etablissement = $etablissement;
+
+        return $this;
+    }
+
+    public function getCodeApogee(): ?string
+    {
+        return $this->codeApogee;
+    }
+
+    public function setCodeApogee(?string $codeApogee): static
+    {
+        $this->codeApogee = $codeApogee;
 
         return $this;
     }

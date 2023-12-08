@@ -185,7 +185,7 @@ parcours_step6.helps.codeRome.help: 'Ajoutez les codes ROME pour préciser les m
 element_constitutif.helps.natureUeEc: '"'
 element_constitutif.helps.ficheMatiere: element_constitutif.helps.ficheMatiere
 fiche_matiere.helps.libelle: "Indiquez le libellé exact de l'enseignement"
-fiche_matiere.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."
+fiche_matiere.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement. Laisser vide s'il n'est pas encore connu."
 fiche_matiere_step1.helps.libelle: "Indiquez le libellé exact de l'enseignement."
 fiche_matiere_step1.helps.libelleAnglais: "Précisez la version anglaise du libellé de l'enseignement."
 fiche_matiere_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez oui.'
@@ -209,7 +209,7 @@ fiche_matiere_step2.helps.langueDispense.help: 'Plusieurs choix possibles.'
 fiche_matiere_step2.helps.langueSupport.help: 'Plusieurs choix possibles.'
 fiche_matiere_step3.helps.objectifs: 'Indiquez en 3000 caractères maximum les objectifs de l’enseignement.'
 fiche_matiere_step3.labels.competence: "Choisissez d'abord le/les bloc(s) de compétences pour accéder aux compétences associées."
-fiche_matiere_step1.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."
+fiche_matiere_step1.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement. Laisser vide s'il n'est pas encore connu."
 user.add_missing.email.help: "Indiquez un email valide de l'utilisateur à ajouter pour récupérer ses informations."
 form.helps.email: form.helps.email
 user_add.helps.email: "Indiquez un email valide de l'utilisateur à ajouter pour récupérer ses informations."
@@ -315,3 +315,11 @@ parcours_ec.helps.recopieEcts: parcours_ec.helps.recopieEcts
 parcours_ec.helps.recopieBcc: parcours_ec.helps.recopieBcc
 parcours_ec.helps.recopieHeures: parcours_ec.helps.recopieHeures
 mccc.ec.helps.sansHeures: 'Cochez cette case si votre EC ne contient pas de volume horaire.'
+parcours_bcc.helps.synchroBcc: parcours_bcc.helps.synchroBcc
+domaine.helps.codeApogee: domaine.helps.codeApogee
+type_diplome.helps.codeApogee: type_diplome.helps.codeApogee
+ville.helps.codeApogee: ville.helps.codeApogee
+composante.helps.codeComposante: composante.helps.codeComposante
+composante.helps.codeApogee: composante.helps.codeApogee
+mention.helps.codeApogee: mention.helps.codeApogee
+annee_universitaire.helps.codeApogee: annee_universitaire.helps.codeApogee

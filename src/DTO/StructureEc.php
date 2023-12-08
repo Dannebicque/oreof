@@ -25,6 +25,7 @@ class StructureEc
     public array $heuresEctsEcEnfants = [];
     public Collection $mcccs;
     public ?string $typeMccc;
+    public ?Collection $bccs;
 
 
     public function __construct(ElementConstitutif $elementConstitutif, Parcours $parcours)

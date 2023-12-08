@@ -30,9 +30,9 @@
     {% if etape == 'cfvu' %}
 
         {# regarder si dans l'historique on à un laissez-passer sur le conseil  #}
-        {% if laisserPasser is defined and laisserPasser != false %}
-            {{ component('alerte', {type:'warning', message: 'Un laissez-passer a été demandé le '~laisserPasser.created|date('d/m/Y')~'.'}) }}
-        {% endif %}
+{#        {% if laisserPasser is defined and laisserPasser != false %}#}
+{#            {{ component('alerte', {type:'warning', message: 'Un laissez-passer a été demandé le '~laisserPasser.created|date('d/m/Y')~'.'}) }}#}
+{#        {% endif %}#}
 
         <div class="form-check mt-2">
             <input class="form-check-input" type="radio" value="acceptationDirecte" id="acceptationDirecte"
@@ -49,7 +49,7 @@
         </div>
         <div class="form-check mt-2">
             <input class="form-check-input" type="radio" value="acceptationNonDirecte" id="acceptationDirecte"
-                    {% if laisserPasser is defined and laisserPasser != false %} checked {% endif %}
+{#                    {% if laisserPasser is defined and laisserPasser != false %} checked {% endif %}#}
                    name="acceptationDirecte">
             <label class="form-check-label" for="acceptationDirecte">
                 <strong>{{ (process.label~'.valide.cas.acceptation.non.directe.'~processData.placeTexte)|trans({}, 'process') }}</strong>
@@ -63,7 +63,7 @@
         </div>
         <div class="form-check ms-3">
             <input class="form-check-input" type="checkbox" value="true" id="sousReserveConseil"
-                    {% if laisserPasser is defined and laisserPasser != false %} checked {% endif %}
+{#                    {% if laisserPasser is defined and laisserPasser != false %} checked {% endif %}#}
                    name="sousReserveConseil">
             <label class="form-check-label" for="sousReserveConseil">
                 {{ (process.label~'.valide.cas.sous.reserve.conseil.'~processData.placeTexte)|trans({}, 'process') }} <i

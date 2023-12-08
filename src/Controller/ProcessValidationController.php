@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\GetHistorique;
 use App\Classes\JsonReponse;
 use App\Classes\Process\FormationProcess;
 use App\Classes\Process\ParcoursProcess;
@@ -37,6 +38,7 @@ class ProcessValidationController extends BaseController
 
     #[Route('/validation/valide/{etape}', name: 'app_validation_valide')]
     public function valide(
+        GetHistorique       $getHistorique,
         ParcoursRepository  $parcoursRepository,
         FormationRepository $formationRepository,
         string              $etape,
@@ -56,14 +58,7 @@ class ProcessValidationController extends BaseController
                 }
 
                 if ($etape === 'cfvu') {
-                    $histo = $objet->getHistoriqueFormations();
-                    foreach ($histo as $h) {
-                        if ($h->getEtape() === 'conseil' && $h->getEtat() === 'laisserPasser') {
-                            if ($laisserPasser === false || $laisserPasser->getCreated() < $h->getCreated()) {
-                                $laisserPasser = $h;
-                            }
-                        }
-                    }
+                    $laisserPasser = $getHistorique->getHistoriqueFormationLastStep($objet, 'conseil');
                 }
 
                 $processData = $this->formationProcess->etatFormation($objet, $process);
@@ -297,16 +292,18 @@ class ProcessValidationController extends BaseController
                 return JsonReponse::error('Formation non trouvée');
             }
             $tFormations[] = $objet;
-            if ($etape === 'cfvu') {
-                $histo = $objet->getHistoriqueFormations();
-                foreach ($histo as $h) {
-                    if ($h->getEtape() === 'conseil' && $h->getEtat() === 'laisserPasser') {
-                        if ($laisserPasser === false || $laisserPasser->getCreated() < $h->getCreated()) {
-                            $laisserPasser = $h;
-                        }
-                    }
-                }
-            }
+//            if ($etape === 'cfvu') {
+//                $histo = $objet->getHistoriqueFormations();
+//                foreach ($histo as $h) {
+//                    if ($h->getEtape() === 'conseil') {
+//                        if ($h->getEtat() === 'laisserPasser' && ($laisserPasser === false || $laisserPasser->getCreated() < $h->getCreated())) {
+//                            $laisserPasser = $h;
+//                        } elseif ($h->getEtat() === 'valide' && $laisserPasser->getCreated() < $h->getCreated()) {
+//                            $laisserPasser = false;
+//                        }
+//                    }
+//                }
+//            }
 
             $processData = $this->formationProcess->etatFormation($objet, $process);
 

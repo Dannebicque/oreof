@@ -8,21 +8,36 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
+  static values = {
+    idCheckAll: {
+      type: String,
+      default: 'check-all',
+    },
+    classCheckAll: {
+      type: String,
+      default: '.check-all',
+    },
+  }
+
   checkAll(event) {
-    const checkboxes = document.querySelectorAll('.check-all')
+    const checkboxes = document.querySelectorAll(this.classCheckAllValue)
     checkboxes.forEach((checkbox) => {
-      checkbox.checked = event.target.checked
+      if (checkbox.disabled === false) {
+        checkbox.checked = event.target.checked
+      }
     })
   }
 
   check(event) {
-    const checkAll = document.getElementById('check-all')
+    const checkAll = document.getElementById(this.idCheckAllValue)
     if (event.target.checked) {
-      const checkboxes = document.querySelectorAll('.check-all')
+      const checkboxes = document.querySelectorAll(this.classCheckAllValue)
       let checked = true
       checkboxes.forEach((checkbox) => {
-        if (!checkbox.checked) {
-          checked = false
+        if (checkbox.disabled === false) {
+          if (!checkbox.checked) {
+            checked = false
+          }
         }
       })
       checkAll.checked = checked

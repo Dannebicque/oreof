@@ -2,6 +2,114 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.19.2](https://github.com/Dannebicque/oreof/compare/v1.19.1...v1.19.2) (2023-12-07)
+
+
+### Features
+
+* Affichages données sur validation des fiches RF ([d0d144e](https://github.com/Dannebicque/oreof/commit/d0d144e063cdab1c38d7e74dd7515573442333f6))
+* fiche matière possible sans référent. ([52b4119](https://github.com/Dannebicque/oreof/commit/52b41195f8a2a80ba570d5140aa2f3e7e001af26))
+* Validation sur l'établissement ([51ebb72](https://github.com/Dannebicque/oreof/commit/51ebb727b922363861a402643c5620ad0b4f435c))
+
+
+### Bug Fixes
+
+* Export MCCC ([c396c52](https://github.com/Dannebicque/oreof/commit/c396c5294e78b9cdc57f4931e6f25940835e3b08))
+* traductions ([d357472](https://github.com/Dannebicque/oreof/commit/d3574729ae1719e45da8ada8985df1abbccf20d6))
+* typos sur validation globale ([59aa386](https://github.com/Dannebicque/oreof/commit/59aa3865d4823933af7ac92708b52a6cea53c884))
+
+### [1.19.1](https://github.com/Dannebicque/oreof/compare/v1.19.0...v1.19.1) (2023-12-05)
+
+
+### Features
+
+* Validation fiches matières ([1b4354d](https://github.com/Dannebicque/oreof/commit/1b4354d5554ed703093b543c3981ca72936f02d9))
+
+## [1.19.0](https://github.com/Dannebicque/oreof/compare/v1.18.9...v1.19.0) (2023-12-05)
+
+
+### Features
+
+* Validation fiches matières ([0ce9e75](https://github.com/Dannebicque/oreof/commit/0ce9e750122ccaa2822428d08c534782071d767b))
+
+
+### Bug Fixes
+
+* Affichage "non concerné" si pas de co-resp/co-rf ([3f90bc1](https://github.com/Dannebicque/oreof/commit/3f90bc1cb10dc2e90743eeacbb4d9984f64c2557))
+* Affichage du rythme de formation ([daa7c80](https://github.com/Dannebicque/oreof/commit/daa7c80910c9aa09cdfa932e73267eb538748d45))
+* Ordre des UE dans les affichages ([cc668ea](https://github.com/Dannebicque/oreof/commit/cc668ea3faecb4dab5f81e48fb4f014dbc0ba6d0))
+
+### [1.18.9](https://github.com/Dannebicque/oreof/compare/v1.18.8...v1.18.9) (2023-12-04)
+
+
+### Bug Fixes
+
+* fiche matière en PDF ([a5ccce7](https://github.com/Dannebicque/oreof/commit/a5ccce77fc0b28308288fe3c5a87bf716651b869))
+* Mise à jour Doctrine ([d5734f7](https://github.com/Dannebicque/oreof/commit/d5734f76cebba9e9fae903176951b5fd519cbd8d))
+* Mise à jour Doctrine ([2ae1569](https://github.com/Dannebicque/oreof/commit/2ae1569036408c5bb6f03b5406c81ac1423d1e77))
+* Mise à jour Doctrine ([128f98a](https://github.com/Dannebicque/oreof/commit/128f98a69a1fbfaa844704e904b1032c44b9259c))
+* Typo sur variable ([0fef64f](https://github.com/Dannebicque/oreof/commit/0fef64ff20789a728d222c74f7979d69f213612f))
+
+### [1.18.8](https://github.com/Dannebicque/oreof/compare/v1.18.7...v1.18.8) (2023-12-04)
+
+
+### Bug Fixes
+
+* Mise à jour Doctrine ([4802d40](https://github.com/Dannebicque/oreof/commit/4802d4032e3d20b167656f9a3e2c065efc5ad370))
+* Suppression d'une fiche, vérification si pas d'EC ou de mutualisation ([e8aec88](https://github.com/Dannebicque/oreof/commit/e8aec889e636d71166f1d8ffb8bb77e865e02701))
+
+### [1.18.7](https://github.com/Dannebicque/oreof/compare/v1.18.6...v1.18.7) (2023-12-03)
+
+
+### Features
+
+* Code apgée sur mention ([5484228](https://github.com/Dannebicque/oreof/commit/5484228cd4f411e17d53acebce9dbc57fbff2855))
+* Code apogée sur parcours ([ff96e81](https://github.com/Dannebicque/oreof/commit/ff96e815dae06724c3941d878df6ddd27fbb8a69))
+* Code apogée sur UE, Semestre, Etape (semestre parcours), diplôme et version (parcours) ([152dbd3](https://github.com/Dannebicque/oreof/commit/152dbd3c8f148119fd77a47ea3006bec53e23eea))
+* Code composante ([225f3a2](https://github.com/Dannebicque/oreof/commit/225f3a2ea0c6b4e7169f29cbb3b51c000509a1a5))
+* Code ville ([3bc0dea](https://github.com/Dannebicque/oreof/commit/3bc0dea675c306a76f7fd967dd1251ca553b01f2))
+* Codification ([56f9b83](https://github.com/Dannebicque/oreof/commit/56f9b836ad815d1913569259d214a348a713139e))
+
+### [1.18.6](https://github.com/Dannebicque/oreof/compare/v1.18.5...v1.18.6) (2023-12-03)
+
+
+### Bug Fixes
+
+* Accès gestionnaire fiches matières ([a2aad6b](https://github.com/Dannebicque/oreof/commit/a2aad6b625dc0485da496101e29cd49421a8f1a0))
+
+### [1.18.5](https://github.com/Dannebicque/oreof/compare/v1.18.4...v1.18.5) (2023-11-28)
+
+
+### Bug Fixes
+
+* Texte sur le process validé CFVU ([991988a](https://github.com/Dannebicque/oreof/commit/991988ab70804b7840681d3336781fcf8eccaf54))
+
+### [1.18.4](https://github.com/Dannebicque/oreof/compare/v1.18.3...v1.18.4) (2023-11-28)
+
+
+### Features
+
+* Affichage état du PV ([dcd6fb3](https://github.com/Dannebicque/oreof/commit/dcd6fb3a8027e177f655106a807c62fcd25168a7))
+
+
+### Bug Fixes
+
+* Valide lot (pas de gestion du PV)) ([5ba57cd](https://github.com/Dannebicque/oreof/commit/5ba57cd4fc773227c3fbc8ca625dc358abb9ba9f))
+
+### [1.18.3](https://github.com/Dannebicque/oreof/compare/v1.18.2...v1.18.3) (2023-11-28)
+
+
+### Bug Fixes
+
+* Valide si PV ([5c9d757](https://github.com/Dannebicque/oreof/commit/5c9d757c5231078424d6e454dddd382e3cf16df2))
+
+### [1.18.2](https://github.com/Dannebicque/oreof/compare/v1.18.1...v1.18.2) (2023-11-28)
+
+
+### Bug Fixes
+
+* Valide si PV ([935f8e1](https://github.com/Dannebicque/oreof/commit/935f8e14b12ccd87d3a49c5006ad9716e82c5993))
+
 ### [1.18.1](https://github.com/Dannebicque/oreof/compare/v1.18.0...v1.18.1) (2023-11-28)
 
 

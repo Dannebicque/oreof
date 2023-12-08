@@ -72,6 +72,12 @@ class Composante
     #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'composante')]
     private Collection $ficheMatieres;
 
+    #[ORM\Column(length: 3, nullable: true)]
+    private ?string $codeComposante = null;
+
+    #[ORM\Column(length: 1, nullable: true)]
+    private ?string $codeApogee = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -327,4 +333,27 @@ class Composante
         return $this;
     }
 
+    public function getCodeComposante(): ?string
+    {
+        return $this->codeComposante;
+    }
+
+    public function setCodeComposante(?string $codeComposante): static
+    {
+        $this->codeComposante = $codeComposante;
+
+        return $this;
+    }
+
+    public function getCodeApogee(): ?string
+    {
+        return $this->codeApogee;
+    }
+
+    public function setCodeApogee(?string $codeApogee): static
+    {
+        $this->codeApogee = $codeApogee;
+
+        return $this;
+    }
 }

@@ -1,0 +1,183 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <div class="card"
+            {{ stimulus_controller('validation--fichematiere') }}
+    >
+        <div class="card-body">
+
+            <button class="btn btn-sm d-block btn-outline-success mb-2"
+                    type="button"
+                    data-controller="tooltip"
+                    data-tooltip-placement-value="bottom"
+                    data-action="validation--fichematiere#valide"
+                    data-validation--fichematiere-url-param="{{ path('fiche_matiere_valide_formation_valide', {formation:formation.id}) }}"
+                    aria-label="{{ ('validation.valider.fiches_matieres.formation')|trans({}, 'process') }}"
+                    data-bs-original-title="{{ ('validation.valider.fiches_matieres.formation')|trans({}, 'process') }}"
+            >
+                <i class="fal fa-check"></i> {{ ('validation.valider.fiches_matieres.formation')|trans({}, 'process') }}
+            </button>
+            <div class="card mb-2 bg-transparent no-shadow d-none d-md-block sh-3">
+                <div class="card-body pt-0 pb-0 h-100">
+                    <div class="row g-0 h-100 align-content-center">
+                        <div class="col-12 col-md-5 d-flex align-items-center mb-2 text-secondary mb-md-0">
+                            Parcours
+                        </div>
+                        <div class="col-6 col-md-3 d-flex align-items-center
+                        text-secondary">
+                            Etat remplissage
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center
+                        text-secondary">
+                            En attente validation RP
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center
+                        text-medium text-secondary">
+                            En attente validation RF
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center text-medium
+                         text-secondary">
+                            En attente validation DPE
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center text-medium
+                        justify-content-end text-secondary">
+                            Détails
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% for parcours in parcourss %}
+                <div>
+                    <div class="card mb-2 sh-19 sh-md-8">
+                        <div class="card-body pt-0 pb-0 h-100">
+                            <div class="row g-0 h-100 align-content-center">
+                                <div class="col-12 col-md-5 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted d-md-none">Parcours</div>
+                                    {{ parcours.libelle }}
+                                </div>
+                                <div class="col-6 col-md-3 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted d-md-none">Etat remplissage</div>
+                                    {{ statsParcours[parcours.id].nbFichesCompletes }} / {{ statsParcours[parcours.id].nbFiches }}
+                                </div>
+                                <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted d-md-none">En attente validation RP</div>
+                                    {{ statsParcours[parcours.id].nbFichesNonValidees }}
+                                </div>
+                                <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted d-md-none">En attente validation RF</div>
+                                    {{ statsParcours[parcours.id].nbFichesValideesRP }}
+                                </div>
+                                <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted d-md-none">En attente validation DPE</div>
+                                    {{ statsParcours[parcours.id].nbFichesValideesRF }}
+                                </div>
+                                <div class="col-6 col-md-1 d-flex flex-column justify-content-center
+                                            mb-1 mb-md-0">
+                                    <div class="text-muted d-md-none">Détails</div>
+
+                                    <button class="ms-2 btn btn-sm btn-outline-primary"
+                                            {{ stimulus_action('validation--fichematiere', 'detail', 'click',
+                                                {parcours:parcours.id}
+                                            ) }}
+                                    >
+                                        <i class="fal fa-caret-right"></i> Détails
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="detail_parcours_{{ parcours.id }}" class="d-none detail_parcours ms-4">
+                        <div class="row">
+                            <div class="col-12 bg-white">
+                                <table class="table table-bordered table-hover"
+                                        {{ stimulus_controller('check_all', {
+                                            idCheckAll: 'check-all'~parcours.id,
+                                            classCheckAll: '.check-all'~parcours.id,
+                                        })
+                                        }}>
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox"
+                                                           id="check-all{{ parcours.id }}" {{ stimulus_action('check_all', 'checkAll') }}>
+                                                </label>
+                                            </div>
+                                        </th>
+                                        <th>EC</th>
+                                        <th>Fiche</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for semParc in parcours.semestreParcours|filter(semestre => semestre.semestre.nonDispense == false) %}
+                                        {% if semParc.semestre.semestreRaccroche != null %}
+                                            {% set semestre = semParc.semestre.semestreRaccroche %}
+                                            {% set raccrocheSem = true %}
+                                        {% else %}
+                                            {% set semestre = semParc %}
+                                            {% set raccrocheSem = false %}
+                                        {% endif %}
+                                        <tr>
+                                            <th colspan="7" class="text-center font-weight-bold">
+                                                {{ semParc.display }}</th>
+                                        </tr>
+
+
+                                        {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
+                                            {{ include('fiche_matiere_valide/_ue.html.twig', {tabEcs: tabParcoursEcs[parcours.id]}) }}
+                                            {% for uee in ue.ueEnfants %}
+                                                {{ include('fiche_matiere_valide/_ue.html.twig', {ue:uee, tabEcs: tabParcoursEcs[parcours.id]}) }}
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+            <button class="btn btn-sm d-block btn-outline-success mt-2"
+                    type="button"
+                    data-action="click->modal#openModal"
+                    data-controller="tooltip"
+                    data-tooltip-placement-value="bottom"
+                    aria-label="{{ ('validation.valider.fiches_matieres.parcours')|trans({}, 'process') }}"
+                    data-bs-original-title="{{ ('validation.valider.fiches_matieres.parcours')|trans({}, 'process') }}"
+            >
+                <i class="fal fa-check"></i> {{ ('validation.valider.fiches_matieres.parcours')|trans({}, 'process') }}
+            </button>
+        </div>
+        <div {{ stimulus_target('validation--fichematiere', 'action') }}
+    </div>
+
+{% endblock %}
+
+{% block header %}
+    Fiches EC/Matières pour la formation {{ formation.displayLong }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('app_parcours_index'), title: 'Liste des parcours'},
+        {href: path('app_formation_edit', {slug:formation.slug}), title: 'Formation : '~formation
+        .display}
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <a href="{{ path('app_formation_edit', {slug:formation.slug}) }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour au parcours"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour à la formation</span>
+    </a>
+{% endblock %}

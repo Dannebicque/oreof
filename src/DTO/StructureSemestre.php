@@ -16,7 +16,7 @@ class StructureSemestre
 {
     public Semestre $semestre;
     public bool $raccroche = false;
-    public array $ues = [];
+    private array $ues = [];
     public int $ordre;
     public HeuresEctsSemestre $heuresEctsSemestre;
 
@@ -58,5 +58,11 @@ class StructureSemestre
             default:
                 return 0;
         }
+    }
+
+    public function ues(): array
+    {
+        sort($this->ues);
+        return $this->ues;
     }
 }

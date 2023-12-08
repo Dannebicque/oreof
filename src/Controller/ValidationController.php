@@ -45,17 +45,24 @@ class ValidationController extends BaseController
         FormationRepository  $formationRepository,
         Request              $request
     ): Response {
-        if ($request->query->has('composante')) {
-            $composante = $composanteRepository->find($request->query->get('composante'));
-            $typeValidation = $request->query->get('typeValidation');
+        $typeValidation = $request->query->get('typeValidation');
+        $process = $validationProcess->getEtape($typeValidation);
 
-            if (!$composante) {
-                throw $this->createNotFoundException('La composante n\'existe pas');
+        if ($request->query->has('composante')) {
+            if ($request->query->get('composante') === 'all') {
+                $composante = null;
+                $formations = $formationRepository->findByTypeValidation($this->getAnneeUniversitaire(), $process['transition']);
+            } else {
+                $composante = $composanteRepository->find($request->query->get('composante'));
+                if (!$composante) {
+                    throw $this->createNotFoundException('La composante n\'existe pas');
+                }
+                $formations = $formationRepository->findByComposanteTypeValidation($composante, $this->getAnneeUniversitaire(), $process['transition']);
             }
 
-            $process = $validationProcess->getEtape($typeValidation);
 
-            $formations = $formationRepository->findByComposanteTypeValidation($composante, $this->getAnneeUniversitaire(), $process['transition']);
+
+
         } else {
             $formations = [];
             $process = null;

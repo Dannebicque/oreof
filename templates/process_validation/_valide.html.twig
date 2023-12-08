@@ -18,7 +18,7 @@
             <input type="date" name="date"
                    class="form-control"
                    id="date"
-                   >
+            >
         </div>
     {% endif %}
 
@@ -30,11 +30,26 @@
 
         {# regarder si dans l'historique on à un laissez-passer sur le conseil  #}
         {% if laisserPasser is defined and laisserPasser != false %}
-            {{ component('alerte', {type:'warning', message: 'Un laissez-passer a été demandé le '~laisserPasser.created|date('d/m/Y')~'.'}) }}
+            {% if laisserPasser.etat == 'laisserPasser' %}
+                {{ component('alerte', {type:'warning', message: 'Un laissez-passer a été demandé le '~laisserPasser.created|date('d/m/Y')~'.'}) }}
+            {% else %}
+                <a
+                        href="{{ asset('uploads/conseils/'~laisserPasser.complements.fichier) }}"
+                        target="_blank"
+                        class="mt-1"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="{{ 'voir.le.pv.infobulle'|trans({}, 'process')}}"
+                >
+                    <i class="{{ iconDownload }}"></i>
+                    <span> {{ 'voir.le.pv'|trans({}, 'process')}}</span>
+                </a>
+            {% endif %}
         {% endif %}
 
         <div class="form-check mt-2">
             <input class="form-check-input" type="radio" value="acceptationDirecte" id="acceptationDirecte"
+                    {% if laisserPasser is defined and laisserPasser != false and laisserPasser.etat == "valide" %} checked {% endif %}
                    name="acceptationDirecte">
             <label class="form-check-label" for="acceptationDirecte">
                 <strong>{{ (process.label~'.valide.cas.acceptation.directe.'~processData.placeTexte)|trans({}, 'process') }}</strong>
@@ -48,7 +63,7 @@
         </div>
         <div class="form-check mt-2">
             <input class="form-check-input" type="radio" value="acceptationNonDirecte" id="acceptationDirecte"
-                    {% if laisserPasser is defined and laisserPasser != false %} checked {% endif %}
+                    {% if laisserPasser is defined and laisserPasser != false and laisserPasser.etat == "laisserPasser" %} checked {% endif %}
                    name="acceptationDirecte">
             <label class="form-check-label" for="acceptationDirecte">
                 <strong>{{ (process.label~'.valide.cas.acceptation.non.directe.'~processData.placeTexte)|trans({}, 'process') }}</strong>
@@ -62,7 +77,7 @@
         </div>
         <div class="form-check ms-3">
             <input class="form-check-input" type="checkbox" value="true" id="sousReserveConseil"
-                    {% if laisserPasser is defined and laisserPasser != false %} checked {% endif %}
+                    {% if laisserPasser is defined and laisserPasser != false and laisserPasser.etat == "laisserPasser" %} checked {% endif %}
                    name="sousReserveConseil">
             <label class="form-check-label" for="sousReserveConseil">
                 {{ (process.label~'.valide.cas.sous.reserve.conseil.'~processData.placeTexte)|trans({}, 'process') }} <i

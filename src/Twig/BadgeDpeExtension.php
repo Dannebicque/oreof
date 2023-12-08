@@ -9,6 +9,7 @@
 
 namespace App\Twig;
 
+use App\Entity\FicheMatiere;
 use App\Enums\EtatDpeEnum;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -25,10 +26,30 @@ class BadgeDpeExtension extends AbstractExtension
             new TwigFilter('badgeEtatComposante', [$this, 'badgeEtatComposante'], ['is_safe' => ['html']]),
             new TwigFilter('badgeFormation', [$this, 'badgeFormation'], ['is_safe' => ['html']]),
             new TwigFilter('badgeEc', [$this, 'badgeEc'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeFiche', [$this, 'badgeFiche'], ['is_safe' => ['html']]),
             new TwigFilter('badge', [$this, 'badge'], ['is_safe' => ['html']]),
             new TwigFilter('badgeValide', [$this, 'badgeValide'], ['is_safe' => ['html']]),
-            new TwigFilter('displayErreurs', [$this, 'displayErreurs'], ['is_safe' => ['html']])
+            new TwigFilter('displayErreurs', [$this, 'displayErreurs'], ['is_safe' => ['html']]),
+            new TwigFilter('isFicheValidable', [$this, 'isFicheValidable'], ['is_safe' => ['html']])
         ];
+    }
+
+    public function isFicheValidable(FicheMatiere $fiche, string $type): string
+    {
+        if ($fiche->remplissage() < 100.0) {
+            return 'disabled';
+        }
+
+        switch ($type) {
+            case 'formation':
+                return in_array('transmis_rf', $fiche->getEtatFiche()) || in_array('en_cours_redaction', $fiche->getEtatFiche()) ? '' : 'disabled';
+            case 'parcours':
+                return in_array('en_cours_redaction', $fiche->getEtatFiche()) || count($fiche->getEtatFiche()) === 0 ? '' : 'disabled';
+            case 'dpe':
+                return in_array('transmis_dpe', $fiche->getEtatFiche()) || in_array('transmis_rf', $fiche->getEtatFiche()) || in_array('en_cours_redaction', $fiche->getEtatFiche()) ? '' : 'disabled';
+            default:
+                return 'disabled';
+        }
     }
 
     public function displayErreurs(?array $erreurs = []): string
@@ -41,7 +62,6 @@ class BadgeDpeExtension extends AbstractExtension
         $erreurs = array_filter($erreurs, function ($erreur) {
             return !empty($erreur);
         });
-
 
 
         $texte = '<ul>';
@@ -93,6 +113,11 @@ class BadgeDpeExtension extends AbstractExtension
     public function badgeDpe(array $etatsDpe): string
     {
         return $this->displayDpeBadge($etatsDpe);
+    }
+
+    public function badgeFiche(array $etatFiche): string
+    {
+        return $this->displayDpeBadge($etatFiche);
     }
 
     /**
