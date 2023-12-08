@@ -265,15 +265,23 @@ HTML;
         if($parcours->isHasProjet()){
             $projetTuteure = $parcours->getProjetText();
         }
-        $organisationPedagogique = $stage . $projetTuteure . $maquetteIframe . $calendrierUniversitaire;
+        $organisationPedagogique = "<h3>Stages et projets tuteurés</h3>" 
+                                    . $stage . $projetTuteure . $maquetteIframe 
+                                    . "<h3>Calendrier universitaire</h3>"
+                                    . $calendrierUniversitaire;
 
         // Informations pratiques
         $informationsPratiques = $etablissementInformation->getInformationsPratiques() ?? "Non renseigné.";
 
         // Modalités d'admission
         $admissionParcours = $parcours->getTypeDiplome()?->getModalitesAdmission() ?? "";
+        $admissionParcours .= "<h3>Calendrier d'inscription<h3>";
         $admissionParcours .= $etablissementInformation->getCalendrierInscription() ?? "";
 
+        // Poursuite d'études
+        $poursuiteEtudes = $parcours->getPoursuitesEtudes() ?? '';
+        $poursuiteEtudes .= "<h2>Débouchés</h2>";
+        $poursuiteEtudes .= $parcours->getDebouches() ?? '-';
 
         // Génération du XML
         $encoder = new XmlEncoder([
@@ -357,7 +365,7 @@ HTML;
                         'extra' => [
                             'competences-acquises' => $competencesAcquisesExtra,
                             'organisation-pedagogique' => $organisationPedagogique,
-                            'poursuite-etudes' => $parcours->getPoursuitesEtudes() ?? 'Non renseigné.',
+                            'poursuite-etudes' => $poursuiteEtudes,
                             'informations-pratiques' => $informationsPratiques,
                             'admission' => $admissionParcours,
                             'formation-continue-et-apprentissage' => [],
