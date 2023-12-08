@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.19.3](https://github.com/Dannebicque/oreof/compare/v1.19.2...v1.19.3) (2023-12-08)
+
+
+### Features
+
+* Composante, gestion des PV ([b632a64](https://github.com/Dannebicque/oreof/commit/b632a64764feeddea3e70b0031a9d5b4f4b4fc3c))
+
+
+### Bug Fixes
+
+* textes sur fiche matière ([455f347](https://github.com/Dannebicque/oreof/commit/455f347bc907fa6f9ef6d044adb5b2ec5247e135))
+* ues enfants dans MCCC ([6e0717e](https://github.com/Dannebicque/oreof/commit/6e0717e3467aa5e8a30eacee82b76bf206029dae))
+
 ### [1.19.2](https://github.com/Dannebicque/oreof/compare/v1.19.1...v1.19.2) (2023-12-07)
 
 
