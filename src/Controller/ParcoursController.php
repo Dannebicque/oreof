@@ -37,7 +37,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
@@ -382,6 +384,24 @@ class ParcoursController extends BaseController
                 'errors' => $xml_errors
             ]);
         }
+    }
+
+    #[Route('/{parcours}/export-json-urca', name: 'app_parcours_export_json_urca')]
+    public function getJsonExportUrca(Parcours $parcours) : Response {
+        $data = [
+            'description' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            'metadata' => [
+                'domaine' => $parcours->getFormation()?->getDomaine()?->getLibelle() ?? '-',
+                'type-formation' => $parcours->getFormation()?->getTypeDiplome()?->getLibelle() ?? '-',
+                'localisation' => '-', // Les villes des parcours sont NULL ---> Table Ville
+                'faculte-ecole-institut' => $parcours->getComposanteInscription()->getLibelle() ?? '-',
+                'public-concerne' => $parcours->getRegimeInscription() ?? [], //Certains sont des tableaux, d'autres en JSON
+            ],
+            'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
+            'maquette-pdf' => $this->generateUrl('app_parcours_export', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
+        ];
+
+        return new JsonResponse($data);
     }
 
     #[Route('/{parcours}/versioning/json_data', name: 'app_parcours_versioning_json_data')]

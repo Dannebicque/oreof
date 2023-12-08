@@ -5,15 +5,27 @@ namespace App\Service;
 use App\Classes\CalculStructureParcours;
 use App\Entity\Etablissement;
 use App\Entity\Parcours;
+use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 
 class LheoXML {
 
     private EntityManagerInterface $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager){
+    private TypeDiplomeRegistry $typeDiplomeR;
+
+    private UrlGeneratorInterface $router;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        TypeDiplomeRegistry $typeDiplomeR,
+        UrlGeneratorInterface $router
+    ){
         $this->entityManager = $entityManager;
+        $this->typeDiplomeR = $typeDiplomeR;
+        $this->router = $router;
     }
 
     /**
@@ -195,30 +207,60 @@ class LheoXML {
                     <li>
                         <ul>{$competencesHTML}</ul>
                     </li>
-        HTML;
+HTML;
                 }
                 $competencesAcquisesExtra .= "</ul>";
             }
         }
         // Si le Parcours EST un BUT
         if($parcours->getTypeDiplome()?->getLibelleCourt() === "BUT"){
-
+            $typeD = $this->typeDiplomeR->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
+            $competences = $typeD->getRefCompetences($parcours);
+            if($competences){                
+                $competencesAcquisesExtra = "<ul style=\"list-style: none;\">";
+                foreach($competences as $comp){
+                    $competencesHTML = "";
+                    foreach($comp->getButNiveaux() as $niveau){
+                        $competencesHTML .= "<li>Niveau {$niveau->getOrdre()} - {$niveau->getLibelle()}</li>";
+                    }
+                    $competencesAcquisesExtra .= <<<HTML
+                    <li>{$comp->getNomCourt()}</li>
+                    <li>
+                        <ul>{$competencesHTML}</ul>
+                    </li>
+HTML;
+                }
+                $competencesAcquisesExtra .= "</ul>";
+            }
         }
 
         $etablissementInformation = $this->entityManager->getRepository(Etablissement::class)
         ->findOneById(1)->getEtablissementInformation();
-
+        
+        // Élément Maquette Iframe
+        $UrlMaquetteIframe = $this->router->generate('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $maquetteIframe = <<<HTML
+        <iframe
+            id="maquettePedagogiqueFormation"
+            width="800"
+            height="750"
+            src="{$UrlMaquetteIframe}" 
+            style="max-height: auto;"
+            loading="eager"
+            >
+        </iframe>
+HTML;
         // Stage et projet tuteuré (Organisation pédagogique)
         $stage = "";
         $projetTuteure = "";
-        $calendrierInscription = $etablissementInformation->getCalendrierUniversitaire() ?? "";
+        $calendrierUniversitaire = $etablissementInformation->getCalendrierUniversitaire() ?? "";
         if($parcours->isHasStage()){
             $stage = $parcours->getStageText();
         }
         if($parcours->isHasProjet()){
             $projetTuteure = $parcours->getProjetText();
         }
-        $organisationPedagogique = $stage . $projetTuteure . $calendrierInscription;
+        $organisationPedagogique = $stage . $projetTuteure . $maquetteIframe . $calendrierUniversitaire;
 
         // Informations pratiques
         $informationsPratiques = $etablissementInformation->getInformationsPratiques() ?? "Non renseigné.";
@@ -226,6 +268,7 @@ class LheoXML {
         // Modalités d'admission
         $admissionParcours = $parcours->getTypeDiplome()?->getModalitesAdmission() ?? "";
         $admissionParcours .= $etablissementInformation->getCalendrierInscription() ?? "";
+
 
         // Génération du XML
         $encoder = new XmlEncoder([

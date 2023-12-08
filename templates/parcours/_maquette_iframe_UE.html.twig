@@ -30,7 +30,7 @@
     : 'bg-success'
 %}
 <tr class="table-dark-child">
-    <td id="UEEnfantLibelle" style="{{ 'padding-left: ' ~ paddingCascade * 1.5 ~ 'em;' }}">
+    <td id="UEEnfantLibelle" style="{{ 'padding-left: ' ~ paddingCascade * paddingCascadeValue ~ 'em;' }}">
         {{ ue.ue.display }} - {{ ue.ue.libelle }} 
         {# <span class="ms-3 badge {{ colorBadge }}">Choix {{ indexUeEnfant }}</span> #}
     </td>
@@ -75,7 +75,7 @@
 
 {% if IsUeEnfant and ue.elementConstitutifs|length == 0 %}
     <tr>
-        <td id="ECEnfantLibelleLibre" style="{{ 'padding-left: ' ~ (paddingCascade + 1) * 1.5 ~ 'em;' }}">
+        <td id="ECEnfantLibelleLibre" style="{{ 'padding-left: ' ~ (paddingCascade + 1) * paddingCascadeValue ~ 'em;' }}">
             {{ ue.ue.descriptionUeLibre }}
         </td>
         <td colspan="7" id="tdEcRestreint"></td>
