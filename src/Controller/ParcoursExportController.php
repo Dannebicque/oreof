@@ -29,7 +29,7 @@ class ParcoursExportController extends AbstractController
      * @throws \Twig\Error\LoaderError
      * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
      */
-    #[Route('/parcours/export/{parcours}', name: 'app_parcours_export')]
+    #[Route('/parcours/{parcours}/export-pdf', name: 'app_parcours_export')]
     public function export(
         Parcours                $parcours,
         CalculStructureParcours $calculStructureParcours

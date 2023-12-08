@@ -32,6 +32,7 @@ security:
         - { path: ^/sso/cas, roles: PUBLIC_ACCESS }
         - { path: ^/.+/export-json-urca, roles: PUBLIC_ACCESS}
         - { path: ^/parcours/.+/export-xml-lheo, roles: PUBLIC_ACCESS }
+        - { path: ^/parcours/.+/export-pdf, roles: PUBLIC_ACCESS }
         - { path: ^/parcours/.+/maquette_iframe, roles: PUBLIC_ACCESS }
         - { path: ^/fiche/matiere/.+/maquette_iframe, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
