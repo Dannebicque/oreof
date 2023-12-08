@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ asset('maquette/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('maquette/maquette.css') }}">
+    <script src="{{ asset('maquette/bootstrap.min.js') }}"></script>
+</head>
+<body class="global-bg">
+    <h2 class="fs-3 mt-5 mb-4 ms-4">Programme des enseignements</h2>
+    {{ include('parcours/_parcours_maquette_iframe.html.twig', {parcours: parcours, indexParcours: 1} ) }}
+</body>
+</html>

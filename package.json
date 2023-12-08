@@ -30,7 +30,6 @@
         "lint": "eslint assets/js/ assets/controllers/"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-pro": "^6.2.1",
         "@hotwired/stimulus": "^3.0.0",
         "@popperjs/core": "^2.9.2",
         "bootstrap": "^5.2.3",

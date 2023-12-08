@@ -26,19 +26,17 @@
 {% endblock %}
 
 {% block bouton_header %}
-    <button
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'Ajouter un type diplôme',
-                modalUrl: path('app_type_diplome_new') }) }}
-            data-action="click->modal#openModal"
-            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+    <a href="{{ path('app_type_diplome_new') }}">
+        <button
+            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2 text-dark"
             data-size="lg"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
             title="Ajouter un type de diplôme"
-    >
-        <i class="{{ iconAdd }}"></i>
-        <span> Ajouter un type de diplôme</span>
-    </button>
+        >
+            
+                <i class="{{ iconAdd }}"></i>
+                <span> Ajouter un type de diplôme</span>
+        </button>
+    </a>
 {% endblock %}

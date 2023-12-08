@@ -8,5 +8,32 @@
         <th>Libellé court</th>
         <td>{{ type_diplome.libelleCourt }}</td>
     </tr>
+    <tr>
+        <th>Modalités d'admission</th>
+        <td>
+            {{  type_diplome.getModalitesAdmission 
+                ? type_diplome.getModalitesAdmission|raw 
+                : 'Non renseigné' 
+            }}
+        </td>
+    </tr>
+    <tr>
+        <th>Prérequis obligatoires</th>
+        <td>
+            {{  type_diplome.getPrerequisObligatoires 
+                ? type_diplome.getPrerequisObligatoires|raw 
+                : 'Non renseigné' 
+            }}
+        </td>
+    </tr>
+    <tr>
+        <th>Insertion professionnelle</th>
+        <td>
+            {{  type_diplome.getInsertionProfessionnelle 
+                ? type_diplome.getInsertionProfessionnelle|raw 
+                : 'Non renseigné' 
+            }}
+        </td>
+    </tr>
     </tbody>
 </table>

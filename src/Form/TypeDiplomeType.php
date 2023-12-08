@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\TypeDiplome;
+use App\Form\Type\TextareaAutoSaveType;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -26,6 +27,30 @@ class TypeDiplomeType extends AbstractType
                 'label' => 'Code Apogée',
                 'attr' => ['maxlength' => 1],
                 'required' => true,
+            ])
+            ->add('modalites_admission', TextareaAutoSaveType::class, [
+                'label' => "Modalités d'admission",
+                'required' => true,
+                'attr' => [
+                    'rows' => 6,
+                    'maxlength' => 3000
+                ]
+            ])
+            ->add('prerequis_obligatoires', TextareaAutoSaveType::class, [
+                'label' => "Prérequis obligatoires",
+                'required' => true,
+                'attr' => [
+                    'rows' => 6,
+                    'maxlength' => 3000
+                ]
+            ])
+            ->add('insertionProfessionnelle', TextareaAutoSaveType::class, [
+                'label' => 'Insertion professionnelle',
+                'required' => true,
+                'attr' => [
+                    'rows' => 4,
+                    'maxlength' => 3000
+                ]
             ])
             ->add('semestreDebut')
             ->add('semestreFin')

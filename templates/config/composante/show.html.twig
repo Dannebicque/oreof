@@ -36,6 +36,26 @@
         <th>URL du site de la composante</th>
         <td>{{ composante.urlSite }}</td>
     </tr>
+    {% if composante.composanteInformation is defined and composante.composanteInformation is not null %}
+        {% if composante.composanteInformation.restauration is not null %}
+            <tr>
+                <th>Information Restauration</th>
+                <td>{{ composante.composanteInformation.restauration }}</td>
+            </tr>
+        {% endif %}
+        {% if composante.composanteInformation.hebergement is not null %}
+            <tr>
+                <th>Information Hébergement</th>
+                <td>{{ composante.composanteInformation.hebergement }}</td>
+            </tr>
+        {% endif %}
+        {% if composante.composanteInformation.transport is not null %}
+            <tr>
+                <th>Information Transport</th>
+                <td>{{ composante.composanteInformation.transport }}</td>
+            </tr>
+        {% endif %}
+    {% endif %}
     </tbody>
 </table>
 

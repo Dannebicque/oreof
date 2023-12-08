@@ -13,6 +13,7 @@ use App\Repository\AnneeUniversitaireRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: AnneeUniversitaireRepository::class)]
 class AnneeUniversitaire
@@ -31,17 +32,23 @@ class AnneeUniversitaire
     #[ORM\Column]
     private ?bool $defaut = null;
 
+    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $dateOuvertureDpe = null;
 
+    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $dateClotureDpe = null;
+
+    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $dateTransmissionSes = null;
 
+    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $dateCfvu = null;
 
+    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $datePublication = null;
 

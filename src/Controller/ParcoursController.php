@@ -13,20 +13,44 @@ use App\Classes\CalculStructureParcours;
 use App\Classes\JsonReponse;
 use App\Classes\ParcoursDupliquer;
 use App\Classes\verif\ParcoursState;
+use App\DTO\HeuresEctsFormation;
+use App\DTO\HeuresEctsSemestre;
+use App\DTO\HeuresEctsUe;
+use App\Entity\AnneeUniversitaire;
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Entity\ParcoursVersioning;
+use App\Entity\SemestreParcours;
 use App\Events\AddCentreParcoursEvent;
 use App\Form\ParcoursType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
+use App\Service\LheoXML;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
+use DateTimeImmutable;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 #[Route('/parcours')]
 class ParcoursController extends BaseController
@@ -45,7 +69,8 @@ class ParcoursController extends BaseController
     #[Route('/liste', name: 'app_parcours_liste', methods: ['GET'])]
     public function liste(
         ParcoursRepository $parcoursRepository,
-        Request            $request
+        Request            $request,
+        LheoXML $lheoXML
     ): Response {
         $sort = $request->query->get('sort') ?? 'libelle';
         $direction = $request->query->get('direction') ?? 'asc';
@@ -79,7 +104,8 @@ class ParcoursController extends BaseController
         return $this->render('parcours/_liste.html.twig', [
             'parcours' => $tParcours,
             'sort' => $sort,
-            'direction' => $direction
+            'direction' => $direction,
+            'lheoXML' => $lheoXML
         ]);
     }
 
@@ -327,5 +353,168 @@ class ParcoursController extends BaseController
         }
 
         return $this->json(false);
+    }
+
+    #[Route('/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
+    public function getMaquetteIframe(
+        Parcours $parcours, 
+        EntityManagerInterface $em, 
+        ElementConstitutifRepository $ecRepo
+    ){
+        $calcul = new CalculStructureParcours($em, $ecRepo);
+
+        return $this->render('parcours/maquette_iframe.html.twig', [
+            'parcours' => $calcul->calcul($parcours)
+        ]);
+    }
+
+    #[Route('/{parcours}/export-xml-lheo', name: 'app_parcours_export_xml_lheo')]
+    public function getXmlLheoFromParcours(Parcours $parcours, LheoXML $lheoXML) : Response {
+        $xml = $lheoXML->generateLheoXMLFromParcours($parcours, true);
+        // Validation
+        libxml_use_internal_errors(true);
+        $isValid = $lheoXML->validateLheoSchema($xml);
+        $xml_errors = [];
+        if(!$isValid){
+            $xml_errors = libxml_get_errors();
+        }
+        libxml_clear_errors();
+        // Si le XML généré est valide, on le renvoie
+        if($isValid){
+            return new Response($xml, 200, ['Content-Type' => 'application/xml']);
+        }
+        // Sinon, on avertit le client
+        else {
+            return $this->render('lheo/error.html.twig', [
+                'errors' => $xml_errors
+            ]);
+        }
+    }
+
+    #[Route('/{parcours}/export-json-urca', name: 'app_parcours_export_json_urca')]
+    public function getJsonExportUrca(Parcours $parcours) : Response {
+        $data = [
+            'description' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            'metadata' => [
+                'domaine' => $parcours->getFormation()?->getDomaine()?->getLibelle() ?? '-',
+                'type-formation' => $parcours->getFormation()?->getTypeDiplome()?->getLibelle() ?? '-',
+                'localisation' => '-', // Les villes des parcours sont NULL ---> Table Ville
+                'faculte-ecole-institut' => $parcours->getComposanteInscription()->getLibelle() ?? '-',
+                'public-concerne' => $parcours->getRegimeInscription() ?? [], //Certains sont des tableaux, d'autres en JSON
+            ],
+            'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
+            'maquette-pdf' => $this->generateUrl('app_parcours_export', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
+        ];
+
+        return new JsonResponse($data);
+    }
+
+    #[IsGranted('ROLE_SES')]
+    #[Route('/{parcours}/versioning/json_data', name: 'app_parcours_versioning_json_data')]
+    public function displayParcoursJsonData(Parcours $parcours) : Response {
+        // Définition du serializer
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $serializer = new Serializer([
+            new DateTimeNormalizer(),
+            new BackedEnumNormalizer(),
+            new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor:  new ReflectionExtractor()),
+        ],
+            [new JsonEncoder()]);
+        try {
+            // Création de la réponse JSON au client
+            $json = $serializer->serialize($parcours, 'json', [
+                'circular_reference_limit' => 5,
+                AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
+                AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
+                DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
+                ObjectNormalizer::PRESERVE_EMPTY_OBJECTS => true,
+            ]);
+            return new Response($json, 200, ['Content-Type' => 'application/json']);
+        }
+        catch(\Exception $e){
+            // Si erreur lors de la serialization
+            return new Response(json_encode([
+                'error' => 'Une erreur interne est survenue.',
+                'message' => "{$e->getMessage()}",
+            ]), 422, ['Content-Type' => 'application/json']);
+        }
+
+    }
+
+    #[IsGranted('ROLE_SES')]
+    #[Route('/{parcours}/versioning/save', name: 'app_parcours_versioning_save')]
+    public function saveParcoursIntoJson(Parcours $parcours, Filesystem $fileSystem, EntityManagerInterface $entityManager){
+        // Définition du serializer
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $serializer = new Serializer([
+            new DateTimeNormalizer(),
+            new BackedEnumNormalizer(),
+            new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor())
+        ],
+        [new JsonEncoder()]);
+        try{
+            $now = new DateTimeImmutable('now');
+            $dateHeure = $now->format('d-m-Y_H-i-s');
+            // Objet BD Parcours Versioning
+            $parcoursVersioning = new ParcoursVersioning();
+            $parcoursVersioning->setParcours($parcours);
+            $parcoursVersioning->setVersionTimestamp($now);
+            // Nom du fichier
+            $fileName = "parcours-{$parcours->getId()}-{$dateHeure}";
+            $parcoursVersioning->setFileName($fileName);
+            // Création du fichier JSON
+            $json = $serializer->serialize($parcours, 'json', [
+                'circular_reference_limit' => 5,
+                AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
+                AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
+                DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
+            ]);
+            $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$fileName}", $json);
+            // Enregistrement de la référence en BD
+            $entityManager->persist($parcoursVersioning);
+            $entityManager->flush();
+            // Message de réussite + redirection
+            $this->addFlashBag('success', 'La version du parcours à bien été sauvegardée.');
+            return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
+
+        }catch(\Exception $e){
+
+            $this->addFlashBag('error', "Une erreur est survenue lors de la sauvegarde.");
+
+            return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
+        }
+
+    }
+
+    #[IsGranted('ROLE_SES')]
+    #[Route('/{parcours_versioning}/versioning/view', name: 'app_parcours_versioning_view')]
+    public function parcoursVersion(
+            ParcoursVersioning $parcours_versioning,
+            CalculStructureParcours $calculStructureParcours
+        ) : Response {
+        // $parcours = new Parcours(new Formation(new AnneeUniversitaire));
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $serializer = new Serializer([
+                new DateTimeNormalizer(),
+                new BackedEnumNormalizer(),
+                new ArrayDenormalizer(),
+                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
+            ],
+            [new JsonEncoder()]);
+        $file = file_get_contents(__DIR__ . "/../../versioning_json/parcours/{$parcours_versioning->getFileName()}");
+        $parcours = $serializer->deserialize($file, Parcours::class, 'json');
+        $dto = $calculStructureParcours->calcul($parcours);
+
+        $dateVersion = $parcours_versioning->getVersionTimestamp()->format('d-m-Y à H:i');
+
+        return $this->render('parcours/show_version.html.twig', [
+            'parcours' => $parcours,
+            'formation' => $parcours->getFormation(),
+            'typeDiplome' => $parcours->getTypeDiplome(),
+            'dto' => $dto,
+            'hasParcours' => $parcours->getFormation()->isHasParcours(),
+            'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
+            'dateVersion' => $dateVersion
+        ]);
     }
 }

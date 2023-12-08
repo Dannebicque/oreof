@@ -49,13 +49,21 @@ class TypeDiplomeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $typeDiplomeRepository->save($typeDiplome, true);
+            // Abandon de la fenêtre modale
+            // return $this->json(true);
 
-            return $this->json(true);
+            $this->addFlash('toast', [
+                'type' => 'success',
+                'text' => 'Création du type de diplôme réussie', 
+                'title' => 'Succès',
+            ]);
+            return $this->redirectToRoute('app_type_diplome_index');
         }
 
         return $this->render('config/type_diplome/new.html.twig', [
             'type_diplome' => $typeDiplome,
             'form' => $form->createView(),
+            'titre' => "Création d'un type de diplôme"
         ]);
     }
 
@@ -81,13 +89,20 @@ class TypeDiplomeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $typeDiplomeRepository->save($typeDiplome, true);
-
-            return $this->json(true);
+            // Abandon de la fenêtre modale
+            // return $this->json(true);
+            $this->addFlash('toast', [
+                'type' => 'success',
+                'text' => 'Type Diplôme modifié avec succès', 
+                'title' => 'Succès',
+            ]);
+            return $this->redirectToRoute('app_type_diplome_index');
         }
 
         return $this->render('config/type_diplome/new.html.twig', [
             'type_diplome' => $typeDiplome,
             'form' => $form->createView(),
+            'titre' => "Modification d'un type de diplôme"
         ]);
     }
 

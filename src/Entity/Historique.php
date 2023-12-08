@@ -7,6 +7,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\MappedSuperclass;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[MappedSuperclass]
 #[ORM\Entity]
 #[ORM\InheritanceType('SINGLE_TABLE')]
@@ -19,6 +21,7 @@ abstract class Historique
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created = null;
 

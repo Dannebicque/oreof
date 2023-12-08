@@ -106,4 +106,5 @@ class CalculStructureParcours
 
         return $dtoStructure;
     }
+
 }

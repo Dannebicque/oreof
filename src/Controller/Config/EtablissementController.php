@@ -11,6 +11,7 @@ namespace App\Controller\Config;
 
 use App\Controller\BaseController;
 use App\Entity\Etablissement;
+use App\Entity\EtablissementInformation;
 use App\Form\EtablissementType;
 use App\Repository\EtablissementRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,12 +47,17 @@ class EtablissementController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             $etablissementRepository->save($etablissement, true);
 
-            return $this->json(true);
+            // Abandon de la fenêtre modale
+            // return $this->json(true);
+
+            $this->addFlashBag('success', 'Établissement créé avec succès');
+            return $this->redirectToRoute('app_etablissement_index');
         }
 
         return $this->render('config/etablissement/new.html.twig', [
             'etablissement' => $etablissement,
             'form' => $form->createView(),
+            'titre' => "Création d'un établissement"
         ]);
     }
 
@@ -79,14 +85,20 @@ class EtablissementController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $etablissement = $form->getData();
             $etablissementRepository->save($etablissement, true);
 
-            return $this->json(true);
+            // Abandon de la fenêtre modale
+            // return $this->json(true);
+
+            $this->addFlashBag('success', 'Établissement modifié avec succès');
+            return $this->redirectToRoute('app_etablissement_index');
         }
 
         return $this->render('config/etablissement/new.html.twig', [
             'etablissement' => $etablissement,
             'form' => $form->createView(),
+            'titre' => "Modification d'un établissement"
         ]);
     }
 
