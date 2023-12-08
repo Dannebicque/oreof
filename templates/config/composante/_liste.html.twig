@@ -53,7 +53,8 @@
                 </button>
 
                 <button {{ stimulus_action('crud', 'delete', 'click', {
-                    url:path('app_composante_delete',{'id': composante.id})
+                    url:path('app_composante_delete',{'id': composante.id}),
+                    csrf: csrf_token('delete' ~ composante.id)
                 })}} class="btn btn-sm text-danger">
                     <i class="{{ iconDelete }}"></i> Supprimer</button>
 

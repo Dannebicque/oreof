@@ -23,6 +23,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
 #[ORM\Index(name: 'sigle_formation', columns: ['sigle'], flags: ['fulltext'])]
 #[ORM\Index(name: 'slug_formation', columns: ['slug'], flags: ['fulltext'])]
@@ -104,6 +106,7 @@ class Formation
     #[ORM\Column(nullable: true)]
     private ?array $structureSemestres = [];
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: Parcours::class)]
     #[ORM\OrderBy(['libelle' => 'ASC'])]
     private Collection $parcours;
@@ -117,12 +120,14 @@ class Formation
     #[ORM\Column(nullable: true)]
     private ?array $etatDpe = [];
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: UserCentre::class, cascade: ['persist', 'remove'])]
     private Collection $userCentres;
 
     #[ORM\Column(length: 10)]
     private ?string $version = '0.1';
 
+    #[Ignore]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'formationsAnterieures')]
     private ?self $versionParent = null;
 
@@ -148,6 +153,7 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: ButCompetence::class)]
     private Collection $butCompetences;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: HistoriqueFormation::class)]
     #[ORM\OrderBy(['created' => 'DESC'])]
     private Collection $historiqueFormations;

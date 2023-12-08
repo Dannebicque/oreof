@@ -41,19 +41,16 @@
                 </button>
 
                 <button
-                        {{ stimulus_controller('modal', {
-                            size: 'lg',
-                            modalTitle: 'Modifier un type de diplôme',
-                            modalUrl: path('app_type_diplome_edit',{'id': type_diplome.id}) }) }}
-                        data-action="click->modal#openModal"
-                        class="btn btn-sm text-warning"
-                        data-size="lg"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom"
-                        title="Modifier un type de diplôme"
+                    class="btn btn-sm text-warning"
+                    data-size="lg"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="Modifier un type de diplôme"
                 >
-                    <i class="{{ iconEdit }}"></i>
-                    <span> modifier</span>
+                    <a href="{{ path('app_type_diplome_edit', { id: type_diplome.id } ) }}" class="text-warning">
+                        <i class="{{ iconEdit }}"></i>
+                        <span> modifier</span>
+                    </a>
                 </button>
 
                 <button {{ stimulus_action('crud', 'duplicate', 'click', {

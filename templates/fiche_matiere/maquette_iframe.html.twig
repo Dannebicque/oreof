@@ -1,0 +1,163 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ asset('maquette/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('maquette/maquette.css') }}">
+    <script src="{{ asset('maquette/bootstrap.min.js') }}"></script>
+</head>
+<body class="global-bg">
+    <div class="col-12">
+        <div class="card global-bg-matiere m-3">
+            <div class="card-header p-3 text-center">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="col-12 d-flex justify-content-center align-items-center">
+                            <a href="{{ maquetteOrigineURL }}">
+                                <button type="button" class="btn btn-sm btn-urca-blue">
+                                    Retour aux semestres
+                                </button>
+                            </a>
+                        </div>
+                        <div class="col-12">
+                            <a href="{{ path('app_fiche_matiere_export', {id: fiche_matiere.id }) }}">
+                                <button type="button" class="btn btn-sm btn-urca-light-green mt-4">
+                                    Imprimer la fiche
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="d-flex col-7 align-items-center justify-content-center">
+                        <span class="card-title mt-2">Détails de la matière : {{ fiche_matiere.libelle }}</span>
+                    </div>
+                    <div class="col-2 d-flex justify-content-center align-items-center">
+                        <span class="badge badge-ects-EC">3 ECTS</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-5">
+                        <h5 class="titre-section">Type de diplôme</h2>
+                        <p class="card-text">
+                            {{ typeDiplome ? typeDiplome|typeDiplome : 'Non renseigné' }}
+                        </p>
+                    </div>
+                    <div class="col-5">
+                        <h5 class="titre-section">Mention / Spécialité</h2>
+                        <p class="card-text">
+                            {{ formation.display() ?? 'Non renseigné' }}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                        <h5 class="titre-section">Parcours porteur</h2>
+                            {{ fiche_matiere.parcours.libelle ?? '' }}
+                        <p class="card-text">
+                        </p>
+                    </div>
+                    <div class="col-5">
+                        <h5 class="titre-section">Composante porteuse</h2>
+                        <p class="card-text">
+                            {{ formation.composantePorteuse.libelle ?? 'Non renseigné' }}    
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                        <h5 class="titre-section">Intitulé de la matière</h2>
+                        <p class="card-text">
+                            {{ fiche_matiere.libelle }}
+                        </p>
+                    </div>
+                    <div class="col-5">
+                        <h5 class="titre-section">Intitulé de la matière en anglais</h2>
+                        <p class="card-text">
+                            {{ fiche_matiere.libelleAnglais ?? 'Non renseigné' }}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <h5 class="titre-section text-center my-3">Répartition des heures d'enseignement</h5>
+                        <table class="table table-fiche-matiere mt-4">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">Présentiel</th>
+                                    <th colspan="3">Distanciel</th>
+                                </tr>
+                                <tr>
+                                    <th>CM</th>
+                                    <th>TD</th>
+                                    <th>TP</th>
+                                    <th>CM</th>
+                                    <th>TD</th>
+                                    <th>TP</th>
+                                    <th>TE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ element_constitutif.getVolumeCmPresentiel ?: '-'  }}</td>
+                                    <td>{{ element_constitutif.getVolumeTdPresentiel ?: '-'  }}</td>
+                                    <td>{{ element_constitutif.getVolumeTpPresentiel ?: '-'  }}</td>
+                                    <td>{{ element_constitutif.getVolumeCmDistanciel ?: '-'  }}</td>
+                                    <td>{{ element_constitutif.getVolumeTdDistanciel ?: '-'  }}</td>
+                                    <td>{{ element_constitutif.getVolumeTpDistanciel ?: '-'  }}</td>
+                                    <td>{{ element_constitutif.getVolumeTe ?: '-' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <h5 class="titre-section text-center">Description de l'enseignement</h2>
+                        <p class="card-text text-center">
+                            {{ fiche_matiere.description ? fiche_matiere.description|raw : 'Non renseigné'  }}
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                        <h5 class="titre-section">Enseignement dispensé en</h5>
+                        {% if fiche_matiere.langueDispense|length > 0 %}
+                            <ul>
+                                {% for langue in fiche_matiere.langueDispense %} 
+                                    <li>{{ langue.libelle }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                        <p class="card-text">
+                            Non renseigné
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div class="col-5">
+                        <h5 class="titre-section">Support de cours en</h5>
+                        {% if fiche_matiere.langueSupport|length > 0 %}
+                            <ul>
+                                {% for langue in fiche_matiere.langueSupport %} 
+                                    <li>{{ langue.libelle }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="card-text">
+                                Non renseigné
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <h5 class="titre-section text-center">Objectifs de l'enseignement</h2>
+                        <p class="card-text text-center">
+                            {{ fiche_matiere.objectifs ? fiche_matiere.objectifs|raw : 'Non renseigné' }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+</body>
+</html>

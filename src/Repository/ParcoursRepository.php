@@ -107,4 +107,12 @@ class ParcoursRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAllParcoursId(){
+        return $this->createQueryBuilder('p')
+            ->select('p.id')
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0" srcLang="fr" trgLang="fr">
+  <file id="but.fr">
+    <unit id="gfy7osW" name="oral">
+      <segment>
+        <source>oral</source>
+        <target>Oral</target>
+      </segment>
+    </unit>
+    <unit id="EIazC7E" name="mccc_but.helps.pourcentage.help">
+      <segment>
+        <source>mccc_but.helps.pourcentage.help</source>
+        <target>mccc_but.helps.pourcentage.help</target>
+      </segment>
+    </unit>
+    <unit id="U8c7KZ4" name="mccc_but.helps.nombre.help">
+      <segment>
+        <source>mccc_but.helps.nombre.help</source>
+        <target>mccc_but.helps.nombre.help</target>
+      </segment>
+    </unit>
+    <unit id="p3uwQiW" name="ecrit">
+      <segment>
+        <source>ecrit</source>
+        <target>Ecrit</target>
+      </segment>
+    </unit>
+    <unit id="hi_Ve._" name="rapport">
+      <segment>
+        <source>rapport</source>
+        <target>Rapport</target>
+      </segment>
+    </unit>
+    <unit id="6ZbykUm" name="autre">
+      <segment>
+        <source>autre</source>
+        <target>Autre</target>
+      </segment>
+    </unit>
+    <unit id="DmqOC4S" name="portfolio">
+      <segment>
+        <source>portfolio</source>
+        <target>Portfolio</target>
+      </segment>
+    </unit>
+    <unit id="h5jlT5A" name="livrable">
+      <segment>
+        <source>livrable</source>
+        <target>Livrable</target>
+      </segment>
+    </unit>
+    <unit id="5isxUBH" name="soutenance">
+      <segment>
+        <source>soutenance</source>
+        <target>Soutenance</target>
+      </segment>
+    </unit>
+    <unit id="5dHoUso" name="entreprise">
+      <segment>
+        <source>entreprise</source>
+        <target>Entreprise</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>

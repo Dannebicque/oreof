@@ -1,3 +1,11 @@
-{{ include('communs/_form.html.twig', {
-    isModal:true,
-}) }}
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1 id="title" class="display-4 mb-5 text-center">{{ titre ?: '' }}</h2>
+    <div class="row justify-content-center">
+        <div class="col-10 col-lg-8 col-xl-6">
+            {{ include('communs/_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
+

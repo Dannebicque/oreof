@@ -15,6 +15,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: ComposanteRepository::class)]
 class Composante
 {
@@ -29,12 +31,15 @@ class Composante
     #[ORM\ManyToOne(inversedBy: 'composantes')]
     private ?User $directeur = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'composanteResponsableDpe')]
     private ?User $responsableDpe = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'composantePorteuse', targetEntity: Formation::class)]
     private Collection $formationsPortees;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'composantesInscription')]
     private Collection $formations;
 
@@ -53,6 +58,7 @@ class Composante
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $urlSite = null;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'composante', targetEntity: UserCentre::class)]
     private Collection $userCentres;
 
@@ -62,6 +68,7 @@ class Composante
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $sigle = null;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'composante')]
     private Collection $ficheMatieres;
 

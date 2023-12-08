@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Ignore;
+
 #[ORM\Entity(repositoryClass: ButApprentissageCritiqueRepository::class)]
 class ButApprentissageCritique
 {
@@ -22,13 +24,16 @@ class ButApprentissageCritique
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $libelle = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'butApprentissageCritiques')]
     private ?ButNiveau $niveau = null;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'apprentissagesCritiques')]
     /** @deprecated  */
     private Collection $elementConstitutifs;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'apprentissagesCritiques')]
     private Collection $ficheMatieres;
 
