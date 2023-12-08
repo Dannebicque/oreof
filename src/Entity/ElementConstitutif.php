@@ -74,7 +74,7 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $isTpDistancielMutualise;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(fetch: 'EAGER')]
     private ?NatureUeEc $natureUeEc = null;
 
     #[ORM\OneToMany(mappedBy: 'ec', targetEntity: Mccc::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
@@ -103,7 +103,7 @@ class ElementConstitutif
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelle = null;
 
-    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
+    #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
     private ?TypeEc $typeEc = null;
 
     #[MaxDepth(1)]
