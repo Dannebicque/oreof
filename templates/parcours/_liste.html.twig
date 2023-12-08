@@ -83,12 +83,14 @@
             </td>
             <td>
                 {{ parcour.remplissage|remplissage }}
-                {% if lheoXML is defined and lheoXML is not null %}
-                <a href="{{ path('app_parcours_export_xml_lheo', {'parcours': parcour.id}) }}">
-                    <span class="mt-4 badge {{ lheoXML.isValidLheo(parcour) ? 'bg-success' : 'bg-danger' }}">
-                        LHEO
-                    </span>
-                </a>
+                {% if is_granted('ROLE_SES') %}
+                    {% if lheoXML is defined and lheoXML is not null %}
+                    <a href="{{ path('app_parcours_export_xml_lheo', {'parcours': parcour.id}) }}">
+                        <span class="mt-4 badge {{ lheoXML.isValidLheo(parcour) ? 'bg-success' : 'bg-danger' }}">
+                            LHEO
+                        </span>
+                    </a>
+                    {% endif %}
                 {% endif %}
             </td>
             <td>

@@ -40,6 +40,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
@@ -355,8 +356,12 @@ class ParcoursController extends BaseController
     }
 
     #[Route('/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
-    public function getMaquetteIframe(Parcours $parcours){
-        $calcul = new CalculStructureParcours();
+    public function getMaquetteIframe(
+        Parcours $parcours, 
+        EntityManagerInterface $em, 
+        ElementConstitutifRepository $ecRepo
+    ){
+        $calcul = new CalculStructureParcours($em, $ecRepo);
 
         return $this->render('parcours/maquette_iframe.html.twig', [
             'parcours' => $calcul->calcul($parcours)
@@ -404,6 +409,7 @@ class ParcoursController extends BaseController
         return new JsonResponse($data);
     }
 
+    #[IsGranted('ROLE_SES')]
     #[Route('/{parcours}/versioning/json_data', name: 'app_parcours_versioning_json_data')]
     public function displayParcoursJsonData(Parcours $parcours) : Response {
         // Définition du serializer
@@ -435,6 +441,7 @@ class ParcoursController extends BaseController
 
     }
 
+    #[IsGranted('ROLE_SES')]
     #[Route('/{parcours}/versioning/save', name: 'app_parcours_versioning_save')]
     public function saveParcoursIntoJson(Parcours $parcours, Filesystem $fileSystem, EntityManagerInterface $entityManager){
         // Définition du serializer
@@ -479,6 +486,7 @@ class ParcoursController extends BaseController
 
     }
 
+    #[IsGranted('ROLE_SES')]
     #[Route('/{parcours_versioning}/versioning/view', name: 'app_parcours_versioning_view')]
     public function parcoursVersion(
             ParcoursVersioning $parcours_versioning,

@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Classes\CalculStructureParcours;
 use App\Entity\Etablissement;
 use App\Entity\Parcours;
+use App\Repository\ElementConstitutifRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -18,14 +19,18 @@ class LheoXML {
 
     private UrlGeneratorInterface $router;
 
+    private ElementConstitutifRepository $ecRepo;
+
     public function __construct(
         EntityManagerInterface $entityManager,
         TypeDiplomeRegistry $typeDiplomeR,
-        UrlGeneratorInterface $router
+        UrlGeneratorInterface $router,
+        ElementConstitutifRepository $ecRepo,
     ){
         $this->entityManager = $entityManager;
         $this->typeDiplomeR = $typeDiplomeR;
         $this->router = $router;
+        $this->ecRepo = $ecRepo;
     }
 
     /**
@@ -158,7 +163,7 @@ class LheoXML {
         // Calculs ECTS
         $ects = 0;
         if($with_extras){
-            $dto = new CalculStructureParcours();
+            $dto = new CalculStructureParcours($this->entityManager, $this->ecRepo);
             $ects = $dto->calcul($parcours)->heuresEctsFormation->sommeFormationEcts;
         }
 
@@ -175,7 +180,7 @@ class LheoXML {
             if($adresse = $composante->getAdresse()){
                 $coordonneesComposante = [
                     'denomination' => $composante->getLibelle(),
-                    'ligne' => $adresse->getAdresse1() . $adresse->getAdresse2() ?? '',
+                    'ligne' => $adresse->getAdresse1() . " " . $adresse->getAdresse2() ?? '',
                     'codepostal' => $adresse->getCodePostal(),
                     'ville' => $adresse->getVille(),
                 ];    
