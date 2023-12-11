@@ -392,14 +392,23 @@ class ParcoursController extends BaseController
     }
 
     #[Route('/{parcours}/export-json-urca', name: 'app_parcours_export_json_urca')]
-    public function getJsonExportUrca(Parcours $parcours) : Response {
+    public function getJsonExportUrca(
+        Parcours $parcours,
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+    ) : Response {
+        $typeDiplome = $parcours->getFormation()->getTypeDiplome();
+        $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
+
+        $ects = $typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts;
+
         $data = [
             'description' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            'ects' => $ects ?? 0,
             'metadata' => [
                 'domaine' => $parcours->getFormation()?->getDomaine()?->getLibelle() ?? '-',
                 'type-formation' => $parcours->getFormation()?->getTypeDiplome()?->getLibelle() ?? '-',
                 'localisation' => '-', // Les villes des parcours sont NULL ---> Table Ville
-                'faculte-ecole-institut' => $parcours->getComposanteInscription()->getLibelle() ?? '-',
+                'faculte-ecole-institut' => $parcours->getComposanteInscription()?->getLibelle() ?? '-',
                 'public-concerne' => $parcours->getRegimeInscription() ?? [], //Certains sont des tableaux, d'autres en JSON
             ],
             'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),

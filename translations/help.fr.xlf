@@ -1904,6 +1904,54 @@
         <target>Cochez cette case si votre EC ne contient pas de volume horaire.</target>
       </segment>
     </unit>
+    <unit id="2_hav_Y" name="parcours_bcc.helps.synchroBcc">
+      <segment>
+        <source>parcours_bcc.helps.synchroBcc</source>
+        <target>parcours_bcc.helps.synchroBcc</target>
+      </segment>
+    </unit>
+    <unit id="qBXX4Di" name="domaine.helps.codeApogee">
+      <segment>
+        <source>domaine.helps.codeApogee</source>
+        <target>domaine.helps.codeApogee</target>
+      </segment>
+    </unit>
+    <unit id="1ve22xb" name="type_diplome.helps.codeApogee">
+      <segment>
+        <source>type_diplome.helps.codeApogee</source>
+        <target>type_diplome.helps.codeApogee</target>
+      </segment>
+    </unit>
+    <unit id="3KakGlR" name="ville.helps.codeApogee">
+      <segment>
+        <source>ville.helps.codeApogee</source>
+        <target>ville.helps.codeApogee</target>
+      </segment>
+    </unit>
+    <unit id="sqrdzlp" name="composante.helps.codeComposante">
+      <segment>
+        <source>composante.helps.codeComposante</source>
+        <target>composante.helps.codeComposante</target>
+      </segment>
+    </unit>
+    <unit id="ravs3y1" name="composante.helps.codeApogee">
+      <segment>
+        <source>composante.helps.codeApogee</source>
+        <target>composante.helps.codeApogee</target>
+      </segment>
+    </unit>
+    <unit id="4biV4_y" name="mention.helps.codeApogee">
+      <segment>
+        <source>mention.helps.codeApogee</source>
+        <target>mention.helps.codeApogee</target>
+      </segment>
+    </unit>
+    <unit id="apXgJw3" name="annee_universitaire.helps.codeApogee">
+      <segment>
+        <source>annee_universitaire.helps.codeApogee</source>
+        <target>annee_universitaire.helps.codeApogee</target>
+      </segment>
+    </unit>
     <unit id="32SQ6QY" name="etablissement.helps.etablissement_information.help">
       <segment>
         <source>etablissement.helps.etablissement_information.help</source>
@@ -1926,12 +1974,6 @@
       <segment>
         <source>etablissement.helps.etablissement_information.informations_pratiques</source>
         <target>etablissement.helps.etablissement_information.informations_pratiques</target>
-      </segment>
-    </unit>
-    <unit id="1ve22xb" name="type_diplome.helps.codeApogee">
-      <segment>
-        <source>type_diplome.helps.codeApogee</source>
-        <target>type_diplome.helps.codeApogee</target>
       </segment>
     </unit>
     <unit id="fx6V9rR" name="type_diplome.helps.modalites_admission">

@@ -1563,5 +1563,125 @@
         <target>Déposer la pièce justifiant la validation par le Conseil de composante (PV, Relevé de décisions, délibération)</target>
       </segment>
     </unit>
+    <unit id="E63LRko" name="formation.refuse.cfvu.flash.success">
+      <segment>
+        <source>formation.refuse.cfvu.flash.success</source>
+        <target>formation.refuse.cfvu.flash.success</target>
+      </segment>
+    </unit>
+    <unit id="nqX6WjM" name="validation.etat.refuser.cfvu">
+      <segment>
+        <source>validation.etat.refuser.cfvu</source>
+        <target>validation.etat.refuser.cfvu</target>
+      </segment>
+    </unit>
+    <unit id="k3wYlpN" name="en_cours_redaction">
+      <segment>
+        <source>en_cours_redaction</source>
+        <target>En cours de rédaction</target>
+      </segment>
+    </unit>
+    <unit id="VYpqFRl" name="soumis_dpe_composante">
+      <segment>
+        <source>soumis_dpe_composante</source>
+        <target>Soumis DPE</target>
+      </segment>
+    </unit>
+    <unit id="mLpOhzj" name="soumis_conseil">
+      <segment>
+        <source>soumis_conseil</source>
+        <target>Soumis Conseil</target>
+      </segment>
+    </unit>
+    <unit id="b39D6KF" name="soumis_central">
+      <segment>
+        <source>soumis_central</source>
+        <target>Soumis Central/VP</target>
+      </segment>
+    </unit>
+    <unit id="wjPr7Bg" name="soumis_cfvu">
+      <segment>
+        <source>soumis_cfvu</source>
+        <target>Soumis CFVU</target>
+      </segment>
+    </unit>
+    <unit id="rQLFrrW" name="valide_pour_publication">
+      <segment>
+        <source>valide_pour_publication</source>
+        <target>Validé CFVU</target>
+      </segment>
+    </unit>
+    <unit id="1lN2PNR" name="btn.validation.formation.valide">
+      <segment>
+        <source>btn.validation.formation.valide</source>
+        <target>Valider et soumettre la formation</target>
+      </segment>
+    </unit>
+    <unit id="fk_fTm8" name="valide.conseil.fichier.label">
+      <segment>
+        <source>valide.conseil.fichier.label</source>
+        <target>Pièce justifiant la validation du projet DPE (PV, relevé de décision, délibération) :</target>
+      </segment>
+    </unit>
+    <unit id="oV5fKyh" name="valide.conseil.helps.fichier.help">
+      <segment>
+        <source>valide.conseil.helps.fichier.help</source>
+        <target>Le fichier doit être au format PDF</target>
+      </segment>
+    </unit>
+    <unit id="qryvJUg" name="valide.conseil.helps.laisserPasser.texte">
+      <segment>
+        <source>valide.conseil.helps.laisserPasser.texte</source>
+        <target>Demande de laissez-passer, le conseil de composante ne pouvant avoir lieu avant le passage en CFVU.</target>
+      </segment>
+    </unit>
+    <unit id="Lzzax_1" name="valide.conseil.helps.laisserPasser.help">
+      <segment>
+        <source>valide.conseil.helps.laisserPasser.help</source>
+        <target> </target>
+      </segment>
+    </unit>
+    <unit id="us8ypJ4" name="valide.conseil.date.label">
+      <segment>
+        <source>valide.conseil.date.label</source>
+        <target>Date du conseil de composante</target>
+      </segment>
+    </unit>
+    <unit id="qLBEz_p" name="valide.conseil.helps.date.help">
+      <segment>
+        <source>valide.conseil.helps.date.help</source>
+        <target> </target>
+      </segment>
+    </unit>
+    <unit id="bPvGnc8" name="btn.conseil.valide">
+      <segment>
+        <source>btn.conseil.valide</source>
+        <target>Valider et transmettre la formation</target>
+      </segment>
+    </unit>
+    <unit id="dG3a7sp" name="validation.formation.indisponible">
+      <segment>
+        <source>validation.formation.indisponible</source>
+        <target>Validation formation impossible</target>
+      </segment>
+    </unit>
+    <unit id="OkUZlkO" name="verifier.fiches.ec.matieres.infobulle">
+      <segment>
+        <source>verifier.fiches.ec.matieres.infobulle</source>
+        <target>Vérifier les informations saisies dans les fiches EC/matières</target>
+      </segment>
+    </unit>
+    <unit id="Mn7h8.J" name="validation.valider.fiches_matieres.parcours">
+      <segment>
+        <source>validation.valider.fiches_matieres.parcours</source>
+        <target>Valider et soumettre au RF les fiches EC/matières</target>
+      </segment>
+    </unit>
+    <unit id="8L8wcxr" name="validation.valider.fiches_matieres.formation">
+      <segment>
+        <source>validation.valider.fiches_matieres.formation</source>
+        <target>Valider et soumettre au DPE les fiches EC/matières</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
