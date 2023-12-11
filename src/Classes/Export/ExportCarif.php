@@ -13,6 +13,7 @@ use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
 use App\Entity\AnneeUniversitaire;
 use App\Repository\FormationRepository;
+use App\Utils\CleanTexte;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -47,12 +48,12 @@ class ExportCarif implements ExportInterface
                     $this->excelWriter->writeCellXY('C', $ligne, $formation->getDisplay());
                     if ($formation->isHasParcours()) {
                         $this->excelWriter->writeCellXY('D', $ligne, $parcours->getLibelle());
-                        $this->excelWriter->writeCellXY('E', $ligne, $parcours->getObjectifsParcours(), ['wrap' => true]);
-                        $this->excelWriter->writeCellXY('F', $ligne, $parcours->getContenuFormation(), ['wrap' => true]);
+                        $this->excelWriter->writeCellXY('E', $ligne, CleanTexte::cleanTextArea($parcours->getObjectifsParcours()), ['wrap' => true]);
+                        $this->excelWriter->writeCellXY('F', $ligne, CleanTexte::cleanTextArea($parcours->getContenuFormation()), ['wrap' => true]);
                         $this->excelWriter->writeCellXY('G', $ligne, $parcours->getRespParcours()?->getDisplay());
                     } else {
-                        $this->excelWriter->writeCellXY('E', $ligne, $formation->getObjectifsFormation(), ['wrap' => true]);
-                        $this->excelWriter->writeCellXY('F', $ligne, $formation->getContenuFormation(), ['wrap' => true]);
+                        $this->excelWriter->writeCellXY('E', $ligne, CleanTexte::cleanTextArea($formation->getObjectifsFormation()), ['wrap' => true]);
+                        $this->excelWriter->writeCellXY('F', $ligne, CleanTexte::cleanTextArea($formation->getContenuFormation()), ['wrap' => true]);
                         $this->excelWriter->writeCellXY('G', $ligne, $formation->getResponsableMention()?->getDisplay());
                     }
 
@@ -64,7 +65,7 @@ class ExportCarif implements ExportInterface
                     $this->excelWriter->writeCellXY('K', $ligne, $parcours->getModalitesEnseignement()?->value);
                     $this->excelWriter->writeCellXY('I', $ligne, $formation->getNiveauEntree()->libelle());
                     $this->excelWriter->writeCellXY('J', $ligne, $formation->getNiveauSortie()->libelle());
-                    $this->excelWriter->writeCellXY('L', $ligne, $parcours->getPrerequis(), ['wrap' => true]);
+                    $this->excelWriter->writeCellXY('L', $ligne, CleanTexte::cleanTextArea($parcours->getPrerequis()), ['wrap' => true]);
 //                    $this->excelWriter->writeCellXY('N', $ligne, $dureeEntreprise);
 //                    $this->excelWriter->writeCellXY('O', $ligne, $dureeFormation);
                     $this->excelWriter->writeCellXY('R', $ligne, $parcours->getLocalisation()?->getLibelle());

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\GetHistorique;
 use App\Repository\FormationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,6 +14,7 @@ class ApiSiteWebController extends AbstractController
 {
     #[Route('/api/site/web', name: 'app_api_site_web')]
     public function index(
+        GetHistorique $getHistorique,
         FormationRepository $formatinRepository,
     ): JsonResponse
     {
@@ -31,7 +33,8 @@ class ApiSiteWebController extends AbstractController
             $data[] = [
                 'id' => $formation->getId(),
                 'libelle' => $formation->getDisplayLong(),
-                'parcours' => $tParcours
+                'parcours' => $tParcours,
+                'dateValidation' => $getHistorique->getHistoriqueFormationLastStep($formation, 'publier')?->getDate()?->format('Y-m-d H:i:s') ?? null,
             ];
         }
 

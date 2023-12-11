@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.20.1](https://github.com/Dannebicque/oreof/compare/v1.20.0...v1.20.1) (2023-12-11)
+
+
+### Features
+
+* Suppression des balises HTML dans les zones de textes pour les exports excel ([ce5e757](https://github.com/Dannebicque/oreof/commit/ce5e757abddb402afb505f6226cbc60a8cdbaf20))
+
+
+### Bug Fixes
+
+* Fontawesome pro ([e475f71](https://github.com/Dannebicque/oreof/commit/e475f7172dd0a55245ab86164743b84217c621b6))
+
 ## [1.20.0](https://github.com/Dannebicque/oreof/compare/v1.19.3...v1.20.0) (2023-12-08)
 
 
