@@ -75,7 +75,7 @@ class Composante
     #[ORM\Column(length: 3, nullable: true)]
     private ?string $codeComposante = null;
 
-    #[ORM\Column(length: 1, nullable: true)]
+    #[ORM\Column(length: 2, nullable: true)]
     private ?string $codeApogee = null;
 
     public function __construct()

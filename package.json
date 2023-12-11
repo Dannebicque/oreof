@@ -30,13 +30,13 @@
         "lint": "eslint assets/js/ assets/controllers/"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-pro": "^6.2.1",
+        "@fortawesome/fontawesome-pro": "^6.5.1",
         "@hotwired/stimulus": "^3.0.0",
         "@popperjs/core": "^2.9.2",
         "bootstrap": "^5.2.3",
         "stimulus-use": "^0.51.3",
-        "trix": "^2.0.4",
-        "tom-select": "^2.2.2"
+        "tom-select": "^2.2.2",
+        "trix": "^2.0.4"
     },
     "name": "oreof",
     "repository": "https://github.com/Dannebicque/oreof.git"
