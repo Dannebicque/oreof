@@ -335,13 +335,13 @@ HTML;
                             ]
                         ],
                         'adresse-information' => ['adresse' => $adresseSiegeURCA],
-                        'restauration' => $parcours->getVille()?->getEtablissement()?->getEtablissementInformation()?->getRestauration() ?? "Non renseigné.",
-                        'hebergement' => $parcours->getVille()?->getEtablissement()?->getEtablissementInformation()?->getHebergement() ?? "Non renseigné.",
-                        'transport' => $parcours->getVille()?->getEtablissement()?->getEtablissementInformation()?->getTransport() ?? "Non renseigné" 
+                        'restauration' => $parcours->getLocalisation()?->getEtablissement()?->getEtablissementInformation()?->getRestauration() ?? "Non renseigné.",
+                        'hebergement' => $parcours->getLocalisation()?->getEtablissement()?->getEtablissementInformation()?->getHebergement() ?? "Non renseigné.",
+                        'transport' => $parcours->getLocalisation()?->getEtablissement()?->getEtablissementInformation()?->getTransport() ?? "Non renseigné" 
 
                     ],
                     'organisme-formation-responsable' => [
-                        'numero-activite' => '2151P001151',
+                        'numero-activite' => $parcours->getLocalisation()?->getEtablissement()?->getNumeroActivite() ?? '00000000000',
                         'SIRET-organisme-formation' => ['SIRET' => $parcours->getLocalisation()?->getEtablissement()?->getNumeroSIRET() ?? '00000000000000'],
                         'nom-organisme' => 'Université de Reims Champagne-Ardenne',
                         'raison-sociale' => 'Université de Reims Champagne-Ardenne',

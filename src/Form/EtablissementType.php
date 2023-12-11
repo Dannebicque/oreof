@@ -29,6 +29,11 @@ class EtablissementType extends AbstractType
                 'required' => true,
                 'attr' => ['maxlength' => 14, 'minlength' => 14]
             ])
+            ->add('numero_activite', TextType::class, [
+                'label' => "Numéro d'activité",
+                'required' => true,
+                'attr' => ['maxlength' => 11, 'minlength' => 11]
+            ])
             ->add('etablissement_information', EtablissementInformationType::class, [
                 'label' => "Informations diverses"
             ])

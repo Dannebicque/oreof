@@ -47,6 +47,9 @@ class Etablissement
     #[ORM\Column(length: 14, nullable: true)]
     private ?string $numero_SIRET = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $numero_activite = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -222,6 +225,18 @@ class Etablissement
     public function setNumeroSIRET(?string $numero_SIRET): static
     {
         $this->numero_SIRET = $numero_SIRET;
+
+        return $this;
+    }
+
+    public function getNumeroActivite(): ?string
+    {
+        return $this->numero_activite;
+    }
+
+    public function setNumeroActivite(?string $numero_activite): static
+    {
+        $this->numero_activite = $numero_activite;
 
         return $this;
     }

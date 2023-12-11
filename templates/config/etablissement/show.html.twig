@@ -13,6 +13,10 @@
         <td>{{ etablissement.getNumeroSIRET() ?: 'Non renseigné' }}</td>
     </tr>
     <tr>
+        <th>Numéro d'activité</th>
+        <td>{{ etablissement.getNumeroActivite() ?: 'Non renseigné' }}</td>
+    </tr>
+    <tr>
         <th>Calendrier universitaire</th>
         <td>
             {{ etablissement.getEtablissementInformation.getCalendrierUniversitaire 

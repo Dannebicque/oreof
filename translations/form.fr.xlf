@@ -2377,5 +2377,11 @@
         <target>Numéro SIRET</target>
       </segment>
     </unit>
+    <unit id="YuaVcdT" name="Numéro d'activité">
+      <segment>
+        <source>Numéro d'activité</source>
+        <target>Numéro d'activité</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

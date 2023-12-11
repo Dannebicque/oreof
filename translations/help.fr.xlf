@@ -2048,5 +2048,11 @@
         <target>etablissement.helps.numero_SIRET</target>
       </segment>
     </unit>
+    <unit id="5OqwzI5" name="etablissement.helps.numero_activite">
+      <segment>
+        <source>etablissement.helps.numero_activite</source>
+        <target>etablissement.helps.numero_activite</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
