@@ -937,6 +937,11 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@fortawesome/fontawesome-pro@^6.5.1":
+  version "6.5.1"
+  resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-pro/-/6.5.1/fontawesome-pro-6.5.1.tgz"
+  integrity sha512-XLi5HOQ3XLNtM9UhrCyT5jEj0RHkx5GfzKDmUPpVTea4C/Ekj5plOYVAp9dUWgH+NWo3IrVpwhsnhIFh/FZPgA==
+
 "@hotwired/stimulus-webpack-helpers@^1.0.1":
   version "1.0.1"
   resolved "https://registry.npmjs.org/@hotwired/stimulus-webpack-helpers/-/stimulus-webpack-helpers-1.0.1.tgz"

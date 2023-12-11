@@ -78,7 +78,6 @@ class FormationController extends BaseController
         TypeDiplomeRepository $typeDiplomeRepository,
         FormationRepository   $formationRepository,
         Request               $request,
-        LheoXML               $lheoXML
     ): Response {
         $sort = $request->query->get('sort') ?? 'typeDiplome';
         $direction = $request->query->get('direction') ?? 'asc';
@@ -139,7 +138,6 @@ class FormationController extends BaseController
             'composantes' => $composanteRepository->findBy([], ['libelle' => 'ASC']),
             'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
             'params' => $request->query->all(),
-            'lheoXML' => $lheoXML,
             'isCfvu' => false,
         ]);
     }

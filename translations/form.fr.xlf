@@ -2275,6 +2275,24 @@
         <target>EC sans volume horaire</target>
       </segment>
     </unit>
+    <unit id="hvsLsYs" name="Code Apogée">
+      <segment>
+        <source>Code Apogée</source>
+        <target>Code Apogée</target>
+      </segment>
+    </unit>
+    <unit id="BNZ7hew" name="type_diplome.labels.codeApogee">
+      <segment>
+        <source>type_diplome.labels.codeApogee</source>
+        <target>Code Apogée</target>
+      </segment>
+    </unit>
+    <unit id="7VxH7xZ" name="Code Composante">
+      <segment>
+        <source>Code Composante</source>
+        <target>Code Composante</target>
+      </segment>
+    </unit>
     <unit id="ynjqnA." name="etablissement.labels.etablissement_information.label">
       <segment>
         <source>etablissement.labels.etablissement_information.label</source>
@@ -2303,12 +2321,6 @@
       <segment>
         <source>Informations diverses</source>
         <target>Informations diverses</target>
-      </segment>
-    </unit>
-    <unit id="hvsLsYs" name="Code Apogée">
-      <segment>
-        <source>Code Apogée</source>
-        <target>Code Apogée</target>
       </segment>
     </unit>
     <unit id="sGE3Cde" name="Modalités d'admission">
@@ -2351,6 +2363,24 @@
       <segment>
         <source>Prérequis obligatoires</source>
         <target>Prérequis obligatoires</target>
+      </segment>
+    </unit>
+    <unit id="SgrLXe." name="Code CIP (Apogée)">
+      <segment>
+        <source>Code CIP (Apogée)</source>
+        <target>Code CIP (Apogée)</target>
+      </segment>
+    </unit>
+    <unit id="7zzuM.c" name="Numéro SIRET">
+      <segment>
+        <source>Numéro SIRET</source>
+        <target>Numéro SIRET</target>
+      </segment>
+    </unit>
+    <unit id="YuaVcdT" name="Numéro d'activité">
+      <segment>
+        <source>Numéro d'activité</source>
+        <target>Numéro d'activité</target>
       </segment>
     </unit>
   </file>

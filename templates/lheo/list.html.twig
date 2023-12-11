@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1 class="text-center mb-5">
+        Liste des parcours dont l'export LHEO est invalide
+    </h1>
+    {% for e in errorArray %}   
+    <div class="row my-3 justify-content-center">
+        <div class="col-8 border border-danger p-2 rounded">
+            <div class="col-12"> 
+                ID : <strong>{{ e.id }}</strong> - Libelle : <strong>{{ e.libelle }}</strong>
+            </div>
+            {% if e.xml_errors|length > 0 %}
+                <ul>
+                {% for xmlError in e.xml_errors %}
+                    <li>
+                        Ligne {{ xmlError.line }} | Erreur : {{ xmlError.message }}
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+        <h2>Tous les parcours sont valides !</h2>
+    {% endfor %}
+{% endblock %}
