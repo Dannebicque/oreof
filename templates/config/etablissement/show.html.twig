@@ -9,6 +9,10 @@
         <td>{{ etablissement.adresse ? etablissement.adresse.display|raw : 'Non définie' }}</td>
     </tr>
     <tr>
+        <th>Numéro SIRET</th>
+        <td>{{ etablissement.getNumeroSIRET() ?: 'Non renseigné' }}</td>
+    </tr>
+    <tr>
         <th>Calendrier universitaire</th>
         <td>
             {{ etablissement.getEtablissementInformation.getCalendrierUniversitaire 

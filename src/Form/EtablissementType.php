@@ -11,6 +11,7 @@ namespace App\Form;
 
 use App\Entity\Etablissement;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -22,6 +23,11 @@ class EtablissementType extends AbstractType
             ->add('libelle')
             ->add('adresse', AdresseType::class, [
                 'label' => 'Adresse du siège de l\'établissement',
+            ])
+            ->add('numero_SIRET', TextType::class, [
+                'label' => "Numéro SIRET",
+                'required' => true,
+                'attr' => ['maxlength' => 14, 'minlength' => 14]
             ])
             ->add('etablissement_information', EtablissementInformationType::class, [
                 'label' => "Informations diverses"

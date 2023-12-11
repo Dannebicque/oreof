@@ -2042,5 +2042,11 @@
         <target>type_diplome.helps.prerequis_obligatoires</target>
       </segment>
     </unit>
+    <unit id="uRnF.zH" name="etablissement.helps.numero_SIRET">
+      <segment>
+        <source>etablissement.helps.numero_SIRET</source>
+        <target>etablissement.helps.numero_SIRET</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

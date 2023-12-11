@@ -2371,5 +2371,11 @@
         <target>Code CIP (Apogée)</target>
       </segment>
     </unit>
+    <unit id="7zzuM.c" name="Numéro SIRET">
+      <segment>
+        <source>Numéro SIRET</source>
+        <target>Numéro SIRET</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

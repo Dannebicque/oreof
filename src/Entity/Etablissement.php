@@ -44,6 +44,9 @@ class Etablissement
     #[ORM\OneToOne(mappedBy: 'etablissement', cascade: ['persist', 'remove'])]
     private ?EtablissementInformation $etablissement_information = null;
 
+    #[ORM\Column(length: 14, nullable: true)]
+    private ?string $numero_SIRET = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -207,6 +210,18 @@ class Etablissement
         }
 
         $this->etablissement_information = $etablissement_information;
+
+        return $this;
+    }
+
+    public function getNumeroSIRET(): ?string
+    {
+        return $this->numero_SIRET;
+    }
+
+    public function setNumeroSIRET(?string $numero_SIRET): static
+    {
+        $this->numero_SIRET = $numero_SIRET;
 
         return $this;
     }

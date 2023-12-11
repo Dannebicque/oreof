@@ -342,7 +342,7 @@ HTML;
                     ],
                     'organisme-formation-responsable' => [
                         'numero-activite' => '2151P001151',
-                        'SIRET-organisme-formation' => ['SIRET' => '19511296600799'],
+                        'SIRET-organisme-formation' => ['SIRET' => $parcours->getLocalisation()?->getEtablissement()?->getNumeroSIRET() ?? '00000000000000'],
                         'nom-organisme' => 'Université de Reims Champagne-Ardenne',
                         'raison-sociale' => 'Université de Reims Champagne-Ardenne',
                         'coordonnees-organisme' => [
