@@ -14,7 +14,8 @@ abstract class CleanTexte
     // Supprime toutes les balises HTML du texte
     public static function cleanTextArea(string $texte): String
     {
-        $texte = str_replace(['<br>', '<br/>', '<br />', '<p>', '</p>', '<div>', '</div>', '<span>', '</span>', '<strong>', '</strong>', '<em>', '</em>', '<u>', '</u>', '<i>', '</i>', '<b>', '</b>', '<!--block-->', '<li>', '</li>', '<ul>', '</ul>'], '', $texte);
+        $texte = str_replace(['<!--block-->'], '', $texte);
+        $texte = strip_tags($texte);
         $texte = str_replace(['&nbsp;'], ' ', $texte);
         return $texte;
     }
