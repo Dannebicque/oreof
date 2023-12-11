@@ -70,7 +70,6 @@ class ParcoursController extends BaseController
     public function liste(
         ParcoursRepository $parcoursRepository,
         Request            $request,
-        LheoXML $lheoXML
     ): Response {
         $sort = $request->query->get('sort') ?? 'libelle';
         $direction = $request->query->get('direction') ?? 'asc';
@@ -105,7 +104,6 @@ class ParcoursController extends BaseController
             'parcours' => $tParcours,
             'sort' => $sort,
             'direction' => $direction,
-            'lheoXML' => $lheoXML
         ]);
     }
 
@@ -208,7 +206,8 @@ class ParcoursController extends BaseController
     #[Route('/{id}', name: 'app_parcours_show', methods: ['GET'])]
     public function show(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        Parcours            $parcours
+        Parcours            $parcours,
+        LheoXML $lheoXML,
     ): Response {
         $formation = $parcours->getFormation();
         if ($formation === null) {
@@ -228,7 +227,8 @@ class ParcoursController extends BaseController
             'typeDiplome' => $typeDiplome,
             'hasParcours' => $formation->isHasParcours(),
             'dto' => $dto,
-            'typeD' => $typeD
+            'typeD' => $typeD,
+            'lheoXML' => $lheoXML
         ]);
     }
 
@@ -524,6 +524,30 @@ class ParcoursController extends BaseController
             'hasParcours' => $parcours->getFormation()->isHasParcours(),
             'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
             'dateVersion' => $dateVersion
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/check/lheo_invalid_list', name: 'app_parcours_lheo_invalid_list')]
+    public function getInvalidXmlLheoList(
+        LheoXML $lheoXML,
+        EntityManagerInterface $entityManager
+    ) : Response {
+        $parcoursList = $entityManager->getRepository(Parcours::class)->findAll();
+        $errorArray = [];
+        foreach($parcoursList as $p){
+            if($lheoXML->isValidLHEO($p) === false){
+                $errorArray[] = [
+                    'id' => $p->getId(),
+                    'libelle' => $p->getLibelle(),
+                    'xml_errors' => libxml_get_errors()
+                ];
+                libxml_clear_errors();
+            }
+        }
+
+        return $this->render('lheo/list.html.twig', [
+            'errorArray' => $errorArray
         ]);
     }
 }

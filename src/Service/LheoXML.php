@@ -319,7 +319,7 @@ HTML;
                         'niveau-entree-obligatoire' => 1,
                         'modalites-alternance' => $modalitesAlternance,
                         'modalites-enseignement' => $parcours->getModalitesEnseignement() ? $parcours->getModalitesEnseignement()->value : 1,
-                        'conditions-specifiques' => $parcours->getPrerequis() ?? 'Aucune condition spécifique.',
+                        'conditions-specifiques' => $this->cleanString($parcours->getPrerequis()) ?? 'Aucune condition spécifique.',
                         'prise-en-charge-frais-possible' => 1, // A CHANGER - 1 oui | 0 non 
                         'modalites-entrees-sorties' => 0,
                         'duree-cycle' => $dureeCycle,
@@ -363,11 +363,11 @@ HTML;
                     ],
                     'extras' => [
                         'extra' => [
-                            'competences-acquises' => $competencesAcquisesExtra,
-                            'organisation-pedagogique' => $organisationPedagogique,
-                            'poursuite-etudes' => $poursuiteEtudes,
-                            'informations-pratiques' => $informationsPratiques,
-                            'admission' => $admissionParcours,
+                            'competences-acquises' => $this->cleanString($competencesAcquisesExtra),
+                            'organisation-pedagogique' => $this->cleanString($organisationPedagogique),
+                            'poursuite-etudes' => $this->cleanString($poursuiteEtudes),
+                            'informations-pratiques' => $this->cleanString($informationsPratiques),
+                            'admission' => $this->cleanString($admissionParcours),
                             'formation-continue-et-apprentissage' => [],
                         ],
                     ]
@@ -424,9 +424,14 @@ HTML;
      * @param ?string $stringToClean Chaîne à nettoyer
      * @return string Chaîne épurée
      */
-    public function cleanString(?string $stringToClean) : string {
-        $cleanedString = preg_replace('/’/m', "'", $stringToClean);
-        $cleanedString = preg_replace('/[\x00-\x1F\x7F]/m', '', $cleanedString);
-        return $cleanedString;
+    public function cleanString(?string $stringToClean) : ?string {
+        if($stringToClean !== null){
+            // Si l'on a bien une chaîne, on la nettoie et on la renvoie
+            $cleanedString = preg_replace('/’/m', "'", $stringToClean);
+            $cleanedString = preg_replace('/[\x00-\x1F\x7F]/m', '', $cleanedString);
+            $cleanedString = preg_replace('/<!--block-->/m', '', $cleanedString);
+            return $cleanedString;
+        }
+        return null;     
     }
 }
