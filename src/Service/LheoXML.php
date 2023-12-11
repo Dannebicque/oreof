@@ -229,7 +229,7 @@ HTML;
                         $competencesHTML .= "<li>Niveau {$niveau->getOrdre()} - {$niveau->getLibelle()}</li>";
                     }
                     $competencesAcquisesExtra .= <<<HTML
-                    <li>{$comp->getNomCourt()}</li>
+                    <li>{$comp->getLibelle()}</li>
                     <li>
                         <ul>{$competencesHTML}</ul>
                     </li>

@@ -407,7 +407,7 @@ class ParcoursController extends BaseController
             'metadata' => [
                 'domaine' => $parcours->getFormation()?->getDomaine()?->getLibelle() ?? '-',
                 'type-formation' => $parcours->getFormation()?->getTypeDiplome()?->getLibelle() ?? '-',
-                'localisation' => '-', // Les villes des parcours sont NULL ---> Table Ville
+                'localisation' => $parcours->getLocalisation()?->getLibelle() ?? '-',
                 'faculte-ecole-institut' => $parcours->getComposanteInscription()?->getLibelle() ?? '-',
                 'public-concerne' => $parcours->getRegimeInscription() ?? [], //Certains sont des tableaux, d'autres en JSON
             ],
