@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Classes\GetHistorique;
 use App\Repository\FormationRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +35,7 @@ class ApiSiteWebController extends AbstractController
                 'id' => $formation->getId(),
                 'libelle' => $formation->getDisplayLong(),
                 'parcours' => $tParcours,
-                'dateValidation' => $getHistorique->getHistoriqueFormationLastStep($formation, 'publier')?->getDate()?->format('Y-m-d H:i:s') ?? null,
+                'dateValidation' => $getHistorique->getHistoriqueFormationLastStep($formation, 'publier')?->getDate()?->format('Y-m-d H:i:s') ?? '2023-12-11 08:00:00', //temporaire pour les tests
             ];
         }
 
