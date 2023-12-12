@@ -526,7 +526,46 @@ HTML;
                 $message
             );
         }
-
+        // Résultats attendus du parcours manquants
+        elseif(
+            preg_match(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}resultats-attendus': .+length of '0'.+underruns.+$/m",
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}resultats-attendus': .+length of '0'.+underruns.+$/m",
+                "Les 'résultats attendus' du parcours ne sont pas renseignés",
+                $message
+            );
+        }
+        // Prérequis du parcours manquants
+        elseif(
+            preg_match(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}conditions-specifiques': .+length of '0'.+underruns.+$/m",
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}conditions-specifiques': .+length of '0'.+underruns.+$/m",
+                "Les prérequis du parcours ne sont pas renseignés",
+                $message
+            );
+        }
+        // Résultats attendus du parcours dépassant la longueur maximale
+        elseif(
+            preg_match(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}resultats-attendus': .+length of '([0-9]+)'.+exceeds.+'([0-9]+)'.+$/m",
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}resultats-attendus': .+length of '([0-9]+)'.+exceeds.+'([0-9]+)'.+$/m",
+                "Les 'résultats attendus' du parcours ont une longueur de $1 supérieure au maximum de $2",
+                $message
+            );
+        }
+    
         return $decodedMessage;
     }
 }
