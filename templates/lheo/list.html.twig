@@ -5,27 +5,57 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="text-center mb-5">
-        Liste des parcours dont l'export LHEO est invalide
-    </h1>
     {% for e in errorArray %}   
     <div class="row my-3 justify-content-center">
         <div class="col-8 border border-primary p-2 rounded bg-white">
             <div class="col-12"> 
-                ID : <strong>{{ e.id }}</strong> 
-                <a href="{{ path('app_parcours_show', {id: e.id}) }}">
-                    <strong>{{ e.formation_libelle }} : {{ e.parcours_libelle }}</strong>
-                </a>
+                <div class="row">
+                    <div class="col-8">
+                        <a href="{{ path('app_parcours_show', {id: e.id}) }}">
+                            <strong class="text-primary">
+                                {{ e.formation_libelle }} : {{ e.parcours_libelle }}
+                            </strong>
+                        </a> - ID : <strong>{{ e.id }}</strong>
+                    </div>
+                    <div class="col-3">
+                        {# Bouton pour voir le parcours #}
+                        <a href="{{ path('app_parcours_show',{'id': e.id}) }}"
+                        class="btn btn-sm text-info"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Voir le parcours"
+                        >
+                            <i class="{{ iconShow }}"></i>
+                            <span>
+                                voir
+                            </span>
+                        </a>
+                        {# Bouton pour modifier le parcours #}
+                        <a href="{{ path('app_parcours_edit',{'id': e.id}) }}"
+                            class="btn btn-sm text-warning"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Modifier la fiche d'identité du parcours"
+                            >
+                            <i class="{{ iconEdit }}"></i>
+                            <span>
+                                modifier
+                            </span>
+                        </a>
+                    </div>
+                </div>
             </div>
-            {% if e.xml_errors|length > 0 %}
-                <ul>
-                {% for xmlErrorMessage in e.xml_errors %}
-                    <li>
-                        Erreur : {{ xmlErrorMessage }}
-                    </li>
-                {% endfor %}
-                </ul>
-            {% endif %}
+            <div class="col-12 mt-2">
+                {% if e.xml_errors|length > 0 %}
+                    <ul>
+                    {% for xmlErrorMessage in e.xml_errors %}
+                        <li>
+                            Erreur : {{ xmlErrorMessage }}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
         </div>
     </div>
     {% else %}

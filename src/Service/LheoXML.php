@@ -51,7 +51,12 @@ class LheoXML {
         // Codes ROME
         $codesRome = [];
         foreach($parcours->getCodesRome() as $code){
-            preg_match_all('/([A-Za-z][0-9]{4})/m', $code['code'], $matches);
+            $codeRomeData = $code['code'];
+            // Si la saisie comporte des tabulations
+            if(preg_match_all('/\\t/m', $codeRomeData)){
+                $codeRomeData = preg_replace('/\\t/m', '', $codeRomeData);
+            }
+            preg_match_all('/([A-Za-z][0-9]{4})/m', $codeRomeData, $matches);
             if(isset($matches[1][0])){
                 $codesRome[] = $matches[1][0];
             }
@@ -483,7 +488,7 @@ HTML;
         ){
             $decodedMessage = preg_replace(
                 "/^Element '{http:\/\/lheo.gouv.fr\/2.3}contenu-formation': .+length of '([0-9]+)'.+exceeds.+'([0-9]+)'.+$/m",
-                "Le 'contenu du parcours' a une longueur de $1 supérieure au maximum de $2",
+                "Le 'contenu du parcours' a une longueur de $1 qui est supérieure au maximum de $2",
                 $message
             );
         }
@@ -522,7 +527,7 @@ HTML;
         ){
             $decodedMessage = preg_replace(
                 "/^Element '{http:\/\/lheo.gouv.fr\/2.3}objectif-formation': .+length of '([0-9]+)'.+exceeds.+'([0-9]+)'.+$/m",
-                "Les 'objectifs du parcours' ont une longueur de $1 supérieure au maximum de $2",
+                "Les 'objectifs du parcours' ont une longueur de $1 qui est supérieure au maximum de $2",
                 $message
             );
         }
@@ -561,7 +566,7 @@ HTML;
         ){
             $decodedMessage = preg_replace(
                 "/^Element '{http:\/\/lheo.gouv.fr\/2.3}resultats-attendus': .+length of '([0-9]+)'.+exceeds.+'([0-9]+)'.+$/m",
-                "Les 'résultats attendus' du parcours ont une longueur de $1 supérieure au maximum de $2",
+                "Les 'résultats attendus' du parcours ont une longueur de $1 qui est supérieure au maximum de $2",
                 $message
             );
         }
