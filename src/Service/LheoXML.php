@@ -113,7 +113,7 @@ class LheoXML {
         // Adresses de la composante d'inscription       
         $composantesInscription = [];
 
-        if($composante = $parcours->getComposanteInscription()){
+        if($composante = $parcours->getComposanteInscription() ?? $parcours->getFormation()?->getComposantePorteuse()){
             $adresse = [
                 'denomination' => '',
                 'ligne' => '', 
@@ -176,7 +176,7 @@ class LheoXML {
 
         // Coordonnées Organisme (composante)
         $coordonneesComposante = [];
-        if($composante = $parcours->getComposanteInscription()){
+        if($composante = $parcours->getComposanteInscription() ?? $parcours->getFormation()?->getComposantePorteuse()){
             if($adresse = $composante->getAdresse()){
                 $coordonneesComposante = [
                     'denomination' => $composante->getLibelle(),

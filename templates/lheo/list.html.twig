@@ -10,7 +10,7 @@
     </h1>
     {% for e in errorArray %}   
     <div class="row my-3 justify-content-center">
-        <div class="col-8 border border-danger p-2 rounded">
+        <div class="col-8 border border-primary p-2 rounded bg-white">
             <div class="col-12"> 
                 ID : <strong>{{ e.id }}</strong> 
                 <a href="{{ path('app_parcours_show', {id: e.id}) }}">

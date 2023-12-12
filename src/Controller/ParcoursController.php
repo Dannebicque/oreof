@@ -376,7 +376,9 @@ class ParcoursController extends BaseController
         $isValid = $lheoXML->validateLheoSchema($xml);
         $xml_errors = [];
         if(!$isValid){
-            $xml_errors = libxml_get_errors();
+            foreach(libxml_get_errors() as $error){
+                $xml_errors[] = $lheoXML->decodeErrorMessages($error->message);
+            }
         }
         libxml_clear_errors();
         // Si le XML généré est valide, on le renvoie
