@@ -471,7 +471,7 @@ class FormationController extends BaseController
         return $this->json(false);
     }
 
-    #[Route('/{slug}/maquette_iframe', name: 'app_formation_maquette_iframe')]
+    #[Route('/api/{slug}/maquette_iframe', name: 'app_formation_maquette_iframe')]
     public function getFormationMaquetteIframe(Formation $formation, CalculStructureParcours $calcul) : Response {
         $listeParcours = [];
 

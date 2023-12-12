@@ -216,7 +216,7 @@ class FicheMatiereController extends AbstractController
         return $this->json(false);
     }
 
-    #[Route('/{ec}/{parcours}/maquette_iframe', name: 'app_fiche_matiere_maquette_iframe')]
+    #[Route('/api/{ec}/{parcours}/maquette_iframe', name: 'app_fiche_matiere_maquette_iframe')]
     public function getMaquetteIframe(ElementConstitutif $ec, Parcours $parcours) : Response {
         $ficheMatiere = $ec->getFicheMatiere();
 

@@ -355,10 +355,10 @@ class ParcoursController extends BaseController
         return $this->json(false);
     }
 
-    #[Route('/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
+    #[Route('/api/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
     public function getMaquetteIframe(
-        Parcours $parcours, 
-        EntityManagerInterface $em, 
+        Parcours $parcours,
+        EntityManagerInterface $em,
         ElementConstitutifRepository $ecRepo
     ){
         $calcul = new CalculStructureParcours($em, $ecRepo);
