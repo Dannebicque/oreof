@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.20.2](https://github.com/Dannebicque/oreof/compare/v1.20.1...v1.20.2) (2023-12-12)
+
+
+### Features
+
+* Suppression des balises HTML dans les zones de textes pour les exports excel ([050c61b](https://github.com/Dannebicque/oreof/commit/050c61bf99c307459871ccafdc8cf83b04a661e8))
+
+
+### Bug Fixes
+
+* date pour tests ([cf804e2](https://github.com/Dannebicque/oreof/commit/cf804e252610c1ebbb6584decb049aae4b0b7f3e))
+* route api ouverte en accès libre ([42b0561](https://github.com/Dannebicque/oreof/commit/42b0561f6ac3bf644fca12f82ae38b98d8055e00))
+
 ### [1.20.1](https://github.com/Dannebicque/oreof/compare/v1.20.0...v1.20.1) (2023-12-11)
 
 
