@@ -355,7 +355,7 @@ class ParcoursController extends BaseController
         return $this->json(false);
     }
 
-    #[Route('/api/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
+    #[Route('/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
     public function getMaquetteIframe(
         Parcours $parcours,
         EntityManagerInterface $em,
