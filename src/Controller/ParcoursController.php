@@ -527,7 +527,7 @@ class ParcoursController extends BaseController
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_SES')]
     #[Route('/check/lheo_invalid_list', name: 'app_parcours_lheo_invalid_list')]
     public function getInvalidXmlLheoList(
         LheoXML $lheoXML,
@@ -537,10 +537,15 @@ class ParcoursController extends BaseController
         $errorArray = [];
         foreach($parcoursList as $p){
             if($lheoXML->isValidLHEO($p) === false){
+                $xmlErrorArray = [];
+                foreach(libxml_get_errors() as $xmlError){
+                    $xmlErrorArray[] = $lheoXML->decodeErrorMessages($xmlError->message);
+                }
                 $errorArray[] = [
                     'id' => $p->getId(),
-                    'libelle' => $p->getLibelle(),
-                    'xml_errors' => libxml_get_errors()
+                    'parcours_libelle' => $p->getLibelle(),
+                    'formation_libelle' => $p->getFormation()?->getMention()?->getLibelle(),
+                    'xml_errors' => $xmlErrorArray
                 ];
                 libxml_clear_errors();
             }
