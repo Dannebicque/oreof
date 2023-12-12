@@ -533,9 +533,11 @@ class ParcoursController extends BaseController
     #[Route('/check/lheo_invalid_list', name: 'app_parcours_lheo_invalid_list')]
     public function getInvalidXmlLheoList(
         LheoXML $lheoXML,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        ParcoursRepository $parcoursRepo
     ) : Response {
-        $parcoursList = $entityManager->getRepository(Parcours::class)->findAll();
+        // $parcoursList = $entityManager->getRepository(Parcours::class)->findAll();
+        $parcoursList = $parcoursRepo->findParcours($this->getAnneeUniversitaire(), []);
         $errorArray = [];
         foreach($parcoursList as $p){
             if($lheoXML->isValidLHEO($p) === false){
