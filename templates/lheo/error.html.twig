@@ -1,13 +1,16 @@
 {% extends 'base.html.twig' %}
 
+{% block header %}
+    Erreur LHEO
+{% endblock %}
+
 {% block content %}
-    <h1 class="display-4 mb-3" id="title">Erreur</h1>
     <h1 class="display-4 mb-3" id="title">Export du parcours au format LHEO</h1>
     {% if errors|length > 0 %}
         <ul class="mt-4 mb-4">
         {% for error in errors %}
             <li>
-                Ligne {{ error.line }} | Erreur : {{ error.message }}
+                Erreur : {{ error }}
             </li>
         {% endfor %}
         </ul>
