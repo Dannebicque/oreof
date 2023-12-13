@@ -51,7 +51,12 @@ class LheoXML {
         // Codes ROME
         $codesRome = [];
         foreach($parcours->getCodesRome() as $code){
-            preg_match_all('/([A-Za-z][0-9]{4})/m', $code['code'], $matches);
+            $codeRomeData = $code['code'];
+            // Si la saisie comporte des tabulations
+            if(preg_match_all('/\\t/m', $codeRomeData)){
+                $codeRomeData = preg_replace('/\\t/m', '', $codeRomeData);
+            }
+            preg_match_all('/([A-Za-z][0-9]{4})/m', $codeRomeData, $matches);
             if(isset($matches[1][0])){
                 $codesRome[] = $matches[1][0];
             }
@@ -113,7 +118,7 @@ class LheoXML {
         // Adresses de la composante d'inscription       
         $composantesInscription = [];
 
-        if($composante = $parcours->getComposanteInscription()){
+        if($composante = $parcours->getComposanteInscription() ?? $parcours->getFormation()?->getComposantePorteuse()){
             $adresse = [
                 'denomination' => '',
                 'ligne' => '', 
@@ -176,7 +181,7 @@ class LheoXML {
 
         // Coordonnées Organisme (composante)
         $coordonneesComposante = [];
-        if($composante = $parcours->getComposanteInscription()){
+        if($composante = $parcours->getComposanteInscription() ?? $parcours->getFormation()?->getComposantePorteuse()){
             if($adresse = $composante->getAdresse()){
                 $coordonneesComposante = [
                     'denomination' => $composante->getLibelle(),
@@ -433,5 +438,139 @@ HTML;
             return $cleanedString;
         }
         return null;     
+    }
+
+    /**
+     * Permet de transformer les messages d'erreurs XML en un format plus lisible
+     * @param string $message Message d'erreur XML
+     * @return string Message transformé
+     */
+    public function decodeErrorMessages(string $message){
+        $decodedMessage = $message;
+        // Problème de Code ROME
+        if(preg_match("/^Element '{http:\/\/lheo.gouv.fr\/2.3}code-ROME.+$/m", $message)){
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}code-ROME.+$/m", 
+                'Problème de Code(s) ROME',
+                $message
+            );
+        }
+        // Problème d'adresse
+        elseif(preg_match("/^Element '{http:\/\/lheo.gouv.fr\/2.3}adresse': Missing.+$/m", $message)) {
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}adresse': Missing.+$/m",
+                "Problème d'adresse",
+                $message
+            );
+        }
+        // composante d'inscription manquante
+        elseif(preg_match("/^Element '{http:\/\/lheo.gouv.fr\/2.3}contact-organisme': Missing.+$/m", $message)){
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}contact-organisme': Missing.+$/m",
+                "Problème de composante d'inscription manquante",
+                $message
+            );
+        }
+        // contact-formation : référents pédagogiques non renseignés
+        elseif(preg_match("/^Element '{http:\/\/lheo.gouv.fr\/2.3}contact-formation': Missing.+$/m", $message)){
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}contact-formation': Missing.+$/m",
+                "Problème de référents pédagogiques (responsable(s) du parcours)",
+                $message
+            );
+        }
+        // contenu-formation : dépassement de la longueur autorisée
+        elseif(
+            preg_match(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}contenu-formation': .+length of '([0-9]+)'.+exceeds.+'([0-9]+)'.+$/m", 
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}contenu-formation': .+length of '([0-9]+)'.+exceeds.+'([0-9]+)'.+$/m",
+                "Le 'contenu du parcours' a une longueur de $1 qui est supérieure au maximum de $2",
+                $message
+            );
+        }
+        // code de niveau d'entrée non renseigné
+        elseif(
+            preg_match(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}code-niveau-entree': .+ The value '-1'.+$/m", 
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}code-niveau-entree': .+ The value '-1'.+$/m",
+                "Problème de 'code de niveau d'entrée'",
+                $message
+            );
+        }
+        // objectif-formation non renseigné
+        elseif(
+            preg_match(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}objectif-formation': .+ The value has a length of '0'; this underruns.+$/m", 
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}objectif-formation': .+ The value has a length of '0'; this underruns.+$/m",
+                "Les objectifs de la formation de sont pas renseignés",
+                $message
+            );
+        }
+        // objectif-formation dépassant la longueur autorisée
+        elseif(
+            preg_match(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}objectif-formation': .+length of '([0-9]+)'.+exceeds.+'([0-9]+)'.+$/m",
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}objectif-formation': .+length of '([0-9]+)'.+exceeds.+'([0-9]+)'.+$/m",
+                "Les 'objectifs du parcours' ont une longueur de $1 qui est supérieure au maximum de $2",
+                $message
+            );
+        }
+        // Résultats attendus du parcours manquants
+        elseif(
+            preg_match(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}resultats-attendus': .+length of '0'.+underruns.+$/m",
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}resultats-attendus': .+length of '0'.+underruns.+$/m",
+                "Les 'résultats attendus' du parcours ne sont pas renseignés",
+                $message
+            );
+        }
+        // Prérequis du parcours manquants
+        elseif(
+            preg_match(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}conditions-specifiques': .+length of '0'.+underruns.+$/m",
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}conditions-specifiques': .+length of '0'.+underruns.+$/m",
+                "Les prérequis du parcours ne sont pas renseignés",
+                $message
+            );
+        }
+        // Résultats attendus du parcours dépassant la longueur maximale
+        elseif(
+            preg_match(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}resultats-attendus': .+length of '([0-9]+)'.+exceeds.+'([0-9]+)'.+$/m",
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}resultats-attendus': .+length of '([0-9]+)'.+exceeds.+'([0-9]+)'.+$/m",
+                "Les 'résultats attendus' du parcours ont une longueur de $1 qui est supérieure au maximum de $2",
+                $message
+            );
+        }
+    
+        return $decodedMessage;
     }
 }
