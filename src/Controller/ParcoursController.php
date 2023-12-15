@@ -492,7 +492,8 @@ class ParcoursController extends BaseController
 
         }catch(\Exception $e){
 
-            $this->addFlashBag('error', "Une erreur est survenue lors de la sauvegarde. {$e->getMessage()}");
+            // TODO : Write log error to file
+            $this->addFlashBag('error', "Une erreur est survenue lors de la sauvegarde.");
 
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
         }
