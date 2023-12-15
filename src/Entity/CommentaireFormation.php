@@ -6,13 +6,10 @@ use App\Repository\CommentaireFormationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
-
 #[ORM\Entity(repositoryClass: CommentaireFormationRepository::class)]
 class CommentaireFormation extends Commentaire
 {
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
     private ?Formation $formation = null;
 

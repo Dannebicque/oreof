@@ -13,7 +13,8 @@ use App\Repository\AnneeUniversitaireRepository;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Ignore;
+
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AnneeUniversitaireRepository::class)]
 class AnneeUniversitaire
@@ -23,32 +24,29 @@ class AnneeUniversitaire
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 30)]
     private ?string $libelle = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?int $annee = null;
 
     #[ORM\Column]
     private ?bool $defaut = null;
 
-    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $dateOuvertureDpe = null;
 
-    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $dateClotureDpe = null;
 
-    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $dateTransmissionSes = null;
 
-    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $dateCfvu = null;
-
-    #[Ignore]
+ 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $datePublication = null;
 

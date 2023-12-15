@@ -8,8 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\MappedSuperclass;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
-
 #[MappedSuperclass]
 #[ORM\Entity]
 #[ORM\InheritanceType('SINGLE_TABLE')]
@@ -25,7 +23,6 @@ abstract class Commentaire
     #[ORM\Column(type: Types::TEXT)]
     private ?string $texte = null;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
     private ?User $user = null;
 

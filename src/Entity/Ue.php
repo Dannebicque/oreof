@@ -15,9 +15,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
-
 #[ORM\Entity(repositoryClass: UeRepository::class)]
 class Ue
 {
@@ -29,13 +26,11 @@ class Ue
     #[ORM\Column]
     private ?int $ordre = null;
 
-    #[MaxDepth(1)]
     #[ORM\ManyToOne(inversedBy: 'ues')]
     private ?Semestre $semestre = null;
 
     #[ORM\ManyToOne(fetch: 'EAGER')]
     private ?TypeUe $typeUe = null;
-
 
     #[ORM\ManyToOne(fetch: 'EAGER')]
     private ?NatureUeEc $natureUeEc = null;
@@ -51,18 +46,15 @@ class Ue
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelle = null;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class)]
     private Collection $ueMutualisables;
 
     #[ORM\ManyToOne(inversedBy: 'ues', fetch: 'EAGER')]
     private ?UeMutualisable $ueRaccrochee = null;
 
-    #[MaxDepth(1)]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ueEnfants')]
     private ?self $ueParent = null;
 
-    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'ueParent', targetEntity: self::class, cascade: [
         'persist',
         'remove'

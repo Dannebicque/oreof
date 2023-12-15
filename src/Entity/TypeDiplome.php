@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TypeDiplomeRepository::class)]
 class TypeDiplome
@@ -18,9 +18,11 @@ class TypeDiplome
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $libelle_court = null;
 
@@ -39,41 +41,41 @@ class TypeDiplome
     #[ORM\Column]
     private ?int $nbEctsMaxUe = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255)]
     private ?string $ModeleMcc = null;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'typeDiplome', targetEntity: Formation::class)]
     private Collection $formations;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'typeDiplome', targetEntity: Mention::class)]
     private Collection $mentions;
 
-    #[Ignore]
     #[ORM\ManyToMany(targetEntity: TypeEc::class, mappedBy: 'typeDiplomes')]
     private Collection $typeEcs;
 
-    #[Ignore]
     #[ORM\ManyToMany(targetEntity: TypeUe::class, mappedBy: 'typeDiplomes')]
     private Collection $typeUes;
 
-    #[Ignore]
     #[ORM\ManyToMany(targetEntity: TypeEpreuve::class, mappedBy: 'typeDiplomes')]
     private Collection $typeEpreuves;
 
     #[ORM\Column]
     private ?bool $debutSemestreFlexible = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?bool $hasStage = true;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?bool $hasProjet = true;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?bool $hasSituationPro = false;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?bool $hasMemoire = true;
 

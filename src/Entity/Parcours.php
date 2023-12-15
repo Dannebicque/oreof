@@ -20,8 +20,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ParcoursRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -36,70 +35,91 @@ class Parcours
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours', fetch: 'EAGER')]
     private ?Formation $formation;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: BlocCompetence::class, cascade: ['persist', 'remove'])]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $blocCompetences;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $contenuFormation = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $objectifsParcours = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $resultatsAttendus = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $rythmeFormationTexte = null;
 
     #[ORM\ManyToOne]
     private ?Ville $ville = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $hasStage = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $stageText = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $nbHeuresStages;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $hasProjet = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $projetText = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $nbHeuresProjet;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $hasMemoire = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $memoireText = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::INTEGER, nullable: true, enumType: ModaliteEnseignementEnum::class)]
     private ?ModaliteEnseignementEnum $modalitesEnseignement = ModaliteEnseignementEnum::NON_DEFINI;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $prerequis = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $poursuitesEtudes = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $debouches = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?array $codesRome = [];
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne]
     private ?RythmeFormation $rythmeFormation = null;
 
@@ -107,84 +127,84 @@ class Parcours
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $semestreParcours;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne]
     private ?Composante $composanteInscription = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?array $regimeInscription = [];
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $modalitesAlternance = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne]
     private ?User $respParcours = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $coordSecretariat = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $hasSituationPro = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $situationProText = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $nbHeuresSituationPro = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne]
     private ?Ville $localisation = null;
 
     #[ORM\Column(length: 15, nullable: true)]
     private ?string $sigle = null;
 
-    #[Ignore]
     #[ORM\Column]
     private ?array $etatSteps = [];
 
     #[ORM\Column(nullable: true)]
     private ?array $etatParcours = [];
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: FicheMatiere::class)]
     private Collection $ficheMatieres;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: FicheMatiereMutualisable::class)]
     private Collection $ficheMatiereParcours;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: SemestreMutualisable::class)]
     private Collection $semestreMutualisables;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: UeMutualisable::class)]
     private Collection $ueMutualisables;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'coParcours')]
     private ?User $coResponsable = null;
 
-    #[Ignore]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'parcoursEnfants')]
     private ?self $parcoursParent = null;
 
     #[ORM\OneToMany(mappedBy: 'parcoursParent', targetEntity: self::class)]
     private Collection $parcoursEnfants;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: HistoriqueParcours::class)]
     private Collection $historiqueParcours;
 
     #[ORM\Column(nullable: true)]
     private ?array $remplissage = [];
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ElementConstitutif::class)]
     private Collection $elementConstitutifs;
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: CommentaireParcours::class)]
     private Collection $commentaires;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ParcoursVersioning::class)]
     private Collection $parcoursVersionings;
     #[ORM\Column(type: Types::TEXT, nullable: true)]

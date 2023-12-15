@@ -14,7 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: CompetenceRepository::class)]
 class Competence
@@ -24,28 +25,30 @@ class Competence
     #[ORM\Column]
     private ?int $id = null;
 
+    #[MaxDepth(1)]
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'competences')]
     private ?BlocCompetence $blocCompetence;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 10)]
     private ?string $code = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: 'text')]
     private ?string $libelle = null;
 
-    #[Ignore]
     #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'competences')]
     private Collection $ficheMatieres;
 
     #[ORM\Column]
     private ?int $ordre = null;
 
-    #[Ignore]
     #[ORM\ManyToMany(targetEntity: ElementConstitutif::class, mappedBy: 'competences')]
     private Collection $elementConstitutifs;
 
 
-    public function __construct(BlocCompetence $blocCompetence)
+    public function __construct(?BlocCompetence $blocCompetence)
     {
         $this->blocCompetence = $blocCompetence;
         $this->ficheMatieres = new ArrayCollection();

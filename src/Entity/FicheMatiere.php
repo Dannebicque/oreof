@@ -19,9 +19,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
-
 #[ORM\Entity(repositoryClass: FicheMatiereRepository::class)]
 #[ORM\Index(name: 'sigle_fiche', columns: ['sigle'], flags: ['fulltext'])]
 #[ORM\Index(name: 'slug_fiche', columns: ['slug'], flags: ['fulltext'])]
@@ -101,15 +98,12 @@ class FicheMatiere
     #[Groups(['fiche_matiere:read'])]
     private ?array $etatSteps = [];
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: ElementConstitutif::class, cascade: ['persist', 'remove'])]
     private Collection $elementConstitutifs;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'ficheMatieres')]
     private ?Parcours $parcours = null;
 
-    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereMutualisable::class)]
     private Collection $ficheMatiereParcours;
 
@@ -184,7 +178,6 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?float $ects = null;
 
-    #[Ignore]
     #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'ficheMatieres')]
     private Collection $composante;
 

@@ -476,7 +476,8 @@ class ParcoursController extends BaseController
             $parcoursVersioning->setFileName($fileName);
             // Création du fichier JSON
             $json = $serializer->serialize($parcours, 'json', [
-                'circular_reference_limit' => 5,
+                AbstractObjectNormalizer::GROUPS => 'parcours_json_versioning',
+                'circular_reference_limit' => 2,
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
                 AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
@@ -491,7 +492,7 @@ class ParcoursController extends BaseController
 
         }catch(\Exception $e){
 
-            $this->addFlashBag('error', "Une erreur est survenue lors de la sauvegarde.");
+            $this->addFlashBag('error', "Une erreur est survenue lors de la sauvegarde. {$e->getMessage()}");
 
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
         }
