@@ -421,7 +421,7 @@ class ParcoursController extends BaseController
         return new JsonResponse($data);
     }
 
-    #[IsGranted('ROLE_SES')]
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{parcours}/versioning/json_data', name: 'app_parcours_versioning_json_data')]
     public function displayParcoursJsonData(Parcours $parcours) : Response {
         // Définition du serializer
@@ -435,11 +435,11 @@ class ParcoursController extends BaseController
         try {
             // Création de la réponse JSON au client
             $json = $serializer->serialize($parcours, 'json', [
-                'circular_reference_limit' => 5,
-                AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
+                AbstractObjectNormalizer::GROUPS => 'parcours_json_versioning',
+                'circular_reference_limit' => 3,
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
+                AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
-                ObjectNormalizer::PRESERVE_EMPTY_OBJECTS => true,
             ]);
             return new Response($json, 200, ['Content-Type' => 'application/json']);
         }
@@ -453,7 +453,7 @@ class ParcoursController extends BaseController
 
     }
 
-    #[IsGranted('ROLE_SES')]
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{parcours}/versioning/save', name: 'app_parcours_versioning_save')]
     public function saveParcoursIntoJson(Parcours $parcours, Filesystem $fileSystem, EntityManagerInterface $entityManager){
         // Définition du serializer
@@ -476,13 +476,13 @@ class ParcoursController extends BaseController
             $parcoursVersioning->setFileName($fileName);
             // Création du fichier JSON
             $json = $serializer->serialize($parcours, 'json', [
-                AbstractObjectNormalizer::GROUPS => 'parcours_json_versioning',
+                AbstractObjectNormalizer::GROUPS => ['parcours_json_versioning', 'parcours_json_versioning_test'],
                 'circular_reference_limit' => 2,
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
                 AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
             ]);
-            $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$fileName}", $json);
+            $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$fileName}.json", $json);
             // Enregistrement de la référence en BD
             $entityManager->persist($parcoursVersioning);
             $entityManager->flush();
@@ -491,16 +491,17 @@ class ParcoursController extends BaseController
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
 
         }catch(\Exception $e){
+            // Log error
+            $logTxt = "[{$dateHeure}] Le versioning du parcours : {$parcours->getId()} a rencontré une erreur.\n{$e->getMessage()}\n";
+            $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/save_parcours_error.log", $logTxt);
 
-            // TODO : Write log error to file
             $this->addFlashBag('error', "Une erreur est survenue lors de la sauvegarde.");
-
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
         }
 
     }
 
-    #[IsGranted('ROLE_SES')]
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{parcours_versioning}/versioning/view', name: 'app_parcours_versioning_view')]
     public function parcoursVersion(
             ParcoursVersioning $parcours_versioning,
@@ -515,7 +516,7 @@ class ParcoursController extends BaseController
                 new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
             ],
             [new JsonEncoder()]);
-        $file = file_get_contents(__DIR__ . "/../../versioning_json/parcours/{$parcours_versioning->getFileName()}");
+        $file = file_get_contents(__DIR__ . "/../../versioning_json/parcours/{$parcours_versioning->getFileName()}.json");
         $parcours = $serializer->deserialize($file, Parcours::class, 'json');
         $dto = $calculStructureParcours->calcul($parcours);
 
@@ -536,7 +537,6 @@ class ParcoursController extends BaseController
     #[Route('/check/lheo_invalid_list', name: 'app_parcours_lheo_invalid_list')]
     public function getInvalidXmlLheoList(
         LheoXML $lheoXML,
-        EntityManagerInterface $entityManager,
         ParcoursRepository $parcoursRepo
     ) : Response {
         // $parcoursList = $entityManager->getRepository(Parcours::class)->findAll();

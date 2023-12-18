@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+
 #[ORM\Entity(repositoryClass: SemestreMutualisableRepository::class)]
 class SemestreMutualisable
 {
@@ -15,6 +18,8 @@ class SemestreMutualisable
     #[ORM\Column]
     private ?int $id = null;
 
+    #[MaxDepth(1)]
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'semestreMutualisables')]
     private ?Semestre $semestre = null;
 

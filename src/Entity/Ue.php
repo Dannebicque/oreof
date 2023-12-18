@@ -15,6 +15,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+
 #[ORM\Entity(repositoryClass: UeRepository::class)]
 class Ue
 {
@@ -23,6 +26,7 @@ class Ue
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?int $ordre = null;
 
@@ -32,29 +36,37 @@ class Ue
     #[ORM\ManyToOne(fetch: 'EAGER')]
     private ?TypeUe $typeUe = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(fetch: 'EAGER')]
     private ?NatureUeEc $natureUeEc = null;
     
+    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: ElementConstitutif::class, cascade: [
         'persist',
         'remove'
     ], orphanRemoval: true)]
-    
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $elementConstitutifs;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelle = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: UeMutualisable::class)]
     private Collection $ueMutualisables;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'ues', fetch: 'EAGER')]
     private ?UeMutualisable $ueRaccrochee = null;
 
+    #[MaxDepth(1)]
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ueEnfants')]
     private ?self $ueParent = null;
 
+    #[MaxDepth(1)]
+    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'ueParent', targetEntity: self::class, cascade: [
         'persist',
         'remove'
@@ -62,9 +74,11 @@ class Ue
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ueEnfants;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descriptionUeLibre = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $ects = null;
 

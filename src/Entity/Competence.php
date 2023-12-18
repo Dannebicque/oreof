@@ -25,8 +25,6 @@ class Competence
     #[ORM\Column]
     private ?int $id = null;
 
-    #[MaxDepth(1)]
-    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'competences')]
     private ?BlocCompetence $blocCompetence;
 

@@ -122,8 +122,6 @@ class Formation
     #[ORM\Column(nullable: true)]
     private ?array $structureSemestres = [];
 
-    #[MaxDepth(1)]
-    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: Parcours::class)]
     #[ORM\OrderBy(['libelle' => 'ASC'])]
     private Collection $parcours;

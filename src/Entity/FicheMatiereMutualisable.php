@@ -5,9 +5,12 @@ namespace App\Entity;
 use App\Repository\FicheMatiereMutualisableRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: FicheMatiereMutualisableRepository::class)]
 class FicheMatiereMutualisable
 {
+    #[Groups('parcours_json_versioning')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

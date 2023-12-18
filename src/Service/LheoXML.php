@@ -287,6 +287,13 @@ HTML;
         $poursuiteEtudes = $parcours->getPoursuitesEtudes() ?? '';
         $poursuiteEtudes .= "<h2>Débouchés</h2>";
         $poursuiteEtudes .= $parcours->getDebouches() ?? '-';
+        $poursuiteEtudes .= "<p>Codes ROME</p>";
+        $poursuiteEtudes .= "<ul>";
+        foreach($codesRome as $code){
+            $poursuiteEtudes .= "<li>{$code}</li>";
+        }
+        $poursuiteEtudes .= "</ul>";
+        $poursuiteEtudes .= "<p>Le ROME est le répertoire des métiers et d'emplois de Pôle Emploi.</p>";
 
         // Génération du XML
         $encoder = new XmlEncoder([

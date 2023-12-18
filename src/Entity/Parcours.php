@@ -123,6 +123,7 @@ class Parcours
     #[ORM\ManyToOne]
     private ?RythmeFormation $rythmeFormation = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: SemestreParcours::class, cascade: ['persist', 'remove'])]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $semestreParcours;
@@ -199,6 +200,7 @@ class Parcours
     #[ORM\Column(nullable: true)]
     private ?array $remplissage = [];
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ElementConstitutif::class)]
     private Collection $elementConstitutifs;
 
@@ -207,6 +209,7 @@ class Parcours
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ParcoursVersioning::class)]
     private Collection $parcoursVersionings;
+    
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $modalitesAdmission = null;
 

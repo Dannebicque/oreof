@@ -17,6 +17,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+
 #[ORM\Entity(repositoryClass: ElementConstitutifRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class ElementConstitutif
@@ -28,60 +31,78 @@ class ElementConstitutif
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 30, nullable: true, enumType: ModaliteEnseignementEnum::class)]
     private ?ModaliteEnseignementEnum $modaliteEnseignement = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $ects;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeCmPresentiel;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTdPresentiel;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTpPresentiel;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeCmDistanciel;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTdDistanciel;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTpDistanciel;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $isCmPresentielMutualise;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $isTdPresentielMutualise;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $isTpPresentielMutualise;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $isCmDistancielMutualise;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $isTdDistancielMutualise;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $isTpDistancielMutualise;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne]
     private ?NatureUeEc $natureUeEc = null;
 
     #[ORM\OneToMany(mappedBy: 'ec', targetEntity: Mccc::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $mcccs;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 15)]
     private ?string $code = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?int $ordre = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
     private ?FicheMatiere $ficheMatiere = null;
 
@@ -91,18 +112,25 @@ class ElementConstitutif
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
     private ?Ue $ue = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $texteEcLibre = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $libelle = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
     private ?TypeEc $typeEc = null;
 
+    #[MaxDepth(1)]
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ecEnfants')]
     private ?self $ecParent = null;
 
+    #[MaxDepth(1)]
+    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'ecParent', targetEntity: self::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ecEnfants;
@@ -113,12 +141,14 @@ class ElementConstitutif
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $etatMccc = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTe = null;
 
     #[ORM\Column]
     private ?bool $mcccEnfantsIdentique = false;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?bool $heuresEnfantsIdentiques = false;
 
@@ -135,15 +165,18 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $synchroMccc = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $synchroHeures = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $synchroBcc = null;
-
+    
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $synchroEcts = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $sansHeure = false;
 
