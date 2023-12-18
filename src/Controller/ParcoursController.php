@@ -476,7 +476,7 @@ class ParcoursController extends BaseController
             $parcoursVersioning->setFileName($fileName);
             // Création du fichier JSON
             $json = $serializer->serialize($parcours, 'json', [
-                AbstractObjectNormalizer::GROUPS => ['parcours_json_versioning', 'parcours_json_versioning_test'],
+                AbstractObjectNormalizer::GROUPS => ['parcours_json_versioning'],
                 'circular_reference_limit' => 2,
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
                 AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
