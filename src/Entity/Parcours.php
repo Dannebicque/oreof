@@ -227,6 +227,9 @@ class Parcours
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descriptifBasPage = null;
 
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $codeRNCP = null;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -1211,6 +1214,18 @@ class Parcours
     public function setDescriptifBasPage(?string $descriptifBasPage): static
     {
         $this->descriptifBasPage = $descriptifBasPage;
+
+        return $this;
+    }
+
+    public function getCodeRNCP(): ?string
+    {
+        return $this->codeRNCP;
+    }
+
+    public function setCodeRNCP(?string $codeRNCP): static
+    {
+        $this->codeRNCP = $codeRNCP;
 
         return $this;
     }

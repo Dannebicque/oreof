@@ -64,6 +64,16 @@
                 Et après... {{ parcoursState.onglets|etatRemplissage(6, 'parcours') }}
             </a>
         </li>
+        {% if is_granted('ROLE_SES') %}
+            <li class="nav-item" role="presentation">
+                <a class="nav-link {% if step == 7 %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
+                   aria-selected="false"
+                        {{ stimulus_action('parcours_wizard', 'changeStep', 'click', {step: 7}) }}
+                >
+                    Configuration
+                </a>
+            </li>
+        {% endif %}
 
         <!-- An empty list to put overflowed links -->
         <li class="nav-item dropdown ms-auto pe-0 d-none responsive-tab-dropdown">

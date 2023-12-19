@@ -17,6 +17,7 @@ use App\Form\ParcoursStep1Type;
 use App\Form\ParcoursStep2Type;
 use App\Form\ParcoursStep5Type;
 use App\Form\ParcoursStep6Type;
+use App\Form\ParcoursStep7Type;
 use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereMutualisableRepository;
 use App\Repository\FormationRepository;
@@ -169,6 +170,17 @@ class ParcoursWizardController extends AbstractController
         $form = $this->createForm(ParcoursStep6Type::class, $parcours);
 
         return $this->render('parcours_wizard/_step6.html.twig', [
+            'form' => $form->createView(),
+            'parcours' => $parcours,
+        ]);
+    }
+
+    #[Route('/{parcours}/7', name: 'app_parcours_wizard_step_7', methods: ['GET'])]
+    public function step7(Parcours $parcours): Response
+    {
+        $form = $this->createForm(ParcoursStep7Type::class, $parcours);
+
+        return $this->render('parcours_wizard/_step7.html.twig', [
             'form' => $form->createView(),
             'parcours' => $parcours,
         ]);
