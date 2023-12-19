@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.21.3](https://github.com/Dannebicque/oreof/compare/v1.21.2...v1.21.3) (2023-12-19)
+
+
+### Features
+
+* Ajout d'un onglet SES dans les parcours pour les champs descriptifs et RNCP ([6f1969d](https://github.com/Dannebicque/oreof/commit/6f1969deafb9c523e3a54080532fe5af8e9a1119))
+
 ### [1.21.2](https://github.com/Dannebicque/oreof/compare/v1.21.1...v1.21.2) (2023-12-19)
 
 
