@@ -21,6 +21,16 @@
 
 {% block bouton_header %}
     {% if is_granted('ROLE_SES') %}
+        <a href="{{ path('app_parcours_lheo_invalid_list') }}"
+           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Vérifier Export LHÉO"
+        >
+            <i class="fas fa-check"></i>
+            <span> Vérifier Export LHÉO</span>
+        </a>
+
         <a href="{{ path('ses_export_offre_formation_brut') }}"
            class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
            data-bs-toggle="tooltip"
