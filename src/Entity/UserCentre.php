@@ -14,8 +14,6 @@ use App\Repository\UserCentreRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
-
 #[ORM\Entity(repositoryClass: UserCentreRepository::class)]
 class UserCentre
 {
@@ -30,7 +28,6 @@ class UserCentre
     #[ORM\ManyToOne(inversedBy: 'userCentres')]
     private ?Composante $composante = null;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'userCentres')]
     private ?Formation $formation = null;
 

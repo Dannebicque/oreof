@@ -12,6 +12,8 @@ namespace App\Entity;
 use App\Repository\AdresseRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: AdresseRepository::class)]
 class Adresse
 {
@@ -20,15 +22,19 @@ class Adresse
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adresse1 = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adresse2 = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $codePostal = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $ville = null;
 

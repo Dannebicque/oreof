@@ -13,8 +13,6 @@ use App\Repository\McccRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
-
 #[ORM\Entity(repositoryClass: McccRepository::class)]
 class Mccc
 {
@@ -41,11 +39,9 @@ class Mccc
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $typeEpreuve = [];
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'mcccs')]
     private ?ElementConstitutif $ec = null;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'mcccs')]
     private ?FicheMatiere $ficheMatiere = null;
 
@@ -55,7 +51,6 @@ class Mccc
     #[ORM\Column]
     private ?bool $examenTerminal = null;
 
-    #[Ignore]
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $duree = null;
 

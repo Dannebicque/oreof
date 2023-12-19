@@ -287,6 +287,13 @@ HTML;
         $poursuiteEtudes = $parcours->getPoursuitesEtudes() ?? '';
         $poursuiteEtudes .= "<h2>Débouchés</h2>";
         $poursuiteEtudes .= $parcours->getDebouches() ?? '-';
+        $poursuiteEtudes .= "<p>Codes ROME</p>";
+        $poursuiteEtudes .= "<ul>";
+        foreach($codesRome as $code){
+            $poursuiteEtudes .= "<li>{$code}</li>";
+        }
+        $poursuiteEtudes .= "</ul>";
+        $poursuiteEtudes .= "<p>Le ROME est le répertoire des métiers et d'emplois de Pôle Emploi.</p>";
 
         // Génération du XML
         $encoder = new XmlEncoder([
@@ -572,5 +579,32 @@ HTML;
         }
     
         return $decodedMessage;
+    }
+
+    public function checkTextValuesAreLongEnough(Parcours $parcours) : array {
+        $errorMessageArray = [];
+        if(mb_strlen($parcours->getPoursuitesEtudes()) < 12){
+            $errorMessageArray[] = "Les poursuites d'études ne sont pas correctement renseignées. (inférieur à 12 caractères)";
+        }
+        if(mb_strlen($parcours->getDebouches()) < 12){
+            $errorMessageArray[] = "Les débouchés du parcours ne sont pas correctement renseignés. (inférieur à 12 caractères)";
+        }
+        if(mb_strlen($parcours->getPrerequis()) < 12){
+            $errorMessageArray[] = "Les prérequis recommandés ne sont pas correctement renseignés. (inférieur à 12 caractères)";
+        }
+        if($parcours->isHasStage()){
+            if(mb_strlen($parcours->getStageText()) < 12){
+                $errorMessageArray[] = "La description du stage n'est pas correctement renseignée. (inférieur à 12 caractères)";
+            }
+        }
+        if($parcours->isHasMemoire()){
+            if(mb_strlen($parcours->getMemoireText()) < 12){
+                $errorMessageArray[] = "La description du mémoire n'est pas correctement renseignée. (inférieur à 12 caractères)";
+            }
+        }
+        if(mb_strlen($parcours->getResultatsAttendus()) < 12){
+            $errorMessageArray[] = "Les résultats attendus ne sont pas correctement renseignée. (inférieur à 12 caractères)";
+        }
+        return $errorMessageArray;
     }
 }

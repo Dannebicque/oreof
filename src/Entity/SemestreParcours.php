@@ -12,7 +12,7 @@ namespace App\Entity;
 use App\Repository\SemestreParcoursRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SemestreParcoursRepository::class)]
 class SemestreParcours
@@ -22,16 +22,18 @@ class SemestreParcours
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
     private ?Semestre $semestre = null;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
     private ?Parcours $parcours = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?int $ordre = 0;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?bool $porteur = false;
 

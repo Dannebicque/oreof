@@ -5,13 +5,10 @@ namespace App\Entity;
 use App\Repository\HistoriqueFormationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
-
 #[ORM\Entity(repositoryClass: HistoriqueFormationRepository::class)]
 class HistoriqueFormation extends Historique
 {
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'historiqueFormations')]
     private ?Formation $formation = null;
 

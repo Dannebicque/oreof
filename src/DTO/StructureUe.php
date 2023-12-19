@@ -54,7 +54,7 @@ class StructureUe
         //gérer pour prendre le max des heures et ects sur tous les enfants de l'EC
     }
 
-    public function addEc(StructureEc $structureEc): void
+    public function addEc(StructureEc|StructureEcVersioning $structureEc): void
     {
         $this->elementConstitutifs[] = $structureEc;
         $this->heuresEctsUe->addEc($structureEc->getHeuresEctsEc());

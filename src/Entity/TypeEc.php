@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TypeEcRepository::class)]
 class TypeEc
@@ -24,17 +24,16 @@ class TypeEc
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 100)]
     private ?string $libelle = null;
 
     #[ORM\ManyToMany(targetEntity: TypeDiplome::class, inversedBy: 'typeEcs')]
     private Collection $typeDiplomes;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'typeEc', targetEntity: ElementConstitutif::class)]
     private Collection $elementConstitutifs;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'typeEcs')]
     private ?Formation $formation = null;
 

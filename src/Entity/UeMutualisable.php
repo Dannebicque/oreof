@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: UeMutualisableRepository::class)]
@@ -19,14 +19,15 @@ class UeMutualisable
     private ?int $id = null;
 
     #[MaxDepth(1)]
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'ueMutualisables')]
     private ?Ue $ue = null;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'ueMutualisables')]
     private ?Parcours $parcours = null;
 
-    #[Ignore]
+    #[MaxDepth(1)]
+    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'ueRaccrochee', targetEntity: Ue::class)]
     private Collection $ues;
 

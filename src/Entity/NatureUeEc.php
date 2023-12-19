@@ -12,6 +12,8 @@ namespace App\Entity;
 use App\Repository\NatureUeEcRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: NatureUeEcRepository::class)]
 class NatureUeEc
 {
@@ -23,15 +25,19 @@ class NatureUeEc
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 100)]
     private ?string $libelle = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?bool $choix = false;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?bool $libre = false;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 2)]
     private ?string $type = self::Nature_EC;
 
