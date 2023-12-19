@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MentionRepository::class)]
 class Mention
@@ -24,23 +24,24 @@ class Mention
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $sigle = null;
 
 //    #[ORM\Column(length: 255)]
 //    private ?string $typeDiplome = null;
-
-    #[Ignore]
+ 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'mentions')]
     private ?Domaine $domaine = null;
 
     #[ORM\ManyToOne(inversedBy: 'mentions')]
     private ?TypeDiplome $typeDiplome = null;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'mention', targetEntity: Formation::class)]
     private Collection $formations;
 

@@ -22,8 +22,7 @@ use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
-
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: FormationRepository::class)]
 #[ORM\Index(name: 'sigle_formation', columns: ['sigle'], flags: ['fulltext'])]
@@ -38,15 +37,19 @@ class Formation
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne]
     private ?Domaine $domaine = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(targetEntity: Composante::class, inversedBy: 'formationsPortees')]
     private ?Composante $composantePorteuse = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne]
     private ?AnneeUniversitaire $anneeUniversitaire;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations')]
     private ?Mention $mention = null;
 
@@ -54,9 +57,11 @@ class Formation
     #[Groups(['formation:read'])]
     private ?string $mentionTexte = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::INTEGER, enumType: NiveauFormationEnum::class)]
     private ?NiveauFormationEnum $niveauEntree = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::INTEGER, enumType: NiveauFormationEnum::class)]
     private ?NiveauFormationEnum $niveauSortie = null;
 
@@ -64,49 +69,59 @@ class Formation
     #[Groups(['formation:read'])]
     private ?bool $inRncp = true;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeRNCP = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'formationsResponsableMention')]
     private ?User $responsableMention = null;
 
     #[ORM\Column]
     private ?int $semestreDebut = 1;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToMany(targetEntity: Ville::class)]
     private Collection $localisationMention;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'formations')]
     private Collection $composantesInscription;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $regimeInscriptionTexte = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $modalitesAlternance = null;
 
     #[ORM\Column(nullable: true)]
     private ?array $regimeInscription = [];
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $objectifsFormation = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $contenuFormation = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $resultatsAttendus = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $rythmeFormationTexte = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $hasParcours = null;
 
     #[ORM\Column(nullable: true)]
     private ?array $structureSemestres = [];
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: Parcours::class)]
     #[ORM\OrderBy(['libelle' => 'ASC'])]
     private Collection $parcours;
@@ -114,20 +129,19 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: BlocCompetence::class)]
     private Collection $blocCompetences;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne]
     private ?RythmeFormation $rythmeFormation = null;
 
     #[ORM\Column(nullable: true)]
     private ?array $etatDpe = [];
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: UserCentre::class, cascade: ['persist', 'remove'])]
     private Collection $userCentres;
 
     #[ORM\Column(length: 10)]
     private ?string $version = '0.1';
 
-    #[Ignore]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'formationsAnterieures')]
     private ?self $versionParent = null;
 
@@ -137,6 +151,7 @@ class Formation
     #[ORM\Column]
     private ?array $etatSteps = [];
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'formations', fetch: 'EAGER')]
     private ?TypeDiplome $typeDiplome = null;
 
@@ -144,16 +159,17 @@ class Formation
     #[Groups(['formation:read'])]
     private ?string $sigle = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'coFormations')]
     private ?User $coResponsable = null;
 
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: TypeEc::class)]
     private Collection $typeEcs;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: ButCompetence::class)]
     private Collection $butCompetences;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: HistoriqueFormation::class)]
     #[ORM\OrderBy(['created' => 'DESC'])]
     private Collection $historiqueFormations;

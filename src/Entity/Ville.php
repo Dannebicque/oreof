@@ -12,7 +12,7 @@ namespace App\Entity;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: VilleRepository::class)]
 class Ville
@@ -22,10 +22,11 @@ class Ville
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
-
-    #[Ignore]
+ 
+    #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'villes')]
     private ?Etablissement $etablissement = null;
 

@@ -45,7 +45,7 @@ class TypeDiplomeType extends AbstractType
                 ]
             ])
             ->add('insertionProfessionnelle', TextareaAutoSaveType::class, [
-                'label' => 'Insertion professionnelle',
+                'label' => 'Devenir des diplômés',
                 'required' => true,
                 'attr' => [
                     'rows' => 4,

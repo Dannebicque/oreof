@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BlocCompetenceRepository::class)]
 class BlocCompetence
@@ -24,22 +24,22 @@ class BlocCompetence
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 10)]
     private ?string $code = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(type: 'text')]
     private ?string $libelle = null;
 
-    #[Ignore]
+    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'blocCompetence', targetEntity: Competence::class, cascade: ['persist', 'remove'])]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $competences;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'blocCompetences')]
     private ?Parcours $parcours = null;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'blocCompetences')]
     private ?Formation $formation = null;
 

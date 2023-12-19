@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ComposanteRepository::class)]
 class Composante
@@ -25,40 +25,42 @@ class Composante
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
     #[ORM\ManyToOne(inversedBy: 'composantes')]
     private ?User $directeur = null;
 
-    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'composanteResponsableDpe')]
     private ?User $responsableDpe = null;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'composantePorteuse', targetEntity: Formation::class)]
     private Collection $formationsPortees;
 
-    #[Ignore]
     #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'composantesInscription')]
     private Collection $formations;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Adresse $adresse = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $telStandard = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $telComplementaire = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $mailContact = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $urlSite = null;
 
-    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'composante', targetEntity: UserCentre::class)]
     private Collection $userCentres;
 
@@ -68,7 +70,6 @@ class Composante
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $sigle = null;
 
-    #[Ignore]
     #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'composante')]
     private Collection $ficheMatieres;
 

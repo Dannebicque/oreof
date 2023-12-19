@@ -14,8 +14,6 @@ use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
-
 /**
  * Trait LifeCycleTrait.
  */
@@ -27,7 +25,6 @@ trait LifeCycleTrait
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $updated = null;
 
-    #[Ignore]
     public function getCreated(): ?DateTimeInterface
     {
         return $this->created ?? new DateTimeImmutable('now');
@@ -38,7 +35,7 @@ trait LifeCycleTrait
         $this->created = $created;
     }
 
-    #[Ignore]
+    
     public function getUpdated(): ?DateTimeInterface
     {
         return $this->updated;
@@ -68,17 +65,17 @@ trait LifeCycleTrait
     }
 
     // Fix pour la serialization
-    #[Ignore]
+    
     public function getUpdatedValue(){
         return $this->updated;
     }
     // Fix pour la serialization
-    #[Ignore]
+    
     public function getUpdatedEntity(){
         return new DateTimeImmutable('now');
     }
     // Fix pour la serialization
-    #[Ignore]
+    
     public function getCreatedValue(){
         return $this->created;
     }

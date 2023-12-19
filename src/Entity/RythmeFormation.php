@@ -12,6 +12,8 @@ namespace App\Entity;
 use App\Repository\RythmeFormationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: RythmeFormationRepository::class)]
 class RythmeFormation
 {
@@ -20,6 +22,7 @@ class RythmeFormation
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 100)]
     private ?string $libelle = null;
 
