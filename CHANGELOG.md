@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.21.0](https://github.com/Dannebicque/oreof/compare/v1.20.2...v1.21.0) (2023-12-19)
+
+
+### Features
+
+* Ajout des champs descriptif haut et bas sur établissement et parcours ([0b59cb3](https://github.com/Dannebicque/oreof/commit/0b59cb3cd9dcb28b0dc381d65014591f55ac9ca0))
+
+
+### Bug Fixes
+
+* ajout du lien MCCC + Fiche descriptive en json ([2c6e24b](https://github.com/Dannebicque/oreof/commit/2c6e24b84c46c51799a24e30b43f1a09a8d6d347))
+* rAccès aux PDF sans sécurité ([70d628a](https://github.com/Dannebicque/oreof/commit/70d628a68059b1a9d032f2fdf1ba315e637cc44f))
+* route api ouverte en accès libre ([72c62d3](https://github.com/Dannebicque/oreof/commit/72c62d386d9cb2ee852f0c03aa1489bef89dd863))
+
 ### [1.20.2](https://github.com/Dannebicque/oreof/compare/v1.20.1...v1.20.2) (2023-12-12)
 
 
