@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.21.1](https://github.com/Dannebicque/oreof/compare/v1.21.0...v1.21.1) (2023-12-19)
+
+
+### Bug Fixes
+
+* liste LHEO invalide uniquement pour les validés CFVU ([9e17243](https://github.com/Dannebicque/oreof/commit/9e172434532aca2b6ee934fa81eb4770b3a9b055))
+
 ## [1.21.0](https://github.com/Dannebicque/oreof/compare/v1.20.2...v1.21.0) (2023-12-19)
 
 
