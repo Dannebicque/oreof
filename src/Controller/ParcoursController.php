@@ -456,8 +456,8 @@ class ParcoursController extends BaseController
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{parcours}/versioning/save', name: 'app_parcours_versioning_save')]
     public function saveParcoursIntoJson(
-        Parcours $parcours, 
-        Filesystem $fileSystem, 
+        Parcours $parcours,
+        Filesystem $fileSystem,
         EntityManagerInterface $entityManager,
     ){
         // Définition du serializer
@@ -492,7 +492,7 @@ class ParcoursController extends BaseController
             $entityManager->flush();
             // Ajout dans les logs
             /**
-             * @var User $user 
+             * @var User $user
              */
             $user = $this->getUser();
             $successLogTxt = "[{$dateHeure}] Le parcours {$parcours->getId()} a été versionné avec succès. ";
@@ -551,8 +551,7 @@ class ParcoursController extends BaseController
         LheoXML $lheoXML,
         ParcoursRepository $parcoursRepo
     ) : Response {
-        // $parcoursList = $entityManager->getRepository(Parcours::class)->findAll();
-        $parcoursList = $parcoursRepo->findParcours($this->getAnneeUniversitaire(), []);
+        $parcoursList = $parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_pour_publication');
         $errorArray = [];
         foreach($parcoursList as $p){
             $erreursChampsParcours = $lheoXML->checkTextValuesAreLongEnough($p);

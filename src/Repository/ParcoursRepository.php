@@ -10,6 +10,7 @@
 namespace App\Repository;
 
 use App\Entity\AnneeUniversitaire;
+use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\Mention;
 use App\Entity\Parcours;
@@ -57,6 +58,19 @@ class ParcoursRepository extends ServiceEntityRepository
             ->setParameter('formation', $formation)
             ->orderBy('p.libelle', 'ASC')
             ->getQuery()
+            ->getResult();
+    }
+
+    public function findByTypeValidation(AnneeUniversitaire $anneeUniversitaire, mixed $typeValidation): array
+    {
+        $query = $this->createQueryBuilder('p')
+            ->innerJoin('p.formation', 'f')
+            ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
+            ->andWhere('f.anneeUniversitaire = :annee')
+            ->setParameter('annee', $anneeUniversitaire);
+
+        return $query->getQuery()
             ->getResult();
     }
 
