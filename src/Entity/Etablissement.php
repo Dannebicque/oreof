@@ -50,6 +50,9 @@ class Etablissement
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $numero_activite = null;
 
+    #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: Composante::class)]
+    private Collection $composantes;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -59,6 +62,7 @@ class Etablissement
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
         $this->setOptions($resolver->resolve($this->options));
+        $this->composantes = new ArrayCollection();
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -237,6 +241,36 @@ class Etablissement
     public function setNumeroActivite(?string $numero_activite): static
     {
         $this->numero_activite = $numero_activite;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Composante>
+     */
+    public function getComposantes(): Collection
+    {
+        return $this->composantes;
+    }
+
+    public function addComposante(Composante $composante): static
+    {
+        if (!$this->composantes->contains($composante)) {
+            $this->composantes->add($composante);
+            $composante->setEtablissement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComposante(Composante $composante): static
+    {
+        if ($this->composantes->removeElement($composante)) {
+            // set the owning side to null (unless already changed)
+            if ($composante->getEtablissement() === $this) {
+                $composante->setEtablissement(null);
+            }
+        }
 
         return $this;
     }

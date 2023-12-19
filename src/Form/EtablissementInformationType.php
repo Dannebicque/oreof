@@ -44,6 +44,18 @@ class EtablissementInformationType extends AbstractType
                 'required' => true,
                 'attr' => ['maxlength' => 2500]
             ])
+            ->add('descriptifHautPage', TextareaAutoSaveType::class, [
+                'label' => 'Texte affiché en haut des pages parcours',
+                'help' => 'Ce texte sera affiché par défaut en haut des pages parcours. Il peut être remplacé par un texte spécifique à chaque parcours.',
+                'required' => true,
+                'attr' => ['maxlength' => 2500]
+            ])
+            ->add('descriptifBasPage', TextareaAutoSaveType::class, [
+                'label' => 'Texte affiché en bas des pages parcours',
+                'help' => 'Ce texte sera affiché par défaut en bas des pages parcours. Il peut être remplacé par un texte spécifique à chaque parcours.',
+                'required' => true,
+                'attr' => ['maxlength' => 2500]
+            ])
         ;
     }
 

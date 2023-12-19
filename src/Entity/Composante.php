@@ -78,6 +78,9 @@ class Composante
     #[ORM\Column(length: 2, nullable: true)]
     private ?string $codeApogee = null;
 
+    #[ORM\ManyToOne(inversedBy: 'composantes')]
+    private ?Etablissement $etablissement = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -353,6 +356,18 @@ class Composante
     public function setCodeApogee(?string $codeApogee): static
     {
         $this->codeApogee = $codeApogee;
+
+        return $this;
+    }
+
+    public function getEtablissement(): ?Etablissement
+    {
+        return $this->etablissement;
+    }
+
+    public function setEtablissement(?Etablissement $etablissement): static
+    {
+        $this->etablissement = $etablissement;
 
         return $this;
     }

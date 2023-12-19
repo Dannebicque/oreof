@@ -35,6 +35,12 @@ class EtablissementInformation
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $transport = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $descriptifHautPage = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $descriptifBasPage = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +126,30 @@ class EtablissementInformation
     public function setTransport(?string $transport): static
     {
         $this->transport = $transport;
+
+        return $this;
+    }
+
+    public function getDescriptifHautPage(): ?string
+    {
+        return $this->descriptifHautPage;
+    }
+
+    public function setDescriptifHautPage(?string $descriptifHautPage): static
+    {
+        $this->descriptifHautPage = $descriptifHautPage;
+
+        return $this;
+    }
+
+    public function getDescriptifBasPage(): ?string
+    {
+        return $this->descriptifBasPage;
+    }
+
+    public function setDescriptifBasPage(?string $descriptifBasPage): static
+    {
+        $this->descriptifBasPage = $descriptifBasPage;
 
         return $this;
     }

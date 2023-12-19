@@ -1,10 +1,35 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <h1 id="title" class="display-4 mb-5 text-center">{{ titre ?: '' }}</h2>
-    <div class="row justify-content-center">
-        <div class="col-10 col-lg-8 col-xl-6">
+    <div class="card">
+        <div class="card-body">
             {{ include('communs/_form.html.twig') }}
         </div>
     </div>
+{% endblock %}
+
+{% block header %}
+    {{ titre ?: '' }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Administration',
+        }
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <a
+            class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            href="{{ path('app_etablissement_index') }}"
+            title="Retour à la liste des établissements"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour à la liste des établissements</span>
+    </a>
 {% endblock %}

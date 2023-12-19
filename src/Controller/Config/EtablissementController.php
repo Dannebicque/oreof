@@ -47,9 +47,6 @@ class EtablissementController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             $etablissementRepository->save($etablissement, true);
 
-            // Abandon de la fenêtre modale
-            // return $this->json(true);
-
             $this->addFlashBag('success', 'Établissement créé avec succès');
             return $this->redirectToRoute('app_etablissement_index');
         }
@@ -71,8 +68,8 @@ class EtablissementController extends BaseController
 
     #[Route('/{id}/edit', name: 'app_etablissement_edit', methods: ['GET', 'POST'])]
     public function edit(
-        Request $request,
-        Etablissement $etablissement,
+        Request                 $request,
+        Etablissement           $etablissement,
         EtablissementRepository $etablissementRepository
     ): Response {
         $form = $this->createForm(
@@ -88,9 +85,6 @@ class EtablissementController extends BaseController
             $etablissement = $form->getData();
             $etablissementRepository->save($etablissement, true);
 
-            // Abandon de la fenêtre modale
-            // return $this->json(true);
-
             $this->addFlashBag('success', 'Établissement modifié avec succès');
             return $this->redirectToRoute('app_etablissement_index');
         }
@@ -104,8 +98,8 @@ class EtablissementController extends BaseController
 
     #[Route('/{id}', name: 'app_etablissement_delete', methods: ['POST'])]
     public function delete(
-        Request $request,
-        Etablissement $etablissement,
+        Request                 $request,
+        Etablissement           $etablissement,
         EtablissementRepository $etablissementRepository
     ): Response {
         if ($this->isCsrfTokenValid('delete' . $etablissement->getId(), $request->request->get('_token'))) {

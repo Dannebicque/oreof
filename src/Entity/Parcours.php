@@ -199,6 +199,12 @@ class Parcours
     #[ORM\Column(length: 3, nullable: true)]
     private ?string $codeApogeeVersion = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $descriptifHautPage = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $descriptifBasPage = null;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -1057,7 +1063,7 @@ class Parcours
 
         return $this;
     }
-  
+
     public function isAlternance(): bool
     {
         // regarder si dans le tableau regimeInscription il y a les valeurs alternance ou apprentissage
@@ -1151,5 +1157,39 @@ class Parcours
         return 1;
 
 
+    }
+
+    public function getDescriptifHautPage(): ?string
+    {
+        return $this->descriptifHautPage;
+    }
+
+    public function getDescriptifHautPageAffichage(): ?string
+    {
+        return $this->descriptifHautPage ?? $this->getFormation()?->getComposantePorteuse()?->getEtablissement()?->getEtablissementInformation()?->getDescriptifHautPage();
+    }
+
+    public function setDescriptifHautPage(?string $descriptifHautPage): static
+    {
+        $this->descriptifHautPage = $descriptifHautPage;
+
+        return $this;
+    }
+
+    public function getDescriptifBasPage(): ?string
+    {
+        return $this->descriptifBasPage;
+    }
+
+    public function getDescriptifBasPageAffichage(): ?string
+    {
+        return $this->descriptifBasPage ?? $this->getFormation()?->getComposantePorteuse()?->getEtablissement()?->getEtablissementInformation()?->getDescriptifBasPage();
+    }
+
+    public function setDescriptifBasPage(?string $descriptifBasPage): static
+    {
+        $this->descriptifBasPage = $descriptifBasPage;
+
+        return $this;
     }
 }
