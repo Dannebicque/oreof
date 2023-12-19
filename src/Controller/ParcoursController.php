@@ -435,8 +435,8 @@ class ParcoursController extends BaseController
         try {
             // Création de la réponse JSON au client
             $json = $serializer->serialize($parcours, 'json', [
-                AbstractObjectNormalizer::GROUPS => 'parcours_json_versioning',
-                'circular_reference_limit' => 3,
+                AbstractObjectNormalizer::GROUPS => ['parcours_json_versioning'],
+                'circular_reference_limit' => 2,
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
                 AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
@@ -455,7 +455,11 @@ class ParcoursController extends BaseController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{parcours}/versioning/save', name: 'app_parcours_versioning_save')]
-    public function saveParcoursIntoJson(Parcours $parcours, Filesystem $fileSystem, EntityManagerInterface $entityManager){
+    public function saveParcoursIntoJson(
+        Parcours $parcours, 
+        Filesystem $fileSystem, 
+        EntityManagerInterface $entityManager,
+    ){
         // Définition du serializer
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $serializer = new Serializer([
@@ -486,6 +490,14 @@ class ParcoursController extends BaseController
             // Enregistrement de la référence en BD
             $entityManager->persist($parcoursVersioning);
             $entityManager->flush();
+            // Ajout dans les logs
+            /**
+             * @var User $user 
+             */
+            $user = $this->getUser();
+            $successLogTxt = "[{$dateHeure}] Le parcours {$parcours->getId()} a été versionné avec succès. ";
+            $successLogTxt .= "Utilisateur : {$user->getPrenom()} {$user->getNom()} ({$user->getUsername()})\n";
+            $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/save_parcours_success.log", $successLogTxt);
             // Message de réussite + redirection
             $this->addFlashBag('success', 'La version du parcours à bien été sauvegardée.');
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
@@ -518,7 +530,7 @@ class ParcoursController extends BaseController
             [new JsonEncoder()]);
         $file = file_get_contents(__DIR__ . "/../../versioning_json/parcours/{$parcours_versioning->getFileName()}.json");
         $parcours = $serializer->deserialize($file, Parcours::class, 'json');
-        $dto = $calculStructureParcours->calcul($parcours);
+        $dto = $calculStructureParcours->calculVersioning($parcours);
 
         $dateVersion = $parcours_versioning->getVersionTimestamp()->format('d-m-Y à H:i');
 
@@ -543,15 +555,18 @@ class ParcoursController extends BaseController
         $parcoursList = $parcoursRepo->findParcours($this->getAnneeUniversitaire(), []);
         $errorArray = [];
         foreach($parcoursList as $p){
-            if($lheoXML->isValidLHEO($p) === false){
+            $erreursChampsParcours = $lheoXML->checkTextValuesAreLongEnough($p);
+            if($lheoXML->isValidLHEO($p) === false || count($erreursChampsParcours) > 0){
                 $xmlErrorArray = [];
                 foreach(libxml_get_errors() as $xmlError){
                     $xmlErrorArray[] = $lheoXML->decodeErrorMessages($xmlError->message);
                 }
+                $xmlErrorArray = array_merge($xmlErrorArray, $erreursChampsParcours);
                 $errorArray[] = [
                     'id' => $p->getId(),
                     'parcours_libelle' => $p->getLibelle(),
                     'formation_libelle' => $p->getFormation()?->getMention()?->getLibelle(),
+                    'type_formation_libelle' => $p->getFormation()?->getTypeDiplome()?->getLibelle(),
                     'xml_errors' => $xmlErrorArray
                 ];
                 libxml_clear_errors();

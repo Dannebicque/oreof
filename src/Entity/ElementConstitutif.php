@@ -180,6 +180,15 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $sansHeure = false;
 
+    /**
+     * VERSIONING
+     * 
+     * Ceci n'est pas un enregistrement BD
+     */
+    #[Groups('parcours_json_versioning')]
+    public ?bool $raccroche = null;
+
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -824,5 +833,12 @@ class ElementConstitutif
         $this->sansHeure = $sansHeure;
 
         return $this;
+    }
+
+    public function isRaccroche() : bool {
+        if($this->parcours){
+            $this->raccroche = GetElementConstitutif::isRaccroche($this, $this->parcours);
+        }
+        return $this->raccroche;
     }
 }

@@ -200,7 +200,6 @@ class Parcours
     #[ORM\Column(nullable: true)]
     private ?array $remplissage = [];
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ElementConstitutif::class)]
     private Collection $elementConstitutifs;
 
