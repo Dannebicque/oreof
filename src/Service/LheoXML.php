@@ -602,7 +602,9 @@ HTML;
                 $errorMessageArray[] = "La description du mémoire n'est pas correctement renseignée. (inférieur à 12 caractères)";
             }
         }
-
+        if(mb_strlen($parcours->getResultatsAttendus()) < 12){
+            $errorMessageArray[] = "Les résultats attendus ne sont pas correctement renseignée. (inférieur à 12 caractères)";
+        }
         return $errorMessageArray;
     }
 }
