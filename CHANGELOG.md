@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.21.4](https://github.com/Dannebicque/oreof/compare/v1.21.3...v1.21.4) (2023-12-20)
+
+
+### Bug Fixes
+
+* filtre sur les dates des formations publiées ([c6690ea](https://github.com/Dannebicque/oreof/commit/c6690ea00028d883d8d681d107480f579a25bfd1))
+
 ### [1.21.3](https://github.com/Dannebicque/oreof/compare/v1.21.2...v1.21.3) (2023-12-19)
 
 
