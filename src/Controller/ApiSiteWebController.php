@@ -35,7 +35,8 @@ class ApiSiteWebController extends AbstractController
                 'id' => $formation->getId(),
                 'libelle' => $formation->getDisplayLong(),
                 'parcours' => $tParcours,
-                'dateValidation' => $getHistorique->getHistoriqueFormationLastStep($formation, 'publier')?->getDate()?->format('Y-m-d H:i:s') ?? '2023-12-11 08:00:00', //temporaire pour les tests
+                //todo: on pourrait ajouter la version. Le Lheo doit dépendre de la version
+                'dateValidation' => $getHistorique->getHistoriqueFormationLastStep($formation, 'publier')?->getDate()?->format('Y-m-d H:i:s') ?? null,
             ];
         }
 
