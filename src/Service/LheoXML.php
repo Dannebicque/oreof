@@ -305,6 +305,18 @@ HTML;
         $prerequis .= '<br><strong>Prérequis recommandés :</strong><br>';
         $prerequis .= $this->cleanString($parcours->getPrerequis()) ?? 'Aucune condition spécifique.';
 
+        if ($parcours->isParcoursDefaut()) {
+            //todo: gestion du parcours par défaut, il faut reprendre les infs de la formation dans ce cas
+            $resultatsAttendus = $this->cleanString($parcours->getFormation()?->getResultatsAttendus()) ?? 'Non renseigné.';
+            $contenuFormation = $this->cleanString($parcours->getFormation()?->getContenuFormation()) ?? 'Non renseigné.';
+            $objectifFormation = $this->cleanString($parcours->getFormation()?->getObjectifsFormation()) ?? 'Non renseigné.';
+        } else {
+            $resultatsAttendus = $this->cleanString($parcours->getResultatsAttendus()) ?? 'Non renseigné.';
+            $contenuFormation = $this->cleanString($parcours->getContenuFormation()) ?? 'Non renseigné.';
+            $objectifFormation = $this->cleanString($parcours->getObjectifsParcours()) ?? 'Non renseigné.';
+        }
+
+
         // Génération du XML
         $encoder = new XmlEncoder([
         ]);
@@ -322,9 +334,9 @@ HTML;
                         'code-ROME' => $codesRome,
                     ],
                     'intitule-formation' => $this->cleanString($intituleFormation),
-                    'objectif-formation' => $this->cleanString(($parcours->getObjectifsParcours() ?? 'Non renseigné.')),
-                    'resultats-attendus' => $this->cleanString(($parcours->getResultatsAttendus() ?? 'Non renseigné.')),
-                    'contenu-formation' => $this->cleanString(($parcours->getContenuFormation() ?? 'Non renseigné.')),
+                    'objectif-formation' => $objectifFormation,
+                    'resultats-attendus' => $resultatsAttendus,
+                    'contenu-formation' => $contenuFormation,
                     'certifiante' => 1,
                     'contact-formation' => $referentsPedagogiques,
                     'parcours-de-formation' => 1,
