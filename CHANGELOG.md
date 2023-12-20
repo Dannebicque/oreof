@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.21.6](https://github.com/Dannebicque/oreof/compare/v1.21.5...v1.21.6) (2023-12-20)
+
+
+### Bug Fixes
+
+* LHEO ([64c74c2](https://github.com/Dannebicque/oreof/commit/64c74c2e224376e26826e6d88b6f72b17bfeed7a))
+* publication date ([4f2356e](https://github.com/Dannebicque/oreof/commit/4f2356ed6372c604807297a9323ca8192ca3796d))
+
 ### [1.21.5](https://github.com/Dannebicque/oreof/compare/v1.21.4...v1.21.5) (2023-12-20)
 
 
