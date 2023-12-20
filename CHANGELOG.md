@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.21.5](https://github.com/Dannebicque/oreof/compare/v1.21.4...v1.21.5) (2023-12-20)
+
+
+### Bug Fixes
+
+* onglet configuration sur formation sans parcours ([60f6d9f](https://github.com/Dannebicque/oreof/commit/60f6d9fd3e1e19f0f6738b31894084330df616d3))
+
 ### [1.21.4](https://github.com/Dannebicque/oreof/compare/v1.21.3...v1.21.4) (2023-12-20)
 
 
