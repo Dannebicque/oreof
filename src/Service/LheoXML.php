@@ -68,7 +68,7 @@ class LheoXML {
         $intituleFormation = 'Non renseigné.';
         if($typeDiplomeLibelle = $parcours->getFormation()?->getTypeDiplome()?->getLibelle()){
             $mention = $parcours->getFormation()?->getMention()?->getLibelle() ?? "";
-            $intituleFormation = $typeDiplomeLibelle . " " . $mention . " - " . $parcours->getLibelle();
+            $intituleFormation = $typeDiplomeLibelle . " " . $mention . " parcours " . $parcours->getLibelle();
         }
 
         // Rythme de la formation
@@ -114,14 +114,14 @@ class LheoXML {
         if($niveau = $parcours->getFormation()?->getNiveauEntree()){
             $niveauEntree = $niveau->value;
         }
-        
-        // Adresses de la composante d'inscription       
+
+        // Adresses de la composante d'inscription
         $composantesInscription = [];
 
         if($composante = $parcours->getComposanteInscription() ?? $parcours->getFormation()?->getComposantePorteuse()){
             $adresse = [
                 'denomination' => '',
-                'ligne' => '', 
+                'ligne' => '',
                 'codepostal' => '',
                 'ville' => '',
             ];
@@ -131,9 +131,9 @@ class LheoXML {
             $adresse['ligne'] = $adresseComp->getAdresse1() . " " . ($adresseComp->getAdresse2() ?? '');
             $adresse['codepostal'] = $adresseComp->getCodePostal();
             $adresse['ville'] = $adresseComp->getVille();
-            // Téléphone 
+            // Téléphone
             $telephone = ['numtel' => $composante->getTelStandard() ?? $composante->getTelComplementaire() ?? 'Non renseigné'];
-            // Résultat 
+            // Résultat
             $result = [
                 'type-contact' => 4 ,
                 'coordonnees' => [
@@ -143,12 +143,12 @@ class LheoXML {
                     'web' => ['urlweb' => $composante->getUrlSite()]
                 ]
             ];
-    
+
             $composantesInscription[] = $result;
         }
-            
-        
-        
+
+
+
         // Modalités de l'alternance
         $modalitesAlternance = "La formation n'est pas dispensée en alternance";
         if($parcours->getModalitesAlternance()){
@@ -188,25 +188,26 @@ class LheoXML {
                     'ligne' => $adresse->getAdresse1() . " " . $adresse->getAdresse2() ?? '',
                     'codepostal' => $adresse->getCodePostal(),
                     'ville' => $adresse->getVille(),
-                ];    
+                ];
             }
         }
 
         //Adresse du siège de l'URCA
-        $adresseSiegeURCA = [ 
+        $adresseSiegeURCA = [
             'denomination' => 'Université de Reims Champagne-Ardenne',
             'ligne' => '2 Avenue Robert Schuman',
             'codepostal' => '51724',
-            'ville' => 'REIMS CEDEX' 
+            'ville' => 'REIMS CEDEX'
         ];
 
         // Référentiel de compétences
         $competencesAcquisesExtra = "Non renseigné.";
+        $competencesAcquisesExtraTitre = "<h3>Compétences acquises</h3><br>";
 
         // Si Parcours NON BUT
-        if($parcours->getTypeDiplome()?->getLibelleCourt() !== "BUT"){    
+        if($parcours->getTypeDiplome()?->getLibelleCourt() !== "BUT"){
             if($blocCompetences = $parcours->getBlocCompetences()){
-                $competencesAcquisesExtra = "<ul style=\"list-style: none;\">";
+                $competencesAcquisesExtra = $competencesAcquisesExtraTitre. "<ul style=\"list-style: none;\">";
                 foreach($blocCompetences as $bloc){
                     $competencesHTML = "";
                     foreach($bloc->getCompetences() as $competence){
@@ -226,8 +227,8 @@ HTML;
         if($parcours->getTypeDiplome()?->getLibelleCourt() === "BUT"){
             $typeD = $this->typeDiplomeR->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
             $competences = $typeD->getRefCompetences($parcours);
-            if($competences){                
-                $competencesAcquisesExtra = "<ul style=\"list-style: none;\">";
+            if($competences){
+                $competencesAcquisesExtra = $competencesAcquisesExtraTitre. "<ul style=\"list-style: none;\">";
                 foreach($competences as $comp){
                     $competencesHTML = "";
                     foreach($comp->getButNiveaux() as $niveau){
@@ -246,7 +247,7 @@ HTML;
 
         $etablissementInformation = $this->entityManager->getRepository(Etablissement::class)
         ->findOneById(1)->getEtablissementInformation();
-        
+
         // Élément Maquette Iframe
         $UrlMaquetteIframe = $this->router->generate('app_parcours_maquette_iframe', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
         $maquetteIframe = <<<HTML
@@ -270,8 +271,9 @@ HTML;
         if($parcours->isHasProjet()){
             $projetTuteure = $parcours->getProjetText();
         }
-        $organisationPedagogique = "<h3>Stages et projets tuteurés</h3>" 
-                                    . $stage . $projetTuteure . $maquetteIframe 
+        $maquettePdf = ''; //todo: Maquette en PDF accessible, quelle URL ?
+        $organisationPedagogique = "<h3>Stages et projets tuteurés</h3>"
+                                    . $stage . $projetTuteure . $maquettePdf . $maquetteIframe
                                     . "<h3>Calendrier universitaire</h3>"
                                     . $calendrierUniversitaire;
 
@@ -279,21 +281,29 @@ HTML;
         $informationsPratiques = $etablissementInformation->getInformationsPratiques() ?? "Non renseigné.";
 
         // Modalités d'admission
-        $admissionParcours = $parcours->getTypeDiplome()?->getModalitesAdmission() ?? "";
-        $admissionParcours .= "<h3>Calendrier d'inscription<h3>";
+        $admissionParcours = "<h3>Modalités d'admission</h3>";
+        $admissionParcours .= $parcours->getTypeDiplome()?->getModalitesAdmission() ?? "";
+        $admissionParcours .= "<h3>Calendrier d'inscription</h3>";
         $admissionParcours .= $etablissementInformation->getCalendrierInscription() ?? "";
 
         // Poursuite d'études
-        $poursuiteEtudes = $parcours->getPoursuitesEtudes() ?? '';
+        $poursuiteEtudes = '<br>'.$parcours->getPoursuitesEtudes() ?? '';
         $poursuiteEtudes .= "<h2>Débouchés</h2>";
         $poursuiteEtudes .= $parcours->getDebouches() ?? '-';
-        $poursuiteEtudes .= "<p>Codes ROME</p>";
+        $poursuiteEtudes .= "<br><h2>Codes ROME</h2>";
         $poursuiteEtudes .= "<ul>";
         foreach($codesRome as $code){
             $poursuiteEtudes .= "<li>{$code}</li>";
         }
         $poursuiteEtudes .= "</ul>";
         $poursuiteEtudes .= "<p>Le ROME est le répertoire des métiers et d'emplois de Pôle Emploi.</p>";
+        $poursuiteEtudes .= "<br><h2>Devenir des étudiants</h2>";
+        $poursuiteEtudes .= $parcours->getTypeDiplome()->getInsertionProfessionnelle() ?? '-';
+
+        $prerequis = '<strong>Prérequis obligatoires :</strong><br>';
+        $prerequis .= $this->cleanString($parcours->getTypeDiplome()?->getPrerequisObligatoires()) ?? '-';
+        $prerequis .= '<br><strong>Prérequis recommandés :</strong><br>';
+        $prerequis .= $this->cleanString($parcours->getPrerequis()) ?? 'Aucune condition spécifique.';
 
         // Génération du XML
         $encoder = new XmlEncoder([
@@ -303,7 +313,7 @@ HTML;
             '@xmlns' => 'http://lheo.gouv.fr/2.3',
             '@xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
             '@xsi:schemaLocation' => 'http://lheo.gouv.fr/2.3/lheo.xsd',
-            'offres' => [ 
+            'offres' => [
                 'formation' => [
                     'domaine-formation' => [
                         // Formacode et code nsf optionnels
@@ -319,26 +329,26 @@ HTML;
                     'contact-formation' => $referentsPedagogiques,
                     'parcours-de-formation' => 1,
                     'code-niveau-entree' => $niveauEntree,
-                    'objectif-general-formation' => 6, // (Certification) A CHANGER OU FAIRE EVOLUER 
+                    'objectif-general-formation' => 6, // (Certification) A CHANGER OU FAIRE EVOLUER
                     'certification' => [
                         'code-RNCP' => $rncp
                     ],
                     'code-niveau-sortie' => $parcours->getFormation()?->getNiveauSortie()->value ?? 0, // A CHANGER
                     'action' => [
-                                                    
+
                         'rythme-formation' => $rythmeFormation,
                         'code-public-vise' => '00000',
                         'niveau-entree-obligatoire' => 1,
                         'modalites-alternance' => $modalitesAlternance,
                         'modalites-enseignement' => $parcours->getModalitesEnseignement() ? $parcours->getModalitesEnseignement()->value : 1,
-                        'conditions-specifiques' => $this->cleanString($parcours->getPrerequis()) ?? 'Aucune condition spécifique.',
-                        'prise-en-charge-frais-possible' => 1, // A CHANGER - 1 oui | 0 non 
+                        'conditions-specifiques' => $prerequis,
+                        'prise-en-charge-frais-possible' => 1, // A CHANGER - 1 oui | 0 non
                         'modalites-entrees-sorties' => 0,
                         'duree-cycle' => $dureeCycle,
                         'session' => [
                             'periode' => [
                                 'debut' => '00000000',
-                                'fin' => '00000000' 
+                                'fin' => '00000000'
                             ],
                             'adresse-inscription' => [
                                 'adresse' => [
@@ -349,7 +359,7 @@ HTML;
                         'adresse-information' => ['adresse' => $adresseSiegeURCA],
                         'restauration' => $parcours->getLocalisation()?->getEtablissement()?->getEtablissementInformation()?->getRestauration() ?? "Non renseigné.",
                         'hebergement' => $parcours->getLocalisation()?->getEtablissement()?->getEtablissementInformation()?->getHebergement() ?? "Non renseigné.",
-                        'transport' => $parcours->getLocalisation()?->getEtablissement()?->getEtablissementInformation()?->getTransport() ?? "Non renseigné" 
+                        'transport' => $parcours->getLocalisation()?->getEtablissement()?->getEtablissementInformation()?->getTransport() ?? "Non renseigné"
 
                     ],
                     'organisme-formation-responsable' => [
@@ -362,7 +372,7 @@ HTML;
                             'coordonnees' => [
                                 'adresse' => [
                                     $coordonneesComposante
-                                ]              
+                                ]
                             ]
                         ],
                         'contact-organisme' => $composantesInscription
@@ -375,6 +385,9 @@ HTML;
                     ],
                     'extras' => [
                         'extra' => [
+                            'description-haut' => $this->cleanString($parcours->getDescriptifHautPageAffichage()), //todo: vérifier le nom du champs extra
+                            'description-bas' => $this->cleanString($parcours->getDescriptifBasPageAffichage()),  //todo: vérifier le nom du champs extra
+                            'description-mention' => $this->cleanString($parcours->getFormation()?->getObjectifsFormation()), //todo: vérifier le nom du champs extra, pour afficher le texte de la formation en plus de la précision du parcours
                             'competences-acquises' => $this->cleanString($competencesAcquisesExtra),
                             'organisation-pedagogique' => $this->cleanString($organisationPedagogique),
                             'poursuite-etudes' => $this->cleanString($poursuiteEtudes),
@@ -389,7 +402,7 @@ HTML;
         ], 'xml', $contextOptions);
 
         return $xml;
-       
+
     }
 
     /**
@@ -398,14 +411,14 @@ HTML;
      * @return bool Vrai si le XML est valide, Faux sinon
      */
     public function validateLheoSchema(string $xml) : bool {
-        
+
         libxml_use_internal_errors(true);
         $xmlValidator = new \DOMDocument('1.0', 'UTF-8');
         $xmlValidator->loadXML($xml);
         $isValid = $xmlValidator->schemaValidate(__DIR__ . '/../../lheo.xsd');
-        
+
         return $isValid;
-        
+
     }
 
     public function isValidLHEO(Parcours $parcours) : bool {
@@ -444,7 +457,7 @@ HTML;
             $cleanedString = preg_replace('/<!--block-->/m', '', $cleanedString);
             return $cleanedString;
         }
-        return null;     
+        return null;
     }
 
     /**
@@ -457,7 +470,7 @@ HTML;
         // Problème de Code ROME
         if(preg_match("/^Element '{http:\/\/lheo.gouv.fr\/2.3}code-ROME.+$/m", $message)){
             $decodedMessage = preg_replace(
-                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}code-ROME.+$/m", 
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}code-ROME.+$/m",
                 'Problème de Code(s) ROME',
                 $message
             );
@@ -489,7 +502,7 @@ HTML;
         // contenu-formation : dépassement de la longueur autorisée
         elseif(
             preg_match(
-                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}contenu-formation': .+length of '([0-9]+)'.+exceeds.+'([0-9]+)'.+$/m", 
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}contenu-formation': .+length of '([0-9]+)'.+exceeds.+'([0-9]+)'.+$/m",
                 $message
             )
         ){
@@ -502,7 +515,7 @@ HTML;
         // code de niveau d'entrée non renseigné
         elseif(
             preg_match(
-                "/Element '{http:\/\/lheo.gouv.fr\/2.3}code-niveau-entree': .+ The value '-1'.+$/m", 
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}code-niveau-entree': .+ The value '-1'.+$/m",
                 $message
             )
         ){
@@ -515,7 +528,7 @@ HTML;
         // objectif-formation non renseigné
         elseif(
             preg_match(
-                "/Element '{http:\/\/lheo.gouv.fr\/2.3}objectif-formation': .+ The value has a length of '0'; this underruns.+$/m", 
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}objectif-formation': .+ The value has a length of '0'; this underruns.+$/m",
                 $message
             )
         ){
@@ -577,7 +590,7 @@ HTML;
                 $message
             );
         }
-    
+
         return $decodedMessage;
     }
 
