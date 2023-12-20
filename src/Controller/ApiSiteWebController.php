@@ -19,6 +19,7 @@ class ApiSiteWebController extends AbstractController
         FormationRepository $formatinRepository,
     ): JsonResponse
     {
+        $data = [];
         $formations = $formatinRepository->findAll();
         foreach ($formations as $formation) {
             $tParcours = [];
@@ -36,7 +37,7 @@ class ApiSiteWebController extends AbstractController
                 'libelle' => $formation->getDisplayLong(),
                 'parcours' => $tParcours,
                 //todo: on pourrait ajouter la version. Le Lheo doit dépendre de la version
-                'dateValidation' => $getHistorique->getHistoriqueFormationLastStep($formation, 'publier')?->getDate()?->format('Y-m-d H:i:s') ?? null,
+                'dateValidation' => $getHistorique->getHistoriqueFormationLastStep($formation, 'publication')?->getDate()?->format('Y-m-d H:i:s') ?? null,
             ];
         }
 
