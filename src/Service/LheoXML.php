@@ -207,16 +207,18 @@ class LheoXML {
         // Si Parcours NON BUT
         if($parcours->getTypeDiplome()?->getLibelleCourt() !== "BUT"){
             if($blocCompetences = $parcours->getBlocCompetences()){
-                $competencesAcquisesExtra = $competencesAcquisesExtraTitre. "<ul style=\"list-style: none;\">";
+                $competencesAcquisesExtra = $competencesAcquisesExtraTitre. "<ul>";
                 foreach($blocCompetences as $bloc){
                     $competencesHTML = "";
                     foreach($bloc->getCompetences() as $competence){
                         $competencesHTML .= "<li>{$competence->display()}</li>";
                     }
                     $competencesAcquisesExtra .= <<<HTML
-                    <li>{$bloc->display()}</li>
                     <li>
-                        <ul>{$competencesHTML}</ul>
+                        {$bloc->display()}
+                        <ul>
+                            {$competencesHTML}
+                        </ul>
                     </li>
 HTML;
                 }
@@ -228,16 +230,18 @@ HTML;
             $typeD = $this->typeDiplomeR->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
             $competences = $typeD->getRefCompetences($parcours);
             if($competences){
-                $competencesAcquisesExtra = $competencesAcquisesExtraTitre. "<ul style=\"list-style: none;\">";
+                $competencesAcquisesExtra = $competencesAcquisesExtraTitre. "<ul>";
                 foreach($competences as $comp){
                     $competencesHTML = "";
                     foreach($comp->getButNiveaux() as $niveau){
                         $competencesHTML .= "<li>Niveau {$niveau->getOrdre()} - {$niveau->getLibelle()}</li>";
                     }
                     $competencesAcquisesExtra .= <<<HTML
-                    <li>{$comp->getLibelle()}</li>
                     <li>
-                        <ul>{$competencesHTML}</ul>
+                        {$comp->getLibelle()}
+                        <ul>
+                            {$competencesHTML}
+                        </ul>
                     </li>
 HTML;
                 }
@@ -291,12 +295,12 @@ HTML;
         $poursuiteEtudes .= "<h2>Débouchés</h2>";
         $poursuiteEtudes .= $parcours->getDebouches() ?? '-';
         $poursuiteEtudes .= "<br><h2>Codes ROME</h2>";
-        $poursuiteEtudes .= "<ul>";
+        $poursuiteEtudes .= "<br><ul>";
         foreach($codesRome as $code){
             $poursuiteEtudes .= "<li>{$code}</li>";
         }
         $poursuiteEtudes .= "</ul>";
-        $poursuiteEtudes .= "<p>Le ROME est le répertoire des métiers et d'emplois de Pôle Emploi.</p>";
+        $poursuiteEtudes .= "<h3>Le ROME est le répertoire des métiers et d'emplois de Pôle Emploi.</h3>";
         $poursuiteEtudes .= "<br><h2>Devenir des étudiants</h2>";
         $poursuiteEtudes .= $parcours->getTypeDiplome()->getInsertionProfessionnelle() ?? '-';
 
