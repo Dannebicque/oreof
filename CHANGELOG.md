@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.22.0](https://github.com/Dannebicque/oreof/compare/v1.21.6...v1.22.0) (2023-12-21)
+
+
+### Features
+
+* Ajout d'un champs type de parcours pour savoir si LAS ou pas. Ajouter de champs pour texte à ajouter sur les LAS ([ce427cd](https://github.com/Dannebicque/oreof/commit/ce427cdebec528cbc09089f3f45aec954162e554))
+
+
+### Bug Fixes
+
+* LHEO avec parcours par défaut ([de5669e](https://github.com/Dannebicque/oreof/commit/de5669e4cc6908da858538f7632520e2a0d9e303))
+
 ### [1.21.6](https://github.com/Dannebicque/oreof/compare/v1.21.5...v1.21.6) (2023-12-20)
 
 
