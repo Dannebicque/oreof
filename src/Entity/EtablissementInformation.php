@@ -41,6 +41,15 @@ class EtablissementInformation
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descriptifBasPage = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $textLas1 = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $textLas2 = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $textLas3 = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -150,6 +159,42 @@ class EtablissementInformation
     public function setDescriptifBasPage(?string $descriptifBasPage): static
     {
         $this->descriptifBasPage = $descriptifBasPage;
+
+        return $this;
+    }
+
+    public function getTextLas1(): ?string
+    {
+        return $this->textLas1;
+    }
+
+    public function setTextLas1(?string $textLas1): static
+    {
+        $this->textLas1 = $textLas1;
+
+        return $this;
+    }
+
+    public function getTextLas2(): ?string
+    {
+        return $this->textLas2;
+    }
+
+    public function setTextLas2(?string $textLas2): static
+    {
+        $this->textLas2 = $textLas2;
+
+        return $this;
+    }
+
+    public function getTextLas3(): ?string
+    {
+        return $this->textLas3;
+    }
+
+    public function setTextLas3(?string $textLas3): static
+    {
+        $this->textLas3 = $textLas3;
 
         return $this;
     }

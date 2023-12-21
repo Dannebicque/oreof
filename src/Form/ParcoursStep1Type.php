@@ -65,14 +65,14 @@ class ParcoursStep1Type extends AbstractType
                     'data-action' => 'change->parcours--step1#saveObjectifsParcours'
                 ],
             ])
-            ->add('objectifsParcours', TextareaAutoSaveType::class, [
-                'help' => '-',
-                'attr' => [
-                    'rows' => 10,
-                    'maxlength' => 3000,
-                    'data-action' => 'change->parcours--step1#saveObjectifsParcours'
-                ],
-            ])
+//            ->add('objectifsParcours', TextareaAutoSaveType::class, [
+//                'help' => '-',
+//                'attr' => [
+//                    'rows' => 10,
+//                    'maxlength' => 3000,
+//                    'data-action' => 'change->parcours--step1#saveObjectifsParcours'
+//                ],
+//            ])
             ->add('resultatsAttendus', TextareaAutoSaveType::class, [
                 'help' => '-',
                 'attr' => ['rows' => 10, 'maxlength' => 3000, 'data-action' => 'change->parcours--step1#saveResultats'],

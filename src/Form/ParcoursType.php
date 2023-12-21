@@ -11,8 +11,11 @@ namespace App\Form;
 
 use App\Entity\Parcours;
 use App\Entity\User;
+use App\Enums\TypeParcoursEnum;
+use App\Form\Type\YesNoType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -56,6 +59,10 @@ class ParcoursType extends AbstractType
                 'attr' => [
                     'maxlength' => '15',
                 ],
+            ])
+            ->add('typeParcours', EnumType::class, [
+                'class' => TypeParcoursEnum::class,
+                'translation_domain' => 'form',
             ])
         ;
     }

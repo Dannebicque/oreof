@@ -41,6 +41,10 @@
 
 {{ form_row(form.sigle, {label: texte == 'option' ? 'options.labels.sigle'|trans({}, 'form') : ''}) }}
 
+
+        {{ form_row(form.typeParcours) }}
+
+
 <button type="submit" class="btn btn-success"
         {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
 >

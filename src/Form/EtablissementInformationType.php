@@ -56,6 +56,23 @@ class EtablissementInformationType extends AbstractType
                 'required' => true,
                 'attr' => ['maxlength' => 2500]
             ])
+            ->add('textLas1', TextareaAutoSaveType::class, [
+                'label' => 'Texte affiché si le parcours est une LAS1',
+                'required' => true,
+                'attr' => ['maxlength' => 2500]
+            ])
+            ->add('textLas2', TextareaAutoSaveType::class, [
+                'label' => 'Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2',
+
+                'required' => true,
+                'attr' => ['maxlength' => 2500]
+            ])
+            ->add('textLas3', TextareaAutoSaveType::class, [
+                'label' => 'Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3',
+
+                'required' => true,
+                'attr' => ['maxlength' => 2500]
+            ])
         ;
     }
 

@@ -14,6 +14,7 @@ use App\DTO\Remplissage;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\RegimeInscriptionEnum;
+use App\Enums\TypeParcoursEnum;
 use App\Repository\ParcoursRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -208,7 +209,7 @@ class Parcours
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: ParcoursVersioning::class)]
     private Collection $parcoursVersionings;
-    
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $modalitesAdmission = null;
 
@@ -229,6 +230,9 @@ class Parcours
 
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeRNCP = null;
+
+    #[ORM\Column(length: 20, nullable: true, enumType: TypeParcoursEnum::class)]
+    private ?TypeParcoursEnum $typeParcours = null;
 
     public function __construct(Formation $formation)
     {
@@ -1226,6 +1230,18 @@ class Parcours
     public function setCodeRNCP(?string $codeRNCP): static
     {
         $this->codeRNCP = $codeRNCP;
+
+        return $this;
+    }
+
+    public function getTypeParcours(): ?TypeParcoursEnum
+    {
+        return $this->typeParcours ?? TypeParcoursEnum::TYPE_PARCOURS_CLASSIQUE;
+    }
+
+    public function setTypeParcours(?string $typeParcours): static
+    {
+        $this->typeParcours = $typeParcours;
 
         return $this;
     }
