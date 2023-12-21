@@ -627,8 +627,11 @@ HTML;
                 $errorMessageArray[] = "La description du mémoire n'est pas correctement renseignée. (inférieur à 12 caractères)";
             }
         }
-        if(mb_strlen($parcours->getResultatsAttendus()) < 12){
-            $errorMessageArray[] = "Les résultats attendus ne sont pas correctement renseignée. (inférieur à 12 caractères)";
+        if(mb_strlen($parcours->getResultatsAttendus()) < 12 && $parcours->isParcoursDefaut() === false){
+            $errorMessageArray[] = "Les résultats attendus du 'parcours' ne sont pas correctement renseignée. (inférieur à 12 caractères)";
+        }
+        if(mb_strlen($parcours->getFormation()?->getResultatsAttendus()) < 12 && $parcours->isParcoursDefaut()){
+            $errorMessageArray[] = "Les résultats attendus de la 'formation' ne sont pas correctement renseignée. (inférieur à 12 caractères)";
         }
         return $errorMessageArray;
     }
