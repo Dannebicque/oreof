@@ -2383,5 +2383,11 @@
         <target>Numéro d'activité</target>
       </segment>
     </unit>
+    <unit id="pSBaTlP" name="Devenir des diplômés">
+      <segment>
+        <source>Devenir des diplômés</source>
+        <target>Devenir des diplômés</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

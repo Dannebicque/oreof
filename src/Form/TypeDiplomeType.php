@@ -38,7 +38,7 @@ class TypeDiplomeType extends AbstractType
             ])
             ->add('prerequis_obligatoires', TextareaAutoSaveType::class, [
                 'label' => "Prérequis obligatoires",
-                'required' => true,
+                'required' => false,
                 'attr' => [
                     'rows' => 6,
                     'maxlength' => 3000
@@ -46,7 +46,7 @@ class TypeDiplomeType extends AbstractType
             ])
             ->add('insertionProfessionnelle', TextareaAutoSaveType::class, [
                 'label' => 'Devenir des diplômés',
-                'required' => true,
+                'required' => false,
                 'attr' => [
                     'rows' => 4,
                     'maxlength' => 3000

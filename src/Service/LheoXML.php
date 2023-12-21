@@ -291,21 +291,27 @@ HTML;
         $admissionParcours .= $etablissementInformation->getCalendrierInscription() ?? "";
 
         // Poursuite d'études
-        $poursuiteEtudes = '<br>'.$parcours->getPoursuitesEtudes() ?? '';
-        $poursuiteEtudes .= "<h2>Débouchés</h2>";
+        $poursuiteEtudes = $parcours->getPoursuitesEtudes() ?? '';
+        $poursuiteEtudes .= "<br><h2>Débouchés</h2>";
         $poursuiteEtudes .= $parcours->getDebouches() ?? '-';
         $poursuiteEtudes .= "<br><h2>Codes ROME</h2>";
-        $poursuiteEtudes .= "<br><ul>";
+        $poursuiteEtudes .= "<ul>";
         foreach($codesRome as $code){
             $poursuiteEtudes .= "<li>{$code}</li>";
         }
         $poursuiteEtudes .= "</ul>";
-        $poursuiteEtudes .= "<h3>Le ROME est le répertoire des métiers et d'emplois de Pôle Emploi.</h3>";
-        $poursuiteEtudes .= "<br><h2>Devenir des étudiants</h2>";
-        $poursuiteEtudes .= $parcours->getTypeDiplome()->getInsertionProfessionnelle() ?? '-';
+        $poursuiteEtudes .= "<br><p>Le ROME est le répertoire des métiers et d'emplois de Pôle Emploi.</p>";
+        if($parcours->getTypeDiplome()?->getInsertionProfessionnelle()){
+            $poursuiteEtudes .= "<br><h2>Devenir des étudiants</h2>";
+            $poursuiteEtudes .= $parcours->getTypeDiplome()->getInsertionProfessionnelle() ?? '-';   
+        }
 
-        $prerequis = '<strong>Prérequis obligatoires :</strong><br>';
-        $prerequis .= $this->cleanString($parcours->getTypeDiplome()?->getPrerequisObligatoires()) ?? '-';
+        // Prérequis
+        $prerequis = "";
+        if($parcours->getTypeDiplome()?->getPrerequisObligatoires()){
+            $prerequis .= '<strong>Prérequis obligatoires :</strong><br>';
+            $prerequis .= $this->cleanString($parcours->getTypeDiplome()?->getPrerequisObligatoires());
+        }
         $prerequis .= '<br><strong>Prérequis recommandés :</strong><br>';
         $prerequis .= $this->cleanString($parcours->getPrerequis()) ?? 'Aucune condition spécifique.';
 
