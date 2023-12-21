@@ -57,23 +57,23 @@ class EtablissementInformationType extends AbstractType
                 'attr' => ['maxlength' => 2500]
             ])
             ->add('textLas1', TextareaAutoSaveType::class, [
-                'label' => 'Texte affiché si le parcours est une LAS1',
+                'label' => 'Après la 1ère année de licence "Sciences pour la Santé" - Accès santé',
                 'required' => true,
                 'attr' => ['maxlength' => 2500]
             ])
             ->add('textLas2', TextareaAutoSaveType::class, [
-                'label' => 'Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2',
+                'label' => 'Licence - Accès santé 2ème année (L.As 2)',
 
                 'required' => true,
                 'attr' => ['maxlength' => 2500]
             ])
             ->add('textLas3', TextareaAutoSaveType::class, [
-                'label' => 'Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3',
+                'label' => 'Licence - Accès santé 3ème année (L.As 3)',
                 'required' => true,
                 'attr' => ['maxlength' => 2500]
             ])
             ->add('secondeChance', TextareaAutoSaveType::class, [
-                'label' => 'Texte affiché pour décourager la seconde chance',
+                'label' => 'Droit à la 2nde chance',
                 'required' => true,
                 'attr' => ['maxlength' => 2500]
             ])
