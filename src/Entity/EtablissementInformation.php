@@ -50,6 +50,9 @@ class EtablissementInformation
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $textLas3 = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $secondeChance = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -195,6 +198,18 @@ class EtablissementInformation
     public function setTextLas3(?string $textLas3): static
     {
         $this->textLas3 = $textLas3;
+
+        return $this;
+    }
+
+    public function getSecondeChance(): ?string
+    {
+        return $this->secondeChance;
+    }
+
+    public function setSecondeChance(?string $secondeChance): static
+    {
+        $this->secondeChance = $secondeChance;
 
         return $this;
     }

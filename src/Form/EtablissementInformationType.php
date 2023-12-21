@@ -69,7 +69,11 @@ class EtablissementInformationType extends AbstractType
             ])
             ->add('textLas3', TextareaAutoSaveType::class, [
                 'label' => 'Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3',
-
+                'required' => true,
+                'attr' => ['maxlength' => 2500]
+            ])
+            ->add('secondeChance', TextareaAutoSaveType::class, [
+                'label' => 'Texte affiché pour décourager la seconde chance',
                 'required' => true,
                 'attr' => ['maxlength' => 2500]
             ])
