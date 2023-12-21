@@ -602,6 +602,19 @@ HTML;
                 $message
             );
         }
+        // conditions spécifiques dépassant la longueur maximale
+        elseif(
+            preg_match(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}conditions-specifiques.+length of '([0-9]+)'.+exceeds.+maximum length of '([0-9]+)'/m",
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}conditions-specifiques.+length of '([0-9]+)'.+exceeds.+maximum length of '([0-9]+)'/m",
+                "Les 'conditions spécifiques' du parcours ont une longueur de $1 qui est supérieure au maximum de $2",
+                $message
+            );
+        }
 
         return $decodedMessage;
     }
