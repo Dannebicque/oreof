@@ -207,16 +207,18 @@ class LheoXML {
         // Si Parcours NON BUT
         if($parcours->getTypeDiplome()?->getLibelleCourt() !== "BUT"){
             if($blocCompetences = $parcours->getBlocCompetences()){
-                $competencesAcquisesExtra = $competencesAcquisesExtraTitre. "<ul style=\"list-style: none;\">";
+                $competencesAcquisesExtra = $competencesAcquisesExtraTitre. "<ul>";
                 foreach($blocCompetences as $bloc){
                     $competencesHTML = "";
                     foreach($bloc->getCompetences() as $competence){
                         $competencesHTML .= "<li>{$competence->display()}</li>";
                     }
                     $competencesAcquisesExtra .= <<<HTML
-                    <li>{$bloc->display()}</li>
                     <li>
-                        <ul>{$competencesHTML}</ul>
+                        {$bloc->display()}
+                        <ul>
+                            {$competencesHTML}
+                        </ul>
                     </li>
 HTML;
                 }
@@ -228,16 +230,18 @@ HTML;
             $typeD = $this->typeDiplomeR->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
             $competences = $typeD->getRefCompetences($parcours);
             if($competences){
-                $competencesAcquisesExtra = $competencesAcquisesExtraTitre. "<ul style=\"list-style: none;\">";
+                $competencesAcquisesExtra = $competencesAcquisesExtraTitre. "<ul>";
                 foreach($competences as $comp){
                     $competencesHTML = "";
                     foreach($comp->getButNiveaux() as $niveau){
                         $competencesHTML .= "<li>Niveau {$niveau->getOrdre()} - {$niveau->getLibelle()}</li>";
                     }
                     $competencesAcquisesExtra .= <<<HTML
-                    <li>{$comp->getLibelle()}</li>
                     <li>
-                        <ul>{$competencesHTML}</ul>
+                        {$comp->getLibelle()}
+                        <ul>
+                            {$competencesHTML}
+                        </ul>
                     </li>
 HTML;
                 }
@@ -279,16 +283,18 @@ HTML;
 
         // Informations pratiques
         $informationsPratiques = $etablissementInformation->getInformationsPratiques() ?? "Non renseigné.";
+        $informationsPratiques = preg_replace("/<h1>/m", "<h3>", $informationsPratiques);
+        $informationsPratiques = preg_replace("/<\/h1>/m", "</h3>", $informationsPratiques);
 
         // Modalités d'admission
-        $admissionParcours = "<h3>Modalités d'admission</h3>";
+        $admissionParcours = "<h3>Modalités d'admission</h3><br>";
         $admissionParcours .= $parcours->getTypeDiplome()?->getModalitesAdmission() ?? "";
         $admissionParcours .= "<h3>Calendrier d'inscription</h3>";
         $admissionParcours .= $etablissementInformation->getCalendrierInscription() ?? "";
 
         // Poursuite d'études
-        $poursuiteEtudes = '<br>'.$parcours->getPoursuitesEtudes() ?? '';
-        $poursuiteEtudes .= "<h2>Débouchés</h2>";
+        $poursuiteEtudes = $parcours->getPoursuitesEtudes() ?? '';
+        $poursuiteEtudes .= "<br><h2>Débouchés</h2>";
         $poursuiteEtudes .= $parcours->getDebouches() ?? '-';
         $poursuiteEtudes .= "<br><h2>Codes ROME</h2>";
         $poursuiteEtudes .= "<ul>";
@@ -296,12 +302,18 @@ HTML;
             $poursuiteEtudes .= "<li>{$code}</li>";
         }
         $poursuiteEtudes .= "</ul>";
-        $poursuiteEtudes .= "<p>Le ROME est le répertoire des métiers et d'emplois de Pôle Emploi.</p>";
-        $poursuiteEtudes .= "<br><h2>Devenir des étudiants</h2>";
-        $poursuiteEtudes .= $parcours->getTypeDiplome()->getInsertionProfessionnelle() ?? '-';
+        $poursuiteEtudes .= "<br><p>Le ROME est le répertoire des métiers et d'emplois de Pôle Emploi.</p>";
+        if($parcours->getTypeDiplome()?->getInsertionProfessionnelle()){
+            $poursuiteEtudes .= "<br><h2>Devenir des étudiants</h2>";
+            $poursuiteEtudes .= $parcours->getTypeDiplome()->getInsertionProfessionnelle() ?? '-';   
+        }
 
-        $prerequis = '<strong>Prérequis obligatoires :</strong><br>';
-        $prerequis .= $this->cleanString($parcours->getTypeDiplome()?->getPrerequisObligatoires()) ?? '-';
+        // Prérequis
+        $prerequis = "";
+        if($parcours->getTypeDiplome()?->getPrerequisObligatoires()){
+            $prerequis .= '<strong>Prérequis obligatoires :</strong><br>';
+            $prerequis .= $this->cleanString($parcours->getTypeDiplome()?->getPrerequisObligatoires());
+        }
         $prerequis .= '<br><strong>Prérequis recommandés :</strong><br>';
         $prerequis .= $this->cleanString($parcours->getPrerequis()) ?? 'Aucune condition spécifique.';
 
@@ -602,6 +614,19 @@ HTML;
                 $message
             );
         }
+        // conditions spécifiques dépassant la longueur maximale
+        elseif(
+            preg_match(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}conditions-specifiques.+length of '([0-9]+)'.+exceeds.+maximum length of '([0-9]+)'/m",
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/^Element '{http:\/\/lheo.gouv.fr\/2.3}conditions-specifiques.+length of '([0-9]+)'.+exceeds.+maximum length of '([0-9]+)'/m",
+                "Les 'conditions spécifiques' du parcours ont une longueur de $1 qui est supérieure au maximum de $2",
+                $message
+            );
+        }
 
         return $decodedMessage;
     }
@@ -627,8 +652,11 @@ HTML;
                 $errorMessageArray[] = "La description du mémoire n'est pas correctement renseignée. (inférieur à 12 caractères)";
             }
         }
-        if(mb_strlen($parcours->getResultatsAttendus()) < 12){
-            $errorMessageArray[] = "Les résultats attendus ne sont pas correctement renseignée. (inférieur à 12 caractères)";
+        if(mb_strlen($parcours->getResultatsAttendus()) < 12 && $parcours->isParcoursDefaut() === false){
+            $errorMessageArray[] = "Les résultats attendus du 'parcours' ne sont pas correctement renseignée. (inférieur à 12 caractères)";
+        }
+        if(mb_strlen($parcours->getFormation()?->getResultatsAttendus()) < 12 && $parcours->isParcoursDefaut()){
+            $errorMessageArray[] = "Les résultats attendus de la 'formation' ne sont pas correctement renseignée. (inférieur à 12 caractères)";
         }
         return $errorMessageArray;
     }
