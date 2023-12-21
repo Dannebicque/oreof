@@ -283,9 +283,11 @@ HTML;
 
         // Informations pratiques
         $informationsPratiques = $etablissementInformation->getInformationsPratiques() ?? "Non renseigné.";
+        $informationsPratiques = preg_replace("/<h1>/m", "<h3>", $informationsPratiques);
+        $informationsPratiques = preg_replace("/<\/h1>/m", "</h3>", $informationsPratiques);
 
         // Modalités d'admission
-        $admissionParcours = "<h3>Modalités d'admission</h3>";
+        $admissionParcours = "<h3>Modalités d'admission</h3><br>";
         $admissionParcours .= $parcours->getTypeDiplome()?->getModalitesAdmission() ?? "";
         $admissionParcours .= "<h3>Calendrier d'inscription</h3>";
         $admissionParcours .= $etablissementInformation->getCalendrierInscription() ?? "";

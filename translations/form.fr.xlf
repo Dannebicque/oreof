@@ -2389,5 +2389,35 @@
         <target>Devenir des diplômés</target>
       </segment>
     </unit>
+    <unit id="wCeeAVn" name="Texte affiché en haut des pages parcours">
+      <segment>
+        <source>Texte affiché en haut des pages parcours</source>
+        <target>Texte affiché en haut des pages parcours</target>
+      </segment>
+    </unit>
+    <unit id="KyjzXAE" name="Texte affiché en bas des pages parcours">
+      <segment>
+        <source>Texte affiché en bas des pages parcours</source>
+        <target>Texte affiché en bas des pages parcours</target>
+      </segment>
+    </unit>
+    <unit id="wcDMXQe" name="Texte affiché si le parcours est une LAS1">
+      <segment>
+        <source>Texte affiché si le parcours est une LAS1</source>
+        <target>Texte affiché si le parcours est une LAS1</target>
+      </segment>
+    </unit>
+    <unit id="64cpNVA">
+      <segment>
+        <source>Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2</source>
+        <target>Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2</target>
+      </segment>
+    </unit>
+    <unit id="Zfi_o5w">
+      <segment>
+        <source>Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3</source>
+        <target>Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
