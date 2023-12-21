@@ -1239,7 +1239,7 @@ class Parcours
         return $this->typeParcours ?? TypeParcoursEnum::TYPE_PARCOURS_CLASSIQUE;
     }
 
-    public function setTypeParcours(?string $typeParcours): static
+    public function setTypeParcours(?TypeParcoursEnum $typeParcours): static
     {
         $this->typeParcours = $typeParcours;
 
