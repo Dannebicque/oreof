@@ -2054,5 +2054,35 @@
         <target>etablissement.helps.numero_activite</target>
       </segment>
     </unit>
+    <unit id="zOXPswG" name="etablissement.helps.etablissement_information.descriptifHautPage">
+      <segment>
+        <source>etablissement.helps.etablissement_information.descriptifHautPage</source>
+        <target>etablissement.helps.etablissement_information.descriptifHautPage</target>
+      </segment>
+    </unit>
+    <unit id="fqTv91C" name="etablissement.helps.etablissement_information.descriptifBasPage">
+      <segment>
+        <source>etablissement.helps.etablissement_information.descriptifBasPage</source>
+        <target>etablissement.helps.etablissement_information.descriptifBasPage</target>
+      </segment>
+    </unit>
+    <unit id="uYNCuRO" name="etablissement.helps.etablissement_information.textLas1">
+      <segment>
+        <source>etablissement.helps.etablissement_information.textLas1</source>
+        <target>etablissement.helps.etablissement_information.textLas1</target>
+      </segment>
+    </unit>
+    <unit id="X5.biW9" name="etablissement.helps.etablissement_information.textLas2">
+      <segment>
+        <source>etablissement.helps.etablissement_information.textLas2</source>
+        <target>etablissement.helps.etablissement_information.textLas2</target>
+      </segment>
+    </unit>
+    <unit id="E8vPYIF" name="etablissement.helps.etablissement_information.textLas3">
+      <segment>
+        <source>etablissement.helps.etablissement_information.textLas3</source>
+        <target>etablissement.helps.etablissement_information.textLas3</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

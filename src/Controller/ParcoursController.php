@@ -404,7 +404,7 @@ class ParcoursController extends BaseController
         $ects = $typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts;
 
         $data = [
-            'description' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            'description' => "",
             'ects' => $ects ?? 0,
             'metadata' => [
                 'domaine' => $parcours->getFormation()?->getDomaine()?->getLibelle() ?? '-',
