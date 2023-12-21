@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.22.2](https://github.com/Dannebicque/oreof/compare/v1.22.1...v1.22.2) (2023-12-21)
+
+
+### Features
+
+* Ajout d'un champ seconde chance ([fc9715b](https://github.com/Dannebicque/oreof/commit/fc9715b43c8905612af9c2febf465e84f280be81))
+
 ### [1.22.1](https://github.com/Dannebicque/oreof/compare/v1.22.0...v1.22.1) (2023-12-21)
 
 
