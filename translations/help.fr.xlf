@@ -2084,5 +2084,11 @@
         <target>etablissement.helps.etablissement_information.textLas3</target>
       </segment>
     </unit>
+    <unit id="U0bMrzO" name="etablissement.helps.etablissement_information.secondeChance">
+      <segment>
+        <source>etablissement.helps.etablissement_information.secondeChance</source>
+        <target>etablissement.helps.etablissement_information.secondeChance</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
