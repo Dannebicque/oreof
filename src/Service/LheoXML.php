@@ -279,9 +279,19 @@ HTML;
         if($parcours->isHasProjet()){
             $projetTuteure = $parcours->getProjetText();
         }
-        $maquettePdf = ''; //todo: Maquette en PDF accessible, quelle URL ?
+        $maquettePdf = $this->router->generate(
+            'app_parcours_mccc_export',
+            [
+                'parcours' => $parcours->getId(),
+                '_format' => 'pdf'
+            ], 
+            UrlGeneratorInterface::ABSOLUTE_URL
+        ); //todo: Maquette en PDF accessible, quelle URL ?
         $organisationPedagogique = "<h3>Stages et projets tuteurés</h3>"
-                                    . $stage . $projetTuteure . $maquettePdf . $maquetteIframe
+                                    . $stage . $projetTuteure 
+                                    . "<br>" 
+                                    . $maquetteIframe
+                                    . "<br><a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>" 
                                     . "<h3>Calendrier universitaire</h3>"
                                     . $calendrierUniversitaire;
 
