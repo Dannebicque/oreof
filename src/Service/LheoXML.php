@@ -325,7 +325,7 @@ HTML;
         }
         // Poursuite d'études L.As (Licence Accès Santé)
         // Si LAS 1
-        if(($parcours->getTypeParcours()->name === 'TYPE_PARCOURS_LAS1')){
+        if($parcours->getTypeParcours()->name === "TYPE_PARCOURS_LAS1"){
             $poursuiteEtudes .= "<h2>Accès Santé</h2>";
             $poursuiteEtudes .= $etablissementInformation->getTextLas1()
                                 . "<br>" . $etablissementInformation->getTextLas2()
@@ -333,7 +333,7 @@ HTML;
                                 . "<br>" . $etablissementInformation->getSecondeChance(); 
         }
         // Si LAS 2 ou 3
-        if(($parcours->getTypeParcours()->name === 'TYPE_PARCOURS_LAS23')){
+        if($parcours->getTypeParcours()->name === "TYPE_PARCOURS_LAS23"){
             $poursuiteEtudes .= "<h2>Accès Santé</h2>";
             $poursuiteEtudes .= $etablissementInformation->getTextLas2()
                                 . "<br>" . $etablissementInformation->getTextLas3()
