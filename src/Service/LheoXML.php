@@ -175,7 +175,8 @@ class LheoXML {
 
         // code RNCP
         $rncp = 'RNCP00000';
-        if($parcours->getFormation()?->getCodeRNCP()){
+        // On prend le RNCP du parcours, et sinon celui de la formation
+        if($code = $parcours->getCodeRNCP() ?? $parcours->getFormation()?->getCodeRNCP()){
            $rncp = 'RNCP' . $parcours->getFormation()->getCodeRNCP();
         }
 
