@@ -2419,5 +2419,29 @@
         <target>Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3</target>
       </segment>
     </unit>
+    <unit id="cJ7b5JS" name="Après la 1ère année de licence &quot;Sciences pour la Santé&quot; - Accès santé">
+      <segment>
+        <source>Après la 1ère année de licence "Sciences pour la Santé" - Accès santé</source>
+        <target>Après la 1ère année de licence "Sciences pour la Santé" - Accès santé</target>
+      </segment>
+    </unit>
+    <unit id="0cRxojT" name="Licence - Accès santé 2ème année (L.As 2)">
+      <segment>
+        <source>Licence - Accès santé 2ème année (L.As 2)</source>
+        <target>Licence - Accès santé 2ème année (L.As 2)</target>
+      </segment>
+    </unit>
+    <unit id="ro6kRBh" name="Licence - Accès santé 3ème année (L.As 3)">
+      <segment>
+        <source>Licence - Accès santé 3ème année (L.As 3)</source>
+        <target>Licence - Accès santé 3ème année (L.As 3)</target>
+      </segment>
+    </unit>
+    <unit id="OWjeu6s" name="Droit à la 2nde chance">
+      <segment>
+        <source>Droit à la 2nde chance</source>
+        <target>Droit à la 2nde chance</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

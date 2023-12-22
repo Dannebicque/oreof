@@ -68,7 +68,10 @@ class LheoXML {
         $intituleFormation = 'Non renseigné.';
         if($typeDiplomeLibelle = $parcours->getFormation()?->getTypeDiplome()?->getLibelle()){
             $mention = $parcours->getFormation()?->getMention()?->getLibelle() ?? "";
-            $intituleFormation = $typeDiplomeLibelle . " " . $mention . " parcours " . $parcours->getLibelle();
+            $intituleFormation = $typeDiplomeLibelle . " " . $mention;
+            if($parcours->isParcoursDefaut() === false){
+                $intituleFormation .= "<br>parcours " . $parcours->getLibelle();
+            }
         }
 
         // Rythme de la formation
@@ -175,7 +178,8 @@ class LheoXML {
 
         // code RNCP
         $rncp = 'RNCP00000';
-        if($parcours->getFormation()?->getCodeRNCP()){
+        // On prend le RNCP du parcours, et sinon celui de la formation
+        if($code = $parcours->getCodeRNCP() ?? $parcours->getFormation()?->getCodeRNCP()){
            $rncp = 'RNCP' . $parcours->getFormation()->getCodeRNCP();
         }
 
@@ -328,6 +332,24 @@ HTML;
             $objectifFormation = $this->cleanString($parcours->getObjectifsParcours()) ?? 'Non renseigné.';
         }
 
+        // EXTRAS
+        $extraArray = [
+            'description-haut' => $this->cleanString($parcours->getDescriptifHautPageAffichage() ?? $etablissementInformation->getDescriptifHautPage()), //todo: vérifier le nom du champs extra
+            'description-bas' => $this->cleanString($parcours->getDescriptifBasPageAffichage() ?? $etablissementInformation->getDescriptifBasPage()),  //todo: vérifier le nom du champs extra
+            //todo: vérifier le nom du champs extra, pour afficher le texte de la formation en plus de la précision du parcours
+            'competences-acquises' => $this->cleanString($competencesAcquisesExtra),
+            'organisation-pedagogique' => $this->cleanString($organisationPedagogique),
+            'poursuite-etudes' => $this->cleanString($poursuiteEtudes),
+            'informations-pratiques' => $this->cleanString($informationsPratiques),
+            'admission' => $this->cleanString($admissionParcours),
+            'formation-continue-et-apprentissage' => [],
+        ];
+
+        // On dispose déjà des objectifs de formation si c'est un parcours par défaut
+        // ---> XML 'objectif-formation'
+        if($parcours->isParcoursDefaut() === false ){
+            $extraArray['description-mention'] = $this->cleanString($parcours->getFormation()?->getObjectifsFormation());
+        }
 
         // Génération du XML
         $encoder = new XmlEncoder([
@@ -408,17 +430,7 @@ HTML;
                         ]
                     ],
                     'extras' => [
-                        'extra' => [
-                            'description-haut' => $this->cleanString($parcours->getDescriptifHautPageAffichage()), //todo: vérifier le nom du champs extra
-                            'description-bas' => $this->cleanString($parcours->getDescriptifBasPageAffichage()),  //todo: vérifier le nom du champs extra
-                            'description-mention' => $this->cleanString($parcours->getFormation()?->getObjectifsFormation()), //todo: vérifier le nom du champs extra, pour afficher le texte de la formation en plus de la précision du parcours
-                            'competences-acquises' => $this->cleanString($competencesAcquisesExtra),
-                            'organisation-pedagogique' => $this->cleanString($organisationPedagogique),
-                            'poursuite-etudes' => $this->cleanString($poursuiteEtudes),
-                            'informations-pratiques' => $this->cleanString($informationsPratiques),
-                            'admission' => $this->cleanString($admissionParcours),
-                            'formation-continue-et-apprentissage' => [],
-                        ],
+                        'extra' => $extraArray,
                     ]
                 ]
             ]
