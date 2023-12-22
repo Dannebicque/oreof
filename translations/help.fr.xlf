@@ -2090,5 +2090,29 @@
         <target>etablissement.helps.etablissement_information.secondeChance</target>
       </segment>
     </unit>
+    <unit id="cG1zFiO" name="parcours_step7.helps.descriptifHautPage">
+      <segment>
+        <source>parcours_step7.helps.descriptifHautPage</source>
+        <target>parcours_step7.helps.descriptifHautPage</target>
+      </segment>
+    </unit>
+    <unit id="bWAtYK3" name="parcours_step7.helps.descriptifBasPage">
+      <segment>
+        <source>parcours_step7.helps.descriptifBasPage</source>
+        <target>parcours_step7.helps.descriptifBasPage</target>
+      </segment>
+    </unit>
+    <unit id="8zcQPgU" name="parcours_step7.helps.codeRNCP">
+      <segment>
+        <source>parcours_step7.helps.codeRNCP</source>
+        <target>parcours_step7.helps.codeRNCP</target>
+      </segment>
+    </unit>
+    <unit id="_xx5RC0" name="parcours.helps.typeParcours">
+      <segment>
+        <source>parcours.helps.typeParcours</source>
+        <target>parcours.helps.typeParcours</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
