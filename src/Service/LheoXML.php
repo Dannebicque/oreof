@@ -179,7 +179,8 @@ class LheoXML {
 
         // code RNCP
         // On prend le RNCP du parcours, et sinon celui de la formation
-        $rncp = $parcours->getCodeRNCP() ?? $parcours->getFormation()?->getCodeRNCP();
+        $rncp = 'RNCP';
+        $rncp .= $parcours->getCodeRNCP() ?? $parcours->getFormation()?->getCodeRNCP();
 
         // Coordonnées Organisme (composante)
         $coordonneesComposante = [];
