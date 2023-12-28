@@ -178,11 +178,8 @@ class LheoXML {
 
 
         // code RNCP
-        $rncp = 'RNCP00000';
         // On prend le RNCP du parcours, et sinon celui de la formation
-        if($code = $parcours->getCodeRNCP() ?? $parcours->getFormation()?->getCodeRNCP()){
-           $rncp = 'RNCP' . $parcours->getFormation()->getCodeRNCP();
-        }
+        $rncp = $parcours->getCodeRNCP() ?? $parcours->getFormation()?->getCodeRNCP();
 
         // Coordonnées Organisme (composante)
         $coordonneesComposante = [];
@@ -285,15 +282,15 @@ HTML;
             [
                 'parcours' => $parcours->getId(),
                 '_format' => 'pdf'
-            ], 
+            ],
             UrlGeneratorInterface::ABSOLUTE_URL
         ); //todo: Maquette en PDF accessible, quelle URL ?
         $organisationPedagogique = "<h3>Stages et projets tuteurés</h3>"
-                                    . $stage . $projetTuteure 
-                                    . "<br>" 
+                                    . $stage . $projetTuteure
+                                    . "<br>"
                                     . $maquetteIframe
                                     . "<h3>Maquette de la formation</h3>"
-                                    . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>" 
+                                    . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>"
                                     . "<h3>Calendrier universitaire</h3>"
                                     . $calendrierUniversitaire;
 
@@ -321,7 +318,7 @@ HTML;
         $poursuiteEtudes .= "<br><p>Le ROME est le répertoire des métiers et d'emplois de Pôle Emploi.</p>";
         if($parcours->getTypeDiplome()?->getInsertionProfessionnelle()){
             $poursuiteEtudes .= "<br><h2>Devenir des étudiants</h2>";
-            $poursuiteEtudes .= $parcours->getTypeDiplome()->getInsertionProfessionnelle() ?? '-';   
+            $poursuiteEtudes .= $parcours->getTypeDiplome()->getInsertionProfessionnelle() ?? '-';
         }
         // Poursuite d'études L.As (Licence Accès Santé)
         // Si LAS 1
@@ -330,7 +327,7 @@ HTML;
             $poursuiteEtudes .= $etablissementInformation->getTextLas1()
                                 . "<br>" . $etablissementInformation->getTextLas2()
                                 . "<br>" . $etablissementInformation->getTextLas3()
-                                . "<br>" . $etablissementInformation->getSecondeChance(); 
+                                . "<br>" . $etablissementInformation->getSecondeChance();
         }
         // Si LAS 2 ou 3
         if($parcours->getTypeParcours()->name === "TYPE_PARCOURS_LAS23"){
