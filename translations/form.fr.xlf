@@ -2443,5 +2443,35 @@
         <target>Droit à la 2nde chance</target>
       </segment>
     </unit>
+    <unit id="kD.GgSB" name="parcours_step7.labels.codeRNCP">
+      <segment>
+        <source>parcours_step7.labels.codeRNCP</source>
+        <target>parcours_step7.labels.codeRNCP</target>
+      </segment>
+    </unit>
+    <unit id="3rvXLth" name="parcours.labels.typeParcours">
+      <segment>
+        <source>parcours.labels.typeParcours</source>
+        <target>parcours.labels.typeParcours</target>
+      </segment>
+    </unit>
+    <unit id="0cS55fu" name="TYPE_PARCOURS_CLASSIQUE">
+      <segment>
+        <source>TYPE_PARCOURS_CLASSIQUE</source>
+        <target>TYPE_PARCOURS_CLASSIQUE</target>
+      </segment>
+    </unit>
+    <unit id="MRLCVBV" name="TYPE_PARCOURS_LAS1">
+      <segment>
+        <source>TYPE_PARCOURS_LAS1</source>
+        <target>TYPE_PARCOURS_LAS1</target>
+      </segment>
+    </unit>
+    <unit id="2DbCNF_" name="TYPE_PARCOURS_LAS23">
+      <segment>
+        <source>TYPE_PARCOURS_LAS23</source>
+        <target>TYPE_PARCOURS_LAS23</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

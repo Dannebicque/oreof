@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Classes\CalculStructureParcours;
 use App\Entity\Etablissement;
 use App\Entity\Parcours;
+use App\Enums\TypeParcoursEnum;
 use App\Repository\ElementConstitutifRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\ORM\EntityManagerInterface;
@@ -279,9 +280,20 @@ HTML;
         if($parcours->isHasProjet()){
             $projetTuteure = $parcours->getProjetText();
         }
-        $maquettePdf = ''; //todo: Maquette en PDF accessible, quelle URL ?
+        $maquettePdf = $this->router->generate(
+            'app_parcours_mccc_export',
+            [
+                'parcours' => $parcours->getId(),
+                '_format' => 'pdf'
+            ], 
+            UrlGeneratorInterface::ABSOLUTE_URL
+        ); //todo: Maquette en PDF accessible, quelle URL ?
         $organisationPedagogique = "<h3>Stages et projets tuteurés</h3>"
-                                    . $stage . $projetTuteure . $maquettePdf . $maquetteIframe
+                                    . $stage . $projetTuteure 
+                                    . "<br>" 
+                                    . $maquetteIframe
+                                    . "<h3>Maquette de la formation</h3>"
+                                    . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>" 
                                     . "<h3>Calendrier universitaire</h3>"
                                     . $calendrierUniversitaire;
 
@@ -311,6 +323,23 @@ HTML;
             $poursuiteEtudes .= "<br><h2>Devenir des étudiants</h2>";
             $poursuiteEtudes .= $parcours->getTypeDiplome()->getInsertionProfessionnelle() ?? '-';   
         }
+        // Poursuite d'études L.As (Licence Accès Santé)
+        // Si LAS 1
+        if($parcours->getTypeParcours()->name === "TYPE_PARCOURS_LAS1"){
+            $poursuiteEtudes .= "<h2>Accès Santé</h2>";
+            $poursuiteEtudes .= $etablissementInformation->getTextLas1()
+                                . "<br>" . $etablissementInformation->getTextLas2()
+                                . "<br>" . $etablissementInformation->getTextLas3()
+                                . "<br>" . $etablissementInformation->getSecondeChance(); 
+        }
+        // Si LAS 2 ou 3
+        if($parcours->getTypeParcours()->name === "TYPE_PARCOURS_LAS23"){
+            $poursuiteEtudes .= "<h2>Accès Santé</h2>";
+            $poursuiteEtudes .= $etablissementInformation->getTextLas2()
+                                . "<br>" . $etablissementInformation->getTextLas3()
+                                . "<br>" . $etablissementInformation->getSecondeChance();
+        }
+
 
         // Prérequis
         $prerequis = "";
