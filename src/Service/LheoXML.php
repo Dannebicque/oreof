@@ -162,12 +162,8 @@ class LheoXML {
         }
 
         // Durée de la formation (durée cycle)
-        $dureeCycle = 0;
-        if($parcours->getTypeDiplome()){
-            if($parcours->getTypeDiplome()->getSemestreFin() !== null && $parcours->getTypeDiplome()->getSemestreDebut() !== null){
-                $dureeCycle = (($parcours->getTypeDiplome()->getSemestreFin() - $parcours->getTypeDiplome()->getSemestreDebut()) + 1) / 2;
-            }
-        }
+        $dureeCycle = $parcours->getSemestreParcours()->count() / 2;
+
 
         // Calculs ECTS
         $ects = 0;
