@@ -1,0 +1,66 @@
+<div class="row">
+    {% for contact in contacts %}
+    <div class="col-4">
+        <h3>{{ contact.denomination }}</h3>
+        <p>{{ contact.display }}</p>
+        <p>{{ contact.telephone|tel_format }}</p>
+        <p>{{ contact.email|mailto }}</p>
+        <p>{{ contact.adresse != null ? contact.adresse.display|raw : 'Pas d\'adresse' }}</p>
+        <div class="row">
+            <div class="col-4">
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Modifier un contact',
+                            modalUrl: path('app_parcours_contact_edit',{'id': contact.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-warning"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Modifier un contact"
+                >
+                    <i class="{{ iconEdit }}"></i>
+                    <span> modifier</span>
+                </button>
+            </div>
+            <div class="col-4">
+                <button {{ stimulus_action('crud', 'duplicate', 'click', {
+                    url:path('app_parcours_contact_duplicate',{'id': contact.id})
+                }) }} class="btn btn-sm text-success">
+                    <i class="{{ iconDuplicate }}"></i> Dupliquer
+                </button>
+            </div>
+            <div class="col-4">
+                <button {{ stimulus_action('crud', 'delete', 'click', {
+                    url:path('app_parcours_contact_delete',{'id': contact.id}),
+                    csrf: csrf_token('delete' ~ contact.id)
+                }) }} class="btn btn-sm text-danger">
+                    <i class="{{ iconDelete }}"></i> Supprimer
+                </button>
+            </div>
+        </div>
+    </div>
+        {% else %}
+            <div class="col-4">
+                {{ component('alerte', {message:'Vous devez ajouter au moins un contact', type:'danger'}) }}
+            </div>
+    {% endfor %}
+    <div class="col-4">
+        <button
+                {{ stimulus_controller('modal', {
+                    size: 'lg',
+                    modalTitle: 'Ajouter un contact',
+                    modalUrl: path('app_parcours_contacts_add', {parcours:parcours.id}) }) }}
+                data-action="click->modal#openModal"
+                class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                data-size="lg"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Ajouter un contact"
+        >
+            <i class="{{ iconAdd }}"></i>
+            <span> Ajouter un contact</span>
+        </button>
+    </div>
+</div>

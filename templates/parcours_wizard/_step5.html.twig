@@ -10,6 +10,17 @@
         {{ form_row(form.modalitesAlternance) }}
     {% endif %}
     {{ form_row(form.coordSecretariat) }}
+
+    <div class="mt-2"
+            {{ stimulus_controller('crud', {
+                url: path('app_parcours_contacts', {parcours:parcours.id})
+            }) }}
+         data-action="base:refreshListe@window->crud#refreshListe">
+        <div {{ stimulus_target('crud', 'liste') }}>
+        </div>
+    </div>
+
+
     {# {{ form_row(form.modalitesAdmission) }} #}
     <div class="alert {% if parcours.getEtatStep(5) %}alert-success{% else %}alert-warning{% endif %}" id="alertEtatStructure">
         <input type="checkbox"

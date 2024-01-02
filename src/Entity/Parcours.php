@@ -234,6 +234,9 @@ class Parcours
     #[ORM\Column(length: 20, nullable: true, enumType: TypeParcoursEnum::class)]
     private ?TypeParcoursEnum $typeParcours = null;
 
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: Contact::class)]
+    private Collection $contacts;
+
     public function __construct(Formation $formation)
     {
         $this->formation = $formation;
@@ -252,6 +255,8 @@ class Parcours
         $this->elementConstitutifs = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->parcoursVersionings = new ArrayCollection();
+        $this->adresses = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
 
@@ -1242,6 +1247,37 @@ class Parcours
     public function setTypeParcours(?TypeParcoursEnum $typeParcours): static
     {
         $this->typeParcours = $typeParcours;
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection<int, Contact>
+     */
+    public function getContacts(): Collection
+    {
+        return $this->contacts;
+    }
+
+    public function addContact(Contact $contact): static
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts->add($contact);
+            $contact->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContact(Contact $contact): static
+    {
+        if ($this->contacts->removeElement($contact)) {
+            // set the owning side to null (unless already changed)
+            if ($contact->getParcours() === $this) {
+                $contact->setParcours(null);
+            }
+        }
 
         return $this;
     }
