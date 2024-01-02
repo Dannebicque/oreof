@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.23.0](https://github.com/Dannebicque/oreof/compare/v1.22.4...v1.23.0) (2024-01-02)
+
+
+### Features
+
+* gestion des contacts sur les parcours ([831b873](https://github.com/Dannebicque/oreof/commit/831b8733c211e4af121b52ef7a8217cc0f5b3a79))
+
+
+### Bug Fixes
+
+* durée cycle se basant sur les semestres saisis et non le typediplome ([7140b96](https://github.com/Dannebicque/oreof/commit/7140b969fa44deae07cd954c5b3f3765474510f3))
+
 ### [1.22.4](https://github.com/Dannebicque/oreof/compare/v1.22.3...v1.22.4) (2023-12-28)
 
 
