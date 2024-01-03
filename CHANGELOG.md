@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.2](https://github.com/Dannebicque/oreof/compare/v1.23.1...v1.23.2) (2024-01-03)
+
+
+### Bug Fixes
+
+* Champs obligatoire sur contact ([a528cc2](https://github.com/Dannebicque/oreof/commit/a528cc2c16d23abb8b74e489ff08a665bb295993))
+* Pieds de page, dates CFVU/Conseil sur excels générés ([b08a6e6](https://github.com/Dannebicque/oreof/commit/b08a6e67c12eb6407e44257ffe27423f09f4d697))
+
 ### [1.23.1](https://github.com/Dannebicque/oreof/compare/v1.23.0...v1.23.1) (2024-01-03)
 
 
