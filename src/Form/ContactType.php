@@ -39,14 +39,12 @@ class ContactType extends AbstractType
                 'attr' => [
                     'maxlength' => 20,
                 ],
-                'required' => false,
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'attr' => [
                     'maxlength' => 255,
                 ],
-                'required' => false,
             ])
             ->add('adresse', AdresseType::class)
         ;
