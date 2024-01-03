@@ -20,4 +20,15 @@
         <dt>Coordonnées secrétariat</dt>
         <dd>{{ parcours.coordSecretariat|raw }}</dd>
     </dl>
+    <div class="row">
+        {% for contact in parcours.contacts %}
+            <div class="col-4">
+                <strong>{{ contact.denomination }}</strong>
+                <p>{{ contact.display }}</p>
+                <p>{{ contact.telephone|tel_format }}</p>
+                <p>{{ contact.email|mailto }}</p>
+                <p>{{ contact.adresse != null ? contact.adresse.display|raw : 'Pas d\'adresse' }}</p>
+            </div>
+        {% endfor %}
+    </div>
 </div>
