@@ -174,7 +174,7 @@ class LheoXML
                         'adresse' => $adresse,
                         'telfixe' => $telephone,
                         'courriel' =>  $contacts->getEmail() ?? $contacts->getEmail() ?? 'Non renseigné',
-                        'web' => ['urlweb' => $composante->getUrlSite()]
+                       // 'web' => ['urlweb' => $composante->getUrlSite()]
                     ]
                 ];
 
@@ -212,13 +212,16 @@ class LheoXML
         $coordonneesComposante = [];
         if ($composante = $parcours->getComposanteInscription() ?? $parcours->getFormation()?->getComposantePorteuse()) {
             if ($adresse = $composante->getAdresse()) {
-                $coordonneesComposante = [
+                $coordonneesComposante['adresse'] = [
                     'denomination' => $composante->getLibelle(),
                     'ligne' => $adresse->getAdresse1() . " " . $adresse->getAdresse2() ?? '',
                     'codepostal' => $adresse->getCodePostal(),
                     'ville' => $adresse->getVille(),
                 ];
             }
+            $coordonneesComposante['telfixe'] = ['numtel' => $composante->getTelStandard() ?? $composante->getTelComplementaire() ?? 'Non renseigné'];
+            $coordonneesComposante['courriel'] = $composante->getMailContact();
+            $coordonneesComposante['web'] = ['urlweb' => $composante->getUrlSite()];
         }
 
         //Adresse du siège de l'URCA
@@ -340,7 +343,7 @@ HTML;
             . "<br>"
             . "<h3>TER/Mémoire de recherche</h3>"
             . $terMemoire
-            . "<br>"
+            . "<br><br>"
             . $maquetteIframe
             . "<h3>Maquette de la formation</h3>"
             . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>"
@@ -493,11 +496,7 @@ HTML;
                         'raison-sociale' => 'Université de Reims Champagne-Ardenne',
                         'coordonnees-organisme' => [
                             // Coordonnées de l'URCA
-                            'coordonnees' => [
-                                'adresse' => [
-                                    $coordonneesComposante
-                                ]
-                            ]
+                            'coordonnees' => $coordonneesComposante
                         ],
                         'contact-organisme' => $contactsOrganismes
                     ],
