@@ -41,6 +41,11 @@ class ParcoursContactController extends BaseController
         $contact = new Contact();
         $contact->setParcours($parcours);
         $parcours->addContact($contact);
+        if ($parcours->getComposanteInscription() !== null && $parcours->getComposanteInscription()->getAdresse() !== null) {
+            $adresseCompo = $parcours->getComposanteInscription()->getAdresse();
+            $adresse = clone $adresseCompo;
+            $contact->setAdresse($adresse);
+        }
         $form = $this->createForm(ContactType::class, $contact, [
             'action' => $this->generateUrl('app_parcours_contacts_add', ['parcours' => $parcours->getId()]),
         ]);
