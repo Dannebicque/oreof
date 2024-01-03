@@ -40,6 +40,7 @@ class ParcoursContactController extends BaseController
     {
         $contact = new Contact();
         $contact->setParcours($parcours);
+        $contact->setDenomination('Secrétariat pédagogique');
         $parcours->addContact($contact);
         if ($parcours->getComposanteInscription() !== null && $parcours->getComposanteInscription()->getAdresse() !== null) {
             $adresseCompo = $parcours->getComposanteInscription()->getAdresse();
