@@ -57,6 +57,9 @@ class LicenceMccc
     public const CEL_REGIME_FI_APPRENTISSAGE = 'D11';
     public const CEL_REGIME_FC_CONTRAT_PRO = 'D13';
 
+    public const CEL_DATE_CFVU = 'AB25';
+    public const CEL_DATE_CONSEIL = 'AB24';
+
     //Colonnes sur Modèles
 
     public const COL_SEMESTRE = 1;
@@ -123,10 +126,10 @@ class LicenceMccc
     public function genereExcelLicenceMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        ?DateTimeInterface $dateEdition = null,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): void {
-        //todo: gérer la date de publication et un "marquage" sur le document si pré-CFVU
         $this->versionFull = $versionFull;
         $formation = $parcours->getFormation();
         $parcours1 = $parcours;
@@ -161,6 +164,20 @@ class LicenceMccc
         }
         $modele->setCellValue(self::CEL_RESPONSABLE_MENTION, $formation->getResponsableMention()?->getDisplay());
         $modele->setCellValue(self::CEL_RESPONSABLE_PARCOURS, $parcours->getRespParcours()?->getDisplay());
+
+        // dates
+        $modele->setCellValue(self::CEL_DATE_CONSEIL,$dateConseil?->format('d/m/Y'));
+        $modele->setCellValue(self::CEL_DATE_CFVU, $dateCfvu?->format('d/m/Y'));
+
+        if ($dateCfvu !== null) {
+           //changer le pied de page.
+            $modele->getHeaderFooter()
+                ->setOddFooter(
+                    '&L&B' . 'Document généré depuis ORéOF'.
+                    '&C&B' . 'Document validé en CFVU le '. $dateCfvu->format('d/m/Y')
+                . '&R&B' . 'Université de Reims Champagne-Ardenne'
+                );
+        }
 
         foreach ($parcours->getRegimeInscription() as $regimeInscription) {
             if ($regimeInscription === RegimeInscriptionEnum::FI) {
@@ -222,7 +239,6 @@ class LicenceMccc
                                         $ligne = $this->afficheEc($ligne, $ece);
                                     }
                                 }
-
 
                                 if ($debut < $ligne - 1) {
                                     $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
@@ -341,6 +357,20 @@ class LicenceMccc
 
                 $this->excelWriter->writeCellXY(
                     self::COL_HEURES_AUTONOMIE,
+                    $ligne + 3,
+                    $totalAnnee->getTotalVolumeTe() === 0.0 ? '' : $totalAnnee->getTotalVolumeTe(),
+                    ['style' => 'HORIZONTAL_CENTER']
+                );
+
+                $this->excelWriter->writeCellXY(
+                    self::COL_HEURES_AUTONOMIE,
+                    $ligne,
+                    $totalAnnee->getTotalVolumeTe() === 0.0 ? '' : $totalAnnee->getTotalVolumeTe(),
+                    ['style' => 'HORIZONTAL_CENTER']
+                );
+
+                $this->excelWriter->writeCellXY(
+                    self::COL_HEURES_AUTONOMIE,
                     $ligne + 1,
                     $totalAnnee->getTotalVolumeTe() === 0.0 ? '' : $totalAnnee->getTotalVolumeTe(),
                     ['style' => 'HORIZONTAL_CENTER']
@@ -413,20 +443,22 @@ class LicenceMccc
     public function exportExcelLicenceMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        ?DateTimeInterface $dateEdition = null,
-        bool               $versionFull = true
+        ?DateTimeInterface  $dateCfvu = null,
+        ?DateTimeInterface  $dateConseil = null,
+        bool               $versionFull = true,
     ): StreamedResponse {
-        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
         return $this->excelWriter->genereFichier($this->fileName);
     }
 
     public function exportPdfLicenceMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        ?DateTimeInterface $dateEdition = null,
-        bool               $versionFull = true
+        ?DateTimeInterface  $dateCfvu = null,
+        ?DateTimeInterface  $dateConseil = null,
+        bool               $versionFull = true,
     ): Response {
-        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
 
         $fichier = $this->excelWriter->saveFichier($this->fileName, $this->dir . '/temp/');
 
@@ -450,10 +482,11 @@ class LicenceMccc
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
         string             $dir,
-        DateTimeInterface  $dateEdition,
-        bool               $versionFull = true
+        ?DateTimeInterface  $dateCfvu = null,
+        ?DateTimeInterface  $dateConseil = null,
+        bool               $versionFull = true,
     ): string {
-        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
         $this->excelWriter->saveFichier($this->fileName, $dir);
         return $this->fileName . '.xlsx';
     }
@@ -462,10 +495,11 @@ class LicenceMccc
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
         string             $dir,
-        DateTimeInterface  $dateEdition,
-        bool               $versionFull = true
+        ?DateTimeInterface  $dateCfvu = null,
+        ?DateTimeInterface  $dateConseil = null,
+        bool               $versionFull = true,
     ): string {
-        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
 
         $fichier = $this->excelWriter->saveFichier($this->fileName, $dir);
 

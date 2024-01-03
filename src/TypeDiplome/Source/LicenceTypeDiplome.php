@@ -58,41 +58,45 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
     public function exportExcelMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        ?DateTimeInterface $dateEdition = null,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): StreamedResponse {
         //todo: exploiter la date...
-        return $this->licenceMccc->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        return $this->licenceMccc->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
     }
 
     public function exportPdfMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        ?DateTimeInterface $dateEdition = null,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): Response {
         //todo: exploiter la date...
-        return $this->licenceMccc->exportPdfLicenceMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        return $this->licenceMccc->exportPdfLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
     }
 
     public function exportAndSaveExcelMccc(
         string             $dir,
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        DateTimeInterface  $dateEdition,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): string {
-        return $this->licenceMccc->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $dateEdition, $versionFull);
+        return $this->licenceMccc->exportAndSaveExcelLicenceMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, $versionFull);
     }
 
     public function exportAndSavePdfMccc(
         string             $dir,
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        DateTimeInterface  $dateEdition,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): string {
-        return $this->licenceMccc->exportAndSavePdfLicenceMccc($anneeUniversitaire, $parcours, $dir, $dateEdition, $versionFull);
+        return $this->licenceMccc->exportAndSavePdfLicenceMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, $versionFull);
     }
 
     public function saveMcccs(ElementConstitutif|FicheMatiere $elementConstitutif, InputBag $request): void

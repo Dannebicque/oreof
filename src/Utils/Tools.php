@@ -82,4 +82,13 @@ abstract class Tools
 
         return u($slug)->truncate($size);
     }
+
+    public static function formatDir(string $dir): string
+    {
+        if (!str_ends_with($dir, '/')) {
+            $dir = $dir.'/';
+        }
+
+        return $dir;
+    }
 }

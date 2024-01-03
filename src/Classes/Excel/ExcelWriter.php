@@ -2,6 +2,7 @@
 
 namespace App\Classes\Excel;
 
+use App\Utils\Tools;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -285,9 +286,10 @@ class ExcelWriter
 
     public function saveFichier(string $name, string $dir): string
     {
+        $dir = Tools::formatDir($dir);
         $this->pageSetup($name);
         $writer = new Xlsx($this->spreadsheet);
-        $writer->save($dir . $name . '.xlsx');//todo: vérifier si / à la fin de dir
+        $writer->save($dir . $name . '.xlsx');
 
         return $dir . $name . '.xlsx';
     }
