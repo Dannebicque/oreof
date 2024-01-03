@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.1](https://github.com/Dannebicque/oreof/compare/v1.23.0...v1.23.1) (2024-01-03)
+
+
+### Features
+
+* gestion des contacts sur les parcours ([63b848a](https://github.com/Dannebicque/oreof/commit/63b848aec84f4c951bb4086581d2da563d09ce5f))
+
+
+### Bug Fixes
+
+* preremplissage avec l'adresse de la compo ([3f47bbe](https://github.com/Dannebicque/oreof/commit/3f47bbe493257875873f965f5d645708933c596f))
+
 ## [1.23.0](https://github.com/Dannebicque/oreof/compare/v1.22.4...v1.23.0) (2024-01-02)
 
 
