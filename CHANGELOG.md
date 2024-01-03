@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.3](https://github.com/Dannebicque/oreof/compare/v1.23.2...v1.23.3) (2024-01-03)
+
+
+### Features
+
+* Codification + page de contrôle ([4692b5b](https://github.com/Dannebicque/oreof/commit/4692b5b5ebc7c313f390f8377d0014eee65bcccd))
+
+
+### Bug Fixes
+
+* Ajout de données dans le LHEO ([6f57a52](https://github.com/Dannebicque/oreof/commit/6f57a526498ff6a91a63b80cd359f890468d960e))
+* Parcours affichage avec la nouvelle gestion des contacts ([938e5da](https://github.com/Dannebicque/oreof/commit/938e5da75fa807b573fb0badb0fc5e4f2207da1d))
+* pre-remplissage du champs dénomination sur contact du parcours ([b8518ea](https://github.com/Dannebicque/oreof/commit/b8518ea7998d26bef34566e92506a87687b0430f))
+
 ### [1.23.2](https://github.com/Dannebicque/oreof/compare/v1.23.1...v1.23.2) (2024-01-03)
 
 
