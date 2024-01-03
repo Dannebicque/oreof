@@ -6,7 +6,7 @@
 
     {{ component('mention_manage', {formation:formation, type:'formation'}) }}
     {% if is_granted('ROLE_SES') %}
-    <a href="{{ path('app_codification', {formation: formation.id}) }}">Génére les codes</a>
+    <a href="{{ path('app_codification_index', {formation: formation.id}) }}">Gérer la codification</a>
     {% endif %}
     <div class="row">
         {{ include('typeDiplome/formation/common/_'~constant('SOURCE', typeD)~'.html.twig', {print:false}) }}
