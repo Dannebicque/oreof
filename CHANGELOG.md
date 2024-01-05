@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.5](https://github.com/Dannebicque/oreof/compare/v1.23.4...v1.23.5) (2024-01-05)
+
+
+### Features
+
+* début export json maquette ([ac0ddd3](https://github.com/Dannebicque/oreof/commit/ac0ddd303f013228f6cffe1fc08e8b15f37f51aa))
+
+
+### Bug Fixes
+
+* génération LHEO si parcours par défaut. ([15ba832](https://github.com/Dannebicque/oreof/commit/15ba832adf60bd1f5845a4d7d2db974e1da74c32))
+* pre-remplissage adresse contact sur parcours par défaut ([a369bf6](https://github.com/Dannebicque/oreof/commit/a369bf64f947044c520dd189033afe71aa1c4743))
+
 ### [1.23.4](https://github.com/Dannebicque/oreof/compare/v1.23.3...v1.23.4) (2024-01-03)
 
 
