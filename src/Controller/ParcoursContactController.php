@@ -36,7 +36,8 @@ class ParcoursContactController extends BaseController
     public function new(
         EntityManagerInterface $entityManager,
         Request $request,
-        Parcours $parcours): Response
+        Parcours $parcours
+    ): Response
     {
         $contact = new Contact();
         $contact->setParcours($parcours);
@@ -46,6 +47,12 @@ class ParcoursContactController extends BaseController
             $adresseCompo = $parcours->getComposanteInscription()->getAdresse();
             $adresse = clone $adresseCompo;
             $contact->setAdresse($adresse);
+        } else {
+            $adresseCompo = $parcours->getFormation()?->getComposantePorteuse()?->getAdresse();
+            if ($adresseCompo !== null) {
+                $adresse = clone $adresseCompo;
+                $contact->setAdresse($adresse);
+            }
         }
         $form = $this->createForm(ContactType::class, $contact, [
             'action' => $this->generateUrl('app_parcours_contacts_add', ['parcours' => $parcours->getId()]),
@@ -68,7 +75,10 @@ class ParcoursContactController extends BaseController
     #[Route('/{id}/edit', name: 'app_parcours_contact_edit', methods: ['GET', 'POST'])]
     public function edit(
         EntityManagerInterface $entityManager,
-        Request $request, Contact $contact, ContactRepository $contactRepository): Response
+        Request $request,
+        Contact $contact,
+        ContactRepository $contactRepository
+    ): Response
     {
         $form = $this->createForm(ContactType::class, $contact, [
             'action' => $this->generateUrl('app_parcours_contact_edit', ['id' => $contact->getId()]),
