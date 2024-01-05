@@ -76,12 +76,7 @@ class LheoXML
             }
         }
 
-        // Rythme de la formation
-        $rythmeFormation = 'Non renseigné.';
 
-        if ($parcours->getRythmeFormation() !== null && $parcours->getRythmeFormation()->getLibelle() !== null) {
-            $rythmeFormation = $parcours->getRythmeFormation()->getLibelle();
-        }
 
 
         // Contact de la formation
@@ -174,7 +169,6 @@ class LheoXML
                         'adresse' => $adresse,
                         'telfixe' => $telephone,
                         'courriel' =>  $contacts->getEmail() ?? $contacts->getEmail() ?? 'Non renseigné',
-                       // 'web' => ['urlweb' => $composante->getUrlSite()]
                     ]
                 ];
 
@@ -182,25 +176,25 @@ class LheoXML
 
         }
 
+        // Durée de la formation (durée cycle)
+        $dureeCycle = 0;
 
-        // Modalités de l'alternance
-        $modalitesAlternance = "La formation n'est pas dispensée en alternance";
-        if ($parcours->getModalitesAlternance()) {
-            if (!empty($parcours->getModalitesAlternance())) {
-                $modalitesAlternance = $this->cleanString($parcours->getModalitesAlternance());
+        foreach ($parcours->getSemestreParcours() as $semestre) {
+            if ($semestre->getSemestre()?->isNonDispense() === 0) {
+                ++$dureeCycle;
             }
         }
 
-        // Durée de la formation (durée cycle)
-        $dureeCycle = $parcours->getSemestreParcours()->count() / 2;
+        $dureeCycle /= 2;
 
 
         // Calculs ECTS
-        $ects = 0;
-        if ($with_extras) {
-            $dto = new CalculStructureParcours($this->entityManager, $this->ecRepo);
-            $ects = $dto->calcul($parcours)->heuresEctsFormation->sommeFormationEcts;
-        }
+        //todo: ne sert pas ??
+//        $ects = 0;
+//        if ($with_extras) {
+//            $dto = new CalculStructureParcours($this->entityManager, $this->ecRepo);
+//            $ects = $dto->calcul($parcours)->heuresEctsFormation->sommeFormationEcts;
+//        }
 
 
         // code RNCP
@@ -403,15 +397,43 @@ HTML;
         $prerequis .= '<br><strong>Prérequis recommandés :</strong><br>';
         $prerequis .= $this->cleanString($parcours->getPrerequis()) ?? 'Aucune condition spécifique.';
 
+        // Rythme de la formation
+        $rythmeFormation = 'Non renseigné.';
+
+        // On dispose déjà des objectifs de formation si c'est un parcours par défaut
+        // ---> XML 'objectif-formation'
+        $modalitesAlternance = "La formation n'est pas dispensée en alternance";
+
         if ($parcours->isParcoursDefaut()) {
             //todo: gestion du parcours par défaut, il faut reprendre les infs de la formation dans ce cas
             $resultatsAttendus = $this->cleanString($parcours->getFormation()?->getResultatsAttendus()) ?? 'Non renseigné.';
             $contenuFormation = $this->cleanString($parcours->getFormation()?->getContenuFormation()) ?? 'Non renseigné.';
             $objectifFormation = $this->cleanString($parcours->getFormation()?->getObjectifsFormation()) ?? 'Non renseigné.';
+            if ($parcours->getFormation()?->getRythmeFormation() !== null && $parcours->getFormation()?->getRythmeFormation()->getLibelle() !== null) {
+                $rythmeFormation = $parcours->getFormation()?->getRythmeFormation()->getLibelle();
+            }
+            $localisation = $parcours->getFormation()?->getLocalisationMention()->first();
+            if ($parcours->getFormation()?->getModalitesAlternance()) {
+                if (!empty($parcours->getFormation()?->getModalitesAlternance())) {
+                    $modalitesAlternance = $this->cleanString($parcours->getFormation()?->getModalitesAlternance());
+                }
+            }
         } else {
             $resultatsAttendus = $this->cleanString($parcours->getResultatsAttendus()) ?? 'Non renseigné.';
             $contenuFormation = $this->cleanString($parcours->getContenuFormation()) ?? 'Non renseigné.';
             $objectifFormation = $this->cleanString($parcours->getObjectifsParcours()) ?? 'Non renseigné.';
+            $extraArray['description-mention'] = $this->cleanString($parcours->getFormation()?->getObjectifsFormation());
+            $localisation = $parcours->getLocalisation();
+            if ($parcours->getRythmeFormation() !== null && $parcours->getRythmeFormation()->getLibelle() !== null) {
+                $rythmeFormation = $parcours->getRythmeFormation()->getLibelle();
+            }
+            // Modalités de l'alternance
+
+            if ($parcours->getModalitesAlternance()) {
+                if (!empty($parcours->getModalitesAlternance())) {
+                    $modalitesAlternance = $this->cleanString($parcours->getModalitesAlternance());
+                }
+            }
         }
 
         // EXTRAS
@@ -426,11 +448,7 @@ HTML;
             'formation-continue-et-apprentissage' => [],
         ];
 
-        // On dispose déjà des objectifs de formation si c'est un parcours par défaut
-        // ---> XML 'objectif-formation'
-        if ($parcours->isParcoursDefaut() === false) {
-            $extraArray['description-mention'] = $this->cleanString($parcours->getFormation()?->getObjectifsFormation());
-        }
+
 
         // Génération du XML
         $encoder = new XmlEncoder([
@@ -484,14 +502,14 @@ HTML;
                             ]
                         ],
                         'adresse-information' => ['adresse' => $adresseSiegeURCA],
-                        'restauration' => $parcours->getLocalisation()?->getEtablissement()?->getEtablissementInformation()?->getRestauration() ?? "Non renseigné.",
-                        'hebergement' => $parcours->getLocalisation()?->getEtablissement()?->getEtablissementInformation()?->getHebergement() ?? "Non renseigné.",
-                        'transport' => $parcours->getLocalisation()?->getEtablissement()?->getEtablissementInformation()?->getTransport() ?? "Non renseigné"
+                        'restauration' => $localisation?->getEtablissement()?->getEtablissementInformation()?->getRestauration() ?? "Non renseigné.",
+                        'hebergement' => $localisation?->getEtablissement()?->getEtablissementInformation()?->getHebergement() ?? "Non renseigné.",
+                        'transport' => $localisation?->getEtablissement()?->getEtablissementInformation()?->getTransport() ?? "Non renseigné"
 
                     ],
                     'organisme-formation-responsable' => [
-                        'numero-activite' => $parcours->getLocalisation()?->getEtablissement()?->getNumeroActivite() ?? '00000000000',
-                        'SIRET-organisme-formation' => ['SIRET' => $parcours->getLocalisation()?->getEtablissement()?->getNumeroSIRET() ?? '00000000000000'],
+                        'numero-activite' => $localisation?->getEtablissement()?->getNumeroActivite() ?? '00000000000',
+                        'SIRET-organisme-formation' => ['SIRET' => $localisation?->getEtablissement()?->getNumeroSIRET() ?? '00000000000000'],
                         'nom-organisme' => 'Université de Reims Champagne-Ardenne',
                         'raison-sociale' => 'Université de Reims Champagne-Ardenne',
                         'coordonnees-organisme' => [
