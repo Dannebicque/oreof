@@ -1020,4 +1020,24 @@ class FicheMatiere
 
         return $this;
     }
+
+    public function getLanguesSupportsArray(): array
+    {
+        $langues = [];
+        foreach ($this->getLangueSupport() as $langue) {
+            $langues[] = $langue->getLibelle();
+        }
+
+        return $langues;
+    }
+
+    public function getLanguesDispenseArray(): array
+    {
+        $langues = [];
+        foreach ($this->getLangueDispense() as $langue) {
+            $langues[] = $langue->getLibelle();
+        }
+
+        return $langues;
+    }
 }

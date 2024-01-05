@@ -207,7 +207,7 @@ class ParcoursController extends BaseController
     public function show(
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours            $parcours,
-        LheoXML $lheoXML,
+        LheoXML             $lheoXML,
     ): Response {
         $formation = $parcours->getFormation();
         if ($formation === null) {
@@ -242,7 +242,6 @@ class ParcoursController extends BaseController
         ParcoursState       $parcoursState,
         Parcours            $parcour
     ): Response {
-
         if (!$this->isGranted('CAN_PARCOURS_EDIT_MY', $parcour)) {
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcour->getId()]);
         }
@@ -269,21 +268,21 @@ class ParcoursController extends BaseController
             'parcours' => $parcour,
         ]);
     }
+
     #[Route('/{id}/dupliquer', name: 'app_parcours_dupliquer', methods: ['POST'])]
     public function dupliquer(
-        Request                $request,
-        ParcoursDupliquer      $parcoursDupliquer,
-        Parcours               $parcours,
+        Request           $request,
+        ParcoursDupliquer $parcoursDupliquer,
+        Parcours          $parcours,
     ): Response {
-
         $typeDuplication = JsonRequest::getValueFromRequest($request, 'dupliquer');
 
         if ($typeDuplication === 'recopie') {
-           return  $parcoursDupliquer->recopie($parcours);
+            return $parcoursDupliquer->recopie($parcours);
         }
 
         if ($typeDuplication === 'mutualise') {
-           // return $parcoursDupliquer->recopieAvecMutualise($parcours);
+            // return $parcoursDupliquer->recopieAvecMutualise($parcours);
             return JsonReponse::error('Mutualisation non implémentée');
         }
 
@@ -357,10 +356,10 @@ class ParcoursController extends BaseController
 
     #[Route('/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
     public function getMaquetteIframe(
-        Parcours $parcours,
-        EntityManagerInterface $em,
+        Parcours                     $parcours,
+        EntityManagerInterface       $em,
         ElementConstitutifRepository $ecRepo
-    ){
+    ) {
         $calcul = new CalculStructureParcours($em, $ecRepo);
 
         return $this->render('parcours/maquette_iframe.html.twig', [
@@ -369,23 +368,23 @@ class ParcoursController extends BaseController
     }
 
     #[Route('/{parcours}/export-xml-lheo', name: 'app_parcours_export_xml_lheo')]
-    public function getXmlLheoFromParcours(Parcours $parcours, LheoXML $lheoXML) : Response {
+    public function getXmlLheoFromParcours(Parcours $parcours, LheoXML $lheoXML): Response
+    {
         $xml = $lheoXML->generateLheoXMLFromParcours($parcours, true);
         // Validation
         libxml_use_internal_errors(true);
         $isValid = $lheoXML->validateLheoSchema($xml);
         $xml_errors = [];
-        if(!$isValid){
-            foreach(libxml_get_errors() as $error){
+        if (!$isValid) {
+            foreach (libxml_get_errors() as $error) {
                 $xml_errors[] = $lheoXML->decodeErrorMessages($error->message);
             }
         }
         libxml_clear_errors();
         // Si le XML généré est valide, on le renvoie
-        if($isValid){
+        if ($isValid) {
             return new Response($xml, 200, ['Content-Type' => 'application/xml']);
-        }
-        // Sinon, on avertit le client
+        } // Sinon, on avertit le client
         else {
             return $this->render('lheo/error.html.twig', [
                 'errors' => $xml_errors
@@ -395,9 +394,9 @@ class ParcoursController extends BaseController
 
     #[Route('/{parcours}/export-json-urca', name: 'app_parcours_export_json_urca')]
     public function getJsonExportUrca(
-        Parcours $parcours,
+        Parcours            $parcours,
         TypeDiplomeRegistry $typeDiplomeRegistry,
-    ) : Response {
+    ): Response {
         $typeDiplome = $parcours->getFormation()->getTypeDiplome();
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
@@ -415,7 +414,7 @@ class ParcoursController extends BaseController
             ],
             'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
             'fiche-pdf' => $this->generateUrl('app_parcours_export', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
-            'maquette-pdf' => $this->generateUrl('app_parcours_mccc_export', ['parcours' => $parcours->getId(), '_format' => 'pdf'], UrlGenerator::ABSOLUTE_URL),
+            'maquette-pdf' => $this->generateUrl('app_parcours_mccc_export', ['parcours' => $parcours->getId(), '_format' => 'pdf'], UrlGenerator::ABSOLUTE_URL), 'maquette-json' => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
         ];
 
         return new JsonResponse($data);
@@ -423,15 +422,18 @@ class ParcoursController extends BaseController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{parcours}/versioning/json_data', name: 'app_parcours_versioning_json_data')]
-    public function displayParcoursJsonData(Parcours $parcours) : Response {
+    public function displayParcoursJsonData(Parcours $parcours): Response
+    {
         // Définition du serializer
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $serializer = new Serializer([
+        $serializer = new Serializer(
+            [
             new DateTimeNormalizer(),
             new BackedEnumNormalizer(),
-            new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor:  new ReflectionExtractor()),
+            new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
         ],
-            [new JsonEncoder()]);
+            [new JsonEncoder()]
+        );
         try {
             // Création de la réponse JSON au client
             $json = $serializer->serialize($parcours, 'json', [
@@ -442,33 +444,33 @@ class ParcoursController extends BaseController
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
             ]);
             return new Response($json, 200, ['Content-Type' => 'application/json']);
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
             // Si erreur lors de la serialization
             return new Response(json_encode([
                 'error' => 'Une erreur interne est survenue.',
                 'message' => "{$e->getMessage()}",
             ]), 422, ['Content-Type' => 'application/json']);
         }
-
     }
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{parcours}/versioning/save', name: 'app_parcours_versioning_save')]
     public function saveParcoursIntoJson(
-        Parcours $parcours,
-        Filesystem $fileSystem,
+        Parcours               $parcours,
+        Filesystem             $fileSystem,
         EntityManagerInterface $entityManager,
-    ){
+    ) {
         // Définition du serializer
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $serializer = new Serializer([
+        $serializer = new Serializer(
+            [
             new DateTimeNormalizer(),
             new BackedEnumNormalizer(),
             new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor())
         ],
-        [new JsonEncoder()]);
-        try{
+            [new JsonEncoder()]
+        );
+        try {
             $now = new DateTimeImmutable('now');
             $dateHeure = $now->format('d-m-Y_H-i-s');
             // Objet BD Parcours Versioning
@@ -501,8 +503,7 @@ class ParcoursController extends BaseController
             // Message de réussite + redirection
             $this->addFlashBag('success', 'La version du parcours à bien été sauvegardée.');
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             // Log error
             $logTxt = "[{$dateHeure}] Le versioning du parcours : {$parcours->getId()} a rencontré une erreur.\n{$e->getMessage()}\n";
             $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/save_parcours_error.log", $logTxt);
@@ -510,24 +511,25 @@ class ParcoursController extends BaseController
             $this->addFlashBag('error', "Une erreur est survenue lors de la sauvegarde.");
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
         }
-
     }
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{parcours_versioning}/versioning/view', name: 'app_parcours_versioning_view')]
     public function parcoursVersion(
-            ParcoursVersioning $parcours_versioning,
-            CalculStructureParcours $calculStructureParcours
-        ) : Response {
+        ParcoursVersioning      $parcours_versioning,
+        CalculStructureParcours $calculStructureParcours
+    ): Response {
         // $parcours = new Parcours(new Formation(new AnneeUniversitaire));
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $serializer = new Serializer([
-                new DateTimeNormalizer(),
-                new BackedEnumNormalizer(),
-                new ArrayDenormalizer(),
-                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
-            ],
-            [new JsonEncoder()]);
+        $serializer = new Serializer(
+            [
+            new DateTimeNormalizer(),
+            new BackedEnumNormalizer(),
+            new ArrayDenormalizer(),
+            new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
+        ],
+            [new JsonEncoder()]
+        );
         $file = file_get_contents(__DIR__ . "/../../versioning_json/parcours/{$parcours_versioning->getFileName()}.json");
         $parcours = $serializer->deserialize($file, Parcours::class, 'json');
         $dto = $calculStructureParcours->calculVersioning($parcours);
@@ -548,16 +550,16 @@ class ParcoursController extends BaseController
     #[IsGranted('ROLE_SES')]
     #[Route('/check/lheo_invalid_list', name: 'app_parcours_lheo_invalid_list')]
     public function getInvalidXmlLheoList(
-        LheoXML $lheoXML,
+        LheoXML            $lheoXML,
         ParcoursRepository $parcoursRepo
-    ) : Response {
+    ): Response {
         $parcoursList = $parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_pour_publication');
         $errorArray = [];
-        foreach($parcoursList as $p){
+        foreach ($parcoursList as $p) {
             $erreursChampsParcours = $lheoXML->checkTextValuesAreLongEnough($p);
-            if($lheoXML->isValidLHEO($p) === false || count($erreursChampsParcours) > 0){
+            if ($lheoXML->isValidLHEO($p) === false || count($erreursChampsParcours) > 0) {
                 $xmlErrorArray = [];
-                foreach(libxml_get_errors() as $xmlError){
+                foreach (libxml_get_errors() as $xmlError) {
                     $xmlErrorArray[] = $lheoXML->decodeErrorMessages($xmlError->message);
                 }
                 $xmlErrorArray = array_merge($xmlErrorArray, $erreursChampsParcours);
