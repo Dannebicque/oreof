@@ -180,22 +180,12 @@ class LheoXML
         $dureeCycle = 0;
 
         foreach ($parcours->getSemestreParcours() as $semestre) {
-            if ($semestre->getSemestre()?->isNonDispense() === 0) {
+            if ($semestre->getSemestre()?->isNonDispense() === false) {
                 ++$dureeCycle;
             }
         }
 
         $dureeCycle /= 2;
-
-
-        // Calculs ECTS
-        //todo: ne sert pas ??
-//        $ects = 0;
-//        if ($with_extras) {
-//            $dto = new CalculStructureParcours($this->entityManager, $this->ecRepo);
-//            $ects = $dto->calcul($parcours)->heuresEctsFormation->sommeFormationEcts;
-//        }
-
 
         // code RNCP
         // On prend le RNCP du parcours, et sinon celui de la formation
