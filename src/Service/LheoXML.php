@@ -180,22 +180,12 @@ class LheoXML
         $dureeCycle = 0;
 
         foreach ($parcours->getSemestreParcours() as $semestre) {
-            if ($semestre->getSemestre()?->isNonDispense() === 0) {
+            if ($semestre->getSemestre()?->isNonDispense() === false) {
                 ++$dureeCycle;
             }
         }
 
         $dureeCycle /= 2;
-
-
-        // Calculs ECTS
-        //todo: ne sert pas ??
-//        $ects = 0;
-//        if ($with_extras) {
-//            $dto = new CalculStructureParcours($this->entityManager, $this->ecRepo);
-//            $ects = $dto->calcul($parcours)->heuresEctsFormation->sommeFormationEcts;
-//        }
-
 
         // code RNCP
         // On prend le RNCP du parcours, et sinon celui de la formation
@@ -339,8 +329,8 @@ HTML;
             . $terMemoire
             . "<br><br>"
             . $maquetteIframe
-            . "<h3>Maquette de la formation</h3>"
-            . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>"
+            // . "<h3>Maquette de la formation</h3>"
+            // . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>"
             . "<h3>Calendrier universitaire</h3>"
             . $calendrierUniversitaire;
 
@@ -422,7 +412,6 @@ HTML;
             $resultatsAttendus = $this->cleanString($parcours->getResultatsAttendus()) ?? 'Non renseigné.';
             $contenuFormation = $this->cleanString($parcours->getContenuFormation()) ?? 'Non renseigné.';
             $objectifFormation = $this->cleanString($parcours->getObjectifsParcours()) ?? 'Non renseigné.';
-            $extraArray['description-mention'] = $this->cleanString($parcours->getFormation()?->getObjectifsFormation());
             $localisation = $parcours->getLocalisation();
             if ($parcours->getRythmeFormation() !== null && $parcours->getRythmeFormation()->getLibelle() !== null) {
                 $rythmeFormation = $parcours->getRythmeFormation()->getLibelle();
@@ -448,7 +437,10 @@ HTML;
             'formation-continue-et-apprentissage' => [],
         ];
 
-
+        // Description de la mention
+        if($parcours->isParcoursDefaut() === false){
+            $extraArray['description-mention'] = $this->cleanString($parcours->getFormation()?->getObjectifsFormation());
+        }
 
         // Génération du XML
         $encoder = new XmlEncoder([
