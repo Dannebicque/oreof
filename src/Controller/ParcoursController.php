@@ -553,11 +553,10 @@ class ParcoursController extends BaseController
         LheoXML            $lheoXML,
         ParcoursRepository $parcoursRepo
     ): Response {
-        $parcoursList = [
-            // ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_pour_publication'),
-            // ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'publie'),
-            ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_a_publier')
-        ];
+        $parcoursList = $parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_a_publier');
+        // ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_pour_publication'),
+        // ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'publie'),    
+        
         $errorArray = [];
         foreach ($parcoursList as $p) {
             $erreursChampsParcours = $lheoXML->checkTextValuesAreLongEnough($p);
