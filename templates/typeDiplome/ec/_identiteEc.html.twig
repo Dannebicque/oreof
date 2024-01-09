@@ -41,8 +41,11 @@
                 <dd>
                     <ul>
                         {% for parc in ficheMatiere.ficheMatiereParcours %}
-                            <li>{{ parc.parcours.libelle }} ({{ parc.parcours.formation.display }})</li>
+                            {% if parc.parcours.formation is defined and parc.parcours.formation is not null %}
+                                <li>{{ parc.parcours.libelle }} ({{ parc.parcours.formation.display }})</li>
+                            {% endif %}
                         {% endfor %}
+
                     </ul>
                 </dd>
             {% endif %}
