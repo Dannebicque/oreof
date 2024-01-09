@@ -180,22 +180,12 @@ class LheoXML
         $dureeCycle = 0;
 
         foreach ($parcours->getSemestreParcours() as $semestre) {
-            if ($semestre->getSemestre()?->isNonDispense() === 0) {
+            if ($semestre->getSemestre()?->isNonDispense() === false) {
                 ++$dureeCycle;
             }
         }
 
         $dureeCycle /= 2;
-
-
-        // Calculs ECTS
-        //todo: ne sert pas ??
-//        $ects = 0;
-//        if ($with_extras) {
-//            $dto = new CalculStructureParcours($this->entityManager, $this->ecRepo);
-//            $ects = $dto->calcul($parcours)->heuresEctsFormation->sommeFormationEcts;
-//        }
-
 
         // code RNCP
         // On prend le RNCP du parcours, et sinon celui de la formation
@@ -339,8 +329,8 @@ HTML;
             . $terMemoire
             . "<br><br>"
             . $maquetteIframe
-            . "<h3>Maquette de la formation</h3>"
-            . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>"
+            // . "<h3>Maquette de la formation</h3>"
+            // . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>"
             . "<h3>Calendrier universitaire</h3>"
             . $calendrierUniversitaire;
 
@@ -422,7 +412,6 @@ HTML;
             $resultatsAttendus = $this->cleanString($parcours->getResultatsAttendus()) ?? 'Non renseigné.';
             $contenuFormation = $this->cleanString($parcours->getContenuFormation()) ?? 'Non renseigné.';
             $objectifFormation = $this->cleanString($parcours->getObjectifsParcours()) ?? 'Non renseigné.';
-            $extraArray['description-mention'] = $this->cleanString($parcours->getFormation()?->getObjectifsFormation());
             $localisation = $parcours->getLocalisation();
             if ($parcours->getRythmeFormation() !== null && $parcours->getRythmeFormation()->getLibelle() !== null) {
                 $rythmeFormation = $parcours->getRythmeFormation()->getLibelle();
@@ -448,7 +437,10 @@ HTML;
             'formation-continue-et-apprentissage' => [],
         ];
 
-
+        // Description de la mention
+        if($parcours->isParcoursDefaut() === false){
+            $extraArray['description-mention'] = $this->cleanString($parcours->getFormation()?->getObjectifsFormation());
+        }
 
         // Génération du XML
         $encoder = new XmlEncoder([
@@ -617,7 +609,7 @@ HTML;
         elseif (preg_match("/^Element '{http:\/\/lheo.gouv.fr\/2.3}contact-organisme': Missing.+$/m", $message)) {
             $decodedMessage = preg_replace(
                 "/^Element '{http:\/\/lheo.gouv.fr\/2.3}contact-organisme': Missing.+$/m",
-                "Problème de composante d'inscription manquante",
+                "Problème de contact d'organisme",
                 $message
             );
         } // contact-formation : référents pédagogiques non renseignés
@@ -721,6 +713,42 @@ HTML;
             $decodedMessage = preg_replace(
                 "/^Element '{http:\/\/lheo.gouv.fr\/2.3}conditions-specifiques.+length of '([0-9]+)'.+exceeds.+maximum length of '([0-9]+)'/m",
                 "Les 'conditions spécifiques' du parcours ont une longueur de $1 qui est supérieure au maximum de $2",
+                $message
+            );
+        }
+        elseif (
+            preg_match(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}ligne'.+length of '([0-9]+)'; this exceeds.+maximum length of '([0-9]+)'./m",
+                $message
+            )
+        ) {
+            $decodedMessage = preg_replace(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}ligne'.+length of '([0-9]+)'; this exceeds.+maximum length of '([0-9]+)'./m",
+                "Une adresse postale a une longueur de $1 qui est supérieure au maximum de $2",
+                $message
+            );
+        }
+        elseif(
+            preg_match(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}codepostal'.+length of '([0-9]+)'; this underruns.+minimum length of '([0-9]+)'./m",
+                $message
+            )
+        ) {
+            $decodedMessage = preg_replace(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}codepostal'.+length of '([0-9]+)'; this underruns.+minimum length of '([0-9]+)'./m",
+                "Un code postal a une longueur de $1 qui est inférieure à 5",
+                $message
+            );
+        }
+        elseif(
+            preg_match(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}ville'.+length of '([0-9]+)'; this underruns.+minimum length of '([0-9]+)'./m",
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}ville'.+length of '([0-9]+)'; this underruns.+minimum length of '([0-9]+)'./m",
+                "Une 'ville' (contact du parcours ou composante) a une longueur de $1 qui est inférieure au minimum de $2",
                 $message
             );
         }

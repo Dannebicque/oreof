@@ -2114,5 +2114,65 @@
         <target>parcours.helps.typeParcours</target>
       </segment>
     </unit>
+    <unit id="ngTvtZd" name="contact.helps.denomination">
+      <segment>
+        <source>contact.helps.denomination</source>
+        <target>contact.helps.denomination</target>
+      </segment>
+    </unit>
+    <unit id="x4bLt8l" name="contact.helps.nom">
+      <segment>
+        <source>contact.helps.nom</source>
+        <target>contact.helps.nom</target>
+      </segment>
+    </unit>
+    <unit id="b6jwOQU" name="contact.helps.prenom">
+      <segment>
+        <source>contact.helps.prenom</source>
+        <target>contact.helps.prenom</target>
+      </segment>
+    </unit>
+    <unit id="PUA_nLn" name="contact.helps.telephone">
+      <segment>
+        <source>contact.helps.telephone</source>
+        <target>contact.helps.telephone</target>
+      </segment>
+    </unit>
+    <unit id="HZt2djv" name="contact.helps.email">
+      <segment>
+        <source>contact.helps.email</source>
+        <target>contact.helps.email</target>
+      </segment>
+    </unit>
+    <unit id="E.dYRG9" name="contact.helps.adresse.help">
+      <segment>
+        <source>contact.helps.adresse.help</source>
+        <target>contact.helps.adresse.help</target>
+      </segment>
+    </unit>
+    <unit id="0wr16OG" name="contact.helps.adresse.adresse1">
+      <segment>
+        <source>contact.helps.adresse.adresse1</source>
+        <target>contact.helps.adresse.adresse1</target>
+      </segment>
+    </unit>
+    <unit id="xIM4HoA" name="contact.helps.adresse.adresse2">
+      <segment>
+        <source>contact.helps.adresse.adresse2</source>
+        <target>contact.helps.adresse.adresse2</target>
+      </segment>
+    </unit>
+    <unit id="vhZAgyE" name="contact.helps.adresse.codePostal">
+      <segment>
+        <source>contact.helps.adresse.codePostal</source>
+        <target>contact.helps.adresse.codePostal</target>
+      </segment>
+    </unit>
+    <unit id="tQ8Q4Gl" name="contact.helps.adresse.ville">
+      <segment>
+        <source>contact.helps.adresse.ville</source>
+        <target>contact.helps.adresse.ville</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

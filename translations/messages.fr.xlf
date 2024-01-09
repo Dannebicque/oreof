@@ -445,5 +445,23 @@
         <target>Description générale de la formation</target>
       </segment>
     </unit>
+    <unit id="sFJxfxa" name="Dénomination du contact">
+      <segment>
+        <source>Dénomination du contact</source>
+        <target>Dénomination du contact</target>
+      </segment>
+    </unit>
+    <unit id="zExCS1c" name="Téléphone">
+      <segment>
+        <source>Téléphone</source>
+        <target>Téléphone</target>
+      </segment>
+    </unit>
+    <unit id="lpzL089" name="Email">
+      <segment>
+        <source>Email</source>
+        <target>Email</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

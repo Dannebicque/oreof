@@ -30,6 +30,7 @@ security:
         - { path: ^/connexion, roles: PUBLIC_ACCESS }
         - { path: ^/demande-acces, roles: PUBLIC_ACCESS }
         - { path: ^/sso/cas, roles: PUBLIC_ACCESS }
+        - { path: ^/fiche-matiere/export/[0-9]+, roles: PUBLIC_ACCESS}
         - { path: ^/parcours/mccc/export/.+\.pdf, roles: PUBLIC_ACCESS}
         - { path: ^/parcours/mccc/export-light/.+\.pdf, roles: PUBLIC_ACCESS}
         - { path: ^/parcours/.+/export-json-urca, roles: PUBLIC_ACCESS}
