@@ -2473,5 +2473,11 @@
         <target>TYPE_PARCOURS_LAS23</target>
       </segment>
     </unit>
+    <unit id="uUjzJ9n" name="contact.labels.adresse.label">
+      <segment>
+        <source>contact.labels.adresse.label</source>
+        <target>contact.labels.adresse.label</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

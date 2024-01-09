@@ -609,7 +609,7 @@ HTML;
         elseif (preg_match("/^Element '{http:\/\/lheo.gouv.fr\/2.3}contact-organisme': Missing.+$/m", $message)) {
             $decodedMessage = preg_replace(
                 "/^Element '{http:\/\/lheo.gouv.fr\/2.3}contact-organisme': Missing.+$/m",
-                "Problème de composante d'inscription manquante",
+                "Problème de contact d'organisme",
                 $message
             );
         } // contact-formation : référents pédagogiques non renseignés
@@ -713,6 +713,42 @@ HTML;
             $decodedMessage = preg_replace(
                 "/^Element '{http:\/\/lheo.gouv.fr\/2.3}conditions-specifiques.+length of '([0-9]+)'.+exceeds.+maximum length of '([0-9]+)'/m",
                 "Les 'conditions spécifiques' du parcours ont une longueur de $1 qui est supérieure au maximum de $2",
+                $message
+            );
+        }
+        elseif (
+            preg_match(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}ligne'.+length of '([0-9]+)'; this exceeds.+maximum length of '([0-9]+)'./m",
+                $message
+            )
+        ) {
+            $decodedMessage = preg_replace(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}ligne'.+length of '([0-9]+)'; this exceeds.+maximum length of '([0-9]+)'./m",
+                "Une adresse postale a une longueur de $1 qui est supérieure au maximum de $2",
+                $message
+            );
+        }
+        elseif(
+            preg_match(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}codepostal'.+length of '([0-9]+)'; this underruns.+minimum length of '([0-9]+)'./m",
+                $message
+            )
+        ) {
+            $decodedMessage = preg_replace(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}codepostal'.+length of '([0-9]+)'; this underruns.+minimum length of '([0-9]+)'./m",
+                "Un code postal a une longueur de $1 qui est inférieure à 5",
+                $message
+            );
+        }
+        elseif(
+            preg_match(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}ville'.+length of '([0-9]+)'; this underruns.+minimum length of '([0-9]+)'./m",
+                $message
+            )
+        ){
+            $decodedMessage = preg_replace(
+                "/Element '{http:\/\/lheo.gouv.fr\/2.3}ville'.+length of '([0-9]+)'; this underruns.+minimum length of '([0-9]+)'./m",
+                "Une 'ville' (contact du parcours ou composante) a une longueur de $1 qui est inférieure au minimum de $2",
                 $message
             );
         }
