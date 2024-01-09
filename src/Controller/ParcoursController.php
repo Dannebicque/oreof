@@ -554,8 +554,8 @@ class ParcoursController extends BaseController
         ParcoursRepository $parcoursRepo
     ): Response {
         $parcoursList = [
-            ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_pour_publication'),
-            ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'publie'),
+            // ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_pour_publication'),
+            // ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'publie'),
             ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_a_publier')
         ];
         $errorArray = [];
