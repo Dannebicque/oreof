@@ -363,18 +363,27 @@ HTML;
         // Poursuite d'études L.As (Licence Accès Santé)
         // Si LAS 1
         if ($parcours->getTypeParcours()->name === "TYPE_PARCOURS_LAS1") {
-            $poursuiteEtudes .= "<h2>Accès Santé</h2>";
-            $poursuiteEtudes .= $etablissementInformation->getTextLas1()
+            $poursuiteEtudes .= "<br><h2>Accès Santé</h2>";
+            $poursuiteEtudes .= 
+                "<h3>Après la 1ère année de licence \"Sciences pour la Santé\" - Accès santé </h3>"
+                . $etablissementInformation->getTextLas1()
+                . "<h3>Licence - Accès santé 2ème année (L.As 2)</h3>"
                 . "<br>" . $etablissementInformation->getTextLas2()
-                . "<br>" . $etablissementInformation->getTextLas3()
-                . "<br>" . $etablissementInformation->getSecondeChance();
+                . "<h3>Licence - Accès santé 3ème année (L.As 3)</h3>"
+                . $etablissementInformation->getTextLas3()
+                . "<h3>Droit à la 2nde chance</h3>"
+                . $etablissementInformation->getSecondeChance();
         }
         // Si LAS 2 ou 3
         if ($parcours->getTypeParcours()->name === "TYPE_PARCOURS_LAS23") {
-            $poursuiteEtudes .= "<h2>Accès Santé</h2>";
-            $poursuiteEtudes .= $etablissementInformation->getTextLas2()
-                . "<br>" . $etablissementInformation->getTextLas3()
-                . "<br>" . $etablissementInformation->getSecondeChance();
+            $poursuiteEtudes .= "<br><h2>Accès Santé</h2>";
+            $poursuiteEtudes .= 
+                "<h3>Licence - Accès santé 2ème année (L.As 2)</h3>"
+                . $etablissementInformation->getTextLas2()
+                . "<h3>Licence - Accès santé 3ème année (L.As 3)</h3>"
+                . $etablissementInformation->getTextLas3()
+                . "<h3>Droit à la 2nde chance</h3>"
+                . $etablissementInformation->getSecondeChance();
         }
 
 
