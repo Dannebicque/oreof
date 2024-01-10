@@ -97,13 +97,7 @@
 
 {% block bouton_header %}
     <button
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'Générer la codification',
-                modalUrl: path('app_codification', {formation:formation.id}) }) }}
-            data-action="click->modal#openModal"
             class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-            data-size="lg"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
             title="Générer la codification"

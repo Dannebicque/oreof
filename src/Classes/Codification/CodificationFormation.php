@@ -11,6 +11,8 @@ namespace App\Classes\Codification;
 
 use App\Entity\Formation;
 use App\Entity\Parcours;
+use App\Entity\Semestre;
+use App\Entity\SemestreParcours;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CodificationFormation
@@ -144,7 +146,7 @@ class CodificationFormation
                      * 4. Code du Parcours (si pas de parcours X, si Tronc commun en première année X, sinon code du parcours)
                      * 5. Numéro d'ordre du semestre LMD
                      */
-                    $code = $formation->getComposantePorteuse()?->getCodeApogee();
+                    $code = substr($formation->getComposantePorteuse()?->getCodeApogee(), 0, 1);
                     $code .= $formation->getTypeDiplome()?->getCodeApogee();
                     $code .= $formation->getMention()?->getCodeApogee();
 
@@ -157,9 +159,28 @@ class CodificationFormation
                     }
                     $code .= $semestre->getOrdre();
                     $semestre->getSemestre()->setCodeApogee($code);
+
+                    $this->setCodificationUe($semestre->getSemestre());
                 }
             }
             $this->entityManager->flush();
+        }
+    }
+
+    private function setCodificationUe(Semestre $semestre)
+    {
+        $ues = $semestre->getUes();
+        foreach ($ues as $ue) {
+            $ue->setCodeApogee($semestre->getCodeApogee() . $ue->getOrdre());
+            $this->setCodificationEc($ue);
+        }
+    }
+
+    private function setCodificationEc(\App\Entity\Ue $ue)
+    {
+        $ecs = $ue->getElementConstitutifs();
+        foreach ($ecs as $ec) {
+            $ec->setCodeApogee($ue->getCodeApogee() . $ec->getOrdre());
         }
     }
 }

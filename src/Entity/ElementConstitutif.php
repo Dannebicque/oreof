@@ -108,7 +108,7 @@ class ElementConstitutif
 
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?Parcours $parcours = null;
-  
+
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs', fetch: 'EAGER')]
     private ?Ue $ue = null;
 
@@ -171,7 +171,7 @@ class ElementConstitutif
 
     #[ORM\Column(nullable: true)]
     private ?bool $synchroBcc = null;
-    
+
     #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $synchroEcts = null;
@@ -182,11 +182,14 @@ class ElementConstitutif
 
     /**
      * VERSIONING
-     * 
+     *
      * Ceci n'est pas un enregistrement BD
      */
     #[Groups('parcours_json_versioning')]
     public ?bool $raccroche = null;
+
+    #[ORM\Column(length: 8, nullable: true)]
+    private ?string $codeApogee = null;
 
 
     public function __construct()
@@ -840,5 +843,30 @@ class ElementConstitutif
             $this->raccroche = GetElementConstitutif::isRaccroche($this, $this->parcours);
         }
         return $this->raccroche;
+    }
+
+    public function getCodeApogee(): ?string
+    {
+        return $this->codeApogee;
+    }
+
+    public function setCodeApogee(?string $codeApogee): static
+    {
+        $this->codeApogee = $codeApogee;
+
+        return $this;
+    }
+
+    public function displayCodeApogee(): string
+    {
+        if ($this->codeApogee !== null) {
+            return $this->codeApogee;
+        }
+
+        if ($this->ficheMatiere !== null) {
+            return $this->ficheMatiere->getCodeApogee();
+        }
+
+        return 'Aucun code Apogée';
     }
 }
