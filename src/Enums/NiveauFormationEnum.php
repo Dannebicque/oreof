@@ -30,7 +30,7 @@ enum NiveauFormationEnum: int
             //self::NIVEAU_VI => 'niveau VI (illettrisme, analphabétisme)',
             //self::NIVEAU_V_BIS => 'niveau V bis (préqualification)',
             self::NIVEAU_V => 'niveau V (CAP, BEP, CFPA du premier degré)',
-            self::NIVEAU_IV => 'niveau IV (BP, BT, baccalauréat professionnel ou technologique)',
+            self::NIVEAU_IV => 'niveau IV (BP, BT, baccalauréat ou équivalent)',
             self::NIVEAU_III => 'niveau III (BTS, DUT)',
             self::NIVEAU_II => 'niveau II (licence ou maîtrise universitaire)',
             self::NIVEAU_I => 'niveau I (supérieur à la maîtrise)',
