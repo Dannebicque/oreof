@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.7](https://github.com/Dannebicque/oreof/compare/v1.23.6...v1.23.7) (2024-01-10)
+
+
+### Features
+
+* Exclusion du DNO dans les vérifs ECTS sur les EC + ECTS sur UE ([a36f35a](https://github.com/Dannebicque/oreof/commit/a36f35ae3b605c22f981f63b12644e6ed9865b37))
+
 ### [1.23.6](https://github.com/Dannebicque/oreof/compare/v1.23.5...v1.23.6) (2024-01-10)
 
 
