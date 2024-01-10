@@ -13,6 +13,7 @@ use App\Classes\GetElementConstitutif;
 use App\Classes\GetUeEcts;
 use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
+use App\Entity\TypeDiplome;
 use App\Entity\Ue;
 
 abstract class ValideStructure extends AbstractValide
@@ -21,8 +22,12 @@ abstract class ValideStructure extends AbstractValide
     private static array $structure = [];
     private static array $errors = [];
 
+    private static ?TypeDiplome $typeDiplome;
+
     public static function valideStructure(Parcours $parcours): void
     {
+        self::$typeDiplome = $parcours->getFormation()?->getTypeDiplome();
+
         self::$parcours = $parcours;
 
         $etatGlobal = self::COMPLET;
@@ -148,13 +153,15 @@ abstract class ValideStructure extends AbstractValide
 
         //vérification des ECTS, d'un libellé et d'une description
         } elseif ($ec->getNatureUeEc()?->isChoix() || $ec->getEcEnfants()->count() > 0) {
-            //si l'EC est un choix, on vérifie les enfants
-            if ($ec->getEcts() !== null && $ec->getEcts() > 0.0 && $ec->getEcts() <= 30.0) {
-                $t['global'] = self::COMPLET;
-                $t['erreur'] = [];
-            } else {
-                $t['global'] = self::ERREUR;
-                $t['erreur'] = ['Les ECTS ne sont pas définis ou non compris entre 0 et 30 l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours)];
+            if (self::$typeDiplome !== null && self::$typeDiplome->getLibelleCourt() !== 'DNO') {
+                //si l'EC est un choix, on vérifie les enfants
+                if ($ec->getEcts() !== null && $ec->getEcts() > 0.0 && $ec->getEcts() <= 30.0) {
+                    $t['global'] = self::COMPLET;
+                    $t['erreur'] = [];
+                } else {
+                    $t['global'] = self::ERREUR;
+                    $t['erreur'] = ['Les ECTS ne sont pas définis ou non compris entre 0 et 30 l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours)];
+                }
             }
 
             $t['enfants'] = [];
@@ -185,13 +192,15 @@ abstract class ValideStructure extends AbstractValide
         }
         $raccroche = GetElementConstitutif::isRaccroche($ec, self::$parcours);
         if ($ec->getNatureUeEc()?->isLibre() === true) {
-            $ects = GetElementConstitutif::getEcts($ec, $raccroche);
-            if ($ects === null ||
-                $ects <= 0.0 ||
-                $ects > 30.0) {
-                $t['erreur'][] = 'ECTS non renseignés';
-                $etatEc = self::ERREUR;
-                self::$errors[] = 'ECTS non renseignés pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
+            if (self::$typeDiplome !== null && self::$typeDiplome->getLibelleCourt() !== 'DNO') {
+                $ects = GetElementConstitutif::getEcts($ec, $raccroche);
+                if ($ects === null ||
+                    $ects <= 0.0 ||
+                    $ects > 30.0) {
+                    $t['erreur'][] = 'ECTS non renseignés';
+                    $etatEc = self::ERREUR;
+                    self::$errors[] = 'ECTS non renseignés pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
+                }
             }
         } elseif ($ec->getFicheMatiere() === null) {
             $t['global'] = self::VIDE;
@@ -210,14 +219,15 @@ abstract class ValideStructure extends AbstractValide
                 $etatEc = self::INCOMPLET;
                 self::$errors[] = 'MCCC non renseignées pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
             }
-
-            $ects = GetElementConstitutif::getEcts($ec, $raccroche);
-            if ($ects === null ||
-                $ects <= 0.0 ||
-                $ects > 30.0) {
-                $t['erreur'][] = 'ECTS non renseignés';
-                $etatEc = self::ERREUR;
-                self::$errors[] = 'ECTS non renseignés pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
+            if (self::$typeDiplome !== null && self::$typeDiplome->getLibelleCourt() !== 'DNO') {
+                $ects = GetElementConstitutif::getEcts($ec, $raccroche);
+                if ($ects === null ||
+                    $ects <= 0.0 ||
+                    $ects > 30.0) {
+                    $t['erreur'][] = 'ECTS non renseignés';
+                    $etatEc = self::ERREUR;
+                    self::$errors[] = 'ECTS non renseignés pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
+                }
             }
 
             if (GetElementConstitutif::getEtatStructure($ec, $raccroche) !== 'Complet') {
@@ -304,7 +314,7 @@ abstract class ValideStructure extends AbstractValide
                             $etatBcc = '';
                             foreach ($ec->getFicheMatiere()?->getElementConstitutifs() as $ece) {
                                 if ($ece->getEtatBcc(self::$parcours) === 'Complet') {
-                                    $etatBcc ='Complet';
+                                    $etatBcc = 'Complet';
                                 }
                             }
 
