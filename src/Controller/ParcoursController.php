@@ -537,12 +537,11 @@ class ParcoursController extends BaseController
     #[Route('/{parcours_versioning}/versioning/view', name: 'app_parcours_versioning_view')]
     public function parcoursVersion(
         ParcoursVersioning      $parcours_versioning,
-        CalculStructureParcours $calculStructureParcours
+        TypeDiplomeRegistry $typeDiplomeRegistry
     ): Response {
-        // $parcours = new Parcours(new Formation(new AnneeUniversitaire));
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $serializer = new Serializer(
-            [
+        [
             new DateTimeNormalizer(),
             new BackedEnumNormalizer(),
             new ArrayDenormalizer(),
@@ -552,7 +551,9 @@ class ParcoursController extends BaseController
         );
         $file = file_get_contents(__DIR__ . "/../../versioning_json/parcours/{$parcours_versioning->getFileName()}.json");
         $parcours = $serializer->deserialize($file, Parcours::class, 'json');
-        $dto = $calculStructureParcours->calculVersioning($parcours);
+
+        $typeD = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome()?->getModeleMcc());
+        $dto = $typeD->calculStructureParcours($parcours);
 
         $dateVersion = $parcours_versioning->getVersionTimestamp()->format('d-m-Y à H:i');
 
@@ -562,7 +563,7 @@ class ParcoursController extends BaseController
             'typeDiplome' => $parcours->getTypeDiplome(),
             'dto' => $dto,
             'hasParcours' => $parcours->getFormation()->isHasParcours(),
-            'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
+            // 'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
             'dateVersion' => $dateVersion
         ]);
     }
