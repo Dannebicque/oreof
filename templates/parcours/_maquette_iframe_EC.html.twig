@@ -31,14 +31,18 @@
         }}"
     >
         {% if ec.elementConstitutif.ficheMatiere is defined and ec.elementConstitutif.ficheMatiere is not null %}
-        <a href="{{ path(
+        {# <a href="{{ path(
                     'app_fiche_matiere_maquette_iframe',
                     { ec: ec.elementConstitutif.id, parcours: parcours.parcours.id }
                     ) 
                 }}">
             EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} - 
             {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
-        </a>
+        </a> #}
+        <span>
+            EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} - 
+            {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
+        </span>
         {% else %}
             EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} - 
             {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
