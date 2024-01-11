@@ -420,6 +420,24 @@ class ParcoursController extends BaseController
             }
         }
 
+        // Gestion de 'faculte-ecole-institut'
+        // ---> Il peut y avoir plusieurs composantes d'inscription au niveau de la formation
+        // "-" par défaut
+        $faculteEcoleInstitut = ["-"];
+        // Si on a au niveau du parcours
+        if($parcours->getComposanteInscription()?->getLibelle() !== null){
+            $faculteEcoleInstitut = [$parcours->getComposanteInscription()?->getLibelle()];
+        }
+        // Sinon, on prend les composantes d'inscription de la formation
+        else {
+            if(count($parcours->getFormation()?->getComposantesInscription()->toArray()) > 0){
+                $faculteEcoleInstitut = array_map(
+                    fn($composanteInscription) => $composanteInscription->getLibelle(),
+                    $parcours->getFormation()?->getComposantesInscription()->toArray()
+                );
+            }
+        }
+
         $data = [
             'description' => "",
             'ects' => $ects ?? 0,
@@ -427,9 +445,7 @@ class ParcoursController extends BaseController
                 'domaine' => $parcours->getFormation()?->getDomaine()?->getLibelle() ?? '-',
                 'type-formation' => $parcours->getFormation()?->getTypeDiplome()?->getLibelle() ?? '-',
                 'localisation' => $localisationMetadata,
-                'faculte-ecole-institut' => $parcours->getComposanteInscription()?->getLibelle() 
-                    ?? $parcours->getFormation()?->getComposantePorteuse()?->getLibelle()
-                    ?? '-',
+                'faculte-ecole-institut' => $faculteEcoleInstitut,
                 'public-concerne' => $parcours->getRegimeInscription() ?? [], //Certains sont des tableaux, d'autres en JSON
             ],
             'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
