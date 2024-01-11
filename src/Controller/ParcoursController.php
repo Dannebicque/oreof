@@ -402,14 +402,34 @@ class ParcoursController extends BaseController
 
         $ects = $typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts;
 
+        // Gestion de la localisation
+        // Vide par défaut : -
+        $localisationMetadata = ["-"];
+        // Si l'on a une ville sur le parcours
+        if($parcours->getLocalisation()?->getLibelle() !== null){
+            $localisationMetadata = [$parcours->getLocalisation()?->getLibelle()];
+        }
+        // Sinon on prend au niveau de la composante
+        else {
+            $villeArray = $parcours->getFormation()?->getLocalisationMention()?->toArray();
+            if(count($villeArray) > 0){
+                $localisationMetadata = array_map(
+                    fn($ville) => $ville->getLibelle(),
+                    $villeArray
+                );
+            }
+        }
+
         $data = [
             'description' => "",
             'ects' => $ects ?? 0,
             'metadata' => [
                 'domaine' => $parcours->getFormation()?->getDomaine()?->getLibelle() ?? '-',
                 'type-formation' => $parcours->getFormation()?->getTypeDiplome()?->getLibelle() ?? '-',
-                'localisation' => $parcours->getLocalisation()?->getLibelle() ?? '-',
-                'faculte-ecole-institut' => $parcours->getComposanteInscription()?->getLibelle() ?? '-',
+                'localisation' => $localisationMetadata,
+                'faculte-ecole-institut' => $parcours->getComposanteInscription()?->getLibelle() 
+                    ?? $parcours->getFormation()?->getComposantePorteuse()?->getLibelle()
+                    ?? '-',
                 'public-concerne' => $parcours->getRegimeInscription() ?? [], //Certains sont des tableaux, d'autres en JSON
             ],
             'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
