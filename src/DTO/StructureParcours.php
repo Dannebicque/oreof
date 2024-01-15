@@ -13,10 +13,17 @@ use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\Ue;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 class StructureParcours
 {
+    #[Groups(['DTO_json_versioning'])]
     public Parcours $parcours;
+
+    #[Groups(['DTO_json_versioning'])]
     public array $semestres = [];
+
+    #[Groups(['DTO_json_versioning'])]
     public HeuresEctsFormation $heuresEctsFormation;
 
     public function setParcours(Parcours $parcours): void

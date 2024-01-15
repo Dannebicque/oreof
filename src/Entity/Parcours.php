@@ -100,7 +100,7 @@ class Parcours
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $memoireText = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'DTO_json_versioning'])]
     #[ORM\Column(type: Types::INTEGER, nullable: true, enumType: ModaliteEnseignementEnum::class)]
     private ?ModaliteEnseignementEnum $modalitesEnseignement = ModaliteEnseignementEnum::NON_DEFINI;
 
@@ -234,10 +234,11 @@ class Parcours
     #[ORM\Column(length: 20, nullable: true, enumType: TypeParcoursEnum::class)]
     private ?TypeParcoursEnum $typeParcours = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: Contact::class)]
     private Collection $contacts;
 
-    public function __construct(Formation $formation)
+    public function __construct(?Formation $formation)
     {
         $this->formation = $formation;
         $this->blocCompetences = new ArrayCollection();

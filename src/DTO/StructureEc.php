@@ -15,16 +15,35 @@ use App\Entity\FicheMatiere;
 use App\Entity\Parcours;
 use Doctrine\Common\Collections\Collection;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 class StructureEc
 {
+    #[Groups(['DTO_json_versioning'])]
     public ElementConstitutif $elementConstitutif;
+
+    #[Groups(['DTO_json_versioning'])]
     public bool $raccroche = false;
+
+    #[Groups(['DTO_json_versioning'])]
     public array $elementsConstitutifsEnfants = [];
+
+    #[Groups(['DTO_json_versioning'])]
     public HeuresEctsEc $heuresEctsEc;
+
+    #[Groups(['DTO_json_versioning'])]
     public ElementConstitutif|FicheMatiere|null $elementRaccroche = null;
+
+    #[Groups(['DTO_json_versioning'])]
     public array $heuresEctsEcEnfants = [];
+
+    #[Groups(['DTO_json_versioning'])]
     public Collection $mcccs;
+
+    #[Groups(['DTO_json_versioning'])]
     public ?string $typeMccc;
+
+    #[Groups(['DTO_json_versioning'])]
     public ?Collection $bccs;
 
 

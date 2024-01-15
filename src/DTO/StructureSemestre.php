@@ -12,12 +12,23 @@ namespace App\DTO;
 use App\Entity\Semestre;
 use App\Entity\Ue;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 class StructureSemestre
 {
+    #[Groups(['DTO_json_versioning'])]
     public Semestre $semestre;
+
+    #[Groups(['DTO_json_versioning'])]
     public bool $raccroche = false;
+
+    #[Groups(['DTO_json_versioning'])]
     private array $ues = [];
+
+    #[Groups(['DTO_json_versioning'])]
     public int $ordre;
+
+    #[Groups(['DTO_json_versioning'])]
     public HeuresEctsSemestre $heuresEctsSemestre;
 
     public function __construct(Semestre $semestre, int $ordre, bool $raccroche = false)

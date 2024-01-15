@@ -19,7 +19,7 @@ class SemestreMutualisable
     private ?int $id = null;
 
     #[MaxDepth(1)]
-    #[Groups('parcours_json_versioning')]
+    #[Groups('DTO_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'semestreMutualisables')]
     private ?Semestre $semestre = null;
 

@@ -12,15 +12,32 @@ namespace App\DTO;
 use App\Entity\ElementConstitutif;
 use App\Entity\Ue;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 class StructureUe
 {
+    #[Groups(['DTO_json_versioning'])]
     public string $display = '';
+
+    #[Groups(['DTO_json_versioning'])]
     public ?Ue $ueOrigine;
+
+    #[Groups(['DTO_json_versioning'])]
     public ?Ue $ue;
+
+    #[Groups(['DTO_json_versioning'])]
     public bool $raccroche = false;
+
+    #[Groups(['DTO_json_versioning'])]
     public array $elementConstitutifs = [];
+
+    #[Groups(['DTO_json_versioning'])]
     private array $uesEnfants = [];
+
+    #[Groups(['DTO_json_versioning'])]
     public array $heuresEctsUeEnfants = [];
+
+    #[Groups(['DTO_json_versioning'])]
     public HeuresEctsUe $heuresEctsUe;
 
     public function __construct(?Ue $ue, bool $raccroche = false, ?string $display = null, ?Ue $ueOrigine = null)

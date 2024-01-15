@@ -38,7 +38,7 @@ class FicheMatiere
     private ?int $id = null;
 
     #[ORM\Column(length: 250)]
-    #[Groups(['fiche_matiere:read', 'parcours_json_versioning'])]
+    #[Groups(['fiche_matiere:read', 'DTO_json_versioning'])]
     private ?string $libelle = null;
 
     #[ORM\Column(length: 250, nullable: true)]
@@ -46,7 +46,7 @@ class FicheMatiere
     private ?string $libelleAnglais = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['fiche_matiere:read', 'parcours_json_versioning'])]
+    #[Groups(['fiche_matiere:read'])]
     private ?bool $enseignementMutualise = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -64,27 +64,21 @@ class FicheMatiere
     #[Groups(['fiche_matiere:read'])]
     private ?ModaliteEnseignementEnum $modaliteEnseignement = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $isCmPresentielMutualise = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $isTdPresentielMutualise = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $isTpPresentielMutualise = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $isCmDistancielMutualise = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $isTdDistancielMutualise = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $isTpDistancielMutualise = null;
 
@@ -110,12 +104,12 @@ class FicheMatiere
     #[ORM\ManyToOne(inversedBy: 'ficheMatieres')]
     private ?Parcours $parcours = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['DTO_json_versioning'])]
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereMutualisable::class)]
     private Collection $ficheMatiereParcours;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['fiche_matiere:read', 'parcours_json_versioning'])]
+    #[Groups(['fiche_matiere:read', 'DTO_json_versioning'])]
     private ?string $sigle = null;
 
     #[ORM\Column(length: 20, nullable: true)]
@@ -124,24 +118,20 @@ class FicheMatiere
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: HistoriqueFicheMatiere::class)]
     private Collection $historiqueFicheMatieres;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['DTO_json_versioning'])]
     #[ORM\Column(length: 255, unique: true)]
     #[Gedmo\Slug(fields: ['libelle'])]
     private ?string $slug = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeCmPresentiel;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTdPresentiel;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTpPresentiel;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTe = null;
 
@@ -160,40 +150,33 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?bool $sansHeures = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeCmDistanciel = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTdDistanciel = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $volumeTpDistanciel = null;
 
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $typeMccc = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $horsDiplome = null;
 
     #[ORM\ManyToOne(inversedBy: 'ficheMatieres')]
     private ?TypeDiplome $typeDiplome = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $volumesHorairesImpose = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?bool $ectsImpose = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $mcccImpose = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?float $ects = null;
 

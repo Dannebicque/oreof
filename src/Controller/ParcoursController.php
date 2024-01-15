@@ -16,6 +16,7 @@ use App\Classes\verif\ParcoursState;
 use App\DTO\HeuresEctsFormation;
 use App\DTO\HeuresEctsSemestre;
 use App\DTO\HeuresEctsUe;
+use App\DTO\StructureParcours;
 use App\Entity\AnneeUniversitaire;
 use App\Entity\Formation;
 use App\Entity\Parcours;
@@ -495,6 +496,7 @@ class ParcoursController extends BaseController
         Parcours               $parcours,
         Filesystem             $fileSystem,
         EntityManagerInterface $entityManager,
+        TypeDiplomeRegistry $typeDiplomeRegistry
     ) {
         // Définition du serializer
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
@@ -514,17 +516,32 @@ class ParcoursController extends BaseController
             $parcoursVersioning->setParcours($parcours);
             $parcoursVersioning->setVersionTimestamp($now);
             // Nom du fichier
-            $fileName = "parcours-{$parcours->getId()}-{$dateHeure}";
-            $parcoursVersioning->setFileName($fileName);
+            $parcoursFileName = "parcours-{$parcours->getId()}-{$dateHeure}";
+            $dtoFileName = "dto-{$parcours->getId()}-{$dateHeure}";
+            $parcoursVersioning->setParcoursFileName($parcoursFileName);
+            $parcoursVersioning->setDtoFileName($dtoFileName);
             // Création du fichier JSON
-            $json = $serializer->serialize($parcours, 'json', [
+            // Parcours
+            $parcoursJson = $serializer->serialize($parcours, 'json', [
                 AbstractObjectNormalizer::GROUPS => ['parcours_json_versioning'],
                 'circular_reference_limit' => 2,
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
                 AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
             ]);
-            $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$fileName}.json", $json);
+            // DTO
+            $typeD = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome()?->getModeleMcc());
+            $dto = $typeD->calculStructureParcours($parcours);
+            $dtoJson = $serializer->serialize($dto, 'json', [
+                AbstractObjectNormalizer::GROUPS => ['DTO_json_versioning'],
+                'circular_reference_limit' => 2,
+                AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
+                AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
+                DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
+            ]);
+            // Enregistrement dans un fichier
+            $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$parcours->getId()}/{$parcoursFileName}.json", $parcoursJson);
+            $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$parcours->getId()}/{$dtoFileName}.json", $dtoJson);
             // Enregistrement de la référence en BD
             $entityManager->persist($parcoursVersioning);
             $entityManager->flush();
@@ -552,8 +569,7 @@ class ParcoursController extends BaseController
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{parcours_versioning}/versioning/view', name: 'app_parcours_versioning_view')]
     public function parcoursVersion(
-        ParcoursVersioning      $parcours_versioning,
-        TypeDiplomeRegistry $typeDiplomeRegistry
+        ParcoursVersioning $parcours_versioning
     ): Response {
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $serializer = new Serializer(
@@ -565,11 +581,16 @@ class ParcoursController extends BaseController
         ],
             [new JsonEncoder()]
         );
-        $file = file_get_contents(__DIR__ . "/../../versioning_json/parcours/{$parcours_versioning->getFileName()}.json");
-        $parcours = $serializer->deserialize($file, Parcours::class, 'json');
-
-        $typeD = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome()?->getModeleMcc());
-        $dto = $typeD->calculStructureParcours($parcours);
+        $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
+                                    . "{$parcours_versioning->getParcours()->getId()}/"
+                                    . "{$parcours_versioning->getParcoursFileName()}.json"
+                    );
+        $fileDTO = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
+                                    . "{$parcours_versioning->getParcours()->getId()}/"
+                                    . "{$parcours_versioning->getDtoFileName()}.json"
+                    );
+        $parcours = $serializer->deserialize($fileParcours, Parcours::class, 'json');
+        $dto = $serializer->deserialize($fileDTO, StructureParcours::class, 'json');
 
         $dateVersion = $parcours_versioning->getVersionTimestamp()->format('d-m-Y à H:i');
 
