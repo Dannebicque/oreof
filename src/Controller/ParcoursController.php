@@ -600,7 +600,7 @@ class ParcoursController extends BaseController
             'typeDiplome' => $parcours->getTypeDiplome(),
             'dto' => $dto,
             'hasParcours' => $parcours->getFormation()->isHasParcours(),
-            // 'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
+            'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
             'dateVersion' => $dateVersion
         ]);
     }
