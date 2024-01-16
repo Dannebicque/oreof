@@ -335,9 +335,9 @@ HTML;
             . $calendrierUniversitaire;
 
         // Informations pratiques
-        $informationsPratiques = "-";
+        $informationsPratiques = "";
         if($parcours->getFormation()?->getTypeDiplome()?->getPresentationFormation()){
-            $informationsPratiques = "<h3>Pour en savoir plus sur ce type de formation :</h3>";
+            $informationsPratiques .= "<h3>Pour en savoir plus sur ce type de formation :</h3>";
             $informationsPratiques .= $parcours->getFormation()?->getTypeDiplome()?->getPresentationFormation();
         }
         if($etablissementInformation->getInformationsPratiques()){
