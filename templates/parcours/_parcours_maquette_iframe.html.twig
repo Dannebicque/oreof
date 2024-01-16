@@ -1,71 +1,73 @@
 {% if parcours is defined and parcours is not null %}
     <div class="accordion" id="accordionMaquetteParcours{{ parcours.parcours.id }}Index{{ indexParcours }}">
     {% for semestre in parcours.semestres %}
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button bg-button-semestre fs-6" type="button" data-bs-toggle="collapse" 
-                        data-bs-target="#collapseSemestre{{semestre.semestre.ordre}}Parcours{{ indexParcours }}" aria-expanded="true" 
-                        aria-controls="collapseSemestre{{semestre.semestre.ordre}}Parcours{{ indexParcours }}"
+        {% if semestre.semestre.isNonDispense == false %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button bg-button-semestre fs-6" type="button" data-bs-toggle="collapse" 
+                            data-bs-target="#collapseSemestre{{semestre.semestre.ordre}}Parcours{{ indexParcours }}" aria-expanded="true" 
+                            aria-controls="collapseSemestre{{semestre.semestre.ordre}}Parcours{{ indexParcours }}"
+                    >
+                        Semestre {{ semestre.semestre.ordre}}
+                    </button>
+                </h2>
+                <div id="collapseSemestre{{semestre.semestre.ordre}}Parcours{{ indexParcours }}" class="accordion-collapse collapse" 
+                    data-bs-parent="#accordionMaquetteParcours{{ parcours.parcours.id }}Index{{ indexParcours }}"
                 >
-                    Semestre {{ semestre.semestre.ordre}}
-                </button>
-            </h2>
-            <div id="collapseSemestre{{semestre.semestre.ordre}}Parcours{{ indexParcours }}" class="accordion-collapse collapse" 
-                data-bs-parent="#accordionMaquetteParcours{{ parcours.parcours.id }}Index{{ indexParcours }}"
-            >
-                <div class="accordion-body global-bg">
-                    <table class="table table-parcours">
-                        <thead>                  
-                            <tr>
-                                <th></th>
-                                <th colspan="3">Présentiel</th>
-                                <th colspan="3">Distanciel</th>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <th>CM</th>
-                                <th>TD</th>
-                                <th>TP</th>
-                                <th>CM</th>
-                                <th>TD</th>
-                                <th>TP</th>
-                                <th>TE</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {# Espacement en cascade pour les UE, EC et leurs enfants #}
-                            {% set paddingCascadeValue = 1.15 %}
-                            {% set paddingCascade = 0 %}
-                            {% for ue in semestre.ues %}
-                                {{ include('parcours/_maquette_iframe_UE.html.twig', 
-                                    {
-                                        ue: ue,
-                                        IsUeEnfant: false,
-                                        paddingCascade: paddingCascade,
-                                        paddingCascadeValue: paddingCascadeValue
-                                    }) 
-                                }}
-                                {% if ue.uesEnfants|length > 0 %}              
-                                    {% for ueEnfant in ue.uesEnfants %}
-                                        {{ include('parcours/_maquette_iframe_UE.html.twig', 
+                    <div class="accordion-body global-bg">
+                        <table class="table table-parcours">
+                            <thead>                  
+                                <tr>
+                                    <th></th>
+                                    <th colspan="3">Présentiel</th>
+                                    <th colspan="3">Distanciel</th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th>CM</th>
+                                    <th>TD</th>
+                                    <th>TP</th>
+                                    <th>CM</th>
+                                    <th>TD</th>
+                                    <th>TP</th>
+                                    <th>TE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {# Espacement en cascade pour les UE, EC et leurs enfants #}
+                                {% set paddingCascadeValue = 1.15 %}
+                                {% set paddingCascade = 0 %}
+                                {% for ue in semestre.ues %}
+                                    {{ include('parcours/_maquette_iframe_UE.html.twig', 
                                         {
-                                            ue: ueEnfant, 
-                                            IsUeEnfant: true, 
-                                            arrayLength: ue.uesEnfants|length,
-                                            indexUeEnfant: loop.index,
-                                            paddingCascade: paddingCascade + 1,
+                                            ue: ue,
+                                            IsUeEnfant: false,
+                                            paddingCascade: paddingCascade,
                                             paddingCascadeValue: paddingCascadeValue
                                         }) 
                                     }}
-                                    {% endfor %}
-                                {% endif %}
-                            {% endfor %}
-                            {{ include('parcours/_maquette_iframe_TotalSemestre.html.twig', {semestre: semestre}) }}
-                        </tbody>
-                    </table>
+                                    {% if ue.uesEnfants|length > 0 %}              
+                                        {% for ueEnfant in ue.uesEnfants %}
+                                            {{ include('parcours/_maquette_iframe_UE.html.twig', 
+                                            {
+                                                ue: ueEnfant, 
+                                                IsUeEnfant: true, 
+                                                arrayLength: ue.uesEnfants|length,
+                                                indexUeEnfant: loop.index,
+                                                paddingCascade: paddingCascade + 1,
+                                                paddingCascadeValue: paddingCascadeValue
+                                            }) 
+                                        }}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                                {{ include('parcours/_maquette_iframe_TotalSemestre.html.twig', {semestre: semestre}) }}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
     {% endfor %}
     </div>
 {% endif %}

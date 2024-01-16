@@ -1,0 +1,103 @@
+<tr class="ec">
+    <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
+    <th {% if enfant %}class="border-left-ue-{{ ue.ue.ordre }}"{% endif %}>&nbsp;</th>
+    <td>{% if ecEnfant %}<span class="badge bg-ec-{{ ec.elementConstitutif.ordre }}">&nbsp;</span>{% endif %}
+        {% if (isBut is defined and isBut == false) or isBut is not defined %}<strong>{{ ec.elementConstitutif.code }}</strong>{% endif %}
+        {% if ec.elementConstitutif.ficheMatiere is defined and ec.elementConstitutif.ficheMatiere != null %}
+            <a href="{{ url('app_fiche_matiere_show', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}">
+                {% if isBut is defined and isBut == true %}
+                    {% if ec.elementConstitutif.ficheMatiere.sigle is defined %}
+                        <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong>
+                    {% endif %}
+                    {{ ec.elementConstitutif.ficheMatiere.libelle }}
+                {% else %}
+                    {# {{ ec.elementConstitutif.ficheMatiere.display }} #}
+                    {{ ec.elementConstitutif.ficheMatiere.libelle }}
+                    {% if ec.elementConstitutif.ficheMatiere.sigle is defined 
+                        and ec.elementConstitutif.ficheMatiere.sigle is not null 
+                        and ec.elementConstitutif.ficheMatiere.sigle|trim != ''
+                    %}
+                        {{ ' | ' ~ ec.elementConstitutif.ficheMatiere.sigle }}
+                    {% endif %}
+                    {% if ec.elementConstitutif.ficheMatiere.ficheMatiereParcours|length > 0 %}
+                        {{ ' (mutualisée)' }}
+                    {% endif %}
+                {% endif %}
+            </a>
+            {% if app.user != null and is_granted('CAN_PARCOURS_EDIT_MY', ec.elementConstitutif.ficheMatiere) %}
+                <a href="{{ url('app_fiche_matiere_edit', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}"
+                   class="btn btn-sm text-warning">
+                    <i class="{{ iconEdit }}"></i>
+                </a>
+            {% endif %}
+        {% else %}
+            {{ ec.elementConstitutif.libelle }}
+        {% endif %}
+        {% if ec.elementConstitutif.natureEcUe is defined and ec.elementConstitutif.natureEcUe.isLibre == true %}
+            <span class="badge bg-success">EC à choix libre</span>
+        {% endif %}
+        {% if ec.elementsConstitutifsEnfants|length > 0 %}
+            <span class="badge bg-info">
+            EC à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possible</span>
+        {% endif %}
+    </td>
+    <td>{{ ec.heuresEctsEc.ects|badgeEcts }}</td>
+
+    {% set sommeEcTotalPres = ec.heuresEctsEc.cmPres
+            + ec.heuresEctsEc.tdPres
+            + ec.heuresEctsEc.tpPres %}
+
+    {% set sommeEcTotalDist = ec.heuresEctsEc.cmDist
+            + ec.heuresEctsEc.tdDist  
+            + ec.heuresEctsEc.tpDist %}
+
+    {% if presentiel %}
+        {% if ec.elementsConstitutifsEnfants|length > 0 %}
+            <td colspan="{% if isBut is defined and isBut == true %}5{% else %}4{% endif %}"></td>
+        {% else %}
+            {#            {% if ec.elementConstitutif.ecParent != null and ec.elementConstitutif.ecParent.heuresEnfantsIdentiques == true %} #}
+            <td>{{ ec.heuresEctsEc.cmPres|filtreHeures }}</td>
+            <td>{{ ec.heuresEctsEc.tdPres|filtreHeures }}</td>
+            <td>{{ ec.heuresEctsEc.tpPres|filtreHeures }}</td>
+            {% if isBut is defined and isBut == true %}
+                <td>{{ ec.heuresEctsEc.tePres|filtreHeures }}</td>
+            {% endif %}
+            <td>{{ sommeEcTotalPres|filtreHeures }}</td>
+            {#            {% else %} #}
+            {#                <td>{{ ec.elementConstitutif.volumeCmPresentiel|filtreHeures }}</td> #}
+            {#                <td>{{ ec.elementConstitutif.volumeTdPresentiel|filtreHeures }}</td> #}
+            {#                <td>{{ ec.elementConstitutif.volumeTpPresentiel|filtreHeures }}</td> #}
+            {#                {% if isBut is defined and isBut == true %} #}
+            {#                    <td>{{ ec.elementConstitutif.volumeTe|filtreHeures }}</td> #}
+            {#                {% endif %} #}
+            {#                <td>{{ ec.elementConstitutif.volumeTotalPresentiel|filtreHeures }}</td> #}
+            {#            {% endif %} #}
+        {% endif %}
+    {% endif %}
+
+    {% if distanciel %}
+        {% if ec.elementsConstitutifsEnfants|length > 0 %}
+            <td colspan="4"></td>
+        {% else %}
+            {#            {% if ec.elementConstitutif.ecParent != null and ec.elementConstitutif.ecParent.heuresEnfantsIdentiques == true %} #}
+            <td>{{ ec.heuresEctsEc.cmDist }}</td>
+            <td>{{ ec.heuresEctsEc.tdDist }}</td>
+            <td>{{ ec.heuresEctsEc.tpDist }}</td>
+            <td>{{ sommeEcTotalDist }}</td>
+            {#            {% else %} #}
+            {#                <td>{{ ec.elementConstitutif.volumeCmDistanciel }}</td> #}
+            {#                <td>{{ ec.elementConstitutif.volumeTdDistanciel }}</td> #}
+            {#                <td>{{ ec.elementConstitutif.volumeTpDistanciel }}</td> #}
+            {#                <td>{{ ec.elementConstitutif.volumeTotalDistanciel }}</td> #}
+            {#            {% endif %} #}
+        {% endif %}
+
+    {% endif %}
+
+    {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
+        {# <td>{{ ec.heuresEctsEc.sommeEcTotalPresDist }}</td> #}
+        <td>{{ sommeEcTotalDist + sommeEcTotalPres }}</td>
+    {% endif %}
+</tr>
+
+

@@ -2174,5 +2174,11 @@
         <target>contact.helps.adresse.ville</target>
       </segment>
     </unit>
+    <unit id="2Ji.SyI" name="type_diplome.helps.presentationFormation">
+      <segment>
+        <source>type_diplome.helps.presentationFormation</source>
+        <target>type_diplome.helps.presentationFormation</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

@@ -22,7 +22,10 @@ class ParcoursVersioning
     private ?\DateTimeImmutable $version_timestamp = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $fileName = null;
+    private ?string $parcoursFileName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $dtoFileName = null;
 
     public function getId(): ?int
     {
@@ -53,14 +56,26 @@ class ParcoursVersioning
         return $this;
     }
 
-    public function getFileName(): ?string
+    public function getParcoursFileName(): ?string
     {
-        return $this->fileName;
+        return $this->parcoursFileName;
     }
 
-    public function setFileName(string $fileName): static
+    public function setParcoursFileName(string $fileName): static
     {
-        $this->fileName = $fileName;
+        $this->parcoursFileName = $fileName;
+
+        return $this;
+    }
+
+    public function getDtoFileName(): ?string
+    {
+        return $this->dtoFileName;
+    }
+
+    public function setDtoFileName(?string $dtoFileName): static
+    {
+        $this->dtoFileName = $dtoFileName;
 
         return $this;
     }

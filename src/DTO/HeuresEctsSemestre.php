@@ -9,15 +9,32 @@
 
 namespace App\DTO;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 class HeuresEctsSemestre
 {
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeSemestreEcts = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeSemestreCmPres = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeSemestreTdPres = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeSemestreTpPres = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeSemestreTePres = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeSemestreCmDist = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeSemestreTdDist = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeSemestreTpDist = 0;
 
 

@@ -1,12 +1,27 @@
 <div class="row">
-    <div class=col-sm-12">
+    <div class="col-sm-12">
         <dl>
             <dt>Organisation de la formation</dt>
-            <dd>{{ parcours.contenuFormation|printTexte }}</dd>
+            <dd>
+                {{ parcours.contenuFormation|printTexte }}
+                {% if isVersioningView is defined and isVersioningView == true %} 
+                    {{ stringDifferences.presentationParcoursContenuFormation|raw  }} 
+                {% endif %}
+            </dd>
             <dt>Objectifs du parcours</dt>
-            <dd>{{ parcours.objectifsParcours|printTexte }}</dd>
+            <dd>
+                {{ parcours.objectifsParcours|printTexte }}
+                {% if isVersioningView is defined and isVersioningView == true %} 
+                    {{ stringDifferences.presentationParcoursObjectifsParcours|raw  }} 
+                {% endif %}
+            </dd>
             <dt>Résultats attendus du parcours</dt>
-            <dd>{{ parcours.resultatsAttendus|printTexte }}</dd>
+            <dd>
+                {{ parcours.resultatsAttendus|printTexte }}
+                {% if isVersioningView is defined and isVersioningView == true %} 
+                    {{ stringDifferences.presentationParcoursResultatsAttendus|raw  }} 
+                {% endif %}    
+            </dd>
             <dt>Rythme de formation</dt>
             <dd>
                 {{ parcours.rythmeFormation != null ? parcours.rythmeFormation.libelle : 'Non précisé' }}

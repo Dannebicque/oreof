@@ -1,7 +1,7 @@
 <tr>
     <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
-    <th colspan="3" {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %}>
-        {{ ue.ue.display(null, semestreOrdre) }} | {{ ue.ue.libelle }} {% if ue.raccroche == true %}<i class="fal fa-link"></i>{% endif %}
+    <th colspan="3" {% if enfant %}class="border-left-ue-{{ ue.ue.ordre }}"{% endif %}>
+        {{ ue.display }} | {% if ue.ue.libelle is defined %} {{ ue.ue.libelle }} {% endif %} {% if ue.raccroche == true %}<i class="fal fa-link"></i>{% endif %}
         {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
             <span class="badge bg-secondary">
             UE à choix libre</span>
@@ -35,7 +35,7 @@
     {% endif %}
     <tr class="ec">
         <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
-        <td {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %} colspan="{{ colspan+4 }}">
+        <td {% if enfant %}class="border-left-ue-{{ ue.ue.ordre }}"{% endif %} colspan="{{ colspan+4 }}">
             {{ ue.ue.descriptionUeLibre }}
         </td>
     </tr>
@@ -43,7 +43,7 @@
     {% if ue.uesEnfants|length == 0 %}
         <tr class="ec">
             <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
-            <th {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %}>&nbsp;</th>
+            <th {% if enfant %}class="border-left-ue-{{ ue.ue.ordre }}"{% endif %}>&nbsp;</th>
             <th>Fiche EC/Matière</th>
             <th>ECTS</th>
 
@@ -72,9 +72,9 @@
 
 
     {% for ec in ue.elementConstitutifs %}
-        {{ include('typeDiplome/formation/_structureEc.html.twig', {ec:ec, semestreOrdre:semestreOrdre, ecEnfant:false}) }}
+        {{ include('typeDiplome/formation/_structureEc.versioning.html.twig', {ec:ec, semestreOrdre:semestreOrdre, ecEnfant:false}) }}
         {% for ece in ec.elementsConstitutifsEnfants %}
-            {{ include('typeDiplome/formation/_structureEc.html.twig', {ec:ece, semestreOrdre:semestreOrdre, ecEnfant:true}) }}
+            {{ include('typeDiplome/formation/_structureEc.versioning.html.twig', {ec:ece, semestreOrdre:semestreOrdre, ecEnfant:true}) }}
         {% endfor %}
     {% endfor %}
 {% endif %}
@@ -83,11 +83,19 @@
     {{ include('typeDiplome/formation/_structureUe.versioning.html.twig', {ue:ueE, enfant: true}) }}
 {% endfor %}
 
+{% set sommeUeTotalPres = ue.heuresEctsUe.sommeUeCmPres
+    + ue.heuresEctsUe.sommeUeTdPres
+    + ue.heuresEctsUe.sommeUeTpPres %}
+
+{% set sommeUeTotalDist = ue.heuresEctsUe.sommeUeCmDist
+    + ue.heuresEctsUe.sommeUeTdDist   
+    + ue.heuresEctsUe.sommeUeTpDist %}
+
 <tr>
     <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
     <th>&nbsp;</th>
     <th class="text-end">
-        Total {{ ue.display }} {% if enfant == false and ue.ue.ueEnfants|length > 0 %}(Total max.){% endif %}</th>
+        Total {{ ue.display }} {% if enfant == false and ue.uesEnfants|length > 0 %}(Total max.){% endif %}</th>
 
     <th>{{ ue.heuresEctsUe.sommeUeEcts|badgeEcts('primary') }}</th>
     {% if presentiel %}
@@ -97,17 +105,20 @@
         {% if isBut is defined and isBut == true %}
             <th>{{ ue.heuresEctsUe.sommeUeTePres|filtreHeures }}</th>
         {% endif %}
-        <th>{{ ue.heuresEctsUe.sommeUeTotalPres|filtreHeures }}</th>
+        {# <th>{{ ue.heuresEctsUe.sommeUeTotalPres|filtreHeures }}</th> #}
+        <th>{{ sommeUeTotalPres }}</th>
     {% endif %}
 
     {% if distanciel %}
         <th>{{ ue.heuresEctsUe.sommeUeCmDist|filtreHeures }}</th>
         <th>{{ ue.heuresEctsUe.sommeUeTdDist|filtreHeures }}</th>
         <th>{{ ue.heuresEctsUe.sommeUeTpDist|filtreHeures }}</th>
-        <th>{{ ue.heuresEctsUe.sommeUeTotalDist|filtreHeures }}</th>
+        {# <th>{{ ue.heuresEctsUe.sommeUeTotalDist|filtreHeures }}</th> #}
+        <th>{{ sommeUeTotalDist }}</th>
     {% endif %}
 
     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-        <th>{{ ue.heuresEctsUe.sommeUeTotalPresDist|filtreHeures }}</th>
+        {# <th>{{ ue.heuresEctsUe.sommeUeTotalPresDist|filtreHeures }}</th> #}
+        <th>{{ sommeUeTotalPres + sommeUeTotalDist }}</th>
     {% endif %}
 </tr>
