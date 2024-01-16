@@ -6,7 +6,10 @@
         {% if ec.elementConstitutif.ficheMatiere is defined and ec.elementConstitutif.ficheMatiere != null %}
             <a href="{{ url('app_fiche_matiere_show', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}">
                 {% if isBut is defined and isBut == true %}
-                    <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }}
+                    {% if ec.elementConstitutif.ficheMatiere.sigle is defined %}
+                        <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong>
+                    {% endif %}
+                    {{ ec.elementConstitutif.ficheMatiere.libelle }}
                 {% else %}
                     {# {{ ec.elementConstitutif.ficheMatiere.display }} #}
                     {{ ec.elementConstitutif.ficheMatiere.libelle }}

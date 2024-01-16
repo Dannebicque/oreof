@@ -32,6 +32,8 @@ use App\Utils\JsonRequest;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
+use Jfcherng\Diff\Differ;
+use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -591,8 +593,20 @@ class ParcoursController extends BaseController
                     );
         $parcours = $serializer->deserialize($fileParcours, Parcours::class, 'json');
         $dto = $serializer->deserialize($fileDTO, StructureParcours::class, 'json');
-
         $dateVersion = $parcours_versioning->getVersionTimestamp()->format('d-m-Y à H:i');
+
+        $rendererName = 'Inline';
+        $differOptions = [
+            'context' => 1
+        ];
+        $rendererOptions = [
+            'detailLevel' => 'word',
+            'lineNumbers' => false,
+            'showHeader' => false,
+            'separateBlock' => false
+        ];
+
+        $cssDiff = DiffHelper::getStyleSheet();
 
         return $this->render('parcours/show_version.html.twig', [
             'parcours' => $parcours,
@@ -601,7 +615,31 @@ class ParcoursController extends BaseController
             'dto' => $dto,
             'hasParcours' => $parcours->getFormation()->isHasParcours(),
             'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
-            'dateVersion' => $dateVersion
+            'dateVersion' => $dateVersion,
+            'stringDifferences' => [
+                'presentationParcoursContenuFormation' => DiffHelper::calculate(
+                    $parcours->getContenuFormation(),
+                    $parcours_versioning->getParcours()->getContenuFormation(),
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                ),
+                'presentationParcoursObjectifsParcours' => DiffHelper::calculate(
+                    $parcours->getObjectifsParcours(),
+                    $parcours_versioning->getParcours()->getObjectifsParcours(),
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                ),
+                'presentationParcoursResultatsAttendus' => DiffHelper::calculate(
+                    $parcours->getResultatsAttendus(),
+                    $parcours_versioning->getParcours()->getResultatsAttendus(),
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )
+            ],
+            'cssDiff' => $cssDiff
         ]);
     }
 
