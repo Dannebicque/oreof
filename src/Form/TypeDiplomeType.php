@@ -44,6 +44,14 @@ class TypeDiplomeType extends AbstractType
                     'maxlength' => 3000
                 ]
             ])
+            ->add('presentationFormation', TextareaAutoSaveType::class, [
+                'label' => "Présentation des formations",
+                'required' => false,
+                'attr' => [
+                    'rows' => 5,
+                    'maxlength' => 3000
+                ]
+            ])
             ->add('insertionProfessionnelle', TextareaAutoSaveType::class, [
                 'label' => 'Devenir des diplômés',
                 'required' => false,
