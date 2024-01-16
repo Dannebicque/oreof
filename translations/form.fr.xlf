@@ -2479,5 +2479,17 @@
         <target>contact.labels.adresse.label</target>
       </segment>
     </unit>
+    <unit id="LqiZqHu" name="Présentation des formations">
+      <segment>
+        <source>Présentation des formations</source>
+        <target>Présentation des formations</target>
+      </segment>
+    </unit>
+    <unit id="cbkWFhP" name="Pour en savoir plus sur ce type de formation">
+      <segment>
+        <source>Pour en savoir plus sur ce type de formation</source>
+        <target>Pour en savoir plus sur ce type de formation</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

@@ -16,6 +16,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: SemestreRepository::class)]
 class Semestre
@@ -25,27 +26,28 @@ class Semestre
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups('DTO_json_versioning')]
     #[ORM\Column]
     private ?int $ordre = null;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: Ue::class, fetch: 'EAGER')]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ues;
 
+    #[Groups('DTO_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: SemestreParcours::class, cascade: ['persist', 'remove'])]
     private Collection $semestreParcours;
 
-    #[Groups('parcours_json_versioning')]
     #[ORM\Column]
     private ?bool $troncCommun = false;
 
-    #[Groups('parcours_json_versioning')]
+    #[MaxDepth(1)]
+    #[Groups('DTO_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'semestre', targetEntity: SemestreMutualisable::class)]
     private Collection $semestreMutualisables;
 
-    #[Groups('parcours_json_versioning')]
+    #[MaxDepth(1)]
+    #[Groups('DTO_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'semestres', fetch: 'EAGER')]
     private ?SemestreMutualisable $semestreRaccroche = null;
 

@@ -9,15 +9,32 @@
 
 namespace App\DTO;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 class HeuresEctsFormation
 {
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeFormationEcts = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeFormationCmPres = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeFormationTdPres = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeFormationTpPres = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeFormationTePres = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeFormationCmDist = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeFormationTdDist = 0;
+    
+    #[Groups(['DTO_json_versioning'])]
     public float $sommeFormationTpDist = 0;
 
     public function sommeFormationTotalDist(): float

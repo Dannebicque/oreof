@@ -39,7 +39,7 @@
                 <tr>
                     <th
                             class="border-left-semestre-{{ ordre }}"
-                            colspan=" {% if presentiel %}8{% else %}13{% endif %}">{{ semestre.semestre.display }} {% if semestre.raccroche == true %}<i class="fal fa-link"></i>{% endif %}</th>
+                            colspan=" {% if presentiel %}8{% else %}13{% endif %}">{{ 'S' ~ ordre }} {% if semestre.raccroche == true %}<i class="fal fa-link"></i>{% endif %}</th>
                 </tr>
 
                 {% for ue in semestre.ues %}
@@ -49,22 +49,32 @@
                     <th class="border-left-semestre-{{ ordre }} text-end" colspan="3">Total Semestre {{ ordre }}</th>
                     <th>{{ semestre.heuresEctsSemestre.sommeSemestreEcts|badgeEctsSemestre }}</th>
 
+                    {% set sommeSemestreTotalPres = semestre.heuresEctsSemestre.sommeSemestreCmPres
+                            + semestre.heuresEctsSemestre.sommeSemestreTdPres
+                            + semestre.heuresEctsSemestre.sommeSemestreTpPres %}
+                    {% set sommeSemestreTotalDist = semestre.heuresEctsSemestre.sommeSemestreCmDist
+                            + semestre.heuresEctsSemestre.sommeSemestreTdDist
+                            + semestre.heuresEctsSemestre.sommeSemestreTpDist %}
+
                     {% if presentiel %}
                         <th>{{ semestre.heuresEctsSemestre.sommeSemestreCmPres }}</th>
                         <th>{{ semestre.heuresEctsSemestre.sommeSemestreTdPres }}</th>
                         <th>{{ semestre.heuresEctsSemestre.sommeSemestreTpPres }}</th>
-                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTotalPres }}</th>
+                        {# <th>{{ semestre.heuresEctsSemestre.sommeSemestreTotalPres }}</th> #}
+                        <th>{{ sommeSemestreTotalPres }}</th>
                     {% endif %}
 
                     {% if distanciel %}
                         <th>{{ semestre.heuresEctsSemestre.sommeSemestreCmDist }}</th>
                         <th>{{ semestre.heuresEctsSemestre.sommeSemestreTdDist }}</th>
                         <th>{{ semestre.heuresEctsSemestre.sommeSemestreTpDist }}</th>
-                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTotalDist }}</th>
+                        {# <th>{{ semestre.heuresEctsSemestre.sommeSemestreTotalDist }}</th> #}
+                        <th>{{ sommeSemestreTotalDist }}</th>
                     {% endif %}
 
                     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTotalPresDist }}</th>
+                        {# <th>{{ semestre.heuresEctsSemestre.sommeSemestreTotalPresDist }}</th> #}
+                        <th>{{ sommeSemestreTotalPres + sommeSemestreTotalDist }}</th>
                     {% endif %}
                 </tr>
             {% endfor %}

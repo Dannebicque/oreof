@@ -12,15 +12,32 @@ namespace App\DTO;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 class HeuresEctsEc
 {
+    #[Groups(['DTO_json_versioning'])]
     public float $ects = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $cmPres = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $tdPres = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $tpPres = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $tePres = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $cmDist = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $tdDist = 0;
+
+    #[Groups(['DTO_json_versioning'])]
     public float $tpDist = 0;
 
     public function sommeEcTotalDist(): float

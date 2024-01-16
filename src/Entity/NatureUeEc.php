@@ -33,7 +33,7 @@ class NatureUeEc
     #[ORM\Column]
     private ?bool $choix = false;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'DTO_json_versioning'])]
     #[ORM\Column]
     private ?bool $libre = false;
 

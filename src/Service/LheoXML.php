@@ -335,7 +335,14 @@ HTML;
             . $calendrierUniversitaire;
 
         // Informations pratiques
-        $informationsPratiques = $etablissementInformation->getInformationsPratiques() ?? "Non renseigné.";
+        $informationsPratiques = "";
+        if($parcours->getFormation()?->getTypeDiplome()?->getPresentationFormation()){
+            $informationsPratiques .= "<h3>Pour en savoir plus sur ce type de formation :</h3>";
+            $informationsPratiques .= $parcours->getFormation()?->getTypeDiplome()?->getPresentationFormation();
+        }
+        if($etablissementInformation->getInformationsPratiques()){
+            $informationsPratiques .= "<br>" . $etablissementInformation->getInformationsPratiques();
+        }
         $informationsPratiques = preg_replace("/<h1>/m", "<h3>", $informationsPratiques);
         $informationsPratiques = preg_replace("/<\/h1>/m", "</h3>", $informationsPratiques);
 

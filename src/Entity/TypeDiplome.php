@@ -100,6 +100,9 @@ class TypeDiplome
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $prerequis_obligatoires = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $presentationFormation = null;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -529,6 +532,18 @@ class TypeDiplome
     public function setPrerequisObligatoires(?string $prerequis_obligatoires): static
     {
         $this->prerequis_obligatoires = $prerequis_obligatoires;
+
+        return $this;
+    }
+
+    public function getPresentationFormation(): ?string
+    {
+        return $this->presentationFormation;
+    }
+
+    public function setPresentationFormation(?string $presentationFormation): static
+    {
+        $this->presentationFormation = $presentationFormation;
 
         return $this;
     }

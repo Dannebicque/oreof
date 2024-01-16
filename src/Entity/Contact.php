@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ContactRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
 class Contact
 {
@@ -13,21 +15,27 @@ class Contact
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255)]
     private ?string $denomination = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $nom = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $prenom = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $telephone = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
 
+    #[Groups('parcours_json_versioning')]
     #[ORM\OneToOne(cascade: ['persist', 'remove'], fetch: 'EAGER')]
     private ?Adresse $adresse = null;
 

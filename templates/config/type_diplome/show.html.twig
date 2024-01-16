@@ -18,6 +18,16 @@
         </td>
     </tr>
     <tr>
+        <th>Présentation des formations</th>
+        <td>
+            {{
+                type_diplome.getPresentationFormation
+                ? type_diplome.getPresentationFormation|raw
+                : 'Non renseigné'
+            }}
+        </td>
+    </tr>
+    <tr>
         <th>Prérequis obligatoires</th>
         <td>
             {{  type_diplome.getPrerequisObligatoires 
