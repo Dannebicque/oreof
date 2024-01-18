@@ -617,27 +617,27 @@ class ParcoursController extends BaseController
             'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
             'dateVersion' => $dateVersion,
             'stringDifferences' => [
-                'presentationParcoursContenuFormation' => DiffHelper::calculate(
+                'presentationParcoursContenuFormation' => html_entity_decode(DiffHelper::calculate(
                     $parcours->getContenuFormation(),
                     $parcours_versioning->getParcours()->getContenuFormation(),
                     $rendererName,
                     $differOptions,
                     $rendererOptions
-                ),
-                'presentationParcoursObjectifsParcours' => DiffHelper::calculate(
+                )),
+                'presentationParcoursObjectifsParcours' => html_entity_decode(DiffHelper::calculate(
                     $parcours->getObjectifsParcours(),
                     $parcours_versioning->getParcours()->getObjectifsParcours(),
                     $rendererName,
                     $differOptions,
                     $rendererOptions
-                ),
-                'presentationParcoursResultatsAttendus' => DiffHelper::calculate(
+                )),
+                'presentationParcoursResultatsAttendus' => html_entity_decode(DiffHelper::calculate(
                     $parcours->getResultatsAttendus(),
                     $parcours_versioning->getParcours()->getResultatsAttendus(),
                     $rendererName,
                     $differOptions,
                     $rendererOptions
-                )
+                ))
             ],
             'cssDiff' => $cssDiff
         ]);
