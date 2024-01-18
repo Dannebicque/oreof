@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.10](https://github.com/Dannebicque/oreof/compare/v1.23.9...v1.23.10) (2024-01-18)
+
+
+### Features
+
+* Ajout d'un droit scolarité + filtres ([d23db6b](https://github.com/Dannebicque/oreof/commit/d23db6b59f947c33c05c16f3cb328132b1e8e57e))
+* Export codification au format excel ([f822ffb](https://github.com/Dannebicque/oreof/commit/f822ffbf91a7e9bc0b8efbeabb62cecec15aed76))
+
+
+### Bug Fixes
+
+* StructureSemestre DTO ([cf86838](https://github.com/Dannebicque/oreof/commit/cf8683856860cca0f84e805ae1481ad740c904c0))
+
 ### [1.23.9](https://github.com/Dannebicque/oreof/compare/v1.23.8...v1.23.9) (2024-01-18)
 
 
