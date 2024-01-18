@@ -11,7 +11,6 @@ namespace App\DTO;
 
 use App\Entity\Semestre;
 use App\Entity\SemestreParcours;
-use App\Entity\Ue;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -20,7 +19,7 @@ class StructureSemestre
     #[Groups(['DTO_json_versioning'])]
     public Semestre $semestre;
 
-    public SemestreParcours $semestreParcours;
+    public ?SemestreParcours $semestreParcours;
 
     #[Groups(['DTO_json_versioning'])]
     public bool $raccroche = false;
