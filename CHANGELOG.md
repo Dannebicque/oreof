@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.8](https://github.com/Dannebicque/oreof/compare/v1.23.7...v1.23.8) (2024-01-18)
+
+
+### Features
+
+* codification + affichage ([79357dd](https://github.com/Dannebicque/oreof/commit/79357dd5c83cb63c159d09b40265cdf3bc36ea8c))
+* codification EC + UE ([f9c52d2](https://github.com/Dannebicque/oreof/commit/f9c52d27a72aa6403fdf2d1893bdcf1076935d41))
+
 ### [1.23.7](https://github.com/Dannebicque/oreof/compare/v1.23.6...v1.23.7) (2024-01-10)
 
 
