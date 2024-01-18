@@ -11,8 +11,11 @@ namespace App\Controller\Config;
 
 use App\Entity\Mention;
 use App\Form\MentionType;
+use App\Repository\DomaineRepository;
 use App\Repository\MentionRepository;
+use App\Repository\TypeDiplomeRepository;
 use App\Utils\JsonRequest;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,16 +24,83 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/mention')]
 class MentionController extends AbstractController
 {
+    public const TAB_CODE_PARCOURS = [
+
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'Y',
+        'Z',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+    ];
+
     #[Route('/', name: 'app_mention_index', methods: ['GET'])]
     public function index(): Response
     {
         return $this->render('config/mention/index.html.twig');
     }
 
+    #[Route('/codification', name: 'app_mention_codification', methods: ['GET'])]
+    public function codification(
+        DomaineRepository      $domaineRepository,
+        TypeDiplomeRepository  $typeDiplomeRepository,
+        MentionRepository      $mentionRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $typeDiplomes = $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']);
+        $domaines = $domaineRepository->findBy([], ['libelle' => 'ASC']);
+
+        foreach ($typeDiplomes as $typeDiplome) {
+            foreach ($domaines as $domaine) {
+                $mentions = $mentionRepository->findBy(['typeDiplome' => $typeDiplome, 'domaine' => $domaine], ['libelle' => 'ASC']);
+                $codeLettre = 0;
+                foreach ($mentions as $mention) {
+                    $mention->setCodeApogee(self::TAB_CODE_PARCOURS[$codeLettre]);
+                    $entityManager->persist($mention);
+                    $codeLettre++;
+                }
+            }
+        }
+
+        $entityManager->flush();
+
+
+        return $this->redirectToRoute('app_mention_index');
+    }
+
     #[Route('/liste', name: 'app_mention_liste', methods: ['GET'])]
     public function liste(
-        Request $request,
-        MentionRepository $mentionRepository): Response
+        Request           $request,
+        MentionRepository $mentionRepository
+    ): Response
     {
         $sort = $request->query->get('sort') ?? 'type_diplome';
         $direction = $request->query->get('direction') ?? 'asc';
@@ -48,10 +118,9 @@ class MentionController extends AbstractController
 
     #[Route('/new', name: 'app_mention_new', methods: ['GET', 'POST'])]
     public function new(
-        Request $request,
+        Request           $request,
         MentionRepository $mentionRepository
-    ): Response
-    {
+    ): Response {
         $mention = new Mention();
         $form = $this->createForm(MentionType::class, $mention, [
             'action' => $this->generateUrl('app_mention_new'),
@@ -79,11 +148,10 @@ class MentionController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_mention_edit', methods: ['GET', 'POST'])]
     public function edit(
-        Request $request,
-        Mention $mention,
+        Request           $request,
+        Mention           $mention,
         MentionRepository $mentionRepository
-    ): Response
-    {
+    ): Response {
         $form = $this->createForm(MentionType::class, $mention, [
             'action' => $this->generateUrl('app_mention_edit', ['id' => $mention->getId()]),
         ]);
@@ -105,7 +173,7 @@ class MentionController extends AbstractController
     #[Route('/{id}/duplicate', name: 'app_mention_duplicate', methods: ['GET'])]
     public function duplicate(
         MentionRepository $mentionRepository,
-        Mention $mention
+        Mention           $mention
     ): Response {
         $mentionNew = clone $mention;
         $mentionNew->setLibelle($mention->getLibelle() . ' - Copie');
@@ -118,8 +186,8 @@ class MentionController extends AbstractController
      */
     #[Route('/{id}', name: 'app_mention_delete', methods: ['DELETE'])]
     public function delete(
-        Request $request,
-        Mention $mention,
+        Request           $request,
+        Mention           $mention,
         MentionRepository $mentionRepository
     ): Response {
         if ($this->isCsrfTokenValid(
