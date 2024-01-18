@@ -91,6 +91,18 @@
 {% endblock %}
 
 {% block bouton_header %}
+
+    <a
+            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Exporter la codification"
+            href="{{ path('app_codification_export') }}"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Exporter la codification</span>
+    </a>
+
     <a
             class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
             data-bs-toggle="tooltip"

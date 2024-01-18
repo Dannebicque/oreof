@@ -252,12 +252,12 @@ class ExcelWriter
 //       }
     }
 
-    public function genereFichier(string $name): StreamedResponse
+    public function genereFichier(string $name, bool $grid = false): StreamedResponse
     {
         $this->pageSetup($name);
         foreach ($this->spreadsheet->getAllSheets() as $shh) {
             $sh = $this->spreadsheet->setActiveSheetIndex($this->spreadsheet->getIndex($shh));
-            $sh->setShowGridlines(false);
+            $sh->setShowGridlines($grid);
             $sh->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A3);
             $sh->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
             $sh->getPageSetup()->setFitToPage(1);

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Classes\Apogee\ExportApogee;
 use App\Classes\Codification\CodificationFormation;
+use App\Classes\Export\Export;
+use App\Classes\Export\ExportCodification;
 use App\Entity\Formation;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
@@ -37,6 +39,65 @@ class CodificationController extends BaseController
                     in_array('Invité', $centre->getDroits()) ||
                     in_array('Directeur', $centre->getDroits())
                 )) {
+                    //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
+                    $formations[] = $formationRepository->findByComposante(
+                        $centre->getComposante(),
+                        $this->getAnneeUniversitaire()
+                    );
+                }
+            }
+
+            $formations[] = $formationRepository->findByComposanteDpe(
+                $this->getUser(),
+                $this->getAnneeUniversitaire()
+            );
+            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
+                $this->getUser(),
+                $this->getAnneeUniversitaire()
+            );
+            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
+                $this->getUser(),
+                $this->getAnneeUniversitaire()
+            );
+            $formations = array_merge(...$formations);
+        }
+
+        $tFormations = [];
+        foreach ($formations as $formation) {
+            $tFormations[$formation->getId()] = $formation;
+        }
+
+        return $this->render('codification/liste.html.twig', [
+            'formations' => $tFormations,
+        ]);
+    }
+
+    #[Route('/codification/export', name: 'app_codification_export')]
+    public function export(
+        ExportCodification              $export,
+        FormationRepository $formationRepository,
+    ): Response {
+        if ($this->isGranted('ROLE_ADMIN') ||
+            $this->isGranted('ROLE_SES') ||
+            $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
+            $this->isGranted('CAN_COMPOSANTE_SCOLARITE_ALL', $this->getUser()) ||
+            $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
+            $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getUser()) ||
+            $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
+            $formations = $formationRepository->findBySearch('', $this->getAnneeUniversitaire(), []);
+
+            return $export->exportFormations($formations);
+        } else {
+            $formations = [];
+            //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
+            $centres = $this->getUser()?->getUserCentres();
+            foreach ($centres as $centre) {
+                //todo: gérer avec un voter
+                if ($centre->getComposante() !== null && (
+                        in_array('Gestionnaire', $centre->getDroits()) ||
+                        in_array('Invité', $centre->getDroits()) ||
+                        in_array('Directeur', $centre->getDroits())
+                    )) {
                     //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
                     $formations[] = $formationRepository->findByComposante(
                         $centre->getComposante(),
