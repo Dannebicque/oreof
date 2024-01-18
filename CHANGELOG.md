@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.9](https://github.com/Dannebicque/oreof/compare/v1.23.8...v1.23.9) (2024-01-18)
+
+
+### Features
+
+* codification + affichage ([b4aa846](https://github.com/Dannebicque/oreof/commit/b4aa846f402e1ded252fffc1d1426fb4074c39f9))
+
+
+### Bug Fixes
+
+* StructureSemestre DTO ([5ed640f](https://github.com/Dannebicque/oreof/commit/5ed640f940224d7edb9850852e50d17bb581de8c))
+
 ### [1.23.8](https://github.com/Dannebicque/oreof/compare/v1.23.7...v1.23.8) (2024-01-18)
 
 
