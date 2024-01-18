@@ -16,7 +16,7 @@ enum RoleNiveauEnum: string
     case FORMATION = 'FORMATION';
     case PARCOURS = 'PARCOURS';
     case EC = 'EC';
-    case SCOLARITE = 'SCOLARITE';
+//    case SCOLARITE = 'SCOLARITE';
 
 
     public static function getAvailableTypes()
@@ -27,7 +27,7 @@ enum RoleNiveauEnum: string
             self::FORMATION->value,
             self::PARCOURS->value,
             self::EC->value,
-            self::SCOLARITE->value,
+//            self::SCOLARITE->value,
         ];
     }
 
@@ -39,7 +39,7 @@ enum RoleNiveauEnum: string
             self::FORMATION => 'Formation',
             self::PARCOURS => 'Parcours',
             self::EC => 'Fiche EC/Matière',
-            self::SCOLARITE => 'Scolarité',
+//            self::SCOLARITE => 'Scolarité',
         };
     }
 }

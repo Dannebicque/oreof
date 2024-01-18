@@ -21,7 +21,9 @@ class CodificationController extends BaseController
         if ($this->isGranted('ROLE_ADMIN') ||
             $this->isGranted('ROLE_SES') ||
             $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
+            $this->isGranted('CAN_COMPOSANTE_SCOLARITE_ALL', $this->getUser()) ||
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
+            $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
             $formations = $formationRepository->findBySearch('', $this->getAnneeUniversitaire(), []);
         } else {
