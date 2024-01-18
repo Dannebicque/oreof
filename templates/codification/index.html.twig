@@ -89,6 +89,10 @@
             title: 'Formations',
         },
         {
+            href:path('app_codification_liste'),
+            title: 'Codification des formations',
+        },
+        {
             href:path('app_formation_show', {slug:formation.slug}),
             title: 'Formation ' ~formation.displayLong,
         }
@@ -96,6 +100,16 @@
 {% endblock %}
 
 {% block bouton_header %}
+    <a
+            class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Retour à la codification des formations"
+            href="{{ path('app_codification_liste') }}"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour à la codification</span>
+    </a>
     <a
             class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
             data-bs-toggle="tooltip"
