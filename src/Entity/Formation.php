@@ -954,4 +954,12 @@ class Formation
 
         return $this;
     }
+
+    public function defaultParcours(): ?Parcours
+    {
+        if ($this->hasParcours === false &&  $this->parcours->count() === 1) {
+            return $this->parcours->first();
+        }
+        return null;
+    }
 }

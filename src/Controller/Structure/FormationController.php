@@ -16,22 +16,16 @@ use App\Repository\FormationRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[
-    Route('/structure/formation', name: 'structure_formation_')
-]
+#[Route('/structure/formation', name: 'structure_formation_')]
 class FormationController extends BaseController
 {
-    #[
-        Route('/', name: 'index')
-    ]
+    #[Route('/', name: 'index')]
     public function index(): Response
     {
         return $this->render('structure/formation/index.html.twig');
     }
 
-    #[
-        Route('/liste', name: 'liste')
-    ]
+    #[Route('/liste', name: 'liste')]
     public function liste(
         FormationRepository $formationRepository
     ): Response {
@@ -49,9 +43,7 @@ class FormationController extends BaseController
         ]);
     }
 
-    #[
-        Route('/detail/composante/{composante}', name: 'detail_composante')
-    ]
+    #[Route('/detail/composante/{composante}', name: 'detail_composante')]
     public function detailComposante(
         FormationRepository $formationRepository,
         Composante $composante

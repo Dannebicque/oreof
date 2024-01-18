@@ -197,6 +197,12 @@
                                         <span class="label">Validations</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ path('app_codification_liste') }}">
+                                        <i class="fal fa-file-binary icon"></i>
+                                        <span class="label">Codification</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     {% endif %}
@@ -413,6 +419,18 @@
                                         <li>
                                             <a href="{{ path('app_user_index') }}">
                                                 <span class="label">Utilisateurs</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#scolarite">
+                                        <span class="label">Scolarité</span>
+                                    </a>
+                                    <ul id="scolarite">
+                                        <li>
+                                            <a href="{{ path('app_codification_liste') }}">
+                                                <span class="label">Codification</span>
                                             </a>
                                         </li>
                                     </ul>

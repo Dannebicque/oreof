@@ -67,7 +67,6 @@ class CodificationFormation
             $this->setCodificationVersionEtape($parcours);
             $this->setCodificationSemestre($parcours);
         }
-
     }
 
     public function setCodificationParcours(Formation $formation): void
@@ -99,13 +98,38 @@ class CodificationFormation
             $code .= $formation->getTypeDiplome()?->getCodeApogee();
             $code .= $formation->getDomaine()?->getCodeApogee();
             $code .= $formation->getMention()?->getCodeApogee();
-            $code .= $parcours->getCodeApogee();
-            $parcours->setCodeApogeeDiplome($code);
+
+            foreach ($parcours->getSemestreParcours() as $sp) {
+                if ($parcours->isParcoursDefaut()) {
+                    $codeParcours = '0';
+                } elseif ($sp->getSemestre()?->isTroncCommun() === true) {
+                    //todo: vérifier le début de semestre dans la formation
+                    $codeParcours = 'X';
+                } else {
+                    $codeParcours = $parcours->getCodeApogee();
+                }
+                $sp->setCodeApogeeDiplome($code.$codeParcours); //todo: attention dépend du type d'anée
+            }
+
+            $this->setCodificationVersionDiplome($parcours);
             $this->entityManager->flush();
         }
     }
 
-    public function setCodificationVersionEtape(Parcours $parcours): void
+    public function setCodificationVersionDiplome(Parcours $parcours): void
+    {
+        $formation = $parcours->getFormation();
+        if ($formation !== null) {
+
+            foreach ($parcours->getSemestreParcours() as $sp) {
+                $code = $sp->getAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '2' : '1';
+                $code .= substr($formation->getComposantePorteuse()?->getCodeComposante(), 1, 2);
+                $sp->setCodeApogeeVersionDiplome($code);
+            }
+        }
+    }
+
+    public function setCodificationVersionEtape(Parcours $parcours): ?string
     {
         /*
          * 1. Régime d'inscription si FI/FC... identiques, 2 si FC différente, 3 si Alternance avec structure différente, 6 pour les LAS
@@ -116,10 +140,11 @@ class CodificationFormation
         if ($formation !== null) {
             $code = $parcours->getCodeRegimeInscription();
             $code .= $parcours->getLocalisation()?->getCodeApogee();
-            $code .= substr($formation->getVersion(), 0, 1);
-            $parcours->setCodeApogeeVersion($code);
-            $this->entityManager->flush();
+            $code .= $parcours->getCodeApogeeNumeroVersion();
+            return $code;
         }
+
+        return null;
     }
 
     public function setCodeEtape(Parcours $parcours): void
@@ -127,7 +152,8 @@ class CodificationFormation
         $semestres = $parcours->getSemestreParcours();
 
         foreach ($semestres as $semestre) {
-            $semestre->setCodeApogeeEtapeAnnee($parcours->getCodeApogeeDiplome() . $semestre->getOrdreAnnee());
+            $semestre->setCodeApogeeEtapeAnnee($parcours->getCodeDiplome($semestre->getAnnee()) . $semestre->getAnnee());
+            $semestre->setCodeApogeeEtapeVersion($this->setCodificationVersionEtape($parcours));
         }
         $this->entityManager->flush();
     }
@@ -151,7 +177,9 @@ class CodificationFormation
                     $code .= $formation->getMention()?->getCodeApogee();
 
                     // si semestre de tronc commun
-                    if ($semestre->getSemestre()->isTroncCommun() === true) {
+                    if ($parcours->isParcoursDefaut()) {
+                        $code .= '0';
+                    } elseif ($semestre->getSemestre()->isTroncCommun() === true) {
                         //todo: vérifier le début de semestre dans la formation
                         $code .= 'X';
                     } else {

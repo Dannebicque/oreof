@@ -79,7 +79,7 @@
 {% endblock %}
 
 {% block header %}
-    Codifciation de la formation {{ formation.displayLong }}
+    Codification de la formation {{ formation.displayLong }}
 {% endblock %}
 
 {% block breadcrumb %}
@@ -96,13 +96,14 @@
 {% endblock %}
 
 {% block bouton_header %}
-    <button
+    <a
             class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
             title="Générer la codification"
+            href="{{ path('app_codification', {formation:formation.id}) }}"
     >
         <i class="{{ iconAdd }}"></i>
         <span> Générer la codification</span>
-    </button>
+    </a>
 {% endblock %}
