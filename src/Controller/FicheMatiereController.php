@@ -11,6 +11,7 @@ namespace App\Controller;
 
 use App\Classes\JsonReponse;
 use App\Classes\verif\FicheMatiereState;
+use App\Entity\AnneeUniversitaire;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereVersioning;
@@ -35,7 +36,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -262,6 +265,7 @@ class FicheMatiereController extends AbstractController
             $ficheMatiereVersioning = new FicheMatiereVersioning();
             $ficheMatiereVersioning->setFicheMatiere($ficheMatiere);
             $ficheMatiereVersioning->setVersionTimestamp($now);
+            $ficheMatiereVersioning->setSlug($ficheMatiere->getSlug());
             // Fichier Json
             $ficheMatiereFileName = "fiche-matiere-{$ficheMatiere->getId()}-{$dateHeure}";
             $ficheMatiereVersioning->setFilename($ficheMatiereFileName);
@@ -275,7 +279,7 @@ class FicheMatiereController extends AbstractController
             ]);
             // Enregistrement du fichier 
             $fileSystem->appendToFile(
-                __DIR__ . "/../../versioning_json/fiche-matiere/{$ficheMatiere->getSlug()}/{$ficheMatiereFileName}.json", 
+                __DIR__ . "/../../versioning_json/fiche-matiere/{$ficheMatiereVersioning->getSlug()}/{$ficheMatiereFileName}.json", 
                 $ficheMatiereJson
             );
             // Enregistrement en BD
@@ -308,5 +312,36 @@ class FicheMatiereController extends AbstractController
             ]);
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
         }
-    }   
+    }
+    
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/{id}/versioning/view', name: 'app_fiche_matiere_versioning_view')]
+    public function getJsonVersion(
+        FicheMatiereVersioning $ficheMatiereVersioning
+    ){
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $serializer = new Serializer(
+            [
+                new ArrayDenormalizer(),
+                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor())
+            ],
+            [new JsonEncoder()]
+        );
+        $ficheMatiereJson = file_get_contents(
+            __DIR__ . "/../../versioning_json/fiche-matiere/"
+            . "{$ficheMatiereVersioning->getSlug()}/"
+            . "{$ficheMatiereVersioning->getFilename()}.json"
+        );
+        $ficheMatiere = $serializer->deserialize($ficheMatiereJson, FicheMatiere::class, 'json');
+        $dateVersion = $ficheMatiereVersioning->getVersionTimestamp()->format('d-m-Y à H:i');
+
+        return $this->render('fiche_matiere/show.versioning.html.twig', [
+            'ficheMatiere' => $ficheMatiere,
+            'formation' => $ficheMatiere->getParcours()->getFormation(),
+            'typeDiplome' => $ficheMatiere->getParcours()->getFormation()->getTypeDiplome(),
+            // 'bccs' => $bccs,
+            'dateHeure' => $dateVersion
+        ]);
+    }
+
 }

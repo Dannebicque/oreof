@@ -184,7 +184,7 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: CommentaireFormation::class)]
     private Collection $commentaires;
 
-    public function __construct(AnneeUniversitaire $anneeUniversitaire)
+    public function __construct(?AnneeUniversitaire $anneeUniversitaire)
     {
         $this->anneeUniversitaire = $anneeUniversitaire;
         $this->localisationMention = new ArrayCollection();

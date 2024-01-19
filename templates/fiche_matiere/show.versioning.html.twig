@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% set isVersioningView = true %}
+
+{% block content %}
+    <div class="row">
+        {{ include('typeDiplome/ec/common/_licence.html.twig') }}
+        <!-- Scrollspy Start -->
+        <div class="col-md-auto d-none d-lg-block" id="scrollSpyMenu">
+            <ul class="nav flex-column">
+                <li>
+                    <a class="nav-link p-2" href="#identite_enseignement">
+                        <i class="fal fa-chevron-right"></i>
+                        Identité de l'enseignement
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link p-2" href="#presentation">
+                        <i class="fal fa-chevron-right"></i>
+                        Présentation
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link p-2" href="#objectifs">
+                        <i class="fal fa-chevron-right"></i>
+                        Objectifs / compétences acquises
+                    </a>
+                </li>
+{#                <li>#}
+{#                    <a class="nav-link p-2" href="#structure">#}
+{#                        <i class="fal fa-chevron-right"></i>#}
+{#                        Structure et organisation pédagogiques#}
+{#                    </a>#}
+{#                </li>#}
+{#                <li>#}
+{#                    <a class="nav-link p-2" href="#mccc">#}
+{#                        <i class="fal fa-chevron-right"></i>#}
+{#                        Modalités de contrôle des connaissances#}
+{#                    </a>#}
+{#                </li>#}
+                <li>
+                    <a class="nav-link p-2" href="#infos">
+                        <i class="fal fa-chevron-right"></i>
+                        Infos Pratiques
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- Scrollspy End -->
+    </div>
+{% endblock %}
+
+{% block header %}
+    Détail de la fiche EC/matière : {{ ficheMatiere.libelle }} - <span class="text-primary">Version du {{ dateHeure }}</span>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('structure_fiche_matiere_index'), title: 'Liste des fiches EC/matières'},
+    ]}) }}
+{% endblock %}
+
+{# {% block bouton_header %}
+    <a href="{{ path('app_fiche_matiere_export', {id:ficheMatiere.id})  }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Télécharger en PDF"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Télécharger en PDF</span>
+    </a>
+    <a href="{{ path('structure_fiche_matiere_index')  }}"
+       class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Retour à la liste des fiches EC/matières"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour à la liste des fiches EC/matières</span>
+    </a>
+{% endblock %} #}

@@ -50,13 +50,14 @@ class FicheMatiere
     private ?bool $enseignementMutualise = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['fiche_matiere:read'])]
+    #[Groups(['fiche_matiere:read', 'fiche_matiere_versioning'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['fiche_matiere:read'])]
+    #[Groups(['fiche_matiere:read', 'fiche_matiere_versioning'])]
     private ?string $objectifs = null;
 
+    #[Groups('fiche_matiere_versioning')]
     #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'ficheMatieres', cascade: ['persist'])]
     private Collection $competences;
 
@@ -83,13 +84,15 @@ class FicheMatiere
     private ?bool $isTpDistancielMutualise = null;
 
     #[ORM\ManyToOne]
-    #[Groups(['fiche_matiere:read'])]
+    #[Groups(['fiche_matiere:read', 'fiche_matiere_versioning'])]
     private ?User $responsableFicheMatiere = null;
 
+    #[Groups(['fiche_matiere_versioning'])]
     #[ORM\ManyToMany(targetEntity: Langue::class, inversedBy: 'ficheMatieres', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'fiche_matiere_langue_dispense')]
     private Collection $langueDispense;
 
+    #[Groups(['fiche_matiere_versioning'])]
     #[ORM\ManyToMany(targetEntity: Langue::class, inversedBy: 'languesSupportsFicheMatieres', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'fiche_matiere_langue_support')]
     private Collection $langueSupport;

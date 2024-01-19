@@ -25,14 +25,15 @@ class Competence
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('fiche_matiere_versioning')]
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'competences')]
     private ?BlocCompetence $blocCompetence;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(length: 10)]
     private ?string $code = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(type: 'text')]
     private ?string $libelle = null;
 
