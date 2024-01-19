@@ -31,16 +31,17 @@ class Parcours
 
     public const PARCOURS_DEFAUT = 'Parcours par défaut';
 
+    #[Groups('fiche_matiere_versioning')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours', fetch: 'EAGER')]
     private ?Formation $formation;
 

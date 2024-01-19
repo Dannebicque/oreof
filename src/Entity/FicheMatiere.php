@@ -38,15 +38,15 @@ class FicheMatiere
     private ?int $id = null;
 
     #[ORM\Column(length: 250)]
-    #[Groups(['fiche_matiere:read', 'DTO_json_versioning'])]
+    #[Groups(['fiche_matiere:read', 'DTO_json_versioning', 'fiche_matiere_versioning'])]
     private ?string $libelle = null;
 
     #[ORM\Column(length: 250, nullable: true)]
-    #[Groups(['fiche_matiere:read'])]
+    #[Groups(['fiche_matiere:read', 'fiche_matiere_versioning'])]
     private ?string $libelleAnglais = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['fiche_matiere:read'])]
+    #[Groups(['fiche_matiere:read', 'fiche_matiere_versioning'])]
     private ?bool $enseignementMutualise = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -101,10 +101,11 @@ class FicheMatiere
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: ElementConstitutif::class, cascade: ['persist', 'remove'])]
     private Collection $elementConstitutifs;
 
+    #[Groups(['fiche_matiere_versioning'])]
     #[ORM\ManyToOne(inversedBy: 'ficheMatieres')]
     private ?Parcours $parcours = null;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereMutualisable::class)]
     private Collection $ficheMatiereParcours;
 
@@ -118,7 +119,7 @@ class FicheMatiere
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: HistoriqueFicheMatiere::class)]
     private Collection $historiqueFicheMatieres;
 
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(length: 255, unique: true)]
     #[Gedmo\Slug(fields: ['libelle'])]
     private ?string $slug = null;
@@ -162,6 +163,7 @@ class FicheMatiere
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $typeMccc = null;
 
+    #[Groups(['fiche_matiere_versioning'])]
     #[ORM\Column(nullable: true)]
     private ?bool $horsDiplome = null;
 
@@ -192,6 +194,9 @@ class FicheMatiere
     #[ORM\Column(length: 8, nullable: true)]
     private ?string $codeApogee = null;
 
+    #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereVersioning::class)]
+    private Collection $ficheMatiereVersionings;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -208,6 +213,7 @@ class FicheMatiere
         $this->apprentissagesCritiques = new ArrayCollection();
         $this->composante = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
+        $this->ficheMatiereVersionings = new ArrayCollection();
     }
 
     public function getEtatStep(int $step): bool
@@ -1035,6 +1041,36 @@ class FicheMatiere
     public function setCodeApogee(?string $codeApogee): static
     {
         $this->codeApogee = $codeApogee;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FicheMatiereVersioning>
+     */
+    public function getFicheMatiereVersionings(): Collection
+    {
+        return $this->ficheMatiereVersionings;
+    }
+
+    public function addFicheMatiereVersioning(FicheMatiereVersioning $ficheMatiereVersioning): static
+    {
+        if (!$this->ficheMatiereVersionings->contains($ficheMatiereVersioning)) {
+            $this->ficheMatiereVersionings->add($ficheMatiereVersioning);
+            $ficheMatiereVersioning->setFicheMatiere($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFicheMatiereVersioning(FicheMatiereVersioning $ficheMatiereVersioning): static
+    {
+        if ($this->ficheMatiereVersionings->removeElement($ficheMatiereVersioning)) {
+            // set the owning side to null (unless already changed)
+            if ($ficheMatiereVersioning->getFicheMatiere() === $this) {
+                $ficheMatiereVersioning->setFicheMatiere(null);
+            }
+        }
 
         return $this;
     }

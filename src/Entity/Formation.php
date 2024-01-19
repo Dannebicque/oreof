@@ -41,7 +41,7 @@ class Formation
     #[ORM\ManyToOne]
     private ?Domaine $domaine = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\ManyToOne(targetEntity: Composante::class, inversedBy: 'formationsPortees')]
     private ?Composante $composantePorteuse = null;
 
@@ -49,12 +49,12 @@ class Formation
     #[ORM\ManyToOne]
     private ?AnneeUniversitaire $anneeUniversitaire;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations')]
     private ?Mention $mention = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['formation:read'])]
+    #[Groups(['formation:read', 'fiche_matiere_versioning'])]
     private ?string $mentionTexte = null;
 
     #[Groups('parcours_json_versioning')]
@@ -151,12 +151,12 @@ class Formation
     #[ORM\Column]
     private ?array $etatSteps = [];
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\ManyToOne(inversedBy: 'formations', fetch: 'EAGER')]
     private ?TypeDiplome $typeDiplome = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['formation:read'])]
+    #[Groups(['formation:read', 'fiche_matiere_versioning'])]
     private ?string $sigle = null;
 
     #[Groups('parcours_json_versioning')]
