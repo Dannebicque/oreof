@@ -189,6 +189,9 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?array $etatFiche = [];
 
+    #[ORM\Column(length: 8, nullable: true)]
+    private ?string $codeApogee = null;
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -1022,5 +1025,17 @@ class FicheMatiere
         }
 
         return $langues;
+    }
+
+    public function getCodeApogee(): ?string
+    {
+        return $this->codeApogee;
+    }
+
+    public function setCodeApogee(?string $codeApogee): static
+    {
+        $this->codeApogee = $codeApogee;
+
+        return $this;
     }
 }

@@ -364,8 +364,7 @@ class FormationController extends BaseController
     #[Route('/{slug}', name: 'app_formation_show', methods: ['GET'])]
     public function show(
         TypeDiplomeRegistry     $typeDiplomeRegistry,
-        Formation               $formation,
-        CalculStructureParcours $calculStructureParcours
+        Formation               $formation
     ): Response {
         $typeDiplome = $formation->getTypeDiplome();
 

@@ -41,13 +41,22 @@ class SemestreParcours
     private ?SemestreMutualisable $semestreRaccroche = null;
 
     #[ORM\Column(length: 6, nullable: true)]
-    private ?string $codeApogeeEtapeAnnee = null;
+    private ?string $codeApogeeEtapeAnnee = null; //sera identique sur deux semestres de la même année
+
+    #[ORM\Column(length: 3, nullable: true)]
+    private ?string $codeApogeeEtapeVersion = null; //sera identique sur deux semestres de la même année
+
+    #[ORM\Column(length: 5, nullable: true)]
+    private ?string $codeApogeeDiplome = null; //sera identique sur plusieurs semestres, mais peut changer selon la présence d'un tronc commun ou pas
+
+    #[ORM\Column(length: 3, nullable: true)]
+    private ?string $codeApogeeVersionDiplome = null; //ne devrait pas changer mais plus cohérent de le mettre ici
 
     public function __construct(?Semestre $semestre, ?Parcours $parcours)
     {
         $this->setSemestre($semestre);
         $this->setParcours($parcours);
-        if($semestre->getOrdre()){
+        if ($semestre->getOrdre()) {
             $this->setOrdre($semestre->getOrdre());
         }
     }
@@ -136,7 +145,6 @@ class SemestreParcours
             default:
                 return 0;
         }
-
     }
 
     public function getOrdreAnnee(): int
@@ -149,7 +157,7 @@ class SemestreParcours
 
     public function display(): string
     {
-        return 'S'.$this->getOrdre();
+        return 'S' . $this->getOrdre();
     }
 
     public function getCodeApogeeEtapeAnnee(): ?string
@@ -163,4 +171,42 @@ class SemestreParcours
 
         return $this;
     }
+
+    public function getCodeApogeeEtapeVersion(): ?string
+    {
+        return $this->codeApogeeEtapeVersion;
+    }
+
+    public function setCodeApogeeEtapeVersion(?string $codeApogeeEtapeVersion): static
+    {
+        $this->codeApogeeEtapeVersion = $codeApogeeEtapeVersion;
+
+        return $this;
+    }
+
+    public function getCodeApogeeDiplome(): ?string
+    {
+        return $this->codeApogeeDiplome;
+    }
+
+    public function setCodeApogeeDiplome(?string $codeApogeeDiplome): static
+    {
+        $this->codeApogeeDiplome = $codeApogeeDiplome;
+
+        return $this;
+    }
+
+    public function getCodeApogeeVersionDiplome(): ?string
+    {
+        return $this->codeApogeeVersionDiplome;
+    }
+
+    public function setCodeApogeeVersionDiplome(?string $codeApogeeVersionDiplome): static
+    {
+        $this->codeApogeeVersionDiplome = $codeApogeeVersionDiplome;
+
+        return $this;
+    }
+
+
 }

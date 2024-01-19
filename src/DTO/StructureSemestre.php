@@ -10,7 +10,7 @@
 namespace App\DTO;
 
 use App\Entity\Semestre;
-use App\Entity\Ue;
+use App\Entity\SemestreParcours;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -18,6 +18,8 @@ class StructureSemestre
 {
     #[Groups(['DTO_json_versioning'])]
     public Semestre $semestre;
+
+    public ?SemestreParcours $semestreParcours;
 
     #[Groups(['DTO_json_versioning'])]
     public bool $raccroche = false;
@@ -31,10 +33,11 @@ class StructureSemestre
     #[Groups(['DTO_json_versioning'])]
     public HeuresEctsSemestre $heuresEctsSemestre;
 
-    public function __construct(Semestre $semestre, int $ordre, bool $raccroche = false)
+    public function __construct(Semestre $semestre, int $ordre, bool $raccroche = false, SemestreParcours $semestreParcours = null)
     {
         $this->ordre = $ordre;
         $this->semestre = $semestre;
+        $this->semestreParcours = $semestreParcours;
         $this->raccroche = $raccroche;
         $this->heuresEctsSemestre = new HeuresEctsSemestre();
     }

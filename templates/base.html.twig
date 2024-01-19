@@ -170,7 +170,7 @@
                         {% endif %}
                     {% endif %}
 
-                    {% if is_granted('ROLE_SES') %}
+                    {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') %}
                         <li>
                             <a href="#gestion_offre_formation" data-href="gestion_offre_formation">
                                 <i class="fal fa-school icon"></i>
@@ -190,11 +190,18 @@
                                         <span class="label">Export de fichier</span>
                                     </a>
                                 </li>
-
+                                {% if is_granted('ROLE_SES') %}
+                                    <li>
+                                        <a href="{{ path('app_validation_index') }}">
+                                            <i class="fal fa-person-chalkboard icon"></i>
+                                            <span class="label">Validations</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
                                 <li>
-                                    <a href="{{ path('app_validation_index') }}">
-                                        <i class="fal fa-person-chalkboard icon"></i>
-                                        <span class="label">Validations</span>
+                                    <a href="{{ path('app_codification_liste') }}">
+                                        <i class="fal fa-file-binary icon"></i>
+                                        <span class="label">Codification</span>
                                     </a>
                                 </li>
                             </ul>
@@ -393,7 +400,7 @@
                                 </li>
                             </ul>
                         </li>
-                    {% elseif is_granted('CAN_COMPOSANTE_MANAGE_MY', app.user) %}
+                    {% elseif is_granted('CAN_COMPOSANTE_MANAGE_MY', app.user) or is_granted('CAN_COMPOSANTE_SCOLARITE_MY', app.user) %}
                         <li class="mega">
                             <a href="#administration" data-href="administration">
                                 <i class="fal fa-wrench icon"></i>
@@ -413,6 +420,18 @@
                                         <li>
                                             <a href="{{ path('app_user_index') }}">
                                                 <span class="label">Utilisateurs</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#scolarite">
+                                        <span class="label">Scolarité</span>
+                                    </a>
+                                    <ul id="scolarite">
+                                        <li>
+                                            <a href="{{ path('app_codification_liste') }}">
+                                                <span class="label">Codification</span>
                                             </a>
                                         </li>
                                     </ul>

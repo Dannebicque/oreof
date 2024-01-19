@@ -5,9 +5,11 @@
 {% block content %}
 
     {{ component('mention_manage', {formation:formation, type:'formation'}) }}
-    {% if is_granted('ROLE_SES') %}
-    <a href="{{ path('app_codification_index', {formation: formation.id}) }}">Gérer la codification</a>
+
+    {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}
+    {{ include('formation/_gestion.html.twig', {formation: formation}) }}
     {% endif %}
+
     <div class="row">
         {{ include('typeDiplome/formation/common/_'~constant('SOURCE', typeD)~'.html.twig', {print:false}) }}
         <!-- Scrollspy Start -->

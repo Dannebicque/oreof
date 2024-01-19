@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Codification{% endblock %}
+
+{% block content %}
+    <h2 class="small-title">Les formations</h2>
+    <div class="card">
+        <div class="card-title"></div>
+        <div class="card-body">
+            <table class="table">
+                {#                //tableau HTML contenant les colonnes : Composante Mention Année d'étude Parcours Lieu de formation #}
+                {#                Diplôme 1er caractère Diplôme 2ème caractère Domaine(s) d'accréditation demandé(s) Diplôme 3ème #}
+                {#                caractère domaine Diplôme 4ème caractère mention Diplôme 5ème caractère parcours Code Diplôme Etape 6ème #}
+                {#                caractère année d'étude Code étape #}
+
+                <thead>
+                <tr>
+                    <th>Composante</th>
+                    <th>Mention</th>
+                    <th>Parcours</th>
+                    <th>Ville</th>
+                    <th>Code Diplôme</th>
+                    <th>Version Diplôme</th>
+                    <th>Année d'étude</th>
+                    <th>Code Etape</th>
+                    <th>Version Etape</th>
+                    <th>&nbsp;</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for formation in formations %}
+                    {% if formation.hasParcours == true %}
+                        {% for parcours in formation.parcours %}
+                            {% if parcours != null %}
+                                {% for annee in 1..parcours.annees %}
+                                    <tr>
+                                        <td>{{ formation.composantePorteuse != null ? formation.composantePorteuse.sigle : '-' }}</td>
+                                        <td>{{ formation.displayLong }}</td>
+                                        <td>{{ parcours.libelle }}</td>
+                                        <td>{{ parcours.localisation != null ? parcours.localisation.libelle : '' }}</td>
+                                        <td>{{ parcours.codeDiplome(annee) }}</td>
+                                        <td>{{ parcours.codeVersionDiplome(annee) }}</td>
+                                        <td>Année {{ annee }}</td>
+                                        <td>{{ parcours.codeEtape(annee) }}</td>
+                                        <td>{{ parcours.codeVersionEtape(annee) }}</td>
+                                        <td>
+                                            <a href="{{ path('app_codification', {formation:formation.id}) }}" class="btn btn-outline-warning">
+                                                <i class="fal fa-wrench"></i>
+                                                Générer</a>
+                                            <a href="{{ path('app_codification_index', {formation:formation.id}) }}" class="btn btn-outline-info">
+                                                <i class="{{ iconShow }}"></i>
+                                                Détails</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {% set parcours = formation.defaultParcours %}
+                        {% if parcours != null %}
+                            {% for annee in 1..parcours.annees %}
+                                <tr>
+                                    <td>{{ formation.composantePorteuse != null ? formation.composantePorteuse.sigle : '-' }}</td>
+                                    <td>{{ formation.displayLong }}</td>
+                                    <td>{{ parcours != null ? '' : 'Pas de parcours?' }}</td>
+                                    <td>{{ parcours.localisation != null ? parcours.localisation.libelle : '' }}</td>
+                                    <td>{{ parcours.codeDiplome(annee) }}</td>
+                                    <td>{{ parcours.codeVersionDiplome(annee) }}</td>
+                                    <td>Année {{ annee }}</td>
+                                    <td>{{ parcours.codeEtape(annee) }}</td>
+                                    <td>{{ parcours.codeVersionEtape(annee) }}</td>
+                                    <td>
+                                        <a href="{{ path('app_codification', {formation:formation.id}) }}">Générer</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block header %}
+    Codification des formations
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {href: path('app_formation_index'), title: 'Liste des formations'},
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+
+    <a
+            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Exporter la codification"
+            href="{{ path('app_codification_export') }}"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Exporter la codification</span>
+    </a>
+
+    <a
+            class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Générer la codification"
+            href="{{ path('app_codification_genere_all') }}"
+    >
+        <i class="{{ iconAdd }}"></i>
+        <span> Générer la codification</span>
+    </a>
+{% endblock %}

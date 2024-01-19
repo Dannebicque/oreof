@@ -547,4 +547,9 @@ class TypeDiplome
 
         return $this;
     }
+
+    public function getNbAnnee(): int
+    {
+        return ($this->semestreFin - $this->semestreDebut + 1) / 2;
+    }
 }

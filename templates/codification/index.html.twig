@@ -79,7 +79,7 @@
 {% endblock %}
 
 {% block header %}
-    Codifciation de la formation {{ formation.displayLong }}
+    Codification de la formation {{ formation.displayLong }}
 {% endblock %}
 
 {% block breadcrumb %}
@@ -89,6 +89,10 @@
             title: 'Formations',
         },
         {
+            href:path('app_codification_liste'),
+            title: 'Codification des formations',
+        },
+        {
             href:path('app_formation_show', {slug:formation.slug}),
             title: 'Formation ' ~formation.displayLong,
         }
@@ -96,19 +100,24 @@
 {% endblock %}
 
 {% block bouton_header %}
-    <button
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'Générer la codification',
-                modalUrl: path('app_codification', {formation:formation.id}) }) }}
-            data-action="click->modal#openModal"
+    <a
+            class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Retour à la codification des formations"
+            href="{{ path('app_codification_liste') }}"
+    >
+        <i class="{{ iconBack }}"></i>
+        <span> Retour à la codification</span>
+    </a>
+    <a
             class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-            data-size="lg"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
             title="Générer la codification"
+            href="{{ path('app_codification', {formation:formation.id}) }}"
     >
         <i class="{{ iconAdd }}"></i>
         <span> Générer la codification</span>
-    </button>
+    </a>
 {% endblock %}

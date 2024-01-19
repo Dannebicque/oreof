@@ -6,9 +6,9 @@
         {% if ec.elementConstitutif.ficheMatiere != null %}
             <a href="{{ url('app_fiche_matiere_show', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}">
                 {% if isBut is defined and isBut == true %}
-                    <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }}
+                    <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }} ({{ ec.elementConstitutif.displayCodeApogee }})
                 {% else %}
-                    {{ ec.elementConstitutif.ficheMatiere.display }}
+                    {{ ec.elementConstitutif.ficheMatiere.display }} ({{ ec.elementConstitutif.displayCodeApogee }})
                 {% endif %}
             </a>
             {% if app.user != null and is_granted('CAN_PARCOURS_EDIT_MY', ec.elementConstitutif.ficheMatiere) %}

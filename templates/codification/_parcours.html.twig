@@ -1,1 +1,17 @@
+
+<div class="div">
+    <div class="col-4">
+{#        Diplôme : {{ parcours.codeDiplome() }} ({{ parcours.codeApogeeVersionDiplome }})#}
+    </div>
+    <div class="col-4">
+        Parcours : {{ parcours.codeApogee }}
+    </div>
+</div>
 {{ include('typeDiplome/formation/_structure.html.twig', {parcours:parcours}) }}
+
+<hr>
+Codification Apogée
+
+{% for elp in apogee %}
+    {{ elp.display|raw }}
+{% endfor %}

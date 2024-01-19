@@ -2,6 +2,53 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.12](https://github.com/Dannebicque/oreof/compare/v1.23.11...v1.23.12) (2024-01-18)
+
+
+### Features
+
+* Génération des codes mentions ([d16f6ad](https://github.com/Dannebicque/oreof/commit/d16f6ad2ca4fd61ea6d755130d9dc4d1f10c49dc))
+
+### [1.23.11](https://github.com/Dannebicque/oreof/compare/v1.23.10...v1.23.11) (2024-01-18)
+
+
+### Bug Fixes
+
+* liens ([0ae2a8b](https://github.com/Dannebicque/oreof/commit/0ae2a8b98500b44d90dae519a6b2b4ed8f0ad351))
+
+### [1.23.10](https://github.com/Dannebicque/oreof/compare/v1.23.9...v1.23.10) (2024-01-18)
+
+
+### Features
+
+* Ajout d'un droit scolarité + filtres ([d23db6b](https://github.com/Dannebicque/oreof/commit/d23db6b59f947c33c05c16f3cb328132b1e8e57e))
+* Export codification au format excel ([f822ffb](https://github.com/Dannebicque/oreof/commit/f822ffbf91a7e9bc0b8efbeabb62cecec15aed76))
+
+
+### Bug Fixes
+
+* StructureSemestre DTO ([cf86838](https://github.com/Dannebicque/oreof/commit/cf8683856860cca0f84e805ae1481ad740c904c0))
+
+### [1.23.9](https://github.com/Dannebicque/oreof/compare/v1.23.8...v1.23.9) (2024-01-18)
+
+
+### Features
+
+* codification + affichage ([b4aa846](https://github.com/Dannebicque/oreof/commit/b4aa846f402e1ded252fffc1d1426fb4074c39f9))
+
+
+### Bug Fixes
+
+* StructureSemestre DTO ([5ed640f](https://github.com/Dannebicque/oreof/commit/5ed640f940224d7edb9850852e50d17bb581de8c))
+
+### [1.23.8](https://github.com/Dannebicque/oreof/compare/v1.23.7...v1.23.8) (2024-01-18)
+
+
+### Features
+
+* codification + affichage ([79357dd](https://github.com/Dannebicque/oreof/commit/79357dd5c83cb63c159d09b40265cdf3bc36ea8c))
+* codification EC + UE ([f9c52d2](https://github.com/Dannebicque/oreof/commit/f9c52d27a72aa6403fdf2d1893bdcf1076935d41))
+
 ### [1.23.7](https://github.com/Dannebicque/oreof/compare/v1.23.6...v1.23.7) (2024-01-10)
 
 

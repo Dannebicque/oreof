@@ -216,12 +216,6 @@ class Parcours
     #[ORM\Column(length: 1, nullable: true)]
     private ?string $codeApogee = null;
 
-    #[ORM\Column(length: 5, nullable: true)]
-    private ?string $codeApogeeDiplome = null;
-
-    #[ORM\Column(length: 3, nullable: true)]
-    private ?string $codeApogeeVersion = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descriptifHautPage = null;
 
@@ -237,6 +231,10 @@ class Parcours
     #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: Contact::class)]
     private Collection $contacts;
+
+    #[ORM\Column(length: 1, nullable: true)]
+    private ?string $codeApogeeNumeroVersion = "1"; //ne devrait pas changer mais plus cohérent de le mettre ici
+
 
     public function __construct(?Formation $formation)
     {
@@ -1144,30 +1142,6 @@ class Parcours
         return $this;
     }
 
-    public function getCodeApogeeDiplome(): ?string
-    {
-        return $this->codeApogeeDiplome;
-    }
-
-    public function setCodeApogeeDiplome(?string $codeApogeeDiplome): static
-    {
-        $this->codeApogeeDiplome = $codeApogeeDiplome;
-
-        return $this;
-    }
-
-    public function getCodeApogeeVersion(): ?string
-    {
-        return $this->codeApogeeVersion;
-    }
-
-    public function setCodeApogeeVersion(?string $codeApogeeVersion): static
-    {
-        $this->codeApogeeVersion = $codeApogeeVersion;
-
-        return $this;
-    }
-
     public function getCodeRegimeInscription()
     {
         $t = [];
@@ -1279,6 +1253,71 @@ class Parcours
                 $contact->setParcours(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAnnees(): int
+    {
+        return $this->getSemestreParcours()->count() / 2;
+    }
+
+    public function getCodeDiplome(int $annee): ?string
+    {
+        $semestres = $this->semestreParcours;
+        $semestres = $semestres->filter(fn(SemestreParcours $semestre) => $semestre->getOrdre() === $annee * 2 - 1);
+
+        if ($semestres->count() === 0) {
+            return null;
+        }
+
+        return $semestres->first()->getCodeApogeeDiplome();
+    }
+
+    public function getCodeEtape(int $annee): ?string
+    {
+        $semestres = $this->semestreParcours;
+        $semestres = $semestres->filter(fn(SemestreParcours $semestre) => $semestre->getOrdre() === $annee * 2 - 1);
+
+        if ($semestres->count() === 0) {
+            return null;
+        }
+
+        return $semestres->first()->getCodeApogeeEtapeAnnee();
+    }
+
+    public function getCodeVersionDiplome(int $annee): ?string
+    {
+        $semestres = $this->semestreParcours;
+        $semestres = $semestres->filter(fn(SemestreParcours $semestre) => $semestre->getOrdre() === $annee * 2 - 1);
+
+        if ($semestres->count() === 0) {
+            return null;
+        }
+
+        return $semestres->first()->getCodeApogeeVersionDiplome();
+    }
+
+    public function getCodeVersionEtape(int $annee): ?string
+    {
+        $semestres = $this->semestreParcours;
+        $semestres = $semestres->filter(fn(SemestreParcours $semestre) => $semestre->getOrdre() === $annee * 2 - 1);
+
+        if ($semestres->count() === 0) {
+            return null;
+        }
+
+        return $semestres->first()->getCodeApogeeEtapeVersion();
+    }
+
+    public function getCodeApogeeNumeroVersion(): ?string
+    {
+        return $this->codeApogeeNumeroVersion ?? "1";
+    }
+
+    public function setCodeApogeeNumeroVersion(?string $codeApogeeNumeroVersion = "1"): static
+    {
+        $this->codeApogeeNumeroVersion = $codeApogeeNumeroVersion;
 
         return $this;
     }
