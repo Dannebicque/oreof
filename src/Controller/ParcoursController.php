@@ -641,7 +641,14 @@ class ParcoursController extends BaseController
                         $rendererName,
                         $differOptions,
                         $rendererOptions
-                    ))
+                    )),
+                    'presentationFormationObjectifsFormation' => html_entity_decode(DiffHelper::calculate(
+                        $parcours->getFormation()?->getObjectifsFormation(),
+                        $parcours_versioning->getParcours()?->getFormation()?->getObjectifsFormation(),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    )),
                 ],
                 'cssDiff' => $cssDiff
             ]);
