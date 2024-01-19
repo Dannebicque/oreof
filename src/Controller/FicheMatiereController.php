@@ -335,11 +335,20 @@ class FicheMatiereController extends AbstractController
         $ficheMatiere = $serializer->deserialize($ficheMatiereJson, FicheMatiere::class, 'json');
         $dateVersion = $ficheMatiereVersioning->getVersionTimestamp()->format('d-m-Y à H:i');
 
+        $bccs = [];
+        foreach ($ficheMatiere->getCompetences() as $competence) {
+            if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
+                $bccs[$competence->getBlocCompetence()?->getId()]['bcc'] = $competence->getBlocCompetence();
+                $bccs[$competence->getBlocCompetence()?->getId()]['competences'] = [];
+            }
+            $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
+        }
+
         return $this->render('fiche_matiere/show.versioning.html.twig', [
             'ficheMatiere' => $ficheMatiere,
             'formation' => $ficheMatiere->getParcours()->getFormation(),
             'typeDiplome' => $ficheMatiere->getParcours()->getFormation()->getTypeDiplome(),
-            // 'bccs' => $bccs,
+            'bccs' => $bccs,
             'dateHeure' => $dateVersion
         ]);
     }
