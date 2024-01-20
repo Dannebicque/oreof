@@ -13,6 +13,7 @@ use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\SemestreParcours;
+use App\Enums\TypeParcoursEnum;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CodificationFormation
@@ -138,7 +139,11 @@ class CodificationFormation
          */
         $formation = $parcours->getFormation();
         if ($formation !== null) {
-            $code = $parcours->getCodeRegimeInscription();
+            if ($parcours->getTypeParcours() !== null && ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1 || $parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23)) {
+                $code = '6';
+            } else {
+                $code = $parcours->getCodeRegimeInscription();
+            }
             $code .= $parcours->getLocalisation()?->getCodeApogee();
             $code .= $parcours->getCodeApogeeNumeroVersion();
             return $code;
@@ -208,7 +213,8 @@ class CodificationFormation
     {
         $ecs = $ue->getElementConstitutifs();
         foreach ($ecs as $ec) {
-            $ec->setCodeApogee($ue->getCodeApogee() . $ec->getOrdre());
+            //todo: gérer ordre des EC de BUT avec un ordre > 99 + codif SAE (50) + stage (60), ...
+            $ec->setCodeApogee($ue->getCodeApogee() . substr($ec->getOrdre(),0,2));
         }
     }
 }

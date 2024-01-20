@@ -64,14 +64,21 @@
                                     <td>{{ formation.composantePorteuse != null ? formation.composantePorteuse.sigle : '-' }}</td>
                                     <td>{{ formation.displayLong }}</td>
                                     <td>{{ parcours != null ? '' : 'Pas de parcours?' }}</td>
-                                    <td>{{ parcours.localisation != null ? parcours.localisation.libelle : '' }}</td>
+                                    <td>
+                                        {% for ville in formation.localisationMention %}{{ ville.libelle }}{% endfor %}
+                                    </td>
                                     <td>{{ parcours.codeDiplome(annee) }}</td>
                                     <td>{{ parcours.codeVersionDiplome(annee) }}</td>
                                     <td>Année {{ annee }}</td>
                                     <td>{{ parcours.codeEtape(annee) }}</td>
                                     <td>{{ parcours.codeVersionEtape(annee) }}</td>
                                     <td>
-                                        <a href="{{ path('app_codification', {formation:formation.id}) }}">Générer</a>
+                                        <a href="{{ path('app_codification', {formation:formation.id}) }}" class="btn btn-outline-warning">
+                                            <i class="fal fa-wrench"></i>
+                                            Générer</a>
+                                        <a href="{{ path('app_codification_index', {formation:formation.id}) }}" class="btn btn-outline-info">
+                                            <i class="{{ iconShow }}"></i>
+                                            Détails</a>
                                     </td>
                                 </tr>
                             {% endfor %}
