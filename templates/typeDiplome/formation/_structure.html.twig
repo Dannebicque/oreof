@@ -38,7 +38,7 @@
             {% set presentiel = parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
             {% set distanciel = parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 2 or parcours.modalitesEnseignement.value == 1) %}
 
-            {% for ordre, semestre in dto.semestres %}
+            {% for ordre, semestre in dto.semestres|filter(semestre => (semestre.semestre.nonDispense == false)) %}
                 <tr>
                     <th
                             class="border-left-semestre-{{ ordre }}"

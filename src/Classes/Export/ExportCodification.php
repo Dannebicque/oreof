@@ -21,7 +21,7 @@ class ExportCodification
 
     public function exportFormations(array $formations)
     {
-        $this->excelWriter->nouveauFichier('Export Régimes');
+        $this->excelWriter->nouveauFichier('Export Codification');
         $this->excelWriter->setActiveSheetIndex(0);
 
         $this->excelWriter->writeCellXY(1, 1, 'Composante');
@@ -36,57 +36,12 @@ class ExportCodification
 
         $ligne = 2;
 
-        /* {% for formation in formations %}
-         {% if formation.hasParcours == true %}
-         {% for parcours in formation.parcours %}
-         {% if parcours != null %}
-         {% for annee in 1..parcours.annees %}
-         <tr>
-                                         <td>{{ formation.composantePorteuse != null ? formation.composantePorteuse.sigle : '-' }}</td>
-                                         <td>{{ formation.displayLong }}</td>
-                                         <td>{{ parcours.libelle }}</td>
-                                         <td>{{ parcours.localisation != null ? parcours.localisation.libelle : '' }}</td>
-                                         <td>{{ parcours.codeDiplome(annee) }}</td>
-                                         <td>{{ parcours.codeVersionDiplome(annee) }}</td>
-                                         <td>Année {{ annee }}</td>
-                                         <td>{{ parcours.codeEtape(annee) }}</td>
-                                         <td>{{ parcours.codeVersionEtape(annee) }}</td>
-                                         <td>
-                                             <a href="{{ path('app_codification', {formation:formation.id}) }}">Générer</a>
-                                         </td>
-                                     </tr>
-                                 {% endfor %}
-                             {% endif %}
-                         {% endfor %}
-                     {% else %}
-                         {% set parcours = formation.defaultParcours %}
-                         {% if parcours != null %}
-                             {% for annee in 1..parcours.annees %}
-                                 <tr>
-                                     <td>{{ formation.composantePorteuse != null ? formation.composantePorteuse.sigle : '-' }}</td>
-                                     <td>{{ formation.displayLong }}</td>
-                                     <td>{{ parcours != null ? '' : 'Pas de parcours?' }}</td>
-                                     <td>{{ parcours.localisation != null ? parcours.localisation.libelle : '' }}</td>
-                                     <td>{{ parcours.codeDiplome(annee) }}</td>
-                                     <td>{{ parcours.codeVersionDiplome(annee) }}</td>
-                                     <td>Année {{ annee }}</td>
-                                     <td>{{ parcours.codeEtape(annee) }}</td>
-                                     <td>{{ parcours.codeVersionEtape(annee) }}</td>
-                                     <td>
-                                         <a href="{{ path('app_codification', {formation:formation.id}) }}">Générer</a>
-                                     </td>
-                                 </tr>
-                             {% endfor %}
-                         {% endif %}
-                     {% endif %}
-                 {% endfor %}
-        */
 
         foreach ($formations as $formation) {
             if ($formation->isHasParcours()) {
                 foreach ($formation->getParcours() as $parcours) {
                     if (null !== $parcours) {
-                        foreach (range(1, $parcours->getAnnees()) as $annee) {
+                        foreach ($parcours->getAnnees() as $annee) {
                             $this->excelWriter->writeCellXY(1, $ligne, $formation->getComposantePorteuse()?->getLibelle());
                             $this->excelWriter->writeCellXY(2, $ligne, $formation->getDisplayLong());
                             $this->excelWriter->writeCellXY(3, $ligne, $parcours->getLibelle());
@@ -103,7 +58,7 @@ class ExportCodification
             } else {
                 $parcours = $formation->defaultParcours();
                 if (null !== $parcours) {
-                    foreach (range(1, $parcours->getAnnees()) as $annee) {
+                    foreach ($parcours->getAnnees() as $annee) {
                         $this->excelWriter->writeCellXY(1, $ligne, $formation->getComposantePorteuse()?->getLibelle());
                         $this->excelWriter->writeCellXY(2, $ligne, $formation->getDisplayLong());
                         $this->excelWriter->writeCellXY(3, $ligne, $parcours->getLibelle());

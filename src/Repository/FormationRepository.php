@@ -14,6 +14,7 @@ use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\Mention;
 use App\Entity\Parcours;
+use App\Entity\TypeDiplome;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -344,6 +345,25 @@ class FormationRepository extends ServiceEntityRepository
             ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
             ->andWhere('f.typeDiplome = :typeDiplome')
             ->setParameter('composante', $composante)
+            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('typeDiplome', $typeDiplome)
+            ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
+            ->addOrderBy(
+                'CASE
+                            WHEN f.mention IS NOT NULL THEN m.libelle
+                            WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
+                            ELSE f.mentionTexte
+                            END',
+                'ASC'
+            )->getQuery()
+            ->getResult();
+    }
+
+    public function findByAnneeUniversitaireAndTypeDiplome(AnneeUniversitaire $anneeUniversitaire, TypeDiplome $typeDiplome): array
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('f.typeDiplome = :typeDiplome')
             ->setParameter('anneeUniversitaire', $anneeUniversitaire)
             ->setParameter('typeDiplome', $typeDiplome)
             ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')

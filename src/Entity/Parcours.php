@@ -1257,9 +1257,23 @@ class Parcours
         return $this;
     }
 
-    public function getAnnees(): int
+    public function getAnnees(): array
     {
-        return $this->getSemestreParcours()->count() / 2;
+        $annees = [];
+        foreach ($this->getSemestreParcours() as $semestreParcours) {
+
+            if ($semestreParcours->getSemestre()?->isNonDispense() === false) {
+
+                if ($semestreParcours->getOrdre() % 2 === 0) {
+
+                    $annees[] = $semestreParcours->getOrdre() / 2;
+                } else {
+                    $annees[] = ($semestreParcours->getOrdre() + 1) / 2;
+                }
+            }
+        }
+
+        return array_unique($annees);
     }
 
     public function getCodeDiplome(int $annee): ?string
@@ -1270,10 +1284,6 @@ class Parcours
     private function getSemestrePourAnnee(int $annee): ?SemestreParcours
     {
         $semestres = $this->semestreParcours;
-
-        if ($annee ===1 && $semestres->count() === 2) {
-            return $semestres->first();
-        }
 
         $semestres = $semestres->filter(fn(SemestreParcours $semestre) => $semestre->getOrdre() === $annee * 2 - 1);
 

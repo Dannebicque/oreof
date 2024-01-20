@@ -25,10 +25,10 @@ class ExportApogee
     public Parcours $parcours;
 
     public function __construct(
-        protected EntityManagerInterface $entityManager,
+        protected EntityManagerInterface       $entityManager,
         protected ElementConstitutifRepository $elementConstitutifRepository
-    )
-    {}
+    ) {
+    }
 
     public function genereExportApogee(Parcours $parcours)
     {
@@ -37,24 +37,24 @@ class ExportApogee
         $structureParcours = $calculStructureParcours->calcul($parcours);
 
         foreach ($structureParcours->semestres as $semestre) {
-            $this->tabsElp[] = $this->genereElpSemestre($semestre);
-            foreach ($semestre->ues() as $ue) {
-                $this->tabsElp[] = $this->genereElpUe($ue, $semestre);
+            if ($semestre->semestre->isNonDispense() === false) {
+                $this->tabsElp[] = $this->genereElpSemestre($semestre);
+                foreach ($semestre->ues() as $ue) {
+                    $this->tabsElp[] = $this->genereElpUe($ue, $semestre);
 //                foreach ($ue->getElps() as $elp) {
 //                    //on genere l'elp
 //                    $this->genereElp($elp);
 //                }
+                }
             }
         }
-
-
     }
 
     private function genereElpSemestre(StructureSemestre $semestre): Elp
     {
         $elp = new Elp();
-        $elp->codElp = $semestre->semestre->getCodeApogee();
-        $elp->libElp = $this->prepareLibelle('Semestre '.$semestre->semestre->getOrdre(), 60);
+        $elp->codElp = $semestre->semestre->getCodeApogee() ?? '-erreur-';
+        $elp->libElp = $this->prepareLibelle('Semestre ' . $semestre->semestre->getOrdre(), 60);
         $elp->libCourtElp = $this->prepareLibelle($semestre->semestre->display(), 25);
         $elp->codNatureElp = CodeNatuElpEnum::SEM;
         $elp->codComposante = $this->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? 'err';
