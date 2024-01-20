@@ -560,19 +560,21 @@ class LicenceMccc
             $this->excelWriter->mergeCellsCaR(2, $ligne, 3, $ligne);
             $ligne++;
             foreach ($bcc->getCompetences() as $competence) {
-                $this->excelWriter->writeCellXY(2, $ligne, $competence->getCode(), ['font-weight' => 'bold', 'style' => 'HORIZONTAL_RIGHT']);
+                $this->excelWriter->writeCellXY(2, $ligne, $competence->getCode(), ['font-weight' => 'bold', 'style' => 'HORIZONTAL_RIGHT', 'valign' => 'VERTICAL_CENTER']);
+                $this->excelWriter->mergeCellsCaR(3, $ligne, 4, $ligne);
                 $this->excelWriter->writeCellXY(3, $ligne, $competence->getLibelle(), ['wrap' => true]);
-                $this->excelWriter->getRowAutosize($ligne);
+                $height = ceil(strlen($competence->getLibelle()) / 140) * 15;
+                $this->excelWriter->getRowDimension($ligne, $height);
                 $ligne++;
             }
+            $ligne++;
         }
 
-        $this->excelWriter->getColumnsAutoSize('D', 'D');
-        $this->excelWriter->setPrintArea('A1:I' . $ligne);
+        $this->excelWriter->getColumnsAutoSizeInt(4, 4);
+        $this->excelWriter->setPrintArea('A1:D' . $ligne);
         $this->excelWriter->setOrientationPage(PageSetup::ORIENTATION_LANDSCAPE);
         $this->excelWriter->configSheet(
-            ['zoom' => 60,
-                'topLeftCell' => 'A1']
+            ['zoom' => 60, 'topLeftCell' => 'A1']
         );
     }
 
