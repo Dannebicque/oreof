@@ -67,6 +67,7 @@ class CodificationFormation
             $this->setCodeEtape($parcours);
             $this->setCodificationVersionEtape($parcours);
             $this->setCodificationSemestre($parcours);
+            $this->entityManager->flush();
         }
     }
 
@@ -80,7 +81,7 @@ class CodificationFormation
                 $i++;
             }
 
-            $this->entityManager->flush();
+            //$this->entityManager->flush();
         }
     }
 
@@ -113,7 +114,7 @@ class CodificationFormation
             }
 
             $this->setCodificationVersionDiplome($parcours);
-            $this->entityManager->flush();
+            //$this->entityManager->flush();
         }
     }
 
@@ -160,7 +161,7 @@ class CodificationFormation
             $semestre->setCodeApogeeEtapeAnnee($parcours->getCodeDiplome($semestre->getAnnee()) . $semestre->getAnnee());
             $semestre->setCodeApogeeEtapeVersion($this->setCodificationVersionEtape($parcours));
         }
-        $this->entityManager->flush();
+        //$this->entityManager->flush();
     }
 
     public function setCodificationSemestre(Parcours $parcours): void
@@ -196,7 +197,7 @@ class CodificationFormation
                     $this->setCodificationUe($semestre->getSemestre());
                 }
             }
-            $this->entityManager->flush();
+            //$this->entityManager->flush();
         }
     }
 
