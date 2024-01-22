@@ -101,6 +101,7 @@ class FicheMatiere
     #[Groups(['fiche_matiere:read'])]
     private ?array $etatSteps = [];
 
+    #[Groups('fiche_matiere_versioning_ec_parcours')]
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: ElementConstitutif::class, cascade: ['persist', 'remove'])]
     private Collection $elementConstitutifs;
 

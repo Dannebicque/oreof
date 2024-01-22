@@ -31,13 +31,13 @@ class Parcours
 
     public const PARCOURS_DEFAUT = 'Parcours par défaut';
 
-    #[Groups('fiche_matiere_versioning')]
+    #[Groups('fiche_matiere_versioning_ec_parcours')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'fiche_matiere_versioning_ec_parcours'])]
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 

@@ -26,6 +26,7 @@
                     <div class="card-body">
                         <ul class="list-unstyled">
                             <li>
+                            {% if isVersioningView == false %}
                                 <button
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
@@ -41,6 +42,9 @@
                                     <i class="{{ iconShow }}"></i>
                                     <span> Voir les éléments pour le parcours <strong>{{ ec.parcours.libelle }}</strong></span>
                                 </button>
+                                {% else %}                                        
+                                    <span><strong>{{ ec.parcours.libelle }}</strong></span>
+                                {% endif %}
                             </li>
                         </ul>
                     </div>

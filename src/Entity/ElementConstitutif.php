@@ -26,6 +26,7 @@ class ElementConstitutif
 {
     use LifeCycleTrait;
 
+    #[Groups('fiche_matiere_versioning_ec_parcours')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -92,6 +93,7 @@ class ElementConstitutif
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
     private ?FicheMatiere $ficheMatiere = null;
 
+    #[Groups('fiche_matiere_versioning_ec_parcours')]
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?Parcours $parcours = null;
 

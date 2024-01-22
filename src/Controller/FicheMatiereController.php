@@ -271,7 +271,7 @@ class FicheMatiereController extends AbstractController
             $ficheMatiereVersioning->setFilename($ficheMatiereFileName);
             // Serialization
             $ficheMatiereJson = $serializer->serialize($ficheMatiere, 'json', [
-                AbstractObjectNormalizer::GROUPS => ['fiche_matiere_versioning'],
+                AbstractObjectNormalizer::GROUPS => ['fiche_matiere_versioning', 'fiche_matiere_versioning_ec_parcours'],
                 'circular_reference_limit' => 2,
                 AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
                 AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
