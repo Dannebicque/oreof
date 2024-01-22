@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.15](https://github.com/Dannebicque/oreof/compare/v1.23.14...v1.23.15) (2024-01-22)
+
+
+### Bug Fixes
+
+* CalculDTO avec BUT ([0ec7f3b](https://github.com/Dannebicque/oreof/commit/0ec7f3b1e324a8638f31d42a518f8657727ed38f))
+
 ### [1.23.14](https://github.com/Dannebicque/oreof/compare/v1.23.13...v1.23.14) (2024-01-22)
 
 
