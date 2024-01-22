@@ -25,6 +25,7 @@ use App\Utils\JsonRequest;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
+use Jfcherng\Diff\DiffHelper;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -344,12 +345,44 @@ class FicheMatiereController extends AbstractController
             $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
         }
 
+        $cssDiff = DiffHelper::getStyleSheet();
+
+        $rendererName = 'Inline';
+        $differOptions = [
+            'context' => 1,
+            'ignoreWhitespace' => true,
+            'ignoreLineEnding' => true,
+        ];
+        $rendererOptions = [
+            'detailLevel' => 'char',
+            'lineNumbers' => false,
+            'showHeader' => false,
+            'separateBlock' => false,
+        ];
+
         return $this->render('fiche_matiere/show.versioning.html.twig', [
             'ficheMatiere' => $ficheMatiere,
             'formation' => $ficheMatiere->getParcours()->getFormation(),
             'typeDiplome' => $ficheMatiere->getParcours()->getFormation()->getTypeDiplome(),
             'bccs' => $bccs,
-            'dateHeure' => $dateVersion
+            'dateHeure' => $dateVersion,
+            'stringDifferences' => [
+                'descriptionEnseignement' => html_entity_decode(DiffHelper::calculate(
+                    $ficheMatiere->getDescription(),
+                    $ficheMatiereVersioning->getFicheMatiere()->getDescription(),
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                'objectifsEnseignement' => html_entity_decode(DiffHelper::calculate(
+                    $ficheMatiere->getObjectifs(),
+                    $ficheMatiereVersioning->getFicheMatiere()->getObjectifs(),
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                ))
+            ],
+            'cssDiff' => $cssDiff
         ]);
     }
 
