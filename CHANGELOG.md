@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.14](https://github.com/Dannebicque/oreof/compare/v1.23.13...v1.23.14) (2024-01-22)
+
+
+### Bug Fixes
+
+* accès JSON ([27c5fc7](https://github.com/Dannebicque/oreof/commit/27c5fc793b79513345bc6af4382a2d56f62fb97c))
+* Codification + affichage LP ([ff5e02c](https://github.com/Dannebicque/oreof/commit/ff5e02ceded21f3e763700426372a7665f8660a3))
+
 ### [1.23.13](https://github.com/Dannebicque/oreof/compare/v1.23.12...v1.23.13) (2024-01-20)
 
 
