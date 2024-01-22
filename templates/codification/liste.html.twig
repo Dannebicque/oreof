@@ -3,86 +3,53 @@
 {% block title %}Codification{% endblock %}
 
 {% block content %}
-    <h2 class="small-title">Les formations</h2>
-    <div class="card">
-        <div class="card-title"></div>
-        <div class="card-body">
-            <table class="table">
-                {#                //tableau HTML contenant les colonnes : Composante Mention Année d'étude Parcours Lieu de formation #}
-                {#                Diplôme 1er caractère Diplôme 2ème caractère Domaine(s) d'accréditation demandé(s) Diplôme 3ème #}
-                {#                caractère domaine Diplôme 4ème caractère mention Diplôme 5ème caractère parcours Code Diplôme Etape 6ème #}
-                {#                caractère année d'étude Code étape #}
+    <div class="mt-3"
+            {{ stimulus_controller('wizard', {
+                url: path('app_codification_liste_type_diplome'),
+                step: typeDiplomes[0].id,
+            }) }}
+    >
 
-                <thead>
-                <tr>
-                    <th>Composante</th>
-                    <th>Mention</th>
-                    <th>Parcours</th>
-                    <th>Ville</th>
-                    <th>Code Diplôme</th>
-                    <th>Version Diplôme</th>
-                    <th>Année d'étude</th>
-                    <th>Code Etape</th>
-                    <th>Version Etape</th>
-                    <th>&nbsp;</th>
-                </tr>
-                </thead>
+        <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs" id="lineTitleTabsContainer"
+            role="tablist">
+            {% for typeDiplome in typeDiplomes %}
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {% if loop.first %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
+                            {{ stimulus_action('wizard', 'changeStep', 'click', {step: typeDiplome.id}) }}
+                    >
+                        {{ typeDiplome.libelle }}
+                    </a>
+                </li>
+            {% endfor %}
 
-                <tbody>
-                {% for formation in formations %}
-                    {% if formation.hasParcours == true %}
-                        {% for parcours in formation.parcours %}
-                            {% if parcours != null %}
-                                {% for annee in 1..parcours.annees %}
-                                    <tr>
-                                        <td>{{ formation.composantePorteuse != null ? formation.composantePorteuse.sigle : '-' }}</td>
-                                        <td>{{ formation.displayLong }}</td>
-                                        <td>{{ parcours.libelle }}</td>
-                                        <td>{{ parcours.localisation != null ? parcours.localisation.libelle : '' }}</td>
-                                        <td>{{ parcours.codeDiplome(annee) }}</td>
-                                        <td>{{ parcours.codeVersionDiplome(annee) }}</td>
-                                        <td>Année {{ annee }}</td>
-                                        <td>{{ parcours.codeEtape(annee) }}</td>
-                                        <td>{{ parcours.codeVersionEtape(annee) }}</td>
-                                        <td>
-                                            <a href="{{ path('app_codification', {formation:formation.id}) }}" class="btn btn-outline-warning">
-                                                <i class="fal fa-wrench"></i>
-                                                Générer</a>
-                                            <a href="{{ path('app_codification_index', {formation:formation.id}) }}" class="btn btn-outline-info">
-                                                <i class="{{ iconShow }}"></i>
-                                                Détails</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        {% set parcours = formation.defaultParcours %}
-                        {% if parcours != null %}
-                            {% for annee in 1..parcours.annees %}
-                                <tr>
-                                    <td>{{ formation.composantePorteuse != null ? formation.composantePorteuse.sigle : '-' }}</td>
-                                    <td>{{ formation.displayLong }}</td>
-                                    <td>{{ parcours != null ? '' : 'Pas de parcours?' }}</td>
-                                    <td>{{ parcours.localisation != null ? parcours.localisation.libelle : '' }}</td>
-                                    <td>{{ parcours.codeDiplome(annee) }}</td>
-                                    <td>{{ parcours.codeVersionDiplome(annee) }}</td>
-                                    <td>Année {{ annee }}</td>
-                                    <td>{{ parcours.codeEtape(annee) }}</td>
-                                    <td>{{ parcours.codeVersionEtape(annee) }}</td>
-                                    <td>
-                                        <a href="{{ path('app_codification', {formation:formation.id}) }}">Générer</a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
-                </tbody>
-            </table>
+
+
+            <!-- An empty list to put overflowed links -->
+            <li class="nav-item dropdown ms-auto pe-0 d-none responsive-tab-dropdown">
+                <a
+                        class="btn btn-icon btn-icon-only btn-background pt-0 bg-transparent pe-0"
+                        href="#"
+                        data-bs-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                >
+                    <i data-acorn-icon="more-horizontal"></i>
+                </a>
+                <ul class="dropdown-menu mt-2 dropdown-menu-end"></ul>
+            </li>
+        </ul>
+
+        <div class="card mb-5">
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane fade active show" id="step_1" role="tabpanel" {{ stimulus_target
+                        ('wizard', 'content') }}>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block header %}

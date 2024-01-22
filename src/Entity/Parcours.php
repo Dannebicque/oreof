@@ -1150,8 +1150,12 @@ class Parcours
             $t[] = $regime->value;
         }
 
-        if (count($t) >= 3) {
+        if (count($t) === 1 && in_array(RegimeInscriptionEnum::FI, $t, true)) {
             return 1;
+        }
+
+        if (count($t) >= 3 && !in_array(RegimeInscriptionEnum::FI, $t, true)) {
+            return 3;
         }
 
         if (count($t) === 1 && in_array(RegimeInscriptionEnum::FC, $t, true)) {
@@ -1162,11 +1166,7 @@ class Parcours
             return 3;
         }
 
-        //todo: gérer la LAS?
-
         return 1;
-
-
     }
 
     public function getDescriptifHautPage(): ?string
@@ -1258,57 +1258,57 @@ class Parcours
         return $this;
     }
 
-    public function getAnnees(): int
+    public function getAnnees(): array
     {
-        return $this->getSemestreParcours()->count() / 2;
+        $annees = [];
+        foreach ($this->getSemestreParcours() as $semestreParcours) {
+
+            if ($semestreParcours->getSemestre()?->isNonDispense() === false) {
+
+                if ($semestreParcours->getOrdre() % 2 === 0) {
+
+                    $annees[] = $semestreParcours->getOrdre() / 2;
+                } else {
+                    $annees[] = ($semestreParcours->getOrdre() + 1) / 2;
+                }
+            }
+        }
+
+        return array_unique($annees);
     }
 
     public function getCodeDiplome(int $annee): ?string
     {
+        return $this->getSemestrePourAnnee($annee)?->getCodeApogeeDiplome();
+    }
+
+    private function getSemestrePourAnnee(int $annee): ?SemestreParcours
+    {
         $semestres = $this->semestreParcours;
+
         $semestres = $semestres->filter(fn(SemestreParcours $semestre) => $semestre->getOrdre() === $annee * 2 - 1);
 
         if ($semestres->count() === 0) {
             return null;
         }
 
-        return $semestres->first()->getCodeApogeeDiplome();
+        return $semestres->first();
     }
 
     public function getCodeEtape(int $annee): ?string
     {
-        $semestres = $this->semestreParcours;
-        $semestres = $semestres->filter(fn(SemestreParcours $semestre) => $semestre->getOrdre() === $annee * 2 - 1);
-
-        if ($semestres->count() === 0) {
-            return null;
-        }
-
-        return $semestres->first()->getCodeApogeeEtapeAnnee();
+        return $this->getSemestrePourAnnee($annee)?->getCodeApogeeEtapeAnnee();
     }
 
     public function getCodeVersionDiplome(int $annee): ?string
     {
-        $semestres = $this->semestreParcours;
-        $semestres = $semestres->filter(fn(SemestreParcours $semestre) => $semestre->getOrdre() === $annee * 2 - 1);
-
-        if ($semestres->count() === 0) {
-            return null;
-        }
-
-        return $semestres->first()->getCodeApogeeVersionDiplome();
+        return $this->getSemestrePourAnnee($annee)?->getCodeApogeeVersionDiplome();
     }
 
     public function getCodeVersionEtape(int $annee): ?string
     {
-        $semestres = $this->semestreParcours;
-        $semestres = $semestres->filter(fn(SemestreParcours $semestre) => $semestre->getOrdre() === $annee * 2 - 1);
+        return $this->getSemestrePourAnnee($annee)?->getCodeApogeeEtapeVersion();
 
-        if ($semestres->count() === 0) {
-            return null;
-        }
-
-        return $semestres->first()->getCodeApogeeEtapeVersion();
     }
 
     public function getCodeApogeeNumeroVersion(): ?string

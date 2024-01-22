@@ -297,18 +297,22 @@ class ExcelWriter
     public function pageSetup(string $name): void
     {
         $this->spreadsheet->getProperties()->setTitle($name);
-        $this->spreadsheet->getActiveSheet()->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A4);
         $this->spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
         $this->spreadsheet->getActiveSheet()->setShowGridlines(true); //affichage de la grille
         $this->spreadsheet->getActiveSheet()->setPrintGridlines(false); //affichage de la grille
-        $this->spreadsheet->getActiveSheet()->getPageSetup()->setRowsToRepeatAtTopByStartAndEnd(
-            1,
-            1
-        ); //ligne a répéter en haut
         $this->spreadsheet->getActiveSheet()->getHeaderFooter()
             ->setOddHeader('&C&HDocument généré depuis ORéOF');
         $this->spreadsheet->getActiveSheet()->getHeaderFooter()
-            ->setOddFooter('&L&B' . $this->spreadsheet->getProperties()->getTitle() . '&RPage &P of &N');
+            ->setOddFooter('&L&B' . $this->spreadsheet->getProperties()->getTitle() . '&RPage &P sur &N');
+        $this->spreadsheet->getActiveSheet()->getHeaderFooter()
+            ->setEvenHeader('&C&HDocument généré depuis ORéOF');
+        $this->spreadsheet->getActiveSheet()->getHeaderFooter()
+            ->setEvenFooter('&L&B' . $this->spreadsheet->getProperties()->getTitle() . '&RPage &P sur &N');
+    }
+
+    public function setPaperSize(string $size): void
+    {
+        $this->spreadsheet->getActiveSheet()->getPageSetup()->setPaperSize($size);
     }
 
     public function createFromTemplate(string $fichier): void
@@ -487,5 +491,10 @@ class ExcelWriter
         }
 
         $this->sheet->insertNewColumnBefore($colUe);
+    }
+
+    public function setRepeatRows(int $debut, int $fin)
+    {
+        $this->sheet->getPageSetup()->setRowsToRepeatAtTopByStartAndEnd($debut, $fin);
     }
 }

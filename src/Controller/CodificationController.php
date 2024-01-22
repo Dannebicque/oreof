@@ -9,6 +9,7 @@ use App\Classes\Export\ExportCodification;
 use App\Entity\Formation;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
+use App\Repository\TypeDiplomeRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,81 @@ class CodificationController extends BaseController
 {
     #[Route('/codification/liste', name: 'app_codification_liste')]
     public function liste(
+        TypeDiplomeRepository $typeDiplomeRepository,
+    ): Response {
+        return $this->render('codification/liste.html.twig', [
+            'typeDiplomes' => $typeDiplomeRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/codification/liste/type_diplome', name: 'app_codification_liste_type_diplome')]
+    public function listeTypeDiplome(
+        Request               $request,
+        TypeDiplomeRepository $typeDiplomeRepository,
+        FormationRepository   $formationRepository,
+    ): Response {
+        $typeDiplome = $typeDiplomeRepository->find($request->query->get('step'));
+
+        if ($typeDiplome === null) {
+            throw new \Exception('Type de diplôme non trouvé');
+        }
+
+        if ($this->isGranted('ROLE_ADMIN') ||
+            $this->isGranted('ROLE_SES') ||
+            $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
+            $this->isGranted('CAN_COMPOSANTE_SCOLARITE_ALL', $this->getUser()) ||
+            $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
+            $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getUser()) ||
+            $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
+            $formations = $formationRepository->findByAnneeUniversitaireAndTypeDiplome($this->getAnneeUniversitaire(), $typeDiplome);
+        } else {
+            $formations = [];
+            //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
+            $centres = $this->getUser()?->getUserCentres();
+            foreach ($centres as $centre) {
+                //todo: gérer avec un voter
+                if ($centre->getComposante() !== null && (
+                    in_array('Gestionnaire', $centre->getDroits()) ||
+                    in_array('Invité', $centre->getDroits()) ||
+                    in_array('Directeur', $centre->getDroits())
+                )) {
+                    //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
+                    $formations[] = $formationRepository->findByComposante(
+                        $centre->getComposante(),
+                        $this->getAnneeUniversitaire()
+                    );
+                }
+            }
+
+            $formations[] = $formationRepository->findByComposanteDpe(
+                $this->getUser(),
+                $this->getAnneeUniversitaire()
+            );
+            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
+                $this->getUser(),
+                $this->getAnneeUniversitaire()
+            );
+            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
+                $this->getUser(),
+                $this->getAnneeUniversitaire()
+            );
+            $formations = array_merge(...$formations);
+        }
+
+        $tFormations = [];
+        foreach ($formations as $formation) {
+            $tFormations[$formation->getId()] = $formation;
+        }
+
+        return $this->render('codification/_liste.html.twig', [
+            'formations' => $tFormations,
+        ]);
+    }
+
+
+    #[Route('/codification/export', name: 'app_codification_export')]
+    public function export(
+        ExportCodification  $export,
         FormationRepository $formationRepository,
     ): Response {
         if ($this->isGranted('ROLE_ADMIN') ||
@@ -28,6 +104,8 @@ class CodificationController extends BaseController
             $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
             $formations = $formationRepository->findBySearch('', $this->getAnneeUniversitaire(), []);
+
+            return $export->exportFormations($formations);
         } else {
             $formations = [];
             //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
@@ -72,70 +150,10 @@ class CodificationController extends BaseController
         ]);
     }
 
-    #[Route('/codification/export', name: 'app_codification_export')]
-    public function export(
-        ExportCodification              $export,
-        FormationRepository $formationRepository,
-    ): Response {
-        if ($this->isGranted('ROLE_ADMIN') ||
-            $this->isGranted('ROLE_SES') ||
-            $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
-            $this->isGranted('CAN_COMPOSANTE_SCOLARITE_ALL', $this->getUser()) ||
-            $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
-            $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getUser()) ||
-            $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findBySearch('', $this->getAnneeUniversitaire(), []);
-
-            return $export->exportFormations($formations);
-        } else {
-            $formations = [];
-            //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
-            $centres = $this->getUser()?->getUserCentres();
-            foreach ($centres as $centre) {
-                //todo: gérer avec un voter
-                if ($centre->getComposante() !== null && (
-                        in_array('Gestionnaire', $centre->getDroits()) ||
-                        in_array('Invité', $centre->getDroits()) ||
-                        in_array('Directeur', $centre->getDroits())
-                    )) {
-                    //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
-                    $formations[] = $formationRepository->findByComposante(
-                        $centre->getComposante(),
-                        $this->getAnneeUniversitaire()
-                    );
-                }
-            }
-
-            $formations[] = $formationRepository->findByComposanteDpe(
-                $this->getUser(),
-                $this->getAnneeUniversitaire()
-            );
-            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
-                $this->getUser(),
-                $this->getAnneeUniversitaire()
-            );
-            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
-                $this->getUser(),
-                $this->getAnneeUniversitaire()
-            );
-            $formations = array_merge(...$formations);
-        }
-
-        $tFormations = [];
-        foreach ($formations as $formation) {
-            $tFormations[$formation->getId()] = $formation;
-        }
-
-        return $this->render('codification/liste.html.twig', [
-            'formations' => $tFormations,
-        ]);
-    }
-
     #[Route('/codification/{formation}', name: 'app_codification_index')]
     public function index(
         Formation $formation
-    ): Response
-    {
+    ): Response {
         return $this->render('codification/index.html.twig', [
             'formation' => $formation,
         ]);
@@ -148,8 +166,7 @@ class CodificationController extends BaseController
         ParcoursRepository  $parcoursRepository,
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Formation           $formation
-    ): Response
-    {
+    ): Response {
         $idParcours = $request->query->get('step');
         $parcours = $parcoursRepository->find($idParcours);
 
@@ -196,8 +213,7 @@ class CodificationController extends BaseController
     public function genere(
         CodificationFormation $codificationFormation,
         Formation             $formation
-    ): Response
-    {
+    ): Response {
         $codificationFormation->setCodificationFormation($formation);
 
         return $this->redirectToRoute('app_codification_index', ['formation' => $formation->getId()]);

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.13](https://github.com/Dannebicque/oreof/compare/v1.23.12...v1.23.13) (2024-01-20)
+
+
+### Features
+
+* Génération des codes mentions ([516ab31](https://github.com/Dannebicque/oreof/commit/516ab311fc5ba0edcb8547e8196da5d5ddb397db))
+
+
+### Bug Fixes
+
+* Affichage référentiel de compétences ([8ebcf67](https://github.com/Dannebicque/oreof/commit/8ebcf67f73899725beca631b0cb5c555ad9e3cf8))
+* Codification + affichage LP ([29c9cf1](https://github.com/Dannebicque/oreof/commit/29c9cf17c039c297f1e63626c23d2941f75b609e))
+* Codification + affichage LP ([9fad7b8](https://github.com/Dannebicque/oreof/commit/9fad7b86f4219880ad867382156f1b10b90ce7d2))
+
 ### [1.23.12](https://github.com/Dannebicque/oreof/compare/v1.23.11...v1.23.12) (2024-01-18)
 
 

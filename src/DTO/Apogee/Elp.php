@@ -17,7 +17,7 @@ use DateTimeInterface;
 class Elp
 {
     public string $elementPedagogi = '';
-    public string $codElp = ''; // max 8 caractères
+    public ?string $codElp = ''; // max 8 caractères
     public string $libCourtElp = ''; // max 25 caractères
     public string $libElp = ''; // max 60 caractères
     public CodeNatuElpEnum $codNatureElp; // max 4 caractères
