@@ -29,6 +29,8 @@
     </script>   
 {% endblock %}
 
+{% set isVersioningView = false %}
+
 {% block content %}
 {# Versioning #}
 {% if is_granted('ROLE_ADMIN') %}
