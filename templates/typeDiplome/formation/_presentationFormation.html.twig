@@ -34,7 +34,7 @@
                     </button>
                 </div>
                 <div class="col-sm-12 collapse" id="diffFormationObjectifsFormation">
-                    {{ stringDifferences.presentationFormationObjectifsFormation|raw  }} 
+                    {{ stringDifferences.presentationFormationObjectifsFormation|raw  }}
                 </div>
                 {% endif %}
             {% endif %}
@@ -52,7 +52,7 @@
                     {% for parcours in formation.parcours %}
                         <tr>
                             <td>{# todo: uniquement si dans formation, sinon des liens ? #}
-                                <a href="#presentation_{{ parcours.id }}">{{ parcours.libelle }} ({{ parcours.codeApogeeDiplome }} | {{ parcours.codeApogeeVersionDiplome }})</a>
+                                <a href="#presentation_{{ parcours.id }}">{{ parcours.libelle }}</a>
                             </td>
                             <td>
                                 {{ include('btn/export_mccc.html.twig') }}
