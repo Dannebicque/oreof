@@ -32,7 +32,7 @@ class CalculButStructureParcours
             }
 
             if ($semestre !== null) {
-                $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre);
+                $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours);
 
                 foreach ($semestre->getUes() as $ue) {
                     if ($ue !== null && $ue->getUeParent() === null) {
@@ -50,9 +50,9 @@ class CalculButStructureParcours
                         foreach ($ue->getElementConstitutifs() as $elementConstitutif) {
                             if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
                                 //récupérer le bon EC selon tous les liens
-                                $dtoEc = new StructureEc($elementConstitutif, $parcours);
+                                $dtoEc = new StructureEc($elementConstitutif, $parcours, true);
                                 foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
-                                    $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours);
+                                    $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, true);
                                     $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
                                 }
                                 $dtoUe->addEc($dtoEc);

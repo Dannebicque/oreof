@@ -9,6 +9,7 @@
 
 namespace App\Controller;
 
+use App\Classes\CalculButStructureParcours;
 use App\Classes\CalculStructureParcours;
 use App\Classes\JsonReponse;
 use App\Classes\ParcoursDupliquer;
@@ -363,7 +364,20 @@ class ParcoursController extends BaseController
         EntityManagerInterface       $em,
         ElementConstitutifRepository $ecRepo
     ) {
-        $calcul = new CalculStructureParcours($em, $ecRepo);
+        $formation = $parcours->getFormation();
+        if ($formation === null) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($formation->getTypeDiplome() === null) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($formation->getTypeDiplome()->getLibelleCourt() === 'BUT') {
+            $calcul = new CalculButStructureParcours();
+        } else {
+            $calcul = new CalculStructureParcours($em, $ecRepo);
+        }
 
         return $this->render('parcours/maquette_iframe.html.twig', [
             'parcours' => $calcul->calcul($parcours)
@@ -654,7 +668,7 @@ class ParcoursController extends BaseController
             ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'publie'),
             ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_a_publier')
         ];
-        
+
         $errorArray = [];
         foreach ($parcoursList as $p) {
             $erreursChampsParcours = $lheoXML->checkTextValuesAreLongEnough($p);

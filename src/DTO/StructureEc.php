@@ -47,7 +47,7 @@ class StructureEc
     public ?Collection $bccs;
 
 
-    public function __construct(ElementConstitutif $elementConstitutif, Parcours $parcours)
+    public function __construct(ElementConstitutif $elementConstitutif, Parcours $parcours, bool $isBut = false)
     {
 
         $this->raccroche = GetElementConstitutif::isRaccroche($elementConstitutif, $parcours);
@@ -56,7 +56,7 @@ class StructureEc
         $this->elementConstitutif = $elementConstitutif;
         $this->heuresEctsEc = new HeuresEctsEc();
         $this->typeMccc = GetElementConstitutif::getTypeMccc($elementConstitutif, $this->raccroche);
-        $this->heuresEctsEc->addEc(GetElementConstitutif::getElementConstitutifHeures($elementConstitutif, $this->raccroche));
+        $this->heuresEctsEc->addEc(GetElementConstitutif::getElementConstitutifHeures($elementConstitutif, $this->raccroche), $isBut);
         $this->heuresEctsEc->addEcts(GetElementConstitutif::getEcts($elementConstitutif, $this->raccroche));
         $this->mcccs = GetElementConstitutif::getMcccsCollection($elementConstitutif, $this->raccroche);
         $this->bccs = GetElementConstitutif::getBccs($elementConstitutif, $this->raccroche);

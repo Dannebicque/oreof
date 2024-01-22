@@ -26,6 +26,7 @@ class CalculStructureParcours
     )
     {
     }
+
     public function calcul(Parcours $parcours): StructureParcours
     {
         $dtoStructure = new StructureParcours();
@@ -41,7 +42,7 @@ class CalculStructureParcours
             }
 
             if ($semestre !== null) {
-                $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre);
+                $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours);
 
                 foreach ($semestre->getUes() as $ue) {
                     if ($ue !== null && $ue->getUeParent() === null) {
@@ -123,7 +124,7 @@ class CalculStructureParcours
             }
 
             if ($semestre !== null) {
-                $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre);
+                $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours);
 
                 foreach ($semestre->getUes() as $ue) {
                     if ($ue !== null && $ue->getUeParent() === null) {

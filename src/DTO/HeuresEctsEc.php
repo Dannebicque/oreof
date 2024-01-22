@@ -50,7 +50,8 @@ class HeuresEctsEc
         return $this->cmPres + $this->tdPres + $this->tpPres;
     }
 
-    public function sommeEcTotalPresDist(): float {
+    public function sommeEcTotalPresDist(): float
+    {
         return $this->sommeEcTotalPres() + $this->sommeEcTotalDist();
     }
 
@@ -58,15 +59,28 @@ class HeuresEctsEc
     {
         $this->ects = $ects ?? 0.0;
     }
-    public function addEc(ElementConstitutif|FicheMatiere $elementConstitutif): void
-    {
-        $this->cmPres = $elementConstitutif->getVolumeCmPresentiel() ?? 0.0;
-        $this->tdPres = $elementConstitutif->getVolumeTdPresentiel() ?? 0.0;
-        $this->tpPres = $elementConstitutif->getVolumeTpPresentiel() ?? 0.0;
-        $this->tePres = $elementConstitutif->getVolumeTe() ?? 0.0;
-        $this->cmDist = $elementConstitutif->getVolumeCmDistanciel() ?? 0.0;
-        $this->tdDist = $elementConstitutif->getVolumeTdDistanciel() ?? 0.0;
-        $this->tpDist = $elementConstitutif->getVolumeTpDistanciel() ?? 0.0;
 
+    public function addEc(ElementConstitutif|FicheMatiere $elementConstitutif, bool $isBut = false): void
+    {
+        if ($isBut) {
+            $ficheMatiere = $elementConstitutif->getFicheMatiere();
+            if ($ficheMatiere !== null) {
+                $this->cmPres = $ficheMatiere->getVolumeCmPresentiel() ?? 0.0;
+                $this->tdPres = $ficheMatiere->getVolumeTdPresentiel() ?? 0.0;
+                $this->tpPres = $ficheMatiere->getVolumeTpPresentiel() ?? 0.0;
+                $this->tePres = $ficheMatiere->getVolumeTe() ?? 0.0;
+                $this->cmDist = $ficheMatiere->getVolumeCmDistanciel() ?? 0.0;
+                $this->tdDist = $ficheMatiere->getVolumeTdDistanciel() ?? 0.0;
+                $this->tpDist = $ficheMatiere->getVolumeTpDistanciel() ?? 0.0;
+            }
+        } else {
+            $this->cmPres = $elementConstitutif->getVolumeCmPresentiel() ?? 0.0;
+            $this->tdPres = $elementConstitutif->getVolumeTdPresentiel() ?? 0.0;
+            $this->tpPres = $elementConstitutif->getVolumeTpPresentiel() ?? 0.0;
+            $this->tePres = $elementConstitutif->getVolumeTe() ?? 0.0;
+            $this->cmDist = $elementConstitutif->getVolumeCmDistanciel() ?? 0.0;
+            $this->tdDist = $elementConstitutif->getVolumeTdDistanciel() ?? 0.0;
+            $this->tpDist = $elementConstitutif->getVolumeTpDistanciel() ?? 0.0;
+        }
     }
 }
