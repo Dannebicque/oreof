@@ -34,6 +34,7 @@ security:
         - { path: ^/parcours/mccc/export/.+\.pdf, roles: PUBLIC_ACCESS}
         - { path: ^/parcours/mccc/export-light/.+\.pdf, roles: PUBLIC_ACCESS}
         - { path: ^/parcours/.+/export-json-urca, roles: PUBLIC_ACCESS}
+        - { path: ^/parcours/.+/export-json, roles: PUBLIC_ACCESS}
         - { path: ^/parcours/.+/export-xml-lheo, roles: PUBLIC_ACCESS }
         - { path: ^/parcours/.+/export-pdf, roles: PUBLIC_ACCESS }
         - { path: ^/parcours/.+/maquette_iframe, roles: PUBLIC_ACCESS }
