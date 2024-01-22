@@ -19,16 +19,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: BlocCompetenceRepository::class)]
 class BlocCompetence
 {
+    #[Groups('fiche_matiere_versioning')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(length: 10)]
     private ?string $code = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(type: 'text')]
     private ?string $libelle = null;
 

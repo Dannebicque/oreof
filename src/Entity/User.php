@@ -51,15 +51,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $formationsResponsableMention;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['fiche_matiere:read', 'parcours_json_versioning'])]
+    #[Groups(['fiche_matiere:read', 'parcours_json_versioning', 'fiche_matiere_versioning'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['fiche_matiere:read', 'parcours_json_versioning'])]
+    #[Groups(['fiche_matiere:read', 'parcours_json_versioning', 'fiche_matiere_versioning'])]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['fiche_matiere:read', 'parcours_json_versioning'])]
+    #[Groups(['fiche_matiere:read', 'parcours_json_versioning', 'fiche_matiere_versioning'])]
     private ?string $email = null;
  
     #[ORM\Column]

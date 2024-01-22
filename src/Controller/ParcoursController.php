@@ -585,76 +585,97 @@ class ParcoursController extends BaseController
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{parcours_versioning}/versioning/view', name: 'app_parcours_versioning_view')]
     public function parcoursVersion(
-        ParcoursVersioning $parcours_versioning
+        ParcoursVersioning $parcours_versioning,
+        Filesystem $fileSystem,
     ): Response {
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $serializer = new Serializer(
-        [
-            new DateTimeNormalizer(),
-            new BackedEnumNormalizer(),
-            new ArrayDenormalizer(),
-            new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
-        ],
-            [new JsonEncoder()]
-        );
-        $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
-                                    . "{$parcours_versioning->getParcours()->getId()}/"
-                                    . "{$parcours_versioning->getParcoursFileName()}.json"
-                    );
-        $fileDTO = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
-                                    . "{$parcours_versioning->getParcours()->getId()}/"
-                                    . "{$parcours_versioning->getDtoFileName()}.json"
-                    );
-        $parcours = $serializer->deserialize($fileParcours, Parcours::class, 'json');
-        $dto = $serializer->deserialize($fileDTO, StructureParcours::class, 'json');
-        $dateVersion = $parcours_versioning->getVersionTimestamp()->format('d-m-Y à H:i');
-
-        $rendererName = 'Inline';
-        $differOptions = [
-            'context' => 1
-        ];
-        $rendererOptions = [
-            'detailLevel' => 'word',
-            'lineNumbers' => false,
-            'showHeader' => false,
-            'separateBlock' => false
-        ];
-
-        $cssDiff = DiffHelper::getStyleSheet();
-
-        return $this->render('parcours/show_version.html.twig', [
-            'parcours' => $parcours,
-            'formation' => $parcours->getFormation(),
-            'typeDiplome' => $parcours->getTypeDiplome(),
-            'dto' => $dto,
-            'hasParcours' => $parcours->getFormation()->isHasParcours(),
-            'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
-            'dateVersion' => $dateVersion,
-            'stringDifferences' => [
-                'presentationParcoursContenuFormation' => DiffHelper::calculate(
-                    $parcours->getContenuFormation(),
-                    $parcours_versioning->getParcours()->getContenuFormation(),
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                ),
-                'presentationParcoursObjectifsParcours' => DiffHelper::calculate(
-                    $parcours->getObjectifsParcours(),
-                    $parcours_versioning->getParcours()->getObjectifsParcours(),
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                ),
-                'presentationParcoursResultatsAttendus' => DiffHelper::calculate(
-                    $parcours->getResultatsAttendus(),
-                    $parcours_versioning->getParcours()->getResultatsAttendus(),
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                )
+        try {
+            $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+            $serializer = new Serializer(
+            [
+                new DateTimeNormalizer(),
+                new BackedEnumNormalizer(),
+                new ArrayDenormalizer(),
+                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
             ],
-            'cssDiff' => $cssDiff
-        ]);
+                [new JsonEncoder()]
+            );
+            $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
+                                        . "{$parcours_versioning->getParcours()->getId()}/"
+                                        . "{$parcours_versioning->getParcoursFileName()}.json"
+                        );
+            $fileDTO = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
+                                        . "{$parcours_versioning->getParcours()->getId()}/"
+                                        . "{$parcours_versioning->getDtoFileName()}.json"
+                        );
+            $parcours = $serializer->deserialize($fileParcours, Parcours::class, 'json');
+            $dto = $serializer->deserialize($fileDTO, StructureParcours::class, 'json');
+            $dateVersion = $parcours_versioning->getVersionTimestamp()->format('d-m-Y à H:i');
+
+            $rendererName = 'Inline';
+            $differOptions = [
+                'context' => 1,
+                'ignoreWhitespace' => true,
+                'ignoreLineEnding' => true,
+            ];
+            $rendererOptions = [
+                'detailLevel' => 'char',
+                'lineNumbers' => false,
+                'showHeader' => false,
+                'separateBlock' => false,
+            ];
+
+            $cssDiff = DiffHelper::getStyleSheet();
+
+            return $this->render('parcours/show_version.html.twig', [
+                'parcours' => $parcours,
+                'formation' => $parcours->getFormation(),
+                'typeDiplome' => $parcours->getTypeDiplome(),
+                'dto' => $dto,
+                'hasParcours' => $parcours->getFormation()->isHasParcours(),
+                'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
+                'dateVersion' => $dateVersion,
+                'stringDifferences' => [
+                    'presentationParcoursContenuFormation' => html_entity_decode(DiffHelper::calculate(
+                        $parcours->getContenuFormation(),
+                        $parcours_versioning->getParcours()->getContenuFormation(),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    )),
+                    'presentationParcoursObjectifsParcours' => html_entity_decode(DiffHelper::calculate(
+                        $parcours->getObjectifsParcours(),
+                        $parcours_versioning->getParcours()->getObjectifsParcours(),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    )),
+                    'presentationParcoursResultatsAttendus' => html_entity_decode(DiffHelper::calculate(
+                        $parcours->getResultatsAttendus(),
+                        $parcours_versioning->getParcours()->getResultatsAttendus(),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    )),
+                    'presentationFormationObjectifsFormation' => html_entity_decode(DiffHelper::calculate(
+                        $parcours->getFormation()?->getObjectifsFormation(),
+                        $parcours_versioning->getParcours()?->getFormation()?->getObjectifsFormation(),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    )),
+                ],
+                'cssDiff' => $cssDiff
+            ]);
+        } catch(\Exception $e){
+            $now = new DateTimeImmutable('now');
+            $dateHeure = $now->format('d-m-Y_H-i-s');
+            // Log error
+            $logTxt = "[{$dateHeure}] La visualisation de la version : {$parcours_versioning->getId()} a rencontré une erreur.\n{$e->getMessage()}\n";
+            $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/view_parcours_error.log", $logTxt);
+
+            $this->addFlashBag('error', "La visualisation de la version a rencontré une erreur.");
+            return $this->redirectToRoute('app_parcours_show', ['id' => $parcours_versioning->getParcours()?->getId()]);
+        }
     }
 
     #[IsGranted('ROLE_SES')]

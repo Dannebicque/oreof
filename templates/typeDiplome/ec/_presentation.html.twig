@@ -5,6 +5,20 @@
             <dd>
                 <p>{{ ficheMatiere.description|raw }}</p>
             </dd>
+            {% if isVersioningView is defined and isVersioningView == true %}
+                {% if stringDifferences.descriptionEnseignement|length > 0 %}
+                <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
+                    <button class="btn btn-primary btn-sm my-3"
+                        data-bs-toggle="collapse" data-bs-target="#diffFicheMatiereDescription"
+                    >
+                        Voir les différences
+                    </button>
+                </div>
+                <div class="col-sm-12 collapse" id="diffFicheMatiereDescription">
+                    {{ stringDifferences.descriptionEnseignement|raw  }} 
+                </div>
+                {% endif %}
+            {% endif %}
         </dl>
     </div>
     <div class="col-md-6 col-sm-12">
@@ -37,6 +51,20 @@
             <dd>
                 <p>{{ ficheMatiere.objectifs|raw }}</p>
             </dd>
+            {% if isVersioningView is defined and isVersioningView == true %}
+                {% if stringDifferences.objectifsEnseignement|length > 0 %}
+                <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
+                    <button class="btn btn-primary btn-sm my-3"
+                        data-bs-toggle="collapse" data-bs-target="#diffObjectifsEnseignement"
+                    >
+                        Voir les différences
+                    </button>
+                </div>
+                <div class="col-sm-12 collapse" id="diffObjectifsEnseignement">
+                    {{ stringDifferences.objectifsEnseignement|raw  }} 
+                </div>
+                {% endif %}
+            {% endif %}
         </dl>
     </div>
 {#    <div class="col-sm-12">#}

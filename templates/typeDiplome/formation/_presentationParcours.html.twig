@@ -4,24 +4,57 @@
             <dt>Organisation de la formation</dt>
             <dd>
                 {{ parcours.contenuFormation|printTexte }}
-                {% if isVersioningView is defined and isVersioningView == true %} 
-                    {{ stringDifferences.presentationParcoursContenuFormation|raw  }} 
-                {% endif %}
             </dd>
+            {% if isVersioningView is defined and isVersioningView == true %}
+                {% if stringDifferences.presentationParcoursContenuFormation|length > 0 %}
+                <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
+                    <button class="btn btn-primary btn-sm my-3"
+                        data-bs-toggle="collapse" data-bs-target="#diffParcoursContenuFormation"
+                    >
+                        Voir les différences
+                    </button>
+                </div>
+                <div class="col-sm-12 collapse" id="diffParcoursContenuFormation">
+                    {{ stringDifferences.presentationParcoursContenuFormation|raw  }} 
+                </div>
+                {% endif %}
+            {% endif %}
             <dt>Objectifs du parcours</dt>
             <dd>
                 {{ parcours.objectifsParcours|printTexte }}
-                {% if isVersioningView is defined and isVersioningView == true %} 
-                    {{ stringDifferences.presentationParcoursObjectifsParcours|raw  }} 
-                {% endif %}
             </dd>
+            {% if isVersioningView is defined and isVersioningView == true %} 
+                {% if stringDifferences.presentationParcoursObjectifsParcours|length > 0 %}
+                <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
+                    <button class="btn btn-primary btn-sm mt-3 mb-3"
+                        data-bs-toggle="collapse" data-bs-target="#diffParcoursObjectifsParcours"
+                    >
+                        Voir les différences
+                    </button>
+                </div>
+                    <div class="col-sm-12 collapse mb-3" id="diffParcoursObjectifsParcours">
+                        {{ stringDifferences.presentationParcoursObjectifsParcours|raw  }} 
+                    </div>
+                {% endif %}
+            {% endif %}
             <dt>Résultats attendus du parcours</dt>
             <dd>
                 {{ parcours.resultatsAttendus|printTexte }}
-                {% if isVersioningView is defined and isVersioningView == true %} 
-                    {{ stringDifferences.presentationParcoursResultatsAttendus|raw  }} 
-                {% endif %}    
             </dd>
+            {% if isVersioningView is defined and isVersioningView == true %} 
+                {% if stringDifferences.presentationParcoursResultatsAttendus|length > 0 %}
+                <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
+                    <button class="btn btn-primary btn-sm mt-3 mb-3"
+                        data-bs-toggle="collapse" data-bs-target="#diffParcoursResultatsAttendus"
+                    >
+                        Voir les différences
+                    </button>
+                </div>
+                    <div class="col-sm-12 collapse mb-3" id="diffParcoursResultatsAttendus">
+                        {{ stringDifferences.presentationParcoursResultatsAttendus|raw  }} 
+                    </div>
+                {% endif %}
+            {% endif %}    
             <dt>Rythme de formation</dt>
             <dd>
                 {{ parcours.rythmeFormation != null ? parcours.rythmeFormation.libelle : 'Non précisé' }}
