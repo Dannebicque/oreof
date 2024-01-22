@@ -2491,5 +2491,11 @@
         <target>Pour en savoir plus sur ce type de formation</target>
       </segment>
     </unit>
+    <unit id="UqPS1Km" name="Chaumont">
+      <segment>
+        <source>Chaumont</source>
+        <target>Chaumont</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

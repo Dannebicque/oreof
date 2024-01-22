@@ -1,78 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block javascripts %}
+{% set isVersioningView = true %}
+
+{% block stylesheets %}
     {{ parent() }}
-    <!-- Test Script -->
-    <script>
-        let isSaveClicked = false;
-
-        function showVersion(){
-            let select = document.querySelector('#selectVersion');
-            let versionSelected = select.options[select.selectedIndex].value;
-            if(versionSelected !== "#"){
-                window.location = `/fiche/matiere/${versionSelected}/versioning/view`;
-            }
-        }
-
-        function saveVersion(event) {
-            if(isSaveClicked === false){
-                let spinner = document.querySelector('#spinner');
-                spinner.classList.remove('d-none');
-                spinner.classList.add('d-flex');
-                isSaveClicked = true; 
-            } else {
-                event.preventDefault();
-                return false;
-            } 
-        }         
-            
-    </script>   
+    <style>
+        {{ cssDiff }}
+    </style>
 {% endblock %}
 
-{% set isVersioningView = false %}
-
 {% block content %}
-{# Versioning #}
-{% if is_granted('ROLE_ADMIN') %}
-<div class="row mt-2 mb-5">
-    <div class="col-lg-3 col-sm-6">
-        <h3 class="small-title">Versions de cette fiche matière</h3>
-        {% if ficheMatiere.ficheMatiereVersionings|length > 0 %}
-            <select class="form-select" id="selectVersion">
-                <option value="#" selected="selected">Choisir...</option>
-                {% for f in ficheMatiere.ficheMatiereVersionings %}
-                    <option value="{{ f.getId }}">
-                        Version du : {{ f.getVersionTimestamp()|date('d/m/Y') }} à {{ f.getVersionTimestamp()|date('H:i') }}
-                    </option>
-                {% endfor %}
-            </select>
-        {% else %}
-            Aucune version enregistrée.
-        {% endif %}
-    </div>  
-        {% if ficheMatiere.ficheMatiereVersionings|length > 0 %}
-        <div class="d-flex col-lg-1 col-sm-3 align-items-end">
-            <a href="#">
-                <button class="btn btn-sm btn-primary mb-1" id="buttonShowVersion" onclick="showVersion()">
-                    Visionner
-                </button>
-            </a>
-        </div>
-        {% endif %}
-    <div class="d-flex col-lg-1 col-sm-3 align-items-end">
-        <a href="{{ path('app_fiche_matiere_versioning_save', {slug: ficheMatiere.slug}) }}" onclick="saveVersion(event)">
-            <button class="btn btn-sm btn-success mb-1 ms-lg-1">
-                Sauvegarder la version
-            </button>
-        </a>
-    </div>
-    <div class="d-none col-lg-2 align-items-end justify-content-xl-center justify-content-end" id="spinner">
-        <div class="spinner-border text-primary mb-1"></div>
-    </div>
-</div>
-{% endif %}
-
-
     <div class="row">
         {{ include('typeDiplome/ec/common/_licence.html.twig') }}
         <!-- Scrollspy Start -->
@@ -121,7 +58,7 @@
 {% endblock %}
 
 {% block header %}
-    Détail de la fiche EC/matière : {{ ficheMatiere.libelle }}
+    Détail de la fiche EC/matière : {{ ficheMatiere.libelle }} - <span class="text-primary">Version du {{ dateHeure }}</span>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -130,7 +67,7 @@
     ]}) }}
 {% endblock %}
 
-{% block bouton_header %}
+{# {% block bouton_header %}
     <a href="{{ path('app_fiche_matiere_export', {id:ficheMatiere.id})  }}"
        class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"
@@ -149,4 +86,4 @@
         <i class="{{ iconBack }}"></i>
         <span> Retour à la liste des fiches EC/matières</span>
     </a>
-{% endblock %}
+{% endblock %} #}

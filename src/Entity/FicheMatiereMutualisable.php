@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: FicheMatiereMutualisableRepository::class)]
 class FicheMatiereMutualisable
 {
-    #[Groups(['DTO_json_versioning'])]
+    #[Groups(['DTO_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -19,6 +19,7 @@ class FicheMatiereMutualisable
     #[ORM\ManyToOne(inversedBy: 'ficheMatiereParcours')]
     private ?FicheMatiere $ficheMatiere = null;
 
+    #[Groups('fiche_matiere_versioning')]
     #[ORM\ManyToOne(inversedBy: 'ficheMatiereParcours')]
     private ?Parcours $parcours = null;
 

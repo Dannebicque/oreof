@@ -24,7 +24,7 @@ class Mention
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
