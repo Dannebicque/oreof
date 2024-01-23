@@ -181,7 +181,8 @@ class ParcoursExportController extends AbstractController
             foreach ($sem->ues() as $ue) {
                 $tUe = [
                     'ordre' => $ue->ordre(),
-                    'libelle' => $ue->display,
+                    'libelleOrdre' => $ue->display,
+                    'libelle' => $ue->ue->getLibelle() ?? $ue->display,
                 ];
 
                 $tEcs = [];
