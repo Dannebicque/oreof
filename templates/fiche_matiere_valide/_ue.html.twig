@@ -14,6 +14,7 @@
     <th class="font-weight-bold">Fiche</th>
 </tr>
 {# todo: améliorer l'affichage et reprendre les éléments comme CalculStructure... #}
+{% if tabEcs[semParc.ordre][ue.id] is defined %}
 {% for ec in tabEcs[semParc.ordre][ue.id] %}
     <tr>
 
@@ -126,3 +127,4 @@
         </td>
     </tr>
 {% endfor %}
+{% endif %}
