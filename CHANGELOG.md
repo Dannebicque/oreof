@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.16](https://github.com/Dannebicque/oreof/compare/v1.23.15...v1.23.16) (2024-01-23)
+
+
+### Bug Fixes
+
+* Affichage des UE sur validation des fiches ([5ad9cea](https://github.com/Dannebicque/oreof/commit/5ad9cea6fd6add00ac1ebe26ed02f861e192a9e9))
+* Code Apogée parcours ([06aa836](https://github.com/Dannebicque/oreof/commit/06aa836f14d72f830545f80df84b0f0816686491))
+
 ### [1.23.15](https://github.com/Dannebicque/oreof/compare/v1.23.14...v1.23.15) (2024-01-22)
 
 
