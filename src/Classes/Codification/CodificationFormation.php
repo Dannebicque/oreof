@@ -89,10 +89,10 @@ class CodificationFormation
                 if (
                     $p->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1 ||
                     $p->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23 ||
-                str_contains($p->getLibelle(), 'en alternance')
+                str_contains($p->getLibelle(), '(Alternance)')
                 ) {
-                    if (str_contains($p->getLibelle(), 'en alternance')) {
-                        $libelle = trim(str_replace('en alternance', '', $p->getLibelle()));
+                    if (str_contains($p->getLibelle(), '(Alternance)')) {
+                        $libelle = trim(str_replace(' (Alternance)', '', $p->getLibelle()));
                     } else {
                         $libelle = trim($p->getLibelle());
                     }
