@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.17](https://github.com/Dannebicque/oreof/compare/v1.23.16...v1.23.17) (2024-01-23)
+
+
+### Bug Fixes
+
+* Codification avec LAS + Parcours BUT ([3fe2387](https://github.com/Dannebicque/oreof/commit/3fe23870f927b0f129ddc145344369b469e97882))
+* Export libellé UE json maquette ([ba74777](https://github.com/Dannebicque/oreof/commit/ba74777755dccc5857131d22e3f5290e15e695d0))
+
 ### [1.23.16](https://github.com/Dannebicque/oreof/compare/v1.23.15...v1.23.16) (2024-01-23)
 
 
