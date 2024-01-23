@@ -1147,7 +1147,7 @@ class Parcours
     {
         $t = [];
         foreach ($this->getRegimeInscription() as $regime) {
-            $t[] = $regime->value;
+            $t[] = $regime;
         }
 
         if (count($t) === 1 && in_array(RegimeInscriptionEnum::FI, $t, true)) {
@@ -1163,6 +1163,7 @@ class Parcours
         }
 
         if (in_array(RegimeInscriptionEnum::FI_APPRENTISSAGE, $t, true) || in_array(RegimeInscriptionEnum::FC_CONTRAT_PRO, $t, true)) {
+
             return 3;
         }
 

@@ -9,8 +9,10 @@
 
 namespace App\Twig;
 
+use App\Enums\TypeParcoursEnum;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class StructureExtension extends AbstractExtension
 {
@@ -20,8 +22,25 @@ class StructureExtension extends AbstractExtension
             new TwigFilter('badgeEctsSemestre', [$this, 'badgeEctsSemestre'], ['is_safe' => ['html']]),
             new TwigFilter('badgeEctsUe', [$this, 'badgeEctsUe'], ['is_safe' => ['html']]),
             new TwigFilter('badgeEcts', [$this, 'badgeEcts'], ['is_safe' => ['html']]),
-            new TwigFilter('badgeNb', [$this, 'badgeNb'], ['is_safe' => ['html']])
+            new TwigFilter('badgeNb', [$this, 'badgeNb'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeTypeParcours', [$this, 'badgeTypeParcours'], ['is_safe' => ['html']])
         ];
+    }
+
+    public function getFunctions()
+    {
+        return [
+            new TwigFunction('isLas', [$this, 'isLas']),//todo: gérer de manière générique pour LAS, CPI et d'autres peut être
+        ];
+    }
+    public function badgeTypeParcours(?TypeParcoursEnum $typeParcoursEnum = null): string
+    {
+        if (null === $typeParcoursEnum || $typeParcoursEnum === TypeParcoursEnum::TYPE_PARCOURS_CLASSIQUE) {
+            return '';
+        }
+
+        $badge = '<span class="badge bg-%s">%s</span>';
+        return sprintf($badge, $typeParcoursEnum->getColor(), $typeParcoursEnum->getLabel());
     }
 
     public function badgeNb(?int $nb): string

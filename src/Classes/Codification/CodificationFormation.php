@@ -73,15 +73,35 @@ class CodificationFormation
 
     public function setCodificationParcours(Formation $formation): void
     {
+        $cleParcours = [];
         if ($formation->isHasParcours() === true) {
             $parcours = $formation->getParcours();
             $i = 0;
             foreach ($parcours as $p) {
-                $p->setCodeApogee(self::TAB_CODE_PARCOURS[$i]);
-                $i++;
+                if ($p->getTypeParcours() !== TypeParcoursEnum::TYPE_PARCOURS_LAS1 && $p->getTypeParcours() !== TypeParcoursEnum::TYPE_PARCOURS_LAS23) {
+                    $p->setCodeApogee(self::TAB_CODE_PARCOURS[$i]);
+                    $cleParcours[trim($p->getLibelle())] = self::TAB_CODE_PARCOURS[$i];
+                    $i++;
+                }
             }
 
-            //$this->entityManager->flush();
+            foreach ($parcours as $p) {
+                if (
+                    $p->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1 ||
+                    $p->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23 ||
+                str_contains($p->getLibelle(), 'en alternance')
+                ) {
+                    if (str_contains($p->getLibelle(), 'en alternance')) {
+                        $libelle = trim(str_replace('en alternance', '', $p->getLibelle()));
+                    } else {
+                        $libelle = trim($p->getLibelle());
+                    }
+                    //un parcours LAS ne génère pas un nouveau code de parcours, on essaye de retrouver le code du parcours
+                    if (array_key_exists($libelle, $cleParcours)) {
+                        $p->setCodeApogee($cleParcours[$libelle ]);
+                    }
+                }
+            }
         }
     }
 

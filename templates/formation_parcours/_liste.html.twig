@@ -13,7 +13,7 @@
     {% for parcour in parcours|filter(parcour => parcour.parcoursParent == null) %}
         <tr>
             <td {% if constant('SOURCE', typeDiplome) == 'meef' %}colspan="2"{% endif %}>
-                {{ parcour.libelle }}
+                {{ parcour.libelle }} {{ parcour.typeParcours|badgeTypeParcours }}
             </td>
             <td>
                 {{ parcour.respParcours != null ? parcour.respParcours.display : 'Non défini' }}
