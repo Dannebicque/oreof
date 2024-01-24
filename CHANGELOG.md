@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.18](https://github.com/Dannebicque/oreof/compare/v1.23.17...v1.23.18) (2024-01-24)
+
+
+### Bug Fixes
+
+* Codification avec LAS + Parcours BUT ([31f327f](https://github.com/Dannebicque/oreof/commit/31f327fa2a8897d5f938d24d5848f9cb964ebcd8))
+* Codification VET selon composante inscription + VET si parcours par défaut ([fc2b9ed](https://github.com/Dannebicque/oreof/commit/fc2b9ed2d90469cba9287cc22e7877994c71a18b))
+* export excel MCCC BUT ([f84a1cb](https://github.com/Dannebicque/oreof/commit/f84a1cb42f8ea6a52b723d013bdb04f2edac50fa))
+* ouverture en target blank d'une fiche sur le processus de validation ([f0e37bf](https://github.com/Dannebicque/oreof/commit/f0e37bf78459a88315dcd2bf7ab77f722df9bf08))
+* Remise de la maquette PDF + suppression limite 5 des codes rome ([2c75ca2](https://github.com/Dannebicque/oreof/commit/2c75ca2c231ef0628c4021e1eee168d4a4dfc27f))
+
 ### [1.23.17](https://github.com/Dannebicque/oreof/compare/v1.23.16...v1.23.17) (2024-01-23)
 
 
