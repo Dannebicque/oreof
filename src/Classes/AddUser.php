@@ -27,21 +27,23 @@ class AddUser
 
     public function addUser(string $email): ?UserInterface
     {
-        $exist = $this->userRepository->findOneBy(['email' => $email]);
-        if ($exist) {
-            return $exist;
-        }
+        if ($email !== '') {
+            $exist = $this->userRepository->findOneBy(['email' => $email]);
+            if ($exist) {
+                return $exist;
+            }
 
-        $user = $this->ldap->getDatas($email);
-        if ($user) {
-            $usr = new User();
-            $usr->setUsername($user['username']);
-            $usr->setEmail($email);
-            $usr->setNom($user['nom']);
-            $usr->setPrenom($user['prenom']);
-            $this->userRepository->save($usr, true);
+            $user = $this->ldap->getDatas($email);
+            if ($user) {
+                $usr = new User();
+                $usr->setUsername($user['username']);
+                $usr->setEmail($email);
+                $usr->setNom($user['nom']);
+                $usr->setPrenom($user['prenom']);
+                $this->userRepository->save($usr, true);
 
-            return $usr;
+                return $usr;
+            }
         }
 
         return null;

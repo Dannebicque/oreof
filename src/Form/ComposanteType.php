@@ -12,6 +12,8 @@ namespace App\Form;
 use App\Entity\Composante;
 use App\Entity\User;
 use App\Form\Type\EntityWithAddType;
+use App\Form\Type\YesNoType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,6 +31,15 @@ class ComposanteType extends AbstractType
             ->add('sigle', TextType::class, [
                 'label' => 'Sigle',
                 'help' => 'Le sigle est la dénomination courte de la composante, s\'il existe.',
+                'required' => false,
+            ])
+            ->add('inscriptionUniquement', YesNoType::class, [
+                'label' => 'Composante d\'inscription uniquement',
+            ])
+            ->add('composanteParent', EntityType::class, [
+                'class' => Composante::class,
+                'choice_label' => 'libelle',
+                'autocomplete' => true,
                 'required' => false,
             ])
             ->add('codeComposante', TextType::class, [

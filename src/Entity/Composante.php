@@ -82,12 +82,22 @@ class Composante
     #[ORM\ManyToOne(inversedBy: 'composantes')]
     private ?Etablissement $etablissement = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $inscriptionUniquement = false;
+
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'composantes')]
+    private ?self $composanteParent = null;
+
+    #[ORM\OneToMany(mappedBy: 'composanteParent', targetEntity: self::class)]
+    private Collection $composantes;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
         $this->userCentres = new ArrayCollection();
         $this->formationsPortees = new ArrayCollection();
         $this->ficheMatieres = new ArrayCollection();
+        $this->composantes = new ArrayCollection();
     }
 
     public function getEtatComposante(): array
@@ -369,6 +379,60 @@ class Composante
     public function setEtablissement(?Etablissement $etablissement): static
     {
         $this->etablissement = $etablissement;
+
+        return $this;
+    }
+
+    public function isInscriptionUniquement(): ?bool
+    {
+        return $this->inscriptionUniquement ?? false;
+    }
+
+    public function setInscriptionUniquement(?bool $inscriptionUniquement): static
+    {
+        $this->inscriptionUniquement = $inscriptionUniquement;
+
+        return $this;
+    }
+
+    public function getComposanteParent(): ?self
+    {
+        return $this->composanteParent;
+    }
+
+    public function setComposanteParent(?self $composanteParent): static
+    {
+        $this->composanteParent = $composanteParent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getComposantes(): Collection
+    {
+        return $this->composantes;
+    }
+
+    public function addComposante(self $composante): static
+    {
+        if (!$this->composantes->contains($composante)) {
+            $this->composantes->add($composante);
+            $composante->setComposanteParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComposante(self $composante): static
+    {
+        if ($this->composantes->removeElement($composante)) {
+            // set the owning side to null (unless already changed)
+            if ($composante->getComposanteParent() === $this) {
+                $composante->setComposanteParent(null);
+            }
+        }
 
         return $this;
     }
