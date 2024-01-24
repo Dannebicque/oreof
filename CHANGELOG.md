@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.21](https://github.com/Dannebicque/oreof/compare/v1.23.20...v1.23.21) (2024-01-24)
+
+
+### Bug Fixes
+
+* Affichage du parcours avec le flag (alternance, Accès Santé...) ([e3b1290](https://github.com/Dannebicque/oreof/commit/e3b12900895f7089b7f37b67019a451952f047ad))
+* Affichage du parcours avec le flag (alternance, Accès Santé...) ([dd66cb3](https://github.com/Dannebicque/oreof/commit/dd66cb3a4db3a03a865cdfa9c51851d673aa76c9))
+* Affichage du parcours avec le flag (alternance, Accès Santé...) ([5c5974b](https://github.com/Dannebicque/oreof/commit/5c5974bad307cbe1256457994fba399d75e2348a))
+* Code rome LHEO ([fc6b818](https://github.com/Dannebicque/oreof/commit/fc6b818417a971756d9c7841ca71e33e4d1d7c1d))
+
 ### [1.23.20](https://github.com/Dannebicque/oreof/compare/v1.23.19...v1.23.20) (2024-01-24)
 
 
