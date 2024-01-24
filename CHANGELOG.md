@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.22](https://github.com/Dannebicque/oreof/compare/v1.23.21...v1.23.22) (2024-01-24)
+
+
+### Bug Fixes
+
+* Export Json maquette ([527fdd4](https://github.com/Dannebicque/oreof/commit/527fdd478018df1d5708f289236a801b43986c70))
+
 ### [1.23.21](https://github.com/Dannebicque/oreof/compare/v1.23.20...v1.23.21) (2024-01-24)
 
 
