@@ -294,7 +294,7 @@ bouton pour valider/invalide les étapes successives #}
                     {% endif %}
 
                     <tr>
-                        <td>{{ parcours.libelle }} {{ parcour.typeParcours|badgeTypeParcours }}</td>
+                        <td>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</td>
                         <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
                         <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
                         <td>{{ parcours.etatParcours|badgeDpe }}</td>
