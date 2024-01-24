@@ -294,23 +294,12 @@ bouton pour valider/invalide les étapes successives #}
                     {% endif %}
 
                     <tr>
-                        <td>{{ parcours.libelle }}</td>
+                        <td>{{ parcours.libelle }} {{ parcour.typeParcours|badgeTypeParcours }}</td>
                         <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
                         <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
                         <td>{{ parcours.etatParcours|badgeDpe }}</td>
                         <td>
                             {{ parcours.remplissage|remplissage }}
-                            {# Affichage de la vignette LHEO
-
-                            {% if lheoXML is defined and lheoXML is not null %}
-                            <a href="{{ path('app_parcours_export_xml_lheo', {'parcours': parcours.id}) }}">
-                                <span class="mt-4 badge {{ lheoXML.isValidLheo(parcours) ? 'bg-success' : 'bg-danger' }}">
-                                    LHEO
-                                </span>
-                            </a>
-                            {% endif %}
-
-                            #}
                         </td>
                         <td class="text-end">
                             <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"
