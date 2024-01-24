@@ -145,7 +145,12 @@ class CodificationFormation
 
             foreach ($parcours->getSemestreParcours() as $sp) {
                 $code = $sp->getAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '2' : '1';
-                $code .= substr($formation->getComposantePorteuse()?->getCodeComposante(), 1, 2);
+                if ($parcours->isParcoursDefaut()) {
+                    $code .= substr($formation->getComposantePorteuse()?->getCodeComposante(), 1, 2);
+                } else {
+                    $code .= substr($parcours->getComposanteInscription()?->getCodeComposante(), 1, 2);
+                }
+
                 $sp->setCodeApogeeVersionDiplome($code);
             }
         }
@@ -165,7 +170,14 @@ class CodificationFormation
             } else {
                 $code = $parcours->getCodeRegimeInscription();
             }
-            $code .= $parcours->getLocalisation()?->getCodeApogee();
+
+            if ($parcours->isParcoursDefaut()) {
+                $code .= $parcours->getFormation()?->getLocalisationMention()->first()?->getCodeApogee();
+            } else {
+                $code .= $parcours->getLocalisation()?->getCodeApogee();
+            }
+
+
             $code .= $parcours->getCodeApogeeNumeroVersion();
             return $code;
         }
