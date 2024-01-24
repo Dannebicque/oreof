@@ -158,9 +158,9 @@ class ButMccc
             $modele->setCellValue(self::CEL_SITE_FORMATION, $formation->getLocalisationMention()[0]?->getLibelle());
         } else {
             $modele->setCellValue(self::CEL_SITE_FORMATION, $parcours->getLocalisation()?->getLibelle());
-            $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->getLibelle());
-            $modele->setCellValue(self::CEL_PARCOURS_ECTS, $parcours->getLibelle());
-            $modele->setCellValue(self::CEL_PARCOURS, $parcours->getLibelle());
+            $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->getDisplay());
+            $modele->setCellValue(self::CEL_PARCOURS_ECTS, $parcours->getDisplay());
+            $modele->setCellValue(self::CEL_PARCOURS, $parcours->getDisplay());
         }
 
         // dates
@@ -332,7 +332,7 @@ class ButMccc
         $this->excelWriter->setActiveSheetIndex(0);
         $this->excelWriter->setSelectedCells('A1');
 
-        $this->fileName = Tools::FileName('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle(), 40);
+        $this->fileName = Tools::FileName('MCCC - ' . $anneeUniversitaire->getLibelle() . ' - ' . $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getDisplay(), 40);
     }
 
     public function exportExcelbutMccc(

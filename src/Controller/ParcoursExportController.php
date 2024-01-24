@@ -46,9 +46,9 @@ class ParcoursExportController extends AbstractController
             'typeDiplome' => $typeDiplome,
             'parcours' => $parcours,
             'hasParcours' => $parcours->getFormation()?->isHasParcours(),
-            'titre' => 'Détails du parcours ' . $parcours->getLibelle(),
+            'titre' => 'Détails du parcours ' . $parcours->getDisplay(),
             'dto' => $calculStructureParcours->calcul($parcours)
-        ], 'Parcours_' . $parcours->getLibelle());
+        ], 'Parcours_' . $parcours->getDisplay());
     }
 
     #[Route('/parcours/{parcours}/maquette/export-json', name: 'app_parcours_export_maquette_json')]

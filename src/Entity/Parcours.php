@@ -1105,6 +1105,16 @@ class Parcours
             in_array(RegimeInscriptionEnum::FC_CONTRAT_PRO, $this->getRegimeInscription(), true);
     }
 
+    public function getDisplay(): string
+    {
+        $str = $this->getLibelle();
+        if ($this->typeParcours !== null && $this->typeParcours !== TypeParcoursEnum::TYPE_PARCOURS_CLASSIQUE) {
+            $str .= ' - ' . $this->typeParcours->getLabel();
+        }
+
+        return $str;
+    }
+
     public function displayRegimeInscription(): string
     {
         $texte = '';

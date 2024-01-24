@@ -70,7 +70,7 @@ class LheoXML
             $mention = $parcours->getFormation()?->getMention()?->getLibelle() ?? "";
             $intituleFormation = $typeDiplomeLibelle . " " . $mention;
             if ($parcours->isParcoursDefaut() === false) {
-                $intituleFormation .= "<br>parcours " . $parcours->getLibelle();
+                $intituleFormation .= "<br>parcours " . $parcours->getDisplay();
             }
         }
 

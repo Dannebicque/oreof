@@ -414,7 +414,7 @@ class UeController extends AbstractController
                 foreach ($parcours as $parcour) {
                     $t[] = [
                         'id' => $parcour->getId(),
-                        'libelle' => $parcour->getLibelle()
+                        'libelle' => $parcour->getDisplay()
                     ];
                 }
                 break;

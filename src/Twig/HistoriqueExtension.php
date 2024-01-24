@@ -42,7 +42,7 @@ class HistoriqueExtension extends AbstractExtension
     {
         if ($historique instanceof HistoriqueParcours) {
             return
-                ['%parcours%' => $historique->getParcours()?->getLibelle(),
+                ['%parcours%' => $historique->getParcours()?->getDisplay(),
                  '%formation%' => $historique->getParcours()?->getFormation()?->getDisplayLong()];
         }
 

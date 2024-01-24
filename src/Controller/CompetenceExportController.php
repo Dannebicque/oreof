@@ -23,7 +23,7 @@ class CompetenceExportController extends AbstractController
             'formation' => $formation,
             'parcours' => $parcours,
             'titre' => 'BCC du parcours ',
-        ], 'BCC du parcours_' . $parcours->getLibelle() . '.pdf');
+        ], 'BCC du parcours_' . $parcours->getDisplay() . '.pdf');
     }
 
     #[Route('/competence/export/croise/{parcours}', name: 'app_competence_export_croise')]
@@ -37,7 +37,7 @@ class CompetenceExportController extends AbstractController
             'formation' => $formation,
             'parcours' => $parcours,
             'titre' => 'BCC croisé du parcours ',
-        ], 'BCC Croisé du parcours_' . $parcours->getLibelle() . '<br>' . $formation->getDisplayLong());
+        ], 'BCC Croisé du parcours_' . $parcours->getDisplay() . '<br>' . $formation->getDisplayLong());
     }
 
     #[Route('/competence/export/croise-global/{parcours}', name: 'app_competence_export_croise_global')]

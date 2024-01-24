@@ -26,7 +26,7 @@ class ApiSiteWebController extends AbstractController
             foreach ($formation->getParcours() as $parcours) {
                 $tParcours[] = [
                     'id' => $parcours->getId(),
-                    'libelle' => $parcours->getLibelle(),
+                    'libelle' => $parcours->getDisplay(),
                     'url' => $this->generateUrl('app_parcours_export_json_urca', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL)
                 ];
             }

@@ -43,7 +43,7 @@ enum TypeParcoursEnum: string
     {
         return match ($this) {
             self::TYPE_PARCOURS_CLASSIQUE => 'Classique',
-            self::TYPE_PARCOURS_LAS1 => 'Accès santé 1',
+            self::TYPE_PARCOURS_LAS1 => 'Accès santé',
             self::TYPE_PARCOURS_LAS23 => 'Accès santé',
             self::TYPE_PARCOURS_CPI => 'CPI',
             self::TYPE_PARCOURS_ALTERNANCE => 'En alternance',

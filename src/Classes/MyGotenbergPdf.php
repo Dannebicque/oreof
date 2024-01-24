@@ -62,7 +62,7 @@ class MyGotenbergPdf
             $parcours = $context['parcours'];
             //formation + mention + parcours + intitulé parcours
             $formation = $parcours->getFormation();
-            $title = $formation->getDisplayLong() . '<br> Parcours : ' . $parcours->getLibelle() . '<br>' . $context['titre'];
+            $title = $formation->getDisplayLong() . '<br> Parcours : ' . $parcours->getDisplay() . '<br>' . $context['titre'];
         } else {
             $title = $context['titre'];
         }

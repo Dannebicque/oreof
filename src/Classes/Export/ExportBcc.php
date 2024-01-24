@@ -51,7 +51,7 @@ class ExportBcc implements ExportInterface
         $this->excelWriter->writeCellName('C3', 'Parcours', [
             'style' => 'HORIZONTAL_RIGHT',
         ]);
-        $this->excelWriter->writeCellName('D3', $parcours->isParcoursDefaut() === false ? $parcours->getLibelle() : '');
+        $this->excelWriter->writeCellName('D3', $parcours->isParcoursDefaut() === false ? $parcours->getDisplay() : '');
         $this->excelWriter->writeCellName('C4', 'Composante', [
             'style' => 'HORIZONTAL_RIGHT',
         ]);
@@ -181,7 +181,7 @@ class ExportBcc implements ExportInterface
 
         $this->excelWriter->borderOutsiteInside(1, 7, $col-1, $ligne-1);
 
-        $this->fileName = Tools::FileName('BCC Croisé Global - ' . $parcours->getLibelle() . ' ' . (new DateTime())->format('d-m-Y-H-i'), 30);
+        $this->fileName = Tools::FileName('BCC Croisé Global - ' . $parcours->getDisplay() . ' ' . (new DateTime())->format('d-m-Y-H-i'), 30);
     }
 
     public function export(Parcours $parcours): StreamedResponse

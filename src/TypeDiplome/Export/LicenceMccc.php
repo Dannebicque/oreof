@@ -155,7 +155,7 @@ class LicenceMccc
         $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, 'Année Universitaire ' . $formation->getAnneeUniversitaire()?->getLibelle());
         $modele->setCellValue(self::CEL_TYPE_FORMATION, $formation->getTypeDiplome()?->getLibelle());
         $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
-        $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->isParcoursDefaut() === false ? $parcours->getLibelle() : '');
+        $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->isParcoursDefaut() === false ? $parcours->getDisplay() : '');
         $modele->setCellValue(self::CEL_COMPOSANTE, $formation->getComposantePorteuse()?->getLibelle());
         if ($formation->isHasParcours() === false) {
             $modele->setCellValue(self::CEL_SITE_FORMATION, $formation->getLocalisationMention()[0]?->getLibelle());
@@ -432,7 +432,7 @@ class LicenceMccc
         $this->excelWriter->removeSheetByIndex(0);
 
         if ($formation->isHasParcours() === true) {
-            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getLibelle();
+            $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $parcours->getDisplay();
         } else {
             $texte = $formation->gettypeDiplome()?->getLibelleCourt() . ' ' . $formation->getDisplay();
         }
@@ -546,7 +546,7 @@ class LicenceMccc
         $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, 'Année Universitaire ' . $formation->getAnneeUniversitaire()?->getLibelle());
         $modele->setCellValue('D5', $formation->getTypeDiplome()?->getLibelle());
         $modele->setCellValue('D6', $formation->getDisplay());
-        $modele->setCellValue('D7', $parcours->isParcoursDefaut() === false ? $parcours->getLibelle() : '');
+        $modele->setCellValue('D7', $parcours->isParcoursDefaut() === false ? $parcours->getDisplay() : '');
         $modele->setCellValue('D11', $formation->getComposantePorteuse()?->getLibelle());
         $modele->setCellValue('D13', $parcours->getLocalisation()?->getLibelle());
 
