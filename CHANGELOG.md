@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.20](https://github.com/Dannebicque/oreof/compare/v1.23.19...v1.23.20) (2024-01-24)
+
+
+### Bug Fixes
+
+* Affichage du parcours avec le flag (alternance, Accès Santé...) ([7693a72](https://github.com/Dannebicque/oreof/commit/7693a72cef5200a0611c5d5cf5c106a66003f1c8))
+* Ajout du code Alternance dans les types ([984f202](https://github.com/Dannebicque/oreof/commit/984f20249d8c1b65359a0de4f0b0a06dfadf679d))
+* Filtre des listes + autocomplete ([a90b452](https://github.com/Dannebicque/oreof/commit/a90b452a84e6648722e34e77afe545d2db057c68))
+
 ### [1.23.19](https://github.com/Dannebicque/oreof/compare/v1.23.18...v1.23.19) (2024-01-24)
 
 
