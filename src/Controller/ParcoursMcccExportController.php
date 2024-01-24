@@ -88,8 +88,8 @@ class ParcoursMcccExportController extends BaseController
             'pdf' => $typeDiplome->exportPdfMccc(
                 $this->getAnneeUniversitaire(),
                 $parcours,
-            $cfvu?->getDate() ?? null,
-            $conseil?->getDate() ?? null,
+                $cfvu?->getDate() ?? null,
+                $conseil?->getDate() ?? null,
                 false
             ),
             default => throw new \Exception('Format non géré'),

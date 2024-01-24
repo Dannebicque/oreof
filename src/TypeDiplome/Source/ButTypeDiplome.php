@@ -150,30 +150,33 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
     public function exportExcelMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        ?DateTimeInterface $dateEdition = null,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): StreamedResponse {
         //todo: exploiter la date...
-        return $this->butMccc->exportExcelButMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        return $this->butMccc->exportExcelButMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
     }
 
     public function exportPdfMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        ?DateTimeInterface $dateEdition = null,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): StreamedResponse {
         //todo: exploiter la date...
-        return $this->butMccc->exportPdfButMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        return $this->butMccc->exportPdfButMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
     }
 
     public function exportAndSaveExcelMccc(
         string             $dir,
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        DateTimeInterface  $dateEdition,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): string {
-        return $this->butMccc->exportAndSaveExcelbutMccc($anneeUniversitaire, $parcours, $dir, $dateEdition, $versionFull);
+        return $this->butMccc->exportAndSaveExcelbutMccc($anneeUniversitaire, $parcours, $dir, $dateCfvu, $dateConseil, $versionFull);
     }
 }

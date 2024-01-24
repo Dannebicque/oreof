@@ -71,6 +71,8 @@ class ButMccc
     public const COL_TP = 7;
     public const COL_HEURE_AUTONOMIE = 8;
     public const COL_FIRST_UE = 39;
+    public const CEL_DATE_CONSEIL = 'N32';
+    public const CEL_DATE_CFVU = 'N34';
     private string $fileName;
     private Parcours $parcours;
 
@@ -94,7 +96,8 @@ class ButMccc
     public function genereExcelbutMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        ?DateTimeInterface $dateEdition = null,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): void {
         $tabColonnes = [
@@ -158,6 +161,20 @@ class ButMccc
             $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->getLibelle());
             $modele->setCellValue(self::CEL_PARCOURS_ECTS, $parcours->getLibelle());
             $modele->setCellValue(self::CEL_PARCOURS, $parcours->getLibelle());
+        }
+
+        // dates
+        $modele->setCellValue(self::CEL_DATE_CONSEIL, $dateConseil?->format('d/m/Y'));
+        $modele->setCellValue(self::CEL_DATE_CFVU, $dateCfvu?->format('d/m/Y'));
+
+        if ($dateCfvu !== null) {
+            //changer le pied de page.
+            $modele->getHeaderFooter()
+                ->setOddFooter(
+                    '&L&B' . 'Document généré depuis ORéOF'.
+                    '&C&B' . 'Document validé en CFVU le '. $dateCfvu->format('d/m/Y')
+                    . '&R&B' . 'Université de Reims Champagne-Ardenne'
+                );
         }
 
         foreach ($parcours->getRegimeInscription() as $regimeInscription) {
@@ -321,20 +338,22 @@ class ButMccc
     public function exportExcelbutMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        ?DateTimeInterface $dateEdition = null,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): StreamedResponse {
-        $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
         return $this->excelWriter->genereFichier($this->fileName);
     }
 
     public function exportPdfbutMccc(
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
-        ?DateTimeInterface $dateEdition = null,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): Response {
-        $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
 
         $fichier = $this->excelWriter->saveFichier($this->fileName, $this->dir . '/temp/');
 
@@ -354,10 +373,11 @@ class ButMccc
         AnneeUniversitaire $anneeUniversitaire,
         Parcours           $parcours,
         string             $dir,
-        DateTimeInterface  $dateEdition,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): string {
-        $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateEdition, $versionFull);
+        $this->genereExcelbutMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
         $this->excelWriter->saveFichier($this->fileName, $dir);
         return $this->fileName . '.xlsx';
     }
