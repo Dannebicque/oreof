@@ -63,8 +63,6 @@ class LheoXML
                 $codesRome[] = $matches[1][0];
             }
         }
-        // 5 codes ROME max
-        $codesRome = array_slice($codesRome, 0, 5);
 
         // Intitulé de la formation
         $intituleFormation = 'Non renseigné.';
@@ -309,7 +307,7 @@ HTML;
                 '_format' => 'pdf'
             ],
             UrlGeneratorInterface::ABSOLUTE_URL
-        ); //todo: Maquette en PDF accessible, quelle URL ?
+        );
 
         $organisationPedagogique = '';
         if($parcours->getRythmeFormationTexte() !== null && !empty($parcours->getRythmeFormationTexte())){
@@ -329,8 +327,8 @@ HTML;
             . $terMemoire
             . "<br><br>"
             . $maquetteIframe
-            // . "<h3>Maquette de la formation</h3>"
-            // . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>"
+             . "<h3>Maquette de la formation</h3>"
+             . "<a href=\"$maquettePdf\" target=\"_blank\">Maquette et modalités de contrôle de la formation au format PDF</a>"
             . "<h3>Calendrier universitaire</h3>"
             . $calendrierUniversitaire;
 
@@ -371,7 +369,7 @@ HTML;
         // Si LAS 1
         if ($parcours->getTypeParcours()->name === "TYPE_PARCOURS_LAS1") {
             $poursuiteEtudes .= "<br><h2>Accès Santé</h2>";
-            $poursuiteEtudes .= 
+            $poursuiteEtudes .=
                 "<h3>Après la 1ère année de licence \"Sciences pour la Santé\" - Accès santé </h3>"
                 . $etablissementInformation->getTextLas1()
                 . "<h3>Licence - Accès santé 2ème année (L.As 2)</h3>"
@@ -384,7 +382,7 @@ HTML;
         // Si LAS 2 ou 3
         if ($parcours->getTypeParcours()->name === "TYPE_PARCOURS_LAS23") {
             $poursuiteEtudes .= "<br><h2>Accès Santé</h2>";
-            $poursuiteEtudes .= 
+            $poursuiteEtudes .=
                 "<h3>Licence - Accès santé 2ème année (L.As 2)</h3>"
                 . $etablissementInformation->getTextLas2()
                 . "<h3>Licence - Accès santé 3ème année (L.As 3)</h3>"
