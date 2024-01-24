@@ -263,7 +263,7 @@ class ParcoursExportController extends AbstractController
                 "nom"=> $ec->elementConstitutif?->getFicheMatiere()?->getResponsableFicheMatiere()?->getDisplay() ?? '-',
                 "email"=> $ec->elementConstitutif?->getFicheMatiere()?->getResponsableFicheMatiere()?->getEmail() ?? '-'
             ],
-            "description" => $ec->elementConstitutif?->getFicheMatiere()?->getDescription() ?? '-',
+            'description' => $ec->elementConstitutif?->getFicheMatiere()?->getDescription() ?? '-',
             "objectifs" => $ec->elementConstitutif?->getFicheMatiere()?->getObjectifs() ?? '-',
             "modalite_enseignement"=> $ec->elementConstitutif?->getFicheMatiere()?->getModaliteEnseignement()->value ?? '-',
             "langues_supports" => $ec->elementConstitutif?->getFicheMatiere()?->getLanguesSupportsArray() ?? [],
