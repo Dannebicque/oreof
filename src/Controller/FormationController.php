@@ -64,7 +64,7 @@ class FormationController extends BaseController
         return $this->render('formation/_liste.html.twig', [
             'formations' => $formationsCfvu,
             'mentions' => $mentionRepository->findBy([], ['libelle' => 'ASC']),
-            'composantes' => $composanteRepository->findBy([], ['libelle' => 'ASC']),
+            'composantes' => $composanteRepository->findPorteuse(),
             'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
             'params' => $request->query->all(),
             'isCfvu' => $isCfvu ?? false,
@@ -135,7 +135,7 @@ class FormationController extends BaseController
         return $this->render('formation/_liste.html.twig', [
             'formations' => $tFormations,
             'mentions' => $mentionRepository->findBy([], ['libelle' => 'ASC']),
-            'composantes' => $composanteRepository->findBy([], ['libelle' => 'ASC']),
+            'composantes' => $composanteRepository->findPorteuse(),
             'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
             'params' => $request->query->all(),
             'isCfvu' => false,
@@ -176,7 +176,7 @@ class FormationController extends BaseController
             'formations' => $formations,
             'sort' => $sort,
             'direction' => $direction,
-            'composantes' => $composanteRepository->findAll(),
+            'composantes' => $composanteRepository->findPorteuse(),
             'typeDiplomes' => $typeDiplomeRepository->findAll(),
             'mentions' => $mentionRepository->findAll(),
         ]);

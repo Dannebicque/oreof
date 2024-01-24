@@ -13,6 +13,8 @@ use App\Entity\Composante;
 use App\Entity\User;
 use App\Form\Type\EntityWithAddType;
 use App\Form\Type\YesNoType;
+use App\Repository\ComposanteRepository;
+use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -38,6 +40,13 @@ class ComposanteType extends AbstractType
             ])
             ->add('composanteParent', EntityType::class, [
                 'class' => Composante::class,
+                'query_builder' => static function ($er) {
+                    return $er->createQueryBuilder('t')
+                        ->where('t.inscriptionUniquement = :inscription')
+                        ->orWhere('t.inscriptionUniquement IS NULL')
+                        ->setParameter('inscription', false)
+                        ->orderBy('t.libelle', 'ASC');
+                },
                 'choice_label' => 'libelle',
                 'autocomplete' => true,
                 'required' => false,
@@ -56,7 +65,13 @@ class ComposanteType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'display',
                 'multiple' => false,
+                'autocomplete' => true,
                 'expanded' => false,
+                'query_builder' => static function ($er) {
+                    return $er->createQueryBuilder('t')
+                        ->orderBy('t.nom', 'ASC')
+                        ->addOrderBy('t.prenom', 'ASC');
+                },
                 'help_to_add' => 'Saisir l\'email urca de la personne à ajouter.',
                 'placeholder' => 'Choisir dans la liste ou choisir "+" pour ajouter un nouveau directeur',
                 'label' => 'Directeur de composante',
@@ -66,7 +81,13 @@ class ComposanteType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'display',
                 'multiple' => false,
+                'autocomplete' => true,
                 'expanded' => false,
+                'query_builder' => static function ($er) {
+                    return $er->createQueryBuilder('t')
+                        ->orderBy('t.nom', 'ASC')
+                        ->addOrderBy('t.prenom', 'ASC');
+                },
                 'empty_data' => 'null',
                 'help_to_add' => 'Saisir l\'email urca de la personne à ajouter.',
                 'placeholder' => 'Choisir dans la liste ou choisir "+" pour ajouter un nouveau responsable',

@@ -61,4 +61,13 @@ class ComposanteRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findPorteuse(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.inscriptionUniquement = 0')
+            ->orWhere('c.inscriptionUniquement IS NULL')
+            ->orderBy('c.libelle', 'ASC')
+            ->getQuery()->getResult();
+    }
 }
