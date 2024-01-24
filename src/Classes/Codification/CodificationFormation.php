@@ -89,16 +89,17 @@ class CodificationFormation
                 if (
                     $p->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1 ||
                     $p->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23 ||
-                str_contains($p->getLibelle(), '(Alternance)')
+                    $p->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_ALTERNANCE
                 ) {
-                    if (str_contains($p->getLibelle(), '(Alternance)')) {
-                        $libelle = trim(str_replace(' (Alternance)', '', $p->getLibelle()));
-                    } else {
-                        $libelle = trim($p->getLibelle());
-                    }
-                    //un parcours LAS ne génère pas un nouveau code de parcours, on essaye de retrouver le code du parcours
+
+                    $libelle = trim($p->getLibelle());
+                    //un parcours LAS ou en alternance avec une FI équivalence ne génère pas un nouveau code de parcours, on essaye de retrouver le code du parcours
                     if (array_key_exists($libelle, $cleParcours)) {
                         $p->setCodeApogee($cleParcours[$libelle ]);
+                    } else {
+                        //si pas d'équivalence on génère un nouveau code
+                        $p->setCodeApogee(self::TAB_CODE_PARCOURS[$i]);
+                        $i++;
                     }
                 }
             }
