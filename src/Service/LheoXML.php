@@ -64,6 +64,9 @@ class LheoXML
             }
         }
 
+        // 5 codes ROME max
+        $codesRomeLheo = array_slice($codesRome, 0, 5);
+
         // Intitulé de la formation
         $intituleFormation = 'Non renseigné.';
         if ($typeDiplomeLibelle = $parcours->getFormation()?->getTypeDiplome()?->getLibelle()) {
@@ -470,7 +473,7 @@ HTML;
                         // Formacode et code nsf optionnels
                         // 'code-FORMACODE' => '',
                         // 'code-NSF' => '',
-                        'code-ROME' => $codesRome,
+                        'code-ROME' => $codesRomeLheo,
                     ],
                     'intitule-formation' => $this->cleanString($intituleFormation),
                     'objectif-formation' => $objectifFormation,
