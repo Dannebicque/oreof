@@ -76,7 +76,7 @@
                     <span class="badge bg-danger">Non définie</span>
                 {% endif %}
             </td>
-            <td>{{ parcour.libelle }}</td>
+            <td>{{ parcour.libelle }} {{ parcour.typeParcours|badgeTypeParcours }}</td>
             <td>{{ parcour.localisation != null ? parcour.localisation.libelle : 'Non défini' }}</td>
             <td>
                 {{ parcour.etatParcours|badgeDpe }}
@@ -84,7 +84,7 @@
             <td>
                 {{ parcour.remplissage|remplissage }}
                 {# Affichage de la vignette LHEO
-                
+
                 {% if is_granted('ROLE_SES') %}
                     {% if lheoXML is defined and lheoXML is not null %}
                     <a href="{{ path('app_parcours_export_xml_lheo', {'parcours': parcour.id}) }}">
@@ -93,8 +93,8 @@
                         </span>
                     </a>
                     {% endif %}
-                {% endif %} 
-                
+                {% endif %}
+
                 #}
             </td>
             <td>

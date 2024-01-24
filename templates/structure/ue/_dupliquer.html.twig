@@ -20,7 +20,7 @@
         >
             <option value="">Choisir un parcours pour dupliquer l'UE</option>
             {% for parcour in formation.parcours %}
-                <option value="{{ parcour.id }}">{{ parcour.libelle }}</option>
+                <option value="{{ parcour.id }}">{{ parcour.display }}</option>
             {% endfor %}
         </select>
     </div>

@@ -77,14 +77,14 @@
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
-                            modalTitle: 'Dupliquer le parcours ' ~ parcour.libelle,
+                            modalTitle: 'Dupliquer le parcours ' ~ parcour.display,
                             modalUrl: path('app_parcours_dupliquer_modal', {'id': parcour.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm text-primary"
                         data-size="lg"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom"
-                        title="Dupliquer le parcours {{ parcour.libelle }}"
+                        title="Dupliquer le parcours {{ parcour.display }}"
                 >
                     <i class="{{ iconDuplicate }}"></i> Dupliquer
                 </button>
@@ -168,17 +168,17 @@
                             {{ stimulus_controller('modal', {
                                 size: 'lg',
                                 nomEvenement: 'parcoursAdded',
-                                modalTitle: 'Ajouter une option au parcours ' ~ parcour.libelle,
+                                modalTitle: 'Ajouter une option au parcours ' ~ parcour.display,
                                 modalUrl: path('app_parcours_new', {formation:formation.id, parent:parcour.id}) }) }}
                             data-action="click->modal#openModal"
                             class="btn btn-sm btn-outline-success btn-icon btn-icon-end"
                             data-size="lg"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
-                            title="Ajouter une option au parcours {{ parcour.libelle }}"
+                            title="Ajouter une option au parcours {{ parcour.display }}"
                     >
                         <i class="{{ iconAdd }}"></i>
-                        <span> Ajouter une option au parcours <strong>{{ parcour.libelle }}</strong></span>
+                        <span> Ajouter une option au parcours <strong>{{ parcour.display }}</strong></span>
                     </button>
                 </td>
             </tr>
