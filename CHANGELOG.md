@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.19](https://github.com/Dannebicque/oreof/compare/v1.23.18...v1.23.19) (2024-01-24)
+
+
+### Features
+
+* Composante inscription ([27a80aa](https://github.com/Dannebicque/oreof/commit/27a80aa64cdd65318c866768d688cfc2b940f345))
+
 ### [1.23.18](https://github.com/Dannebicque/oreof/compare/v1.23.17...v1.23.18) (2024-01-24)
 
 
