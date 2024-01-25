@@ -55,15 +55,18 @@ class ExportElpApogeeCommand extends Command
         $mode = $input->getOption('mode');
 
         if($mode === "test"){
-            $io->text("Début de la commande d'export des ELP");
+            $io->success("Début de la commande d'export des ELP");
             // Récupération de la donnée
             $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById(405);
             $dto = $this->getDTOForParcours($parcours);
-            $semestre = $dto->semestres[1]->ues()[0];
             // Transformation en objet pour le SOAP
-            $soapObject = $this->setObjectForSoapCall($semestre, $dto);
+            $soapObjectArray = [];
+            foreach($dto->semestres[1]->ues() as $ue){
+                $soapObjectArray[] = $this->setObjectForSoapCall($ue, $dto);
+            }
+            
 
-            dump($soapObject);exit;
+            dump($soapObjectArray);exit;
 
             return Command::SUCCESS;
         }
