@@ -47,7 +47,7 @@ class Formation
 
     #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne]
-    private ?AnneeUniversitaire $anneeUniversitaire;
+    private ?Dpe $dpe;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations')]
@@ -184,9 +184,9 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: CommentaireFormation::class)]
     private Collection $commentaires;
 
-    public function __construct(?AnneeUniversitaire $anneeUniversitaire)
+    public function __construct(?Dpe $anneeUniversitaire)
     {
-        $this->anneeUniversitaire = $anneeUniversitaire;
+        $this->dpe = $anneeUniversitaire;
         $this->localisationMention = new ArrayCollection();
         $this->parcours = new ArrayCollection();
         $this->composantesInscription = new ArrayCollection();
@@ -207,7 +207,7 @@ class Formation
     public function updateSlug(): void
     {
         $texte = $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
-        $texte = ($this->getTypeDiplome() != null ? $this->getTypeDiplome()->getLibelleCourt() : '') . '-' . $texte . '-' . $this->getAnneeUniversitaire()->getAnnee();
+        $texte = ($this->getTypeDiplome() != null ? $this->getTypeDiplome()->getLibelleCourt() : '') . '-' . $texte . '-' . $this->getDpe()?->getAnneeUniversitaire()?->getAnnee();
 
         $this->setSlug($texte);
     }
@@ -250,14 +250,14 @@ class Formation
         return $this;
     }
 
-    public function getAnneeUniversitaire(): ?AnneeUniversitaire
+    public function getDpe(): ?Dpe
     {
-        return $this->anneeUniversitaire;
+        return $this->dpe;
     }
 
-    public function setAnneeUniversitaire(?AnneeUniversitaire $anneeUniversitaire): self
+    public function setDpe(?Dpe $dpe): self
     {
-        $this->anneeUniversitaire = $anneeUniversitaire;
+        $this->dpe = $dpe;
 
         return $this;
     }

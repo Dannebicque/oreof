@@ -15,7 +15,7 @@ use App\DTO\StructureEc;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\DTO\TotalVolumeHeure;
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use App\Entity\Formation;
 use App\Entity\Mccc;
 use App\Entity\Parcours;
@@ -124,7 +124,7 @@ class LicenceMccc
      * @throws \Exception
      */
     public function genereExcelLicenceMccc(
-        AnneeUniversitaire $anneeUniversitaire,
+        Dpe                $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
@@ -152,7 +152,7 @@ class LicenceMccc
         $tabSemestresAnnee = $dto->getTabAnnee();
 
         //en-tête du fichier
-        $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, 'Année Universitaire ' . $formation->getAnneeUniversitaire()?->getLibelle());
+        $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, 'Année Universitaire ' . $formation->getDpe()?->getLibelle());
         $modele->setCellValue(self::CEL_TYPE_FORMATION, $formation->getTypeDiplome()?->getLibelle());
         $modele->setCellValue(self::CEL_INTITULE_FORMATION, $formation->getDisplay());
         $modele->setCellValue(self::CEL_INTITULE_PARCOURS, $parcours->isParcoursDefaut() === false ? $parcours->getDisplay() : '');
@@ -441,10 +441,10 @@ class LicenceMccc
     }
 
     public function exportExcelLicenceMccc(
-        AnneeUniversitaire $anneeUniversitaire,
+        Dpe                $anneeUniversitaire,
         Parcours           $parcours,
-        ?DateTimeInterface  $dateCfvu = null,
-        ?DateTimeInterface  $dateConseil = null,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true,
     ): StreamedResponse {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
@@ -452,10 +452,10 @@ class LicenceMccc
     }
 
     public function exportPdfLicenceMccc(
-        AnneeUniversitaire $anneeUniversitaire,
+        Dpe                $anneeUniversitaire,
         Parcours           $parcours,
-        ?DateTimeInterface  $dateCfvu = null,
-        ?DateTimeInterface  $dateConseil = null,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true,
     ): Response {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
@@ -479,11 +479,11 @@ class LicenceMccc
     }
 
     public function exportAndSaveExcelLicenceMccc(
-        AnneeUniversitaire $anneeUniversitaire,
+        Dpe                $anneeUniversitaire,
         Parcours           $parcours,
         string             $dir,
-        ?DateTimeInterface  $dateCfvu = null,
-        ?DateTimeInterface  $dateConseil = null,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true,
     ): string {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
@@ -492,11 +492,11 @@ class LicenceMccc
     }
 
     public function exportAndSavePdfLicenceMccc(
-        AnneeUniversitaire $anneeUniversitaire,
+        Dpe                $anneeUniversitaire,
         Parcours           $parcours,
         string             $dir,
-        ?DateTimeInterface  $dateCfvu = null,
-        ?DateTimeInterface  $dateConseil = null,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true,
     ): string {
         $this->genereExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
@@ -543,7 +543,7 @@ class LicenceMccc
         }
 
         //en-tête du fichier
-        $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, 'Année Universitaire ' . $formation->getAnneeUniversitaire()?->getLibelle());
+        $modele->setCellValue(self::CEL_ANNEE_UNIVERSITAIRE, 'Année Universitaire ' . $formation->getDpe()?->getLibelle());
         $modele->setCellValue('D5', $formation->getTypeDiplome()?->getLibelle());
         $modele->setCellValue('D6', $formation->getDisplay());
         $modele->setCellValue('D7', $parcours->isParcoursDefaut() === false ? $parcours->getDisplay() : '');
@@ -985,7 +985,7 @@ class LicenceMccc
         return $ligne;
     }
 
-    private function generePdfLicenceMccc(AnneeUniversitaire $anneeUniversitaire, Parcours $parcours, DateTimeInterface $dateEdition, bool $versionFull)
+    private function generePdfLicenceMccc(Dpe $anneeUniversitaire, Parcours $parcours, DateTimeInterface $dateEdition, bool $versionFull)
     {
     }
 }

@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+    {{ component('fiche_matiere_manage', {ficheMatiere:fiche_matiere}) }}
+
     <div {{ stimulus_controller('fiche_matiere_wizard', {
         url: path('app_fiche_matiere_wizard'),
         urlSynthese: path('app_fiche_matiere_wizard_synthese', {id: fiche_matiere.id}),

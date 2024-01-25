@@ -2,21 +2,37 @@
     <thead>
     <tr>
         <th>Libellé</th>
-        <th>Année</th>
+        <th>Année Universitaire</th>
+        <th>Code Apogée</th>
+{#        <th>Année</th>#}
+        <th>Date Ouverture</th>
+        <th>Date Clôture</th>
+        <th>Transmission SES</th>
+        <th>CFVU</th>
+        <th>Collecte DPE active ?</th>
         <th></th>
     </tr>
     </thead>
     <tbody>
-    {% for annee_universitaire in annee_universitaires %}
+    {% for dpe in dpes %}
         <tr>
-            <td>{{ annee_universitaire.libelle }}</td>
-            <td>{{ annee_universitaire.annee  }}</td>
+            <td>{{ dpe.libelle }}</td>
+            <td>{{ dpe.anneeUniversitaire != null ? dpe.anneeUniversitaire.libelle : 'erreur' }}</td>
+            <td>{{ dpe.codeApogee|displayOrBadge }}</td>
+{#            <td>{{ dpe.annee }}</td>#}
+            <td>{{ dpe.dateOuvertureDpe|dateFr }}</td>
+            <td>{{ dpe.dateClotureDpe|dateFr }}</td>
+            <td>{{ dpe.dateTransmissionSes|dateFr }}</td>
+            <td>{{ dpe.dateCfvu|dateFr }}</td>
+            <td><span class="badge {% if dpe.defaut %}bg-success{% else %}bg-warning{% endif %}">{{
+                    dpe
+                    .defaut ? 'Active' : 'Non' }}</span></td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {
                             size: 'lg',
                             modalTitle: 'Voir une année universitaire',
-                            modalUrl: path('app_annee_universitaire_show',{'id': annee_universitaire.id}) }) }}
+                            modalUrl: path('app_dpe_show',{'id': dpe.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm text-info"
                         data-size="lg"
@@ -32,7 +48,7 @@
                         {{ stimulus_controller('modal', {
                             size: 'lg',
                             modalTitle: 'Modifier une année universitaire',
-                            modalUrl: path('app_annee_universitaire_edit',{'id': annee_universitaire.id}) }) }}
+                            modalUrl: path('app_dpe_edit',{'id': dpe.id}) }) }}
                         data-action="click->modal#openModal"
                         class="btn btn-sm text-warning"
                         data-size="lg"
@@ -45,13 +61,13 @@
                 </button>
 
                 <button {{ stimulus_action('crud', 'duplicate', 'click', {
-                    url:path('app_annee_universitaire_duplicate',{'id': annee_universitaire.id})
+                    url:path('app_dpe_duplicate',{'id': dpe.id})
                 }) }} class="btn btn-sm text-success">
                     <i class="{{ iconDuplicate }}"></i> Dupliquer
                 </button>
                 <button {{ stimulus_action('crud', 'delete', 'click', {
-                    url:path('app_annee_universitaire_delete',{'id': annee_universitaire.id}),
-                    csrf: csrf_token('delete' ~ annee_universitaire.id)
+                    url:path('app_dpe_delete',{'id': dpe.id}),
+                    csrf: csrf_token('delete' ~ dpe.id)
                 }) }} class="btn btn-sm text-danger">
                     <i class="{{ iconDelete }}"></i> Supprimer
                 </button>
@@ -59,7 +75,7 @@
         </tr>
     {% else %}
         <tr>
-            <td colspan="3">no records found</td>
+            <td colspan="5">no records found</td>
         </tr>
     {% endfor %}
     </tbody>

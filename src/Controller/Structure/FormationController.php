@@ -30,11 +30,11 @@ class FormationController extends BaseController
         FormationRepository $formationRepository
     ): Response {
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) || $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()]);
+            $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getDpe()]);
         } else {
             $formations = [];
-            $formations[] = $formationRepository->findByComposanteDpe($this->getUser(), $this->getAnneeUniversitaire());
-            $formations[] = $formationRepository->findBy(['responsableMention' => $this->getUser(), 'anneeUniversitaire' => $this->getAnneeUniversitaire()]);
+            $formations[] = $formationRepository->findByComposanteDpe($this->getUser(), $this->getDpe());
+            $formations[] = $formationRepository->findBy(['responsableMention' => $this->getUser(), 'anneeUniversitaire' => $this->getDpe()]);
             $formations = array_merge(...$formations);
         }
 

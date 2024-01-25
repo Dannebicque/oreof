@@ -11,7 +11,7 @@ namespace App\Classes\Export;
 
 use App\Classes\Excel\ExcelWriter;
 use App\Classes\GetHistorique;
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\FormationRepository;
 use App\Utils\Tools;
@@ -34,7 +34,7 @@ class ExportRegime implements ExportInterface
     }
 
     private function prepareExport(
-        AnneeUniversitaire $anneeUniversitaire,
+        Dpe $anneeUniversitaire,
     ): void {
         $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
         $this->excelWriter->nouveauFichier('Export Régimes');
@@ -94,13 +94,13 @@ class ExportRegime implements ExportInterface
         $this->fileName = Tools::FileName('OF - REGIME - ' . (new DateTime())->format('d-m-Y-H-i'), 30);
     }
 
-    public function export(AnneeUniversitaire $anneeUniversitaire): StreamedResponse
+    public function export(Dpe $anneeUniversitaire): StreamedResponse
     {
         $this->prepareExport($anneeUniversitaire);
         return $this->excelWriter->genereFichier($this->fileName);
     }
 
-    public function exportLink(AnneeUniversitaire $anneeUniversitaire): string
+    public function exportLink(Dpe $anneeUniversitaire): string
     {
         $this->prepareExport($anneeUniversitaire);
         $this->excelWriter->saveFichier($this->fileName, $this->dir . 'zip/');

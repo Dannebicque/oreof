@@ -11,7 +11,7 @@ namespace App\TypeDiplome\Source;
 
 use App\Classes\CalculStructureParcours;
 use App\DTO\StructureParcours;
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Mccc;
@@ -56,7 +56,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
     }
 
     public function exportExcelMccc(
-        AnneeUniversitaire $anneeUniversitaire,
+        Dpe                $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
@@ -67,7 +67,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
     }
 
     public function exportPdfMccc(
-        AnneeUniversitaire $anneeUniversitaire,
+        Dpe                $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
@@ -79,7 +79,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
 
     public function exportAndSaveExcelMccc(
         string             $dir,
-        AnneeUniversitaire $anneeUniversitaire,
+        Dpe                $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
@@ -90,7 +90,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
 
     public function exportAndSavePdfMccc(
         string             $dir,
-        AnneeUniversitaire $anneeUniversitaire,
+        Dpe                $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,

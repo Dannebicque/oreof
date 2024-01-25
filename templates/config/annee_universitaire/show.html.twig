@@ -8,23 +8,5 @@
         <th>Année</th>
         <td>{{ annee_universitaire.annee }}</td>
     </tr>
-    <tr>
-        <th>Date de transmission limite au SES</th>
-        <td>{{ annee_universitaire.dateTransmissionSes|dateFr }}</td>
-    </tr>
-    <tr>
-        <th>Date de la CI CFVU</th>
-        <td>{{ annee_universitaire.dateCiCfvu|dateFr }}</td>
-    </tr>
-    <tr>
-        <th>Date de la CFVU</th>
-        <td>{{ annee_universitaire.dateCfvu|dateFr }}</td>
-    </tr>
-    <tr>
-        <th>Année Active</th>
-        <td><span class="badge {% if annee_universitaire.defaut %}bg-success{% else %}bg-warning{% endif %}">{{
-                annee_universitaire
-                .defaut ? 'Oui' : 'Non' }}</span></td>
-    </tr>
     </tbody>
 </table>

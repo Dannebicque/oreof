@@ -57,7 +57,7 @@
 
 
             <!-- Language Switch Start -->
-            {{ component('switch_annee_universitaire') }}
+            {{ component('switch_dpe') }}
             <!-- Language Switch End -->
 
 
@@ -220,6 +220,11 @@
                                         <span class="label">Structure de l'établissement</span>
                                     </a>
                                     <ul id="structure">
+                                        <li>
+                                            <a href="{{ path('app_dpe_index') }}">
+                                                <span class="label">DPE</span>
+                                            </a>
+                                        </li>
                                         <li>
                                             <a href="{{ path('app_composante_index') }}">
                                                 <span class="label">Composantes</span>

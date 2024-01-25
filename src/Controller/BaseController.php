@@ -10,7 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\DataUserSession;
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use App\Entity\Constantes;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -53,8 +53,8 @@ class BaseController extends AbstractController
         ]);
     }
 
-    public function getAnneeUniversitaire(): AnneeUniversitaire
+    public function getDpe(): Dpe
     {
-        return $this->dataUserSession->getAnneeUniversitaire();
+        return $this->dataUserSession->getDpe();
     }
 }

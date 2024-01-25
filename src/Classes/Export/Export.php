@@ -10,7 +10,7 @@
 namespace App\Classes\Export;
 
 use App\Classes\MyPDF;
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
 use DateTimeInterface;
@@ -21,7 +21,7 @@ class Export
     private string $format;
     private string $typeDocument;
     private array $formations;
-    private ?AnneeUniversitaire $annee;
+    private ?Dpe $annee;
     private ?DateTimeInterface $date;
     private string $dir;
     private mixed $export;
@@ -53,7 +53,7 @@ class Export
         $this->typeDocument = $t[1];
     }
 
-    public function exportFormations(array $formations, ?AnneeUniversitaire $annee = null): string
+    public function exportFormations(array $formations, ?Dpe $annee = null): string
     {
         $this->formations = $formations;
         $this->annee = $annee;

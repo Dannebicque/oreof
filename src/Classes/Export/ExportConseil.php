@@ -11,17 +11,17 @@ namespace App\Classes\Export;
 
 use App\Classes\CalculStructureParcours;
 use App\Classes\MyPDF;
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use DateTimeInterface;
 
 class ExportConseil
 {
     public function __construct(
-        private string $dir,
-        private MyPDF              $myPDF,
-        private array              $formations,
-        private AnneeUniversitaire $annee,
-        private DateTimeInterface  $date
+        private string            $dir,
+        private MyPDF             $myPDF,
+        private array             $formations,
+        private Dpe               $annee,
+        private DateTimeInterface $date
     ) {
     }
 

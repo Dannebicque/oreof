@@ -117,7 +117,7 @@ class CodificationFormation
          */
         $formation = $parcours->getFormation();
         if ($formation !== null) {
-            $code = $formation->getAnneeUniversitaire()?->getCodeApogee();
+            $code = $formation->getDpe()?->getCodeApogee();
             $code .= $formation->getTypeDiplome()?->getCodeApogee();
             $code .= $formation->getDomaine()?->getCodeApogee();
             $code .= $formation->getMention()?->getCodeApogee();

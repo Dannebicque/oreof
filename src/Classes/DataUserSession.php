@@ -9,8 +9,8 @@
 
 namespace App\Classes;
 
-use App\Entity\AnneeUniversitaire;
-use App\Repository\AnneeUniversitaireRepository;
+use App\Entity\Dpe;
+use App\Repository\DpeRepository;
 use Stringable;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -21,24 +21,24 @@ class DataUserSession
     private UserInterface $user;
 
     private string $dir;
-    private ?AnneeUniversitaire $anneeUniversitaire;
+    private ?Dpe $dpe;
 
 
     public function __construct(
-        AnneeUniversitaireRepository $anneeUniversitaireRepository,
+        DpeRepository         $dpeRepository,
         TokenStorageInterface $tokenStorage,
-        KernelInterface $kernel,
+        KernelInterface       $kernel,
     ) {
-        $this->anneeUniversitaire = $anneeUniversitaireRepository->findOneBy(['defaut' => true]);
+        $this->dpe = $dpeRepository->findOneBy(['defaut' => true]);
         $this->dir = $kernel->getProjectDir();
         if ($tokenStorage->getToken() !== null) {
             $this->user = $tokenStorage->getToken()->getUser();
         }
     }
 
-    public function getAnneeUniversitaire(): ?AnneeUniversitaire
+    public function getDpe(): ?Dpe
     {
-        return $this->anneeUniversitaire;
+        return $this->dpe;
     }
 
     public function version(): ?string

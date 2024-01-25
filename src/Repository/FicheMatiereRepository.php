@@ -9,7 +9,7 @@
 
 namespace App\Repository;
 
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use App\Entity\Composante;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
@@ -80,8 +80,8 @@ class FicheMatiereRepository extends ServiceEntityRepository
     }
 
     public function findByAdmin(
-        AnneeUniversitaire $anneeUniversitaire,
-        array              $options = []
+        Dpe   $anneeUniversitaire,
+        array $options = []
     ): array {
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
@@ -96,7 +96,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function countByAdmin(AnneeUniversitaire $anneeUniversitaire, array $options): ?int
+    public function countByAdmin(Dpe $anneeUniversitaire, array $options): ?int
     {
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
@@ -238,7 +238,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
 //            ->getResult();
 //    }
 
-    public function findByHd(AnneeUniversitaire $getAnneeUniversitaire, array $options): array
+    public function findByHd(Dpe $dpe, array $options): array
     {
         $start = $options['start'] ?? 0;
         $query = $this->createQueryBuilder('f')
@@ -271,7 +271,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function countByHd(AnneeUniversitaire $getAnneeUniversitaire, array $options): ?int
+    public function countByHd(Dpe $dpe, array $options): ?int
     {
         $query = $this->createQueryBuilder('f')
             ->select('count(f.id)')
@@ -288,7 +288,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function findByResponsable(?UserInterface $user, AnneeUniversitaire $anneeUniversitaire, array $options): array
+    public function findByResponsable(?UserInterface $user, Dpe $anneeUniversitaire, array $options): array
     {
         $query = $this->createQueryBuilder('f')
             ->leftJoin('f.parcours', 'p')
@@ -311,7 +311,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function countByResponsable(?UserInterface $user, AnneeUniversitaire $anneeUniversitaire, array $options): ?int
+    public function countByResponsable(?UserInterface $user, Dpe $anneeUniversitaire, array $options): ?int
     {
         $query = $this->createQueryBuilder('f')
             ->leftJoin('f.parcours', 'p')

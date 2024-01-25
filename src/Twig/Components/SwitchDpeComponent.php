@@ -9,16 +9,16 @@
 
 namespace App\Twig\Components;
 
-use App\Repository\AnneeUniversitaireRepository;
+use App\Repository\DpeRepository;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
-#[AsTwigComponent('switch_annee_universitaire')]
-final class SwitchAnneeUniversitaireComponent
+#[AsTwigComponent('switch_dpe')]
+final class SwitchDpeComponent
 {
-    public array $anneesUniversitaires;
+    public array $dpes;
 
-    public function __construct(AnneeUniversitaireRepository $anneeUniversitaireRepository)
+    public function __construct(DpeRepository $dpeRepository)
     {
-        $this->anneesUniversitaires = $anneeUniversitaireRepository->findAll();
+        $this->dpes = $dpeRepository->findAll();
     }
 }

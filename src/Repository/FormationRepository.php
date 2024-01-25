@@ -9,7 +9,7 @@
 
 namespace App\Repository;
 
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\Mention;
@@ -54,16 +54,16 @@ class FormationRepository extends ServiceEntityRepository
     }
 
     public function findByComposanteDpe(
-        UserInterface      $user,
-        AnneeUniversitaire $anneeUniversitaire,
-        array              $sorts = []
+        UserInterface $user,
+        Dpe           $dpe,
+        array         $sorts = []
     ): array {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
             ->where('c.responsableDpe = :user')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('f.dpe = :dpe')
             ->setParameter('user', $user)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire);
+            ->setParameter('dpe', $dpe);
 
         foreach ($sorts as $sort => $direction) {
             if ($sort === 'mention') {
@@ -86,19 +86,19 @@ class FormationRepository extends ServiceEntityRepository
     }
 
     public function findBySearch(
-        string|null        $q,
-        AnneeUniversitaire $anneeUniversitaire,
-        array              $options = [],
-        Composante|null    $composante = null,
+        string|null     $q,
+        Dpe             $dpe,
+        array           $options = [],
+        Composante|null $composante = null,
     ): array {
         $sort = $options['sort'] ?? 'typeDiplome';
         $direction = $options['direction'] ?? 'ASC';
 
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
-            ->where('f.anneeUniversitaire = :anneeUniversitaire')
+            ->where('f.dpe = :dpe')
             ->andWhere('m.libelle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q ')
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('dpe', $dpe)
             ->setParameter('q', '%' . $q . '%')
             ->orderBy('f.' . $sort, $direction);
 
@@ -144,21 +144,21 @@ class FormationRepository extends ServiceEntityRepository
     }
 
     public function findBySearchAndCfvu(
-        string|null        $q,
-        AnneeUniversitaire $anneeUniversitaire,
-        array              $options = [],
-        Composante|null    $composante = null,
+        string|null     $q,
+        Dpe             $dpe,
+        array           $options = [],
+        Composante|null $composante = null,
     ): array {
         $sort = $options['sort'] ?? 'typeDiplome';
         $direction = $options['direction'] ?? 'ASC';
 
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
-            ->where('f.anneeUniversitaire = :anneeUniversitaire')
+            ->where('f.dpe = :dpe')
             ->andWhere('m.libelle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q ')
             ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
             ->setParameter('etatDpe', json_encode(['soumis_cfvu' => 1]))
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('dpe', $dpe)
             ->setParameter('q', '%' . $q . '%')
             ->orderBy('f.' . $sort, $direction);
 
@@ -198,14 +198,14 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByResponsableOuCoResponsable(User $user, AnneeUniversitaire $anneeUniversitaire, array $sorts = []): array
+    public function findByResponsableOuCoResponsable(User $user, Dpe $dpe, array $sorts = []): array
     {
         $query = $this->createQueryBuilder('f')
             ->where('f.responsableMention = :user')
             ->orWhere('f.coResponsable = :user')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('f.dpe = :dpe')
             ->setParameter('user', $user)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire);
+            ->setParameter('dpe', $dpe);
 
         foreach ($sorts as $sort => $direction) {
             if ($sort === 'mention') {
@@ -227,13 +227,13 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByComposante(Composante $composante, AnneeUniversitaire $anneeUniversitaire, array $sorts = []): array
+    public function findByComposante(Composante $composante, Dpe $dpe, array $sorts = []): array
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
             ->andWhere('c.id = :composante')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->andWhere('f.dpe = :dpe')
+            ->setParameter('dpe', $dpe)
             ->setParameter('composante', $composante);
 
         foreach ($sorts as $sort => $direction) {
@@ -256,15 +256,15 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByComposanteTypeValidation(Composante $composante, AnneeUniversitaire $anneeUniversitaire, string $typeValidation): array
+    public function findByComposanteTypeValidation(Composante $composante, Dpe $dpe, string $typeValidation): array
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
             ->andWhere('c.id = :composante')
             ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
             ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->andWhere('f.dpe = :dpe')
+            ->setParameter('dpe', $dpe)
             ->setParameter('composante', $composante);
 
 
@@ -272,15 +272,15 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByResponsableOuCoResponsableParcours(?UserInterface $user, AnneeUniversitaire $anneeUniversitaire, array $sorts)
+    public function findByResponsableOuCoResponsableParcours(?UserInterface $user, Dpe $dpe, array $sorts)
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Parcours::class, 'p', 'WITH', 'f.id = p.formation')
             ->where('p.respParcours = :user')
             ->orWhere('p.coResponsable = :user')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('f.dpe = :dpe')
             ->setParameter('user', $user)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire);
+            ->setParameter('dpe', $dpe);
 
         foreach ($sorts as $sort => $direction) {
             if ($sort === 'mention') {
@@ -319,13 +319,13 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByComposanteAndAnneeUniversitaire(string|null $composante, string|null $anneeUniversitaire): array
+    public function findByComposanteAndAnneeUniversitaire(string|null $composante, string|null $dpe): array
     {
         return $this->createQueryBuilder('f')
             ->where('f.composantePorteuse = :composante')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('f.dpe = :dpe')
             ->setParameter('composante', $composante)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('dpe', $dpe)
             ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
             ->addOrderBy(
                 'CASE
@@ -338,14 +338,14 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByComposanteAndAnneeUniversitaireAndTypeDiplome(string|null $composante, string|null $anneeUniversitaire, string|null $typeDiplome): array
+    public function findByComposanteAndAnneeUniversitaireAndTypeDiplome(string|null $composante, string|null $dpe, string|null $typeDiplome): array
     {
         return $this->createQueryBuilder('f')
             ->where('f.composantePorteuse = :composante')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('f.dpe = :dpe')
             ->andWhere('f.typeDiplome = :typeDiplome')
             ->setParameter('composante', $composante)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('dpe', $dpe)
             ->setParameter('typeDiplome', $typeDiplome)
             ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
             ->addOrderBy(
@@ -359,12 +359,12 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByAnneeUniversitaireAndTypeDiplome(AnneeUniversitaire $anneeUniversitaire, TypeDiplome $typeDiplome): array
+    public function findByAnneeUniversitaireAndTypeDiplome(Dpe $dpe, TypeDiplome $typeDiplome): array
     {
         return $this->createQueryBuilder('f')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('f.dpe = :dpe')
             ->andWhere('f.typeDiplome = :typeDiplome')
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('dpe', $dpe)
             ->setParameter('typeDiplome', $typeDiplome)
             ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
             ->addOrderBy(
@@ -378,15 +378,15 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByComposanteCfvu(Composante $composante, AnneeUniversitaire $anneeUniversitaire): array
+    public function findByComposanteCfvu(Composante $composante, Dpe $dpe): array
     {
         return $this->createQueryBuilder('f')
             ->where('f.composantePorteuse = :composante')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('f.dpe = :dpe')
             ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
             ->setParameter('etatDpe', json_encode(['soumis_cfvu' => 1]))
             ->setParameter('composante', $composante)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('dpe', $dpe)
             ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
             ->addOrderBy(
                 'CASE
@@ -399,14 +399,14 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByTypeValidation(AnneeUniversitaire $anneeUniversitaire, mixed $typeValidation): array
+    public function findByTypeValidation(Dpe $dpe, mixed $typeValidation): array
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
             ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
             ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire);
+            ->andWhere('f.dpe = :dpe')
+            ->setParameter('dpe', $dpe);
 
 
         return $query->getQuery()

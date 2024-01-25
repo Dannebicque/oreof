@@ -57,7 +57,7 @@ class FormationController extends BaseController
         $q = $request->query->get('q') ?? null;
 
         if ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL')) {
-            $formationsCfvu = $formationRepository->findBySearchAndCfvu($q, $this->getAnneeUniversitaire(), $request->query->all());
+            $formationsCfvu = $formationRepository->findBySearchAndCfvu($q, $this->getDpe(), $request->query->all());
             $isCfvu = true;
         }
 
@@ -88,7 +88,7 @@ class FormationController extends BaseController
             $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findBySearch($q, $this->getAnneeUniversitaire(), $request->query->all());
+            $formations = $formationRepository->findBySearch($q, $this->getDpe(), $request->query->all());
         } else {
             $formations = [];
             //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
@@ -103,7 +103,7 @@ class FormationController extends BaseController
                     //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
                     $formations[] = $formationRepository->findByComposante(
                         $centre->getComposante(),
-                        $this->getAnneeUniversitaire(),
+                        $this->getDpe(),
                         [$sort => $direction]
                     );
                 }
@@ -111,17 +111,17 @@ class FormationController extends BaseController
 
             $formations[] = $formationRepository->findByComposanteDpe(
                 $this->getUser(),
-                $this->getAnneeUniversitaire(),
+                $this->getDpe(),
                 [$sort => $direction]
             );
             $formations[] = $formationRepository->findByResponsableOuCoResponsable(
                 $this->getUser(),
-                $this->getAnneeUniversitaire(),
+                $this->getDpe(),
                 [$sort => $direction]
             );
             $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
                 $this->getUser(),
-                $this->getAnneeUniversitaire(),
+                $this->getDpe(),
                 [$sort => $direction]
             );
             $formations = array_merge(...$formations);
@@ -159,14 +159,14 @@ class FormationController extends BaseController
         if ($q) {
             $formations = $formationRepository->findBySearch(
                 $q,
-                $this->getAnneeUniversitaire(),
+                $this->getDpe(),
                 $sort,
                 $direction,
                 $composante
             );
         } else {
             $formations = $formationRepository->findBy(
-                ['composantePorteuse' => $composante->getId(), 'anneeUniversitaire' => $this->getAnneeUniversitaire()],
+                ['composantePorteuse' => $composante->getId(), 'anneeUniversitaire' => $this->getDpe()],
                 [$sort => $direction]
             );
         }
@@ -242,7 +242,7 @@ class FormationController extends BaseController
     ): Response {
         $this->denyAccessUnlessGranted('CAN_FORMATION_CREATE_ALL', $this->getUser());
 
-        $formation = new Formation($this->getAnneeUniversitaire());
+        $formation = new Formation($this->getDpe());
         $form = $this->createForm(FormationSesType::class, $formation, [
             'action' => $this->generateUrl('app_formation_new'),
         ]);

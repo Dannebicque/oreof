@@ -3,7 +3,7 @@
 {% block content %}
     <div class="card"
             {{ stimulus_controller('crud', {
-                url: path('app_annee_universitaire_liste')
+                url: path('app_dpe_liste')
             }) }}
          data-action="base:refreshListe@window->crud#refreshListe"
     >
@@ -29,16 +29,16 @@
     <button
             {{ stimulus_controller('modal', {
                 size: 'lg',
-                modalTitle: 'Ajouter une année universitaire',
-                modalUrl: path('app_annee_universitaire_new') }) }}
+                modalTitle: 'Ajouter un DPE',
+                modalUrl: path('app_dpe_new') }) }}
             data-action="click->modal#openModal"
             class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
             data-size="lg"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
-            title="Ajouter une année universitaire"
+            title="Ajouter un DPE"
     >
         <i class="{{ iconAdd }}"></i>
-        <span> Ajouter une année universitaire</span>
+        <span> Ajouter une année</span>
     </button>
 {% endblock %}

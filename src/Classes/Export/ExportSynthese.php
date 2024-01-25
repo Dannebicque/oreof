@@ -10,7 +10,7 @@
 namespace App\Classes\Export;
 
 use App\Classes\Excel\ExcelWriter;
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\FormationRepository;
 use App\Utils\Tools;
@@ -32,7 +32,7 @@ class ExportSynthese
     }
 
     private function prepareExport(
-        AnneeUniversitaire $anneeUniversitaire,
+        Dpe $anneeUniversitaire,
     ): void {
         $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
         $this->excelWriter->createFromTemplate('export_offre_formation.xlsx');
@@ -75,7 +75,7 @@ class ExportSynthese
 
 
     private function prepareExportBrut(
-        AnneeUniversitaire $anneeUniversitaire,
+        Dpe $anneeUniversitaire,
     ): void {
         $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
         $this->excelWriter->nouveauFichier('Export Régimes');
@@ -210,19 +210,19 @@ class ExportSynthese
         $this->fileName = Tools::FileName('OF Brut - ' . (new DateTime())->format('d-m-Y-H-i'), 30);
     }
 
-    public function export(AnneeUniversitaire $annee): StreamedResponse
+    public function export(Dpe $annee): StreamedResponse
     {
         $this->prepareExport($annee);
         return $this->excelWriter->genereFichier($this->fileName);
     }
 
-    public function exportBrut(AnneeUniversitaire $annee): StreamedResponse
+    public function exportBrut(Dpe $annee): StreamedResponse
     {
         $this->prepareExportBrut($annee);
         return $this->excelWriter->genereFichier($this->fileName);
     }
 
-    public function exportLink(AnneeUniversitaire $annee): string
+    public function exportLink(Dpe $annee): string
     {
         $this->prepareExport($annee);
         $this->excelWriter->saveFichier($this->fileName, $this->dir . 'zip/');

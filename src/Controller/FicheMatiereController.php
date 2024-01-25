@@ -11,7 +11,7 @@ namespace App\Controller;
 
 use App\Classes\JsonReponse;
 use App\Classes\verif\FicheMatiereState;
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereVersioning;
@@ -278,9 +278,9 @@ class FicheMatiereController extends AbstractController
                 AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s'
             ]);
-            // Enregistrement du fichier 
+            // Enregistrement du fichier
             $fileSystem->appendToFile(
-                __DIR__ . "/../../versioning_json/fiche-matiere/{$ficheMatiereVersioning->getSlug()}/{$ficheMatiereFileName}.json", 
+                __DIR__ . "/../../versioning_json/fiche-matiere/{$ficheMatiereVersioning->getSlug()}/{$ficheMatiereFileName}.json",
                 $ficheMatiereJson
             );
             // Enregistrement en BD
@@ -303,7 +303,7 @@ class FicheMatiereController extends AbstractController
         }catch(\Exception $e){
             // Log error
             $logTxt = "[{$dateHeure}] Le versioning de la fiche matière : "
-                . "{$ficheMatiere->getSlug()} - ID : {$ficheMatiere->getId()}" 
+                . "{$ficheMatiere->getSlug()} - ID : {$ficheMatiere->getId()}"
                 . "- a rencontré une erreur.\n{$e->getMessage()}\n";
             $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/save_fiche_matiere_error.log", $logTxt);
 
@@ -314,7 +314,7 @@ class FicheMatiereController extends AbstractController
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
         }
     }
-    
+
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/versioning/view', name: 'app_fiche_matiere_versioning_view')]
     public function getJsonVersion(

@@ -18,7 +18,7 @@ use App\DTO\HeuresEctsFormation;
 use App\DTO\HeuresEctsSemestre;
 use App\DTO\HeuresEctsUe;
 use App\DTO\StructureParcours;
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
@@ -81,7 +81,7 @@ class ParcoursController extends BaseController
 
 
         $parcours = $parcoursRepository->findParcours(
-            $this->getAnneeUniversitaire(),
+            $this->getDpe(),
             [$sort => $direction, 'recherche' => $q]
         );
 
@@ -685,9 +685,9 @@ class ParcoursController extends BaseController
         ParcoursRepository $parcoursRepo
     ): Response {
         $parcoursList = [
-            ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_pour_publication'),
-            ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'publie'),
-            ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_a_publier')
+            ...$parcoursRepo->findByTypeValidation($this->getDpe(), 'valide_pour_publication'),
+            ...$parcoursRepo->findByTypeValidation($this->getDpe(), 'publie'),
+            ...$parcoursRepo->findByTypeValidation($this->getDpe(), 'valide_a_publier')
         ];
 
         $errorArray = [];

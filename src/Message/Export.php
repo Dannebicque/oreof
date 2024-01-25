@@ -9,7 +9,7 @@
 
 namespace App\Message;
 
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use DateTimeInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 

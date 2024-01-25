@@ -9,7 +9,7 @@
 
 namespace App\Repository;
 
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\Mention;
@@ -61,7 +61,7 @@ class ParcoursRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByTypeValidation(AnneeUniversitaire $anneeUniversitaire, mixed $typeValidation): array
+    public function findByTypeValidation(Dpe $anneeUniversitaire, mixed $typeValidation): array
     {
         $query = $this->createQueryBuilder('p')
             ->innerJoin('p.formation', 'f')
@@ -74,7 +74,7 @@ class ParcoursRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findParcours(AnneeUniversitaire $anneeUniversitaire, array $options): array
+    public function findParcours(Dpe $anneeUniversitaire, array $options): array
     {
         $qb = $this->createQueryBuilder('p')
             ->where('p.libelle <> :libelle')

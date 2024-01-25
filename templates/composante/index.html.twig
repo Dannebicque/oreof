@@ -44,7 +44,11 @@
                             </tr>
                             <tr>
                                 <th>URL du site de la composante</th>
-                                <td>{{ composante.urlSite }}</td>
+                                <td>
+                                    <a href="{{ composante.urlSite|url }}" target="_blank">
+                                        {{ composante.urlSite }}
+                                    </a>
+                                </td>
                             </tr>
                             </tbody>
                         </table>

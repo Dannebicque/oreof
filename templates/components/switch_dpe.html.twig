@@ -1,0 +1,11 @@
+<!-- component html -->
+<div class="language-switch-container" {{ attributes }}>
+    <button class="btn btn-empty language-button dropdown-toggle" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">{{ user_data.dpe != null ? user_data.dpe.libelle|trim|replace({'-':'<br>'})|raw : 'erreur' }}
+    </button>
+    <div class="dropdown-menu">
+        {% for dpe in this.dpes %}
+            <a href="#" class="dropdown-item">{{ dpe.libelle }}</a>
+        {% endfor %}
+    </div>
+</div>

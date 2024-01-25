@@ -9,7 +9,7 @@
 
 namespace App\Repository;
 
-use App\Entity\AnneeUniversitaire;
+use App\Entity\Dpe;
 use App\Entity\Composante;
 use App\Entity\ElementConstitutif;
 use App\Entity\Formation;
@@ -53,7 +53,7 @@ class ElementConstitutifRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByComposanteDpe(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
+    public function findByComposanteDpe(UserInterface $user, Dpe $anneeUniversitaire): array
     {
         return $this->createQueryBuilder('ec')
             ->join('ec.ecUes', 'ecue')
@@ -71,7 +71,7 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByResponsableFormation(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
+    public function findByResponsableFormation(UserInterface $user, Dpe $anneeUniversitaire): array
     {
         return $this->createQueryBuilder('ec')
             ->join('ec.ecUes', 'ecue')
@@ -88,7 +88,7 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByResponsableEc(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
+    public function findByResponsableEc(UserInterface $user, Dpe $anneeUniversitaire): array
     {
         return $this->createQueryBuilder('ec')
             ->join('ec.ecUes', 'ecue')
@@ -105,7 +105,7 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByAllAnneUniversitaire(AnneeUniversitaire $anneeUniversitaire): array
+    public function findByAllAnneUniversitaire(Dpe $anneeUniversitaire): array
     {
         return $this->createQueryBuilder('ec')
             ->join('ec.ecUes', 'ecue')
