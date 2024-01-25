@@ -16,6 +16,7 @@ use App\DTO\StructureUe;
 use App\Entity\Parcours;
 use App\Entity\Ue;
 use App\Repository\TypeEpreuveRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -255,6 +256,8 @@ class ParcoursExportController extends AbstractController
     {
         $tEc = [
             'ordre' => $ec->elementConstitutif->getOrdre(),
+            'valide' => true,
+            'valide_date' => new DateTime(),
             "numero"=> $ec->elementConstitutif->getCode(),
             "libelle"=> $ec->elementConstitutif?->getFicheMatiere()?->getLibelle() ?? '-',
             "libelle_anglais" => $ec->elementConstitutif?->getFicheMatiere()?->getLibelleAnglais() ?? '-',
