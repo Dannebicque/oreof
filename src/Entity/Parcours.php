@@ -42,7 +42,7 @@ class Parcours
     private ?string $libelle = null;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
-    #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours', fetch: 'EAGER')]
+    #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours')]
     private ?Formation $formation;
 
     #[Groups('parcours_json_versioning')]
@@ -234,7 +234,10 @@ class Parcours
     private Collection $contacts;
 
     #[ORM\Column(length: 1, nullable: true)]
-    private ?string $codeApogeeNumeroVersion = "1"; //ne devrait pas changer mais plus cohérent de le mettre ici
+    private ?string $codeApogeeNumeroVersion = "1";
+
+    #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: DpeParcours::class)]
+    private Collection $dpeParcours; //ne devrait pas changer mais plus cohérent de le mettre ici
 
 
     public function __construct(?Formation $formation)
@@ -257,6 +260,7 @@ class Parcours
         $this->parcoursVersionings = new ArrayCollection();
         $this->adresses = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+        $this->dpeParcours = new ArrayCollection();
     }
 
 
@@ -1330,6 +1334,36 @@ class Parcours
     public function setCodeApogeeNumeroVersion(?string $codeApogeeNumeroVersion = "1"): static
     {
         $this->codeApogeeNumeroVersion = $codeApogeeNumeroVersion;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DpeParcours>
+     */
+    public function getDpeParcours(): Collection
+    {
+        return $this->dpeParcours;
+    }
+
+    public function addDpeParcour(DpeParcours $dpeParcour): static
+    {
+        if (!$this->dpeParcours->contains($dpeParcour)) {
+            $this->dpeParcours->add($dpeParcour);
+            $dpeParcour->setParcours($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDpeParcour(DpeParcours $dpeParcour): static
+    {
+        if ($this->dpeParcours->removeElement($dpeParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($dpeParcour->getParcours() === $this) {
+                $dpeParcour->setParcours(null);
+            }
+        }
 
         return $this;
     }

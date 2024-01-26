@@ -85,6 +85,7 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /** @deprecated  */
     public function findBySearch(
         string|null     $q,
         Dpe             $dpe,
@@ -95,10 +96,13 @@ class FormationRepository extends ServiceEntityRepository
         $direction = $options['direction'] ?? 'ASC';
 
         $query = $this->createQueryBuilder('f')
-            ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
-            ->where('f.dpe = :dpe')
-            ->andWhere('m.libelle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q ')
+            ->leftJoin('f.dpeParcours', 'p')
+            ->addSelect('p')
+            ->where('p.dpe = :dpe')
             ->setParameter('dpe', $dpe)
+            ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
+            ->andWhere('m.libelle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q ')
+
             ->setParameter('q', '%' . $q . '%')
             ->orderBy('f.' . $sort, $direction);
 
@@ -118,7 +122,7 @@ class FormationRepository extends ServiceEntityRepository
         }
 
         if (array_key_exists('etatDpe', $options) && null !== $options['etatDpe']) {
-            $query->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            $query->andWhere("JSON_CONTAINS(p.etatValidation, :etatDpe) = 1")
                 ->setParameter('etatDpe', json_encode([$options['etatDpe'] => 1]));
         }
 
@@ -154,11 +158,13 @@ class FormationRepository extends ServiceEntityRepository
 
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
-            ->where('f.dpe = :dpe')
-            ->andWhere('m.libelle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q ')
-            ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
-            ->setParameter('etatDpe', json_encode(['soumis_cfvu' => 1]))
+            ->leftJoin('f.dpeParcours', 'p')
+            ->addSelect('p')
+            ->where('p.dpe = :dpe')
             ->setParameter('dpe', $dpe)
+            ->andWhere('m.libelle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q ')
+            ->andWhere("JSON_CONTAINS(p.etatValidation, :etatDpe) = 1")
+            ->setParameter('etatDpe', json_encode(['soumis_cfvu' => 1]))
             ->setParameter('q', '%' . $q . '%')
             ->orderBy('f.' . $sort, $direction);
 
@@ -201,9 +207,11 @@ class FormationRepository extends ServiceEntityRepository
     public function findByResponsableOuCoResponsable(User $user, Dpe $dpe, array $sorts = []): array
     {
         $query = $this->createQueryBuilder('f')
+            ->leftJoin('f.dpeParcours', 'p')
+            ->addSelect('p')
             ->where('f.responsableMention = :user')
             ->orWhere('f.coResponsable = :user')
-            ->andWhere('f.dpe = :dpe')
+            ->andWhere('p.dpe = :dpe')
             ->setParameter('user', $user)
             ->setParameter('dpe', $dpe);
 
@@ -231,8 +239,10 @@ class FormationRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
+            ->leftJoin('f.dpeParcours', 'p')
+            ->addSelect('p')
             ->andWhere('c.id = :composante')
-            ->andWhere('f.dpe = :dpe')
+            ->andWhere('p.dpe = :dpe')
             ->setParameter('dpe', $dpe)
             ->setParameter('composante', $composante);
 
@@ -260,10 +270,12 @@ class FormationRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
+            ->leftJoin('f.dpeParcours', 'p')
+            ->addSelect('p')
             ->andWhere('c.id = :composante')
-            ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            ->andWhere("JSON_CONTAINS(p.etatValidation, :etatDpe) = 1")
             ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
-            ->andWhere('f.dpe = :dpe')
+            ->andWhere('p.dpe = :dpe')
             ->setParameter('dpe', $dpe)
             ->setParameter('composante', $composante);
 
@@ -276,9 +288,11 @@ class FormationRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Parcours::class, 'p', 'WITH', 'f.id = p.formation')
+            ->leftJoin('f.dpeParcours', 'p')
+            ->addSelect('p')
             ->where('p.respParcours = :user')
             ->orWhere('p.coResponsable = :user')
-            ->andWhere('f.dpe = :dpe')
+            ->andWhere('p.dpe = :dpe')
             ->setParameter('user', $user)
             ->setParameter('dpe', $dpe);
 
@@ -323,7 +337,9 @@ class FormationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('f')
             ->where('f.composantePorteuse = :composante')
-            ->andWhere('f.dpe = :dpe')
+            ->leftJoin('f.dpeParcours', 'p')
+            ->addSelect('p')
+            ->andWhere('p.dpe = :dpe')
             ->setParameter('composante', $composante)
             ->setParameter('dpe', $dpe)
             ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
@@ -342,8 +358,11 @@ class FormationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('f')
             ->where('f.composantePorteuse = :composante')
-            ->andWhere('f.dpe = :dpe')
+            ->leftJoin('f.dpeParcours', 'p')
+            ->addSelect('p')
+            ->andWhere('p.dpe = :dpe')
             ->andWhere('f.typeDiplome = :typeDiplome')
+
             ->setParameter('composante', $composante)
             ->setParameter('dpe', $dpe)
             ->setParameter('typeDiplome', $typeDiplome)
@@ -362,7 +381,9 @@ class FormationRepository extends ServiceEntityRepository
     public function findByAnneeUniversitaireAndTypeDiplome(Dpe $dpe, TypeDiplome $typeDiplome): array
     {
         return $this->createQueryBuilder('f')
-            ->andWhere('f.dpe = :dpe')
+            ->leftJoin('f.dpeParcours', 'p')
+            ->addSelect('p')
+            ->andWhere('p.dpe = :dpe')
             ->andWhere('f.typeDiplome = :typeDiplome')
             ->setParameter('dpe', $dpe)
             ->setParameter('typeDiplome', $typeDiplome)
@@ -382,8 +403,10 @@ class FormationRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('f')
             ->where('f.composantePorteuse = :composante')
-            ->andWhere('f.dpe = :dpe')
-            ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            ->leftJoin('f.dpeParcours', 'p')
+            ->addSelect('p')
+            ->andWhere('p.dpe = :dpe')
+            ->andWhere("JSON_CONTAINS(p.etatValidation, :etatDpe) = 1")
             ->setParameter('etatDpe', json_encode(['soumis_cfvu' => 1]))
             ->setParameter('composante', $composante)
             ->setParameter('dpe', $dpe)
@@ -403,9 +426,11 @@ class FormationRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
-            ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            ->leftJoin('f.dpeParcours', 'p')
+            ->addSelect('p')
+            ->andWhere("JSON_CONTAINS(p.etatValidation, :etatDpe) = 1")
             ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
-            ->andWhere('f.dpe = :dpe')
+            ->andWhere('p.dpe = :dpe')
             ->setParameter('dpe', $dpe);
 
 

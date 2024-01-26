@@ -11,6 +11,8 @@ namespace App\Entity;
 
 use App\Repository\DpeRepository;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -55,6 +57,14 @@ class Dpe
 
     #[ORM\ManyToOne(inversedBy: 'dpes')]
     private ?AnneeUniversitaire $annee_universitaire = null;
+
+    #[ORM\OneToMany(mappedBy: 'dpe', targetEntity: DpeParcours::class)]
+    private Collection $dpeParcours;
+
+    public function __construct()
+    {
+        $this->dpeParcours = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -177,6 +187,36 @@ class Dpe
     public function setAnneeUniversitaire(?AnneeUniversitaire $annee_universitaire): static
     {
         $this->annee_universitaire = $annee_universitaire;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DpeParcours>
+     */
+    public function getDpeParcours(): Collection
+    {
+        return $this->dpeParcours;
+    }
+
+    public function addDpeParcour(DpeParcours $dpeParcour): static
+    {
+        if (!$this->dpeParcours->contains($dpeParcour)) {
+            $this->dpeParcours->add($dpeParcour);
+            $dpeParcour->setDpe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDpeParcour(DpeParcours $dpeParcour): static
+    {
+        if ($this->dpeParcours->removeElement($dpeParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($dpeParcour->getDpe() === $this) {
+                $dpeParcour->setDpe(null);
+            }
+        }
 
         return $this;
     }

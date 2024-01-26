@@ -129,4 +129,14 @@ class ParcoursRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAllParcours()
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.formation', 'f')
+            ->select('p.id', 'f.id as formation_id', 'f.f.etatDpe as etatDpe')
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

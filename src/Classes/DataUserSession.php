@@ -23,22 +23,15 @@ class DataUserSession
     private UserInterface $user;
 
     private string $dir;
-    private ?Dpe $dpe;
+    private ?Dpe $dpe = null;
 
 
     public function __construct(
-        RequestStack      $requestStack,
-        DpeRepository         $dpeRepository,
+        private RequestStack      $requestStack,
+        private DpeRepository         $dpeRepository,
         TokenStorageInterface $tokenStorage,
         KernelInterface       $kernel,
     ) {
-        if ($requestStack->getSession()->get('dpe') !== null) {
-            $this->dpe = $dpeRepository->find($requestStack->getSession()->get('dpe'));
-        } else {
-            $this->dpe = $dpeRepository->findOneBy(['defaut' => true]);
-        }
-
-
         $this->dir = $kernel->getProjectDir();
         if ($tokenStorage->getToken() !== null) {
             $this->user = $tokenStorage->getToken()->getUser();
@@ -47,6 +40,15 @@ class DataUserSession
 
     public function getDpe(): ?Dpe
     {
+        $session = $this->requestStack->getSession();
+        if ($this->dpe === null) {
+            if ($session !== null && $session->get('dpe') !== null) {
+                $this->dpe = $this->dpeRepository->find($session->get('dpe'));
+            } else {
+                $this->dpe = $this->dpeRepository->findOneBy(['defaut' => true]);
+            }
+        }
+
         return $this->dpe;
     }
 

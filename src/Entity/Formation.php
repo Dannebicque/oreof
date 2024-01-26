@@ -152,7 +152,7 @@ class Formation
     private ?array $etatSteps = [];
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
-    #[ORM\ManyToOne(inversedBy: 'formations', fetch: 'EAGER')]
+    #[ORM\ManyToOne(inversedBy: 'formations')]
     private ?TypeDiplome $typeDiplome = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -184,6 +184,9 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: CommentaireFormation::class)]
     private Collection $commentaires;
 
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: DpeParcours::class)]
+    private Collection $dpeParcours;
+
     public function __construct(?Dpe $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
@@ -201,6 +204,7 @@ class Formation
         $this->butCompetences = new ArrayCollection();
         $this->historiqueFormations = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
+        $this->dpeParcours = new ArrayCollection();
     }
 
     #[ORM\PreFlush]
@@ -961,5 +965,35 @@ class Formation
             return $this->parcours->first();
         }
         return null;
+    }
+
+    /**
+     * @return Collection<int, DpeParcours>
+     */
+    public function getDpeParcours(): Collection
+    {
+        return $this->dpeParcours;
+    }
+
+    public function addDpeParcour(DpeParcours $dpeParcour): static
+    {
+        if (!$this->dpeParcours->contains($dpeParcour)) {
+            $this->dpeParcours->add($dpeParcour);
+            $dpeParcour->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDpeParcour(DpeParcours $dpeParcour): static
+    {
+        if ($this->dpeParcours->removeElement($dpeParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($dpeParcour->getFormation() === $this) {
+                $dpeParcour->setFormation(null);
+            }
+        }
+
+        return $this;
     }
 }
