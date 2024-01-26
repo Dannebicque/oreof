@@ -63,7 +63,7 @@
     {% for fiche in fiches %}
         <tr>
             <td>{{ fiche.ficheMatiere.libelle }}</td>
-            {% if fiche.ficheMatiere != null and fiche.ficheMatiere.parcours != null %}
+            {% if fiche.ficheMatiere != null and fiche.ficheMatiere.parcours != null and fiche.ficheMatiere.parcours.formation != null %}
                 <td>{{ fiche.ficheMatiere.parcours.formation.display }}</td>
             {% else %}
                 <td>Pas de parcours associé</td>

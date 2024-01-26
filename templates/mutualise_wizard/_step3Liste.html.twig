@@ -56,11 +56,17 @@
     <tbody>
     {% for semestre in semestres %}
         <tr>
-            <td>{{ semestre.semestre.display }}</td>
-            <td>{{ semestre.semestre.semestreParcours[0].parcours.formation.display }}</td>
+            <td>{{ semestre.semestre != null ? semestre.semestre.display : '' }}</td>
+            <td>{{ semestre.semestre != null and semestre.semestre.semestreParcours[0] is defined and semestre.semestre.semestreParcours[0].parcours != null and semestre.semestre.semestreParcours[0].parcours.formation != null ? semestre.semestre.semestreParcours[0].parcours.formation.display }}</td>
+            {% if semestre.parcours != null and semestre.parcours.formation != null %}
             <td>{{ semestre.parcours.formation.composantePorteuse.libelle }}</td>
             <td>{{ semestre.parcours.formation.display }}</td>
             <td>{{ semestre.parcours.libelle }}</td>
+            {% else %}
+            <td>Pas de parcours</td>
+            <td>Pas de parcours</td>
+            <td>Pas de parcours</td>
+            {% endif %}
             <td>Voir ?</td>
         </tr>
     {% endfor %}
