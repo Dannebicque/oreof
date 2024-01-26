@@ -53,10 +53,11 @@ class ExportElpApogeeCommand extends Command
             mode: InputArgument::OPTIONAL,
             description: 'Execution mode : test or production', 
             default: 'test'
-        )->addArgument(
-            'action', 
+        )->addOption(
+            'excel-export', 
+            'excel',
             InputArgument::OPTIONAL,
-            'Génère un export Excel des ELP'
+            'Génère un export Excel des ELP - Type : Semestre, UE, EC'
         );
     }
 
@@ -64,14 +65,30 @@ class ExportElpApogeeCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $mode = $input->getOption('mode');
-        $action = $input->getArgument('action');
+        $export = $input->getOption('excel-export');
 
 
         if($mode === "test"){
-            if($action === 'excel-export'){
-                $io->writeln("Génération de l'export Excel...");
-                $this->saveExportAsSpreadsheet($output);
+            if($export){
+                switch(strtoupper($export)){
+                    case "EC":
+                        $io->writeln("Génération de l'export Excel...");
+                        $this->saveExportAsSpreadsheet($output, "EC");
+                        break;
+                    case "UE":
+                        $io->writeln("Génération de l'export Excel...");
+                        $this->saveExportAsSpreadsheet($output, "UE");
+                        break;
+                    case "SEMESTRE":
+                        // $io->writeln("Génération de l'export Excel...");
+                        // $this->saveExportAsSpreadsheet($output, "SEMESTRE");
+                        break;
+                    default: 
+                        $io->warning("Type d'export inconnu. Il devrait être parmi la liste : ['SEMESTRE', 'UE', 'EC']");
+                        return Command::INVALID;
+                }
                 $io->success("Fichier généré avec succès.");
+
                 return Command::SUCCESS;
             }       
             
@@ -95,7 +112,7 @@ class ExportElpApogeeCommand extends Command
         return new ElementPedagogiDTO6($elementPedagogique, $dto);
     }
 
-    private function saveExportAsSpreadsheet(OutputInterface $output){
+    private function saveExportAsSpreadsheet(OutputInterface $output, string $type){
         // retrieve data
         $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAll();
         $totalElement = count($parcoursArray);
@@ -105,12 +122,28 @@ class ExportElpApogeeCommand extends Command
         $soapObjectArray = [];
         foreach($parcoursArray as $parcours){
             $dto = $this->getDTOForParcours($parcours);
-            foreach($dto->semestres as $semestre){
-                foreach($semestre->ues() as $ue){
-                    $soapObjectArray[] = $this->setObjectForSoapCall($ue, $dto);
+            if($type === "EC"){
+                foreach($dto->semestres as $semestre){
+                    foreach($semestre->ues() as $ue){
+                        foreach($ue->elementConstitutifs as $ec){
+                            $soapObjectArray[] = $this->setObjectForSoapCall($ec, $dto);
+                        }
+                    }
                 }
+                $progressBar->advance();
             }
-            $progressBar->advance();
+            elseif ($type === "UE") {
+                foreach($dto->semestres as $semestre){
+                    foreach($semestre->ues() as $ue){
+                        $soapObjectArray[] = $this->setObjectForSoapCall($ue, $dto);
+                    }
+                }
+                $progressBar->advance();
+            }
+            elseif ($type === "SEMESTRE"){
+
+            }
+            
         }
         $this->generateSpreadsheet($soapObjectArray);
     }

@@ -47,7 +47,36 @@ class ElementPedagogiDTO6
         StructureParcours $dto
     ) {
         if ($elementPedagogique instanceof StructureEc){
-           
+            $this->codElp = $elementPedagogique->elementConstitutif->getCodeApogee();
+            $this->libCourtElp = $this->prepareLibelle($elementPedagogique->elementConstitutif->getLibelle(), 25);
+            $this->libElp = $this->prepareLibelle($elementPedagogique->elementConstitutif->getLibelle(), 60);
+            $this->codNatureElp = "FIX_";
+            $this->codComposante = $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "error";
+            // $this->temSuspension;
+            // $this->motifSuspension;
+            $this->temModaliteControle = "O";
+            // $this->temEnsADistance;
+            // $this->temHorsEtab;
+            // $this->temStage;
+            // $this->lieu;
+            $this->nbrCredits = $elementPedagogique->heuresEctsEc->ects;
+            // $this->dateDebutIP;
+            // $this->dateFinIP;
+            // $this->descriptionElp;
+            $this->volume = $elementPedagogique->heuresEctsEc->sommeEcTotalPresDist();
+            $this->uniteVolume = TypeVolumeElpEnum::HE->value;
+            $this->codPeriode = "__";
+            // $this->numOrdrePresentationElp;
+            // $this->seuilOuverture;
+            // $this->capaciteMaxElp;
+            // $this->capaciteIntElp;
+            // $this->listComposantesAssociees;
+            // $this->listCentreInsPedagogi;
+            // $this->listResponsables;
+            // $this->listLibAnnexe;
+            // $this->listParamChargEns;
+            // $this->listElementPrerequis;
+            // $this->listTypePopulation;
         }
         elseif ($elementPedagogique instanceof StructureUe){
             $this->codElp = $elementPedagogique->ue->getCodeApogee();
@@ -83,7 +112,7 @@ class ElementPedagogiDTO6
         
         }
         elseif ($elementPedagogique instanceof StructureSemestre){
-
+            
         }
     }
 
