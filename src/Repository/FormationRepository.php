@@ -85,7 +85,6 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /** @deprecated  */
     public function findBySearch(
         string|null     $q,
         Dpe             $dpe,

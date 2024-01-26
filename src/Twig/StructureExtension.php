@@ -27,7 +27,7 @@ class StructureExtension extends AbstractExtension
         ];
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('isLas', [$this, 'isLas']),//todo: gérer de manière générique pour LAS, CPI et d'autres peut être
