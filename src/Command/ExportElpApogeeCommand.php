@@ -133,7 +133,6 @@ class ExportElpApogeeCommand extends Command
         $activeWorksheet = $spreadsheet->getActiveSheet();
         $activeWorksheet->fromArray($headers);
         $activeWorksheet->fromArray($ElpArray, startCell: "A2");
-        $activeWorksheet->getPageSetup()->setFitToWidth(1);
         // Write to file
         $now = new DateTime();
         $date = $now->format('d-m-Y_H-i-s');
