@@ -10,15 +10,35 @@
 namespace App\Twig\Components;
 
 use App\Repository\DpeRepository;
-use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
+use Symfony\UX\LiveComponent\Attribute\LiveAction;
+use Symfony\UX\LiveComponent\Attribute\LiveArg;
+use Symfony\UX\LiveComponent\DefaultActionTrait;
 
-#[AsTwigComponent('switch_dpe')]
-final class SwitchDpeComponent
+#[AsLiveComponent('switch_dpe')]
+final class SwitchDpeComponent extends AbstractController
 {
+    use DefaultActionTrait;
+
     public array $dpes;
 
-    public function __construct(DpeRepository $dpeRepository)
+    public function __construct(
+        protected RequestStack $requestStack,
+        DpeRepository $dpeRepository
+    )
     {
         $this->dpes = $dpeRepository->findAll();
+    }
+
+    #[LiveAction]
+    public function changeDpe(#[LiveArg] int $id)
+    {
+        $this->requestStack->getSession()->set('dpe', $id);
+
+        //forcer l'actualisation de la page
+        return $this->redirectToRoute('app_homepage');
+
     }
 }

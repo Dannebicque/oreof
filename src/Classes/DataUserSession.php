@@ -12,6 +12,8 @@ namespace App\Classes;
 use App\Entity\Dpe;
 use App\Repository\DpeRepository;
 use Stringable;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -25,11 +27,18 @@ class DataUserSession
 
 
     public function __construct(
+        RequestStack      $requestStack,
         DpeRepository         $dpeRepository,
         TokenStorageInterface $tokenStorage,
         KernelInterface       $kernel,
     ) {
-        $this->dpe = $dpeRepository->findOneBy(['defaut' => true]);
+        if ($requestStack->getSession()->get('dpe') !== null) {
+            $this->dpe = $dpeRepository->find($requestStack->getSession()->get('dpe'));
+        } else {
+            $this->dpe = $dpeRepository->findOneBy(['defaut' => true]);
+        }
+
+
         $this->dir = $kernel->getProjectDir();
         if ($tokenStorage->getToken() !== null) {
             $this->user = $tokenStorage->getToken()->getUser();

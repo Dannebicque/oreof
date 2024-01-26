@@ -5,7 +5,10 @@
     </button>
     <div class="dropdown-menu">
         {% for dpe in this.dpes %}
-            <a href="#" class="dropdown-item">{{ dpe.libelle }}</a>
+            <a
+                    data-action="live#action"
+                    data-action-name="changeDpe(id={{ dpe.id }})"
+                    href="#" class="dropdown-item">{{ dpe.libelle }}</a>
         {% endfor %}
     </div>
 </div>
