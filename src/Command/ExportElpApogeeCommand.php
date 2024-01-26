@@ -16,6 +16,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -67,31 +68,18 @@ class ExportElpApogeeCommand extends Command
 
 
         if($mode === "test"){
-            // retrieve data
-            $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById(405);
-            $dto = $this->getDTOForParcours($parcours);
-            // transform into valid soap object
-            $soapObjectArray = [];
-            foreach($dto->semestres[1]->ues() as $ue){
-                $soapObjectArray[] = $this->setObjectForSoapCall($ue, $dto);
-            }
-            // excel export
             if($action === 'excel-export'){
                 $io->writeln("Génération de l'export Excel...");
-                $this->generateSpreadsheetExport($soapObjectArray);
+                $this->saveExportAsSpreadsheet($output);
                 $io->success("Fichier généré avec succès.");
                 return Command::SUCCESS;
-            }
-
-            $io->success("Début de la commande d'export des ELP");
-
-            dump($soapObjectArray);exit;
-
+            }       
+            
             return Command::SUCCESS;
         }
 
         elseif($mode === "production"){
-            $io->warning("Command en mode PRODUCTION - O.K");
+            $io->warning("Commande en mode PRODUCTION - O.K");
             return Command::INVALID;
         }
         else{
@@ -107,12 +95,32 @@ class ExportElpApogeeCommand extends Command
         return new ElementPedagogiDTO6($elementPedagogique, $dto);
     }
 
+    private function saveExportAsSpreadsheet(OutputInterface $output){
+        // retrieve data
+        $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAll();
+        $totalElement = count($parcoursArray);
+        // progress bar
+        $progressBar = new ProgressBar($output, $totalElement);
+        // transform into valid soap object
+        $soapObjectArray = [];
+        foreach($parcoursArray as $parcours){
+            $dto = $this->getDTOForParcours($parcours);
+            foreach($dto->semestres as $semestre){
+                foreach($semestre->ues() as $ue){
+                    $soapObjectArray[] = $this->setObjectForSoapCall($ue, $dto);
+                }
+            }
+            $progressBar->advance();
+        }
+        $this->generateSpreadsheet($soapObjectArray);
+    }
+
     private function getDTOForParcours(Parcours $parcours){
         $calculStructure = new CalculStructureParcours($this->entityManager, $this->elementConstitutifRepository);
         return $calculStructure->calcul($parcours);
     }
 
-    private function generateSpreadsheetExport(array $ElpArray){
+    private function generateSpreadsheet(array $ElpArray){
         // spreadsheet headers
         $headers = [
             "codElp", "libCourtElp", "libElp", "codNatureElp",

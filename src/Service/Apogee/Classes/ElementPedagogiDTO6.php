@@ -54,7 +54,7 @@ class ElementPedagogiDTO6
             $this->libCourtElp = $this->prepareLibelle($elementPedagogique->ue->getLibelle(), 25);
             $this->libElp = $this->prepareLibelle($elementPedagogique->ue->getLibelle(), 60);
             $this->codNatureElp = CodeNatuElpEnum::UE->value;
-            $this->codComposante = $dto->parcours->getFormation()->getComposantePorteuse()->getCodeComposante();
+            $this->codComposante = $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "error";
             // $this->temSuspension
             // $this->motifSuspension
             $this->temModaliteControle = "O"; // valeur par défaut
@@ -87,7 +87,7 @@ class ElementPedagogiDTO6
         }
     }
 
-    private function prepareLibelle(string $txt, int $length = 25){
+    private function prepareLibelle(?string $txt, int $length = 25){
         if($txt){
             return substr($txt, 0, $length);
         }else {
