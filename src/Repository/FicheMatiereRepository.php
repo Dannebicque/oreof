@@ -11,6 +11,7 @@ namespace App\Repository;
 
 use App\Entity\Dpe;
 use App\Entity\Composante;
+use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Mention;
@@ -80,31 +81,35 @@ class FicheMatiereRepository extends ServiceEntityRepository
     }
 
     public function findByAdmin(
-        Dpe   $anneeUniversitaire,
+        Dpe   $dpe,
         array $options = []
     ): array {
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+            ->join(DpeParcours::class, 'dp', 'WITH', 'p.id = dp.parcours')
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
-            ->andWhere('fo.anneeUniversitaire = :annee')
+            ->andWhere('dp.dpe = :dpe')
             ->andWhere('f.horsDiplome = 0')
-            ->setParameter('annee', $anneeUniversitaire);
+            ->orWhere('f.horsDiplome IS NULL')
+            ->setParameter('dpe', $dpe);
 
         $this->addFiltres($qb, $options);
 
         return $qb->getQuery()->getResult();
     }
 
-    public function countByAdmin(Dpe $anneeUniversitaire, array $options): ?int
+    public function countByAdmin(Dpe $dpe, array $options): ?int
     {
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+            ->join(DpeParcours::class, 'dp', 'WITH', 'p.id = dp.parcours')
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
-            ->andWhere('fo.anneeUniversitaire = :annee')
+            ->andWhere('dp.dpe = :dpe')
             ->andWhere('f.horsDiplome = 0')
-            ->setParameter('annee', $anneeUniversitaire);
+            ->orWhere('f.horsDiplome IS NULL')
+            ->setParameter('dpe', $dpe);
 
         $this->addFiltres($qb, $options, true);
 
@@ -288,20 +293,20 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function findByResponsable(?UserInterface $user, Dpe $anneeUniversitaire, array $options): array
+    public function findByResponsable(?UserInterface $user, Dpe $dpe, array $options): array
     {
         $query = $this->createQueryBuilder('f')
             ->leftJoin('f.parcours', 'p')
             ->join('p.formation', 'fo')
+            ->join('p.dpeParcours', 'dp')
             ->orWhere('(fo.responsableMention = :parcours OR fo.coResponsable = :parcours)')
             ->orWhere('(p.respParcours = :parcours OR p.coResponsable = :parcours)')
             ->orWhere('f.responsableFicheMatiere = :user')
-            ->andWhere('fo.anneeUniversitaire = :annee') // Pour la troisième requête
-            //->andWhere('f.horsDiplome = 0')
+            ->andWhere('dp.dpe = :dpe') // Pour la troisième requête
             ->orderBy('f.libelle', 'ASC')
             ->setParameters([
                 'parcours' => $user,
-                'annee' => $anneeUniversitaire,
+                'dpe' => $dpe,
                 'user' => $user
             ]);
 
@@ -311,23 +316,23 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function countByResponsable(?UserInterface $user, Dpe $anneeUniversitaire, array $options): ?int
+    public function countByResponsable(?UserInterface $user, Dpe $dpe, array $options): ?int
     {
         $query = $this->createQueryBuilder('f')
             ->leftJoin('f.parcours', 'p')
             ->join('p.formation', 'fo')
+            ->join('p.dpeParcours', 'dp')
             // Pour la première requête
             ->andWhere('(fo.responsableMention = :parcours OR fo.coResponsable = :parcours)')
             // Pour la deuxième requête
             ->orWhere('(p.respParcours = :parcours OR p.coResponsable = :parcours)')
-            ->andWhere('fo.anneeUniversitaire = :annee') // Pour la troisième requête
+            ->andWhere('dp.dpe = :dpe') // Pour la troisième requête
             // Ajout condition à la derniere requete
             ->andWhere('f.responsableFicheMatiere = :user')
-            //->andWhere('f.horsDiplome = 0')
             ->orderBy('f.libelle', 'ASC')
             ->setParameters([
                 'parcours' => $user,
-                'annee' => $anneeUniversitaire,
+                'dpe' => $dpe,
                 'user' => $user
             ]);
 
@@ -337,6 +342,4 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-
-
 }
