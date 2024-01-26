@@ -13,7 +13,7 @@ use App\Controller\BaseController;
 use App\Repository\FormationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class FormationController extends BaseController
 {

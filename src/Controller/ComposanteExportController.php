@@ -13,7 +13,7 @@ use App\Classes\MyPDF;
 use App\Entity\Composante;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ComposanteExportController extends AbstractController
 {

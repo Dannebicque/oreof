@@ -15,7 +15,7 @@ use App\Repository\ParcoursRepository;
 use App\Repository\SemestreParcoursRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[
     Route('/structure/parcours', name: 'structure_parcours_')

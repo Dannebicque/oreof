@@ -12,7 +12,7 @@ namespace App\Controller;
 use App\Classes\GetHistorique;
 use App\Entity\Parcours;
 use App\TypeDiplome\TypeDiplomeRegistry;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ParcoursMcccExportController extends BaseController
 {

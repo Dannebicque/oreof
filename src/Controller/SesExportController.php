@@ -16,7 +16,7 @@ use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use DateTime;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class SesExportController extends BaseController
 {

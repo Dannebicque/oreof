@@ -13,7 +13,7 @@ use App\Repository\TypeDiplomeRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class CodificationController extends BaseController
 {

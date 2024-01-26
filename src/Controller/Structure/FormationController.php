@@ -14,7 +14,7 @@ use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Repository\FormationRepository;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/structure/formation', name: 'structure_formation_')]
 class FormationController extends BaseController

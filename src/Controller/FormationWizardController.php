@@ -16,7 +16,7 @@ use App\Form\FormationStep2Type;
 use App\Form\Type\TextareaAutoSaveType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/formation/step')]
 class FormationWizardController extends AbstractController

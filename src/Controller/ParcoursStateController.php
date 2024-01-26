@@ -6,7 +6,7 @@ use App\Classes\verif\ParcoursValide;
 use App\Entity\Parcours;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ParcoursStateController extends AbstractController
 {
