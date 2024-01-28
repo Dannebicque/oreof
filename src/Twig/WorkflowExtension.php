@@ -28,6 +28,8 @@ class WorkflowExtension extends AbstractExtension
         private readonly WorkflowInterface $dpeWorkflow,
         #[Target('parcours')]
         private readonly WorkflowInterface $parcoursWorkflow,
+        #[Target('fiche')]
+        private readonly WorkflowInterface $ficheWorkflow,
     ) {
     }
 
@@ -51,6 +53,7 @@ class WorkflowExtension extends AbstractExtension
         if ($key === 'vp') { //todo: temporaire pour phase 1 ou VP = SES
             $key = 'ses';
         }
+
         if (array_key_exists($key, $historique)) {
             return match ($historique[$key]->getEtat()) {
                 'valide' => 'btn-success',
@@ -101,9 +104,14 @@ class WorkflowExtension extends AbstractExtension
             return true;
         }
 
+        if (array_key_exists('en_cours_redaction', $actualPlaces) && $entity instanceof FicheMatiere && $place === 'fiche_matiere') {
+            return true;
+        }
+
         if (array_key_exists('soumis_parcours', $actualPlaces) && $entity instanceof Parcours && $place === 'parcours_rf') {
             return true;
         }
+
 
         if (array_key_exists($place, $actualPlaces)) {
             return true;
@@ -161,6 +169,7 @@ class WorkflowExtension extends AbstractExtension
         return match ($workflow) {
             'dpe' => $this->dpeWorkflow,
             'parcours' => $this->parcoursWorkflow,
+            'fiche' => $this->ficheWorkflow,
         };
     }
 }

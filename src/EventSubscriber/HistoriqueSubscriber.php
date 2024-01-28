@@ -11,8 +11,10 @@ namespace App\EventSubscriber;
 
 use App\Classes\Mailer;
 use App\Entity\Formation;
+use App\Entity\HistoriqueFicheMatiere;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
+use App\Events\HistoriqueFicheMatiereEvent;
 use App\Events\HistoriqueFormationEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Repository\ComposanteRepository;
@@ -53,8 +55,8 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         return [
             HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION => 'createHistoriqueFormation',
             HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS => 'createHistoriqueParcours',
-//            'add.historique.parcours' => 'createHistoriqueParcours',
-//            'add.historique.ficheEc' => 'createHistoriqueFicheEc',
+            HistoriqueFicheMatiereEvent::ADD_HISTORIQUE_FICHE_MATIERE => 'createHistoriqueFicheMatiere',
+
 
         ];
     }
@@ -115,6 +117,26 @@ class HistoriqueSubscriber implements EventSubscriberInterface
 
         $histo = new HistoriqueParcours();
         $histo->setParcours($event->getParcours());
+        $histo->setDate($this->getDateTime($request));
+        $histo->setUser($event->getUser());
+        $histo->setEtape($event->getEtape());
+        $histo->setCommentaire($this->getCommentaire($request));
+        $histo->setEtat($event->getEtat());
+
+        $this->entityManager->persist($histo);
+        $this->entityManager->flush();
+    }
+
+    public function createHistoriqueFicheMatiere(HistoriqueFicheMatiereEvent $event): void
+    {
+        $request = $event->getRequest();
+
+        if ($request === null) {
+            throw new \Exception('Pas de requete');
+        }
+
+        $histo = new HistoriqueFicheMatiere();
+        $histo->setFicheMatiere($event->getFicheMatiere());
         $histo->setDate($this->getDateTime($request));
         $histo->setUser($event->getUser());
         $histo->setEtape($event->getEtape());

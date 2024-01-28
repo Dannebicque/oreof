@@ -15,118 +15,120 @@
 </tr>
 {# todo: améliorer l'affichage et reprendre les éléments comme CalculStructure... #}
 {% if tabEcs[semParc.ordre][ue.id] is defined %}
-{% for ec in tabEcs[semParc.ordre][ue.id] %}
-    <tr>
+    {% for ec in tabEcs[semParc.ordre][ue.id] %}
+        <tr>
 
-        {% if ec.ficheMatiere != null %}
-            {% if ec.ficheMatiere.parcours != null %}
-                {% if ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false %}
-                    <th>
-                        <div class="checkbox">
-                            <label>
-                                <input
-                                        {{ stimulus_action('check_all', 'check') }}
-                                        type="checkbox"
-                                        class="check-all check-all{{ parcours.id }}"
-                                        {% if ec.ficheMatiere != null and ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false %}
-                                            {% if is_granted('CAN_PARCOURS_VALIDATE_MY', parcours.id) %}
-                                                {{ ec.ficheMatiere|isFicheValidable('parcours') }}
-                                            {% elseif is_granted('CAN_FORMATION_VALIDATE_MY', formation.id) %}
-                                                {{ ec.ficheMatiere|isFicheValidable('formation') }}
-                                            {% elseif is_granted('CAN_COMPOSANTE_VALIDATE_MY', formation.composantePorteuse.id) %}
-                                                {{ ec.ficheMatiere|isFicheValidable('dpe') }}
+            {% if ec.ficheMatiere != null %}
+                {% if ec.ficheMatiere.parcours != null %}
+                    {% if ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false %}
+                        <th>
+                            <div class="checkbox">
+                                <label>
+                                    <input
+                                            {{ stimulus_action('check_all', 'check') }}
+                                            type="checkbox"
+                                            class="check-all check-all{{ parcours.id }}"
+                                            {% if ec.ficheMatiere != null and ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false %}
+                                                {% if is_granted('CAN_PARCOURS_VALIDATE_MY', parcours) %}
+                                                    {{ ec.ficheMatiere|isFicheValidable('parcours') }}
+                                                {% elseif is_granted('CAN_FORMATION_VALIDATE_MY', formation) %}
+                                                    {{ ec.ficheMatiere|isFicheValidable('formation') }}
+                                                {% elseif is_granted('CAN_COMPOSANTE_VALIDATE_MY', formation.composantePorteuse) %}
+                                                    {{ ec.ficheMatiere|isFicheValidable('dpe') }}
+                                                {% else %}
+                                                    disabled
+                                                {% endif %}
+
+                                                name="formations[]"
+                                                value="{{ ec.ficheMatiere.id }}"
                                             {% endif %}
-
-                                        name="formations[]"
-                                        value="{{ ec.ficheMatiere.id }}"
-                                        {% endif %}
-                                >
-                            </label>
-                        </div>
+                                    >
+                                </label>
+                            </div>
+                        </th>
+                        <td>
+                            {{ ec.ficheMatiere.etatFiche|badgeFiche }}
+                        </td>
+                    {% else %}
+                        <th>
+                            &nbsp;
+                        </th>
+                        <td>
+                            <span class="badge bg-info"> Raccroché</span>
+                        </td>
+                    {% endif %}
+                {% else %}
+                    <th>
+                        &nbsp;
                     </th>
                     <td>
-                        {{ ec.ficheMatiere.etatFiche|badgeFiche }}
+                        <span class="badge bg-info"> Hors Diplôme</span>
+                    </td>
+                {% endif %}
+            {% else %}
+                {% if ec.natureUeEc != null and ec.natureUeEc.isLibre %}
+                    <th>
+                        &nbsp;
+                    </th>
+                    <td>
+                        <span class="badge bg-info"> EC Libre</span>
+                    </td>
+                {% elseif ec.natureUeEc != null and ec.natureUeEc.isChoix %}
+                    <th>
+                        &nbsp;
+                    </th>
+                    <td>
+                        <span class="badge bg-info"> EC à choix</span>
                     </td>
                 {% else %}
                     <th>
                         &nbsp;
                     </th>
                     <td>
-                        <span class="badge bg-info"> Raccroché</span>
+                        <span class="badge bg-danger"> Erreur</span>
                     </td>
                 {% endif %}
-            {% else %}
-                <th>
-                    &nbsp;
-                </th>
-                <td>
-                    <span class="badge bg-info"> Hors Diplôme</span>
-                </td>
             {% endif %}
-        {% else %}
-            {% if ec.natureUeEc != null and ec.natureUeEc.isLibre %}
-                <th>
-                    &nbsp;
-                </th>
-                <td>
-                    <span class="badge bg-info"> EC Libre</span>
-                </td>
-            {% elseif ec.natureUeEc != null and ec.natureUeEc.isChoix %}
-                <th>
-                    &nbsp;
-                </th>
-                <td>
-                    <span class="badge bg-info"> EC à choix</span>
-                </td>
-            {% else %}
-                <th>
-                    &nbsp;
-                </th>
-                <td>
-                    <span class="badge bg-danger"> Erreur</span>
-                </td>
-            {% endif %}
-        {% endif %}
-        <th>{{ ec.code }} | {{ ec.display }}</th>
-        <td>
+            <th>{{ ec.code }} | {{ ec.display }}</th>
+            <td>
 
-            {% if ec.natureUeEc != null and ec.natureUeEc.isLibre ==  true %}
-                <span class="badge bg-info">EC Libre</span>
-            {% elseif ec.ecParent == null and ec.natureUeEc != null and ec.natureUeEc.isChoix ==  true %}
-                <span class="badge bg-info">EC à choix</span>
-            {% elseif ec.ficheMatiere != null %}
-                {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false %}
-                    <a
-                            href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
-                            class="btn btn-sm btn-outline-info"
-                            data-bs-toggle="tooltip"
-                            target="_blank"
-                            data-bs-placement="bottom"
-                            title="Modifier la fiche EC/matière"
-                    >
-                        <i class="fal fa-file"></i>
-                        {% if ec.ficheMatiere.remplissage == 100 %}
-                            <span class="badge bg-success"> Complet</span>
-                        {% else %}
-                            <span class="badge bg-warning"> À compléter</span>
-                        {% endif %}
-                    </a>
+                {% if ec.natureUeEc != null and ec.natureUeEc.isLibre ==  true %}
+                    <span class="badge bg-info">EC Libre</span>
+                {% elseif ec.ecParent == null and ec.natureUeEc != null and ec.natureUeEc.isChoix ==  true %}
+                    <span class="badge bg-info">EC à choix</span>
+                {% elseif ec.ficheMatiere != null %}
+                    {% if ec.ficheMatiere.parcours != null and ec.ficheMatiere.parcours.id == parcours.id and raccrocheSem == false and raccrocheUe == false %}
+                        <a
+                                href="{{ path('app_fiche_matiere_edit',{slug: ec.ficheMatiere.slug}) }}"
+                                class="btn btn-sm btn-outline-info"
+                                data-bs-toggle="tooltip"
+                                target="_blank"
+                                data-bs-placement="bottom"
+                                title="Modifier la fiche EC/matière"
+                        >
+                            <i class="fal fa-file"></i>
+                            {% if ec.ficheMatiere.remplissage == 100 %}
+                                <span class="badge bg-success"> Complet</span>
+                            {% else %}
+                                <span class="badge bg-warning"> À compléter</span>
+                            {% endif %}
+                        </a>
+                    {% else %}
+                        <a
+                                href="{{ path('app_fiche_matiere_show',{slug: ec.ficheMatiere.slug}) }}"
+                                class="btn btn-sm btn-outline-info"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="bottom"
+                                title="Voir la fiche EC/matière"
+                                target="_blank"
+                        >
+                            <span class="badge bg-info"> Voir la fiche</span>
+                        </a>
+                    {% endif %}
                 {% else %}
-                    <a
-                            href="{{ path('app_fiche_matiere_show',{slug: ec.ficheMatiere.slug}) }}"
-                            class="btn btn-sm btn-outline-info"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Voir la fiche EC/matière"
-                            target="_blank"
-                    >
-                        <span class="badge bg-info"> Voir la fiche</span>
-                    </a>
+                    <span class="badge bg-danger"> Erreur</span>
                 {% endif %}
-            {% else %}
-                <span class="badge bg-danger"> Erreur</span>
-            {% endif %}
-        </td>
-    </tr>
-{% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
 {% endif %}

@@ -12,11 +12,11 @@ namespace App\Classes;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class ValidationProcess extends AbstractValidationProcess
+class ValidationProcessFicheMatiere extends AbstractValidationProcess
 {
     public function __construct(KernelInterface $kernel,)
     {
-        $file = $kernel->getContainer()->getParameter('kernel.project_dir') . '/config/process.yaml';
+        $file = $kernel->getContainer()->getParameter('kernel.project_dir') . '/config/processFicheMatiere.yaml';
 
         $data = Yaml::parseFile($file);
         $this->process = $data['process'];

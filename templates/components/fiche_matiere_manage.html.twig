@@ -24,15 +24,21 @@
                         </div>
                         <div class="col-{{ col_process }} d-flex align-items-center justify-content-center">
                             {% for key, etape in this.process %}
-{#                                {% if (etape.showOn is defined and this.type in etape.showOn) or etape.showOn is not defined %}#}
-{#                                    <button class="btn btn-sm btn-icon btn-icon-only {{ class }} ms-1" type="button"#}
-{#                                            data-controller="tooltip" data-tooltip-placement-value="bottom"#}
-{#                                            aria-label="{{ etape.label|trans({}, 'process') }}"#}
-{#                                            data-bs-original-title="{{ etape.label|trans({}, 'process') }}"#}
-{#                                    >#}
-{#                                        <i class="fal {{ etape.icon }}"></i>#}
-{#                                    </button>#}
-{#                                {% endif %}#}
+                                {% if (etape.showOn is defined) or etape.showOn is not defined %}
+                                    {% set class = 'btn-muted' %}
+                                    {% if isPlace('fiche', this.ficheMatiere, key) %}
+                                        {% set class = 'btn-info' %}
+                                    {% else %}
+                                            {% set class =  hasHistorique(this.ficheMatiere, key, this.historiques) %}
+                                    {% endif %}
+                                    <button class="btn btn-sm btn-icon btn-icon-only {{ class }} ms-1" type="button"
+                                            data-controller="tooltip" data-tooltip-placement-value="bottom"
+                                            aria-label="{{ etape.label|trans({}, 'process') }}"
+                                            data-bs-original-title="{{ etape.label|trans({}, 'process') }}"
+                                    >
+                                        <i class="fal {{ etape.icon }}"></i>
+                                    </button>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     </div>
@@ -47,8 +53,10 @@
                 </div>
                 <div class="col-12">
                     <div class="row mt-2">
-                        {% if this.process[this.etape] is defined and this.process[this.etape].page == this.type %}
-
+                        {% if this.process[this.etape] is defined %}
+{#                            {% if#}
+{#                                (is_granted('CAN_FICHE_MATIERE_VALIDATE_MY', this.ficheMatiere) or is_granted('CAN_FORMATION_VALIDATE_ALL') or is_granted('CAN_PARCOURS_VALIDATE_MY', this.ficheMatiere))#}
+{#                            %}#}
                                 {% if this.process[this.etape].hasValid %}
                                     <div class="col-2 d-grid">
                                         <button class="btn btn-sm d-block btn-outline-success"
@@ -62,8 +70,8 @@
                                                     modalTitle: ('validation.valider.'~this.etape~'.title')|trans({}, 'process'),
                                                     modalUrl: path('app_validation_valide', {
                                                         etape:this.etape,
-                                                        id:id,
-                                                        type:this.type
+                                                        id:this.ficheMatiere.id,
+                                                        type:'ficheMatiere'
                                                     }) }) }}
                                                 data-action="click->modal#openModal"
                                                 data-controller="tooltip"
@@ -75,6 +83,10 @@
                                             <i class="fal fa-check"></i> {{ ('validation.valider.'~this.etape)|trans({}, 'process') }}
                                         </button>
                                     </div>
+                                {% else %}
+                                    <div class="col-2 d-grid">
+                                    </div>
+                                    {% endif %}
                                 {% if this.process[this.etape].hasReserve %}
                                     <div class="col-2 d-grid">
                                         <button
@@ -88,7 +100,8 @@
                                                     modalTitle: ('validation.reserve.'~this.etape~'.title')|trans({}, 'process'),
                                                     modalUrl: path('app_validation_reserve', {
                                                         etape:this.etape,
-                                                        id:id,
+                                                        id:this.ficheMatiere.id,
+                                                        type:'ficheMatiere'
                                                     }) }) }}
                                                 data-action="click->modal#openModal"
                                                 data-controller="tooltip"
@@ -117,7 +130,8 @@
                                                     modalTitle: ('validation.refuser.'~this.etape~'.title')|trans({}, 'process'),
                                                     modalUrl: path('app_validation_refuse', {
                                                         etape:this.etape,
-                                                        id:id,
+                                                        id:this.ficheMatiere.id,
+                                                        type:'ficheMatiere'
                                                     }) }) }}
                                                 data-action="click->modal#openModal"
                                                 data-controller="tooltip"
@@ -132,13 +146,13 @@
                                     <div class="col-2 d-grid">
                                     </div>
                                 {% endif %}
-                            {% else %}
-                                <div class="col-6 d-grid">
-                                    <button class="btn btn-sm btn-muted d-block">
-                                        {{ 'validation.formation.indisponible'|trans({}, 'process') }}
-                                    </button>
-                                </div>
-                            {% endif %}
+{#                            {% else %}#}
+{#                                <div class="col-6 d-grid">#}
+{#                                    <button class="btn btn-sm btn-muted d-block">#}
+{#                                        {{ 'validation.fiche_matiere.indisponible'|trans({}, 'process') }}#}
+{#                                    </button>#}
+{#                                </div>#}
+{#                            {% endif %}#}
                         {% else %}
 
                                 <div class="col-2 d-grid">
@@ -171,7 +185,7 @@
                                         size: 'large',
                                         modalTitle: 'historique.de.validation.fiche_matiere.title'|trans({}, 'process'),
                                         right: true,
-                                        modalUrl: path('app_historique_fiche_matiere', {fiche_matiere:this.ficheMatiere.id}) }) }}
+                                        modalUrl: path('app_historique_fiche_matiere', {ficheMatiere:this.ficheMatiere.id}) }) }}
                                     data-action="click->modal#openModal"
                                     data-size="lg"
                                     data-bs-toggle="tooltip"

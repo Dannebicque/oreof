@@ -1,4 +1,12 @@
-<h2>{{ formation.display }}</h2>
+<h2>
+    {% if formation is defined %}
+    {{ formation.display }}
+    {% elseif ficheMatiere is defined %}
+    {{ ficheMatiere.libelle }}
+    {% else %}
+    -Erreur-
+    {% endif %}
+</h2>
 
 {% for histo in historiques %}
     {% if histo.etat == 'valide' %}
@@ -18,7 +26,7 @@
     <div class="row g-0 align-items-center mb-2">
         <div class="col-auto">
             <div class="border border-{{ color }} sw-5 sh-5 rounded-xl d-flex justify-content-center align-items-center">
-                <i class="fas {{ histo.etape|etapeIcone }} text-{{ color }} fs-3"></i>
+                <i class="fas {{ histo.etape|etapeIcone(type) }} text-{{ color }} fs-3"></i>
             </div>
         </div>
         <div class="col ps-3">
@@ -26,9 +34,9 @@
                 <div class="col">
                     <div class="d-flex align-items-center lh-1-25">
                         {% if histo.etape == 'laisserPasser' %}
-                            {{ ('historique.laisserPasser.conseil')|trans(histo|etapeParams, 'process') }}
+                            {{ ('historique.laisserPasser.conseil')|trans(histo|etapeParams(type), 'process') }}
                         {% else %}
-                            {{ ('historique.'~histo.etape|etapeLabel)|trans(histo|etapeParams, 'process') }}
+                            {{ ('historique.'~histo.etape|etapeLabel(type))|trans(histo|etapeParams(type), 'process') }}
                         {% endif %}
                     </div>
                     {% if histo.complements.sousReserveModifications is defined %}
