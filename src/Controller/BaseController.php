@@ -10,7 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\DataUserSession;
-use App\Entity\Dpe;
+use App\Entity\CampagneCollecte;
 use App\Entity\Constantes;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -53,7 +53,7 @@ class BaseController extends AbstractController
         ]);
     }
 
-    public function getDpe(): Dpe
+    public function getDpe(): CampagneCollecte
     {
         return $this->dataUserSession->getDpe();
     }

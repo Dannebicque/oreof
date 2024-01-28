@@ -15,7 +15,7 @@ use App\DTO\StructureEc;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\DTO\TotalVolumeHeure;
-use App\Entity\Dpe;
+use App\Entity\CampagneCollecte;
 use App\Entity\Formation;
 use App\Entity\Mccc;
 use App\Entity\Parcours;
@@ -124,7 +124,7 @@ class LicenceMccc
      * @throws \Exception
      */
     public function genereExcelLicenceMccc(
-        Dpe                $anneeUniversitaire,
+        CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
@@ -441,7 +441,7 @@ class LicenceMccc
     }
 
     public function exportExcelLicenceMccc(
-        Dpe                $anneeUniversitaire,
+        CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
@@ -452,7 +452,7 @@ class LicenceMccc
     }
 
     public function exportPdfLicenceMccc(
-        Dpe                $anneeUniversitaire,
+        CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
@@ -479,7 +479,7 @@ class LicenceMccc
     }
 
     public function exportAndSaveExcelLicenceMccc(
-        Dpe                $anneeUniversitaire,
+        CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         string             $dir,
         ?DateTimeInterface $dateCfvu = null,
@@ -492,7 +492,7 @@ class LicenceMccc
     }
 
     public function exportAndSavePdfLicenceMccc(
-        Dpe                $anneeUniversitaire,
+        CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         string             $dir,
         ?DateTimeInterface $dateCfvu = null,
@@ -985,7 +985,7 @@ class LicenceMccc
         return $ligne;
     }
 
-    private function generePdfLicenceMccc(Dpe $anneeUniversitaire, Parcours $parcours, DateTimeInterface $dateEdition, bool $versionFull)
+    private function generePdfLicenceMccc(CampagneCollecte $anneeUniversitaire, Parcours $parcours, DateTimeInterface $dateEdition, bool $versionFull)
     {
     }
 }

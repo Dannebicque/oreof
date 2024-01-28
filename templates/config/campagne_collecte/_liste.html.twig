@@ -1,0 +1,92 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Libellé</th>
+        <th>Année Universitaire</th>
+        <th>Date Ouverture</th>
+        <th>Date Clôture</th>
+        <th>Transmission SES</th>
+        <th>CFVU</th>
+        <th>Collecte DPE active ?</th>
+        <th>DPE informé ?</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for campagne_collecte in campagne_collectes %}
+        <tr>
+            <td>{{ campagne_collecte.libelle }}</td>
+            <td>{{ campagne_collecte.anneeUniversitaire != null ? campagne_collecte.anneeUniversitaire.libelle : 'erreur' }}</td>
+            <td>{{ campagne_collecte.dateOuvertureDpe|dateFr }}</td>
+            <td>{{ campagne_collecte.dateClotureDpe|dateFr }}</td>
+            <td>{{ campagne_collecte.dateTransmissionSes|dateFr }}</td>
+            <td>{{ campagne_collecte.dateCfvu|dateFr }}</td>
+            <td><span class="badge {% if campagne_collecte.defaut %}bg-success{% else %}bg-warning{% endif %}">{{
+                    campagne_collecte.defaut ? 'Active' : 'Non' }}</span></td>
+            <td><span class="badge {% if campagne_collecte.mailDpeEnvoye %}bg-success{% else %}bg-warning{% endif %}">{{
+                    campagne_collecte.mailDpeEnvoye ? 'Oui' : 'Non' }}</span></td>
+            <td class="text-end">
+                {% if campagne_collecte.mailDpeEnvoye == false %}
+                    <span {{ stimulus_controller('modal_confirm', {
+                        titre: 'Ouverture d\'une campagne de collecte',
+                        body: 'Êtes-vous sûr de vouloir ouvrir la campagne de collecte ? Cela enverra un mail aux DPE.',
+                    }) }}>
+                <a
+                        {{ stimulus_action('modal_confirm', 'confirm') }}
+                        href="{{ path('app_campagne_collecte_open_dpe',{'id': campagne_collecte.id}) }}" class="btn btn-sm text-success">
+                    <i class="fal fa-lock-open"></i> Ouvrir DPE
+                </a>
+                        </span>
+                {% endif %}
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Voir une campagne de collecte',
+                            modalUrl: path('app_campagne_collecte_show',{'id': campagne_collecte.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-info"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Voir une campagne de collecte"
+                >
+                    <i class="{{ iconShow }}"></i>
+                    <span> voir</span>
+                </button>
+
+                <button
+                        {{ stimulus_controller('modal', {
+                            size: 'lg',
+                            modalTitle: 'Modifier une campagne de collecte',
+                            modalUrl: path('app_campagne_collecte_edit',{'id': campagne_collecte.id}) }) }}
+                        data-action="click->modal#openModal"
+                        class="btn btn-sm text-warning"
+                        data-size="lg"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="Modifier une campagne de collecte"
+                >
+                    <i class="{{ iconEdit }}"></i>
+                    <span> modifier</span>
+                </button>
+
+                <button {{ stimulus_action('crud', 'duplicate', 'click', {
+                    url:path('app_campagne_collecte_duplicate',{'id': campagne_collecte.id})
+                }) }} class="btn btn-sm text-success">
+                    <i class="{{ iconDuplicate }}"></i> Dupliquer
+                </button>
+                <button {{ stimulus_action('crud', 'delete', 'click', {
+                    url:path('app_campagne_collecte_delete',{'id': campagne_collecte.id}),
+                    csrf: csrf_token('delete' ~ campagne_collecte.id)
+                }) }} class="btn btn-sm text-danger">
+                    <i class="{{ iconDelete }}"></i> Supprimer
+                </button>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="5">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

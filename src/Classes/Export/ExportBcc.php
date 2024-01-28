@@ -11,7 +11,7 @@ namespace App\Classes\Export;
 
 use App\Classes\Excel\ExcelWriter;
 use App\Classes\GetElementConstitutif;
-use App\Entity\Dpe;
+use App\Entity\CampagneCollecte;
 use App\Entity\Parcours;
 use App\Repository\FormationRepository;
 use App\Utils\Tools;
@@ -190,7 +190,7 @@ class ExportBcc implements ExportInterface
         return $this->excelWriter->genereFichier($this->fileName);
     }
 
-    public function exportLink(Dpe $anneeUniversitaire): string
+    public function exportLink(CampagneCollecte $anneeUniversitaire): string
     {
         // TODO: Implement exportLink() method.
     }

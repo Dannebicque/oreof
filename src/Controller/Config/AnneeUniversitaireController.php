@@ -9,9 +9,9 @@
 
 namespace App\Controller\Config;
 
-use App\Entity\Dpe;
-use App\Form\DpeType;
-use App\Repository\DpeRepository;
+use App\Entity\CampagneCollecte;
+use App\Form\CampagneCollecteType;
+use App\Repository\CampagneCollecteRepository;
 use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +28,7 @@ class AnneeUniversitaireController extends AbstractController
     }
 
     #[Route('/liste', name: 'app_annee_universitaire_liste', methods: ['GET'])]
-    public function liste(DpeRepository $anneeUniversitaireRepository): Response
+    public function liste(CampagneCollecteRepository $anneeUniversitaireRepository): Response
     {
         return $this->render('config/annee_universitaire/_liste.html.twig', [
             'annee_universitaires' => $anneeUniversitaireRepository->findAll(),
@@ -36,11 +36,11 @@ class AnneeUniversitaireController extends AbstractController
     }
 
     #[Route('/new', name: 'app_annee_universitaire_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, DpeRepository $annee_universitaireRepository): Response
+    public function new(Request $request, CampagneCollecteRepository $annee_universitaireRepository): Response
     {
-        $annee_universitaire = new Dpe();
+        $annee_universitaire = new CampagneCollecte();
         $form = $this->createForm(
-            DpeType::class,
+            CampagneCollecteType::class,
             $annee_universitaire,
             ['action' => $this->generateUrl('app_annee_universitaire_new')]
         );
@@ -59,7 +59,7 @@ class AnneeUniversitaireController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_annee_universitaire_show', methods: ['GET'])]
-    public function show(Dpe $annee_universitaire): Response
+    public function show(CampagneCollecte $annee_universitaire): Response
     {
         return $this->render('config/annee_universitaire/show.html.twig', [
             'annee_universitaire' => $annee_universitaire,
@@ -68,12 +68,12 @@ class AnneeUniversitaireController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_annee_universitaire_edit', methods: ['GET', 'POST'])]
     public function edit(
-        Request                      $request,
-        Dpe                          $annee_universitaire,
-        DpeRepository $annee_universitaireRepository
+        Request          $request,
+        CampagneCollecte $annee_universitaire,
+        CampagneCollecteRepository $annee_universitaireRepository
     ): Response {
         $form = $this->createForm(
-            DpeType::class,
+            CampagneCollecteType::class,
             $annee_universitaire,
             [
                 'action' => $this->generateUrl('app_annee_universitaire_edit', [
@@ -97,8 +97,8 @@ class AnneeUniversitaireController extends AbstractController
 
     #[Route('/{id}/duplicate', name: 'app_annee_universitaire_duplicate', methods: ['GET'])]
     public function duplicate(
-        DpeRepository $annee_universitaireRepository,
-        Dpe           $annee_universitaire
+        CampagneCollecteRepository $annee_universitaireRepository,
+        CampagneCollecte           $annee_universitaire
     ): Response {
         $annee_universitaireNew = clone $annee_universitaire;
         $annee_universitaireNew->setLibelle($annee_universitaire->getLibelle() . ' - Copie');
@@ -111,9 +111,9 @@ class AnneeUniversitaireController extends AbstractController
      */
     #[Route('/{id}', name: 'app_annee_universitaire_delete', methods: ['DELETE'])]
     public function delete(
-        Request                      $request,
-        Dpe                          $annee_universitaire,
-        DpeRepository $annee_universitaireRepository
+        Request          $request,
+        CampagneCollecte $annee_universitaire,
+        CampagneCollecteRepository $annee_universitaireRepository
     ): Response {
         if ($this->isCsrfTokenValid(
             'delete' . $annee_universitaire->getId(),

@@ -11,7 +11,7 @@ namespace App\TypeDiplome\Export;
 
 use App\Classes\Excel\ExcelWriter;
 use App\DTO\TotalVolumeHeure;
-use App\Entity\Dpe;
+use App\Entity\CampagneCollecte;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
@@ -94,7 +94,7 @@ class ButMccc
      * @throws \Exception
      */
     public function genereExcelbutMccc(
-        Dpe                $anneeUniversitaire,
+        CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
@@ -336,7 +336,7 @@ class ButMccc
     }
 
     public function exportExcelbutMccc(
-        Dpe                $anneeUniversitaire,
+        CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
@@ -347,7 +347,7 @@ class ButMccc
     }
 
     public function exportPdfbutMccc(
-        Dpe                $anneeUniversitaire,
+        CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
@@ -370,7 +370,7 @@ class ButMccc
     }
 
     public function exportAndSaveExcelbutMccc(
-        Dpe                $anneeUniversitaire,
+        CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         string             $dir,
         ?DateTimeInterface $dateCfvu = null,

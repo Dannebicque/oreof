@@ -20,7 +20,9 @@ export default class extends Controller {
   }
 
   checkAll(event) {
-    const checkboxes = document.querySelectorAll(this.classCheckAllValue)
+    // soit event.params.classCheck si existe et non null sinon this.classCheckAllValue
+    const classCheckAll = event.params.classcheckall ? `.${event.params.classcheckall}` : this.classCheckAllValue
+    const checkboxes = document.querySelectorAll(classCheckAll)
     checkboxes.forEach((checkbox) => {
       if (checkbox.disabled === false) {
         checkbox.checked = event.target.checked
@@ -29,9 +31,12 @@ export default class extends Controller {
   }
 
   check(event) {
-    const checkAll = document.getElementById(this.idCheckAllValue)
+    const classCheckAll = event.params.classcheckall ? `.${event.params.classcheckall}` : this.classCheckAllValue
+    const idCheckAll = event.params.idcheckall ? event.params.idcheckall : this.idCheckAllValue
+    console.log(classCheckAll, idCheckAll)
+    const checkAll = document.getElementById(idCheckAll)
     if (event.target.checked) {
-      const checkboxes = document.querySelectorAll(this.classCheckAllValue)
+      const checkboxes = document.querySelectorAll(classCheckAll)
       let checked = true
       checkboxes.forEach((checkbox) => {
         if (checkbox.disabled === false) {

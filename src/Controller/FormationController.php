@@ -151,31 +151,19 @@ class FormationController extends BaseController
         Composante            $composante,
         Request               $request
     ): Response {
-        $sort = $request->query->get('sort') ?? 'typeDiplome';
-        $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
 
-
-        if ($q) {
             $formations = $formationRepository->findBySearch(
                 $q,
                 $this->getDpe(),
-                $sort,
-                $direction,
+                $request->query->all(),
                 $composante
             );
-        } else {
-            $formations = $formationRepository->findBy(
-                ['composantePorteuse' => $composante->getId(), 'anneeUniversitaire' => $this->getDpe()],
-                [$sort => $direction]
-            );
-        }
-
 
         return $this->render('formation/_liste.html.twig', [
             'formations' => $formations,
-            'sort' => $sort,
-            'direction' => $direction,
+            'params' => $request->query->all(),
+            'isCfvu' => false,
             'composantes' => $composanteRepository->findPorteuse(),
             'typeDiplomes' => $typeDiplomeRepository->findAll(),
             'mentions' => $mentionRepository->findAll(),

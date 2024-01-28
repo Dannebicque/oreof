@@ -11,7 +11,7 @@ namespace App\Classes\Export;
 
 use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
-use App\Entity\Dpe;
+use App\Entity\CampagneCollecte;
 use App\Repository\FormationRepository;
 use App\Utils\CleanTexte;
 use App\Utils\Tools;
@@ -33,7 +33,7 @@ class ExportCarif implements ExportInterface
     }
 
     private function prepareExport(
-        Dpe $anneeUniversitaire,
+        CampagneCollecte $anneeUniversitaire,
     ): void {
         $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
         $this->excelWriter->createFromTemplate('export_carif.xlsx');
@@ -80,13 +80,13 @@ class ExportCarif implements ExportInterface
         $this->fileName = Tools::FileName('CARIF - ' . (new DateTime())->format('d-m-Y-H-i'), 30);
     }
 
-    public function export(Dpe $anneeUniversitaire): StreamedResponse
+    public function export(CampagneCollecte $anneeUniversitaire): StreamedResponse
     {
         $this->prepareExport($anneeUniversitaire);
         return $this->excelWriter->genereFichier($this->fileName);
     }
 
-    public function exportLink(Dpe $anneeUniversitaire): string
+    public function exportLink(CampagneCollecte $anneeUniversitaire): string
     {
         $this->prepareExport($anneeUniversitaire);
         $this->excelWriter->saveFichier($this->fileName, $this->dir . 'zip/');

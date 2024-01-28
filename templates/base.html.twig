@@ -221,8 +221,8 @@
                                     </a>
                                     <ul id="structure">
                                         <li>
-                                            <a href="{{ path('app_dpe_index') }}">
-                                                <span class="label">DPE</span>
+                                            <a href="{{ path('app_campagne_collecte_index') }}">
+                                                <span class="label">Campagne Collecte</span>
                                             </a>
                                         </li>
                                         <li>
@@ -451,6 +451,11 @@
                                                 <li>
                                                     <a href="{{ path('app_composante', {composante:composante.id}) }}">
                                                         <span class="label">Détails de la composante</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ path('app_composante_campagne_collecte', {composante:composante.id}) }}">
+                                                        <span class="label">Campagne de collecte</span>
                                                     </a>
                                                 </li>
                                                 <li>
@@ -688,61 +693,36 @@
     </div>
 </div>
 
-{# <!-- Theme Settings & Niches Buttons Start --> #}
-{# <div class="settings-buttons-container"> #}
-{#        <button type="button" class="btn settings-button btn-primary p-0" #}
-{#                {{ stimulus_controller('modal', { #}
-{#                    size: 'large', #}
-{#                    modalTitle: 'Paramètres & Accessibilité', #}
-{#                    right: true, #}
-{#                    modalUrl: path('app_settings') }) }} #}
-{#                data-action="click->modal#openModal" #}
-{#                class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2" #}
-{#                data-size="lg" #}
-{#                data-bs-toggle="tooltip" #}
-{#                data-bs-placement="bottom" #}
-{#                title="Paramètres & Accessibilité" #}
-{#        > #}
-{#                <span class="d-inline-block no-delay" data-bs-delay="0" data-bs-offset="0,3" data-bs-toggle="tooltip" data-bs-placement="left" title="Aide"> #}
-{#                  <i class="fas fa-gears position-relative"></i> #}
-{#                </span> #}
-{#        </button> #}
-{#    <button type="button" class="btn settings-button btn-primary p-0" #}
-{#            {{ stimulus_controller('modal', #}{# } #}
-{#                size: 'large', #}
-{#                modalTitle: 'Aide', #}
-{#                right: true, #}
-{#                modalUrl: path('app_help') }) }} #}
-{#            data-action="click->modal#openModal" #}
-{#            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2" #}
-{#            data-size="lg" #}
-{#            data-bs-toggle="tooltip" #}
-{#            data-bs-placement="bottom" #}
-{#            title="Aide" #}
-{#    > #}
-{#            <span class="d-inline-block no-delay" data-bs-delay="0" data-bs-offset="0,3" data-bs-toggle="tooltip" data-bs-placement="left" title="Aide"> #}
-{#              <i class="fas fa-question position-relative"></i> #}
-{#            </span> #}
-{#    </button> #}
-{#    <button type="button" class="btn settings-button btn-primary p-0" #}
-{#            {{ stimulus_controller('modal', #}{# } #}
-{#                size: 'large', #}
-{#                modalTitle: 'Signaler un problème', #}
-{#                right: true, #}
-{#                modalUrl: path('app_signaler_probleme') }) }} #}
-{#            data-action="click->modal#openModal" #}
-{#            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2" #}
-{#            data-size="lg" #}
-{#            data-bs-toggle="tooltip" #}
-{#            data-bs-placement="bottom" #}
-{#            title="Signaler un problème" #}
-{#    > #}
-{#            <span class="d-inline-block no-delay" data-bs-delay="0" data-bs-offset="0,3" data-bs-toggle="tooltip" data-bs-placement="left" title="Signaler un problème"> #}
-{#              <i class="fas fa-comment-exclamation position-relative"></i> #}
-{#            </span> #}
-{#    </button> #}
-{# </div> #}
-{# <!-- Theme Settings & Niches Buttons End --> #}
-
+<!-- modal confirm -->
+<div class="modal fade"
+     tabindex="-1"
+     aria-hidden="true"
+     id="modal-confirm"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-confirm-title">Confirmer la suppression</h5>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"><i class="far fa-xmark-large"></i></button>
+            </div>
+            <div class="modal-body" id="modal-confirm-body">
+                Confirmer la suppression de l'élément sélectionné.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info"
+                        data-bs-dismiss="modal">
+                    Annuler
+                </button>
+                <button type="button" class="btn btn-danger"
+                        id="btn-confirm-valide"
+                        data-bs-dismiss="modal">
+                    Confirmer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

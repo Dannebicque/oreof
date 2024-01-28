@@ -10,7 +10,7 @@
 namespace App\MessageHandler;
 
 use App\Classes\Export\Export;
-use App\Repository\DpeRepository;
+use App\Repository\CampagneCollecteRepository;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
@@ -20,10 +20,10 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 class ExportHandler
 {
     public function __construct(
-        private UserRepository           $userRepository,
-        private DpeRepository            $anneeUniversitaireRepository,
-        private readonly MailerInterface $mailer,
-        private Export                   $export
+        private UserRepository             $userRepository,
+        private CampagneCollecteRepository $anneeUniversitaireRepository,
+        private readonly MailerInterface   $mailer,
+        private Export                     $export
     )
     {
     }

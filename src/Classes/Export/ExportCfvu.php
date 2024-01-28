@@ -11,7 +11,7 @@ namespace App\Classes\Export;
 
 use App\Classes\Excel\ExcelWriter;
 use App\Classes\GetHistorique;
-use App\Entity\Dpe;
+use App\Entity\CampagneCollecte;
 use App\Repository\FormationRepository;
 use App\Utils\Tools;
 use DateTime;
@@ -33,7 +33,7 @@ class ExportCfvu implements ExportInterface
     }
 
     private function prepareExport(
-        Dpe $anneeUniversitaire,
+        CampagneCollecte $anneeUniversitaire,
     ): void {
         /*
          * Nous aurions besoin d'une extraction des formations (mention et parcours) qui passent en CFVU on peut repartir sur la base : compo / type de formation / mention / parcours / lieu de formation / responsable mention / responsable parcours et peut être ajouter une colonne date validation Conseil compo et date de transmission PV conseil (ou si PV déposé ou non)
@@ -84,13 +84,13 @@ class ExportCfvu implements ExportInterface
         $this->fileName = Tools::FileName('EXPORT-CFVU - ' . (new DateTime())->format('d-m-Y-H-i'), 30);
     }
 
-    public function export(Dpe $anneeUniversitaire): StreamedResponse
+    public function export(CampagneCollecte $anneeUniversitaire): StreamedResponse
     {
         $this->prepareExport($anneeUniversitaire);
         return $this->excelWriter->genereFichier($this->fileName);
     }
 
-    public function exportLink(Dpe $anneeUniversitaire): string
+    public function exportLink(CampagneCollecte $anneeUniversitaire): string
     {
         $this->prepareExport($anneeUniversitaire);
         $this->excelWriter->saveFichier($this->fileName, $this->dir . 'zip/');

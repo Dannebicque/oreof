@@ -9,7 +9,7 @@
 
 namespace App\Message;
 
-use App\Entity\Dpe;
+use App\Entity\CampagneCollecte;
 use DateTimeInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 

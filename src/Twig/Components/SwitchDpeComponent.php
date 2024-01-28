@@ -9,7 +9,7 @@
 
 namespace App\Twig\Components;
 
-use App\Repository\DpeRepository;
+use App\Repository\CampagneCollecteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
@@ -26,7 +26,7 @@ final class SwitchDpeComponent extends AbstractController
 
     public function __construct(
         protected RequestStack $requestStack,
-        DpeRepository $dpeRepository
+        CampagneCollecteRepository $dpeRepository
     )
     {
         $this->dpes = $dpeRepository->findAll();

@@ -9,7 +9,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Dpe;
+use App\Entity\CampagneCollecte;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\Mention;
@@ -61,27 +61,29 @@ class ParcoursRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByTypeValidation(Dpe $anneeUniversitaire, mixed $typeValidation): array
+    public function findByTypeValidation(CampagneCollecte $campagneCollecte, mixed $typeValidation): array
     {
         $query = $this->createQueryBuilder('p')
+            ->join('p.dpeParcours', 'dp')
             ->innerJoin('p.formation', 'f')
-            ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            ->andWhere("JSON_CONTAINS(dp.etatValidation, :etatDpe) = 1")
             ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
-            ->andWhere('f.anneeUniversitaire = :annee')
-            ->setParameter('annee', $anneeUniversitaire);
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte);
 
         return $query->getQuery()
             ->getResult();
     }
 
-    public function findParcours(Dpe $anneeUniversitaire, array $options): array
+    public function findParcours(CampagneCollecte $campagneCollecte, array $options): array
     {
         $qb = $this->createQueryBuilder('p')
+            ->join('p.dpeParcours', 'dp')
             ->where('p.libelle <> :libelle')
             ->setParameter('libelle', Parcours::PARCOURS_DEFAUT)
             ->innerJoin('p.formation', 'f')
-            ->andWhere('f.anneeUniversitaire = :annee')
-            ->setParameter('annee', $anneeUniversitaire);
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte);
 
         foreach ($options as $sort => $direction) {
             if ($sort === 'recherche' && $direction !== '') {

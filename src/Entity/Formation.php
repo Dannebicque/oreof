@@ -47,7 +47,7 @@ class Formation
 
     #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne]
-    private ?Dpe $dpe;
+    private ?CampagneCollecte $dpe;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations')]
@@ -187,7 +187,7 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: DpeParcours::class)]
     private Collection $dpeParcours;
 
-    public function __construct(?Dpe $anneeUniversitaire)
+    public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
         $this->localisationMention = new ArrayCollection();
@@ -254,12 +254,12 @@ class Formation
         return $this;
     }
 
-    public function getDpe(): ?Dpe
+    public function getDpe(): ?CampagneCollecte
     {
         return $this->dpe;
     }
 
-    public function setDpe(?Dpe $dpe): self
+    public function setDpe(?CampagneCollecte $dpe): self
     {
         $this->dpe = $dpe;
 

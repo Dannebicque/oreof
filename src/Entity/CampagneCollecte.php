@@ -9,7 +9,7 @@
 
 namespace App\Entity;
 
-use App\Repository\DpeRepository;
+use App\Repository\CampagneCollecteRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,8 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: DpeRepository::class)]
-class Dpe
+#[ORM\Entity(repositoryClass: CampagneCollecteRepository::class)]
+class CampagneCollecte
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -35,7 +35,7 @@ class Dpe
     private ?int $annee = null;
 
     #[ORM\Column]
-    private ?bool $defaut = null;
+    private ?bool $defaut = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $dateOuvertureDpe = null;
@@ -53,13 +53,16 @@ class Dpe
     private ?DateTimeInterface $datePublication = null;
 
     #[ORM\Column(length: 1)]
-    private ?string $codeApogee = null;
+    private ?string $codeApogee = null; //todo: déplacer dans année ?
 
     #[ORM\ManyToOne(inversedBy: 'dpes')]
     private ?AnneeUniversitaire $annee_universitaire = null;
 
-    #[ORM\OneToMany(mappedBy: 'dpe', targetEntity: DpeParcours::class)]
+    #[ORM\OneToMany(mappedBy: 'campagneCollecte', targetEntity: DpeParcours::class)]
     private Collection $dpeParcours;
+
+    #[ORM\Column]
+    private ?bool $mailDpeEnvoye = false;
 
     public function __construct()
     {
@@ -203,7 +206,7 @@ class Dpe
     {
         if (!$this->dpeParcours->contains($dpeParcour)) {
             $this->dpeParcours->add($dpeParcour);
-            $dpeParcour->setDpe($this);
+            $dpeParcour->setCampagneCollecte($this);
         }
 
         return $this;
@@ -213,10 +216,22 @@ class Dpe
     {
         if ($this->dpeParcours->removeElement($dpeParcour)) {
             // set the owning side to null (unless already changed)
-            if ($dpeParcour->getDpe() === $this) {
-                $dpeParcour->setDpe(null);
+            if ($dpeParcour->getCampagneCollecte() === $this) {
+                $dpeParcour->setCampagneCollecte(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isMailDpeEnvoye(): ?bool
+    {
+        return $this->mailDpeEnvoye ?? false;
+    }
+
+    public function setMailDpeEnvoye(bool $mailDpeEnvoye): static
+    {
+        $this->mailDpeEnvoye = $mailDpeEnvoye;
 
         return $this;
     }

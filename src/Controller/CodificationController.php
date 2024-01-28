@@ -45,7 +45,7 @@ class CodificationController extends BaseController
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findByAnneeUniversitaireAndTypeDiplome($this->getDpe(), $typeDiplome);
+            $formations = $formationRepository->findByDpeAndTypeDiplome($this->getDpe(), $typeDiplome);
         } else {
             $formations = [];
             //gérer le cas ou l'utilisateur dispose des droits pour lire la composante

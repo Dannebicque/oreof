@@ -9,22 +9,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Dpe;
+use App\Entity\CampagneCollecte;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Dpe>
+ * @extends ServiceEntityRepository<CampagneCollecte>
  *
- * @method Dpe|null find($id, $lockMode = null, $lockVersion = null)
- * @method Dpe|null findOneBy(array $criteria, array $orderBy = null)
- * @method Dpe[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CampagneCollecte|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CampagneCollecte|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CampagneCollecte[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class DpeRepository extends ServiceEntityRepository
+class CampagneCollecteRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Dpe::class);
+        parent::__construct($registry, CampagneCollecte::class);
     }
 
     public function findAll(): array
@@ -32,7 +32,7 @@ class DpeRepository extends ServiceEntityRepository
         return $this->findBy([], ['libelle' => 'ASC']);
     }
 
-    public function save(Dpe $entity, bool $flush = false): void
+    public function save(CampagneCollecte $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -41,7 +41,7 @@ class DpeRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Dpe $entity, bool $flush = false): void
+    public function remove(CampagneCollecte $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 

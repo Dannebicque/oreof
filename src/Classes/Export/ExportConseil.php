@@ -11,7 +11,7 @@ namespace App\Classes\Export;
 
 use App\Classes\CalculStructureParcours;
 use App\Classes\MyPDF;
-use App\Entity\Dpe;
+use App\Entity\CampagneCollecte;
 use DateTimeInterface;
 
 class ExportConseil
@@ -20,7 +20,7 @@ class ExportConseil
         private string            $dir,
         private MyPDF             $myPDF,
         private array             $formations,
-        private Dpe               $annee,
+        private CampagneCollecte  $annee,
         private DateTimeInterface $date
     ) {
     }

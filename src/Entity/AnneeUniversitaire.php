@@ -21,7 +21,7 @@ class AnneeUniversitaire
     #[ORM\Column]
     private ?int $annee = null;
 
-    #[ORM\OneToMany(mappedBy: 'annee_universitaire', targetEntity: Dpe::class)]
+    #[ORM\OneToMany(mappedBy: 'annee_universitaire', targetEntity: CampagneCollecte::class)]
     private Collection $dpes;
 
     public function __construct()
@@ -59,14 +59,14 @@ class AnneeUniversitaire
     }
 
     /**
-     * @return Collection<int, Dpe>
+     * @return Collection<int, CampagneCollecte>
      */
     public function getDpes(): Collection
     {
         return $this->dpes;
     }
 
-    public function addDpe(Dpe $dpe): static
+    public function addDpe(CampagneCollecte $dpe): static
     {
         if (!$this->dpes->contains($dpe)) {
             $this->dpes->add($dpe);
@@ -76,7 +76,7 @@ class AnneeUniversitaire
         return $this;
     }
 
-    public function removeDpe(Dpe $dpe): static
+    public function removeDpe(CampagneCollecte $dpe): static
     {
         if ($this->dpes->removeElement($dpe)) {
             // set the owning side to null (unless already changed)

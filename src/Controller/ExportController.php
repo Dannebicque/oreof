@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Classes\JsonReponse;
 use App\Entity\Composante;
 use App\Message\Export;
-use App\Repository\DpeRepository;
+use App\Repository\CampagneCollecteRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Utils\Tools;
@@ -33,8 +33,8 @@ class ExportController extends BaseController
 
     #[Route('/export', name: 'app_export_index')]
     public function index(
-        DpeRepository        $anneeUniversitaireRepository,
-        ComposanteRepository $composanteRepository,
+        CampagneCollecteRepository $anneeUniversitaireRepository,
+        ComposanteRepository       $composanteRepository,
     ): Response {
         $this->denyAccessUnlessGranted('ROLE_SES');
 
@@ -50,8 +50,8 @@ class ExportController extends BaseController
 
     #[Route('/export/cfvu', name: 'app_export_cfvu')]
     public function exportCfvu(
-        DpeRepository        $anneeUniversitaireRepository,
-        ComposanteRepository $composanteRepository,
+        CampagneCollecteRepository $anneeUniversitaireRepository,
+        ComposanteRepository       $composanteRepository,
     ): Response {
         $this->denyAccessUnlessGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser());
 
@@ -66,8 +66,8 @@ class ExportController extends BaseController
 
     #[Route('/export/consultation', name: 'app_export_show')]
     public function exportShow(
-        DpeRepository        $anneeUniversitaireRepository,
-        ComposanteRepository $composanteRepository,
+        CampagneCollecteRepository $anneeUniversitaireRepository,
+        ComposanteRepository       $composanteRepository,
     ): Response {
         $this->denyAccessUnlessGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser());
 
@@ -83,8 +83,8 @@ class ExportController extends BaseController
 
     #[Route('/export/composante/{composante}', name: 'app_export_composante_index')]
     public function composante(
-        DpeRepository $anneeUniversitaireRepository,
-        Composante    $composante,
+        CampagneCollecteRepository $anneeUniversitaireRepository,
+        Composante                 $composante,
     ): Response {
         return $this->render('export/index.html.twig', [
             'annees' => $anneeUniversitaireRepository->findAll(),
@@ -120,9 +120,9 @@ class ExportController extends BaseController
 
     #[Route('/export/valide', name: 'app_export_valide')]
     public function valide(
-        MessageBusInterface $messageBus,
-        DpeRepository       $anneeUniversitaireRepository,
-        Request             $request,
+        MessageBusInterface        $messageBus,
+        CampagneCollecteRepository $anneeUniversitaireRepository,
+        Request                    $request,
     ): Response {
         $annee = $anneeUniversitaireRepository->find($request->request->get('annee_universitaire'));
         if (!$annee) {

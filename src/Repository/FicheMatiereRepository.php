@@ -9,7 +9,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Dpe;
+use App\Entity\CampagneCollecte;
 use App\Entity\Composante;
 use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
@@ -81,35 +81,35 @@ class FicheMatiereRepository extends ServiceEntityRepository
     }
 
     public function findByAdmin(
-        Dpe   $dpe,
-        array $options = []
+        CampagneCollecte $campagneCollecte,
+        array            $options = []
     ): array {
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
             ->join(DpeParcours::class, 'dp', 'WITH', 'p.id = dp.parcours')
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
-            ->andWhere('dp.dpe = :dpe')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->andWhere('f.horsDiplome = 0')
             ->orWhere('f.horsDiplome IS NULL')
-            ->setParameter('dpe', $dpe);
+            ->setParameter('campagneCollecte', $campagneCollecte);
 
         $this->addFiltres($qb, $options);
 
         return $qb->getQuery()->getResult();
     }
 
-    public function countByAdmin(Dpe $dpe, array $options): ?int
+    public function countByAdmin(CampagneCollecte $campagneCollecte, array $options): ?int
     {
         $qb = $this->createQueryBuilder('f')
             ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
             ->join(DpeParcours::class, 'dp', 'WITH', 'p.id = dp.parcours')
             ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
-            ->andWhere('dp.dpe = :dpe')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->andWhere('f.horsDiplome = 0')
             ->orWhere('f.horsDiplome IS NULL')
-            ->setParameter('dpe', $dpe);
+            ->setParameter('campagneCollecte', $campagneCollecte);
 
         $this->addFiltres($qb, $options, true);
 
@@ -243,7 +243,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
 //            ->getResult();
 //    }
 
-    public function findByHd(Dpe $dpe, array $options): array
+    public function findByHd(CampagneCollecte $campagneCollecte, array $options): array
     {
         $start = $options['start'] ?? 0;
         $query = $this->createQueryBuilder('f')
@@ -276,7 +276,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function countByHd(Dpe $dpe, array $options): ?int
+    public function countByHd(CampagneCollecte $campagneCollecte, array $options): ?int
     {
         $query = $this->createQueryBuilder('f')
             ->select('count(f.id)')
@@ -293,7 +293,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function findByResponsable(?UserInterface $user, Dpe $dpe, array $options): array
+    public function findByResponsable(?UserInterface $user, CampagneCollecte $campagneCollecte, array $options): array
     {
         $query = $this->createQueryBuilder('f')
             ->leftJoin('f.parcours', 'p')
@@ -302,11 +302,11 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->orWhere('(fo.responsableMention = :parcours OR fo.coResponsable = :parcours)')
             ->orWhere('(p.respParcours = :parcours OR p.coResponsable = :parcours)')
             ->orWhere('f.responsableFicheMatiere = :user')
-            ->andWhere('dp.dpe = :dpe') // Pour la troisième requête
+            ->andWhere('dp.campagneCollecte = :campagneCollecte') // Pour la troisième requête
             ->orderBy('f.libelle', 'ASC')
             ->setParameters([
                 'parcours' => $user,
-                'dpe' => $dpe,
+                'campagneCollecte' => $campagneCollecte,
                 'user' => $user
             ]);
 
@@ -316,7 +316,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function countByResponsable(?UserInterface $user, Dpe $dpe, array $options): ?int
+    public function countByResponsable(?UserInterface $user, CampagneCollecte $campagneCollecte, array $options): ?int
     {
         $query = $this->createQueryBuilder('f')
             ->leftJoin('f.parcours', 'p')
@@ -326,13 +326,13 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->andWhere('(fo.responsableMention = :parcours OR fo.coResponsable = :parcours)')
             // Pour la deuxième requête
             ->orWhere('(p.respParcours = :parcours OR p.coResponsable = :parcours)')
-            ->andWhere('dp.dpe = :dpe') // Pour la troisième requête
+            ->andWhere('dp.campagneCollecte = :campagneCollecte') // Pour la troisième requête
             // Ajout condition à la derniere requete
             ->andWhere('f.responsableFicheMatiere = :user')
             ->orderBy('f.libelle', 'ASC')
             ->setParameters([
                 'parcours' => $user,
-                'dpe' => $dpe,
+                'campagneCollecte' => $campagneCollecte,
                 'user' => $user
             ]);
 

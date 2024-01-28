@@ -46,7 +46,7 @@ class UpdateDpeCommand extends Command
                 if ($parcours->getDpeParcours()->count() === 0) {
                     $dpe = new DpeParcours();
                     $dpe->setParcours($parcours);
-                    $dpe->setDpe($formation->getDpe());
+                    $dpe->setCampagneCollecte($formation->getDpe());
                     $dpe->setFormation($formation);
                     $dpe->setCreated($date);
                     $dpe->setVersion('1.0');

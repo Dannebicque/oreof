@@ -16,7 +16,7 @@ class DpeParcours
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'dpeParcours')]
-    private ?Dpe $dpe = null;
+    private ?CampagneCollecte $campagneCollecte = null;
 
     #[ORM\ManyToOne(inversedBy: 'dpeParcours')]
     private ?Parcours $parcours = null;
@@ -41,14 +41,14 @@ class DpeParcours
         return $this->id;
     }
 
-    public function getDpe(): ?Dpe
+    public function getCampagneCollecte(): ?CampagneCollecte
     {
-        return $this->dpe;
+        return $this->campagneCollecte;
     }
 
-    public function setDpe(?Dpe $dpe): static
+    public function setCampagneCollecte(?CampagneCollecte $campagneCollecte): static
     {
-        $this->dpe = $dpe;
+        $this->campagneCollecte = $campagneCollecte;
 
         return $this;
     }
@@ -94,7 +94,7 @@ class DpeParcours
         return $this->etatReconduction;
     }
 
-    public function setEtatReconduction(TypeModificationDpeEnum $etatReconduction): static
+    public function setEtatReconduction(?TypeModificationDpeEnum $etatReconduction): static
     {
         $this->etatReconduction = $etatReconduction;
 

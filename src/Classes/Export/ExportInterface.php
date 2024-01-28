@@ -9,9 +9,9 @@
 
 namespace App\Classes\Export;
 
-use App\Entity\Dpe;
+use App\Entity\CampagneCollecte;
 
 interface ExportInterface
 {
-    public function exportLink(Dpe $anneeUniversitaire): string;
+    public function exportLink(CampagneCollecte $anneeUniversitaire): string;
 }

@@ -18,7 +18,7 @@ use App\DTO\HeuresEctsFormation;
 use App\DTO\HeuresEctsSemestre;
 use App\DTO\HeuresEctsUe;
 use App\DTO\StructureParcours;
-use App\Entity\Dpe;
+use App\Entity\CampagneCollecte;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;

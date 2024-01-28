@@ -9,8 +9,8 @@
 
 namespace App\Classes;
 
-use App\Entity\Dpe;
-use App\Repository\DpeRepository;
+use App\Entity\CampagneCollecte;
+use App\Repository\CampagneCollecteRepository;
 use Stringable;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -23,14 +23,14 @@ class DataUserSession
     private UserInterface $user;
 
     private string $dir;
-    private ?Dpe $dpe = null;
+    private ?CampagneCollecte $dpe = null;
 
 
     public function __construct(
-        private RequestStack      $requestStack,
-        private DpeRepository         $dpeRepository,
-        TokenStorageInterface $tokenStorage,
-        KernelInterface       $kernel,
+        private RequestStack               $requestStack,
+        private CampagneCollecteRepository $dpeRepository,
+        TokenStorageInterface              $tokenStorage,
+        KernelInterface                    $kernel,
     ) {
         $this->dir = $kernel->getProjectDir();
         if ($tokenStorage->getToken() !== null) {
@@ -38,7 +38,7 @@ class DataUserSession
         }
     }
 
-    public function getDpe(): ?Dpe
+    public function getDpe(): ?CampagneCollecte
     {
         $session = $this->requestStack->getSession();
         if ($this->dpe === null) {
