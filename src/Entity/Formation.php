@@ -47,6 +47,7 @@ class Formation
 
     #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne]
+    /** @deprecated("Sur le Dpe")  */
     private ?CampagneCollecte $dpe;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
@@ -134,18 +135,22 @@ class Formation
     private ?RythmeFormation $rythmeFormation = null;
 
     #[ORM\Column(nullable: true)]
+    /** @deprecated("sur le DPE") */
     private ?array $etatDpe = [];
 
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: UserCentre::class, cascade: ['persist', 'remove'])]
     private Collection $userCentres;
 
     #[ORM\Column(length: 10)]
+    /** @deprecated("sur le DPE") */
     private ?string $version = '0.1';
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'formationsAnterieures')]
+    /** @deprecated("A gérer") */
     private ?self $versionParent = null;
 
     #[ORM\OneToMany(mappedBy: 'versionParent', targetEntity: self::class)]
+    /** @deprecated("A gérer") */
     private Collection $formationsAnterieures;
 
     #[ORM\Column]
