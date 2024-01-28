@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.24.0](https://github.com/Dannebicque/oreof/compare/v1.23.22...v1.24.0) (2024-01-28)
+
+
+### Features
+
+* Création d'une entité année universitaire. Remplacement de année universitaire par DPE qui est liée à une année. Une année pourra avoir plusieurs DPE. ([e43b49c](https://github.com/Dannebicque/oreof/commit/e43b49c836559587aecfe9d20d948b286edb09a1))
+* gestion de la validation des fiches matières ([ac1795a](https://github.com/Dannebicque/oreof/commit/ac1795a80830ee5e8ee54835c63163b1a9e4f967))
+* Gestion DPE sur formation + Switch pris en compte + entités et types ([eaec715](https://github.com/Dannebicque/oreof/commit/eaec71543952bc88ee9b0c2e04d4c7279e586714))
+* Notion de campagne de collecte composée de DpeParcours. ([3859e56](https://github.com/Dannebicque/oreof/commit/3859e56b13ab118ecd126b50c262e679d03d05f4))
+* switch DPE ([5b0b459](https://github.com/Dannebicque/oreof/commit/5b0b459271f59b485421a5f0c8795f241ad2a1c4))
+* Symfony 6.4 ([47107a0](https://github.com/Dannebicque/oreof/commit/47107a0571c04c430378636c769f2482461111b8))
+* Symfony 6.4 ([dd76df5](https://github.com/Dannebicque/oreof/commit/dd76df53f63ef00ea5fc12fceefe95812af259d6))
+* Symfony 6.4 ([66d2857](https://github.com/Dannebicque/oreof/commit/66d2857ce8427a1a0457896ee46df5301c46d1a8))
+
+
+### Bug Fixes
+
+* Affichage des fiches matières. ([f198862](https://github.com/Dannebicque/oreof/commit/f1988627a5409618fa3e25b1eaa48eee958d01d7))
+* Export Json maquette ([458b932](https://github.com/Dannebicque/oreof/commit/458b932e1a4024261b8c025fcce0cbba5c1c219d))
+* Export Json maquette ([15c8399](https://github.com/Dannebicque/oreof/commit/15c839944f494c07ac74ef7beab9ad9c808250f1))
+* Modif CSS version PDF ([865560b](https://github.com/Dannebicque/oreof/commit/865560bd091205ab7b43dd94541be7f36f6ebae6))
+* Traitement des cas null ou vide ([638e8f6](https://github.com/Dannebicque/oreof/commit/638e8f6333639957d3bfdaec31146183e710c368))
+* Typos et bugs pour passage SF6.4 ([d8b1d06](https://github.com/Dannebicque/oreof/commit/d8b1d06b22a297a7b7b9f8e0acdc207b4d116f01))
+
 ### [1.23.22](https://github.com/Dannebicque/oreof/compare/v1.23.21...v1.23.22) (2024-01-24)
 
 
