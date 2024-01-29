@@ -67,7 +67,7 @@ class CodificationFormation
             $this->setCodificationDiplome($parcours);
             $this->setCodeEtape($parcours);
             $this->setCodificationVersionEtape($parcours);
-            $this->setCodificationSemestre($parcours);
+            //$this->setCodificationSemestre($parcours);
             $this->entityManager->flush();
         }
     }
@@ -120,13 +120,15 @@ class CodificationFormation
             $code = $formation->getDpe()?->getCodeApogee();
             $code .= $formation->getTypeDiplome()?->getCodeApogee();
             $code .= $formation->getDomaine()?->getCodeApogee();
-            $code .= $formation->getMention()?->getCodeApogee();
+            $code .= $formation->getCodeMentionApogee();
 
             foreach ($parcours->getSemestreParcours() as $sp) {
                 if ($parcours->isParcoursDefaut()) {
                     $codeParcours = '0';
-                } elseif ($sp->getSemestre()?->isTroncCommun() === true) {
-                    //todo: vérifier le début de semestre dans la formation
+                } elseif ($formation->getParcours()->count() === 1) {
+                    $codeParcours = '1';
+                } elseif ($sp->getSemestre()?->isTroncCommun() === true && $formation->getParcours()->count() > 1) {
+                    //Si tronc commun et plus de 1 parcours
                     $codeParcours = 'X';
                 } else {
                     $codeParcours = $parcours->getCodeApogee();
@@ -210,7 +212,7 @@ class CodificationFormation
                      */
                     $code = substr($formation->getComposantePorteuse()?->getCodeApogee(), 0, 1);
                     $code .= $formation->getTypeDiplome()?->getCodeApogee();
-                    $code .= $formation->getMention()?->getCodeApogee();
+                    $code .= $formation->getCodeMentionApogee();
 
                     // si semestre de tronc commun
                     if ($parcours->isParcoursDefaut()) {

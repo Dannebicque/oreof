@@ -192,6 +192,9 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: DpeParcours::class)]
     private Collection $dpeParcours;
 
+    #[ORM\Column(length: 1, nullable: true)]
+    private ?string $codeMentionApogee = null;
+
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
@@ -998,6 +1001,18 @@ class Formation
                 $dpeParcour->setFormation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCodeMentionApogee(): ?string
+    {
+        return $this->codeMentionApogee;
+    }
+
+    public function setCodeMentionApogee(?string $codeMentionApogee): static
+    {
+        $this->codeMentionApogee = $codeMentionApogee;
 
         return $this;
     }
