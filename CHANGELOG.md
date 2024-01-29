@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.1](https://github.com/Dannebicque/oreof/compare/v1.24.0...v1.24.1) (2024-01-29)
+
+
+### Features
+
+* Code Mention sur la formation plutôt que la mention ([9b9b46b](https://github.com/Dannebicque/oreof/commit/9b9b46ba7a0d2b95a1e3781a9370a812ad41c748))
+
 ## [1.24.0](https://github.com/Dannebicque/oreof/compare/v1.23.22...v1.24.0) (2024-01-28)
 
 
