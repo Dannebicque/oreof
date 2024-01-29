@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.2](https://github.com/Dannebicque/oreof/compare/v1.24.1...v1.24.2) (2024-01-29)
+
+
+### Bug Fixes
+
+* Responsable sur mention sans parcours ([0cd70ca](https://github.com/Dannebicque/oreof/commit/0cd70caf9b43d9ab1c362f1e21649308436f23d2))
+
 ### [1.24.1](https://github.com/Dannebicque/oreof/compare/v1.24.0...v1.24.1) (2024-01-29)
 
 
