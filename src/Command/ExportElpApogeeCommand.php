@@ -7,6 +7,7 @@ use App\DTO\StructureEc;
 use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
+use App\Entity\ElementConstitutif;
 use App\Entity\Parcours;
 use App\Repository\ElementConstitutifRepository;
 use App\Service\Apogee\Classes\ElementPedagogiDTO6;
@@ -19,6 +20,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
@@ -50,14 +52,17 @@ class ExportElpApogeeCommand extends Command
     {
         $this->addOption(
             name: 'mode',
-            mode: InputArgument::OPTIONAL,
+            mode: InputOption::VALUE_OPTIONAL,
             description: 'Execution mode : test or production', 
             default: 'test'
         )->addOption(
-            'excel-export', 
-            'excel',
-            InputArgument::OPTIONAL,
-            'Génère un export Excel des ELP - Type : Semestre, UE, EC'
+            name: 'excel-export', 
+            mode: InputOption::VALUE_REQUIRED,
+            description: 'Génère un export Excel des ELP - Type : Semestre, UE, EC'
+        )->addOption(
+            name: 'dummy-insertion',
+            mode: InputOption::VALUE_NONE,
+            description: "Insère un ELP dans la base de données APOTEST"
         );
     }
 
@@ -66,7 +71,7 @@ class ExportElpApogeeCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $mode = $input->getOption('mode');
         $export = $input->getOption('excel-export');
-
+        $dummyInsertion = $input->getOption('dummy-insertion');
 
         if($mode === "test"){
             if($export){
@@ -90,7 +95,28 @@ class ExportElpApogeeCommand extends Command
                 $io->success("Fichier généré avec succès.");
 
                 return Command::SUCCESS;
-            }       
+            }  
+            if($dummyInsertion){
+                $io->write("Utilisation du Web Service APOTEST");
+                if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer dans APOTEST ?")){
+                    $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById(405);
+                    $dto = $this->getDTOForParcours($parcours);
+                    $ec = $dto->semestres[1]->ues()[0]->elementConstitutifs[0];
+                    $elp = new ElementPedagogiDTO6($ec, $dto);
+                    $elp->codElp = 'TEST110';
+                    $elp->codNatureElp = 'MATI';
+
+                    dump($elp);
+                    // $io->write("Initialisation du Web Service...");
+                    return Command::SUCCESS;
+                }
+                else {
+                    $io->warning('La commande a été annulée.');
+                    return Command::SUCCESS;
+                }
+            
+                return Command::SUCCESS;
+            }     
             
             return Command::SUCCESS;
         }
@@ -100,7 +126,7 @@ class ExportElpApogeeCommand extends Command
             return Command::INVALID;
         }
         else{
-            $io->error("Given execution mode is invalid. It should be 'test' or 'production'");
+            $io->error("Le mode d'exécution est invalide. Il devrait être 'test' ou 'production'");
             return Command::FAILURE;
         }
     }
@@ -183,4 +209,14 @@ class ExportElpApogeeCommand extends Command
         $writer->save($filename);
     }
 
+    private function verifyUserIntent(SymfonyStyle $io, string $message){
+        return $io->ask("{$message} [Y/n]", 'n', function($message) use ($io) {
+            if($message === "Y"){
+                return true;
+            }
+            else {
+                return false;
+            }
+        });
+    }
 }

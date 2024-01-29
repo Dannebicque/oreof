@@ -47,11 +47,11 @@ class ElementPedagogiDTO6
         StructureParcours $dto
     ) {
         if ($elementPedagogique instanceof StructureEc){
-            $this->codElp = $elementPedagogique->elementConstitutif->getCodeApogee();
+            $this->codElp = $elementPedagogique->elementConstitutif->getCodeApogee() ?? "ERROR";
             $this->libCourtElp = $this->prepareLibelle($elementPedagogique->elementConstitutif->getLibelle(), 25);
             $this->libElp = $this->prepareLibelle($elementPedagogique->elementConstitutif->getLibelle(), 60);
-            $this->codNatureElp = "FIX_";
-            $this->codComposante = $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "error";
+            $this->codNatureElp = "ERR";
+            $this->codComposante = $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "ERROR";
             // $this->temSuspension;
             // $this->motifSuspension;
             $this->temModaliteControle = "O";
@@ -65,7 +65,7 @@ class ElementPedagogiDTO6
             // $this->descriptionElp;
             $this->volume = $elementPedagogique->heuresEctsEc->sommeEcTotalPresDist();
             $this->uniteVolume = TypeVolumeElpEnum::HE->value;
-            $this->codPeriode = "__";
+            $this->codPeriode = $elementPedagogique->elementConstitutif->getUe()->getSemestre()->display();
             // $this->numOrdrePresentationElp;
             // $this->seuilOuverture;
             // $this->capaciteMaxElp;
@@ -83,7 +83,7 @@ class ElementPedagogiDTO6
             $this->libCourtElp = $this->prepareLibelle($elementPedagogique->ue->getLibelle(), 25);
             $this->libElp = $this->prepareLibelle($elementPedagogique->ue->getLibelle(), 60);
             $this->codNatureElp = CodeNatuElpEnum::UE->value;
-            $this->codComposante = $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "error";
+            $this->codComposante = $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "ERROR";
             // $this->temSuspension
             // $this->motifSuspension
             $this->temModaliteControle = "O"; // valeur par défaut
@@ -120,7 +120,7 @@ class ElementPedagogiDTO6
         if($txt){
             return substr($txt, 0, $length);
         }else {
-            return 'error';
+            return 'ERROR';
         }
     }
 }
