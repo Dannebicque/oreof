@@ -9,14 +9,14 @@
 
 namespace App\Controller\Config;
 
-use App\Entity\AnneeUniversitaire;
-use App\Form\AnneeUniversitaireType;
-use App\Repository\AnneeUniversitaireRepository;
+use App\Entity\CampagneCollecte;
+use App\Form\CampagneCollecteType;
+use App\Repository\CampagneCollecteRepository;
 use App\Utils\JsonRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/annee/universitaire')]
 class AnneeUniversitaireController extends AbstractController
@@ -28,7 +28,7 @@ class AnneeUniversitaireController extends AbstractController
     }
 
     #[Route('/liste', name: 'app_annee_universitaire_liste', methods: ['GET'])]
-    public function liste(AnneeUniversitaireRepository $anneeUniversitaireRepository): Response
+    public function liste(CampagneCollecteRepository $anneeUniversitaireRepository): Response
     {
         return $this->render('config/annee_universitaire/_liste.html.twig', [
             'annee_universitaires' => $anneeUniversitaireRepository->findAll(),
@@ -36,73 +36,73 @@ class AnneeUniversitaireController extends AbstractController
     }
 
     #[Route('/new', name: 'app_annee_universitaire_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, AnneeUniversitaireRepository $anneeUniversitaireRepository): Response
+    public function new(Request $request, CampagneCollecteRepository $annee_universitaireRepository): Response
     {
-        $anneeUniversitaire = new AnneeUniversitaire();
+        $annee_universitaire = new CampagneCollecte();
         $form = $this->createForm(
-            AnneeUniversitaireType::class,
-            $anneeUniversitaire,
+            CampagneCollecteType::class,
+            $annee_universitaire,
             ['action' => $this->generateUrl('app_annee_universitaire_new')]
         );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $anneeUniversitaireRepository->save($anneeUniversitaire, true);
+            $annee_universitaireRepository->save($annee_universitaire, true);
 
             return $this->json(true);
         }
 
         return $this->render('config/annee_universitaire/new.html.twig', [
-            'annee_universitaire' => $anneeUniversitaire,
+            'annee_universitaire' => $annee_universitaire,
             'form' => $form->createView(),
         ]);
     }
 
     #[Route('/{id}', name: 'app_annee_universitaire_show', methods: ['GET'])]
-    public function show(AnneeUniversitaire $anneeUniversitaire): Response
+    public function show(CampagneCollecte $annee_universitaire): Response
     {
         return $this->render('config/annee_universitaire/show.html.twig', [
-            'annee_universitaire' => $anneeUniversitaire,
+            'annee_universitaire' => $annee_universitaire,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_annee_universitaire_edit', methods: ['GET', 'POST'])]
     public function edit(
-        Request $request,
-        AnneeUniversitaire $anneeUniversitaire,
-        AnneeUniversitaireRepository $anneeUniversitaireRepository
+        Request          $request,
+        CampagneCollecte $annee_universitaire,
+        CampagneCollecteRepository $annee_universitaireRepository
     ): Response {
         $form = $this->createForm(
-            AnneeUniversitaireType::class,
-            $anneeUniversitaire,
+            CampagneCollecteType::class,
+            $annee_universitaire,
             [
                 'action' => $this->generateUrl('app_annee_universitaire_edit', [
-                    'id' => $anneeUniversitaire->getId()
+                    'id' => $annee_universitaire->getId()
                 ])
             ]
         );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $anneeUniversitaireRepository->save($anneeUniversitaire, true);
+            $annee_universitaireRepository->save($annee_universitaire, true);
 
             return $this->json(true);
         }
 
         return $this->render('config/annee_universitaire/new.html.twig', [
-            'annee_universitaire' => $anneeUniversitaire,
+            'annee_universitaire' => $annee_universitaire,
             'form' => $form->createView(),
         ]);
     }
 
     #[Route('/{id}/duplicate', name: 'app_annee_universitaire_duplicate', methods: ['GET'])]
     public function duplicate(
-        AnneeUniversitaireRepository $anneeUniversitaireRepository,
-        AnneeUniversitaire $anneeUniversitaire
+        CampagneCollecteRepository $annee_universitaireRepository,
+        CampagneCollecte           $annee_universitaire
     ): Response {
-        $anneeUniversitaireNew = clone $anneeUniversitaire;
-        $anneeUniversitaireNew->setLibelle($anneeUniversitaire->getLibelle() . ' - Copie');
-        $anneeUniversitaireRepository->save($anneeUniversitaireNew, true);
+        $annee_universitaireNew = clone $annee_universitaire;
+        $annee_universitaireNew->setLibelle($annee_universitaire->getLibelle() . ' - Copie');
+        $annee_universitaireRepository->save($annee_universitaireNew, true);
         return $this->json(true);
     }
 
@@ -111,15 +111,15 @@ class AnneeUniversitaireController extends AbstractController
      */
     #[Route('/{id}', name: 'app_annee_universitaire_delete', methods: ['DELETE'])]
     public function delete(
-        Request $request,
-        AnneeUniversitaire $anneeUniversitaire,
-        AnneeUniversitaireRepository $anneeUniversitaireRepository
+        Request          $request,
+        CampagneCollecte $annee_universitaire,
+        CampagneCollecteRepository $annee_universitaireRepository
     ): Response {
         if ($this->isCsrfTokenValid(
-            'delete' . $anneeUniversitaire->getId(),
+            'delete' . $annee_universitaire->getId(),
             JsonRequest::getValueFromRequest($request, 'csrf')
         )) {
-            $anneeUniversitaireRepository->remove($anneeUniversitaire, true);
+            $annee_universitaireRepository->remove($annee_universitaire, true);
 
             return $this->json(true);
         }

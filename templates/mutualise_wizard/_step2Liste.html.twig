@@ -64,15 +64,19 @@
     {% for ue in ues %}
         <tr>
             <td>
-                {% if ue.parcours != null and ue.ue.semestre.semestreParcours[0] is defined %}
+                {% if ue.parcours != null and
+                    ue.ue.semestre.semestreParcours[0] is defined and
+                    ue.ue.semestre.semestreParcours[0].parcours != null and
+                    ue.ue.semestre.semestreParcours[0].parcours.formation != null
+                %}
                     {{ ue.ue.semestre.semestreParcours[0].parcours.formation.display }}
                 {% else %}
                     Pas de formation
                 {% endif %}
             </td>
             <td>{{ ue.ue.typeUe != null ? ue.ue.typeUe.libelle : 'Non défini' }}</td>
-            <td>{{ ue.parcours != null ? ue.parcours.formation.composantePorteuse.libelle : 'Pas de formation' }}</td>
-            <td>{{ ue.parcours != null ? ue.parcours.formation.display : 'Pas de formation' }}</td>
+            <td>{{ ue.parcours != null and ue.parcours.formation != null  and ue.parcours.formation.composantePorteuse != null ? ue.parcours.formation.composantePorteuse.libelle : 'Pas de formation' }}</td>
+            <td>{{ ue.parcours != null and ue.parcours.formation != null  ? ue.parcours.formation.display : 'Pas de formation' }}</td>
             <td>{{ ue.parcours != null ? ue.parcours.libelle : 'Pas de formation' }}</td>
             <td>Voir ?</td>
         </tr>

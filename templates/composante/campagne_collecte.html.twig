@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+    Gestion de la campagne de collecte
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Administration',
+        }
+    ]}) }}
+{% endblock %}
+
+{% block content %}
+    {% if campagne is defined and campagne == true %}
+        <div class="alert alert-info">
+            Vous pouvez laisser les responsables de formations indiquer leur souhait pour chacun de leur
+            parcours. Pour cela cliquez sur ce lien pour les informer et les inviter à indiquer leur souhait.
+            Vous gardez la décision finale.<br>
+            <a href="" class="text-warning">Demander aux responsables de formation le souhait pour chacun de leurs
+                formations et
+                parcours</a></div>
+
+        <div class="card mt-2">
+            <div class="card-body">
+                <table class="table" {{ stimulus_controller('check_all') }}>
+                    <thead>
+                    <tr>
+                        <th>Mention / Parcours</th>
+                        <th>
+                            <div class="checkbox text-center">
+                                <label>
+                                    Attente<br>
+                                    <input type="radio"
+                                           name="etat"
+                                           id="attente" {{ stimulus_action('check_all', 'checkAll', 'click', {'classCheckAll' : 'attente', 'idCheckAll': 'attente'}) }}>
+                                </label>
+                            </div>
+                        </th>
+                        {% for etat in etats|filter(etat => etat.value != 'CREATION') %}
+                            <th>
+                                <div class="checkbox text-center">
+                                    <label>
+                                        {{ etat.libelle }}<br>
+                                        <input type="radio"
+                                               name="etat"
+                                               id="{{ etat.value }}" {{ stimulus_action('check_all', 'checkAll', 'click', {'classCheckAll' : etat.value, 'idCheckAll': etat.value}) }}>
+                                    </label>
+                                </div>
+                            </th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for parcour in allParcours %}
+                        <tr>
+                            <td>{{ parcour.formation.displayLong }} {% if parcour.formation.hasParcours %} | {{ parcour.parcours.display }}{% endif %}</td>
+                            <td>
+                                <div class="checkbox text-center">
+                                    <label>
+                                        <input
+                                                {{ stimulus_action('check_all', 'check', 'click', {'classCheckAll' : 'attente', 'idCheckAll': 'attente' }) }}
+                                                type="radio"
+                                                checked
+                                                class="attente"
+                                                name="parcour_{{ parcour.id }}"
+                                                value="attente"
+                                        >
+                                    </label>
+                                </div>
+                            </td>
+                            {% for etat in etats|filter(etat => etat.value != 'CREATION') %}
+                                <td>
+                                    <div class="checkbox text-center">
+                                        <label>
+                                            <input
+                                                    {{ stimulus_action('check_all', 'check', 'click', {'classCheckAll' : etat.value, 'idCheckAll': etat.value }) }}
+                                                    type="radio"
+                                                    class="{{ etat.value }}"
+                                                    name="parcour_{{ parcour.id }}"
+                                                    value="{{ etat.value }}"
+                                            >
+                                        </label>
+                                    </div>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    {% else %}
+        {{ component('alerte', {
+            'type': 'warning',
+            'message': 'Vous n\'avez pas de campagne de collecte en cours'
+        }) }}
+    {% endif %}
+{% endblock %}
+

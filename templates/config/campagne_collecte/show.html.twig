@@ -1,0 +1,25 @@
+<table class="table">
+    <tbody>
+    <tr>
+        <th>Libelle</th>
+        <td>{{ campagne_collecte.libelle }}</td>
+    </tr>
+    <tr>
+        <th>Année</th>
+        <td>{{ campagne_collecte.annee }}</td>
+    </tr>
+    <tr>
+        <th>Date de transmission limite au SES</th>
+        <td>{{ campagne_collecte.dateTransmissionSes|dateFr }}</td>
+    </tr>
+    <tr>
+        <th>Date de la CFVU</th>
+        <td>{{ campagne_collecte.dateCfvu|dateFr }}</td>
+    </tr>
+    <tr>
+        <th>Année Active</th>
+        <td><span class="badge {% if campagne_collecte.defaut %}bg-success{% else %}bg-warning{% endif %}">{{
+                campagne_collecte.defaut ? 'Oui' : 'Non' }}</span></td>
+    </tr>
+    </tbody>
+</table>

@@ -11,7 +11,7 @@ namespace App\Controller;
 
 use App\Repository\FormationRepository;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 #[Route('/central/formation/etat')]
@@ -24,7 +24,7 @@ class FormationEtatController extends BaseController
     public function sendOuverture(
         FormationRepository $formationRepository
     ): Response {
-        $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()]);
+        $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getDpe()]);
         $listeFormationsOuvrables = [];
         foreach ($formations as $formation) {
             if ($this->dpeWorkflow->can($formation, 'initialiser') && $formation->getResponsableMention() !== null) {

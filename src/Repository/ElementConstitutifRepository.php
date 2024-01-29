@@ -9,7 +9,7 @@
 
 namespace App\Repository;
 
-use App\Entity\AnneeUniversitaire;
+use App\Entity\CampagneCollecte;
 use App\Entity\Composante;
 use App\Entity\ElementConstitutif;
 use App\Entity\Formation;
@@ -53,7 +53,7 @@ class ElementConstitutifRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByComposanteDpe(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
+    public function findByComposanteDpe(UserInterface $user, CampagneCollecte $campagneCollecte): array
     {
         return $this->createQueryBuilder('ec')
             ->join('ec.ecUes', 'ecue')
@@ -62,16 +62,17 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->join('s.semestreParcours', 'sp')
             ->innerJoin(Parcours::class, 'p', 'WITH', 'p.id = sp.parcours')
             ->innerJoin(Formation::class, 'f', 'WITH', 'f.id = p.formation')
+            ->join('f.dpeParcours', 'dp')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
             ->where('c.responsableDpe = :user')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->setParameter('user', $user)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->getQuery()
             ->getResult();
     }
 
-    public function findByResponsableFormation(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
+    public function findByResponsableFormation(UserInterface $user, CampagneCollecte $campagneCollecte): array
     {
         return $this->createQueryBuilder('ec')
             ->join('ec.ecUes', 'ecue')
@@ -79,16 +80,17 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->innerJoin(Semestre::class, 's', 'WITH', 's.id = ue.semestre')
             ->join('s.semestreParcours', 'sp')
             ->innerJoin(Parcours::class, 'p', 'WITH', 'p.id = sp.parcours')
+            ->join('p.dpeParcourss', 'dp')
             ->innerJoin(Formation::class, 'f', 'WITH', 'f.id = p.formation')
             ->where('f.responsableMention = :user')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->setParameter('user', $user)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->getQuery()
             ->getResult();
     }
 
-    public function findByResponsableEc(UserInterface $user, AnneeUniversitaire $anneeUniversitaire): array
+    public function findByResponsableEc(UserInterface $user, CampagneCollecte $campagneCollecte): array
     {
         return $this->createQueryBuilder('ec')
             ->join('ec.ecUes', 'ecue')
@@ -96,16 +98,17 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->innerJoin(Semestre::class, 's', 'WITH', 's.id = ue.semestre')
             ->join('s.semestreParcours', 'sp')
             ->innerJoin(Parcours::class, 'p', 'WITH', 'p.id = sp.parcours')
+            ->join('p.dpeParcourss', 'dp')
             ->innerJoin(Formation::class, 'f', 'WITH', 'f.id = p.formation')
             ->where('ec.responsableEc = :user')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->setParameter('user', $user)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->getQuery()
             ->getResult();
     }
 
-    public function findByAllAnneUniversitaire(AnneeUniversitaire $anneeUniversitaire): array
+    public function findByAllDpe(CampagneCollecte $campagneCollecte): array
     {
         return $this->createQueryBuilder('ec')
             ->join('ec.ecUes', 'ecue')
@@ -113,9 +116,10 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->innerJoin(Semestre::class, 's', 'WITH', 's.id = ue.semestre')
             ->join('s.semestreParcours', 'sp')
             ->innerJoin(Parcours::class, 'p', 'WITH', 'p.id = sp.parcours')
+            ->join('p.dpeParcourss', 'dp')
             ->innerJoin(Formation::class, 'f', 'WITH', 'f.id = p.formation')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->andWhere('f.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->distinct()
             ->getQuery()
             ->getResult();

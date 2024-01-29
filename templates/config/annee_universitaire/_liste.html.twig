@@ -2,13 +2,7 @@
     <thead>
     <tr>
         <th>Libellé</th>
-        <th>Code Apogée</th>
         <th>Année</th>
-        <th>Date Ouverture</th>
-        <th>Date Clôture</th>
-        <th>Transmission SES</th>
-        <th>CFVU</th>
-        <th>Collecte DPE active ?</th>
         <th></th>
     </tr>
     </thead>
@@ -16,15 +10,7 @@
     {% for annee_universitaire in annee_universitaires %}
         <tr>
             <td>{{ annee_universitaire.libelle }}</td>
-            <td>{{ annee_universitaire.codeApogee|displayOrBadge }}</td>
-            <td>{{ annee_universitaire.annee }}</td>
-            <td>{{ annee_universitaire.dateOuvertureDpe|dateFr }}</td>
-            <td>{{ annee_universitaire.dateClotureDpe|dateFr }}</td>
-            <td>{{ annee_universitaire.dateTransmissionSes|dateFr }}</td>
-            <td>{{ annee_universitaire.dateCfvu|dateFr }}</td>
-            <td><span class="badge {% if annee_universitaire.defaut %}bg-success{% else %}bg-warning{% endif %}">{{
-                    annee_universitaire
-                    .defaut ? 'Active' : 'Non' }}</span></td>
+            <td>{{ annee_universitaire.annee  }}</td>
             <td class="text-end">
                 <button
                         {{ stimulus_controller('modal', {
@@ -73,7 +59,7 @@
         </tr>
     {% else %}
         <tr>
-            <td colspan="5">no records found</td>
+            <td colspan="3">no records found</td>
         </tr>
     {% endfor %}
     </tbody>

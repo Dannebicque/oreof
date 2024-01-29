@@ -13,7 +13,7 @@ use App\Repository\TypeDiplomeRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class CodificationController extends BaseController
 {
@@ -45,7 +45,7 @@ class CodificationController extends BaseController
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findByAnneeUniversitaireAndTypeDiplome($this->getAnneeUniversitaire(), $typeDiplome);
+            $formations = $formationRepository->findByDpeAndTypeDiplome($this->getDpe(), $typeDiplome);
         } else {
             $formations = [];
             //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
@@ -60,22 +60,22 @@ class CodificationController extends BaseController
                     //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
                     $formations[] = $formationRepository->findByComposante(
                         $centre->getComposante(),
-                        $this->getAnneeUniversitaire()
+                        $this->getDpe()
                     );
                 }
             }
 
             $formations[] = $formationRepository->findByComposanteDpe(
                 $this->getUser(),
-                $this->getAnneeUniversitaire()
+                $this->getDpe()
             );
             $formations[] = $formationRepository->findByResponsableOuCoResponsable(
                 $this->getUser(),
-                $this->getAnneeUniversitaire()
+                $this->getDpe()
             );
             $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
                 $this->getUser(),
-                $this->getAnneeUniversitaire()
+                $this->getDpe()
             );
             $formations = array_merge(...$formations);
         }
@@ -103,7 +103,7 @@ class CodificationController extends BaseController
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findBySearch('', $this->getAnneeUniversitaire(), []);
+            $formations = $formationRepository->findBySearch('', $this->getDpe(), []);
 
             return $export->exportFormations($formations);
         } else {
@@ -120,22 +120,22 @@ class CodificationController extends BaseController
                     //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
                     $formations[] = $formationRepository->findByComposante(
                         $centre->getComposante(),
-                        $this->getAnneeUniversitaire()
+                        $this->getDpe()
                     );
                 }
             }
 
             $formations[] = $formationRepository->findByComposanteDpe(
                 $this->getUser(),
-                $this->getAnneeUniversitaire()
+                $this->getDpe()
             );
             $formations[] = $formationRepository->findByResponsableOuCoResponsable(
                 $this->getUser(),
-                $this->getAnneeUniversitaire()
+                $this->getDpe()
             );
             $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
                 $this->getUser(),
-                $this->getAnneeUniversitaire()
+                $this->getDpe()
             );
             $formations = array_merge(...$formations);
         }
@@ -201,7 +201,7 @@ class CodificationController extends BaseController
         FormationRepository   $formationRepository,
         CodificationFormation $codificationFormation,
     ): Response {
-        $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()]);
+        $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getDpe()]);
         foreach ($formations as $formation) {
             $codificationFormation->setCodificationFormation($formation);
         }

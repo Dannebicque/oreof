@@ -15,7 +15,7 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[
     Route('/structure/fiche-matiere', name: 'structure_fiche_matiere_')
@@ -46,20 +46,20 @@ class FicheMatiereController extends BaseController
 
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SES')) {
             $ficheMatieres = $ficheMatiereRepository->findByAdmin(
-                $this->getAnneeUniversitaire(),
+                $this->getDpe(),
                 $request->query->all()
             );
-            $totalFiches = $ficheMatiereRepository->countByAdmin($this->getAnneeUniversitaire(), $request->query->all());
+            $totalFiches = $ficheMatiereRepository->countByAdmin($this->getDpe(), $request->query->all());
         } else {
             $ficheMatieres = $ficheMatiereRepository->findByResponsable(
                 $this->getUser(),
-                $this->getAnneeUniversitaire(),
+                $this->getDpe(),
                 $request->query->all()
             );
 
             $totalFiches = $ficheMatiereRepository->countByResponsable(
                 $this->getUser(),
-                $this->getAnneeUniversitaire(),
+                $this->getDpe(),
                 $request->query->all()
             );
         }
@@ -108,11 +108,11 @@ class FicheMatiereController extends BaseController
     ): Response
     {
         $ficheMatieres = $ficheMatiereRepository->findByHd(
-            $this->getAnneeUniversitaire(),
+            $this->getDpe(),
             $request->query->all(),
         );
 
-        $totalFiches = $ficheMatiereRepository->countByHd($this->getAnneeUniversitaire(), $request->query->all());
+        $totalFiches = $ficheMatiereRepository->countByHd($this->getDpe(), $request->query->all());
         $nbPages = ceil($totalFiches / 50);
 
         return $this->render('structure/fiche_matiere/_listeHd.html.twig', [

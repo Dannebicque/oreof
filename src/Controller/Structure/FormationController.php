@@ -14,7 +14,7 @@ use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Repository\FormationRepository;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/structure/formation', name: 'structure_formation_')]
 class FormationController extends BaseController
@@ -30,11 +30,11 @@ class FormationController extends BaseController
         FormationRepository $formationRepository
     ): Response {
         if ($this->isGranted('ROLE_ADMIN') || $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) || $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getAnneeUniversitaire()]);
+            $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getDpe()]);
         } else {
             $formations = [];
-            $formations[] = $formationRepository->findByComposanteDpe($this->getUser(), $this->getAnneeUniversitaire());
-            $formations[] = $formationRepository->findBy(['responsableMention' => $this->getUser(), 'anneeUniversitaire' => $this->getAnneeUniversitaire()]);
+            $formations[] = $formationRepository->findByComposanteDpe($this->getUser(), $this->getDpe());
+            $formations[] = $formationRepository->findBy(['responsableMention' => $this->getUser(), 'anneeUniversitaire' => $this->getDpe()]);
             $formations = array_merge(...$formations);
         }
 

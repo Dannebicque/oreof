@@ -25,31 +25,31 @@
         "psr/http-client": "*",
         "scienta/doctrine-json-functions": "^5.3",
         "stof/doctrine-extensions-bundle": "*",
-        "symfony/console": "6.3.*",
-        "symfony/doctrine-messenger": "6.3.*",
-        "symfony/dotenv": "6.3.*",
-        "symfony/expression-language": "6.3.*",
-        "symfony/filesystem": "6.3.*",
+        "symfony/console": "6.4.*",
+        "symfony/doctrine-messenger": "6.4.*",
+        "symfony/dotenv": "6.4.*",
+        "symfony/expression-language": "6.4.*",
+        "symfony/filesystem": "6.4.*",
         "symfony/flex": "^2",
-        "symfony/form": "6.3.*",
-        "symfony/framework-bundle": "6.3.*",
-        "symfony/http-client": "6.3.*",
-        "symfony/ldap": "6.3.*",
-        "symfony/mailer": "6.3.*",
-        "symfony/messenger": "6.3.*",
+        "symfony/form": "6.4.*",
+        "symfony/framework-bundle": "6.4.*",
+        "symfony/http-client": "6.4.*",
+        "symfony/ldap": "6.4.*",
+        "symfony/mailer": "6.4.*",
+        "symfony/messenger": "6.4.*",
         "symfony/monolog-bundle": "^3.8",
-        "symfony/runtime": "6.3.*",
-        "symfony/security-bundle": "6.3.*",
-        "symfony/serializer": "6.3.*",
-        "symfony/string": "6.3.*",
-        "symfony/translation": "6.3.*",
-        "symfony/twig-bundle": "6.3.*",
+        "symfony/runtime": "6.4.*",
+        "symfony/security-bundle": "6.4.*",
+        "symfony/serializer": "6.4.*",
+        "symfony/string": "6.4.*",
+        "symfony/translation": "6.4.*",
+        "symfony/twig-bundle": "6.4.*",
         "symfony/ux-autocomplete": "^2.7",
         "symfony/ux-live-component": "^2.7",
-        "symfony/validator": "6.3.*",
+        "symfony/validator": "6.4.*",
         "symfony/webpack-encore-bundle": "^1.16",
-        "symfony/workflow": "6.3.*",
-        "symfony/yaml": "6.3.*",
+        "symfony/workflow": "6.4.*",
+        "symfony/yaml": "6.4.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
@@ -104,7 +104,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "6.3.*"
+            "require": "6.4.*"
         }
     },
     "require-dev": {
@@ -113,7 +113,7 @@
         "phpstan/phpstan": "^1.9",
         "phpstan/phpstan-symfony": "^1.2",
         "symfony/maker-bundle": "^1.48",
-        "symfony/stopwatch": "6.3.*",
-        "symfony/web-profiler-bundle": "6.3.*"
+        "symfony/stopwatch": "6.4.*",
+        "symfony/web-profiler-bundle": "6.4.*"
     }
 }

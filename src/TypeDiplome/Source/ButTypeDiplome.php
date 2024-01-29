@@ -11,7 +11,7 @@ namespace App\TypeDiplome\Source;
 
 use App\Classes\CalculButStructureParcours;
 use App\DTO\StructureParcours;
-use App\Entity\AnneeUniversitaire;
+use App\Entity\CampagneCollecte;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Mccc;
@@ -148,7 +148,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
     }
 
     public function exportExcelMccc(
-        AnneeUniversitaire $anneeUniversitaire,
+        CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
@@ -159,7 +159,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
     }
 
     public function exportPdfMccc(
-        AnneeUniversitaire $anneeUniversitaire,
+        CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
@@ -171,7 +171,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
 
     public function exportAndSaveExcelMccc(
         string             $dir,
-        AnneeUniversitaire $anneeUniversitaire,
+        CampagneCollecte   $anneeUniversitaire,
         Parcours           $parcours,
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,

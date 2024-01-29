@@ -35,7 +35,7 @@ class DpePublicationMailSubscriber implements EventSubscriberInterface
     {
         return [
             'workflow.dpe.transition.valider_publication' => 'onValidePublication',
-            'workflow.dpe.transition.publier' => 'onPublie',
+           // 'workflow.dpe.transition.publier' => 'onPublie',
         ];
     }
 

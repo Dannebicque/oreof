@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="card"
+            {{ stimulus_controller('crud', {
+                url: path('app_campagne_collecte_liste')
+            }) }}
+         data-action="base:refreshListe@window->crud#refreshListe"
+    >
+        <div class="card-body" {{ stimulus_target('crud', 'liste') }}>
+        </div>
+    </div>
+{% endblock %}
+
+{% block header %}
+    Gestion des campagnes de collecte
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+        {
+            href:'',
+            title: 'Administration',
+        }
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <button
+            {{ stimulus_controller('modal', {
+                size: 'lg',
+                modalTitle: 'Ajouter une xampagne de collecte',
+                modalUrl: path('app_campagne_collecte_new') }) }}
+            data-action="click->modal#openModal"
+            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-size="lg"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Ajouter une xampagne de collecte"
+    >
+        <i class="{{ iconAdd }}"></i>
+        <span> Ajouter une campagne de collecte</span>
+    </button>
+{% endblock %}

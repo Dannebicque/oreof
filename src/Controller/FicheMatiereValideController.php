@@ -9,6 +9,8 @@
 
 namespace App\Controller;
 
+use App\Classes\Process\FicheMatiereProcess;
+use App\Classes\ValidationProcessFicheMatiere;
 use App\DTO\StatsFichesMatieresParcours;
 use App\Entity\Formation;
 use App\Entity\Parcours;
@@ -19,7 +21,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 
 class FicheMatiereValideController extends BaseController
@@ -81,7 +83,6 @@ class FicheMatiereValideController extends BaseController
 
     #[Route('/fiche-matiere/valide/parcours/{parcours}', name: 'fiche_matiere_valide_parcours')]
     public function valideParcours(
-        ElementConstitutifRepository $ecRepository,
         Parcours                     $parcours
     ): Response
     {
@@ -127,13 +128,13 @@ class FicheMatiereValideController extends BaseController
         ]);
     }
 
-    #[Route('/fiche-matiere/valide/parcours/{parcours}/valide', name: 'fiche_matiere_valide_parcours_valide', methods: ['POST'])]
+    #[Route('/fiche-matiere/valide/confirmation', name: 'fiche_matiere_valide_valide', methods: ['POST'])]
     public function valideParcoursValide(
-        WorkflowInterface      $ficheWorkflow,
+        ValidationProcessFicheMatiere        $validationProcessFicheMatiere,
+        FicheMatiereProcess    $ficheMatiereProcess,
         FicheMatiereRepository $ficheMatiereRepository,
         EntityManagerInterface $entityManager,
         Request                $request,
-        Parcours               $parcours
     ): JsonResponse
     {
         $fiches = JsonRequest::getValueFromRequest($request, 'fiches');
@@ -143,9 +144,7 @@ class FicheMatiereValideController extends BaseController
             $ficheMatiere = $ficheMatiereRepository->find($fiche);
 
             if (null !== $ficheMatiere && $ficheMatiere->remplissage() === 100.0) {
-                if ($ficheWorkflow->getMarking($ficheMatiere)->has('en_cours_redaction')) {
-                    $ficheWorkflow->apply($ficheMatiere, 'valider_parcours'); //passage au RF
-                }
+                $ficheMatiereProcess->valideFicheMatiere($ficheMatiere, $this->getUser(), $validationProcessFicheMatiere->getEtape('fiche_matiere'), 'fiche_matiere', $request);
             }
         }
 
@@ -153,33 +152,4 @@ class FicheMatiereValideController extends BaseController
         return new JsonResponse(['message' => 'ok']);
     }
 
-    #[Route('/fiche-matiere/valide/formation/{formation}/valide', name: 'fiche_matiere_valide_formation_valide', methods: ['POST'])]
-    public function valideFormationValide(
-        WorkflowInterface      $ficheWorkflow,
-        FicheMatiereRepository $ficheMatiereRepository,
-        EntityManagerInterface $entityManager,
-        Request                $request,
-        Formation               $formation
-    ): JsonResponse
-    {
-        $fiches = JsonRequest::getValueFromRequest($request, 'fiches');
-        $tFiches = explode(',', $fiches);
-        //parcours toutes les fiches du tableau tFches, trouve la fiche et la valide
-        foreach ($tFiches as $fiche) {
-            $ficheMatiere = $ficheMatiereRepository->find($fiche);
-
-            if (null !== $ficheMatiere && $ficheMatiere->remplissage() === 100.0) {
-                if ($ficheWorkflow->getMarking($ficheMatiere)->has('en_cours_redaction')) {
-                    $ficheWorkflow->apply($ficheMatiere, 'valider_parcours'); //On force le passage au RF
-                }
-
-                if ($ficheWorkflow->getMarking($ficheMatiere)->has('transmis_rf')) {
-                    $ficheWorkflow->apply($ficheMatiere, 'valider_rf'); //passage au DPE
-                }
-            }
-        }
-
-        $entityManager->flush();
-        return new JsonResponse(['message' => 'ok']);
-    }
 }

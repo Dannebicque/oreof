@@ -10,6 +10,8 @@
 namespace App\Twig;
 
 use App\Classes\ValidationProcess;
+use App\Classes\ValidationProcessFicheMatiere;
+use App\Entity\HistoriqueFicheMatiere;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
 use Twig\Extension\AbstractExtension;
@@ -21,6 +23,7 @@ class HistoriqueExtension extends AbstractExtension
 
     public function __construct(
         private ValidationProcess $validationProcess,
+        private ValidationProcessFicheMatiere $validationProcessFicheMatiere,
     ) {
     }
 
@@ -33,12 +36,15 @@ class HistoriqueExtension extends AbstractExtension
             ];
     }
 
-    public function etapeLabel(string $etape): string
+    public function etapeLabel(string $etape, string $process = 'formation'): string
     {
-        return $this->validationProcess->getEtapeCle($etape, 'label');
+        if ($process === 'formation' || $process === 'parcours') {
+            return $this->validationProcess->getEtapeCle($etape, 'label');
+        }
+        return $this->validationProcessFicheMatiere->getEtapeCle($etape, 'label');
     }
 
-    public function etapeParams(HistoriqueParcours|HistoriqueFormation $historique): array
+    public function etapeParams(HistoriqueParcours|HistoriqueFormation|HistoriqueFicheMatiere $historique): array
     {
         if ($historique instanceof HistoriqueParcours) {
             return
@@ -52,10 +58,20 @@ class HistoriqueExtension extends AbstractExtension
                 '%date%' => $historique->getDate()?->format('d/m/Y'),
             ];
         }
+
+        if ($historique instanceof HistoriqueFicheMatiere) {
+            return [
+                '%formation%' => $historique->getFicheMatiere()?->getLibelle(),
+                '%date%' => $historique->getDate()?->format('d/m/Y'),
+            ];
+        }
     }
 
-    public function etapeIcone(string $etape): string
+    public function etapeIcone(string $etape, string $process = 'formation'): string
     {
-        return $this->validationProcess->getEtapeCle($etape, 'icon');
+        if ($process === 'formation' || $process === 'parcours') {
+            return $this->validationProcess->getEtapeCle($etape, 'icon');
+        }
+        return $this->validationProcessFicheMatiere->getEtapeCle($etape, 'icon');
     }
 }

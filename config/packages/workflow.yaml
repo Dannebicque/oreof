@@ -161,28 +161,20 @@ framework:
             initial_marking: 'en_cours_redaction'
             places:
                 - 'en_cours_redaction'
-                - 'transmis_rf'
-                - 'transmis_dpe'
-                - 'transmis_central'
+                - 'soumis_central'
+                - 'valide_pour_publication'
+                - 'publie'
             transitions:
-                valider_parcours:
+                valider_fiche_compo:
                     from: 'en_cours_redaction'
-                    to: 'transmis_rf'
-                valider_rf:
-                    from: 'transmis_rf'
-                    to: 'transmis_dpe'
-                refuser_rf:
-                    from: 'transmis_rf'
+                    to: 'soumis_central'
+                valider_fiche_ses:
+                    from: 'soumis_central'
+                    to: 'valide_pour_publication'
+                reserver_fiche_ses:
+                    from: 'soumis_central'
                     to: 'en_cours_redaction'
-                reserver_rf:
-                    from: 'transmis_rf'
-                    to: 'en_cours_redaction'
-                valider_dpe:
-                    from: 'transmis_dpe'
-                    to: 'transmis_central'
-                refuser_dpe:
-                    from: 'transmis_dpe'
-                    to: 'en_cours_redaction'
-                reserver_dpe:
-                    from: 'transmis_dpe'
-                    to: 'en_cours_redaction'
+                valider_fiche_pour_publication:
+                    from: 'valide_pour_publication'
+                    to: 'publie'
+

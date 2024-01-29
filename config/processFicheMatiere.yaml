@@ -1,0 +1,53 @@
+process:
+  fiche_matiere:
+    page: 'fiche_matiere'
+    icon: 'fa-ballot-check'
+    label: 'validation.fiche_matiere'
+    hasValid: true
+    hasReserve: false
+    hasRefuse: false
+    hasUpload: false
+    isTimeline: false
+    hasDate: false
+    transition: 'en_cours_redaction'
+    canValide: 'valider_fiche_compo'
+    check: true
+  transmis_ses:
+    page: 'fiche_matiere'
+    icon: 'fa-school-circle-check'
+    label: 'validation.fiche_matiere.ses'
+    hasValid: true
+    hasReserve: true
+    hasRefuse: true
+    hasUpload: false
+    isTimeline: false
+    hasDate: false
+    transition: 'transmis_ses'
+    canValide: 'valider_fiche_ses'
+    canRefuse: 'refuser_fiche_ses'
+    canReserve: 'reserver_fiche_ses'
+  transmis_pour_publication:
+    page: 'fiche_matiere'
+    icon: 'fa-stamp'
+    label: 'validation.fiche_matiere.publication'
+    hasValid: true
+    hasReserve: false
+    hasRefuse: false
+    hasUpload: false
+    isTimeline: true
+    hasDate: true
+    transition: 'transmis_pour_publication'
+    canValide: 'valider_fiche_pour_publication'
+  publie:
+    page: 'fiche_matiere'
+    icon: 'fa-bullhorn'
+    label: 'fiche_matiere.publie'
+    hasValid: true
+    hasReserve: false
+    hasRefuse: false
+    hasUpload: false
+    isTimeline: true
+    hasDate: true
+    transition: 'publie'
+    canValide: ''
+

@@ -18,7 +18,7 @@ use App\DTO\HeuresEctsFormation;
 use App\DTO\HeuresEctsSemestre;
 use App\DTO\HeuresEctsUe;
 use App\DTO\StructureParcours;
-use App\Entity\AnneeUniversitaire;
+use App\Entity\CampagneCollecte;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
@@ -38,7 +38,7 @@ use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -81,7 +81,7 @@ class ParcoursController extends BaseController
 
 
         $parcours = $parcoursRepository->findParcours(
-            $this->getAnneeUniversitaire(),
+            $this->getDpe(),
             [$sort => $direction, 'recherche' => $q]
         );
 
@@ -685,9 +685,9 @@ class ParcoursController extends BaseController
         ParcoursRepository $parcoursRepo
     ): Response {
         $parcoursList = [
-            ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_pour_publication'),
-            ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'publie'),
-            ...$parcoursRepo->findByTypeValidation($this->getAnneeUniversitaire(), 'valide_a_publier')
+            ...$parcoursRepo->findByTypeValidation($this->getDpe(), 'valide_pour_publication'),
+            ...$parcoursRepo->findByTypeValidation($this->getDpe(), 'publie'),
+            ...$parcoursRepo->findByTypeValidation($this->getDpe(), 'valide_a_publier')
         ];
 
         $errorArray = [];

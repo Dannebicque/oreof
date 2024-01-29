@@ -9,7 +9,7 @@
 
 namespace App\Repository;
 
-use App\Entity\AnneeUniversitaire;
+use App\Entity\CampagneCollecte;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\Mention;
@@ -54,16 +54,17 @@ class FormationRepository extends ServiceEntityRepository
     }
 
     public function findByComposanteDpe(
-        UserInterface      $user,
-        AnneeUniversitaire $anneeUniversitaire,
-        array              $sorts = []
+        UserInterface    $user,
+        CampagneCollecte $campagneCollecte,
+        array            $sorts = []
     ): array {
         $query = $this->createQueryBuilder('f')
+            ->join('f.dpeParcours', 'dp')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
             ->where('c.responsableDpe = :user')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->setParameter('user', $user)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire);
+            ->setParameter('campagneCollecte', $campagneCollecte);
 
         foreach ($sorts as $sort => $direction) {
             if ($sort === 'mention') {
@@ -86,19 +87,22 @@ class FormationRepository extends ServiceEntityRepository
     }
 
     public function findBySearch(
-        string|null        $q,
-        AnneeUniversitaire $anneeUniversitaire,
-        array              $options = [],
-        Composante|null    $composante = null,
+        string|null      $q,
+        CampagneCollecte $campagneCollecte,
+        array            $options = [],
+        Composante|null  $composante = null,
     ): array {
         $sort = $options['sort'] ?? 'typeDiplome';
         $direction = $options['direction'] ?? 'ASC';
 
         $query = $this->createQueryBuilder('f')
+            ->leftJoin('f.dpeParcours', 'p')
+            ->addSelect('p')
+            ->where('p.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
-            ->where('f.anneeUniversitaire = :anneeUniversitaire')
             ->andWhere('m.libelle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q ')
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+
             ->setParameter('q', '%' . $q . '%')
             ->orderBy('f.' . $sort, $direction);
 
@@ -118,7 +122,7 @@ class FormationRepository extends ServiceEntityRepository
         }
 
         if (array_key_exists('etatDpe', $options) && null !== $options['etatDpe']) {
-            $query->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            $query->andWhere("JSON_CONTAINS(p.etatValidation, :etatDpe) = 1")
                 ->setParameter('etatDpe', json_encode([$options['etatDpe'] => 1]));
         }
 
@@ -144,21 +148,23 @@ class FormationRepository extends ServiceEntityRepository
     }
 
     public function findBySearchAndCfvu(
-        string|null        $q,
-        AnneeUniversitaire $anneeUniversitaire,
-        array              $options = [],
-        Composante|null    $composante = null,
+        string|null      $q,
+        CampagneCollecte $campagneCollecte,
+        array            $options = [],
+        Composante|null  $composante = null,
     ): array {
         $sort = $options['sort'] ?? 'typeDiplome';
         $direction = $options['direction'] ?? 'ASC';
 
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
-            ->where('f.anneeUniversitaire = :anneeUniversitaire')
+            ->leftJoin('f.dpeParcours', 'p')
+            ->addSelect('p')
+            ->where('p.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->andWhere('m.libelle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q ')
-            ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            ->andWhere("JSON_CONTAINS(p.etatValidation, :etatDpe) = 1")
             ->setParameter('etatDpe', json_encode(['soumis_cfvu' => 1]))
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
             ->setParameter('q', '%' . $q . '%')
             ->orderBy('f.' . $sort, $direction);
 
@@ -198,14 +204,16 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByResponsableOuCoResponsable(User $user, AnneeUniversitaire $anneeUniversitaire, array $sorts = []): array
+    public function findByResponsableOuCoResponsable(User $user, CampagneCollecte $campagneCollecte, array $sorts = []): array
     {
         $query = $this->createQueryBuilder('f')
+            ->leftJoin('f.dpeParcours', 'dp')
+            ->addSelect('dp')
             ->where('f.responsableMention = :user')
             ->orWhere('f.coResponsable = :user')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->setParameter('user', $user)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire);
+            ->setParameter('campagneCollecte', $campagneCollecte);
 
         foreach ($sorts as $sort => $direction) {
             if ($sort === 'mention') {
@@ -227,13 +235,15 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByComposante(Composante $composante, AnneeUniversitaire $anneeUniversitaire, array $sorts = []): array
+    public function findByComposante(Composante $composante, CampagneCollecte $campagneCollecte, array $sorts = []): array
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
+            ->leftJoin('f.dpeParcours', 'dp')
+            ->addSelect('dp')
             ->andWhere('c.id = :composante')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->setParameter('composante', $composante);
 
         foreach ($sorts as $sort => $direction) {
@@ -256,15 +266,17 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByComposanteTypeValidation(Composante $composante, AnneeUniversitaire $anneeUniversitaire, string $typeValidation): array
+    public function findByComposanteTypeValidation(Composante $composante, CampagneCollecte $campagneCollecte, string $typeValidation): array
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
+            ->leftJoin('f.dpeParcours', 'dp')
+            ->addSelect('dp')
             ->andWhere('c.id = :composante')
-            ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            ->andWhere("JSON_CONTAINS(p.etatValidation, :etatDpe) = 1")
             ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->setParameter('composante', $composante);
 
 
@@ -272,15 +284,17 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByResponsableOuCoResponsableParcours(?UserInterface $user, AnneeUniversitaire $anneeUniversitaire, array $sorts)
+    public function findByResponsableOuCoResponsableParcours(?UserInterface $user, CampagneCollecte $campagneCollecte, array $sorts)
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Parcours::class, 'p', 'WITH', 'f.id = p.formation')
+            ->leftJoin('f.dpeParcours', 'dp')
+            ->addSelect('dp')
             ->where('p.respParcours = :user')
             ->orWhere('p.coResponsable = :user')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->setParameter('user', $user)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire);
+            ->setParameter('campagneCollecte', $campagneCollecte);
 
         foreach ($sorts as $sort => $direction) {
             if ($sort === 'mention') {
@@ -319,13 +333,15 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByComposanteAndAnneeUniversitaire(string|null $composante, string|null $anneeUniversitaire): array
+    public function findByComposanteAndDpe(string|null $composante, ?CampagneCollecte $campagneCollecte): array
     {
         return $this->createQueryBuilder('f')
             ->where('f.composantePorteuse = :composante')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->leftJoin('f.dpeParcours', 'dp')
+            ->addSelect('dp')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->setParameter('composante', $composante)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
             ->addOrderBy(
                 'CASE
@@ -338,14 +354,17 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByComposanteAndAnneeUniversitaireAndTypeDiplome(string|null $composante, string|null $anneeUniversitaire, string|null $typeDiplome): array
+    public function findByComposanteAndAnneeUniversitaireAndTypeDiplome(string|null $composante, string|null $campagneCollecte, string|null $typeDiplome): array
     {
         return $this->createQueryBuilder('f')
             ->where('f.composantePorteuse = :composante')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->leftJoin('f.dpeParcours', 'dp')
+            ->addSelect('dp')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->andWhere('f.typeDiplome = :typeDiplome')
+
             ->setParameter('composante', $composante)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->setParameter('typeDiplome', $typeDiplome)
             ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
             ->addOrderBy(
@@ -359,12 +378,14 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByAnneeUniversitaireAndTypeDiplome(AnneeUniversitaire $anneeUniversitaire, TypeDiplome $typeDiplome): array
+    public function findByDpeAndTypeDiplome(CampagneCollecte $campagneCollecte, TypeDiplome $typeDiplome): array
     {
         return $this->createQueryBuilder('f')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
+            ->leftJoin('f.dpeParcours', 'dp')
+            ->addSelect('dp')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->andWhere('f.typeDiplome = :typeDiplome')
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->setParameter('typeDiplome', $typeDiplome)
             ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
             ->addOrderBy(
@@ -378,15 +399,17 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByComposanteCfvu(Composante $composante, AnneeUniversitaire $anneeUniversitaire): array
+    public function findByComposanteCfvu(Composante $composante, CampagneCollecte $campagneCollecte): array
     {
         return $this->createQueryBuilder('f')
             ->where('f.composantePorteuse = :composante')
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
-            ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            ->leftJoin('f.dpeParcours', 'dp')
+            ->addSelect('dp')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->andWhere("JSON_CONTAINS(p.etatValidation, :etatDpe) = 1")
             ->setParameter('etatDpe', json_encode(['soumis_cfvu' => 1]))
             ->setParameter('composante', $composante)
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire)
+            ->setParameter('campagneCollecte', $campagneCollecte)
             ->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
             ->addOrderBy(
                 'CASE
@@ -399,14 +422,16 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByTypeValidation(AnneeUniversitaire $anneeUniversitaire, mixed $typeValidation): array
+    public function findByTypeValidation(CampagneCollecte $campagneCollecte, mixed $typeValidation): array
     {
         $query = $this->createQueryBuilder('f')
             ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
-            ->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
+            ->leftJoin('f.dpeParcours', 'dp')
+            ->addSelect('dp')
+            ->andWhere("JSON_CONTAINS(p.etatValidation, :etatDpe) = 1")
             ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
-            ->andWhere('f.anneeUniversitaire = :anneeUniversitaire')
-            ->setParameter('anneeUniversitaire', $anneeUniversitaire);
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte);
 
 
         return $query->getQuery()

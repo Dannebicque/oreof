@@ -10,7 +10,6 @@
 namespace App\Form;
 
 use App\Entity\AnneeUniversitaire;
-use App\Form\Type\YesNoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -24,15 +23,10 @@ class AnneeUniversitaireType extends AbstractType
     {
         $builder
             ->add('libelle', TextType::class, [
-                'label' => 'Libellé Année Universitaire',
+                'label' => 'Libellé du DPE',
                 'attr' => [
-                    'placeholder' => 'Ex: 2019-2020',
+                    'placeholder' => 'Ex: DPE Accréditation 2024',
                 ],
-            ])
-            ->add('codeApogee', TextType::class, [
-                'label' => 'Code Apogée',
-                'attr' => ['maxlength' => 1],
-                'required' => true,
             ])
             ->add('annee', ChoiceType::class, [
                 'label' => 'Année',
@@ -46,29 +40,6 @@ class AnneeUniversitaireType extends AbstractType
                     '2029' => 2029,
                     '2030' => 2030,
                 ],
-            ])
-            ->add('defaut', YesNoType::class, [
-                'label' => 'Campagne de collecte DPE active ?',
-            ])
-            ->add('dateOuvertureDpe', DateType::class, [
-                'label' => 'Date d\'ouverture du DPE',
-                'widget' => 'single_text',
-            ])
-            ->add('dateClotureDpe', DateType::class, [
-                'label' => 'Date de clôture du DPE',
-                'widget' => 'single_text',
-            ])
-            ->add('dateTransmissionSes', DateType::class, [
-                'label' => 'Date limite de transmission des dossiers ',
-                'widget' => 'single_text',
-            ])
-            ->add('dateCfvu', DateType::class, [
-                'label' => 'Date de la CFVU ',
-                'widget' => 'single_text',
-            ])
-            ->add('datePublication', DateType::class, [
-                'label' => 'Date de publication ',
-                'widget' => 'single_text',
             ])
         ;
     }

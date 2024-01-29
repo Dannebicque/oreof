@@ -47,7 +47,8 @@ class Formation
 
     #[Groups('parcours_json_versioning')]
     #[ORM\ManyToOne]
-    private ?AnneeUniversitaire $anneeUniversitaire;
+    /** @deprecated("Sur le Dpe")  */
+    private ?CampagneCollecte $dpe;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations')]
@@ -134,25 +135,29 @@ class Formation
     private ?RythmeFormation $rythmeFormation = null;
 
     #[ORM\Column(nullable: true)]
+    /** @deprecated("sur le DPE") */
     private ?array $etatDpe = [];
 
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: UserCentre::class, cascade: ['persist', 'remove'])]
     private Collection $userCentres;
 
     #[ORM\Column(length: 10)]
+    /** @deprecated("sur le DPE") */
     private ?string $version = '0.1';
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'formationsAnterieures')]
+    /** @deprecated("A gérer") */
     private ?self $versionParent = null;
 
     #[ORM\OneToMany(mappedBy: 'versionParent', targetEntity: self::class)]
+    /** @deprecated("A gérer") */
     private Collection $formationsAnterieures;
 
     #[ORM\Column]
     private ?array $etatSteps = [];
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
-    #[ORM\ManyToOne(inversedBy: 'formations', fetch: 'EAGER')]
+    #[ORM\ManyToOne(inversedBy: 'formations')]
     private ?TypeDiplome $typeDiplome = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -184,9 +189,12 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: CommentaireFormation::class)]
     private Collection $commentaires;
 
-    public function __construct(?AnneeUniversitaire $anneeUniversitaire)
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: DpeParcours::class)]
+    private Collection $dpeParcours;
+
+    public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
-        $this->anneeUniversitaire = $anneeUniversitaire;
+        $this->dpe = $anneeUniversitaire;
         $this->localisationMention = new ArrayCollection();
         $this->parcours = new ArrayCollection();
         $this->composantesInscription = new ArrayCollection();
@@ -201,13 +209,14 @@ class Formation
         $this->butCompetences = new ArrayCollection();
         $this->historiqueFormations = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
+        $this->dpeParcours = new ArrayCollection();
     }
 
     #[ORM\PreFlush]
     public function updateSlug(): void
     {
         $texte = $this->getMention() === null ? $this->getMentionTexte() : $this->getMention()->getLibelle();
-        $texte = ($this->getTypeDiplome() != null ? $this->getTypeDiplome()->getLibelleCourt() : '') . '-' . $texte . '-' . $this->getAnneeUniversitaire()->getAnnee();
+        $texte = ($this->getTypeDiplome() != null ? $this->getTypeDiplome()->getLibelleCourt() : '') . '-' . $texte . '-' . $this->getDpe()?->getAnneeUniversitaire()?->getAnnee();
 
         $this->setSlug($texte);
     }
@@ -250,14 +259,14 @@ class Formation
         return $this;
     }
 
-    public function getAnneeUniversitaire(): ?AnneeUniversitaire
+    public function getDpe(): ?CampagneCollecte
     {
-        return $this->anneeUniversitaire;
+        return $this->dpe;
     }
 
-    public function setAnneeUniversitaire(?AnneeUniversitaire $anneeUniversitaire): self
+    public function setDpe(?CampagneCollecte $dpe): self
     {
-        $this->anneeUniversitaire = $anneeUniversitaire;
+        $this->dpe = $dpe;
 
         return $this;
     }
@@ -961,5 +970,35 @@ class Formation
             return $this->parcours->first();
         }
         return null;
+    }
+
+    /**
+     * @return Collection<int, DpeParcours>
+     */
+    public function getDpeParcours(): Collection
+    {
+        return $this->dpeParcours;
+    }
+
+    public function addDpeParcour(DpeParcours $dpeParcour): static
+    {
+        if (!$this->dpeParcours->contains($dpeParcour)) {
+            $this->dpeParcours->add($dpeParcour);
+            $dpeParcour->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDpeParcour(DpeParcours $dpeParcour): static
+    {
+        if ($this->dpeParcours->removeElement($dpeParcour)) {
+            // set the owning side to null (unless already changed)
+            if ($dpeParcour->getFormation() === $this) {
+                $dpeParcour->setFormation(null);
+            }
+        }
+
+        return $this;
     }
 }

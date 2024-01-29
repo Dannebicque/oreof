@@ -42,11 +42,9 @@ class BadgeDpeExtension extends AbstractExtension
 
         switch ($type) {
             case 'formation':
-                return in_array('transmis_rf', $fiche->getEtatFiche()) || in_array('en_cours_redaction', $fiche->getEtatFiche()) ? '' : 'disabled';
             case 'parcours':
-                return in_array('en_cours_redaction', $fiche->getEtatFiche()) || count($fiche->getEtatFiche()) === 0 ? '' : 'disabled';
             case 'dpe':
-                return in_array('transmis_dpe', $fiche->getEtatFiche()) || in_array('transmis_rf', $fiche->getEtatFiche()) || in_array('en_cours_redaction', $fiche->getEtatFiche()) ? '' : 'disabled';
+                return in_array('en_cours_redaction', $fiche->getEtatFiche()) || count($fiche->getEtatFiche()) === 0 ? '' : 'disabled';
             default:
                 return 'disabled';
         }

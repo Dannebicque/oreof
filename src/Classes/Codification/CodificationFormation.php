@@ -13,6 +13,7 @@ use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\SemestreParcours;
+use App\Entity\Ue;
 use App\Enums\TypeParcoursEnum;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -91,7 +92,6 @@ class CodificationFormation
                     $p->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23 ||
                     $p->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_ALTERNANCE
                 ) {
-
                     $libelle = trim($p->getLibelle());
                     //un parcours LAS ou en alternance avec une FI équivalence ne génère pas un nouveau code de parcours, on essaye de retrouver le code du parcours
                     if (array_key_exists($libelle, $cleParcours)) {
@@ -117,7 +117,7 @@ class CodificationFormation
          */
         $formation = $parcours->getFormation();
         if ($formation !== null) {
-            $code = $formation->getAnneeUniversitaire()?->getCodeApogee();
+            $code = $formation->getDpe()?->getCodeApogee();
             $code .= $formation->getTypeDiplome()?->getCodeApogee();
             $code .= $formation->getDomaine()?->getCodeApogee();
             $code .= $formation->getMention()?->getCodeApogee();
@@ -135,7 +135,6 @@ class CodificationFormation
             }
 
             $this->setCodificationVersionDiplome($parcours);
-            //$this->entityManager->flush();
         }
     }
 
@@ -143,7 +142,6 @@ class CodificationFormation
     {
         $formation = $parcours->getFormation();
         if ($formation !== null) {
-
             foreach ($parcours->getSemestreParcours() as $sp) {
                 $code = $sp->getAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '2' : '1';
                 if ($parcours->isParcoursDefaut()) {
@@ -194,7 +192,6 @@ class CodificationFormation
             $semestre->setCodeApogeeEtapeAnnee($parcours->getCodeDiplome($semestre->getAnnee()) . $semestre->getAnnee());
             $semestre->setCodeApogeeEtapeVersion($this->setCodificationVersionEtape($parcours));
         }
-        //$this->entityManager->flush();
     }
 
     public function setCodificationSemestre(Parcours $parcours): void
@@ -230,7 +227,6 @@ class CodificationFormation
                     $this->setCodificationUe($semestre->getSemestre());
                 }
             }
-            //$this->entityManager->flush();
         }
     }
 
@@ -243,12 +239,12 @@ class CodificationFormation
         }
     }
 
-    private function setCodificationEc(\App\Entity\Ue $ue)
+    private function setCodificationEc(Ue $ue)
     {
         $ecs = $ue->getElementConstitutifs();
         foreach ($ecs as $ec) {
             //todo: gérer ordre des EC de BUT avec un ordre > 99 + codif SAE (50) + stage (60), ...
-            $ec->setCodeApogee($ue->getCodeApogee() . substr($ec->getOrdre(),0,2));
+            $ec->setCodeApogee($ue->getCodeApogee() . substr($ec->getOrdre(), 0, 2));
         }
     }
 }

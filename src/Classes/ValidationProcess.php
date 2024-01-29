@@ -12,38 +12,13 @@ namespace App\Classes;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class ValidationProcess
+class ValidationProcess extends AbstractValidationProcess
 {
-    private array $process;
-
     public function __construct(KernelInterface $kernel,)
     {
         $file = $kernel->getContainer()->getParameter('kernel.project_dir') . '/config/process.yaml';
 
         $data = Yaml::parseFile($file);
         $this->process = $data['process'];
-    }
-
-    public function getProcess(): array
-    {
-        return $this->process;
-    }
-
-    public function getEtapeCle(string $etape, string $cle): string
-    {
-       if (array_key_exists($etape, $this->process)) {
-           return $this->process[$etape][$cle];
-       }
-
-         return '';
-    }
-
-    public function getEtape(string $etape): array
-    {
-        if (array_key_exists($etape, $this->process)) {
-            return $this->process[$etape];
-        }
-
-        return [];
     }
 }

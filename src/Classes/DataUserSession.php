@@ -9,9 +9,11 @@
 
 namespace App\Classes;
 
-use App\Entity\AnneeUniversitaire;
-use App\Repository\AnneeUniversitaireRepository;
+use App\Entity\CampagneCollecte;
+use App\Repository\CampagneCollecteRepository;
 use Stringable;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -21,24 +23,33 @@ class DataUserSession
     private UserInterface $user;
 
     private string $dir;
-    private ?AnneeUniversitaire $anneeUniversitaire;
+    private ?CampagneCollecte $dpe = null;
 
 
     public function __construct(
-        AnneeUniversitaireRepository $anneeUniversitaireRepository,
-        TokenStorageInterface $tokenStorage,
-        KernelInterface $kernel,
+        private RequestStack               $requestStack,
+        private CampagneCollecteRepository $dpeRepository,
+        TokenStorageInterface              $tokenStorage,
+        KernelInterface                    $kernel,
     ) {
-        $this->anneeUniversitaire = $anneeUniversitaireRepository->findOneBy(['defaut' => true]);
         $this->dir = $kernel->getProjectDir();
         if ($tokenStorage->getToken() !== null) {
             $this->user = $tokenStorage->getToken()->getUser();
         }
     }
 
-    public function getAnneeUniversitaire(): ?AnneeUniversitaire
+    public function getDpe(): ?CampagneCollecte
     {
-        return $this->anneeUniversitaire;
+        $session = $this->requestStack->getSession();
+        if ($this->dpe === null) {
+            if ($session !== null && $session->get('dpe') !== null) {
+                $this->dpe = $this->dpeRepository->find($session->get('dpe'));
+            } else {
+                $this->dpe = $this->dpeRepository->findOneBy(['defaut' => true]);
+            }
+        }
+
+        return $this->dpe;
     }
 
     public function version(): ?string

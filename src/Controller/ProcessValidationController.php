@@ -4,13 +4,16 @@ namespace App\Controller;
 
 use App\Classes\GetHistorique;
 use App\Classes\JsonReponse;
+use App\Classes\Process\FicheMatiereProcess;
 use App\Classes\Process\FormationProcess;
 use App\Classes\Process\ParcoursProcess;
 use App\Classes\ValidationProcess;
+use App\Classes\ValidationProcessFicheMatiere;
 use App\Classes\verif\FormationValide;
 use App\Classes\verif\ParcoursValide;
 use App\Events\HistoriqueFormationEvent;
 use App\Events\HistoriqueParcoursEvent;
+use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +22,7 @@ use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -31,8 +34,10 @@ class ProcessValidationController extends BaseController
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly EntityManagerInterface   $entityManager,
         private readonly ValidationProcess        $validationProcess,
+        private readonly ValidationProcessFicheMatiere        $validationProcessFicheMatiere,
         private readonly FormationProcess         $formationProcess,
         private readonly ParcoursProcess          $parcoursProcess,
+        private readonly FicheMatiereProcess          $ficheMatiereProcess,
     ) {
     }
 
@@ -41,16 +46,18 @@ class ProcessValidationController extends BaseController
         GetHistorique       $getHistorique,
         ParcoursRepository  $parcoursRepository,
         FormationRepository $formationRepository,
+        FicheMatiereRepository $ficheMatiereRepository,
         string              $etape,
         Request             $request
     ): Response {
         $type = $request->query->get('type');
         $id = $request->query->get('id');
 
-        $process = $this->validationProcess->getEtape($etape);
+
         $laisserPasser = false;
         switch ($type) {
             case 'formation':
+                $process = $this->validationProcess->getEtape($etape);
                 $objet = $formationRepository->find($id);
 
                 if ($objet === null) {
@@ -68,6 +75,7 @@ class ProcessValidationController extends BaseController
                 }
                 break;
             case 'parcours':
+                $process = $this->validationProcess->getEtape($etape);
                 $objet = $parcoursRepository->find($id);
 
                 if ($objet === null) {
@@ -81,11 +89,21 @@ class ProcessValidationController extends BaseController
                 }
 
                 break;
-//            case 'ficheMatiere':
-//                $objet = $formationRepository->find($id);
-//                $place = $dpeWorkflow->getMarking($objet);
-//                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
-//                break;
+            case 'ficheMatiere':
+                $process = $this->validationProcessFicheMatiere->getEtape($etape);
+
+                $objet = $ficheMatiereRepository->find($id);
+
+                if ($objet === null) {
+                    return JsonReponse::error('Fiche matière non trouvée');
+                }
+
+                $processData = $this->ficheMatiereProcess->etatFicheMatiere($objet, $process);
+
+                if ($request->isMethod('POST')) {
+                    return $this->ficheMatiereProcess->valideFicheMatiere($objet, $this->getUser(), $process, $etape, $request);
+                }
+                break;
         }
 
         return $this->render('process_validation/_valide.html.twig', [

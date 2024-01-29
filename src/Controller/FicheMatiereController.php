@@ -11,7 +11,6 @@ namespace App\Controller;
 
 use App\Classes\JsonReponse;
 use App\Classes\verif\FicheMatiereState;
-use App\Entity\AnneeUniversitaire;
 use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\FicheMatiereVersioning;
@@ -26,18 +25,16 @@ use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Jfcherng\Diff\DiffHelper;
-use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
@@ -278,9 +275,9 @@ class FicheMatiereController extends AbstractController
                 AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s'
             ]);
-            // Enregistrement du fichier 
+            // Enregistrement du fichier
             $fileSystem->appendToFile(
-                __DIR__ . "/../../versioning_json/fiche-matiere/{$ficheMatiereVersioning->getSlug()}/{$ficheMatiereFileName}.json", 
+                __DIR__ . "/../../versioning_json/fiche-matiere/{$ficheMatiereVersioning->getSlug()}/{$ficheMatiereFileName}.json",
                 $ficheMatiereJson
             );
             // Enregistrement en BD
@@ -303,7 +300,7 @@ class FicheMatiereController extends AbstractController
         }catch(\Exception $e){
             // Log error
             $logTxt = "[{$dateHeure}] Le versioning de la fiche matière : "
-                . "{$ficheMatiere->getSlug()} - ID : {$ficheMatiere->getId()}" 
+                . "{$ficheMatiere->getSlug()} - ID : {$ficheMatiere->getId()}"
                 . "- a rencontré une erreur.\n{$e->getMessage()}\n";
             $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/save_fiche_matiere_error.log", $logTxt);
 
@@ -314,7 +311,7 @@ class FicheMatiereController extends AbstractController
             return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
         }
     }
-    
+
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/versioning/view', name: 'app_fiche_matiere_versioning_view')]
     public function getJsonVersion(

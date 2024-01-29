@@ -9,7 +9,7 @@
 
 namespace App\Classes\Export;
 
-use App\Entity\AnneeUniversitaire;
+use App\Entity\CampagneCollecte;
 use App\Repository\FormationRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
@@ -23,7 +23,7 @@ class ExportMccc
     private string $dir;
     private TypeDiplomeRegistry $typeDiplomeRegistry;
     private array $formations;
-    private AnneeUniversitaire $annee;
+    private CampagneCollecte $annee;
     private DateTimeInterface $date;
     private string $format = 'xlsx';
     private bool $isLight = false;
@@ -97,7 +97,7 @@ class ExportMccc
         string              $dir,
         TypeDiplomeRegistry $typeDiplomeRegistry,
         array               $formations,
-        AnneeUniversitaire  $annee,
+        CampagneCollecte    $annee,
         DateTimeInterface   $date,
         string              $format = 'xlsx',
         bool                $isLight = false

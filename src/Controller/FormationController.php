@@ -34,7 +34,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/formation')]
@@ -57,7 +57,7 @@ class FormationController extends BaseController
         $q = $request->query->get('q') ?? null;
 
         if ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL')) {
-            $formationsCfvu = $formationRepository->findBySearchAndCfvu($q, $this->getAnneeUniversitaire(), $request->query->all());
+            $formationsCfvu = $formationRepository->findBySearchAndCfvu($q, $this->getDpe(), $request->query->all());
             $isCfvu = true;
         }
 
@@ -88,7 +88,7 @@ class FormationController extends BaseController
             $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findBySearch($q, $this->getAnneeUniversitaire(), $request->query->all());
+            $formations = $formationRepository->findBySearch($q, $this->getDpe(), $request->query->all());
         } else {
             $formations = [];
             //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
@@ -103,7 +103,7 @@ class FormationController extends BaseController
                     //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
                     $formations[] = $formationRepository->findByComposante(
                         $centre->getComposante(),
-                        $this->getAnneeUniversitaire(),
+                        $this->getDpe(),
                         [$sort => $direction]
                     );
                 }
@@ -111,17 +111,17 @@ class FormationController extends BaseController
 
             $formations[] = $formationRepository->findByComposanteDpe(
                 $this->getUser(),
-                $this->getAnneeUniversitaire(),
+                $this->getDpe(),
                 [$sort => $direction]
             );
             $formations[] = $formationRepository->findByResponsableOuCoResponsable(
                 $this->getUser(),
-                $this->getAnneeUniversitaire(),
+                $this->getDpe(),
                 [$sort => $direction]
             );
             $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
                 $this->getUser(),
-                $this->getAnneeUniversitaire(),
+                $this->getDpe(),
                 [$sort => $direction]
             );
             $formations = array_merge(...$formations);
@@ -151,31 +151,19 @@ class FormationController extends BaseController
         Composante            $composante,
         Request               $request
     ): Response {
-        $sort = $request->query->get('sort') ?? 'typeDiplome';
-        $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? null;
 
-
-        if ($q) {
             $formations = $formationRepository->findBySearch(
                 $q,
-                $this->getAnneeUniversitaire(),
-                $sort,
-                $direction,
+                $this->getDpe(),
+                $request->query->all(),
                 $composante
             );
-        } else {
-            $formations = $formationRepository->findBy(
-                ['composantePorteuse' => $composante->getId(), 'anneeUniversitaire' => $this->getAnneeUniversitaire()],
-                [$sort => $direction]
-            );
-        }
-
 
         return $this->render('formation/_liste.html.twig', [
             'formations' => $formations,
-            'sort' => $sort,
-            'direction' => $direction,
+            'params' => $request->query->all(),
+            'isCfvu' => false,
             'composantes' => $composanteRepository->findPorteuse(),
             'typeDiplomes' => $typeDiplomeRepository->findAll(),
             'mentions' => $mentionRepository->findAll(),
@@ -242,7 +230,7 @@ class FormationController extends BaseController
     ): Response {
         $this->denyAccessUnlessGranted('CAN_FORMATION_CREATE_ALL', $this->getUser());
 
-        $formation = new Formation($this->getAnneeUniversitaire());
+        $formation = new Formation($this->getDpe());
         $form = $this->createForm(FormationSesType::class, $formation, [
             'action' => $this->generateUrl('app_formation_new'),
         ]);

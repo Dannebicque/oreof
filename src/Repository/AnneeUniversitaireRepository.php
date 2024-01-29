@@ -1,11 +1,4 @@
 <?php
-/*
- * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
- * @file /Users/davidannebicque/Sites/oreof/src/Repository/AnneeUniversitaireRepository.php
- * @author davidannebicque
- * @project oreof
- * @lastUpdate 25/02/2023 23:24
- */
 
 namespace App\Repository;
 
@@ -18,6 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
  *
  * @method AnneeUniversitaire|null find($id, $lockMode = null, $lockVersion = null)
  * @method AnneeUniversitaire|null findOneBy(array $criteria, array $orderBy = null)
+ * @method AnneeUniversitaire[]    findAll()
  * @method AnneeUniversitaire[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class AnneeUniversitaireRepository extends ServiceEntityRepository
@@ -27,26 +21,28 @@ class AnneeUniversitaireRepository extends ServiceEntityRepository
         parent::__construct($registry, AnneeUniversitaire::class);
     }
 
-    public function findAll(): array
-    {
-        return $this->findBy([], ['libelle' => 'ASC']);
-    }
+//    /**
+//     * @return AnneeUniversitaire[] Returns an array of AnneeUniversitaire objects
+//     */
+//    public function findByExampleField($value): array
+//    {
+//        return $this->createQueryBuilder('a')
+//            ->andWhere('a.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->orderBy('a.id', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
 
-    public function save(AnneeUniversitaire $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    public function remove(AnneeUniversitaire $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
+//    public function findOneBySomeField($value): ?AnneeUniversitaire
+//    {
+//        return $this->createQueryBuilder('a')
+//            ->andWhere('a.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
+//    }
 }
