@@ -11,6 +11,9 @@ use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Classes\verif\FormationValide;
 use App\Classes\verif\ParcoursValide;
+use App\Entity\DpeDemande;
+use App\Enums\TypeModificationDpeEnum;
+use App\Events\DpeDemandeEvent;
 use App\Events\HistoriqueFormationEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Repository\FicheMatiereRepository;
@@ -438,5 +441,67 @@ class ProcessValidationController extends BaseController
             'id' => $id,
             'etape' => $etape,
         ]);
+    }
+
+    #[Route('/demande/reouverture', name: 'app_validation_demande_reouverture')]
+    public function demandeReouverture(
+        ParcoursRepository  $parcoursRepository,
+        FormationRepository $formationRepository,
+        FicheMatiereRepository $ficheMatiereRepository,
+        Request             $request
+    ): Response
+    {
+        $type = $request->query->get('type');
+        $id = $request->query->get('id');
+
+        $formation = null;
+        $parcours = null;
+
+        switch ($type) {
+            case 'formation':
+                $formation = $formationRepository->find($id);
+                $parcours = null;
+                $typeDpe = 'F';
+
+                if ($formation === null) {
+                    return JsonReponse::error('Formation non trouvée');
+                }
+                break;
+            case 'parcours':
+                $parcours = $parcoursRepository->find($id);
+
+                if ($parcours === null) {
+                    return JsonReponse::error('Parcours non trouvé');
+                }
+                $formation = $parcours->getFormation();
+                $typeDpe = 'P';
+                break;
+        }
+
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+            $demande = new DpeDemande();
+            $demande->setFormation($formation);
+            $demande->setParcours($parcours);
+            $demande->setNiveauDemande($typeDpe);
+            $demande->setArgumentaireDemande($data['argumentaire_demande_reouverture']);
+            $demande->setEtatDemande('attente');
+            $demande->setNiveauModification(TypeModificationDpeEnum::tryFrom($data['demandeReouverture']));
+            //$demande->setUser($this->getUser());
+            $this->entityManager->persist($demande);
+            $this->entityManager->flush();
+
+            //mail au SES
+            $dpeDemandeEvent = new DpeDemandeEvent($demande, $this->getUser());
+            $this->eventDispatcher->dispatch($dpeDemandeEvent, DpeDemandeEvent::DPE_DEMANDE_CREATED);
+
+            return JsonReponse::success('Demande de réouverture enregistrée');
+        }
+
+        return $this->render('process_validation/_demande_reouverture.html.twig', [
+            'type' => $type,
+            'id' => $id,
+        ]);
+
     }
 }

@@ -9,6 +9,7 @@
 
 namespace App\Form;
 
+use App\Entity\AnneeUniversitaire;
 use App\Entity\CampagneCollecte;
 use App\Form\Type\YesNoType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -31,7 +32,7 @@ class CampagneCollecteType extends AbstractType
                 ],
             ])
             ->add('anneeUniversitaire', EntityType::class, [
-                'class' => CampagneCollecte::class,
+                'class' => AnneeUniversitaire::class,
                 'label' => 'Année Universitaire',
                 'choice_label' => 'libelle',
                 'required' => true,

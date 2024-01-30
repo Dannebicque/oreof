@@ -10,6 +10,7 @@
 namespace App\Twig;
 
 use App\Entity\UserCentre;
+use App\Enums\BadgeEnumInterface;
 use App\Enums\CentreGestionEnum;
 use App\Utils\Tools;
 use DateTimeInterface;
@@ -44,8 +45,14 @@ class AppExtension extends AbstractExtension
             new TwigFilter('displayOrBadge', [$this, 'displayOrBadge'], ['is_safe' => ['html']]),
             new TwigFilter('etatRemplissage', [$this, 'etatRemplissage'], ['is_safe' => ['html']]),
             new TwigFilter('printTexte', [$this, 'printTexte'], ['is_safe' => ['html']]),
-            new TwigFilter('filtreHeures', [$this, 'filtreHeures'], ['is_safe' => ['html']])
+            new TwigFilter('filtreHeures', [$this, 'filtreHeures'], ['is_safe' => ['html']]),
+            new TwigFilter('badgeEnum', [$this, 'badgeEnum'], ['is_safe' => ['html']])
         ];
+    }
+
+    public function badgeEnum(BadgeEnumInterface $value): string
+    {
+        return ($value !== null) ? '<span class="badge '.$value->getBadge().'">' . $value->getLibelle() . '</span>' : '<span class="badge bg-danger">Non renseigné</span>';
     }
 
     public function displayOrBadge(?string $value): string
