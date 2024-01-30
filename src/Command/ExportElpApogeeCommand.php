@@ -15,6 +15,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use stdClass;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -23,6 +24,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 #[AsCommand(
@@ -35,17 +37,22 @@ class ExportElpApogeeCommand extends Command
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
     private Filesystem $filesystem;
+    private ParameterBagInterface $parameterBag;
+    private ?\SoapClient $soapClient;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         ElementConstitutifRepository $elementConstitutifRepository,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        ParameterBagInterface $parameterBag
     )
     {
         parent::__construct();
         $this->entityManager = $entityManager;
         $this->elementConstitutifRepository = $elementConstitutifRepository;
         $this->filesystem = $filesystem;
+        $this->parameterBag = $parameterBag;
+        $this->soapClient = null;
     }
 
     protected function configure(): void
@@ -99,16 +106,31 @@ class ExportElpApogeeCommand extends Command
             if($dummyInsertion){
                 $io->write("Utilisation du Web Service APOTEST");
                 if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer dans APOTEST ?")){
+                    // Récupération des donnéees à insérer
                     $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById(405);
                     $dto = $this->getDTOForParcours($parcours);
                     $ec = $dto->semestres[1]->ues()[0]->elementConstitutifs[0];
                     $elp = new ElementPedagogiDTO6($ec, $dto);
                     $elp->codElp = 'TEST110';
                     $elp->codNatureElp = 'MATI';
-
+                    $elp->libCourtElp = "TEST WS PHP 2";
+                    $elp->libElp = "TEST WEBSERVICE PHP 2";
                     dump($elp);
-                    // $io->write("Initialisation du Web Service...");
-                    return Command::SUCCESS;
+                    if($this->verifyUserIntent($io, "Les données affichées conviennent-elles ?")){
+                        $io->writeln("Initialisation du Web Service...");
+                        // Création du client SOAP
+                        $this->createSoapClient();
+                        $io->writeln('Création du client SOAP réussie.');
+                        // Insertion d'un élément
+                        $result = $this->insertElp($elp);
+                        $io->writeln("Résultat de l'appel au Web Service :");
+                        dump($result);
+                        return Command::SUCCESS;
+
+                    }else {
+                        $io->warning('La commande a été annulée.');
+                        return Command::SUCCESS;    
+                    }
                 }
                 else {
                     $io->warning('La commande a été annulée.');
@@ -218,5 +240,23 @@ class ExportElpApogeeCommand extends Command
                 return false;
             }
         });
+    }
+
+    private function createSoapClient(){
+        $wsdl = $this->parameterBag->get('WSDL_APOTEST');
+        $this->soapClient = new \SoapClient($wsdl, [
+            "trace" => true
+        ]);
+    }
+
+    private function insertElp(ElementPedagogiDTO6 $elementPedagogique){
+        $var = new stdClass();
+        $var->elementPedagogi = $elementPedagogique;
+        if($this->soapClient){
+            return $this->soapClient->__soapCall("creerModifierELP", [$var]);
+        }
+        else {
+            throw new \Exception("Soap Client is not initialized.");
+        }
     }
 }

@@ -48,8 +48,16 @@ class ElementPedagogiDTO6
     ) {
         if ($elementPedagogique instanceof StructureEc){
             $this->codElp = $elementPedagogique->elementConstitutif->getCodeApogee() ?? "ERROR";
-            $this->libCourtElp = $this->prepareLibelle($elementPedagogique->elementConstitutif->getLibelle(), 25);
-            $this->libElp = $this->prepareLibelle($elementPedagogique->elementConstitutif->getLibelle(), 60);
+            $this->libCourtElp = $this->prepareLibelle(
+                $elementPedagogique->elementConstitutif->getFicheMatiere()?->getLibelle() 
+                ?? $elementPedagogique->elementConstitutif->getLibelle(),
+                25
+            );
+            $this->libElp = $this->prepareLibelle(
+                $elementPedagogique->elementConstitutif->getFicheMatiere()?->getLibelle()
+                ?? $elementPedagogique->elementConstitutif->getLibelle(), 
+                60
+            );
             $this->codNatureElp = "ERR";
             $this->codComposante = $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "ERROR";
             // $this->temSuspension;
@@ -71,7 +79,12 @@ class ElementPedagogiDTO6
             // $this->capaciteMaxElp;
             // $this->capaciteIntElp;
             // $this->listComposantesAssociees;
-            // $this->listCentreInsPedagogi;
+            $this->listCentreInsPedagogi = new TableauCentreInsPedagogiDTO(
+                array_map(
+                    fn($composante) => $composante->getCodeApogee(),
+                    $dto->parcours->getFormation()?->getComposantesInscription()->toArray()
+                )
+            );
             // $this->listResponsables;
             // $this->listLibAnnexe;
             // $this->listParamChargEns;

@@ -15,6 +15,7 @@ parameters:
     CAS_CLIENT_SERVICE_NAME: '%env(resolve:CAS_CLIENT_SERVICE_NAME)%'
     api_key: '%env(resolve:API_KEY)%'
     api_url: '%env(resolve:API_URL)%'
+    WSDL_APOTEST: '%env(resolve:WSDL_APOTEST)%'
 
 services:
     # default configuration for services in *this* file

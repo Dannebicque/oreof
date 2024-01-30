@@ -16,9 +16,9 @@ class TableauCentreInsPedagogiDTO
     }
 
     private function add(string $codeCIP){
-        if(strlen($codeCIP) !== 3){
+        if(strlen($codeCIP) !== 2){
             throw new \InvalidArgumentException(
-                "Le code de centre d'inscription pédagogique (CIP) est invalide. Il doit avoir une longueur de 3 (actuel : " . strlen($codeCIP) . ")"
+                "Le code de centre d'inscription pédagogique (CIP) est invalide. Il doit avoir une longueur de 2 (actuel : " . strlen($codeCIP) . ")"
             );
         }
         $this->centreInsPedagogi[] = new CentreInsPedagogiDTO($codeCIP);
