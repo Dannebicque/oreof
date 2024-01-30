@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.3](https://github.com/Dannebicque/oreof/compare/v1.24.2...v1.24.3) (2024-01-30)
+
+
+### Features
+
+* Demande ouverture DPE exceptionnelle ([2d06443](https://github.com/Dannebicque/oreof/commit/2d0644354912ef356b7db5eb84fd5d30dd281b5f))
+
 ### [1.24.2](https://github.com/Dannebicque/oreof/compare/v1.24.1...v1.24.2) (2024-01-29)
 
 
