@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.5](https://github.com/Dannebicque/oreof/compare/v1.24.4...v1.24.5) (2024-01-30)
+
+
+### Bug Fixes
+
+* Requete sur DpeParcours ([a5d35fd](https://github.com/Dannebicque/oreof/commit/a5d35fd3b1a0e20f308726c9db02ef09e20d50ca))
+* Requete sur DpeParcours ([7a376cf](https://github.com/Dannebicque/oreof/commit/7a376cff6cf0b9d317dd9febcc0aa242389f54b1))
+
 ### [1.24.4](https://github.com/Dannebicque/oreof/compare/v1.24.3...v1.24.4) (2024-01-30)
 
 
