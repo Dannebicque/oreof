@@ -206,14 +206,20 @@ class ExportElpApogeeCommand extends Command
         $headers = [
             "codElp", "libCourtElp", "libElp", "codNatureElp",
             "codComposante", "temModaliteControle", "nbrCredits",
-            "volume", "uniteVolume", "codPeriode"
+            "volume", "uniteVolume", "codPeriode", "listeCentreInsPedagogi"
         ];
-        // cast element in array values
+        // cast element into array values
         $ElpArray = array_map(
             fn($elp) => [
                 $elp->codElp, $elp->libCourtElp, $elp->libElp, 
                 $elp->codNatureElp, $elp->codComposante, $elp->temModaliteControle, 
-                $elp->nbrCredits, $elp->volume, $elp->uniteVolume, $elp->codPeriode
+                $elp->nbrCredits, $elp->volume, $elp->uniteVolume, $elp->codPeriode,
+                // CIP list
+                implode(", ", array_map(
+                        fn($cip) => $cip->codCentreInsPedagogi,
+                        $elp->listCentreInsPedagogi->centreInsPedagogi
+                    )
+                )
             ], 
             $ElpArray
         );
@@ -250,10 +256,10 @@ class ExportElpApogeeCommand extends Command
     }
 
     private function insertElp(ElementPedagogiDTO6 $elementPedagogique){
-        $var = new stdClass();
-        $var->elementPedagogi = $elementPedagogique;
+        $param = new stdClass();
+        $param->elementPedagogi = $elementPedagogique;
         if($this->soapClient){
-            return $this->soapClient->__soapCall("creerModifierELP", [$var]);
+            return $this->soapClient->__soapCall("creerModifierELP", [$param]);
         }
         else {
             throw new \Exception("Soap Client is not initialized.");

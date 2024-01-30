@@ -10,6 +10,7 @@ class TableauCentreInsPedagogiDTO
     public array $centreInsPedagogi;
 
     public function __construct(array $centreInsPedagogi){
+        $this->centreInsPedagogi = [];
         foreach($centreInsPedagogi as $CIP){
             $this->add($CIP);
         }

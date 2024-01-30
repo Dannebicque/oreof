@@ -82,7 +82,7 @@ class ElementPedagogiDTO6
             $this->listCentreInsPedagogi = new TableauCentreInsPedagogiDTO(
                 array_map(
                     fn($composante) => $composante->getCodeApogee(),
-                    $dto->parcours->getFormation()?->getComposantesInscription()->toArray()
+                    $dto->parcours->getFormation()?->getComposantesInscription()?->toArray() ?? []
                 )
             );
             // $this->listResponsables;
@@ -92,7 +92,7 @@ class ElementPedagogiDTO6
             // $this->listTypePopulation;
         }
         elseif ($elementPedagogique instanceof StructureUe){
-            $this->codElp = $elementPedagogique->ue->getCodeApogee();
+            $this->codElp = $elementPedagogique->ue->getCodeApogee() ?? "ERROR";
             $this->libCourtElp = $this->prepareLibelle($elementPedagogique->ue->getLibelle(), 25);
             $this->libElp = $this->prepareLibelle($elementPedagogique->ue->getLibelle(), 60);
             $this->codNatureElp = CodeNatuElpEnum::UE->value;
@@ -116,7 +116,12 @@ class ElementPedagogiDTO6
             // $this->capaciteMaxElp
             // $this->capaciteIntElp
             // $this->listComposantesAssociees = new TableauComposanteDTO2([]);
-            // $this->listCentreInsPedagogi = new TableauCentreInsPedagogiDTO([]);
+            $this->listCentreInsPedagogi = new TableauCentreInsPedagogiDTO(
+                array_map(
+                    fn($composante) => $composante->getCodeApogee(),
+                    $dto->parcours->getFormation()?->getComposantesInscription()?->toArray() ?? []
+                )
+            );
             // $this->listResponsables;
             // $this->listLibAnnexe;
             // $this->listParamChargEns;
