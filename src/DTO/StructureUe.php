@@ -79,7 +79,7 @@ class StructureUe
 
     public function ordre(): int
     {
-        return $this->ueOrigine !== null ? $this->ueOrigine->getOrdre() : $this->ue->getOrdre();
+        return $this->ue->getOrdre();
     }
 
     public function getHeuresEctsUe(): HeuresEctsUe

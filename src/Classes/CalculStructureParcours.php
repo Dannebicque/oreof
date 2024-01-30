@@ -99,7 +99,7 @@ class CalculStructureParcours
                                 $dtoUe->addUeEnfant($ueEnfant->getOrdre(), $dtoUeEnfant);
                             }
                         }
-                        $dtoSemestre->addUe($ue->getOrdre(), $dtoUe);
+                        $dtoSemestre->addUe($ueOrigine->getOrdre(), $dtoUe);
                     }
                 }
                 $dtoStructure->addSemestre($semestreParcours->getOrdre(), $dtoSemestre);
@@ -181,7 +181,7 @@ class CalculStructureParcours
                                 $dtoUe->addUeEnfant($ueEnfant->getOrdre(), $dtoUeEnfant);
                             }
                         }
-                        $dtoSemestre->addUe($ue->getOrdre(), $dtoUe);
+                        $dtoSemestre->addUe($ueOrigine->getOrdre(), $dtoUe);
                     }
                 }
                 $dtoStructure->addSemestre($semestreParcours->getOrdre(), $dtoSemestre);
