@@ -278,3 +278,50 @@ validation.formation.indisponible: 'Validation formation impossible'
 verifier.fiches.ec.matieres.infobulle: 'Vérifier les informations saisies dans les fiches EC/matières'
 validation.valider.fiches_matieres.parcours: 'Valider et soumettre au RF les fiches EC/matières'
 validation.valider.fiches_matieres.formation: 'Valider et soumettre au DPE les fiches EC/matières'
+historique.de.validation.fiche_matiere.title: historique.de.validation.fiche_matiere.title
+historique.de.validation.fiche_matiere.infobulle: historique.de.validation.fiche_matiere.infobulle
+validation.fiche_matiere: validation.fiche_matiere
+validation.valider.fiche_matiere.title: validation.valider.fiche_matiere.title
+validation.valider.fiche_matiere: validation.valider.fiche_matiere
+validation.fiche_matiere.valide.alerte: validation.fiche_matiere.valide.alerte
+btn.validation.fiche_matiere.valide.en_cours_redaction: btn.validation.fiche_matiere.valide.en_cours_redaction
+validation.fiche_matiere.valide.impossible.en_cours_redaction: validation.fiche_matiere.valide.impossible.en_cours_redaction
+ficheMatiere.valide.fiche_matiere.flash.success: ficheMatiere.valide.fiche_matiere.flash.success
+validation.fiche_matiere.ses: validation.fiche_matiere.ses
+validation.fiche_matiere.publication: validation.fiche_matiere.publication
+fiche_matiere.publie: fiche_matiere.publie
+validation.valider.transmis_ses.title: validation.valider.transmis_ses.title
+validation.valider.transmis_ses: validation.valider.transmis_ses
+validation.reserve.transmis_ses.title: validation.reserve.transmis_ses.title
+validation.reserve.transmis_ses: validation.reserve.transmis_ses
+validation.refuser.transmis_ses.title: validation.refuser.transmis_ses.title
+validation.refuser.transmis_ses: validation.refuser.transmis_ses
+validation.fiche_matiere.ses.valide.alerte: validation.fiche_matiere.ses.valide.alerte
+btn.validation.fiche_matiere.ses.valide: btn.validation.fiche_matiere.ses.valide
+ficheMatiere.valide.transmis_ses.flash.success: ficheMatiere.valide.transmis_ses.flash.success
+validation.valider.transmis_pour_publication.title: validation.valider.transmis_pour_publication.title
+validation.valider.transmis_pour_publication: validation.valider.transmis_pour_publication
+historique.: historique.
+historique.validation.fiche_matiere.ses: historique.validation.fiche_matiere.ses
+validation.valider.fiches_matieres: validation.valider.fiches_matieres
+demande.reouverture: demande.reouverture
+demande.reouverture.title: demande.reouverture.title
+validation.cfvu.valide.cas.acceptation.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.directe.valide_a_publier
+validation.cfvu.valide.cas.acceptation.non.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.non.directe.valide_a_publier
+validation.cfvu.valide.cas.sous.reserve.conseil.valide_a_publier: validation.cfvu.valide.cas.sous.reserve.conseil.valide_a_publier
+validation.cfvu.valide.cas.sous.reserve.modifications.valide_a_publier: validation.cfvu.valide.cas.sous.reserve.modifications.valide_a_publier
+demande.reouverture.alerte: La demande de réouverture permet la réouvertue des onglets du formulaire de saisie. Les demandes doivent être argumentés afin de déterminer si les modifications impliquent un passage en conseil de composantes, en CFVU ou peuvent être appliqués directement.
+demande.reouverture.modification.mccc.label: modifications de la maquette et/ou des MCCC
+demande.reouverture.modification.mccc.help: demande.reouverture.modification.mccc.help
+demande.reouverture.modification.maquette.label: modifications de la maquette et/ou des MCCC
+demande.reouverture.modification.maquette.help: demande.reouverture.modification.maquette.help
+demande.reouverture.modification.argumentaire.label: Motif(s) de la demande de réouverture (texte servant de justificatif en cas de passage en CFVU)
+demande.reouverture.modification.argumentaire.help: demande.reouverture.modification.argumentaire.help
+btn.demande.reouverture.modification: Demander la réouverture du projet DPE
+demande.reouverture.modification.texte.label: modifications des descriptifs
+demande.reouverture.modification.texte.help: demande.reouverture.modification.texte.help
+demande.reouverture.modification.mccc.texte.label: modifications des descriptifs et de la maquette/MCCC
+demande.reouverture.modification.mccc.texte.help: demande.reouverture.modification.mccc.texte.help
+demande.reouverture.label: Précisez quelle(s) modification(s) vous souhaitez apporter à la formation
+demande.reouverture.help: demande.reouverture.help
+historique.validation.fiche_matiere: historique.validation.fiche_matiere

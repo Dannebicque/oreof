@@ -47,8 +47,8 @@ class CalculStructureParcours
                 foreach ($semestre->getUes() as $ue) {
                     if ($ue !== null && $ue->getUeParent() === null) {
                         $display = $ue->display($parcours);
+                        $ueOrigine = $ue;
                         if ($ue->getUeRaccrochee() !== null) {
-                            $ueOrigine = $ue;
                             $ue = $ue->getUeRaccrochee()->getUe();
                             $raccrocheUe = true;
                         } else {
@@ -129,8 +129,9 @@ class CalculStructureParcours
                 foreach ($semestre->getUes() as $ue) {
                     if ($ue !== null && $ue->getUeParent() === null) {
                         $display = $ue->display($parcours);
+                        $ueOrigine = $ue;
                         if ($ue->getUeRaccrochee() !== null) {
-                            $ueOrigine = $ue;
+
                             $ue = $ue->getUeRaccrochee()->getUe();
                             $raccrocheUe = true;
                         } else {
