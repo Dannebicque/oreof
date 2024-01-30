@@ -304,7 +304,7 @@ validation.valider.transmis_pour_publication: validation.valider.transmis_pour_p
 historique.: historique.
 historique.validation.fiche_matiere.ses: historique.validation.fiche_matiere.ses
 validation.valider.fiches_matieres: validation.valider.fiches_matieres
-demande.reouverture: demande.reouverture
+demande.reouverture: Demander la réouverture du DPE
 demande.reouverture.title: demande.reouverture.title
 validation.cfvu.valide.cas.acceptation.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.directe.valide_a_publier
 validation.cfvu.valide.cas.acceptation.non.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.non.directe.valide_a_publier
