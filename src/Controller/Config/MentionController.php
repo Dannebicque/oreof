@@ -84,7 +84,9 @@ class MentionController extends AbstractController
                 $codeLettre = 0;
                 foreach ($mentions as $mention) {
                     $mention->setCodeApogee(self::TAB_CODE_PARCOURS[$codeLettre]);
-                    $entityManager->persist($mention);
+                    foreach ($mention->getFormations() as $formation) {
+                        $formation->setCodeMentionApogee($mention->getCodeApogee());
+                    }
                     $codeLettre++;
                 }
             }

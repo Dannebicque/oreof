@@ -27,7 +27,7 @@ class DpeParcours
     #[ORM\Column(length: 10)]
     private ?string $version = null;
 
-    #[ORM\Column(length: 255, enumType: TypeModificationDpeEnum::class)]
+    #[ORM\Column(length: 255, enumType: TypeModificationDpeEnum::class, nullable: true)]
     private ?TypeModificationDpeEnum $etatReconduction = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

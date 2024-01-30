@@ -201,7 +201,7 @@ class CodificationController extends BaseController
         FormationRepository   $formationRepository,
         CodificationFormation $codificationFormation,
     ): Response {
-        $formations = $formationRepository->findBy(['anneeUniversitaire' => $this->getDpe()]);
+        $formations = $formationRepository->findBy(['dpe' => $this->getDpe()]);
         foreach ($formations as $formation) {
             $codificationFormation->setCodificationFormation($formation);
         }

@@ -89,6 +89,11 @@ class FormationSesType extends AbstractType
                 'required' => false,
                 'help' => 'Si la mention existe, veuillez la sélectionner dans la liste déroulante'
             ])
+            ->add('codeMentionApogee', TextType::class, [
+                'attr' => ['maxlength' => 1],
+                'required' => false,
+                'help' => 'Code de la mention dans Apogée'
+            ])
             ->add('niveauEntree', EnumType::class, [
                 'class' => NiveauFormationEnum::class,
                 'choice_label' => static function (UnitEnum $choice): string {

@@ -14,6 +14,7 @@ use App\Form\CampagneCollecteType;
 use App\Repository\CampagneCollecteRepository;
 use App\Repository\DpeParcoursRepository;
 use App\Utils\JsonRequest;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +31,7 @@ class CampagneCollecteController extends AbstractController
 
     #[Route('/ouvrir-dpe/{id}', name: 'app_campagne_collecte_open_dpe', methods: ['GET'])]
     public function openDpe(
+        EntityManagerInterface $entityManager,
         CampagneCollecteRepository $campagneCollecteRepository,
         DpeParcoursRepository $dpeParcoursRepository,
         CampagneCollecte $campagneCollecte): Response
@@ -41,7 +43,10 @@ class CampagneCollecteController extends AbstractController
 
         $dpeParcoursRepository->duplicateParcours($campagneCollectePrecedente, $campagneCollecte);
         $campagneCollectePrecedente->setDefaut(false);
+        $campagneCollecte->setMailDpeEnvoye(true);
         $campagneCollecte->setDefaut(true);
+
+        $entityManager->flush();
 
         //todo: prévenir les responsables DPE
 

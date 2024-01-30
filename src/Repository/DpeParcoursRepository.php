@@ -24,65 +24,6 @@ class DpeParcoursRepository extends ServiceEntityRepository
         parent::__construct($registry, DpeParcours::class);
     }
 
-//    public function findFormationBySearch(
-//        string|null     $q,
-//        Dpe             $dpe,
-//        array           $options = [],
-//        Composante|null $composante = null,
-//    ): array {
-//        $sort = $options['sort'] ?? 'typeDiplome';
-//        $direction = $options['direction'] ?? 'ASC';
-//
-//        $query = $this->createQueryBuilder('d')
-//            ->innerJoin('d.formation', 'f')
-//            ->addSelect('f')
-//            ->innerJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id')
-//            ->where('d.id = :dpe')
-//            ->andWhere('m.libelle LIKE :q or m.sigle LIKE :q or f.mentionTexte LIKE :q ')
-//            ->setParameter('dpe', $dpe)
-//            ->setParameter('q', '%' . $q . '%')
-//            ->orderBy('f.' . $sort, $direction);
-//
-//        if (array_key_exists('typeDiplome', $options) && null !== $options['typeDiplome']) {
-//            $query->andWhere('f.typeDiplome = :typeDiplome')
-//                ->setParameter('typeDiplome', $options['typeDiplome']);
-//        }
-//
-//        if (array_key_exists('mention', $options) && null !== $options['mention']) {
-//            $query->andWhere('f.mention = :mention')
-//                ->setParameter('mention', $options['mention']);
-//        }
-//
-//        if (array_key_exists('composantePorteuse', $options) && null !== $options['composantePorteuse']) {
-//            $query->andWhere('f.composantePorteuse = :composante')
-//                ->setParameter('composante', $options['composantePorteuse']);
-//        }
-//
-//        if (array_key_exists('etatDpe', $options) && null !== $options['etatDpe']) {
-//            $query->andWhere("JSON_CONTAINS(f.etatDpe, :etatDpe) = 1")
-//                ->setParameter('etatDpe', json_encode([$options['etatDpe'] => 1]));
-//        }
-//
-//        if ($sort === 'mention') {
-//            $query->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id');
-//            $query->addOrderBy(
-//                'CASE
-//                            WHEN f.mention IS NOT NULL THEN m.libelle
-//                            WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
-//                            ELSE f.mentionTexte
-//                            END',
-//                $direction
-//            );
-//        }
-//
-//        if ($composante !== null) {
-//            $query->andWhere('f.composantePorteuse = :composante')
-//                ->setParameter('composante', $composante);
-//        }
-//
-//        return $query->getQuery()
-//            ->getResult();
-//    }
 
     public function findByComposanteAndCampagne(Composante $composante, CampagneCollecte $campagneCollecte): array
     {
@@ -108,6 +49,8 @@ class DpeParcoursRepository extends ServiceEntityRepository
         foreach ($parcours as $p) {
             $version = (int)(explode('.', $p->getVersion())[0]) + 1;
             $newParcours = new DpeParcours();
+            $newParcours->setParcours($p->getParcours());
+            $newParcours->setFormation($p->getFormation());
             $newParcours->setCampagneCollecte($campagneCollecte);
             $newParcours->setVersion($version.'.0');
             $newParcours->setEtatValidation([]);
