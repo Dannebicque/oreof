@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.6](https://github.com/Dannebicque/oreof/compare/v1.24.5...v1.24.6) (2024-01-31)
+
+
+### Bug Fixes
+
+* Numérotation UE sur maquette iframe ([38298ad](https://github.com/Dannebicque/oreof/commit/38298ada4dba7c9ea888fbcb0aee04a91817b128))
+* Traductions ([8178e0e](https://github.com/Dannebicque/oreof/commit/8178e0e9c7f76a41b2dc309b3fcc64ee496e31b7))
+
 ### [1.24.5](https://github.com/Dannebicque/oreof/compare/v1.24.4...v1.24.5) (2024-01-30)
 
 
