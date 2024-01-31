@@ -4,7 +4,9 @@
     <span class="badge bg-{{ processData.valid == true ? 'success' : 'danger' }}">
 {{ processData.valid == true ? "Fiche matière vérifiée complete" : 'Fiche matière incomplete' }}
 </span></p>
+
 {% set valide = processData.validation.ficheMatiere %}
+
 <table class="table table-striped">
     <tr>
         <th colspan="2">Identité de l'enseignement</th>
@@ -12,7 +14,11 @@
     <tr>
         <td>Référent de l'enseignement</td>
         <td>
-            {{ valide.etat.referent|badgeValide }}
+            {% if objet.responsableFicheMatiere == null %}
+                <span class="badge bg-info">Resp. de parcours ou de mention</span>
+            {% else %}
+                <span class="badge bg-success">Complet</span>
+            {% endif %}
         </td>
     </tr>
     <tr>
@@ -40,6 +46,8 @@
         <td>Description de l'enseignement</td>
         <td>
             {{ valide.etat.description|badgeValide }}
+            {{ valide.erreurs.description is defined ? valide.erreurs.description|displayErreurs : '' }}
+
         </td>
     </tr>
     <tr>
@@ -61,6 +69,7 @@
         <td>Objectifs</td>
         <td>
             {{ valide.etat.objectifs|badgeValide }}
+            {{ valide.erreurs.objectifs is defined ? valide.erreurs.objectifs|displayErreurs : '' }}
         </td>
     </tr>
 </table>

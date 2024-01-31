@@ -283,7 +283,7 @@ historique.de.validation.fiche_matiere.infobulle: historique.de.validation.fiche
 validation.fiche_matiere: validation.fiche_matiere
 validation.valider.fiche_matiere.title: Valider et soumettre la fiche EC/matière
 validation.valider.fiche_matiere: Soumettre la fiche EC/matière
-validation.fiche_matiere.valide.alerte: 'La validation de la fiche EC/matière permet sa transmission au central en vue de la publication. Après transmission, la fiche "EC/matière" ne sera plus modifiable.<br>La fiche EC/matière n''est publiable que si elle est complète.'
+validation.fiche_matiere.valide.alerte: "La validation de la fiche EC/matière permet sa transmission au central en vue de la publication. Après transmission, la fiche \"EC/matière\" ne sera plus modifiable. \n La fiche EC/matière n'est publiable que si elle est complète."
 btn.validation.fiche_matiere.valide.en_cours_redaction: btn.validation.fiche_matiere.valide.en_cours_redaction
 validation.fiche_matiere.valide.impossible.en_cours_redaction: 'La validation de la fiche EC/matière est impossible. Les informations de cette fiche sont incomplètes/erronées.'
 ficheMatiere.valide.fiche_matiere.flash.success: Fiche EC/matière validée et transmise au central
