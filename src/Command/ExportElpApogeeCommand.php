@@ -2,12 +2,15 @@
 
 namespace App\Command;
 
+use App\Classes\CalculButStructureParcours;
 use App\Classes\CalculStructureParcours;
 use App\DTO\StructureEc;
 use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\ElementConstitutif;
+use App\Entity\Formation;
+use App\Entity\HistoriqueFormation;
 use App\Entity\Parcours;
 use App\Repository\ElementConstitutifRepository;
 use App\Service\Apogee\Classes\ElementPedagogiDTO6;
@@ -162,13 +165,17 @@ class ExportElpApogeeCommand extends Command
 
     private function saveExportAsSpreadsheet(OutputInterface $output, string $type){
         // retrieve data
-        $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAll();
-        $totalElement = count($parcoursArray);
+        $dataArray = $this->entityManager->getRepository(Formation::class)->findAll();
+        $dataArray = array_filter($dataArray, [$this, 'filterFormationByPublicationState']);
+        $dataArray = array_map(fn($formation) => $formation->getParcours()->toArray(), $dataArray);
+        $dataArray = array_merge(...$dataArray);
+        // $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAll();
+        $totalElement = count($dataArray);
         // progress bar
         $progressBar = new ProgressBar($output, $totalElement);
         // transform into valid soap object
         $soapObjectArray = [];
-        foreach($parcoursArray as $parcours){
+        foreach($dataArray as $parcours){
             $dto = $this->getDTOForParcours($parcours);
             if($type === "EC"){
                 foreach($dto->semestres as $semestre){
@@ -200,7 +207,12 @@ class ExportElpApogeeCommand extends Command
     }
 
     private function getDTOForParcours(Parcours $parcours){
-        $calculStructure = new CalculStructureParcours($this->entityManager, $this->elementConstitutifRepository);
+        if($parcours->getFormation()->getTypeDiplome()->getLibelleCourt() === "BUT"){
+            $calculStructure = new CalculButStructureParcours(); 
+        }
+        else {
+            $calculStructure = new CalculStructureParcours($this->entityManager, $this->elementConstitutifRepository);
+        }
         return $calculStructure->calcul($parcours);
     }
 
@@ -267,5 +279,18 @@ class ExportElpApogeeCommand extends Command
         else {
             throw new \Exception("Soap Client is not initialized.");
         }
+    }
+
+    private function filterFormationByPublicationState(Formation $formation){
+        $return = false;
+        $historique = $this->entityManager->getRepository(HistoriqueFormation::class)->findBy(
+            ['formation' => $formation],
+            ['date' => 'DESC']
+        );
+        if(count($historique) > 0){
+            $return = $historique[0]->getEtape() === "publication";
+        }
+        
+        return $return;
     }
 }
