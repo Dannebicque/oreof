@@ -130,7 +130,64 @@ class ElementPedagogiDTO6
         
         }
         elseif ($elementPedagogique instanceof StructureSemestre){
-            
+            $this->codElp = $elementPedagogique->semestre->getCodeApogee() ?? "ERROR";
+            // Libellés
+            if( $elementPedagogique->semestre->getOrdre() 
+                && $dto->parcours->getSigle() 
+                && $dto->parcours->getFormation()?->getSigle()
+                && $dto->parcours->getFormation()?->getTypeDiplome()->getLibelleCourt()
+            ){
+                $libelleLong = 'Semestre ' . $elementPedagogique->semestre->getOrdre() 
+                    . ' ' 
+                    . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
+                    . ' '
+                    . $dto->parcours->getFormation()->getSigle() 
+                    . ' ' 
+                    . $dto->parcours->getSigle();
+                $libelleCourt = 'SEM ' . $elementPedagogique->semestre->getOrdre()
+                    . ' '
+                    . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
+                    . ' '
+                    . $dto->parcours->getSigle();
+            }
+            else {
+                $libelleLong = "ERROR";
+                $libelleCourt = "ERROR";
+            }
+            $this->libCourtElp = $this->prepareLibelle($libelleCourt, 25);
+            $this->libElp = $this->prepareLibelle($libelleLong, 60);
+            $this->codNatureElp = CodeNatuElpEnum::SEM->value;
+            $this->codComposante = $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "ERROR";
+            // $this->temSuspension;
+            // $this->motifSuspension;
+            $this->temModaliteControle = "O";
+            // $this->temEnsADistance;
+            // $this->temHorsEtab;
+            // $this->temStage;
+            // $this->lieu;
+            $this->nbrCredits = $elementPedagogique->heuresEctsSemestre->sommeSemestreEcts;
+            // $this->dateDebutIP;
+            // $this->dateFinIP;
+            // $this->descriptionElp;
+            $this->volume = $elementPedagogique->heuresEctsSemestre->sommeSemestreTotalPresDist();
+            $this->uniteVolume = TypeVolumeElpEnum::ST->value;
+            $this->codPeriode = $elementPedagogique->semestre->display();
+            // $this->numOrdrePresentationElp;
+            // $this->seuilOuverture;
+            // $this->capaciteMaxElp;
+            // $this->capaciteIntElp;
+            // $this->listComposantesAssociees;
+            $this->listCentreInsPedagogi = new TableauCentreInsPedagogiDTO(
+                array_map(
+                    fn($composante) => $composante->getCodeApogee(),
+                    $dto->parcours->getFormation()?->getComposantesInscription()?->toArray() ?? []
+                )
+            );
+            // $this->listResponsables;
+            // $this->listLibAnnexe;
+            // $this->listParamChargEns;
+            // $this->listElementPrerequis;
+            // $this->listTypePopulation;
         }
     }
 

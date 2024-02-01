@@ -92,8 +92,8 @@ class ExportElpApogeeCommand extends Command
                         $this->saveExportAsSpreadsheet($output, "UE");
                         break;
                     case "SEMESTRE":
-                        // $io->writeln("Génération de l'export Excel...");
-                        // $this->saveExportAsSpreadsheet($output, "SEMESTRE");
+                        $io->writeln("Génération de l'export Excel...");
+                        $this->saveExportAsSpreadsheet($output, "SEMESTRE");
                         break;
                     default: 
                         $io->warning("Type d'export inconnu. Il devrait être parmi la liste : ['SEMESTRE', 'UE', 'EC']");
@@ -189,7 +189,10 @@ class ExportElpApogeeCommand extends Command
                 $progressBar->advance();
             }
             elseif ($type === "SEMESTRE"){
-
+                foreach($dto->semestres as $semestre){
+                    $soapObjectArray[] = $this->setObjectForSoapCall($semestre, $dto);
+                }
+                $progressBar->advance();
             }
             
         }
