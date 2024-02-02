@@ -26,17 +26,29 @@ class StructureParcours
     #[Groups(['DTO_json_versioning'])]
     public HeuresEctsFormation $heuresEctsFormation;
 
+    public StatsFichesMatieresParcours $statsFichesMatieresParcours;
+
+    public function __construct(
+        private $withEcts = true
+    )
+    {
+    }
     public function setParcours(Parcours $parcours): void
     {
+        $this->statsFichesMatieresParcours = new StatsFichesMatieresParcours($parcours);
         $this->parcours = $parcours;
-        $this->heuresEctsFormation = new HeuresEctsFormation();
+        if ($this->withEcts) {
+            $this->heuresEctsFormation = new HeuresEctsFormation();
+        }
 
     }
 
     public function addSemestre(int $ordre, StructureSemestre $structureSemestre): void
     {
         $this->semestres[$ordre] = $structureSemestre;
-        $this->heuresEctsFormation->addSemestre($structureSemestre->heuresEctsSemestre);
+        if ($this->withEcts) {
+            $this->heuresEctsFormation->addSemestre($structureSemestre->heuresEctsSemestre);
+        }
     }
 
     public function getTabAnnee(): array

@@ -12,38 +12,52 @@ namespace App\DTO;
 
 
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
+use App\Entity\Parcours;
 
 class StatsFichesMatieresParcours
 {
     public int $nbFiches = 0;
-    public int $nbFichesValideesRP = 0;
-    public int $nbFichesValideesRF = 0;
-    public int $nbFichesValideesDPE = 0;
+    public int $nbFichesValidees = 0; //par central
+    public int $nbFichesNonValideesSes = 0;
     public int $nbFichesCompletes = 0;
     public int $nbFichesNonValidees = 0;
 
-    public function addEc(ElementConstitutif $ec) :void
-    {
-        if ($ec->getFicheMatiere() !== null) {
-            $this->nbFiches++;
-            $this->nbFichesNonValidees++;
-            if ($ec->getFicheMatiere()->remplissage() === 100.0) {
-                $this->nbFichesCompletes++;
-            }
+    public int $nbFichesPubliees = 0;
 
-            if (in_array('transmis_rf', $ec->getFicheMatiere()->getEtatFiche())) {
-                $this->nbFichesValideesRP++;
-                $this->nbFichesNonValidees--;
-            }
-            if (in_array('transmis_dpe', $ec->getFicheMatiere()->getEtatFiche())) {
-                $this->nbFichesValideesRF++;
-                $this->nbFichesNonValidees--;
-            }
-            if (in_array('transmis_central', $ec->getFicheMatiere()->getEtatFiche())) {
-                $this->nbFichesValideesDPE++;
-                $this->nbFichesNonValidees--;
+    public function __construct(public Parcours $parcours)
+    {
+    }
+
+    public function addEc(ElementConstitutif $ec, bool $raccroche) :void
+    {
+        if ($raccroche === false) {
+            if ($ec->getFicheMatiere() !== null && $ec->getFicheMatiere()?->getParcours() === $this->parcours && !$ec->getNatureUeEc()?->isLibre()) {
+                $this->addStasEc($ec->getFicheMatiere());
+
             }
         }
+    }
 
+    private function addStasEc(FicheMatiere $ficheMatiere)
+    {
+        $this->nbFiches++;
+        if ($ficheMatiere->remplissage() === 100.0) {
+            $this->nbFichesCompletes++;
+        }
+        if (array_key_exists('fiche_matiere', $ficheMatiere->getEtatFiche()) || count($ficheMatiere->getEtatFiche()) === 0) {
+            $this->nbFichesNonValidees++;
+        }
+
+        if (array_key_exists('soumis_central', $ficheMatiere->getEtatFiche())) {
+            $this->nbFichesNonValideesSes++;
+        }
+        if (array_key_exists('valide_pour_publication', $ficheMatiere->getEtatFiche())) {
+            $this->nbFichesValidees++;
+        }
+
+        if (array_key_exists('publie', $ficheMatiere->getEtatFiche())) {
+            $this->nbFichesPubliees++;
+        }
     }
 }

@@ -24,46 +24,10 @@ Cela entrainera la vérification des informations saisies. Seules les fiches EC/
             >
                 <i class="fal fa-check"></i> {{ ('validation.valider.fiches_matieres')|trans({}, 'process') }}
             </button>
+            {% set stats =  statsParcours.statsFichesMatieresParcours %}
+            {% set dto = statsParcours %}
+            {{ include('fiche_matiere_valide/_parcours.html.twig') }}
 
-            <table class="table table-bordered table-hover" {{ stimulus_controller('check_all') }}>
-                <thead>
-                <tr>
-                    <th>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
-                            </label>
-                        </div>
-                    </th>
-                    <th>EC</th>
-                    <th>Fiche</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for semParc in parcours.semestreParcours|filter(semestre => semestre.semestre.nonDispense == false) %}
-                    {% if semParc.semestre.semestreRaccroche != null %}
-                        {% set semestre = semParc.semestre.semestreRaccroche %}
-                        {% set raccrocheSem = true %}
-                    {% else %}
-                        {% set semestre = semParc %}
-                        {% set raccrocheSem = false %}
-                    {% endif %}
-                    <tr>
-                        <th colspan="7" class="text-center font-weight-bold">
-                            {{ semParc.display }}</th>
-                    </tr>
-
-
-                    {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
-                        {{ include('fiche_matiere_valide/_ue.html.twig') }}
-                        {% for uee in ue.ueEnfants %}
-                            {{ include('fiche_matiere_valide/_ue.html.twig', {ue:uee}) }}
-                        {% endfor %}
-                    {% endfor %}
-
-                {% endfor %}
-                </tbody>
-            </table>
             <button class="btn btn-sm d-block btn-outline-success mb-2"
                     type="button"
                     data-controller="tooltip"

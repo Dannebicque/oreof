@@ -32,14 +32,18 @@ class StructureSemestre
 
     #[Groups(['DTO_json_versioning'])]
     public HeuresEctsSemestre $heuresEctsSemestre;
+    private bool $withEcts = true;
 
-    public function __construct(Semestre $semestre, int $ordre, bool $raccroche = false, SemestreParcours $semestreParcours = null)
+    public function __construct(Semestre $semestre, int $ordre, bool $raccroche = false, SemestreParcours $semestreParcours = null, bool $withEcts = true)
     {
+        $this->withEcts = $withEcts;
         $this->ordre = $ordre;
         $this->semestre = $semestre;
         $this->semestreParcours = $semestreParcours;
         $this->raccroche = $raccroche;
-        $this->heuresEctsSemestre = new HeuresEctsSemestre();
+        if ($this->withEcts) {
+            $this->heuresEctsSemestre = new HeuresEctsSemestre();
+        }
     }
 
     public function addUe(?int $idUe, StructureUe $structureUe): void
@@ -50,7 +54,10 @@ class StructureSemestre
         else {
             $this->ues[] = $structureUe;
         }
-        $this->heuresEctsSemestre->addUe($structureUe->getHeuresEctsUe());
+
+        if ($this->withEcts) {
+            $this->heuresEctsSemestre->addUe($structureUe->getHeuresEctsUe());
+        }
     }
 
     public function getAnnee(): int

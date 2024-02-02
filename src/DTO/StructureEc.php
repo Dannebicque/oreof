@@ -46,30 +46,36 @@ class StructureEc
     #[Groups(['DTO_json_versioning'])]
     public ?Collection $bccs;
 
+    private bool $withEcts = true;
 
-    public function __construct(ElementConstitutif $elementConstitutif, Parcours $parcours, bool $isBut = false)
+    public function __construct(ElementConstitutif $elementConstitutif, Parcours $parcours, bool $isBut = false, bool $withEcts = true)
     {
-
+        $this->withEcts = $withEcts;
         $this->raccroche = GetElementConstitutif::isRaccroche($elementConstitutif, $parcours);
         $this->elementRaccroche = GetElementConstitutif::getElementConstitutif($elementConstitutif, $this->raccroche);
 
         $this->elementConstitutif = $elementConstitutif;
-        $this->heuresEctsEc = new HeuresEctsEc();
-        $this->typeMccc = GetElementConstitutif::getTypeMccc($elementConstitutif, $this->raccroche);
-        $this->heuresEctsEc->addEc(GetElementConstitutif::getElementConstitutifHeures($elementConstitutif, $this->raccroche), $isBut);
-        $this->heuresEctsEc->addEcts(GetElementConstitutif::getEcts($elementConstitutif, $this->raccroche));
-        $this->mcccs = GetElementConstitutif::getMcccsCollection($elementConstitutif, $this->raccroche);
-        $this->bccs = GetElementConstitutif::getBccs($elementConstitutif, $this->raccroche);
+        if ($withEcts) {
+            $this->heuresEctsEc = new HeuresEctsEc();
+            $this->typeMccc = GetElementConstitutif::getTypeMccc($elementConstitutif, $this->raccroche);
+            $this->heuresEctsEc->addEc(GetElementConstitutif::getElementConstitutifHeures($elementConstitutif, $this->raccroche), $isBut);
+            $this->heuresEctsEc->addEcts(GetElementConstitutif::getEcts($elementConstitutif, $this->raccroche));
+            $this->mcccs = GetElementConstitutif::getMcccsCollection($elementConstitutif, $this->raccroche);
+            $this->bccs = GetElementConstitutif::getBccs($elementConstitutif, $this->raccroche);
+        }
     }
 
     public function addEcEnfant(?int $idEc, StructureEc $structureEc): void
     {
-        if($idEc !== null){
+        if ($idEc !== null) {
             $this->elementsConstitutifsEnfants[$idEc] = $structureEc;
-        }else {
+        } else {
             $this->elementsConstitutifsEnfants[] = $structureEc;
         }
-        $this->heuresEctsEcEnfants[] = $structureEc->getHeuresEctsEc();
+
+        if ($this->withEcts) {
+            $this->heuresEctsEcEnfants[] = $structureEc->getHeuresEctsEc();
+        }
         //gérer pour prendre le max des heures et ects sur tous les enfants de l'EC
     }
 
