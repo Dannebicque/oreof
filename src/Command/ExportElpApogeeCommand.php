@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Classes\CalculButStructureParcours;
 use App\Classes\CalculStructureParcours;
+use App\Classes\GetElementConstitutif;
 use App\DTO\StructureEc;
 use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
@@ -12,6 +13,7 @@ use App\Entity\ElementConstitutif;
 use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
 use App\Entity\Parcours;
+use App\Enums\Apogee\CodeNatuElpEnum;
 use App\Repository\ElementConstitutifRepository;
 use App\Service\Apogee\Classes\ElementPedagogiDTO6;
 use DateTime;
@@ -158,9 +160,10 @@ class ExportElpApogeeCommand extends Command
 
     private function setObjectForSoapCall(
         StructureEc|StructureUe|StructureSemestre $elementPedagogique, 
-        StructureParcours $dto
+        StructureParcours $dto,
+        ?CodeNatuElpEnum $natureElp = null
     ) : ElementPedagogiDTO6 {
-        return new ElementPedagogiDTO6($elementPedagogique, $dto);
+        return new ElementPedagogiDTO6($elementPedagogique, $dto, $natureElp);
     }
 
     private function saveExportAsSpreadsheet(OutputInterface $output, string $type){
@@ -181,7 +184,26 @@ class ExportElpApogeeCommand extends Command
                 foreach($dto->semestres as $semestre){
                     foreach($semestre->ues() as $ue){
                         foreach($ue->elementConstitutifs as $ec){
-                            $soapObjectArray[] = $this->setObjectForSoapCall($ec, $dto);
+                            $hasChildren = count($ec->elementsConstitutifsEnfants) > 0;
+                            // si l'élément est mutualisé, on ne l'insère qu'une fois
+                            if($this->isEcMutualiseMaster($ec) && $hasChildren === false){
+                                $soapObjectArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATM);
+                            }
+                            // si l'élément a des enfants, on insère que les enfants
+                            if($hasChildren){
+                                foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
+                                    if($this->isEcMutualiseMaster($ecEnfant) === true){
+                                        $soapObjectArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::MATM);
+                                    }
+                                    elseif ($this->isEcMutualise($ecEnfant) === false) {
+                                        $soapObjectArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::CHOI);
+                                    }
+                                }
+                            }
+                            // si c'est une matière standard
+                            if($hasChildren === false && $this->isEcMutualise($ec) === false){
+                                $soapObjectArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATI);
+                            }
                         }
                     }
                 }
@@ -288,9 +310,22 @@ class ExportElpApogeeCommand extends Command
             ['date' => 'DESC']
         );
         if(count($historique) > 0){
-            $return = $historique[0]->getEtape() === "publication";
+            // dernier état est 'publication'
+            $return = $historique[0]->getEtape() === "publication"
+            // exclusion des IUT
+            && in_array($formation->getComposantePorteuse()?->getCodeComposante(), ['980', '983', '984', '985']) === false;
         }
         
         return $return;
+    }
+
+    private function isEcMutualiseMaster(StructureEc $ec){
+        // si la matière est mutualisée et est l'élément maître
+        return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 2 
+        && $ec->elementConstitutif?->getParcours()?->getId() === $ec->elementConstitutif->getFicheMatiere()?->getParcours()?->getId();
+    }
+
+    private function isEcMutualise(StructureEc $ec){
+        return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 2;
     }
 }

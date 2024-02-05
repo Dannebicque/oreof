@@ -44,7 +44,8 @@ class ElementPedagogiDTO6
 
     public function __construct(
         StructureEc|StructureUe|StructureSemestre $elementPedagogique,
-        StructureParcours $dto
+        StructureParcours $dto,
+        ?CodeNatuElpEnum $nature = null
     ) {
         if ($elementPedagogique instanceof StructureEc){
             $this->codElp = $elementPedagogique->elementConstitutif->getCodeApogee() ?? "ERROR";
@@ -58,7 +59,7 @@ class ElementPedagogiDTO6
                 ?? $elementPedagogique->elementConstitutif->getLibelle(), 
                 60
             );
-            $this->codNatureElp = "ERR";
+            $this->codNatureElp = $nature->value;
             $this->codComposante = $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "ERROR";
             // $this->temSuspension;
             // $this->motifSuspension;
