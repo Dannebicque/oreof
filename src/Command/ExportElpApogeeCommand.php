@@ -68,13 +68,17 @@ class ExportElpApogeeCommand extends Command
             description: 'Execution mode : test or production', 
             default: 'test'
         )->addOption(
-            name: 'excel-export', 
+            name: 'full-excel-export', 
             mode: InputOption::VALUE_REQUIRED,
-            description: 'Génère un export Excel des ELP - Type : Semestre, UE, EC'
+            description: 'Génère un export Excel des ELP pour toutes les formations - Type : Semestre, UE, EC'
         )->addOption(
             name: 'dummy-insertion',
             mode: InputOption::VALUE_NONE,
             description: "Insère un ELP dans la base de données APOTEST"
+        )->addOption(
+            name: 'parcours-excel-export',
+            mode: InputOption::VALUE_REQUIRED,
+            description: 'Genère une export de tous les ELP pour un parcours donné.'
         );
     }
 
@@ -82,12 +86,13 @@ class ExportElpApogeeCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $mode = $input->getOption('mode');
-        $export = $input->getOption('excel-export');
+        $fullExport = $input->getOption('full-excel-export');
+        $parcoursExport = $input->getOption('parcours-excel-export');
         $dummyInsertion = $input->getOption('dummy-insertion');
 
         if($mode === "test"){
-            if($export){
-                switch(strtoupper($export)){
+            if($fullExport){
+                switch(strtoupper($fullExport)){
                     case "EC":
                         $io->writeln("Génération de l'export Excel...");
                         $this->saveFullExportAsSpreadsheet($output, "EC");
@@ -108,6 +113,19 @@ class ExportElpApogeeCommand extends Command
 
                 return Command::SUCCESS;
             }  
+            if($parcoursExport){
+                $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($parcoursExport);
+                if($parcours){
+                    $io->writeln('Parcours trouvé : ' . $parcours->getDisplay() . ' - Formation : ' . $parcours->getFormation()->getDisplayLong());
+                    $io->writeln("Génération de l'export Excel...");
+                    $this->saveParcoursExportAsSpreadsheet($parcours);
+                    $io->success("Parcours enregistré avec succès.");
+                    return Command::SUCCESS;
+                }else {
+                    $io->warning("Aucun parcours trouvé. L'identifiant est incorrect. ({$parcoursExport})");
+                    return Command::INVALID;
+                }
+            }
             if($dummyInsertion){
                 $io->write("Utilisation du Web Service APOTEST");
                 if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer dans APOTEST ?")){
@@ -189,6 +207,8 @@ class ExportElpApogeeCommand extends Command
         $progressBar = new ProgressBar($output, $totalElement);
         // transform into valid soap object
         $soapObjectArray = [];
+        // export typename for file
+        $exportTypeName = "";
         foreach($dataArray as $parcours){
             $dto = $this->getDTOForParcours($parcours);
             if($type === "EC"){
@@ -208,6 +228,7 @@ class ExportElpApogeeCommand extends Command
                         }
                     }
                 }
+                $exportTypeName = "EC";
                 $progressBar->advance();
             }
             elseif ($type === "UE") {
@@ -216,17 +237,36 @@ class ExportElpApogeeCommand extends Command
                         $this->addUeToElpArray($soapObjectArray, $ue, $dto);
                     }
                 }
+                $exportTypeName = "UE";
                 $progressBar->advance();
             }
             elseif ($type === "SEMESTRE"){
                 foreach($dto->semestres as $semestre){
                     $this->addSemestreToElpArray($soapObjectArray, $semestre, $dto);
                 }
+                $exportTypeName = "SEMESTRE";
                 $progressBar->advance();
             }
             
         }
-        $this->generateSpreadsheet($soapObjectArray);
+        $this->generateSpreadsheet($soapObjectArray, $exportTypeName);
+    }
+
+    private function saveParcoursExportAsSpreadsheet(Parcours $parcours){
+        $dto = $this->getDTOForParcours($parcours);
+        $soapObjectArray = [];
+        foreach($dto->semestres as $semestre){
+            if($semestre->semestre->isNonDispense() === false){
+                $this->addSemestreToElpArray($soapObjectArray, $semestre, $dto);
+                foreach($semestre->ues() as $ue){
+                    $this->addUeToElpArray($soapObjectArray, $ue, $dto);
+                    foreach($ue->elementConstitutifs as $ec){
+                        $this->addEcToElpArray($soapObjectArray, $ec, $dto);
+                    }
+                }
+            }
+        }
+        $this->generateSpreadsheet($soapObjectArray, "Parcours-{$parcours->getId()}");
     }
 
     /**
@@ -249,7 +289,7 @@ class ExportElpApogeeCommand extends Command
      * @param array $ElpArray Les éléments pédagogiques : ElementPedagogiDTO6[]
      * @return void
      */
-    private function generateSpreadsheet(array $ElpArray){
+    private function generateSpreadsheet(array $ElpArray, string $exportTypeName = ""){
         // spreadsheet headers
         $headers = [
             "codElp", "libCourtElp", "libElp", "codNatureElp",
@@ -279,7 +319,7 @@ class ExportElpApogeeCommand extends Command
         // Write to file
         $now = new DateTime();
         $date = $now->format('d-m-Y_H-i-s');
-        $filename = __DIR__ . "/../Service/Apogee/export/ELP-export-{$date}.xlsx";
+        $filename = __DIR__ . "/../Service/Apogee/export/{$exportTypeName}-ELP-export-{$date}.xlsx";
         $this->filesystem->dumpFile($filename, "");
         $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
         $writer->save($filename);
