@@ -171,7 +171,7 @@ class ElementPedagogiDTO6
             // $this->dateFinIP;
             // $this->descriptionElp;
             $this->volume = $elementPedagogique->heuresEctsSemestre->sommeSemestreTotalPresDist();
-            $this->uniteVolume = TypeVolumeElpEnum::ST->value;
+            $this->uniteVolume = TypeVolumeElpEnum::HE->value;
             $this->codPeriode = $elementPedagogique->semestre->display();
             // $this->numOrdrePresentationElp;
             // $this->seuilOuverture;

@@ -76,6 +76,10 @@ class ExportElpApogeeCommand extends Command
             mode: InputOption::VALUE_NONE,
             description: "Insère un ELP dans la base de données APOTEST"
         )->addOption(
+            name: 'parcours-insertion',
+            mode: InputOption::VALUE_REQUIRED,
+            description: "Insère tous les ELP d'un parcours dans la base de données, via le Web Service"
+        )->addOption(
             name: 'parcours-excel-export',
             mode: InputOption::VALUE_REQUIRED,
             description: 'Genère une export de tous les ELP pour un parcours donné.'
@@ -89,8 +93,10 @@ class ExportElpApogeeCommand extends Command
         $fullExport = $input->getOption('full-excel-export');
         $parcoursExport = $input->getOption('parcours-excel-export');
         $dummyInsertion = $input->getOption('dummy-insertion');
+        $parcoursInsertion = $input->getOption('parcours-insertion');
 
         if($mode === "test"){
+            // Export total des ELP selon le type : EC, UE ou Semestre
             if($fullExport){
                 switch(strtoupper($fullExport)){
                     case "EC":
@@ -113,17 +119,46 @@ class ExportElpApogeeCommand extends Command
 
                 return Command::SUCCESS;
             }  
+            // Export Excel d'un parcours suivant l'ID
             if($parcoursExport){
                 $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($parcoursExport);
                 if($parcours){
                     $io->writeln('Parcours trouvé : ' . $parcours->getDisplay() . ' - Formation : ' . $parcours->getFormation()->getDisplayLong());
                     $io->writeln("Génération de l'export Excel...");
-                    $this->saveParcoursExportAsSpreadsheet($parcours);
+                    $soapObjectArray = $this->generateSoapObjectsForParcours($parcours);
+                    $this->generateSpreadsheet($soapObjectArray, "Parcours-{$parcours->getId()}");
                     $io->success("Parcours enregistré avec succès.");
                     return Command::SUCCESS;
                 }else {
                     $io->warning("Aucun parcours trouvé. L'identifiant est incorrect. ({$parcoursExport})");
                     return Command::INVALID;
+                }
+            }
+            // Insertion d'un parcours suivant l'ID 
+            if($parcoursInsertion){
+                $io->write("Utilisation du Web Service APOTEST");
+                if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer un parcours dans la base de données ?")){
+                    $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($parcoursInsertion);
+                    if($parcours){
+                        $io->writeln('Parcours trouvé : ' . $parcours->getDisplay() . ' - Formation : ' . $parcours->getFormation()->getDisplayLong());
+                        $soapObjectArray = $this->generateSoapObjectsForParcours($parcours);
+                        $countElement = count($soapObjectArray);
+                        if($this->verifyUserIntent($io, "Le parcours comprend {$countElement} ELP. Voulez-vous continuer ?")){
+                            $this->insertSeveralElp($soapObjectArray);
+                            $io->success("Commande exécutée avec succès");
+                            return Command::SUCCESS;
+                        }else {
+                            $io->warning("L'insertion des ELP a été annulée.");
+                            return Command::SUCCESS;
+                        }
+                    }else {
+                        $io->warning("Aucun parcours trouvé pour cet identifiant. ({$parcoursInsertion})");
+                        return Command::INVALID;
+                    }
+                }
+                else {
+                    $io->warning("La commande d'insertion a été annulée.");
+                    return Command::SUCCESS;
                 }
             }
             if($dummyInsertion){
@@ -145,7 +180,7 @@ class ExportElpApogeeCommand extends Command
                         $this->createSoapClient();
                         $io->writeln('Création du client SOAP réussie.');
                         // Insertion d'un élément
-                        $result = $this->insertElp($elp);
+                        $result = $this->insertOneElp($elp);
                         $io->writeln("Résultat de l'appel au Web Service :");
                         dump($result);
                         return Command::SUCCESS;
@@ -252,7 +287,12 @@ class ExportElpApogeeCommand extends Command
         $this->generateSpreadsheet($soapObjectArray, $exportTypeName);
     }
 
-    private function saveParcoursExportAsSpreadsheet(Parcours $parcours){
+    /**
+     * Crée les ELP correspondants depuis un parcours passé en paramètre
+     * @param Parcours $parcours Le parcours que l'on souhaite générer en ELP
+     * @return array Tableau comprenant tous les ELP d'un parcours
+     */
+    private function generateSoapObjectsForParcours(Parcours $parcours) : array {
         $dto = $this->getDTOForParcours($parcours);
         $soapObjectArray = [];
         foreach($dto->semestres as $semestre){
@@ -266,7 +306,8 @@ class ExportElpApogeeCommand extends Command
                 }
             }
         }
-        $this->generateSpreadsheet($soapObjectArray, "Parcours-{$parcours->getId()}");
+        
+        return $soapObjectArray;
     }
 
     /**
@@ -356,7 +397,7 @@ class ExportElpApogeeCommand extends Command
      * Méthode pour appeler la fonction d'insertion d'un ELP du Web Service Apogee
      * @param ElementPedagogiDTO6 $elementPedagogique Élément à insérer
      */
-    private function insertElp(ElementPedagogiDTO6 $elementPedagogique) {
+    private function insertOneElp(ElementPedagogiDTO6 $elementPedagogique) {
         $param = new stdClass();
         $param->elementPedagogi = $elementPedagogique;
         if($this->soapClient){
@@ -365,6 +406,16 @@ class ExportElpApogeeCommand extends Command
         else {
             throw new \Exception("Soap Client is not initialized.");
         }
+    }
+
+    /**
+     * Appelle le Web Service d'insertion d'ELP d'Apogee, 
+     * et insère plusieurs valeurs d'un coup
+     * @param array $elpArray
+     */
+    private function insertSeveralElp(array $elpArray){
+        $dataWS = array_map([$this, 'mapDataForWebService'], $elpArray);
+        print_r($dataWS);
     }
 
     /**
@@ -480,7 +531,18 @@ class ExportElpApogeeCommand extends Command
      * @param StructureSemestre $semestre Données sources du semestre
      * @param StructureParcours $dto DTO du parcours
      */
-    private function addSemestreToElpArray(array &$elpArray, StructureSemestre $semestre, StructureParcours $dto){
+    private function addSemestreToElpArray(array &$elpArray, StructureSemestre $semestre, StructureParcours $dto) : void {
         $elpArray[] = $this->setObjectForSoapCall($semestre, $dto, CodeNatuElpEnum::SEM);
+    }
+
+    /**
+     * Met en forme les données pour être utilisées par le Web Service Apogee
+     * @param ElementPedagogiDTO6 $elp Element à mettre en forme
+     * @return stdClass Objet transformé
+     */
+    private function mapDataForWebService(ElementPedagogiDTO6 $elp) : stdClass {
+        $object = new stdClass();
+        $object->elementPedagogi = $elp;
+        return $object;
     }
 }
