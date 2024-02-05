@@ -96,7 +96,7 @@ class ElementPedagogiDTO6
             $this->codElp = $elementPedagogique->ue->getCodeApogee() ?? "ERROR";
             $this->libCourtElp = $this->prepareLibelle($elementPedagogique->ue->getLibelle(), 25);
             $this->libElp = $this->prepareLibelle($elementPedagogique->ue->getLibelle(), 60);
-            $this->codNatureElp = CodeNatuElpEnum::UE->value;
+            $this->codNatureElp = $nature->value;
             $this->codComposante = $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "ERROR";
             // $this->temSuspension
             // $this->motifSuspension

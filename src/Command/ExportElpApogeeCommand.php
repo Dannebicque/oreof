@@ -192,10 +192,19 @@ class ExportElpApogeeCommand extends Command
         foreach($dataArray as $parcours){
             $dto = $this->getDTOForParcours($parcours);
             if($type === "EC"){
-                foreach($dto->semestres as $semestre){
-                    foreach($semestre->ues() as $ue){
-                        foreach($ue->elementConstitutifs as $ec){
-                            $this->addEctoElpArray($soapObjectArray, $ec, $dto);
+                foreach($dto->semestres as $semestre) {
+                    // UE 
+                    foreach($semestre->ues() as $ue) {
+                        // EC à insérer
+                        foreach($ue->elementConstitutifs as $ec) {
+                            $this->addEcToElpArray($soapObjectArray, $ec, $dto);
+                        }
+                        // UE Enfants
+                        foreach($ue->uesEnfants() as $ueEnfant) {
+                            foreach($ueEnfant->elementConstitutifs as $ec) {
+                                // EC à insérer
+                                $this->addEcToElpArray($soapObjectArray, $ec, $dto);
+                            }
                         }
                     }
                 }
@@ -204,14 +213,14 @@ class ExportElpApogeeCommand extends Command
             elseif ($type === "UE") {
                 foreach($dto->semestres as $semestre){
                     foreach($semestre->ues() as $ue){
-                        $soapObjectArray[] = $this->setObjectForSoapCall($ue, $dto);
+                        $this->addUeToElpArray($soapObjectArray, $ue, $dto);
                     }
                 }
                 $progressBar->advance();
             }
             elseif ($type === "SEMESTRE"){
                 foreach($dto->semestres as $semestre){
-                    $soapObjectArray[] = $this->setObjectForSoapCall($semestre, $dto);
+                    $this->addSemestreToElpArray($soapObjectArray, $semestre, $dto);
                 }
                 $progressBar->advance();
             }
@@ -359,6 +368,25 @@ class ExportElpApogeeCommand extends Command
     }
 
     /**
+     * Permet de savoir si une UE est mutualisée
+     * @param StructureUe $ue UE à tester
+     * @return boolean Vrai si elle est mutualisée, Faux sinon
+     */
+    private function isUeMutualise(StructureUe $ue) : bool {
+        return count($ue->ue->getUeMutualisables()) >= 2;
+    }
+
+    /**
+     * Teste si une UE qui est mutualisée est l'UE porteuse (maître)
+     * @param StructureUe $ue UE à tester
+     * @return boolean Vrai si l'UE est celle porteuse, Faux sinon
+     */
+    private function isUeMutualiseMaster(StructureUe $ue) : bool {
+        // TO DO
+        return true;
+    }
+
+    /**
      * Ajoute une matière (élément constitutif) dans le tableau d'ELP,
      * avec les types adéquats
      * @param array &$elpArray Tableau dans lequel on insère l'élément
@@ -366,7 +394,7 @@ class ExportElpApogeeCommand extends Command
      * @param StructureParcours $dto Structure DTO du parcours complet
      * @return void
      */
-    private function addEctoElpArray(array &$elpArray, StructureEc $ec, StructureParcours $dto) : void {
+    private function addEcToElpArray(array &$elpArray, StructureEc $ec, StructureParcours $dto) : void {
         $hasChildren = count($ec->elementsConstitutifsEnfants) > 0;
         // si l'élément est mutualisé, on ne l'insère qu'une fois
         if($this->isEcMutualiseMaster($ec) && $hasChildren === false){
@@ -387,5 +415,32 @@ class ExportElpApogeeCommand extends Command
         if($hasChildren === false && $this->isEcMutualise($ec) === false){
             $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATI);
         }
+    }
+
+    /**
+     * Ajoute une UE dans le tableau d'ELP
+     * @param array &$elpArray Tableau d'ELP dans lequel on insère
+     * @param StructureUe $ue La source de données de l'UE
+     * @param StructureParcours $dto DTO du parcours
+     * @return void
+     */
+    private function addUeToElpArray(array &$elpArray, StructureUe $ue, StructureParcours $dto) : void {
+        if(count($ue->uesEnfants()) > 0){
+            foreach($ue->uesEnfants() as $ueEnfant){
+                $elpArray[] = $this->setObjectForSoapCall($ueEnfant, $dto, CodeNatuElpEnum::CHOI);            
+            }
+        }else {
+            $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::UE);
+        }
+    }
+
+    /**
+     * Ajoute un Semestre dans le tableau d'ELP
+     * @param array &$elpArray Tableau d'ELP dans lequel on insère
+     * @param StructureSemestre $semestre Données sources du semestre
+     * @param StructureParcours $dto DTO du parcours
+     */
+    private function addSemestreToElpArray(array &$elpArray, StructureSemestre $semestre, StructureParcours $dto){
+        $elpArray[] = $this->setObjectForSoapCall($semestre, $dto, CodeNatuElpEnum::SEM);
     }
 }
