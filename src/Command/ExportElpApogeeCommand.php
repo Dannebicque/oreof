@@ -90,15 +90,15 @@ class ExportElpApogeeCommand extends Command
                 switch(strtoupper($export)){
                     case "EC":
                         $io->writeln("Génération de l'export Excel...");
-                        $this->saveExportAsSpreadsheet($output, "EC");
+                        $this->saveFullExportAsSpreadsheet($output, "EC");
                         break;
                     case "UE":
                         $io->writeln("Génération de l'export Excel...");
-                        $this->saveExportAsSpreadsheet($output, "UE");
+                        $this->saveFullExportAsSpreadsheet($output, "UE");
                         break;
                     case "SEMESTRE":
                         $io->writeln("Génération de l'export Excel...");
-                        $this->saveExportAsSpreadsheet($output, "SEMESTRE");
+                        $this->saveFullExportAsSpreadsheet($output, "SEMESTRE");
                         break;
                     default: 
                         $io->warning("Type d'export inconnu. Il devrait être parmi la liste : ['SEMESTRE', 'UE', 'EC']");
@@ -158,6 +158,12 @@ class ExportElpApogeeCommand extends Command
         }
     }
 
+    /**
+     * Créer un ELP à partir d'un Semestre, UE, ou EC
+     * @param StructureEC|StructureUe|StructureSemestre $elementPedagogique Données sources
+     * @param StructureParcours $dto DTO du parcours
+     * @param ?CodeNatuElmEnum $natureElp Nature de l'élément pédagogique
+     */
     private function setObjectForSoapCall(
         StructureEc|StructureUe|StructureSemestre $elementPedagogique, 
         StructureParcours $dto,
@@ -166,7 +172,12 @@ class ExportElpApogeeCommand extends Command
         return new ElementPedagogiDTO6($elementPedagogique, $dto, $natureElp);
     }
 
-    private function saveExportAsSpreadsheet(OutputInterface $output, string $type){
+    /**
+     * Exporte tous les ELP d'une formation, en sélectionnant les EC, UE, ou Semestres
+     * @param OutputInterface $output Sortie de la commande
+     * @param string $type Sélectionne le type, dans la liste : [EC, UE, SEMESTRE]
+     */
+    private function saveFullExportAsSpreadsheet(OutputInterface $output, string $type){
         // retrieve data
         $dataArray = $this->entityManager->getRepository(Formation::class)->findAll();
         $dataArray = array_filter($dataArray, [$this, 'filterFormationByPublicationState']);
@@ -184,26 +195,7 @@ class ExportElpApogeeCommand extends Command
                 foreach($dto->semestres as $semestre){
                     foreach($semestre->ues() as $ue){
                         foreach($ue->elementConstitutifs as $ec){
-                            $hasChildren = count($ec->elementsConstitutifsEnfants) > 0;
-                            // si l'élément est mutualisé, on ne l'insère qu'une fois
-                            if($this->isEcMutualiseMaster($ec) && $hasChildren === false){
-                                $soapObjectArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATM);
-                            }
-                            // si l'élément a des enfants, on insère que les enfants
-                            if($hasChildren){
-                                foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
-                                    if($this->isEcMutualiseMaster($ecEnfant) === true){
-                                        $soapObjectArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::MATM);
-                                    }
-                                    elseif ($this->isEcMutualise($ecEnfant) === false) {
-                                        $soapObjectArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::CHOI);
-                                    }
-                                }
-                            }
-                            // si c'est une matière standard
-                            if($hasChildren === false && $this->isEcMutualise($ec) === false){
-                                $soapObjectArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATI);
-                            }
+                            $this->addEctoElpArray($soapObjectArray, $ec, $dto);
                         }
                     }
                 }
@@ -228,6 +220,11 @@ class ExportElpApogeeCommand extends Command
         $this->generateSpreadsheet($soapObjectArray);
     }
 
+    /**
+     * Permet d'obtenir la structure DTO pour un parcours donné
+     * @param Parcours $parcours
+     * @return StructureParcours DTO du parcours
+     */
     private function getDTOForParcours(Parcours $parcours){
         if($parcours->getFormation()->getTypeDiplome()->getLibelleCourt() === "BUT"){
             $calculStructure = new CalculButStructureParcours(); 
@@ -238,6 +235,11 @@ class ExportElpApogeeCommand extends Command
         return $calculStructure->calcul($parcours);
     }
 
+    /**
+     * Génère dans un fichier Excel les ELP fournis en paramètre.
+     * @param array $ElpArray Les éléments pédagogiques : ElementPedagogiDTO6[]
+     * @return void
+     */
     private function generateSpreadsheet(array $ElpArray){
         // spreadsheet headers
         $headers = [
@@ -274,7 +276,13 @@ class ExportElpApogeeCommand extends Command
         $writer->save($filename);
     }
 
-    private function verifyUserIntent(SymfonyStyle $io, string $message){
+    /**
+     * Prompt pour poser une question à l'utilisateur de la commande
+     * @param SymfonyStyle $io Entrée / Sortie de la commande
+     * @param string $message Question à poser 
+     * @return boolean Vrai si l'utilisateur confirme la question, Faux sinon
+     */
+    private function verifyUserIntent(SymfonyStyle $io, string $message) : bool {
         return $io->ask("{$message} [Y/n]", 'n', function($message) use ($io) {
             if($message === "Y"){
                 return true;
@@ -285,14 +293,21 @@ class ExportElpApogeeCommand extends Command
         });
     }
 
-    private function createSoapClient(){
+    /**
+     * Création du client SOAP, selon la WSDL fournie dans .env.local
+     */
+    private function createSoapClient() : void {
         $wsdl = $this->parameterBag->get('WSDL_APOTEST');
         $this->soapClient = new \SoapClient($wsdl, [
             "trace" => true
         ]);
     }
 
-    private function insertElp(ElementPedagogiDTO6 $elementPedagogique){
+    /**
+     * Méthode pour appeler la fonction d'insertion d'un ELP du Web Service Apogee
+     * @param ElementPedagogiDTO6 $elementPedagogique Élément à insérer
+     */
+    private function insertElp(ElementPedagogiDTO6 $elementPedagogique) {
         $param = new stdClass();
         $param->elementPedagogi = $elementPedagogique;
         if($this->soapClient){
@@ -303,7 +318,13 @@ class ExportElpApogeeCommand extends Command
         }
     }
 
-    private function filterFormationByPublicationState(Formation $formation){
+    /**
+     * Méthode pour filtrer les formations, si elles sont étiquettées comme "publication"
+     * et si elles ne font pas partie des IUT
+     * @param Formation $formation Formation que l'on souhaite tester
+     * @return boolean Vrai si la formation peut être pris en compte, Faux si elle doit être écartée du jeu de données.
+     */
+    private function filterFormationByPublicationState(Formation $formation) : bool {
         $return = false;
         $historique = $this->entityManager->getRepository(HistoriqueFormation::class)->findBy(
             ['formation' => $formation],
@@ -319,13 +340,52 @@ class ExportElpApogeeCommand extends Command
         return $return;
     }
 
-    private function isEcMutualiseMaster(StructureEc $ec){
+    /**
+     * Permet de savoir si une matière mutualisée est la matière porteuse (maître)
+     * @return boolean Vrai si la matière est porteuse, Faux sinon
+     */
+    private function isEcMutualiseMaster(StructureEc $ec) : bool {
         // si la matière est mutualisée et est l'élément maître
         return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 2 
         && $ec->elementConstitutif?->getParcours()?->getId() === $ec->elementConstitutif->getFicheMatiere()?->getParcours()?->getId();
     }
 
-    private function isEcMutualise(StructureEc $ec){
+    /**
+     * Permet de savoir si une matière est mutualisée avec un autre parcours
+     * @return boolean Vrai si la matière est mutualisée, Faux sinon
+     */
+    private function isEcMutualise(StructureEc $ec) : bool {
         return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 2;
+    }
+
+    /**
+     * Ajoute une matière (élément constitutif) dans le tableau d'ELP,
+     * avec les types adéquats
+     * @param array &$elpArray Tableau dans lequel on insère l'élément
+     * @param StructureEc $ec Element Constitutif
+     * @param StructureParcours $dto Structure DTO du parcours complet
+     * @return void
+     */
+    private function addEctoElpArray(array &$elpArray, StructureEc $ec, StructureParcours $dto) : void {
+        $hasChildren = count($ec->elementsConstitutifsEnfants) > 0;
+        // si l'élément est mutualisé, on ne l'insère qu'une fois
+        if($this->isEcMutualiseMaster($ec) && $hasChildren === false){
+            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATM);
+        }
+        // si l'élément a des enfants, on insère que les enfants
+        if($hasChildren){
+            foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
+                if($this->isEcMutualiseMaster($ecEnfant) === true){
+                    $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::MATM);
+                }
+                elseif ($this->isEcMutualise($ecEnfant) === false) {
+                    $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::CHOI);
+                }
+            }
+        }
+        // si c'est une matière standard
+        if($hasChildren === false && $this->isEcMutualise($ec) === false){
+            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATI);
+        }
     }
 }
