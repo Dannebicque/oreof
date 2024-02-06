@@ -332,7 +332,7 @@ demande.reouverture.modification.mccc.maquette.help: demande.reouverture.modific
 transmis_ses: transmis_ses
 transmis_pour_publication: transmis_pour_publication
 publie: publie
-validation.valider.soumis_central: validation.valider.soumis_central
-validation.reserve.soumis_central: validation.reserve.soumis_central
-validation.refuser.soumis_central: validation.refuser.soumis_central
-ficheMatiere.valide.soumis_central.flash.success: ficheMatiere.valide.soumis_central.flash.success
+validation.valider.soumis_central: "Valider pour publication"
+validation.reserve.soumis_central: "Emettre des réserves"
+validation.refuser.soumis_central: "Refuser la fiche EC/matière"
+ficheMatiere.valide.soumis_central.flash.success: "La fiche EC/matière est validée"
