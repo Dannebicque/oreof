@@ -67,7 +67,7 @@ class ExportElpApogeeCommand extends Command
         $this->addOption(
             name: 'mode',
             mode: InputOption::VALUE_OPTIONAL,
-            description: 'Execution mode : test or production', 
+            description: "Mode d'exécution : 'test' ou 'production'", 
             default: 'test'
         )->addOption(
             name: 'full-excel-export', 
@@ -88,7 +88,7 @@ class ExportElpApogeeCommand extends Command
         )->addOption(
             name: 'full-verify-data',
             mode: InputOption::VALUE_NONE,
-            description: "Compte rendu des parcours qui sont des candidats à l'insertion APOTEST et qui sont non conformes"
+            description: "Compte rendu des parcours qui sont des candidats à l'insertion dans APOTEST et qui sont non conformes"
         )->addOption(
             name: 'check-duplicates',
             mode: InputOption::VALUE_NONE,
@@ -234,8 +234,13 @@ class ExportElpApogeeCommand extends Command
                             }
                         }
                     }
+                    $hasCodeComposantePorteuse = false;
+                    if($dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante()){
+                        $hasCodeComposantePorteuse = true;
+                    }
                     if($countEcInvalide > 0 || $countUeInvalide > 0 || $countSemestreInvalide > 0){
                         $text = "\nLe parcours {$dto->parcours->getId()} - {$dto->parcours->getDisplay()} - est invalide\n"
+                            . ($hasCodeComposantePorteuse ? "" : "Le parcours n'a pas de code composante porteuse\n")
                             . ($countEcInvalide > 0 ? "{$countEcInvalide} EC sans code APOGEE\n" : "")
                             . ($countUeInvalide > 0 ? "{$countUeInvalide} UE sans code APOGEE\n" : "")
                             . ($countSemestreInvalide > 0 ? "{$countSemestreInvalide} Semestre sans code APOGEE\n" : "");
@@ -243,6 +248,7 @@ class ExportElpApogeeCommand extends Command
                     }
                     $io->progressAdvance();
                 }
+                $io->success("Fichier généré avec succès.");
                 return Command::SUCCESS;
             }
             // Vérification des doublons sur les codes Apogee
