@@ -1683,5 +1683,306 @@
         <target>Valider et soumettre au DPE les fiches EC/matières</target>
       </segment>
     </unit>
+    <unit id="Ar2n4y." name="historique.de.validation.fiche_matiere.title">
+      <segment>
+        <source>historique.de.validation.fiche_matiere.title</source>
+        <target>historique.de.validation.fiche_matiere.title</target>
+      </segment>
+    </unit>
+    <unit id="VBjwRBs" name="historique.de.validation.fiche_matiere.infobulle">
+      <segment>
+        <source>historique.de.validation.fiche_matiere.infobulle</source>
+        <target>historique.de.validation.fiche_matiere.infobulle</target>
+      </segment>
+    </unit>
+    <unit id="UN4B84R" name="validation.fiche_matiere">
+      <segment>
+        <source>validation.fiche_matiere</source>
+        <target>validation.fiche_matiere</target>
+      </segment>
+    </unit>
+    <unit id="x9G7Oko" name="validation.valider.fiche_matiere.title">
+      <segment>
+        <source>validation.valider.fiche_matiere.title</source>
+        <target>Valider et soumettre la fiche EC/matière</target>
+      </segment>
+    </unit>
+    <unit id="c9IemNO" name="validation.valider.fiche_matiere">
+      <segment>
+        <source>validation.valider.fiche_matiere</source>
+        <target>Soumettre la fiche EC/matière</target>
+      </segment>
+    </unit>
+    <unit id="isB9xLg" name="validation.fiche_matiere.valide.alerte">
+      <segment>
+        <source>validation.fiche_matiere.valide.alerte</source>
+        <target>La validation de la fiche EC/matière permet sa transmission au central en vue de la publication. Après transmission, la fiche "EC/matière" ne sera plus modifiable. 
+ La fiche EC/matière n'est publiable que si elle est complète.</target>
+      </segment>
+    </unit>
+    <unit id="6t.Ix99" name="btn.validation.fiche_matiere.valide.en_cours_redaction">
+      <segment>
+        <source>btn.validation.fiche_matiere.valide.en_cours_redaction</source>
+        <target>btn.validation.fiche_matiere.valide.en_cours_redaction</target>
+      </segment>
+    </unit>
+    <unit id="U0HXlYn" name="validation.fiche_matiere.valide.impossible.en_cours_redaction">
+      <segment>
+        <source>validation.fiche_matiere.valide.impossible.en_cours_redaction</source>
+        <target>La validation de la fiche EC/matière est impossible. Les informations de cette fiche sont incomplètes/erronées.</target>
+      </segment>
+    </unit>
+    <unit id=".J8kjwM" name="ficheMatiere.valide.fiche_matiere.flash.success">
+      <segment>
+        <source>ficheMatiere.valide.fiche_matiere.flash.success</source>
+        <target>Fiche EC/matière validée et transmise au central</target>
+      </segment>
+    </unit>
+    <unit id="5gU93xZ" name="validation.fiche_matiere.ses">
+      <segment>
+        <source>validation.fiche_matiere.ses</source>
+        <target>validation.fiche_matiere.ses</target>
+      </segment>
+    </unit>
+    <unit id="gfo9d7l" name="validation.fiche_matiere.publication">
+      <segment>
+        <source>validation.fiche_matiere.publication</source>
+        <target>validation.fiche_matiere.publication</target>
+      </segment>
+    </unit>
+    <unit id="yV_FA3o" name="fiche_matiere.publie">
+      <segment>
+        <source>fiche_matiere.publie</source>
+        <target>fiche_matiere.publie</target>
+      </segment>
+    </unit>
+    <unit id="TFq8UOi" name="validation.valider.transmis_ses.title">
+      <segment>
+        <source>validation.valider.transmis_ses.title</source>
+        <target>validation.valider.transmis_ses.title</target>
+      </segment>
+    </unit>
+    <unit id="K3H9230" name="validation.valider.transmis_ses">
+      <segment>
+        <source>validation.valider.transmis_ses</source>
+        <target>validation.valider.transmis_ses</target>
+      </segment>
+    </unit>
+    <unit id="_7hZ7qZ" name="validation.reserve.transmis_ses.title">
+      <segment>
+        <source>validation.reserve.transmis_ses.title</source>
+        <target>validation.reserve.transmis_ses.title</target>
+      </segment>
+    </unit>
+    <unit id="vHMW4Rn" name="validation.reserve.transmis_ses">
+      <segment>
+        <source>validation.reserve.transmis_ses</source>
+        <target>validation.reserve.transmis_ses</target>
+      </segment>
+    </unit>
+    <unit id="IdLdLCe" name="validation.refuser.transmis_ses.title">
+      <segment>
+        <source>validation.refuser.transmis_ses.title</source>
+        <target>validation.refuser.transmis_ses.title</target>
+      </segment>
+    </unit>
+    <unit id="jvE.0XF" name="validation.refuser.transmis_ses">
+      <segment>
+        <source>validation.refuser.transmis_ses</source>
+        <target>validation.refuser.transmis_ses</target>
+      </segment>
+    </unit>
+    <unit id="LnU0uzN" name="validation.fiche_matiere.ses.valide.alerte">
+      <segment>
+        <source>validation.fiche_matiere.ses.valide.alerte</source>
+        <target>validation.fiche_matiere.ses.valide.alerte</target>
+      </segment>
+    </unit>
+    <unit id="XicjB6L" name="btn.validation.fiche_matiere.ses.valide">
+      <segment>
+        <source>btn.validation.fiche_matiere.ses.valide</source>
+        <target>btn.validation.fiche_matiere.ses.valide</target>
+      </segment>
+    </unit>
+    <unit id=".6hb1pq" name="ficheMatiere.valide.transmis_ses.flash.success">
+      <segment>
+        <source>ficheMatiere.valide.transmis_ses.flash.success</source>
+        <target>ficheMatiere.valide.transmis_ses.flash.success</target>
+      </segment>
+    </unit>
+    <unit id="A8Rn0zM" name="validation.valider.transmis_pour_publication.title">
+      <segment>
+        <source>validation.valider.transmis_pour_publication.title</source>
+        <target>validation.valider.transmis_pour_publication.title</target>
+      </segment>
+    </unit>
+    <unit id="YwzRmGr" name="validation.valider.transmis_pour_publication">
+      <segment>
+        <source>validation.valider.transmis_pour_publication</source>
+        <target>validation.valider.transmis_pour_publication</target>
+      </segment>
+    </unit>
+    <unit id="kCNhYsD" name="historique.">
+      <segment>
+        <source>historique.</source>
+        <target>historique.</target>
+      </segment>
+    </unit>
+    <unit id="8Cmq.sP" name="historique.validation.fiche_matiere.ses">
+      <segment>
+        <source>historique.validation.fiche_matiere.ses</source>
+        <target>historique.validation.fiche_matiere.ses</target>
+      </segment>
+    </unit>
+    <unit id="3ioAa3d" name="validation.valider.fiches_matieres">
+      <segment>
+        <source>validation.valider.fiches_matieres</source>
+        <target>Valider et soumettre les fiches EC/matière</target>
+      </segment>
+    </unit>
+    <unit id="klI.WA_" name="demande.reouverture">
+      <segment>
+        <source>demande.reouverture</source>
+        <target>Demander la réouverture du DPE</target>
+      </segment>
+    </unit>
+    <unit id="bT0NYpa" name="demande.reouverture.title">
+      <segment>
+        <source>demande.reouverture.title</source>
+        <target>demande.reouverture.title</target>
+      </segment>
+    </unit>
+    <unit id="USBjLN9" name="validation.cfvu.valide.cas.acceptation.directe.valide_a_publier">
+      <segment>
+        <source>validation.cfvu.valide.cas.acceptation.directe.valide_a_publier</source>
+        <target>validation.cfvu.valide.cas.acceptation.directe.valide_a_publier</target>
+      </segment>
+    </unit>
+    <unit id="_kk9_uD" name="validation.cfvu.valide.cas.acceptation.non.directe.valide_a_publier">
+      <segment>
+        <source>validation.cfvu.valide.cas.acceptation.non.directe.valide_a_publier</source>
+        <target>validation.cfvu.valide.cas.acceptation.non.directe.valide_a_publier</target>
+      </segment>
+    </unit>
+    <unit id="R0vJUqF" name="validation.cfvu.valide.cas.sous.reserve.conseil.valide_a_publier">
+      <segment>
+        <source>validation.cfvu.valide.cas.sous.reserve.conseil.valide_a_publier</source>
+        <target>validation.cfvu.valide.cas.sous.reserve.conseil.valide_a_publier</target>
+      </segment>
+    </unit>
+    <unit id="FTiWf8H" name="validation.cfvu.valide.cas.sous.reserve.modifications.valide_a_publier">
+      <segment>
+        <source>validation.cfvu.valide.cas.sous.reserve.modifications.valide_a_publier</source>
+        <target>validation.cfvu.valide.cas.sous.reserve.modifications.valide_a_publier</target>
+      </segment>
+    </unit>
+    <unit id="UYUNrvT" name="demande.reouverture.alerte">
+      <segment>
+        <source>demande.reouverture.alerte</source>
+        <target>La demande de réouverture permet la réouvertue des onglets du formulaire de saisie. Les demandes doivent être argumentés afin de déterminer si les modifications impliquent un passage en conseil de composantes, en CFVU ou peuvent être appliqués directement.</target>
+      </segment>
+    </unit>
+    <unit id="hyi7kcL" name="demande.reouverture.modification.mccc.label">
+      <segment>
+        <source>demande.reouverture.modification.mccc.label</source>
+        <target>modifications de la maquette et/ou des MCCC</target>
+      </segment>
+    </unit>
+    <unit id="dlNyqcS" name="demande.reouverture.modification.mccc.help">
+      <segment>
+        <source>demande.reouverture.modification.mccc.help</source>
+        <target>demande.reouverture.modification.mccc.help</target>
+      </segment>
+    </unit>
+    <unit id="Eg6ReBn" name="demande.reouverture.modification.maquette.label">
+      <segment>
+        <source>demande.reouverture.modification.maquette.label</source>
+        <target>modifications de la maquette et/ou des MCCC</target>
+      </segment>
+    </unit>
+    <unit id="Jg4njF9" name="demande.reouverture.modification.maquette.help">
+      <segment>
+        <source>demande.reouverture.modification.maquette.help</source>
+        <target>demande.reouverture.modification.maquette.help</target>
+      </segment>
+    </unit>
+    <unit id="E7HA56_" name="demande.reouverture.modification.argumentaire.label">
+      <segment>
+        <source>demande.reouverture.modification.argumentaire.label</source>
+        <target>Motif(s) de la demande de réouverture (texte servant de justificatif en cas de passage en CFVU)</target>
+      </segment>
+    </unit>
+    <unit id="FzpFKSi" name="demande.reouverture.modification.argumentaire.help">
+      <segment>
+        <source>demande.reouverture.modification.argumentaire.help</source>
+        <target>demande.reouverture.modification.argumentaire.help</target>
+      </segment>
+    </unit>
+    <unit id="etm_V68" name="btn.demande.reouverture.modification">
+      <segment>
+        <source>btn.demande.reouverture.modification</source>
+        <target>Demander la réouverture du projet DPE</target>
+      </segment>
+    </unit>
+    <unit id="ErXBJqK" name="demande.reouverture.modification.texte.label">
+      <segment>
+        <source>demande.reouverture.modification.texte.label</source>
+        <target>modifications des descriptifs</target>
+      </segment>
+    </unit>
+    <unit id="3cbexBC" name="demande.reouverture.modification.texte.help">
+      <segment>
+        <source>demande.reouverture.modification.texte.help</source>
+        <target>demande.reouverture.modification.texte.help</target>
+      </segment>
+    </unit>
+    <unit id="q5O2h1Y" name="demande.reouverture.modification.mccc.texte.label">
+      <segment>
+        <source>demande.reouverture.modification.mccc.texte.label</source>
+        <target>modifications des descriptifs et de la maquette/MCCC</target>
+      </segment>
+    </unit>
+    <unit id="0R1z8.r" name="demande.reouverture.modification.mccc.texte.help">
+      <segment>
+        <source>demande.reouverture.modification.mccc.texte.help</source>
+        <target>demande.reouverture.modification.mccc.texte.help</target>
+      </segment>
+    </unit>
+    <unit id="JeYUJJe" name="demande.reouverture.label">
+      <segment>
+        <source>demande.reouverture.label</source>
+        <target>Précisez quelle(s) modification(s) vous souhaitez apporter à la formation</target>
+      </segment>
+    </unit>
+    <unit id="C0gVdql" name="demande.reouverture.help">
+      <segment>
+        <source>demande.reouverture.help</source>
+        <target>demande.reouverture.help</target>
+      </segment>
+    </unit>
+    <unit id="igYkFyg" name="historique.validation.fiche_matiere">
+      <segment>
+        <source>historique.validation.fiche_matiere</source>
+        <target>historique.validation.fiche_matiere</target>
+      </segment>
+    </unit>
+    <unit id="JubJ6ix" name="transmis_ses">
+      <segment>
+        <source>transmis_ses</source>
+        <target>transmis_ses</target>
+      </segment>
+    </unit>
+    <unit id="qt_uDlN" name="transmis_pour_publication">
+      <segment>
+        <source>transmis_pour_publication</source>
+        <target>transmis_pour_publication</target>
+      </segment>
+    </unit>
+    <unit id="8r1VLpU" name="publie">
+      <segment>
+        <source>publie</source>
+        <target>publie</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

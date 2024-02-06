@@ -83,6 +83,10 @@ class ExportElpApogeeCommand extends Command
             name: 'parcours-excel-export',
             mode: InputOption::VALUE_REQUIRED,
             description: 'Genère une export de tous les ELP pour un parcours donné.'
+        )->addOption(
+            name: 'full-verify-data',
+            mode: InputOption::VALUE_NONE,
+            description: "Compte rendu des parcours qui sont des candidats à l'insertion APOTEST et qui sont non conformes"
         );
     }
 
@@ -91,6 +95,7 @@ class ExportElpApogeeCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $mode = $input->getOption('mode');
         $fullExport = $input->getOption('full-excel-export');
+        $fullVerifyData = $input->getOption('full-verify-data');
         $parcoursExport = $input->getOption('parcours-excel-export');
         $dummyInsertion = $input->getOption('dummy-insertion');
         $parcoursInsertion = $input->getOption('parcours-insertion');
@@ -169,6 +174,69 @@ class ExportElpApogeeCommand extends Command
                     return Command::SUCCESS;
                 }
             }
+            // Compte rendu sur les candidats à l'insertion qui sont non conformes
+            if($fullVerifyData){
+                $io->writeln("Outil de compte-rendu des parcours non conformes APOGEE");
+                // date et heure pour le fichier
+                $now = new DateTime();
+                $date = $now->format('d-m-Y_H-i-s');
+                // nom et chemin du fichier
+                $file = __DIR__ . "/../Service/Apogee/export/Compte-rendu-parcours-invalide-{$date}";
+                // création du fichier
+                $this->filesystem->appendToFile($file, "Compte Rendu des parcours invalides pour l'export APOGEE\n");
+                // parcours à traiter
+                $parcoursArray = $this->retrieveParcoursDataFromDatabase();
+                // barre de progression
+                $io->progressStart(count($parcoursArray));
+                foreach($parcoursArray as $parcours){
+                    $countEcInvalide = 0;
+                    $countSemestreInvalide = 0;
+                    $countUeInvalide = 0;
+                    $dto = $this->getDTOForParcours($parcours);
+                    foreach($dto->semestres as $semestre){
+                        if($semestre->semestre->getCodeApogee() === null ){
+                            ++$countSemestreInvalide;
+                        }
+                        // Nombre d'éléments incorrects : UE
+                        foreach($semestre->ues() as $ue){
+                            if($ue->ue->getCodeApogee() === null){
+                                ++$countUeInvalide;
+                            }
+                            foreach($ue->elementConstitutifs as $ec){
+                                foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
+                                    if($ecEnfant->elementConstitutif->getCodeApogee() === null){
+                                        ++$countEcInvalide;
+                                    }
+                                }
+                                if($ec->elementConstitutif->getCodeApogee() === null){
+                                    ++$countEcInvalide;
+                                }
+                            }
+                            // Nombre d'éléments incorrects : UE Enfants
+                            foreach($ue->uesEnfants() as $ueEnfant){
+                                foreach($ueEnfant->elementConstitutifs as $ec){
+                                    foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
+                                        if($ecEnfant->elementConstitutif->getCodeApogee() === null){
+                                            ++$countEcInvalide;
+                                        }
+                                    }
+                                    if($ec->elementConstitutif->getCodeApogee() === null){
+                                        ++$countEcInvalide;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if($countEcInvalide > 0 || $countUeInvalide > 0 || $countSemestreInvalide > 0){
+                        $text = "\nLe parcours {$dto->parcours->getId()} - {$dto->parcours->getDisplay()} - est invalide\n"
+                            . ($countEcInvalide > 0 ? "{$countEcInvalide} EC sans code APOGEE\n" : "")
+                            . ($countUeInvalide > 0 ? "{$countUeInvalide} UE sans code APOGEE\n" : "")
+                            . ($countSemestreInvalide > 0 ? "{$countSemestreInvalide} Semestre sans code APOGEE\n" : "");
+                        $this->filesystem->appendToFile($file, $text);
+                    }
+                    $io->progressAdvance();
+                }
+            }
             if($dummyInsertion){
                 $io->write("Utilisation du Web Service APOTEST");
                 if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer dans APOTEST ?")){
@@ -240,11 +308,7 @@ class ExportElpApogeeCommand extends Command
      */
     private function saveFullExportAsSpreadsheet(OutputInterface $output, string $type){
         // retrieve data
-        $dataArray = $this->entityManager->getRepository(Formation::class)->findAll();
-        $dataArray = array_filter($dataArray, [$this, 'filterFormationByPublicationState']);
-        $dataArray = array_map(fn($formation) => $formation->getParcours()->toArray(), $dataArray);
-        $dataArray = array_merge(...$dataArray);
-        // $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAll();
+        $dataArray = $this->retrieveParcoursDataFromDatabase();
         $totalElement = count($dataArray);
         // progress bar
         $progressBar = new ProgressBar($output, $totalElement);
@@ -558,5 +622,12 @@ class ExportElpApogeeCommand extends Command
         $object = new stdClass();
         $object->elementPedagogi = $elp;
         return $object;
+    }
+
+    private function retrieveParcoursDataFromDatabase(){
+        $dataArray = $this->entityManager->getRepository(Formation::class)->findAll();
+        $dataArray = array_filter($dataArray, [$this, 'filterFormationByPublicationState']);
+        $dataArray = array_map(fn($formation) => $formation->getParcours()->toArray(), $dataArray);
+        return array_merge(...$dataArray);
     }
 }
