@@ -9,33 +9,52 @@
 
 namespace App\Enums;
 
-enum TypeModificationDpeEnum: string
+enum TypeModificationDpeEnum: string implements BadgeEnumInterface
 {
     /*
      * Création
      * Non ouverture
      * Reconduite identique
-     * Reconduite avec modification MCCC
+     * modification MCCC
      * Reconduite avec modification des textes
      * Reconduite avec modification MCCC et des textes
      */
+    case ATTENTE = 'ATTENTE';
     case CREATION = 'CREATION';
     case NON_OUVERTURE = 'NON_OUVERTURE';
-    case RECONDUITE_IDENTIQUE = 'RECONDUITE_IDENTIQUE';
-    case RECONDUITE_MODIFICATION_MCCC = 'RECONDUITE_MODIFICATION_MCCC';
-    case RECONDUITE_MODIFICATION_TEXTE = 'RECONDUITE_MODIFICATION_TEXTE';
-    case RECONDUITE_MODIFICATION_MCCC_TEXTE = 'RECONDUITE_MODIFICATION_MCCC_TEXTE';
+    case MODIFICATION = 'MODIFICATION';
+    case MODIFICATION_INTITULE = 'MODIFICATION_INTITULE';
+    case MODIFICATION_MCCC = 'MODIFICATION_MCCC';
+    case MODIFICATION_TEXTE = 'MODIFICATION_TEXTE';
+    case MODIFICATION_MCCC_TEXTE = 'MODIFICATION_MCCC_TEXTE';
 
     public function getLibelle(): string
     {
         return match ($this) {
+            self::ATTENTE => 'Attente décision',
             self::CREATION => 'Création',
             self::NON_OUVERTURE => 'Non ouverture',
-            self::RECONDUITE_IDENTIQUE => 'Reconduite identique',
-            self::RECONDUITE_MODIFICATION_MCCC => 'Reconduite avec modification MCCC',
-            self::RECONDUITE_MODIFICATION_TEXTE => 'Reconduite avec modification des textes',
-            self::RECONDUITE_MODIFICATION_MCCC_TEXTE => 'Reconduite avec modification MCCC et des textes',
+            self::MODIFICATION => 'modification(s) MCCC, Maquette ou textes',
+            self::MODIFICATION_INTITULE => 'modification intitulé parcours',
+            self::MODIFICATION_MCCC => 'modification MCCC et Maquette',
+            self::MODIFICATION_TEXTE => 'modification des textes',
+            self::MODIFICATION_MCCC_TEXTE => 'modification MCCC, maquettes et des textes',
             default => 'Non défini',
+        };
+    }
+
+    public function getBadge(): string
+    {
+        return match ($this) {
+            self::ATTENTE => 'bg-primary',
+            self::CREATION => 'bg-info',
+            self::NON_OUVERTURE => 'bg-danger',
+            self::MODIFICATION => 'bg-warning',
+            self::MODIFICATION_INTITULE => 'bg-warning',
+            self::MODIFICATION_MCCC => 'bg-warning',
+            self::MODIFICATION_TEXTE => 'bg-warning',
+            self::MODIFICATION_MCCC_TEXTE => 'bg-warning',
+            default => 'bg-danger',
         };
     }
 }

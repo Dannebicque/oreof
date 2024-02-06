@@ -2,6 +2,71 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.10](https://github.com/Dannebicque/oreof/compare/v1.24.9...v1.24.10) (2024-02-06)
+
+
+### Features
+
+* validation des fiches niveau SES ([004f0b8](https://github.com/Dannebicque/oreof/commit/004f0b8f1605e2c566af35269669fddd6db77365))
+
+### [1.24.9](https://github.com/Dannebicque/oreof/compare/v1.24.8...v1.24.9) (2024-02-06)
+
+
+### Features
+
+* validation des fiches niveau SES ([2ee3ef5](https://github.com/Dannebicque/oreof/commit/2ee3ef5b45228eb7b9242b28d9bbb6f505e3b01e))
+* validation des fiches niveau SES ([fd8a667](https://github.com/Dannebicque/oreof/commit/fd8a6671f4d948b7ce4072dc3575d098869d58d8))
+
+
+### Bug Fixes
+
+* Mise en page validation fiche matière parcours ou RF ([6677689](https://github.com/Dannebicque/oreof/commit/6677689b4744751f3c27f5ac0cc8d9339b9f7988))
+
+### [1.24.8](https://github.com/Dannebicque/oreof/compare/v1.24.7...v1.24.8) (2024-01-31)
+
+
+### Bug Fixes
+
+* Vérification d'une fiche ([0685284](https://github.com/Dannebicque/oreof/commit/068528458715ae3c7cf23e632c1cdb4749cd4161))
+
+### [1.24.7](https://github.com/Dannebicque/oreof/compare/v1.24.6...v1.24.7) (2024-01-31)
+
+
+### Bug Fixes
+
+* validation + texte ([0e6e955](https://github.com/Dannebicque/oreof/commit/0e6e95539767cc621dccd7b027fe4a9b485c2a78))
+* validation + texte ([d915674](https://github.com/Dannebicque/oreof/commit/d91567499be0a6991d48f4c2f98ae40542698eb5))
+
+### [1.24.6](https://github.com/Dannebicque/oreof/compare/v1.24.5...v1.24.6) (2024-01-31)
+
+
+### Bug Fixes
+
+* Numérotation UE sur maquette iframe ([38298ad](https://github.com/Dannebicque/oreof/commit/38298ada4dba7c9ea888fbcb0aee04a91817b128))
+* Traductions ([8178e0e](https://github.com/Dannebicque/oreof/commit/8178e0e9c7f76a41b2dc309b3fcc64ee496e31b7))
+
+### [1.24.5](https://github.com/Dannebicque/oreof/compare/v1.24.4...v1.24.5) (2024-01-30)
+
+
+### Bug Fixes
+
+* Requete sur DpeParcours ([a5d35fd](https://github.com/Dannebicque/oreof/commit/a5d35fd3b1a0e20f308726c9db02ef09e20d50ca))
+* Requete sur DpeParcours ([7a376cf](https://github.com/Dannebicque/oreof/commit/7a376cff6cf0b9d317dd9febcc0aa242389f54b1))
+
+### [1.24.4](https://github.com/Dannebicque/oreof/compare/v1.24.3...v1.24.4) (2024-01-30)
+
+
+### Bug Fixes
+
+* Ordre UE est celui de l'origine pas de raccroché ([c0d445b](https://github.com/Dannebicque/oreof/commit/c0d445b69bc2282845835c407ad2f512f715fc1a))
+
+### [1.24.3](https://github.com/Dannebicque/oreof/compare/v1.24.2...v1.24.3) (2024-01-30)
+
+
+### Features
+
+* Demande ouverture DPE exceptionnelle ([2d06443](https://github.com/Dannebicque/oreof/commit/2d0644354912ef356b7db5eb84fd5d30dd281b5f))
+
 ### [1.24.2](https://github.com/Dannebicque/oreof/compare/v1.24.1...v1.24.2) (2024-01-29)
 
 

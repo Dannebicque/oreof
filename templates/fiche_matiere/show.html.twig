@@ -4,73 +4,86 @@
     {{ parent() }}
     <!-- Test Script -->
     <script>
-        let isSaveClicked = false;
+      let isSaveClicked = false
 
-        function showVersion(){
-            let select = document.querySelector('#selectVersion');
-            let versionSelected = select.options[select.selectedIndex].value;
-            if(versionSelected !== "#"){
-                window.location = `/fiche/matiere/${versionSelected}/versioning/view`;
-            }
+      function showVersion () {
+        let select = document.querySelector('#selectVersion')
+        let versionSelected = select.options[select.selectedIndex].value
+        if (versionSelected !== '#') {
+          window.location = `/fiche/matiere/${versionSelected}/versioning/view`
         }
+      }
 
-        function saveVersion(event) {
-            if(isSaveClicked === false){
-                let spinner = document.querySelector('#spinner');
-                spinner.classList.remove('d-none');
-                spinner.classList.add('d-flex');
-                isSaveClicked = true; 
-            } else {
-                event.preventDefault();
-                return false;
-            } 
-        }         
-            
-    </script>   
+      function saveVersion (event) {
+        if (isSaveClicked === false) {
+          let spinner = document.querySelector('#spinner')
+          spinner.classList.remove('d-none')
+          spinner.classList.add('d-flex')
+          isSaveClicked = true
+        } else {
+          event.preventDefault()
+          return false
+        }
+      }
+
+    </script>
 {% endblock %}
 
 {% set isVersioningView = false %}
 
 {% block content %}
-{# Versioning #}
-{% if is_granted('ROLE_ADMIN') %}
-<div class="row mt-2 mb-5">
-    <div class="col-lg-3 col-sm-6">
-        <h3 class="small-title">Versions de cette fiche matière</h3>
-        {% if ficheMatiere.ficheMatiereVersionings|length > 0 %}
-            <select class="form-select" id="selectVersion">
-                <option value="#" selected="selected">Choisir...</option>
-                {% for f in ficheMatiere.ficheMatiereVersionings %}
-                    <option value="{{ f.getId }}">
-                        Version du : {{ f.getVersionTimestamp()|date('d/m/Y') }} à {{ f.getVersionTimestamp()|date('H:i') }}
-                    </option>
-                {% endfor %}
-            </select>
-        {% else %}
-            Aucune version enregistrée.
-        {% endif %}
-    </div>  
-        {% if ficheMatiere.ficheMatiereVersionings|length > 0 %}
-        <div class="d-flex col-lg-1 col-sm-3 align-items-end">
-            <a href="#">
-                <button class="btn btn-sm btn-primary mb-1" id="buttonShowVersion" onclick="showVersion()">
-                    Visionner
-                </button>
-            </a>
+
+    {{ component('fiche_matiere_manage', {ficheMatiere:ficheMatiere}) }}
+
+
+    {# Versioning #}
+    {% if is_granted('ROLE_ADMIN') %}
+
+        <div class="card mt-2 mb-5">
+            <div class="card-body">
+                <div class="row ">
+                    <div class="col-lg-3 col-sm-6">
+                        <h3 class="small-title">Versions de cette fiche matière</h3>
+                        {% if ficheMatiere.ficheMatiereVersionings|length > 0 %}
+                            <select class="form-select" id="selectVersion">
+                                <option value="#" selected="selected">Choisir...</option>
+                                {% for f in ficheMatiere.ficheMatiereVersionings %}
+                                    <option value="{{ f.getId }}">
+                                        Version du : {{ f.getVersionTimestamp()|date('d/m/Y') }}
+                                        à {{ f.getVersionTimestamp()|date('H:i') }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                            Aucune version enregistrée.
+                        {% endif %}
+                    </div>
+                    {% if ficheMatiere.ficheMatiereVersionings|length > 0 %}
+                        <div class="d-flex col-lg-1 col-sm-3 align-items-end">
+                            <a href="#">
+                                <button class="btn btn-sm btn-primary mb-1" id="buttonShowVersion"
+                                        onclick="showVersion()">
+                                    Visionner
+                                </button>
+                            </a>
+                        </div>
+                    {% endif %}
+                    <div class="d-flex col-lg-1 col-sm-3 align-items-end">
+                        <a href="{{ path('app_fiche_matiere_versioning_save', {slug: ficheMatiere.slug}) }}"
+                           onclick="saveVersion(event)">
+                            <button class="btn btn-sm btn-success mb-1 ms-lg-1">
+                                Sauvegarder la version
+                            </button>
+                        </a>
+                    </div>
+                    <div class="d-none col-lg-2 align-items-end justify-content-xl-center justify-content-end"
+                         id="spinner">
+                        <div class="spinner-border text-primary mb-1"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endif %}
-    <div class="d-flex col-lg-1 col-sm-3 align-items-end">
-        <a href="{{ path('app_fiche_matiere_versioning_save', {slug: ficheMatiere.slug}) }}" onclick="saveVersion(event)">
-            <button class="btn btn-sm btn-success mb-1 ms-lg-1">
-                Sauvegarder la version
-            </button>
-        </a>
-    </div>
-    <div class="d-none col-lg-2 align-items-end justify-content-xl-center justify-content-end" id="spinner">
-        <div class="spinner-border text-primary mb-1"></div>
-    </div>
-</div>
-{% endif %}
+    {% endif %}
 
 
     <div class="row">
@@ -96,18 +109,18 @@
                         Objectifs / compétences acquises
                     </a>
                 </li>
-{#                <li>#}
-{#                    <a class="nav-link p-2" href="#structure">#}
-{#                        <i class="fal fa-chevron-right"></i>#}
-{#                        Structure et organisation pédagogiques#}
-{#                    </a>#}
-{#                </li>#}
-{#                <li>#}
-{#                    <a class="nav-link p-2" href="#mccc">#}
-{#                        <i class="fal fa-chevron-right"></i>#}
-{#                        Modalités de contrôle des connaissances#}
-{#                    </a>#}
-{#                </li>#}
+                {#                <li> #}
+                {#                    <a class="nav-link p-2" href="#structure"> #}
+                {#                        <i class="fal fa-chevron-right"></i> #}
+                {#                        Structure et organisation pédagogiques #}
+                {#                    </a> #}
+                {#                </li> #}
+                {#                <li> #}
+                {#                    <a class="nav-link p-2" href="#mccc"> #}
+                {#                        <i class="fal fa-chevron-right"></i> #}
+                {#                        Modalités de contrôle des connaissances #}
+                {#                    </a> #}
+                {#                </li> #}
                 <li>
                     <a class="nav-link p-2" href="#infos">
                         <i class="fal fa-chevron-right"></i>
@@ -131,7 +144,7 @@
 {% endblock %}
 
 {% block bouton_header %}
-    <a href="{{ path('app_fiche_matiere_export', {id:ficheMatiere.id})  }}"
+    <a href="{{ path('app_fiche_matiere_export', {id:ficheMatiere.id}) }}"
        class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"
        data-bs-placement="bottom"
@@ -140,7 +153,7 @@
         <i class="{{ iconDownload }}"></i>
         <span> Télécharger en PDF</span>
     </a>
-    <a href="{{ path('structure_fiche_matiere_index')  }}"
+    <a href="{{ path('structure_fiche_matiere_index') }}"
        class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"
        data-bs-placement="bottom"

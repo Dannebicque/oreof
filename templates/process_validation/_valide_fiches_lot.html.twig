@@ -1,0 +1,32 @@
+{{ component('alerte', {
+    type: 'info',
+    message: (process.label~'.valide.alerte')|trans({}, 'process')|nl2br|raw
+}) }}
+
+<form action="{{ path('app_validation_valide_fiche_lot', {etape:etape}) }}" method="post"
+      enctype="multipart/form-data">
+    <input type="hidden" name="formations" value="{{ sFiches }}">
+
+    {% if process.hasDate %}
+        <div>
+            <label for="date" class="form-label">{{ ('valide.'~process.label~'.date.label')|trans({}, 'process') }}
+                <span class="required"></span> <i
+                        class="fal fa-question-circle ms-1"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('valide.'~process.label~'.helps.date.help')|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('valide.'~process.label~'.helps.date.help')|trans({}, 'process') }}"></i></label>
+            <input type="date" name="date"
+                   class="form-control"
+                   id="date"
+            >
+        </div>
+    {% endif %}
+
+    <div class="mt-2">
+        <button type="submit" class="btn btn-success">
+            <i class="fal fa-floppy-disk"></i>
+            {{ ('btn.'~process.label~'.valide')|trans({}, 'process') }}
+        </button>
+    </div>
+</form>

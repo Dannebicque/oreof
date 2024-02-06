@@ -192,6 +192,12 @@
                                 </li>
                                 {% if is_granted('ROLE_SES') %}
                                     <li>
+                                        <a href="{{ path('app_demande_dpe') }}">
+                                            <i class="fal fa-person-chalkboard icon"></i>
+                                            <span class="label">Demandes DPE</span>
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="{{ path('app_validation_index') }}">
                                             <i class="fal fa-person-chalkboard icon"></i>
                                             <span class="label">Validations</span>

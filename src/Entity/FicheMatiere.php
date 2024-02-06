@@ -187,6 +187,7 @@ class FicheMatiere
     private ?float $ects = null;
 
     #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'ficheMatieres')]
+    /** @deprecated('encore utile?') */
     private Collection $composante;
 
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: CommentaireFicheMatiere::class)]

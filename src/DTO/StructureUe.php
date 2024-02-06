@@ -40,32 +40,40 @@ class StructureUe
     #[Groups(['DTO_json_versioning'])]
     public HeuresEctsUe $heuresEctsUe;
 
-    public function __construct(?Ue $ue, bool $raccroche = false, ?string $display = null, ?Ue $ueOrigine = null)
+    private bool $withEcts = true;
+
+    public function __construct(?Ue $ue, bool $raccroche = false, ?string $display = null, ?Ue $ueOrigine = null, bool $withEcts = true)
     {
+        $this->withEcts = $withEcts;
         $this->ue = $ue;
         $this->display = $display ?? '';
         $this->raccroche = $raccroche;
         $this->ueOrigine = $ueOrigine;
-        $this->heuresEctsUe = new HeuresEctsUe();
 
-        if($this->ue){
-            if ($this->ue->getNatureUeEc()?->isLibre()) {
-                // Si UE lbren prise en compte des ECTS de l'UE
-                //todo: faire idem pour BUT
-                $this->heuresEctsUe->sommeUeEcts = $this->ue->getEcts() ?? 0.0;
+        if ($this->withEcts) {
+            $this->heuresEctsUe = new HeuresEctsUe();
+            if($this->ue) {
+                if ($this->ue->getNatureUeEc()?->isLibre()) {
+                    // Si UE lbren prise en compte des ECTS de l'UE
+                    //todo: faire idem pour BUT
+                    $this->heuresEctsUe->sommeUeEcts = $this->ue->getEcts() ?? 0.0;
+                }
             }
         }
     }
 
     public function addUeEnfant(?int $idUe, StructureUe $structureUe): void
     {
-        if($idUe !== null){
+        if($idUe !== null) {
             $this->uesEnfants[$idUe] = $structureUe;
-            $this->heuresEctsUeEnfants[$idUe] = $structureUe->heuresEctsUe;
-        }
-        else {
+            if ($this->withEcts) {
+                $this->heuresEctsUeEnfants[$idUe] = $structureUe->heuresEctsUe;
+            }
+        } else {
             $this->uesEnfants[] = $structureUe;
-            $this->heuresEctsUeEnfants[] = $structureUe->heuresEctsUe;
+            if ($this->withEcts) {
+                $this->heuresEctsUeEnfants[] = $structureUe->heuresEctsUe;
+            }
         }
 
         //gérer pour prendre le max des heures et ects sur tous les enfants de l'EC
@@ -74,12 +82,14 @@ class StructureUe
     public function addEc(StructureEc|StructureEcVersioning $structureEc): void
     {
         $this->elementConstitutifs[] = $structureEc;
-        $this->heuresEctsUe->addEc($structureEc->getHeuresEctsEc());
+        if ($this->withEcts) {
+            $this->heuresEctsUe->addEc($structureEc->getHeuresEctsEc());
+        }
     }
 
     public function ordre(): int
     {
-        return $this->ueOrigine !== null ? $this->ueOrigine->getOrdre() : $this->ue->getOrdre();
+        return $this->ue->getOrdre();
     }
 
     public function getHeuresEctsUe(): HeuresEctsUe

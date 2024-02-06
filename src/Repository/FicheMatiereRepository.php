@@ -69,6 +69,7 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /** @deprecated('pas de sens?') */
     public function findByComposante(Composante $composante): array
     {
         return $this->createQueryBuilder('f')
@@ -117,46 +118,6 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-
-//    public function findByResponsableFicheMatiere(
-//        UserInterface      $user,
-//        AnneeUniversitaire $anneeUniversitaire,
-//        array              $options = []
-//    ): array {
-//        $qb = $this->createQueryBuilder('f')
-//            ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
-//            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
-//            ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
-//            ->andWhere('fo.anneeUniversitaire = :annee')
-//            ->andWhere('f.responsableFicheMatiere = :user')
-//            ->setParameter('user', $user)
-//            ->setParameter('annee', $anneeUniversitaire);
-//
-//        $this->addFiltres($qb, $options);
-//
-//        return $qb->getQuery()->getResult();
-//    }
-
-//    public function countByResponsableFicheMatiere(
-//        UserInterface      $user,
-//        AnneeUniversitaire $anneeUniversitaire,
-//        array              $options = []
-//    ): int {
-//        $qb = $this->createQueryBuilder('f')
-//            ->leftJoin(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
-//            ->leftJoin(User::class, 'u', 'WITH', 'f.responsableFicheMatiere = u.id')
-//            ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
-//            ->andWhere('fo.anneeUniversitaire = :annee')
-//            ->andWhere('f.responsableFicheMatiere = :user')
-//            ->setParameter('user', $user)
-//            ->setParameter('annee', $anneeUniversitaire);
-//
-//        $this->addFiltres($qb, $options);
-//
-//        return $qb->select('count(f.id)')
-//            ->getQuery()
-//            ->getSingleScalarResult();
-//    }
 
     private function addFiltres(QueryBuilder $qb, array $options, bool $count = false): void
     {
@@ -211,37 +172,6 @@ class FicheMatiereRepository extends ServiceEntityRepository
                 ->setMaxResults($options['length'] ?? 50);
         }
     }
-
-//    public function findByResponsableParcours(?UserInterface $user, AnneeUniversitaire $getAnneeUniversitaire, array $options): array
-//    {
-//        $query = $this->createQueryBuilder('f')
-//            ->leftJoin('f.parcours', 'p')
-//            ->join('p.formation', 'fo')
-//            ->where('p.respParcours = :parcours')
-//            ->orWhere('p.coResponsable = :parcours')
-//            ->setParameter('parcours', $user)
-//            ->orderBy('f.libelle', 'ASC');
-//        $this->addFiltres($query, $options);
-//
-//        return $query->getQuery()
-//            ->getResult();
-//    }
-
-//    public function findByResponsableFormation(?UserInterface $user, AnneeUniversitaire $getAnneeUniversitaire, array $options): array
-//    {
-//        $query = $this->createQueryBuilder('f')
-//            ->leftJoin('f.parcours', 'p')
-//            ->join('p.formation', 'fo')
-//            ->where('fo.responsableMention = :parcours')
-//            ->orWhere('fo.coResponsable = :parcours')
-//            ->setParameter('parcours', $user)
-//            ->orderBy('f.libelle', 'ASC');
-//
-//        $this->addFiltres($query, $options);
-//
-//        return $query->getQuery()
-//            ->getResult();
-//    }
 
     public function findByHd(CampagneCollecte $campagneCollecte, array $options): array
     {
@@ -341,5 +271,35 @@ class FicheMatiereRepository extends ServiceEntityRepository
         return $query->select('count(f.id)')
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    public function findByComposanteTypeValidation(Composante $composante, CampagneCollecte $campagneCollecte, mixed $transition): array
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->join(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
+            ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+            ->join(DpeParcours::class, 'dp', 'WITH', 'p.id = dp.parcours')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->andWhere("JSON_CONTAINS(f.etatFiche, :transition) = 1")
+            ->setParameter('transition', json_encode([$transition => 1]))
+            ->andWhere('fo.composantePorteuse = :composante')
+            ->setParameter('campagneCollecte', $campagneCollecte)
+            ->setParameter('composante', $composante);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByTypeValidation(CampagneCollecte $campagneCollecte, mixed $transition): array
+    {
+        $qb = $this->createQueryBuilder('f')
+        ->join(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
+        ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+        ->join(DpeParcours::class, 'dp', 'WITH', 'p.id = dp.parcours')
+        ->andWhere('dp.campagneCollecte = :campagneCollecte')
+        ->andWhere("JSON_CONTAINS(f.etatFiche, :transition) = 1")
+        ->setParameter('transition', json_encode([$transition => 1]))
+        ->setParameter('campagneCollecte', $campagneCollecte);
+
+        return $qb->getQuery()->getResult();
     }
 }

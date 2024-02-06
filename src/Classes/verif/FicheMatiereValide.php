@@ -16,21 +16,29 @@ use App\Entity\TypeDiplome;
 class FicheMatiereValide extends AbstractValide
 {
     public array $etat = [];
+    public array $erreurs = [];
     public array $bccs = [];
 
     public function __construct(
-        protected FicheMatiere $ficheMatiere, protected TypeDiplome $typeDiplome)
-    {
+        protected FicheMatiere $ficheMatiere,
+        protected TypeDiplome $typeDiplome
+    ) {
     }
 
     public function valideFicheMatiere(): FicheMatiereValide
     {
-        $this->etat['referent'] = $this->ficheMatiere->getResponsableFicheMatiere() !== null ? self::COMPLET : self::VIDE;
+        // $this->etat['referent'] = $this->ficheMatiere->getResponsableFicheMatiere() !== null ? self::COMPLET : self::VIDE;
         $this->etat['libelle'] = $this->nonVide($this->ficheMatiere->getLibelle());
         $this->etat['libelleAnglais'] = $this->nonVide($this->ficheMatiere->getLibelleAnglais());
         $this->etat['mutualise'] = $this->ficheMatiere->isEnseignementMutualise() !== null ? self::COMPLET : self::VIDE;
-        $this->etat['description'] = $this->nonVide($this->ficheMatiere->getDescription());
-        $this->etat['objectifs'] = $this->nonVide($this->ficheMatiere->getObjectifs());
+        $this->etat['description'] = $this->nonVideEtTailleMinimale($this->ficheMatiere->getDescription(), 12);
+        if (!$this->tailleMinimum($this->ficheMatiere->getDescription(), 12) ||  $this->etat['description'] === self::VIDE) {
+            $this->erreurs['description'][] = 'La description de la matière doit faire au moins 12 caractères';
+        }
+        $this->etat['objectifs'] = $this->nonVideEtTailleMinimale($this->ficheMatiere->getObjectifs());
+        if (!$this->tailleMinimum($this->ficheMatiere->getObjectifs(), 12) || $this->etat['objectifs'] === self::VIDE) {
+            $this->erreurs['objectifs'][] = 'Les objectifs de la matière doivent faire au moins 12 caractères';
+        }
         $this->etat['langueDispense'] = $this->ficheMatiere->getLangueDispense()->count() > 0 ? self::COMPLET : self::VIDE;
         $this->etat['langueSupport'] = $this->ficheMatiere->getLangueSupport()->count() > 0 ? self::COMPLET : self::VIDE;
 
@@ -85,5 +93,19 @@ class FicheMatiereValide extends AbstractValide
         }
 
         return $remplissage;
+    }
+
+    private function tailleMinimum(?string $getDescription, int $int): bool
+    {
+        return strlen($getDescription) > $int;
+    }
+
+    private function nonVideEtTailleMinimale(?string $getObjectifs): string
+    {
+        if (null === $getObjectifs || '' === $getObjectifs) {
+            return self::VIDE;
+        }
+
+        return $this->tailleMinimum($getObjectifs, 12) ? self::COMPLET : self::INCOMPLET;
     }
 }

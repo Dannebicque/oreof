@@ -7,7 +7,13 @@
     >
         <div class="card-body">
 
-            <button class="btn btn-sm d-block btn-outline-success mb-2"
+            {{ component('alerte', {
+                type: 'info',
+                message: 'Cocher les fiches EC/matière à valider puis cliquer sur le bouton "Valider et soumettre les fiches EC/matière.<br>
+Cela entrainera la vérification des informations saisies. Seules les fiches EC/matières complètes peuvent être validées et soumises pour publication.',
+            }) }}
+
+            <button class="btn btn-sm d-block btn-outline-success mb-2 mt-2"
                     type="button"
                     data-controller="tooltip"
                     data-tooltip-placement-value="bottom"
@@ -24,21 +30,26 @@
                         <div class="col-12 col-md-5 d-flex align-items-center mb-2 text-secondary mb-md-0">
                             Parcours
                         </div>
-                        <div class="col-6 col-md-3 d-flex align-items-center
+                        <div class="col-6 col-md-2 d-flex align-items-center
                         text-secondary">
                             Etat remplissage
                         </div>
                         <div class="col-6 col-md-1 d-flex align-items-center
                         text-secondary">
-                            En attente validation RP
-                        </div>
-                        <div class="col-6 col-md-1 d-flex align-items-center
-                        text-medium text-secondary">
-                            En attente validation RF
+                            En attente<br> validation
                         </div>
                         <div class="col-6 col-md-1 d-flex align-items-center text-medium
                          text-secondary">
-                            En attente validation DPE
+                            En attente <br>
+                            validation SES
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center
+                        text-medium text-secondary">
+                            Fiches validées
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center text-medium
+                         text-secondary">
+                            Publiées
                         </div>
                         <div class="col-6 col-md-1 d-flex align-items-center text-medium
                         justify-content-end text-secondary">
@@ -48,6 +59,8 @@
                 </div>
             </div>
             {% for parcours in parcourss %}
+                {% set stats =  statsParcours[parcours.id].statsFichesMatieresParcours %}
+                {% set dto = statsParcours[parcours.id] %}
                 <div>
                     <div class="card mb-2 sh-19 sh-md-8">
                         <div class="card-body pt-0 pb-0 h-100">
@@ -56,21 +69,26 @@
                                     <div class="text-muted d-md-none">Parcours</div>
                                     {{ parcours.libelle }}
                                 </div>
-                                <div class="col-6 col-md-3 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                <div class="col-6 col-md-2 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                     <div class="text-muted d-md-none">Etat remplissage</div>
-                                    {{ statsParcours[parcours.id].nbFichesCompletes }} / {{ statsParcours[parcours.id].nbFiches }}
+                                    {{ stats.nbFichesCompletes }} / {{ stats.nbFiches }}
                                 </div>
                                 <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                     <div class="text-muted d-md-none">En attente validation RP</div>
-                                    {{ statsParcours[parcours.id].nbFichesNonValidees }}
+                                    {{ stats.nbFichesNonValidees }}
+                                </div>
+
+                                <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                    <div class="text-muted d-md-none">En attente validation DPE</div>
+                                    {{ stats.nbFichesNonValideesSes }}
                                 </div>
                                 <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                     <div class="text-muted d-md-none">En attente validation RF</div>
-                                    {{ statsParcours[parcours.id].nbFichesValideesRP }}
+                                    {{ stats.nbFichesValidees }}
                                 </div>
                                 <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                     <div class="text-muted d-md-none">En attente validation DPE</div>
-                                    {{ statsParcours[parcours.id].nbFichesValideesRF }}
+                                    {{ stats.nbFichesPubliees }}
                                 </div>
                                 <div class="col-6 col-md-1 d-flex flex-column justify-content-center
                                             mb-1 mb-md-0">
@@ -90,51 +108,7 @@
                     <div id="detail_parcours_{{ parcours.id }}" class="d-none detail_parcours ms-4">
                         <div class="row">
                             <div class="col-12 bg-white">
-                                <table class="table table-bordered table-hover"
-                                        {{ stimulus_controller('check_all', {
-                                            idCheckAll: 'check-all'~parcours.id,
-                                            classCheckAll: '.check-all'~parcours.id,
-                                        })
-                                        }}>
-                                    <thead>
-                                    <tr>
-                                        <th>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox"
-                                                           id="check-all{{ parcours.id }}" {{ stimulus_action('check_all', 'checkAll') }}>
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th>EC</th>
-                                        <th>Fiche</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for semParc in parcours.semestreParcours|filter(semestre => semestre.semestre.nonDispense == false) %}
-                                        {% if semParc.semestre.semestreRaccroche != null %}
-                                            {% set semestre = semParc.semestre.semestreRaccroche %}
-                                            {% set raccrocheSem = true %}
-                                        {% else %}
-                                            {% set semestre = semParc %}
-                                            {% set raccrocheSem = false %}
-                                        {% endif %}
-                                        <tr>
-                                            <th colspan="7" class="text-center font-weight-bold">
-                                                {{ semParc.display }}</th>
-                                        </tr>
-
-
-                                        {% for ue in semestre.semestre.ues|filter(ue => ue.ueParent == null) %}
-                                            {{ include('fiche_matiere_valide/_ue.html.twig', {tabEcs: tabParcoursEcs[parcours.id]}) }}
-                                            {% for uee in ue.ueEnfants %}
-                                                {{ include('fiche_matiere_valide/_ue.html.twig', {ue:uee, tabEcs: tabParcoursEcs[parcours.id]}) }}
-                                            {% endfor %}
-                                        {% endfor %}
-
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
+                                {{ include('fiche_matiere_valide/_parcours.html.twig') }}
                             </div>
                         </div>
                     </div>

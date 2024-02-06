@@ -156,17 +156,17 @@ validation.parcours.valide.autorisation_saisie: validation.parcours.valide.autor
 btn.validation.parcours.valide.autorisation_saisie: btn.validation.parcours.valide.autorisation_saisie
 validation.parcours.valide.alerte: 'La validation du parcours permet la transmission du projet DPE "parcours" au responsable de formation pour visa. Après transmission, la fiche "parcours" ne sera plus modifiable.'
 btn.validation.parcours.valide.initialisation_parcours: 'Soumettre le parcours'
-validation.parcours.valide.impossible.initialisation_parcours: 'La transmission du projet DPE "parcours" est impossible. Les informations de ce parcours sont incomplètes/erronées et/ou une ou des fiches EC/matières ne sont pas initiées.'
+validation.parcours.valide.impossible.initialisation_parcours: 'La transmission du projet DPE "parcours" est impossible. Les informations de ce parcours sont incomplètes/erronées et/ou une ou des fiches EC/matière ne sont pas initiées.'
 validation.formation.valide.alerte: 'La validation de la formation permet la transmission du projet DPE "formation" au responsable DPE de la composante pour visa. Après validation, le projet DPE "formation" ne sera plus modifiable.'
 validation.formation.valide.impossible.soumis_dpe_composante: 'La validation du projet DPE "formation" est impossible. Vous devez valider l''ensemble des fiches parcours avant de valider la formation  et/ou les informations saisies sur la fiche formation sont incomplètes.'
 validation.parcours_rf.valide.alerte: 'Après validation, le projet DPE "parcours" ne sera plus modifiable.'
-validation.parcours_rf.valide.impossible.soumis_parcours: 'La validation du projet DPE "parcours" est impossible. Les informations de ce parcours sont incomplètes/erronées et/ou une ou des fiches EC/matières ne sont pas initiées.'
+validation.parcours_rf.valide.impossible.soumis_parcours: 'La validation du projet DPE "parcours" est impossible. Les informations de ce parcours sont incomplètes/erronées et/ou une ou des fiches EC/matière ne sont pas initiées.'
 btn.validation.parcours_rf.reserve: 'Emettre des réserves'
 reserve.validation.parcours_rf.argumentaire.label: 'Argumentaire :'
 process.modification: "Retour à l'étape de validation de :"
 validation.parcours_rf.reserve.alerte: 'Emettre des réserves sur le projet DPE "parcours" rend la fiche parcours de nouveau modifiable.'
 btn.validation.parcours_rf.valide.valide_parcours_rf: 'Valider le parcours'
-validation.parcours_rf.valide.impossible.valide_parcours_rf: 'La validation du projet DPE "parcours" est impossible. Les informations de ce parcours sont incomplètes/erronées et/ou une ou des fiches EC/matières ne sont pas initiées.'
+validation.parcours_rf.valide.impossible.valide_parcours_rf: 'La validation du projet DPE "parcours" est impossible. Les informations de ce parcours sont incomplètes/erronées et/ou une ou des fiches EC/matière ne sont pas initiées.'
 refuse.validation.conseil.date.label: 'Date du conseil de composante'
 refuse.validation.conseil.argumentaire.label: 'Motif(s) du refus :'
 btn.validation.conseil.refuse: 'Refuser la formation'
@@ -275,6 +275,53 @@ valide.conseil.date.label: Date du conseil de composante
 valide.conseil.helps.date.help: ' '
 btn.conseil.valide: 'Valider et transmettre la formation'
 validation.formation.indisponible: 'Validation formation impossible'
-verifier.fiches.ec.matieres.infobulle: 'Vérifier les informations saisies dans les fiches EC/matières'
-validation.valider.fiches_matieres.parcours: 'Valider et soumettre au RF les fiches EC/matières'
-validation.valider.fiches_matieres.formation: 'Valider et soumettre au DPE les fiches EC/matières'
+verifier.fiches.ec.matieres.infobulle: 'Vérifier et valider les informations saisies dans les fiches EC/matière'
+validation.valider.fiches_matieres.parcours: 'Valider et soumettre au central les fiches EC/matière'
+validation.valider.fiches_matieres.formation: 'Valider et soumettre au central les fiches EC/matière'
+historique.de.validation.fiche_matiere.title: historique.de.validation.fiche_matiere.title
+historique.de.validation.fiche_matiere.infobulle: historique.de.validation.fiche_matiere.infobulle
+validation.fiche_matiere: validation.fiche_matiere
+validation.valider.fiche_matiere.title: Valider et soumettre la fiche EC/matière
+validation.valider.fiche_matiere: Soumettre la fiche EC/matière
+validation.fiche_matiere.valide.alerte: "La validation de la fiche EC/matière permet sa transmission au central en vue de la publication. Après transmission, la fiche \"EC/matière\" ne sera plus modifiable. \n La fiche EC/matière n'est publiable que si elle est complète."
+btn.validation.fiche_matiere.valide.en_cours_redaction: btn.validation.fiche_matiere.valide.en_cours_redaction
+validation.fiche_matiere.valide.impossible.en_cours_redaction: 'La validation de la fiche EC/matière est impossible. Les informations de cette fiche sont incomplètes/erronées.'
+ficheMatiere.valide.fiche_matiere.flash.success: Fiche EC/matière validée et transmise au central
+validation.fiche_matiere.ses: validation.fiche_matiere.ses
+validation.fiche_matiere.publication: validation.fiche_matiere.publication
+fiche_matiere.publie: fiche_matiere.publie
+validation.valider.transmis_ses.title: validation.valider.transmis_ses.title
+validation.valider.transmis_ses: validation.valider.transmis_ses
+validation.reserve.transmis_ses.title: validation.reserve.transmis_ses.title
+validation.reserve.transmis_ses: validation.reserve.transmis_ses
+validation.refuser.transmis_ses.title: validation.refuser.transmis_ses.title
+validation.refuser.transmis_ses: validation.refuser.transmis_ses
+validation.fiche_matiere.ses.valide.alerte: validation.fiche_matiere.ses.valide.alerte
+btn.validation.fiche_matiere.ses.valide: btn.validation.fiche_matiere.ses.valide
+ficheMatiere.valide.transmis_ses.flash.success: ficheMatiere.valide.transmis_ses.flash.success
+validation.valider.transmis_pour_publication.title: validation.valider.transmis_pour_publication.title
+validation.valider.transmis_pour_publication: validation.valider.transmis_pour_publication
+historique.: historique.
+historique.validation.fiche_matiere.ses: historique.validation.fiche_matiere.ses
+validation.valider.fiches_matieres: 'Valider et soumettre les fiches EC/matière'
+demande.reouverture: Demander la réouverture du DPE
+demande.reouverture.title: demande.reouverture.title
+validation.cfvu.valide.cas.acceptation.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.directe.valide_a_publier
+validation.cfvu.valide.cas.acceptation.non.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.non.directe.valide_a_publier
+validation.cfvu.valide.cas.sous.reserve.conseil.valide_a_publier: validation.cfvu.valide.cas.sous.reserve.conseil.valide_a_publier
+validation.cfvu.valide.cas.sous.reserve.modifications.valide_a_publier: validation.cfvu.valide.cas.sous.reserve.modifications.valide_a_publier
+demande.reouverture.alerte: La demande de réouverture permet la réouvertue des onglets du formulaire de saisie. Les demandes doivent être argumentés afin de déterminer si les modifications impliquent un passage en conseil de composantes, en CFVU ou peuvent être appliqués directement.
+demande.reouverture.modification.mccc.label: modifications de la maquette et/ou des MCCC
+demande.reouverture.modification.mccc.help: demande.reouverture.modification.mccc.help
+demande.reouverture.modification.maquette.label: modifications de la maquette et/ou des MCCC
+demande.reouverture.modification.maquette.help: demande.reouverture.modification.maquette.help
+demande.reouverture.modification.argumentaire.label: Motif(s) de la demande de réouverture (texte servant de justificatif en cas de passage en CFVU)
+demande.reouverture.modification.argumentaire.help: demande.reouverture.modification.argumentaire.help
+btn.demande.reouverture.modification: Demander la réouverture du projet DPE
+demande.reouverture.modification.texte.label: modifications des descriptifs
+demande.reouverture.modification.texte.help: demande.reouverture.modification.texte.help
+demande.reouverture.modification.mccc.texte.label: modifications des descriptifs et de la maquette/MCCC
+demande.reouverture.modification.mccc.texte.help: demande.reouverture.modification.mccc.texte.help
+demande.reouverture.label: Précisez quelle(s) modification(s) vous souhaitez apporter à la formation
+demande.reouverture.help: demande.reouverture.help
+historique.validation.fiche_matiere: historique.validation.fiche_matiere

@@ -1,0 +1,14 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+Bonjour,
+
+Une nouvelle demande d'ouverture de DPE a été faite pour la formation {{ dpeDemande.formation.displayLong }}.
+
+//todo: ajouter parcours si présent
+
+La demande concerne une modification : {{ dpeDemande.niveauModification.libelle }}.
+
+L'argumentaire est : {{ dpeDemande.argumentaireDemande }}.
+
+{% endblock %}

@@ -55,11 +55,15 @@ class FicheMatiereProcess extends AbstractProcess
         return $processData;
     }
 
-    public function valideFicheMatiere(FicheMatiere $ficheMatiere, UserInterface $user, $process, $etape, $request): Response
+    public function valideFicheMatiere(FicheMatiere $ficheMatiere, UserInterface $user, $process, $etape, $request): ?Response
     {
-        $this->ficheMatiereWorkflow->apply($ficheMatiere, $process['canValide']);
-        $this->entityManager->flush();
-        return $this->dispatchEventFicheMatiere($ficheMatiere, $user, $etape, $request, 'valide');
+        if ($this->ficheMatiereWorkflow->can($ficheMatiere, $process['canValide'])) {
+            $this->ficheMatiereWorkflow->apply($ficheMatiere, $process['canValide']);
+            $this->entityManager->flush();
+            return $this->dispatchEventFicheMatiere($ficheMatiere, $user, $etape, $request, 'valide');
+        }
+
+        return null;
     }
 
     public function reserveFicheMatiere(FicheMatiere $ficheMatiere, UserInterface $user, $process, $etape, $request): Response

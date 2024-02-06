@@ -36,8 +36,10 @@ class DpeParcoursRepository extends ServiceEntityRepository
             ->setParameter('campagneCollecte', $campagneCollecte)
             ->setParameter('composante', $composante)
             ->orderBy('f.typeDiplome', 'ASC')
+
             ->addOrderBy('m.libelle', 'ASC')
-            ->addOrderBy('f.mentionTexte', 'ASC');
+            ->addOrderBy('f.mentionTexte', 'ASC')
+            ;
 
         return $query->getQuery()
             ->getResult();
