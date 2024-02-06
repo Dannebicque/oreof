@@ -275,7 +275,6 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
     public function findByComposanteTypeValidation(Composante $composante, CampagneCollecte $campagneCollecte, mixed $transition): array
     {
-        //todo: à revoir. Tout est renvoyé
         $qb = $this->createQueryBuilder('f')
             ->join(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
             ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
@@ -284,10 +283,22 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->andWhere("JSON_CONTAINS(f.etatFiche, :transition) = 1")
             ->setParameter('transition', json_encode([$transition => 1]))
             ->andWhere('fo.composantePorteuse = :composante')
-           // ->andWhere('f.horsDiplome = 0')
-           // ->orWhere('f.horsDiplome IS NULL')
             ->setParameter('campagneCollecte', $campagneCollecte)
             ->setParameter('composante', $composante);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findByTypeValidation(CampagneCollecte $campagneCollecte, mixed $transition): array
+    {
+        $qb = $this->createQueryBuilder('f')
+        ->join(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
+        ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+        ->join(DpeParcours::class, 'dp', 'WITH', 'p.id = dp.parcours')
+        ->andWhere('dp.campagneCollecte = :campagneCollecte')
+        ->andWhere("JSON_CONTAINS(f.etatFiche, :transition) = 1")
+        ->setParameter('transition', json_encode([$transition => 1]))
+        ->setParameter('campagneCollecte', $campagneCollecte);
 
         return $qb->getQuery()->getResult();
     }
