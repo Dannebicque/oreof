@@ -303,7 +303,7 @@ validation.valider.transmis_pour_publication.title: validation.valider.transmis_
 validation.valider.transmis_pour_publication: validation.valider.transmis_pour_publication
 historique.: historique.
 historique.validation.fiche_matiere.ses: historique.validation.fiche_matiere.ses
-validation.valider.fiches_matieres: validation.valider.fiches_matieres
+validation.valider.fiches_matieres: Validation et soumettre des fiches EC/matières
 demande.reouverture: demande.reouverture
 demande.reouverture.title: demande.reouverture.title
 validation.cfvu.valide.cas.acceptation.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.directe.valide_a_publier
