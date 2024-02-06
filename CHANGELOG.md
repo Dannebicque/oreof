@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.10](https://github.com/Dannebicque/oreof/compare/v1.24.9...v1.24.10) (2024-02-06)
+
+
+### Features
+
+* validation des fiches niveau SES ([004f0b8](https://github.com/Dannebicque/oreof/commit/004f0b8f1605e2c566af35269669fddd6db77365))
+
 ### [1.24.9](https://github.com/Dannebicque/oreof/compare/v1.24.8...v1.24.9) (2024-02-06)
 
 
