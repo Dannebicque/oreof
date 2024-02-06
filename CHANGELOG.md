@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.9](https://github.com/Dannebicque/oreof/compare/v1.24.8...v1.24.9) (2024-02-06)
+
+
+### Features
+
+* validation des fiches niveau SES ([2ee3ef5](https://github.com/Dannebicque/oreof/commit/2ee3ef5b45228eb7b9242b28d9bbb6f505e3b01e))
+* validation des fiches niveau SES ([fd8a667](https://github.com/Dannebicque/oreof/commit/fd8a6671f4d948b7ce4072dc3575d098869d58d8))
+
+
+### Bug Fixes
+
+* Mise en page validation fiche matière parcours ou RF ([6677689](https://github.com/Dannebicque/oreof/commit/6677689b4744751f3c27f5ac0cc8d9339b9f7988))
+
 ### [1.24.8](https://github.com/Dannebicque/oreof/compare/v1.24.7...v1.24.8) (2024-01-31)
 
 
