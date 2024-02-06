@@ -194,7 +194,7 @@ class ElementPedagogiDTO6
 
     private function prepareLibelle(?string $txt, int $length = 25){
         if($txt){
-            return substr($txt, 0, $length);
+            return mb_substr($txt, 0, $length);
         }else {
             return 'ERROR';
         }

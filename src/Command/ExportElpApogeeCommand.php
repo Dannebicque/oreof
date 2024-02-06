@@ -144,9 +144,17 @@ class ExportElpApogeeCommand extends Command
                         $soapObjectArray = $this->generateSoapObjectsForParcours($parcours);
                         $countElement = count($soapObjectArray);
                         if($this->verifyUserIntent($io, "Le parcours comprend {$countElement} ELP. Voulez-vous continuer ?")){
-                            $this->insertSeveralElp($soapObjectArray);
-                            $io->success("Commande exécutée avec succès");
-                            return Command::SUCCESS;
+                            try{
+                                $io->writeln("Appel au Web Service en cours...");
+                                $this->createSoapClient();
+                                $this->insertSeveralElp($soapObjectArray);
+                                $io->success("Commande exécutée avec succès");
+                                return Command::SUCCESS;
+                            }catch(\Exception $e){
+                                $io->writeln("Une erreur est survenue durant l'insertion.");
+                                $io->writeln("Message : " . $e->getMessage());
+                                return Command::FAILURE;
+                            }
                         }else {
                             $io->warning("L'insertion des ELP a été annulée.");
                             return Command::SUCCESS;
@@ -415,7 +423,13 @@ class ExportElpApogeeCommand extends Command
      */
     private function insertSeveralElp(array $elpArray){
         $dataWS = array_map([$this, 'mapDataForWebService'], $elpArray);
-        print_r($dataWS);
+        if($this->soapClient){
+            foreach($dataWS as $elpWS){
+                $this->soapClient->__soapCall("creerModifierELP", [$elpWS]);
+            }
+        }else {
+            throw new \Exception('Soap Client is not initialized.');
+        }
     }
 
     /**
