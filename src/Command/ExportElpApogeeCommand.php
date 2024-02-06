@@ -13,6 +13,8 @@ use App\Entity\ElementConstitutif;
 use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
 use App\Entity\Parcours;
+use App\Entity\Semestre;
+use App\Entity\Ue;
 use App\Enums\Apogee\CodeNatuElpEnum;
 use App\Repository\ElementConstitutifRepository;
 use App\Service\Apogee\Classes\ElementPedagogiDTO6;
@@ -87,6 +89,10 @@ class ExportElpApogeeCommand extends Command
             name: 'full-verify-data',
             mode: InputOption::VALUE_NONE,
             description: "Compte rendu des parcours qui sont des candidats à l'insertion APOTEST et qui sont non conformes"
+        )->addOption(
+            name: 'check-duplicates',
+            mode: InputOption::VALUE_NONE,
+            description: "Vérifie s'il y a des doublons sur les codes Apogee depuis la base de données"
         );
     }
 
@@ -99,6 +105,7 @@ class ExportElpApogeeCommand extends Command
         $parcoursExport = $input->getOption('parcours-excel-export');
         $dummyInsertion = $input->getOption('dummy-insertion');
         $parcoursInsertion = $input->getOption('parcours-insertion');
+        $checkDuplicates = $input->getOption('check-duplicates');
 
         if($mode === "test"){
             // Export total des ELP selon le type : EC, UE ou Semestre
@@ -236,6 +243,20 @@ class ExportElpApogeeCommand extends Command
                     }
                     $io->progressAdvance();
                 }
+                return Command::SUCCESS;
+            }
+            // Vérification des doublons sur les codes Apogee
+            if($checkDuplicates){
+                $io->writeln("Vérification de la présence de doublons sur les codes Apogee depuis la base de données...");
+                // nombre de doubles
+                $nbEcDuplicates = count($this->entityManager->getRepository(ElementConstitutif::class)->countDuplicatesCode());
+                $nbUeDuplicates = count($this->entityManager->getRepository(Ue::class)->countDuplicatesCode());
+                $nbSemestreDuplicates = count($this->entityManager->getRepository(Semestre::class)->countDuplicatesCode());
+                // affichage des résultats
+                $io->writeln("Nombre de doublons sur les EC : " . $nbEcDuplicates);
+                $io->writeln("Nombre de doublons sur les UE : " . $nbUeDuplicates);
+                $io->writeln("Nombre de doublons sur les Semestres : " . $nbSemestreDuplicates);
+                return Command::SUCCESS;
             }
             if($dummyInsertion){
                 $io->write("Utilisation du Web Service APOTEST");

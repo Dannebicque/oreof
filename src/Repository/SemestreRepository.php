@@ -58,4 +58,14 @@ class SemestreRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function countDuplicatesCode() : array {
+        return $this->createQueryBuilder('s')
+            ->select('count(s.codeApogee)')
+            ->where('s.codeApogee IS NOT NULL')
+            ->groupBy('s.codeApogee')
+            ->having('count(s.codeApogee) > 1')
+            ->getQuery()
+            ->getResult();
+    }
 }

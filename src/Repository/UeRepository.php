@@ -104,4 +104,14 @@ class UeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function countDuplicatesCode() : array {
+        return $this->createQueryBuilder('ue')
+            ->select('count(ue.codeApogee)')
+            ->where('ue.codeApogee IS NOT NULL')
+            ->groupBy('ue.codeApogee')
+            ->having('count(ue.codeApogee) > 1')
+            ->getQuery()
+            ->getResult();
+    }
 }
