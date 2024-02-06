@@ -90,7 +90,8 @@
                                 </button>
                             </div>
                         {% elseif (this.type == 'parcours' and isPublie(this.parcours, this.type)) or (this.type == 'formation' and isPublie(this.formation, this.type)) %}
-                            {% if is_granted('CAN_COMPOSANTE_VALIDATE_MY', objet) %}
+                            {% if is_granted('ROLE_ADMIN') %}
+{#                            {% if is_granted('CAN_COMPOSANTE_VALIDATE_MY', objet) %}#}
                                 <div class="col-4 d-grid">
                                     <button class="btn btn-sm btn-success">
                                         {{ ('validation.etat.publie')|trans({}, 'process') }}

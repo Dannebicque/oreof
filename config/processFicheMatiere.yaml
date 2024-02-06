@@ -12,7 +12,7 @@ process:
     transition: 'en_cours_redaction'
     canValide: 'valider_fiche_compo'
     check: true
-  transmis_ses:
+  soumis_central:
     page: 'fiche_matiere'
     icon: 'fa-school-circle-check'
     label: 'validation.fiche_matiere.ses'
@@ -26,7 +26,7 @@ process:
     canValide: 'valider_fiche_ses'
     canRefuse: 'refuser_fiche_ses'
     canReserve: 'reserver_fiche_ses'
-  transmis_pour_publication:
+  valide_pour_publication:
     page: 'fiche_matiere'
     icon: 'fa-stamp'
     label: 'validation.fiche_matiere.publication'

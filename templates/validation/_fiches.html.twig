@@ -1,0 +1,72 @@
+<div
+        {% if ses is defined and ses == true %}
+            {{ stimulus_controller('validation--index',
+                {
+                    urlListe: path('app_validation_formation_liste_fiche'),
+                }) }}
+        {% else %}
+            {{ stimulus_controller('validation--index',
+                {
+                    urlListe: path('app_validation_formation_liste_fiche', {composante:composante.id}),
+                }) }}
+        {% endif %}
+>
+    <div class="card mt-2">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-6">
+                    {% if ses is defined and ses == true %}
+                        <div>
+                            <label for="composante" class="required">Composante</label>
+                            <select name="composante" id="composante" class="form-select"
+                                    {{ stimulus_action('validation--index', 'changeListe') }}
+                                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                            >
+                                <option value="">Choisir une composante</option>
+                                {% if is_granted('ROLE_SES') %}
+                                    <option value="all">Toutes les composantes de l'établissement</option>
+                                {% endif %}
+                                {% for composante in composantes %}
+                                    <option value="{{ composante.id }}">{{ composante.libelle }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% else %}
+                        <div>
+                            <label for="composante" class="required">Composante</label>
+                            <select name="composante" id="composante" class="form-select"
+                                    disabled
+                                    {{ stimulus_action('validation--index', 'changeListe') }}
+                                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                            >
+                                <option value="{{ composante.id }}">{{ composante.libelle }}</option>
+                            </select>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    <div>
+                        <label for="type_validation" class="required">Etat actuel des fiches EC/matières</label>
+                        <select name="type_validation" id="type_validation" class="form-select"
+                                {{ stimulus_action('validation--index', 'changeListe') }}
+                        >
+                            <option value="">Choisir l'état</option>
+                            {% for value, type in types_validation %}
+                                <option value="{{ value }}">{{ type.transition|trans({}, 'process') }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-2" {{ stimulus_target('validation--index', 'liste') }}>
+        <div class="card-body">
+            {{ component('alerte', {
+                type:'info',
+                message:'Veuillez sélectionner une composante et un état de validation pour afficher les formations concernées.'
+            }) }}
+        </div>
+    </div>
+</div>

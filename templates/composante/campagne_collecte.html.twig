@@ -13,6 +13,29 @@
     ]}) }}
 {% endblock %}
 
+{% set cases = {
+    1: {
+        id: 'attente',
+        libelle: 'En attente',
+        value: 'ATTENTE'
+    },
+    2: {
+        id: 'non_ouverture',
+        libelle: 'Non ouverture',
+        value: 'NON_OUVERTURE'
+    },
+    3: {
+        id: 'reconduction',
+        libelle: 'Reconduction identique',
+        value: 'RECONDUCTION_IDENTIQUE'
+    },
+    4: {
+        id: 'reconduction_modification',
+        libelle: 'Reconduction avec modification',
+        value: 'RECONDUCTION_MODIFICATION'
+    },
+} %}
+
 {% block content %}
     {% if campagne is defined and campagne == true %}
         <div class="alert alert-info">
@@ -28,25 +51,15 @@
                 <table class="table" {{ stimulus_controller('check_all') }}>
                     <thead>
                     <tr>
-                        <th>Mention / Parcours</th>
-                        <th>
-                            <div class="checkbox text-center">
-                                <label>
-                                    Attente<br>
-                                    <input type="radio"
-                                           name="etat"
-                                           id="attente" {{ stimulus_action('check_all', 'checkAll', 'click', {'classCheckAll' : 'attente', 'idCheckAll': 'attente'}) }}>
-                                </label>
-                            </div>
-                        </th>
-                        {% for etat in etats|filter(etat => etat.value != 'CREATION') %}
+                        <th colspan="2">Mention / Parcours</th>
+                        {% for cas in cases %}
                             <th>
                                 <div class="checkbox text-center">
                                     <label>
-                                        {{ etat.libelle }}<br>
+                                        {{ cas.libelle }}<br>
                                         <input type="radio"
                                                name="etat"
-                                               id="{{ etat.value }}" {{ stimulus_action('check_all', 'checkAll', 'click', {'classCheckAll' : etat.value, 'idCheckAll': etat.value}) }}>
+                                               id="{{ cas.id }}" {{ stimulus_action('check_all', 'checkAll', 'click', {'classCheckAll' : cas.id, 'idCheckAll': cas.id}) }}>
                                     </label>
                                 </div>
                             </th>
@@ -55,39 +68,50 @@
                     </thead>
                     <tbody>
 
-                    {% for parcour in allParcours %}
-                        <tr>
-                            <td>{{ parcour.formation.displayLong }} {% if parcour.formation.hasParcours %} | {{ parcour.parcours.display }}{% endif %}</td>
-                            <td>
-                                <div class="checkbox text-center">
-                                    <label>
-                                        <input
-                                                {{ stimulus_action('check_all', 'check', 'click', {'classCheckAll' : 'attente', 'idCheckAll': 'attente' }) }}
-                                                type="radio"
-                                                checked
-                                                class="attente"
-                                                name="parcour_{{ parcour.id }}"
-                                                value="attente"
-                                        >
-                                    </label>
-                                </div>
-                            </td>
-                            {% for etat in etats|filter(etat => etat.value != 'CREATION') %}
+                    {% for formation in formations %}
+                        <tr class="bg-light" >
+                            <td class="bg-light" colspan="2">{{ formation.formation.displayLong }}</td>
+                            {% for cas in cases %}
                                 <td>
                                     <div class="checkbox text-center">
                                         <label>
                                             <input
-                                                    {{ stimulus_action('check_all', 'check', 'click', {'classCheckAll' : etat.value, 'idCheckAll': etat.value }) }}
+                                                    {{ stimulus_action('check_all', 'check', 'click', {'classCheckAll' : cas.id, 'idCheckAll': cas.id }) }}
                                                     type="radio"
-                                                    class="{{ etat.value }}"
-                                                    name="parcour_{{ parcour.id }}"
-                                                    value="{{ etat.value }}"
+                                                    {% if loop.first %}checked{% endif %}
+                                                    class="{{ cas.id }}"
+                                                    value="{{ cas.value }}"
                                             >
                                         </label>
                                     </div>
                                 </td>
                             {% endfor %}
                         </tr>
+                        {% if formation.formation.hasParcours %}
+                            {% for parcours in formation.parcours %}
+                            <tr>
+                                <td></td>
+                                <td>{{ parcours.parcours.display }}</td>
+                                {% for cas in cases %}
+                                    <td>
+                                        <div class="checkbox text-center">
+                                            <label>
+                                                <input
+                                                        {{ stimulus_action('check_all', 'check', 'click', {'classCheckAll' : cas.id, 'idCheckAll': cas.id }) }}
+                                                        type="radio"
+                                                        {% if loop.first %}checked{% endif %}
+                                                        class="{{ cas.id }}"
+                                                        name="parcour_{{ parcours.id }}"
+                                                        value="{{ cas.value }}"
+                                                >
+                                            </label>
+                                        </div>
+                                    </td>
+                                {% endfor %}
+                            </tr>
+
+                        {% endfor %}
+                        {% endif %}
                     {% endfor %}
 
                     </tbody>

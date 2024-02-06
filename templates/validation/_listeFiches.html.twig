@@ -1,0 +1,169 @@
+<div class="card-body">
+    <table class="table" {{ stimulus_controller('check_all') }}>
+        <thead>
+        <tr>
+            <th>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
+                    </label>
+                </div>
+            </th>
+            <th>
+                Fiche matière
+            </th>
+            <th>
+                Composante
+            </th>
+            <th>
+                Mention/spécialité
+            </th>
+            <th>
+                Parcours
+            </th>
+            <th>Etat</th>
+            <th>Remplissage</th>
+            <th></th>
+        </tr>
+
+        </thead>
+        <tbody>
+        {% for fiche in fiches %}
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input
+                                    {{ stimulus_action('check_all', 'check') }}
+                                    type="checkbox"
+                                    class="check-all"
+                                    name="fiches[]"
+                                    value="{{ fiche.id }}"
+                            >
+                        </label>
+                    </div>
+                </td>
+                <td>
+                    {{ fiche.libelle }}
+                </td>
+
+                {% if
+                    fiche.parcours !=null and
+                    fiche.parcours.formation != null and
+                    fiche.parcours.formation.composantePorteuse != null %}
+                    <td>
+                        {{ fiche.parcours.formation.composantePorteuse.libelle }}
+                    </td>
+                    <td>
+                        {{ fiche.parcours.formation.display }}
+                    </td>
+                    <td>
+                        {{ fiche.parcours.libelle }}
+                    </td>
+                {% else %}
+                    <td><span class="badge bg-danger">Non définie</span></td>
+                    <td><span class="badge bg-danger">Non définie</span></td>
+                    <td><span class="badge bg-danger">Non définie</span></td>
+                {% endif %}
+
+
+                <td>
+                    {{ fiche.etatFiche|badgeFiche }}
+                </td>
+                <td>
+                    {{ fiche.remplissage|remplissage }}
+                </td>
+                <td class="text-end">
+
+                    {#                    <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}" #}
+                    {#                       class="btn btn-sm text-info" #}
+                    {#                       data-bs-toggle="tooltip" #}
+                    {#                       data-bs-placement="bottom" #}
+                    {#                       title="Voir une formation" #}
+                    {#                    > #}
+                    {#                        <i class="{{ iconShow }}"></i> #}
+                    {#                        <span> Voir</span> #}
+                    {#                    </a> #}
+
+                    {#                   #}
+
+                    {#                    {% if is_granted('ROLE_SES') %} #}
+                    {#                        <button {{ stimulus_action('crud', 'delete', 'click', { #}
+                    {#                            url:path('app_formation_delete',{'id': formation.id}), #}
+                    {#                            csrf: csrf_token('delete' ~ formation.id) #}
+                    {#                        }) }} class="btn btn-sm text-danger"> #}
+                    {#                            <i class="{{ iconDelete }}"></i> Supprimer #}
+                    {#                        </button> #}
+                    {#                    {% endif %} #}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8" class="bg-warning">Aucun enregistrement trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="row mt-2">
+        {% if process.hasValid %}
+            <div class="col-3 d-grid">
+                <button class="btn btn-sm d-block btn-outline-success"
+                        type="button"
+                        data-action="validation--index#valide"
+                        data-validation--index-url-param="{{ path('app_validation_valide_fiche_lot', {etape:etape}) }}"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
+                >
+                    <i class="fal fa-check"></i> {{ ('validation.valider.'~etape)|trans({}, 'process') }}
+                </button>
+            </div>
+        {% else %}
+            <div class="col-3 d-grid">
+            </div>
+        {% endif %}
+
+        {% if process.hasReserve %}
+            <div class="col-3 d-grid">
+                <button
+                        class="btn btn-sm d-block btn-outline-warning"
+                        data-action="validation--index#valide"
+                        data-validation--index-url-param="{{ path('app_validation_reserve_fiche_lot', {etape:etape}) }}"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('validation.reserve.'~etape)|trans({}, 'process') }}"
+                        type="button">
+                    <i class="fal fa-circle-exclamation-check"></i> {{ ('validation.reserve.'~etape)|trans({}, 'process') }}
+                </button>
+            </div>
+        {% else %}
+            <div class="col-3 d-grid">
+            </div>
+        {% endif %}
+
+        {% if process.hasRefuse %}
+            <div class="col-3 d-grid">
+                <button class="btn btn-sm d-block btn-outline-danger"
+                        type="button"
+                        data-action="validation--index#valide"
+                        data-validation--index-url-param="{{ path('app_validation_refuse_fiche_lot', {etape:etape}) }}"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"
+                >
+                    <i class="fal fa-ban"></i> {{ ('validation.refuser.'~etape)|trans({}, 'process') }}
+                </button>
+            </div>
+        {% else %}
+            <div class="col-3 d-grid">
+            </div>
+        {% endif %}
+    </div>
+    <div class="row mt-2" {{ stimulus_target('validation--index', 'action') }}>
+
+    </div>
+</div>
+
