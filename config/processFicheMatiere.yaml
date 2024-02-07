@@ -30,24 +30,24 @@ process:
     page: 'fiche_matiere'
     icon: 'fa-stamp'
     label: 'validation.fiche_matiere.publication'
-    hasValid: true
+    hasValid: false
     hasReserve: false
     hasRefuse: false
     hasUpload: false
     isTimeline: true
-    hasDate: true
+    hasDate: false
     transition: 'transmis_pour_publication'
     canValide: 'valider_fiche_pour_publication'
   publie:
     page: 'fiche_matiere'
     icon: 'fa-bullhorn'
     label: 'fiche_matiere.publie'
-    hasValid: true
+    hasValid: false
     hasReserve: false
     hasRefuse: false
     hasUpload: false
     isTimeline: true
-    hasDate: true
+    hasDate: false
     transition: 'publie'
     canValide: ''
 
