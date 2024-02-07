@@ -7,15 +7,16 @@
     <thead>
     <tr>
         <th>&nbsp;</th>
-        <th>
+        <th colspan="2">
             <div class="checkbox">
                 <label>
                     <input type="checkbox"
                            id="check-all{{ parcours.id }}" {{ stimulus_action('check_all', 'checkAll') }}>
+                    <span class="total"></span>
                 </label>
             </div>
         </th>
-        <th colspan="4"></th>
+        <th colspan="3"></th>
     </tr>
     </thead>
     <tbody>
