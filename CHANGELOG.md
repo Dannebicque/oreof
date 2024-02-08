@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.14](https://github.com/Dannebicque/oreof/compare/v1.24.13...v1.24.14) (2024-02-08)
+
+
+### Features
+
+* affichage du guide ([4d15624](https://github.com/Dannebicque/oreof/commit/4d15624b3c3b5b2cfe90dcbdbbf660781f0942c9))
+* affichage du nombre d'éléments selectionnés ([c8fdb9d](https://github.com/Dannebicque/oreof/commit/c8fdb9db5c2ffccf0c84007b89ee7a42939db301))
+
+
+### Bug Fixes
+
+* ajout d'un lien pour voir les fiches ([4aa3710](https://github.com/Dannebicque/oreof/commit/4aa37100545ea218a60dc9ed3d419033cc6675d4))
+* Export amélioré JSON maquette. Intégration des heures sur les niveaux, nettoyage des textes ([e2cdb43](https://github.com/Dannebicque/oreof/commit/e2cdb434b1c4bb801d4f808cf2ca8172a3f9bc7d))
+* process fiche ([bf39f6e](https://github.com/Dannebicque/oreof/commit/bf39f6eeb6e136b5c86ed2faa7ca5e86a872c9c7))
+
 ### [1.24.13](https://github.com/Dannebicque/oreof/compare/v1.24.12...v1.24.13) (2024-02-07)
 
 
