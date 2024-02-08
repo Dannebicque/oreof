@@ -16,6 +16,8 @@ use App\DTO\StructureUe;
 use App\Entity\Parcours;
 use App\Entity\Ue;
 use App\Repository\TypeEpreuveRepository;
+use App\Utils\CleanTexte;
+use App\Utils\Tools;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -183,12 +185,44 @@ class ParcoursExportController extends AbstractController
             "path" => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
             "id" => $parcours->getId(),
             'formationId' => $parcours->getFormation()?->getId(),
+            "volumes"=> [
+                "CM"=> [
+                    "presentiel"=> $dto->heuresEctsFormation->sommeFormationCmPres,
+                    "distanciel"=> $dto->heuresEctsFormation->sommeFormationCmDist
+                ],
+                "TD"=> [
+                    "presentiel"=> $dto->heuresEctsFormation->sommeFormationTdPres,
+                    "distanciel"=> $dto->heuresEctsFormation->sommeFormationTdDist
+                ],
+                "TP"=> [
+                    "presentiel"=> $dto->heuresEctsFormation->sommeFormationTpPres,
+                    "distanciel"=> $dto->heuresEctsFormation->sommeFormationTpDist
+                ],
+                "autonomie"=> $dto->heuresEctsFormation->sommeFormationTePres
+            ],
+            'ects' => $dto->heuresEctsFormation->sommeFormationEcts,
             'semestres' => []
         ];
 
         foreach ($dto->semestres as $ordre => $sem) {
             $semestre =  [
                 'ordre' => $ordre,
+                "volumes"=> [
+                    "CM"=> [
+                        "presentiel"=> $sem->heuresEctsSemestre->sommeSemestreCmPres,
+                        "distanciel"=> $sem->heuresEctsSemestre->sommeSemestreCmDist
+                    ],
+                    "TD"=> [
+                        "presentiel"=> $sem->heuresEctsSemestre->sommeSemestreTdPres,
+                        "distanciel"=> $sem->heuresEctsSemestre->sommeSemestreTdDist
+                    ],
+                    "TP"=> [
+                        "presentiel"=> $sem->heuresEctsSemestre->sommeSemestreTpPres,
+                        "distanciel"=> $sem->heuresEctsSemestre->sommeSemestreTpDist
+                    ],
+                    "autonomie"=> $sem->heuresEctsSemestre->sommeSemestreTePres
+                ],
+                'ects' => $sem->heuresEctsSemestre->sommeSemestreEcts,
                 'ues' => []
             ];
             foreach ($sem->ues() as $ue) {
@@ -196,6 +230,21 @@ class ParcoursExportController extends AbstractController
                     'ordre' => $ue->ordre(),
                     'libelleOrdre' => $ue->display,
                     'libelle' => $ue->ue->getLibelle() ?? $ue->display,
+                    "volumes"=> [
+                        "CM"=> [
+                            "presentiel"=> $ue->heuresEctsUe->sommeUeCmPres,
+                            "distanciel"=> $ue->heuresEctsUe->sommeUeCmDist
+                        ],
+                        "TD"=> [
+                            "presentiel"=> $ue->heuresEctsUe->sommeUeTdPres,
+                            "distanciel"=> $ue->heuresEctsUe->sommeUeTdDist
+                        ],
+                        "TP"=> [
+                            "presentiel"=> $ue->heuresEctsUe->sommeUeTpPres,
+                            "distanciel"=> $ue->heuresEctsUe->sommeUeTpDist
+                        ],
+                        "autonomie"=> $ue->heuresEctsUe->sommeUeTePres
+                    ],
                 ];
 
                 if ($ue->ue->getNatureUeEc()?->isLibre()) {
@@ -209,6 +258,21 @@ class ParcoursExportController extends AbstractController
                             'ordre' => $ueEnfant->ordre(),
                             'libelleOrdre' => $ueEnfant->display,
                             'libelle' => $ueEnfant->ue->getLibelle() ?? $ueEnfant->display,
+                            "volumes"=> [
+                                "CM"=> [
+                                    "presentiel"=> $ueEnfant->heuresEctsUe->sommeUeCmPres,
+                                    "distanciel"=> $ueEnfant->heuresEctsUe->sommeUeCmDist
+                                ],
+                                "TD"=> [
+                                    "presentiel"=> $ueEnfant->heuresEctsUe->sommeUeTdPres,
+                                    "distanciel"=> $ueEnfant->heuresEctsUe->sommeUeTdDist
+                                ],
+                                "TP"=> [
+                                    "presentiel"=> $ueEnfant->heuresEctsUe->sommeUeTpPres,
+                                    "distanciel"=> $ueEnfant->heuresEctsUe->sommeUeTpDist
+                                ],
+                                "autonomie"=> $ueEnfant->heuresEctsUe->sommeUeTePres
+                            ],
                         ];
 
                         $tUeEnfant['ec'] = $this->getEcFromUe($ueEnfant);
@@ -257,6 +321,7 @@ class ParcoursExportController extends AbstractController
         $tEc = [
             'ordre' => $ec->elementConstitutif->getOrdre(),
             'valide' => true,
+            'nature_ec' => $ec->elementConstitutif->getTypeEc()?->getLibelle(),
             'valide_date' => new DateTime(),
             "numero"=> $ec->elementConstitutif->getCode(),
             "libelle"=> $ec->elementConstitutif?->getFicheMatiere()?->getLibelle() ?? '-',
@@ -266,8 +331,8 @@ class ParcoursExportController extends AbstractController
                 "nom"=> $ec->elementConstitutif?->getFicheMatiere()?->getResponsableFicheMatiere()?->getDisplay() ?? '-',
                 "email"=> $ec->elementConstitutif?->getFicheMatiere()?->getResponsableFicheMatiere()?->getEmail() ?? '-'
             ],
-            'description' => $ec->elementConstitutif?->getFicheMatiere()?->getDescription() ?? '-',
-            "objectifs" => $ec->elementConstitutif?->getFicheMatiere()?->getObjectifs() ?? '-',
+            'description' => CleanTexte::cleanTextArea($ec->elementConstitutif?->getFicheMatiere()?->getDescription()) ?? '-',
+            "objectifs" => CleanTexte::cleanTextArea($ec->elementConstitutif?->getFicheMatiere()?->getObjectifs()) ?? '-',
             "modalite_enseignement"=> $ec->elementConstitutif?->getFicheMatiere()?->getModaliteEnseignement()->value ?? '-',
             "langues_supports" => $ec->elementConstitutif?->getFicheMatiere()?->getLanguesSupportsArray() ?? [],
             "langues_dispense_cours" => $ec->elementConstitutif?->getFicheMatiere()?->getLanguesDispenseArray() ?? [],
@@ -287,47 +352,47 @@ class ParcoursExportController extends AbstractController
                 ],
                 "autonomie"=> $ec->heuresEctsEc->tePres
             ],
-            "mccc" => $this->getMccc($ec),
+           // "mccc" => $this->getMccc($ec),
         ];
 
         return $tEc;
     }
 
-    private function getMccc(StructureEc $ec): array
-    {
-        $tMcccs = [];
-        $tMcccs['type_mccc'] = $ec->typeMccc;
-        $tMcccs['mccc'] = [];
-        foreach ($ec->mcccs as $mccc) {
-            if (count($mccc->getTypeEpreuve()) === 1) {
-                $typeE = $mccc->getTypeEpreuve()[0];
-            } else {
-                $typeE = '';
-                foreach ($mccc->getTypeEpreuve() as $typeEpreuve) {
-                    $typeE .= $typeEpreuve . ' / ';
-                }
-                $typeE = substr($typeE, 0, -3);
-            }
-
-
-            $tMccc = [
-                'libelle' => $mccc->getLibelle(),
-                'secondeChance' => $mccc->isSecondeChance(),
-                'pourcentage' => $mccc->getPourcentage(),
-                'nbEpreuves' => $mccc->getNbEpreuves(),
-                'typeEpreuve' => $typeE,
-                'controleContinu' => $mccc->isControleContinu(),
-                'examenTerminal' => $mccc->isExamenTerminal(),
-                'duree' => $mccc->getDuree(),
-                'numeroEpreuve' => $mccc->getNumeroEpreuve(),
-            ];
-
-            if (array_key_exists($mccc->getNumeroSession(), $tMcccs['mccc'])) {
-                $tMcccs['mccc'][$mccc->getNumeroSession()][] = $tMccc;
-            } else {
-                $tMcccs['mccc'][$mccc->getNumeroSession()] = [$tMccc];
-            }
-        }
-        return $tMcccs;
-    }
+//    private function getMccc(StructureEc $ec): array
+//    {
+//        $tMcccs = [];
+//        $tMcccs['type_mccc'] = $ec->typeMccc;
+//        $tMcccs['mccc'] = [];
+//        foreach ($ec->mcccs as $mccc) {
+//            if (count($mccc->getTypeEpreuve()) === 1) {
+//                $typeE = $mccc->getTypeEpreuve()[0];
+//            } else {
+//                $typeE = '';
+//                foreach ($mccc->getTypeEpreuve() as $typeEpreuve) {
+//                    $typeE .= $typeEpreuve . ' / ';
+//                }
+//                $typeE = substr($typeE, 0, -3);
+//            }
+//
+//
+//            $tMccc = [
+//                'libelle' => $mccc->getLibelle(),
+//                'secondeChance' => $mccc->isSecondeChance(),
+//                'pourcentage' => $mccc->getPourcentage(),
+//                'nbEpreuves' => $mccc->getNbEpreuves(),
+//                'typeEpreuve' => $typeE,
+//                'controleContinu' => $mccc->isControleContinu(),
+//                'examenTerminal' => $mccc->isExamenTerminal(),
+//                'duree' => $mccc->getDuree(),
+//                'numeroEpreuve' => $mccc->getNumeroEpreuve(),
+//            ];
+//
+//            if (array_key_exists($mccc->getNumeroSession(), $tMcccs['mccc'])) {
+//                $tMcccs['mccc'][$mccc->getNumeroSession()][] = $tMccc;
+//            } else {
+//                $tMcccs['mccc'][$mccc->getNumeroSession()] = [$tMccc];
+//            }
+//        }
+//        return $tMcccs;
+//    }
 }

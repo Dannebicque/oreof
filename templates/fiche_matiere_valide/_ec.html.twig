@@ -10,11 +10,11 @@
                                     {{ stimulus_action('check_all', 'check') }}
                                     type="checkbox"
                                     class="check-all check-all{{ parcours.id }}"
-                                    {% if is_granted('CAN_PARCOURS_VALIDATE_MY', parcours) %}
+                                    {% if is_granted('CAN_PARCOURS_VALIDATE_MY', ec.elementConstitutif.ficheMatiere) %}
                                         {{ ec.elementConstitutif.ficheMatiere|isFicheValidable('parcours') }}
-                                    {% elseif is_granted('CAN_FORMATION_VALIDATE_MY', formation) %}
+                                    {% elseif is_granted('CAN_FORMATION_VALIDATE_MY', ec.elementConstitutif.ficheMatiere) %}
                                         {{ ec.elementConstitutif.ficheMatiere|isFicheValidable('formation') }}
-                                    {% elseif is_granted('CAN_COMPOSANTE_VALIDATE_MY', formation.composantePorteuse) %}
+                                    {% elseif is_granted('CAN_COMPOSANTE_VALIDATE_MY', ec.elementConstitutif.ficheMatiere) %}
                                         {{ ec.elementConstitutif.ficheMatiere|isFicheValidable('dpe') }}
                                     {% else %}
                                         disabled
@@ -59,9 +59,13 @@
         {% else %}
             <td></td>
             <td>
+                {% if ec.elementsConstitutifsEnfants|length > 0 %}
+                    <span class="badge bg-info">
+            EC à choix </span>
+                {% else %}
                 <span class="badge bg-danger"> Erreur</span>
+                    {% endif %}
             </td>
-
         {% endif %}
     {% endif %}
 
@@ -100,7 +104,13 @@
                 </a>
             {% endif %}
         {% else %}
-            <span class="badge bg-danger"> Erreur</span>
+            {% if ec.elementConstitutif.ficheMatiere != null %}
+                {% if  ec.elementConstitutif.ficheMatiere.remplissage == 100 %}
+                    <span class="badge bg-success"> Complet</span>
+                {% else %}
+                    <span class="badge bg-warning"> À compléter</span>
+                {% endif %}
+            {% endif %}
         {% endif %}
 
     </td>

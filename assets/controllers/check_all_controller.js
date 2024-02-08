@@ -22,18 +22,22 @@ export default class extends Controller {
   checkAll(event) {
     // soit event.params.classCheck si existe et non null sinon this.classCheckAllValue
     const classCheckAll = event.params.classcheckall ? `.${event.params.classcheckall}` : this.classCheckAllValue
+    const idCheckAll = event.params.idcheckall ? event.params.idcheckall : this.idCheckAllValue
+
     const checkboxes = document.querySelectorAll(classCheckAll)
     checkboxes.forEach((checkbox) => {
       if (checkbox.disabled === false) {
         checkbox.checked = event.target.checked
       }
     })
+    this.updateCount(classCheckAll, idCheckAll)
   }
 
   check(event) {
     const classCheckAll = event.params.classcheckall ? `.${event.params.classcheckall}` : this.classCheckAllValue
     const idCheckAll = event.params.idcheckall ? event.params.idcheckall : this.idCheckAllValue
-    console.log(classCheckAll, idCheckAll)
+
+    this.updateCount(classCheckAll, idCheckAll)
     const checkAll = document.getElementById(idCheckAll)
     if (event.target.checked) {
       const checkboxes = document.querySelectorAll(classCheckAll)
@@ -48,6 +52,28 @@ export default class extends Controller {
       checkAll.checked = checked
     } else {
       checkAll.checked = false
+    }
+  }
+
+  updateCount(classCheckAll, idCheckAll) {
+    const total = document.getElementById(idCheckAll)
+    if (total.parentNode.querySelector('.total')) {
+      // compte le nombre de checkbox cochées
+      const checkboxes = document.querySelectorAll(classCheckAll)
+      let checked = 0
+      let totalChecked = checkboxes.length
+      checkboxes.forEach((checkbox) => {
+        if (checkbox.checked) {
+          checked += 1
+        }
+        if (checkbox.disabled === true) {
+          totalChecked -= 1
+        }
+      })
+
+      // ajouter le total après le checkbox
+      // accéder au parent de total pour injecter le texte
+      total.parentNode.querySelector('.total').innerText = ` ${checked} / ${totalChecked} élément(s) sélectionné(s)`
     }
   }
 }

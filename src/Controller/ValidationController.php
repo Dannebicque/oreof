@@ -129,21 +129,14 @@ class ValidationController extends BaseController
 
         if ($request->query->has('composante')) {
             if ($request->query->get('composante') === 'all') {
-                $composante = null;
-                $fiches = $ficheMatiereRepository->findByTypeValidation($this->getDpe(), $process['transition']);
+                $fiches = $ficheMatiereRepository->findByTypeValidation($this->getDpe(), $typeValidation);
             } else {
                 $composante = $composanteRepository->find($request->query->get('composante'));
                 if (!$composante) {
                     throw $this->createNotFoundException('La composante n\'existe pas');
                 }
-
-
                 $fiches = $ficheMatiereRepository->findByComposanteTypeValidation($composante, $this->getDpe(), $typeValidation);
             }
-
-
-
-
         } else {
             $fiches = [];
             $process = null;

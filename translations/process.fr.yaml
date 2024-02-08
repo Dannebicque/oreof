@@ -281,12 +281,12 @@ validation.valider.fiches_matieres.formation: 'Valider et soumettre au DPE les f
 historique.de.validation.fiche_matiere.title: historique.de.validation.fiche_matiere.title
 historique.de.validation.fiche_matiere.infobulle: historique.de.validation.fiche_matiere.infobulle
 validation.fiche_matiere: validation.fiche_matiere
-validation.valider.fiche_matiere.title: "Validation de la fiche EC/matière"
-validation.valider.fiche_matiere: "Valider et soumettre la fiche EC/matière"
+validation.valider.fiche_matiere.title: validation.valider.fiche_matiere.title
+validation.valider.fiche_matiere: validation.valider.fiche_matiere
 validation.fiche_matiere.valide.alerte: validation.fiche_matiere.valide.alerte
-btn.validation.fiche_matiere.valide.en_cours_redaction: "Valider et soumettre la fiche EC/matière"
-validation.fiche_matiere.valide.impossible.en_cours_redaction: "La validation de la fiche EC/matière est impossible."
-ficheMatiere.valide.fiche_matiere.flash.success: "La fiche EC/matière est transmise"
+btn.validation.fiche_matiere.valide.en_cours_redaction: btn.validation.fiche_matiere.valide.en_cours_redaction
+validation.fiche_matiere.valide.impossible.en_cours_redaction: validation.fiche_matiere.valide.impossible.en_cours_redaction
+ficheMatiere.valide.fiche_matiere.flash.success: ficheMatiere.valide.fiche_matiere.flash.success
 validation.fiche_matiere.ses: validation.fiche_matiere.ses
 validation.fiche_matiere.publication: validation.fiche_matiere.publication
 fiche_matiere.publie: fiche_matiere.publie
@@ -329,10 +329,12 @@ validation.cfvu.valide.commentaire.cas.sous.reserve.modifications.argumentaire.v
 validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier: validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier
 demande.reouverture.modification.mccc.maquette.label: demande.reouverture.modification.mccc.maquette.label
 demande.reouverture.modification.mccc.maquette.help: demande.reouverture.modification.mccc.maquette.help
-transmis_ses: transmis_ses
-transmis_pour_publication: transmis_pour_publication
-publie: publie
-validation.valider.soumis_central: "Valider pour publication"
-validation.reserve.soumis_central: "Emettre des réserves"
-validation.refuser.soumis_central: "Refuser la fiche EC/matière"
-ficheMatiere.valide.soumis_central.flash.success: "La fiche EC/matière est validée"
+transmis_ses: Transmis central
+transmis_pour_publication: Prêt pour publication
+publie: Publié
+validation.valider.soumis_central: validation.valider.soumis_central
+validation.reserve.soumis_central: validation.reserve.soumis_central
+validation.refuser.soumis_central: validation.refuser.soumis_central
+ficheMatiere.valide.soumis_central.flash.success: ficheMatiere.valide.soumis_central.flash.success
+validation.valider.valide_pour_publication: validation.valider.valide_pour_publication
+fiche_matiere: fiche_matiere
