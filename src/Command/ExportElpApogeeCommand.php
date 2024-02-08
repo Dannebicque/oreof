@@ -47,6 +47,8 @@ class ExportElpApogeeCommand extends Command
     private ParameterBagInterface $parameterBag;
     private ?\SoapClient $soapClient;
 
+    public static array $errorMessagesArray = [];
+
     public function __construct(
         EntityManagerInterface $entityManager,
         ElementConstitutifRepository $elementConstitutifRepository,
@@ -86,13 +88,17 @@ class ExportElpApogeeCommand extends Command
             mode: InputOption::VALUE_REQUIRED,
             description: 'Genère une export de tous les ELP pour un parcours donné.'
         )->addOption(
-            name: 'full-verify-data',
+            name: 'report-missing-values',
             mode: InputOption::VALUE_NONE,
             description: "Compte rendu des parcours qui sont des candidats à l'insertion dans APOTEST et qui sont non conformes"
         )->addOption(
             name: 'check-duplicates',
             mode: InputOption::VALUE_NONE,
             description: "Vérifie s'il y a des doublons sur les codes Apogee depuis la base de données"
+        )->addOption(
+            name: 'full-verify-data',
+            mode: InputOption::VALUE_NONE,
+            description: "Instancie tous les ELP des parcours disponibles, et génère un compte-rendu selon les erreurs détectées."
         );
     }
 
@@ -101,11 +107,12 @@ class ExportElpApogeeCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $mode = $input->getOption('mode');
         $fullExport = $input->getOption('full-excel-export');
-        $fullVerifyData = $input->getOption('full-verify-data');
+        $reportMissingValues = $input->getOption('report-missing-values');
         $parcoursExport = $input->getOption('parcours-excel-export');
         $dummyInsertion = $input->getOption('dummy-insertion');
         $parcoursInsertion = $input->getOption('parcours-insertion');
         $checkDuplicates = $input->getOption('check-duplicates');
+        $fullVerifyData = $input->getOption('full-verify-data');
 
         if($mode === "test"){
             // Export total des ELP selon le type : EC, UE ou Semestre
@@ -181,112 +188,33 @@ class ExportElpApogeeCommand extends Command
                     return Command::SUCCESS;
                 }
             }
-            // Compte rendu sur les candidats à l'insertion qui sont non conformes
+            // Instancie les ELP et génère un rapport des erreurs détectées
             if($fullVerifyData){
-                $io->writeln("Outil de compte-rendu des parcours non conformes APOGEE");
                 // date et heure pour le fichier
                 $now = new DateTime();
                 $date = $now->format('d-m-Y_H-i-s');
-                // nom et chemin du fichier
-                $file = __DIR__ . "/../Service/Apogee/export/Compte-rendu-parcours-invalide-{$date}";
-                // création du fichier
-                $this->filesystem->appendToFile($file, "Compte Rendu des parcours invalides pour l'export APOGEE\n");
-                // parcours à traiter
+                $io->writeln("Vérification des donnéees pour les parcours disponibles...");
                 $parcoursArray = $this->retrieveParcoursDataFromDatabase();
-                // barre de progression
                 $io->progressStart(count($parcoursArray));
                 foreach($parcoursArray as $parcours){
-                    $countEcAucunCode = 0;
-                    $countSemestreAucunCode = 0;
-                    $countUeAucunCode = 0;
-                    $countEcAucunLibelle = 0;
-                    $countUeAucunLibelle = 0;
-                    $countSemestreAucunLibelle = 0;
-                    $dto = $this->getDTOForParcours($parcours);
-                    foreach($dto->semestres as $semestre){
-                        if($semestre->semestre->getCodeApogee() === null ){
-                            ++$countSemestreAucunCode;
-                        }
-                        if( $semestre->semestre->getOrdre() === null
-                            || $dto->parcours->getSigle() === null 
-                            || $dto->parcours->getFormation()?->getSigle() === null
-                            || $dto->parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === null
-                        ){
-                            ++$countSemestreAucunLibelle;
-                        }
-                        // Nombre d'éléments incorrects : UE
-                        foreach($semestre->ues() as $ue){
-                            if($ue->ue->getCodeApogee() === null){
-                                ++$countUeAucunCode;
-                            }
-                            if($ue->ue->getLibelle() === null){
-                                ++$countUeAucunLibelle;
-                            }
-                            foreach($ue->elementConstitutifs as $ec){
-                                foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
-                                    if($ecEnfant->elementConstitutif->getCodeApogee() === null){
-                                        ++$countEcAucunCode;
-                                    }
-                                    if( $ecEnfant->elementConstitutif->getFicheMatiere()?->getLibelle() === null
-                                        && $ecEnfant->elementConstitutif->getLibelle() === null
-                                    ){
-                                        ++$countEcAucunLibelle;
-                                    }
-                                }
-                                if($ec->elementConstitutif->getCodeApogee() === null){
-                                    ++$countEcAucunCode;
-                                }
-                                if( $ec->elementConstitutif->getFicheMatiere()?->getLibelle() === null
-                                        && $ec->elementConstitutif->getLibelle() === null
-                                    ){
-                                        ++$countEcAucunLibelle;
-                                }
-                            }
-                            // Nombre d'éléments incorrects : UE Enfants
-                            foreach($ue->uesEnfants() as $ueEnfant){
-                                foreach($ueEnfant->elementConstitutifs as $ec){
-                                    foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
-                                        if($ecEnfant->elementConstitutif->getCodeApogee() === null){
-                                            ++$countEcAucunCode;
-                                        }
-                                        if( $ecEnfant->elementConstitutif->getFicheMatiere()?->getLibelle() === null
-                                        && $ecEnfant->elementConstitutif->getLibelle() === null
-                                        ){
-                                            ++$countEcAucunLibelle;
-                                        }
-                                    }
-                                    if($ec->elementConstitutif->getCodeApogee() === null){
-                                        ++$countEcAucunCode;
-                                    }
-                                    if( $ec->elementConstitutif->getFicheMatiere()?->getLibelle() === null
-                                        && $ec->elementConstitutif->getLibelle() === null
-                                    )   {
-                                        ++$countEcAucunLibelle;
-                                    }   
-                                }
-                            }
-                        }
-                    }
-                    $hasCodeComposantePorteuse = false;
-                    if($dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante()){
-                        $hasCodeComposantePorteuse = true;
-                    }
-                    if( $countEcAucunCode > 0 || $countUeAucunCode > 0 || $countSemestreAucunCode > 0 || $hasCodeComposantePorteuse === false 
-                        || $countEcAucunLibelle > 0 || $countUeAucunLibelle > 0 || $countSemestreAucunLibelle > 0
-                    ){ 
-                        $text = "\nLe parcours {$dto->parcours->getId()} - {$dto->parcours->getDisplay()} - est invalide\n"
-                            . ($hasCodeComposantePorteuse ? "" : "Le parcours n'a pas de code composante porteuse\n")
-                            . ($countEcAucunCode > 0 ? "{$countEcAucunCode} EC sans code APOGEE\n" : "")
-                            . ($countUeAucunCode > 0 ? "{$countUeAucunCode} UE sans code APOGEE\n" : "")
-                            . ($countSemestreAucunCode > 0 ? "{$countSemestreAucunCode} Semestre sans code APOGEE\n" : "")
-                            . ($countEcAucunLibelle > 0 ? "{$countEcAucunLibelle} EC sans libellé correct\n" : "")
-                            . ($countUeAucunLibelle > 0 ? "{$countUeAucunLibelle} UE sans libellé correct\n" : "")
-                            . ($countSemestreAucunLibelle > 0 ? "{$countSemestreAucunLibelle} Semestre sans libellé correct\n" : "");
-                        $this->filesystem->appendToFile($file, $text);
-                    }
+                    self::$errorMessagesArray[$parcours->getId()] = [];
+                    $soapObjects = $this->generateSoapObjectsForParcours($parcours, true);
                     $io->progressAdvance();
                 }
-                $io->success("Fichier généré avec succès.");
+                $file = __DIR__ . "/../Service/Apogee/export/Parcours-invalides-{$date}";
+                $this->filesystem->appendToFile($file, "Compte Rendu des parcours invalides pour l'export APOGEE\n");
+                $io->writeln("");
+                $io->writeln("Traitement des erreurs détectées...");
+                foreach(self::$errorMessagesArray as $id => $errorArray){
+                    if(count($errorArray) > 0){
+                        $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($id);
+                        $this->filesystem->appendToFile($file, "\nParcours {$id} - {$parcours->getDisplay()} :\n");
+                        foreach($errorArray as $error){
+                            $this->filesystem->appendToFile($file, "{$error}\n");
+                        }
+                    }
+                }
+                $io->success("Rapport d'erreurs généré avec succès.");
                 return Command::SUCCESS;
             }
             // Vérification des doublons sur les codes Apogee
@@ -357,13 +285,15 @@ class ExportElpApogeeCommand extends Command
      * @param StructureEC|StructureUe|StructureSemestre $elementPedagogique Données sources
      * @param StructureParcours $dto DTO du parcours
      * @param ?CodeNatuElmEnum $natureElp Nature de l'élément pédagogique
+     * @param bool $withChecks Si des messages d'erreurs doivent être générés
      */
     private function setObjectForSoapCall(
         StructureEc|StructureUe|StructureSemestre $elementPedagogique, 
         StructureParcours $dto,
-        ?CodeNatuElpEnum $natureElp = null
+        ?CodeNatuElpEnum $natureElp = null,
+        bool $withChecks = false
     ) : ElementPedagogiDTO6 {
-        return new ElementPedagogiDTO6($elementPedagogique, $dto, $natureElp);
+        return new ElementPedagogiDTO6($elementPedagogique, $dto, $natureElp, $withChecks);
     }
 
     /**
@@ -429,16 +359,16 @@ class ExportElpApogeeCommand extends Command
      * @param Parcours $parcours Le parcours que l'on souhaite générer en ELP
      * @return array Tableau comprenant tous les ELP d'un parcours
      */
-    private function generateSoapObjectsForParcours(Parcours $parcours) : array {
+    private function generateSoapObjectsForParcours(Parcours $parcours, bool $withChecks = false) : array {
         $dto = $this->getDTOForParcours($parcours);
         $soapObjectArray = [];
         foreach($dto->semestres as $semestre){
             if($semestre->semestre->isNonDispense() === false){
-                $this->addSemestreToElpArray($soapObjectArray, $semestre, $dto);
+                $this->addSemestreToElpArray($soapObjectArray, $semestre, $dto, $withChecks);
                 foreach($semestre->ues() as $ue){
-                    $this->addUeToElpArray($soapObjectArray, $ue, $dto);
+                    $this->addUeToElpArray($soapObjectArray, $ue, $dto, $withChecks);
                     foreach($ue->elementConstitutifs as $ec){
-                        $this->addEcToElpArray($soapObjectArray, $ec, $dto);
+                        $this->addEcToElpArray($soapObjectArray, $ec, $dto, $withChecks);
                     }
                 }
             }
@@ -626,22 +556,23 @@ class ExportElpApogeeCommand extends Command
      * @param array &$elpArray Tableau dans lequel on insère l'élément
      * @param StructureEc $ec Element Constitutif
      * @param StructureParcours $dto Structure DTO du parcours complet
+     * @param bool $withChecks Si des messages d'erreurs doivent être générés
      * @return void
      */
-    private function addEcToElpArray(array &$elpArray, StructureEc $ec, StructureParcours $dto) : void {
+    private function addEcToElpArray(array &$elpArray, StructureEc $ec, StructureParcours $dto, bool $withChecks = false) : void {
         $hasChildren = count($ec->elementsConstitutifsEnfants) > 0;
         // si l'élément est mutualisé, on ne l'insère qu'une fois
         if($this->isEcMutualiseMaster($ec) && $hasChildren === false){
-            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATM);
+            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATM, $withChecks);
         }
         // si l'élément a des enfants, on insère que les enfants
         if($hasChildren){
             foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
                 if($this->isEcMutualiseMaster($ecEnfant) === true){
-                    $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::MATM);
+                    $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::MATM, $withChecks);
                 }
                 elseif ($this->isEcMutualise($ecEnfant) === false) {
-                    $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::CHOI);
+                    $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::CHOI, $withChecks);
                 }
             }
         }
@@ -656,15 +587,16 @@ class ExportElpApogeeCommand extends Command
      * @param array &$elpArray Tableau d'ELP dans lequel on insère
      * @param StructureUe $ue La source de données de l'UE
      * @param StructureParcours $dto DTO du parcours
+     * @param bool $withChecks Si des messages d'erreurs doivent être générés
      * @return void
      */
-    private function addUeToElpArray(array &$elpArray, StructureUe $ue, StructureParcours $dto) : void {
+    private function addUeToElpArray(array &$elpArray, StructureUe $ue, StructureParcours $dto, bool $withChecks = false) : void {
         if(count($ue->uesEnfants()) > 0){
             foreach($ue->uesEnfants() as $ueEnfant){
-                $elpArray[] = $this->setObjectForSoapCall($ueEnfant, $dto, CodeNatuElpEnum::CHOI);            
+                $elpArray[] = $this->setObjectForSoapCall($ueEnfant, $dto, CodeNatuElpEnum::CHOI, $withChecks);            
             }
         }else {
-            $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::UE);
+            $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::UE, $withChecks);
         }
     }
 
@@ -673,9 +605,10 @@ class ExportElpApogeeCommand extends Command
      * @param array &$elpArray Tableau d'ELP dans lequel on insère
      * @param StructureSemestre $semestre Données sources du semestre
      * @param StructureParcours $dto DTO du parcours
+     * @param bool $withChecks Si des messages d'erreurs doivent être générés
      */
-    private function addSemestreToElpArray(array &$elpArray, StructureSemestre $semestre, StructureParcours $dto) : void {
-        $elpArray[] = $this->setObjectForSoapCall($semestre, $dto, CodeNatuElpEnum::SEM);
+    private function addSemestreToElpArray(array &$elpArray, StructureSemestre $semestre, StructureParcours $dto, bool $withChecks = false) : void {
+        $elpArray[] = $this->setObjectForSoapCall($semestre, $dto, CodeNatuElpEnum::SEM, $withChecks);
     }
 
     /**

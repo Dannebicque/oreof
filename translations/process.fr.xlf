@@ -1966,6 +1966,30 @@
         <target>historique.validation.fiche_matiere</target>
       </segment>
     </unit>
+    <unit id="_9j13Mm">
+      <segment>
+        <source>validation.cfvu.valide.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier</source>
+        <target>validation.cfvu.valide.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier</target>
+      </segment>
+    </unit>
+    <unit id="liy_A.5">
+      <segment>
+        <source>validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier</source>
+        <target>validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier</target>
+      </segment>
+    </unit>
+    <unit id="yBpwQUC" name="demande.reouverture.modification.mccc.maquette.label">
+      <segment>
+        <source>demande.reouverture.modification.mccc.maquette.label</source>
+        <target>demande.reouverture.modification.mccc.maquette.label</target>
+      </segment>
+    </unit>
+    <unit id="0MAf4S6" name="demande.reouverture.modification.mccc.maquette.help">
+      <segment>
+        <source>demande.reouverture.modification.mccc.maquette.help</source>
+        <target>demande.reouverture.modification.mccc.maquette.help</target>
+      </segment>
+    </unit>
     <unit id="JubJ6ix" name="transmis_ses">
       <segment>
         <source>transmis_ses</source>
@@ -1982,6 +2006,60 @@
       <segment>
         <source>publie</source>
         <target>publie</target>
+      </segment>
+    </unit>
+    <unit id="u.OO9f2" name="validation.valider.soumis_central">
+      <segment>
+        <source>validation.valider.soumis_central</source>
+        <target>validation.valider.soumis_central</target>
+      </segment>
+    </unit>
+    <unit id="sSyCg6U" name="validation.reserve.soumis_central">
+      <segment>
+        <source>validation.reserve.soumis_central</source>
+        <target>validation.reserve.soumis_central</target>
+      </segment>
+    </unit>
+    <unit id="RYUNph8" name="validation.refuser.soumis_central">
+      <segment>
+        <source>validation.refuser.soumis_central</source>
+        <target>validation.refuser.soumis_central</target>
+      </segment>
+    </unit>
+    <unit id="W0_4TSi" name="ficheMatiere.valide.soumis_central.flash.success">
+      <segment>
+        <source>ficheMatiere.valide.soumis_central.flash.success</source>
+        <target>ficheMatiere.valide.soumis_central.flash.success</target>
+      </segment>
+    </unit>
+    <unit id="0VZ7U3E" name="validation.valider.valide_pour_publication">
+      <segment>
+        <source>validation.valider.valide_pour_publication</source>
+        <target>validation.valider.valide_pour_publication</target>
+      </segment>
+    </unit>
+    <unit id="ONisdiZ" name="fiche_matiere">
+      <segment>
+        <source>fiche_matiere</source>
+        <target>fiche_matiere</target>
+      </segment>
+    </unit>
+    <unit id="deSgSoy" name="validation.valider.soumis_central.title">
+      <segment>
+        <source>validation.valider.soumis_central.title</source>
+        <target>validation.valider.soumis_central.title</target>
+      </segment>
+    </unit>
+    <unit id="V2j0gt2" name="validation.reserve.soumis_central.title">
+      <segment>
+        <source>validation.reserve.soumis_central.title</source>
+        <target>validation.reserve.soumis_central.title</target>
+      </segment>
+    </unit>
+    <unit id="GUrgHcV" name="validation.refuser.soumis_central.title">
+      <segment>
+        <source>validation.refuser.soumis_central.title</source>
+        <target>validation.refuser.soumis_central.title</target>
       </segment>
     </unit>
   </file>

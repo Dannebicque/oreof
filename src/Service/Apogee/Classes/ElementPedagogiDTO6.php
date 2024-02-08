@@ -2,6 +2,8 @@
 
 namespace App\Service\Apogee\Classes;
 
+use App\Classes\Export\Export;
+use App\Command\ExportElpApogeeCommand;
 use App\DTO\StructureEc;
 use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
@@ -59,17 +61,19 @@ class ElementPedagogiDTO6
             $this->codElp = $this->checkCodeApogee(
                 $elementPedagogique->elementConstitutif->getCodeApogee(),
                 "Type : EC - ID : {$elementPedagogique->elementConstitutif->getId()}",
-                $withChecks
+                $withChecks,
+                $dto->parcours->getId()
             ); 
             // Libellé court
-            $this->libCourtElp = $this->checkLibelleEC($elementPedagogique, 25, $withChecks);
+            $this->libCourtElp = $this->checkLibelleEC($elementPedagogique, 25, $withChecks, $dto->parcours->getId());
             // Libellé long
-            $this->libElp = $this->checkLibelleEC($elementPedagogique, 60, $withChecks);
+            $this->libElp = $this->checkLibelleEC($elementPedagogique, 60, $withChecks, $dto->parcours->getId());
             // Nature
             $this->codNatureElp = $this->checkNatureElp(
                 $nature, 
                 "Type : EC - ID : {$elementPedagogique->elementConstitutif->getId()}",
-                $withChecks
+                $withChecks,
+                $dto->parcours->getId()
             );
             $this->codComposante = $this->checkCodeComposante(
                 $dto, 
@@ -108,11 +112,33 @@ class ElementPedagogiDTO6
             // $this->listTypePopulation;
         }
         elseif ($elementPedagogique instanceof StructureUe){
-            $this->codElp = $elementPedagogique->ue->getCodeApogee() ?? "ERROR";
-            $this->libCourtElp = $this->prepareLibelle($elementPedagogique->ue->getLibelle(), 25);
-            $this->libElp = $this->prepareLibelle($elementPedagogique->ue->getLibelle(), 60);
-            $this->codNatureElp = $nature->value;
-            $this->codComposante = $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "ERROR";
+            $this->codElp = $this->checkCodeApogee(
+                $elementPedagogique->ue->getCodeApogee(), 
+                "Type UE - ID : {$elementPedagogique->ue->getId()}",
+                $withChecks,
+                $dto->parcours->getId()
+            );
+            $this->libCourtElp = $this->checkLibelleUE(
+                $elementPedagogique->ue->getLibelle(),
+                 25, 
+                "ID : {$elementPedagogique->ue->getId()}",
+                $withChecks, 
+                $dto->parcours->getId()
+            );
+            $this->libElp = $this->checkLibelleUE(
+                $elementPedagogique->ue->getLibelle(),
+                60,
+                "ID : {$elementPedagogique->ue->getId()}",
+                $withChecks,
+                $dto->parcours->getId()
+            );
+            $this->codNatureElp = $this->checkNatureElp(
+                $nature, 
+                "Type : UE - ID : {$elementPedagogique->ue->getId()}",
+                true,
+                $dto->parcours->getId()
+            );
+            $this->codComposante = $this->checkCodeComposante($dto, "Type : UE - Parcourd ID : {$dto->parcours->getId()}", $withChecks);
             // $this->temSuspension
             // $this->motifSuspension
             $this->temModaliteControle = "O"; // valeur par défaut
@@ -148,32 +174,10 @@ class ElementPedagogiDTO6
         elseif ($elementPedagogique instanceof StructureSemestre){
             $this->codElp = $elementPedagogique->semestre->getCodeApogee() ?? "ERROR";
             // Libellés
-            if( $elementPedagogique->semestre->getOrdre() 
-                && $dto->parcours->getSigle() 
-                && $dto->parcours->getFormation()?->getSigle()
-                && $dto->parcours->getFormation()?->getTypeDiplome()->getLibelleCourt()
-            ){
-                $libelleLong = 'Semestre ' . $elementPedagogique->semestre->getOrdre() 
-                    . ' ' 
-                    . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
-                    . ' '
-                    . $dto->parcours->getFormation()->getSigle() 
-                    . ' ' 
-                    . $dto->parcours->getSigle();
-                $libelleCourt = 'SEM ' . $elementPedagogique->semestre->getOrdre()
-                    . ' '
-                    . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
-                    . ' '
-                    . $dto->parcours->getSigle();
-            }
-            else {
-                $libelleLong = "ERROR";
-                $libelleCourt = "ERROR";
-            }
-            $this->libCourtElp = $this->prepareLibelle($libelleCourt, 25);
-            $this->libElp = $this->prepareLibelle($libelleLong, 60);
-            $this->codNatureElp = CodeNatuElpEnum::SEM->value;
-            $this->codComposante = $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "ERROR";
+            $this->libCourtElp = $this->prepareLibelle($this->checkLibelleSemestre($elementPedagogique, $dto, $withChecks, "libelleCourt"), 25);
+            $this->libElp = $this->prepareLibelle($this->checkLibelleSemestre($elementPedagogique, $dto, $withChecks, "libelleLong"), 60);
+            $this->codNatureElp = $this->checkNatureElp($nature, "Type Semestre - ID : {$elementPedagogique->semestre->getId()}", $withChecks, $dto->parcours->getId());
+            $this->codComposante = $this->checkCodeComposante($dto, "Type Semestre - ID : {$elementPedagogique->semestre->getId()}", $withChecks);
             // $this->temSuspension;
             // $this->motifSuspension;
             $this->temModaliteControle = "O";
@@ -219,50 +223,48 @@ class ElementPedagogiDTO6
      * Vérifie que le code Apogee pour l'ELP n'est pas null.
      * @param ?string $codeApogee Code à tester
      * @param string $identifier Identifiant de l'élément si une erreur survient
-     * @param bool $withChecks Vrai si une exception doit être lancée, renvoie la valeur "ERROR" sinon
-     * @throws \Exception Si $withChecks est à vrai, une exception est lancée
+     * @param bool $withChecks Vrai si des messages d'erreurs doivent êtres générés
+     * @param int $parcoursID Identifiant du parcours
      * @return string Code APOGEE de l'élément
      */
-    private function checkCodeApogee(?string $codeApogee, string $identifier, bool $withChecks) : string {
-        return $codeApogee ?? 
-        (
-            $withChecks === false ? "ERROR" 
-            : throw new \Exception("Le code Apogee pour l'élément est incorrect. {$identifier}")
-        );
+    private function checkCodeApogee(?string $codeApogee, string $identifier, bool $withChecks, int $parcoursID) : string {
+        if($codeApogee === null && $withChecks){
+            ExportElpApogeeCommand::$errorMessagesArray[$parcoursID][] = "Code APOGEE introuvable. {$identifier}";
+        }
+        return $codeApogee ?? "ERROR";
     }
 
     /**
      * @param StructureEc $elementPedagogique Élément constitutif (matière)
      * @param int $length Longueur max de la chaîne à renvoyer
-     * @param bool $withChecks Si la valeur est à vrai, une exception est lancée. Renvoie la valeur "ERROR" sinon
-     * @throws \Exception Lance une exception si $withChecks est à vrai
+     * @param bool $withChecks Si la valeur est à vrai, des messages d'erreurs sont générés
      * @return string Libellé de l'EC raccourci à la longueur max $length
      */
     private function checkLibelleEC(
         StructureEc $elementPedagogique, 
         int $length,
-        bool $withChecks = false
+        bool $withChecks = false,
+        int $parcoursID
     ) : string {
-        return $elementPedagogique->elementConstitutif->getFicheMatiere()?->getLibelle() 
-            ?? $elementPedagogique->elementConstitutif->getLibelle() ?? ($withChecks === false ?
-            $this->prepareLibelle(
-                $elementPedagogique->elementConstitutif->getFicheMatiere()?->getLibelle() 
-                ?? $elementPedagogique->elementConstitutif->getLibelle(),
-                $length
-        ) : throw new \Exception("Le libellé de l'EC est 'null'. ID : {$elementPedagogique->elementConstitutif->getId()}"));
+        $libelle = $elementPedagogique->elementConstitutif->getFicheMatiere()?->getLibelle() 
+        ?? $elementPedagogique->elementConstitutif->getLibelle(); 
+        if($libelle === null && $withChecks){
+            ExportElpApogeeCommand::$errorMessagesArray[$parcoursID][] = "Le libellé de l'EC est 'null'. ID : {$elementPedagogique->elementConstitutif->getId()}";
+        }
+
+        return $this->prepareLibelle($libelle, $length);
     }
 
     /**
      * Vérification sur la nature de l'élément pédagogique
      * @param ?CodeNatuElpEnum Nature de l'élément à tester
      * @param string $errorIdentifier Identifiant pour le message d'erreur
-     * @param bool $withChecks Si une Exception doit être lancée en cas d'erreur
-     * @throws \Exception Lance une exception si la valeur testée n'est pas correcte et que $withChecks est true
+     * @param bool $withChecks Si des messages d'erreurs doivent être générés
      * @return ?CodeNatuElpEnum Nature de l'ELP
      */
-    private function checkNatureElp(?CodeNatuElpEnum $nature, string $errorIdentifier, bool $withChecks) : string {
+    private function checkNatureElp(?CodeNatuElpEnum $nature, string $errorIdentifier, bool $withChecks, int $parcoursID) : string {
         if(($nature === null || $nature instanceof CodeNatuElpEnum === false) && $withChecks){
-            throw new \Exception("La nature de l'ELP est incorrecte. {$errorIdentifier}");
+            ExportElpApogeeCommand::$errorMessagesArray[$parcoursID][] = "La nature de l'ELP est incorrecte. {$errorIdentifier}";
         }
         return $nature->value;
     }
@@ -271,17 +273,90 @@ class ElementPedagogiDTO6
      * Vérifie le code composante fourni par le DTO
      * @param StructureParcours DTO du parcours
      * @param string $errorIdentifier Indication pour le message d'erreur
-     * @param bool $withChecks Si une exception doit être lancée en cas d'erreur
-     * @throws \Exception Si $withChecks est à vrai, lance une exception
+     * @param bool $withChecks Vrai si des messages d'erreurs doivent être générés
      * @return string Code composante du parcours
      */
     private function checkCodeComposante(StructureParcours $dto, string $errorIdentifier, bool $withChecks) : string {
-        return $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() 
-        ?? 
-        (
-            $withChecks === false 
-            ? "ERROR"
-            : throw new \Exception("Le code de la composante porteuse est 'null'. {$errorIdentifier}")
-        );
+        if($dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() === null && $withChecks){
+            ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le code de la composante porteuse est 'null'. {$errorIdentifier}";
+        }
+
+        return $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "ERROR";
+    }
+
+    /**
+     * Vérifie le libellé de l'UE
+     * @param ?string $libelle Libellé à tester
+     * @param int $length Longueur max de la chaîne à renvoyer
+     * @param string $errorIdentifier Indication pour le message d'erreur
+     * @param bool $withChecks Si des messages d'erreurs doivent être générés
+     * @param int $parcoursID Identifiant du parcours
+     * @return string Le libellé réduit à la taille max
+     */
+    private function checkLibelleUE(?string $libelle, int $length, string $errorIdentifier, bool $withChecks, int $parcoursID){
+        if($libelle === null && $withChecks){
+            ExportElpApogeeCommand::$errorMessagesArray[$parcoursID][] = "Le libellé de l'UE est 'null'. {$errorIdentifier}";
+        }
+
+        return $this->prepareLibelle($libelle, $length);
+    }
+
+    /**
+     * Vérifie le libellé d'un semestre en tant qu'élément pédagogique.
+     * Permet de construire le futur libellé de l'ELP, en renvoyant le court ou le long
+     * @param StructureSemestre $elementPedagogique Semestre du DTO à instancier
+     * @param StructureParcours $dto
+     * @param bool $withChecks Si des messages d'erreurs doivent être générés
+     * @param string $type libelleCourt ou libelleLong
+     */
+    private function checkLibelleSemestre(
+        StructureSemestre $elementPedagogique,
+        StructureParcours $dto,
+        bool $withChecks,
+        string $type
+    ){
+        if( $elementPedagogique->semestre->getOrdre() 
+            && $dto->parcours->getSigle() 
+            && $dto->parcours->getFormation()?->getSigle()
+            && $dto->parcours->getFormation()?->getTypeDiplome()->getLibelleCourt()
+        ){
+            if($type === "libelleLong"){
+                return 'Semestre ' . $elementPedagogique->semestre->getOrdre() 
+                . ' ' 
+                . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
+                . ' '
+                . $dto->parcours->getFormation()->getSigle() 
+                . ' ' 
+                . $dto->parcours->getSigle();
+
+            }
+            elseif($type === "libelleCourt"){
+                return 'SEM ' . $elementPedagogique->semestre->getOrdre()
+                . ' '
+                . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
+                . ' '
+                . $dto->parcours->getSigle();
+            }
+        } else {
+            if($withChecks){
+                // Ordre du semestre
+                if($elementPedagogique->semestre->getOrdre() === null){
+                    ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le semestre n'a pas d'ordre - ID : {$elementPedagogique->semestre->getId()}";
+                } 
+                // Sigle du parcours
+                if($dto->parcours->getSigle() === null){
+                    ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le Parcours n'a pas de sigle - ID : {$dto->parcours->getId()}";
+                }
+                // Sigle de la formation
+                if($dto->parcours->getFormation()?->getSigle()){
+                    ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "La formation n'a pas de sigle - Parcours ID : {$dto->parcours->getId()} - Formation ID : {$dto->parcours->getFormation()->getId()}";
+                }
+                // Libellé court du type diplôme
+                if($dto->parcours->getFormation()?->getTypeDiplome()->getLibelleCourt()){
+                    ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le Type Diplôme n'a pas de libellé court - Type Diplôme ID : {$dto->parcours->getFormation()?->getTypeDiplome()->getId()} - Formation ID : {$dto->parcours->getFormation()->getId()}";
+                }
+            }
+            return "ERROR";
+        }
     }
 }
