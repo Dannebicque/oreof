@@ -196,27 +196,50 @@ class ExportElpApogeeCommand extends Command
                 // barre de progression
                 $io->progressStart(count($parcoursArray));
                 foreach($parcoursArray as $parcours){
-                    $countEcInvalide = 0;
-                    $countSemestreInvalide = 0;
-                    $countUeInvalide = 0;
+                    $countEcAucunCode = 0;
+                    $countSemestreAucunCode = 0;
+                    $countUeAucunCode = 0;
+                    $countEcAucunLibelle = 0;
+                    $countUeAucunLibelle = 0;
+                    $countSemestreAucunLibelle = 0;
                     $dto = $this->getDTOForParcours($parcours);
                     foreach($dto->semestres as $semestre){
                         if($semestre->semestre->getCodeApogee() === null ){
-                            ++$countSemestreInvalide;
+                            ++$countSemestreAucunCode;
+                        }
+                        if( $semestre->semestre->getOrdre() === null
+                            || $dto->parcours->getSigle() === null 
+                            || $dto->parcours->getFormation()?->getSigle() === null
+                            || $dto->parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === null
+                        ){
+                            ++$countSemestreAucunLibelle;
                         }
                         // Nombre d'éléments incorrects : UE
                         foreach($semestre->ues() as $ue){
                             if($ue->ue->getCodeApogee() === null){
-                                ++$countUeInvalide;
+                                ++$countUeAucunCode;
+                            }
+                            if($ue->ue->getLibelle() === null){
+                                ++$countUeAucunLibelle;
                             }
                             foreach($ue->elementConstitutifs as $ec){
                                 foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
                                     if($ecEnfant->elementConstitutif->getCodeApogee() === null){
-                                        ++$countEcInvalide;
+                                        ++$countEcAucunCode;
+                                    }
+                                    if( $ecEnfant->elementConstitutif->getFicheMatiere()?->getLibelle() === null
+                                        && $ecEnfant->elementConstitutif->getLibelle() === null
+                                    ){
+                                        ++$countEcAucunLibelle;
                                     }
                                 }
                                 if($ec->elementConstitutif->getCodeApogee() === null){
-                                    ++$countEcInvalide;
+                                    ++$countEcAucunCode;
+                                }
+                                if( $ec->elementConstitutif->getFicheMatiere()?->getLibelle() === null
+                                        && $ec->elementConstitutif->getLibelle() === null
+                                    ){
+                                        ++$countEcAucunLibelle;
                                 }
                             }
                             // Nombre d'éléments incorrects : UE Enfants
@@ -224,12 +247,22 @@ class ExportElpApogeeCommand extends Command
                                 foreach($ueEnfant->elementConstitutifs as $ec){
                                     foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
                                         if($ecEnfant->elementConstitutif->getCodeApogee() === null){
-                                            ++$countEcInvalide;
+                                            ++$countEcAucunCode;
+                                        }
+                                        if( $ecEnfant->elementConstitutif->getFicheMatiere()?->getLibelle() === null
+                                        && $ecEnfant->elementConstitutif->getLibelle() === null
+                                        ){
+                                            ++$countEcAucunLibelle;
                                         }
                                     }
                                     if($ec->elementConstitutif->getCodeApogee() === null){
-                                        ++$countEcInvalide;
+                                        ++$countEcAucunCode;
                                     }
+                                    if( $ec->elementConstitutif->getFicheMatiere()?->getLibelle() === null
+                                        && $ec->elementConstitutif->getLibelle() === null
+                                    )   {
+                                        ++$countEcAucunLibelle;
+                                    }   
                                 }
                             }
                         }
@@ -238,12 +271,17 @@ class ExportElpApogeeCommand extends Command
                     if($dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante()){
                         $hasCodeComposantePorteuse = true;
                     }
-                    if($countEcInvalide > 0 || $countUeInvalide > 0 || $countSemestreInvalide > 0){
+                    if( $countEcAucunCode > 0 || $countUeAucunCode > 0 || $countSemestreAucunCode > 0 || $hasCodeComposantePorteuse === false 
+                        || $countEcAucunLibelle > 0 || $countUeAucunLibelle > 0 || $countSemestreAucunLibelle > 0
+                    ){ 
                         $text = "\nLe parcours {$dto->parcours->getId()} - {$dto->parcours->getDisplay()} - est invalide\n"
                             . ($hasCodeComposantePorteuse ? "" : "Le parcours n'a pas de code composante porteuse\n")
-                            . ($countEcInvalide > 0 ? "{$countEcInvalide} EC sans code APOGEE\n" : "")
-                            . ($countUeInvalide > 0 ? "{$countUeInvalide} UE sans code APOGEE\n" : "")
-                            . ($countSemestreInvalide > 0 ? "{$countSemestreInvalide} Semestre sans code APOGEE\n" : "");
+                            . ($countEcAucunCode > 0 ? "{$countEcAucunCode} EC sans code APOGEE\n" : "")
+                            . ($countUeAucunCode > 0 ? "{$countUeAucunCode} UE sans code APOGEE\n" : "")
+                            . ($countSemestreAucunCode > 0 ? "{$countSemestreAucunCode} Semestre sans code APOGEE\n" : "")
+                            . ($countEcAucunLibelle > 0 ? "{$countEcAucunLibelle} EC sans libellé correct\n" : "")
+                            . ($countUeAucunLibelle > 0 ? "{$countUeAucunLibelle} UE sans libellé correct\n" : "")
+                            . ($countSemestreAucunLibelle > 0 ? "{$countSemestreAucunLibelle} Semestre sans libellé correct\n" : "");
                         $this->filesystem->appendToFile($file, $text);
                     }
                     $io->progressAdvance();
