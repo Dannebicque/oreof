@@ -521,7 +521,7 @@ class ExportElpApogeeCommand extends Command
      */
     private function isEcMutualiseMaster(StructureEc $ec, StructureParcours $dto) : bool {
         // si la matière est mutualisée et est l'élément maître
-        return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 2 
+        return $this->isEcMutualise($ec)
         && $dto->parcours->getId() === $ec->elementConstitutif->getFicheMatiere()?->getParcours()?->getId();
     }
 
