@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.15](https://github.com/Dannebicque/oreof/compare/v1.24.14...v1.24.15) (2024-02-09)
+
+
+### Bug Fixes
+
+* bloque l'accès aux fiches depuis la structure si validée ([50742d9](https://github.com/Dannebicque/oreof/commit/50742d9ce45efaa7f20c723125a149551e956d8b))
+* DNO plus particulier. ([c0f4977](https://github.com/Dannebicque/oreof/commit/c0f4977afaef20db7dc41459a9d235a695362513))
+
 ### [1.24.14](https://github.com/Dannebicque/oreof/compare/v1.24.13...v1.24.14) (2024-02-08)
 
 
