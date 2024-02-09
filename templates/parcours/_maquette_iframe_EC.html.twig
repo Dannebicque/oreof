@@ -28,7 +28,7 @@
         : 'padding-left: ' ~ (paddingCascade) * paddingCascadeValue ~ 'em;' }}"
     >
         {% if ec.elementConstitutif.ficheMatiere is defined and ec.elementConstitutif.ficheMatiere is not null %}
-            {% if workflow_has_marked_place(ec.elementConstitutif.ficheMatiere, 'publie') %}
+            {% if workflow_has_marked_place(ec.elementConstitutif.ficheMatiere, 'publie') or workflow_has_marked_place(ec.elementConstitutif.ficheMatiere, 'valide_pour_publication') %}
                 <a href="{{ path(
                     'app_fiche_matiere_maquette_iframe',
                     { ec: ec.elementConstitutif.id, parcours: parcours.parcours.id }
