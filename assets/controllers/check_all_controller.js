@@ -19,6 +19,18 @@ export default class extends Controller {
     },
   }
 
+  connect() {
+    // vérifie s'il y a des checkbox à cocher
+    const total = document.getElementById(this.idCheckAllValue)
+    const checkboxes = document.querySelectorAll(this.classCheckAllValue)
+    if (checkboxes.length === 0) {
+      // ajouter le total après le checkbox
+      total.parentNode.querySelector('.total').innerText = 'Aucun élément à sélectionner'
+      const checkAll = document.getElementById(this.idCheckAllValue)
+      checkAll.disabled = true
+    }
+  }
+
   checkAll(event) {
     // soit event.params.classCheck si existe et non null sinon this.classCheckAllValue
     const classCheckAll = event.params.classcheckall ? `.${event.params.classcheckall}` : this.classCheckAllValue
