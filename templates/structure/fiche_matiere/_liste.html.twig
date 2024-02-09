@@ -55,7 +55,7 @@
             </th>
             <th>Utilisé?</th>
             <th>Remplissage</th>
-            {#            <th>Etat</th> #}
+            <th>Etat</th>
             <th></th>
 
         </tr>
@@ -147,6 +147,7 @@
                         id="filter-remplissage" class="form-select">
                 </select>
             </th>
+            <th></th>
             <th>
                 <button class="btn btn-outline-danger"
                         {{ stimulus_action('crud', 'effaceFiltre', 'click', {
@@ -194,7 +195,7 @@
                     {% endif %}
                 </td>
                 <td>{{ ficheMatiere.remplissage|remplissage }}</td>
-                {#            <td>{{ ficheMatiere.etatFicheMatiere|badgeEc }}</td> #}
+                <td>{{ ficheMatiere.etatFiche|badgeFiche }}</td>
 
                 <td class="text-end">
                     {#                    {% if (is_granted('ROLE_FORMATION_EDIT_MY', ficheMatiere.parcours.formation) or is_granted #}
