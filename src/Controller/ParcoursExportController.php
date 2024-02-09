@@ -245,6 +245,7 @@ class ParcoursExportController extends AbstractController
                         ],
                         "autonomie"=> $ue->heuresEctsUe->sommeUeTePres
                     ],
+                    'ects' => $ue->heuresEctsUe->sommeUeEcts,
                 ];
 
                 if ($ue->ue->getNatureUeEc()?->isLibre()) {
@@ -273,6 +274,7 @@ class ParcoursExportController extends AbstractController
                                 ],
                                 "autonomie"=> $ueEnfant->heuresEctsUe->sommeUeTePres
                             ],
+                            'ects' => $ueEnfant->heuresEctsUe->sommeUeEcts,
                         ];
 
                         $tUeEnfant['ec'] = $this->getEcFromUe($ueEnfant);
