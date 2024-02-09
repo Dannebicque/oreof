@@ -519,10 +519,10 @@ class ExportElpApogeeCommand extends Command
      * Permet de savoir si une matière mutualisée est la matière porteuse (maître)
      * @return boolean Vrai si la matière est porteuse, Faux sinon
      */
-    private function isEcMutualiseMaster(StructureEc $ec) : bool {
+    private function isEcMutualiseMaster(StructureEc $ec, StructureParcours $dto) : bool {
         // si la matière est mutualisée et est l'élément maître
         return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 2 
-        && $ec->elementConstitutif?->getParcours()?->getId() === $ec->elementConstitutif->getFicheMatiere()?->getParcours()?->getId();
+        && $dto->parcours->getId() === $ec->elementConstitutif->getFicheMatiere()?->getParcours()?->getId();
     }
 
     /**
@@ -530,7 +530,7 @@ class ExportElpApogeeCommand extends Command
      * @return boolean Vrai si la matière est mutualisée, Faux sinon
      */
     private function isEcMutualise(StructureEc $ec) : bool {
-        return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 2;
+        return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 1;
     }
 
     /**
@@ -564,13 +564,13 @@ class ExportElpApogeeCommand extends Command
     private function addEcToElpArray(array &$elpArray, StructureEc $ec, StructureParcours $dto, bool $withChecks = false) : void {
         $hasChildren = count($ec->elementsConstitutifsEnfants) > 0;
         // si l'élément est mutualisé, on ne l'insère qu'une fois
-        if($this->isEcMutualiseMaster($ec) && $hasChildren === false){
+        if($this->isEcMutualiseMaster($ec, $dto) && $hasChildren === false){
             $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATM, $withChecks);
         }
         // si l'élément a des enfants, on insère que les enfants
         if($hasChildren){
             foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
-                if($this->isEcMutualiseMaster($ecEnfant) === true){
+                if($this->isEcMutualiseMaster($ecEnfant, $dto) === true){
                     $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::MATM, $withChecks);
                 }
                 elseif ($this->isEcMutualise($ecEnfant) === false) {
