@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.16](https://github.com/Dannebicque/oreof/compare/v1.24.15...v1.24.16) (2024-02-09)
+
+
+### Bug Fixes
+
+* Blocage case si pas de case à cocher ([e0fdf8d](https://github.com/Dannebicque/oreof/commit/e0fdf8d41093867ddd16dc9b36664d645602de3c))
+* Composant fiche matiere ([ed547a3](https://github.com/Dannebicque/oreof/commit/ed547a3880d0ad5d22ce663c075278d5b31cfc73))
+* ECTS sur les UE pour export json maquette ([fc5d844](https://github.com/Dannebicque/oreof/commit/fc5d844f0ea08b7d2952e51d17a159a5a8245228))
+* Etat des fiches dans listes ([9809054](https://github.com/Dannebicque/oreof/commit/9809054547173702ec6206e90b9f04a42ba1f6a5))
+* lien vers EC sur ifram maquette ([6ca5804](https://github.com/Dannebicque/oreof/commit/6ca5804dbbee37feb1c9e3974f7bd5b7d3863cde))
+* Typos + trad ([fb6d7e4](https://github.com/Dannebicque/oreof/commit/fb6d7e4849e4d62613c50d7b1019c3caad5be194))
+
 ### [1.24.15](https://github.com/Dannebicque/oreof/compare/v1.24.14...v1.24.15) (2024-02-09)
 
 
