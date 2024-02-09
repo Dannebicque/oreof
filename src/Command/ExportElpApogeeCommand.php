@@ -107,7 +107,6 @@ class ExportElpApogeeCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $mode = $input->getOption('mode');
         $fullExport = $input->getOption('full-excel-export');
-        $reportMissingValues = $input->getOption('report-missing-values');
         $parcoursExport = $input->getOption('parcours-excel-export');
         $dummyInsertion = $input->getOption('dummy-insertion');
         $parcoursInsertion = $input->getOption('parcours-insertion');
@@ -205,8 +204,10 @@ class ExportElpApogeeCommand extends Command
                 $this->filesystem->appendToFile($file, "Compte Rendu des parcours invalides pour l'export APOGEE\n");
                 $io->writeln("");
                 $io->writeln("Traitement des erreurs détectées...");
+                $hasError = false;
                 foreach(self::$errorMessagesArray as $id => $errorArray){
                     if(count($errorArray) > 0){
+                        $hasError = true;
                         $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($id);
                         $this->filesystem->appendToFile($file, "\nParcours {$id} - {$parcours->getDisplay()} :\n");
                         foreach($errorArray as $error){
@@ -214,7 +215,8 @@ class ExportElpApogeeCommand extends Command
                         }
                     }
                 }
-                $io->success("Rapport d'erreurs généré avec succès.");
+                $io->writeln("Rapport d'erreurs généré avec succès.");
+                $hasError ? $io->warning("Un ou plusieurs parcours est incorrect.") : $io->success("Aucun problème détecté.");
                 return Command::SUCCESS;
             }
             // Vérification des doublons sur les codes Apogee
