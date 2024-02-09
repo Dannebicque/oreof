@@ -303,7 +303,7 @@ validation.valider.transmis_pour_publication.title: validation.valider.transmis_
 validation.valider.transmis_pour_publication: validation.valider.transmis_pour_publication
 historique.: historique.
 historique.validation.fiche_matiere.ses: historique.validation.fiche_matiere.ses
-validation.valider.fiches_matieres: validation.valider.fiches_matieres
+validation.valider.fiches_matieres: "Valider et soumettre les fiches EC/matière"
 demande.reouverture: demande.reouverture
 demande.reouverture.title: demande.reouverture.title
 validation.cfvu.valide.cas.acceptation.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.directe.valide_a_publier
@@ -329,12 +329,17 @@ validation.cfvu.valide.commentaire.cas.sous.reserve.modifications.argumentaire.v
 validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier: validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier
 demande.reouverture.modification.mccc.maquette.label: demande.reouverture.modification.mccc.maquette.label
 demande.reouverture.modification.mccc.maquette.help: demande.reouverture.modification.mccc.maquette.help
-transmis_ses: Transmis central
-transmis_pour_publication: Prêt pour publication
-publie: Publié
+transmis_ses: transmis_ses
+transmis_pour_publication: transmis_pour_publication
+publie: publie
 validation.valider.soumis_central: validation.valider.soumis_central
 validation.reserve.soumis_central: validation.reserve.soumis_central
 validation.refuser.soumis_central: validation.refuser.soumis_central
 ficheMatiere.valide.soumis_central.flash.success: ficheMatiere.valide.soumis_central.flash.success
 validation.valider.valide_pour_publication: validation.valider.valide_pour_publication
 fiche_matiere: fiche_matiere
+validation.valider.soumis_central.title: validation.valider.soumis_central.title
+validation.reserve.soumis_central.title: validation.reserve.soumis_central.title
+validation.refuser.soumis_central.title: validation.refuser.soumis_central.title
+modification.historique.title: modification.historique.title
+modification.historique: modification.historique

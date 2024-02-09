@@ -7,7 +7,7 @@
             UE à choix libre</span>
         {% endif %}
         {% if ue.uesEnfants|length > 0 %}<span class="badge bg-primary">
-            UE à choix restreint : {{ ue.uesEnfants|length }} choix possible</span>{% endif %}
+            UE à choix restreint : {{ ue.uesEnfants|length }} choix possible(s)</span>{% endif %}
     </th>
     {% if presentiel %}
         {% if ue.uesEnfants|length == 0 %}
@@ -88,7 +88,7 @@
     + ue.heuresEctsUe.sommeUeTpPres %}
 
 {% set sommeUeTotalDist = ue.heuresEctsUe.sommeUeCmDist
-    + ue.heuresEctsUe.sommeUeTdDist   
+    + ue.heuresEctsUe.sommeUeTdDist
     + ue.heuresEctsUe.sommeUeTpDist %}
 
 <tr>
