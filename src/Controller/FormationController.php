@@ -107,6 +107,11 @@ class FormationController extends BaseController
                         [$sort => $direction]
                     );
                 }
+
+                if ($centre->getFormation() !== null && (
+                        in_array('ROLE_FORMATION_LECTEUR', $centre->getDroits()))) {
+                    $formations[] = [$centre->getFormation()];
+                }
             }
 
             $formations[] = $formationRepository->findByComposanteDpe(
@@ -124,6 +129,10 @@ class FormationController extends BaseController
                 $this->getDpe(),
                 [$sort => $direction]
             );
+
+
+
+
             $formations = array_merge(...$formations);
         }
 
