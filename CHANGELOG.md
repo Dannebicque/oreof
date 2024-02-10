@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.17](https://github.com/Dannebicque/oreof/compare/v1.24.16...v1.24.17) (2024-02-10)
+
+
+### Bug Fixes
+
+* Composant fiche matiere ([5cdab4e](https://github.com/Dannebicque/oreof/commit/5cdab4e4919f4b05b91cc5d0ec39ba62e6459d27))
+* fiche ([9798769](https://github.com/Dannebicque/oreof/commit/979876946e95c045c176b140cfda001e78a74257))
+* Json marquage des fiches avec lien ([3246aea](https://github.com/Dannebicque/oreof/commit/3246aeaa830253ca9ceb4341cd40072f116f7e25))
+* trad ([ca114fc](https://github.com/Dannebicque/oreof/commit/ca114fccf2ed55fb2b74dccd08f753354a1c6881))
+
 ### [1.24.16](https://github.com/Dannebicque/oreof/compare/v1.24.15...v1.24.16) (2024-02-09)
 
 
