@@ -320,9 +320,19 @@ class ParcoursExportController extends AbstractController
 
     private function getEc(StructureEc $ec): array
     {
+        if ($ec->elementConstitutif?->getFicheMatiere() !== null &&
+            (array_key_exists('publie', $ec->elementConstitutif?->getFicheMatiere()?->getEtatFiche()) ||
+            array_key_exists('valide_pour_publication', $ec->elementConstitutif?->getFicheMatiere()?->getEtatFiche()))
+        ) {
+            $valide = true;
+        } else {
+            $valide = false;
+        }
+
+
         $tEc = [
             'ordre' => $ec->elementConstitutif->getOrdre(),
-            'valide' => true,
+            'valide' => $valide,
             'nature_ec' => $ec->elementConstitutif->getTypeEc()?->getLibelle(),
             'valide_date' => new DateTime(),
             "numero"=> $ec->elementConstitutif->getCode(),
