@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.19](https://github.com/Dannebicque/oreof/compare/v1.24.18...v1.24.19) (2024-02-10)
+
+
+### Bug Fixes
+
+* Role lecture seul sur formation ([332e766](https://github.com/Dannebicque/oreof/commit/332e7661962cef4925f184f870f76b49f8f40c7f))
+
 ### [1.24.18](https://github.com/Dannebicque/oreof/compare/v1.24.17...v1.24.18) (2024-02-10)
 
 
