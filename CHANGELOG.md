@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.18](https://github.com/Dannebicque/oreof/compare/v1.24.17...v1.24.18) (2024-02-10)
+
+
+### Bug Fixes
+
+* UE enfants dans structure ([fa50cb3](https://github.com/Dannebicque/oreof/commit/fa50cb38d4a8bbfe6a657a587f621dc55121f4ec))
+
 ### [1.24.17](https://github.com/Dannebicque/oreof/compare/v1.24.16...v1.24.17) (2024-02-10)
 
 
