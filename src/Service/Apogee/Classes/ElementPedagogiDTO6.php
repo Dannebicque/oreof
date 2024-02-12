@@ -54,7 +54,8 @@ class ElementPedagogiDTO6
         StructureEc|StructureUe|StructureSemestre $elementPedagogique,
         StructureParcours $dto,
         ?CodeNatuElpEnum $nature = null,
-        bool $withChecks = false
+        bool $withChecks = false,
+        array $paramArrayCE = []
     ) {
         if ($elementPedagogique instanceof StructureEc){
             // Création du code ELP
@@ -107,7 +108,7 @@ class ElementPedagogiDTO6
             );
             // $this->listResponsables;
             // $this->listLibAnnexe;
-            // $this->listParamChargEns;
+            $this->listParamChargEns = new TableauParametrageChargeEnseignementDTO2($paramArrayCE);
             // $this->listElementPrerequis;
             // $this->listTypePopulation;
         }

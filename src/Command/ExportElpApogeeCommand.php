@@ -16,8 +16,13 @@ use App\Entity\Parcours;
 use App\Entity\Semestre;
 use App\Entity\Ue;
 use App\Enums\Apogee\CodeNatuElpEnum;
+use App\Enums\Apogee\TypeHeureCE;
 use App\Repository\ElementConstitutifRepository;
 use App\Service\Apogee\Classes\ElementPedagogiDTO6;
+use App\Service\Apogee\Classes\ParametrageAnnuelCeDTO2;
+use App\Service\Apogee\Classes\TableauParametrageChargeEnseignementDTO2;
+use App\Service\Apogee\Classes\TableauTypeHeureDTO;
+use App\Service\Apogee\Classes\TypeHeureDTO;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -295,7 +300,11 @@ class ExportElpApogeeCommand extends Command
         ?CodeNatuElpEnum $natureElp = null,
         bool $withChecks = false
     ) : ElementPedagogiDTO6 {
-        return new ElementPedagogiDTO6($elementPedagogique, $dto, $natureElp, $withChecks);
+        $tableauParamCE = [];
+        if(in_array($natureElp->value, ['MATI', 'MATM', 'MATP', 'MATS']) && $elementPedagogique instanceof StructureEc){
+           $tableauParamCE = $this->configureChargeEnseignementForEC($elementPedagogique);
+        }
+        return new ElementPedagogiDTO6($elementPedagogique, $dto, $natureElp, $withChecks, $tableauParamCE);
     }
 
     /**
@@ -404,7 +413,8 @@ class ExportElpApogeeCommand extends Command
         $headers = [
             "codElp", "libCourtElp", "libElp", "codNatureElp",
             "codComposante", "temModaliteControle", "nbrCredits",
-            "volume", "uniteVolume", "codPeriode", "listeCentreInsPedagogi"
+            "volume", "uniteVolume", "codPeriode", "listeCentreInsPedagogi",
+            "paramCE"
         ];
         // cast element into array values
         $ElpArray = array_map(
@@ -417,7 +427,7 @@ class ExportElpApogeeCommand extends Command
                         fn($cip) => $cip->codCentreInsPedagogi,
                         $elp->listCentreInsPedagogi->centreInsPedagogi
                     )
-                )
+                ), $elp->listParamChargEns instanceof TableauParametrageChargeEnseignementDTO2 ? $elp->listParamChargEns->printInformation() : ""
             ], 
             $ElpArray
         );
@@ -624,10 +634,45 @@ class ExportElpApogeeCommand extends Command
         return $object;
     }
 
+    /**
+     * Récupère les parcours disponibles et valides en base de données
+     * @return array Tableau des parcours disponibles à traiter
+     */
     private function retrieveParcoursDataFromDatabase(){
         $dataArray = $this->entityManager->getRepository(Formation::class)->findAll();
         $dataArray = array_filter($dataArray, [$this, 'filterFormationByPublicationState']);
         $dataArray = array_map(fn($formation) => $formation->getParcours()->toArray(), $dataArray);
         return array_merge(...$dataArray);
     }
+
+    /**
+     * Calcule les charges d'enseignements pour l'element pédagogique fourni
+     * @param StructureEc $elementPedagogique Élément pédagogique
+     * @return TableauParametrageChargeEnseignementDTO2 Paramètres des charges d'enseignement
+     */
+    private function configureChargeEnseignementForEC(StructureEc $elementPedagogique) : TableauParametrageChargeEnseignementDTO2|array {
+        $typeHeureArray = [];
+        if($elementPedagogique->heuresEctsEc->cmPres > 0 || $elementPedagogique->heuresEctsEc->cmDist > 0){
+            $nbHeure = $elementPedagogique->heuresEctsEc->cmPres + $elementPedagogique->heuresEctsEc->cmDist;
+            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::CM, (string)$nbHeure, '?');
+        }
+        if($elementPedagogique->heuresEctsEc->tdPres > 0 || $elementPedagogique->heuresEctsEc->tdDist > 0){
+            $nbHeure = $elementPedagogique->heuresEctsEc->tdPres + $elementPedagogique->heuresEctsEc->tdDist;
+            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::TD, (string)$nbHeure, '?');
+        }
+        if($elementPedagogique->heuresEctsEc->tpPres > 0 || $elementPedagogique->heuresEctsEc->tpDist > 0){
+            $nbHeure = $elementPedagogique->heuresEctsEc->tpPres + $elementPedagogique->heuresEctsEc->tpDist;
+            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::TP, (string)$nbHeure, '?');
+        }
+
+        if(count($typeHeureArray) > 0){
+            $typeHeureArrayDTO = new TableauTypeHeureDTO($typeHeureArray);
+            $paramCE = new ParametrageAnnuelCeDTO2('2024', $typeHeureArrayDTO, 'O');
+            return [$paramCE];
+        }else {
+            return [];
+        }
+
+    }
+    
 }

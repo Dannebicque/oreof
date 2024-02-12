@@ -18,4 +18,13 @@ class ParametrageAnnuelCeDTO2
     public TableauTypeHeureDTO $listTypHeur;
     public TableauEffPrevDTO $listEffPrev;
 
+    public function __construct(string $codAnneeUni, TableauTypeHeureDTO $typeHeureArray, string $temCalculCharge = 'O'){
+        $this->codAnneeUni = $codAnneeUni;
+        $this->listTypHeur = $typeHeureArray;
+        $this->temCalculCharge = $temCalculCharge;
+    }
+
+    public function printInformation(){
+        return $this->listTypHeur->printInformation();
+    }
 }
