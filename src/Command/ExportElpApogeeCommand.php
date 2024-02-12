@@ -244,22 +244,30 @@ class ExportElpApogeeCommand extends Command
                     $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById(405);
                     $dto = $this->getDTOForParcours($parcours);
                     $ec = $dto->semestres[1]->ues()[0]->elementConstitutifs[0];
-                    $elp = new ElementPedagogiDTO6($ec, $dto);
+                    // $elp = new ElementPedagogiDTO6($ec, $dto);
+                    $elp = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATI, false);
                     $elp->codElp = 'TEST110';
                     $elp->codNatureElp = 'MATI';
-                    $elp->libCourtElp = "TEST WS PHP 2";
-                    $elp->libElp = "TEST WEBSERVICE PHP 2";
+                    $elp->libCourtElp = "TEST WS PHP 10";
+                    $elp->libElp = "TEST WEBSERVICE PHP 12022024";
                     dump($elp);
                     if($this->verifyUserIntent($io, "Les données affichées conviennent-elles ?")){
-                        $io->writeln("Initialisation du Web Service...");
-                        // Création du client SOAP
-                        $this->createSoapClient();
-                        $io->writeln('Création du client SOAP réussie.');
-                        // Insertion d'un élément
-                        $result = $this->insertOneElp($elp);
-                        $io->writeln("Résultat de l'appel au Web Service :");
-                        dump($result);
-                        return Command::SUCCESS;
+                        try{
+                            $io->writeln("Initialisation du Web Service...");
+                            // Création du client SOAP
+                            $this->createSoapClient();
+                            $io->writeln('Création du client SOAP réussie.');
+                            // Insertion d'un élément
+                            $result = $this->insertOneElp($elp);
+                            $io->writeln("Résultat de l'appel au Web Service :");
+                            dump($result);
+                            $io->writeln('Insertion réussie !');
+                            return Command::SUCCESS;
+                        }catch(\Exception $e){
+                            $io->writeln("Une erreur est survenue durant l'insertion.");
+                            $io->writeln("Message : " . $e->getMessage());
+                            return Command::FAILURE;
+                        }
 
                     }else {
                         $io->warning('La commande a été annulée.');
@@ -654,15 +662,15 @@ class ExportElpApogeeCommand extends Command
         $typeHeureArray = [];
         if($elementPedagogique->heuresEctsEc->cmPres > 0 || $elementPedagogique->heuresEctsEc->cmDist > 0){
             $nbHeure = $elementPedagogique->heuresEctsEc->cmPres + $elementPedagogique->heuresEctsEc->cmDist;
-            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::CM, (string)$nbHeure, '?');
+            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::CM, (string)$nbHeure, '55');
         }
         if($elementPedagogique->heuresEctsEc->tdPres > 0 || $elementPedagogique->heuresEctsEc->tdDist > 0){
             $nbHeure = $elementPedagogique->heuresEctsEc->tdPres + $elementPedagogique->heuresEctsEc->tdDist;
-            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::TD, (string)$nbHeure, '?');
+            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::TD, (string)$nbHeure, '55');
         }
         if($elementPedagogique->heuresEctsEc->tpPres > 0 || $elementPedagogique->heuresEctsEc->tpDist > 0){
             $nbHeure = $elementPedagogique->heuresEctsEc->tpPres + $elementPedagogique->heuresEctsEc->tpDist;
-            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::TP, (string)$nbHeure, '?');
+            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::TP, (string)$nbHeure, '55');
         }
 
         if(count($typeHeureArray) > 0){
