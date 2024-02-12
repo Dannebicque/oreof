@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.19](https://github.com/Dannebicque/oreof/compare/v1.24.18...v1.24.19) (2024-02-10)
+
+
+### Bug Fixes
+
+* Role lecture seul sur formation ([332e766](https://github.com/Dannebicque/oreof/commit/332e7661962cef4925f184f870f76b49f8f40c7f))
+
+### [1.24.18](https://github.com/Dannebicque/oreof/compare/v1.24.17...v1.24.18) (2024-02-10)
+
+
+### Bug Fixes
+
+* UE enfants dans structure ([fa50cb3](https://github.com/Dannebicque/oreof/commit/fa50cb38d4a8bbfe6a657a587f621dc55121f4ec))
+
+### [1.24.17](https://github.com/Dannebicque/oreof/compare/v1.24.16...v1.24.17) (2024-02-10)
+
+
+### Bug Fixes
+
+* Composant fiche matiere ([5cdab4e](https://github.com/Dannebicque/oreof/commit/5cdab4e4919f4b05b91cc5d0ec39ba62e6459d27))
+* fiche ([9798769](https://github.com/Dannebicque/oreof/commit/979876946e95c045c176b140cfda001e78a74257))
+* Json marquage des fiches avec lien ([3246aea](https://github.com/Dannebicque/oreof/commit/3246aeaa830253ca9ceb4341cd40072f116f7e25))
+* trad ([ca114fc](https://github.com/Dannebicque/oreof/commit/ca114fccf2ed55fb2b74dccd08f753354a1c6881))
+
+### [1.24.16](https://github.com/Dannebicque/oreof/compare/v1.24.15...v1.24.16) (2024-02-09)
+
+
+### Bug Fixes
+
+* Blocage case si pas de case à cocher ([e0fdf8d](https://github.com/Dannebicque/oreof/commit/e0fdf8d41093867ddd16dc9b36664d645602de3c))
+* Composant fiche matiere ([ed547a3](https://github.com/Dannebicque/oreof/commit/ed547a3880d0ad5d22ce663c075278d5b31cfc73))
+* ECTS sur les UE pour export json maquette ([fc5d844](https://github.com/Dannebicque/oreof/commit/fc5d844f0ea08b7d2952e51d17a159a5a8245228))
+* Etat des fiches dans listes ([9809054](https://github.com/Dannebicque/oreof/commit/9809054547173702ec6206e90b9f04a42ba1f6a5))
+* lien vers EC sur ifram maquette ([6ca5804](https://github.com/Dannebicque/oreof/commit/6ca5804dbbee37feb1c9e3974f7bd5b7d3863cde))
+* Typos + trad ([fb6d7e4](https://github.com/Dannebicque/oreof/commit/fb6d7e4849e4d62613c50d7b1019c3caad5be194))
+
+### [1.24.15](https://github.com/Dannebicque/oreof/compare/v1.24.14...v1.24.15) (2024-02-09)
+
+
+### Bug Fixes
+
+* bloque l'accès aux fiches depuis la structure si validée ([50742d9](https://github.com/Dannebicque/oreof/commit/50742d9ce45efaa7f20c723125a149551e956d8b))
+* DNO plus particulier. ([c0f4977](https://github.com/Dannebicque/oreof/commit/c0f4977afaef20db7dc41459a9d235a695362513))
+
 ### [1.24.14](https://github.com/Dannebicque/oreof/compare/v1.24.13...v1.24.14) (2024-02-08)
 
 

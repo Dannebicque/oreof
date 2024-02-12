@@ -52,7 +52,7 @@
                         >
                             <option value="">Choisir l'état</option>
                             {% for value, type in types_validation %}
-                                <option value="{{ value }}">{{ type.transition|trans({}, 'process') }}</option>
+                                <option value="{{ value }}">{{ (type.transition)|trans({}, 'process') }}</option>
                             {% endfor %}
                         </select>
                     </div>

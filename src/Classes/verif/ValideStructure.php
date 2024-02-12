@@ -153,7 +153,7 @@ abstract class ValideStructure extends AbstractValide
 
         //vérification des ECTS, d'un libellé et d'une description
         } elseif ($ec->getNatureUeEc()?->isChoix() || $ec->getEcEnfants()->count() > 0) {
-            if (self::$typeDiplome !== null && self::$typeDiplome->getLibelleCourt() !== 'DNO') {
+            if (self::$typeDiplome !== null) {
                 //si l'EC est un choix, on vérifie les enfants
                 if ($ec->getEcts() !== null && $ec->getEcts() > 0.0 && $ec->getEcts() <= 30.0) {
                     $t['global'] = self::COMPLET;
@@ -192,7 +192,7 @@ abstract class ValideStructure extends AbstractValide
         }
         $raccroche = GetElementConstitutif::isRaccroche($ec, self::$parcours);
         if ($ec->getNatureUeEc()?->isLibre() === true) {
-            if (self::$typeDiplome !== null && self::$typeDiplome->getLibelleCourt() !== 'DNO') {
+            if (self::$typeDiplome !== null) {
                 $ects = GetElementConstitutif::getEcts($ec, $raccroche);
                 if ($ects === null ||
                     $ects <= 0.0 ||
@@ -219,7 +219,7 @@ abstract class ValideStructure extends AbstractValide
                 $etatEc = self::INCOMPLET;
                 self::$errors[] = 'MCCC non renseignées pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
             }
-            if (self::$typeDiplome !== null && self::$typeDiplome->getLibelleCourt() !== 'DNO') {
+            if (self::$typeDiplome !== null) {
                 $ects = GetElementConstitutif::getEcts($ec, $raccroche);
                 if ($ects === null ||
                     $ects <= 0.0 ||

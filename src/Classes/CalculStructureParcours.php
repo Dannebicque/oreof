@@ -75,8 +75,8 @@ class CalculStructureParcours
 
                         foreach ($ue->getUeEnfants() as $ueEnfant) {
                             $display = $ueEnfant->display($parcours);
+                            $ueOrigineEnfant = $ueEnfant;
                             if ($ueEnfant !== null && $ueEnfant->getUeRaccrochee() !== null) {
-                                $ueOrigine = $ueEnfant;
                                 $ueEnfant = $ueEnfant->getUeRaccrochee()->getUe();
                                 $raccrocheUeEnfant = true;
                             } else {
@@ -84,7 +84,7 @@ class CalculStructureParcours
                             }
 
                             if ($ueEnfant !== null) {
-                                $dtoUeEnfant = new StructureUe($ueEnfant, $raccrocheUeEnfant, $display, $ueOrigine ?? null, $withEcts);
+                                $dtoUeEnfant = new StructureUe($ueEnfant, $raccrocheUeEnfant, $display, $ueOrigineEnfant ?? null, $withEcts);
                                 //$ecsEnfant = $this->elementConstitutifRepository->getByUe($ueEnfant);
 
                                 foreach ($ueEnfant->getElementConstitutifs() as $elementConstitutif) {
@@ -99,7 +99,7 @@ class CalculStructureParcours
                                         $dtoUeEnfant->addEc($dtoEc);
                                     }
                                 }
-                                $dtoUe->addUeEnfant($ueEnfant->getOrdre(), $dtoUeEnfant);
+                                $dtoUe->addUeEnfant($ueOrigineEnfant->getOrdre(), $dtoUeEnfant);
                             }
                         }
                         $dtoSemestre->addUe($ueOrigine->getOrdre(), $dtoUe);

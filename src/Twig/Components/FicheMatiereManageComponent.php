@@ -97,9 +97,6 @@ final class FicheMatiereManageComponent extends AbstractController
     #[PostMount]
     public function postMount(): void
     {
-        $this->typeDiplome = $this->ficheMatiere->getParcours()?->getFormation()?->getTypeDiplome();
-        $this->parcours = $this->ficheMatiere->getParcours();
-        $this->formation = $this->parcours->getFormation();
         $this->getHistorique();
 
         // dépend du type et de l'étape...

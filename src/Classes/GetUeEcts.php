@@ -17,7 +17,7 @@ abstract class GetUeEcts
 {
     public static function getEcts(Ue $ue, Parcours $parcours, TypeDiplome $typeDiplome): ?float
     {
-        if ($typeDiplome->getLibelleCourt() === 'BUT' || $typeDiplome->getLibelleCourt() === 'DNO') {
+        if ($typeDiplome->getLibelleCourt() === 'BUT') {
             return $ue->getEcts() ?? 0.0;
         }
 

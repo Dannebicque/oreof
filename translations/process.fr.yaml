@@ -258,8 +258,8 @@ reserve.validation.conseil.helps.date.help: ' '
 transmis.parcours.formation: 'Parcours transmis'
 parcours.valides.rf: 'Parcours validé'
 deposer.le.pv.infobulle: 'Déposer la pièce justifiant la validation par le Conseil de composante (PV, Relevé de décisions, délibération)'
-formation.refuse.cfvu.flash.success: formation.refuse.cfvu.flash.success
-validation.etat.refuser.cfvu: validation.etat.refuser.cfvu
+formation.refuse.cfvu.flash.success: 'Formation refusée par la CFVU'
+validation.etat.refuser.cfvu: 'Formation refusée par la CFVU'
 en_cours_redaction: 'En cours de rédaction'
 soumis_dpe_composante: 'Soumis DPE'
 soumis_conseil: 'Soumis Conseil'
@@ -278,32 +278,31 @@ validation.formation.indisponible: 'Validation formation impossible'
 verifier.fiches.ec.matieres.infobulle: 'Vérifier les informations saisies dans les fiches EC/matières'
 validation.valider.fiches_matieres.parcours: 'Valider et soumettre au RF les fiches EC/matières'
 validation.valider.fiches_matieres.formation: 'Valider et soumettre au DPE les fiches EC/matières'
-historique.de.validation.fiche_matiere.title: historique.de.validation.fiche_matiere.title
-historique.de.validation.fiche_matiere.infobulle: historique.de.validation.fiche_matiere.infobulle
-validation.fiche_matiere: validation.fiche_matiere
-validation.valider.fiche_matiere.title: validation.valider.fiche_matiere.title
-validation.valider.fiche_matiere: validation.valider.fiche_matiere
+historique.de.validation.fiche_matiere.title: 'Historique de validation fiche EC/matière'
+historique.de.validation.fiche_matiere.infobulle: 'Historique de validation fiche EC/matière'
+validation.fiche_matiere: 'Fiche EC/Matière en cours de rédaction, attente de validation'
+validation.valider.fiche_matiere.title: 'Valider et soumettre la fiche EC/matière'
+validation.valider.fiche_matiere: 'Valider et soumettre la fiche EC/matière'
 validation.fiche_matiere.valide.alerte: validation.fiche_matiere.valide.alerte
 btn.validation.fiche_matiere.valide.en_cours_redaction: btn.validation.fiche_matiere.valide.en_cours_redaction
 validation.fiche_matiere.valide.impossible.en_cours_redaction: validation.fiche_matiere.valide.impossible.en_cours_redaction
-ficheMatiere.valide.fiche_matiere.flash.success: ficheMatiere.valide.fiche_matiere.flash.success
-validation.fiche_matiere.ses: validation.fiche_matiere.ses
-validation.fiche_matiere.publication: validation.fiche_matiere.publication
-fiche_matiere.publie: fiche_matiere.publie
+ficheMatiere.valide.fiche_matiere.flash.success: 'Valider et soumettre la fiche EC/matière'
+validation.fiche_matiere.ses: 'Validation par le central'
+validation.fiche_matiere.publication: 'Fiche EC/Matière prête pour publication'
+fiche_matiere.publie: 'Fiche EC/Matière publiée'
 validation.valider.transmis_ses.title: validation.valider.transmis_ses.title
 validation.valider.transmis_ses: validation.valider.transmis_ses
 validation.reserve.transmis_ses.title: validation.reserve.transmis_ses.title
 validation.reserve.transmis_ses: validation.reserve.transmis_ses
 validation.refuser.transmis_ses.title: validation.refuser.transmis_ses.title
 validation.refuser.transmis_ses: validation.refuser.transmis_ses
-validation.fiche_matiere.ses.valide.alerte: validation.fiche_matiere.ses.valide.alerte
+validation.fiche_matiere.ses.valide.alerte: 'Valider les fiches EC/matière pour la publication'
 btn.validation.fiche_matiere.ses.valide: btn.validation.fiche_matiere.ses.valide
 ficheMatiere.valide.transmis_ses.flash.success: ficheMatiere.valide.transmis_ses.flash.success
 validation.valider.transmis_pour_publication.title: validation.valider.transmis_pour_publication.title
 validation.valider.transmis_pour_publication: validation.valider.transmis_pour_publication
-historique.: historique.
-historique.validation.fiche_matiere.ses: historique.validation.fiche_matiere.ses
-validation.valider.fiches_matieres: validation.valider.fiches_matieres
+historique.validation.fiche_matiere.ses: 'Historique de validation fiche EC/matière'
+validation.valider.fiches_matieres: "Valider et soumettre les fiches EC/matière"
 demande.reouverture: demande.reouverture
 demande.reouverture.title: demande.reouverture.title
 validation.cfvu.valide.cas.acceptation.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.directe.valide_a_publier
@@ -329,12 +328,19 @@ validation.cfvu.valide.commentaire.cas.sous.reserve.modifications.argumentaire.v
 validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier: validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier
 demande.reouverture.modification.mccc.maquette.label: demande.reouverture.modification.mccc.maquette.label
 demande.reouverture.modification.mccc.maquette.help: demande.reouverture.modification.mccc.maquette.help
-transmis_ses: Transmis central
-transmis_pour_publication: Prêt pour publication
-publie: Publié
-validation.valider.soumis_central: validation.valider.soumis_central
-validation.reserve.soumis_central: validation.reserve.soumis_central
-validation.refuser.soumis_central: validation.refuser.soumis_central
-ficheMatiere.valide.soumis_central.flash.success: ficheMatiere.valide.soumis_central.flash.success
+transmis_ses: 'Soumis central'
+transmis_pour_publication: 'Validé pour publication'
+publie: 'Publié'
+validation.valider.soumis_central: 'Valider pour publication'
+validation.reserve.soumis_central: 'Emettre des réserves'
+validation.refuser.soumis_central: 'Refuser les fiches EC/matiere'
+ficheMatiere.valide.soumis_central.flash.success: 'Fiche EC/Matière validée pour publication'
+fiche_matiere: 'Fiche EC/matière'
+validation.valider.soumis_central.title: 'Valider et soumettre les fiches EC/matière'
+modification.historique.title: 'Modification de l''historique'
+modification.historique: 'Modification de l''historique'
 validation.valider.valide_pour_publication: validation.valider.valide_pour_publication
-fiche_matiere: fiche_matiere
+validation.fiche_matiere.ses.reserve.alerte: validation.fiche_matiere.ses.reserve.alerte
+reserve.validation.fiche_matiere.ses.argumentaire.label: 'Argumentaire pour les réserves des fiches EC/matière'
+reserve.validation.fiche_matiere.ses.helps.argumentaire.help: ''
+btn.validation.fiche_matiere.ses.reserve: 'Emettre des réserves sur les fiches EC/matière'

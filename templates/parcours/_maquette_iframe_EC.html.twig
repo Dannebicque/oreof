@@ -1,53 +1,63 @@
-{% set colorBadge = indexUeEnfant == 1 ? 'bg-primary' 
-    : indexUeEnfant == 2 ? 'bg-danger' 
-    : indexUeEnfant == 3 ? 'bg-success' 
-    : 'bg-warning' 
-%}
+{% set colorBadge = indexUeEnfant == 1 ? 'bg-primary'
+    : indexUeEnfant == 2 ? 'bg-danger'
+    : indexUeEnfant == 3 ? 'bg-success'
+    : 'bg-warning' %}
 
 {% set alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
 
 {% if IsEcEnfant and loop.index == 1 %}
-<tr>
-    <td id="ECLibelle" style="{{ 'padding-left: ' ~ (paddingCascade - 1) * paddingCascadeValue ~ 'em;' }}">
-        EC {{ indexEC }} à choix :
-        <span class="badge bg-info">
-            1 choix possible parmi {{ arrayLength }} 
+    <tr>
+        <td id="ECLibelle" style="{{ 'padding-left: ' ~ (paddingCascade - 1) * paddingCascadeValue ~ 'em;' }}">
+            EC {{ indexEC }} à choix :
+            <span class="badge bg-info">
+            1 choix possible parmi {{ arrayLength }}
         </span>
-        {# {% if indexUeEnfant != -1 %} 
+            {# {% if indexUeEnfant != -1 %}
             <span class="ms-3 badge {{ colorBadge }}">Choix {{ indexUeEnfant }}</span>
         {% endif %} #}
-        {# <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down"> #}
-    </td>
-    <td colspan="7" id="tdEcRestreint"></td>
-</tr>
+            {# <img src="{{ asset('/maquette/arrow-down.svg') }}" class="arrow-down"> #}
+        </td>
+        <td colspan="7" id="tdEcRestreint"></td>
+    </tr>
 {% endif %}
 <tr>
     {# <td id="{{ IsEcEnfant ? 'ECEnfantLibelle' : 'ECLibelle' }}" class="{{ indexUeEnfant != -1  ? 'indexUeEnfant' ~ indexUeEnfant : '' }}"> #}
     <td id="{{ IsEcEnfant ? 'ECEnfantLibelle' : 'ECLibelle' }}"
-        style="{{
-            IsEcEnfant 
-            ? 'padding-left: ' ~ (paddingCascade) * paddingCascadeValue ~ 'em;'
-            : 'padding-left: ' ~ (paddingCascade) * paddingCascadeValue ~ 'em;' 
-        }}"
+        style="{{ IsEcEnfant
+        ? 'padding-left: ' ~ (paddingCascade) * paddingCascadeValue ~ 'em;'
+        : 'padding-left: ' ~ (paddingCascade) * paddingCascadeValue ~ 'em;' }}"
     >
         {% if ec.elementConstitutif.ficheMatiere is defined and ec.elementConstitutif.ficheMatiere is not null %}
-        {# <a href="{{ path(
+            {% if workflow_has_marked_place(ec.elementConstitutif.ficheMatiere, 'publie') or workflow_has_marked_place(ec.elementConstitutif.ficheMatiere, 'valide_pour_publication') %}
+                <a href="{{ path(
                     'app_fiche_matiere_maquette_iframe',
                     { ec: ec.elementConstitutif.id, parcours: parcours.parcours.id }
-                    ) 
-                }}">
-            EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} - 
-            {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
-        </a> #}
-        <span>
-            EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} - 
+                ) }}">
+             <span>
+            EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} -
             {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
         </span>
+                </a>
+            {% else %}
+                <span>
+            EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} -
+            {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
+        </span>
+            {% endif %}
+            {# <a href="{{ path(
+                    'app_fiche_matiere_maquette_iframe',
+                    { ec: ec.elementConstitutif.id, parcours: parcours.parcours.id }
+                    )
+                }}">
+            EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} -
+            {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
+        </a> #}
+
         {% else %}
-            EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} - 
+            EC {{ IsEcEnfant ? indexEC ~ '.' ~ alphabet|slice((indexECEnfant - 1), 1) : indexEC }} -
             {{ ec.elementConstitutif.ficheMatiere.libelle ?? ec.elementConstitutif.libelle ?? ec.elementConstitutif.display() }}
         {% endif %}
-        {# {% if indexUeEnfant != -1 and IsEcEnfant is same as(false) %} 
+        {# {% if indexUeEnfant != -1 and IsEcEnfant is same as(false) %}
             <span class="ms-3 badge {{ colorBadge }}">Choix {{ indexUeEnfant }}</span>
         {% endif %} #}
     </td>

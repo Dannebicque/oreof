@@ -197,25 +197,25 @@
 
 
                             {% if is_granted('ROLE_SES') %}
-                                <a href="{{ path('app_formation_edit_modal',{'slug': this.formation.slug}) }}"
-                                   class="btn btn-sm btn-icon btn-icon-only btn-outline-secondary ms-1"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="bottom"
-                                   title="{{ 'modifier.la.validation.infobulle'|trans({}, 'process') }}"
-                                        {{ stimulus_controller('modal', {
-                                            size: 'large',
-                                            modalTitle: 'modifier.la.validation.title'|trans({}, 'process'),
-                                            right: false,
-                                            updateComponent: {
-                                                id: 'mention_manage',
-                                                event: 'mention_manage:edit'
-                                            },
-                                            modalUrl: path('app_validation_edit', {id:0, type:'a'}) }) }}
-                                   data-action="click->modal#openModal"
-                                   data-size="lg"
-                                >
-                                    <i class="fal fa-wrench"></i>
-                                </a>
+{#                                <a href="{{ path('app_formation_edit_modal',{'slug': this.formation.slug}) }}"#}
+{#                                   class="btn btn-sm btn-icon btn-icon-only btn-outline-secondary ms-1"#}
+{#                                   data-bs-toggle="tooltip"#}
+{#                                   data-bs-placement="bottom"#}
+{#                                   title="{{ 'modifier.la.validation.infobulle'|trans({}, 'process') }}"#}
+{#                                        {{ stimulus_controller('modal', {#}
+{#                                            size: 'large',#}
+{#                                            modalTitle: 'modifier.la.validation.title'|trans({}, 'process'),#}
+{#                                            right: false,#}
+{#                                            updateComponent: {#}
+{#                                                id: 'mention_manage',#}
+{#                                                event: 'mention_manage:edit'#}
+{#                                            },#}
+{#                                            modalUrl: path('app_validation_edit', {id:0, type:'a'}) }) }}#}
+{#                                   data-action="click->modal#openModal"#}
+{#                                   data-size="lg"#}
+{#                                >#}
+{#                                    <i class="fal fa-wrench"></i>#}
+{#                                </a>#}
                             {% endif %}
                         </div>
                     </div>
