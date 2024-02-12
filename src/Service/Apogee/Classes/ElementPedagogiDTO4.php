@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Classes\Apogee;
+namespace App\Service\Apogee\Classes;
 
 class ElementPedagogiDTO4 {
 
