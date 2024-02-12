@@ -435,7 +435,7 @@ class ExportElpApogeeCommand extends Command
                         fn($cip) => $cip->codCentreInsPedagogi,
                         $elp->listCentreInsPedagogi->centreInsPedagogi
                     )
-                ), $elp->listParamChargEns instanceof TableauParametrageChargeEnseignementDTO2 ? $elp->listParamChargEns->printInformation() : ""
+                ), isset($elp->listParamChargEns) ? $elp->listParamChargEns->printInformation() : ""
             ], 
             $ElpArray
         );
