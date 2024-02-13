@@ -9,6 +9,7 @@
 
 namespace App\Entity;
 
+use App\Enums\TypeUeEcEnum;
 use App\Repository\TypeUeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -27,12 +28,12 @@ class TypeUe
     #[Groups('parcours_json_versioning')]
     #[ORM\Column(length: 100)]
     private ?string $libelle = null;
-//
-//    #[ORM\Column(type: Types::JSON, nullable: true)]
-//    private ?array $typeDiplome = [];
 
     #[ORM\ManyToMany(targetEntity: TypeDiplome::class, inversedBy: 'typeUes')]
     private Collection $typeDiplomes;
+
+    #[ORM\Column(length: 30, nullable: true, enumType: TypeUeEcEnum::class)]
+    private ?TypeUeEcEnum $type = null;
 
     public function __construct()
     {
@@ -88,6 +89,18 @@ class TypeUe
     public function removeTypeDiplome(TypeDiplome $typeDiplome): self
     {
         $this->typeDiplomes->removeElement($typeDiplome);
+
+        return $this;
+    }
+
+    public function getType(): ?TypeUeEcEnum
+    {
+        return $this->type ?? TypeUeEcEnum::NORMAL;
+    }
+
+    public function setType(?TypeUeEcEnum $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }
