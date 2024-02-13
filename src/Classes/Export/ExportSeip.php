@@ -1,0 +1,92 @@
+<?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Classes/Export/ExportSynthese.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 11/11/2023 13:07
+ */
+
+namespace App\Classes\Export;
+
+use App\Classes\Excel\ExcelWriter;
+use App\Classes\GetHistorique;
+use App\Entity\CampagneCollecte;
+use App\Entity\ElementConstitutif;
+use App\Enums\RegimeInscriptionEnum;
+use App\Repository\ElementConstitutifRepository;
+use App\Repository\FormationRepository;
+use App\Utils\Tools;
+use DateTime;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpKernel\KernelInterface;
+
+class ExportSeip implements ExportInterface
+{
+    private string $fileName;
+    private string $dir;
+
+    public function __construct(
+        protected GetHistorique        $getHistorique,
+        protected ExcelWriter         $excelWriter,
+        KernelInterface               $kernel,
+        protected ElementConstitutifRepository $elementConstitutifRepository,
+    ) {
+        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+    }
+
+    private function prepareExport(
+        CampagneCollecte $anneeUniversitaire,
+    ): void {
+        $ecs = $this->elementConstitutifRepository->findWithParcours();
+        $this->excelWriter->nouveauFichier('Export SEIP');
+        $this->excelWriter->setActiveSheetIndex(0);
+
+        $this->excelWriter->writeCellXY(1, 1, 'Composante');
+        $this->excelWriter->writeCellXY(2, 1, 'Type Diplôme');
+        $this->excelWriter->writeCellXY(3, 1, 'Mention');
+        $this->excelWriter->writeCellXY(4, 1, 'Parcours');
+        $this->excelWriter->writeCellXY(5, 1, 'Semestre');
+        $this->excelWriter->writeCellXY(6, 1, 'Ue');
+        $this->excelWriter->writeCellXY(7, 1, 'EC');
+        $this->excelWriter->writeCellXY(8, 1, 'Fiche EC/matière');
+        $this->excelWriter->writeCellXY(9, 1, 'Type EC');
+
+        $ligne = 2;
+        /** @var ElementConstitutif $ec */
+        foreach ($ecs as $ec) {
+            $this->excelWriter->writeCellXY(1, $ligne, $ec->getParcours()?->getFormation()?->getComposantePorteuse()?->getLibelle());
+            $this->excelWriter->writeCellXY(2, $ligne, $ec->getParcours()?->getFormation()?->getTypeDiplome()?->getLibelle());
+            $this->excelWriter->writeCellXY(3, $ligne, $ec->getParcours()?->getFormation()?->getDisplay());
+
+            if ($ec->getParcours()?->getFormation()?->isHasParcours()) {
+                $this->excelWriter->writeCellXY(4, $ligne, $ec->getParcours()?->getLibelle());
+            } else {
+                $this->excelWriter->writeCellXY(4, $ligne, 'Pas de parcours');
+            }
+            $this->excelWriter->writeCellXY(5, $ligne, $ec->getUe()?->getSemestre()?->display());
+            $this->excelWriter->writeCellXY(6, $ligne, $ec->getUe()?->display($ec->getParcours()));
+            $this->excelWriter->writeCellXY(7, $ligne, $ec->getLibelle());
+            $this->excelWriter->writeCellXY(8, $ligne, $ec->getFicheMatiere()?->getLibelle());
+            $this->excelWriter->writeCellXY(9, $ligne, $ec->getTypeEc()?->getType()->value);
+
+            $this->excelWriter->getColumnsAutoSize('A', 'M');
+            $ligne++;
+        }
+
+        $this->fileName = Tools::FileName('OF - SEIP - ' . (new DateTime())->format('d-m-Y-H-i'), 30);
+    }
+
+    public function export(CampagneCollecte $anneeUniversitaire): StreamedResponse
+    {
+        $this->prepareExport($anneeUniversitaire);
+        return $this->excelWriter->genereFichier($this->fileName);
+    }
+
+    public function exportLink(CampagneCollecte $anneeUniversitaire): string
+    {
+        $this->prepareExport($anneeUniversitaire);
+        $this->excelWriter->saveFichier($this->fileName, $this->dir . 'zip/');
+        return $this->fileName . '.xlsx';
+    }
+}

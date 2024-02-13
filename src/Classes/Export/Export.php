@@ -32,6 +32,7 @@ class Export
         protected ExportCfvu $exportCfvu,
         protected ExportCarif $exportCarif,
         protected ExportSynthese $exportSynthese,
+        protected ExportSeip $exportSeip,
         protected ExportMccc $exportMccc,
         KernelInterface $kernel,
         private TypeDiplomeRegistry $typeDiplomeRegistry,
@@ -77,6 +78,8 @@ class Export
                 return $this->exportCfvu();
             case 'fiches_matieres':
                 return $this->exportFicheMatiere();
+            case 'seip':
+                return $this->exportSeip();
             case 'synthese':
                 return $this->exportSynthese();
         }
@@ -109,6 +112,11 @@ class Export
     private function exportCarif()
     {
         return $this->exportCarif->exportLink($this->annee);
+    }
+
+    private function exportSeip()
+    {
+        return $this->exportSeip->exportLink($this->annee);
     }
 
     private function exportSynthese(): string

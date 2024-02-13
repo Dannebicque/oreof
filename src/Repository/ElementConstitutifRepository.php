@@ -15,6 +15,7 @@ use App\Entity\ElementConstitutif;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
+use App\Entity\SemestreParcours;
 use App\Entity\Ue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -209,6 +210,20 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->andWhere('ec.ue = :ue')
             ->setParameter('ue', $ue)
             ->orderBy('ec.ordre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findWithParcours(): array
+    {
+        return $this->createQueryBuilder('ec')
+            ->join('ec.ue', 'ue')
+            ->join('ue.semestre', 's')
+            ->innerJoin(SemestreParcours::class, 'sp', 'WITH', 's.id = sp.semestre')
+            ->join('sp.parcours', 'p')
+            ->join('p.formation', 'f')
+//            //->addSelect('ue', 's', 'sp', 'p', 'f')
+            ->andWhere('ec.parcours IS NOT NULL')
             ->getQuery()
             ->getResult();
     }
