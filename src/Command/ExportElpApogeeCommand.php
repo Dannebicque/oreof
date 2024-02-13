@@ -584,28 +584,31 @@ class ExportElpApogeeCommand extends Command
         $hasChildren = count($ec->elementsConstitutifsEnfants) > 0;
         // si l'élément est mutualisé, on ne l'insère qu'une fois
         if($this->isEcMutualiseMaster($ec, $dto) && $hasChildren === false){
-            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATM, $withChecks);
+            $nature = CodeNatuElpEnum::MATM;
+            if($ec->elementConstitutif->getTypeEc()->getType() === TypeUeEcEnum::STAGE){
+                $nature = CodeNatuElpEnum::MATS;
+            }
+            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, $nature, $withChecks);
         }
         // si l'élément a des enfants, on insère que les enfants
         if($hasChildren){
+            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::CHOI, $withChecks);
             foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
                 if($this->isEcMutualiseMaster($ecEnfant, $dto) === true){
                     $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::MATM, $withChecks);
                 }
                 elseif ($this->isEcMutualise($ecEnfant) === false) {
-                    $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::CHOI, $withChecks);
+                    $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::MATI, $withChecks);
                 }
             }
         }
         // si c'est une matière standard
         if($hasChildren === false && $this->isEcMutualise($ec) === false){
             $nature = CodeNatuElpEnum::MATI;
-            if($ec->elementConstitutif->getTypeEc()->getType() === TypeUeEcEnum::PROJET){
-                $nature = CodeNatuElpEnum::MATP;
-            } elseif ($ec->elementConstitutif->getTypeEc()->getType() === TypeUeEcEnum::STAGE){
+            if ($ec->elementConstitutif->getTypeEc()->getType() === TypeUeEcEnum::STAGE){
                 $nature = CodeNatuElpEnum::MATS;
             }
-            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, $nature);
+            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, $nature, $withChecks);
         }
     }
 
@@ -619,8 +622,12 @@ class ExportElpApogeeCommand extends Command
      */
     private function addUeToElpArray(array &$elpArray, StructureUe $ue, StructureParcours $dto, bool $withChecks = false) : void {
         if(count($ue->uesEnfants()) > 0){
+            $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::CHOI, $withChecks);
             foreach($ue->uesEnfants() as $ueEnfant){
-                $elpArray[] = $this->setObjectForSoapCall($ueEnfant, $dto, CodeNatuElpEnum::CHOI, $withChecks);            
+                $elpArray[] = $this->setObjectForSoapCall($ueEnfant, $dto, CodeNatuElpEnum::UE, $withChecks);
+                foreach($ueEnfant->elementConstitutifs as $ecUeEnfant){
+                    $this->addEcToElpArray($elpArray, $ecUeEnfant, $dto, $withChecks);
+                }
             }
         }else {
             $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::UE, $withChecks);
