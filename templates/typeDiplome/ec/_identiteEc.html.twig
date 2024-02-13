@@ -23,8 +23,8 @@
                 {% endif %}
             </dd>
             {% if ficheMatiere.horsDiplome == false %}
-            <dt>Composante porteuse</dt>
-            <dd>{{ (formation != null and formation.composantePorteuse != null) ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
+                <dt>Composante porteuse</dt>
+                <dd>{{ (formation != null and formation.composantePorteuse != null) ? formation.composantePorteuse.libelle : 'erreur' }}</dd>
             {% endif %}
         </dl>
     </div>
@@ -42,15 +42,19 @@
                     <ul>
                         {% for parc in ficheMatiere.ficheMatiereParcours %}
                             {% if parc.parcours.formation is defined and parc.parcours.formation is not null %}
-                                <li>{{ parc.parcours.libelle }} ({{ parc.parcours.formation.display }})</li>
+                                {% if parc.parcours.isParcoursDefaut %}
+                                    <li>{{ parc.parcours.formation.displayLong }} (mention sans parcours)</li>
+                                {% else %}
+                                    <li>{{ parc.parcours.libelle }} ({{ parc.parcours.formation.displayLong }})</li>
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
 
                     </ul>
                 </dd>
             {% endif %}
-            <dt>Code Pégase</dt>
-            <dd>-A ajouter-</dd>
+            <dt>Code Apogée</dt>
+            <dd>{{ ficheMatiere.codeApogee ?? 'Non calculé' }}</dd>
         </dl>
     </div>
 </div>
