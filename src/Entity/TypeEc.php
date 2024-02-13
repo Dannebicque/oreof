@@ -9,6 +9,7 @@
 
 namespace App\Entity;
 
+use App\Enums\TypeUeEcEnum;
 use App\Repository\TypeEcRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -37,6 +38,9 @@ class TypeEc
     #[ORM\ManyToOne(inversedBy: 'typeEcs')]
     private ?Formation $formation = null;
 
+    #[ORM\Column(length: 30, nullable: true, enumType: TypeUeEcEnum::class)]
+    private ?TypeUeEcEnum $type = null;
+
     public function __construct()
     {
         $this->typeDiplomes = new ArrayCollection();
@@ -60,21 +64,6 @@ class TypeEc
         return $this;
     }
 
-//    public function getTypeDiplome(): array
-//    {
-//        return $this->typeDiplome ?? [];
-//    }
-//
-//    public function setTypeDiplome(?array $typeDiplome): self
-//    {
-//        $this->typeDiplome = $typeDiplome;
-//
-//        return $this;
-//    }
-
-    /**
-     * @return Collection|TypeDiplome[]
-     */
     public function getTypeDiplomes(): Collection
     {
         return $this->typeDiplomes;
@@ -134,6 +123,18 @@ class TypeEc
     public function setFormation(?Formation $formation): self
     {
         $this->formation = $formation;
+
+        return $this;
+    }
+
+    public function getType(): ?TypeUeEcEnum
+    {
+        return $this->type ?? TypeUeEcEnum::NORMAL;
+    }
+
+    public function setType(?TypeUeEcEnum $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

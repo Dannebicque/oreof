@@ -11,8 +11,11 @@ namespace App\Form;
 
 use App\Entity\TypeDiplome;
 use App\Entity\TypeEc;
+use App\Enums\RegimeInscriptionEnum;
+use App\Enums\TypeUeEcEnum;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -25,6 +28,13 @@ class TypeEcType extends AbstractType
             ->add('libelle', TextType::class, [
                 'label' => 'Libellé',
             ])
+            ->add('type', EnumType::class, [
+                'help' => 'Type EC',
+                'class' => TypeUeEcEnum::class,
+                'translation_domain' => 'form',
+                'multiple' => false,
+                'expanded' => true,
+            ])
             ->add('typeDiplomes', EntityType::class, [
                 'class' => TypeDiplome::class,
                 'choice_label' => 'libelle',
@@ -32,6 +42,7 @@ class TypeEcType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
             ])
+
         ;
     }
 

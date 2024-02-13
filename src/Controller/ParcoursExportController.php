@@ -14,33 +14,32 @@ use App\Classes\MyGotenbergPdf;
 use App\DTO\StructureEc;
 use App\DTO\StructureUe;
 use App\Entity\Parcours;
-use App\Entity\Ue;
 use App\Repository\TypeEpreuveRepository;
+use App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException;
 use App\Utils\CleanTexte;
-use App\Utils\Tools;
 use DateTime;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class ParcoursExportController extends AbstractController
 {
-    /**
-     * @var \App\Entity\TypeEpreuve[]
-     */
-    private array $typeEpreuves = [];
-
     public function __construct(
         private readonly MyGotenbergPdf $myPdf
     ) {
     }
 
     /**
-     * @throws \Twig\Error\SyntaxError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\LoaderError
-     * @throws \App\TypeDiplome\Exceptions\TypeDiplomeNotFoundException
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws TypeDiplomeNotFoundException
+     * @throws Exception
      */
     #[Route('/parcours/{parcours}/export-pdf', name: 'app_parcours_export')]
     public function export(
@@ -50,7 +49,7 @@ class ParcoursExportController extends AbstractController
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         if (null === $typeDiplome) {
-            throw new \Exception('Type de diplôme non trouvé');
+            throw new Exception('Type de diplôme non trouvé');
         }
 
         return $this->myPdf->render('pdf/parcours.html.twig', [
@@ -65,140 +64,36 @@ class ParcoursExportController extends AbstractController
 
     #[Route('/parcours/{parcours}/maquette/export-json', name: 'app_parcours_export_maquette_json')]
     public function exportMaquetteJson(
-                TypeEpreuveRepository    $typeEpreuveRepository,
+        TypeEpreuveRepository    $typeEpreuveRepository,
         Parcours                $parcours,
         CalculStructureParcours $calculStructureParcours
     ): Response {
         $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         if (null === $typeDiplome) {
-            throw new \Exception('Type de diplôme non trouvé');
+            throw new Exception('Type de diplôme non trouvé');
         }
-
-        $this->typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome);
 
         $dto = $calculStructureParcours->calcul($parcours);
 
-        /* /maquette
-        {
-            "method": "GET",
-    "path": "/maquette",
-    "parameters": [
-        {
-            "name": "id",
-            "type": "string",
-            "required": true
-        }
-    ],
-    "response": {
-            "id": "367",
-        "formationId": "8762",
-        "semestres": [
-            {
-                "numero": 1,
-                "ec": [
-                    {
-                        "numero": "EC 2.B",
-                        "libelle": "Cours fondamental et méthodologie en histoire Moderne",
-                        "libelle_anglais": "",
-                        "sigle": "",
-                        "enseignant_referent": {
-                        "nom": "Prof. Dupont",
-                            "email": "dupont@example.com"
-                        },
-                        "description": "C'est un cours en histoire moderne",
-                        "objectifs": "Les objectifs du cours",
-                        "blocs_competences": [
-                            {
-                                "numero": 2,
-                                "libelle": "Action en responsabilité au sein d'une organisation professionnelle",
-                                "competences": [
-                                    {
-                                        "libelle": "Situer son rôle et sa mission au sein d'une organisation pour s’adapter et prendre des initiatives.",
-                                        "numero": "2A"
-                                    },
-                                    {
-                                        "libelle": "Respecter les principes d’éthique, de déontologie et de responsabilité environnementale.",
-                                        "numero": "2B"
-                                    }
-                                ]
-                            }
-                        ],
-                        "modalite_enseignement": "Présentiel",
-                        "langues_supports": [
-                        "Français",
-                        "Anglais"
-                    ],
-                        "langues_dispense_cours": [
-                        "Français"
-                    ],
-                        "volumes": {
-                        "CM": {
-                            "presentiel": 20,
-                                "distanciel": 5
-                            },
-                            "TD": {
-                            "presentiel": 15,
-                                "distanciel": 10
-                            },
-                            "TP": {
-                            "presentiel": 10,
-                                "distanciel": 5
-                            },
-                            "autonomie": 5
-                        },
-                        "ects": 5,
-                        "ressources": "Supports de cours et exercices",
-                        "mccc": {
-                        "premiere_session": {
-                            "CC": [
-                                "CC1 (50%); CC2 (50%)"
-                            ],
-                                "CT": [
-                                "ET 04h00 (50%)"
-                            ]
-                            },
-                            "seconde_chance": {
-                            "CC_lt_10": {
-                                "sans_tp": [
-                                    "OT (100%)"
-                                ],
-                                    "avec_tp": null
-                                },
-                                "CC_gt_10": [
-                                "CCr (50%)+ OT (50%)"
-                            ],
-                                "CT_only": [
-                                "DO (100%)"
-                            ]
-                            }
-                        }
-                    }
-                ]
-            }
-        ]
-    }
-}
-**/
-
         $data = [
-            "path" => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
-            "id" => $parcours->getId(),
+            'path' => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+            'id' => $parcours->getId(),
             'formationId' => $parcours->getFormation()?->getId(),
-            "volumes"=> [
-                "CM"=> [
-                    "presentiel"=> $dto->heuresEctsFormation->sommeFormationCmPres,
-                    "distanciel"=> $dto->heuresEctsFormation->sommeFormationCmDist
+            'volumes'=> [
+                'CM'=> [
+                    'presentiel'=> $dto->heuresEctsFormation->sommeFormationCmPres,
+                    'distanciel'=> $dto->heuresEctsFormation->sommeFormationCmDist
                 ],
-                "TD"=> [
-                    "presentiel"=> $dto->heuresEctsFormation->sommeFormationTdPres,
-                    "distanciel"=> $dto->heuresEctsFormation->sommeFormationTdDist
+                'TD'=> [
+                    'presentiel'=> $dto->heuresEctsFormation->sommeFormationTdPres,
+                    'distanciel'=> $dto->heuresEctsFormation->sommeFormationTdDist
                 ],
-                "TP"=> [
-                    "presentiel"=> $dto->heuresEctsFormation->sommeFormationTpPres,
-                    "distanciel"=> $dto->heuresEctsFormation->sommeFormationTpDist
+                'TP'=> [
+                    'presentiel'=> $dto->heuresEctsFormation->sommeFormationTpPres,
+                    'distanciel'=> $dto->heuresEctsFormation->sommeFormationTpDist
                 ],
-                "autonomie"=> $dto->heuresEctsFormation->sommeFormationTePres
+                'autonomie'=> $dto->heuresEctsFormation->sommeFormationTePres
             ],
             'ects' => $dto->heuresEctsFormation->sommeFormationEcts,
             'semestres' => []
@@ -207,20 +102,20 @@ class ParcoursExportController extends AbstractController
         foreach ($dto->semestres as $ordre => $sem) {
             $semestre =  [
                 'ordre' => $ordre,
-                "volumes"=> [
-                    "CM"=> [
-                        "presentiel"=> $sem->heuresEctsSemestre->sommeSemestreCmPres,
-                        "distanciel"=> $sem->heuresEctsSemestre->sommeSemestreCmDist
+                'volumes'=> [
+                    'CM'=> [
+                        'presentiel'=> $sem->heuresEctsSemestre->sommeSemestreCmPres,
+                        'distanciel'=> $sem->heuresEctsSemestre->sommeSemestreCmDist
                     ],
-                    "TD"=> [
-                        "presentiel"=> $sem->heuresEctsSemestre->sommeSemestreTdPres,
-                        "distanciel"=> $sem->heuresEctsSemestre->sommeSemestreTdDist
+                    'TD'=> [
+                        'presentiel'=> $sem->heuresEctsSemestre->sommeSemestreTdPres,
+                        'distanciel'=> $sem->heuresEctsSemestre->sommeSemestreTdDist
                     ],
-                    "TP"=> [
-                        "presentiel"=> $sem->heuresEctsSemestre->sommeSemestreTpPres,
-                        "distanciel"=> $sem->heuresEctsSemestre->sommeSemestreTpDist
+                    'TP'=> [
+                        'presentiel'=> $sem->heuresEctsSemestre->sommeSemestreTpPres,
+                        'distanciel'=> $sem->heuresEctsSemestre->sommeSemestreTpDist
                     ],
-                    "autonomie"=> $sem->heuresEctsSemestre->sommeSemestreTePres
+                    'autonomie'=> $sem->heuresEctsSemestre->sommeSemestreTePres
                 ],
                 'ects' => $sem->heuresEctsSemestre->sommeSemestreEcts,
                 'ues' => []
@@ -230,20 +125,20 @@ class ParcoursExportController extends AbstractController
                     'ordre' => $ue->ordre(),
                     'libelleOrdre' => $ue->display,
                     'libelle' => $ue->ue->getLibelle() ?? $ue->display,
-                    "volumes"=> [
-                        "CM"=> [
-                            "presentiel"=> $ue->heuresEctsUe->sommeUeCmPres,
-                            "distanciel"=> $ue->heuresEctsUe->sommeUeCmDist
+                    'volumes'=> [
+                        'CM'=> [
+                            'presentiel'=> $ue->heuresEctsUe->sommeUeCmPres,
+                            'distanciel'=> $ue->heuresEctsUe->sommeUeCmDist
                         ],
-                        "TD"=> [
-                            "presentiel"=> $ue->heuresEctsUe->sommeUeTdPres,
-                            "distanciel"=> $ue->heuresEctsUe->sommeUeTdDist
+                        'TD'=> [
+                            'presentiel'=> $ue->heuresEctsUe->sommeUeTdPres,
+                            'distanciel'=> $ue->heuresEctsUe->sommeUeTdDist
                         ],
-                        "TP"=> [
-                            "presentiel"=> $ue->heuresEctsUe->sommeUeTpPres,
-                            "distanciel"=> $ue->heuresEctsUe->sommeUeTpDist
+                        'TP'=> [
+                            'presentiel'=> $ue->heuresEctsUe->sommeUeTpPres,
+                            'distanciel'=> $ue->heuresEctsUe->sommeUeTpDist
                         ],
-                        "autonomie"=> $ue->heuresEctsUe->sommeUeTePres
+                        'autonomie'=> $ue->heuresEctsUe->sommeUeTePres
                     ],
                     'ects' => $ue->heuresEctsUe->sommeUeEcts,
                 ];
@@ -259,20 +154,20 @@ class ParcoursExportController extends AbstractController
                             'ordre' => $ueEnfant->ordre(),
                             'libelleOrdre' => $ueEnfant->display,
                             'libelle' => $ueEnfant->ue->getLibelle() ?? $ueEnfant->display,
-                            "volumes"=> [
-                                "CM"=> [
-                                    "presentiel"=> $ueEnfant->heuresEctsUe->sommeUeCmPres,
-                                    "distanciel"=> $ueEnfant->heuresEctsUe->sommeUeCmDist
+                            'volumes'=> [
+                                'CM'=> [
+                                    'presentiel'=> $ueEnfant->heuresEctsUe->sommeUeCmPres,
+                                    'distanciel'=> $ueEnfant->heuresEctsUe->sommeUeCmDist
                                 ],
-                                "TD"=> [
-                                    "presentiel"=> $ueEnfant->heuresEctsUe->sommeUeTdPres,
-                                    "distanciel"=> $ueEnfant->heuresEctsUe->sommeUeTdDist
+                                'TD'=> [
+                                    'presentiel'=> $ueEnfant->heuresEctsUe->sommeUeTdPres,
+                                    'distanciel'=> $ueEnfant->heuresEctsUe->sommeUeTdDist
                                 ],
-                                "TP"=> [
-                                    "presentiel"=> $ueEnfant->heuresEctsUe->sommeUeTpPres,
-                                    "distanciel"=> $ueEnfant->heuresEctsUe->sommeUeTpDist
+                                'TP'=> [
+                                    'presentiel'=> $ueEnfant->heuresEctsUe->sommeUeTpPres,
+                                    'distanciel'=> $ueEnfant->heuresEctsUe->sommeUeTpDist
                                 ],
-                                "autonomie"=> $ueEnfant->heuresEctsUe->sommeUeTePres
+                                'autonomie'=> $ueEnfant->heuresEctsUe->sommeUeTePres
                             ],
                             'ects' => $ueEnfant->heuresEctsUe->sommeUeEcts,
                         ];
@@ -289,8 +184,6 @@ class ParcoursExportController extends AbstractController
 
             $data['semestres'][] = $semestre;
         }
-
-
 
         return $this->json($data);
     }
@@ -320,91 +213,49 @@ class ParcoursExportController extends AbstractController
 
     private function getEc(StructureEc $ec): array
     {
-        if ($ec->elementConstitutif?->getFicheMatiere() !== null &&
-            (array_key_exists('publie', $ec->elementConstitutif?->getFicheMatiere()?->getEtatFiche()) ||
-            array_key_exists('valide_pour_publication', $ec->elementConstitutif?->getFicheMatiere()?->getEtatFiche()))
+        if ($ec->elementConstitutif->getFicheMatiere() !== null &&
+            (array_key_exists('publie', $ec->elementConstitutif->getFicheMatiere()->getEtatFiche()) ||
+            array_key_exists('valide_pour_publication', $ec->elementConstitutif->getFicheMatiere()->getEtatFiche()))
         ) {
             $valide = true;
         } else {
             $valide = false;
         }
 
-
-        $tEc = [
+        return [
             'ordre' => $ec->elementConstitutif->getOrdre(),
             'valide' => $valide,
             'nature_ec' => $ec->elementConstitutif->getTypeEc()?->getLibelle(),
             'valide_date' => new DateTime(),
-            "numero"=> $ec->elementConstitutif->getCode(),
-            "libelle"=> $ec->elementConstitutif?->getFicheMatiere()?->getLibelle() ?? '-',
-            "libelle_anglais" => $ec->elementConstitutif?->getFicheMatiere()?->getLibelleAnglais() ?? '-',
-            "sigle"=> $ec->elementConstitutif?->getFicheMatiere()?->getSigle() ?? '-', "",
-            "enseignant_referent" => [
-                "nom"=> $ec->elementConstitutif?->getFicheMatiere()?->getResponsableFicheMatiere()?->getDisplay() ?? '-',
-                "email"=> $ec->elementConstitutif?->getFicheMatiere()?->getResponsableFicheMatiere()?->getEmail() ?? '-'
+            'numero'=> $ec->elementConstitutif->getCode(),
+            'libelle'=> $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-',
+            'libelle_anglais' => $ec->elementConstitutif->getFicheMatiere()?->getLibelleAnglais() ?? '-',
+            'sigle'=> $ec->elementConstitutif->getFicheMatiere()?->getSigle() ?? '-', "",
+            'enseignant_referent' => [
+                'nom'=> $ec->elementConstitutif->getFicheMatiere()?->getResponsableFicheMatiere()?->getDisplay() ?? '-',
+                'email'=> $ec->elementConstitutif->getFicheMatiere()?->getResponsableFicheMatiere()?->getEmail() ?? '-'
             ],
-            'description' => CleanTexte::cleanTextArea($ec->elementConstitutif?->getFicheMatiere()?->getDescription()) ?? '-',
-            "objectifs" => CleanTexte::cleanTextArea($ec->elementConstitutif?->getFicheMatiere()?->getObjectifs()) ?? '-',
-            "modalite_enseignement"=> $ec->elementConstitutif?->getFicheMatiere()?->getModaliteEnseignement()->value ?? '-',
-            "langues_supports" => $ec->elementConstitutif?->getFicheMatiere()?->getLanguesSupportsArray() ?? [],
-            "langues_dispense_cours" => $ec->elementConstitutif?->getFicheMatiere()?->getLanguesDispenseArray() ?? [],
-            "ects"=> $ec->heuresEctsEc->ects,
-            "volumes"=> [
-                "CM"=> [
-                    "presentiel"=> $ec->heuresEctsEc->cmPres,
-                    "distanciel"=> $ec->heuresEctsEc->cmDist
+            'description' => CleanTexte::cleanTextArea($ec->elementConstitutif->getFicheMatiere()?->getDescription()) ?? '-',
+            'objectifs' => CleanTexte::cleanTextArea($ec->elementConstitutif->getFicheMatiere()?->getObjectifs()) ?? '-',
+            'modalite_enseignement'=> $ec->elementConstitutif->getFicheMatiere()?->getModaliteEnseignement()->value ?? '-',
+            'langues_supports' => $ec->elementConstitutif->getFicheMatiere()?->getLanguesSupportsArray() ?? [],
+            'langues_dispense_cours' => $ec->elementConstitutif->getFicheMatiere()?->getLanguesDispenseArray() ?? [],
+            'ects'=> $ec->heuresEctsEc->ects,
+            'volumes'=> [
+                'CM'=> [
+                    'presentiel'=> $ec->heuresEctsEc->cmPres,
+                    'distanciel'=> $ec->heuresEctsEc->cmDist
                 ],
-                "TD"=> [
-                    "presentiel"=> $ec->heuresEctsEc->tdPres,
-                    "distanciel"=> $ec->heuresEctsEc->tdDist
+                'TD'=> [
+                    'presentiel'=> $ec->heuresEctsEc->tdPres,
+                    'distanciel'=> $ec->heuresEctsEc->tdDist
                 ],
-                "TP"=> [
-                    "presentiel"=> $ec->heuresEctsEc->tpPres,
-                    "distanciel"=> $ec->heuresEctsEc->tpDist
+                'TP'=> [
+                    'presentiel'=> $ec->heuresEctsEc->tpPres,
+                    'distanciel'=> $ec->heuresEctsEc->tpDist
                 ],
-                "autonomie"=> $ec->heuresEctsEc->tePres
+                'autonomie'=> $ec->heuresEctsEc->tePres
             ],
-           // "mccc" => $this->getMccc($ec),
         ];
-
-        return $tEc;
     }
-
-//    private function getMccc(StructureEc $ec): array
-//    {
-//        $tMcccs = [];
-//        $tMcccs['type_mccc'] = $ec->typeMccc;
-//        $tMcccs['mccc'] = [];
-//        foreach ($ec->mcccs as $mccc) {
-//            if (count($mccc->getTypeEpreuve()) === 1) {
-//                $typeE = $mccc->getTypeEpreuve()[0];
-//            } else {
-//                $typeE = '';
-//                foreach ($mccc->getTypeEpreuve() as $typeEpreuve) {
-//                    $typeE .= $typeEpreuve . ' / ';
-//                }
-//                $typeE = substr($typeE, 0, -3);
-//            }
-//
-//
-//            $tMccc = [
-//                'libelle' => $mccc->getLibelle(),
-//                'secondeChance' => $mccc->isSecondeChance(),
-//                'pourcentage' => $mccc->getPourcentage(),
-//                'nbEpreuves' => $mccc->getNbEpreuves(),
-//                'typeEpreuve' => $typeE,
-//                'controleContinu' => $mccc->isControleContinu(),
-//                'examenTerminal' => $mccc->isExamenTerminal(),
-//                'duree' => $mccc->getDuree(),
-//                'numeroEpreuve' => $mccc->getNumeroEpreuve(),
-//            ];
-//
-//            if (array_key_exists($mccc->getNumeroSession(), $tMcccs['mccc'])) {
-//                $tMcccs['mccc'][$mccc->getNumeroSession()][] = $tMccc;
-//            } else {
-//                $tMcccs['mccc'][$mccc->getNumeroSession()] = [$tMccc];
-//            }
-//        }
-//        return $tMcccs;
-//    }
 }
