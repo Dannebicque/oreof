@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.20](https://github.com/Dannebicque/oreof/compare/v1.24.19...v1.24.20) (2024-02-13)
+
+
+### Bug Fixes
+
+* refactoring ([43ec978](https://github.com/Dannebicque/oreof/commit/43ec97850d6c5e5bce48b51b3b34bef265fce7f0))
+* Type sur TypeEC TypeUe ([9bd4d62](https://github.com/Dannebicque/oreof/commit/9bd4d629f105f88f9465f448bc379e2344ac9e17))
+
 ### [1.24.19](https://github.com/Dannebicque/oreof/compare/v1.24.18...v1.24.19) (2024-02-10)
 
 
