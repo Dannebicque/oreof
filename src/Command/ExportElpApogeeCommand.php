@@ -17,6 +17,7 @@ use App\Entity\Semestre;
 use App\Entity\Ue;
 use App\Enums\Apogee\CodeNatuElpEnum;
 use App\Enums\Apogee\TypeHeureCE;
+use App\Enums\TypeUeEcEnum;
 use App\Repository\ElementConstitutifRepository;
 use App\Service\Apogee\Classes\ElementPedagogiDTO6;
 use App\Service\Apogee\Classes\ParametrageAnnuelCeDTO2;
@@ -248,8 +249,8 @@ class ExportElpApogeeCommand extends Command
                     $elp = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATI, false);
                     $elp->codElp = 'TEST110';
                     $elp->codNatureElp = 'MATI';
-                    $elp->libCourtElp = "TEST WS PHP 10";
-                    $elp->libElp = "TEST WEBSERVICE PHP 12022024";
+                    $elp->libCourtElp = "TEST WS PHP NORME 1";
+                    $elp->libElp = "TEST WEBSERVICE PHP 13022024";
                     dump($elp);
                     if($this->verifyUserIntent($io, "Les données affichées conviennent-elles ?")){
                         try{
@@ -598,7 +599,13 @@ class ExportElpApogeeCommand extends Command
         }
         // si c'est une matière standard
         if($hasChildren === false && $this->isEcMutualise($ec) === false){
-            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATI);
+            $nature = CodeNatuElpEnum::MATI;
+            if($ec->elementConstitutif->getTypeEc()->getType() === TypeUeEcEnum::PROJET){
+                $nature = CodeNatuElpEnum::MATP;
+            } elseif ($ec->elementConstitutif->getTypeEc()->getType() === TypeUeEcEnum::STAGE){
+                $nature = CodeNatuElpEnum::MATS;
+            }
+            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, $nature);
         }
     }
 
@@ -662,15 +669,15 @@ class ExportElpApogeeCommand extends Command
         $typeHeureArray = [];
         if($elementPedagogique->heuresEctsEc->cmPres > 0 || $elementPedagogique->heuresEctsEc->cmDist > 0){
             $nbHeure = $elementPedagogique->heuresEctsEc->cmPres + $elementPedagogique->heuresEctsEc->cmDist;
-            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::CM, (string)$nbHeure, '55');
+            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::CM, (string)$nbHeure, '300');
         }
         if($elementPedagogique->heuresEctsEc->tdPres > 0 || $elementPedagogique->heuresEctsEc->tdDist > 0){
             $nbHeure = $elementPedagogique->heuresEctsEc->tdPres + $elementPedagogique->heuresEctsEc->tdDist;
-            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::TD, (string)$nbHeure, '55');
+            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::TD, (string)$nbHeure, '32');
         }
         if($elementPedagogique->heuresEctsEc->tpPres > 0 || $elementPedagogique->heuresEctsEc->tpDist > 0){
             $nbHeure = $elementPedagogique->heuresEctsEc->tpPres + $elementPedagogique->heuresEctsEc->tpDist;
-            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::TP, (string)$nbHeure, '55');
+            $typeHeureArray[] = new TypeHeureDTO(TypeHeureCE::TP, (string)$nbHeure, '16');
         }
 
         if(count($typeHeureArray) > 0){

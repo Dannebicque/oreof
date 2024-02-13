@@ -2497,5 +2497,35 @@
         <target>Chaumont</target>
       </segment>
     </unit>
+    <unit id="akMdOuC" name="type_ue.labels.type.label">
+      <segment>
+        <source>type_ue.labels.type.label</source>
+        <target>type_ue.labels.type.label</target>
+      </segment>
+    </unit>
+    <unit id="r5Dj4EK" name="STAGE">
+      <segment>
+        <source>STAGE</source>
+        <target>STAGE</target>
+      </segment>
+    </unit>
+    <unit id="Bs2pe_i" name="PROJET">
+      <segment>
+        <source>PROJET</source>
+        <target>PROJET</target>
+      </segment>
+    </unit>
+    <unit id="2yyz.ij" name="NORMAL">
+      <segment>
+        <source>NORMAL</source>
+        <target>NORMAL</target>
+      </segment>
+    </unit>
+    <unit id="MO9p.pM" name="type_ec.labels.type.label">
+      <segment>
+        <source>type_ec.labels.type.label</source>
+        <target>type_ec.labels.type.label</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

@@ -1822,12 +1822,6 @@
         <target>validation.valider.transmis_pour_publication</target>
       </segment>
     </unit>
-    <unit id="kCNhYsD" name="historique.">
-      <segment>
-        <source>historique.</source>
-        <target>historique.</target>
-      </segment>
-    </unit>
     <unit id="8Cmq.sP" name="historique.validation.fiche_matiere.ses">
       <segment>
         <source>historique.validation.fiche_matiere.ses</source>
@@ -2032,12 +2026,6 @@
         <target>ficheMatiere.valide.soumis_central.flash.success</target>
       </segment>
     </unit>
-    <unit id="0VZ7U3E" name="validation.valider.valide_pour_publication">
-      <segment>
-        <source>validation.valider.valide_pour_publication</source>
-        <target>validation.valider.valide_pour_publication</target>
-      </segment>
-    </unit>
     <unit id="ONisdiZ" name="fiche_matiere">
       <segment>
         <source>fiche_matiere</source>
@@ -2048,6 +2036,54 @@
       <segment>
         <source>validation.valider.soumis_central.title</source>
         <target>validation.valider.soumis_central.title</target>
+      </segment>
+    </unit>
+    <unit id="ut136Fq" name="modification.historique.title">
+      <segment>
+        <source>modification.historique.title</source>
+        <target>Modification de l'historique</target>
+      </segment>
+    </unit>
+    <unit id="8Sw3mV4" name="modification.historique">
+      <segment>
+        <source>modification.historique</source>
+        <target>Modification de l'historique</target>
+      </segment>
+    </unit>
+    <unit id="0VZ7U3E" name="validation.valider.valide_pour_publication">
+      <segment>
+        <source>validation.valider.valide_pour_publication</source>
+        <target>validation.valider.valide_pour_publication</target>
+      </segment>
+    </unit>
+    <unit id="DF2p3Nk" name="validation.fiche_matiere.ses.reserve.alerte">
+      <segment>
+        <source>validation.fiche_matiere.ses.reserve.alerte</source>
+        <target>validation.fiche_matiere.ses.reserve.alerte</target>
+      </segment>
+    </unit>
+    <unit id="VQhlAi1" name="reserve.validation.fiche_matiere.ses.argumentaire.label">
+      <segment>
+        <source>reserve.validation.fiche_matiere.ses.argumentaire.label</source>
+        <target>Argumentaire pour les réserves des fiches EC/matière</target>
+      </segment>
+    </unit>
+    <unit id="MhFYYH_" name="reserve.validation.fiche_matiere.ses.helps.argumentaire.help">
+      <segment>
+        <source>reserve.validation.fiche_matiere.ses.helps.argumentaire.help</source>
+        <target></target>
+      </segment>
+    </unit>
+    <unit id="vEz6C1N" name="btn.validation.fiche_matiere.ses.reserve">
+      <segment>
+        <source>btn.validation.fiche_matiere.ses.reserve</source>
+        <target>Emettre des réserves sur les fiches EC/matière</target>
+      </segment>
+    </unit>
+    <unit id="kCNhYsD" name="historique.">
+      <segment>
+        <source>historique.</source>
+        <target>historique.</target>
       </segment>
     </unit>
     <unit id="V2j0gt2" name="validation.reserve.soumis_central.title">

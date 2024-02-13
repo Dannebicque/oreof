@@ -2180,5 +2180,17 @@
         <target>type_diplome.helps.presentationFormation</target>
       </segment>
     </unit>
+    <unit id="bt4sopb" name="type_ue.helps.type.help">
+      <segment>
+        <source>type_ue.helps.type.help</source>
+        <target>type_ue.helps.type.help</target>
+      </segment>
+    </unit>
+    <unit id="le1bVld" name="type_ec.helps.type.help">
+      <segment>
+        <source>type_ec.helps.type.help</source>
+        <target>type_ec.helps.type.help</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
