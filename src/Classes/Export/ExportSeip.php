@@ -9,13 +9,12 @@
 
 namespace App\Classes\Export;
 
+use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
-use App\Classes\GetHistorique;
 use App\Entity\CampagneCollecte;
-use App\Entity\ElementConstitutif;
-use App\Enums\RegimeInscriptionEnum;
-use App\Repository\ElementConstitutifRepository;
+use App\Entity\Parcours;
 use App\Repository\FormationRepository;
+use App\Utils\CleanTexte;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -27,10 +26,9 @@ class ExportSeip implements ExportInterface
     private string $dir;
 
     public function __construct(
-        protected GetHistorique        $getHistorique,
         protected ExcelWriter         $excelWriter,
         KernelInterface               $kernel,
-        protected ElementConstitutifRepository $elementConstitutifRepository,
+        protected FormationRepository $formationRepository,
     ) {
         $this->dir = $kernel->getProjectDir() . '/public/temp/';
     }
@@ -38,7 +36,7 @@ class ExportSeip implements ExportInterface
     private function prepareExport(
         CampagneCollecte $anneeUniversitaire,
     ): void {
-        $ecs = $this->elementConstitutifRepository->findWithParcours();
+        $formations = $this->formationRepository->findBySearch('', $anneeUniversitaire, []);
         $this->excelWriter->nouveauFichier('Export SEIP');
         $this->excelWriter->setActiveSheetIndex(0);
 
@@ -46,35 +44,42 @@ class ExportSeip implements ExportInterface
         $this->excelWriter->writeCellXY(2, 1, 'Type Diplôme');
         $this->excelWriter->writeCellXY(3, 1, 'Mention');
         $this->excelWriter->writeCellXY(4, 1, 'Parcours');
-        $this->excelWriter->writeCellXY(5, 1, 'Semestre');
-        $this->excelWriter->writeCellXY(6, 1, 'Ue');
-        $this->excelWriter->writeCellXY(7, 1, 'EC');
-        $this->excelWriter->writeCellXY(8, 1, 'Fiche EC/matière');
-        $this->excelWriter->writeCellXY(9, 1, 'Type EC');
+        $this->excelWriter->writeCellXY(5, 1, 'Modalités');
+        $this->excelWriter->writeCellXY(6, 1, 'Stage');
+        $this->excelWriter->writeCellXY(7, 1, 'Heures Stage');
+        $this->excelWriter->writeCellXY(8, 1, 'Modalités Stage');
+        $this->excelWriter->writeCellXY(9, 1, 'Projet');
+        $this->excelWriter->writeCellXY(10, 1, 'Heures Projet');
+        $this->excelWriter->writeCellXY(11, 1, 'Modalités projet');
+        $this->excelWriter->writeCellXY(12, 1, 'TER/mémoire');
+        $this->excelWriter->writeCellXY(14, 1, 'Modalités TER');
 
         $ligne = 2;
-        /** @var ElementConstitutif $ec */
-        foreach ($ecs as $ec) {
-            $this->excelWriter->writeCellXY(1, $ligne, $ec->getParcours()?->getFormation()?->getComposantePorteuse()?->getLibelle());
-            $this->excelWriter->writeCellXY(2, $ligne, $ec->getParcours()?->getFormation()?->getTypeDiplome()?->getLibelle());
-            $this->excelWriter->writeCellXY(3, $ligne, $ec->getParcours()?->getFormation()?->getDisplay());
-
-            if ($ec->getParcours()?->getFormation()?->isHasParcours()) {
-                $this->excelWriter->writeCellXY(4, $ligne, $ec->getParcours()?->getLibelle());
-            } else {
-                $this->excelWriter->writeCellXY(4, $ligne, 'Pas de parcours');
+        foreach ($formations as $formation) {
+            /** @var Parcours $parcours */
+            foreach ($formation->getParcours() as $parcours) {
+                //Composante	Type de diplôme	mention	parcours	état	remplissage	nom responsable
+                $this->excelWriter->writeCellXY('A', $ligne, $formation->getComposantePorteuse()?->getLibelle());
+                $this->excelWriter->writeCellXY('B', $ligne, $formation->getTypeDiplome()?->getLibelle());
+                $this->excelWriter->writeCellXY('C', $ligne, $formation->getDisplay());
+                if ($formation->isHasParcours()) {
+                    $this->excelWriter->writeCellXY('D', $ligne, $parcours->getLibelle());
+                }
+                $this->excelWriter->writeCellXY(5, $ligne, $parcours->getModalitesEnseignement()?->value);
+                $this->excelWriter->writeCellXY(6, $ligne, $parcours->isHasStage() ? 'Oui' : 'Non');
+                $this->excelWriter->writeCellXY(7, $ligne, $parcours->getNbHeuresStages());
+                $this->excelWriter->writeCellXY(8, $ligne, CleanTexte::cleanTextArea($parcours->getStageText()));
+                $this->excelWriter->writeCellXY(9, $ligne, $parcours->isHasProjet() ? 'Oui' : 'Non');
+                $this->excelWriter->writeCellXY(10, $ligne, $parcours->getNbHeuresProjet());
+                $this->excelWriter->writeCellXY(11, $ligne, CleanTexte::cleanTextArea($parcours->getProjetText()));
+                $this->excelWriter->writeCellXY(12, $ligne, $parcours->isHasMemoire()? 'Oui' : 'Non');
+                $this->excelWriter->writeCellXY(13, $ligne, CleanTexte::cleanTextArea($parcours->getMemoireText()));
+                $ligne++;
             }
-            $this->excelWriter->writeCellXY(5, $ligne, $ec->getUe()?->getSemestre()?->display());
-            $this->excelWriter->writeCellXY(6, $ligne, $ec->getUe()?->display($ec->getParcours()));
-            $this->excelWriter->writeCellXY(7, $ligne, $ec->getLibelle());
-            $this->excelWriter->writeCellXY(8, $ligne, $ec->getFicheMatiere()?->getLibelle());
-            $this->excelWriter->writeCellXY(9, $ligne, $ec->getTypeEc()?->getType()->value);
-
-            $this->excelWriter->getColumnsAutoSize('A', 'M');
-            $ligne++;
         }
 
-        $this->fileName = Tools::FileName('OF - SEIP - ' . (new DateTime())->format('d-m-Y-H-i'), 30);
+
+        $this->fileName = Tools::FileName('Export SEIP - ' . (new DateTime())->format('d-m-Y-H-i'), 30);
     }
 
     public function export(CampagneCollecte $anneeUniversitaire): StreamedResponse

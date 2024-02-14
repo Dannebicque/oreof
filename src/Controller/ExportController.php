@@ -26,6 +26,7 @@ class ExportController extends BaseController
 
     public const TYPES_DOCUMENT_GLOBAL = [
         "xlsx-carif" => 'Tableau CARIF (xslx)',
+        "xlsx-ec" => 'Fiches EC/Type (xslx)',
         "xlsx-seip" => 'Tableau SEIP (xslx)',
         "xlsx-regime" => 'Tableau Régimes Inscriptions (xslx)',
         "xlsx-cfvu" => 'Tableau Synthèse CFVU (xslx)',
