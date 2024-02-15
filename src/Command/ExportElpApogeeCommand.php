@@ -755,10 +755,12 @@ class ExportElpApogeeCommand extends Command
     /**
      * Crée la liste LSE des EC composant une UE
      * @param StructureUe $ue UE à utiliser
+     * @param string $libelleCourt Libellé court à utiliser pour la liste
+     * @param string $libelleLong Libellé long à utiliser pour la liste
      * @return ListeElementPedagogiDTO3 Liste LSE
      */
-    private function getLseEcFromUe(StructureUe $ue) : ListeElementPedagogiDTO3 {
-        return new ListeElementPedagogiDTO3('LISTE_EC', 'O', 'TEST LISTE EC', 'TEST LISTE EC LONG', array_map(
+    private function getLseEcFromUe(StructureUe $ue, string $libelleCourt, string $libelleLong) : ListeElementPedagogiDTO3 {
+        return new ListeElementPedagogiDTO3('LISTE_EC', 'O', $libelleCourt, $libelleLong, array_map(
             fn($ec) => $ec->elementConstitutif->getCodeApogee(),
             $ue->elementConstitutifs
         ));
@@ -791,7 +793,8 @@ class ExportElpApogeeCommand extends Command
         $return[] = $this->getLseUeFromSemestre($semestre, $libelles['libCourt'], $libelles['libLong']);
         foreach($semestre->ues() as $ue){
             if(count($ue->elementConstitutifs) > 0){
-                $return[] = $this->getLseEcFromUe($ue);
+                $libelles = $this->getLibellesForListeEC($ue, $dto);
+                $return[] = $this->getLseEcFromUe($ue, $libelles['libCourt'], $libelles['libLong']);
             }
             foreach($ue->elementConstitutifs as $ec){
                 if(count($ec->elementsConstitutifsEnfants) > 0){
@@ -802,7 +805,8 @@ class ExportElpApogeeCommand extends Command
                 $return[] = $this->getLseObjectForUeChildren($ue);
                 foreach($ue->uesEnfants() as $ueEnfant){
                     if(count($ueEnfant->elementConstitutifs) > 0){
-                        $return[] = $this->getLseEcFromUe($ueEnfant);
+                        $libelles = $this->getLibellesForListeEC($ueEnfant, $dto);
+                        $return[] = $this->getLseEcFromUe($ueEnfant, $libelles['libCourt'], $libelles['libLong']);
                     }
                     foreach($ueEnfant->elementConstitutifs as $ec){
                         if(count($ec->elementsConstitutifsEnfants) > 0){
@@ -875,11 +879,33 @@ class ExportElpApogeeCommand extends Command
         $writer->save($filename);
     }
 
+    /**
+     * Génère les libellés courts et long pour une liste d'UE, raccrochée à un semestre
+     * @param StructureSemestre $semestre Semestre contenant les UE
+     * @param StructureParcours $dto DTO du parcours concerné
+     * @return array Tableau avec les libellés accessibles via les clés 'libCourt' et 'libLong'
+     */
     private function getLibellesForListeUE(StructureSemestre $semestre, StructureParcours $dto){
         $typeDiplome = $dto->parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() ?? "";
         $sigleFormation = $dto->parcours->getFormation()?->getSigle() ?? "";
         $libelleCourt = "LISTE UE S" . $semestre->semestre->getOrdre() . " " . $sigleFormation;
         $libelleLong = "LISTE UE SEMESTRE " . $semestre->semestre->getOrdre() . " " . $typeDiplome . " " . $sigleFormation; 
+        return [
+            'libCourt' => $libelleCourt,
+            'libLong' => $libelleLong
+        ];
+    }
+
+    /**
+     * Génère les libellés courts et long pour une liste d'EC
+     * @param StructureEc $ec 
+     */
+    private function getLibellesForListeEC(StructureUe $ue, StructureParcours $dto){
+        $typeDiplome = $dto->parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() ?? "";
+        $sigleFormation = $dto->parcours->getFormation()?->getSigle() ?? "";
+        $libelleCourt = "ECs " . $ue->ue->display() . " S" . $ue->ue->getSemestre()->getOrdre() . " " . $sigleFormation;
+        $libelleLong = "LISTE EC " . $ue->ue->display() . " S" . $ue->ue->getSemestre()->getOrdre() 
+            . " " . $typeDiplome . " " . $sigleFormation; 
         return [
             'libCourt' => $libelleCourt,
             'libLong' => $libelleLong
