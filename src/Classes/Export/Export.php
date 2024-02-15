@@ -28,20 +28,21 @@ class Export
 
     public function __construct(
         protected ExportFicheMatiere $exportFicheMatiere,
-        protected ExportRegime $exportRegime,
-        protected ExportCfvu $exportCfvu,
-        protected ExportCarif $exportCarif,
-        protected ExportSynthese $exportSynthese,
-        protected ExportMccc $exportMccc,
-        KernelInterface $kernel,
-        private TypeDiplomeRegistry $typeDiplomeRegistry,
-        private MyPDF $myPDF
-    )
-    {
+        protected ExportRegime       $exportRegime,
+        protected ExportCfvu         $exportCfvu,
+        protected ExportCarif        $exportCarif,
+        protected ExportSynthese     $exportSynthese,
+        protected ExportSeip           $exportSeip,
+        protected ExportEc           $exportEc,
+        protected ExportMccc         $exportMccc,
+        KernelInterface              $kernel,
+        private TypeDiplomeRegistry  $typeDiplomeRegistry,
+        private MyPDF                $myPDF
+    ) {
         $this->dir = $kernel->getProjectDir().'/public/temp';
     }
 
-    public  function setDate(?DateTimeInterface $date):void
+    public function setDate(?DateTimeInterface $date):void
     {
         $this->date = $date;
     }
@@ -77,6 +78,10 @@ class Export
                 return $this->exportCfvu();
             case 'fiches_matieres':
                 return $this->exportFicheMatiere();
+            case 'seip':
+                return $this->exportSeip();
+            case 'ec':
+                return $this->exportEc();
             case 'synthese':
                 return $this->exportSynthese();
         }
@@ -89,7 +94,8 @@ class Export
             $this->myPDF,
             $this->formations,
             $this->annee,
-            $this->date);
+            $this->date
+        );
         return $this->export->exportZip();
     }
 
@@ -102,13 +108,24 @@ class Export
             $this->annee,
             $this->date,
             $this->format,
-            $isLight);
+            $isLight
+        );
         return $this->exportMccc->exportZip();
     }
 
     private function exportCarif()
     {
         return $this->exportCarif->exportLink($this->annee);
+    }
+
+    private function exportSeip()
+    {
+        return $this->exportSeip->exportLink($this->annee);
+    }
+
+    private function exportEc()
+    {
+        return $this->exportEc->exportLink($this->annee);
     }
 
     private function exportSynthese(): string
