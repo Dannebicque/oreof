@@ -767,10 +767,12 @@ class ExportElpApogeeCommand extends Command
     /**
      * Crée la liste LSE des UE composant un Semestre
      * @param StructureSemestre $semestre Semestre à traiter
+     * @param string $libCourt Libellé court à utiliser pour la liste
+     * @param string $libLong Libellé long à utiliser pour la liste
      * @return ListeElementPedagogiDTO3 Liste LSE
      */
-    private function getLseUeFromSemestre(StructureSemestre $semestre) : ListeElementPedagogiDTO3 {
-        return new ListeElementPedagogiDTO3('LISTE_UE', 'O', 'TEST LISTE UE', 'TEST LISTE UE LONG', array_map(
+    private function getLseUeFromSemestre(StructureSemestre $semestre, string $libCourt, string $libLong) : ListeElementPedagogiDTO3 {
+        return new ListeElementPedagogiDTO3('LISTE_UE', 'O', $libCourt, $libLong, array_map(
             fn($ue) => $ue->ue->getCodeApogee(),
             $semestre->ues()
         ));
@@ -780,11 +782,13 @@ class ExportElpApogeeCommand extends Command
      * Crée le tableau de liste d'éléments pédagogiques pour un semestre. 
      * Descend l'arborescence jusqu'aux EC et leurs enfants possibles
      * @param StructureSemestre $semestre Semestre à utiliser 
+     * @param StructureParcours $dto DTO du parcours
      * @return array Tableau de listes LSE
      */
-    private function getLseObjectArrayForSemestre(StructureSemestre $semestre) : array {
+    private function getLseObjectArrayForSemestre(StructureSemestre $semestre, StructureParcours $dto) : array {
         $return = [];
-        $return[] = $this->getLseUeFromSemestre($semestre);
+        $libelles = $this->getLibellesForListeUE($semestre, $dto);
+        $return[] = $this->getLseUeFromSemestre($semestre, $libelles['libCourt'], $libelles['libLong']);
         foreach($semestre->ues() as $ue){
             if(count($ue->elementConstitutifs) > 0){
                 $return[] = $this->getLseEcFromUe($ue);
@@ -819,14 +823,19 @@ class ExportElpApogeeCommand extends Command
      */
     private function getLseObjectArrayForParcours(StructureParcours $parcours) : array {
         $return = [];
+        $libelleListeSemestre = $parcours->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() . " "
+            . $parcours->parcours->getFormation()->getSigle() . " "
+            . $parcours->parcours->getSigle();
+        $libCourtListeSemestre = "SEM " . $libelleListeSemestre;
+        $libLongListeSemestre = "Semestres " . $libelleListeSemestre;
         $return[] = [
-            new ListeElementPedagogiDTO3('LISTE_SEMESTRE', 'O', 'TEST LISTE SEMESTRE', 'TEST LISTE SEMESTRE LONG', array_map(
+            new ListeElementPedagogiDTO3('LISTE_SEMESTRE', 'O', $libCourtListeSemestre, $libLongListeSemestre, array_map(
                 fn($semestre) => $semestre->semestre->getCodeApogee(),
                 $parcours->semestres
             ))
         ];
         foreach($parcours->semestres as $semestre){
-            $return[] = $this->getLseObjectArrayForSemestre($semestre);
+            $return[] = $this->getLseObjectArrayForSemestre($semestre, $parcours);
         }
         return array_merge(...$return);
     }
@@ -864,5 +873,16 @@ class ExportElpApogeeCommand extends Command
         $this->filesystem->dumpFile($filename, "");
         $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
         $writer->save($filename);
+    }
+
+    private function getLibellesForListeUE(StructureSemestre $semestre, StructureParcours $dto){
+        $typeDiplome = $dto->parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() ?? "";
+        $sigleFormation = $dto->parcours->getFormation()?->getSigle() ?? "";
+        $libelleCourt = "LISTE UE S" . $semestre->semestre->getOrdre() . " " . $sigleFormation;
+        $libelleLong = "LISTE UE SEMESTRE " . $semestre->semestre->getOrdre() . " " . $typeDiplome . " " . $sigleFormation; 
+        return [
+            'libCourt' => $libelleCourt,
+            'libLong' => $libelleLong
+        ];
     }
 }
