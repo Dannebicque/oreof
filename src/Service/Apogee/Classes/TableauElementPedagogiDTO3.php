@@ -10,6 +10,7 @@ class TableauElementPedagogiDTO3 {
     public array $elementPedagogi;
 
     public function __construct(array $tableauElementPedagogique){
+        $this->elementPedagogi = [];
         foreach($tableauElementPedagogique as $codElp){
             $this->add($codElp);
         }

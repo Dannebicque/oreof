@@ -20,6 +20,7 @@ use App\Enums\Apogee\TypeHeureCE;
 use App\Enums\TypeUeEcEnum;
 use App\Repository\ElementConstitutifRepository;
 use App\Service\Apogee\Classes\ElementPedagogiDTO6;
+use App\Service\Apogee\Classes\ListeElementPedagogiDTO3;
 use App\Service\Apogee\Classes\ParametrageAnnuelCeDTO2;
 use App\Service\Apogee\Classes\TableauParametrageChargeEnseignementDTO2;
 use App\Service\Apogee\Classes\TableauTypeHeureDTO;
@@ -105,6 +106,10 @@ class ExportElpApogeeCommand extends Command
             name: 'full-verify-data',
             mode: InputOption::VALUE_NONE,
             description: "Instancie tous les ELP des parcours disponibles, et génère un compte-rendu selon les erreurs détectées."
+        )->addOption(
+            name: 'parcours-lse-excel-export',
+            mode: InputOption::VALUE_REQUIRED,
+            description: "Génère un export Excel pour les LSE d'un parcours"
         );
     }
 
@@ -118,6 +123,7 @@ class ExportElpApogeeCommand extends Command
         $parcoursInsertion = $input->getOption('parcours-insertion');
         $checkDuplicates = $input->getOption('check-duplicates');
         $fullVerifyData = $input->getOption('full-verify-data');
+        $parcoursLseExport = $input->getOption('parcours-lse-excel-export');
 
         if($mode === "test"){
             // Export total des ELP selon le type : EC, UE ou Semestre
@@ -238,6 +244,23 @@ class ExportElpApogeeCommand extends Command
                 $io->writeln("Nombre de doublons sur les Semestres : " . $nbSemestreDuplicates);
                 return Command::SUCCESS;
             }
+            // Export Excel des LES d'un parcours
+            if($parcoursLseExport){ 
+                $io->writeln("Génération d'export Excel des LSE d'un parcours.");
+                $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($parcoursLseExport);
+                if($parcours){
+                    $io->writeln("Parcours trouvé - Formation : " . $parcours->getDisplay());
+                    $dto = $this->getDTOForParcours($parcours);
+                    $lseArray = $this->getLseObjectArrayForParcours($dto);
+                    $this->generateSpreadsheetForLSE($lseArray, 'Parcours_' . $parcours->getId());
+                    $io->success("Export des LSE généré avec succès.");
+                    return Command::SUCCESS;
+                }else {
+                    $io->warning("Identifiant du Parcours incorrect. (" . $parcoursLseExport . ")");
+                    return Command::FAILURE;
+                }
+            }
+            // Insertion de test
             if($dummyInsertion){
                 $io->write("Utilisation du Web Service APOTEST");
                 if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer dans APOTEST ?")){
@@ -697,4 +720,149 @@ class ExportElpApogeeCommand extends Command
 
     }
     
+    /**
+     * Crée la liste d'éléments pédagogiques pour les enfants d'un EC à choix
+     * @param StructureEc $ec EC à traiter
+     * @return ListeElementPedagogiDTO3|null Liste d'éléments pédagogiques s'il y a des enfants, null sinon
+     */
+    private function getLseObjectForEcChildren(StructureEc $ec) : ListeElementPedagogiDTO3|null {
+        $return = null;
+        if(count($ec->elementsConstitutifsEnfants) > 0){
+            $return = new ListeElementPedagogiDTO3('EC_CHOIX', 'O', 'TEST EC', 'TEST EC LONG', array_map(
+                fn($ecEnfant) => $ecEnfant->elementConstitutif->getCodeApogee(),
+                $ec->elementsConstitutifsEnfants
+            ));
+        }
+        return $return;
+    }
+
+    /**
+     * Crée la liste d'éléments pédagogiques pour les enfants d'une UE à choix
+     * @param StructureUe $ue UE à traiter
+     * @return ListeElementPedagogiDTO3|null Liste d'éléments pédagogiques s'il y a des enfants, null sinon  
+     */
+    private function getLseObjectForUeChildren(StructureUe $ue) : ListeElementPedagogiDTO3|null {
+        $return = null;
+        if(count($ue->uesEnfants()) > 0){
+            $return = new ListeElementPedagogiDTO3('UE_CHOIX', 'O', 'TEST UE', 'TEST UE LONG', array_map(
+                fn($ueEnfant) => $ueEnfant->ue->getCodeApogee(),
+                $ue->uesEnfants()
+            ));
+        }
+        return $return;
+    }
+
+    /**
+     * Crée la liste LSE des EC composant une UE
+     * @param StructureUe $ue UE à utiliser
+     * @return ListeElementPedagogiDTO3 Liste LSE
+     */
+    private function getLseEcFromUe(StructureUe $ue) : ListeElementPedagogiDTO3 {
+        return new ListeElementPedagogiDTO3('LISTE_EC', 'O', 'TEST LISTE EC', 'TEST LISTE EC LONG', array_map(
+            fn($ec) => $ec->elementConstitutif->getCodeApogee(),
+            $ue->elementConstitutifs
+        ));
+    }
+
+    /**
+     * Crée la liste LSE des UE composant un Semestre
+     * @param StructureSemestre $semestre Semestre à traiter
+     * @return ListeElementPedagogiDTO3 Liste LSE
+     */
+    private function getLseUeFromSemestre(StructureSemestre $semestre) : ListeElementPedagogiDTO3 {
+        return new ListeElementPedagogiDTO3('LISTE_UE', 'O', 'TEST LISTE UE', 'TEST LISTE UE LONG', array_map(
+            fn($ue) => $ue->ue->getCodeApogee(),
+            $semestre->ues()
+        ));
+    }
+
+    /**
+     * Crée le tableau de liste d'éléments pédagogiques pour un semestre. 
+     * Descend l'arborescence jusqu'aux EC et leurs enfants possibles
+     * @param StructureSemestre $semestre Semestre à utiliser 
+     * @return array Tableau de listes LSE
+     */
+    private function getLseObjectArrayForSemestre(StructureSemestre $semestre) : array {
+        $return = [];
+        $return[] = $this->getLseUeFromSemestre($semestre);
+        foreach($semestre->ues() as $ue){
+            if(count($ue->elementConstitutifs) > 0){
+                $return[] = $this->getLseEcFromUe($ue);
+            }
+            foreach($ue->elementConstitutifs as $ec){
+                if(count($ec->elementsConstitutifsEnfants) > 0){
+                    $return[] = $this->getLseObjectForEcChildren($ec);
+                }
+            }
+            if(count($ue->uesEnfants()) > 0){
+                $return[] = $this->getLseObjectForUeChildren($ue);
+                foreach($ue->uesEnfants() as $ueEnfant){
+                    if(count($ueEnfant->elementConstitutifs) > 0){
+                        $return[] = $this->getLseEcFromUe($ueEnfant);
+                    }
+                    foreach($ueEnfant->elementConstitutifs as $ec){
+                        if(count($ec->elementsConstitutifsEnfants) > 0){
+                            $return[] = $this->getLseObjectForEcChildren($ec);
+                        }
+                    }
+                }
+            }
+        }
+    
+        return $return;
+    }
+
+    /**
+     * Génère les listes LSE pour un parcours complet
+     * @param StructureParcours $parcours Parcours à utiliser
+     * @return array Tableau comportant des LSE de type ListeElementPedagogiDTO3
+     */
+    private function getLseObjectArrayForParcours(StructureParcours $parcours) : array {
+        $return = [];
+        $return[] = [
+            new ListeElementPedagogiDTO3('LISTE_SEMESTRE', 'O', 'TEST LISTE SEMESTRE', 'TEST LISTE SEMESTRE LONG', array_map(
+                fn($semestre) => $semestre->semestre->getCodeApogee(),
+                $parcours->semestres
+            ))
+        ];
+        foreach($parcours->semestres as $semestre){
+            $return[] = $this->getLseObjectArrayForSemestre($semestre);
+        }
+        return array_merge(...$return);
+    }
+
+    /**
+     * Génère un rapport Excel suivant le tableau de liste (LSE) fourni en paramètre.
+     * @param array $lseArray Tableau contenant les listes (LSE)
+     * @param string $exportTypeName Texte à faire figurer dans le nom du fichier d'export
+     * @return void
+     */
+    private function generateSpreadsheetForLSE(array $lseArray, string $exportTypeName = ""){
+        $headers = ['codListeELP', 'typListeELP', 'libelleCourt', 'libelleLong', 'tableauCodeELP'];
+        // arrange data
+        $lseArray = array_map(
+            fn($lse) => [
+                $lse->codListeElp, $lse->typListeElp, $lse->libCourtListeElp, $lse->libListeElp,
+                implode(
+                    ", ", 
+                    array_map(fn($elp) => $elp->codElp,
+                        $lse->listElementPedagogi->elementPedagogi                
+                    )
+                )
+            ],
+            $lseArray
+        );
+        // Write to spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $activeWorksheet = $spreadsheet->getActiveSheet();
+        $activeWorksheet->fromArray($headers);
+        $activeWorksheet->fromArray($lseArray, startCell: "A2");
+        // Write to file
+        $now = new DateTime();
+        $date = $now->format('d-m-Y_H-i-s');
+        $filename = __DIR__ . "/../Service/Apogee/export/{$exportTypeName}-LSE-export-{$date}.xlsx";
+        $this->filesystem->dumpFile($filename, "");
+        $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
+        $writer->save($filename);
+    }
 }
