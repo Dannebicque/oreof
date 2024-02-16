@@ -10,6 +10,7 @@ use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Enums\Apogee\CodeNatuElpEnum;
 use App\Enums\Apogee\TypeVolumeElpEnum;
+use Transliterator;
 
 class ElementPedagogiDTO6
 {
@@ -101,10 +102,13 @@ class ElementPedagogiDTO6
             // $this->capaciteIntElp;
             // $this->listComposantesAssociees;
             $this->listCentreInsPedagogi = new TableauCentreInsPedagogiDTO(
-                array_map(
-                    fn($composante) => $composante->getCodeApogee(),
-                    $dto->parcours->getFormation()?->getComposantesInscription()?->toArray() ?? []
-                )
+                // array_map(
+                //     fn($composante) => $composante->getCodeApogee(),
+                //     $dto->parcours->getFormation()?->getComposantesInscription()?->toArray() ?? []
+                // )
+                
+                // Code CIP de la composante porteuse uniquement
+                [$dto->parcours->getFormation()->getComposantePorteuse()->getCodeApogee()]
             );
             // $this->listResponsables;
             // $this->listLibAnnexe;
@@ -160,10 +164,13 @@ class ElementPedagogiDTO6
             // $this->capaciteIntElp
             // $this->listComposantesAssociees = new TableauComposanteDTO2([]);
             $this->listCentreInsPedagogi = new TableauCentreInsPedagogiDTO(
-                array_map(
-                    fn($composante) => $composante->getCodeApogee(),
-                    $dto->parcours->getFormation()?->getComposantesInscription()?->toArray() ?? []
-                )
+                // array_map(
+                //     fn($composante) => $composante->getCodeApogee(),
+                //     $dto->parcours->getFormation()?->getComposantesInscription()?->toArray() ?? []
+                // )
+
+                // Code CIP de la composante porteuse uniquement
+                [$dto->parcours->getFormation()->getComposantePorteuse()->getCodeApogee()]
             );
             // $this->listResponsables;
             // $this->listLibAnnexe;
@@ -199,10 +206,13 @@ class ElementPedagogiDTO6
             // $this->capaciteIntElp;
             // $this->listComposantesAssociees;
             $this->listCentreInsPedagogi = new TableauCentreInsPedagogiDTO(
-                array_map(
-                    fn($composante) => $composante->getCodeApogee(),
-                    $dto->parcours->getFormation()?->getComposantesInscription()?->toArray() ?? []
-                )
+                // array_map(
+                //     fn($composante) => $composante->getCodeApogee(),
+                //     $dto->parcours->getFormation()?->getComposantesInscription()?->toArray() ?? []
+                // )
+
+                // Code CIP de la composante porteuse uniquement
+                [$dto->parcours->getFormation()->getComposantePorteuse()->getCodeApogee()]
             );
             // $this->listResponsables;
             // $this->listLibAnnexe;
@@ -214,7 +224,9 @@ class ElementPedagogiDTO6
 
     private function prepareLibelle(?string $txt, int $length = 25) : string {
         if($txt){
-            return mb_substr($txt, 0, $length);
+            $rules = "À > A; Ç > C; É > E; È > E; :: NFC;";
+            $transliterator = Transliterator::createFromRules($rules, Transliterator::FORWARD);
+            return mb_substr($transliterator->transliterate($txt), 0, $length);
         }else {
             return 'ERROR';
         }

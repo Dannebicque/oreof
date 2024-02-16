@@ -27,7 +27,9 @@ class ListeElementPedagogiDTO3 {
 
     private function prepareLibelle(?string $txt, int $length = 25) : string {
         if($txt){
-            return mb_substr($txt, 0, $length);
+            $rules = "À > A; Ç > C; É > E; È > E; :: NFC;";
+            $transliterator = \Transliterator::createFromRules($rules, \Transliterator::FORWARD);
+            return mb_substr($transliterator->transliterate($txt), 0, $length);
         }else {
             return 'ERROR';
         }

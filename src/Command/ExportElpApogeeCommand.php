@@ -212,7 +212,7 @@ class ExportElpApogeeCommand extends Command
                     $soapObjects = $this->generateSoapObjectsForParcours($parcours, true);
                     $io->progressAdvance();
                 }
-                $file = __DIR__ . "/../Service/Apogee/export/Parcours-invalides-{$date}";
+                $file = __DIR__ . "/../Service/Apogee/export/Parcours-invalides-{$date}.txt";
                 $this->filesystem->appendToFile($file, "Compte Rendu des parcours invalides pour l'export APOGEE\n");
                 $io->writeln("");
                 $io->writeln("Traitement des erreurs détectées...");
@@ -615,7 +615,8 @@ class ExportElpApogeeCommand extends Command
         }
         // si l'élément a des enfants, on insère que les enfants
         if($hasChildren){
-            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::CHOI, $withChecks);
+            // Ne pas insérer les éléments de nature 'CHOI'
+            // $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::CHOI, $withChecks);
             foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
                 if($this->isEcMutualiseMaster($ecEnfant, $dto) === true){
                     $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::MATM, $withChecks);
@@ -645,7 +646,8 @@ class ExportElpApogeeCommand extends Command
      */
     private function addUeToElpArray(array &$elpArray, StructureUe $ue, StructureParcours $dto, bool $withChecks = false) : void {
         if(count($ue->uesEnfants()) > 0){
-            $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::CHOI, $withChecks);
+            // Ne pas insérer les éléments de nature 'CHOI'
+            // $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::CHOI, $withChecks);
             foreach($ue->uesEnfants() as $ueEnfant){
                 $elpArray[] = $this->setObjectForSoapCall($ueEnfant, $dto, CodeNatuElpEnum::UE, $withChecks);
                 foreach($ueEnfant->elementConstitutifs as $ecUeEnfant){
@@ -930,8 +932,8 @@ class ExportElpApogeeCommand extends Command
         $libelleCourt = $ec->elementConstitutif->getCode() . " " . $ec->elementConstitutif->getUe()?->display() 
             . " S" . $ec->elementConstitutif->getUe()?->getSemestre()?->getOrdre() . " "
             . $typeDiplome . " " . $sigleFormation . " " . $sigleParcours;
-        $libelleLong = $ec->elementConstitutif->getCode() . " S" .
-            $ec->elementConstitutif->getUe()?->getSemestre()?->getOrdre() . " " . $sigleFormation . " ". $sigleParcours;
+        $libelleLong = $ec->elementConstitutif->getCode() . " " . $ec->elementConstitutif->getUe()?->display() . " S"
+            . $ec->elementConstitutif->getUe()?->getSemestre()?->getOrdre() . " " . $sigleFormation . " ". $sigleParcours;
         return [
             'libCourt' => $libelleCourt,
             'libLong' => $libelleLong
