@@ -10,8 +10,11 @@
 namespace App\Controller;
 
 use App\Classes\CalculStructureParcours;
+use App\Classes\GetFormations;
 use App\Classes\verif\FormationState;
 use App\Classes\verif\ParcoursState;
+use App\DTO\StatsFichesMatieres;
+use App\DTO\StatsFichesMatieresParcours;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\FormationDemande;
@@ -73,73 +76,20 @@ class FormationController extends BaseController
 
     #[Route('/liste', name: 'app_formation_liste', methods: ['GET'])]
     public function liste(
+        GetFormations         $getFormations,
         MentionRepository     $mentionRepository,
         ComposanteRepository  $composanteRepository,
         TypeDiplomeRepository $typeDiplomeRepository,
-        FormationRepository   $formationRepository,
         Request               $request,
     ): Response {
-        $sort = $request->query->get('sort') ?? 'typeDiplome';
-        $direction = $request->query->get('direction') ?? 'asc';
-        $q = $request->query->get('q') ?? null;
         $isCfvu = false;
-        if ($this->isGranted('ROLE_ADMIN') ||
-            $this->isGranted('ROLE_SES') ||
-            $this->isGranted('CAN_COMPOSANTE_SHOW_ALL', $this->getUser()) ||
-            $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
-            $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findBySearch($q, $this->getDpe(), $request->query->all());
-        } else {
-            $formations = [];
-            //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
-            $centres = $this->getUser()?->getUserCentres();
-            foreach ($centres as $centre) {
-                //todo: gérer avec un voter
-                if ($centre->getComposante() !== null && (
-                    in_array('Gestionnaire', $centre->getDroits()) ||
-                    in_array('Invité', $centre->getDroits()) ||
-                    in_array('Directeur', $centre->getDroits())
-                )) {
-                    //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
-                    $formations[] = $formationRepository->findByComposante(
-                        $centre->getComposante(),
-                        $this->getDpe(),
-                        [$sort => $direction]
-                    );
-                }
 
-                if ($centre->getFormation() !== null && (
-                        in_array('ROLE_FORMATION_LECTEUR', $centre->getDroits()))) {
-                    $formations[] = [$centre->getFormation()];
-                }
-            }
-
-            $formations[] = $formationRepository->findByComposanteDpe(
-                $this->getUser(),
-                $this->getDpe(),
-                [$sort => $direction]
-            );
-            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
-                $this->getUser(),
-                $this->getDpe(),
-                [$sort => $direction]
-            );
-            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
-                $this->getUser(),
-                $this->getDpe(),
-                [$sort => $direction]
-            );
-
-
-
-
-            $formations = array_merge(...$formations);
-        }
-
-        $tFormations = [];
-        foreach ($formations as $formation) {
-            $tFormations[$formation->getId()] = $formation;
-        }
+        $tFormations = $getFormations->getFormations(
+            $this->getUser(),
+            $this->getDpe(),
+            $request->query->all(),
+            $isCfvu
+        );
 
         return $this->render('formation/_liste.html.twig', [
             'formations' => $tFormations,
@@ -148,6 +98,47 @@ class FormationController extends BaseController
             'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
             'params' => $request->query->all(),
             'isCfvu' => false,
+        ]);
+    }
+
+    #[Route('/fiches/liste', name: 'app_fiches_formation_liste', methods: ['GET'])]
+    public function fichesFormation(
+        CalculStructureParcours $calculStructureParcours,
+        GetFormations         $getFormations,
+        MentionRepository     $mentionRepository,
+        ComposanteRepository  $composanteRepository,
+        TypeDiplomeRepository $typeDiplomeRepository,
+        Request               $request,
+    ): Response {
+
+        $tFormations = $getFormations->getFormations(
+            $this->getUser(),
+            $this->getDpe(),
+            $request->query->all()
+        );
+
+        $stats = [];
+        foreach ($tFormations as $formation) {
+
+            $parcourss = $formation->getParcours();
+            $stats[$formation->getId()]['stats'] = new StatsFichesMatieres();
+
+            foreach ($parcourss as $parcours) {
+                $stats[$formation->getId()][$parcours->getId()] = $calculStructureParcours->calcul($parcours, false);
+                $stats[$formation->getId()]['stats']->addStatsParcours(
+                    $stats[$formation->getId()][$parcours->getId()]->statsFichesMatieresParcours
+                );
+            }
+        }
+
+        return $this->render('formation/_fichesListe.html.twig', [
+            'formations' => $tFormations,
+            'mentions' => $mentionRepository->findBy([], ['libelle' => 'ASC']),
+            'composantes' => $composanteRepository->findPorteuse(),
+            'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
+            'params' => $request->query->all(),
+            'isCfvu' => false,
+            'stats' => $stats
         ]);
     }
 
@@ -162,12 +153,12 @@ class FormationController extends BaseController
     ): Response {
         $q = $request->query->get('q') ?? null;
 
-            $formations = $formationRepository->findBySearch(
-                $q,
-                $this->getDpe(),
-                $request->query->all(),
-                $composante
-            );
+        $formations = $formationRepository->findBySearch(
+            $q,
+            $this->getDpe(),
+            $request->query->all(),
+            $composante
+        );
 
         return $this->render('formation/_liste.html.twig', [
             'formations' => $formations,
@@ -468,10 +459,11 @@ class FormationController extends BaseController
     }
 
     #[Route('/{slug}/maquette_iframe', name: 'app_formation_maquette_iframe')]
-    public function getFormationMaquetteIframe(Formation $formation, CalculStructureParcours $calcul) : Response {
+    public function getFormationMaquetteIframe(Formation $formation, CalculStructureParcours $calcul) : Response
+    {
         $listeParcours = [];
 
-        foreach($formation->getParcours() as $parcours){
+        foreach($formation->getParcours() as $parcours) {
             $listeParcours[] = $calcul->calcul($parcours);
         }
 

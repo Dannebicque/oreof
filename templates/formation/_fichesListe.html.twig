@@ -1,0 +1,269 @@
+{# todo: reprendre cette page comme le bilan des formations pour le SES, DPE ou Admin avec état, remplissage et
+bouton pour valider/invalide les étapes successives #}
+<div {{ stimulus_controller('structure--formation') }}>
+    {% set sort = params.sort is defined ? params.sort : 'typeDiplome' %}
+    {% set direction = params.direction is defined ? params.direction : 'asc' %}
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                <a href="#"
+                        {{ stimulus_action('crud', 'sort', 'click', {
+                            'sort': 'composantePorteuse',
+                            'direction': getDirection('composantePorteuse', sort, direction)
+                        }) }}
+                >
+                    Composante
+                    {{ displaySort('composantePorteuse', sort, direction) }}
+                </a>
+            </th>
+            <th>
+                <a href="#"
+                        {{ stimulus_action('crud', 'sort', 'click', {
+                            'sort': 'typeDiplome',
+                            'direction': getDirection('typeDiplome', sort, direction)
+                        }) }}
+                >
+                    Type de formation
+                    {{ displaySort('typeDiplome', sort, direction) }}
+                </a>
+            </th>
+            <th>
+                <a href="#"
+                        {{ stimulus_action('crud', 'sort', 'click', {
+                            'sort': 'mention',
+                            'direction': getDirection('mention', sort, direction)
+                        }) }}
+                >
+                    Mention/spécialité
+
+                    {{ displaySort('mention', sort, direction) }}
+                </a>
+            </th>
+            <th>Etat remplissage</th>
+            <th>En attente<br> validation</th>
+            <th> En attente <br>
+                validation SES</th>
+            <th>Fiches validées</th>
+            <th>Publiées</th>
+            <th></th>
+        </tr>
+        {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SHOW_ALL', app.user) %}
+            <tr>
+                <th>
+                    <label for="filter-composante" class="sr-only">Composante</label>
+                    <select
+                            {{ stimulus_action('crud', 'filter', 'change', {
+                                'field': 'composantePorteuse'
+                            }) }}
+                            id="filter-composante"
+                            {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                            class="form-select">
+                        <option value="">Toutes les composantes</option>
+                        {% for composante in composantes %}
+                            <option value="{{ composante.id }}"
+                                    {% if params['composantePorteuse'] is defined and params['composantePorteuse']  == composante.id %}selected{% endif %}
+                            >{{ composante.libelle }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <label for="filter-type_formation" class="sr-only">type formation</label>
+                    <select
+                            {{ stimulus_action('crud', 'filter', 'change', {
+                                'field': 'typeDiplome'
+                            }) }}
+                            {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                            id="filter-type_formation" class="form-select"
+                    >
+                        <option value="">Tous les types de formation</option>
+                        {% for type in typeDiplomes %}
+                            <option value="{{ type.id }}"
+                                    {% if params['typeDiplome'] is defined and params['typeDiplome']  == type.id %}selected{% endif %}
+                            >{{ type.libelle }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <label for="filter-mention" class="sr-only">mention</label>
+                    <select
+                            {{ stimulus_action('crud', 'filter', 'change', {
+                                'field': 'mention'
+                            }) }}
+                            id="filter-mention" class="form-select"
+                            {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+                    >
+                        <option value="">Toutes les mentions</option>
+                        {% for mention in mentions %}
+                            <option value="{{ mention.id }}"
+                                    {% if params['mention'] is defined and params['mention']  == mention.id %}selected{% endif %}
+                            >{{ mention.libelle }}</option>
+                        {% endfor %}
+
+                    </select>
+                </th>
+
+                <th>Etat remplissage</th>
+                <th>En attente<br> validation</th>
+                <th> En attente <br>
+                    validation SES</th>
+                <th>Fiches validées</th>
+                <th>Publiées</th>
+                <th>
+                    <button class="btn btn-outline-danger"
+                            {{ stimulus_action('crud', 'effaceFiltre', 'click', {
+                            }) }}
+                    >
+                        Effacer les filtres
+                    </button>
+                </th>
+            </tr>
+        {% endif %}
+        </thead>
+        <tbody>
+        {% for formation in formations %}
+            {% if (params['remplissage'] is defined and formation.remplissage.calcul == params['remplissage']) or  params['remplissage'] is not defined %}
+                <tr>
+                    <td>
+                        {% if formation.composantePorteuse != null %}
+                            {{ formation.composantePorteuse.libelle }}
+                        {% else %}
+                            <span class="badge bg-danger">Non définie</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ formation.typeDiplome|typeDiplome }}
+                    </td>
+                    <td>
+                        {% if formation.mention != null or formation.mentionTexte != null %}
+                            {{ formation.display }}
+                        {% else %}
+                            <span class="badge bg-danger">Non définie</span>
+                        {% endif %}
+                    </td>
+
+                    <td>{{ stats[formation.id].stats.nbFichesCompletes }} / {{ stats[formation.id].stats.nbFiches }}</td>
+                    <td>{{ stats[formation.id].stats.nbFichesNonValidees }}</td>
+                    <td>{{ stats[formation.id].stats.nbFichesNonValideesSes }}</td>
+                    <td>{{ stats[formation.id].stats.nbFichesValidees }}</td>
+                    <td>{{ stats[formation.id].stats.nbFichesPubliees }}</td>
+
+                    <td class="text-end">
+                        <a
+                                href="{{ path('fiche_matiere_valide_formation', {formation: formation.id}) }}"
+                                class="btn btn-outline-success btn-sm mb-1"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="bottom"
+                                title="Voir les fiches"
+                        >
+                            <i class="fas fa-check"></i>
+                            <span> Voir les fiches</span>
+                        </a>
+                        {% if formation.hasParcours and formation.parcours|length > 0 %}
+                            <button class="btn btn-sm btn-outline-primary"
+                                    {{ stimulus_action('structure--formation', 'afficherParcours', 'click',
+                                        {formation:formation.id}) }}
+                            >
+                                <i class="fal fa-caret-right"></i>
+                                Voir les parcours ({{ formation.parcours|length }})
+                            </button>
+                        {% endif %}
+
+                    </td>
+                </tr>
+{#                {% set hasBoucle = false %}#}
+{#                {% for parcours in formation.parcours|filter(parcours => parcours.formation.hasParcours) %}#}
+{#                    {% if loop.first %}#}
+{#                        {% set hasBoucle = true %}#}
+{#                        <tr class="d-none" id="parcours_{{ formation.id }}">#}
+{#                        <td colspan="7">#}
+{#                        <table class="table" style="border-left: 2px solid var(--secondary)">#}
+{#                        <thead>#}
+{#                        <tr>#}
+{#                            <th>Parcours</th>#}
+{#                            <th>Lieu</th>#}
+{#                            <th>Responsable</th>#}
+{#                            <th>Etat</th>#}
+{#                            <th>Remplissage</th>#}
+{#                            <th></th>#}
+{#                        </tr>#}
+{#                        </thead>#}
+{#                        <tbody>#}
+{#                    {% endif %}#}
+
+{#                    <tr>#}
+{#                        <td>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</td>#}
+{#                        <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>#}
+{#                        <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>#}
+{#                        <td>{{ parcours.etatParcours|badgeDpe }}</td>#}
+{#                        <td>#}
+{#                            {{ parcours.remplissage|remplissage }}#}
+{#                        </td>#}
+{#                        <td class="text-end">#}
+{#                            <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"#}
+{#                               class="btn btn-sm text-info"#}
+{#                               data-bs-toggle="tooltip"#}
+{#                               data-bs-placement="bottom"#}
+{#                               title="Voir une formation"#}
+{#                            >#}
+{#                                <i class="{{ iconShow }}"></i>#}
+{#                                <span> voir</span>#}
+{#                            </a>#}
+
+{#                            <a href="#"#}
+{#                               class="btn btn-sm text-success"#}
+{#                                    {{ stimulus_controller('modal', {#}
+{#                                        size: 'lg',#}
+{#                                        modalTitle: 'Vérifier la saisie',#}
+{#                                        modalUrl: path('app_parcours_state', {parcours:parcours.id}) }) }}#}
+{#                               data-action="click->modal#openModal"#}
+{#                               data-size="lg"#}
+{#                               data-bs-toggle="tooltip"#}
+{#                               data-bs-placement="bottom"#}
+{#                               title="Vérifier la saisie"#}
+{#                            >#}
+{#                                <i class="fal fa-binoculars"></i>#}
+{#                                <span> vérifier</span>#}
+{#                            </a><br>#}
+
+{#                            {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) or is_granted('ROLE_SES') %} #}{# todo: filtrer#}
+{#                sur ROLE_SES => Parcours Edit #}
+{#                                <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"#}
+{#                                   class="btn btn-sm text-warning"#}
+{#                                   data-bs-toggle="tooltip"#}
+{#                                   data-bs-placement="bottom"#}
+{#                                   title="Modifier la fiche d'identité du parcours"#}
+{#                                >#}
+{#                                    <i class="{{ iconEdit }}"></i>#}
+{#                                    <span> modifier</span>#}
+{#                                </a>#}
+{#                            {% endif %}#}
+
+{#                            {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_SES') %}#}
+{#                                #}{# todo manque formation sur le isgranted #}
+{#                                <button {{ stimulus_action('crud', 'delete', 'click', {#}
+{#                                    url:path('app_parcours_delete',{'id': parcours.id}),#}
+{#                                    csrf: csrf_token('delete' ~ parcours.id)#}
+{#                                }) }} class="btn btn-sm text-danger">#}
+{#                                    <i class="{{ iconDelete }}"></i> Supprimer#}
+{#                                </button>#}
+{#                            {% endif %}#}
+{#                        </td>#}
+{#                    </tr>#}
+{#                {% endfor %}#}
+{#                {% if hasBoucle %}#}
+{#                    </tbody>#}
+{#                    </table>#}
+{#                    </td>#}
+{#                    </tr>#}
+{#                {% endif %}#}
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="7" class="bg-warning">Aucun enregistrement trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
