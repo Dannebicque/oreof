@@ -627,11 +627,13 @@ class Formation
         return $this;
     }
 
+    /** @deprecated("sur le DPE") */
     public function getEtatDpe(): array
     {
         return $this->etatDpe ?? [];
     }
 
+    /** @deprecated("sur le DPE") */
     public function setEtatDpe(?array $etatDpe): self
     {
         $this->etatDpe = $etatDpe;
