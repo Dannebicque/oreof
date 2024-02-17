@@ -29,7 +29,8 @@ class StructureParcours
     public StatsFichesMatieresParcours $statsFichesMatieresParcours;
 
     public function __construct(
-        private $withEcts = true
+        private $withEcts = true,
+        private $withBcc = true,
     )
     {
     }

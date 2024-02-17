@@ -124,7 +124,7 @@ class FormationController extends BaseController
             $stats[$formation->getId()]['stats'] = new StatsFichesMatieres();
 
             foreach ($parcourss as $parcours) {
-                $stats[$formation->getId()][$parcours->getId()] = $calculStructureParcours->calcul($parcours, false);
+                $stats[$formation->getId()][$parcours->getId()] = $calculStructureParcours->calcul($parcours, false, false);
                 $stats[$formation->getId()]['stats']->addStatsParcours(
                     $stats[$formation->getId()][$parcours->getId()]->statsFichesMatieresParcours
                 );

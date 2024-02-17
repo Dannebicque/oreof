@@ -47,21 +47,29 @@ class StructureEc
     public ?Collection $bccs;
 
     private bool $withEcts = true;
+    private bool $withBcc = true;
 
-    public function __construct(ElementConstitutif $elementConstitutif, Parcours $parcours, bool $isBut = false, bool $withEcts = true)
+    public function __construct(
+        ElementConstitutif $elementConstitutif, Parcours $parcours, bool $isBut = false, bool $withEcts = true, bool $withBcc = true)
     {
+        $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
         $this->withEcts = $withEcts;
-        $this->raccroche = GetElementConstitutif::isRaccroche($elementConstitutif, $parcours);
-        $this->elementRaccroche = GetElementConstitutif::getElementConstitutif($elementConstitutif, $this->raccroche);
+        $this->withBcc = $withBcc;
+        $this->raccroche = $getElement->isRaccroche();
+        $this->elementRaccroche = $getElement->getElementConstitutif();
 
         $this->elementConstitutif = $elementConstitutif;
-        if ($withEcts) {
+        if ($this->withEcts) {
             $this->heuresEctsEc = new HeuresEctsEc();
-            $this->typeMccc = GetElementConstitutif::getTypeMccc($elementConstitutif, $this->raccroche);
-            $this->heuresEctsEc->addEc(GetElementConstitutif::getElementConstitutifHeures($elementConstitutif, $this->raccroche), $isBut);
-            $this->heuresEctsEc->addEcts(GetElementConstitutif::getEcts($elementConstitutif, $this->raccroche));
-            $this->mcccs = GetElementConstitutif::getMcccsCollection($elementConstitutif, $this->raccroche);
-            $this->bccs = GetElementConstitutif::getBccs($elementConstitutif, $this->raccroche);
+            $this->typeMccc = $getElement->getTypeMccc();
+            $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures(), $isBut);
+            $this->heuresEctsEc->addEcts($getElement->getEcts());
+            $this->mcccs = $getElement->getMcccsCollection();
+
+        }
+
+        if ($this->withBcc) {
+            $this->bccs = $getElement->getBccs();
         }
     }
 

@@ -33,10 +33,12 @@ class StructureSemestre
     #[Groups(['DTO_json_versioning'])]
     public HeuresEctsSemestre $heuresEctsSemestre;
     private bool $withEcts = true;
+    private bool $withBcc = true;
 
-    public function __construct(Semestre $semestre, int $ordre, bool $raccroche = false, SemestreParcours $semestreParcours = null, bool $withEcts = true)
+    public function __construct(Semestre $semestre, int $ordre, bool $raccroche = false, SemestreParcours $semestreParcours = null, bool $withEcts = true, $withBcc = true)
     {
         $this->withEcts = $withEcts;
+        $this->withBcc = $withBcc;
         $this->ordre = $ordre;
         $this->semestre = $semestre;
         $this->semestreParcours = $semestreParcours;

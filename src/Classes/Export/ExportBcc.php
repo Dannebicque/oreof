@@ -150,7 +150,9 @@ class ExportBcc implements ExportInterface
                                     foreach ($ue->getElementConstitutifs() as $ec) {
                                         $raccroche = $ec->getFicheMatiere()?->getParcours() !== $parcours;
                                         if ($raccroche) {
-                                            $competences = GetElementConstitutif::getBccs($ec, $raccroche);
+                                            $getElement = new GetElementConstitutif($ec, $parcours);
+                                            $getElement->setIsRaccroche($raccroche);
+                                            $competences = $getElement->getBccs();
                                         } else {
                                             $competences = $ec->getFicheMatiere()?->getCompetences();
                                         }

@@ -15,188 +15,211 @@ use App\Entity\Parcours;
 use App\TypeDiplome\Source\TypeDiplomeInterface;
 use Doctrine\Common\Collections\Collection;
 
-abstract class GetElementConstitutif
+class GetElementConstitutif
 {
-    public static function getElementConstitutif(ElementConstitutif $elementConstitutif, bool $raccroche): ElementConstitutif|FicheMatiere
+    private ?bool $isRaccroche = null;
+    private ElementConstitutif|FicheMatiere|null $ecSource = null;
+    public function __construct(
+        private readonly ElementConstitutif $elementConstitutif,
+        private readonly Parcours $parcours) {}
+
+    public function getElementConstitutif(): ElementConstitutif|FicheMatiere
     {
-        if ($raccroche && $elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->getParcours() !== null) {
-            foreach ($elementConstitutif->getFicheMatiere()?->getParcours()?->getElementConstitutifs() as $ec) {
-                if ($ec->getFicheMatiere()?->getId() === $elementConstitutif->getFicheMatiere()?->getId()) {
-                    return $ec;
+        if ($this->ecSource !== null) {
+            return $this->ecSource;
+        }
+
+        if ($this->isRaccroche() && $this->elementConstitutif->getFicheMatiere() !== null && $this->elementConstitutif->getFicheMatiere()->getParcours() !== null) {
+            foreach ($this->elementConstitutif->getFicheMatiere()->getParcours()->getElementConstitutifs() as $ec) {
+                if ($ec->getFicheMatiere()?->getId() === $this->elementConstitutif->getFicheMatiere()->getId()) {
+                    $this->ecSource = $ec;
+                    return $this->ecSource;
                 }
             }
-        } elseif ($elementConstitutif->getEcParent() !== null) {
-            return $elementConstitutif->getEcParent();
+        } elseif ($this->elementConstitutif->getEcParent() !== null) {
+            $this->ecSource = $this->elementConstitutif->getEcParent();
+            return $this->ecSource;
         }
-        return $elementConstitutif;
+        $this->ecSource = $this->elementConstitutif;
+        return $this->ecSource;
     }
 
-    public static function getMcccs(ElementConstitutif $elementConstitutif, bool $raccroche, TypeDiplomeInterface $typeD): array
+    public function getMcccs(TypeDiplomeInterface $typeD): array
     {
-        if ($elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
-            return $typeD->getMcccs($elementConstitutif->getFicheMatiere());
+        if ($this->elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
+            return $typeD->getMcccs($this->elementConstitutif->getFicheMatiere());
         }
 
-        if ($elementConstitutif->isSynchroMccc() === true && $raccroche === true) {
-            return $typeD->getMcccs(self::getElementConstitutif($elementConstitutif, $raccroche));
+        if ($this->elementConstitutif->isSynchroMccc() === true && $this->isRaccroche() === true) {
+            return $typeD->getMcccs($this->getElementConstitutif());
         }
-        //$ec = self::getElementConstitutif($elementConstitutif, $raccroche);
-        return $typeD->getMcccs($elementConstitutif);
+
+        return $typeD->getMcccs($this->elementConstitutif);
     }
 
-    public static function getMcccsCollection(ElementConstitutif $elementConstitutif, bool $raccroche): ?Collection
+    public function getMcccsCollection(): ?Collection
     {
-        if ($elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
-            return $elementConstitutif->getFicheMatiere()->getMcccs();
+        if ($this->elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
+            return $this->elementConstitutif->getFicheMatiere()?->getMcccs();
         }
 
-        if ($elementConstitutif->isSynchroMccc() === true && $raccroche === true) {
-            return self::getElementConstitutif($elementConstitutif, $raccroche)->getMcccs();
+        if ($this->elementConstitutif->isSynchroMccc() === true && $this->isRaccroche() === true) {
+            return $this->getElementConstitutif()->getMcccs();
         }
 
-        return $elementConstitutif->getMcccs();
+        return $this->elementConstitutif->getMcccs();
     }
 
-    public static function getEcts(ElementConstitutif $elementConstitutif, bool $raccroche): ?float
+    public function getEcts(): ?float
     {
-        if ($elementConstitutif->getFicheMatiere()?->isEctsImpose()) {
-            return $elementConstitutif->getFicheMatiere()?->getEcts();
+        if ($this->elementConstitutif->getFicheMatiere()?->isEctsImpose()) {
+            return $this->elementConstitutif->getFicheMatiere()?->getEcts();
         }
 
-        if ($elementConstitutif->isSynchroEcts() === true && $raccroche === true) {
-            return self::getElementConstitutif($elementConstitutif, $raccroche)?->getEcts();
+        if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroEcts() === true) {
+            return $this->getElementConstitutif()?->getEcts();
         }
 
-        if ($elementConstitutif->getEcParent() !== null) {
-            return $elementConstitutif->getEcParent()->getEcts();
+        if ($this->elementConstitutif->getEcParent() !== null) {
+            return $this->elementConstitutif->getEcParent()->getEcts();
         }
 
-        return $elementConstitutif->getEcts();
+        return $this->elementConstitutif->getEcts();
     }
 
-    public static function getElementConstitutifHeures(ElementConstitutif $elementConstitutif, bool $raccroche): ElementConstitutif|FicheMatiere
+    public function getElementConstitutifHeures(): ElementConstitutif|FicheMatiere
     {
-        if ($elementConstitutif->getFicheMatiere()?->isVolumesHorairesImpose()) {
-            return $elementConstitutif->getFicheMatiere();
+        if ($this->elementConstitutif->getFicheMatiere()?->isVolumesHorairesImpose()) {
+            return $this->elementConstitutif->getFicheMatiere();
         }
 
-        if ($elementConstitutif->getEcParent() !== null && $elementConstitutif->getEcParent()->isHeuresEnfantsIdentiques() === true) {
-            return $elementConstitutif->getEcParent();
+        if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isHeuresEnfantsIdentiques() === true) {
+            return $this->elementConstitutif->getEcParent();
         }
 
-        if ($elementConstitutif->isSynchroHeures() === true && $raccroche === true) {
-            return self::getElementConstitutif($elementConstitutif, $raccroche);
+        if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroHeures() === true) {
+            return $this->getElementConstitutif();
         }
-        return $elementConstitutif;
+        return $this->elementConstitutif;
     }
 
-    public static function isRaccroche(ElementConstitutif $elementConstitutif, Parcours $parcours)
+    public function isRaccroche():bool
     {
-        if ($elementConstitutif->getFicheMatiere()?->isHorsDiplome()) {
+        if ($this->isRaccroche !== null) {
+            return $this->isRaccroche;
+        }
+
+        if ($this->elementConstitutif->getFicheMatiere()?->isHorsDiplome()) {
             return true;
         }
 
-        if ($elementConstitutif->getFicheMatiere()?->getParcours() === null) {
+        if ($this->elementConstitutif->getFicheMatiere()?->getParcours() === null) {
             return false;
         }
 
-        return $elementConstitutif->getFicheMatiere()?->getParcours() !== $parcours;
+        $this->isRaccroche = $this->elementConstitutif->getFicheMatiere()?->getParcours() !== $this->parcours;
+        return $this->isRaccroche;
     }
 
-    public static function getEtatsMccc(ElementConstitutif $elementConstitutif, bool $raccroche): ?string
+    public function getEtatsMccc(): ?string
     {
-        if ($elementConstitutif->getEcParent() !== null && $elementConstitutif->getEcParent()->isMcccEnfantsIdentique() === true) {
-            return $elementConstitutif->getEcParent()->getEtatMccc();
+        if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isMcccEnfantsIdentique() === true) {
+            return $this->elementConstitutif->getEcParent()->getEtatMccc();
         }
 
-        if ($elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
-            return $elementConstitutif->getFicheMatiere()?->getEtatMccc();
+        if ($this->elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
+            return $this->elementConstitutif->getFicheMatiere()?->getEtatMccc();
         }
 
-        if ($elementConstitutif->isSynchroMccc() === true && $raccroche === true) {
-            return self::getElementConstitutif($elementConstitutif, $raccroche)->getEtatMccc();
+        if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroMccc() === true) {
+            return $this->getElementConstitutif()->getEtatMccc();
         }
 
-        return $elementConstitutif->getEtatMccc();
+        return $this->elementConstitutif->getEtatMccc();
     }
 
-    public static function getEtatStructure(ElementConstitutif $elementConstitutif, bool $raccroche): ?string
+    public function getEtatStructure(): ?string
     {
-        if ($elementConstitutif->getFicheMatiere()?->isVolumesHorairesImpose()) {
-            return $elementConstitutif->getFicheMatiere()?->etatStructure();
+        if ($this->elementConstitutif->getFicheMatiere()?->isVolumesHorairesImpose()) {
+            return $this->elementConstitutif->getFicheMatiere()?->etatStructure();
         }
 
-        if ($elementConstitutif->getEcParent() !== null && $elementConstitutif->getEcParent()->isHeuresEnfantsIdentiques() === true) {
-            return $elementConstitutif->getEcParent()->etatStructure();
+        if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isHeuresEnfantsIdentiques() === true) {
+            return $this->elementConstitutif->getEcParent()->etatStructure();
         }
 
-        if ($elementConstitutif->isSynchroHeures() === true && $raccroche === true) {
-            return self::getElementConstitutif($elementConstitutif, $raccroche)->etatStructure();
+        if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroHeures() === true) {
+            return $this->getElementConstitutif()->etatStructure();
         }
-        return $elementConstitutif->etatStructure();
+        return $this->elementConstitutif->etatStructure();
     }
 
-    public static function getEtatBcc(ElementConstitutif $elementConstitutif, bool $raccroche): ?string
+    public function getEtatBcc(): ?string
     {
         // cas du BUT
-        if ($elementConstitutif->getFicheMatiere()?->getApprentissagesCritiques()->count() > 0) {
+        if ($this->elementConstitutif->getFicheMatiere()?->getApprentissagesCritiques()->count() > 0) {
             //todo: les Ac doivent être dans la bonne compétence...
-            foreach ($elementConstitutif->getFicheMatiere()?->getApprentissagesCritiques() as $ac) {
+            foreach ($this->elementConstitutif->getFicheMatiere()?->getApprentissagesCritiques() as $ac) {
                 if ($ac->getNiveau() !== null &&
-                    $ac->getNiveau()->getCompetence()?->getNumero() === $elementConstitutif->getUe()?->getOrdre()) {
+                    $ac->getNiveau()->getCompetence()?->getNumero() === $this->elementConstitutif->getUe()?->getOrdre()) {
                     return 'Complet';
                 }
             }
         }
 
 
-        if ($raccroche === true && $elementConstitutif->isSynchroBcc() === true) {
-            $ec = self::getElementConstitutif($elementConstitutif, $raccroche);
+        if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroBcc() === true) {
+            $ec = $this->getElementConstitutif();
             if ($ec->getCompetences()->count() === 0) {
                 return $ec->getFicheMatiere()?->getCompetences()->count() > 0 ? 'Complet' : 'A saisir';
             }
             return $ec->getCompetences()->count() > 0 ? 'Complet' : 'A saisir';
         }
 
-        if ($elementConstitutif->getCompetences()->count() === 0) {
-            return $elementConstitutif->getFicheMatiere()?->getCompetences()->count() > 0 ? 'Complet' : 'A saisir';
+        if ($this->elementConstitutif->getCompetences()->count() === 0) {
+            return $this->elementConstitutif->getFicheMatiere()?->getCompetences()->count() > 0 ? 'Complet' : 'A saisir';
         }
 
-        return $elementConstitutif->getCompetences()->count() > 0 ? 'Complet' : 'A saisir';
+        return $this->elementConstitutif->getCompetences()->count() > 0 ? 'Complet' : 'A saisir';
 
     }
 
-    public static function getTypeMccc(ElementConstitutif $elementConstitutif, bool $raccroche): ?string
+    public function getTypeMccc(): ?string
     {
-        if ($elementConstitutif->getEcParent() !== null && $elementConstitutif->getEcParent()->isMcccEnfantsIdentique() === true) {
-            return $elementConstitutif->getEcParent()->getTypeMccc();
+        if ($this->elementConstitutif->getEcParent() !== null && $this->elementConstitutif->getEcParent()->isMcccEnfantsIdentique() === true) {
+            return $this->elementConstitutif->getEcParent()->getTypeMccc();
         }
 
-        if ($elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
-            return $elementConstitutif->getFicheMatiere()?->getTypeMccc();
+        if ($this->elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
+            return $this->elementConstitutif->getFicheMatiere()?->getTypeMccc();
         }
 
-        if ($elementConstitutif->isSynchroMccc() === true && $raccroche === true) {
-            return self::getElementConstitutif($elementConstitutif, $raccroche)->getTypeMccc();
+        if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroMccc() === true) {
+            return $this->getElementConstitutif()->getTypeMccc();
         }
 
-        return $elementConstitutif->getTypeMccc();
+        return $this->elementConstitutif->getTypeMccc();
     }
 
-    public static function getBccs(ElementConstitutif $elementConstitutif, bool $raccroche): ?Collection
+    public function getBccs(): ?Collection
     {
-        if ($raccroche === true && $elementConstitutif->isSynchroBcc() === true) {
-            $ec = self::getElementConstitutif($elementConstitutif, $raccroche);
+        if ($this->isRaccroche() === true && $this->elementConstitutif->isSynchroBcc() === true) {
+            $ec = $this->getElementConstitutif();
             if ($ec->getCompetences()->count() === 0) {
                 return $ec->getFicheMatiere()?->getCompetences();
             }
             return $ec->getCompetences();
         }
 
-        if ($elementConstitutif->getCompetences()->count() === 0) {
-            return $elementConstitutif->getFicheMatiere()?->getCompetences();
+        if ($this->elementConstitutif->getCompetences()->count() === 0) {
+            return $this->elementConstitutif->getFicheMatiere()?->getCompetences();
         }
 
-        return $elementConstitutif->getCompetences();
+        return $this->elementConstitutif->getCompetences();
+    }
+
+    public function setIsRaccroche(bool $raccroche): void
+    {
+        $this->isRaccroche = $raccroche;
     }
 }

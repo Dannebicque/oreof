@@ -690,7 +690,9 @@ class ElementConstitutif
     public function getEtatBcc(Parcours $parcours): ?string
     {
         $raccroche = $this->getFicheMatiere()?->getParcours() !== $parcours;
-        return GetElementConstitutif::getEtatBcc($this, $raccroche);
+        $getElement = new GetElementConstitutif($this, $parcours);
+        $getElement->setIsRaccroche($raccroche);
+        return $getElement->getEtatBcc();
     }
 
     public function isFicheFromParcours(): bool

@@ -12,6 +12,7 @@ namespace App\TypeDiplome\Source;
 use App\Classes\CalculButStructureParcours;
 use App\DTO\StructureParcours;
 use App\Entity\CampagneCollecte;
+use App\Entity\ElementConstitutif;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Mccc;
@@ -67,7 +68,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         return $this->calculStructureParcours->calcul($parcours);
     }
 
-    public function getMcccs(FicheMatiere $elementConstitutif): array|Collection
+    public function getMcccs(ElementConstitutif|FicheMatiere $elementConstitutif): array|Collection
     {
         $mcccs = $elementConstitutif->getMcccs();
         $tab = [];

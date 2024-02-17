@@ -41,10 +41,12 @@ class StructureUe
     public HeuresEctsUe $heuresEctsUe;
 
     private bool $withEcts = true;
+    private bool $withBcc = true;
 
-    public function __construct(?Ue $ue, bool $raccroche = false, ?string $display = null, ?Ue $ueOrigine = null, bool $withEcts = true)
+    public function __construct(?Ue $ue, bool $raccroche = false, ?string $display = null, ?Ue $ueOrigine = null, bool $withEcts = true, $withBcc = true)
     {
         $this->withEcts = $withEcts;
+        $this->withBcc = $withBcc;
         $this->ue = $ue;
         $this->display = $display ?? '';
         $this->raccroche = $raccroche;

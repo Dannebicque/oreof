@@ -23,8 +23,8 @@ final class BadgeEctsComponent
     public function mounted(): void
     {
         $this->isSynchroEcts = $this->elementConstitutif->isSynchroEcts() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours->getId();
-        $raccroche = GetElementConstitutif::isRaccroche($this->elementConstitutif, $this->parcours);
-        $this->ects = GetElementConstitutif::getEcts($this->elementConstitutif, $raccroche);
+        $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
+        $this->ects = $getElement->getEcts();
 
         if ($this->ects > 0.0 && $this->ects < 30.0) {
             $this->etatEcts = 'success';

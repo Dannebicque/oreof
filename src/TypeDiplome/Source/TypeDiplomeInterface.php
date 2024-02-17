@@ -10,9 +10,11 @@
 namespace App\TypeDiplome\Source;
 
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\InputBag;
 
 interface TypeDiplomeInterface
 {
+    public function getMcccs(ElementConstitutif|FicheMatiere $elementConstitutif): array|Collection;
 }

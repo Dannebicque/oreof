@@ -492,7 +492,9 @@ class ElementConstitutifController extends AbstractController
 //        )) { //todo: ajouter le workflow...
 
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
-        $ecHeures = GetElementConstitutif::getElementConstitutifHeures($elementConstitutif, $raccroche);
+        $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
+        $getElement->setIsRaccroche($raccroche);
+        $ecHeures = $getElement->getElementConstitutifHeures();
 
         $form = $this->createForm(EcStep4Type::class, $ecHeures, [
             'isModal' => true,
@@ -609,5 +611,5 @@ class ElementConstitutifController extends AbstractController
 
         return $this->json(false, 500);
     }
-    
+
 }

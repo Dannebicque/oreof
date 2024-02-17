@@ -111,11 +111,15 @@ class ElementConstitutifMcccController extends AbstractController
             }
 
             $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
+            $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
+            $getElement->setIsRaccroche($raccroche);
+
+
 
             if ($elementConstitutif->getFicheMatiere() !== null && $elementConstitutif->getFicheMatiere()?->isMcccImpose()) {
                 $typeEpreuve = $elementConstitutif->getFicheMatiere()?->getTypeMccc();
             } elseif ($raccroche && $elementConstitutif->isSynchroMccc()) {
-                $ec = GetElementConstitutif::getElementConstitutif($elementConstitutif, $raccroche);
+                $ec = $getElement->getElementConstitutif();
                 $typeEpreuve = $ec->getTypeMccc();
             } else {
                 $typeEpreuve = $elementConstitutif->getTypeMccc();
@@ -127,9 +131,9 @@ class ElementConstitutifMcccController extends AbstractController
                 'typeMccc' => $typeEpreuve,
                 'typeEpreuves' => $typeEpreuveRepository->findByTypeDiplome($typeDiplome),
                 'ec' => $elementConstitutif,
-                'ects' => GetElementConstitutif::getEcts($elementConstitutif, $raccroche),
+                'ects' => $getElement->getEcts(),
                 'templateForm' => $typeD::TEMPLATE_FORM_MCCC,
-                'mcccs' => GetElementConstitutif::getMcccs($elementConstitutif, $raccroche, $typeD),
+                'mcccs' => $getElement->getMcccs($typeD),
                 'wizard' => false,
                 'typeDiplome' => $typeDiplome,
                 'parcours' => $parcours,

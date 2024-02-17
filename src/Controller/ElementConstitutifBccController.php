@@ -160,8 +160,10 @@ class ElementConstitutifBccController extends AbstractController
                         $tabCompetences[$competence->getCode()] = $competence;
                     }
                 }
+                $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
+                $getElement->setIsRaccroche($raccroche);
                 // competences de l'EC du parcours d'origine
-                $competences = GetElementConstitutif::getBccs($elementConstitutif, $raccroche);
+                $competences = $getElement->getBccs();
 
                 //on fait le lien entre la compétence et le code
                 foreach ($competences as $competence) {

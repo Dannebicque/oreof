@@ -13,6 +13,9 @@ use App\Classes\JsonReponse;
 use App\Classes\verif\FormationValide;
 use App\DTO\ProcessData;
 use App\Entity\Formation;
+use App\Entity\Historique;
+use App\Entity\HistoriqueFormation;
+use App\Events\HistoriqueFormationEditEvent;
 use App\Events\HistoriqueFormationEvent;
 use App\Utils\Tools;
 use DateTime;
@@ -74,7 +77,7 @@ class FormationProcess extends AbstractProcess
         }
 
         if ($request->request->has('acceptationDirecte')) {
-            $motifs['acceptationDirecte'] = $request->request->get('acceptationDirecte') === 'acceptationDirecte' ? true : false;
+            $motifs['acceptationDirecte'] = $request->request->get('acceptationDirecte') === 'acceptationDirecte';
             $valid = 'valider_cfvu';
         }
 
@@ -93,8 +96,15 @@ class FormationProcess extends AbstractProcess
         }
 
         $this->dpeWorkflow->apply($formation, $valid, $motifs);
+
         $this->entityManager->flush();
 
+        return $reponse;
+    }
+
+    public function editFormation(Historique|HistoriqueFormation $historiqueFormation, UserInterface $user, $etape, $request): Response
+    {
+        $reponse = $this->dispatchEventEditFormation($historiqueFormation, $user, $etape, $request, 'valide');
         return $reponse;
     }
 
@@ -103,6 +113,7 @@ class FormationProcess extends AbstractProcess
         $reponse = $this->dispatchEventFormation($formation, $user, $etape, $request, 'reserve');
 
         $this->dpeWorkflow->apply($formation, $process['canReserve'], ['motif' => $request->request->get('argumentaire')]);
+        //todo: pas dans la table DPE...
         $this->entityManager->flush();
 
         return $reponse;
@@ -144,5 +155,12 @@ class FormationProcess extends AbstractProcess
         $histoEvent = new HistoriqueFormationEvent($formation, $user, $etape, $etat, $request);
         $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
         return JsonReponse::success($this->translator->trans('formation.' . $etat . '.' . $etape . '.flash.success', [], 'process'));
+    }
+
+    private function dispatchEventEditFormation(HistoriqueFormation $historiqueFormation, UserInterface $user, $etape, $request, string $etat): Response
+    {
+        $histoEvent = new HistoriqueFormationEditEvent($historiqueFormation, $user, $etape, $etat, $request);
+        $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEditEvent::EDIT_HISTORIQUE_FORMATION);
+        return JsonReponse::success($this->translator->trans('formation.edit.' . $etat . '.' . $etape . '.flash.success', [], 'process'));
     }
 }

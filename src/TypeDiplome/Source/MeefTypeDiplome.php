@@ -10,7 +10,9 @@
 namespace App\TypeDiplome\Source;
 
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 use App\Entity\Mccc;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\InputBag;
 
 class MeefTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
@@ -291,7 +293,7 @@ class MeefTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterfac
         $this->entityManager->flush();
     }
 
-    public function getMcccs(ElementConstitutif $elementConstitutif): array
+    public function getMcccs(ElementConstitutif|FicheMatiere $elementConstitutif): array|Collection
     {
         $mcccs = $elementConstitutif->getMcccs();
         $tabMcccs = [];

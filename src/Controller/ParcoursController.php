@@ -223,7 +223,7 @@ class ParcoursController extends BaseController
         }
 
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-        $dto = $typeD->calculStructureParcours($parcours);
+        $dto = $typeD->calculStructureParcours($parcours, true, false);
 
         return $this->render('parcours/show.html.twig', [
             'parcours' => $parcours,
