@@ -5,7 +5,6 @@
 
 <form action="{{ path('app_validation_valide', {etape:etape, type:type, id:id}) }}" method="post"
       enctype="multipart/form-data">
-
     {% if process.hasDate %}
         <div>
             <label for="date" class="form-label">{{ ('valide.'~process.label~'.date.label')|trans({}, 'process') }}

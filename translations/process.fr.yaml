@@ -38,7 +38,7 @@ validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argument
 validation.cfvu.valide.cas.acceptation.non.directe.soumis_cfvu: 'Validation du projet DPE "formation" SOUS RESERVE :'
 valide.validation.cfvu.helps.acceptation.non.directe.help: ' '
 formation.valide.cfvu.flash.success: 'Validation de la formation par la CFVU'
-historique.validation.cfvu: 'Validation de la CFVU'
+historique.validation.cfvu: 'Validation de la CFVU du %date%'
 historique.validation.vp: 'Visa des VP'
 validation.publication.valide.alerte: 'La validation  entraîne la publication de la formation à la date indiquée.'
 btn.validation.publication.valide: 'A publier'
@@ -344,3 +344,11 @@ validation.fiche_matiere.ses.reserve.alerte: validation.fiche_matiere.ses.reserv
 reserve.validation.fiche_matiere.ses.argumentaire.label: 'Argumentaire pour les réserves des fiches EC/matière'
 reserve.validation.fiche_matiere.ses.helps.argumentaire.help: ''
 btn.validation.fiche_matiere.ses.reserve: 'Emettre des réserves sur les fiches EC/matière'
+historique.: historique.
+validation.reserve.soumis_central.title: validation.reserve.soumis_central.title
+validation.refuser.soumis_central.title: validation.refuser.soumis_central.title
+validation.fiche_matiere.ses.refuse.alerte: validation.fiche_matiere.ses.refuse.alerte
+refuse.validation.fiche_matiere.ses.argumentaire.label: refuse.validation.fiche_matiere.ses.argumentaire.label
+refuse.validation.fiche_matiere.ses.helps.argumentaire.help: refuse.validation.fiche_matiere.ses.helps.argumentaire.help
+btn.validation.fiche_matiere.ses.refuse: btn.validation.fiche_matiere.ses.refuse
+formation.edit.valide.cfvu.flash.success: formation.edit.valide.cfvu.flash.success

@@ -1,0 +1,100 @@
+{{ component('alerte', {
+    type: 'info',
+    message: (process.label~'.valide.alerte')|trans({}, 'process')|nl2br|raw
+}) }}
+
+<form action="{{ path('app_historique_edit', {historique: historique.id}) }}" method="post"
+      enctype="multipart/form-data">
+
+    {% if process.hasDate %}
+        <div>
+            <label for="date" class="form-label">{{ ('valide.'~process.label~'.date.label')|trans({}, 'process') }}
+                <span class="required"></span> <i
+                        class="fal fa-question-circle ms-1"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('valide.'~process.label~'.helps.date.help')|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('valide.'~process.label~'.helps.date.help')|trans({}, 'process') }}"></i></label>
+            <input type="date" name="date"
+                   class="form-control"
+                   id="date"
+                   value="{{ historique.date|date('Y-m-d') }}"
+            >
+        </div>
+    {% endif %}
+
+    {% if etape == 'cfvu' %}
+        {# regarder si dans l'historique on à un laissez-passer sur le conseil  #}
+        {% if laisserPasser is defined and laisserPasser != false %}
+            {% if laisserPasser.etat == 'laisserPasser' %}
+                {{ component('alerte', {type:'warning', message: 'Un laissez-passer a été demandé le '~laisserPasser.created|date('d/m/Y')~'.'}) }}
+            {% else %}
+                <a
+                        href="{{ asset('uploads/conseils/'~laisserPasser.complements.fichier) }}"
+                        target="_blank"
+                        class="mt-1"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom"
+                        title="{{ 'voir.le.pv.infobulle'|trans({}, 'process') }}"
+                >
+                    <i class="{{ iconDownload }}"></i>
+                    <span> {{ 'voir.le.pv'|trans({}, 'process') }}</span>
+                </a>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% if process.hasUpload %}
+        <div>
+            <label for="file" class="form-label">{{ ('valide.'~process.label~'.fichier.label')|trans({}, 'process') }}
+                <i class="fal fa-question-circle ms-1"
+                   data-controller="tooltip"
+                   data-tooltip-placement-value="bottom"
+                   aria-label="{{ ('valide.'~process.label~'.helps.fichier.help')|trans({}, 'process') }}"
+                   data-bs-original-title="{{ ('valide.'~process.label~'.helps.fichier.help')|trans({}, 'process') }}"></i></label>
+            <input type="file" name="file" id="file" accept="application/pdf" class="form-control">
+        </div>
+
+        {% if historique.complements is defined and historique.complements.fichier is defined %}
+            <a
+                    href="{{ asset('uploads/conseils/'~historique.complements.fichier) }}"
+                    target="_blank"
+                    class="mt-1 btn btn-outline-primary"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="{{ 'voir.le.pv.infobulle'|trans({}, 'process') }}"
+            >
+                <i class="{{ iconDownload }}"></i>
+                <span> {{ 'voir.le.pv'|trans({}, 'process') }}</span>
+            </a>
+        {% else %}
+            <span class="text-warning">Pas de PV déposé</span>
+        {% endif %}
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="laisserPasser" id="laisserPasser"
+                   name="laisserPasser">
+            <label class="form-check-label" for="laisserPasser">
+                {{ ('valide.'~process.label~'.helps.laisserPasser.texte')|trans({}, 'process') }}
+                <i
+                        class="fal fa-question-circle ms-1"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('valide.'~process.label~'.helps.laisserPasser.help')|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('valide.'~process.label~'.helps.laisserPasser.help')|trans({}, 'process') }}"></i>
+            </label>
+        </div>
+    {% endif %}
+
+
+    <div class="mt-2">
+        <button type="submit" class="btn btn-success"
+                {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+                data-action="live#emit"
+                data-event="valide"
+        >
+            <i class="fal fa-floppy-disk"></i>
+            {{ ('btn.'~process.label~'.valide')|trans({}, 'process') }}
+        </button>
+    </div>
+</form>
