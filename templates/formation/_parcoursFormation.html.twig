@@ -1,0 +1,79 @@
+<tr id="parcours_{{ formation.id }}">
+    <td colspan="7">
+        <table class="table" style="border-left: 2px solid var(--secondary)">
+            <thead>
+            <tr>
+                <th>Parcours</th>
+                <th>Lieu</th>
+                <th>Responsable</th>
+                <th>Etat</th>
+                <th>Remplissage</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for parcours in formation.parcours|filter(parcours => parcours.formation.hasParcours) %}
+                <tr>
+                    <td>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</td>
+                    <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
+                    <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
+                    <td>{{ parcours.etatParcours|badgeDpe }}</td>
+                    <td>
+                        {{ parcours.remplissage|remplissage }}
+                    </td>
+                    <td class="text-end">
+                        <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"
+                           class="btn btn-sm text-info"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Voir une formation"
+                        >
+                            <i class="{{ iconShow }}"></i>
+                            <span> voir</span>
+                        </a>
+
+                        <a href="#"
+                           class="btn btn-sm text-success"
+                                {{ stimulus_controller('modal', {
+                                    size: 'lg',
+                                    modalTitle: 'Vérifier la saisie',
+                                    modalUrl: path('app_parcours_state', {parcours:parcours.id}) }) }}
+                           data-action="click->modal#openModal"
+                           data-size="lg"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Vérifier la saisie"
+                        >
+                            <i class="fal fa-binoculars"></i>
+                            <span> vérifier</span>
+                        </a><br>
+
+                        {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) or is_granted('ROLE_SES') %}  todo: filtrer
+                            sur ROLE_SES => Parcours Edit
+                            <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
+                               class="btn btn-sm text-warning"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="bottom"
+                               title="Modifier la fiche d'identité du parcours"
+                            >
+                                <i class="{{ iconEdit }}"></i>
+                                <span> modifier</span>
+                            </a>
+                        {% endif %}
+
+                        {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_SES') %}
+                            todo manque formation sur le isgranted
+                            <button {{ stimulus_action('crud', 'delete', 'click', {
+                                url:path('app_parcours_delete',{'id': parcours.id}),
+                                csrf: csrf_token('delete' ~ parcours.id)
+                            }) }} class="btn btn-sm text-danger">
+                                <i class="{{ iconDelete }}"></i> Supprimer
+                            </button>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </td>
+</tr>

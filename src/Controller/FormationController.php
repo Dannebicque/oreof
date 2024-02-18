@@ -101,6 +101,24 @@ class FormationController extends BaseController
         ]);
     }
 
+    #[Route('/detail/parcours/', name: 'app_parcours_formation_detail', methods: ['GET'])]
+    public function parcoursFormation(
+        Request $request,
+        FormationRepository $formationRepository,
+    ): Response
+    {
+        if ($request->query->has('formation')) {
+            $formation = $formationRepository->find($request->query->get('formation'));
+        } else {
+            throw new \Exception('Formation non trouvée');
+        }
+
+        return $this->render('formation/_parcoursFormation.html.twig', [
+            'formation' => $formation,
+            'parcours' => $formation->getParcours()
+        ]);
+    }
+
     #[Route('/fiches/liste', name: 'app_fiches_formation_liste', methods: ['GET'])]
     public function fichesFormation(
         CalculStructureParcours $calculStructureParcours,

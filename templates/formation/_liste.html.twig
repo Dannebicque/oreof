@@ -1,9 +1,11 @@
 {# todo: reprendre cette page comme le bilan des formations pour le SES, DPE ou Admin avec état, remplissage et
 bouton pour valider/invalide les étapes successives #}
-<div {{ stimulus_controller('structure--formation') }}>
+<div {{ stimulus_controller('structure--formation', {
+    url: path('app_parcours_formation_detail'),
+}) }}>
     {% set sort = params.sort is defined ? params.sort : 'typeDiplome' %}
     {% set direction = params.direction is defined ? params.direction : 'asc' %}
-
+    {% set isGranted = is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SHOW_ALL', app.user) or isCfvu %}
     <table class="table">
         <thead>
         <tr>
@@ -46,7 +48,7 @@ bouton pour valider/invalide les étapes successives #}
             <th></th>
             <th></th>
         </tr>
-        {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SHOW_ALL', app.user) or isCfvu %}
+        {% if isGranted %}
             <tr>
                 <th>
                     <label for="filter-composante" class="sr-only">Composante</label>
@@ -210,15 +212,10 @@ bouton pour valider/invalide les étapes successives #}
                     <td>
                         {{ formation.remplissage|remplissage }}
                     </td>
-                    {#                    <td> #}
-                    {#                        <span class="badge bg-warning"><i class="fal fa-circle-exclamation"></i></span> #}
-                    {#                        <span class="badge bg-warning"><i class="fal fa-file-slash"></i></span> #}
-                    {#                    </td> #}
                     <td class="text-end">
                         {% if formation.hasParcours and formation.parcours|length > 0 %}
                             <button class="btn btn-sm btn-outline-primary"
-                                    {{ stimulus_action('structure--formation', 'afficherParcours', 'click',
-                                        {formation:formation.id}) }}
+                                    {{ stimulus_action('structure--formation', 'afficherParcours', 'click', {formation:formation.id}) }}
                             >
                                 <i class="fal fa-caret-right"></i>
                                 Voir les parcours ({{ formation.parcours|length }})
@@ -273,92 +270,7 @@ bouton pour valider/invalide les étapes successives #}
                         {% endif %}
                     </td>
                 </tr>
-                {% set hasBoucle = false %}
-                {% for parcours in formation.parcours|filter(parcours => parcours.formation.hasParcours) %}
-                    {% if loop.first %}
-                        {% set hasBoucle = true %}
-                        <tr class="d-none" id="parcours_{{ formation.id }}">
-                        <td colspan="7">
-                        <table class="table" style="border-left: 2px solid var(--secondary)">
-                        <thead>
-                        <tr>
-                            <th>Parcours</th>
-                            <th>Lieu</th>
-                            <th>Responsable</th>
-                            <th>Etat</th>
-                            <th>Remplissage</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                    {% endif %}
-
-                    <tr>
-                        <td>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</td>
-                        <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
-                        <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
-                        <td>{{ parcours.etatParcours|badgeDpe }}</td>
-                        <td>
-                            {{ parcours.remplissage|remplissage }}
-                        </td>
-                        <td class="text-end">
-                            <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"
-                               class="btn btn-sm text-info"
-                               data-bs-toggle="tooltip"
-                               data-bs-placement="bottom"
-                               title="Voir une formation"
-                            >
-                                <i class="{{ iconShow }}"></i>
-                                <span> voir</span>
-                            </a>
-
-                            <a href="#"
-                               class="btn btn-sm text-success"
-                                    {{ stimulus_controller('modal', {
-                                        size: 'lg',
-                                        modalTitle: 'Vérifier la saisie',
-                                        modalUrl: path('app_parcours_state', {parcours:parcours.id}) }) }}
-                               data-action="click->modal#openModal"
-                               data-size="lg"
-                               data-bs-toggle="tooltip"
-                               data-bs-placement="bottom"
-                               title="Vérifier la saisie"
-                            >
-                                <i class="fal fa-binoculars"></i>
-                                <span> vérifier</span>
-                            </a><br>
-
-                            {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) or is_granted('ROLE_SES') %} {# todo: filtrer
-                sur ROLE_SES => Parcours Edit #}
-                                <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
-                                   class="btn btn-sm text-warning"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="bottom"
-                                   title="Modifier la fiche d'identité du parcours"
-                                >
-                                    <i class="{{ iconEdit }}"></i>
-                                    <span> modifier</span>
-                                </a>
-                            {% endif %}
-
-                            {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_SES') %}
-                                {# todo manque formation sur le isgranted #}
-                                <button {{ stimulus_action('crud', 'delete', 'click', {
-                                    url:path('app_parcours_delete',{'id': parcours.id}),
-                                    csrf: csrf_token('delete' ~ parcours.id)
-                                }) }} class="btn btn-sm text-danger">
-                                    <i class="{{ iconDelete }}"></i> Supprimer
-                                </button>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-                {% if hasBoucle %}
-                    </tbody>
-                    </table>
-                    </td>
-                    </tr>
-                {% endif %}
+                <template id="detailParcours_{{ formation.id }}"></template>
             {% endif %}
         {% else %}
             <tr>
