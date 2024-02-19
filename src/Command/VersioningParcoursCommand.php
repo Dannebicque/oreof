@@ -77,10 +77,20 @@ class VersioningParcoursCommand extends Command
                     $this->saveOneParcoursIntoJSON($parcours);
                     $io->progressAdvance();
                 }
+                $now = new DateTimeImmutable('now');
+                $dateHeure = $now->format('d-m-Y_H-i-s');
+                $logTxt = "[{$dateHeure}] Tous les parcours ont correctement été versionnés en JSON.\n";
+                $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/global_save_parcours_success.log", $logTxt);
                 $io->success('Sauvegarde en JSON des parcours de la base de données réussie.');
                 return Command::SUCCESS;
             }catch(\Exception $e){
+                // Affichage de l'erreur sur le terminal
                 $io->error("Une erreur est survenue : " . $e->getMessage());
+                $now = new DateTimeImmutable('now');
+                $dateHeure = $now->format('d-m-Y_H-i-s');
+                // Affichage de l'erreur dans les logs// Log error
+                $logTxt = "[{$dateHeure}] Le versioning global des parcours a rencontré une erreur.\n{$e->getMessage()}\n";
+                $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/global_save_parcours_error.log", $logTxt);
             }
         }
         
