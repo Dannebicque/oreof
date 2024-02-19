@@ -52,7 +52,7 @@ class VersioningParcoursCommand extends Command
     protected function configure(): void
     {
         $this->addOption(
-            name: 'full-database', 
+            name: 'dpe-full-database', 
             mode: InputOption::VALUE_NONE,
             description: 'Sauvegarde tous les parcours de la base de données en JSON'
         );
@@ -61,12 +61,16 @@ class VersioningParcoursCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $fullDatabase = $input->getOption('full-database');
+        $dpeFullDatabase = $input->getOption('dpe-full-database');
 
-        if($fullDatabase){
+        if($dpeFullDatabase){
             $io->writeln("Sauvegarde de tous les parcours en cours...");
             $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
             $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findParcours($dpe, []);
+            $parcoursArray = array_filter(
+                $parcoursArray, 
+                fn($parcours) => $parcours->getFormation()->getTypeDiplome()->getLibelleCourt() !== "MEEF"
+            );
             $io->progressStart(count($parcoursArray));
             try{
                 foreach($parcoursArray as $parcours){
@@ -80,7 +84,7 @@ class VersioningParcoursCommand extends Command
             }
         }
         
-        $io->warning("Option de la commande non reconnue. Choix possibles : ['full-database']");
+        $io->warning("Option de la commande non reconnue. Choix possibles : ['dpe-full-database']");
         return Command::INVALID;
     }
 
