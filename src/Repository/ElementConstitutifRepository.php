@@ -205,8 +205,10 @@ class ElementConstitutifRepository extends ServiceEntityRepository
     public function getByUe(?Ue $ue): array
     {
         return $this->createQueryBuilder('ec')
-            ->select('ec', 'fm')
             ->leftJoin('ec.ficheMatiere', 'fm')
+            ->leftJoin('ec.typeEc', 'te')
+            ->addSelect('fm')
+            ->addSelect('te')
             ->andWhere('ec.ue = :ue')
             ->setParameter('ue', $ue)
             ->orderBy('ec.ordre', 'ASC')
