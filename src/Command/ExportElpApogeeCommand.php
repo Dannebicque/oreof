@@ -130,19 +130,23 @@ class ExportElpApogeeCommand extends Command
             if($fullExport){
                 switch(strtoupper($fullExport)){
                     case "EC":
-                        $io->writeln("Génération de l'export Excel...");
+                        $io->writeln("Génération de l'export Excel - EC...");
                         $this->saveFullExportAsSpreadsheet($output, "EC");
                         break;
                     case "UE":
-                        $io->writeln("Génération de l'export Excel...");
+                        $io->writeln("Génération de l'export Excel - UE...");
                         $this->saveFullExportAsSpreadsheet($output, "UE");
                         break;
                     case "SEMESTRE":
-                        $io->writeln("Génération de l'export Excel...");
+                        $io->writeln("Génération de l'export Excel - Semestres...");
                         $this->saveFullExportAsSpreadsheet($output, "SEMESTRE");
                         break;
+                    case "PARCOURS":
+                        $io->writeln("Génération de l'export Excel - Parcours...");
+                        $this->saveFullExportAsSpreadsheet($output, "PARCOURS");
+                        break;
                     default: 
-                        $io->warning("Type d'export inconnu. Il devrait être parmi la liste : ['SEMESTRE', 'UE', 'EC']");
+                        $io->warning("Type d'export inconnu. Il devrait être parmi la liste : ['PARCOURS', 'SEMESTRE', 'UE', 'EC']");
                         return Command::INVALID;
                 }
                 $io->success("Fichier généré avec succès.");
@@ -392,7 +396,15 @@ class ExportElpApogeeCommand extends Command
                 $exportTypeName = "SEMESTRE";
                 $progressBar->advance();
             }
+            elseif ($type === "PARCOURS"){
+                $exportTypeName = "ALL_PARCOURS";
+                $soapObjectArray[] = $this->generateSoapObjectsForParcours($parcours, false);
+                $progressBar->advance();
+            }
             
+        }
+        if($type === "PARCOURS"){
+            $soapObjectArray = array_merge(...$soapObjectArray);
         }
         $this->generateSpreadsheet($soapObjectArray, $exportTypeName);
     }
