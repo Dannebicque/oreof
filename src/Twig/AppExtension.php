@@ -36,6 +36,7 @@ class AppExtension extends AbstractExtension
             new TwigFilter('url', [$this, 'url']),
             new TwigFilter('tel_format', [$this, 'telFormat']),
             new TwigFilter('mailto', [$this, 'mailto'], ['is_safe' => ['html']]),
+            new TwigFilter('open_url', [$this, 'openUrl'], ['is_safe' => ['html']]),
             new TwigFilter('dateFr', [$this, 'dateFr'], ['is_safe' => ['html']]),
             new TwigFilter('dateTimeFr', [$this, 'dateTimeFr'], ['is_safe' => ['html']]),
             new TwigFilter('rncp_link', [$this, 'rncpLink'], ['is_safe' => ['html']]),
@@ -193,6 +194,16 @@ class AppExtension extends AbstractExtension
         }
 
         return '<a href="mailto:' . $email . '" target="_blank">' . $email . ' <i class="fal
+                            fa-arrow-up-right-from-square"></i></a>&nbsp;';
+    }
+
+    public function openUrl(?string $url): string
+    {
+        if (null === $url) {
+            return '';
+        }
+
+        return '<a href="' . $url . '" target="_blank">' . $url . ' <i class="fal
                             fa-arrow-up-right-from-square"></i></a>&nbsp;';
     }
 

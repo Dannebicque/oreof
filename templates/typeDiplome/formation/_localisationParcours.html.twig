@@ -30,7 +30,7 @@
                 <dt>Email</dt>
                 <dd>{{ parcours.composanteInscription.mailContact|mailto }}</dd>
                 <dt>Site web</dt>
-                <dd>{{ parcours.composanteInscription.urlSite }}</dd>
+                <dd>{{ parcours.composanteInscription.urlSite|open_url }}</dd>
         {% else %}
             Non précisé
         {% endif %}
