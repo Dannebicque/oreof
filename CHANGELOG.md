@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.22](https://github.com/Dannebicque/oreof/compare/v1.24.21...v1.24.22) (2024-02-19)
+
+
+### Features
+
+* Add HistoriqueFormationEditEvent and subscriber method ([643f9d5](https://github.com/Dannebicque/oreof/commit/643f9d5440865f83de04a727a4e2441f461dc76e))
+* Edition historique ([3283753](https://github.com/Dannebicque/oreof/commit/3283753f37559827a5e112d4a515da0972da771b))
+* Export ([f6391fd](https://github.com/Dannebicque/oreof/commit/f6391fd585fa669d926397ffb0aaf40f598b2d85))
+* Onglets pour la page d'accueil et tableau de bord sur Fiches ([af4aee9](https://github.com/Dannebicque/oreof/commit/af4aee90886c25038582d61a702151984ba97ddc))
+* structure formation chargement à la demande ([9e4a5f1](https://github.com/Dannebicque/oreof/commit/9e4a5f12d4c9fc83ceadfef9559852213fe0a837))
+
+
+### Bug Fixes
+
+* Codif EC/UE ([5e98ae3](https://github.com/Dannebicque/oreof/commit/5e98ae35c93bb5cb0a7220555ae8b6954c93f713))
+* deprecated ([08305ee](https://github.com/Dannebicque/oreof/commit/08305ee449f9c2e68b650c4bc51c1a94a31f5c09))
+* mise en page parcours ([1814421](https://github.com/Dannebicque/oreof/commit/1814421194d4ac56e2513f253cf7565c2a02d708))
+* optimisation requête ([96a2f87](https://github.com/Dannebicque/oreof/commit/96a2f87a3a518e90643fecaa4573c202d31a7444))
+* optimisation requête ([96f44ee](https://github.com/Dannebicque/oreof/commit/96f44ee0b80e4af26f7b347d3dac1147225975b1))
+* stats sur les fiches ([7bdecb7](https://github.com/Dannebicque/oreof/commit/7bdecb752ffabc43e6154b4bcab98ac580d8530c))
+
 ### [1.24.21](https://github.com/Dannebicque/oreof/compare/v1.24.20...v1.24.21) (2024-02-14)
 
 
