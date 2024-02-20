@@ -1,10 +1,10 @@
 <h2>
     {% if formation is defined %}
-    {{ formation.display }}
+        {{ formation.display }}
     {% elseif ficheMatiere is defined %}
-    {{ ficheMatiere.libelle }}
+        {{ ficheMatiere.libelle }}
     {% else %}
-    -Erreur-
+        -Erreur-
     {% endif %}
 </h2>
 
@@ -21,7 +21,7 @@
         histo.etape == 'laisserPasser' or
         histo.complements.sousReserveModifications is defined or
         histo.complements.sousReserveConseil is defined %}
-    {% set color='warning' %}
+        {% set color='warning' %}
     {% endif %}
     <div class="row g-0 align-items-center mb-2">
         <div class="col-auto">
@@ -38,6 +38,27 @@
                         {% else %}
                             {{ ('historique.'~histo.etape|etapeLabel(type))|trans(histo|etapeParams(type), 'process') }}
                         {% endif %}
+                        {% if is_granted('ROLE_SES') and
+                            (histo.etape == 'cfvu' or histo.etape=='conseil')
+                        %}
+                                <button class="btn text-warning"
+                                        type="button"
+                                        {{ stimulus_controller('modal', {
+                                            size: 'lg',
+                                            modalTitle: ('modification.historique.title')|trans({}, 'process'),
+                                            modalUrl: path('app_historique_edit', {
+                                                historique: histo.id
+                                            }) }) }}
+                                        data-action="click->modal#openModal"
+                                        data-controller="tooltip"
+                                        data-tooltip-placement-value="bottom"
+
+                                        aria-label="{{ 'modification.historique'|trans({}, 'process') }}"
+                                        data-bs-original-title="{{ 'modification.historique'|trans({}, 'process') }}"
+                                >
+                                    <i class="{{ iconEdit }}"></i>
+                                </button>
+                        {% endif %}
                     </div>
                     {% if histo.complements.sousReserveModifications is defined %}
                         <span class="badge bg-warning ms-2">Sous réserve de modifications</span>
@@ -52,28 +73,30 @@
                 </div>
                 <div class="col-auto">
                     <div class="sh-5 d-flex align-items-center">{{ histo.created|date('d/m/Y H:i') }}</div>
+
                 </div>
+
             </div>
             {% if histo.commentaire is defined or histo.complements.fichier is defined %}
-            <div class="row">
-                {% if histo.commentaire is defined %}
-                    <div class="col-auto">
-                        <p>{{ histo.commentaire|raw }}</p>
-                    </div>
-                {% endif %}
-                {% if histo.complements.fichier is defined %}
-                    <div class="col-auto">
-                        <p><a href="{{ asset('uploads/conseils/'~histo.complements.fichier) }}" target="_blank">Voir le PV du conseil</a></p>
-                    </div>
-                {% endif %}
-            </div>
+                <div class="row">
+                    {% if histo.commentaire is defined %}
+                        <div class="col-auto">
+                            <p>{{ histo.commentaire|raw }}</p>
+                        </div>
+                    {% endif %}
+                    {% if histo.complements.fichier is defined %}
+                        <div class="col-auto">
+                            <p><a href="{{ asset('uploads/conseils/'~histo.complements.fichier) }}" target="_blank">Voir
+                                    le PV du conseil</a></p>
+                        </div>
+                    {% endif %}
+                </div>
             {% endif %}
         </div>
     </div>
-    {% else %}
-        {{ component('alerte', {
-            'type': 'warning',
-            'message': 'Aucune validation pour cette formation.'
-        })
-        }}
+{% else %}
+    {{ component('alerte', {
+        'type': 'warning',
+        'message': 'Aucune validation pour cette formation.'
+    }) }}
 {% endfor %}

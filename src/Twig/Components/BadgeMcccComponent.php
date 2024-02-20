@@ -37,8 +37,8 @@ final class BadgeMcccComponent
                 $this->isSynchroMccc = $this->elementConstitutif->isSynchroMccc() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours?->getId();
 
                 if ($this->isSynchroMccc) {
-                    $raccroche = GetElementConstitutif::isRaccroche($this->elementConstitutif, $this->parcours);
-                    $ec = GetElementConstitutif::getElementConstitutif($this->elementConstitutif, $raccroche);
+                    $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
+                    $ec = $getElement->getElementConstitutif();
 
                     $this->etatMcccComplet = $ec->getEtatMccc() === 'Complet';
                 } else {

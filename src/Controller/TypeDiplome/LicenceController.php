@@ -112,7 +112,8 @@ class LicenceController extends AbstractController
 
         $typeEpreuves = $typeEpreuveRepository->findByTypeDiplome($typeDiplome);
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
-
+        $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
+        $getElement->setIsRaccroche($raccroche);
         $disabled = ($elementConstitutif->isSynchroMccc() && $raccroche) || $elementConstitutif->getFicheMatiere()?->isMcccImpose();
 
         if ($request->query->get('type') !== $elementConstitutif->getTypeMccc()) {
@@ -129,7 +130,7 @@ class LicenceController extends AbstractController
                 if ($typeDiplome->getLibelleCourt() !== 'L') {
                     //seul cas particulier, pour les autres mêmes formulaires
                     return $this->render('typeDiplome/mccc/licence/_cc_autres_diplomes.html.twig', [
-                        'mcccs' => GetElementConstitutif::getMcccs($elementConstitutif, $raccroche, $licenceTypeDiplome),
+                        'mcccs' => $getElement->getMcccs($licenceTypeDiplome),
                         'disabled' => $disabled,
                         'typeEpreuves' => $typeEpreuves,
                         'elementConstitutif' => $elementConstitutif,
@@ -137,7 +138,7 @@ class LicenceController extends AbstractController
                 }
 
                 return $this->render('typeDiplome/mccc/licence/_cc.html.twig', [
-                    'mcccs' => GetElementConstitutif::getMcccs($elementConstitutif, $raccroche, $licenceTypeDiplome),
+                    'mcccs' => $getElement->getMcccs($licenceTypeDiplome),
                     'typeEpreuves' => $typeEpreuves,
                     'disabled' => $disabled,
                     'elementConstitutif' => $elementConstitutif,
@@ -145,21 +146,21 @@ class LicenceController extends AbstractController
 
             case 'cci':
                 return $this->render('typeDiplome/mccc/licence/_cci.html.twig', [
-                    'mcccs' => GetElementConstitutif::getMcccs($elementConstitutif, $raccroche, $licenceTypeDiplome),
+                    'mcccs' => $getElement->getMcccs($licenceTypeDiplome),
                     'typeEpreuves' => $typeEpreuves,
                     'disabled' => $disabled,
                     'elementConstitutif' => $elementConstitutif,
                 ]);
             case 'cc_ct':
                 return $this->render('typeDiplome/mccc/licence/_cc_ct.html.twig', [
-                    'mcccs' => GetElementConstitutif::getMcccs($elementConstitutif, $raccroche, $licenceTypeDiplome),
+                    'mcccs' => $getElement->getMcccs($licenceTypeDiplome),
                     'typeEpreuves' => $typeEpreuves,
                     'disabled' => $disabled,
                     'elementConstitutif' => $elementConstitutif,
                 ]);
             case 'ct':
                 return $this->render('typeDiplome/mccc/licence/_ct.html.twig', [
-                    'mcccs' => GetElementConstitutif::getMcccs($elementConstitutif, $raccroche, $licenceTypeDiplome),
+                    'mcccs' => $getElement->getMcccs($licenceTypeDiplome),
                     'typeEpreuves' => $typeEpreuves,
                     'disabled' => $disabled,
                     'elementConstitutif' => $elementConstitutif,

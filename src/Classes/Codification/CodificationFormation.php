@@ -67,7 +67,7 @@ class CodificationFormation
             $this->setCodificationDiplome($parcours);
             $this->setCodeEtape($parcours);
             $this->setCodificationVersionEtape($parcours);
-            //$this->setCodificationSemestre($parcours);
+            $this->setCodificationSemestre($parcours);
             $this->entityManager->flush();
         }
     }

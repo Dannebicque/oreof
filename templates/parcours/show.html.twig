@@ -6,29 +6,29 @@
     {{ parent() }}
     <!-- Test Script -->
     <script>
-        let isSaveClicked = false;
+      let isSaveClicked = false
 
-        function showVersion(){
-            let select = document.querySelector('#selectVersion');
-            let versionSelected = select.options[select.selectedIndex].value;
-            if(versionSelected !== "#"){
-                window.location = `/parcours/${versionSelected}/versioning/view`;
-            }
+      function showVersion () {
+        let select = document.querySelector('#selectVersion')
+        let versionSelected = select.options[select.selectedIndex].value
+        if (versionSelected !== '#') {
+          window.location = `/parcours/${versionSelected}/versioning/view`
         }
+      }
 
-        function saveVersion(event) {
-            if(isSaveClicked === false){
-                let spinner = document.querySelector('#spinner');
-                spinner.classList.remove('d-none');
-                spinner.classList.add('d-flex');
-                isSaveClicked = true; 
-            } else {
-                event.preventDefault();
-                return false;
-            } 
-        }         
-            
-    </script>   
+      function saveVersion (event) {
+        if (isSaveClicked === false) {
+          let spinner = document.querySelector('#spinner')
+          spinner.classList.remove('d-none')
+          spinner.classList.add('d-flex')
+          isSaveClicked = true
+        } else {
+          event.preventDefault()
+          return false
+        }
+      }
+
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -36,56 +36,63 @@
 
 
     {% if is_granted('ROLE_SES') %}
-    <div class="row mb-5">
-        <h3 class="small-title">
-            Format d'export LHEO
-            <a href="{{ path('app_parcours_export_xml_lheo', {'parcours': parcours.id}) }}">
+        <div class="row mt-5 mb-5">
+            <h3 class="small-title">Gestion du parcours</h3>
+            <div class="card">
+            <div class="card-body">
+                <p>Format d'export LHEO
+                    <a href="{{ path('app_parcours_export_xml_lheo', {'parcours': parcours.id}) }}">
                 <span class="mt-4 ms-3 badge {{ lheoXML.isValidLheo(parcours) ? 'bg-success' : 'bg-danger' }}">
                     {{ lheoXML.isValidLheo(parcours) ? 'Valide' : 'Invalide' }}
                 </span>
-            </a>
-        </h3>
-    </div>
-    {% endif %}
+                    </a>
+                </p>
 
-{% if is_granted('ROLE_ADMIN') %}
-    <div class="row my-3">
-        <div class="col-lg-3 col-sm-6">
-            <h3 class="small-title">Versions de ce parcours</h3>
-            {% if parcours.parcoursVersionings|length > 0 %}
-                <select class="form-select" id="selectVersion">
-                    <option value="#" selected="selected">Choisir...</option>
-                    {% for p in parcours.parcoursVersionings %}
-                        <option value="{{ p.getId }}">
-                            Version du : {{ p.getVersionTimestamp()|date('d/m/Y') }} à {{ p.getVersionTimestamp()|date('H:i') }}
-                        </option>
-                    {% endfor %}
-                </select>
-            {% else %}
-                Aucune version enregistrée.
-            {% endif %}
-        </div>  
-            {% if parcours.parcoursVersionings|length > 0 %}
-            <div class="d-flex col-lg-1 col-sm-3 align-items-end">
-                <a href="#">
-                    <button class="btn btn-sm btn-primary mb-1" id="buttonShowVersion" onclick="showVersion()">
-                        Visionner
-                    </button>
-                </a>
+
+                <div class="row my-3">
+                    <div class="col-lg-3 col-sm-6">
+                        <h3 class="small-title">Versions de ce parcours</h3>
+                        {% if parcours.parcoursVersionings|length > 0 %}
+                            <select class="form-select" id="selectVersion">
+                                <option value="#" selected="selected">Choisir...</option>
+                                {% for p in parcours.parcoursVersionings %}
+                                    <option value="{{ p.getId }}">
+                                        Version du : {{ p.getVersionTimestamp()|date('d/m/Y') }}
+                                        à {{ p.getVersionTimestamp()|date('H:i') }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                            Aucune version enregistrée.
+                        {% endif %}
+                    </div>
+                    {% if parcours.parcoursVersionings|length > 0 %}
+                        <div class="d-flex col-lg-1 col-sm-3 align-items-end">
+                            <a href="#">
+                                <button class="btn btn-sm btn-primary mb-1" id="buttonShowVersion"
+                                        onclick="showVersion()">
+                                    Visionner
+                                </button>
+                            </a>
+                        </div>
+                    {% endif %}
+                    <div class="d-flex col-lg-1 col-sm-3 align-items-end">
+                        <a href="{{ path('app_parcours_versioning_save', {parcours: parcours.id}) }}"
+                           onclick="saveVersion(event)">
+                            <button class="btn btn-sm btn-success mb-1 ms-lg-1">
+                                Sauvegarder la version
+                            </button>
+                        </a>
+                    </div>
+                    <div class="d-none col-lg-2 align-items-end justify-content-xl-center justify-content-end"
+                         id="spinner">
+                        <div class="spinner-border text-primary mb-1"></div>
+                    </div>
+                </div>
             </div>
-            {% endif %}
-        <div class="d-flex col-lg-1 col-sm-3 align-items-end">
-            <a href="{{ path('app_parcours_versioning_save', {parcours: parcours.id}) }}" onclick="saveVersion(event)">
-                <button class="btn btn-sm btn-success mb-1 ms-lg-1">
-                    Sauvegarder la version
-                </button>
-            </a>
+            </div>
         </div>
-        <div class="d-none col-lg-2 align-items-end justify-content-xl-center justify-content-end" id="spinner">
-            <div class="spinner-border text-primary mb-1"></div>
-        </div>
-    </div>
-{% endif %}
+    {% endif %}
 
     <div class="row">
         {{ include('typeDiplome/parcours/common/_'~constant('SOURCE', typeD)~'.html.twig') }}

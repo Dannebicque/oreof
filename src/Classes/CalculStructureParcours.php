@@ -16,20 +16,22 @@ use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\Parcours;
 use App\Repository\ElementConstitutifRepository;
+use App\Repository\UeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CalculStructureParcours
 {
     public function __construct(
         protected EntityManagerInterface $entityManager,
-        protected ElementConstitutifRepository $elementConstitutifRepository
+        protected ElementConstitutifRepository $elementConstitutifRepository,
+        protected UeRepository $ueRepository
     )
     {
     }
 
-    public function calcul(Parcours $parcours, $withEcts = true): StructureParcours
+    public function calcul(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): StructureParcours
     {
-        $dtoStructure = new StructureParcours($withEcts);
+        $dtoStructure = new StructureParcours($withEcts, $withBcc);
         $dtoStructure->setParcours($parcours);
 
         foreach ($parcours->getSemestreParcours() as $semestreParcours) {
@@ -42,9 +44,9 @@ class CalculStructureParcours
             }
 
             if ($semestre !== null) {
-                $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours, $withEcts);
-
-                foreach ($semestre->getUes() as $ue) {
+                $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours, $withEcts, $withBcc);
+                $ues = $this->ueRepository->getBySemestre($semestre);
+                foreach ($ues as $ue) {
                     if ($ue !== null && $ue->getUeParent() === null) {
                         $display = $ue->display($parcours);
                         $ueOrigine = $ue;
@@ -56,16 +58,16 @@ class CalculStructureParcours
                         }
 
                         //si des UE enfants, on ne regarde pas s'il y a des EC
-                        $dtoUe = new StructureUe($ue, $raccrocheUe, $display, $ueOrigine ?? null, $withEcts);
-                       // $ecs = $this->elementConstitutifRepository->getByUe($ue);
+                        $dtoUe = new StructureUe($ue, $raccrocheUe, $display, $ueOrigine ?? null, $withEcts, $withBcc);
+                        $ecs = $this->elementConstitutifRepository->getByUe($ue);
 
-                        foreach ($ue->getElementConstitutifs() as $elementConstitutif) {
+                        foreach ($ecs as $elementConstitutif) {
                             if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
                                 //récupérer le bon EC selon tous les liens
-                                $dtoEc = new StructureEc($elementConstitutif, $parcours, false, $withEcts);
+                                $dtoEc = new StructureEc($elementConstitutif, $parcours, false, $withEcts, $withBcc);
                                 $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutif, $raccrocheUe);
                                 foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
-                                    $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts);
+                                    $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts, $withBcc);
                                     $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutifEnfant, $raccrocheUe);
                                     $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
                                 }
@@ -84,15 +86,14 @@ class CalculStructureParcours
                             }
 
                             if ($ueEnfant !== null) {
-                                $dtoUeEnfant = new StructureUe($ueEnfant, $raccrocheUeEnfant, $display, $ueOrigineEnfant ?? null, $withEcts);
-                                //$ecsEnfant = $this->elementConstitutifRepository->getByUe($ueEnfant);
-
-                                foreach ($ueEnfant->getElementConstitutifs() as $elementConstitutif) {
+                                $dtoUeEnfant = new StructureUe($ueEnfant, $raccrocheUeEnfant, $display, $ueOrigineEnfant ?? null, $withEcts, $withBcc);
+                                $ecsUeEnfant = $this->elementConstitutifRepository->getByUe($ueEnfant);
+                                foreach ($ecsUeEnfant as $elementConstitutif) {
                                     if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
-                                        $dtoEc = new StructureEc($elementConstitutif, $parcours, false, $withEcts);
+                                        $dtoEc = new StructureEc($elementConstitutif, $parcours, false, $withEcts, $withBcc);
                                         $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutif, $raccrocheUe);
                                         foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
-                                            $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts);
+                                            $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts, $withBcc);
                                             $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutifEnfant, $raccrocheUe);
                                             $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
                                         }

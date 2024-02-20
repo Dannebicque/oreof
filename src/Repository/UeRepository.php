@@ -105,6 +105,17 @@ class UeRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getBySemestre(Semestre $semestre): array
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.ueRaccrochee', 'r')
+            ->addSelect('r')
+            ->andWhere('u.semestre = :semestre')
+            ->setParameter('semestre', $semestre)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function countDuplicatesCode() : array {
         return $this->createQueryBuilder('ue')
             ->select('count(ue.codeApogee)')

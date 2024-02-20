@@ -55,7 +55,7 @@ class FicheMatiereValideController extends BaseController
         return $this->render('fiche_matiere_valide/valide_parcours.html.twig', [
             'parcours' => $parcours,
             'formation' => $parcours->getFormation(),
-            'statsParcours' => $calculStructureParcours->calcul($parcours, false),
+            'statsParcours' => $calculStructureParcours->calcul($parcours, false, false),
         ]);
     }
 

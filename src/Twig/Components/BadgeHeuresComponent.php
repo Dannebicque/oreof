@@ -30,8 +30,9 @@ final class BadgeHeuresComponent
         } else {
             $this->isSynchroHeures = $this->elementConstitutif->isSynchroHeures() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours->getId();
             if ($this->isSynchroHeures) {
-                $raccroche = GetElementConstitutif::isRaccroche($this->elementConstitutif, $this->parcours);
-                $ec = GetElementConstitutif::getElementConstitutifHeures($this->elementConstitutif, $raccroche);
+                $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
+                $raccroche = $getElement->isRaccroche();
+                $ec = $getElement->getElementConstitutifHeures();
                 $this->etatHeuresComplet = $ec->etatStructure() === 'Complet';
             } else {
                 $this->etatHeuresComplet = $this->elementConstitutif->etatStructure() === 'Complet';

@@ -190,10 +190,11 @@ abstract class ValideStructure extends AbstractValide
             $t['erreur'][] = 'Type d\'EC non renseigné (disciplinaire, ...)';
             self::$errors[] = 'Type d\'EC non renseigné (disciplinaire, ...) pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
         }
-        $raccroche = GetElementConstitutif::isRaccroche($ec, self::$parcours);
+        $getElement = new GetElementConstitutif($ec, self::$parcours);
+        $raccroche = $getElement->isRaccroche();
         if ($ec->getNatureUeEc()?->isLibre() === true) {
             if (self::$typeDiplome !== null) {
-                $ects = GetElementConstitutif::getEcts($ec, $raccroche);
+                $ects = $getElement->getEcts();
                 if ($ects === null ||
                     $ects <= 0.0 ||
                     $ects > 30.0) {
@@ -213,14 +214,14 @@ abstract class ValideStructure extends AbstractValide
             // Si MCCC raccrochée
             // Si Enfants et MCCC du parent
             // Sinon
-            if (GetElementConstitutif::getEtatsMccc($ec, $raccroche) !== 'Complet') {
+            if ($getElement->getEtatsMccc() !== 'Complet') {
                 //todo: gérer MCCC raccrochées, ou d'un parent
                 $t['erreur'][] = 'MCCC non renseignées';
                 $etatEc = self::INCOMPLET;
                 self::$errors[] = 'MCCC non renseignées pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
             }
             if (self::$typeDiplome !== null) {
-                $ects = GetElementConstitutif::getEcts($ec, $raccroche);
+                $ects = $getElement->getEcts();
                 if ($ects === null ||
                     $ects <= 0.0 ||
                     $ects > 30.0) {
@@ -230,14 +231,14 @@ abstract class ValideStructure extends AbstractValide
                 }
             }
 
-            if (GetElementConstitutif::getEtatStructure($ec, $raccroche) !== 'Complet') {
+            if ($getElement->getEtatStructure() !== 'Complet') {
                 //todo:gérer MCCC raccrochées, ou d'un parent
                 $t['erreur'][] = 'Volumes horaires non renseignés';
                 $etatEc = self::INCOMPLET;
                 self::$errors[] = 'Volumes horaires non renseignés pour l\'' . $ec->getCode() . ' de l\'' . $ue->display(self::$parcours);
             }
 
-            if (GetElementConstitutif::getEtatBcc($ec, $raccroche, self::$parcours) !== 'Complet') {
+            if ($getElement->getEtatBcc() !== 'Complet') {
                 //todo:gérer MCCC raccrochées, ou d'un parent
                 $t['erreur'][] = 'BCC incomplet ou non renseignés';
                 $etatEc = self::INCOMPLET;

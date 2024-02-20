@@ -44,8 +44,10 @@ class EctsController extends AbstractController
                     $ectsSemestre += $ec->getEcParent()->getEcts();
                 } else {
                     $raccroche = $ec->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
+                    $getElement = new GetElementConstitutif($ec, $parcours);
+                    $getElement->setIsRaccroche($raccroche);
                     if ($raccroche && $ec->isSynchroEcts()) {
-                        $ects = GetElementConstitutif::getEcts($ec, $raccroche);
+                        $ects = $getElement->getEcts();
                         $ectsSemestre += $ects;
                     } else {
                         $ectsSemestre += $ec->getEcts();

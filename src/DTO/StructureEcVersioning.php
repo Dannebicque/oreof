@@ -30,18 +30,19 @@ class StructureEcVersioning
 
     public function __construct(ElementConstitutif $elementConstitutif, Parcours $parcours)
     {
+        $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
+        $this->raccroche = $getElement->isRaccroche();
 
         // $this->raccroche = GetElementConstitutif::isRaccroche($elementConstitutif, $parcours);
-        $this->raccroche = $elementConstitutif->raccroche;
-        $this->elementRaccroche = GetElementConstitutif::getElementConstitutif($elementConstitutif, $this->raccroche);
+        $this->elementRaccroche = $getElement->getElementConstitutif();
 
         $this->elementConstitutif = $elementConstitutif;
         $this->heuresEctsEc = new HeuresEctsEc();
-        $this->typeMccc = GetElementConstitutif::getTypeMccc($elementConstitutif, $this->raccroche);
-        $this->heuresEctsEc->addEc(GetElementConstitutif::getElementConstitutifHeures($elementConstitutif, $this->raccroche));
-        $this->heuresEctsEc->addEcts(GetElementConstitutif::getEcts($elementConstitutif, $this->raccroche));
-        $this->mcccs = GetElementConstitutif::getMcccsCollection($elementConstitutif, $this->raccroche);
-        $this->bccs = GetElementConstitutif::getBccs($elementConstitutif, $this->raccroche);
+        $this->typeMccc = $getElement->getTypeMccc();
+        $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures());
+        $this->heuresEctsEc->addEcts($getElement->getEcts());
+        $this->mcccs = $getElement->getMcccsCollection();
+        $this->bccs = $getElement->getBccs();
     }
 
     public function addEcEnfant(?int $idEc, StructureEcVersioning $structureEc): void

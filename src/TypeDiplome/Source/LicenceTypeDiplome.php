@@ -21,6 +21,7 @@ use App\TypeDiplome\Export\LicenceMccc;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
 use DateTimeInterface;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,9 +51,9 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         }
     }
 
-    public function calculStructureParcours(Parcours $parcours): StructureParcours
+    public function calculStructureParcours(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): StructureParcours
     {
-        return $this->calculStructureParcours->calcul($parcours);
+        return $this->calculStructureParcours->calcul($parcours, $withEcts, $withBcc);
     }
 
     public function exportExcelMccc(
@@ -242,7 +243,7 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         $this->entityManager->flush();
     }
 
-    public function getMcccs(ElementConstitutif|FicheMatiere $elementConstitutif): array
+    public function getMcccs(ElementConstitutif|FicheMatiere $elementConstitutif): array|Collection
     {
         $mcccs = $elementConstitutif->getMcccs();
         $tabMcccs = [];

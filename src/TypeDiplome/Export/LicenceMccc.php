@@ -109,10 +109,16 @@ class LicenceMccc
         protected ClientInterface         $client,
         protected CalculStructureParcours $calculStructureParcours,
         protected ExcelWriter             $excelWriter,
-        TypeEpreuveRepository             $typeEpreuveRepository
+        protected TypeEpreuveRepository             $typeEpreuveRepository
     ) {
-        $epreuves = $typeEpreuveRepository->findAll();
+
         $this->dir = $kernel->getProjectDir() . '/public';
+
+    }
+
+    public function getTypeEpreuves(): array
+    {
+        $epreuves = $this->typeEpreuveRepository->findAll();
         foreach ($epreuves as $epreuve) {
             $this->typeEpreuves[$epreuve->getId()] = $epreuve;
         }
@@ -130,6 +136,7 @@ class LicenceMccc
         ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): void {
+        $this->getTypeEpreuves();
         $this->versionFull = $versionFull;
         $formation = $parcours->getFormation();
         $parcours1 = $parcours;
@@ -512,6 +519,10 @@ class LicenceMccc
 
     public function getMcccs(StructureEc $structureEc): array
     {
+        if ($this->typeEpreuves === []) {
+            $this->getTypeEpreuves();
+        }
+
         //todo: a mutualiser avec le code dans LicenceTypeDiplome
         $mcccs = $structureEc->mcccs;
         $tabMcccs = [];

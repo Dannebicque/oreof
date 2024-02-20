@@ -50,7 +50,10 @@ abstract class GetUeEcts
                 if ($ec->getFicheMatiere() !== null && $ec->getFicheMatiere()?->isEctsImpose()) {
                     $totalEctsUe += $ec->getFicheMatiere()?->getEcts();
                 } elseif ($raccroche && $ec->isSynchroEcts()) {
-                    $ects = GetElementConstitutif::getEcts($ec, $raccroche);
+                    $getElement = new GetElementConstitutif($ec, $parcours);
+                    $getElement->setIsRaccroche($raccroche);
+
+                    $ects = $getElement->getEcts();
                     $totalEctsUe += $ects;
                 } else {
                     $totalEctsUe += $ec->getEcts();

@@ -15,6 +15,7 @@ use App\Entity\HistoriqueFicheMatiere;
 use App\Entity\HistoriqueFormation;
 use App\Entity\HistoriqueParcours;
 use App\Events\HistoriqueFicheMatiereEvent;
+use App\Events\HistoriqueFormationEditEvent;
 use App\Events\HistoriqueFormationEvent;
 use App\Events\HistoriqueParcoursEvent;
 use App\Repository\ComposanteRepository;
@@ -54,11 +55,54 @@ class HistoriqueSubscriber implements EventSubscriberInterface
     {
         return [
             HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION => 'createHistoriqueFormation',
+            HistoriqueFormationEditEvent::EDIT_HISTORIQUE_FORMATION => 'editHistoriqueFormation',
             HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS => 'createHistoriqueParcours',
             HistoriqueFicheMatiereEvent::ADD_HISTORIQUE_FICHE_MATIERE => 'createHistoriqueFicheMatiere',
 
 
         ];
+    }
+
+    public function editHistoriqueFormation(HistoriqueFormationEditEvent $event): void
+    {
+        $request = $event->getRequest();
+
+        if ($request === null) {
+            throw new \Exception('Pas de requete');
+        }
+
+        $histo = $event->getHistoriqueFormation();
+        $histo->setDate($this->getDateTime($request));
+        $histo->setCommentaire($this->getCommentaire($request));
+
+        foreach ($this->cases as $cas) {
+            if ($request->request->has($cas)) {
+                $tab[$cas] = $request->request->get($cas);
+                if ($cas === 'laisserPasser') {
+                    $histo->setEtat('laisserPasser');
+                }
+            }
+
+            if ($request->request->has('argumentaire_'.$cas)) {
+                $tab['argumentaire_'.$cas] = $request->request->get('argumentaire_'.$cas);
+            }
+        }
+
+        //upload
+        if ($request->files->has('file') && $request->files->get('file') !== null) {
+            $file = $request->files->get('file');
+            $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
+            $file->move(
+                $this->dir,
+                $fileName
+            );
+            $tab['fichier'] = $fileName;
+        }
+
+        $histo->setComplements($tab ?? []);
+
+        $this->entityManager->persist($histo);
+        $this->entityManager->flush();
     }
 
     public function createHistoriqueFormation(HistoriqueFormationEvent $event): void
