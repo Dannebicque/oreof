@@ -26,7 +26,8 @@ class VersioningFicheMatiereCommand extends Command
         $this->addOption(
             name: 'dpe-full-database', 
             mode: InputOption::VALUE_NONE,
-            description: 'Sauvegarde les fiches matières pour tous les parcours de la DPE actuelle');
+            description: 'Sauvegarde les fiches matières pour tous les parcours de la DPE actuelle'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

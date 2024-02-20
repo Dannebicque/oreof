@@ -19,6 +19,7 @@ use App\Enums\Apogee\CodeNatuElpEnum;
 use App\Enums\Apogee\TypeHeureCE;
 use App\Enums\TypeUeEcEnum;
 use App\Repository\ElementConstitutifRepository;
+use App\Repository\UeRepository;
 use App\Service\Apogee\Classes\ElementPedagogiDTO6;
 use App\Service\Apogee\Classes\ListeElementPedagogiDTO3;
 use App\Service\Apogee\Classes\ParametrageAnnuelCeDTO2;
@@ -50,6 +51,7 @@ class ExportElpApogeeCommand extends Command
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
+    private UeRepository $ueRepository;
     private Filesystem $filesystem;
     private ParameterBagInterface $parameterBag;
     private ?\SoapClient $soapClient;
@@ -59,6 +61,7 @@ class ExportElpApogeeCommand extends Command
     public function __construct(
         EntityManagerInterface $entityManager,
         ElementConstitutifRepository $elementConstitutifRepository,
+        UeRepository $ueRepository,
         Filesystem $filesystem,
         ParameterBagInterface $parameterBag
     )
@@ -66,6 +69,7 @@ class ExportElpApogeeCommand extends Command
         parent::__construct();
         $this->entityManager = $entityManager;
         $this->elementConstitutifRepository = $elementConstitutifRepository;
+        $this->ueRepository = $ueRepository;
         $this->filesystem = $filesystem;
         $this->parameterBag = $parameterBag;
         $this->soapClient = null;
@@ -95,10 +99,6 @@ class ExportElpApogeeCommand extends Command
             mode: InputOption::VALUE_REQUIRED,
             description: 'Genère une export de tous les ELP pour un parcours donné.'
         )->addOption(
-            name: 'report-missing-values',
-            mode: InputOption::VALUE_NONE,
-            description: "Compte rendu des parcours qui sont des candidats à l'insertion dans APOTEST et qui sont non conformes"
-        )->addOption(
             name: 'check-duplicates',
             mode: InputOption::VALUE_NONE,
             description: "Vérifie s'il y a des doublons sur les codes Apogee depuis la base de données"
@@ -110,6 +110,10 @@ class ExportElpApogeeCommand extends Command
             name: 'parcours-lse-excel-export',
             mode: InputOption::VALUE_REQUIRED,
             description: "Génère un export Excel pour les LSE d'un parcours"
+        )->addOption(
+            name: 'full-lse-excel-export',
+            mode: InputOption::VALUE_NONE,
+            description: "Génère l'export Excel pour les LSE de tous les parcours disponibles"
         );
     }
 
@@ -124,6 +128,7 @@ class ExportElpApogeeCommand extends Command
         $checkDuplicates = $input->getOption('check-duplicates');
         $fullVerifyData = $input->getOption('full-verify-data');
         $parcoursLseExport = $input->getOption('parcours-lse-excel-export');
+        $fullLseExport = $input->getOption('full-lse-excel-export');
 
         if($mode === "test"){
             // Export total des ELP selon le type : EC, UE ou Semestre
@@ -248,7 +253,7 @@ class ExportElpApogeeCommand extends Command
                 $io->writeln("Nombre de doublons sur les Semestres : " . $nbSemestreDuplicates);
                 return Command::SUCCESS;
             }
-            // Export Excel des LES d'un parcours
+            // Export Excel des LSE d'un parcours
             if($parcoursLseExport){ 
                 $io->writeln("Génération d'export Excel des LSE d'un parcours.");
                 $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($parcoursLseExport);
@@ -263,6 +268,22 @@ class ExportElpApogeeCommand extends Command
                     $io->warning("Identifiant du Parcours incorrect. (" . $parcoursLseExport . ")");
                     return Command::FAILURE;
                 }
+            }
+            // Export Excel des LSE de tous les parcours disponibles
+            if($fullLseExport){
+                $io->writeln("Génération des LSE pour tous les parcours...");
+                $parcoursArray = $this->retrieveParcoursDataFromDatabase();
+                $io->progressStart(count($parcoursArray));
+                $lseArray = [];
+                foreach($parcoursArray as $parcours){
+                    $lseArray[] = $this->getLseObjectArrayForParcours($this->getDTOForParcours($parcours));
+                    $io->progressAdvance();
+                }
+                $lseArray = array_merge(...$lseArray);
+                $this->generateSpreadsheetForLSE($lseArray, "ALL");
+                $io->writeln("\nCréation du fichier Excel...");
+                $io->success("Export de tous les LSE généré avec succès.");
+                return Command::SUCCESS;
             }
             // Insertion de test
             if($dummyInsertion){
@@ -442,7 +463,7 @@ class ExportElpApogeeCommand extends Command
             $calculStructure = new CalculButStructureParcours(); 
         }
         else {
-            $calculStructure = new CalculStructureParcours($this->entityManager, $this->elementConstitutifRepository);
+            $calculStructure = new CalculStructureParcours($this->entityManager, $this->elementConstitutifRepository, $this->ueRepository);
         }
         return $calculStructure->calcul($parcours);
     }
