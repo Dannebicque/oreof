@@ -80,8 +80,9 @@ class VersioningParcoursCommand extends Command
                 $now = new DateTimeImmutable('now');
                 $dateHeure = $now->format('d-m-Y_H-i-s');
                 $logTxt = "[{$dateHeure}] Tous les parcours ont correctement été versionnés en JSON.\n";
-                $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/global_save_parcours_success.log", $logTxt);
+                $io->writeln("\nEnregistrement en base de données...");
                 $this->entityManager->flush();
+                $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/global_save_parcours_success.log", $logTxt);
                 $io->success('Sauvegarde en JSON des parcours de la base de données réussie.');
                 return Command::SUCCESS;
             }catch(\Exception $e){
