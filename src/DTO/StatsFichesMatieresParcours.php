@@ -42,7 +42,7 @@ class StatsFichesMatieresParcours
     private function addStasEc(FicheMatiere $ficheMatiere)
     {
         $this->nbFiches++;
-        if ($ficheMatiere->remplissage() === 100.0) {
+        if ($ficheMatiere->getRemplissage()->isFull()) {
             $this->nbFichesCompletes++;
         }
         if (array_key_exists('fiche_matiere', $ficheMatiere->getEtatFiche()) || count($ficheMatiere->getEtatFiche()) === 0) {
