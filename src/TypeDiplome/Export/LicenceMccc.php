@@ -116,7 +116,7 @@ class LicenceMccc
 
     }
 
-    public function getTypeEpreuves(): array
+    public function getTypeEpreuves(): void
     {
         $epreuves = $this->typeEpreuveRepository->findAll();
         foreach ($epreuves as $epreuve) {
