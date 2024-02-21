@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.23](https://github.com/Dannebicque/oreof/compare/v1.24.22...v1.24.23) (2024-02-21)
+
+
+### Features
+
+* Export des maquettes : ajout des types de formations multiple + ajout du nombre d'UE/EC ([ccfc526](https://github.com/Dannebicque/oreof/commit/ccfc526a7fb593bb9270e547707ba01393214d2f))
+* filtre twig url ([2fb39aa](https://github.com/Dannebicque/oreof/commit/2fb39aa5cbad6b9e18c0902176a3a18be751977a))
+* Gestion remplissage des fiches avec un DTO ([31be7af](https://github.com/Dannebicque/oreof/commit/31be7afeeb1aba91bb16a791686d2d65f1ea982c))
+
 ### [1.24.22](https://github.com/Dannebicque/oreof/compare/v1.24.21...v1.24.22) (2024-02-19)
 
 
