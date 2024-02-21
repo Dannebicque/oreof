@@ -148,7 +148,8 @@ class ParcoursExportController extends AbstractController
                     $tUe['description_libre_choix'] = $ue->ue->getDescriptionUeLibre();
                 } elseif ($ue->ue->getNatureUeEc()?->isChoix()) {
                     $tUe['description_libre_choix'] = $ue->ue->getDescriptionUeLibre();
-                    $tUe['UesEnfant'] = [];
+                    $tUe['UesEnfants'] = [];
+                    $nb = 0;
                     foreach ($ue->uesEnfants() as $ueEnfant) {
                         $tUeEnfant = [
                             'ordre' => $ueEnfant->ordre(),
@@ -170,8 +171,10 @@ class ParcoursExportController extends AbstractController
                                 'autonomie'=> $ueEnfant->heuresEctsUe->sommeUeTePres
                             ],
                             'ects' => $ueEnfant->heuresEctsUe->sommeUeEcts,
-                        ];
 
+                        ];
+                        $nb++;
+                        $tUe['nbChoix'] = $nb;
                         $tUeEnfant['ec'] = $this->getEcFromUe($ueEnfant);
                         $tUe['UesEnfants'][] = $tUeEnfant;
                     }
@@ -200,9 +203,13 @@ class ParcoursExportController extends AbstractController
                 $tEc['libelle'] = $ec->elementConstitutif?->getFicheMatiere()?->getLibelle() ?? '-';
                 $tEc['ecsEnfants'] =  [];
                 $tEc['description_libre_choix'] =  $ec->elementConstitutif->gettexteEcLibre();
+                $nb = 0;
                 foreach ($ec->elementsConstitutifsEnfants as $ecEnfant) {
                     $tEc['ecsEnfants'][] = $this->getEc($ecEnfant);
+                    $nb++;
                 }
+                $tEc['nbChoix'] =  $nb;
+
                 $tEcs[] = $tEc;
             } else {
                 $tEcs[] = $this->getEc($ec);
