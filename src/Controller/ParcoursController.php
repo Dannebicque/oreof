@@ -28,6 +28,7 @@ use App\Events\AddCentreParcoursEvent;
 use App\Form\ParcoursType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
+use App\Repository\UeRepository;
 use App\Service\LheoXML;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
@@ -363,7 +364,8 @@ class ParcoursController extends BaseController
     public function getMaquetteIframe(
         Parcours                     $parcours,
         EntityManagerInterface       $em,
-        ElementConstitutifRepository $ecRepo
+        ElementConstitutifRepository $ecRepo,
+        UeRepository                 $ueRepository
     ) {
         $formation = $parcours->getFormation();
         if ($formation === null) {
@@ -377,7 +379,7 @@ class ParcoursController extends BaseController
         if ($formation->getTypeDiplome()->getLibelleCourt() === 'BUT') {
             $calcul = new CalculButStructureParcours();
         } else {
-            $calcul = new CalculStructureParcours($em, $ecRepo);
+            $calcul = new CalculStructureParcours($em, $ecRepo, $ueRepository);
         }
 
         return $this->render('parcours/maquette_iframe.html.twig', [
