@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,8 +22,7 @@ class UpdateRemplissageCommand extends Command
 {
 
     public function __construct(
-        private FormationRepository $formationRepository,
-        private ParcoursRepository $parcoursRepository,
+        private FicheMatiereRepository $ficheMatiereRepository,
         private EntityManagerInterface $entityManager)
     {
         parent::__construct();
@@ -36,26 +36,19 @@ class UpdateRemplissageCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $parcours = $this->parcoursRepository->findAll();
-        $formations = $this->formationRepository->findAll();
+        $fiches = $this->ficheMatiereRepository->findAll();
 
         $memory = ini_get('memory_limit');
         $io->writeln('Memory: ' . $memory);
         ini_set('memory_limit', '-1');
 
-        foreach ($parcours as $parc) {
-            if ($parc->getRemplissage()->empty() === true) {
-                //$parc->setRemplissage(null);
+        foreach ($fiches as $fiche) {
+            if ($fiche->getRemplissage()->empty() === true) {
+                $fiche->setRemplissage(null);
                 $this->entityManager->flush();
             }
         }
 
-        foreach ($formations as $formation) {
-            if ($formation->getRemplissage()->empty() === true) {
-                //$formation->setRemplissage(null);
-                $this->entityManager->flush();
-            }
-        }
         ini_set('memory_limit', $memory);
         $io->success('Remplissages mis à jours.');
 
