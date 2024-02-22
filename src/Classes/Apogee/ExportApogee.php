@@ -17,6 +17,7 @@ use App\Entity\Parcours;
 use App\Enums\Apogee\CodeNatuElpEnum;
 use App\Enums\Apogee\TypeVolumeElpEnum;
 use App\Repository\ElementConstitutifRepository;
+use App\Repository\UeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ExportApogee
@@ -26,14 +27,15 @@ class ExportApogee
 
     public function __construct(
         protected EntityManagerInterface       $entityManager,
-        protected ElementConstitutifRepository $elementConstitutifRepository
+        protected ElementConstitutifRepository $elementConstitutifRepository,
+        protected UeRepository                 $ueRepository
     ) {
     }
 
     public function genereExportApogee(Parcours $parcours)
     {
         $this->parcours = $parcours;
-        $calculStructureParcours = new CalculStructureParcours($this->entityManager, $this->elementConstitutifRepository);
+        $calculStructureParcours = new CalculStructureParcours($this->entityManager, $this->elementConstitutifRepository, $this->ueRepository);
         $structureParcours = $calculStructureParcours->calcul($parcours);
 
         foreach ($structureParcours->semestres as $semestre) {

@@ -27,12 +27,13 @@ class ExportCodification
         $this->excelWriter->writeCellXY(1, 1, 'Composante');
         $this->excelWriter->writeCellXY(2, 1, 'Mention');
         $this->excelWriter->writeCellXY(3, 1, 'Parcours');
-        $this->excelWriter->writeCellXY(4, 1, 'Ville');
-        $this->excelWriter->writeCellXY(5, 1, 'Code Diplôme');
-        $this->excelWriter->writeCellXY(6, 1, 'Version Diplôme');
-        $this->excelWriter->writeCellXY(7, 1, 'Année d\'étude');
-        $this->excelWriter->writeCellXY(8, 1, 'Code Etape');
-        $this->excelWriter->writeCellXY(9, 1, 'Version Etape');
+        $this->excelWriter->writeCellXY(4, 1, 'Domaine');
+        $this->excelWriter->writeCellXY(5, 1, 'Ville');
+        $this->excelWriter->writeCellXY(6, 1, 'Code Diplôme');
+        $this->excelWriter->writeCellXY(7, 1, 'Version Diplôme');
+        $this->excelWriter->writeCellXY(8, 1, 'Année d\'étude');
+        $this->excelWriter->writeCellXY(9, 1, 'Code Etape');
+        $this->excelWriter->writeCellXY(10, 1, 'Version Etape');
 
         $ligne = 2;
 
@@ -45,12 +46,13 @@ class ExportCodification
                             $this->excelWriter->writeCellXY(1, $ligne, $formation->getComposantePorteuse()?->getLibelle());
                             $this->excelWriter->writeCellXY(2, $ligne, $formation->getDisplayLong());
                             $this->excelWriter->writeCellXY(3, $ligne, $parcours->getLibelle());
-                            $this->excelWriter->writeCellXY(4, $ligne, $parcours->getLocalisation()?->getLibelle());
-                            $this->excelWriter->writeCellXY(5, $ligne, $parcours->getCodeDiplome($annee));
-                            $this->excelWriter->writeCellXY(6, $ligne, $parcours->getCodeVersionDiplome($annee));
-                            $this->excelWriter->writeCellXY(7, $ligne, 'Année ' . $annee);
-                            $this->excelWriter->writeCellXY(8, $ligne, $parcours->getCodeEtape($annee));
-                            $this->excelWriter->writeCellXY(9, $ligne, $parcours->getCodeVersionEtape($annee));
+                            $this->excelWriter->writeCellXY(4, $ligne, $formation->getMention()?->getDomaine()?->getLibelle());
+                            $this->excelWriter->writeCellXY(5, $ligne, $parcours->getLocalisation()?->getLibelle());
+                            $this->excelWriter->writeCellXY(6, $ligne, $parcours->getCodeDiplome($annee));
+                            $this->excelWriter->writeCellXY(7, $ligne, $parcours->getCodeVersionDiplome($annee));
+                            $this->excelWriter->writeCellXY(8, $ligne, 'Année ' . $annee);
+                            $this->excelWriter->writeCellXY(9, $ligne, $parcours->getCodeEtape($annee));
+                            $this->excelWriter->writeCellXY(10, $ligne, $parcours->getCodeVersionEtape($annee));
                             $ligne++;
                         }
                     }
@@ -62,12 +64,13 @@ class ExportCodification
                         $this->excelWriter->writeCellXY(1, $ligne, $formation->getComposantePorteuse()?->getLibelle());
                         $this->excelWriter->writeCellXY(2, $ligne, $formation->getDisplayLong());
                         $this->excelWriter->writeCellXY(3, $ligne, $parcours->getLibelle());
-                        $this->excelWriter->writeCellXY(4, $ligne, $parcours->getLocalisation()?->getLibelle());
-                        $this->excelWriter->writeCellXY(5, $ligne, $parcours->getCodeDiplome($annee));
-                        $this->excelWriter->writeCellXY(6, $ligne, $parcours->getCodeVersionDiplome($annee));
-                        $this->excelWriter->writeCellXY(7, $ligne, 'Année ' . $annee);
-                        $this->excelWriter->writeCellXY(8, $ligne, $parcours->getCodeEtape($annee));
-                        $this->excelWriter->writeCellXY(9, $ligne, $parcours->getCodeVersionEtape($annee));
+                        $this->excelWriter->writeCellXY(4, $ligne, $formation->getMention()?->getDomaine()?->getLibelle());
+                        $this->excelWriter->writeCellXY(5, $ligne, $parcours->getLocalisation()?->getLibelle());
+                        $this->excelWriter->writeCellXY(6, $ligne, $parcours->getCodeDiplome($annee));
+                        $this->excelWriter->writeCellXY(7, $ligne, $parcours->getCodeVersionDiplome($annee));
+                        $this->excelWriter->writeCellXY(8, $ligne, 'Année ' . $annee);
+                        $this->excelWriter->writeCellXY(9, $ligne, $parcours->getCodeEtape($annee));
+                        $this->excelWriter->writeCellXY(10, $ligne, $parcours->getCodeVersionEtape($annee));
                         $ligne++;
                     }
                 }
