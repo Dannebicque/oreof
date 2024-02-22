@@ -14,7 +14,7 @@ class Remplissage
     public int $score = 0;
     public int $total = 0;
 
-    public function add(int $param)
+    public function add(int $param = 1)
     {
         $this->score += $param;
         $this->total++;
@@ -48,5 +48,10 @@ class Remplissage
     public function empty()
     {
         return $this->score === 0 && $this->total === 0;
+    }
+
+    public function isFull(): bool
+    {
+        return $this->score === $this->total;
     }
 }

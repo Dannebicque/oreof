@@ -9,12 +9,14 @@
 
 namespace App\Entity;
 
+use App\DTO\Remplissage;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\FicheMatiereRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -202,6 +204,9 @@ class FicheMatiere
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereVersioning::class)]
     private Collection $ficheMatiereVersionings;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $remplissage = [];
+
     public function __construct()
     {
         $this->mcccs = new ArrayCollection();
@@ -330,39 +335,75 @@ class FicheMatiere
         return $this;
     }
 
-    public function remplissage(): float
+    public function remplissageBrut(): Remplissage
     {
         //calcul un remplissage de l'entité en fonction des champs obligatoires
-        $nbChampsRemplis = 0;
+        $remplissage = new Remplissage();
 
         if ($this->langueDispense->isEmpty() === false) {
-            $nbChampsRemplis++;
+            $remplissage->add();
         }
 
         if ($this->libelleAnglais !== null) {
-            $nbChampsRemplis++;
+            $remplissage->add();
         }
 
         if ($this->enseignementMutualise !== null) {
-            $nbChampsRemplis++;
+            $remplissage->add();
         }
 
         if ($this->description !== null) {
-            $nbChampsRemplis++;
+            $remplissage->add();
         }
 
         if ($this->objectifs !== null) {
-            $nbChampsRemplis++;
+            $remplissage->add();
         }
 
-//        if ($this->competences->isEmpty() === false) {
-//            $nbChampsRemplis++;
-//        }
+        if ($this->competences->isEmpty() === false) {
+            $remplissage->add();
+        }
         //todo: ajouter MCCC et Apprentissages critiques pour le BUT
 
-        $nbChampsObligatoires = 5;
+        return $remplissage;
+    }
 
-        return round($nbChampsRemplis / $nbChampsObligatoires * 100, 2);
+    public function getRemplissage(): Remplissage
+    {
+        $remplissage = new Remplissage();
+
+        if (
+            $this->remplissage !== null &&
+            count($this->remplissage) > 0
+            && array_key_exists('score', $this->remplissage)
+            && array_key_exists('total', $this->remplissage)) {
+            $remplissage->setScore($this->remplissage['score']);
+            $remplissage->setTotal($this->remplissage['total']);
+        }
+
+
+        return $remplissage;
+    }
+
+    public function setRemplissage(?Remplissage $remplissage = null): static
+    {
+        if (null === $remplissage) {
+            $remplissage = $this->remplissageBrut();
+        }
+
+        $this->remplissage = [
+            'score' => $remplissage->score,
+            'total' => $remplissage->total,
+        ];
+
+        return $this;
+    }
+
+    #[ORM\PreFlush]
+    public function updateRemplissage(PreFlushEventArgs $args): void
+    {
+        $remplissage = $this->remplissageBrut();
+        $this->setRemplissage($remplissage);
     }
 
     /**

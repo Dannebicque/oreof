@@ -91,7 +91,7 @@
                                                                 data-bs-placement="bottom"
                                                                 title="Modifier la fiche EC/matière"
                                                         >
-                                                            {% if ec.ficheMatiere.remplissage == 100 %}
+                                                            {% if ec.ficheMatiere.remplissage.isFull() == true %}
                                                                 <span class="badge bg-success">Fiche</span>
                                                             {% else %}
                                                                 <span class="badge bg-warning">Fiche</span>
@@ -107,7 +107,7 @@
                                                                     data-bs-placement="bottom"
                                                                     title="Modifier la fiche EC/matière"
                                                             >
-                                                                {% if ec.ficheMatiere.remplissage == 100 %}
+                                                                {% if ec.ficheMatiere.remplissage.isFull() == true %}
                                                                     <span class="badge bg-success">Fiche</span>
                                                                 {% else %}
                                                                     <span class="badge bg-warning">Fiche</span>
@@ -484,7 +484,7 @@
                                                                     data-bs-placement="bottom"
                                                                     title="Modifier la fiche EC/matière"
                                                             >
-                                                                {% if ece.ficheMatiere.remplissage == 100 %}
+                                                                {% if ece.ficheMatiere.remplissage.isFull() == true %}
                                                                     <span class="badge bg-success"> Fiche</span>
                                                                 {% else %}
                                                                     <span class="badge bg-warning"> Fiche</span>

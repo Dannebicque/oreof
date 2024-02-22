@@ -36,7 +36,7 @@
             <dt>Email</dt>
             <dd>{{ composante.mailContact|mailto }}</dd>
             <dt>Site web</dt>
-            <dd>{{ composante.urlSite }}</dd>
+            <dd>{{ composante.urlSite|url_open }}</dd>
         </dl>
         {% endfor %}
     </div>

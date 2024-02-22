@@ -85,7 +85,7 @@
                         title="Modifier la fiche EC/matière"
                 >
                     <i class="fal fa-file"></i>
-                    {% if  ec.elementConstitutif.ficheMatiere.remplissage == 100 %}
+                    {% if  ec.elementConstitutif.ficheMatiere.remplissage.isFull() == true %}
                         <span class="badge bg-success"> Complet</span>
                     {% else %}
                         <span class="badge bg-warning"> À compléter</span>
@@ -105,7 +105,7 @@
             {% endif %}
         {% else %}
             {% if ec.elementConstitutif.ficheMatiere != null %}
-                {% if  ec.elementConstitutif.ficheMatiere.remplissage == 100 %}
+                {% if  ec.elementConstitutif.ficheMatiere.remplissage.isFull() == true %}
                     <span class="badge bg-success"> Complet</span>
                 {% else %}
                     <span class="badge bg-warning"> À compléter</span>

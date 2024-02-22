@@ -23,10 +23,12 @@ use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Entity\SemestreParcours;
+use App\Enums\TypeParcoursEnum;
 use App\Events\AddCentreParcoursEvent;
 use App\Form\ParcoursType;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
+use App\Repository\UeRepository;
 use App\Service\LheoXML;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
@@ -362,7 +364,8 @@ class ParcoursController extends BaseController
     public function getMaquetteIframe(
         Parcours                     $parcours,
         EntityManagerInterface       $em,
-        ElementConstitutifRepository $ecRepo
+        ElementConstitutifRepository $ecRepo,
+        UeRepository                 $ueRepository
     ) {
         $formation = $parcours->getFormation();
         if ($formation === null) {
@@ -376,7 +379,7 @@ class ParcoursController extends BaseController
         if ($formation->getTypeDiplome()->getLibelleCourt() === 'BUT') {
             $calcul = new CalculButStructureParcours();
         } else {
-            $calcul = new CalculStructureParcours($em, $ecRepo);
+            $calcul = new CalculStructureParcours($em, $ecRepo, $ueRepository);
         }
 
         return $this->render('parcours/maquette_iframe.html.twig', [
@@ -414,7 +417,7 @@ class ParcoursController extends BaseController
         Parcours            $parcours,
         TypeDiplomeRegistry $typeDiplomeRegistry,
     ): Response {
-        $typeDiplome = $parcours->getFormation()->getTypeDiplome();
+        $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
         $ects = $typeD->calculStructureParcours($parcours)->heuresEctsFormation->sommeFormationEcts;
@@ -455,19 +458,31 @@ class ParcoursController extends BaseController
             }
         }
 
+        $typeF = [];
+        $typeF[] = $typeDiplome?->getLibelle() ?? '-';
+
+        if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_CPI) {
+            $typeF[] = 'Diplômes d’ingénieur / CMI / CPI';
+        } elseif ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1) {
+            $typeF[] = 'Licence Accès Santé';
+        } elseif ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23) {
+            $typeF[] = 'Licence Accès Santé';
+        }
+
         $data = [
             'description' => "",
             'ects' => $ects ?? 0,
             'metadata' => [
                 'domaine' => $parcours->getFormation()?->getDomaine()?->getLibelle() ?? '-',
-                'type-formation' => $parcours->getFormation()?->getTypeDiplome()?->getLibelle() ?? '-',
+                'type-formation' => $typeF,
                 'localisation' => $localisationMetadata,
                 'faculte-ecole-institut' => $faculteEcoleInstitut,
                 'public-concerne' => $parcours->getRegimeInscription() ?? [], //Certains sont des tableaux, d'autres en JSON
             ],
             'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
             'fiche-pdf' => $this->generateUrl('app_parcours_export', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
-            'maquette-pdf' => $this->generateUrl('app_parcours_mccc_export', ['parcours' => $parcours->getId(), '_format' => 'pdf'], UrlGenerator::ABSOLUTE_URL), 'maquette-json' => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
+            'maquette-pdf' => $this->generateUrl('app_parcours_mccc_export', ['parcours' => $parcours->getId(), '_format' => 'pdf'], UrlGenerator::ABSOLUTE_URL),
+            'maquette-json' => $this->generateUrl('app_parcours_export_maquette_json', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
         ];
 
         return new JsonResponse($data);

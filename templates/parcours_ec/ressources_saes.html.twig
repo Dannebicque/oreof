@@ -33,7 +33,7 @@
                                         title="Modifier la fiche EC/matière"
                                 >
                                     <i class="fal fa-file"></i>
-                                    {% if ficheMatiere.remplissage == 100 %}
+                                    {% if ficheMatiere.remplissage.isFull() == true %}
                                         <span class="badge bg-success"> Complet</span>
                                     {% else %}
                                         <span class="badge bg-warning"> À compléter</span>
