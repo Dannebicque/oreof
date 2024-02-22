@@ -5,7 +5,7 @@
             <dd>
                 {{ parcours.contenuFormation|printTexte }}
             </dd>
-            {% if isVersioningView is defined and isVersioningView == true %}
+            {% if is_granted('ROLE_ADMIN') %}
                 {% if stringDifferences.presentationParcoursContenuFormation|length > 0 %}
                 <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
                     <button class="btn btn-primary btn-sm my-3"
@@ -14,7 +14,7 @@
                         Voir les différences
                     </button>
                 </div>
-                <div class="col-sm-12 collapse" id="diffParcoursContenuFormation">
+                <div class="col-sm-12 collapse mb-3" id="diffParcoursContenuFormation">
                     {{ stringDifferences.presentationParcoursContenuFormation|raw  }} 
                 </div>
                 {% endif %}
@@ -23,7 +23,7 @@
             <dd>
                 {{ parcours.objectifsParcours|printTexte }}
             </dd>
-            {% if isVersioningView is defined and isVersioningView == true %} 
+            {% if is_granted('ROLE_ADMIN') %}
                 {% if stringDifferences.presentationParcoursObjectifsParcours|length > 0 %}
                 <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
                     <button class="btn btn-primary btn-sm mt-3 mb-3"
@@ -41,7 +41,7 @@
             <dd>
                 {{ parcours.resultatsAttendus|printTexte }}
             </dd>
-            {% if isVersioningView is defined and isVersioningView == true %} 
+            {% if is_granted('ROLE_ADMIN') %}
                 {% if stringDifferences.presentationParcoursResultatsAttendus|length > 0 %}
                 <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
                     <button class="btn btn-primary btn-sm mt-3 mb-3"
@@ -50,11 +50,11 @@
                         Voir les différences
                     </button>
                 </div>
-                    <div class="col-sm-12 collapse mb-3" id="diffParcoursResultatsAttendus">
-                        {{ stringDifferences.presentationParcoursResultatsAttendus|raw  }} 
-                    </div>
-                {% endif %}
-            {% endif %}    
+                <div class="col-sm-12 collapse mb-3" id="diffParcoursResultatsAttendus">
+                    {{ stringDifferences.presentationParcoursResultatsAttendus|raw  }} 
+                </div>
+                {% endif %}  
+            {% endif %}
             <dt>Rythme de formation</dt>
             <dd>
                 {{ parcours.rythmeFormation != null ? parcours.rythmeFormation.libelle : 'Non précisé' }}

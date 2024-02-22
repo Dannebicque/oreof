@@ -214,6 +214,7 @@ class ParcoursController extends BaseController
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours            $parcours,
         LheoXML             $lheoXML,
+        EntityManagerInterface $entityManager
     ): Response {
         $formation = $parcours->getFormation();
         if ($formation === null) {
@@ -227,6 +228,40 @@ class ParcoursController extends BaseController
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         $dto = $typeD->calculStructureParcours($parcours, true, false);
 
+        
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $serializer = new Serializer(
+        [
+            new DateTimeNormalizer(),
+            new BackedEnumNormalizer(),
+            new ArrayDenormalizer(),
+            new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
+        ],
+            [new JsonEncoder()]
+        );      
+        $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
+        $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
+        $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
+                                        . "{$lastVersion->getParcours()->getId()}/"
+                                        . "{$lastVersion->getParcoursFileName()}.json"
+                        );
+        $lastVersion = $serializer->deserialize($fileParcours, Parcours::class, 'json');
+
+        $rendererName = 'Inline';
+        $differOptions = [
+            'context' => 1,
+            'ignoreWhitespace' => true,
+            'ignoreLineEnding' => true,
+        ];
+        $rendererOptions = [
+            'detailLevel' => 'char',
+            'lineNumbers' => false,
+            'showHeader' => false,
+            'separateBlock' => false,
+        ];
+
+        $cssDiff = DiffHelper::getStyleSheet();
+
         return $this->render('parcours/show.html.twig', [
             'parcours' => $parcours,
             'formation' => $formation,
@@ -234,7 +269,38 @@ class ParcoursController extends BaseController
             'hasParcours' => $formation->isHasParcours(),
             'dto' => $dto,
             'typeD' => $typeD,
-            'lheoXML' => $lheoXML
+            'lheoXML' => $lheoXML,
+            'stringDifferences' => [
+                'presentationParcoursContenuFormation' => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getContenuFormation(),
+                    $parcours->getContenuFormation(),
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                'presentationParcoursObjectifsParcours' => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getObjectifsParcours(),
+                    $parcours->getObjectifsParcours(),
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                'presentationParcoursResultatsAttendus' => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getResultatsAttendus(),
+                    $parcours->getResultatsAttendus(),
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                'presentationFormationObjectifsFormation' => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getFormation()?->getObjectifsFormation(),
+                    $parcours->getFormation()?->getObjectifsFormation(),
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+            ],
+            'cssDiff' => $cssDiff
         ]);
     }
 
@@ -626,21 +692,6 @@ class ParcoursController extends BaseController
             $dto = $serializer->deserialize($fileDTO, StructureParcours::class, 'json');
             $dateVersion = $parcours_versioning->getVersionTimestamp()->format('d-m-Y à H:i');
 
-            $rendererName = 'Inline';
-            $differOptions = [
-                'context' => 1,
-                'ignoreWhitespace' => true,
-                'ignoreLineEnding' => true,
-            ];
-            $rendererOptions = [
-                'detailLevel' => 'char',
-                'lineNumbers' => false,
-                'showHeader' => false,
-                'separateBlock' => false,
-            ];
-
-            $cssDiff = DiffHelper::getStyleSheet();
-
             return $this->render('parcours/show_version.html.twig', [
                 'parcours' => $parcours,
                 'formation' => $parcours->getFormation(),
@@ -649,37 +700,6 @@ class ParcoursController extends BaseController
                 'hasParcours' => $parcours->getFormation()->isHasParcours(),
                 'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
                 'dateVersion' => $dateVersion,
-                'stringDifferences' => [
-                    'presentationParcoursContenuFormation' => html_entity_decode(DiffHelper::calculate(
-                        $parcours->getContenuFormation(),
-                        $parcours_versioning->getParcours()->getContenuFormation(),
-                        $rendererName,
-                        $differOptions,
-                        $rendererOptions
-                    )),
-                    'presentationParcoursObjectifsParcours' => html_entity_decode(DiffHelper::calculate(
-                        $parcours->getObjectifsParcours(),
-                        $parcours_versioning->getParcours()->getObjectifsParcours(),
-                        $rendererName,
-                        $differOptions,
-                        $rendererOptions
-                    )),
-                    'presentationParcoursResultatsAttendus' => html_entity_decode(DiffHelper::calculate(
-                        $parcours->getResultatsAttendus(),
-                        $parcours_versioning->getParcours()->getResultatsAttendus(),
-                        $rendererName,
-                        $differOptions,
-                        $rendererOptions
-                    )),
-                    'presentationFormationObjectifsFormation' => html_entity_decode(DiffHelper::calculate(
-                        $parcours->getFormation()?->getObjectifsFormation(),
-                        $parcours_versioning->getParcours()?->getFormation()?->getObjectifsFormation(),
-                        $rendererName,
-                        $differOptions,
-                        $rendererOptions
-                    )),
-                ],
-                'cssDiff' => $cssDiff
             ]);
         } catch(\Exception $e){
             $now = new DateTimeImmutable('now');
