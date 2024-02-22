@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Classes\Apogee\ExportApogee;
 use App\Classes\Codification\CodificationFormation;
-use App\Classes\Export\Export;
 use App\Classes\Export\ExportCodification;
+use App\Classes\GetFormations;
 use App\Entity\Formation;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
@@ -28,15 +28,18 @@ class CodificationController extends BaseController
 
     #[Route('/codification/liste/type_diplome', name: 'app_codification_liste_type_diplome')]
     public function listeTypeDiplome(
+        GetFormations         $getFormations,
         Request               $request,
         TypeDiplomeRepository $typeDiplomeRepository,
-        FormationRepository   $formationRepository,
     ): Response {
         $typeDiplome = $typeDiplomeRepository->find($request->query->get('step'));
 
         if ($typeDiplome === null) {
             throw new \Exception('Type de diplôme non trouvé');
         }
+
+        $filtres = $request->query->all();
+        $filtres['typeDiplome'] = $typeDiplome->getId();
 
         if ($this->isGranted('ROLE_ADMIN') ||
             $this->isGranted('ROLE_SES') ||
@@ -45,48 +48,50 @@ class CodificationController extends BaseController
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            $formations = $formationRepository->findByDpeAndTypeDiplome($this->getDpe(), $typeDiplome);
+            //$formations = $formationRepository->findByDpeAndTypeDiplome($this->getDpe(), $typeDiplome);
+            $tFormations = $getFormations->getFormations(
+                $this->getUser(),
+                $this->getDpe(),
+                $filtres,
+                false
+            );
         } else {
-            $formations = [];
-            //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
-            $centres = $this->getUser()?->getUserCentres();
-            foreach ($centres as $centre) {
-                //todo: gérer avec un voter
-                if ($centre->getComposante() !== null && (
-                    in_array('Gestionnaire', $centre->getDroits()) ||
-                    in_array('Invité', $centre->getDroits()) ||
-                    in_array('Directeur', $centre->getDroits())
-                )) {
-                    //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
-                    $formations[] = $formationRepository->findByComposante(
-                        $centre->getComposante(),
-                        $this->getDpe()
-                    );
-                }
-            }
-
-            $formations[] = $formationRepository->findByComposanteDpe(
-                $this->getUser(),
-                $this->getDpe()
-            );
-            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
-                $this->getUser(),
-                $this->getDpe()
-            );
-            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
-                $this->getUser(),
-                $this->getDpe()
-            );
-            $formations = array_merge(...$formations);
-        }
-
-        $tFormations = [];
-        foreach ($formations as $formation) {
-            $tFormations[$formation->getId()] = $formation;
+            //filtrer par type de diplôme
+//            $formations = [];
+//            //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
+//            $centres = $this->getUser()?->getUserCentres();
+//            foreach ($centres as $centre) {
+//                //todo: gérer avec un voter
+//                if ($centre->getComposante() !== null && (
+//                    in_array('Gestionnaire', $centre->getDroits()) ||
+//                    in_array('Invité', $centre->getDroits()) ||
+//                    in_array('Directeur', $centre->getDroits())
+//                )) {
+//                    $formations[] = $formationRepository->findByComposante(
+//                        $centre->getComposante(),
+//                        $this->getDpe()
+//                    );
+//                }
+//            }
+//
+//            $formations[] = $formationRepository->findByComposanteDpe(
+//                $this->getUser(),
+//                $this->getDpe()
+//            );
+//            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
+//                $this->getUser(),
+//                $this->getDpe()
+//            );
+//            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
+//                $this->getUser(),
+//                $this->getDpe()
+//            );
+//            $formations = array_merge(...$formations);
         }
 
         return $this->render('codification/_liste.html.twig', [
             'formations' => $tFormations,
+            'typeDiplome' => $typeDiplome,
         ]);
     }
 

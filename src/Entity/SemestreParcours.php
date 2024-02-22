@@ -23,7 +23,7 @@ class SemestreParcours
     private ?int $id = null;
 
     #[Groups('parcours_json_versioning')]
-    #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
+    #[ORM\ManyToOne(inversedBy: 'semestreParcours', fetch: 'EAGER')]
     private ?Semestre $semestre = null;
 
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
@@ -40,13 +40,13 @@ class SemestreParcours
     #[ORM\ManyToOne(inversedBy: 'semestreParcours')]
     private ?SemestreMutualisable $semestreRaccroche = null;
 
-    #[ORM\Column(length: 6, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogeeEtapeAnnee = null; //sera identique sur deux semestres de la même année
 
     #[ORM\Column(length: 3, nullable: true)]
     private ?string $codeApogeeEtapeVersion = null; //sera identique sur deux semestres de la même année
 
-    #[ORM\Column(length: 5, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogeeDiplome = null; //sera identique sur plusieurs semestres, mais peut changer selon la présence d'un tronc commun ou pas
 
     #[ORM\Column(length: 3, nullable: true)]
