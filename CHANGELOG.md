@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.24](https://github.com/Dannebicque/oreof/compare/v1.24.23...v1.24.24) (2024-02-22)
+
+
+### Features
+
+* commande recalcul remplissage fiche matière ([97a6530](https://github.com/Dannebicque/oreof/commit/97a65306402fa2db668303d79d81127b73c91eac))
+
+
+### Bug Fixes
+
+* controller parcours iframe ([25890ca](https://github.com/Dannebicque/oreof/commit/25890cac9ea1f562f6c99d914c7cb8614ec09778))
+* controller parcours iframe ([3003ad5](https://github.com/Dannebicque/oreof/commit/3003ad555d57e9d96ad35ee70028e9484db2e442))
+* modification codification des EC/UE ([4d12fa7](https://github.com/Dannebicque/oreof/commit/4d12fa7d8783c32934e066e3a86faf4462b89de7))
+* modification codification des EC/UE ([b016bff](https://github.com/Dannebicque/oreof/commit/b016bff0ae1f06368e425f0e612cf09002c5eb4e))
+
 ### [1.24.23](https://github.com/Dannebicque/oreof/compare/v1.24.22...v1.24.23) (2024-02-21)
 
 
