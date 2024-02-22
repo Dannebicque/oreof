@@ -5,7 +5,7 @@
             <dd>
                 {{ parcours.contenuFormation|printTexte }}
             </dd>
-            {% if is_granted('ROLE_ADMIN') %}
+            {% if is_granted('ROLE_ADMIN') and stringDifferences is defined %}
                 {% if stringDifferences.presentationParcoursContenuFormation|length > 0 %}
                 <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
                     <button class="btn btn-primary btn-sm my-3"
@@ -23,7 +23,7 @@
             <dd>
                 {{ parcours.objectifsParcours|printTexte }}
             </dd>
-            {% if is_granted('ROLE_ADMIN') %}
+            {% if is_granted('ROLE_ADMIN') and stringDifferences is defined %}
                 {% if stringDifferences.presentationParcoursObjectifsParcours|length > 0 %}
                 <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
                     <button class="btn btn-primary btn-sm mt-3 mb-3"
@@ -41,7 +41,7 @@
             <dd>
                 {{ parcours.resultatsAttendus|printTexte }}
             </dd>
-            {% if is_granted('ROLE_ADMIN') %}
+            {% if is_granted('ROLE_ADMIN') and stringDifferences is defined  %}
                 {% if stringDifferences.presentationParcoursResultatsAttendus|length > 0 %}
                 <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
                     <button class="btn btn-primary btn-sm mt-3 mb-3"

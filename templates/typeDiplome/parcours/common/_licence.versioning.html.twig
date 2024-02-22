@@ -1,14 +1,3 @@
-{% set isVersioningView = true %}
-
-{% if isVersioningView is defined and isVersioningView == true %}
-    {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('versioning/parcours_versioning.css') }}">
-        <style>
-            {{ cssDiff }}
-        </style>
-    {% endblock %}
-{% endif %}
-
 <div class="col">
     <section class="scroll-section" id="identite_formation">
         <h3 class="small-title">Identité de la formation</h3>
@@ -33,7 +22,7 @@
         <h3 class="small-title">Présentation du parcours {{ parcours.libelle }}</h3>
         <div class="card mb-5">
             <div class="card-body">
-                {{ include('typeDiplome/formation/_presentationParcours.html.twig', {parcours:parcours, isVersioningView: isVersioningView}) }}
+                {{ include('typeDiplome/formation/_presentationParcours.html.twig', {parcours:parcours}) }}
             </div>
         </div>
     </section>
