@@ -258,10 +258,6 @@ class CodificationFormation
                     $ec->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre());
                 }
             }
-
-
-//            //todo: gérer ordre des EC de BUT avec un ordre > 99 + codif SAE (50) + stage (60), ...
-//            $ec->setCodeApogee($ue->getCodeApogee() . substr($ec->getOrdre(), 0, 2));
         }
     }
 }

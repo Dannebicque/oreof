@@ -161,7 +161,7 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $sansHeure = false;
 
-    #[ORM\Column(length: 8, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogee = null;
 
 

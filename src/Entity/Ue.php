@@ -39,7 +39,7 @@ class Ue
     #[Groups(['DTO_json_versioning'])]
     #[ORM\ManyToOne(fetch: 'EAGER')]
     private ?NatureUeEc $natureUeEc = null;
-    
+
     #[ORM\OneToMany(mappedBy: 'ue', targetEntity: ElementConstitutif::class, cascade: [
         'persist',
         'remove'
@@ -74,7 +74,7 @@ class Ue
     #[ORM\Column(nullable: true)]
     private ?float $ects = null;
 
-    #[ORM\Column(length: 6, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogee = null;
 
     public function __construct()
@@ -132,7 +132,7 @@ class Ue
                             if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
                                 return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue . ' (' . $this->getLibelle() . ')';
                             }
-        
+
                             return 'UE ' . $semestreParcours->getOrdre() . '.' . $ordreue;
                         }
                     }

@@ -25,11 +25,11 @@
             {{ ec.elementConstitutif.libelle }}
         {% endif %}
         {% if ec.elementConstitutif.natureEcUe is defined and ec.elementConstitutif.natureEcUe.isLibre == true %}
-            <span class="badge bg-success">EC à choix libre</span>
+            ({{ ec.elementConstitutif.displayCodeApogee }}) <span class="badge bg-success">EC à choix libre</span>
         {% endif %}
         {% if ec.elementsConstitutifsEnfants|length > 0 %}
-            <span class="badge bg-info">
-            EC à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possible(s)</span>
+            ({{ ec.elementConstitutif.displayCodeApogee }}) <span class="badge bg-info">
+             EC à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possible(s)</span>
         {% endif %}
     </td>
     <td>{{ ec.heuresEctsEc.ects|badgeEcts }}</td>
