@@ -34,7 +34,7 @@
     </tr>
     <tr>
         <th>URL du site de la composante</th>
-        <td>{{ composante.urlSite|url_open }}</td>
+        <td>{{ composante.urlSite|open_url }}</td>
     </tr>
     {% if composante.composanteInformation is defined and composante.composanteInformation is not null %}
         {% if composante.composanteInformation.restauration is not null %}
