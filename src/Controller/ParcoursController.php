@@ -228,7 +228,7 @@ class ParcoursController extends BaseController
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         $dto = $typeD->calculStructureParcours($parcours, true, false);
 
-        
+        // Serializer
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $serializer = new Serializer(
         [
@@ -238,39 +238,33 @@ class ParcoursController extends BaseController
             new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
         ],
             [new JsonEncoder()]
-        );      
+        ); 
+        // Version n-1     
         $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
         $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
-        $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
-                                        . "{$lastVersion->getParcours()->getId()}/"
-                                        . "{$lastVersion->getParcoursFileName()}.json"
-                        );
-        $lastVersion = $serializer->deserialize($fileParcours, Parcours::class, 'json');
 
-        $rendererName = 'Inline';
-        $differOptions = [
-            'context' => 1,
-            'ignoreWhitespace' => true,
-            'ignoreLineEnding' => true,
-        ];
-        $rendererOptions = [
-            'detailLevel' => 'char',
-            'lineNumbers' => false,
-            'showHeader' => false,
-            'separateBlock' => false,
-        ];
+        $textDifferences = [];
 
-        $cssDiff = DiffHelper::getStyleSheet();
-
-        return $this->render('parcours/show.html.twig', [
-            'parcours' => $parcours,
-            'formation' => $formation,
-            'typeDiplome' => $typeDiplome,
-            'hasParcours' => $formation->isHasParcours(),
-            'dto' => $dto,
-            'typeD' => $typeD,
-            'lheoXML' => $lheoXML,
-            'stringDifferences' => [
+        // Changements dans le texte : comparaison avec n-1
+        if($lastVersion){
+            $rendererName = 'Inline';
+            $differOptions = [
+                'context' => 1,
+                'ignoreWhitespace' => true,
+                'ignoreLineEnding' => true,
+            ];
+            $rendererOptions = [
+                'detailLevel' => 'char',
+                'lineNumbers' => false,
+                'showHeader' => false,
+                'separateBlock' => false,
+            ];
+            $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
+                                            . "{$lastVersion->getParcours()->getId()}/"
+                                            . "{$lastVersion->getParcoursFileName()}.json"
+                            );
+            $lastVersion = $serializer->deserialize($fileParcours, Parcours::class, 'json');
+            $textDifferences = [
                 'presentationParcoursContenuFormation' => html_entity_decode(DiffHelper::calculate(
                     $lastVersion->getContenuFormation(),
                     $parcours->getContenuFormation(),
@@ -299,7 +293,20 @@ class ParcoursController extends BaseController
                     $differOptions,
                     $rendererOptions
                 )),
-            ],
+            ];
+        }
+
+        $cssDiff = DiffHelper::getStyleSheet();
+
+        return $this->render('parcours/show.html.twig', [
+            'parcours' => $parcours,
+            'formation' => $formation,
+            'typeDiplome' => $typeDiplome,
+            'hasParcours' => $formation->isHasParcours(),
+            'dto' => $dto,
+            'typeD' => $typeD,
+            'lheoXML' => $lheoXML,
+            'stringDifferences' => $textDifferences,
             'cssDiff' => $cssDiff
         ]);
     }
