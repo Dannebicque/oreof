@@ -26,6 +26,8 @@ class ParcoursVersioningRepository extends ServiceEntityRepository
     public function findLastVersion(Parcours $parcours){
         return $this->createQueryBuilder('pv')
             ->orderBy('pv.version_timestamp', 'DESC')
+            ->where('pv.parcours = :parcours')
+            ->setParameter('parcours', $parcours)
             ->getQuery()
             ->getResult();
     }
