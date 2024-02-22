@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.25](https://github.com/Dannebicque/oreof/compare/v1.24.24...v1.24.25) (2024-02-22)
+
+
+### Bug Fixes
+
+* filtre twig ([7ac23cf](https://github.com/Dannebicque/oreof/commit/7ac23cf34c1f8646a11c197be28090e3e4afd878))
+* modification codification des EC/UE ([0f7259c](https://github.com/Dannebicque/oreof/commit/0f7259c6e3d0d2419ed2cc44f53f30767255223c))
+* remplissage ([fbd2ce4](https://github.com/Dannebicque/oreof/commit/fbd2ce42932f9e207ef21743ca2136f55e3db703))
+
 ### [1.24.24](https://github.com/Dannebicque/oreof/compare/v1.24.23...v1.24.24) (2024-02-22)
 
 
