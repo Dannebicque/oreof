@@ -244,6 +244,9 @@ class ElementPedagogiDTO6
         if($codeApogee === null && $withChecks){
             ExportElpApogeeCommand::$errorMessagesArray[$parcoursID][] = "Code APOGEE introuvable. {$identifier}";
         }
+        if(mb_strlen($codeApogee ?? "") > 8){
+            ExportElpApogeeCommand::$errorMessagesArray[$parcoursID][] = "Le Code APOGEE fait plus de 8 caractères. {$identifier}";
+        }
         return $codeApogee ?? "ERROR";
     }
 
