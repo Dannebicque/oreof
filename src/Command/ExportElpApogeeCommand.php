@@ -49,6 +49,8 @@ use Symfony\Component\Filesystem\Filesystem;
 class ExportElpApogeeCommand extends Command
 {
 
+    private static $codElpApogeeDataTest = "COD_ELP_202402231547.json";
+
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
     private UeRepository $ueRepository;
@@ -128,6 +130,10 @@ class ExportElpApogeeCommand extends Command
             name: 'full-lse-excel-export',
             mode: InputOption::VALUE_NONE,
             description: "Génère l'export Excel pour les LSE de tous les parcours disponibles"
+        )->addOption(
+            name: 'check-duplicates-with-apogee',
+            mode: InputOption::VALUE_NONE,
+            description: "Vérifie si les codes apogee depuis OREOF ne sont pas déjà présents dans APOGEE"
         );
     }
 
@@ -146,6 +152,7 @@ class ExportElpApogeeCommand extends Command
         $parcoursLseExport = $input->getOption('parcours-lse-excel-export');
         $fullLseExport = $input->getOption('full-lse-excel-export');
         $fullLseInsertion = $input->getOption('full-lse-insertion');
+        $checkDuplicatesWithApogee = $input->getOption('check-duplicates-with-apogee');
 
         if($mode === "test"){
             // Export total des ELP selon le type : EC, UE ou Semestre
@@ -363,6 +370,35 @@ class ExportElpApogeeCommand extends Command
                 else {
                     $io->warning("La commande d'insertion a été annulée.");
                     return Command::SUCCESS;
+                }
+            }
+            if($checkDuplicatesWithApogee){
+                $io->writeln("Vérification des doublons entre les codes ORéOF et ceux présents dans APOGEE...");
+                $parcoursArray = $this->retrieveParcoursDataFromDatabase();
+                $nbDoublons = 0;
+                $listeDoublons = [];
+                $io->progressStart(count($parcoursArray));
+                $codeElpApogee = json_decode(file_get_contents(__DIR__ . "/../Service/Apogee/data-test/" . self::$codElpApogeeDataTest));
+                foreach($parcoursArray as $parcours){
+                    $elpArray = $this->generateSoapObjectsForParcours($parcours);
+                    $elpArray = array_map(fn($elp) => $elp->codElp, $elpArray);
+                    foreach($elpArray as $codeElp){
+                        if(in_array($codeElp, $codeElpApogee)){
+                            ++$nbDoublons;
+                            $listeDoublons[] = $codeElp;
+                        }
+                    }
+                    $io->progressAdvance();
+                }
+                $io->writeln("\nVérification des doublons réussie !");
+                if($nbDoublons === 0){
+                    $io->success("Aucun doublon détecté.");
+                    return Command::SUCCESS;
+                }
+                elseif ($nbDoublons > 0) {
+                    $io->writeln("{$nbDoublons} doublons ont été détectés.");
+                    dump($listeDoublons);
+                    return Command::FAILURE;
                 }
             }
             // Insertion de test d'un ELP
