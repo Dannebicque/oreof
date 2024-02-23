@@ -124,14 +124,14 @@ class ElementPedagogiDTO6
                 $dto->parcours->getId()
             );
             $this->libCourtElp = $this->checkLibelleUE(
-                $elementPedagogique->ue->getLibelle(),
+                $elementPedagogique->ue->getLibelle() ?? $elementPedagogique->ue->display(),
                  25, 
                 "ID : {$elementPedagogique->ue->getId()}",
                 $withChecks, 
                 $dto->parcours->getId()
             );
             $this->libElp = $this->checkLibelleUE(
-                $elementPedagogique->ue->getLibelle(),
+                $elementPedagogique->ue->getLibelle() ?? $elementPedagogique->ue->display(),
                 60,
                 "ID : {$elementPedagogique->ue->getId()}",
                 $withChecks,
@@ -263,7 +263,7 @@ class ElementPedagogiDTO6
         int $parcoursID
     ) : string {
         $libelle = $elementPedagogique->elementConstitutif->getFicheMatiere()?->getLibelle() 
-        ?? $elementPedagogique->elementConstitutif->getLibelle(); 
+        ?? $elementPedagogique->elementConstitutif->getLibelle() ?? $elementPedagogique->elementConstitutif->getCode(); 
         if($libelle === null && $withChecks){
             ExportElpApogeeCommand::$errorMessagesArray[$parcoursID][] = "Le libellé de l'EC est 'null'. ID : {$elementPedagogique->elementConstitutif->getId()}";
         }
