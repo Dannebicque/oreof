@@ -48,8 +48,8 @@
                             <span> vérifier</span>
                         </a><br>
 
-                        {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) or is_granted('ROLE_SES') %}  todo: filtrer
-                            sur ROLE_SES => Parcours Edit
+                        {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) or is_granted('ROLE_SES') %}
+                        {# todo: filtrer sur ROLE_SES => Parcours Edit #}
                             <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
                                class="btn btn-sm text-warning"
                                data-bs-toggle="tooltip"
@@ -62,7 +62,7 @@
                         {% endif %}
 
                         {% if is_granted('CAN_FORMATION_DELETE_MY') or is_granted('ROLE_SES') %}
-                            todo manque formation sur le isgranted
+{# todo manque formation sur le isgranted #}
                             <button {{ stimulus_action('crud', 'delete', 'click', {
                                 url:path('app_parcours_delete',{'id': parcours.id}),
                                 csrf: csrf_token('delete' ~ parcours.id)

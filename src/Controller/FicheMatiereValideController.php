@@ -12,10 +12,8 @@ namespace App\Controller;
 use App\Classes\CalculStructureParcours;
 use App\Classes\Process\FicheMatiereProcess;
 use App\Classes\ValidationProcessFicheMatiere;
-use App\DTO\StatsFichesMatieresParcours;
 use App\Entity\Formation;
 use App\Entity\Parcours;
-use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,7 +21,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Workflow\WorkflowInterface;
 
 class FicheMatiereValideController extends BaseController
 {
@@ -73,7 +70,7 @@ class FicheMatiereValideController extends BaseController
         foreach ($tFiches as $fiche) {
             $ficheMatiere = $ficheMatiereRepository->find($fiche);
 
-            if (null !== $ficheMatiere && $ficheMatiere->remplissage() === 100.0) {
+            if (null !== $ficheMatiere && $ficheMatiere->getRemplissage()->isFull()) {
                 $ficheMatiereProcess->valideFicheMatiere($ficheMatiere, $this->getUser(), $validationProcessFicheMatiere->getEtape('fiche_matiere'), 'fiche_matiere', $request);
             }
         }

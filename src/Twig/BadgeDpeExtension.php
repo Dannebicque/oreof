@@ -36,7 +36,7 @@ class BadgeDpeExtension extends AbstractExtension
 
     public function isFicheValidable(FicheMatiere $fiche, string $type): string
     {
-        if ($fiche->remplissage() < 100.0) {
+        if ($fiche->getRemplissage()->calcul() < 100.0) {
             return 'disabled';
         }
 

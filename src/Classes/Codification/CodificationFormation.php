@@ -64,6 +64,7 @@ class CodificationFormation
 
     public function setCodificationFormation(Formation $formation): void
     {
+        //odo: calcul structure ??
         $this->setCodificationParcours($formation);
         foreach ($formation->getParcours() as $parcours) {
             $this->setCodificationDiplome($parcours);

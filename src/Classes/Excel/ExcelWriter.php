@@ -124,6 +124,10 @@ class ExcelWriter
                     case 'pourcentage':
                         $this->sheet->getCell([$col, $row])->getStyle()->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_PERCENTAGE_00);
                         break;
+                    case 'bold':
+                        if ($valeur === true) {
+                            $this->sheet->getCell([$col, $row])->getStyle()->getFont()->setBold(true);
+                        }
                 }
             }
         }

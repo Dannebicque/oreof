@@ -9,14 +9,23 @@
 
 namespace App\Classes\Export;
 
+use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
+use App\DTO\StructureSemestre;
+use App\DTO\StructureUe;
+use App\Entity\Parcours;
 use App\Utils\Tools;
 use DateTime;
 
 class ExportCodification
 {
-    public function __construct(protected ExcelWriter         $excelWriter)
-    {
+    const BLUE = '#4472C4';
+    const GREEN = '#00B050';
+
+    public function __construct(
+        protected CalculStructureParcours $calculStructureParcours,
+        protected ExcelWriter         $excelWriter
+    ) {
     }
 
     public function exportFormations(array $formations)
@@ -83,5 +92,82 @@ class ExportCodification
 
         $fileName = Tools::FileName('Codification-OReOF' . (new DateTime())->format('d-m-Y-H-i'), 30);
         return $this->excelWriter->genereFichier($fileName, true);
+    }
+
+    public function exportParcours(Parcours $parcours)
+    {
+        $this->excelWriter->nouveauFichier('Export Codification');
+        $this->excelWriter->setActiveSheetIndex(0);
+
+        $dto = $this->calculStructureParcours->calcul($parcours, true, false);
+
+        $ligne = 0;
+        /** @var StructureSemestre $semestre */
+        foreach ($dto->semestres as $semestre) {
+            $ligne++;
+            $this->excelWriter->writeCellXY(1, $ligne, 'Semestre ' . $semestre->ordre);
+            $this->excelWriter->writeCellXY(2, $ligne, $semestre->semestre->getCodeApogee(), ['bold' => true]);
+            $this->excelWriter->writeCellXY(3, $ligne, 'SEMESTRE', ['color' => self::BLUE]);
+            $this->excelWriter->writeCellXY(4, $ligne, $semestre->heuresEctsSemestre->sommeSemestreEcts, ['color' => self::GREEN]);
+            foreach ($semestre->ues() as $ue) {
+                $ligne++;
+                if ($ue->ue->getUeParent() === null) {
+                    $this->excelWriter->writeCellXY(2, $ligne, $ue->ue->display($parcours));
+                    $this->excelWriter->writeCellXY(3, $ligne, $ue->ue->getCodeApogee(), ['bold' => true]);
+                    if ($ue->ue->getNatureUeEc()->isChoix()) {
+                        $this->excelWriter->writeCellXY(4, $ligne, 'CHOIX', ['color' => self::BLUE]);
+                        //todo: ajouter lib court, long, ...
+                        foreach ($ue->uesEnfants() as $uesEnfant) {
+                            $ligne++;
+                            $this->excelWriter->writeCellXY(3, $ligne, $uesEnfant->ue->display($parcours));
+                            $this->excelWriter->writeCellXY(4, $ligne, $uesEnfant->ue->getCodeApogee(), ['bold' => true]);
+                            $this->excelWriter->writeCellXY(5, $ligne, 'UE', ['color' => self::BLUE]);
+                            $this->excelWriter->writeCellXY(6, $ligne, $uesEnfant->heuresEctsUe->sommeUeEcts, ['color' => self::GREEN]);
+                            $ligne = $this->writeEcs($uesEnfant, $ligne, 4);
+                        }
+                    } else {
+                        $this->excelWriter->writeCellXY(4, $ligne, 'UE', ['color' => self::BLUE]);
+                        $this->excelWriter->writeCellXY(5, $ligne, $ue->heuresEctsUe->sommeUeEcts, ['color' => self::GREEN]);
+                        $ligne = $this->writeEcs($ue, $ligne, 4);
+                    }
+
+                }
+            }
+        }
+
+
+        $this->excelWriter->getColumnsAutoSize('A', 'M');
+
+        $fileName = Tools::FileName('Codification-Parcours-'.$parcours->getLibelle() .'-'. (new DateTime())->format('d-m-Y-H-i'), 50);
+        return $this->excelWriter->genereFichier($fileName, true);
+    }
+
+    private function writeEcs(StructureUe $ue, int $ligne, int $col): int
+    {
+        foreach ($ue->elementConstitutifs as $ec) {
+            if ($ec->elementConstitutif->getEcParent() === null) {
+                $ligne++;
+                $this->excelWriter->writeCellXY($col, $ligne, $ec->elementConstitutif->getCode());
+                $this->excelWriter->writeCellXY($col + 1, $ligne, $ec->elementConstitutif->getCodeApogee(), ['bold' => true]);
+                if ($ec->elementConstitutif->getNatureUeEc()->isChoix()) {
+                    $this->excelWriter->writeCellXY($col +2, $ligne, 'CHOIX', ['color' => self::BLUE]);
+                    foreach ($ec->elementsConstitutifsEnfants as $ecsEnfant) {
+                        $ligne++;
+                        $this->excelWriter->writeCellXY($col + 1, $ligne, $ecsEnfant->elementConstitutif->getCode());
+                        $this->excelWriter->writeCellXY($col + 2, $ligne, $ecsEnfant->elementConstitutif->getCodeApogee(), ['bold' => true]);
+                        $this->excelWriter->writeCellXY($col + 3, $ligne, 'EC', ['color' => self::BLUE]);
+                        $this->excelWriter->writeCellXY($col + 4, $ligne, $ecsEnfant->heuresEctsEc->ects, ['color' => self::GREEN]);
+                        //todo: MATI ou MATM
+                    }
+                } else {
+                    $this->excelWriter->writeCellXY($col +2, $ligne, 'EC', ['color' => self::BLUE]);
+                    $this->excelWriter->writeCellXY($col + 3, $ligne, $ec->heuresEctsEc->ects, ['color' => self::GREEN]);
+                    //todo: MATI ou MATM
+                }
+            }
+
+        }
+
+        return $ligne;
     }
 }
