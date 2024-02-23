@@ -596,6 +596,10 @@ class ExportElpApogeeCommand extends Command
         }
     }
 
+    /**
+     * Appelle la fonction d'insertion d'une liste LSE du Web Service Apogee
+     * @param ListeElementPedagogiDTO3 $lseObject Élément à insérer via le WS
+     */
     private function insertOneLSE(ListeElementPedagogiDTO3 $lseObject){
         $param = new stdClass();
         $param->listeElementPedagogi = $lseObject;
@@ -619,6 +623,23 @@ class ExportElpApogeeCommand extends Command
                 $this->soapClient->__soapCall("creerModifierELP", [$elpWS]);
             }
         }else {
+            throw new \Exception('Soap Client is not initialized.');
+        }
+    }
+
+    /**
+     * Appelle le Web Service d'insertion des listes LSE d'Apogee
+     * avec plusieurs valeurs 
+     * @param array $lseArray Tableau contenant les objets LSE
+     */
+    private function insertSeveralLSE(array $lseArray){
+        $dataWS = array_map([$this, 'mapDataLseForWebService'], $lseArray);
+        if($this->soapClient){
+            foreach($dataWS as $lseWS){
+                $this->soapClient->__soapCall('creerLSE', [$lseWS]);
+            }
+        }
+        else {
             throw new \Exception('Soap Client is not initialized.');
         }
     }
@@ -766,6 +787,17 @@ class ExportElpApogeeCommand extends Command
     private function mapDataForWebService(ElementPedagogiDTO6 $elp) : stdClass {
         $object = new stdClass();
         $object->elementPedagogi = $elp;
+        return $object;
+    }
+
+    /**
+     * Met en forme la liste LSE pour être utilisée par le Web Service Apogee
+     * @param ListeElementPedagogiDTO3 $lse Element à mettre en forme
+     * @return stdClass Objet transformé
+     */
+    private function mapDataLseForWebService(ListeElementPedagogiDTO3 $lse) : stdClass {
+        $object = new stdClass();
+        $object->listeElementPedagogi = $lse;
         return $object;
     }
 
