@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.26](https://github.com/Dannebicque/oreof/compare/v1.24.25...v1.24.26) (2024-02-23)
+
+
+### Features
+
+* export codification ELP ([a286769](https://github.com/Dannebicque/oreof/commit/a28676944c79e466bb4a4cfd2e095dfa4c0f1ba0))
+
+
+### Bug Fixes
+
+* remplissage ([c63574f](https://github.com/Dannebicque/oreof/commit/c63574fba22ba4a12216a5ff42532769800fda49))
+
 ### [1.24.25](https://github.com/Dannebicque/oreof/compare/v1.24.24...v1.24.25) (2024-02-22)
 
 
