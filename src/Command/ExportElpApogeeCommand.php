@@ -91,6 +91,10 @@ class ExportElpApogeeCommand extends Command
             mode: InputOption::VALUE_NONE,
             description: "Insère un ELP dans la base de données APOTEST"
         )->addOption(
+            name: 'dummy-lse-insertion',
+            mode: InputOption::VALUE_NONE,
+            description: "Insère une LSE dans la base de données APOTEST"
+        )->addOption(
             name: 'parcours-insertion',
             mode: InputOption::VALUE_REQUIRED,
             description: "Insère tous les ELP d'un parcours dans la base de données, via le Web Service"
@@ -124,6 +128,7 @@ class ExportElpApogeeCommand extends Command
         $fullExport = $input->getOption('full-excel-export');
         $parcoursExport = $input->getOption('parcours-excel-export');
         $dummyInsertion = $input->getOption('dummy-insertion');
+        $dummyLseInsertion = $input->getOption('dummy-lse-insertion');
         $parcoursInsertion = $input->getOption('parcours-insertion');
         $checkDuplicates = $input->getOption('check-duplicates');
         $fullVerifyData = $input->getOption('full-verify-data');
@@ -285,22 +290,22 @@ class ExportElpApogeeCommand extends Command
                 $io->success("Export de tous les LSE généré avec succès.");
                 return Command::SUCCESS;
             }
-            // Insertion de test
+            // Insertion de test d'un ELP
             if($dummyInsertion){
                 $io->write("Utilisation du Web Service APOTEST");
-                if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer dans APOTEST ?")){
+                if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer dans APOTEST (ELP) ?")){
                     // Récupération des donnéees à insérer
                     $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById(405);
                     $dto = $this->getDTOForParcours($parcours);
                     $ec = $dto->semestres[1]->ues()[0]->elementConstitutifs[0];
                     // $elp = new ElementPedagogiDTO6($ec, $dto);
                     $elp = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATI, false);
-                    $elp->codElp = 'TEST110';
+                    $elp->codElp = 'TEST111';
                     $elp->codNatureElp = 'MATI';
-                    $elp->libCourtElp = "TEST WS PHP NORME 1";
-                    $elp->libElp = "TEST WEBSERVICE PHP 13022024";
+                    $elp->libCourtElp = "TEST WS PHP 2";
+                    $elp->libElp = "TEST WEBSERVICE PHP 23022024";
                     dump($elp);
-                    if($this->verifyUserIntent($io, "Les données affichées conviennent-elles ?")){
+                    if($this->verifyUserIntent($io, "Les données affichées (ELP) conviennent-elles ?")){
                         try{
                             $io->writeln("Initialisation du Web Service...");
                             // Création du client SOAP
@@ -313,7 +318,7 @@ class ExportElpApogeeCommand extends Command
                             $io->writeln('Insertion réussie !');
                             return Command::SUCCESS;
                         }catch(\Exception $e){
-                            $io->writeln("Une erreur est survenue durant l'insertion.");
+                            $io->writeln("Une erreur est survenue durant l'insertion. (ELP)");
                             $io->writeln("Message : " . $e->getMessage());
                             return Command::FAILURE;
                         }
@@ -329,6 +334,45 @@ class ExportElpApogeeCommand extends Command
                 }
             
                 return Command::SUCCESS;
+            }
+            // Insertion de test d'une liste (LSE)
+            if($dummyLseInsertion){
+                if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer dans APOTEST (LSE) ?")){
+                    // Création des données à insérer
+                    $lseObject = new ListeElementPedagogiDTO3(
+                        'TEST110', 'O', 'TEST INSERT LISTE WS',
+                        'TEST INSERTION LISTE WEB SERVICE', 
+                        ['TEST110', 'TEST111']
+                    );
+                    dump($lseObject);
+                    if($this->verifyUserIntent($io, "Les données à insérer (LSE) conviennent-elles ?")){
+                        try{
+                            // Création du client SOAP
+                            $io->writeln("Initialisation du Web Service...");
+                            $this->createSoapClient();
+                            $io->writeln("Création du client SOAP réussie.");
+                            // Insertion de la liste LSE
+                            $result = $this->insertOneLSE($lseObject);
+                            $io->writeln("Résultat de l'appel au Web Service :");
+                            dump($result);
+                            $io->writeln('Insertion réussie !');
+                            return Command::SUCCESS;
+                        }catch(\Exception $e){
+                            $io->writeln("Une erreur est survenue durant l'insertion. (LSE)");
+                            $io->writeln("Message : " . $e->getMessage());
+                            return Command::FAILURE;
+                        }
+                    }
+                    else {
+                        $io->warning('La commande a été annulée.');
+                        return Command::SUCCESS;    
+                    }
+                }
+                else {
+                    $io->warning('La commande a été annulée.');
+                    return Command::SUCCESS;
+                }
+
             }     
             
             return Command::SUCCESS;
@@ -546,6 +590,17 @@ class ExportElpApogeeCommand extends Command
         $param->elementPedagogi = $elementPedagogique;
         if($this->soapClient){
             return $this->soapClient->__soapCall("creerModifierELP", [$param]);
+        }
+        else {
+            throw new \Exception("Soap Client is not initialized.");
+        }
+    }
+
+    private function insertOneLSE(ListeElementPedagogiDTO3 $lseObject){
+        $param = new stdClass();
+        $param->listeElementPedagogi = $lseObject;
+        if($this->soapClient){
+            return $this->soapClient->__soapCall("creerLSE", [$param]);
         }
         else {
             throw new \Exception("Soap Client is not initialized.");
