@@ -98,7 +98,13 @@ class ExportElpApogeeCommand extends Command
             name: 'parcours-insertion',
             mode: InputOption::VALUE_REQUIRED,
             description: "Insère tous les ELP d'un parcours dans la base de données, via le Web Service"
-        )->addOption(
+        )
+        ->addOption(
+            name: 'full-parcours-insertion',
+            mode: InputOption::VALUE_NONE,
+            description: "Insère tous les ELP de tous les parcours disponibles en base de données"
+        )
+        ->addOption(
             name: 'parcours-excel-export',
             mode: InputOption::VALUE_REQUIRED,
             description: 'Genère une export de tous les ELP pour un parcours donné.'
@@ -130,6 +136,7 @@ class ExportElpApogeeCommand extends Command
         $dummyInsertion = $input->getOption('dummy-insertion');
         $dummyLseInsertion = $input->getOption('dummy-lse-insertion');
         $parcoursInsertion = $input->getOption('parcours-insertion');
+        $fullParcoursInsertion = $input->getOption('full-parcours-insertion');
         $checkDuplicates = $input->getOption('check-duplicates');
         $fullVerifyData = $input->getOption('full-verify-data');
         $parcoursLseExport = $input->getOption('parcours-lse-excel-export');
@@ -206,6 +213,41 @@ class ExportElpApogeeCommand extends Command
                     }else {
                         $io->warning("Aucun parcours trouvé pour cet identifiant. ({$parcoursInsertion})");
                         return Command::INVALID;
+                    }
+                }
+                else {
+                    $io->warning("La commande d'insertion a été annulée.");
+                    return Command::SUCCESS;
+                }
+            }
+            // Insère tous les ELP de tous les parcours disponibles
+            if($fullParcoursInsertion){
+                $io->writeln("Utilisation du Web Service APOTEST");
+                if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer les ELP de TOUS LES PARCOURS ?")){
+                    $parcoursArray = $this->retrieveParcoursDataFromDatabase();
+                    $nbParcours = count($parcoursArray);
+                    if($this->verifyUserIntent($io, "Il y a {$nbParcours} parcours disponibles. Continuer ?")){
+                        try{
+                            $io->writeln('Initialisation du Web Service...');
+                            // $this->createSoapClient();
+                            $io->writeln('Insertion des données en cours...');
+                            $io->progressStart($nbParcours);
+                            foreach($parcoursArray as $parcours){
+                                $soapObjectArray = $this->generateSoapObjectsForParcours($parcours);
+                                // $this->insertSeveralElp($soapObjectArray);
+                                $io->progressAdvance();
+                            }
+                            $io->writeln("\nInsertion réussie !");
+                            return Command::SUCCESS;
+                        }catch(\Exception $e){
+                            $io->writeln("Une erreur est survenue durant l'insertion.");
+                            $io->writeln("Message : " . $e->getMessage());
+                            return Command::FAILURE;
+                        }
+                    }
+                    else {
+                        $io->warning("La commande d'insertion a été annulée.");
+                        return Command::SUCCESS;
                     }
                 }
                 else {
