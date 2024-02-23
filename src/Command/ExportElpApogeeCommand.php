@@ -103,6 +103,10 @@ class ExportElpApogeeCommand extends Command
             name: 'full-parcours-insertion',
             mode: InputOption::VALUE_NONE,
             description: "Insère tous les ELP de tous les parcours disponibles en base de données"
+        )->addOption(
+            name: 'full-lse-insertion',
+            mode: InputOption::VALUE_NONE,
+            description: "Insère toutes les listes LSE de tous les parcours disponibles"
         )
         ->addOption(
             name: 'parcours-excel-export',
@@ -141,6 +145,7 @@ class ExportElpApogeeCommand extends Command
         $fullVerifyData = $input->getOption('full-verify-data');
         $parcoursLseExport = $input->getOption('parcours-lse-excel-export');
         $fullLseExport = $input->getOption('full-lse-excel-export');
+        $fullLseInsertion = $input->getOption('full-lse-insertion');
 
         if($mode === "test"){
             // Export total des ELP selon le type : EC, UE ou Semestre
@@ -331,6 +336,34 @@ class ExportElpApogeeCommand extends Command
                 $io->writeln("\nCréation du fichier Excel...");
                 $io->success("Export de tous les LSE généré avec succès.");
                 return Command::SUCCESS;
+            }
+            if($fullLseInsertion){
+                $io->writeln("Utilisation du Web Service APOTEST");
+                if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer les LSE de TOUS LES PARCOURS ?")){
+                    $parcoursArray = $this->retrieveParcoursDataFromDatabase();
+                    $nbParcours = count($parcoursArray);
+                    if($this->verifyUserIntent($io, "Il y a {$nbParcours} parcours à traiter. Continuer ?")){
+                        $io->writeln("Initialisation du Web Service...");
+                        // $this->createSoapClient();
+                        $io->progressStart($nbParcours);
+                        foreach($parcoursArray as $parcours){
+                            $dto = $this->getDTOForParcours($parcours);
+                            $lseArray = $this->getLseObjectArrayForParcours($dto);
+                            // $this->insertSeveralLSE($lseArray);
+                            $io->progressAdvance();
+                        }
+                        $io->writeln("\nInsertion réussie !");
+                        return Command::SUCCESS;
+                    }
+                    else {
+                        $io->warning("La commande d'insertion a été annulée.");
+                        return Command::SUCCESS;
+                    }
+                }
+                else {
+                    $io->warning("La commande d'insertion a été annulée.");
+                    return Command::SUCCESS;
+                }
             }
             // Insertion de test d'un ELP
             if($dummyInsertion){
