@@ -9,6 +9,12 @@
 
 namespace App\Controller;
 
+use App\Classes\CalculStructureParcours;
+use App\Classes\GetFormations;
+use App\DTO\StatsFichesMatieres;
+use App\Repository\ComposanteRepository;
+use App\Repository\MentionRepository;
+use App\Repository\TypeDiplomeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +36,7 @@ class DefaultController extends AbstractController
 
     #[Route('/wizard', name: 'app_homepage_wizard')]
     public function wizard(
+        ComposanteRepository $composanteRepository,
         Request $request
     ): Response {
         $step = $request->query->get('step', 'formation');
@@ -43,6 +50,15 @@ class DefaultController extends AbstractController
                     ]
                 );
             case 'fiche':
+                if ($this->isGranted('ROLE_SES')) {
+                    return $this->render(
+                        'default/_fichesSes.html.twig',
+                        [
+                            'step' => $step,
+                            'composantes' => $composanteRepository->findPorteuse(),
+                        ]
+                    );
+                }
                 return $this->render(
                     'default/_fiches.html.twig',
                     [
@@ -64,5 +80,41 @@ class DefaultController extends AbstractController
                     ]
                 );
         }
+    }
+
+    #[Route('/ses/fiches-composante', name: 'app_fiches_composantes')]
+    public function fichesComposante(
+        ComposanteRepository   $composanteRepository,
+        CalculStructureParcours $calculStructureParcours,
+        GetFormations         $getFormations,
+        Request               $request,
+    ): Response {
+        $composante = $composanteRepository->find($request->query->get('value'));
+
+        if ($composante === null) {
+            throw $this->createNotFoundException('La composante n\'existe pas');
+        }
+
+        $tFormations = $composante->getFormations();
+
+        $stats = [];
+        foreach ($tFormations as $formation) {
+
+            $parcourss = $formation->getParcours();
+            $stats[$formation->getId()]['stats'] = new StatsFichesMatieres();
+
+            foreach ($parcourss as $parcours) {
+                $stats[$formation->getId()][$parcours->getId()] = $calculStructureParcours->calcul($parcours, false, false);
+                $stats[$formation->getId()]['stats']->addStatsParcours(
+                    $stats[$formation->getId()][$parcours->getId()]->statsFichesMatieresParcours
+                );
+            }
+        }
+
+        return $this->render('default/_fiches_composante.html.twig', [
+            'formations' => $tFormations,
+            'stats' => $stats
+        ]);
+
     }
 }
