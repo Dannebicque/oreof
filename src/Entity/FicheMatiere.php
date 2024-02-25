@@ -198,7 +198,7 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?array $etatFiche = [];
 
-    #[ORM\Column(length: 8, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogee = null;
 
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: FicheMatiereVersioning::class)]
