@@ -7,6 +7,7 @@ use App\Classes\Codification\CodificationFormation;
 use App\Classes\Export\ExportCodification;
 use App\Classes\GetFormations;
 use App\Entity\Formation;
+use App\Entity\TypeDiplome;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeDiplomeRepository;
@@ -26,14 +27,29 @@ class CodificationController extends BaseController
         ]);
     }
 
-    #[Route('/codification/liste/type_diplome', name: 'app_codification_liste_type_diplome')]
+    #[Route('/codification/liste-inter', name: 'app_codification_liste_inter')]
+    public function listeInter(
+        TypeDiplomeRepository $typeDiplomeRepository,
+        Request               $request,
+    ): Response {
+        $typeDiplome = $typeDiplomeRepository->find($request->query->get('step'));
+
+        if ($typeDiplome === null) {
+            throw new \Exception('Type de diplôme non trouvé');
+        }
+
+        return $this->render('codification/_liste-inter.html.twig', [
+            'typeDiplome' => $typeDiplome,
+        ]);
+    }
+
+    #[Route('/codification/liste/type_diplome/{typeDiplome}', name: 'app_codification_liste_type_diplome')]
     public function listeTypeDiplome(
         GetFormations         $getFormations,
         Request               $request,
         TypeDiplomeRepository $typeDiplomeRepository,
+        TypeDiplome           $typeDiplome
     ): Response {
-        $typeDiplome = $typeDiplomeRepository->find($request->query->get('step'));
-
         if ($typeDiplome === null) {
             throw new \Exception('Type de diplôme non trouvé');
         }
@@ -92,6 +108,7 @@ class CodificationController extends BaseController
         return $this->render('codification/_liste.html.twig', [
             'formations' => $tFormations,
             'typeDiplome' => $typeDiplome,
+            'params' => $request->query->all(),
         ]);
     }
 

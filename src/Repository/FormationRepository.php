@@ -95,6 +95,8 @@ class FormationRepository extends ServiceEntityRepository
         $sort = $options['sort'] ?? 'typeDiplome';
         $direction = $options['direction'] ?? 'ASC';
 
+        $filtres = [$sort => $direction]; //todo: pour gérer le cumul ?
+
         $query = $this->createQueryBuilder('f')
             ->leftJoin('f.dpeParcours', 'p')
             ->addSelect('p')
@@ -126,15 +128,21 @@ class FormationRepository extends ServiceEntityRepository
                 ->setParameter('etatDpe', json_encode([$options['etatDpe'] => 1]));
         }
 
-        if ($sort === 'mention') {
-            $query->leftJoin(Mention::class, 'm', 'WITH', 'f.mention = m.id');
+        if (array_key_exists('mention', $filtres) && null !== $filtres['mention']) {
             $query->addOrderBy(
                 'CASE
                             WHEN f.mention IS NOT NULL THEN m.libelle
                             WHEN f.mentionTexte IS NOT NULL THEN f.mentionTexte
                             ELSE f.mentionTexte
                             END',
-                $direction
+                $filtres['mention']
+            );
+        }
+
+        if (array_key_exists('domaine', $filtres) && null !== $filtres['domaine']) {
+            $query->addOrderBy(
+                'm.domaine',
+                $filtres['domaine']
             );
         }
 
