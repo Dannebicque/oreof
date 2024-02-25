@@ -1292,8 +1292,11 @@ class Parcours
         return array_unique($annees);
     }
 
-    public function getCodeDiplome(int $annee): ?string
+    public function getCodeDiplome(?int $annee): ?string
     {
+        if ($annee === null) {
+            return $this->getSemestreParcours()->first()?->getCodeApogeeDiplome();
+        }
         return $this->getSemestrePourAnnee($annee)?->getCodeApogeeDiplome();
     }
 
@@ -1301,7 +1304,7 @@ class Parcours
     {
         $semestres = $this->semestreParcours;
 
-        $semestres = $semestres->filter(fn(SemestreParcours $semestre) => $semestre->getOrdre() === $annee * 2 - 1);
+        $semestres = $semestres->filter(fn (SemestreParcours $semestre) => $semestre->getOrdre() === $annee * 2 - 1);
 
         if ($semestres->count() === 0) {
             return null;
@@ -1315,8 +1318,11 @@ class Parcours
         return $this->getSemestrePourAnnee($annee)?->getCodeApogeeEtapeAnnee();
     }
 
-    public function getCodeVersionDiplome(int $annee): ?string
+    public function getCodeVersionDiplome(?int $annee): ?string
     {
+        if ($annee === null) {
+            return $this->getSemestreParcours()->first()?->getCodeApogeeVersionDiplome();
+        }
         return $this->getSemestrePourAnnee($annee)?->getCodeApogeeVersionDiplome();
     }
 

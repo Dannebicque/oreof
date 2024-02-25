@@ -128,39 +128,39 @@ class CodificationController extends BaseController
             $formations = $formationRepository->findBySearch('', $this->getDpe(), []);
 
             return $export->exportFormations($formations);
-        } else {
-            $formations = [];
-            //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
-            $centres = $this->getUser()?->getUserCentres();
-            foreach ($centres as $centre) {
-                //todo: gérer avec un voter
-                if ($centre->getComposante() !== null && (
-                    in_array('Gestionnaire', $centre->getDroits()) ||
-                    in_array('Invité', $centre->getDroits()) ||
-                    in_array('Directeur', $centre->getDroits())
-                )) {
-                    //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
-                    $formations[] = $formationRepository->findByComposante(
-                        $centre->getComposante(),
-                        $this->getDpe()
-                    );
-                }
-            }
-
-            $formations[] = $formationRepository->findByComposanteDpe(
-                $this->getUser(),
-                $this->getDpe()
-            );
-            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
-                $this->getUser(),
-                $this->getDpe()
-            );
-            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
-                $this->getUser(),
-                $this->getDpe()
-            );
-            $formations = array_merge(...$formations);
         }
+
+        $formations = [];
+        //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
+        $centres = $this->getUser()?->getUserCentres();
+        foreach ($centres as $centre) {
+            //todo: gérer avec un voter
+            if ($centre->getComposante() !== null && (
+                in_array('Gestionnaire', $centre->getDroits()) ||
+                in_array('Invité', $centre->getDroits()) ||
+                in_array('Directeur', $centre->getDroits())
+            )) {
+                //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
+                $formations[] = $formationRepository->findByComposante(
+                    $centre->getComposante(),
+                    $this->getDpe()
+                );
+            }
+        }
+
+        $formations[] = $formationRepository->findByComposanteDpe(
+            $this->getUser(),
+            $this->getDpe()
+        );
+        $formations[] = $formationRepository->findByResponsableOuCoResponsable(
+            $this->getUser(),
+            $this->getDpe()
+        );
+        $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
+            $this->getUser(),
+            $this->getDpe()
+        );
+        $formations = array_merge(...$formations);
 
         $tFormations = [];
         foreach ($formations as $formation) {
@@ -216,19 +216,6 @@ class CodificationController extends BaseController
             'typeD' => $typeD,
             'apogee' => $apogee,
         ]);
-    }
-
-    #[Route('/codification/genere/all', name: 'app_codification_genere_all')]
-    public function genereAll(
-        FormationRepository   $formationRepository,
-        CodificationFormation $codificationFormation,
-    ): Response {
-        $formations = $formationRepository->findBy(['dpe' => $this->getDpe()]);
-        foreach ($formations as $formation) {
-            $codificationFormation->setCodificationFormation($formation);
-        }
-
-        return $this->redirectToRoute('app_codification_liste');
     }
 
     #[Route('/codification/genere/{formation}', name: 'app_codification')]
