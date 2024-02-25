@@ -27,13 +27,6 @@ final class BadgeBccComponent
         $getElement = new GetElementConstitutif($this->elementConstitutif, $this->parcours);
 
         $this->isSynchroBcc = $this->elementConstitutif->isSynchroBcc() && $this->elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $this->parcours->getId();
-//        if ($this->isSynchroBcc) {
-            $raccroche = $getElement->isRaccroche();
-            $this->etatBccComplet = $getElement->getEtatBcc() === 'Complet';
-//        } else {
-//            $this->etatBccComplet = $this->elementConstitutif->getEtatBcc($this->parcours) === 'Complet';
-//            //todo: faux positif si Compétences mais d'un autre parcours ? Sans que ce soit attaché pour autant ??
-//        }
-
+        $this->etatBccComplet = $getElement->getEtatBcc() === 'Complet';
     }
 }
