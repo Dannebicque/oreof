@@ -75,7 +75,7 @@ class ParcoursType extends AbstractType
                         ->setParameter('formation', $options['formation'])
                         ->orderBy('p.libelle', 'ASC');
                 },
-                'choice_label' => 'libelle',
+                'choice_label' => 'getDisplay',
             ])
         ;
     }
