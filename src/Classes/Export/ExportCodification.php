@@ -16,6 +16,8 @@ use App\DTO\StructureUe;
 use App\Entity\Parcours;
 use App\Utils\Tools;
 use DateTime;
+use Symfony\Component\HttpFoundation\StreamedJsonResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExportCodification
 {
@@ -28,7 +30,7 @@ class ExportCodification
     ) {
     }
 
-    public function exportFormations(array $formations)
+    public function exportFormations(array $formations): StreamedResponse
     {
         $this->excelWriter->nouveauFichier('Export Codification');
         $this->excelWriter->setActiveSheetIndex(0);
@@ -94,7 +96,7 @@ class ExportCodification
         return $this->excelWriter->genereFichier($fileName, true);
     }
 
-    public function exportParcours(Parcours $parcours): string
+    public function exportParcours(Parcours $parcours)
     {
         $this->excelWriter->nouveauFichier('Export Codification');
         $this->excelWriter->setActiveSheetIndex(0);
