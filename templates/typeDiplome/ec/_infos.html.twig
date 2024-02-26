@@ -1,8 +1,25 @@
 <div class="col-12">
     <dl>
-        <dt>Responsable de l'enseignement</dt>
-        <dd>{{ ficheMatiere.responsableFicheMatiere != null ? ficheMatiere.responsableFicheMatiere.display : 'erreur' }}</dd>
-        <dt>Email</dt>
-        <dd>{{ ficheMatiere.responsableFicheMatiere != null ? ficheMatiere.responsableFicheMatiere.email : 'erreur' }}</dd>
+        {% if ficheMatiere.responsableFicheMatiere != null %}
+            <dt>Responsable de l'enseignement</dt>
+            <dd>{{ ficheMatiere.responsableFicheMatiere.display }}</dd>
+            <dt>Email</dt>
+            <dd>{{ ficheMatiere.responsableFicheMatiere.email }}</dd>
+        {% elseif ficheMatiere.parcours != null %}
+            {% if ficheMatiere.parcours.isParcoursDefaut == true and ficheMatiere.parcours.formation != null and ficheMatiere.parcours.formation.responsableMention != null %}
+                <dt>Responsable de l'enseignement (mention)</dt>
+                <dd>{{ ficheMatiere.parcours.formation.responsableMention.display }}</dd>
+                <dt>Email</dt>
+                <dd>{{ ficheMatiere.parcours.formation.responsableMention.email }}</dd>
+            {% elseif ficheMatiere.parcours.respParcours != null %}
+                <dt>Responsable de l'enseignement (parcours)</dt>
+                <dd>{{ ficheMatiere.parcours.respParcours.display }}</dd>
+                <dt>Email</dt>
+                <dd>{{ ficheMatiere.parcours.respParcours.email }}</dd>
+            {% endif %}
+            {% else %}
+                <dt>Responsable de l'enseignement</dt>
+                <dd>Non renseigné</dd>
+        {% endif %}
     </dl>
 </div>
