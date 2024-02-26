@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.27](https://github.com/Dannebicque/oreof/compare/v1.24.26...v1.24.27) (2024-02-26)
+
+
+### Features
+
+* export avec ode diplome + vdi ([169fae0](https://github.com/Dannebicque/oreof/commit/169fae01f5b1435faadb3d9f84010c99da14ea00))
+* tri et recherche sur partie codification ([ce483de](https://github.com/Dannebicque/oreof/commit/ce483dee7aa5a6fbc3f31364c83346c5f229daf3))
+
+
+### Bug Fixes
+
+* affichage du code EC ([73df7f0](https://github.com/Dannebicque/oreof/commit/73df7f0ad4cb90e2d146e455e21aa703d57e8255))
+* code apogée 10 caractères ([022e875](https://github.com/Dannebicque/oreof/commit/022e8756c3d2c68d9586e0a108b3914163b8ffc8))
+* Page fiche matière ([ea5043f](https://github.com/Dannebicque/oreof/commit/ea5043f6113a3209a98ab5511a869a40c45f69b8))
+* Page fiches en SES ([cd05c76](https://github.com/Dannebicque/oreof/commit/cd05c761084e30e3a7d3def2e4f4315f3dd90e97))
+
 ### [1.24.26](https://github.com/Dannebicque/oreof/compare/v1.24.25...v1.24.26) (2024-02-23)
 
 
