@@ -55,8 +55,6 @@ class CodificationFormation
         'Z',
     ];
 
-    private int $ordreUe = 1;
-
     public function __construct(
         protected EntityManagerInterface $entityManager
     ) {
@@ -77,33 +75,19 @@ class CodificationFormation
 
     public function setCodificationParcours(Formation $formation): void
     {
-        $cleParcours = [];
         if ($formation->isHasParcours() === true) {
             $parcours = $formation->getParcours();
             $i = 0;
             foreach ($parcours as $p) {
-                if ($p->getTypeParcours() !== TypeParcoursEnum::TYPE_PARCOURS_LAS1 && $p->getTypeParcours() !== TypeParcoursEnum::TYPE_PARCOURS_LAS23) {
+                if ($p->getParcoursOrigine() === null) {
                     $p->setCodeApogee(self::TAB_CODE_PARCOURS[$i]);
-                    $cleParcours[trim($p->getLibelle())] = self::TAB_CODE_PARCOURS[$i];
                     $i++;
                 }
             }
 
             foreach ($parcours as $p) {
-                if (
-                    $p->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1 ||
-                    $p->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23 ||
-                    $p->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_ALTERNANCE
-                ) {
-                    $libelle = trim($p->getLibelle());
-                    //un parcours LAS ou en alternance avec une FI équivalence ne génère pas un nouveau code de parcours, on essaye de retrouver le code du parcours
-                    if (array_key_exists($libelle, $cleParcours)) {
-                        $p->setCodeApogee($cleParcours[$libelle ]);
-                    } else {
-                        //si pas d'équivalence on génère un nouveau code
-                        $p->setCodeApogee(self::TAB_CODE_PARCOURS[$i]);
-                        $i++;
-                    }
+                if ($p->getParcoursOrigine() !== null) {
+                    $p->setCodeApogee($p->getParcoursOrigine()->getCodeApogee());
                 }
             }
         }
