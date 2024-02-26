@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.28](https://github.com/Dannebicque/oreof/compare/v1.24.27...v1.24.28) (2024-02-26)
+
+
+### Features
+
+* affichage code dimplôme + VDI sur parcours ([f62b2ae](https://github.com/Dannebicque/oreof/commit/f62b2aed55704c8642737803b271c2d6e92cfca0))
+* parcours origine pour les parcours identiques sur plusieurs sites ([e995a60](https://github.com/Dannebicque/oreof/commit/e995a607e70003cf1b9d1a63a73b8c0092ed9f77))
+
+
+### Bug Fixes
+
+* Page fiche matière ([a00712f](https://github.com/Dannebicque/oreof/commit/a00712f0498c3d2683a12ddb8bdb56bffc128f2b))
+
 ### [1.24.27](https://github.com/Dannebicque/oreof/compare/v1.24.26...v1.24.27) (2024-02-26)
 
 
