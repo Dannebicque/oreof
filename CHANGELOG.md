@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.29](https://github.com/Dannebicque/oreof/compare/v1.24.28...v1.24.29) (2024-02-27)
+
+
+### Features
+
+* affichage code dimplôme + VDI sur parcours ([6385b2c](https://github.com/Dannebicque/oreof/commit/6385b2ca19ab3d502d837b33c5bf7e40697edc7f))
+* Ajout de boutons pour naviguer entre fiche et codification ([846fa7e](https://github.com/Dannebicque/oreof/commit/846fa7e48a14a9903af80bc5615cf784f63ae750))
+* commande mise à jour codification ([4fb5af7](https://github.com/Dannebicque/oreof/commit/4fb5af71231e88bb6ed7ca732d33944d34c5880a))
+* commande mise à jour codification ([569d36d](https://github.com/Dannebicque/oreof/commit/569d36d38d07085250f17b03eb8a4331d5abf152))
+
+
+### Bug Fixes
+
+* Edition du type EC sur EC enfant ([ad3e078](https://github.com/Dannebicque/oreof/commit/ad3e0785a2c2cf93192634598c1c3141c6d2194b))
+
 ### [1.24.28](https://github.com/Dannebicque/oreof/compare/v1.24.27...v1.24.28) (2024-02-26)
 
 
