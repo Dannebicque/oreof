@@ -9,9 +9,3 @@
 </div>
 {{ include('typeDiplome/formation/_structure.html.twig', {parcours:parcours, source: 'codification'}) }}
 
-<hr>
-Codification Apogée
-
-{% for elp in apogee %}
-    {{ elp.display|raw }}
-{% endfor %}

@@ -183,7 +183,6 @@ class CodificationController extends BaseController
 
     #[Route('/codification/parcours/{formation}', name: 'app_codification_wizard')]
     public function parcoursWizard(
-        ExportApogee        $exportApogee,
         Request             $request,
         ParcoursRepository  $parcoursRepository,
         TypeDiplomeRegistry $typeDiplomeRegistry,
@@ -205,8 +204,6 @@ class CodificationController extends BaseController
 
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         $tParcours = $typeD->calculStructureParcours($parcours);
-        $exportApogee->genereExportApogee($parcours);
-        $apogee = $exportApogee->tabsElp;
 
         return $this->render('codification/_parcours.html.twig', [
             'formation' => $formation,
@@ -214,7 +211,6 @@ class CodificationController extends BaseController
             'dto' => $tParcours,
             'parcours' => $parcours,
             'typeD' => $typeD,
-            'apogee' => $apogee,
         ]);
     }
 
