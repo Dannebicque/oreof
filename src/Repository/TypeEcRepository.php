@@ -67,7 +67,7 @@ class TypeEcRepository extends ServiceEntityRepository
         return $this->findByTypeDiplomeBuilder($typeDiplome)->getQuery()->getResult();
     }
 
-    public function findByTypeDiplomeAndFormation(TypeDiplome $typeDiplome, Formation $formation): QueryBuilder
+    public function findByTypeDiplomeAndFormationBuilder(TypeDiplome $typeDiplome, Formation $formation): QueryBuilder
     {
         return $this->createQueryBuilder('t')
             ->join('t.typeDiplomes', 'td')
@@ -77,6 +77,11 @@ class TypeEcRepository extends ServiceEntityRepository
             ->setParameter('typeDiplome', $typeDiplome->getId())
             ->setParameter('formation', $formation)
             ->orderBy('t.libelle', 'ASC');
+    }
+
+    public function findByTypeDiplomeAndFormation(TypeDiplome $typeDiplome, Formation $formation): array
+    {
+        return $this->findByTypeDiplomeAndFormationBuilder($typeDiplome, $formation)->getQuery()->getResult();
     }
 
 

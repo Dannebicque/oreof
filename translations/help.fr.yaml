@@ -185,7 +185,7 @@ parcours_step6.helps.codeRome.help: 'Ajoutez les codes ROME pour préciser les m
 element_constitutif.helps.natureUeEc: '"'
 element_constitutif.helps.ficheMatiere: element_constitutif.helps.ficheMatiere
 fiche_matiere.helps.libelle: "Indiquez le libellé exact de l'enseignement"
-fiche_matiere.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement. Laisser vide s'il n'est pas encore connu."
+fiche_matiere.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."
 fiche_matiere_step1.helps.libelle: "Indiquez le libellé exact de l'enseignement."
 fiche_matiere_step1.helps.libelleAnglais: "Précisez la version anglaise du libellé de l'enseignement."
 fiche_matiere_step1.helps.enseignementMutualise.help: 'Si une partie de la formation est mutualisée (CM par exemple), mais une autre est différenciée (TP par exemple), cochez oui.'
@@ -209,7 +209,7 @@ fiche_matiere_step2.helps.langueDispense.help: 'Plusieurs choix possibles.'
 fiche_matiere_step2.helps.langueSupport.help: 'Plusieurs choix possibles.'
 fiche_matiere_step3.helps.objectifs: 'Indiquez en 3000 caractères maximum les objectifs de l’enseignement.'
 fiche_matiere_step3.labels.competence: "Choisissez d'abord le/les bloc(s) de compétences pour accéder aux compétences associées."
-fiche_matiere_step1.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement. Laisser vide s'il n'est pas encore connu."
+fiche_matiere_step1.helps.responsableFicheMatiere: "Indiquez le référent de l'enseignement."
 user.add_missing.email.help: "Indiquez un email valide de l'utilisateur à ajouter pour récupérer ses informations."
 form.helps.email: form.helps.email
 user_add.helps.email: "Indiquez un email valide de l'utilisateur à ajouter pour récupérer ses informations."
@@ -323,3 +323,104 @@ composante.helps.codeComposante: composante.helps.codeComposante
 composante.helps.codeApogee: composante.helps.codeApogee
 mention.helps.codeApogee: mention.helps.codeApogee
 annee_universitaire.helps.codeApogee: annee_universitaire.helps.codeApogee
+etablissement.helps.etablissement_information.help: etablissement.helps.etablissement_information.help
+etablissement.helps.etablissement_information.calendrier_universitaire: etablissement.helps.etablissement_information.calendrier_universitaire
+etablissement.helps.etablissement_information.calendrier_inscription: etablissement.helps.etablissement_information.calendrier_inscription
+etablissement.helps.etablissement_information.informations_pratiques: etablissement.helps.etablissement_information.informations_pratiques
+type_diplome.helps.modalites_admission: type_diplome.helps.modalites_admission
+parcours_step5.helps.modalitesAdmission: parcours_step5.helps.modalitesAdmission
+type_diplome.helps.insertionProfessionnelle: type_diplome.helps.insertionProfessionnelle
+composante.helps.composanteInformation.help: composante.helps.composanteInformation.help
+composante.helps.composanteInformation.restauration: composante.helps.composanteInformation.restauration
+composante.helps.composanteInformation.hebergement: composante.helps.composanteInformation.hebergement
+composante.helps.composanteInformation.transport: composante.helps.composanteInformation.transport
+etablissement.helps.etablissement_information.restauration: etablissement.helps.etablissement_information.restauration
+etablissement.helps.etablissement_information.hebergement: etablissement.helps.etablissement_information.hebergement
+etablissement.helps.etablissement_information.transport: etablissement.helps.etablissement_information.transport
+type_diplome.helps.prerequis_obligatoires: type_diplome.helps.prerequis_obligatoires
+etablissement.helps.numero_SIRET: etablissement.helps.numero_SIRET
+etablissement.helps.numero_activite: etablissement.helps.numero_activite
+etablissement.helps.etablissement_information.descriptifHautPage: etablissement.helps.etablissement_information.descriptifHautPage
+etablissement.helps.etablissement_information.descriptifBasPage: etablissement.helps.etablissement_information.descriptifBasPage
+parcours_step7.helps.descriptifHautPage: parcours_step7.helps.descriptifHautPage
+parcours_step7.helps.descriptifBasPage: parcours_step7.helps.descriptifBasPage
+parcours_step7.helps.codeRNCP: parcours_step7.helps.codeRNCP
+parcours.helps.las1.help: parcours.helps.las1.help
+parcours.helps.las23.help: parcours.helps.las23.help
+parcours.helps.typeParcours: parcours.helps.typeParcours
+etablissement.helps.etablissement_information.textLas1: etablissement.helps.etablissement_information.textLas1
+etablissement.helps.etablissement_information.textLas2: etablissement.helps.etablissement_information.textLas2
+etablissement.helps.etablissement_information.textLas3: etablissement.helps.etablissement_information.textLas3
+etablissement.helps.etablissement_information.secondeChance: etablissement.helps.etablissement_information.secondeChance
+parcours_step5.helps.adresses.help: parcours_step5.helps.adresses.help
+parcours_step5.helps.adresses.help.__name__.help: parcours_step5.helps.adresses.help.__name__.help
+parcours_step5.helps.adresses.__name__.adresse1: parcours_step5.helps.adresses.__name__.adresse1
+parcours_step5.helps.adresses.__name__.adresse2: parcours_step5.helps.adresses.__name__.adresse2
+parcours_step5.helps.adresses.__name__.codePostal: parcours_step5.helps.adresses.__name__.codePostal
+parcours_step5.helps.adresses.__name__.ville: parcours_step5.helps.adresses.__name__.ville
+parcours_step5.helps.adresses.help.0.help: parcours_step5.helps.adresses.help.0.help
+parcours_step5.helps.adresses.0.adresse1: parcours_step5.helps.adresses.0.adresse1
+parcours_step5.helps.adresses.0.adresse2: parcours_step5.helps.adresses.0.adresse2
+parcours_step5.helps.adresses.0.codePostal: parcours_step5.helps.adresses.0.codePostal
+parcours_step5.helps.adresses.0.ville: parcours_step5.helps.adresses.0.ville
+parcours_step5.helps.contacts.help: parcours_step5.helps.contacts.help
+parcours_step5.helps.contacts.help.__name__.help: parcours_step5.helps.contacts.help.__name__.help
+parcours_step5.helps.contacts.__name__.denomination: parcours_step5.helps.contacts.__name__.denomination
+parcours_step5.helps.contacts.__name__.nom: parcours_step5.helps.contacts.__name__.nom
+parcours_step5.helps.contacts.__name__.prenom: parcours_step5.helps.contacts.__name__.prenom
+parcours_step5.helps.contacts.__name__.telephone: parcours_step5.helps.contacts.__name__.telephone
+parcours_step5.helps.contacts.__name__.email: parcours_step5.helps.contacts.__name__.email
+parcours_step5.helps.contacts.help.__name__.help.adresse.help: parcours_step5.helps.contacts.help.__name__.help.adresse.help
+parcours_step5.helps.contacts.__name__.adresse.adresse1: parcours_step5.helps.contacts.__name__.adresse.adresse1
+parcours_step5.helps.contacts.__name__.adresse.adresse2: parcours_step5.helps.contacts.__name__.adresse.adresse2
+parcours_step5.helps.contacts.__name__.adresse.codePostal: parcours_step5.helps.contacts.__name__.adresse.codePostal
+parcours_step5.helps.contacts.__name__.adresse.ville: parcours_step5.helps.contacts.__name__.adresse.ville
+parcours_step5.helps.contacts.help.0.help: parcours_step5.helps.contacts.help.0.help
+parcours_step5.helps.contacts.0.denomination: parcours_step5.helps.contacts.0.denomination
+parcours_step5.helps.contacts.0.nom: parcours_step5.helps.contacts.0.nom
+parcours_step5.helps.contacts.0.prenom: parcours_step5.helps.contacts.0.prenom
+parcours_step5.helps.contacts.0.telephone: parcours_step5.helps.contacts.0.telephone
+parcours_step5.helps.contacts.0.email: parcours_step5.helps.contacts.0.email
+parcours_step5.helps.contacts.help.0.help.adresse.help: parcours_step5.helps.contacts.help.0.help.adresse.help
+parcours_step5.helps.contacts.0.adresse.adresse1: parcours_step5.helps.contacts.0.adresse.adresse1
+parcours_step5.helps.contacts.0.adresse.adresse2: parcours_step5.helps.contacts.0.adresse.adresse2
+parcours_step5.helps.contacts.0.adresse.codePostal: parcours_step5.helps.contacts.0.adresse.codePostal
+parcours_step5.helps.contacts.0.adresse.ville: parcours_step5.helps.contacts.0.adresse.ville
+contact.helps.denomination: contact.helps.denomination
+contact.helps.nom: contact.helps.nom
+contact.helps.prenom: contact.helps.prenom
+contact.helps.telephone: contact.helps.telephone
+contact.helps.email: contact.helps.email
+contact.helps.adresse.help: contact.helps.adresse.help
+contact.helps.adresse.adresse1: contact.helps.adresse.adresse1
+contact.helps.adresse.adresse2: contact.helps.adresse.adresse2
+contact.helps.adresse.codePostal: contact.helps.adresse.codePostal
+contact.helps.adresse.ville: contact.helps.adresse.ville
+type_diplome.helps.presentationFormation: type_diplome.helps.presentationFormation
+composante.helps.inscriptionUniquement.help: composante.helps.inscriptionUniquement.help
+composante.helps.composanteParent: composante.helps.composanteParent
+dpe.helps.libelle: dpe.helps.libelle
+dpe.helps.anneeUniversitaire: dpe.helps.anneeUniversitaire
+dpe.helps.codeApogee: dpe.helps.codeApogee
+dpe.helps.defaut.help: dpe.helps.defaut.help
+dpe.helps.dateOuvertureDpe: dpe.helps.dateOuvertureDpe
+dpe.helps.dateClotureDpe: dpe.helps.dateClotureDpe
+dpe.helps.dateTransmissionSes: dpe.helps.dateTransmissionSes
+dpe.helps.dateCfvu: dpe.helps.dateCfvu
+dpe.helps.datePublication: dpe.helps.datePublication
+campagne_collecte.helps.libelle: campagne_collecte.helps.libelle
+campagne_collecte.helps.anneeUniversitaire: campagne_collecte.helps.anneeUniversitaire
+campagne_collecte.helps.codeApogee: campagne_collecte.helps.codeApogee
+campagne_collecte.helps.defaut.help: campagne_collecte.helps.defaut.help
+campagne_collecte.helps.dateOuvertureDpe: campagne_collecte.helps.dateOuvertureDpe
+campagne_collecte.helps.dateClotureDpe: campagne_collecte.helps.dateClotureDpe
+campagne_collecte.helps.dateTransmissionSes: campagne_collecte.helps.dateTransmissionSes
+campagne_collecte.helps.dateCfvu: campagne_collecte.helps.dateCfvu
+campagne_collecte.helps.datePublication: campagne_collecte.helps.datePublication
+formation_ses.helps.codeMentionApogee: formation_ses.helps.codeMentionApogee
+type_ue.helps.type.help: type_ue.helps.type.help
+element_constitutif.helps.ordre: 'Précisez l’ordre d’apparition de l’EC dans la maquette.'
+element_constitutif.helps.code: "Précisez le code de l'EC"
+parcours.helps.parcoursOrigine: "Indiquez le parcours d'origine si ce parcours est une évolution/adaptation d'un autre parcours. Cela est nécessaire pour la bonne codification Apogée"
+ec_manage.helps.fiche_matiere_titre_libre_edit.help: 'Saisissez un texte libre pour ce EC et préciser les modalités de choix dans la zone suivante'
+ec.helps.typeEc.help: 'Type d''EC'

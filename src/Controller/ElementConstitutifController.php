@@ -212,6 +212,7 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/new-enfant/{ue}/{parcours}', name: 'app_element_constitutif_new_enfant', methods: ['GET', 'POST'])]
     public function newEnfant(
+        TypeEcRepository         $typeEcRepository,
         EcOrdre                      $ecOrdre,
         Request                      $request,
         FicheMatiereRepository       $ficheMatiereRepository,
@@ -245,6 +246,9 @@ class ElementConstitutifController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $typeEc = $typeEcRepository->find($request->request->get('typeEc'));
+            $elementConstitutif->setTypeEc($typeEc);
+
             if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
                 $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
                     'id_',
@@ -285,6 +289,7 @@ class ElementConstitutifController extends AbstractController
             'form' => $form->createView(),
             'ue' => $ue,
             'parcours' => $parcours,
+            'typeEcs' => $typeEcRepository->findByTypeDiplomeAndFormation($typeDiplome, $parcours->getFormation()),
             'matieres' => $ficheMatiereRepository->findByParcours($parcours)
         ]);
     }
@@ -431,6 +436,7 @@ class ElementConstitutifController extends AbstractController
             'POST'
         ])]
     public function editEnfant(
+        TypeEcRepository             $typeEcRepository,
         NatureUeEcRepository             $natureUeEcRepository,
         FicheMatiereRepository       $ficheMatiereRepository,
         Request                      $request,
@@ -440,6 +446,7 @@ class ElementConstitutifController extends AbstractController
         Ue                           $ue
     ): Response {
         $isAdmin = $this->isGranted('ROLE_SES');
+        $typeDiplome = $parcours->getFormation()?->getTypeDiplome();
 
         if ($request->isMethod('POST')) {
             if ($request->request->has('ficheMatiereLibre') && $request->request->get('ficheMatiereLibre') !== '') {
@@ -464,6 +471,9 @@ class ElementConstitutifController extends AbstractController
                 $elementConstitutif->setFicheMatiere($ficheMatiere);
             }
 
+            $typeEc = $typeEcRepository->find($request->request->get('typeEc'));
+            $elementConstitutif->setTypeEc($typeEc);
+
             $elementConstitutifRepository->save($elementConstitutif, true);
 
             return $this->json(true);
@@ -474,6 +484,7 @@ class ElementConstitutifController extends AbstractController
             'element_constitutif' => $elementConstitutif,
             'parcours' => $parcours,
             'ue' => $ue,
+            'typeEcs' => $typeEcRepository->findByTypeDiplomeAndFormation($typeDiplome, $parcours->getFormation()),
             'matieres' => $ficheMatiereRepository->findByParcours($parcours),
             'isAdmin' => $isAdmin
         ]);

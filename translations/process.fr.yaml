@@ -234,8 +234,8 @@ reserve.validation.vp.helps.argumentaire.help: ' '
 reserve.validation.parcours_rf.helps.argumentaire.help: ' '
 reserve.validation.dpe.helps.argumentaire.help: ' '
 refuse.validation.dpe.helps.argumentaire.help: ' '
-formation.refuse.dpe.flash.success: formation.refuse.dpe.flash.success
-validation.etat.refuser.dpe: validation.etat.refuser.dpe
+formation.refuse.dpe.flash.success: 'Formation refusée par le responsable DPE'
+validation.etat.refuser.dpe: 'Formation refusée par le responsable DPE'
 valide.validation.publication.date.label: 'Date de publication'
 valide.validation.publication.helps.date.help: ' '
 validation.etat.publie: 'DPE publié'
@@ -302,7 +302,7 @@ ficheMatiere.valide.transmis_ses.flash.success: ficheMatiere.valide.transmis_ses
 validation.valider.transmis_pour_publication.title: validation.valider.transmis_pour_publication.title
 validation.valider.transmis_pour_publication: validation.valider.transmis_pour_publication
 historique.validation.fiche_matiere.ses: 'Historique de validation fiche EC/matière'
-validation.valider.fiches_matieres: "Valider et soumettre les fiches EC/matière"
+validation.valider.fiches_matieres: 'Valider et soumettre les fiches EC/matière'
 demande.reouverture: demande.reouverture
 demande.reouverture.title: demande.reouverture.title
 validation.cfvu.valide.cas.acceptation.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.directe.valide_a_publier
@@ -323,22 +323,22 @@ demande.reouverture.modification.mccc.texte.label: demande.reouverture.modificat
 demande.reouverture.modification.mccc.texte.help: demande.reouverture.modification.mccc.texte.help
 demande.reouverture.label: demande.reouverture.label
 demande.reouverture.help: demande.reouverture.help
-historique.validation.fiche_matiere: historique.validation.fiche_matiere
+historique.validation.fiche_matiere: 'Historique de validation fiche EC/matière'
 validation.cfvu.valide.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier: validation.cfvu.valide.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier
 validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier: validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier
 demande.reouverture.modification.mccc.maquette.label: demande.reouverture.modification.mccc.maquette.label
 demande.reouverture.modification.mccc.maquette.help: demande.reouverture.modification.mccc.maquette.help
 transmis_ses: 'Soumis central'
 transmis_pour_publication: 'Validé pour publication'
-publie: 'Publié'
+publie: Publié
 validation.valider.soumis_central: 'Valider pour publication'
 validation.reserve.soumis_central: 'Emettre des réserves'
 validation.refuser.soumis_central: 'Refuser les fiches EC/matiere'
 ficheMatiere.valide.soumis_central.flash.success: 'Fiche EC/Matière validée pour publication'
 fiche_matiere: 'Fiche EC/matière'
 validation.valider.soumis_central.title: 'Valider et soumettre les fiches EC/matière'
-modification.historique.title: 'Modification de l''historique'
-modification.historique: 'Modification de l''historique'
+modification.historique.title: "Modification de l'historique"
+modification.historique: "Modification de l'historique"
 validation.valider.valide_pour_publication: validation.valider.valide_pour_publication
 validation.fiche_matiere.ses.reserve.alerte: validation.fiche_matiere.ses.reserve.alerte
 reserve.validation.fiche_matiere.ses.argumentaire.label: 'Argumentaire pour les réserves des fiches EC/matière'
@@ -350,5 +350,5 @@ validation.refuser.soumis_central.title: validation.refuser.soumis_central.title
 validation.fiche_matiere.ses.refuse.alerte: validation.fiche_matiere.ses.refuse.alerte
 refuse.validation.fiche_matiere.ses.argumentaire.label: refuse.validation.fiche_matiere.ses.argumentaire.label
 refuse.validation.fiche_matiere.ses.helps.argumentaire.help: refuse.validation.fiche_matiere.ses.helps.argumentaire.help
-btn.validation.fiche_matiere.ses.refuse: btn.validation.fiche_matiere.ses.refuse
-formation.edit.valide.cfvu.flash.success: formation.edit.valide.cfvu.flash.success
+btn.validation.fiche_matiere.ses.refuse: 'Refuser les fiches EC/matière'
+formation.edit.valide.cfvu.flash.success: 'Modification enregistrée pour la validation par la CFVU'
