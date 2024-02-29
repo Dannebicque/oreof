@@ -2,16 +2,17 @@
 
 namespace App\Controller;
 
-use App\Classes\Apogee\ExportApogee;
 use App\Classes\Codification\CodificationFormation;
 use App\Classes\Export\ExportCodification;
 use App\Classes\GetFormations;
 use App\Entity\Formation;
+use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -178,6 +179,62 @@ class CodificationController extends BaseController
     ): Response {
         return $this->render('codification/index.html.twig', [
             'formation' => $formation,
+        ]);
+    }
+
+    #[Route('/codification/modifier/{parcours}/{annee}', name: 'app_codification_edit')]
+    public function modifier(
+        EntityManagerInterface $em,
+        Request  $request,
+        Parcours $parcours,
+        int      $annee
+    ): Response {
+        $formation = $parcours->getFormation();
+
+        $form = $this->createFormBuilder(null, [
+            'action' => $this->generateUrl('app_codification_edit', [
+                'parcours' => $parcours->getId(),
+                'annee' => $annee,
+            ]),
+        ])
+            ->add('codeDiplome', null, [
+                'label' => 'Code diplôme',
+                'data' => $parcours->getCodeDiplome($annee),
+            ])
+            ->add('codeVersionDiplome', null, [
+                'label' => 'Version diplôme',
+                'data' => $parcours->getCodeVersionDiplome($annee),
+            ])
+            ->add('codeEtape', null, [
+                'label' => 'Code étape',
+                'data' => $parcours->getCodeEtape($annee),
+            ])
+            ->add('codeVersionEtape', null, [
+                'label' => 'Version étape',
+                'data' => $parcours->getCodeVersionEtape($annee),
+            ])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $semParcours = $parcours->getSemestrePourAnnee($annee);
+            foreach ($semParcours as $sem) {
+                $sem->setCodeApogeeDiplome($form->get('codeDiplome')->getData(), $annee);
+                $sem->setCodeApogeeVersionDiplome($form->get('codeVersionDiplome')->getData(), $annee);
+                $sem->setCodeApogeeEtapeAnnee($form->get('codeEtape')->getData(), $annee);
+                $sem->setCodeApogeeEtapeVersion($form->get('codeVersionEtape')->getData(), $annee);
+            }
+
+            $em->flush();
+
+            return $this->json(true);
+        }
+
+        return $this->render('codification/_edit.html.twig', [
+            'formation' => $formation,
+            'parcours' => $parcours,
+            'annee' => $annee,
+            'form' => $form->createView(),
         ]);
     }
 

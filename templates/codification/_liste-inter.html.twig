@@ -2,7 +2,9 @@
 <div class="card">
     <div class="card-title"></div>
     <div class="card-body"
-            {{ stimulus_controller('crud', {url: path('app_codification_liste_type_diplome', {typeDiplome: typeDiplome.id})}) }}>
+            {{ stimulus_controller('crud', {url: path('app_codification_liste_type_diplome', {typeDiplome: typeDiplome.id})}) }}
+         data-action="base:refreshListe@window->crud#refreshListe"
+    >
         {{ include('communs/_recherche.html.twig') }}
         <div {{ stimulus_target('crud', 'liste') }}>
 

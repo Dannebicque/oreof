@@ -1300,10 +1300,10 @@ class Parcours
         if ($annee === null) {
             return $this->getSemestreParcours()->first()?->getCodeApogeeDiplome();
         }
-        return $this->getSemestrePourAnnee($annee)?->getCodeApogeeDiplome();
+        return $this->getSemestrePourAnnee($annee)?->first()?->getCodeApogeeDiplome();
     }
 
-    private function getSemestrePourAnnee(int $annee): ?SemestreParcours
+    public function getSemestrePourAnnee(int $annee): ?Collection
     {
         $semestres = $this->semestreParcours;
 
@@ -1313,12 +1313,12 @@ class Parcours
             return null;
         }
 
-        return $semestres->first();
+        return $semestres;
     }
 
     public function getCodeEtape(int $annee): ?string
     {
-        return $this->getSemestrePourAnnee($annee)?->getCodeApogeeEtapeAnnee();
+        return $this->getSemestrePourAnnee($annee)?->first()?->getCodeApogeeEtapeAnnee();
     }
 
     public function getCodeVersionDiplome(?int $annee): ?string
@@ -1326,12 +1326,12 @@ class Parcours
         if ($annee === null) {
             return $this->getSemestreParcours()->first()?->getCodeApogeeVersionDiplome();
         }
-        return $this->getSemestrePourAnnee($annee)?->getCodeApogeeVersionDiplome();
+        return $this->getSemestrePourAnnee($annee)?->first()?->getCodeApogeeVersionDiplome();
     }
 
     public function getCodeVersionEtape(int $annee): ?string
     {
-        return $this->getSemestrePourAnnee($annee)?->getCodeApogeeEtapeVersion();
+        return $this->getSemestrePourAnnee($annee)?->first()?->getCodeApogeeEtapeVersion();
 
     }
 
