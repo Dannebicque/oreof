@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.30](https://github.com/Dannebicque/oreof/compare/v1.24.29...v1.24.30) (2024-03-01)
+
+
+### Features
+
+* Edition de la codification haute ([ad04db4](https://github.com/Dannebicque/oreof/commit/ad04db40fd2037803471835c08ec0747c26fb245))
+
 ### [1.24.29](https://github.com/Dannebicque/oreof/compare/v1.24.28...v1.24.29) (2024-02-27)
 
 
