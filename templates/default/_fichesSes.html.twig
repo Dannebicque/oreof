@@ -1,0 +1,41 @@
+<div class="row gy-2">
+    <div class="col-12 p-0">
+        <div class="card">
+            <div class="card-body">
+                <div>
+                    {% for composante in composantes|filter(composante => composante.formationsPortees|length > 0) %}
+                        <div {{ stimulus_controller('load_content', {url: path('app_fiches_composantes')}) }}>
+                            <div class="card mb-2 sh-19 sh-md-8">
+                                <div class="card-body pt-0 pb-0 h-100">
+                                    <div class="row g-0 h-100 align-content-center">
+                                        <div class="col-12 col-md-4 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                            <div class="text-muted d-md-none">Composante</div>
+                                            {{ composante.libelle }}
+                                        </div>
+                                        <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
+                                            <div class="text-muted d-md-none">Nb Mentions</div>
+                                            {{ composante.formationsPortees|length }} mentions
+                                        </div>
+                                        <div class="col-6 col-md-1 d-flex flex-column justify-content-center
+                                            mb-1 mb-md-0">
+                                            <div class="text-muted d-md-none">Détails</div>
+
+                                            <button class="ms-2 btn btn-sm btn-outline-primary"
+                                                    {{ stimulus_action('load_content', 'change', 'click',
+                                                        {value:composante.id}
+                                                    ) }}
+                                            >
+                                                <i class="fal fa-caret-right"></i> Détails
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div {{ stimulus_target('load_content', 'content') }}></div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

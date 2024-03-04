@@ -380,3 +380,81 @@ mccc.ec.labels.sansHeures: 'EC sans volume horaire'
 'Code Apogée': 'Code Apogée'
 type_diplome.labels.codeApogee: 'Code Apogée'
 'Code Composante': 'Code Composante'
+etablissement.labels.etablissement_information.label: etablissement.labels.etablissement_information.label
+'Calendrier universitaire': 'Calendrier universitaire'
+"Calendrier d'inscription": "Calendrier d'inscription"
+'Informations pratiques': 'Informations pratiques'
+'Informations diverses': 'Informations diverses'
+"Modalités d'admission": "Modalités d'admission"
+parcours_step5.labels.modalitesAdmission: parcours_step5.labels.modalitesAdmission
+'Insertion professionnelle': 'Insertion professionnelle'
+Restauration: Restauration
+Hébergement: Hébergement
+Transport: Transport
+'Prérequis obligatoires': 'Prérequis obligatoires'
+'Code CIP (Apogée)': 'Code CIP (Apogée)'
+'Numéro SIRET': 'Numéro SIRET'
+"Numéro d'activité": "Numéro d'activité"
+'Texte affiché en haut des pages parcours': 'Texte affiché en haut des pages parcours'
+'Texte affiché en bas des pages parcours': 'Texte affiché en bas des pages parcours'
+parcours_step7.labels.codeRNCP: parcours_step7.labels.codeRNCP
+parcours.labels.las1.label: parcours.labels.las1.label
+parcours.labels.las23.label: parcours.labels.las23.label
+parcours.labels.typeParcours: parcours.labels.typeParcours
+TYPE_PARCOURS_CLASSIQUE: 'Parcours Classique'
+TYPE_PARCOURS_LAS1: 'Parcours LAS1'
+TYPE_PARCOURS_LAS23: 'Parcours LAS2 ou LAS3'
+'Texte affiché si le parcours est une LAS1': 'Texte affiché si le parcours est une LAS1'
+'Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2': 'Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2'
+'Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3': 'Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3'
+'Devenir des diplômés': 'Devenir des diplômés'
+'Après la 1ère année de licence "Sciences pour la Santé" - Accès santé': 'Après la 1ère année de licence "Sciences pour la Santé" - Accès santé'
+'Licence - Accès santé 2ème année (L.As 2)': 'Licence - Accès santé 2ème année (L.As 2)'
+'Licence - Accès santé 3ème année (L.As 3)': 'Licence - Accès santé 3ème année (L.As 3)'
+'Droit à la 2nde chance': 'Droit à la 2nde chance'
+parcours_step5.labels.adresses.label: parcours_step5.labels.adresses.label
+parcours_step5.labels.adresses.label.__name__.label: parcours_step5.labels.adresses.label.__name__.label
+parcours_step5.labels.adresses.label.0.label: parcours_step5.labels.adresses.label.0.label
+parcours_step5.labels.contacts.label: parcours_step5.labels.contacts.label
+parcours_step5.labels.contacts.label.__name__.label: parcours_step5.labels.contacts.label.__name__.label
+parcours_step5.labels.contacts.__name__.denomination: parcours_step5.labels.contacts.__name__.denomination
+parcours_step5.labels.contacts.__name__.nom: parcours_step5.labels.contacts.__name__.nom
+parcours_step5.labels.contacts.__name__.prenom: parcours_step5.labels.contacts.__name__.prenom
+parcours_step5.labels.contacts.__name__.telephone: parcours_step5.labels.contacts.__name__.telephone
+parcours_step5.labels.contacts.__name__.email: parcours_step5.labels.contacts.__name__.email
+parcours_step5.labels.contacts.label.__name__.label.adresse.label: parcours_step5.labels.contacts.label.__name__.label.adresse.label
+parcours_step5.labels.contacts.label.0.label: parcours_step5.labels.contacts.label.0.label
+parcours_step5.labels.contacts.0.denomination: parcours_step5.labels.contacts.0.denomination
+parcours_step5.labels.contacts.0.nom: parcours_step5.labels.contacts.0.nom
+parcours_step5.labels.contacts.0.prenom: parcours_step5.labels.contacts.0.prenom
+parcours_step5.labels.contacts.0.telephone: parcours_step5.labels.contacts.0.telephone
+parcours_step5.labels.contacts.0.email: parcours_step5.labels.contacts.0.email
+parcours_step5.labels.contacts.label.0.label.adresse.label: parcours_step5.labels.contacts.label.0.label.adresse.label
+'Dénomination du contact': 'Dénomination du contact'
+Téléphone: Téléphone
+Email: Email
+contact.labels.adresse.label: 'Adresse de contact'
+'Présentation des formations': 'Présentation des formations'
+'Pour en savoir plus sur ce type de formation': 'Pour en savoir plus sur ce type de formation'
+Chaumont: Chaumont
+"Composante d'inscription uniquement": "Composante d'inscription uniquement"
+composante.labels.composanteParent: 'Composante parente'
+TYPE_PARCOURS_CPI: 'Parcours CPI'
+TYPE_PARCOURS_ALTERNANCE: 'Parcours en alternance uniquement'
+'Année Universitaire': 'Année Universitaire'
+'Libellé du DPE': 'Libellé du DPE'
+'Ex: DPE Accréditation 2024': 'Ex: DPE Accréditation 2024'
+'Libellé de la campagne de collecte': 'Libellé de la campagne de collecte'
+'Ex: Accréditation 2024, 2025-2026, ...': 'Ex: Accréditation 2024, 2025-2026, ...'
+'niveau IV (BP, BT, baccalauréat ou équivalent)': 'niveau IV (BP, BT, baccalauréat ou équivalent)'
+formation_ses.labels.codeMentionApogee: 'Code Apogée de la mention'
+"Date d'ouverture de la campagne de collecte DPE": "Date d'ouverture de la campagne de collecte DPE"
+'Date de clôture de la campagne de collecte DPE': 'Date de clôture de la campagne de collecte DPE'
+type_ue.labels.type.label: '"Type" de  Type d''UE'
+STAGE: Stage
+PROJET: Projet
+NORMAL: Classique
+parcours_step5.labels.contacts: 'Contacts de la formation/du parcours'
+parcours.labels.parcoursOrigine: "Parcours d'origine"
+ec_manage.labels.fiche_matiere_titre_libre_edit.label: "Libellé libre de l'EC"
+ec.labels.typeEc.label: 'Type de l''EC'

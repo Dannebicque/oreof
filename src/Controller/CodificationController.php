@@ -2,15 +2,17 @@
 
 namespace App\Controller;
 
-use App\Classes\Apogee\ExportApogee;
 use App\Classes\Codification\CodificationFormation;
 use App\Classes\Export\ExportCodification;
 use App\Classes\GetFormations;
 use App\Entity\Formation;
+use App\Entity\Parcours;
+use App\Entity\TypeDiplome;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,14 +28,29 @@ class CodificationController extends BaseController
         ]);
     }
 
-    #[Route('/codification/liste/type_diplome', name: 'app_codification_liste_type_diplome')]
+    #[Route('/codification/liste-inter', name: 'app_codification_liste_inter')]
+    public function listeInter(
+        TypeDiplomeRepository $typeDiplomeRepository,
+        Request               $request,
+    ): Response {
+        $typeDiplome = $typeDiplomeRepository->find($request->query->get('step'));
+
+        if ($typeDiplome === null) {
+            throw new \Exception('Type de diplôme non trouvé');
+        }
+
+        return $this->render('codification/_liste-inter.html.twig', [
+            'typeDiplome' => $typeDiplome,
+        ]);
+    }
+
+    #[Route('/codification/liste/type_diplome/{typeDiplome}', name: 'app_codification_liste_type_diplome')]
     public function listeTypeDiplome(
         GetFormations         $getFormations,
         Request               $request,
         TypeDiplomeRepository $typeDiplomeRepository,
+        TypeDiplome           $typeDiplome
     ): Response {
-        $typeDiplome = $typeDiplomeRepository->find($request->query->get('step'));
-
         if ($typeDiplome === null) {
             throw new \Exception('Type de diplôme non trouvé');
         }
@@ -92,6 +109,7 @@ class CodificationController extends BaseController
         return $this->render('codification/_liste.html.twig', [
             'formations' => $tFormations,
             'typeDiplome' => $typeDiplome,
+            'params' => $request->query->all(),
         ]);
     }
 
@@ -111,39 +129,39 @@ class CodificationController extends BaseController
             $formations = $formationRepository->findBySearch('', $this->getDpe(), []);
 
             return $export->exportFormations($formations);
-        } else {
-            $formations = [];
-            //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
-            $centres = $this->getUser()?->getUserCentres();
-            foreach ($centres as $centre) {
-                //todo: gérer avec un voter
-                if ($centre->getComposante() !== null && (
-                    in_array('Gestionnaire', $centre->getDroits()) ||
-                    in_array('Invité', $centre->getDroits()) ||
-                    in_array('Directeur', $centre->getDroits())
-                )) {
-                    //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
-                    $formations[] = $formationRepository->findByComposante(
-                        $centre->getComposante(),
-                        $this->getDpe()
-                    );
-                }
-            }
-
-            $formations[] = $formationRepository->findByComposanteDpe(
-                $this->getUser(),
-                $this->getDpe()
-            );
-            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
-                $this->getUser(),
-                $this->getDpe()
-            );
-            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
-                $this->getUser(),
-                $this->getDpe()
-            );
-            $formations = array_merge(...$formations);
         }
+
+        $formations = [];
+        //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
+        $centres = $this->getUser()?->getUserCentres();
+        foreach ($centres as $centre) {
+            //todo: gérer avec un voter
+            if ($centre->getComposante() !== null && (
+                in_array('Gestionnaire', $centre->getDroits()) ||
+                in_array('Invité', $centre->getDroits()) ||
+                in_array('Directeur', $centre->getDroits())
+            )) {
+                //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
+                $formations[] = $formationRepository->findByComposante(
+                    $centre->getComposante(),
+                    $this->getDpe()
+                );
+            }
+        }
+
+        $formations[] = $formationRepository->findByComposanteDpe(
+            $this->getUser(),
+            $this->getDpe()
+        );
+        $formations[] = $formationRepository->findByResponsableOuCoResponsable(
+            $this->getUser(),
+            $this->getDpe()
+        );
+        $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
+            $this->getUser(),
+            $this->getDpe()
+        );
+        $formations = array_merge(...$formations);
 
         $tFormations = [];
         foreach ($formations as $formation) {
@@ -164,9 +182,64 @@ class CodificationController extends BaseController
         ]);
     }
 
+    #[Route('/codification/modifier/{parcours}/{annee}', name: 'app_codification_edit')]
+    public function modifier(
+        EntityManagerInterface $em,
+        Request  $request,
+        Parcours $parcours,
+        int      $annee
+    ): Response {
+        $formation = $parcours->getFormation();
+
+        $form = $this->createFormBuilder(null, [
+            'action' => $this->generateUrl('app_codification_edit', [
+                'parcours' => $parcours->getId(),
+                'annee' => $annee,
+            ]),
+        ])
+            ->add('codeDiplome', null, [
+                'label' => 'Code diplôme',
+                'data' => $parcours->getCodeDiplome($annee),
+            ])
+            ->add('codeVersionDiplome', null, [
+                'label' => 'Version diplôme',
+                'data' => $parcours->getCodeVersionDiplome($annee),
+            ])
+            ->add('codeEtape', null, [
+                'label' => 'Code étape',
+                'data' => $parcours->getCodeEtape($annee),
+            ])
+            ->add('codeVersionEtape', null, [
+                'label' => 'Version étape',
+                'data' => $parcours->getCodeVersionEtape($annee),
+            ])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $semParcours = $parcours->getSemestrePourAnnee($annee);
+            foreach ($semParcours as $sem) {
+                $sem->setCodeApogeeDiplome($form->get('codeDiplome')->getData(), $annee);
+                $sem->setCodeApogeeVersionDiplome($form->get('codeVersionDiplome')->getData(), $annee);
+                $sem->setCodeApogeeEtapeAnnee($form->get('codeEtape')->getData(), $annee);
+                $sem->setCodeApogeeEtapeVersion($form->get('codeVersionEtape')->getData(), $annee);
+            }
+
+            $em->flush();
+
+            return $this->json(true);
+        }
+
+        return $this->render('codification/_edit.html.twig', [
+            'formation' => $formation,
+            'parcours' => $parcours,
+            'annee' => $annee,
+            'form' => $form->createView(),
+        ]);
+    }
+
     #[Route('/codification/parcours/{formation}', name: 'app_codification_wizard')]
     public function parcoursWizard(
-        ExportApogee        $exportApogee,
         Request             $request,
         ParcoursRepository  $parcoursRepository,
         TypeDiplomeRegistry $typeDiplomeRegistry,
@@ -188,8 +261,6 @@ class CodificationController extends BaseController
 
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         $tParcours = $typeD->calculStructureParcours($parcours);
-        $exportApogee->genereExportApogee($parcours);
-        $apogee = $exportApogee->tabsElp;
 
         return $this->render('codification/_parcours.html.twig', [
             'formation' => $formation,
@@ -197,21 +268,7 @@ class CodificationController extends BaseController
             'dto' => $tParcours,
             'parcours' => $parcours,
             'typeD' => $typeD,
-            'apogee' => $apogee,
         ]);
-    }
-
-    #[Route('/codification/genere/all', name: 'app_codification_genere_all')]
-    public function genereAll(
-        FormationRepository   $formationRepository,
-        CodificationFormation $codificationFormation,
-    ): Response {
-        $formations = $formationRepository->findBy(['dpe' => $this->getDpe()]);
-        foreach ($formations as $formation) {
-            $codificationFormation->setCodificationFormation($formation);
-        }
-
-        return $this->redirectToRoute('app_codification_liste');
     }
 
     #[Route('/codification/genere/{formation}', name: 'app_codification')]

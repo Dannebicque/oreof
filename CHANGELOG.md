@@ -2,6 +2,57 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.30](https://github.com/Dannebicque/oreof/compare/v1.24.29...v1.24.30) (2024-03-01)
+
+
+### Features
+
+* Edition de la codification haute ([ad04db4](https://github.com/Dannebicque/oreof/commit/ad04db40fd2037803471835c08ec0747c26fb245))
+
+### [1.24.29](https://github.com/Dannebicque/oreof/compare/v1.24.28...v1.24.29) (2024-02-27)
+
+
+### Features
+
+* affichage code dimplôme + VDI sur parcours ([6385b2c](https://github.com/Dannebicque/oreof/commit/6385b2ca19ab3d502d837b33c5bf7e40697edc7f))
+* Ajout de boutons pour naviguer entre fiche et codification ([846fa7e](https://github.com/Dannebicque/oreof/commit/846fa7e48a14a9903af80bc5615cf784f63ae750))
+* commande mise à jour codification ([4fb5af7](https://github.com/Dannebicque/oreof/commit/4fb5af71231e88bb6ed7ca732d33944d34c5880a))
+* commande mise à jour codification ([569d36d](https://github.com/Dannebicque/oreof/commit/569d36d38d07085250f17b03eb8a4331d5abf152))
+
+
+### Bug Fixes
+
+* Edition du type EC sur EC enfant ([ad3e078](https://github.com/Dannebicque/oreof/commit/ad3e0785a2c2cf93192634598c1c3141c6d2194b))
+
+### [1.24.28](https://github.com/Dannebicque/oreof/compare/v1.24.27...v1.24.28) (2024-02-26)
+
+
+### Features
+
+* affichage code dimplôme + VDI sur parcours ([f62b2ae](https://github.com/Dannebicque/oreof/commit/f62b2aed55704c8642737803b271c2d6e92cfca0))
+* parcours origine pour les parcours identiques sur plusieurs sites ([e995a60](https://github.com/Dannebicque/oreof/commit/e995a607e70003cf1b9d1a63a73b8c0092ed9f77))
+
+
+### Bug Fixes
+
+* Page fiche matière ([a00712f](https://github.com/Dannebicque/oreof/commit/a00712f0498c3d2683a12ddb8bdb56bffc128f2b))
+
+### [1.24.27](https://github.com/Dannebicque/oreof/compare/v1.24.26...v1.24.27) (2024-02-26)
+
+
+### Features
+
+* export avec ode diplome + vdi ([169fae0](https://github.com/Dannebicque/oreof/commit/169fae01f5b1435faadb3d9f84010c99da14ea00))
+* tri et recherche sur partie codification ([ce483de](https://github.com/Dannebicque/oreof/commit/ce483dee7aa5a6fbc3f31364c83346c5f229daf3))
+
+
+### Bug Fixes
+
+* affichage du code EC ([73df7f0](https://github.com/Dannebicque/oreof/commit/73df7f0ad4cb90e2d146e455e21aa703d57e8255))
+* code apogée 10 caractères ([022e875](https://github.com/Dannebicque/oreof/commit/022e8756c3d2c68d9586e0a108b3914163b8ffc8))
+* Page fiche matière ([ea5043f](https://github.com/Dannebicque/oreof/commit/ea5043f6113a3209a98ab5511a869a40c45f69b8))
+* Page fiches en SES ([cd05c76](https://github.com/Dannebicque/oreof/commit/cd05c761084e30e3a7d3def2e4f4315f3dd90e97))
+
 ### [1.24.26](https://github.com/Dannebicque/oreof/compare/v1.24.25...v1.24.26) (2024-02-23)
 
 

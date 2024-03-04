@@ -65,6 +65,24 @@
             <textarea maxlength="255" type="text" id="ficheMatiereLibre" name="ficheMatiereLibre" class="form-control"
                       rows="4">{{ element_constitutif.texteEcLibre }}</textarea>
         </div>
+        <hr>
+        <label for="typeEc"
+               class="form-label">{{ 'ec.labels.typeEc.label'|trans({}, 'form') }}
+            <i class="fal fa-question-circle ms-1"
+               data-controller="tooltip"
+               data-tooltip-placement-value="bottom"
+               aria-label="{{ 'ec.helps.typeEc.help'|trans({}, 'help') }}"
+               data-bs-original-title="{{ 'ec.helps.typeEc.help'|trans({}, 'help') }}"></i>
+        </label>
+        <select id="typeEc" name="typeEc" class="form-select">
+            <option value="">Choisir dans la liste un type d'EC</option>
+            {% for typeEc in typeEcs %}
+                <option value="{{ typeEc.id }}"
+                        {% if element_constitutif.typeEc != null and typeEc.id == element_constitutif.typeEc.id %}selected{% endif %}
+                >{{ typeEc.libelle }}</option>
+            {% endfor %}
+        </select>
+
         {{ component('alerte', {type:"info", message:'Si vous complétez un texte libre, les deux autres champs seront ignorés'}) }}
 
         <button class="btn btn-success mt-2"

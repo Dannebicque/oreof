@@ -104,6 +104,16 @@
             class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"
+            title="Voir la formation"
+            href="{{ path('app_formation_show', {slug:formation.slug}) }}"
+    >
+        <i class="{{ iconShow }}"></i>
+        <span> Voir la formation</span>
+    </a>
+    <a
+            class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
             title="Retour à la codification des formations"
             href="{{ path('app_codification_liste') }}"
     >

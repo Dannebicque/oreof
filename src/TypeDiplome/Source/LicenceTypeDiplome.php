@@ -74,7 +74,6 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
     ): Response {
-        //todo: exploiter la date...
         return $this->licenceMccc->exportPdfLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
     }
 

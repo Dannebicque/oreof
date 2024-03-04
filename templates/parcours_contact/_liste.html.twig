@@ -1,6 +1,6 @@
 <div class="row">
     {% for contact in contacts %}
-    <div class="col-4">
+    <div class="col-4 border border-secondary mb-2 p-2">
         <h3>{{ contact.denomination }}</h3>
         <p>{{ contact.display }}</p>
         <p>{{ contact.telephone|tel_format }}</p>

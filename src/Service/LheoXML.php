@@ -410,7 +410,7 @@ HTML;
                 ];
                 $referentsPedagogiques[] = $coReferentPedagogique;
             }
-            //todo: gestion du parcours par défaut, il faut reprendre les infs de la formation dans ce cas
+            //gestion du parcours par défaut, il faut reprendre les infs de la formation dans ce cas
             $resultatsAttendus = $this->cleanString($parcours->getFormation()?->getResultatsAttendus()) ?? 'Non renseigné.';
             $contenuFormation = $this->cleanString($parcours->getFormation()?->getContenuFormation()) ?? 'Non renseigné.';
             $objectifFormation = $this->cleanString($parcours->getFormation()?->getObjectifsFormation()) ?? 'Non renseigné.';

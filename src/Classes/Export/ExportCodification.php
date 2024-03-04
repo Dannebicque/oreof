@@ -16,6 +16,8 @@ use App\DTO\StructureUe;
 use App\Entity\Parcours;
 use App\Utils\Tools;
 use DateTime;
+use Symfony\Component\HttpFoundation\StreamedJsonResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExportCodification
 {
@@ -28,7 +30,7 @@ class ExportCodification
     ) {
     }
 
-    public function exportFormations(array $formations)
+    public function exportFormations(array $formations): StreamedResponse
     {
         $this->excelWriter->nouveauFichier('Export Codification');
         $this->excelWriter->setActiveSheetIndex(0);
@@ -101,7 +103,15 @@ class ExportCodification
 
         $dto = $this->calculStructureParcours->calcul($parcours, true, false);
 
-        $ligne = 0;
+        $this->excelWriter->writeCellXY(1, 1, 'Diplôme ' . $parcours->getFormation()->getDisplayLong());
+        $this->excelWriter->writeCellXY(1, 2, 'Parcours ' . $parcours->getLibelle());
+        $this->excelWriter->writeCellXY(1, 3, 'Dip ');
+        $this->excelWriter->writeCellXY(2, 3, $parcours->getCodeDiplome(null));
+        $this->excelWriter->writeCellXY(3, 3, 'VDI ');
+        $this->excelWriter->writeCellXY(4, 3, $parcours->getCodeVersionDiplome(null));
+
+//todo: ajouter étape année
+        $ligne = 4;
         /** @var StructureSemestre $semestre */
         foreach ($dto->semestres as $semestre) {
             $ligne++;

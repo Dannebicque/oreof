@@ -137,6 +137,7 @@ class ParcoursController extends BaseController
 
         $parcour->setModalitesEnseignement(null);
         $form = $this->createForm(ParcoursType::class, $parcour, [
+            'formation' => $formation,
             'action' => $this->generateUrl('app_parcours_new', [
                 'formation' => $formation->getId(),
                 'parent' => $parent?->getId(),
@@ -176,6 +177,7 @@ class ParcoursController extends BaseController
         Parcours                 $parcours
     ): Response {
         $form = $this->createForm(ParcoursType::class, $parcours, [
+            'formation' => $parcours->getFormation(),
             'action' => $this->generateUrl('app_parcours_edit_modal', [
                 'parcours' => $parcours->getId(),
             ]),

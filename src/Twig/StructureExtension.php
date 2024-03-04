@@ -27,12 +27,6 @@ class StructureExtension extends AbstractExtension
         ];
     }
 
-    public function getFunctions(): array
-    {
-        return [
-            new TwigFunction('isLas', [$this, 'isLas']),//todo: gérer de manière générique pour LAS, CPI et d'autres peut être
-        ];
-    }
     public function badgeTypeParcours(?TypeParcoursEnum $typeParcoursEnum = null): string
     {
         if (null === $typeParcoursEnum || $typeParcoursEnum === TypeParcoursEnum::TYPE_PARCOURS_CLASSIQUE) {

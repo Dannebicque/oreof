@@ -1,17 +1,11 @@
 
 <div class="div">
     <div class="col-4">
-{#        Diplôme : {{ parcours.codeDiplome() }} ({{ parcours.codeApogeeVersionDiplome }})#}
+        Diplôme : {{ parcours.codeDiplome(parcours.semestreParcours.first.annee) }} VDI : {{ parcours.codeVersionDiplome(parcours.semestreParcours.first.annee) }}
     </div>
     <div class="col-4">
-        Parcours : {{ parcours.codeApogee }}
+        Code apogée parcours {{ parcours.codeApogee }}
     </div>
 </div>
 {{ include('typeDiplome/formation/_structure.html.twig', {parcours:parcours, source: 'codification'}) }}
 
-<hr>
-Codification Apogée
-
-{% for elp in apogee %}
-    {{ elp.display|raw }}
-{% endfor %}

@@ -237,7 +237,10 @@ class Parcours
     private ?string $codeApogeeNumeroVersion = "1";
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: DpeParcours::class)]
-    private Collection $dpeParcours; //ne devrait pas changer mais plus cohérent de le mettre ici
+    private Collection $dpeParcours;
+
+    #[ORM\ManyToOne(targetEntity: self::class)]
+    private ?self $parcoursOrigine = null; //ne devrait pas changer mais plus cohérent de le mettre ici
 
 
     public function __construct(?Formation $formation)
@@ -1164,7 +1167,7 @@ class Parcours
             $t[] = $regime;
         }
 
-        if (count($t) === 1 && in_array(RegimeInscriptionEnum::FI, $t, true)) {
+        if ((count($t) === 1 || count($t) === 4 ) && in_array(RegimeInscriptionEnum::FI, $t, true)) {
             return 1;
         }
 
@@ -1292,37 +1295,43 @@ class Parcours
         return array_unique($annees);
     }
 
-    public function getCodeDiplome(int $annee): ?string
+    public function getCodeDiplome(?int $annee): ?string
     {
-        return $this->getSemestrePourAnnee($annee)?->getCodeApogeeDiplome();
+        if ($annee === null) {
+            return $this->getSemestreParcours()->first()?->getCodeApogeeDiplome();
+        }
+        return $this->getSemestrePourAnnee($annee)?->first()?->getCodeApogeeDiplome();
     }
 
-    private function getSemestrePourAnnee(int $annee): ?SemestreParcours
+    public function getSemestrePourAnnee(int $annee): ?Collection
     {
         $semestres = $this->semestreParcours;
 
-        $semestres = $semestres->filter(fn(SemestreParcours $semestre) => $semestre->getOrdre() === $annee * 2 - 1);
+        $semestres = $semestres->filter(fn (SemestreParcours $semestre) => $semestre->getOrdre() === $annee * 2 - 1);
 
         if ($semestres->count() === 0) {
             return null;
         }
 
-        return $semestres->first();
+        return $semestres;
     }
 
     public function getCodeEtape(int $annee): ?string
     {
-        return $this->getSemestrePourAnnee($annee)?->getCodeApogeeEtapeAnnee();
+        return $this->getSemestrePourAnnee($annee)?->first()?->getCodeApogeeEtapeAnnee();
     }
 
-    public function getCodeVersionDiplome(int $annee): ?string
+    public function getCodeVersionDiplome(?int $annee): ?string
     {
-        return $this->getSemestrePourAnnee($annee)?->getCodeApogeeVersionDiplome();
+        if ($annee === null) {
+            return $this->getSemestreParcours()->first()?->getCodeApogeeVersionDiplome();
+        }
+        return $this->getSemestrePourAnnee($annee)?->first()?->getCodeApogeeVersionDiplome();
     }
 
     public function getCodeVersionEtape(int $annee): ?string
     {
-        return $this->getSemestrePourAnnee($annee)?->getCodeApogeeEtapeVersion();
+        return $this->getSemestrePourAnnee($annee)?->first()?->getCodeApogeeEtapeVersion();
 
     }
 
@@ -1364,6 +1373,18 @@ class Parcours
                 $dpeParcour->setParcours(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getParcoursOrigine(): ?self
+    {
+        return $this->parcoursOrigine;
+    }
+
+    public function setParcoursOrigine(?self $parcoursOrigine): static
+    {
+        $this->parcoursOrigine = $parcoursOrigine;
 
         return $this;
     }

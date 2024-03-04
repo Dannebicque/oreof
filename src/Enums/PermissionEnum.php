@@ -11,7 +11,7 @@ namespace App\Enums;
 
 enum PermissionEnum: string
 {
-    case CREATE = 'create';//todo: possible en maj?
+    case CREATE = 'create';
     case EDIT = 'edit';
     case DELETE = 'delete';
     case SHOW = 'show';

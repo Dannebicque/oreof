@@ -64,6 +64,19 @@ class ParcoursType extends AbstractType
                 'class' => TypeParcoursEnum::class,
                 'translation_domain' => 'form',
             ])
+            ->add('parcoursOrigine', EntityType::class, [
+                'required' => false,
+                'help' => '',
+                'autocomplete' => true,
+                'class' => Parcours::class,
+                'query_builder' => function ($er) use ($options){
+                    return $er->createQueryBuilder('p')
+                        ->where('p.formation = :formation')
+                        ->setParameter('formation', $options['formation'])
+                        ->orderBy('p.libelle', 'ASC');
+                },
+                'choice_label' => 'getDisplay',
+            ])
         ;
     }
 
@@ -71,7 +84,8 @@ class ParcoursType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Parcours::class,
-            'translation_domain' => 'form'
+            'translation_domain' => 'form',
+            'formation' => null,
         ]);
     }
 }

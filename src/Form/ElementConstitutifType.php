@@ -44,7 +44,7 @@ class ElementConstitutifType extends AbstractType
                 'choice_label' => 'libelle',
                 'query_builder' => fn (
                     TypeEcRepository $typeEcRepository
-                ) => $typeEcRepository->findByTypeDiplomeAndFormation($typeDiplome, $formation),
+                ) => $typeEcRepository->findByTypeDiplomeAndFormationBuilder($typeDiplome, $formation),
                 'required' => false,
             ])
             ->add('typeEcTexte', TextType::class, [
