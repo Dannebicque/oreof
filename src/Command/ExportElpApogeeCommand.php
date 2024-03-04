@@ -49,7 +49,8 @@ use Symfony\Component\Filesystem\Filesystem;
 class ExportElpApogeeCommand extends Command
 {
 
-    private static $codElpApogeeDataTest = "COD_ELP_202402231547.json";
+    private static $codElpApogeeDataTest = "COD_ELP_04-03-2024-08-55.json";
+    private static $codLseApogeeDataTest = "COD_LSE_04-03-2024-08-57.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
@@ -375,29 +376,42 @@ class ExportElpApogeeCommand extends Command
             if($checkDuplicatesWithApogee){
                 $io->writeln("Vérification des doublons entre les codes ORéOF et ceux présents dans APOGEE...");
                 $parcoursArray = $this->retrieveParcoursDataFromDatabase();
-                $nbDoublons = 0;
-                $listeDoublons = [];
+                $nbDoublonsELP = 0;
+                $nbDoublonsLse = 0;
+                $listeDoublonsELP = [];
+                $listeDoublonsLSE = [];
                 $io->progressStart(count($parcoursArray));
                 $codeElpApogee = json_decode(file_get_contents(__DIR__ . "/../Service/Apogee/data-test/" . self::$codElpApogeeDataTest));
+                $codeLseApogee = json_decode(file_get_contents(__DIR__ . "/../Service/Apogee/data-test/" . self::$codLseApogeeDataTest));
                 foreach($parcoursArray as $parcours){
                     $elpArray = $this->generateSoapObjectsForParcours($parcours);
                     $elpArray = array_map(fn($elp) => $elp->codElp, $elpArray);
                     foreach($elpArray as $codeElp){
-                        if(in_array($codeElp, $codeElpApogee)){
-                            ++$nbDoublons;
-                            $listeDoublons[] = $codeElp;
+                        if(in_array($codeElp, $codeElpApogee, true)){
+                            ++$nbDoublonsELP;
+                            $listeDoublonsELP[] = $codeElp;
+                        }
+                        if(in_array($codeElp, $codeLseApogee, true)){
+                            ++$nbDoublonsLse;
+                            $listeDoublonsLSE[] = $codeElp;
                         }
                     }
                     $io->progressAdvance();
                 }
                 $io->writeln("\nVérification des doublons réussie !");
-                if($nbDoublons === 0){
+                if($nbDoublonsELP === 0 && $nbDoublonsLse === 0){
                     $io->success("Aucun doublon détecté.");
                     return Command::SUCCESS;
                 }
-                elseif ($nbDoublons > 0) {
-                    $io->writeln("{$nbDoublons} doublons ont été détectés.");
-                    dump($listeDoublons);
+                elseif ($nbDoublonsELP > 0 || $nbDoublonsLse > 0) {
+                    $now = new DateTime();
+                    $dateHeure = $now->format("d-m-Y_H-i");
+                    $io->writeln("Des doublons ont été détectés. !");
+                    $io->writeln("{$nbDoublonsLse} codes de liste (LSE)");
+                    $io->writeln("{$nbDoublonsELP} codes d'élément pédagogique (ELP)");
+                    $dataError = json_encode(array_merge($listeDoublonsELP, $listeDoublonsLSE));
+                    $this->filesystem->appendToFile(__DIR__ . "/../Service/Apogee/data-test/ERROR-Apogee-duplicates-" . $dateHeure . ".json", $dataError);
+                    $io->warning("Des doublons ont été détectés ! Le rapport d'erreur a été généré.");
                     return Command::FAILURE;
                 }
             }
