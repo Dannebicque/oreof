@@ -24,8 +24,9 @@ class WorkflowEcNotificationSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.ec.transition.initialiser' => 'onInitialise',
-
+//            'workflow.fiche.transition.reserver_fiche_ses' => 'onReserveFiche',
+//            'workflow.fiche.transition.valider_fiche_ses' => 'onReserveFiche',
+//            'workflow.fiche.transition.valider_fiche_compo' => 'onReserveFiche',
         ];
     }
 

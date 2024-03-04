@@ -10,6 +10,7 @@
 namespace App\EventSubscriber;
 
 use App\Classes\Mailer;
+use App\Entity\Parcours;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
 use App\Repository\UserRepository;
@@ -29,29 +30,38 @@ class WorkflowEcMailSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'workflow.ec.transition.initialiser' => 'onInitialise',
+            'workflow.fiche.transition.reserver_fiche_ses' => 'onReserveFiche',
 
         ];
     }
 
-    /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
-     */
-    public function onInitialise(Event $event): void
+    public function onReserveFiche(Event $event)
     {
-        /** @var \App\Entity\ElementConstitutif $ec */
-        $ec = $event->getSubject();
-        if ($ec->getResponsableEc() !== null) {
-            //todo: check si le responsable de EC accepte le mail
-            $this->myMailer->initEmail();
-            $this->myMailer->setTemplate(
-                'mails/ec/ouverture_redaction_ec.txt.twig',
-                ['ec' => $ec, 'responsable' => $ec->getResponsableEc(), 'formation' => $ec->getParcours()->getFormation()]
-            );
-            $this->myMailer->sendMessage(
-                [$ec->getResponsableEc()?->getEmail()],
-                '[ORéOF]  Un élément constitutif est ouvert pour la rédaction/modification'
-            );
+        $fiche = $event->getSubject();
+        $parcours = $fiche->getParcours();
+        $formation = $parcours->getFormation();
+        $context = $event->getContext();
+
+        if ($formation === null) {
+            return;
         }
+        //todo: check si le responsable de formation accepte le mail
+        $this->myMailer->initEmail();
+        $this->myMailer->setTemplate(
+            'mails/workflow/fiche/reserve_central.html.twig',
+            ['fiche' => $fiche, 'parcours' => $parcours, 'formation' => $formation, 'motif' => $context['motif']]
+        );
+        $this->myMailer->sendMessage(
+            [
+                $formation->getCoResponsable()?->getEmail(),
+                $formation->getResponsableMention()?->getEmail(),
+                $parcours->getRespParcours()?->getEmail(),
+                $parcours->getCoResponsable()?->getEmail()
+            ],
+            '[ORéOF]  Une fiche de votre parcours ou formation a reçu des réserves',
+            ['replyTo' => Mailer::MAIL_GENERIC, 'cc' => Mailer::MAIL_GENERIC]
+        );
     }
+
+
 }

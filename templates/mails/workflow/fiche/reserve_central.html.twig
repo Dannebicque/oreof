@@ -1,0 +1,20 @@
+{% extends 'mails/base_mail.html.twig' %}
+
+{% block content %}
+    <p>Bonjour {{ formation.getResponsableMention.display }}, {{ parcours.getRespParcours.display }}
+        , {% if formation.getCoResponsable != null %}{{ formation.getCoResponsable.display }}, {% endif %}
+        , {% if parcours.getCoResponsable != null %}{{ parcours.getCoResponsable.display }}, {% endif %}</p>
+
+    <p>Le SES a émis une ou des réserve(s) sur votre fiche EC/matière <strong>{{ fiche.libelle }}</strong> du parcours <strong>{{ parcours.libelle }}</strong>, de la formation <strong>{{ formation.displayLong }}</strong>.</p>
+
+    <p>Détail des réserves :</p>
+
+    <p>{{ motif|raw }}</p>
+
+    <p>Vous pouvez modifier votre fiche matière en cliquant sur le lien suivant :</p>
+
+    <p>
+        <a href="{{ url('app_fiche_matiere_edit', {'slug': fiche.slug}) }}">{{ url('app_fiche_matiere_edit', {'slug': fiche.slug}) }}</a>
+    </p>
+
+{% endblock %}

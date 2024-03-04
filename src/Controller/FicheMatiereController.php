@@ -155,6 +155,10 @@ class FicheMatiereController extends AbstractController
         FicheMatiere $ficheMatiere,
         FicheMatiereState $ficheMatiereState,
     ): Response {
+        if (!$this->isGranted('CAN_EC_EDIT_MY', $ficheMatiere)) {
+            return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
+        }
+
         $ficheMatiereState->setFicheMatiere($ficheMatiere);
 
         $referer = $request->headers->get('referer');

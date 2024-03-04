@@ -62,7 +62,7 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
                 $formation->getResponsableMention()?->getEmail(),
                 $formation->getCoResponsable()?->getEmail()],
             '[ORéOF]  Votre formation a été refusée par le central',
-            ['replyTo' => 'oreof-vp@univ-reims.fr']
+            ['replyTo' => 'oreof-vp@univ-reims.fr', 'cc' => Mailer::MAIL_GENERIC]
         );
     }
 
@@ -119,7 +119,7 @@ class DpeCentralMailSubscriber extends AbstractDpeMailSubscriber implements Even
                 $formation->getResponsableMention()?->getEmail(),
                 $formation->getCoResponsable()?->getEmail()],
             '[ORéOF]  Votre formation a reçu des réserves du central',
-            ['replyTo' => 'oreof-vp@univ-reims.fr']
+            ['replyTo' => 'oreof-vp@univ-reims.fr', 'cc' => Mailer::MAIL_GENERIC]
         );
     }
 }

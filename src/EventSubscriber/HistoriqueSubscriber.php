@@ -186,7 +186,6 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $histo->setEtape($event->getEtape());
         $histo->setCommentaire($this->getCommentaire($request));
         $histo->setEtat($event->getEtat());
-
         $this->entityManager->persist($histo);
         $this->entityManager->flush();
     }
