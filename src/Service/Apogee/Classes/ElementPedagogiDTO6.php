@@ -352,7 +352,7 @@ class ElementPedagogiDTO6
             && $dto->parcours->getFormation()?->getTypeDiplome()->getLibelleCourt()
         ){
             if($type === "libelleLong"){
-                return 'Semestre ' . $elementPedagogique->semestre->getOrdre() 
+                return 'SEMESTRE ' . $elementPedagogique->semestre->getOrdre() 
                 . ' ' 
                 . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
                 . ' '
