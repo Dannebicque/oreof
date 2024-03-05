@@ -308,7 +308,12 @@ class ElementPedagogiDTO6
         bool $withChecks, 
     ){
         $retour = "UE " . $elementPedagogique->ue->getSemestre()->getOrdre() . "." . $elementPedagogique->ue->getOrdre()
-        . " " . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() . " " . $dto->parcours->getSigle();
+        . " " . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() . " ";
+        if($dto->parcours->isParcoursDefaut() === false){
+            $retour .= $dto->parcours->getSigle();
+        }else {
+            $retour .= $dto->parcours->getFormation()?->getSigle();
+        }
         if($withChecks){
             if($elementPedagogique->ue->getSemestre()?->getOrdre() === null){
                 ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le semestre de l'UE n'a pas d'ordre. UE {$elementPedagogique->ue->getId()}";
@@ -319,7 +324,7 @@ class ElementPedagogiDTO6
             if($dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() === null){
                 ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Pas de libellé court de type diplôme. UE {$elementPedagogique->ue->getId()}";    
             }
-            if($dto->parcours->getSigle() === null){
+            if($dto->parcours->getSigle() === null && $dto->parcours->isParcoursDefaut() === false){
                 ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Pas de sigle sur le parcours. UE {$elementPedagogique->ue->getId()}";
             } 
         }
@@ -342,7 +347,7 @@ class ElementPedagogiDTO6
         string $type
     ){
         if( $elementPedagogique->semestre->getOrdre() 
-            && $dto->parcours->getSigle() 
+            && ($dto->parcours->getSigle() || ($dto->parcours->isParcoursDefaut() === true && $dto->parcours->getFormation()?->getSigle()))
             && $dto->parcours->getFormation()?->getSigle()
             && $dto->parcours->getFormation()?->getTypeDiplome()->getLibelleCourt()
         ){
@@ -352,8 +357,7 @@ class ElementPedagogiDTO6
                 . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
                 . ' '
                 . $dto->parcours->getFormation()->getSigle() 
-                . ' ' 
-                . $dto->parcours->getSigle();
+                . ($dto->parcours->isParcoursDefaut() ? "" : ' ' . $dto->parcours->getSigle());
 
             }
             elseif($type === "libelleCourt"){
@@ -361,7 +365,7 @@ class ElementPedagogiDTO6
                 . ' '
                 . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
                 . ' '
-                . $dto->parcours->getSigle();
+                . ($dto->parcours->isParcoursDefaut() ? $dto->parcours->getFormation()->getSigle() : $dto->parcours->getSigle());
             }
         } else {
             if($withChecks){
@@ -370,7 +374,7 @@ class ElementPedagogiDTO6
                     ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le semestre n'a pas d'ordre - ID : {$elementPedagogique->semestre->getId()}";
                 } 
                 // Sigle du parcours
-                if($dto->parcours->getSigle() === null){
+                if($dto->parcours->getSigle() === null && $dto->parcours->isParcoursDefaut() === false){
                     ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le Parcours n'a pas de sigle - ID : {$dto->parcours->getId()}";
                 }
                 // Sigle de la formation

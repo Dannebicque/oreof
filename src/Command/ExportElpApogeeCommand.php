@@ -313,7 +313,7 @@ class ExportElpApogeeCommand extends Command
                 $io->writeln("Vérification des données disponibles...");
                 $parcoursArray = $this->retrieveParcoursDataFromDatabase();
                 foreach($parcoursArray as $parcours){
-                    if($parcours->getSigle() === null){
+                    if($parcours->getSigle() === null && $parcours->isParcoursDefaut() === false){
                         $errorArray[$parcours->getId()][] = "Le parcours n'a pas de sigle.";
                     }
                     if($parcours->getFormation()?->getSigle() === null){
