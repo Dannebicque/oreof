@@ -357,7 +357,7 @@ class ElementPedagogiDTO6
 
             }
             elseif($type === "libelleCourt"){
-                return 'S ' . $elementPedagogique->semestre->getOrdre()
+                return 'S' . $elementPedagogique->semestre->getOrdre()
                 . ' '
                 . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
                 . ' '
@@ -374,11 +374,11 @@ class ElementPedagogiDTO6
                     ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le Parcours n'a pas de sigle - ID : {$dto->parcours->getId()}";
                 }
                 // Sigle de la formation
-                if($dto->parcours->getFormation()?->getSigle()){
+                if($dto->parcours->getFormation()?->getSigle() === null){
                     ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "La formation n'a pas de sigle - Parcours ID : {$dto->parcours->getId()} - Formation ID : {$dto->parcours->getFormation()->getId()}";
                 }
                 // Libellé court du type diplôme
-                if($dto->parcours->getFormation()?->getTypeDiplome()->getLibelleCourt()){
+                if($dto->parcours->getFormation()?->getTypeDiplome()->getLibelleCourt() === null){
                     ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le Type Diplôme n'a pas de libellé court - Type Diplôme ID : {$dto->parcours->getFormation()?->getTypeDiplome()->getId()} - Formation ID : {$dto->parcours->getFormation()->getId()}";
                 }
             }

@@ -135,6 +135,10 @@ class ExportElpApogeeCommand extends Command
             name: 'check-duplicates-with-apogee',
             mode: InputOption::VALUE_NONE,
             description: "Vérifie si les codes apogee depuis OREOF ne sont pas déjà présents dans APOGEE"
+        )->addOption(
+            name: 'report-invalid-data',
+            mode: InputOption::VALUE_NONE,
+            description: "Génère un rapport listant les parcours dont certaines données sont manquantes"
         );
     }
 
@@ -154,6 +158,7 @@ class ExportElpApogeeCommand extends Command
         $fullLseExport = $input->getOption('full-lse-excel-export');
         $fullLseInsertion = $input->getOption('full-lse-insertion');
         $checkDuplicatesWithApogee = $input->getOption('check-duplicates-with-apogee');
+        $reportInvalidData = $input->getOption('report-invalid-data');
 
         if($mode === "test"){
             // Export total des ELP selon le type : EC, UE ou Semestre
@@ -300,6 +305,44 @@ class ExportElpApogeeCommand extends Command
                 $hasError ? $io->warning("Un ou plusieurs parcours est incorrect.") : $io->success("Aucun problème détecté.");
                 return Command::SUCCESS;
             }
+            // Rapport listant les parcours où il manque des données
+            if($reportInvalidData){
+                $now = new DateTime();
+                $dateHeure = $now->format('d-m-Y_H-i-s');
+                $errorArray = [];
+                $io->writeln("Vérification des données disponibles...");
+                $parcoursArray = $this->retrieveParcoursDataFromDatabase();
+                foreach($parcoursArray as $parcours){
+                    if($parcours->getSigle() === null){
+                        $errorArray[$parcours->getId()][] = "Le parcours n'a pas de sigle.";
+                    }
+                    if($parcours->getFormation()?->getSigle() === null){
+                        $errorArray[$parcours->getId()][] = "La formation n'a pas de sigle.";
+                    }
+                    if($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === null){
+                        $errorArray[$parcours->getId()][] = "Le type de diplôme n'a pas de libellé court.";
+                    }
+                }
+                if(count($errorArray) > 0){
+                    $missingDataTxt = "";
+                    foreach($errorArray as $errorId => $errorMessages){
+                        $parcours = $this->entityManager->getRepository(Parcours::class)->find($errorId);
+                        $libelleParcours = $parcours->getDisplay() . ' - Formation : ' . $parcours->getFormation()->getDisplayLong() . " - ID : {$parcours->getId()}";
+                        $missingDataTxt .= "{$libelleParcours}\n";
+                        foreach($errorMessages as $error){
+                            $missingDataTxt .= "{$error}\n";
+                        }
+                        $missingDataTxt .= "\n";
+                    }
+                    $this->filesystem->appendToFile(__DIR__ . "/../Service/Apogee/export/Missing-data-report-" . $dateHeure . ".txt", $missingDataTxt);
+                    $io->warning("Des erreurs ont été détectées. La rapport d'erreurs a été généré");
+                    return Command::FAILURE;
+                }
+                else {
+                    $io->success("Aucune donnée manquante détectée.");
+                    return Command::SUCCESS;
+                }
+            }
             // Vérification des doublons sur les codes Apogee
             if($checkDuplicates){
                 $io->writeln("Vérification de la présence de doublons sur les codes Apogee depuis la base de données...");
@@ -405,7 +448,7 @@ class ExportElpApogeeCommand extends Command
                 }
                 elseif ($nbDoublonsELP > 0 || $nbDoublonsLse > 0) {
                     $now = new DateTime();
-                    $dateHeure = $now->format("d-m-Y_H-i");
+                    $dateHeure = $now->format("d-m-Y_H-i-s");
                     $io->writeln("Des doublons ont été détectés. !");
                     $io->writeln("{$nbDoublonsLse} codes de liste (LSE)");
                     $io->writeln("{$nbDoublonsELP} codes d'élément pédagogique (ELP)");
