@@ -112,7 +112,7 @@
                         </a>
                     </li>
 
-                    {% if (is_granted('CAN_ETABLISSEMENT_CONSEILLER_ALL')) and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_SES') %}
+                    {% if (is_granted('CAN_ETABLISSEMENT_CONSEILLER_ALL', app.user)) and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_SES') %}
                         <li>
                             <a href="{{ path('app_export_cfvu') }}" data-href="exports">
                                 <i class="fal fa-chalkboard-user icon"></i>
