@@ -123,20 +123,9 @@ class ElementPedagogiDTO6
                 $withChecks,
                 $dto->parcours->getId()
             );
-            $this->libCourtElp = $this->checkLibelleUE(
-                $elementPedagogique->ue->getLibelle() ?? $elementPedagogique->ue->display(),
-                 25, 
-                "ID : {$elementPedagogique->ue->getId()}",
-                $withChecks, 
-                $dto->parcours->getId()
-            );
+            $this->libCourtElp = $this->checkLibelleUE($elementPedagogique, $dto, 25, $withChecks);
             $this->libElp = $this->checkLibelleUE(
-                $elementPedagogique->ue->getLibelle() ?? $elementPedagogique->ue->display(),
-                60,
-                "ID : {$elementPedagogique->ue->getId()}",
-                $withChecks,
-                $dto->parcours->getId()
-            );
+                $elementPedagogique, $dto, 60, $withChecks);
             $this->codNatureElp = $this->checkNatureElp(
                 $nature, 
                 "Type : UE - ID : {$elementPedagogique->ue->getId()}",
@@ -263,7 +252,10 @@ class ElementPedagogiDTO6
         int $parcoursID
     ) : string {
         $libelle = $elementPedagogique->elementConstitutif->getFicheMatiere()?->getLibelle() 
-        ?? $elementPedagogique->elementConstitutif->getLibelle() ?? $elementPedagogique->elementConstitutif->getCode(); 
+        ?? $elementPedagogique->elementConstitutif->getLibelle() ?? $elementPedagogique->elementConstitutif->getCode();
+        if(count($elementPedagogique->elementsConstitutifsEnfants) > 0){
+            $libelle = "EC A CHOIX";
+        } 
         if($libelle === null && $withChecks){
             ExportElpApogeeCommand::$errorMessagesArray[$parcoursID][] = "Le libellé de l'EC est 'null'. ID : {$elementPedagogique->elementConstitutif->getId()}";
         }
@@ -309,12 +301,30 @@ class ElementPedagogiDTO6
      * @param int $parcoursID Identifiant du parcours
      * @return string Le libellé réduit à la taille max
      */
-    private function checkLibelleUE(?string $libelle, int $length, string $errorIdentifier, bool $withChecks, int $parcoursID){
-        if($libelle === null && $withChecks){
-            ExportElpApogeeCommand::$errorMessagesArray[$parcoursID][] = "Le libellé de l'UE est 'null'. {$errorIdentifier}";
+    private function checkLibelleUE (
+        StructureUe $elementPedagogique,
+        StructureParcours $dto, 
+        int $length, 
+        bool $withChecks, 
+    ){
+        $retour = "UE " . $elementPedagogique->ue->getSemestre()->getOrdre() . "." . $elementPedagogique->ue->getOrdre()
+        . " " . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() . " " . $dto->parcours->getSigle();
+        if($withChecks){
+            if($elementPedagogique->ue->getSemestre()?->getOrdre() === null){
+                ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le semestre de l'UE n'a pas d'ordre. UE {$elementPedagogique->ue->getId()}";
+            }
+            if($elementPedagogique->ue->getOrdre() === null){
+                ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "L'UE n'a pas d'ordre. Ue {$elementPedagogique->ue->getId()}";
+            }
+            if($dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() === null){
+                ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Pas de libellé court de type diplôme. UE {$elementPedagogique->ue->getId()}";    
+            }
+            if($dto->parcours->getSigle() === null){
+                ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Pas de sigle sur le parcours. UE {$elementPedagogique->ue->getId()}";
+            } 
         }
 
-        return $this->prepareLibelle($libelle, $length);
+        return $this->prepareLibelle($retour, $length);
     }
 
     /**
@@ -347,7 +357,7 @@ class ElementPedagogiDTO6
 
             }
             elseif($type === "libelleCourt"){
-                return 'SEM ' . $elementPedagogique->semestre->getOrdre()
+                return 'S ' . $elementPedagogique->semestre->getOrdre()
                 . ' '
                 . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
                 . ' '

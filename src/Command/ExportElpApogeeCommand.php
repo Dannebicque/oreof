@@ -573,7 +573,7 @@ class ExportElpApogeeCommand extends Command
             elseif ($type === "UE") {
                 foreach($dto->semestres as $semestre){
                     foreach($semestre->ues() as $ue){
-                        $this->addUeToElpArray($soapObjectArray, $ue, $dto);
+                        $this->addUeToElpArray($soapObjectArray, $ue, $dto, false, false);
                     }
                 }
                 $exportTypeName = "UE";
@@ -849,8 +849,8 @@ class ExportElpApogeeCommand extends Command
         }
         // si l'élément a des enfants, on insère que les enfants
         if($hasChildren){
-            // Ne pas insérer les éléments de nature 'CHOI'
-            // $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::CHOI, $withChecks);
+            // Ne pas insérer les éléments de nature 'CHOI' ?
+            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::CHOI, $withChecks);
             foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
                 if($this->isEcMutualiseMaster($ecEnfant, $dto) === true){
                     $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::MATM, $withChecks);
@@ -878,14 +878,16 @@ class ExportElpApogeeCommand extends Command
      * @param bool $withChecks Si des messages d'erreurs doivent être générés
      * @return void
      */
-    private function addUeToElpArray(array &$elpArray, StructureUe $ue, StructureParcours $dto, bool $withChecks = false) : void {
+    private function addUeToElpArray(array &$elpArray, StructureUe $ue, StructureParcours $dto, bool $withChecks = false, bool $withEcChildren = true) : void {
         if(count($ue->uesEnfants()) > 0){
-            // Ne pas insérer les éléments de nature 'CHOI'
-            // $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::CHOI, $withChecks);
+            // Ne pas insérer les éléments de nature 'CHOI' ?
+            $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::CHOI, $withChecks);
             foreach($ue->uesEnfants() as $ueEnfant){
                 $elpArray[] = $this->setObjectForSoapCall($ueEnfant, $dto, CodeNatuElpEnum::UE, $withChecks);
-                foreach($ueEnfant->elementConstitutifs as $ecUeEnfant){
-                    $this->addEcToElpArray($elpArray, $ecUeEnfant, $dto, $withChecks);
+                if($withEcChildren) {
+                    foreach($ueEnfant->elementConstitutifs as $ecUeEnfant){
+                        $this->addEcToElpArray($elpArray, $ecUeEnfant, $dto, $withChecks);
+                    }
                 }
             }
         }else {
