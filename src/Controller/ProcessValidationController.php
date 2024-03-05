@@ -9,27 +9,20 @@ use App\Classes\Process\FormationProcess;
 use App\Classes\Process\ParcoursProcess;
 use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessFicheMatiere;
-use App\Classes\verif\FormationValide;
-use App\Classes\verif\ParcoursValide;
 use App\Entity\DpeDemande;
 use App\Enums\TypeModificationDpeEnum;
 use App\Events\DpeDemandeEvent;
 use App\Events\HistoriqueFormationEvent;
 use App\Events\HistoriqueParcoursEvent;
+use App\Repository\DpeParcoursRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Workflow\WorkflowInterface;
-use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProcessValidationController extends BaseController
 {
@@ -240,6 +233,7 @@ class ProcessValidationController extends BaseController
 
     #[Route('/validation/edit/{type}/{id}', name: 'app_validation_edit')]
     public function edit(
+        DpeParcoursRepository  $dpeParcoursRepository,
         ParcoursRepository  $parcoursRepository,
         FormationRepository $formationRepository,
         Request             $request,
@@ -253,10 +247,11 @@ class ProcessValidationController extends BaseController
             switch ($type) {
                 case 'formation':
                     $objet = $formationRepository->find($id);
-                    if ($objet === null) {
+                    $dpe = $dpeParcoursRepository->findOneBy(['formation' => $objet, 'campagneCollecte' => $this->getDpe()]);
+                    if ($objet === null || $dpe === null) {
                         return JsonReponse::error('Formation non trouvée');
                     }
-                    $objet->setEtatDpe([$process['transition'] => 1]);
+                    $dpe->setEtatValidation([$process['transition'] => 1]);
                     //mettre à jour l'historique
                     $histoEvent = new HistoriqueFormationEvent($objet, $this->getUser(), $data['etat'], 'valide', $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
@@ -274,10 +269,6 @@ class ProcessValidationController extends BaseController
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                     $this->entityManager->flush();
                     break;
-//                case 'ficheMatiere':
-//                    $objet = $this->getDoctrine()->getRepository(FicheMatiere::class)->find($id);
-//                    $dpeWorkflow->apply($objet, $data['etat']);
-//                    break;
             }
 
             return JsonReponse::success('Validation modifiée');

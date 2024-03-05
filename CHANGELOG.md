@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.31](https://github.com/Dannebicque/oreof/compare/v1.24.30...v1.24.31) (2024-03-04)
+
+
+### Features
+
+* Gestion du cas reserve sur Fiches matières ([65c0a2a](https://github.com/Dannebicque/oreof/commit/65c0a2a6745d60bb49e354fcebca4dc2aea34d77))
+
+
+### Bug Fixes
+
+* Tri historique ([8a6214c](https://github.com/Dannebicque/oreof/commit/8a6214cef92870d86e343205d42d7231c9490407))
+
 ### [1.24.30](https://github.com/Dannebicque/oreof/compare/v1.24.29...v1.24.30) (2024-03-01)
 
 

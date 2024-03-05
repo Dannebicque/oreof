@@ -55,7 +55,7 @@
                     <div class="row mt-2">
                         {% if this.process[this.etape] is defined %}
 {#                            {% if#}
-{#                                (is_granted('CAN_FICHE_MATIERE_VALIDATE_MY', this.ficheMatiere) or is_granted('CAN_FORMATION_VALIDATE_ALL') or is_granted('CAN_PARCOURS_VALIDATE_MY', this.ficheMatiere))#}
+{#                                (is_granted('CAN_EC_VALIDATE_MY', this.ficheMatiere) or is_granted('CAN_FORMATION_VALIDATE_ALL') or is_granted('CAN_PARCOURS_VALIDATE_MY', this.ficheMatiere))#}
 {#                            %}#}
                                 {% if this.process[this.etape].hasValid %}
                                     <div class="col-2 d-grid">

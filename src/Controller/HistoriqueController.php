@@ -83,7 +83,7 @@ class HistoriqueController extends AbstractController
             $historiques[$h->getCreated()?->getTimestamp()] = $h;
         }
 
-        ksort($historiques);
+        krsort($historiques);
 
         return $this->render('historique/_formation.html.twig', [
             'historiques' => $historiques,
