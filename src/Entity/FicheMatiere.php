@@ -32,6 +32,8 @@ class FicheMatiere
     public const TYPE_MATIERE_COURS = 'matiere';
     public const TYPE_MATIERE_SAE = 'sae';
     public const TYPE_MATIERE_RESSOURCE = 'ressource';
+    const MATI = 'MATI';
+    const MATM = 'MATM';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -206,6 +208,9 @@ class FicheMatiere
 
     #[ORM\Column(nullable: true)]
     private ?array $remplissage = [];
+
+    #[ORM\Column(length: 4, nullable: true)]
+    private ?string $typeApogee = null;
 
     public function __construct()
     {
@@ -1117,6 +1122,18 @@ class FicheMatiere
                 $ficheMatiereVersioning->setFicheMatiere(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTypeApogee(): ?string
+    {
+        return $this->typeApogee;
+    }
+
+    public function setTypeApogee(?string $typeApogee): static
+    {
+        $this->typeApogee = $typeApogee ?? FicheMatiere::MATI;
 
         return $this;
     }

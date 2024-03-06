@@ -57,7 +57,7 @@ class Semestre
     #[ORM\Column]
     private ?bool $nonDispense = false;
 
-    #[ORM\Column(length: 6, nullable: true)]
+    #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeApogee = null;
 
     public function __construct()
