@@ -20,7 +20,9 @@
                aria-label="{{ 'ec_manage.helps.fiche_matiere_unique.help'|trans({}, 'help') }}"
                data-bs-original-title="{{ 'ec_manage.helps.fiche_matiere_unique.help'|trans({}, 'help') }}"></i>
         </label>
-        <select id="ficheMatiere" name="ficheMatiere" class="form-select">
+        <select id="ficheMatiere" name="ficheMatiere" class="form-select"
+                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+        >
             <option value="">Choisir dans la liste une fiche EC/matière</option>
             {% for matiere in matieres %}
                 <option value="id_{{ matiere.id }}"
@@ -74,7 +76,9 @@
                aria-label="{{ 'ec.helps.typeEc.help'|trans({}, 'help') }}"
                data-bs-original-title="{{ 'ec.helps.typeEc.help'|trans({}, 'help') }}"></i>
         </label>
-        <select id="typeEc" name="typeEc" class="form-select">
+        <select id="typeEc" name="typeEc" class="form-select"
+                {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}
+        >
             <option value="">Choisir dans la liste un type d'EC</option>
             {% for typeEc in typeEcs %}
                 <option value="{{ typeEc.id }}"
