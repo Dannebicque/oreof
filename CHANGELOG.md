@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.32](https://github.com/Dannebicque/oreof/compare/v1.24.31...v1.24.32) (2024-03-06)
+
+
+### Bug Fixes
+
+* base ([f4f415d](https://github.com/Dannebicque/oreof/commit/f4f415db1c94d36ecebe4eec6879db325cf9d9a7))
+* redirect après validation ([607081d](https://github.com/Dannebicque/oreof/commit/607081d817921593be560ae6aaf3d543e7f2f04f))
+* reserve depuis fiche matière ([e1649b4](https://github.com/Dannebicque/oreof/commit/e1649b459065128ad2dc682427a8ae90fad51376))
+
 ### [1.24.31](https://github.com/Dannebicque/oreof/compare/v1.24.30...v1.24.31) (2024-03-04)
 
 
