@@ -174,6 +174,7 @@ class ProcessValidationController extends BaseController
 
     #[Route('/validation/reserve/{etape}', name: 'app_validation_reserve')]
     public function reserve(
+        FicheMatiereRepository $ficheMatiereRepository,
         ParcoursRepository  $parcoursRepository,
         FormationRepository $formationRepository,
         string              $etape,
@@ -211,14 +212,21 @@ class ProcessValidationController extends BaseController
                     return $this->parcoursProcess->reserveParcours($objet, $this->getUser(), $process, $etape, $request);
                 }
                 break;
-//            case 'ficheMatiere':
-//                $objet = $formationRepository->find($id);
-//                if ($objet === null) {
-//                    return JsonReponse::error('Fiche EC/matière non trouvée');
-//                }
-//                $place = $dpeWorkflow->getMarking($objet);
-//                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
-//                break;
+            case 'ficheMatiere':
+                $process = $this->validationProcessFicheMatiere->getEtape($etape);
+
+                $objet = $ficheMatiereRepository->find($id);
+
+                if ($objet === null) {
+                    return JsonReponse::error('Fiche matière non trouvée');
+                }
+
+                $processData = $this->ficheMatiereProcess->etatFicheMatiere($objet, $process);
+
+                if ($request->isMethod('POST')) {
+                    return $this->ficheMatiereProcess->reserveFicheMatiere($objet, $this->getUser(), $process, $etape, $request);
+                }
+                break;
         }
 
         return $this->render('process_validation/_reserve.html.twig', [
