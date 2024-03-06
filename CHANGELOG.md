@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.34](https://github.com/Dannebicque/oreof/compare/v1.24.33...v1.24.34) (2024-03-06)
+
+
+### Bug Fixes
+
+* autocomplete sur type EC ([f85c110](https://github.com/Dannebicque/oreof/commit/f85c1106c576f05dc1eb47afb21b62c71f507800))
+* autocomplete sur type EC ([053b713](https://github.com/Dannebicque/oreof/commit/053b713de04e4768b082e18c713f803e20d08edb))
+* Bugs LHEO si durée en ,5 + ajout LAS1 + LAS23 ([b2f3f25](https://github.com/Dannebicque/oreof/commit/b2f3f2555cba47945a7854b797d00f73e380fa60))
+* Export codification avec TypeApogee ([9b8d063](https://github.com/Dannebicque/oreof/commit/9b8d0630c274455a600b0135bca3f3066cb20442))
+
 ### [1.24.33](https://github.com/Dannebicque/oreof/compare/v1.24.32...v1.24.33) (2024-03-06)
 
 
