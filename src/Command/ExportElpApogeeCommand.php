@@ -116,6 +116,11 @@ class ExportElpApogeeCommand extends Command
             mode: InputOption::VALUE_REQUIRED,
             description: 'Genère une export de tous les ELP pour un parcours donné.'
         )->addOption(
+            name: 'with-filter',
+            mode: InputOption::VALUE_NONE,
+            description: "Ajoute un filtre aux données traitées (parcours-excel-export)"
+        )
+        ->addOption(
             name: 'check-duplicates',
             mode: InputOption::VALUE_NONE,
             description: "Vérifie s'il y a des doublons sur les codes Apogee depuis la base de données"
@@ -148,6 +153,7 @@ class ExportElpApogeeCommand extends Command
         $mode = $input->getOption('mode');
         $fullExport = $input->getOption('full-excel-export');
         $parcoursExport = $input->getOption('parcours-excel-export');
+        $withFilter = $input->getOption('with-filter');
         $dummyInsertion = $input->getOption('dummy-insertion');
         $dummyLseInsertion = $input->getOption('dummy-lse-insertion');
         $parcoursInsertion = $input->getOption('parcours-insertion');
@@ -178,7 +184,7 @@ class ExportElpApogeeCommand extends Command
                         break;
                     case "PARCOURS":
                         $io->writeln("Génération de l'export Excel - Parcours...");
-                        $this->saveFullExportAsSpreadsheet($output, "PARCOURS");
+                        $this->saveFullExportAsSpreadsheet($output, "PARCOURS", $withFilter);
                         break;
                     default: 
                         $io->warning("Type d'export inconnu. Il devrait être parmi la liste : ['PARCOURS', 'SEMESTRE', 'UE', 'EC']");
@@ -192,10 +198,15 @@ class ExportElpApogeeCommand extends Command
             if($parcoursExport){
                 $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($parcoursExport);
                 if($parcours){
+                    $filterTxt = "";
                     $io->writeln('Parcours trouvé : ' . $parcours->getDisplay() . ' - Formation : ' . $parcours->getFormation()->getDisplayLong());
                     $io->writeln("Génération de l'export Excel...");
                     $soapObjectArray = $this->generateSoapObjectsForParcours($parcours);
-                    $this->generateSpreadsheet($soapObjectArray, "Parcours-{$parcours->getId()}");
+                    if($withFilter){
+                        $soapObjectArray = $this->filterInvalidElpArray($soapObjectArray);
+                        $filterTxt = "filtered-";
+                    }
+                    $this->generateSpreadsheet($soapObjectArray, "Parcours-{$filterTxt}{$parcours->getId()}");
                     $io->success("Parcours enregistré avec succès.");
                     return Command::SUCCESS;
                 }else {
@@ -252,6 +263,7 @@ class ExportElpApogeeCommand extends Command
                             $io->progressStart($nbParcours);
                             foreach($parcoursArray as $parcours){
                                 $soapObjectArray = $this->generateSoapObjectsForParcours($parcours);
+                                $soapObjectArray = $this->filterInvalidElpArray($soapObjectArray);
                                 // $this->insertSeveralElp($soapObjectArray);
                                 $io->progressAdvance();
                             }
@@ -581,7 +593,7 @@ class ExportElpApogeeCommand extends Command
      * @param OutputInterface $output Sortie de la commande
      * @param string $type Sélectionne le type, dans la liste : [EC, UE, SEMESTRE]
      */
-    private function saveFullExportAsSpreadsheet(OutputInterface $output, string $type){
+    private function saveFullExportAsSpreadsheet(OutputInterface $output, string $type, bool $withFilter = false){
         // retrieve data
         $dataArray = $this->retrieveParcoursDataFromDatabase();
         $totalElement = count($dataArray);
@@ -631,7 +643,12 @@ class ExportElpApogeeCommand extends Command
             }
             elseif ($type === "PARCOURS"){
                 $exportTypeName = "ALL_PARCOURS";
-                $soapObjectArray[] = $this->generateSoapObjectsForParcours($parcours, false);
+                $dataELP = $this->generateSoapObjectsForParcours($parcours, false);
+                if($withFilter){
+                    $dataELP = $this->filterInvalidElpArray($dataELP);
+                    $exportTypeName .= "-filtered";
+                }
+                $soapObjectArray[] = $dataELP;
                 $progressBar->advance();
             }
             
@@ -1254,5 +1271,19 @@ class ExportElpApogeeCommand extends Command
             'libCourt' => $libelleCourt,
             'libLong' => $libelleLong
         ];
+    }
+
+    /**
+     * Filtre les ELP, en excluant ceux qui ont un code à 'null', 'ERROR' ou faisant plus de 8 caractères
+     * @param array $elpArray Tableau d'ELP à filtrer
+     * @return array Tableau d'ELP filtré
+     */
+    private function filterInvalidElpArray(array $elpArray){
+        return array_filter(
+            $elpArray, 
+            fn($elp) => $elp->codElp !== "ERROR" 
+                        && $elp->codElp !== null 
+                        && mb_strlen($elp->codElp) <= 8
+        );
     }
 }

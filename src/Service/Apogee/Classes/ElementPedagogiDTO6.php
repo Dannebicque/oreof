@@ -307,7 +307,8 @@ class ElementPedagogiDTO6
         int $length, 
         bool $withChecks, 
     ){
-        $retour = "UE " . $elementPedagogique->ue->getSemestre()->getOrdre() . "." . $elementPedagogique->ue->getOrdre()
+        $retour = // "UE " . $elementPedagogique->ue->getSemestre()->getOrdre() . "." . $elementPedagogique->ue->getOrdre()
+            $elementPedagogique->ue->display()
         . " " . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() . " ";
         if($dto->parcours->isParcoursDefaut() === false){
             $retour .= $dto->parcours->getSigle();
