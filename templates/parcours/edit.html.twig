@@ -18,7 +18,7 @@
 
 {% block header %}
     {% if parcours.parcoursParent == null %}
-        Parcours <strong>{{ parcours.libelle }}</strong>
+        Parcours <strong>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</strong>
     {% else %}
         Option <strong>{{ parcours.libelle }}</strong> (parcours <strong>{{ parcours.parcoursParent.libelle }}</strong>)
     {% endif %}

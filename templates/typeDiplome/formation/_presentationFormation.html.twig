@@ -52,7 +52,7 @@
                     {% for parcours in formation.parcours %}
                         <tr>
                             <td>{# todo: uniquement si dans formation, sinon des liens ? #}
-                                <a href="#presentation_{{ parcours.id }}">{{ parcours.libelle }}</a>
+                                <a href="#presentation_{{ parcours.id }}">{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</a>
                             </td>
                             <td>
                                 {{ include('btn/export_mccc.html.twig') }}
