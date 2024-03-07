@@ -49,8 +49,8 @@ use Symfony\Component\Filesystem\Filesystem;
 class ExportElpApogeeCommand extends Command
 {
 
-    private static $codElpApogeeDataTest = "COD_ELP_04-03-2024-08-55.json";
-    private static $codLseApogeeDataTest = "COD_LSE_04-03-2024-08-57.json";
+    private static $codElpApogeeDataTest = "COD_ELP_07-03-2024-10_27.json";
+    private static $codLseApogeeDataTest = "COD_LSE_07-03-2024-10_28.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
@@ -373,10 +373,15 @@ class ExportElpApogeeCommand extends Command
                 $io->writeln("Génération d'export Excel des LSE d'un parcours.");
                 $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($parcoursLseExport);
                 if($parcours){
+                    $exportName = 'Parcours_' . $parcours->getId();
                     $io->writeln("Parcours trouvé - Formation : " . $parcours->getDisplay());
                     $dto = $this->getDTOForParcours($parcours);
                     $lseArray = $this->getLseObjectArrayForParcours($dto);
-                    $this->generateSpreadsheetForLSE($lseArray, 'Parcours_' . $parcours->getId());
+                    if($withFilter){
+                        $lseArray = $this->mapLseArrayObjectForTest($lseArray, $parcours->getId());
+                        $exportName .= "-filtered";
+                    }
+                    $this->generateSpreadsheetForLSE($lseArray, $exportName);
                     $io->success("Export des LSE généré avec succès.");
                     return Command::SUCCESS;
                 }else {
@@ -390,12 +395,20 @@ class ExportElpApogeeCommand extends Command
                 $parcoursArray = $this->retrieveParcoursDataFromDatabase();
                 $io->progressStart(count($parcoursArray));
                 $lseArray = [];
+                $exportName = "ALL";
                 foreach($parcoursArray as $parcours){
-                    $lseArray[] = $this->getLseObjectArrayForParcours($this->getDTOForParcours($parcours));
+                    $dataLSE = $this->getLseObjectArrayForParcours($this->getDTOForParcours($parcours));
+                    if($withFilter){
+                        $dataLSE = $this->mapLseArrayObjectForTest($dataLSE, $parcours->getId());
+                    }
+                    $lseArray[] = $dataLSE;
                     $io->progressAdvance();
                 }
+                if($withFilter){
+                    $exportName .= "-filtered";
+                }
                 $lseArray = array_merge(...$lseArray);
-                $this->generateSpreadsheetForLSE($lseArray, "ALL");
+                $this->generateSpreadsheetForLSE($lseArray, $exportName);
                 $io->writeln("\nCréation du fichier Excel...");
                 $io->success("Export de tous les LSE généré avec succès.");
                 return Command::SUCCESS;
@@ -1143,17 +1156,18 @@ class ExportElpApogeeCommand extends Command
      */
     private function getLseObjectArrayForParcours(StructureParcours $parcours) : array {
         $return = [];
-        $libelleListeSemestre = $parcours->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() . " "
-            . $parcours->parcours->getFormation()->getSigle() . " "
-            . $parcours->parcours->getSigle();
-        $libCourtListeSemestre = "SEM " . $libelleListeSemestre;
-        $libLongListeSemestre = "Semestres " . $libelleListeSemestre;
-        $return[] = [
-            new ListeElementPedagogiDTO3('LISTE_SEMESTRE', 'O', $libCourtListeSemestre, $libLongListeSemestre, array_map(
-                fn($semestre) => $semestre->semestre->getCodeApogee(),
-                $parcours->semestres
-            ))
-        ];
+        // Inclure la liste des semestres ?
+        // $libelleListeSemestre = $parcours->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() . " "
+        //     . $parcours->parcours->getFormation()->getSigle() . " "
+        //     . $parcours->parcours->getSigle();
+        // $libCourtListeSemestre = "SEM " . $libelleListeSemestre;
+        // $libLongListeSemestre = "Semestres " . $libelleListeSemestre;
+        // $return[] = [
+        //     new ListeElementPedagogiDTO3('LISTE_SEMESTRE', 'O', $libCourtListeSemestre, $libLongListeSemestre, array_map(
+        //         fn($semestre) => $semestre->semestre->getCodeApogee(),
+        //         $parcours->semestres
+        //     ))
+        // ];
         foreach($parcours->semestres as $semestre){
             $return[] = $this->getLseObjectArrayForSemestre($semestre, $parcours);
         }
@@ -1285,5 +1299,13 @@ class ExportElpApogeeCommand extends Command
                         && $elp->codElp !== null 
                         && mb_strlen($elp->codElp) <= 8
         );
+    }
+
+    private function mapLseArrayObjectForTest(array $lseArray, int $idParcours){
+        $retour = $lseArray;
+        for($i = 0; $i < count($lseArray); $i++){
+            $retour[$i]->codListeElp = "TST" . $idParcours . str_pad((string)($i + 1), 2, "0", STR_PAD_LEFT);
+        }
+        return $retour;
     }
 }

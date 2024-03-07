@@ -17,9 +17,9 @@ class TableauElementPedagogiDTO3 {
     }
 
     private function add(?string $codElp){
-        if(mb_strlen($codElp) > 8){
-            throw new \Exception("La longueur du code ELP est trop longue (supérieure à 8).");
-        }
+        // if(mb_strlen($codElp) > 8){
+        //     throw new \Exception("La longueur du code ELP est trop longue (supérieure à 8).");
+        // }
         $this->elementPedagogi[] = new ElementPedagogiDTO4($codElp ?? "ERROR");
     }
 }
