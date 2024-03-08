@@ -51,6 +51,7 @@ class ExportElpApogeeCommand extends Command
 
     private static $codElpApogeeDataTest = "COD_ELP_07-03-2024-10_27.json";
     private static $codLseApogeeDataTest = "COD_LSE_07-03-2024-10_28.json";
+    private static $fullLseExportDataTest = "COD_LSE_TEST-08-03-2024_09-47-16.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
@@ -119,8 +120,16 @@ class ExportElpApogeeCommand extends Command
             name: 'with-filter',
             mode: InputOption::VALUE_NONE,
             description: "Ajoute un filtre aux données traitées (parcours-excel-export)"
+        )->addOption(
+            name: 'with-json-export',
+            mode: InputOption::VALUE_NONE,
+            description: "Option si l'on souhaite un export JSON supplémentaire dans certains cas (lse-export --with-filter)"
         )
         ->addOption(
+            name: 'check-lse-test-json',
+            mode: InputOption::VALUE_NONE,
+            description: "Vérifie un fichier d'export JSON pour les LSE de test (doublons)"
+        )->addOption(
             name: 'check-duplicates',
             mode: InputOption::VALUE_NONE,
             description: "Vérifie s'il y a des doublons sur les codes Apogee depuis la base de données"
@@ -165,6 +174,8 @@ class ExportElpApogeeCommand extends Command
         $fullLseInsertion = $input->getOption('full-lse-insertion');
         $checkDuplicatesWithApogee = $input->getOption('check-duplicates-with-apogee');
         $reportInvalidData = $input->getOption('report-invalid-data');
+        $withJsonExport = $input->getOption('with-json-export');
+        $checkLseTestJsonExport = $input->getOption('check-lse-test-json');
 
         if($mode === "test"){
             // Export total des ELP selon le type : EC, UE ou Semestre
@@ -410,9 +421,42 @@ class ExportElpApogeeCommand extends Command
                 $lseArray = array_merge(...$lseArray);
                 $this->generateSpreadsheetForLSE($lseArray, $exportName);
                 $io->writeln("\nCréation du fichier Excel...");
+                if($withJsonExport && $withFilter){
+                    $io->writeln("Création de l'export JSON...");
+                    $date = new DateTime();
+                    $now = $date->format("d-m-Y_H-i-s");
+                    $jsonCodLse = array_map(fn($lse) => $lse->codListeElp, $lseArray);
+                    $this->filesystem->appendToFile(__DIR__ . "/../Service/Apogee/export/COD_LSE_TEST-{$now}.json", json_encode($jsonCodLse));
+                }
                 $io->success("Export de tous les LSE généré avec succès.");
                 return Command::SUCCESS;
             }
+            // Vérifie un fichier d'export JSON pour les LSE de test (doublons)
+            if($checkLseTestJsonExport){
+                $io->writeln("Vérification de la présence de doublons dans le fichier JSON (LSE - TEST)");
+                $lseArray = json_decode(file_get_contents(__DIR__ . "/../Service/Apogee/data-test/" . self::$fullLseExportDataTest));
+                $io->progressStart(count($lseArray));
+                $nbLseDuplicates = 0;
+                $duplicatesList = [];
+                $countValues = array_count_values($lseArray);
+                foreach($countValues as $value => $count){
+                    if($count > 1){
+                        ++$nbLseDuplicates;
+                        $duplicatesList[] = $value;
+                    }
+                    $io->progressAdvance();
+                }
+                if($nbLseDuplicates === 0){
+                    $io->success("Aucun doublon détecté !");
+                    return Command::SUCCESS;
+                }
+                else {
+                    $io->warning("Des doublons ont été detecté. ({$nbLseDuplicates})");
+                    dump($duplicatesList);
+                    return Command::FAILURE;
+                }
+            }
+            // Insère tous les LSE disponibles dans APOTEST
             if($fullLseInsertion){
                 $io->writeln("Utilisation du Web Service APOTEST");
                 if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer les LSE de TOUS LES PARCOURS ?")){
