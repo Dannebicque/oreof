@@ -469,6 +469,7 @@ class ExportElpApogeeCommand extends Command
                         foreach($parcoursArray as $parcours){
                             $dto = $this->getDTOForParcours($parcours);
                             $lseArray = $this->getLseObjectArrayForParcours($dto);
+                            $lseArray = $this->mapLseArrayObjectForTest($lseArray, $parcours->getId());
                             // $this->insertSeveralLSE($lseArray);
                             $io->progressAdvance();
                         }
@@ -1336,7 +1337,7 @@ class ExportElpApogeeCommand extends Command
      * @param array $elpArray Tableau d'ELP à filtrer
      * @return array Tableau d'ELP filtré
      */
-    private function filterInvalidElpArray(array $elpArray){
+    private function filterInvalidElpArray(array $elpArray) : array {
         return array_filter(
             $elpArray, 
             fn($elp) => $elp->codElp !== "ERROR" 
@@ -1345,7 +1346,13 @@ class ExportElpApogeeCommand extends Command
         );
     }
 
-    private function mapLseArrayObjectForTest(array $lseArray, int $idParcours){
+    /**
+     * Permet d'attribuer des codes de listes 'factices' pour les tests d'insertion
+     * @param array $lseArray Tableau contenant les objets listes
+     * @param int $idParcours ID du parcours
+     * @return array Tableau de liste transformé
+     */
+    private function mapLseArrayObjectForTest(array $lseArray, int $idParcours) : array {
         $retour = $lseArray;
         for($i = 0; $i < count($lseArray); $i++){
             $retour[$i]->codListeElp = "TST" . $idParcours . str_pad((string)($i + 1), 2, "0", STR_PAD_LEFT);
