@@ -153,6 +153,10 @@ class ExportElpApogeeCommand extends Command
             name: 'report-invalid-data',
             mode: InputOption::VALUE_NONE,
             description: "Génère un rapport listant les parcours dont certaines données sont manquantes"
+        )->addOption(
+            name: 'report-invalid-apogee-code',
+            mode: InputOption::VALUE_NONE,
+            description: "Génère un rapport listant les parcours dont les codes APOGEE sont invalides"
         );
     }
 
@@ -160,22 +164,27 @@ class ExportElpApogeeCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $mode = $input->getOption('mode');
-        $fullExport = $input->getOption('full-excel-export');
-        $parcoursExport = $input->getOption('parcours-excel-export');
+        // Options pour certaines commandes
         $withFilter = $input->getOption('with-filter');
+        $withJsonExport = $input->getOption('with-json-export');
+        // Insertion via le Web Service
         $dummyInsertion = $input->getOption('dummy-insertion');
         $dummyLseInsertion = $input->getOption('dummy-lse-insertion');
         $parcoursInsertion = $input->getOption('parcours-insertion');
         $fullParcoursInsertion = $input->getOption('full-parcours-insertion');
-        $checkDuplicates = $input->getOption('check-duplicates');
-        $fullVerifyData = $input->getOption('full-verify-data');
+        $fullLseInsertion = $input->getOption('full-lse-insertion');
+        // Export Excel
+        $fullExport = $input->getOption('full-excel-export');
+        $parcoursExport = $input->getOption('parcours-excel-export');
         $parcoursLseExport = $input->getOption('parcours-lse-excel-export');
         $fullLseExport = $input->getOption('full-lse-excel-export');
-        $fullLseInsertion = $input->getOption('full-lse-insertion');
+        // Tests des données
+        $checkDuplicates = $input->getOption('check-duplicates');
+        $fullVerifyData = $input->getOption('full-verify-data');
         $checkDuplicatesWithApogee = $input->getOption('check-duplicates-with-apogee');
         $reportInvalidData = $input->getOption('report-invalid-data');
-        $withJsonExport = $input->getOption('with-json-export');
         $checkLseTestJsonExport = $input->getOption('check-lse-test-json');
+        $reportInvalidApogeeCode = $input->getOption('report-invalid-apogee-code');
 
         if($mode === "test"){
             // Export total des ELP selon le type : EC, UE ou Semestre
@@ -399,6 +408,77 @@ class ExportElpApogeeCommand extends Command
                     $io->warning("Identifiant du Parcours incorrect. (" . $parcoursLseExport . ")");
                     return Command::FAILURE;
                 }
+            }
+            if($reportInvalidApogeeCode){
+                $io->writeln("Génération d'un rapport pour les codes Apogée invalides...");
+                $errorTxt = [];
+                $parcoursArray = $this->retrieveParcoursDataFromDatabase();
+                $io->progressStart(count($parcoursArray));
+                foreach($parcoursArray as $p){
+                    $errorMessage = "";
+                    $dto = $this->getDTOForParcours($p);
+                    foreach($dto->semestres as $semestre){
+                        if(mb_strlen($semestre->semestre->getCodeApogee()) > 8){
+                            $errorMessage .= "Le Semestre {$semestre->ordre} : a un code APOGEE supérieur à 8 caractères. ({$semestre->semestre->getCodeApogee()})\n";
+                        }
+                        foreach($semestre->ues() as $ue){
+                            if(mb_strlen($ue->ue->getCodeApogee()) > 8){
+                                $errorMessage .= "L'{$ue->ue->display()} : a un code APOGEE supérieur à 8 caractères. ({$ue->ue->getCodeApogee()})\n";
+                            }
+                            foreach($ue->elementConstitutifs as $ecUE){
+                                if(mb_strlen($ecUE->elementConstitutif->getCodeApogee()) > 8){
+                                    $errorMessage .= "L'{$ecUE->elementConstitutif->getCode()} ({$ecUE->elementConstitutif->getUe()->display()}) :"
+                                    . " a un code APOGEE supérieur à 8 caractères. ({$ecUE->elementConstitutif->getCodeApogee()})\n";
+                                }
+                                foreach($ecUE->elementsConstitutifsEnfants as $ecE){
+                                    if(mb_strlen($ecE->elementConstitutif->getCodeApogee()) > 8){
+                                        $errorMessage .= "L'{$ecE->elementConstitutif->getCode()} ({$ecE->elementConstitutif->getUe()->display()}) :"
+                                        . " a un code APOGEE supérieur à 8 caractères. ({$ecE->elementConstitutif->getCodeApogee()})\n";
+                                    }   
+                                }
+                            }
+                            foreach($ue->uesEnfants() as $ueE){
+                                if(mb_strlen($ueE->ue->getCodeApogee()) > 8){
+                                    $errorMessage .= "L'{$ueE->ue->display()} : a un code APOGEE supérieur à 8 caractères. ({$ueE->ue->getCodeApogee()})\n";
+                                }
+                                foreach($ueE->elementConstitutifs as $ecUeE){
+                                    if(mb_strlen($ecUeE->elementConstitutif->getCodeApogee()) > 8){
+                                        $errorMessage .= "L'{$ecUeE->elementConstitutif->getCode()} ({$ecUeE->elementConstitutif->getUe()->display()}) :"
+                                        . " a un code APOGEE supérieur à 8 caractères. ({$ecUeE->elementConstitutif->getCodeApogee()})\n";
+                                    }
+                                    foreach($ecUeE->elementsConstitutifsEnfants as $ecE){
+                                        if(mb_strlen($ecE->elementConstitutif->getCodeApogee()) > 8){
+                                            $errorMessage .= "L'{$ecE->elementConstitutif->getCode()} ({$ecE->elementConstitutif->getUe()->display()}) :"
+                                            . " a un code APOGEE supérieur à 8 caractères. ({$ecE->elementConstitutif->getCodeApogee()})\n";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if(!empty($errorMessage)){
+                        $errorMessage = "Le Parcours {$p->getId()} - {$p->getDisplay()} - Formation {$p->getFormation()->getDisplayLong()} est invalide :\n\n" . $errorMessage . "\n\n";
+                        $errorTxt[] = $errorMessage;
+                    }
+                    $io->progressAdvance();
+                }
+                if(count($errorTxt) > 0){
+                    $date = new DateTime();
+                    $now = $date->format("d-m-Y_H-i-s");
+                    $this->filesystem->appendToFile(
+                        __DIR__ . "/../Service/Apogee/export/" 
+                        . "Report-invalid-Apogee-codes-{$now}.txt", 
+                        implode($errorTxt)
+                    );
+                    $io->writeln("\nRapport généré !");
+                    $io->warning("Des erreurs de codes APOGEE ont été détectées.");
+                    return Command::SUCCESS;
+                }
+                else {
+                    $io->success("Aucun code APOGEE invalide détecté.");
+                    return Command::SUCCESS;
+                }
+
             }
             // Export Excel des LSE de tous les parcours disponibles
             if($fullLseExport){
@@ -1348,15 +1428,25 @@ class ExportElpApogeeCommand extends Command
 
     /**
      * Permet d'attribuer des codes de listes 'factices' pour les tests d'insertion
+     * Retire les codes ELP invalides du TableauElementPedagogi de la liste
      * @param array $lseArray Tableau contenant les objets listes
      * @param int $idParcours ID du parcours
      * @return array Tableau de liste transformé
      */
     private function mapLseArrayObjectForTest(array $lseArray, int $idParcours) : array {
         $retour = $lseArray;
+        // Codes LSE factices
         for($i = 0; $i < count($lseArray); $i++){
             $retour[$i]->codListeElp = "TST" . $idParcours . str_pad((string)($i + 1), 2, "0", STR_PAD_LEFT);
         }
+        // Retirer les Codes ELP invalides (supérieur à 8 carac. ou 'ERROR')
+        for($i = 0; $i < count($retour); $i++){
+            $retour[$i]->listElementPedagogi->elementPedagogi = array_filter(
+                $retour[$i]->listElementPedagogi->elementPedagogi,
+                fn($elp) => mb_strlen($elp->codElp) <= 8 && $elp->codElp !== 'ERROR'
+            );
+        }
+
         return $retour;
     }
 }
