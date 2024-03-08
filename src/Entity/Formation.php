@@ -193,6 +193,7 @@ class Formation
     private Collection $dpeParcours;
 
     #[ORM\Column(length: 1, nullable: true)]
+    /** @deprecated  */
     private ?string $codeMentionApogee = null;
 
     public function __construct(?CampagneCollecte $anneeUniversitaire)
@@ -1007,11 +1008,13 @@ class Formation
         return $this;
     }
 
+    /** @deprecated  */
     public function getCodeMentionApogee(): ?string
     {
         return $this->codeMentionApogee;
     }
 
+    /** @deprecated  */
     public function setCodeMentionApogee(?string $codeMentionApogee): static
     {
         $this->codeMentionApogee = $codeMentionApogee;

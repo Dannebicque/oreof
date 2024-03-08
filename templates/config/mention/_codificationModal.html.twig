@@ -1,0 +1,62 @@
+<form action="{{ path('app_mention_codification') }}" method="post">
+    <div class="row" >
+        {{ component('alerte', {
+            'type': 'info',
+            'message': 'Veuillez sélectionner au moins un type de diplôme et au moins un domaine'
+        }) }}
+        <div class="col-6" {{ stimulus_controller('check_all', {}) }}>
+            <div class="form-check mt-2">
+                <input type="checkbox"
+                       name="allTypeDiplome"
+                       class="form-check-input"
+                       value="all"
+                       id="typediplome" {{ stimulus_action('check_all', 'checkAll', 'click', {'classCheckAll' : 'typediplome', 'idCheckAll': 'typediplome'}) }}>
+                <label for="typediplome" class="form-check-label">
+                    Tous les types de diplôme
+                </label>
+            </div>
+            {% for typeDiplome in typeDiplomes %}
+                <div class="form-check">
+                    <input type="checkbox"
+                           name="typediplome[]"
+                           class="form-check-input typediplome"
+                           value="{{ typeDiplome.id }}"
+                           id="td_{{ typeDiplome.id }}" {{ stimulus_action('check_all', 'checkAll', 'click', {'classCheckAll' : 'typediplome', 'idCheckAll': 'typediplome'}) }}>
+                    <label for="td_{{ typeDiplome.id }}" class="form-check-label">
+                        {{ typeDiplome.libelle }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-6" {{ stimulus_controller('check_all', {}) }}>
+            <div class="form-check mt-2">
+                <input type="checkbox"
+                       name="allDomaine"
+                       value="all"
+                       class="form-check-input"
+                       id="domaine" {{ stimulus_action('check_all', 'checkAll', 'click', {'classCheckAll' : 'domaine', 'idCheckAll': 'domaine'}) }}>
+                <label for="domaine" class="form-check-label">
+                    Tous les domaines
+                </label>
+            </div>
+            {% for domaine in domaines %}
+                <div class="form-check">
+                    <input type="checkbox"
+                           name="domaine[]"
+                           value="{{ domaine.id }}"
+                           id="domaine_{{ domaine.id }}"
+                           class="form-check-input domaine"
+                            {{ stimulus_action('check_all', 'checkAll', 'click', {'classCheckAll' : 'domaine', 'idCheckAll': 'domaine'}) }}>
+                    <label for="domaine_{{ domaine.id }}" class="form-check-label">
+                        {{ domaine.libelle }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success"
+            {{ stimulus_action('base','sauvegardeFormModal', 'click') }}>
+        <i class="fal fa-floppy-disk"></i>
+        Générer les codes
+    </button>
+</form>

@@ -111,7 +111,7 @@ class CodificationFormation
             $code = $formation->getDpe()?->getCodeApogee();
             $code .= $formation->getTypeDiplome()?->getCodeApogee();
             $code .= $formation->getDomaine()?->getCodeApogee();
-            $code .= $formation->getCodeMentionApogee();
+            $code .= $parcours->getCodeMentionApogee();
 
             foreach ($parcours->getSemestreParcours() as $sp) {
                 if ($parcours->isParcoursDefaut()) {

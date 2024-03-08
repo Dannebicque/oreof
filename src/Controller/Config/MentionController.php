@@ -68,15 +68,44 @@ class MentionController extends AbstractController
         return $this->render('config/mention/index.html.twig');
     }
 
-    #[Route('/codification', name: 'app_mention_codification', methods: ['GET'])]
+    #[Route('/codification-modal', name: 'app_mention_codification_modal', methods: ['GET'])]
+    public function codificationModal(
+        DomaineRepository     $domaineRepository,
+        TypeDiplomeRepository $typeDiplomeRepository
+    ): Response {
+        return $this->render('config/mention/_codificationModal.html.twig', [
+            'typeDiplomes' => $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']),
+            'domaines' => $domaineRepository->findBy([], ['libelle' => 'ASC']),
+
+        ]);
+    }
+
+    #[Route('/codification', name: 'app_mention_codification', methods: ['POST'])]
     public function codification(
+        Request               $request,
         DomaineRepository      $domaineRepository,
         TypeDiplomeRepository  $typeDiplomeRepository,
         MentionRepository      $mentionRepository,
         EntityManagerInterface $entityManager
     ): Response {
-        $typeDiplomes = $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']);
-        $domaines = $domaineRepository->findBy([], ['libelle' => 'ASC']);
+        $checkTypeDiplome = $request->request->all()['typediplome'];
+        $checkTypeDomaine = $request->request->all()['domaine'];
+
+        if (null === $checkTypeDiplome || null === $checkTypeDomaine) {
+            return $this->redirectToRoute('app_mention_index');
+        }
+
+        if ($checkTypeDiplome === 'all') {
+            $typeDiplomes = $typeDiplomeRepository->findBy([], ['libelle' => 'ASC']);
+        } else {
+            $typeDiplomes = $checkTypeDiplome;
+        }
+
+        if ($checkTypeDomaine === 'all') {
+            $domaines = $domaineRepository->findBy([], ['libelle' => 'ASC']);
+        } else {
+            $domaines = $checkTypeDomaine;
+        }
 
         foreach ($typeDiplomes as $typeDiplome) {
             foreach ($domaines as $domaine) {
@@ -84,8 +113,17 @@ class MentionController extends AbstractController
                 $codeLettre = 0;
                 foreach ($mentions as $mention) {
                     $mention->setCodeApogee(self::TAB_CODE_PARCOURS[$codeLettre]);
+                    //si LP + plusieurs parcours sur différentes composantes alors mention lettre !=
                     foreach ($mention->getFormations() as $formation) {
-                        $formation->setCodeMentionApogee($mention->getCodeApogee());
+                        foreach ($formation->getParcours() as $parcours) {
+                            if ($parcours->getComposanteInscription() !== $formation->getComposantePorteuse() &&
+                            $parcours->getComposanteInscription()?->getComposanteParent() === null) {
+                                $parcours->setCodeMentionApogee(self::TAB_CODE_PARCOURS[$codeLettre]);
+                                $codeLettre++;
+                            } else {
+                                $parcours->setCodeMentionApogee(self::TAB_CODE_PARCOURS[$codeLettre]);
+                            }
+                        }
                     }
                     $codeLettre++;
                 }
@@ -102,8 +140,7 @@ class MentionController extends AbstractController
     public function liste(
         Request           $request,
         MentionRepository $mentionRepository
-    ): Response
-    {
+    ): Response {
         $sort = $request->query->get('sort') ?? 'type_diplome';
         $direction = $request->query->get('direction') ?? 'asc';
         $q = $request->query->get('q') ?? '';
