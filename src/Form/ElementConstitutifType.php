@@ -41,6 +41,7 @@ class ElementConstitutifType extends AbstractType
         $builder
             ->add('typeEc', EntityType::class, [
                 'class' => TypeEc::class,
+                'autocomplete' => true,
                 'choice_label' => 'libelle',
                 'query_builder' => fn (
                     TypeEcRepository $typeEcRepository

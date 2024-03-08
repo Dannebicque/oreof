@@ -9,6 +9,7 @@
 
 namespace App\Classes\Codification;
 
+use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
@@ -62,12 +63,15 @@ class CodificationFormation
 
     public function setCodificationFormation(Formation $formation): void
     {
-        //odo: calcul structure ??
+        //todo: calcul structure ??
         $this->setCodificationParcours($formation);
         foreach ($formation->getParcours() as $parcours) {
+            //todo: tester si codif haute est figée pour ne pas recalculer
             $this->setCodificationDiplome($parcours);
             $this->setCodeEtape($parcours);
             $this->setCodificationVersionEtape($parcours);
+
+            //recalculer les semestres même si déjà codifiés selon la partie haute
             $this->setCodificationSemestre($parcours);
             $this->entityManager->flush();
         }
@@ -237,10 +241,36 @@ class CodificationFormation
                 if ($ec->getNatureUeEc()?->isChoix() && $ec->getEcEnfants()->count() > 0) {
                     $ec->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre() . 'X');
                     foreach ($ec->getEcEnfants() as $ecEnfant) {
-                        $ecEnfant->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre(). chr(64+$ecEnfant->getOrdre()));
+                        if ($ecEnfant->getFicheMatiere() !== null) {
+                            if ($ecEnfant->getFicheMatiere()->getCodeApogee() === null) {
+                                $ecEnfant->getFicheMatiere()->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre() . 'X' . chr(64+$ecEnfant->getOrdre())); //todo: OK ? veut dire qu'on change le code fiche si sur un EC enfant ?
+                            }
+
+                            if ($ecEnfant->getParcours() !== null && $ecEnfant->getParcours()->getFormation() !== $ecEnfant->getFicheMatiere()->getParcours()?->getFormation())
+                            {
+                                $ecEnfant->getFicheMatiere()->setTypeApogee(FicheMatiere::MATM);
+                            }
+
+                            $ecEnfant->setCodeApogee($ecEnfant->getFicheMatiere()->getCodeApogee());
+                        } else {
+                            $ecEnfant->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre(). chr(64+$ecEnfant->getOrdre()));
+                        }
                     }
                 } else {
-                    $ec->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre());
+                    if ($ec->getFicheMatiere() !== null) {
+                        if ($ec->getFicheMatiere()->getCodeApogee() === null) {
+                            $ec->getFicheMatiere()->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre());
+                        }
+
+                        if ($ec->getParcours() !== null && $ec->getParcours()->getFormation() !== $ec->getFicheMatiere()->getParcours()?->getFormation())
+                        {
+                            $ec->getFicheMatiere()->setTypeApogee(FicheMatiere::MATM);
+                        }
+
+                        $ec->setCodeApogee($ec->getFicheMatiere()->getCodeApogee());
+                    } else {
+                        $ec->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre());
+                    }
                 }
             }
         }

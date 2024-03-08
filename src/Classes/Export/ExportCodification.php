@@ -16,7 +16,6 @@ use App\DTO\StructureUe;
 use App\Entity\Parcours;
 use App\Utils\Tools;
 use DateTime;
-use Symfony\Component\HttpFoundation\StreamedJsonResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExportCodification
@@ -124,7 +123,7 @@ class ExportCodification
                 if ($ue->ue->getUeParent() === null) {
                     $this->excelWriter->writeCellXY(2, $ligne, $ue->ue->display($parcours));
                     $this->excelWriter->writeCellXY(3, $ligne, $ue->ue->getCodeApogee(), ['bold' => true]);
-                    if ($ue->ue->getNatureUeEc()->isChoix()) {
+                    if ($ue->ue->getNatureUeEc()?->isChoix()) {
                         $this->excelWriter->writeCellXY(4, $ligne, 'CHOIX', ['color' => self::BLUE]);
                         //todo: ajouter lib court, long, ...
                         foreach ($ue->uesEnfants() as $uesEnfant) {
@@ -167,12 +166,12 @@ class ExportCodification
                         $this->excelWriter->writeCellXY($col + 2, $ligne, $ecsEnfant->elementConstitutif->getCodeApogee(), ['bold' => true]);
                         $this->excelWriter->writeCellXY($col + 3, $ligne, 'EC', ['color' => self::BLUE]);
                         $this->excelWriter->writeCellXY($col + 4, $ligne, $ecsEnfant->heuresEctsEc->ects, ['color' => self::GREEN]);
-                        //todo: MATI ou MATM
+                        $this->excelWriter->writeCellXY($col + 5, $ligne, $ecsEnfant->elementConstitutif->getTypeApogee());
                     }
                 } else {
                     $this->excelWriter->writeCellXY($col +2, $ligne, 'EC', ['color' => self::BLUE]);
                     $this->excelWriter->writeCellXY($col + 3, $ligne, $ec->heuresEctsEc->ects, ['color' => self::GREEN]);
-                    //todo: MATI ou MATM
+                    $this->excelWriter->writeCellXY($col + 4, $ligne, $ec->elementConstitutif->getTypeApogee());
                 }
             }
 

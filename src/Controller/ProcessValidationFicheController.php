@@ -50,7 +50,7 @@ class ProcessValidationFicheController extends BaseController
 
         if ($request->isMethod('POST')) {
             $this->toast('success', 'Fiches validées');
-            return $this->redirectToRoute('app_validation_index');
+            return $this->redirectToRoute('app_validation_index', ['step' => 'fiche']);
         }
 
 
@@ -96,7 +96,7 @@ class ProcessValidationFicheController extends BaseController
 
         if ($request->isMethod('POST')) {
             $this->toast('success', 'Fiches refusées');
-            return $this->redirectToRoute('app_validation_index');
+            return $this->redirectToRoute('app_validation_index', ['step' => 'fiche']);
         }
 
         return $this->render('process_validation/_refuse_fiches_lot.html.twig', [
@@ -142,7 +142,7 @@ class ProcessValidationFicheController extends BaseController
 
         if ($request->isMethod('POST')) {
             $this->toast('success', 'Fiches marquées avec des réserves');
-            return $this->redirectToRoute('app_validation_index');
+            return $this->redirectToRoute('app_validation_index', ['step' => 'fiche']);
         }
 
         return $this->render('process_validation/_reserve_fiches_lot.html.twig', [

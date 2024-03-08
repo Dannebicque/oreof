@@ -837,4 +837,13 @@ class ElementConstitutif
 
         return 'Aucun code Apogée';
     }
+
+    public function getTypeApogee(): string
+    {
+        if ($this->ficheMatiere !== null) {
+            return $this->ficheMatiere->getTypeApogee();
+        }
+
+        return '-';
+    }
 }

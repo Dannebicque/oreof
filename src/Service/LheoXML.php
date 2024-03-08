@@ -75,6 +75,14 @@ class LheoXML
             if ($parcours->isParcoursDefaut() === false) {
                 $intituleFormation .= "<br>parcours " . $parcours->getDisplay();
             }
+
+            if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1) {
+                $intituleFormation .= " - LAS 1";
+            }
+
+            if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23) {
+                $intituleFormation .= " - LAS 2 et 3";
+            }
         }
 
         // Niveau d'entree
@@ -157,6 +165,8 @@ class LheoXML
         }
 
         $dureeCycle /= 2;
+        //arrondi supérieur
+        $dureeCycle = ceil($dureeCycle);
 
         // code RNCP
         // On prend le RNCP du parcours, et sinon celui de la formation
