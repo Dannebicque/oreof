@@ -80,10 +80,23 @@
                                     <i class="{{ iconEdit }}"></i>
                                     <span> Modifier Codes</span>
                                 </a>
-                                <a href="{{ path('app_codification', {formation:formation.id}) }}"
-                                   class="btn btn-sm text-warning">
+
+                                <a href="#"
+                                   class="btn btn-sm text-warning"
+                                        {{ stimulus_controller('modal', {
+                                            size: 'lg',
+                                            modalTitle: 'Générer la codification',
+                                            modalUrl: path('app_codification_modal', {formation:formation.id}) }) }}
+                                   data-action="click->modal#openModal"
+                                   data-size="lg"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="bottom"
+                                   title="Générer Codes"
+                                >
                                     <i class="fal fa-wrench"></i>
-                                    Générer</a>
+                                    <span> Générer</span>
+                                </a>
+
                                 <a href="{{ path('app_codification_index', {formation:formation.id}) }}"
                                    class="btn btn-sm text-info">
                                     <i class="{{ iconShow }}"></i>
@@ -111,12 +124,40 @@
                         <td>{{ parcours.codeEtape(annee) }}</td>
                         <td>{{ parcours.codeVersionEtape(annee) }}</td>
                         <td>
-                            <a href="{{ path('app_codification', {formation:formation.id}) }}"
-                               class="btn btn-outline-warning">
+                            <a href="#"
+                               class="btn btn-sm text-warning"
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        modalTitle: 'Modifier la codification',
+                                        modalUrl: path('app_codification_edit', {parcours:parcours.id, annee:annee}) }) }}
+                               data-action="click->modal#openModal"
+                               data-size="lg"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="bottom"
+                               title="Modifier Codes"
+                            >
+                                <i class="{{ iconEdit }}"></i>
+                                <span> Modifier Codes</span>
+                            </a>
+
+                            <a href="#"
+                               class="btn btn-sm text-warning"
+                                    {{ stimulus_controller('modal', {
+                                        size: 'lg',
+                                        modalTitle: 'Générer la codification',
+                                        modalUrl: path('app_codification_modal', {formation:formation.id}) }) }}
+                               data-action="click->modal#openModal"
+                               data-size="lg"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="bottom"
+                               title="Générer Codes"
+                            >
                                 <i class="fal fa-wrench"></i>
-                                Générer</a>
+                                <span> Générer</span>
+                            </a>
+
                             <a href="{{ path('app_codification_index', {formation:formation.id}) }}"
-                               class="btn btn-outline-info">
+                               class="btn btn-sm text-info">
                                 <i class="{{ iconShow }}"></i>
                                 Détails</a>
                         </td>

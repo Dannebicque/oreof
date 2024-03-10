@@ -1,0 +1,46 @@
+<form action="{{ path('app_codification', {formation:formation.id}) }}" method="post">
+    <div class="row" >
+        {{ component('alerte', {
+            'type': 'info',
+            'message': 'Veuillez sélectionner au moins un type de diplôme et au moins un domaine'
+        }) }}
+        <div class="col-12">
+            <div class="form-check mt-2">
+                <input type="radio"
+                       name="typeCodification"
+                       class="form-check-input"
+                       value="codifHaute"
+                       id="codifHaute">
+                <label for="codifHaute" class="form-check-label">
+                    Uniquement la codification haute (diplôme, étape, VDI, VET)
+                </label>
+            </div>
+            <div class="form-check mt-2">
+                <input type="radio"
+                       name="typeCodification"
+                       class="form-check-input"
+                       value="codifBasse"
+                       id="codifBasse">
+                <label for="codifBasse" class="form-check-label">
+                    Uniquement la codification basse (ELP : semestre, UE, EC)
+                </label>
+            </div>
+            <div class="form-check mt-2">
+                <input type="radio"
+                       name="typeCodification"
+                       class="form-check-input"
+                       value="codifHauteBasse"
+                       id="codifHauteBasse">
+                <label for="codifHauteBasse" class="form-check-label">
+                    Toute la codification (haute et basse)
+                </label>
+            </div>
+
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success"
+            {{ stimulus_action('base','sauvegardeFormModal', 'click') }}>
+        <i class="fal fa-floppy-disk"></i>
+        Générer les codes
+    </button>
+</form>

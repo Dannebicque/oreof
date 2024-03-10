@@ -27,9 +27,17 @@ class ComposanteController extends BaseController
     {
         $parcours = $dpeParcoursRepository->findByComposanteAndCampagne($composante, $this->getDpe());
 
+        $tFormations = [];
+
+        foreach ($parcours as $p) {
+            $tFormations[$p->getFormation()?->getId()]['formation'] = $p->getFormation();
+            $tFormations[$p->getFormation()?->getId()]['parcours'][] = $p;
+        }
+
+
         return $this->render('composante/campagne_collecte.html.twig', [
             'composante' => $composante,
-            'allParcours' => $parcours,
+            'formations' => $tFormations,
             'campagne' => $this->getDpe()->isDefaut() && $this->getDpe()->isMailDpeEnvoye(),
             'etats' => TypeModificationDpeEnum::cases()
         ]);

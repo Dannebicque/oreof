@@ -584,6 +584,47 @@ class SemestreController extends AbstractController
         ]);
     }
 
+    #[Route('/tronc-commun/{semestreParcours}/{parcours}', name: 'definir_tronc_commun')]
+    public function definirTroncCommun(
+        EntityManagerInterface     $entityManager,
+        SemestreParcoursRepository $semestreParcoursRepository,
+        SemestreParcours                   $semestreParcours,
+        Parcours                   $parcours
+    ): Response {
+        // tous les parcours
+        $allParcours = $parcours->getFormation()?->getParcours();
+
+        $semestreTc = $semestreParcours->getSemestre();
+
+        if($semestreTc === null) {
+            return JsonReponse::error('Le semestre n\'existe pas');
+        }
+
+        if ($semestreTc->getSemestreRaccroche() !== null) {
+            return JsonReponse::error('Le semestre est mutualisé');
+        }
+
+        $semestreTc->setTroncCommun(true);
+        foreach ($allParcours as $parcour) {
+            $sem = $semestreParcoursRepository->findOneBy([
+                'ordre' => $semestreParcours->getOrdre(),
+                'parcours' => $parcour
+            ]);
+
+            if ($sem !== null && $sem->getSemestre() !== null) {
+                if ($sem->getSemestre()->isNonDispense() === false) {
+                    $sem->setSemestre($semestreTc);
+                    //todo: supprimer toutes les données de l'autre semestre ?
+                }
+            }
+        }
+
+        $entityManager->flush();
+
+
+        return JsonReponse::success('Le semestre a été réinitialisé');
+    }
+
     #[Route('/reinitialiser/{semestre}/{parcours}', name: 'reinitialiser')]
     public function reinitialiser(
         EntityManagerInterface     $entityManager,

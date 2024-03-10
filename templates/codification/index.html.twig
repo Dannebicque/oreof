@@ -120,14 +120,20 @@
         <i class="{{ iconBack }}"></i>
         <span> Retour à la codification</span>
     </a>
-    <a
-            class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="Générer la codification"
-            href="{{ path('app_codification', {formation:formation.id}) }}"
+
+    <a href="#"
+       class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            {{ stimulus_controller('modal', {
+                size: 'lg',
+                modalTitle: 'Générer la codification',
+                modalUrl: path('app_codification_modal', {formation:formation.id}) }) }}
+       data-action="click->modal#openModal"
+       data-size="lg"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Générer Codes"
     >
-        <i class="{{ iconAdd }}"></i>
-        <span> Générer la codification</span>
+        <i class="fal fa-wrench"></i>
+        <span> Générer</span>
     </a>
 {% endblock %}

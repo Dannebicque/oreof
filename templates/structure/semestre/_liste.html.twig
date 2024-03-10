@@ -109,7 +109,7 @@
                                                 <i class="fal fa-link"
                                                    data-controller="tooltip"
                                                    data-tooltip-placement-value="bottom"
-                                                   title="Raccrochée au semestre {{ sem.display }}"></i>{% endif %}
+                                                   title="Raccrochée au semestre {{ sem.semestreParcours[0].display }} - {{ sem.semestreParcours[0].parcours.libelle }}"></i>{% endif %}
                                                 {% if semestre.semestre != null and semestre.semestre.semestreMutualisables|length > 0 %}
                                                     <i class="fal fa-share-nodes"
                                                        data-controller="tooltip"
@@ -123,9 +123,9 @@
                                                 semestre: sem,
                                                 parcours: parcours,
                                             }) }}
-{#                                            <span id="ects_semestre_{{ sem.id }}_{{ parcours.id }}">#}
-{#                                            {{ sem.totalEctsSemestre|badgeEctsSemestre }}#}
-{#                                        </span>#}
+                                            {#                                            <span id="ects_semestre_{{ sem.id }}_{{ parcours.id }}"> #}
+                                            {#                                            {{ sem.totalEctsSemestre|badgeEctsSemestre }} #}
+                                            {#                                        </span> #}
                                         </div>
                                         <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                             <div class="text-muted text-small d-md-none">Nb UE</div>
@@ -263,14 +263,36 @@
                                                                     <span> Raccrocher un semestre</span>
                                                                 </a>
                                                             </li>
+                                                            {% if sem.troncCommun == false %}
+                                                            <li>
+                                                                <button
+                                                                        {{ stimulus_action('structure--semestre', 'transformeTroncCommun', 'click', {
+                                                                            url: path
+                                                                                ('structure_semestre_definir_tronc_commun',
+                                                                                {semestreParcours:semestre.id, parcours: parcours.id})
+                                                                        }) }}
+                                                                        href="#"
+                                                                        class="dropdown-item text-danger"
+                                                                        data-size="lg"
+                                                                        data-bs-toggle="tooltip"
+                                                                        {% if raccroche %}
+                                                                            disabled
+                                                                        {% endif %}
+                                                                        data-bs-placement="bottom"
+                                                                        title="Définir ce {{ semestre.display }} comme tronc commun de la mention"
+                                                                >
+                                                                    <i class="fal fa-merge"></i>
+                                                                    <span> Définir tronc commun de la mention</span>
+                                                                </button>
+                                                            </li>
+                                                                {% endif %}
                                                             <li>
                                                                 <button
                                                                         {{ stimulus_action('structure--semestre', 'reinitSemestre', 'click', {
                                                                             url: path
                                                                                 ('structure_semestre_reinitialiser',
                                                                                 {semestre:semestre.semestre.id, parcours: parcours.id})
-                                                                        })
-                                                                        }}
+                                                                        }) }}
                                                                         href="#"
                                                                         class="dropdown-item text-danger"
                                                                         data-size="lg"
