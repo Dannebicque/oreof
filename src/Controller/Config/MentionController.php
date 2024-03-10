@@ -117,8 +117,11 @@ class MentionController extends AbstractController
                     foreach ($mention->getFormations() as $formation) {
                         $offset = 1;
                         foreach ($formation->getParcours() as $parcours) {
-                            if ($parcours->getComposanteInscription() !== $formation->getComposantePorteuse() &&
-                            $parcours->getComposanteInscription()?->getComposanteParent() === null) {
+                            if (
+                                count($formation->getParcours()) > 1 &&
+                                $parcours->isParcoursDefaut() === false &&
+                                $parcours->getComposanteInscription() !== $formation->getComposantePorteuse() &&
+                                $parcours->getComposanteInscription()?->getComposanteParent() === null) {
                                 //plusieurs parcours sur des composantes porteurs différentes
                                 $parcours->setCodeMentionApogee(self::TAB_CODE_PARCOURS[$codeLettre]);
                                 $offset++;
@@ -134,7 +137,6 @@ class MentionController extends AbstractController
         }
 
         $entityManager->flush();
-
 
         return $this->redirectToRoute('app_mention_index');
     }
