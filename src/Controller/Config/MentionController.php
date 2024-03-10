@@ -115,18 +115,20 @@ class MentionController extends AbstractController
                     $mention->setCodeApogee(self::TAB_CODE_PARCOURS[$codeLettre]);
                     //si LP + plusieurs parcours sur différentes composantes alors mention lettre !=
                     foreach ($mention->getFormations() as $formation) {
+                        $offset = 1;
                         foreach ($formation->getParcours() as $parcours) {
                             if ($parcours->getComposanteInscription() !== $formation->getComposantePorteuse() &&
                             $parcours->getComposanteInscription()?->getComposanteParent() === null) {
                                 //plusieurs parcours sur des composantes porteurs différentes
                                 $parcours->setCodeMentionApogee(self::TAB_CODE_PARCOURS[$codeLettre]);
-                                $codeLettre++;
+                                $offset++;
                             } else {
                                 $parcours->setCodeMentionApogee(self::TAB_CODE_PARCOURS[$codeLettre]);
                             }
                         }
                     }
-                    $codeLettre++;
+                    $codeLettre = $codeLettre + $offset;
+
                 }
             }
         }
