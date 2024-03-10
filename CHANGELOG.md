@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.36](https://github.com/Dannebicque/oreof/compare/v1.24.35...v1.24.36) (2024-03-10)
+
+
+### Bug Fixes
+
+* codif avec séparation haute ou basse ([b634fa9](https://github.com/Dannebicque/oreof/commit/b634fa9de48bb8e463d504f06050ad8adf9679c2))
+
 ### [1.24.35](https://github.com/Dannebicque/oreof/compare/v1.24.34...v1.24.35) (2024-03-10)
 
 
