@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.35](https://github.com/Dannebicque/oreof/compare/v1.24.34...v1.24.35) (2024-03-10)
+
+
+### Features
+
+* Affichage du type de parcours ([c82f9ff](https://github.com/Dannebicque/oreof/commit/c82f9ff3acbe15bdf68dc91949af8a0ff206727b))
+* Codification des mentions améliorée ([804a0f2](https://github.com/Dannebicque/oreof/commit/804a0f28c6eb7814d3eabe05a18d880b99c8a3e9))
+
+
+### Bug Fixes
+
+* codif avec séparation haute ou basse ([11d768e](https://github.com/Dannebicque/oreof/commit/11d768e840124a3998a0a26fea4b1045f6df740e))
+* codif mention ([a980c1e](https://github.com/Dannebicque/oreof/commit/a980c1e34344801e0e6cefb2e95d0f5e71d798a0))
+* export codification ([ba9a69c](https://github.com/Dannebicque/oreof/commit/ba9a69c6fe6a0122289b6e0aafca2cdab15911a3))
+
 ### [1.24.34](https://github.com/Dannebicque/oreof/compare/v1.24.33...v1.24.34) (2024-03-06)
 
 
