@@ -45,7 +45,17 @@ export default class extends Controller {
   }
 
   reinitSemestre(event) {
-    if (confirm('Voulez-vous vraiment réinitialiser ce semestre ? Les données des UEs et les EC seront supprimés.')) {
+    if (confirm('Voulez-vous vraiment réinitialiser ce semestre ? Les données des UEs et les EC seront supprimées.')) {
+      const { url } = event.params
+      fetch(url).then((reponse) => {
+        JsonResponse(reponse)
+        this.dispatch('refreshListe')
+      })
+    }
+  }
+
+  transformeTroncCommun(event) {
+    if (confirm('Voulez-vous vraiment définir ce semestre comme semestre tronc commun de l\'ensemble des parcours de la formation (hors semestre non dispensés)')) {
       const { url } = event.params
       fetch(url).then((reponse) => {
         JsonResponse(reponse)

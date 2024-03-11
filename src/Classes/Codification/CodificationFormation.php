@@ -13,7 +13,6 @@ use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\Semestre;
-use App\Entity\SemestreParcours;
 use App\Entity\Ue;
 use App\Enums\TypeParcoursEnum;
 use Doctrine\ORM\EntityManagerInterface;
@@ -111,7 +110,7 @@ class CodificationFormation
             $code = $formation->getDpe()?->getCodeApogee();
             $code .= $formation->getTypeDiplome()?->getCodeApogee();
             $code .= $formation->getDomaine()?->getCodeApogee();
-            $code .= $formation->getCodeMentionApogee();
+            $code .= $parcours->getCodeMentionApogee();
 
             foreach ($parcours->getSemestreParcours() as $sp) {
                 if ($parcours->isParcoursDefaut()) {
@@ -273,6 +272,29 @@ class CodificationFormation
                     }
                 }
             }
+        }
+    }
+
+    public function setCodificationHaute(Formation $formation)
+    {
+        $this->setCodificationParcours($formation);
+        foreach ($formation->getParcours() as $parcours) {
+            //todo: tester si codif haute est figée pour ne pas recalculer
+            $this->setCodificationDiplome($parcours);
+            $this->setCodeEtape($parcours);
+            $this->setCodificationVersionEtape($parcours);
+            $this->entityManager->flush();
+        }
+    }
+
+    public function setCodificationBasse(Formation $formation): void
+    {
+        //todo: calcul structure ??
+        $this->setCodificationParcours($formation);
+        foreach ($formation->getParcours() as $parcours) {
+            //recalculer les semestres même si déjà codifiés selon la partie haute
+            $this->setCodificationSemestre($parcours);
+            $this->entityManager->flush();
         }
     }
 }

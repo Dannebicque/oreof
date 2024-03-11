@@ -242,6 +242,8 @@ class Parcours
     #[ORM\ManyToOne(targetEntity: self::class)]
     private ?self $parcoursOrigine = null; //ne devrait pas changer mais plus cohérent de le mettre ici
 
+    #[ORM\Column(length: 1, nullable: true)]
+    private ?string $codeMentionApogee = null;
 
     public function __construct(?Formation $formation)
     {
@@ -1385,6 +1387,18 @@ class Parcours
     public function setParcoursOrigine(?self $parcoursOrigine): static
     {
         $this->parcoursOrigine = $parcoursOrigine;
+
+        return $this;
+    }
+
+    public function getCodeMentionApogee(): ?string
+    {
+        return $this->codeMentionApogee;
+    }
+
+    public function setCodeMentionApogee(?string $codeMentionApogee): static
+    {
+        $this->codeMentionApogee = $codeMentionApogee;
 
         return $this;
     }

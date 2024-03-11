@@ -74,36 +74,36 @@ class CodificationController extends BaseController
             );
         } else {
             //filtrer par type de diplôme
-//            $formations = [];
-//            //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
-//            $centres = $this->getUser()?->getUserCentres();
-//            foreach ($centres as $centre) {
-//                //todo: gérer avec un voter
-//                if ($centre->getComposante() !== null && (
-//                    in_array('Gestionnaire', $centre->getDroits()) ||
-//                    in_array('Invité', $centre->getDroits()) ||
-//                    in_array('Directeur', $centre->getDroits())
-//                )) {
-//                    $formations[] = $formationRepository->findByComposante(
-//                        $centre->getComposante(),
-//                        $this->getDpe()
-//                    );
-//                }
-//            }
-//
-//            $formations[] = $formationRepository->findByComposanteDpe(
-//                $this->getUser(),
-//                $this->getDpe()
-//            );
-//            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
-//                $this->getUser(),
-//                $this->getDpe()
-//            );
-//            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
-//                $this->getUser(),
-//                $this->getDpe()
-//            );
-//            $formations = array_merge(...$formations);
+            //            $formations = [];
+            //            //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
+            //            $centres = $this->getUser()?->getUserCentres();
+            //            foreach ($centres as $centre) {
+            //                //todo: gérer avec un voter
+            //                if ($centre->getComposante() !== null && (
+            //                    in_array('Gestionnaire', $centre->getDroits()) ||
+            //                    in_array('Invité', $centre->getDroits()) ||
+            //                    in_array('Directeur', $centre->getDroits())
+            //                )) {
+            //                    $formations[] = $formationRepository->findByComposante(
+            //                        $centre->getComposante(),
+            //                        $this->getDpe()
+            //                    );
+            //                }
+            //            }
+            //
+            //            $formations[] = $formationRepository->findByComposanteDpe(
+            //                $this->getUser(),
+            //                $this->getDpe()
+            //            );
+            //            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
+            //                $this->getUser(),
+            //                $this->getDpe()
+            //            );
+            //            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
+            //                $this->getUser(),
+            //                $this->getDpe()
+            //            );
+            //            $formations = array_merge(...$formations);
         }
 
         return $this->render('codification/_liste.html.twig', [
@@ -271,12 +271,39 @@ class CodificationController extends BaseController
         ]);
     }
 
+    #[Route('/codification/modal-genere/{formation}', name: 'app_codification_modal')]
+    public function genereModal(
+        Formation             $formation
+    ): Response {
+        return $this->render('codification/_modal.html.twig', [
+            'formation' => $formation,
+        ]);
+    }
+
     #[Route('/codification/genere/{formation}', name: 'app_codification')]
     public function genere(
+        Request              $request,
         CodificationFormation $codificationFormation,
         Formation             $formation
     ): Response {
-        $codificationFormation->setCodificationFormation($formation);
+        $typeCodification = $request->request->get('typeCodification');
+
+        if ($typeCodification === null) {
+            throw new \Exception('Type de codification non trouvé');
+        }
+
+        switch ($typeCodification)
+        {
+            case 'codifHaute':
+                $codificationFormation->setCodificationHaute($formation);
+                break;
+            case 'codifBasse':
+                $codificationFormation->setCodificationBasse($formation);
+                break;
+            case 'codifHauteBasse':
+                $codificationFormation->setCodificationFormation($formation);
+                break;
+        }
 
         return $this->redirectToRoute('app_codification_index', ['formation' => $formation->getId()]);
     }

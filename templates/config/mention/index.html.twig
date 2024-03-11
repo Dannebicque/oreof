@@ -31,12 +31,27 @@
 
 {% block bouton_header %}
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('app_mention_codification') }}"
-           class="btn btn-sm btn-outline-danger btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+{#        <a href="{{ path('app_mention_codification') }}"#}
+{#           class="btn btn-sm btn-outline-danger btn-icon btn-icon-end w-100 w-sm-auto mx-2"#}
+{#        >#}
+{#            <i class="fal fa-wrench"></i>#}
+{#            <span> Générer Codification</span>#}
+{#        </a>#}
+        <button
+                {{ stimulus_controller('modal', {
+                    size: 'lg',
+                    modalTitle: 'Générer Codification',
+                    modalUrl: path('app_mention_codification_modal') }) }}
+                data-action="click->modal#openModal"
+                class="btn btn-sm btn-outline-danger btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                data-size="lg"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Générer Codification"
         >
             <i class="fal fa-wrench"></i>
             <span> Générer Codification</span>
-        </a>
+        </button>
     {% endif %}
     <button
             {{ stimulus_controller('modal', {

@@ -825,10 +825,10 @@ class ElementConstitutif
         return $this;
     }
 
-    public function displayCodeApogee(): string
+    public function displayCodeApogee(): ?string
     {
         if ($this->codeApogee !== null) {
-            return $this->codeApogee ?? 'Aucun code Apogée';
+            return $this->codeApogee;
         }
 
         if ($this->ficheMatiere !== null) {
@@ -838,7 +838,7 @@ class ElementConstitutif
         return 'Aucun code Apogée';
     }
 
-    public function getTypeApogee(): string
+    public function getTypeApogee(): ?string
     {
         if ($this->ficheMatiere !== null) {
             return $this->ficheMatiere->getTypeApogee();
