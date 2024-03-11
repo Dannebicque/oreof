@@ -286,19 +286,19 @@ class ExportElpApogeeCommand extends Command
                     if($this->verifyUserIntent($io, "Il y a {$nbParcours} parcours disponibles. Continuer ?")){
                         try{
                             $io->writeln('Initialisation du Web Service...');
-                            // $this->createSoapClient();
+                            $this->createSoapClient();
                             $io->writeln('Insertion des données en cours...');
                             $io->progressStart($nbParcours);
                             foreach($parcoursArray as $parcours){
                                 $soapObjectArray = $this->generateSoapObjectsForParcours($parcours);
                                 $soapObjectArray = $this->filterInvalidElpArray($soapObjectArray);
-                                // $this->insertSeveralElp($soapObjectArray);
+                                $this->insertSeveralElp($soapObjectArray);
                                 $io->progressAdvance();
                             }
                             $io->writeln("\nInsertion réussie !");
                             return Command::SUCCESS;
                         }catch(\Exception $e){
-                            $io->writeln("Une erreur est survenue durant l'insertion.");
+                            $io->writeln("\nUne erreur est survenue durant l'insertion.");
                             $io->writeln("Message : " . $e->getMessage());
                             return Command::FAILURE;
                         }
@@ -630,7 +630,7 @@ class ExportElpApogeeCommand extends Command
                 elseif ($nbDoublonsELP > 0 || $nbDoublonsLse > 0) {
                     $now = new DateTime();
                     $dateHeure = $now->format("d-m-Y_H-i-s");
-                    $io->writeln("Des doublons ont été détectés. !");
+                    $io->writeln("Des doublons ont été détectés !");
                     $io->writeln("{$nbDoublonsLse} codes de liste (LSE)");
                     $io->writeln("{$nbDoublonsELP} codes d'élément pédagogique (ELP)");
                     $dataError = json_encode(array_merge($listeDoublonsELP, $listeDoublonsLSE));
@@ -653,6 +653,7 @@ class ExportElpApogeeCommand extends Command
                     $elp->codNatureElp = 'MATI';
                     $elp->libCourtElp = "TEST WS PHP 2";
                     $elp->libElp = "TEST WEBSERVICE PHP 11032024";
+                    // $elp->nbrCredits = 0;
                     dump($elp);
                     if($this->verifyUserIntent($io, "Les données affichées (ELP) conviennent-elles ?")){
                         try{

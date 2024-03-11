@@ -26,7 +26,7 @@ class ElementPedagogiDTO6
     public string $temHorsEtab;
     public string $temStage;
     public string $lieu;
-    public string $nbrCredits;
+    public float $nbrCredits;
     public string $dateDebutIP;
     public string $dateFinIP;
     public string $descriptionElp;
@@ -89,7 +89,9 @@ class ElementPedagogiDTO6
             // $this->temHorsEtab;
             // $this->temStage;
             // $this->lieu;
-            $this->nbrCredits = $elementPedagogique->heuresEctsEc->ects;
+            if($elementPedagogique->heuresEctsEc->ects > 0){
+                $this->nbrCredits = $elementPedagogique->heuresEctsEc->ects;
+            }
             // $this->dateDebutIP;
             // $this->dateFinIP;
             // $this->descriptionElp;
@@ -112,7 +114,9 @@ class ElementPedagogiDTO6
             );
             // $this->listResponsables;
             // $this->listLibAnnexe;
-            $this->listParamChargEns = new TableauParametrageChargeEnseignementDTO2($paramArrayCE);
+            if(count($paramArrayCE) > 0){
+                $this->listParamChargEns = new TableauParametrageChargeEnseignementDTO2($paramArrayCE);
+            }
             // $this->listElementPrerequis;
             // $this->listTypePopulation;
         }
@@ -140,7 +144,9 @@ class ElementPedagogiDTO6
             // $this->temHorsEtab = "N"; // valeur par défaut
             // $this->temStage = "N"; // valeur par défaut
             // $this->lieu = ""; //
-            $this->nbrCredits = $elementPedagogique->heuresEctsUe->sommeUeEcts;
+            if($elementPedagogique->heuresEctsUe->sommeUeEcts > 0){
+                $this->nbrCredits = $elementPedagogique->heuresEctsUe->sommeUeEcts;
+            }
             // $this->dateDebutIP
             // $this->dateFinIP
             // $this->descriptionElp
@@ -182,7 +188,9 @@ class ElementPedagogiDTO6
             // $this->temHorsEtab;
             // $this->temStage;
             // $this->lieu;
-            $this->nbrCredits = $elementPedagogique->heuresEctsSemestre->sommeSemestreEcts;
+            if($elementPedagogique->heuresEctsSemestre->sommeSemestreEcts > 0){
+                $this->nbrCredits = $elementPedagogique->heuresEctsSemestre->sommeSemestreEcts;
+            }
             // $this->dateDebutIP;
             // $this->dateFinIP;
             // $this->descriptionElp;
