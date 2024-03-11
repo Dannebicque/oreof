@@ -49,9 +49,12 @@ use Symfony\Component\Filesystem\Filesystem;
 class ExportElpApogeeCommand extends Command
 {
 
-    private static $codElpApogeeDataTest = "COD_ELP_07-03-2024-10_27.json";
-    private static $codLseApogeeDataTest = "COD_LSE_07-03-2024-10_28.json";
+    // Données extraites d'APOTEST
+    private static $codElpApogeeDataTest = "COD_ELP_11-03-2024-09_46.json";
+    private static $codLseApogeeDataTest = "COD_LSE_11-03-2024-09_47.json";
+    // Données exportées depuis ORéOF
     private static $fullLseExportDataTest = "COD_LSE_TEST-08-03-2024_09-47-16.json";
+    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-11-03-2024_11-23-02.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
@@ -157,6 +160,10 @@ class ExportElpApogeeCommand extends Command
             name: 'report-invalid-apogee-code',
             mode: InputOption::VALUE_NONE,
             description: "Génère un rapport listant les parcours dont les codes APOGEE sont invalides"
+        )->addOption(
+            name: 'check-duplicates-from-json-export',
+            mode: InputOption::VALUE_NONE,
+            description: "Vérifie si des doublons existent dans un export JSON des ELP"
         );
     }
 
@@ -185,6 +192,7 @@ class ExportElpApogeeCommand extends Command
         $reportInvalidData = $input->getOption('report-invalid-data');
         $checkLseTestJsonExport = $input->getOption('check-lse-test-json');
         $reportInvalidApogeeCode = $input->getOption('report-invalid-apogee-code');
+        $checkDuplicatesFromJsonExport = $input->getOption('check-duplicates-from-json-export');
 
         if($mode === "test"){
             // Export total des ELP selon le type : EC, UE ou Semestre
@@ -204,7 +212,7 @@ class ExportElpApogeeCommand extends Command
                         break;
                     case "PARCOURS":
                         $io->writeln("Génération de l'export Excel - Parcours...");
-                        $this->saveFullExportAsSpreadsheet($output, "PARCOURS", $withFilter);
+                        $this->saveFullExportAsSpreadsheet($output, "PARCOURS", $withFilter, $withJsonExport);
                         break;
                     default: 
                         $io->warning("Type d'export inconnu. Il devrait être parmi la liste : ['PARCOURS', 'SEMESTRE', 'UE', 'EC']");
@@ -566,6 +574,29 @@ class ExportElpApogeeCommand extends Command
                     return Command::SUCCESS;
                 }
             }
+            if($checkDuplicatesFromJsonExport){
+                $io->writeln("Vérification des doublons depuis l'export JSON...");
+                $codElpArray = json_decode(file_get_contents(__DIR__ . "/../Service/Apogee/data-test/" . self::$allParcoursCodElpExport));
+                $io->progressStart(count($codElpArray));
+                $nbDoublons = 0;
+                $doublonArray = [];
+                foreach(array_count_values($codElpArray) as $codeElp => $nb){
+                    if($nb > 1){
+                        ++$nbDoublons;
+                        $doublonArray[] = $codeElp;
+                    }
+                    $io->progressAdvance();
+                }
+                if($nbDoublons === 0){
+                    $io->success("Aucun doublon détecté !");
+                    return Command::SUCCESS;
+                }
+                else {
+                    dump($doublonArray);
+                    $io->warning("Des doublons ont été détecté ! ({$nbDoublons})");
+                    return Command::SUCCESS;
+                }
+            }
             if($checkDuplicatesWithApogee){
                 $io->writeln("Vérification des doublons entre les codes ORéOF et ceux présents dans APOGEE...");
                 $parcoursArray = $this->retrieveParcoursDataFromDatabase();
@@ -621,7 +652,7 @@ class ExportElpApogeeCommand extends Command
                     $elp->codElp = 'TEST111';
                     $elp->codNatureElp = 'MATI';
                     $elp->libCourtElp = "TEST WS PHP 2";
-                    $elp->libElp = "TEST WEBSERVICE PHP 23022024";
+                    $elp->libElp = "TEST WEBSERVICE PHP 11032024";
                     dump($elp);
                     if($this->verifyUserIntent($io, "Les données affichées (ELP) conviennent-elles ?")){
                         try{
@@ -731,7 +762,7 @@ class ExportElpApogeeCommand extends Command
      * @param OutputInterface $output Sortie de la commande
      * @param string $type Sélectionne le type, dans la liste : [EC, UE, SEMESTRE]
      */
-    private function saveFullExportAsSpreadsheet(OutputInterface $output, string $type, bool $withFilter = false){
+    private function saveFullExportAsSpreadsheet(OutputInterface $output, string $type, bool $withFilter = false, $withJsonExport = false){
         // retrieve data
         $dataArray = $this->retrieveParcoursDataFromDatabase();
         $totalElement = count($dataArray);
@@ -793,6 +824,15 @@ class ExportElpApogeeCommand extends Command
         }
         if($type === "PARCOURS"){
             $soapObjectArray = array_merge(...$soapObjectArray);
+            if($withJsonExport){
+                $jsonCodeApogee = array_map(fn($elp) => $elp->codElp, $soapObjectArray);
+                $date = new DateTime();
+                $now = $date->format("d-m-Y_H-i-s");
+                $this->filesystem->appendToFile(
+                    __DIR__ . "/../Service/Apogee/export/OREOF-COD_ELP-" . $exportTypeName . "-" . $now . ".json", 
+                    json_encode($jsonCodeApogee)
+                );
+            }
         }
         $this->generateSpreadsheet($soapObjectArray, $exportTypeName);
     }

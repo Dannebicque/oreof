@@ -2098,5 +2098,35 @@
         <target>validation.refuser.soumis_central.title</target>
       </segment>
     </unit>
+    <unit id="L6kOjjG" name="validation.fiche_matiere.ses.refuse.alerte">
+      <segment>
+        <source>validation.fiche_matiere.ses.refuse.alerte</source>
+        <target>validation.fiche_matiere.ses.refuse.alerte</target>
+      </segment>
+    </unit>
+    <unit id="fgWiRml" name="refuse.validation.fiche_matiere.ses.argumentaire.label">
+      <segment>
+        <source>refuse.validation.fiche_matiere.ses.argumentaire.label</source>
+        <target>refuse.validation.fiche_matiere.ses.argumentaire.label</target>
+      </segment>
+    </unit>
+    <unit id="dfkd0UC" name="refuse.validation.fiche_matiere.ses.helps.argumentaire.help">
+      <segment>
+        <source>refuse.validation.fiche_matiere.ses.helps.argumentaire.help</source>
+        <target>refuse.validation.fiche_matiere.ses.helps.argumentaire.help</target>
+      </segment>
+    </unit>
+    <unit id="WOMfWp9" name="btn.validation.fiche_matiere.ses.refuse">
+      <segment>
+        <source>btn.validation.fiche_matiere.ses.refuse</source>
+        <target>Refuser les fiches EC/matière</target>
+      </segment>
+    </unit>
+    <unit id="mLocVvi" name="formation.edit.valide.cfvu.flash.success">
+      <segment>
+        <source>formation.edit.valide.cfvu.flash.success</source>
+        <target>Modification enregistrée pour la validation par la CFVU</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
