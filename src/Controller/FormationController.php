@@ -14,11 +14,9 @@ use App\Classes\GetFormations;
 use App\Classes\verif\FormationState;
 use App\Classes\verif\ParcoursState;
 use App\DTO\StatsFichesMatieres;
-use App\DTO\StatsFichesMatieresParcours;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\FormationDemande;
-use App\Entity\User;
 use App\Entity\UserCentre;
 use App\Events\AddCentreFormationEvent;
 use App\Form\FormationDemandeType;
@@ -30,7 +28,6 @@ use App\Repository\MentionRepository;
 use App\Repository\RoleRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserCentreRepository;
-use App\Service\LheoXML;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,7 +35,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/formation')]
 class FormationController extends BaseController
