@@ -582,7 +582,7 @@ class ExportElpApogeeCommand extends Command
                 $doublonArray = [];
                 foreach(array_count_values($codElpArray) as $codeElp => $nb){
                     if($nb > 1){
-                        ++$nbDoublons;
+                        $nbDoublons += ($nb - 1);
                         $doublonArray[] = $codeElp;
                     }
                     $io->progressAdvance();
@@ -597,6 +597,7 @@ class ExportElpApogeeCommand extends Command
                     return Command::SUCCESS;
                 }
             }
+            // Vérifie les doublons entre ORéOF et des export JSON des codes APOGEE (LSE & ELP)
             if($checkDuplicatesWithApogee){
                 $io->writeln("Vérification des doublons entre les codes ORéOF et ceux présents dans APOGEE...");
                 $parcoursArray = $this->retrieveParcoursDataFromDatabase();
