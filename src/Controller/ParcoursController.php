@@ -120,9 +120,9 @@ class ParcoursController extends BaseController
         ParcoursRepository       $parcoursRepository,
         Formation                $formation
     ): Response {
-//        if (!$this->isGranted('ROLE_RESP_FORMATION', $formation)) {
-//            throw $this->createAccessDeniedException();
-//        }
+        //        if (!$this->isGranted('ROLE_RESP_FORMATION', $formation)) {
+        //            throw $this->createAccessDeniedException();
+        //        }
 
 
         $parent = null;
@@ -428,15 +428,15 @@ class ParcoursController extends BaseController
         // Vide par défaut : -
         $localisationMetadata = ["-"];
         // Si l'on a une ville sur le parcours
-        if($parcours->getLocalisation()?->getLibelle() !== null){
+        if($parcours->getLocalisation()?->getLibelle() !== null) {
             $localisationMetadata = [$parcours->getLocalisation()?->getLibelle()];
         }
         // Sinon on prend au niveau de la composante
         else {
             $villeArray = $parcours->getFormation()?->getLocalisationMention()?->toArray();
-            if(count($villeArray) > 0){
+            if(count($villeArray) > 0) {
                 $localisationMetadata = array_map(
-                    fn($ville) => $ville->getLibelle(),
+                    fn ($ville) => $ville->getLibelle(),
                     $villeArray
                 );
             }
@@ -447,14 +447,18 @@ class ParcoursController extends BaseController
         // "-" par défaut
         $faculteEcoleInstitut = ["-"];
         // Si on a au niveau du parcours
-        if($parcours->getComposanteInscription()?->getLibelle() !== null){
-            $faculteEcoleInstitut = [$parcours->getComposanteInscription()?->getLibelle()];
+        if($parcours->getComposanteInscription()?->getLibelle() !== null) {
+            if ($parcours->getComposanteInscription()?->getComposanteParent() === null) {
+                $faculteEcoleInstitut = [$parcours->getComposanteInscription()?->getLibelle()];
+            } else {
+                $faculteEcoleInstitut = [$parcours->getComposanteInscription()?->getComposanteParent()?->getLibelle()];
+            }
         }
         // Sinon, on prend les composantes d'inscription de la formation
         else {
-            if(count($parcours->getFormation()?->getComposantesInscription()->toArray()) > 0){
+            if(count($parcours->getFormation()?->getComposantesInscription()->toArray()) > 0) {
                 $faculteEcoleInstitut = array_map(
-                    fn($composanteInscription) => $composanteInscription->getLibelle(),
+                    fn ($composanteInscription) => $composanteInscription->getLibelle(),
                     $parcours->getFormation()?->getComposantesInscription()->toArray()
                 );
             }
@@ -608,7 +612,7 @@ class ParcoursController extends BaseController
         try {
             $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
             $serializer = new Serializer(
-            [
+                [
                 new DateTimeNormalizer(),
                 new BackedEnumNormalizer(),
                 new ArrayDenormalizer(),
@@ -616,14 +620,16 @@ class ParcoursController extends BaseController
             ],
                 [new JsonEncoder()]
             );
-            $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
+            $fileParcours = file_get_contents(
+                __DIR__ . "/../../versioning_json/parcours/"
                                         . "{$parcours_versioning->getParcours()->getId()}/"
                                         . "{$parcours_versioning->getParcoursFileName()}.json"
-                        );
-            $fileDTO = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
+            );
+            $fileDTO = file_get_contents(
+                __DIR__ . "/../../versioning_json/parcours/"
                                         . "{$parcours_versioning->getParcours()->getId()}/"
                                         . "{$parcours_versioning->getDtoFileName()}.json"
-                        );
+            );
             $parcours = $serializer->deserialize($fileParcours, Parcours::class, 'json');
             $dto = $serializer->deserialize($fileDTO, StructureParcours::class, 'json');
             $dateVersion = $parcours_versioning->getVersionTimestamp()->format('d-m-Y à H:i');
@@ -683,7 +689,7 @@ class ParcoursController extends BaseController
                 ],
                 'cssDiff' => $cssDiff
             ]);
-        } catch(\Exception $e){
+        } catch(\Exception $e) {
             $now = new DateTimeImmutable('now');
             $dateHeure = $now->format('d-m-Y_H-i-s');
             // Log error
