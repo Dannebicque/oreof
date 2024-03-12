@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.38](https://github.com/Dannebicque/oreof/compare/v1.24.37...v1.24.38) (2024-03-12)
+
+
+### Bug Fixes
+
+* codif VDI BUT, LP et DEUST ([f4c8c30](https://github.com/Dannebicque/oreof/commit/f4c8c30b572a57a3ca721d5a5787c381841abcc7))
+* commande pour la codification ([4a11d3b](https://github.com/Dannebicque/oreof/commit/4a11d3b3a9629add792c4e09232fba42249452e5))
+* export de la composante d'inscription principale ([5f3da31](https://github.com/Dannebicque/oreof/commit/5f3da31e90ab085c2bcc1b339132964e2bdbc61b))
+
 ### [1.24.37](https://github.com/Dannebicque/oreof/compare/v1.24.36...v1.24.37) (2024-03-11)
 
 
