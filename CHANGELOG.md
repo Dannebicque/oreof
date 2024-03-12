@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.39](https://github.com/Dannebicque/oreof/compare/v1.24.38...v1.24.39) (2024-03-12)
+
+
+### Bug Fixes
+
+* Ajout de la gestion du code intermédiaire sur type diplôme. ([9c587a8](https://github.com/Dannebicque/oreof/commit/9c587a85e84ae14acf3607699f487ab8d89fd369))
+* Ajout de la gestion du code intermédiaire sur type diplôme. ([b18f5df](https://github.com/Dannebicque/oreof/commit/b18f5dfa28a1c803b5e496f12e032b38106a0aba))
+
 ### [1.24.38](https://github.com/Dannebicque/oreof/compare/v1.24.37...v1.24.38) (2024-03-12)
 
 
