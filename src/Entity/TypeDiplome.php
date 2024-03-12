@@ -103,6 +103,9 @@ class TypeDiplome
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $presentationFormation = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $codifIntermediaire = false;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
@@ -551,5 +554,17 @@ class TypeDiplome
     public function getNbAnnee(): int
     {
         return ($this->semestreFin - $this->semestreDebut + 1) / 2;
+    }
+
+    public function isCodifIntermediaire(): ?bool
+    {
+        return $this->codifIntermediaire ?? false;
+    }
+
+    public function setCodifIntermediaire(?bool $codifIntermediaire): static
+    {
+        $this->codifIntermediaire = $codifIntermediaire;
+
+        return $this;
     }
 }

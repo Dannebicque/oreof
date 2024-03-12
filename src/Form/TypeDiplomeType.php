@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\TypeDiplome;
 use App\Form\Type\TextareaAutoSaveType;
+use App\Form\Type\YesNoType;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -26,6 +27,10 @@ class TypeDiplomeType extends AbstractType
             ->add('codeApogee', TextType::class, [
                 'label' => 'Code Apogée',
                 'attr' => ['maxlength' => 1],
+                'required' => true,
+            ])
+            ->add('codifIntermediaire', YesNoType::class, [
+                'label' => 'Codification intermédiaire',
                 'required' => true,
             ])
             ->add('modalites_admission', TextareaAutoSaveType::class, [

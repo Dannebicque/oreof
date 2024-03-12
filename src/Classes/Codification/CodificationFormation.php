@@ -135,10 +135,7 @@ class CodificationFormation
         $formation = $parcours->getFormation();
         if ($formation !== null) {
             foreach ($parcours->getSemestreParcours() as $sp) {
-                if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'LP' ||
-                    $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'DEUST' ||
-                    $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'DNO'
-                ) {
+                if ($parcours->getFormation()?->getTypeDiplome()?->isCodifIntermediaire() === false) {
                     $code = '2';
                 } else {
                     $code = $sp->getAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '2' : '1';
