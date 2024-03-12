@@ -650,10 +650,10 @@ class ExportElpApogeeCommand extends Command
                     $ec = $dto->semestres[1]->ues()[0]->elementConstitutifs[0];
                     // $elp = new ElementPedagogiDTO6($ec, $dto);
                     $elp = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATI, false);
-                    $elp->codElp = 'TEST111';
+                    $elp->codElp = 'TEST112';
                     $elp->codNatureElp = 'MATI';
-                    $elp->libCourtElp = "TEST WS PHP 2";
-                    $elp->libElp = "TEST WEBSERVICE PHP 11032024";
+                    $elp->libCourtElp = "TEST WS PHP 3";
+                    $elp->libElp = "TEST WEBSERVICE PHP 12032024";
                     // $elp->nbrCredits = 0;
                     dump($elp);
                     if($this->verifyUserIntent($io, "Les données affichées (ELP) conviennent-elles ?")){
@@ -692,8 +692,8 @@ class ExportElpApogeeCommand extends Command
                     // Création des données à insérer
                     $lseObject = new ListeElementPedagogiDTO3(
                         'TEST110', 'O', 'TEST INSERT LISTE WS',
-                        'TEST INSERTION LISTE WEB SERVICE', 
-                        ['TEST110', 'TEST111']
+                        'TEST INSERTION LISTE WEB SERVICE 12032024', 
+                        ['TEST111', 'TEST112']
                     );
                     dump($lseObject);
                     if($this->verifyUserIntent($io, "Les données à insérer (LSE) conviennent-elles ?")){
@@ -895,7 +895,7 @@ class ExportElpApogeeCommand extends Command
             fn($elp) => [
                 $elp->codElp, $elp->libCourtElp, $elp->libElp, 
                 $elp->codNatureElp, $elp->codComposante, $elp->temModaliteControle, 
-                $elp->nbrCredits, $elp->volume, $elp->uniteVolume, $elp->codPeriode,
+                $elp->nbrCredits ?? "", $elp->volume, $elp->uniteVolume, $elp->codPeriode,
                 // CIP list
                 implode(", ", array_map(
                         fn($cip) => $cip->codCentreInsPedagogi,
