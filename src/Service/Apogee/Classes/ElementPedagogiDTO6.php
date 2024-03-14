@@ -225,7 +225,7 @@ class ElementPedagogiDTO6
             $transliterator = Transliterator::createFromRules($rules, Transliterator::FORWARD);
             return mb_substr($transliterator->transliterate($txt), 0, $length);
         }else {
-            return 'ERROR';
+            return 'AUCUN LIBELLE';
         }
     }
 
@@ -395,7 +395,7 @@ class ElementPedagogiDTO6
                     ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le Type Diplôme n'a pas de libellé court - Type Diplôme ID : {$dto->parcours->getFormation()?->getTypeDiplome()->getId()} - Formation ID : {$dto->parcours->getFormation()->getId()}";
                 }
             }
-            return "ERROR";
+            return "AUCUN LIBELLE";
         }
     }
 }
