@@ -1097,8 +1097,11 @@ class ExportElpApogeeCommand extends Command
                 if($this->isEcMutualiseMaster($ecEnfant, $dto) === true && $natureEcEnfant === 'MATM'){
                     $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::MATM, $withChecks);
                 }
-                elseif ($this->isEcMutualise($ecEnfant) === false) {
+                elseif ($this->isEcMutualise($ecEnfant) === false && !$ecEnfant->elementConstitutif->getNatureUeEc()?->isLibre()) {
                     $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::MATI, $withChecks);
+                }
+                elseif($this->isEcMutualise($ecEnfant) === false && $ecEnfant->elementConstitutif->getNatureUeEc()?->isLibre() === true){
+                    $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::CHOI, $withChecks);
                 }
             }
         }
@@ -1107,6 +1110,9 @@ class ExportElpApogeeCommand extends Command
             $natureApogee = CodeNatuElpEnum::MATI;
             if ($ec->elementConstitutif->getTypeEc()->getType() === TypeUeEcEnum::STAGE){
                 $natureApogee = CodeNatuElpEnum::MATS;
+            }
+            if($ec->elementConstitutif->getNatureUeEc()?->isLibre()){
+                $natureApogee = CodeNatuElpEnum::CHOI;
             }
             $elpArray[] = $this->setObjectForSoapCall($ec, $dto, $natureApogee, $withChecks);
         }
