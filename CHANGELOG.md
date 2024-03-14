@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.41](https://github.com/Dannebicque/oreof/compare/v1.24.40...v1.24.41) (2024-03-14)
+
+
+### Bug Fixes
+
+* affichage choix libre ([bf9c36f](https://github.com/Dannebicque/oreof/commit/bf9c36ff7c3a69cfc2a7de75a4601dcbfe148edd))
+
+### [1.24.40](https://github.com/Dannebicque/oreof/compare/v1.24.39...v1.24.40) (2024-03-14)
+
+
+### Bug Fixes
+
+* Composante d'inscription même si pas de parcours. ([cec86fb](https://github.com/Dannebicque/oreof/commit/cec86fb80f3706e9248219c1e477f66a06f22d34))
+
+### [1.24.39](https://github.com/Dannebicque/oreof/compare/v1.24.38...v1.24.39) (2024-03-12)
+
+
+### Bug Fixes
+
+* Ajout de la gestion du code intermédiaire sur type diplôme. ([9c587a8](https://github.com/Dannebicque/oreof/commit/9c587a85e84ae14acf3607699f487ab8d89fd369))
+* Ajout de la gestion du code intermédiaire sur type diplôme. ([b18f5df](https://github.com/Dannebicque/oreof/commit/b18f5dfa28a1c803b5e496f12e032b38106a0aba))
+
+### [1.24.38](https://github.com/Dannebicque/oreof/compare/v1.24.37...v1.24.38) (2024-03-12)
+
+
+### Bug Fixes
+
+* codif VDI BUT, LP et DEUST ([f4c8c30](https://github.com/Dannebicque/oreof/commit/f4c8c30b572a57a3ca721d5a5787c381841abcc7))
+* commande pour la codification ([4a11d3b](https://github.com/Dannebicque/oreof/commit/4a11d3b3a9629add792c4e09232fba42249452e5))
+* export de la composante d'inscription principale ([5f3da31](https://github.com/Dannebicque/oreof/commit/5f3da31e90ab085c2bcc1b339132964e2bdbc61b))
+
+### [1.24.37](https://github.com/Dannebicque/oreof/compare/v1.24.36...v1.24.37) (2024-03-11)
+
+
+### Bug Fixes
+
+* codif avec séparation haute ou basse ([18a4a15](https://github.com/Dannebicque/oreof/commit/18a4a15a23be91a19cc71c562b5e23c4e0e85e15))
+* codif avec séparation haute ou basse ([b9b485a](https://github.com/Dannebicque/oreof/commit/b9b485a259e7e35fed6479a16adbb460beeab697))
+* Modif codification lettre mention ([a5089c7](https://github.com/Dannebicque/oreof/commit/a5089c70089770d0d951dd8475992e8aa6e1d274))
+
 ### [1.24.36](https://github.com/Dannebicque/oreof/compare/v1.24.35...v1.24.36) (2024-03-10)
 
 

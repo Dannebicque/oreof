@@ -24,8 +24,7 @@
         {% else %}
             {{ ec.elementConstitutif.libelle }}
         {% endif %}
-        ({{ ec.elementConstitutif.displayCodeApogee }})
-        {% if ec.elementConstitutif.natureEcUe is defined and ec.elementConstitutif.natureEcUe.isLibre == true %}
+        {% if ec.elementConstitutif.natureUeEc is defined and ec.elementConstitutif.natureUeEc.isLibre == true %}
             ({{ ec.elementConstitutif.displayCodeApogee }}) <span class="badge bg-success">EC à choix libre</span>
         {% endif %}
         {% if ec.elementsConstitutifsEnfants|length > 0 %}

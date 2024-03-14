@@ -197,6 +197,10 @@ class CodificationController extends BaseController
                 'annee' => $annee,
             ]),
         ])
+            ->add('codeMentionApogee', null, [
+                'label' => 'Lettre Mention',
+                'data' => $parcours->getCodeMentionApogee(),
+            ])
             ->add('codeDiplome', null, [
                 'label' => 'Code diplôme',
                 'data' => $parcours->getCodeDiplome($annee),
@@ -218,6 +222,7 @@ class CodificationController extends BaseController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $semParcours = $parcours->getSemestrePourAnnee($annee);
+            $parcours->setCodeMentionApogee($form->get('codeMentionApogee')->getData());
             foreach ($semParcours as $sem) {
                 $sem->setCodeApogeeDiplome($form->get('codeDiplome')->getData(), $annee);
                 $sem->setCodeApogeeVersionDiplome($form->get('codeVersionDiplome')->getData(), $annee);
@@ -292,8 +297,7 @@ class CodificationController extends BaseController
             throw new \Exception('Type de codification non trouvé');
         }
 
-        switch ($typeCodification)
-        {
+        switch ($typeCodification) {
             case 'codifHaute':
                 $codificationFormation->setCodificationHaute($formation);
                 break;

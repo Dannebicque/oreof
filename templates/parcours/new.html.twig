@@ -43,6 +43,10 @@
 {{ form_row(form.typeParcours) }}
 {{ form_row(form.parcoursOrigine) }}
 
+{% if is_granted('ROLE_ADMIN') %}
+    {{ form_row(form.codeMentionApogee) }}
+{% endif %}
+
 <button type="submit" class="btn btn-success"
         {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
 >

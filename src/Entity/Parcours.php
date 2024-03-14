@@ -583,6 +583,9 @@ class Parcours
 
     public function getComposanteInscription(): ?Composante
     {
+        if ($this->isParcoursDefaut() === true) {
+            return $this->composanteInscription ?? $this->getFormation()?->getComposantesInscription()?->first();
+        }
         return $this->composanteInscription;
     }
 

@@ -64,6 +64,13 @@ class ParcoursType extends AbstractType
                 'class' => TypeParcoursEnum::class,
                 'translation_domain' => 'form',
             ])
+            ->add('codeMentionApogee', TextType::class, [
+                'help' => 'Code de la mention dans Apogée',
+                'attr' => [
+                    'maxlength' => '1',
+                ],
+                'required' => false,
+            ])
             ->add('parcoursOrigine', EntityType::class, [
                 'required' => false,
                 'help' => '',
