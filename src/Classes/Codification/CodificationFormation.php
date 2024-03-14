@@ -135,7 +135,6 @@ class CodificationFormation
         $formation = $parcours->getFormation();
         if ($formation !== null) {
             foreach ($parcours->getSemestreParcours() as $sp) {
-
                 if ($parcours->getFormation()?->getTypeDiplome()?->isCodifIntermediaire() === false) {
                     if ($parcours->getTypeParcours() !== null && ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1 || $parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23)) {
                         $code = '6';
@@ -147,7 +146,6 @@ class CodificationFormation
                 }
 
                 $code .= substr($parcours->getComposanteInscription()?->getCodeComposante(), 1, 2);
-
                 $sp->setCodeApogeeVersionDiplome($code);
             }
         }
