@@ -1125,7 +1125,11 @@ class ExportElpApogeeCommand extends Command
             // Ne pas insérer les éléments de nature 'CHOI' ?
             $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::CHOI, $withChecks);
             foreach($ue->uesEnfants() as $ueEnfant){
-                $elpArray[] = $this->setObjectForSoapCall($ueEnfant, $dto, CodeNatuElpEnum::UE, $withChecks);
+                if($ueEnfant->ue->getNatureUeEc()?->isLibre()){
+                    $elpArray[] = $this->setObjectForSoapCall($ueEnfant, $dto, CodeNatuElpEnum::CHOI, $withChecks);
+                }else {
+                    $elpArray[] = $this->setObjectForSoapCall($ueEnfant, $dto, CodeNatuElpEnum::UE, $withChecks);
+                }
                 if($withEcChildren) {
                     foreach($ueEnfant->elementConstitutifs as $ecUeEnfant){
                         $this->addEcToElpArray($elpArray, $ecUeEnfant, $dto, $withChecks);
@@ -1133,7 +1137,11 @@ class ExportElpApogeeCommand extends Command
                 }
             }
         }else {
-            $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::UE, $withChecks);
+            if($ue->ue->getNatureUeEc()?->isLibre()){
+                $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::CHOI, $withChecks);
+            }else {
+                $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::UE, $withChecks);
+            }
         }
     }
 
