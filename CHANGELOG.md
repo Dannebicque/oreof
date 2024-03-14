@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.40](https://github.com/Dannebicque/oreof/compare/v1.24.39...v1.24.40) (2024-03-14)
+
+
+### Bug Fixes
+
+* Composante d'inscription même si pas de parcours. ([cec86fb](https://github.com/Dannebicque/oreof/commit/cec86fb80f3706e9248219c1e477f66a06f22d34))
+
 ### [1.24.39](https://github.com/Dannebicque/oreof/compare/v1.24.38...v1.24.39) (2024-03-12)
 
 
