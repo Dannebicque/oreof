@@ -1080,19 +1080,21 @@ class ExportElpApogeeCommand extends Command
     private function addEcToElpArray(array &$elpArray, StructureEc $ec, StructureParcours $dto, bool $withChecks = false) : void {
         $hasChildren = count($ec->elementsConstitutifsEnfants) > 0;
         // si l'élément est mutualisé, on ne l'insère qu'une fois
-        if($this->isEcMutualiseMaster($ec, $dto) && $hasChildren === false){
-            $nature = CodeNatuElpEnum::MATM;
+        $nature = $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? 'MATI';
+        if($this->isEcMutualiseMaster($ec, $dto) && $hasChildren === false && $nature === 'MATM'){
+            $natureApogee = CodeNatuElpEnum::MATM;
             if($ec->elementConstitutif->getTypeEc()->getType() === TypeUeEcEnum::STAGE){
-                $nature = CodeNatuElpEnum::MATS;
+                $natureApogee = CodeNatuElpEnum::MATS;
             }
-            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, $nature, $withChecks);
+            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, $natureApogee, $withChecks);
         }
         // si l'élément a des enfants, on insère que les enfants
         if($hasChildren){
             // Ne pas insérer les éléments de nature 'CHOI' ?
             $elpArray[] = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::CHOI, $withChecks);
             foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
-                if($this->isEcMutualiseMaster($ecEnfant, $dto) === true){
+                $natureEcEnfant = $ecEnfant->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? 'MATI';
+                if($this->isEcMutualiseMaster($ecEnfant, $dto) === true && $natureEcEnfant === 'MATM'){
                     $elpArray[] = $this->setObjectForSoapCall($ecEnfant, $dto, CodeNatuElpEnum::MATM, $withChecks);
                 }
                 elseif ($this->isEcMutualise($ecEnfant) === false) {
