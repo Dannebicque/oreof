@@ -1103,12 +1103,12 @@ class ExportElpApogeeCommand extends Command
             }
         }
         // si c'est une matière standard
-        if($hasChildren === false && $this->isEcMutualise($ec) === false){
-            $nature = CodeNatuElpEnum::MATI;
+        if(($hasChildren === false && $this->isEcMutualise($ec) === false) || $nature === 'MATI'){
+            $natureApogee = CodeNatuElpEnum::MATI;
             if ($ec->elementConstitutif->getTypeEc()->getType() === TypeUeEcEnum::STAGE){
-                $nature = CodeNatuElpEnum::MATS;
+                $natureApogee = CodeNatuElpEnum::MATS;
             }
-            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, $nature, $withChecks);
+            $elpArray[] = $this->setObjectForSoapCall($ec, $dto, $natureApogee, $withChecks);
         }
     }
 
