@@ -136,13 +136,14 @@ class CodificationFormation
         if ($formation !== null) {
             foreach ($parcours->getSemestreParcours() as $sp) {
                 if ($parcours->getFormation()?->getTypeDiplome()?->isCodifIntermediaire() === false) {
-                    if ($parcours->getTypeParcours() !== null && ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1 || $parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23)) {
-                        $code = '6';
-                    } else {
-                        $code = '2';
-                    }
+                    $code = '2';
                 } else {
-                    $code = $sp->getAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '2' : '1';
+                    if ($parcours->getTypeParcours() !== null && ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1 || $parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23)) {
+                        $code = $sp->getAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '6' : '1';
+                    } else {
+
+                        $code = $sp->getAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '2' : '1';
+                    }
                 }
 
                 $code .= substr($parcours->getComposanteInscription()?->getCodeComposante(), 1, 2);
