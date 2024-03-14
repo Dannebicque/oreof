@@ -141,11 +141,7 @@ class CodificationFormation
                     $code = $sp->getAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '2' : '1';
                 }
 
-                if ($parcours->isParcoursDefaut()) {
-                    $code .= substr($formation->getComposantePorteuse()?->getCodeComposante(), 1, 2);
-                } else {
-                    $code .= substr($parcours->getComposanteInscription()?->getCodeComposante(), 1, 2);
-                }
+                $code .= substr($parcours->getComposanteInscription()?->getCodeComposante(), 1, 2);
 
                 $sp->setCodeApogeeVersionDiplome($code);
             }
