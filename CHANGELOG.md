@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.41](https://github.com/Dannebicque/oreof/compare/v1.24.40...v1.24.41) (2024-03-14)
+
+
+### Bug Fixes
+
+* affichage choix libre ([bf9c36f](https://github.com/Dannebicque/oreof/commit/bf9c36ff7c3a69cfc2a7de75a4601dcbfe148edd))
+
 ### [1.24.40](https://github.com/Dannebicque/oreof/compare/v1.24.39...v1.24.40) (2024-03-14)
 
 
