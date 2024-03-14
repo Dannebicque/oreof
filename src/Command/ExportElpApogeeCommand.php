@@ -1103,7 +1103,7 @@ class ExportElpApogeeCommand extends Command
             }
         }
         // si c'est une matière standard
-        if(($hasChildren === false && $this->isEcMutualise($ec) === false) || $nature === 'MATI'){
+        if($hasChildren === false && $nature === 'MATI'){
             $natureApogee = CodeNatuElpEnum::MATI;
             if ($ec->elementConstitutif->getTypeEc()->getType() === TypeUeEcEnum::STAGE){
                 $natureApogee = CodeNatuElpEnum::MATS;
