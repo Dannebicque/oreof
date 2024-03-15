@@ -1,5 +1,41 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        {{ cssDiff }}
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- Test Script -->
+    <script>
+      let isSaveClicked = false
+
+      function showVersion () {
+        let select = document.querySelector('#selectVersion')
+        let versionSelected = select.options[select.selectedIndex].value
+        if (versionSelected !== '#') {
+          window.location = `/parcours/${versionSelected}/versioning/view`
+        }
+      }
+
+      function saveVersion (event) {
+        if (isSaveClicked === false) {
+          let spinner = document.querySelector('#spinner')
+          spinner.classList.remove('d-none')
+          spinner.classList.add('d-flex')
+          isSaveClicked = true
+        } else {
+          event.preventDefault()
+          return false
+        }
+      }
+
+    </script>
+{% endblock %}
+
 {% block title %}Formation{% endblock %}
 
 {% block content %}
@@ -8,6 +44,10 @@
 
     {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}
     {{ include('formation/_gestion.html.twig', {formation: formation}) }}
+    {# Versioning pour les parcours par défaut #}
+    {% if formation.isHasParcours == false and formation.parcours|length == 1 %}   
+        {{ include('formation/_manage_versioning.html.twig', {parcours: formation.parcours[0]}) }}
+    {% endif %}
     {% endif %}
 
     <div class="row">

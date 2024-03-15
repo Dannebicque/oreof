@@ -17,6 +17,8 @@ use App\DTO\StatsFichesMatieres;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\FormationDemande;
+use App\Entity\Parcours;
+use App\Entity\ParcoursVersioning;
 use App\Entity\UserCentre;
 use App\Events\AddCentreFormationEvent;
 use App\Form\FormationDemandeType;
@@ -30,11 +32,22 @@ use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserCentreRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
+use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 #[Route('/formation')]
 class FormationController extends BaseController
@@ -366,7 +379,8 @@ class FormationController extends BaseController
     #[Route('/{slug}', name: 'app_formation_show', methods: ['GET'])]
     public function show(
         TypeDiplomeRegistry     $typeDiplomeRegistry,
-        Formation               $formation
+        Formation               $formation,
+        EntityManagerInterface $entityManager
     ): Response {
         $typeDiplome = $formation->getTypeDiplome();
 
@@ -381,11 +395,90 @@ class FormationController extends BaseController
             $tParcours[$parcours->getId()] = $typeD->calculStructureParcours($parcours);
         }
 
+        /**
+         * VERSIONING PARCOURS PAR DÉFAUT
+         */
+        $cssDiff = "";
+        if($formation->isHasParcours() === false && count($formation->getParcours()) === 1){
+            $cssDiff = DiffHelper::getStyleSheet();
+
+            // Serializer
+            $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+            $serializer = new Serializer(
+            [
+                new DateTimeNormalizer(),
+                new BackedEnumNormalizer(),
+                new ArrayDenormalizer(),
+                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
+            ],
+                [new JsonEncoder()]
+            ); 
+            // Version n-1     
+            $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
+            $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
+
+            $textDifferences = [];
+
+            // Changements dans le texte : comparaison avec n-1
+            if($lastVersion){
+                $rendererName = 'Inline';
+                $differOptions = [
+                    'context' => 1,
+                    'ignoreWhitespace' => true,
+                    'ignoreLineEnding' => true,
+                ];
+                $rendererOptions = [
+                    'detailLevel' => 'char',
+                    'lineNumbers' => false,
+                    'showHeader' => false,
+                    'separateBlock' => false,
+                ];
+                $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
+                                                . "{$lastVersion->getParcours()->getId()}/"
+                                                . "{$lastVersion->getParcoursFileName()}.json"
+                                );
+                $lastVersion = $serializer->deserialize($fileParcours, Parcours::class, 'json');
+                $textDifferences = [
+                    'presentationParcoursContenuFormation' => html_entity_decode(DiffHelper::calculate(
+                        $lastVersion->getFormation()->getContenuFormation() ?? "",
+                        $parcours->getFormation()->getContenuFormation() ?? "",
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    )),
+                    'presentationParcoursObjectifsParcours' => html_entity_decode(DiffHelper::calculate(
+                        $lastVersion->getObjectifsParcours() ?? "",
+                        $parcours->getObjectifsParcours() ?? "",
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    )),
+                    'presentationParcoursResultatsAttendus' => html_entity_decode(DiffHelper::calculate(
+                        $lastVersion->getFormation()->getResultatsAttendus() ?? "",
+                        $parcours->getFormation()->getResultatsAttendus() ?? "",
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    )),
+                    'presentationFormationObjectifsFormation' => html_entity_decode(DiffHelper::calculate(
+                        $lastVersion->getFormation()?->getObjectifsFormation() ?? "",
+                        $parcours->getFormation()?->getObjectifsFormation() ?? "",
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    )),
+                ];
+            }
+        }
+        /* FIN DU VERSIONING */
+
         return $this->render('formation/show.html.twig', [
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
             'tParcours' => $tParcours,
-            'typeD' => $typeD
+            'typeD' => $typeD,
+            'cssDiff' => $cssDiff,
+            'stringDifferences' => $textDifferences ?? [],
         ]);
     }
 

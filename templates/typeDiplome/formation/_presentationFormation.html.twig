@@ -5,8 +5,38 @@
             <dl>
                 <dt>Contenu de la formation</dt>
                 <dd>{{ formation.contenuFormation|raw }}</dd>
+                {% if stringDifferences is defined 
+                   and stringDifferences.presentationParcoursContenuFormation is defined 
+                   and stringDifferences.presentationParcoursContenuFormation|length > 0
+                %}
+                    <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
+                        <button class="btn btn-primary btn-sm my-3"
+                            data-bs-toggle="collapse" data-bs-target="#diffContenuFormation"
+                        >
+                            Voir les différences
+                        </button>
+                    </div>
+                    <div class="col-sm-12 collapse" id="diffContenuFormation">
+                        {{ stringDifferences.presentationParcoursContenuFormation|raw  }} 
+                    </div>
+                {% endif %}
                 <dt>Résultats attendus de la formation</dt>
                 <dd>{{ formation.resultatsAttendus|raw }}</dd>
+                {% if stringDifferences is defined 
+                   and stringDifferences.presentationParcoursResultatsAttendus is defined 
+                   and stringDifferences.presentationParcoursResultatsAttendus|length > 0
+                %}
+                    <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
+                        <button class="btn btn-primary btn-sm my-3"
+                            data-bs-toggle="collapse" data-bs-target="#diffResultatsAttendus"
+                        >
+                            Voir les différences
+                        </button>
+                    </div>
+                    <div class="col-sm-12 collapse" id="diffResultatsAttendus">
+                        {{ stringDifferences.presentationParcoursResultatsAttendus|raw  }} 
+                    </div>
+                {% endif %}
                 <dt>Rythme de formation</dt>
                 <dd>
                     {{ formation.rythmeFormation != null ? formation.rythmeFormation.libelle : 'Non précisé' }}

@@ -268,29 +268,29 @@ class ParcoursController extends BaseController
             $lastVersion = $serializer->deserialize($fileParcours, Parcours::class, 'json');
             $textDifferences = [
                 'presentationParcoursContenuFormation' => html_entity_decode(DiffHelper::calculate(
-                    $lastVersion->getContenuFormation(),
-                    $parcours->getContenuFormation(),
+                    $lastVersion->getContenuFormation() ?? "",
+                    $parcours->getContenuFormation() ?? "",
                     $rendererName,
                     $differOptions,
                     $rendererOptions
                 )),
                 'presentationParcoursObjectifsParcours' => html_entity_decode(DiffHelper::calculate(
-                    $lastVersion->getObjectifsParcours(),
-                    $parcours->getObjectifsParcours(),
+                    $lastVersion->getObjectifsParcours() ?? "",
+                    $parcours->getObjectifsParcours() ?? "",
                     $rendererName,
                     $differOptions,
                     $rendererOptions
                 )),
                 'presentationParcoursResultatsAttendus' => html_entity_decode(DiffHelper::calculate(
-                    $lastVersion->getResultatsAttendus(),
-                    $parcours->getResultatsAttendus(),
+                    $lastVersion->getResultatsAttendus() ?? "",
+                    $parcours->getResultatsAttendus() ?? "",
                     $rendererName,
                     $differOptions,
                     $rendererOptions
                 )),
                 'presentationFormationObjectifsFormation' => html_entity_decode(DiffHelper::calculate(
-                    $lastVersion->getFormation()?->getObjectifsFormation(),
-                    $parcours->getFormation()?->getObjectifsFormation(),
+                    $lastVersion->getFormation()?->getObjectifsFormation() ?? "",
+                    $parcours->getFormation()?->getObjectifsFormation() ?? "",
                     $rendererName,
                     $differOptions,
                     $rendererOptions
@@ -665,7 +665,12 @@ class ParcoursController extends BaseController
             $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/save_parcours_success.log", $successLogTxt);
             // Message de réussite + redirection
             $this->addFlashBag('success', 'La version du parcours à bien été sauvegardée.');
-            return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
+            if($parcours->isParcoursDefaut() === false){
+                return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
+            }
+            else {
+                return $this->redirectToRoute('app_formation_show', ['slug' => $parcours->getFormation()->getSlug()]);
+            }
         } catch (\Exception $e) {
             // Log error
             $logTxt = "[{$dateHeure}] Le versioning du parcours : {$parcours->getId()} a rencontré une erreur.\n{$e->getMessage()}\n";
