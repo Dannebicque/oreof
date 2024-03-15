@@ -1,11 +1,50 @@
 
-<div class="div">
-    <div class="col-4">
-        Diplôme : {{ parcours.codeDiplome(parcours.semestreParcours.first.annee) }} VDI : {{ parcours.codeVersionDiplome(parcours.semestreParcours.first.annee) }}
-    </div>
-    <div class="col-4">
-        Code apogée parcours {{ parcours.codeApogee }}
+<div class="row">
+    <div class="col-12">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Année d'étude</th>
+                <th>Ville</th>
+                <th>Parcours</th>
+                <th>Code Diplôme</th>
+                <th>Version Diplôme</th>
+                <th>Code Etape</th>
+                <th>Version Etape</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for annee in parcours.annees %}
+                <tr>
+                    <td>{{annee}}</td>
+                    <td>{{ parcours.localisation != null ? parcours.localisation.libelle : '' }}</td>
+                    <td>{{ parcours.codeMentionApogee }}</td>
+                    <td>{{ parcours.codeDiplome(annee) }}</td>
+                    <td>{{ parcours.codeVersionDiplome(annee) }}</td>
+                    <td>{{ parcours.codeEtape(annee) }}</td>
+                    <td>{{ parcours.codeVersionEtape(annee) }}</td>
+                    <td> <a href="#"
+                            class="btn btn-sm text-warning"
+                                {{ stimulus_controller('modal', {
+                                    size: 'lg',
+                                    modalTitle: 'Modifier la codification',
+                                    modalUrl: path('app_codification_edit', {parcours:parcours.id, annee:annee}) }) }}
+                            data-action="click->modal#openModal"
+                            data-size="lg"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            title="Modifier Codes"
+                        >
+                            <i class="{{ iconEdit }}"></i>
+                            <span> Modifier Codes</span>
+                        </a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
+
 {{ include('typeDiplome/formation/_structure.html.twig', {parcours:parcours, source: 'codification'}) }}
 
