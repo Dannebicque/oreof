@@ -54,7 +54,7 @@ class ExportElpApogeeCommand extends Command
     private static $codLseApogeeDataTest = "COD_LSE_11-03-2024-09_47.json";
     // Données exportées depuis ORéOF
     private static $fullLseExportDataTest = "COD_LSE_TEST-08-03-2024_09-47-16.json";
-    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-11-03-2024_11-23-02.json";
+    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-15-03-2024_09-10-14.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
@@ -1235,7 +1235,7 @@ class ExportElpApogeeCommand extends Command
     private function getLseObjectForEcChildren(StructureEc $ec, string $libelleCourt, string $libelleLong) : ListeElementPedagogiDTO3|null {
         $return = null;
         if(count($ec->elementsConstitutifsEnfants) > 0){
-            $return = new ListeElementPedagogiDTO3($ec->elementConstitutif->getCodeApogee() ?? 'ERROR', 'O', $libelleCourt, $libelleLong, array_map(
+            $return = new ListeElementPedagogiDTO3($ec->elementConstitutif->getCodeApogee() ?? 'ERROR', 'X', $libelleCourt, $libelleLong, array_map(
                 fn($ecEnfant) => $ecEnfant->elementConstitutif->getCodeApogee(),
                 $ec->elementsConstitutifsEnfants
             ));
@@ -1253,7 +1253,7 @@ class ExportElpApogeeCommand extends Command
     private function getLseObjectForUeChildren(StructureUe $ue, string $libelleCourt, string $libelleLong) : ListeElementPedagogiDTO3|null {
         $return = null;
         if(count($ue->uesEnfants()) > 0){
-            $return = new ListeElementPedagogiDTO3($ue->ue->getCodeApogee() ?? 'ERROR', 'O', $libelleCourt, $libelleLong, array_map(
+            $return = new ListeElementPedagogiDTO3($ue->ue->getCodeApogee() ?? 'ERROR', 'X', $libelleCourt, $libelleLong, array_map(
                 fn($ueEnfant) => $ueEnfant->ue->getCodeApogee(),
                 $ue->uesEnfants()
             ));
