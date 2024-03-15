@@ -138,11 +138,15 @@ class CodificationFormation
                 if ($parcours->getFormation()?->getTypeDiplome()?->isCodifIntermediaire() === false) {
                     $code = '2';
                 } else {
-                    $code = $sp->getAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '2' : '1';
+                    if ($parcours->getTypeParcours() !== null && ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS1 || $parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23)) {
+                        $code = $sp->getAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '6' : '1';
+                    } else {
+
+                        $code = $sp->getAnnee() === $parcours->getFormation()?->getTypeDiplome()?->getNbAnnee() ? '2' : '1';
+                    }
                 }
 
                 $code .= substr($parcours->getComposanteInscription()?->getCodeComposante(), 1, 2);
-
                 $sp->setCodeApogeeVersionDiplome($code);
             }
         }

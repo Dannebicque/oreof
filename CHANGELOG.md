@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.43](https://github.com/Dannebicque/oreof/compare/v1.24.42...v1.24.43) (2024-03-15)
+
+
+### Bug Fixes
+
+* affichage codification sur parcours ([c4421e0](https://github.com/Dannebicque/oreof/commit/c4421e016037b98c05cada56d94e0e1cb0f7d6ea))
+* codification ([0d475e0](https://github.com/Dannebicque/oreof/commit/0d475e03565f55e8abccfab7fd4c9a327db38b23))
+* codification ([d023254](https://github.com/Dannebicque/oreof/commit/d02325452c1b485d95937563e83a440059992f00))
+* codification ([42aca14](https://github.com/Dannebicque/oreof/commit/42aca14ae5b69427d0fc7fe12184875bc00ed318))
+
+### [1.24.42](https://github.com/Dannebicque/oreof/compare/v1.24.41...v1.24.42) (2024-03-14)
+
+
+### Bug Fixes
+
+* affichage choix libre ([3707943](https://github.com/Dannebicque/oreof/commit/37079430584bb6ae9f4ec1a4973011630521b2cb))
+* affichage choix libre ([c46852c](https://github.com/Dannebicque/oreof/commit/c46852c919bc73268510f9f1b797676f17452dcf))
+* affichage choix libre ([0c55fe4](https://github.com/Dannebicque/oreof/commit/0c55fe425cc826974467f34f3e81baf606b0c9d0))
+* codification ([db06854](https://github.com/Dannebicque/oreof/commit/db0685409e264688c18b90370046fbc434c89a4c))
+
 ### [1.24.41](https://github.com/Dannebicque/oreof/compare/v1.24.40...v1.24.41) (2024-03-14)
 
 
