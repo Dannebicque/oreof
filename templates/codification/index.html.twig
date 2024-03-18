@@ -34,6 +34,7 @@
                 url: path('app_codification_wizard', {formation:formation.id}),
                 step: formation.parcours.first.id,
             }) }}
+         data-action="base:refreshListe@window->wizard#changeStep"
     >
 
         <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs" id="lineTitleTabsContainer"
@@ -43,7 +44,7 @@
                     <a class="nav-link {% if loop.first %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
                             {{ stimulus_action('wizard', 'changeStep', 'click', {step: parcours.id}) }}
                     >
-                        {{ parcours.libelle }}
+                        {{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}
                     </a>
                 </li>
             {% endfor %}
