@@ -40,6 +40,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
@@ -576,6 +577,19 @@ class FormationController extends BaseController
 
         return $this->render('formation/maquette_iframe.html.twig', [
             'listeParcours' => $listeParcours
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/mention/list', name: 'app_formation_liste_id')]
+    public function getParcoursListForFormations(
+        EntityManagerInterface $entityManager
+    ) : Response {
+        
+        $formations = $entityManager->getRepository(Formation::class)->findBy(['dpe' => 1]);
+
+        return $this->render("formation/parcours_list_with_id.html.twig", [
+            'formations' => $formations
         ]);
     }
 }
