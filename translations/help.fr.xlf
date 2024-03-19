@@ -2588,5 +2588,11 @@
         <target>form.helps.codeVersionEtape</target>
       </segment>
     </unit>
+    <unit id="0HMlD1t" name="type_diplome.helps.codifIntermediaire.help">
+      <segment>
+        <source>type_diplome.helps.codifIntermediaire.help</source>
+        <target>type_diplome.helps.codifIntermediaire.help</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

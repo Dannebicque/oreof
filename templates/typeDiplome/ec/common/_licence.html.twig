@@ -43,7 +43,13 @@
                                         <span> Voir les éléments pour  {% if ec.parcours.isParcoursDefaut %}
                                                 la mention <strong>{{ ec.parcours.formation.displayLong }} (mention sans parcours)</strong>
                                     {% else %}
-                                                le parcours <strong>{{ ec.parcours.libelle }} ({{ ec.parcours.formation.displayLong }})</strong>
+                                                le parcours 
+                                                <strong>
+                                                    {{ ec.parcours.libelle }} 
+                                                    {% if ec.parcours.formation.displayLong is defined and ec.parcours.formation.displayLong != null %}
+                                                        ({{ ec.parcours.formation.displayLong }})
+                                                    {% endif %}
+                                                </strong>
                                             {% endif %}</span>
                                     </button>
                                 {% else %}

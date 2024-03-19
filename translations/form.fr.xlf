@@ -2767,5 +2767,11 @@
         <target>type_ec.labels.type.label</target>
       </segment>
     </unit>
+    <unit id="NiEBpCS" name="Codification intermédiaire">
+      <segment>
+        <source>Codification intermédiaire</source>
+        <target>Codification intermédiaire</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
