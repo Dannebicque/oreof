@@ -1,35 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="card mt-2">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-2">
-                    <p>type Diplome</p>
-                    <p>{{ formation.typeDiplome != null ?  formation.typeDiplome.codeApogee : '--' }}</p>
-                </div>
-                <div class="col-2">
-                    <p>domaine</p>
-                    <p>{{ formation.domaine != null ?  formation.domaine.codeApogee : '--' }}</p>
-                </div>
-                <div class="col-2">
-                    <p>mention</p>
-                    <p>{{ formation.mention != null ? formation.codeMentionApogee : '--' }}</p>
-                </div>
-                <div class="col-2">
-                    <p>code compo.</p>
-                    <p>{{ formation.composantePorteuse != null ? formation.composantePorteuse.codeComposante : '--' }}</p>
-                </div>
-                <div class="col-2">
-                    <p>code compo. 2</p>
-                    <p>{{ formation.composantePorteuse != null ? formation.composantePorteuse.codeApogee : '--' }}</p>
-                </div>
-                <div class="col-2"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="mt-3"
+    <div
             {{ stimulus_controller('wizard', {
                 url: path('app_codification_wizard', {formation:formation.id}),
                 step: formation.parcours.first.id,
@@ -48,8 +20,6 @@
                     </a>
                 </li>
             {% endfor %}
-
-
 
             <!-- An empty list to put overflowed links -->
             <li class="nav-item dropdown ms-auto pe-0 d-none responsive-tab-dropdown">

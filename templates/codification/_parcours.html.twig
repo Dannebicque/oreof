@@ -1,3 +1,49 @@
+<div class="row">
+    <div class="col-2 text-center">
+        <p class="font-weight-bold">Type Diplôme</p>
+        <p>{{ formation.typeDiplome != null ?  formation.typeDiplome.codeApogee : '--' }}</p>
+    </div>
+    <div class="col-2 text-center">
+        <p class="font-weight-bold">Domaine</p>
+        <p>{{ formation.domaine != null ?  formation.domaine.codeApogee : '--' }}</p>
+    </div>
+    <div class="col-2 text-center">
+        <p class="font-weight-bold">Mention</p>
+        <p>{{ parcours.codeMentionApogee }}</p>
+    </div>
+    {% if parcours.parcoursDefaut %}
+        <div class="col-2 text-center">
+            <p class="font-weight-bold">Ville</p>
+            <p>{{ formation.localisationMention.first != null ? formation.localisationMention.first.codeApogee : '--' }}</p>
+        </div>
+        <div class="col-2 text-center">
+            <p class="font-weight-bold">Code compo.</p>
+            <p>
+                {{ parcours.composanteInscription != null ? parcours.composanteInscription.codeComposante : '--' }}
+            </p>
+        </div>
+        <div class="col-2 text-center">
+            <p class="font-weight-bold">code compo. 2</p>
+            <p>{{ parcours.composanteInscription != null ? parcours.composanteInscription.codeApogee : '--' }}</p>
+        </div>
+    {% else %}
+        <div class="col-2 text-center">
+            <p class="font-weight-bold">Ville</p>
+            <p>{{ parcours.localisation != null ? parcours.localisation.codeApogee : '--' }}</p>
+        </div>
+        <div class="col-2 text-center">
+            <p class="font-weight-bold">Code compo.</p>
+            <p>
+                {{ parcours.composanteInscription != null ? parcours.composanteInscription.codeComposante : '--' }}
+            </p>
+        </div>
+        <div class="col-2 text-center">
+            <p class="font-weight-bold">Code compo. 2</p>
+            <p>{{ parcours.composanteInscription != null ? parcours.composanteInscription.codeApogee : '--' }}</p>
+        </div>
+    {% endif %}
+</div>
+
 
 <div class="row">
     <div class="col-12">
@@ -17,24 +63,24 @@
             <tbody>
             {% for annee in parcours.annees %}
                 <tr>
-                    <td>{{annee}}</td>
+                    <td>{{ annee }}</td>
                     <td>{{ parcours.localisation != null ? parcours.localisation.libelle : '' }}</td>
                     <td>{{ parcours.codeMentionApogee }}</td>
                     <td>{{ parcours.codeDiplome(annee) }}</td>
                     <td>{{ parcours.codeVersionDiplome(annee) }}</td>
                     <td>{{ parcours.codeEtape(annee) }}</td>
                     <td>{{ parcours.codeVersionEtape(annee) }}</td>
-                    <td> <a href="#"
-                            class="btn btn-sm text-warning"
+                    <td><a href="#"
+                           class="btn btn-sm text-warning"
                                 {{ stimulus_controller('modal', {
                                     size: 'lg',
                                     modalTitle: 'Modifier la codification',
                                     modalUrl: path('app_codification_edit', {parcours:parcours.id, annee:annee}) }) }}
-                            data-action="click->modal#openModal"
-                            data-size="lg"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            title="Modifier Codes"
+                           data-action="click->modal#openModal"
+                           data-size="lg"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Modifier Codes"
                         >
                             <i class="{{ iconEdit }}"></i>
                             <span> Modifier Codes</span>
