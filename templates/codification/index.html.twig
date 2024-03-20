@@ -102,6 +102,16 @@
 
 {% block bouton_header %}
     <a
+            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Exporter codif. formation"
+            href="{{ path('app_codification_export_formation', {slug:formation.slug}) }}"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Exporter codif. formation</span>
+    </a>
+    <a
             class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
             data-bs-toggle="tooltip"
             data-bs-placement="bottom"

@@ -13,6 +13,7 @@ use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
+use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Utils\Tools;
 use DateTime;
@@ -100,16 +101,29 @@ class ExportCodification
         $this->excelWriter->nouveauFichier('Export Codification');
         $this->excelWriter->setActiveSheetIndex(0);
 
+        $this->writeParcours($parcours);
+
+        $fileName = Tools::FileName('Codification-Parcours-'.$parcours->getLibelle() .'-'. (new DateTime())->format('d-m-Y-H-i'), 50);
+        return $this->excelWriter->genereFichier($fileName, true);
+    }
+
+    private function writeParcours(Parcours $parcours)
+    {
         $dto = $this->calculStructureParcours->calcul($parcours, true, false);
 
         $this->excelWriter->writeCellXY(1, 1, 'Diplôme ' . $parcours->getFormation()->getDisplayLong());
         $this->excelWriter->writeCellXY(1, 2, 'Parcours ' . $parcours->getLibelle());
+
+        // fusion des cellules
+        $this->excelWriter->mergeCells('A1:J1');
+        $this->excelWriter->mergeCells('A2:J2');
+
         $this->excelWriter->writeCellXY(1, 3, 'Dip ');
         $this->excelWriter->writeCellXY(2, 3, $parcours->getCodeDiplome(null));
         $this->excelWriter->writeCellXY(3, 3, 'VDI ');
         $this->excelWriter->writeCellXY(4, 3, $parcours->getCodeVersionDiplome(null));
 
-//todo: ajouter étape année
+        //todo: ajouter étape année
         $ligne = 4;
         /** @var StructureSemestre $semestre */
         foreach ($dto->semestres as $semestre) {
@@ -156,9 +170,6 @@ class ExportCodification
 
 
         $this->excelWriter->getColumnsAutoSize('A', 'N');
-
-        $fileName = Tools::FileName('Codification-Parcours-'.$parcours->getLibelle() .'-'. (new DateTime())->format('d-m-Y-H-i'), 50);
-        return $this->excelWriter->genereFichier($fileName, true);
     }
 
     private function writeEcs(StructureUe $ue, int $ligne, int $col): int
@@ -188,5 +199,21 @@ class ExportCodification
         }
 
         return $ligne;
+    }
+
+    public function exportFormation(Formation $formation)
+    {
+        $this->excelWriter->nouveauFichier();
+        $i = 0;
+        foreach ($formation->getParcours() as $parcours) {
+            $this->excelWriter->createSheet(substr($parcours->getLibelle(), 0, 31));
+            $this->excelWriter->setActiveSheetIndex($i);
+            $this->writeParcours($parcours);
+            $i++;
+        }
+
+
+        $fileName = Tools::FileName('Codification-Formation-'.$formation->getDisplay() .'-'. (new DateTime())->format('d-m-Y-H-i'), 50);
+        return $this->excelWriter->genereFichier($fileName, true);
     }
 }
