@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.45](https://github.com/Dannebicque/oreof/compare/v1.24.44...v1.24.45) (2024-03-20)
+
+
+### Features
+
+* export des formations ([7cd2174](https://github.com/Dannebicque/oreof/commit/7cd2174d0245f23033c2810790d08d17f3f6fd2d))
+
+
+### Bug Fixes
+
+* Code MATI/MATM ([25f1dbf](https://github.com/Dannebicque/oreof/commit/25f1dbf2f1fd3aaedd8b8935a9471f7a90ebdbc2))
+
 ### [1.24.44](https://github.com/Dannebicque/oreof/compare/v1.24.43...v1.24.44) (2024-03-19)
 
 
