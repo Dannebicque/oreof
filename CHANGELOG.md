@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.46](https://github.com/Dannebicque/oreof/compare/v1.24.45...v1.24.46) (2024-03-20)
+
+
+### Features
+
+* Affichage en-tête codification par parcours et non mention (pas de sens) ([8f40c9a](https://github.com/Dannebicque/oreof/commit/8f40c9a21b73e07d9a4853680ed1eae559ca4ddc))
+
 ### [1.24.45](https://github.com/Dannebicque/oreof/compare/v1.24.44...v1.24.45) (2024-03-20)
 
 
