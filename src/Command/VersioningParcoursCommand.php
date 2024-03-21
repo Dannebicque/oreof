@@ -66,7 +66,7 @@ class VersioningParcoursCommand extends Command
         if($dpeFullDatabase){
             $io->writeln("Sauvegarde de tous les parcours en cours...");
             $dpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => true]);
-            $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findParcours($dpe, []);
+            $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAllParcoursForDpe($dpe);
             $parcoursArray = array_filter(
                 $parcoursArray, 
                 fn($parcours) => $parcours->getFormation()->getTypeDiplome()->getLibelleCourt() !== "MEEF"
