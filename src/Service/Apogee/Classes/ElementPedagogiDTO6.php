@@ -316,7 +316,7 @@ class ElementPedagogiDTO6
         bool $withChecks, 
     ){
         $retour = // "UE " . $elementPedagogique->ue->getSemestre()->getOrdre() . "." . $elementPedagogique->ue->getOrdre()
-            $elementPedagogique->ue->display()
+            $elementPedagogique->display
         . " " . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() . " ";
         if($dto->parcours->isParcoursDefaut() === false){
             $retour .= $dto->parcours->getSigle();
@@ -361,7 +361,7 @@ class ElementPedagogiDTO6
             && $dto->parcours->getFormation()?->getTypeDiplome()->getLibelleCourt()
         ){
             if($type === "libelleLong"){
-                return 'SEMESTRE ' . $elementPedagogique->semestre->getOrdre() 
+                return 'SEMESTRE ' . $elementPedagogique->ordre 
                 . ' ' 
                 . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
                 . ' '
@@ -370,7 +370,7 @@ class ElementPedagogiDTO6
 
             }
             elseif($type === "libelleCourt"){
-                return 'S' . $elementPedagogique->semestre->getOrdre()
+                return 'S' . $elementPedagogique->ordre
                 . ' '
                 . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt()
                 . ' '
