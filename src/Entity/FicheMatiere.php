@@ -1128,12 +1128,12 @@ class FicheMatiere
 
     public function getTypeApogee(): ?string
     {
-        return $this->typeApogee;
+        return $this->typeApogee ?? self::MATI;
     }
 
     public function setTypeApogee(?string $typeApogee): static
     {
-        $this->typeApogee = $typeApogee ?? FicheMatiere::MATI;
+        $this->typeApogee = $typeApogee ?? self::MATI;
 
         return $this;
     }

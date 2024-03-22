@@ -8,9 +8,13 @@ use App\Classes\GetFormations;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
+use App\Repository\ComposanteRepository;
+use App\Repository\DomaineRepository;
 use App\Repository\FormationRepository;
+use App\Repository\MentionRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\TypeDiplomeRepository;
+use App\Repository\VilleRepository;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,6 +50,10 @@ class CodificationController extends BaseController
 
     #[Route('/codification/liste/type_diplome/{typeDiplome}', name: 'app_codification_liste_type_diplome')]
     public function listeTypeDiplome(
+        VilleRepository       $villeRepository,
+        ComposanteRepository  $composanteRepository,
+        MentionRepository     $mentionRepository,
+        DomaineRepository     $domaineRepository,
         GetFormations         $getFormations,
         Request               $request,
         TypeDiplomeRepository $typeDiplomeRepository,
@@ -65,12 +73,10 @@ class CodificationController extends BaseController
             $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser()) ||
             $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getUser()) ||
             $this->isGranted('CAN_FORMATION_SHOW_ALL', $this->getUser())) {
-            //$formations = $formationRepository->findByDpeAndTypeDiplome($this->getDpe(), $typeDiplome);
             $tFormations = $getFormations->getFormations(
                 $this->getUser(),
                 $this->getDpe(),
-                $filtres,
-                false
+                $filtres
             );
         } else {
             //filtrer par type de diplôme
@@ -110,6 +116,10 @@ class CodificationController extends BaseController
             'formations' => $tFormations,
             'typeDiplome' => $typeDiplome,
             'params' => $request->query->all(),
+            'composantes' => $composanteRepository->findAll(),
+            'mentions' => $mentionRepository->findAll(),
+            'domaines' => $domaineRepository->findAll(),
+            'villes' => $villeRepository->findAll(),
         ]);
     }
 

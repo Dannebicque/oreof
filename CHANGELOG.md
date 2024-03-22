@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.46](https://github.com/Dannebicque/oreof/compare/v1.24.45...v1.24.46) (2024-03-20)
+
+
+### Features
+
+* Affichage en-tête codification par parcours et non mention (pas de sens) ([8f40c9a](https://github.com/Dannebicque/oreof/commit/8f40c9a21b73e07d9a4853680ed1eae559ca4ddc))
+
+### [1.24.45](https://github.com/Dannebicque/oreof/compare/v1.24.44...v1.24.45) (2024-03-20)
+
+
+### Features
+
+* export des formations ([7cd2174](https://github.com/Dannebicque/oreof/commit/7cd2174d0245f23033c2810790d08d17f3f6fd2d))
+
+
+### Bug Fixes
+
+* Code MATI/MATM ([25f1dbf](https://github.com/Dannebicque/oreof/commit/25f1dbf2f1fd3aaedd8b8935a9471f7a90ebdbc2))
+
+### [1.24.44](https://github.com/Dannebicque/oreof/compare/v1.24.43...v1.24.44) (2024-03-19)
+
+
+### Bug Fixes
+
+* affichage partie codification ([af9ffcf](https://github.com/Dannebicque/oreof/commit/af9ffcf79b8b68c3cb527a730f45255c543826d8))
+* export avec code vet ([42915ee](https://github.com/Dannebicque/oreof/commit/42915ee76027c3cbe0dccfc6aeff11d32cf4fdb9))
+
 ### [1.24.43](https://github.com/Dannebicque/oreof/compare/v1.24.42...v1.24.43) (2024-03-15)
 
 

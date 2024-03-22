@@ -1,39 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="card mt-2">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-2">
-                    <p>type Diplome</p>
-                    <p>{{ formation.typeDiplome != null ?  formation.typeDiplome.codeApogee : '--' }}</p>
-                </div>
-                <div class="col-2">
-                    <p>domaine</p>
-                    <p>{{ formation.domaine != null ?  formation.domaine.codeApogee : '--' }}</p>
-                </div>
-                <div class="col-2">
-                    <p>mention</p>
-                    <p>{{ formation.mention != null ? formation.codeMentionApogee : '--' }}</p>
-                </div>
-                <div class="col-2">
-                    <p>code compo.</p>
-                    <p>{{ formation.composantePorteuse != null ? formation.composantePorteuse.codeComposante : '--' }}</p>
-                </div>
-                <div class="col-2">
-                    <p>code compo. 2</p>
-                    <p>{{ formation.composantePorteuse != null ? formation.composantePorteuse.codeApogee : '--' }}</p>
-                </div>
-                <div class="col-2"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="mt-3"
+    <div
             {{ stimulus_controller('wizard', {
                 url: path('app_codification_wizard', {formation:formation.id}),
                 step: formation.parcours.first.id,
             }) }}
+         data-action="base:refreshListe@window->wizard#changeStep"
     >
 
         <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs" id="lineTitleTabsContainer"
@@ -43,12 +16,10 @@
                     <a class="nav-link {% if loop.first %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
                             {{ stimulus_action('wizard', 'changeStep', 'click', {step: parcours.id}) }}
                     >
-                        {{ parcours.libelle }}
+                        {{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}
                     </a>
                 </li>
             {% endfor %}
-
-
 
             <!-- An empty list to put overflowed links -->
             <li class="nav-item dropdown ms-auto pe-0 d-none responsive-tab-dropdown">
@@ -100,6 +71,16 @@
 {% endblock %}
 
 {% block bouton_header %}
+    <a
+            class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+            data-bs-toggle="tooltip"
+            data-bs-placement="bottom"
+            title="Exporter codif. formation"
+            href="{{ path('app_codification_export_formation', {slug:formation.slug}) }}"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Exporter codif. formation</span>
+    </a>
     <a
             class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
             data-bs-toggle="tooltip"
