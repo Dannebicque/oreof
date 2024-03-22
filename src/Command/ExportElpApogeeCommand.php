@@ -164,6 +164,10 @@ class ExportElpApogeeCommand extends Command
             name: 'check-duplicates-from-json-export',
             mode: InputOption::VALUE_NONE,
             description: "Vérifie si des doublons existent dans un export JSON des ELP"
+        )->addOption(
+            name: 'check-nested-children',
+            mode: InputOption::VALUE_NONE,
+            description: "Vérifie s'il n'y a pas trop d'éléments enfants imbriqués dans les parcours disponibles"
         );
     }
 
@@ -193,6 +197,7 @@ class ExportElpApogeeCommand extends Command
         $checkLseTestJsonExport = $input->getOption('check-lse-test-json');
         $reportInvalidApogeeCode = $input->getOption('report-invalid-apogee-code');
         $checkDuplicatesFromJsonExport = $input->getOption('check-duplicates-from-json-export');
+        $checkNestedChildren = $input->getOption('check-nested-children');
 
         if($mode === "test"){
             // Export total des ELP selon le type : EC, UE ou Semestre
@@ -595,6 +600,56 @@ class ExportElpApogeeCommand extends Command
                     dump($doublonArray);
                     $io->warning("Des doublons ont été détecté ! ({$nbDoublons})");
                     return Command::SUCCESS;
+                }
+            }
+            // Vérifie qu'il n'y a pas trop d'enfants imbriqués dans les parcours disponibles
+            if($checkNestedChildren){
+                $io->writeln("Vérification des enfants imbriqués pour les parcours...");
+                $parcoursArray = $this->retrieveParcoursDataFromDatabase();
+                $io->progressStart(count($parcoursArray));
+                $globalErrorArray = [];
+                foreach($parcoursArray as $p){
+                    $dto = $this->getDTOForParcours($p);
+                    $errorMessage = "";
+                    foreach($dto->semestres as $semestre){
+                        foreach($semestre->ues() as $ue){
+                            // Si trop d'UE imbriquées
+                            foreach($ue->uesEnfants() as $ueEnfant){
+                                if(count($ueEnfant->uesEnfants()) > 0){
+                                    $errorMessage .= "L'{$ueEnfant->display} a trop d'enfants imbriqués.\n";
+                                }
+                                // Si une UE enfant a trop d'EC imbriqués
+                                foreach($ueEnfant->elementConstitutifs as $ec){
+                                    foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
+                                        if(count($ecEnfant->elementsConstitutifsEnfants) > 0){
+                                            $errorMessage .= "L'{$ecEnfant->elementConstitutif->getCode()} de l'{$ueEnfant->display} as trop d'enfants imbriqués.\n";
+                                        }
+                                    }
+                                }
+                            }
+                            // Si trop d'EC imbriqués pour une UE "standard"
+                            foreach($ue->elementConstitutifs as $ec){
+                                foreach($ec->elementsConstitutifsEnfants as $ecEnfant){
+                                    if(count($ecEnfant->elementsConstitutifsEnfants) > 0){
+                                        $errorMessage .= "L'{$ecEnfant->elementConstitutif->getCode()} de l'{$ue->display} as trop d'enfants imbriqués.\n";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if(mb_strlen($errorMessage) > 0){
+                        $errorMessage .= $p->getFormation()->getDisplayLong() . "\n\n" . $errorMessage . "\n";
+                        $globalErrorArray[] = $errorMessage;
+                    }
+                    $io->progressAdvance();
+                }
+                if(count($globalErrorArray) === 0){
+                    $io->success("Aucune erreur d'imbrication détectée.");
+                    return Command::SUCCESS;
+                }else {
+                    dump($globalErrorArray);
+                    $io->warning("Des erreurs d'imbrication ont été détectées !");
+                    return Command::FAILURE;
                 }
             }
             // Vérifie les doublons entre ORéOF et des export JSON des codes APOGEE (LSE & ELP)
