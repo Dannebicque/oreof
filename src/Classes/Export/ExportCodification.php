@@ -155,12 +155,21 @@ class ExportCodification
                             $ligne++;
                             $this->excelWriter->writeCellXY(4, $ligne, $uesEnfant->ue->display($parcours));
                             $this->excelWriter->writeCellXY(5, $ligne, $uesEnfant->ue->getCodeApogee(), ['bold' => true]);
-                            $this->excelWriter->writeCellXY(6, $ligne, 'UE', ['color' => self::BLUE]);
+                            if ($uesEnfant->ue->getNatureUeEc()?->isLibre()) {
+                                $this->excelWriter->writeCellXY(6, $ligne, 'CHOIX', ['color' => self::BLUE]);
+                            } else {
+                                $this->excelWriter->writeCellXY(6, $ligne, 'UE', ['color' => self::BLUE]);
+                            }
                             $this->excelWriter->writeCellXY(7, $ligne, $uesEnfant->heuresEctsUe->sommeUeEcts, ['color' => self::GREEN]);
                             $ligne = $this->writeEcs($uesEnfant, $ligne, 5);
                         }
                     } else {
-                        $this->excelWriter->writeCellXY(5, $ligne, 'UE', ['color' => self::BLUE]);
+                        if ($ue->ue->getNatureUeEc()?->isLibre()) {
+                            $this->excelWriter->writeCellXY(5, $ligne, 'CHOIX', ['color' => self::BLUE]);
+                        } else {
+                            $this->excelWriter->writeCellXY(5, $ligne, 'UE', ['color' => self::BLUE]);
+                        }
+
                         $this->excelWriter->writeCellXY(6, $ligne, $ue->heuresEctsUe->sommeUeEcts, ['color' => self::GREEN]);
                         $ligne = $this->writeEcs($ue, $ligne, 5);
                     }
@@ -178,19 +187,27 @@ class ExportCodification
             if ($ec->elementConstitutif->getEcParent() === null) {
                 $ligne++;
                 $this->excelWriter->writeCellXY($col, $ligne, $ec->elementConstitutif->getCode());
-                $this->excelWriter->writeCellXY($col + 1, $ligne, $ec->elementConstitutif->getCodeApogee(), ['bold' => true]);
+                $this->excelWriter->writeCellXY($col + 1, $ligne, $ec->elementConstitutif->displayCodeApogee(), ['bold' => true]);
                 if ($ec->elementConstitutif->getNatureUeEc()->isChoix()) {
                     $this->excelWriter->writeCellXY($col +2, $ligne, 'CHOIX', ['color' => self::BLUE]);
                     foreach ($ec->elementsConstitutifsEnfants as $ecsEnfant) {
                         $ligne++;
                         $this->excelWriter->writeCellXY($col + 1, $ligne, $ecsEnfant->elementConstitutif->getCode());
-                        $this->excelWriter->writeCellXY($col + 2, $ligne, $ecsEnfant->elementConstitutif->getCodeApogee(), ['bold' => true]);
-                        $this->excelWriter->writeCellXY($col + 3, $ligne, 'EC', ['color' => self::BLUE]);
+                        $this->excelWriter->writeCellXY($col + 2, $ligne, $ecsEnfant->elementConstitutif->displayCodeApogee(), ['bold' => true]);
+                        if ($ecsEnfant->elementConstitutif->getNatureUeEc()?->isLibre()) {
+                            $this->excelWriter->writeCellXY($col + 3, $ligne, 'CHOIX', ['color' => self::BLUE]);
+                        } else {
+                            $this->excelWriter->writeCellXY($col + 3, $ligne, 'EC', ['color' => self::BLUE]);
+                        }
                         $this->excelWriter->writeCellXY($col + 4, $ligne, $ecsEnfant->heuresEctsEc->ects, ['color' => self::GREEN]);
                         $this->excelWriter->writeCellXY($col + 5, $ligne, $ecsEnfant->elementConstitutif->getTypeApogee());
                     }
                 } else {
-                    $this->excelWriter->writeCellXY($col +2, $ligne, 'EC', ['color' => self::BLUE]);
+                    if ($ec->elementConstitutif->getNatureUeEc()->isLibre()) {
+                        $this->excelWriter->writeCellXY($col + 3, $ligne, 'CHOIX', ['color' => self::BLUE]);
+                    } else {
+                        $this->excelWriter->writeCellXY($col +2, $ligne, 'EC', ['color' => self::BLUE]);
+                    }
                     $this->excelWriter->writeCellXY($col + 3, $ligne, $ec->heuresEctsEc->ects, ['color' => self::GREEN]);
                     $this->excelWriter->writeCellXY($col + 4, $ligne, $ec->elementConstitutif->getTypeApogee());
                 }
