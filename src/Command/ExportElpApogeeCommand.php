@@ -53,8 +53,8 @@ class ExportElpApogeeCommand extends Command
     private static $codElpApogeeDataTest = "COD_ELP_11-03-2024-09_46.json";
     private static $codLseApogeeDataTest = "COD_LSE_11-03-2024-09_47.json";
     // Données exportées depuis ORéOF
-    private static $fullLseExportDataTest = "COD_LSE_TEST-08-03-2024_09-47-16.json";
-    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-19-03-2024_08-58-38.json";
+    private static $fullLseExportDataTest = "COD_LSE_TEST-FULL-25-03-2024_09-06-23.json";
+    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-22-03-2024_15-09-52.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
@@ -173,6 +173,9 @@ class ExportElpApogeeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+
+        ini_set('memory_limit', '2048M');
+
         $io = new SymfonyStyle($input, $output);
         $mode = $input->getOption('mode');
         // Options pour certaines commandes
@@ -514,7 +517,7 @@ class ExportElpApogeeCommand extends Command
                 $lseArray = array_merge(...$lseArray);
                 $this->generateSpreadsheetForLSE($lseArray, $exportName);
                 $io->writeln("\nCréation du fichier Excel...");
-                if($withJsonExport && $withFilter){
+                if($withJsonExport){
                     $io->writeln("Création de l'export JSON...");
                     $date = new DateTime();
                     $now = $date->format("d-m-Y_H-i-s");
@@ -544,8 +547,8 @@ class ExportElpApogeeCommand extends Command
                     return Command::SUCCESS;
                 }
                 else {
-                    $io->warning("Des doublons ont été detecté. ({$nbLseDuplicates})");
                     dump($duplicatesList);
+                    $io->warning("Des doublons ont été detecté. ({$nbLseDuplicates})");
                     return Command::FAILURE;
                 }
             }
