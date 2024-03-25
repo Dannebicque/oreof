@@ -1480,9 +1480,9 @@ class ExportElpApogeeCommand extends Command
         $typeDiplome = $dto->parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() ?? "";
         $sigleFormation = $dto->parcours->getFormation()?->getSigle() ?? "";
         $sigleParcours = $dto->parcours->getSigle() ?? "";
-        $libelleCourt = "ECs " . $ue->ue->display() . " S" . $ue->ue->getSemestre()->getOrdre() . " " 
+        $libelleCourt = "ECs " . $ue->display . " S" . $ue->ue->getSemestre()->getOrdre() . " " 
             . $sigleFormation . " " . $sigleParcours;
-        $libelleLong = "LISTE EC " . $ue->ue->display() . " S" . $ue->ue->getSemestre()->getOrdre() 
+        $libelleLong = "LISTE EC " . $ue->display . " S" . $ue->ue->getSemestre()->getOrdre() 
             . " " . $typeDiplome . " " . $sigleFormation . " " . $sigleParcours; 
         return [
             'libCourt' => $libelleCourt,
