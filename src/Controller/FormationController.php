@@ -422,14 +422,14 @@ class FormationController extends BaseController
 
             // Changements dans le texte : comparaison avec n-1
             if($lastVersion){
-                $rendererName = 'Inline';
+                $rendererName = 'Combined';
                 $differOptions = [
                     'context' => 1,
                     'ignoreWhitespace' => true,
                     'ignoreLineEnding' => true,
                 ];
                 $rendererOptions = [
-                    'detailLevel' => 'char',
+                    'detailLevel' => 'word',
                     'lineNumbers' => false,
                     'showHeader' => false,
                     'separateBlock' => false,
