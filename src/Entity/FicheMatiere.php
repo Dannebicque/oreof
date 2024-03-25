@@ -527,7 +527,7 @@ class FicheMatiere
 
     public function isIsCmPresentielMutualise(): ?bool
     {
-        return $this->isCmPresentielMutualise;
+        return $this->isCmPresentielMutualise ?? false;
     }
 
     public function setIsCmPresentielMutualise(?bool $isCmPresentielMutualise): self
@@ -539,7 +539,7 @@ class FicheMatiere
 
     public function isIsTdPresentielMutualise(): ?bool
     {
-        return $this->isTdPresentielMutualise;
+        return $this->isTdPresentielMutualise ?? false;
     }
 
     public function setIsTdPresentielMutualise(?bool $isTdPresentielMutualise): self
@@ -551,7 +551,7 @@ class FicheMatiere
 
     public function isIsTpPresentielMutualise(): ?bool
     {
-        return $this->isTpPresentielMutualise;
+        return $this->isTpPresentielMutualise ?? false;
     }
 
     public function setIsTpPresentielMutualise(?bool $isTpPresentielMutualise): self
@@ -563,7 +563,7 @@ class FicheMatiere
 
     public function isIsCmDistancielMutualise(): ?bool
     {
-        return $this->isCmDistancielMutualise;
+        return $this->isCmDistancielMutualise ?? false;
     }
 
     public function setIsCmDistancielMutualise(?bool $isCmDistancielMutualise): self
@@ -575,7 +575,7 @@ class FicheMatiere
 
     public function isIsTdDistancielMutualise(): ?bool
     {
-        return $this->isTdDistancielMutualise;
+        return $this->isTdDistancielMutualise ?? false;
     }
 
     public function setIsTdDistancielMutualise(?bool $isTdDistancielMutualise): self
@@ -587,7 +587,7 @@ class FicheMatiere
 
     public function isIsTpDistancielMutualise(): ?bool
     {
-        return $this->isTpDistancielMutualise;
+        return $this->isTpDistancielMutualise ?? false;
     }
 
     public function setIsTpDistancielMutualise(?bool $isTpDistancielMutualise): self

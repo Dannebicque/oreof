@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.47](https://github.com/Dannebicque/oreof/compare/v1.24.46...v1.24.47) (2024-03-24)
+
+
+### Bug Fixes
+
+* codification des ELP ([84f689d](https://github.com/Dannebicque/oreof/commit/84f689df2f199cf6b4526181b6ce9b4f3dc234af))
+* non par défaut sur mutualisation ([f0495aa](https://github.com/Dannebicque/oreof/commit/f0495aa2f88d6955773c607a27b3afdd929236d9))
+
 ### [1.24.46](https://github.com/Dannebicque/oreof/compare/v1.24.45...v1.24.46) (2024-03-20)
 
 

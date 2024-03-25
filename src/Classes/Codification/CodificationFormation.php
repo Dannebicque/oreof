@@ -9,6 +9,10 @@
 
 namespace App\Classes\Codification;
 
+use App\Classes\CalculStructureParcours;
+use App\DTO\StructureEc;
+use App\DTO\StructureSemestre;
+use App\DTO\StructureUe;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
@@ -55,8 +59,12 @@ class CodificationFormation
         'Z',
     ];
 
+    private Parcours $parcours;
+    private int $ordreEc;
+
     public function __construct(
-        protected EntityManagerInterface $entityManager
+        protected EntityManagerInterface $entityManager,
+        protected CalculStructureParcours $calculStructreParcours
     ) {
     }
 
@@ -193,99 +201,120 @@ class CodificationFormation
 
     public function setCodificationSemestre(Parcours $parcours): void
     {
-        $semestres = $parcours->getSemestreParcours();
+        // structure semestre
+        $structureParcours = $this->calculStructreParcours->calcul($parcours, false, false);
+
+
+       $semestres = $structureParcours->semestres;
         $formation = $parcours->getFormation();
         if ($formation !== null) {
             foreach ($semestres as $semestre) {
-                if ($semestre->getSemestre() !== null && $semestre->getSemestre()->isNonDispense() === false) {
+                if ($semestre->semestre !== null && $semestre->semestre->isNonDispense() === false) {
                     /*
-                     * 1. Code de la composante porteuse du semestre (champs codeApogee dans Composante)
+                     * 1. Code de la composante d'inscription du semestre (champs codeApogee dans Composante)
                      * 2. Code du type de diplôme (champs codeApogee dans TypeDiplome)
                      * 3. Code de la Mention (champs codeApogee dans Mention)
                      * 4. Code du Parcours (si pas de parcours X, si Tronc commun en première année X, sinon code du parcours)
                      * 5. Numéro d'ordre du semestre LMD
                      */
-                    $code = substr($formation->getComposantePorteuse()?->getCodeApogee(), 0, 1);
+                    $code = substr($parcours->getComposanteInscription()?->getCodeApogee(), 0, 1);
                     $code .= $formation->getTypeDiplome()?->getCodeApogee();
-                    $code .= substr($semestre->getCodeApogeeDiplome(), 3, 2); //3 et 4 = 4 et 5 de diplôme
-                    $code .= $semestre->getOrdre();
-                    $semestre->getSemestre()->setCodeApogee($code);
+                    $code .= substr($semestre->semestreParcours->getCodeApogeeDiplome(), 3, 2); //3 et 4 = 4 et 5 de diplôme
+                    $code .= $semestre->ordre;
+                    $semestre->semestre->setCodeApogee($code);
 
-                    $this->setCodificationUe($semestre->getSemestre());
+                    $this->setCodificationUe($semestre);
                 }
             }
         }
     }
 
-    private function setCodificationUe(Semestre $semestre): void
+    private function setCodificationUe(StructureSemestre $semestre): void
     {
-        $ues = $semestre->getUes();
-
+        $ues = $semestre->ues();
         foreach ($ues as $ue) {
-            if ($ue->getUeParent() === null) {
-                $ordreUe = 1;
-                if ($ue->getNatureUeEc()?->isChoix() && $ue->getUeEnfants()->count() > 0) {
-                    $ue->setCodeApogee($semestre->getCodeApogee() . $ue->getOrdre());
-                    foreach ($ue->getUeEnfants() as $ueEnfant) {
-                        $ueEnfant->setCodeApogee($semestre->getCodeApogee() . $ue->getOrdre(). chr(64+$ueEnfant->getOrdre()));
-                        $this->setCodificationEc($ueEnfant, $ordreUe);
-                        $ordreUe++;
-                    }
-                } else {
-                    $ue->setCodeApogee($semestre->getCodeApogee() . $ue->getOrdre());
-                }
-                $this->setCodificationEc($ue);
+            $this->ordreEc = 1;
+            $ordreUe = 1;
+            if ($ue->ue->getUeParent() === null) { //UE parent
+               if (count($ue->uesEnfants()) > 0) {
+                   //UE avec UE enfants
+                   $ue->ue->setCodeApogee($semestre->semestre->getCodeApogee() . $ue->ordre().'X'); //UE à choix on met un X
+                   foreach ($ue->uesEnfants() as $ueEnfant) {
+                       if ($ueEnfant->ue->getNatureUeEc()?->isLibre() === true) {
+                           $ueEnfant->ue->setCodeApogee($semestre->semestre->getCodeApogee() . $ue->ordre(). chr(64+$ordreUe).'X');
+                           $ordreUe++;
+                       } else {
+                           $ueEnfant->ue->setCodeApogee($semestre->semestre->getCodeApogee() . $ue->ordre(). chr(64+$ordreUe));
+                           $this->setCodificationEc($ueEnfant, true);
+                            $ordreUe++;
+                       }
+                   }
+               } else {
+                   $ue->ue->setCodeApogee($semestre->semestre->getCodeApogee() . $ue->ordre());
+                   //UE sans UE enfants
+                   $this->setCodificationEc($ue, false);
+               }
             }
         }
     }
 
-    private function setCodificationEc(Ue $ue, int $ordreUe = 1): void
+    private function setCodificationEc(StructureUe $ue, bool $isUeEnfant = false): void
     {
-        $ecs = $ue->getElementConstitutifs();
+        $ecs = $ue->elementConstitutifs;
         foreach ($ecs as $ec) {
-            if ($ec->getEcParent() === null) {
-                if ($ec->getNatureUeEc()?->isChoix() && $ec->getEcEnfants()->count() > 0) {
-                    $ec->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre());
-                    foreach ($ec->getEcEnfants() as $ecEnfant) {
-                        if ($ecEnfant->getFicheMatiere() !== null) {
-                            if ($ecEnfant->getFicheMatiere()->getCodeApogee() === null) {
-                                $ecEnfant->getFicheMatiere()->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre() . chr(64+$ecEnfant->getOrdre())); //todo: OK ? veut dire qu'on change le code fiche si sur un EC enfant ?
-                            }
-
-                            if ($ecEnfant->getParcours() !== null && $ecEnfant->getParcours()->getFormation() !== $ecEnfant->getFicheMatiere()->getParcours()?->getFormation()) {
-                                $ecEnfant->getFicheMatiere()->setTypeApogee(FicheMatiere::MATM);
-                            }
-
-                            $ecEnfant->setCodeApogee($ecEnfant->getFicheMatiere()->getCodeApogee());
-                        } else {
-                            $ecEnfant->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre(). chr(64+$ecEnfant->getOrdre()));
-                        }
+            if ($ec->elementConstitutif->getEcParent() === null) {
+                if (count($ec->elementsConstitutifsEnfants) > 0) {
+                    //code de l'EC parent
+                    $ec->elementConstitutif->setCodeApogee($ue->ue->getCodeApogee() . $ec->elementConstitutif->getOrdre());
+                    //EC avec EC enfants
+                    foreach ($ec->elementsConstitutifsEnfants as $ecEnfant) {
+                        $this->setCodificationFicheMatiere($ecEnfant, $ue, $isUeEnfant, true);
                     }
                 } else {
-                    if ($ec->getFicheMatiere() !== null) {
-                        if ($ec->getFicheMatiere()->getCodeApogee() === null) {
-                            if ($ue->getUeParent() === null) {
-                                $ec->getFicheMatiere()->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre());
-                            } else {
-                                $ec->getFicheMatiere()->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre() . chr(64+$ordreUe));
-                            }
-                        }
-
-                        if ($ec->getParcours() !== null && $ec->getParcours()->getFormation() !== $ec->getFicheMatiere()->getParcours()?->getFormation()) {
-                            $ec->getFicheMatiere()->setTypeApogee(FicheMatiere::MATM);
-                        }
-
-                        $ec->setCodeApogee($ec->getFicheMatiere()->getCodeApogee());
-                    } else {
-                        if ($ue->getUeParent() === null) {
-                            $ec->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre());
-
-                        } else {
-                            $ec->setCodeApogee($ec->getUe()?->getCodeApogee() . $ec->getOrdre() . chr(64+$ordreUe));
-                        }
-                    }
+                    //EC sans EC enfants
+                    $this->setCodificationFicheMatiere($ec, $ue, $isUeEnfant, false);
                 }
             }
+        }
+    }
+
+    private function setCodificationFicheMatiere(StructureEc $ec, StructureUe $ue, bool $isUeEnfant, bool $isEcEnfant)
+    {
+        if ($ec->elementConstitutif->getFicheMatiere() !== null) {
+            if ($ec->elementConstitutif->getFicheMatiere()->getParcours() === $this->parcours) {
+                $code = $ue->ue->getCodeApogee();
+                    if ($isEcEnfant === true) {
+                        $code .= $ec->elementConstitutif->getEcParent()?->getOrdre();
+                        $code .= chr(64 + $ec->elementConstitutif->getOrdre());
+                        $this->ordreEc++;
+                    } else {
+                        $code .= $ec->elementConstitutif->getOrdre();
+                    }
+                $ec->elementConstitutif->getFicheMatiere()->setCodeApogee($code);
+            } else {
+                if ($isEcEnfant === true) {
+                    $this->ordreEc++; //EC enfant, on incrément l'ordre malgré tout pour garder la cohérence des lettres
+                }
+            }
+
+            if ($ec->elementConstitutif->getParcours() !== null && $ec->elementConstitutif->getParcours()->getFormation() !== $ec->elementConstitutif->getFicheMatiere()->getParcours()?->getFormation()) {
+                $ec->elementConstitutif->getFicheMatiere()->setTypeApogee(FicheMatiere::MATM);
+            }
+        } else {
+            $code = $ue->ue->getCodeApogee();
+            if ($isUeEnfant === true) {
+                $code .= chr(64 + $ec->elementConstitutif->getOrdre());
+                $this->ordreEc++;
+            } else {
+                if ($ec->elementConstitutif->getNatureUeEc()?->isLibre() && $isEcEnfant === true) {
+                    $code .= $ec->elementConstitutif->getEcParent()?->getOrdre();
+                    $code .= chr(64 + $ec->elementConstitutif->getOrdre());
+                    $this->ordreEc++;
+                } else {
+                    $code .= $ec->elementConstitutif->getOrdre();
+                }
+            }
+            $ec->elementConstitutif->setCodeApogee($code);
         }
     }
 
@@ -303,9 +332,9 @@ class CodificationFormation
 
     public function setCodificationBasse(Formation $formation): void
     {
-        //todo: calcul structure ??
-        $this->setCodificationParcours($formation);
+        //$this->setCodificationParcours($formation);
         foreach ($formation->getParcours() as $parcours) {
+            $this->parcours = $parcours;
             //recalculer les semestres même si déjà codifiés selon la partie haute
             $this->setCodificationSemestre($parcours);
             $this->entityManager->flush();
