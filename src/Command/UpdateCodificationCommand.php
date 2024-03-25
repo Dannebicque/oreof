@@ -41,7 +41,7 @@ class UpdateCodificationCommand extends Command
 
         // ajoute une option sur ma commande pour que l'utilisateur puisse spécifier le niveau de codification entre les valeurs haute, basse et complet
         $this
-            ->addOption('niveauCodification', null, InputOption::VALUE_OPTIONAL, 'Le niveau de codification (haute, basse, complet)', 'complet');
+            ->addArgument('niveauCodification', InputArgument::REQUIRED, 'Le niveau de codification (haute, basse, complet)');
 
     }
 
@@ -65,7 +65,7 @@ class UpdateCodificationCommand extends Command
         }
 
         // vérifier si le niveau de codification est valide
-        $niveauCodification = $input->getOption('niveauCodification');
+        $niveauCodification = $input->getArgument('niveauCodification');
         if (!in_array($niveauCodification, ['haute', 'basse', 'complet'])) {
             $io->error('Le niveau de codification '. $niveauCodification .' n\'est pas valide');
             return Command::FAILURE;

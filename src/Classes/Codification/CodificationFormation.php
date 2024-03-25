@@ -16,8 +16,6 @@ use App\DTO\StructureUe;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
-use App\Entity\Semestre;
-use App\Entity\Ue;
 use App\Enums\TypeParcoursEnum;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -59,7 +57,7 @@ class CodificationFormation
         'Z',
     ];
 
-    private Parcours $parcours;
+    private ?Parcours $parcours = null;
     private int $ordreEc;
 
     public function __construct(
