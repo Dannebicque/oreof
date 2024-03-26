@@ -283,7 +283,7 @@ class CodificationFormation
                 $code = $ue->ue->getCodeApogee();
                     if ($isEcEnfant === true) {
                         $code .= $ec->elementConstitutif->getEcParent()?->getOrdre();
-                        $code .= chr(64 + $ec->elementConstitutif->getOrdre());
+                        $code .= chr(64 + $this->ordreEc);
                         $this->ordreEc++;
                     } else {
                         $code .= $ec->elementConstitutif->getOrdre();
@@ -301,12 +301,12 @@ class CodificationFormation
         } else {
             $code = $ue->ue->getCodeApogee();
             if ($isUeEnfant === true) {
-                $code .= chr(64 + $ec->elementConstitutif->getOrdre());
+                $code .= chr(64 + $this->ordreEc);
                 $this->ordreEc++;
             } else {
                 if ($ec->elementConstitutif->getNatureUeEc()?->isLibre() && $isEcEnfant === true) {
                     $code .= $ec->elementConstitutif->getEcParent()?->getOrdre();
-                    $code .= chr(64 + $ec->elementConstitutif->getOrdre());
+                    $code .= chr(64 + $this->ordreEc);
                     $this->ordreEc++;
                 } else {
                     $code .= $ec->elementConstitutif->getOrdre();
