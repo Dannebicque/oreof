@@ -30,6 +30,7 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\UeRepository;
 use App\Service\LheoXML;
+use App\Service\VersioningParcours;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
@@ -605,56 +606,12 @@ class ParcoursController extends BaseController
     public function saveParcoursIntoJson(
         Parcours               $parcours,
         Filesystem             $fileSystem,
-        EntityManagerInterface $entityManager,
-        TypeDiplomeRegistry $typeDiplomeRegistry
+        VersioningParcours $versioningParcours
     ) {
-        // Définition du serializer
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $serializer = new Serializer(
-            [
-            new DateTimeNormalizer(),
-            new BackedEnumNormalizer(),
-            new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor())
-        ],
-            [new JsonEncoder()]
-        );
         try {
             $now = new DateTimeImmutable('now');
             $dateHeure = $now->format('d-m-Y_H-i-s');
-            // Objet BD Parcours Versioning
-            $parcoursVersioning = new ParcoursVersioning();
-            $parcoursVersioning->setParcours($parcours);
-            $parcoursVersioning->setVersionTimestamp($now);
-            // Nom du fichier
-            $parcoursFileName = "parcours-{$parcours->getId()}-{$dateHeure}";
-            $dtoFileName = "dto-{$parcours->getId()}-{$dateHeure}";
-            $parcoursVersioning->setParcoursFileName($parcoursFileName);
-            $parcoursVersioning->setDtoFileName($dtoFileName);
-            // Création du fichier JSON
-            // Parcours
-            $parcoursJson = $serializer->serialize($parcours, 'json', [
-                AbstractObjectNormalizer::GROUPS => ['parcours_json_versioning'],
-                'circular_reference_limit' => 2,
-                AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
-                AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
-                DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
-            ]);
-            // DTO
-            $typeD = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome()?->getModeleMcc());
-            $dto = $typeD->calculStructureParcours($parcours);
-            $dtoJson = $serializer->serialize($dto, 'json', [
-                AbstractObjectNormalizer::GROUPS => ['DTO_json_versioning'],
-                'circular_reference_limit' => 2,
-                AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
-                AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
-                DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
-            ]);
-            // Enregistrement dans un fichier
-            $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$parcours->getId()}/{$parcoursFileName}.json", $parcoursJson);
-            $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$parcours->getId()}/{$dtoFileName}.json", $dtoJson);
-            // Enregistrement de la référence en BD
-            $entityManager->persist($parcoursVersioning);
-            $entityManager->flush();
+            $versioningParcours->saveVersionOfParcours($parcours, $now, true);
             // Ajout dans les logs
             /**
              * @var User $user
@@ -686,40 +643,19 @@ class ParcoursController extends BaseController
     public function parcoursVersion(
         ParcoursVersioning $parcours_versioning,
         Filesystem $fileSystem,
+        VersioningParcours $versioningParcours
     ): Response {
-        try {
-            $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-            $serializer = new Serializer(
-                [
-                new DateTimeNormalizer(),
-                new BackedEnumNormalizer(),
-                new ArrayDenormalizer(),
-                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
-            ],
-                [new JsonEncoder()]
-            );
-            $fileParcours = file_get_contents(
-                __DIR__ . "/../../versioning_json/parcours/"
-                                        . "{$parcours_versioning->getParcours()->getId()}/"
-                                        . "{$parcours_versioning->getParcoursFileName()}.json"
-            );
-            $fileDTO = file_get_contents(
-                __DIR__ . "/../../versioning_json/parcours/"
-                                        . "{$parcours_versioning->getParcours()->getId()}/"
-                                        . "{$parcours_versioning->getDtoFileName()}.json"
-            );
-            $parcours = $serializer->deserialize($fileParcours, Parcours::class, 'json');
-            $dto = $serializer->deserialize($fileDTO, StructureParcours::class, 'json');
-            $dateVersion = $parcours_versioning->getVersionTimestamp()->format('d-m-Y à H:i');
+        try {  
+            $loadedVersion = $versioningParcours->loadParcoursFromVersion($parcours_versioning);
 
             return $this->render('parcours/show_version.html.twig', [
-                'parcours' => $parcours,
-                'formation' => $parcours->getFormation(),
-                'typeDiplome' => $parcours->getTypeDiplome(),
-                'dto' => $dto,
-                'hasParcours' => $parcours->getFormation()->isHasParcours(),
-                'isBut' => $parcours->getTypeDiplome()->getLibelleCourt() === 'BUT',
-                'dateVersion' => $dateVersion,
+                'parcours' => $loadedVersion['parcours'],
+                'formation' => $loadedVersion['parcours']->getFormation(),
+                'typeDiplome' => $loadedVersion['parcours']->getTypeDiplome(),
+                'dto' => $loadedVersion['dto'],
+                'hasParcours' => $loadedVersion['parcours']->getFormation()->isHasParcours(),
+                'isBut' => $loadedVersion['parcours']->getTypeDiplome()->getLibelleCourt() === 'BUT',
+                'dateVersion' => $loadedVersion['dateVersion'],
             ]);
         } catch(\Exception $e) {
             $now = new DateTimeImmutable('now');

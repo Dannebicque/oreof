@@ -61,7 +61,9 @@ class ElementPedagogiDTO6
         if ($elementPedagogique instanceof StructureEc){
             // Création du code ELP
             $this->codElp = $this->checkCodeApogee(
-                $elementPedagogique->elementConstitutif->getCodeApogee(),
+                $elementPedagogique->elementConstitutif->getCodeApogee() 
+                    ?? $elementPedagogique->elementConstitutif->getFicheMatiere()->getCodeApogee() 
+                    ?? null,
                 "Type : EC - ID : {$elementPedagogique->elementConstitutif->getId()}",
                 $withChecks,
                 $dto->parcours->getId()
