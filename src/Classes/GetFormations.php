@@ -49,7 +49,7 @@ class GetFormations
                 if ($centre->getComposante() !== null && (
                     in_array('Gestionnaire', $centre->getDroits()) ||
                         in_array('Invité', $centre->getDroits()) ||
-                        in_array('Scolarité', $centre->getDroits()) ||
+                        in_array('ROLE_SCOL', $centre->getDroits()) ||
                         in_array('Directeur', $centre->getDroits())
                 )) {
                     //todo: il faudrait pouvoir filtrer par ce que contient le rôle et pas juste le nom
