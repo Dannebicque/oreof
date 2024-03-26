@@ -18,6 +18,7 @@
         </div>
     </section>
 
+    {% if parcours.isParcoursDefaut == false %}
     <section class="scroll-section" id="presentation_{{ parcours.id }}">
         <h3 class="small-title">Présentation du parcours {{ parcours.libelle }}</h3>
         <div class="card mb-5">
@@ -26,7 +27,7 @@
             </div>
         </div>
     </section>
-
+    {% endif %}
     <section class="scroll-section" id="descriptif_{{ parcours.id }}">
         <h3 class="small-title">Descriptif du parcours</h3>
         <div class="card mb-5">

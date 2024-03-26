@@ -22,6 +22,7 @@ use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use DateTimeImmutable;
 use App\Entity\ParcoursVersioning;
+use App\Service\VersioningParcours;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
@@ -35,18 +36,18 @@ class VersioningParcoursCommand extends Command
 
     private EntityManagerInterface $entityManager;
     private Filesystem $filesystem;
-    private TypeDiplomeRegistry $typeDiplomeRegistry;
+    private VersioningParcours $versioningParcours;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         Filesystem $filesystem,
-        TypeDiplomeRegistry $typeDiplomeRegistry
+        VersioningParcours $versioningParcours
     )
     {
         parent::__construct();
         $this->entityManager = $entityManager;
         $this->filesystem = $filesystem;
-        $this->typeDiplomeRegistry = $typeDiplomeRegistry;
+        $this->versioningParcours = $versioningParcours;
     }
 
     protected function configure(): void
@@ -76,7 +77,7 @@ class VersioningParcoursCommand extends Command
             $io->progressStart(count($parcoursArray));
             try{
                 foreach($parcoursArray as $parcours){
-                    $this->saveOneParcoursIntoJSON($parcours);
+                    $this->versioningParcours->saveVersionOfParcours($parcours, new DateTimeImmutable());
                     $io->progressAdvance();
                 }
                 $now = new DateTimeImmutable('now');
@@ -102,51 +103,4 @@ class VersioningParcoursCommand extends Command
         return Command::INVALID;
     }
 
-    private function saveOneParcoursIntoJSON(Parcours $parcours){
-        // Définition du serializer
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $serializer = new Serializer(
-            [
-                new DateTimeNormalizer(),
-                new BackedEnumNormalizer(),
-                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor())
-            ],
-            [new JsonEncoder()]
-        );
-        $now = new DateTimeImmutable('now');
-        $dateHeure = $now->format('d-m-Y_H-i-s');
-        // Objet BD Parcours Versioning
-        $parcoursVersioning = new ParcoursVersioning();
-        $parcoursVersioning->setParcours($parcours);
-        $parcoursVersioning->setVersionTimestamp($now);
-        // Nom du fichier
-        $parcoursFileName = "parcours-{$parcours->getId()}-{$dateHeure}";
-        $dtoFileName = "dto-{$parcours->getId()}-{$dateHeure}";
-        $parcoursVersioning->setParcoursFileName($parcoursFileName);
-        $parcoursVersioning->setDtoFileName($dtoFileName);
-        // Création du fichier JSON
-        // Parcours
-        $parcoursJson = $serializer->serialize($parcours, 'json', [
-            AbstractObjectNormalizer::GROUPS => ['parcours_json_versioning'],
-            'circular_reference_limit' => 2,
-            AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
-            AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
-            DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
-        ]);
-        // DTO
-        $typeD = $this->typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()?->getTypeDiplome()?->getModeleMcc());
-        $dto = $typeD->calculStructureParcours($parcours);
-        $dtoJson = $serializer->serialize($dto, 'json', [
-            AbstractObjectNormalizer::GROUPS => ['DTO_json_versioning'],
-            'circular_reference_limit' => 2,
-            AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
-            AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
-            DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
-        ]);
-        // Enregistrement dans un fichier
-        $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$parcours->getId()}/{$parcoursFileName}.json", $parcoursJson);
-        $this->filesystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$parcours->getId()}/{$dtoFileName}.json", $dtoJson);
-        // Enregistrement de la référence en BD
-        $this->entityManager->persist($parcoursVersioning);
-    }
 }
