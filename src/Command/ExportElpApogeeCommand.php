@@ -27,6 +27,7 @@ use App\Service\Apogee\Classes\TableauParametrageChargeEnseignementDTO2;
 use App\Service\Apogee\Classes\TableauTypeHeureDTO;
 use App\Service\Apogee\Classes\TypeHeureDTO;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -54,7 +55,7 @@ class ExportElpApogeeCommand extends Command
     private static $codLseApogeeDataTest = "COD_LSE_11-03-2024-09_47.json";
     // Données exportées depuis ORéOF
     private static $fullLseExportDataTest = "COD_LSE_TEST-FULL-25-03-2024_09-06-23.json";
-    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-26-03-2024_09-04-11.json";
+    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-26-03-2024_14-23-45.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
@@ -600,8 +601,18 @@ class ExportElpApogeeCommand extends Command
                     return Command::SUCCESS;
                 }
                 else {
+                    if($withJsonExport){
+                        $date = new DateTimeImmutable();
+                        $now = $date->format("d-m-Y_H-i-s");
+                        $this->filesystem->appendToFile(
+                            __DIR__ . "/../Service/Apogee/export/" . "Doublons-export-" . $now  . ".json",
+                            json_encode($doublonArray));
+                    }
                     dump($doublonArray);
                     $io->warning("Des doublons ont été détecté ! ({$nbDoublons})");
+                    if($withJsonExport){
+                        $io->writeln("Le rapport contenant les doublons a été généré.");
+                    }
                     return Command::SUCCESS;
                 }
             }
