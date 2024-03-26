@@ -261,6 +261,7 @@
                         <td>{{ parcours.codeEtape(annee) }}</td>
                         <td>{{ parcours.codeVersionEtape(annee) }}</td>
                         <td>
+                            {% if is_granted('ROLE_SES') %}
                             <a href="#"
                                class="btn btn-sm text-warning"
                                     {{ stimulus_controller('modal', {
@@ -292,6 +293,7 @@
                                 <i class="fal fa-wrench"></i>
                                 <span> Générer</span>
                             </a>
+                            {% endif %}
 
                             <a href="{{ path('app_codification_index', {formation:formation.id}) }}"
                                class="btn btn-sm text-info">
