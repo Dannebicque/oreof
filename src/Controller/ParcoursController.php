@@ -217,7 +217,7 @@ class ParcoursController extends BaseController
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours            $parcours,
         LheoXML             $lheoXML,
-        EntityManagerInterface $entityManager
+        VersioningParcours $versioningParcours
     ): Response {
         $formation = $parcours->getFormation();
         if ($formation === null) {
@@ -230,75 +230,8 @@ class ParcoursController extends BaseController
 
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         $dto = $typeD->calculStructureParcours($parcours, true, false);
-
-        // Serializer
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $serializer = new Serializer(
-        [
-            new DateTimeNormalizer(),
-            new BackedEnumNormalizer(),
-            new ArrayDenormalizer(),
-            new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
-        ],
-            [new JsonEncoder()]
-        ); 
-        // Version n-1     
-        $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
-        $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
-
-        $textDifferences = [];
-
-        // Changements dans le texte : comparaison avec n-1
-        if($lastVersion){
-            $rendererName = 'Combined';
-            $differOptions = [
-                'context' => 1,
-                'ignoreWhitespace' => true,
-                'ignoreLineEnding' => true,
-            ];
-            $rendererOptions = [
-                'detailLevel' => 'word',
-                'lineNumbers' => false,
-                'showHeader' => false,
-                'separateBlock' => false,
-            ];
-            $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
-                                            . "{$lastVersion->getParcours()->getId()}/"
-                                            . "{$lastVersion->getParcoursFileName()}.json"
-                            );
-            $lastVersion = $serializer->deserialize($fileParcours, Parcours::class, 'json');
-            $textDifferences = [
-                'presentationParcoursContenuFormation' => html_entity_decode(DiffHelper::calculate(
-                    $lastVersion->getContenuFormation() ?? "",
-                    $parcours->getContenuFormation() ?? "",
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                )),
-                'presentationParcoursObjectifsParcours' => html_entity_decode(DiffHelper::calculate(
-                    $lastVersion->getObjectifsParcours() ?? "",
-                    $parcours->getObjectifsParcours() ?? "",
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                )),
-                'presentationParcoursResultatsAttendus' => html_entity_decode(DiffHelper::calculate(
-                    $lastVersion->getResultatsAttendus() ?? "",
-                    $parcours->getResultatsAttendus() ?? "",
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                )),
-                'presentationFormationObjectifsFormation' => html_entity_decode(DiffHelper::calculate(
-                    $lastVersion->getFormation()?->getObjectifsFormation() ?? "",
-                    $parcours->getFormation()?->getObjectifsFormation() ?? "",
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                )),
-            ];
-        }
-
+        
+        $textDifferences = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
         $cssDiff = DiffHelper::getStyleSheet();
 
         return $this->render('parcours/show.html.twig', [

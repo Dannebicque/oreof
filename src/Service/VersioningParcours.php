@@ -9,6 +9,7 @@ use App\TypeDiplome\TypeDiplomeRegistry;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
+use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -109,5 +110,66 @@ class VersioningParcours {
             'dto' => $dto,
             'dateVersion' => $dateVersion
         ];
+    }
+
+    public function getDifferencesBetweenParcoursAndLastVersion(Parcours $parcours){
+        $textDifferences = [];
+        $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
+        $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
+
+        if($lastVersion){
+            // Configuration du calcul des différences
+            $rendererName = 'Combined';
+            $differOptions = [
+                'context' => 1,
+                'ignoreWhitespace' => true,
+                'ignoreLineEnding' => true,
+            ];
+            // Affichage 
+            $rendererOptions = [
+                'detailLevel' => 'word',
+                'lineNumbers' => false,
+                'showHeader' => false,
+                'separateBlock' => false,
+            ];
+            // Données du parcours en JSON
+            $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
+                                            . "{$lastVersion->getParcours()->getId()}/"
+                                            . "{$lastVersion->getParcoursFileName()}.json"
+                            );
+            $lastVersion = $this->serializer->deserialize($fileParcours, Parcours::class, 'json');
+            $textDifferences = [
+                'presentationParcoursContenuFormation' => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getContenuFormation() ?? "",
+                    $parcours->getContenuFormation() ?? "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                'presentationParcoursObjectifsParcours' => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getObjectifsParcours() ?? "",
+                    $parcours->getObjectifsParcours() ?? "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                'presentationParcoursResultatsAttendus' => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getResultatsAttendus() ?? "",
+                    $parcours->getResultatsAttendus() ?? "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                'presentationFormationObjectifsFormation' => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getFormation()?->getObjectifsFormation() ?? "",
+                    $parcours->getFormation()?->getObjectifsFormation() ?? "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+            ];
+        }
+
+        return $textDifferences;
     }
 }
