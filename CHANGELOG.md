@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.48](https://github.com/Dannebicque/oreof/compare/v1.24.47...v1.24.48) (2024-03-26)
+
+
+### Bug Fixes
+
+* codification avec lettres sur EC ([64b8585](https://github.com/Dannebicque/oreof/commit/64b8585bebc98b8a506dbc7f2b5e41abc588aa8e))
+* commande ([02e0840](https://github.com/Dannebicque/oreof/commit/02e08407964f2b55463f1fc893d5615b519f6023))
+* commande ([6af57a1](https://github.com/Dannebicque/oreof/commit/6af57a198f304b337d2062ac8702a9431886d1d0))
+* droits ([6d63c81](https://github.com/Dannebicque/oreof/commit/6d63c814a1234f2c7e51ea8a8f3bd1668a51ac89))
+* droits ([705fe9d](https://github.com/Dannebicque/oreof/commit/705fe9dcbe86456de4ceeba2e30c4e0c4670a690))
+
 ### [1.24.47](https://github.com/Dannebicque/oreof/compare/v1.24.46...v1.24.47) (2024-03-24)
 
 
