@@ -50,13 +50,13 @@ class CodificationController extends BaseController
 
     #[Route('/codification/liste/type_diplome/{typeDiplome}', name: 'app_codification_liste_type_diplome')]
     public function listeTypeDiplome(
+        FormationRepository   $formationRepository,
         VilleRepository       $villeRepository,
         ComposanteRepository  $composanteRepository,
         MentionRepository     $mentionRepository,
         DomaineRepository     $domaineRepository,
         GetFormations         $getFormations,
         Request               $request,
-        TypeDiplomeRepository $typeDiplomeRepository,
         TypeDiplome           $typeDiplome
     ): Response {
         if ($typeDiplome === null) {
@@ -79,37 +79,44 @@ class CodificationController extends BaseController
                 $filtres
             );
         } else {
-            //filtrer par type de diplôme
-            //            $formations = [];
-            //            //gérer le cas ou l'utilisateur dispose des droits pour lire la composante
-            //            $centres = $this->getUser()?->getUserCentres();
-            //            foreach ($centres as $centre) {
-            //                //todo: gérer avec un voter
-            //                if ($centre->getComposante() !== null && (
-            //                    in_array('Gestionnaire', $centre->getDroits()) ||
-            //                    in_array('Invité', $centre->getDroits()) ||
-            //                    in_array('Directeur', $centre->getDroits())
-            //                )) {
-            //                    $formations[] = $formationRepository->findByComposante(
-            //                        $centre->getComposante(),
-            //                        $this->getDpe()
-            //                    );
-            //                }
-            //            }
-            //
-            //            $formations[] = $formationRepository->findByComposanteDpe(
-            //                $this->getUser(),
-            //                $this->getDpe()
-            //            );
-            //            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
-            //                $this->getUser(),
-            //                $this->getDpe()
-            //            );
-            //            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
-            //                $this->getUser(),
-            //                $this->getDpe()
-            //            );
-            //            $formations = array_merge(...$formations);
+            $formations = [];
+            $centres = $this->getUser()?->getUserCentres();
+            foreach ($centres as $centre) {
+                //todo: gérer avec un voter
+                if ($centre->getComposante() !== null && (
+                    in_array('Gestionnaire', $centre->getDroits()) ||
+                    in_array('Invité', $centre->getDroits()) ||
+                    in_array('ROLE_SCOL', $centre->getDroits()) ||
+                    in_array('Directeur', $centre->getDroits())
+                )) {
+                    $formations[] = $formationRepository->findByComposante(
+                        $centre->getComposante(),
+                        $this->getDpe()
+                    );
+                }
+            }
+
+            $formations[] = $formationRepository->findByComposanteDpe(
+                $this->getUser(),
+                $this->getDpe()
+            );
+            $formations[] = $formationRepository->findByResponsableOuCoResponsable(
+                $this->getUser(),
+                $this->getDpe()
+            );
+            $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
+                $this->getUser(),
+                $this->getDpe()
+            );
+            $formations = array_merge(...$formations);
+
+            //filtrer par type de diplome les formations
+            $tFormations = [];
+            foreach ($formations as $formation) {
+                if ($formation->getTypeDiplome() === $typeDiplome) {
+                    $tFormations[$formation->getId()] = $formation;
+                }
+            }
         }
 
         return $this->render('codification/_liste.html.twig', [
