@@ -70,7 +70,9 @@
                     <td>{{ parcours.codeVersionDiplome(annee) }}</td>
                     <td>{{ parcours.codeEtape(annee) }}</td>
                     <td>{{ parcours.codeVersionEtape(annee) }}</td>
-                    <td><a href="#"
+                    <td>
+                        {% if is_granted('ROLE_SES') %}
+                        <a href="#"
                            class="btn btn-sm text-warning"
                                 {{ stimulus_controller('modal', {
                                     size: 'lg',
@@ -84,7 +86,9 @@
                         >
                             <i class="{{ iconEdit }}"></i>
                             <span> Modifier Codes</span>
-                        </a></td>
+                        </a>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
