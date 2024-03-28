@@ -114,4 +114,9 @@ class StructureUe
         sort($this->uesEnfants);
         return $this->uesEnfants;
     }
+
+    public function getCodeApogee(): string
+    {
+        return $this->ueOrigine->getCodeApogee();
+    }
 }

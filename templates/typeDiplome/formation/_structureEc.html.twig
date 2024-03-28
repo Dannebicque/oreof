@@ -28,7 +28,7 @@
             ({{ ec.elementConstitutif.displayCodeApogee }}) <span class="badge bg-success">EC à choix libre</span>
         {% endif %}
         {% if ec.elementsConstitutifsEnfants|length > 0 %}
-             <span class="badge bg-info">
+            ({{ ec.elementConstitutif.displayCodeApogee }}) <span class="badge bg-info">
              EC à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possible(s)</span>
         {% endif %}
     </td>
