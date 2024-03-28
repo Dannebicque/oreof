@@ -47,7 +47,7 @@
                 <tr>
                     <th
                             class="border-left-semestre-{{ ordre }}"
-                            colspan=" {% if presentiel %}8{% else %}13{% endif %}">{{ semestre.semestre.display }} ({{ semestre.semestre.codeApogee }} | {{ semestre.semestreParcours.codeApogeeEtapeAnnee }} - {{ semestre.semestreParcours.codeApogeeEtapeVersion }}) {% if semestre.raccroche == true %}<i class="fal fa-link"></i>{% endif %}</th>
+                            colspan=" {% if presentiel %}8{% else %}13{% endif %}">S{{ semestre.ordre }} ({{ semestre.semestre.codeApogee }} | {{ semestre.semestreParcours.codeApogeeEtapeAnnee }} - {{ semestre.semestreParcours.codeApogeeEtapeVersion }}) {% if semestre.raccroche == true %}<i class="fal fa-link"></i>{% endif %}</th>
                 </tr>
 
                 {% for ue in semestre.ues %}

@@ -127,51 +127,53 @@ class ExportCodification
         $ligne = 4;
         /** @var StructureSemestre $semestre */
         foreach ($dto->semestres as $semestre) {
-            // gérer les années
-            if ($semestre->ordre % 2 === 1) {
+            if ($semestre->semestre->isNonDispense() === false) {
+                // gérer les années
+                if ($semestre->ordre % 2 === 1) {
+                    $ligne++;
+                    $this->excelWriter->writeCellXY(1, $ligne, 'Année ' . $semestre->getAnnee());
+                    $this->excelWriter->writeCellXY(2, $ligne, $semestre->semestreParcours->getCodeApogeeEtapeAnnee(), ['bold' => true]);
+                    $this->excelWriter->writeCellXY(3, $ligne, 'VET');
+                    $this->excelWriter->writeCellXY(4, $ligne, $semestre->semestreParcours->getCodeApogeeEtapeVersion(), ['bold' => true]);
+
+                }
+
+
                 $ligne++;
-                $this->excelWriter->writeCellXY(1, $ligne, 'Année ' . $semestre->getAnnee());
-                $this->excelWriter->writeCellXY(2, $ligne, $semestre->semestreParcours->getCodeApogeeEtapeAnnee(), ['bold' => true]);
-                $this->excelWriter->writeCellXY(3, $ligne, 'VET');
-                $this->excelWriter->writeCellXY(4, $ligne, $semestre->semestreParcours->getCodeApogeeEtapeVersion(), ['bold' => true]);
-
-            }
-
-
-            $ligne++;
-            $this->excelWriter->writeCellXY(2, $ligne, 'Semestre ' . $semestre->ordre);
-            $this->excelWriter->writeCellXY(3, $ligne, $semestre->semestre->getCodeApogee(), ['bold' => true]);
-            $this->excelWriter->writeCellXY(4, $ligne, 'SEMESTRE', ['color' => self::BLUE]);
-            $this->excelWriter->writeCellXY(5, $ligne, $semestre->heuresEctsSemestre->sommeSemestreEcts, ['color' => self::GREEN]);
-            foreach ($semestre->ues() as $ue) {
-                $ligne++;
-                if ($ue->ue->getUeParent() === null) {
-                    $this->excelWriter->writeCellXY(3, $ligne, $ue->ue->display($parcours));
-                    $this->excelWriter->writeCellXY(4, $ligne, $ue->ue->getCodeApogee(), ['bold' => true]);
-                    if ($ue->ue->getNatureUeEc()?->isChoix()) {
-                        $this->excelWriter->writeCellXY(5, $ligne, 'CHOIX', ['color' => self::BLUE]);
-                        //todo: ajouter lib court, long, ...
-                        foreach ($ue->uesEnfants() as $uesEnfant) {
-                            $ligne++;
-                            $this->excelWriter->writeCellXY(4, $ligne, $uesEnfant->ue->display($parcours));
-                            $this->excelWriter->writeCellXY(5, $ligne, $uesEnfant->ue->getCodeApogee(), ['bold' => true]);
-                            if ($uesEnfant->ue->getNatureUeEc()?->isLibre()) {
-                                $this->excelWriter->writeCellXY(6, $ligne, 'CHOIX', ['color' => self::BLUE]);
-                            } else {
-                                $this->excelWriter->writeCellXY(6, $ligne, 'UE', ['color' => self::BLUE]);
-                            }
-                            $this->excelWriter->writeCellXY(7, $ligne, $uesEnfant->heuresEctsUe->sommeUeEcts, ['color' => self::GREEN]);
-                            $ligne = $this->writeEcs($uesEnfant, $ligne, 5);
-                        }
-                    } else {
-                        if ($ue->ue->getNatureUeEc()?->isLibre()) {
+                $this->excelWriter->writeCellXY(2, $ligne, 'Semestre ' . $semestre->ordre);
+                $this->excelWriter->writeCellXY(3, $ligne, $semestre->semestre->getCodeApogee(), ['bold' => true]);
+                $this->excelWriter->writeCellXY(4, $ligne, 'SEMESTRE', ['color' => self::BLUE]);
+                $this->excelWriter->writeCellXY(5, $ligne, $semestre->heuresEctsSemestre->sommeSemestreEcts, ['color' => self::GREEN]);
+                foreach ($semestre->ues() as $ue) {
+                    $ligne++;
+                    if ($ue->ue->getUeParent() === null) {
+                        $this->excelWriter->writeCellXY(3, $ligne, $ue->display);
+                        $this->excelWriter->writeCellXY(4, $ligne, $ue->getCodeApogee(), ['bold' => true]);
+                        if ($ue->ue->getNatureUeEc()?->isChoix()) {
                             $this->excelWriter->writeCellXY(5, $ligne, 'CHOIX', ['color' => self::BLUE]);
+                            //todo: ajouter lib court, long, ...
+                            foreach ($ue->uesEnfants() as $uesEnfant) {
+                                $ligne++;
+                                $this->excelWriter->writeCellXY(4, $ligne, $uesEnfant->display);
+                                $this->excelWriter->writeCellXY(5, $ligne, $uesEnfant->getCodeApogee(), ['bold' => true]);
+                                if ($uesEnfant->ue->getNatureUeEc()?->isLibre()) {
+                                    $this->excelWriter->writeCellXY(6, $ligne, 'CHOIX', ['color' => self::BLUE]);
+                                } else {
+                                    $this->excelWriter->writeCellXY(6, $ligne, 'UE', ['color' => self::BLUE]);
+                                }
+                                $this->excelWriter->writeCellXY(7, $ligne, $uesEnfant->heuresEctsUe->sommeUeEcts, ['color' => self::GREEN]);
+                                $ligne = $this->writeEcs($uesEnfant, $ligne, 5);
+                            }
                         } else {
-                            $this->excelWriter->writeCellXY(5, $ligne, 'UE', ['color' => self::BLUE]);
-                        }
+                            if ($ue->ue->getNatureUeEc()?->isLibre()) {
+                                $this->excelWriter->writeCellXY(5, $ligne, 'CHOIX', ['color' => self::BLUE]);
+                            } else {
+                                $this->excelWriter->writeCellXY(5, $ligne, 'UE', ['color' => self::BLUE]);
+                            }
 
-                        $this->excelWriter->writeCellXY(6, $ligne, $ue->heuresEctsUe->sommeUeEcts, ['color' => self::GREEN]);
-                        $ligne = $this->writeEcs($ue, $ligne, 5);
+                            $this->excelWriter->writeCellXY(6, $ligne, $ue->heuresEctsUe->sommeUeEcts, ['color' => self::GREEN]);
+                            $ligne = $this->writeEcs($ue, $ligne, 5);
+                        }
                     }
                 }
             }

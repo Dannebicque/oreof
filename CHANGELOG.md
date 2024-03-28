@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.49](https://github.com/Dannebicque/oreof/compare/v1.24.48...v1.24.49) (2024-03-28)
+
+
+### Bug Fixes
+
+* codif LAS ([cb86f11](https://github.com/Dannebicque/oreof/commit/cb86f1176dcb1989ed4c8aab63f7970cd9e2e6ca))
+* codification avec lettres sur EC ([ea11809](https://github.com/Dannebicque/oreof/commit/ea118095d49e37c8265e2cfd33fe228d6b875a7a))
+* filtre formation en scol ([ab2f3af](https://github.com/Dannebicque/oreof/commit/ab2f3af44bc56ca8b8c8db3252e683d602b9cbf7))
+* filtre formation en scol ([af6079d](https://github.com/Dannebicque/oreof/commit/af6079d87a551c394e191b1eef01feb6156bf1f6))
+* filtre formation en scol ([e8114f2](https://github.com/Dannebicque/oreof/commit/e8114f2b7750671ed6397602df534254754e360f))
+* filtre formation en scol ([9d3e2f7](https://github.com/Dannebicque/oreof/commit/9d3e2f753ace891b90b396827bc6e24df6f3ea6a))
+* filtre formation en scol ([e11baf5](https://github.com/Dannebicque/oreof/commit/e11baf52558ceea94accb1e4dbf99d341702952c))
+* filtre formation en scol ([e6f1499](https://github.com/Dannebicque/oreof/commit/e6f1499d81b7bea693c6ab01294ff7810d1347c2))
+
 ### [1.24.48](https://github.com/Dannebicque/oreof/compare/v1.24.47...v1.24.48) (2024-03-26)
 
 
