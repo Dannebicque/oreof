@@ -246,7 +246,7 @@ class CodificationFormation
         foreach ($ues as $ue) {
             $this->ordreEc = 1;
             $ordreUe = 1;
-            $codeUe = $codeApogeeSemestre . $ue->ordre();
+            $codeUe = $codeApogeeSemestre . $ue->ueOrigine->getOrdre();
             if ($isLas) {
                 $codeUe .= 'S';
             }
@@ -286,7 +286,13 @@ class CodificationFormation
                     } else {
                         $codeApogeeUe = $ue->ueOrigine->getCodeApogee();
                     }
-                    $ec->elementConstitutif->setCodeApogee($codeApogeeUe . $ec->elementConstitutif->getOrdre());
+                    $codeEc = $codeApogeeUe . $ec->elementConstitutif->getOrdre();
+
+                    if ($isLas) {
+                        $codeEc .= 'S';
+                    }
+
+                    $ec->elementConstitutif->setCodeApogee($codeEc);
                     //EC avec EC enfants
                     foreach ($ec->elementsConstitutifsEnfants as $ecEnfant) {
                         $this->setCodificationFicheMatiere($ecEnfant, $ue, $isUeEnfant, true, $isLas);
