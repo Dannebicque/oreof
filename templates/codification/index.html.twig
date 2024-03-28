@@ -101,6 +101,7 @@
         <i class="{{ iconBack }}"></i>
         <span> Retour à la codification</span>
     </a>
+    {% if is_granted('ROLE_SES') %}
 
     <a href="#"
        class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
@@ -117,4 +118,5 @@
         <i class="fal fa-wrench"></i>
         <span> Générer</span>
     </a>
+    {% endif %}
 {% endblock %}
