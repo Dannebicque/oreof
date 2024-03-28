@@ -124,6 +124,7 @@ class VersioningParcours {
                 'context' => 1,
                 'ignoreWhitespace' => true,
                 'ignoreLineEnding' => true,
+                'lengthLimit' => 4500
             ];
             // Affichage 
             $rendererOptions = [
@@ -189,11 +190,17 @@ class VersioningParcours {
 
     public static function cleanUpHtmlTextForComparison(string $html){
         $cleaned = $html;
-        $cleaned = preg_replace('/\<br\>/m', '', $cleaned);
+        $cleaned = preg_replace('/\<div\>/m', '', $cleaned);
+        $cleaned = preg_replace('/\<\/div\>/m', '<br>', $cleaned);
         $cleaned = preg_replace('/\<ul\>|\<\/ul\>/m', '', $cleaned);
         $cleaned = preg_replace('/\<li\>/m', '<p class="list-item"><span class="list-item-text">', $cleaned);
         $cleaned = preg_replace('/\<\/li\>/m', '</span></p>', $cleaned);
+        $cleaned = preg_replace('/\<\!--block--\>/m', '', $cleaned); 
 
         return $cleaned;
+    }
+
+    public static function removeBlockHtml(string $html){
+        return preg_replace('/\<\!--block--\>/m', '', $html);
     }
 }

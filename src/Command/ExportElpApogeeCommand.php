@@ -55,7 +55,7 @@ class ExportElpApogeeCommand extends Command
     private static $codLseApogeeDataTest = "COD_LSE_11-03-2024-09_47.json";
     // Données exportées depuis ORéOF
     private static $fullLseExportDataTest = "COD_LSE_TEST-FULL-25-03-2024_09-06-23.json";
-    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-26-03-2024_14-23-45.json";
+    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-28-03-2024_15-36-47.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
