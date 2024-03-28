@@ -198,6 +198,7 @@ class CodificationController extends BaseController
     ): Response {
         return $this->render('codification/index.html.twig', [
             'formation' => $formation,
+            'step' => $formation->getParcours()->first()->getId(),
         ]);
     }
 
@@ -328,6 +329,6 @@ class CodificationController extends BaseController
                 break;
         }
 
-        return $this->redirectToRoute('app_codification_index', ['formation' => $formation->getId()]);
+        return $this->redirectToRoute('app_codification_index', ['formation' => $formation->getId(), 'step' => $formation->getParcours()->first()->getId()]);
     }
 }

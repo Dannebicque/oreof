@@ -244,11 +244,13 @@ class CodificationFormation
             $codeApogeeSemestre = $semestre->semestre->getCodeApogee();
         }
         foreach ($ues as $ue) {
+            $isLasEc = false;
             $this->ordreEc = 1;
             $ordreUe = 1;
             $codeUe = $codeApogeeSemestre . $ue->ueOrigine->getOrdre();
-            if ($isLas) {
+            if ($isLas === true && $ue->ueOrigine->getOrdre() == 4) {
                 $codeUe .= 'S';
+                $isLasEc = true;
             }
 
             if ($ue->ue->getUeParent() === null) { //UE parent
@@ -261,14 +263,14 @@ class CodificationFormation
                             $ordreUe++;
                         } else {
                             $ueEnfant->ueOrigine->setCodeApogee($codeUe. chr(64+$ordreUe));
-                            $this->setCodificationEc($ueEnfant, true, $isLas);
+                            $this->setCodificationEc($ueEnfant, true, $isLasEc);
                             $ordreUe++;
                         }
                     }
                 } else {
                     $ue->ueOrigine->setCodeApogee($codeUe);
                     //UE sans UE enfants
-                    $this->setCodificationEc($ue, false, $isLas);
+                    $this->setCodificationEc($ue, false, $isLasEc);
                 }
             }
         }
