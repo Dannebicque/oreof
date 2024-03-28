@@ -5,9 +5,9 @@
             <dl>
                 <dt>Contenu de la formation</dt>
                 <dd>{{ formation.contenuFormation|raw }}</dd>
-                {% if stringDifferences is defined 
-                   and stringDifferences.presentationParcoursContenuFormation is defined 
-                   and stringDifferences.presentationParcoursContenuFormation|length > 0
+                {% if is_granted('ROLE_ADMIN') and stringDifferences is defined 
+                   and stringDifferences.presentationFormationContenuFormation is defined 
+                   and stringDifferences.presentationFormationContenuFormation|length > 0
                 %}
                     <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
                         <button class="btn btn-primary btn-sm my-3"
@@ -17,14 +17,14 @@
                         </button>
                     </div>
                     <div class="col-sm-12 col-md-10 col-lg-8 collapse" id="diffContenuFormation">
-                        {{ stringDifferences.presentationParcoursContenuFormation|raw  }} 
+                        {{ stringDifferences.presentationFormationContenuFormation|raw  }} 
                     </div>
                 {% endif %}
                 <dt>Résultats attendus de la formation</dt>
                 <dd>{{ formation.resultatsAttendus|raw }}</dd>
-                {% if stringDifferences is defined 
-                   and stringDifferences.presentationParcoursResultatsAttendus is defined 
-                   and stringDifferences.presentationParcoursResultatsAttendus|length > 0
+                {% if is_granted('ROLE_ADMIN') and stringDifferences is defined 
+                   and stringDifferences.presentationFormationResultatsAttendus is defined 
+                   and stringDifferences.presentationFormationResultatsAttendus|length > 0
                 %}
                     <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
                         <button class="btn btn-primary btn-sm my-3"
@@ -34,7 +34,7 @@
                         </button>
                     </div>
                     <div class="col-sm-12 col-md-10 col-lg-8 collapse" id="diffResultatsAttendus">
-                        {{ stringDifferences.presentationParcoursResultatsAttendus|raw  }} 
+                        {{ stringDifferences.presentationFormationResultatsAttendus|raw  }} 
                     </div>
                 {% endif %}
                 <dt>Rythme de formation</dt>

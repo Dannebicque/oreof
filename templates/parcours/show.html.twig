@@ -6,15 +6,7 @@
     {{ parent() }}
     <style>
         {{ cssDiff }}
-        .diff-wrapper.diff.diff-html .change del {
-            background-color: unset; 
-            font-weight: unset;
-            text-decoration: line-through;
-            color: red;
-        }
-        .diff-wrapper.diff.diff-html .change .rep {
-            background-color: white;
-        }
+        {{ include('communs/versioning_view_style.html.twig') }}
     </style>
 {% endblock %}
 

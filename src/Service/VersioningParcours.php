@@ -167,6 +167,20 @@ class VersioningParcours {
                     $differOptions,
                     $rendererOptions
                 )),
+                'presentationFormationContenuFormation' => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getFormation()?->getContenuFormation() ?? "",
+                    $parcours->getFormation()?->getContenuFormation() ?? "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                'presentationFormationResultatsAttendus' => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getFormation()?->getResultatsAttendus() ?? "",
+                    $parcours->getFormation()?->getResultatsAttendus() ?? "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                ))
             ];
         }
 

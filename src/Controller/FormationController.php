@@ -30,6 +30,7 @@ use App\Repository\MentionRepository;
 use App\Repository\RoleRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserCentreRepository;
+use App\Service\VersioningParcours;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -381,7 +382,8 @@ class FormationController extends BaseController
     public function show(
         TypeDiplomeRegistry     $typeDiplomeRegistry,
         Formation               $formation,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        VersioningParcours $versioningParcours
     ): Response {
         $typeDiplome = $formation->getTypeDiplome();
 
@@ -399,79 +401,10 @@ class FormationController extends BaseController
         /**
          * VERSIONING PARCOURS PAR DÉFAUT
          */
-        $cssDiff = "";
+        $cssDiff = DiffHelper::getStyleSheet();
         if($formation->isHasParcours() === false && count($formation->getParcours()) === 1){
-            $cssDiff = DiffHelper::getStyleSheet();
-
-            // Serializer
-            $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-            $serializer = new Serializer(
-            [
-                new DateTimeNormalizer(),
-                new BackedEnumNormalizer(),
-                new ArrayDenormalizer(),
-                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor()),
-            ],
-                [new JsonEncoder()]
-            ); 
-            // Version n-1     
-            $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
-            $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
-
-            $textDifferences = [];
-
-            // Changements dans le texte : comparaison avec n-1
-            if($lastVersion){
-                $rendererName = 'Combined';
-                $differOptions = [
-                    'context' => 1,
-                    'ignoreWhitespace' => true,
-                    'ignoreLineEnding' => true,
-                ];
-                $rendererOptions = [
-                    'detailLevel' => 'word',
-                    'lineNumbers' => false,
-                    'showHeader' => false,
-                    'separateBlock' => false,
-                ];
-                $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
-                                                . "{$lastVersion->getParcours()->getId()}/"
-                                                . "{$lastVersion->getParcoursFileName()}.json"
-                                );
-                $lastVersion = $serializer->deserialize($fileParcours, Parcours::class, 'json');
-                $textDifferences = [
-                    'presentationParcoursContenuFormation' => html_entity_decode(DiffHelper::calculate(
-                        $lastVersion->getFormation()->getContenuFormation() ?? "",
-                        $parcours->getFormation()->getContenuFormation() ?? "",
-                        $rendererName,
-                        $differOptions,
-                        $rendererOptions
-                    )),
-                    'presentationParcoursObjectifsParcours' => html_entity_decode(DiffHelper::calculate(
-                        $lastVersion->getObjectifsParcours() ?? "",
-                        $parcours->getObjectifsParcours() ?? "",
-                        $rendererName,
-                        $differOptions,
-                        $rendererOptions
-                    )),
-                    'presentationParcoursResultatsAttendus' => html_entity_decode(DiffHelper::calculate(
-                        $lastVersion->getFormation()->getResultatsAttendus() ?? "",
-                        $parcours->getFormation()->getResultatsAttendus() ?? "",
-                        $rendererName,
-                        $differOptions,
-                        $rendererOptions
-                    )),
-                    'presentationFormationObjectifsFormation' => html_entity_decode(DiffHelper::calculate(
-                        $lastVersion->getFormation()?->getObjectifsFormation() ?? "",
-                        $parcours->getFormation()?->getObjectifsFormation() ?? "",
-                        $rendererName,
-                        $differOptions,
-                        $rendererOptions
-                    )),
-                ];
-            }
+            $textDifferences = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);    
         }
-        /* FIN DU VERSIONING */
 
         return $this->render('formation/show.html.twig', [
             'formation' => $formation,
