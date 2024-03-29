@@ -140,67 +140,96 @@ class VersioningParcours {
                             );
             $lastVersion = $this->serializer->deserialize($fileParcours, Parcours::class, 'json');
             $textDifferences = [
-                'presentationParcoursContenuFormation' => html_entity_decode(DiffHelper::calculate(
-                    self::cleanUpHtmlTextForComparison($lastVersion->getContenuFormation() ?? ""),
-                    self::cleanUpHtmlTextForComparison($parcours->getContenuFormation() ?? ""),
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                )),
-                'presentationParcoursObjectifsParcours' => html_entity_decode(DiffHelper::calculate(
-                    self::cleanUpHtmlTextForComparison($lastVersion->getObjectifsParcours() ?? ""),
-                    self::cleanUpHtmlTextForComparison($parcours->getObjectifsParcours() ?? ""),
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                )),
-                'presentationParcoursResultatsAttendus' => html_entity_decode(DiffHelper::calculate(
-                    self::cleanUpHtmlTextForComparison($lastVersion->getResultatsAttendus() ?? ""),
-                    self::cleanUpHtmlTextForComparison($parcours->getResultatsAttendus() ?? ""),
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                )),
-                'presentationFormationObjectifsFormation' => html_entity_decode(DiffHelper::calculate(
-                    self::cleanUpHtmlTextForComparison($lastVersion->getFormation()?->getObjectifsFormation() ?? ""),
-                    self::cleanUpHtmlTextForComparison($parcours->getFormation()?->getObjectifsFormation() ?? ""),
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                )),
-                'presentationFormationContenuFormation' => html_entity_decode(DiffHelper::calculate(
-                    self::cleanUpHtmlTextForComparison($lastVersion->getFormation()?->getContenuFormation() ?? ""),
-                    self::cleanUpHtmlTextForComparison($parcours->getFormation()?->getContenuFormation() ?? ""),
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                )),
-                'presentationFormationResultatsAttendus' => html_entity_decode(DiffHelper::calculate(
-                    self::cleanUpHtmlTextForComparison($lastVersion->getFormation()?->getResultatsAttendus() ?? ""),
-                    self::cleanUpHtmlTextForComparison($parcours->getFormation()?->getResultatsAttendus() ?? ""),
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                ))
+                'presentationParcoursContenuFormation' => 
+                self::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        self::cleanUpHtmlTextForComparison($lastVersion->getContenuFormation() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getContenuFormation() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    ))
+                ),
+                'presentationParcoursObjectifsParcours' => 
+                self::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        self::cleanUpHtmlTextForComparison($lastVersion->getObjectifsParcours() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getObjectifsParcours() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    ))
+                ),
+                'presentationParcoursResultatsAttendus' => 
+                self::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        self::cleanUpHtmlTextForComparison($lastVersion->getResultatsAttendus() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getResultatsAttendus() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    ))
+                ),
+                'presentationFormationObjectifsFormation' => 
+                self::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        self::cleanUpHtmlTextForComparison($lastVersion->getFormation()?->getObjectifsFormation() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getFormation()?->getObjectifsFormation() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    ))
+                ),
+                'presentationFormationContenuFormation' => 
+                self::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        self::cleanUpHtmlTextForComparison($lastVersion->getFormation()?->getContenuFormation() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getFormation()?->getContenuFormation() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    ))
+                ),
+                'presentationFormationResultatsAttendus' => 
+                self::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        self::cleanUpHtmlTextForComparison($lastVersion->getFormation()?->getResultatsAttendus() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getFormation()?->getResultatsAttendus() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    ))
+                )
             ];
         }
 
         return $textDifferences;
     }
 
-    public static function cleanUpHtmlTextForComparison(string $html){
+    public static function cleanUpHtmlTextForComparison(string $html) : string {
         $cleaned = $html;
         $cleaned = preg_replace('/\<div\>/m', '', $cleaned);
-        $cleaned = preg_replace('/\<\/div\>/m', '<br>', $cleaned);
+        $cleaned = preg_replace('/\<\/div\>/m', '', $cleaned);
         $cleaned = preg_replace('/\<ul\>|\<\/ul\>/m', '', $cleaned);
         $cleaned = preg_replace('/\<li\>/m', '<p class="list-item"><span class="list-item-text">', $cleaned);
         $cleaned = preg_replace('/\<\/li\>/m', '</span></p>', $cleaned);
         $cleaned = preg_replace('/\<\!--block--\>/m', '', $cleaned); 
+        $cleaned = preg_replace('/\<br\>/m', '', $cleaned);
+        // $cleaned = preg_replace('/\>(.+)\<br\>/m', '<p>$1</p>', $cleaned);
+        
 
         return $cleaned;
     }
 
-    public static function removeBlockHtml(string $html){
+    public static function removeBlockHtml(string $html) : string {
         return preg_replace('/\<\!--block--\>/m', '', $html);
+    }
+
+    public static function cleanUpComparison(string $htmlComparison) : string {
+        return preg_replace(
+            '/(\<del\>)(\<\/span\>\<\/p\>\<p class\="list-item"\>\<span class\="list-item-text"\>)/m', 
+            "$2$1", 
+            $htmlComparison
+        );
     }
 }
