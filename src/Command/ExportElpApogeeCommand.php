@@ -1357,7 +1357,7 @@ class ExportElpApogeeCommand extends Command
      */
     private function getLseUeFromSemestre(StructureSemestre $semestre, string $libCourt, string $libLong) : ListeElementPedagogiDTO3 {
         return new ListeElementPedagogiDTO3($semestre->semestre->getCodeApogee() ?? 'ERROR', 'O', $libCourt, $libLong, array_map(
-            fn($ue) => $ue->ue->getCodeApogee(),
+            fn($ue) => $ue->getCodeApogee(),
             $semestre->ues()
         ));
     }

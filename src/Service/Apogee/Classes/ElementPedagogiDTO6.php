@@ -124,7 +124,7 @@ class ElementPedagogiDTO6
         }
         elseif ($elementPedagogique instanceof StructureUe){
             $this->codElp = $this->checkCodeApogee(
-                $elementPedagogique->ue->getCodeApogee(), 
+                $elementPedagogique->getCodeApogee(), 
                 "Type UE - ID : {$elementPedagogique->ue->getId()}",
                 $withChecks,
                 $dto->parcours->getId()
