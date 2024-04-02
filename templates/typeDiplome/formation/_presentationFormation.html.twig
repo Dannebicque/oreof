@@ -16,8 +16,10 @@
                             Voir les différences
                         </button>
                     </div>
-                    <div class="col-sm-12 col-md-10 col-lg-8 collapse" id="diffContenuFormation">
-                        {{ stringDifferences.presentationFormationContenuFormation|raw  }} 
+                    <div class="row">
+                        <div class="col-sm-12 col-md-10 col-lg-8 collapse" id="diffContenuFormation">
+                            {{ stringDifferences.presentationFormationContenuFormation|raw  }} 
+                        </div>
                     </div>
                 {% endif %}
                 <dt>Résultats attendus de la formation</dt>
@@ -33,8 +35,10 @@
                             Voir les différences
                         </button>
                     </div>
-                    <div class="col-sm-12 col-md-10 col-lg-8 collapse" id="diffResultatsAttendus">
-                        {{ stringDifferences.presentationFormationResultatsAttendus|raw  }} 
+                    <div class="row">
+                        <div class="col-sm-12 col-md-10 col-lg-8 collapse" id="diffResultatsAttendus">
+                            {{ stringDifferences.presentationFormationResultatsAttendus|raw  }} 
+                        </div>
                     </div>
                 {% endif %}
                 <dt>Rythme de formation</dt>
@@ -65,8 +69,10 @@
                         Voir les différences
                     </button>
                 </div>
-                <div class="col-sm-12 collapse" id="diffFormationObjectifsFormation">
-                    {{ stringDifferences.presentationFormationObjectifsFormation|raw  }}
+                <div class="row">
+                    <div class="col-sm-12 collapse" id="diffFormationObjectifsFormation">
+                        {{ stringDifferences.presentationFormationObjectifsFormation|raw  }}
+                    </div>
                 </div>
                 {% endif %}
             {% endif %}

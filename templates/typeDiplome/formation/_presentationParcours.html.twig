@@ -16,8 +16,10 @@
                         Voir les différences
                     </button>
                 </div>
-                <div class="col-sm-12 col-md-10 col-lg-8 collapse mb-3" id="diffParcoursContenuFormation">
-                    {{ stringDifferences.presentationParcoursContenuFormation|raw  }} 
+                <div class="row">
+                    <div class="col-sm-12 col-md-10 col-lg-8 collapse mb-3" id="diffParcoursContenuFormation">
+                        {{ stringDifferences.presentationParcoursContenuFormation|raw  }} 
+                    </div>
                 </div>
                 {% endif %}
             {% endif %}
@@ -36,9 +38,11 @@
                         Voir les différences
                     </button>
                 </div>
+                <div class="row">
                     <div class="col-sm-12 col-md-10 col-lg-8 collapse mb-3" id="diffParcoursObjectifsParcours">
                         {{ stringDifferences.presentationParcoursObjectifsParcours|raw  }} 
                     </div>
+                </div>
                 {% endif %}
             {% endif %}
             <dt>Résultats attendus du parcours</dt>
@@ -56,8 +60,10 @@
                         Voir les différences
                     </button>
                 </div>
-                <div class="col-sm-12 col-md-10 col-lg-8 collapse mb-3" id="diffParcoursResultatsAttendus">
-                    {{ stringDifferences.presentationParcoursResultatsAttendus|raw  }} 
+                <div class="row">
+                    <div class="col-sm-12 col-md-10 col-lg-8 collapse mb-3" id="diffParcoursResultatsAttendus">
+                        {{ stringDifferences.presentationParcoursResultatsAttendus|raw  }} 
+                    </div>
                 </div>
                 {% endif %}  
             {% endif %}
