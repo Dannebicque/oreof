@@ -10,6 +10,7 @@ use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\ElementConstitutif;
+use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\HistoriqueFormation;
 use App\Entity\Parcours;
@@ -51,8 +52,8 @@ class ExportElpApogeeCommand extends Command
 {
 
     // Données extraites d'APOTEST
-    private static $codElpApogeeDataTest = "COD_ELP_11-03-2024-09_46.json";
-    private static $codLseApogeeDataTest = "COD_LSE_11-03-2024-09_47.json";
+    private static $codElpApogeeDataTest = "COD_ELP_02-04-2024-10_46.json";
+    private static $codLseApogeeDataTest = "COD_LSE_02-04-2024-10_47.json";
     // Données exportées depuis ORéOF
     private static $fullLseExportDataTest = "COD_LSE_TEST-29-03-2024_11-57-29.json";
     private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-02-04-2024_08-59-14.json";
@@ -399,7 +400,9 @@ class ExportElpApogeeCommand extends Command
                 $nbEcDuplicates = count($this->entityManager->getRepository(ElementConstitutif::class)->countDuplicatesCode());
                 $nbUeDuplicates = count($this->entityManager->getRepository(Ue::class)->countDuplicatesCode());
                 $nbSemestreDuplicates = count($this->entityManager->getRepository(Semestre::class)->countDuplicatesCode());
+                $nbFicheMatiereDuplicates = count($this->entityManager->getRepository(FicheMatiere::class)->countDuplicatesCode());
                 // affichage des résultats
+                $io->writeln("Nombre de doublons sur les Fiches Matières : " . $nbFicheMatiereDuplicates);
                 $io->writeln("Nombre de doublons sur les EC : " . $nbEcDuplicates);
                 $io->writeln("Nombre de doublons sur les UE : " . $nbUeDuplicates);
                 $io->writeln("Nombre de doublons sur les Semestres : " . $nbSemestreDuplicates);
