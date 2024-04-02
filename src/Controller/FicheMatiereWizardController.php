@@ -60,15 +60,17 @@ class FicheMatiereWizardController extends AbstractController
         } else {
             $isBut = false;
         }
-
+        $isScol = $this->isGranted('CAN_ETABLISSEMENT_SCOLARITE_ALL', $this->getuser());
         $form = $this->createForm(FicheMatiereStep1Type::class, $ficheMatiere, [
-            'isBut' => $isBut
+            'isBut' => $isBut,
+            'isScol' => $isScol,
         ]);
-
         return $this->render('fiche_matiere_wizard/_step1.html.twig', [
             'form' => $form->createView(),
             'ficheMatiere' => $ficheMatiere,
-            'isBut' => $isBut
+            'isBut' => $isBut,
+            'isScol' => $isScol,
+
         ]);
     }
 
