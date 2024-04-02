@@ -54,8 +54,8 @@ class ExportElpApogeeCommand extends Command
     private static $codElpApogeeDataTest = "COD_ELP_11-03-2024-09_46.json";
     private static $codLseApogeeDataTest = "COD_LSE_11-03-2024-09_47.json";
     // Données exportées depuis ORéOF
-    private static $fullLseExportDataTest = "COD_LSE_TEST-FULL-25-03-2024_09-06-23.json";
-    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-28-03-2024_15-36-47.json";
+    private static $fullLseExportDataTest = "COD_LSE_TEST-29-03-2024_11-57-29.json";
+    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-02-04-2024_08-59-14.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
@@ -439,8 +439,8 @@ class ExportElpApogeeCommand extends Command
                             $errorMessage .= "Le Semestre {$semestre->ordre} : a un code APOGEE supérieur à 8 caractères. ({$semestre->semestre->getCodeApogee()})\n";
                         }
                         foreach($semestre->ues() as $ue){
-                            if(mb_strlen($ue->ue->getCodeApogee()) > 8){
-                                $errorMessage .= "L'{$ue->ue->display()} : a un code APOGEE supérieur à 8 caractères. ({$ue->ue->getCodeApogee()})\n";
+                            if(mb_strlen($ue->getCodeApogee()) > 8){
+                                $errorMessage .= "L'{$ue->ue->display()} : a un code APOGEE supérieur à 8 caractères. ({$ue->getCodeApogee()})\n";
                             }
                             foreach($ue->elementConstitutifs as $ecUE){
                                 $codeEcUe = $ecUE->elementConstitutif->getCodeApogee() ?? $ecUE->elementConstitutif->getFicheMatiere()->getCodeApogee() ?? "";
@@ -457,8 +457,8 @@ class ExportElpApogeeCommand extends Command
                                 }
                             }
                             foreach($ue->uesEnfants() as $ueE){
-                                if(mb_strlen($ueE->ue->getCodeApogee()) > 8){
-                                    $errorMessage .= "L'{$ueE->ue->display()} : a un code APOGEE supérieur à 8 caractères. ({$ueE->ue->getCodeApogee()})\n";
+                                if(mb_strlen($ueE->getCodeApogee()) > 8){
+                                    $errorMessage .= "L'{$ueE->ue->display()} : a un code APOGEE supérieur à 8 caractères. ({$ueE->getCodeApogee()})\n";
                                 }
                                 foreach($ueE->elementConstitutifs as $ecUeE){
                                     $codeEcUeE = $ecUeE->elementConstitutif->getCodeApogee() ?? $ecUeE->elementConstitutif->getFicheMatiere()->getCodeApogee() ?? "";

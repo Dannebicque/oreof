@@ -64,7 +64,7 @@ class ElementPedagogiDTO6
                 $elementPedagogique->elementConstitutif->getCodeApogee() 
                     ?? $elementPedagogique->elementConstitutif->getFicheMatiere()->getCodeApogee() 
                     ?? null,
-                "Type : EC - ID : {$elementPedagogique->elementConstitutif->getId()}",
+                "Type : EC - ID : {$elementPedagogique->elementConstitutif->getId()} - {$elementPedagogique->elementConstitutif->display()}",
                 $withChecks,
                 $dto->parcours->getId()
             ); 
