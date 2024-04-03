@@ -318,7 +318,12 @@ class CodificationFormation
                 }
 
                 if ($isEcEnfant === true) {
-                    $code .= chr(64 + $this->ordreEc);
+                    if ($isUeEnfant === false) {
+                        $code = $ec->elementConstitutif->getEcParent()?->getCodeApogee().chr(64 + $this->ordreEc);
+                    } else {
+                        $code .= chr(64 + $this->ordreEc);
+                    }
+
                     $this->ordreEc++;
                 } else {
                     $code .= $ec->elementConstitutif->getOrdre();
@@ -330,9 +335,14 @@ class CodificationFormation
                 }
             }
 
-            if ($ec->elementConstitutif->getParcours() !== null && $ec->elementConstitutif->getParcours()->getFormation() !== $ec->elementConstitutif->getFicheMatiere()->getParcours()?->getFormation()) {
+
+            if (
+                $ec->elementConstitutif->getFicheMatiere()->isHorsDiplome() === true ||
+                ($ec->elementConstitutif->getParcours() !== null &&
+                    $ec->elementConstitutif->getParcours() !== $ec->elementConstitutif->getFicheMatiere()->getParcours())) {
                 $ec->elementConstitutif->getFicheMatiere()->setTypeApogee(FicheMatiere::MATM);
             }
+
         } else {
             $code = $ue->ue->getCodeApogee();
             if ($isUeEnfant === true) {
