@@ -816,9 +816,9 @@ class ElementConstitutif
     public function getCodeApogee(): ?string
     {
         if ($this->getNatureUeEc()?->isChoix()) {
-            if ($this->getUe()?->getUeParent() === null) {
+            //if ($this->getUe()?->getUeParent() === null) {
                 return $this->getUe()?->getCodeApogee() . $this->getOrdre();
-            }
+            //}
         }
 
         return $this->codeApogee;

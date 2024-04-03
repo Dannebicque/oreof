@@ -125,8 +125,8 @@ class Ue
         }
 
         if ($parcours !== null) {
-            if($this->getSemestre()){
-                if($this->getSemestre()->getSemestreParcours()){
+            if($this->getSemestre()) {
+                if($this->getSemestre()->getSemestreParcours()) {
                     foreach ($this->getSemestre()?->getSemestreParcours() as $semestreParcours) {
                         if ($semestreParcours->getParcours() === $parcours) {
                             if ($parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT') {
@@ -166,9 +166,9 @@ class Ue
             return $this->getEcts();
         }
 
-//        if ($this->getUeRaccrochee() !== null) {
-//            return $this->getUeRaccrochee()->getUe()?->totalEctsUe();
-//        }
+        //        if ($this->getUeRaccrochee() !== null) {
+        //            return $this->getUeRaccrochee()->getUe()?->totalEctsUe();
+        //        }
 
         $total = 0;
         if ($this->getUeEnfants()->count() === 0) {
@@ -365,6 +365,13 @@ class Ue
 
     public function getCodeApogee(): ?string
     {
+        if ($this->getUeParent() !== null) {
+            if ($this->getNatureUeEc()?->isLibre()) {
+                return substr($this->getUeParent()->getCodeApogee(), 0, -1).chr($this->getOrdre() + 64).'X';
+            }
+            return substr($this->getUeParent()->getCodeApogee(), 0, -1).chr($this->getOrdre() + 64);
+        }
+
         return $this->codeApogee;
     }
 

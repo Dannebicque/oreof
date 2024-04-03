@@ -345,18 +345,21 @@ class CodificationFormation
 
         } else {
             $code = $ue->ue->getCodeApogee();
-            if ($isUeEnfant === true) {
+
+            if ($ec->elementConstitutif->getNatureUeEc()?->isLibre() && $isEcEnfant === true) {
+//                dump($ec->elementConstitutif->getId());
+//                dump($isEcEnfant);
+                $code = $ec->elementConstitutif->getEcParent()?->getCodeApogee();
+                $code .= chr(64 + $this->ordreEc);
+//                dump($code);
+                $this->ordreEc++;
+            } elseif ($isUeEnfant === true) {
                 $code .= chr(64 + $this->ordreEc);
                 $this->ordreEc++;
             } else {
-                if ($ec->elementConstitutif->getNatureUeEc()?->isLibre() && $isEcEnfant === true) {
-                    // $code .= $ec->elementConstitutif->getEcParent()?->getOrdre();
-                    $code .= chr(64 + $this->ordreEc);
-                    $this->ordreEc++;
-                } else {
-                    $code .= $ec->elementConstitutif->getOrdre();
-                }
+                $code .= $ec->elementConstitutif->getOrdre();
             }
+
             $ec->elementConstitutif->setCodeApogee($code);
         }
     }
