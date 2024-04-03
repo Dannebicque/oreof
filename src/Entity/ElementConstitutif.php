@@ -817,7 +817,7 @@ class ElementConstitutif
     {
         if ($this->getNatureUeEc()?->isChoix()) {
             if ($this->getUe()?->getUeParent() === null) {
-                return $this->getUe()?->getCodeApogee() . $this->getOrdre() . 'X';
+                return $this->getUe()?->getCodeApogee() . $this->getOrdre();
             }
         }
 
