@@ -17,6 +17,7 @@ use App\DTO\StatsFichesMatieres;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\FormationDemande;
+use App\Entity\FormationVersioning;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Entity\UserCentre;
@@ -386,7 +387,8 @@ class FormationController extends BaseController
         TypeDiplomeRegistry     $typeDiplomeRegistry,
         Formation               $formation,
         EntityManagerInterface $entityManager,
-        VersioningParcours $versioningParcours
+        VersioningParcours $versioningParcours,
+        VersioningFormation $versioningFormation
     ): Response {
         $typeDiplome = $formation->getTypeDiplome();
 
@@ -409,6 +411,11 @@ class FormationController extends BaseController
             $textDifferences = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);    
         }
 
+        /**
+         * VERSIONING FORMATION
+         */
+        $formationStringDifferences = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
+
         return $this->render('formation/show.html.twig', [
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
@@ -416,6 +423,7 @@ class FormationController extends BaseController
             'typeD' => $typeD,
             'cssDiff' => $cssDiff,
             'stringDifferences' => $textDifferences ?? [],
+            'formationStringDifferences' => $formationStringDifferences ?? []
         ]);
     }
 

@@ -1,0 +1,15 @@
+{% if is_granted('ROLE_ADMIN') %}
+    {% if stringData is defined 
+        and stringData != null
+        and stringData|length > 0
+    %}
+        <span class="badge rounded-pill text-bg-primary">
+            Différences
+        </span>
+        <div class="row">
+            <div class="col-6">
+                {{ stringData|raw }}  
+            </div> 
+        </div>
+    {% endif %}
+{% endif %}

@@ -31,6 +31,7 @@
         <dl>
             <dt>Responsable de la formation</dt>
             <dd>{{ formation.responsableMention != null ? formation.responsableMention.display : 'erreur' }}</dd>
+            {# {{ include('communs/_comparaison_formation_versioning.html.twig', {textField: "emailResponsableFormation"}) }} #}
             <dt>Email</dt>
             <dd>{{ formation.responsableMention != null ? formation.responsableMention.email : 'erreur' }}</dd>
             {% if formation.coResponsable != null %}

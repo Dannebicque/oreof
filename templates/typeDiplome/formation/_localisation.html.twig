@@ -5,6 +5,9 @@
             <dd>
                 {% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}
             </dd>
+            {{ include('communs/_comparaison_formation_versioning.html.twig', 
+               {stringData: formationStringDifferences.localisationMention}) 
+            }}
             <dt>Régime(s) d'inscription</dt>
             <dd>
                 <ul>
