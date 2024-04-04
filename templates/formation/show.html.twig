@@ -24,13 +24,25 @@
 
       function saveVersion (event) {
         if (isSaveClicked === false) {
-          let spinner = document.querySelector('#spinner')
+          let spinner = document.querySelector('#spinnerParcours')
           spinner.classList.remove('d-none')
           spinner.classList.add('d-flex')
           isSaveClicked = true
         } else {
           event.preventDefault()
           return false
+        }
+      }
+
+      function saveFormationVersion (event) {
+        if(isSaveClicked === false){
+            let spinnerFormation = document.querySelector('#spinnerFormation');
+            spinnerFormation.classList.remove('d-none');
+            spinnerFormation.classList.add('d-flex');
+            isSaveClicked = true;
+        } else {
+            event.preventDefault();
+            return false;
         }
       }
 

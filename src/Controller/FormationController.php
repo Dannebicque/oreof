@@ -530,7 +530,7 @@ class FormationController extends BaseController
     }
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/{slug}/versioning/save')]
+    #[Route('/{slug}/versioning/save', name: "app_formation_versioning_save")]
     public function saveFormationIntoJson(
         Formation $formation,
         VersioningFormation $versioningFormationService,
