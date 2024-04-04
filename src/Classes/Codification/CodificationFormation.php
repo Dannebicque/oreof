@@ -218,6 +218,7 @@ class CodificationFormation
                     $code = substr($parcours->getComposanteInscription()?->getCodeApogee(), 0, 1);
                     $code .= $formation->getTypeDiplome()?->getCodeApogee();
                     $code .= substr($semestre->semestreParcours->getCodeApogeeDiplome(), 3, 2); //3 et 4 = 4 et 5 de diplôme
+                    //todo: ne prends pas le bon parcours si semestre mutualisé
                     $code .= $semestre->ordre;
                     $isLas = false;
                     if ($parcours->getTypeParcours() === TypeParcoursEnum::TYPE_PARCOURS_LAS23 &&
@@ -347,11 +348,8 @@ class CodificationFormation
             $code = $ue->ue->getCodeApogee();
 
             if ($ec->elementConstitutif->getNatureUeEc()?->isLibre() && $isEcEnfant === true) {
-//                dump($ec->elementConstitutif->getId());
-//                dump($isEcEnfant);
                 $code = $ec->elementConstitutif->getEcParent()?->getCodeApogee();
                 $code .= chr(64 + $this->ordreEc);
-//                dump($code);
                 $this->ordreEc++;
             } elseif ($isUeEnfant === true) {
                 $code .= chr(64 + $this->ordreEc);
