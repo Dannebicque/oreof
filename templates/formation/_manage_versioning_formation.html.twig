@@ -15,7 +15,7 @@
             </a>
         </div>
     <div class="d-flex col-lg-1 col-sm-3 align-items-end">
-        <a href="{{ path('app_formation_versioning_save', {slug: formation.slug}) }}">
+        <a href="{{ path('app_formation_versioning_save', {slug: formation.slug}) }}" onclick="saveFormationVersion(event)">
             <button class="btn btn-sm btn-success mb-1 ms-lg-1">
                 Sauvegarder la version
             </button>

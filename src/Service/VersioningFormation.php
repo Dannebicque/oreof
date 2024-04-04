@@ -64,7 +64,7 @@ class VersioningFormation {
         ]);
         // Enregistrement du fichier
         $this->filesystem->appendToFile(
-            __DIR__ . "/../../versioning_json/formation/{$formation->getSlug()}/{$formationFilename}", 
+            __DIR__ . "/../../versioning_json/formation/{$formation->getSlug()}/{$formationFilename}.json", 
             $formationJSON
         );
         $this->entityManager->persist($formationVersioning);
