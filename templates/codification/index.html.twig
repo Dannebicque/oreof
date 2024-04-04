@@ -4,7 +4,7 @@
     <div
             {{ stimulus_controller('wizard', {
                 url: path('app_codification_wizard', {formation:formation.id}),
-                step: formation.parcours.first.id,
+                step: step,
             }) }}
          data-action="base:refreshListe@window->wizard#changeStep"
     >

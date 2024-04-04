@@ -27,6 +27,10 @@
     {{ form_row(form.libelle) }}
     {{ form_row(form.sigle) }}
 
+    {% if isScol %}
+        {{ form_row(form.codeApogee) }}
+    {% endif %}
+
     {% if isBut %}
         {{ form_row(form.typeMatiere) }}
     {% endif %}

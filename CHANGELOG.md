@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.51](https://github.com/Dannebicque/oreof/compare/v1.24.50...v1.24.51) (2024-04-03)
+
+
+### Bug Fixes
+
+* Codification ([9d2a447](https://github.com/Dannebicque/oreof/commit/9d2a447f7b23dc13e4f276ea10de93cb471046e2))
+* Codification ([a495eb8](https://github.com/Dannebicque/oreof/commit/a495eb86c3d08487022401c814a2ce74ca86db54))
+
+### [1.24.50](https://github.com/Dannebicque/oreof/compare/v1.24.49...v1.24.50) (2024-04-03)
+
+
+### Bug Fixes
+
+* codif LAS ([2392996](https://github.com/Dannebicque/oreof/commit/2392996f5ebdfbd51e683450b8ea2f2f9a7b56e2))
+* codif LAS ([72e40a9](https://github.com/Dannebicque/oreof/commit/72e40a9ded22392c15f2a6ac32cf8768ee5c4d1e))
+* Codification ([b0fe70b](https://github.com/Dannebicque/oreof/commit/b0fe70b738712c52b154b5ef8fe745604837b9a4))
+* Saisie code fiche matière ([310241f](https://github.com/Dannebicque/oreof/commit/310241fd315cb158c043dbd5d16521f5a46172d3))
+
 ### [1.24.49](https://github.com/Dannebicque/oreof/compare/v1.24.48...v1.24.49) (2024-03-28)
 
 

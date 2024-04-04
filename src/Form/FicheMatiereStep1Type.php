@@ -26,7 +26,6 @@ class FicheMatiereStep1Type extends AbstractType
     public function __construct(
         private AuthorizationCheckerInterface $authorizationChecker)
     {
-        $this->authorizationChecker = $authorizationChecker;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -37,6 +36,7 @@ class FicheMatiereStep1Type extends AbstractType
 //        );
         $access = true;
         $builder
+
             ->add('responsableFicheMatiere', EntityType::class, [
                 'class' => User::class,
                 'autocomplete' => true,
@@ -104,6 +104,13 @@ class FicheMatiereStep1Type extends AbstractType
                 'help' => '-'
             ]);
 
+        if ($options['isScol']) {
+            $builder->add('codeApogee', TextType::class, [
+                'attr' => ['data-action' => 'change->fichematiere--step1#saveCodeApogee', 'maxlength' => 8],
+                'required' => false
+            ]);
+        }
+
         if ($options['isBut']) {
             $builder->add('typeMatiere', ChoiceType::class, [
                 'choices' => [
@@ -124,6 +131,7 @@ class FicheMatiereStep1Type extends AbstractType
             'data_class' => FicheMatiere::class,
             'translation_domain' => 'form',
             'isBut' => false,
+            'isScol' => false,
         ]);
     }
 }

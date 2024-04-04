@@ -104,6 +104,15 @@ export default class extends Controller {
     })
   }
 
+  saveCodeApogee() {
+    const { value } = document.getElementById('fiche_matiere_step1_codeApogee')
+    this._save({
+      field: 'codeApogee',
+      action: 'textarea',
+      value,
+    })
+  }
+
   saveContenuEn() {
     this._save({
       field: 'libelleAnglais',
