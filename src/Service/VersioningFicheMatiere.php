@@ -114,20 +114,29 @@ class VersioningFicheMatiere {
         ];
         if($lastVersion){
             $textDifferences = [
-                'descriptionEnseignement' => html_entity_decode(DiffHelper::calculate(
-                    $lastVersion->getDescription() ?? "",
-                    $ficheMatiere->getDescription() ?? "",
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                )),
-                'objectifsEnseignement' => html_entity_decode(DiffHelper::calculate(
-                    $lastVersion->getObjectifs() ?? "",
-                    $ficheMatiere->getObjectifs() ?? "",
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                ))
+                'descriptionEnseignement' => VersioningParcours::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            VersioningParcours::cleanUpHtmlTextForComparison($lastVersion->getDescription() ?? ""),
+                            VersioningParcours::cleanUpHtmlTextForComparison($ficheMatiere->getDescription() ?? ""),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                
+                        )
+                    )
+                ),
+                'objectifsEnseignement' => VersioningParcours::cleanUpComparison(
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            VersioningParcours::cleanUpHtmlTextForComparison($lastVersion->getObjectifs() ?? ""),
+                            VersioningParcours::cleanUpHtmlTextForComparison($ficheMatiere->getObjectifs() ?? ""),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
+                    )  
+                )
             ];
 
         }
