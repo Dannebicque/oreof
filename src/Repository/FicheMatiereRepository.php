@@ -302,4 +302,17 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findByTypeValidationNull(CampagneCollecte $campagneCollecte): array
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->join(Parcours::class, 'p', 'WITH', 'f.parcours = p.id')
+            ->join(Formation::class, 'fo', 'WITH', 'p.formation = fo.id')
+            ->join(DpeParcours::class, 'dp', 'WITH', 'p.id = dp.parcours')
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->andWhere('f.etatFiche IS NULL')
+            ->setParameter('campagneCollecte', $campagneCollecte);
+
+        return $qb->getQuery()->getResult();
+    }
 }
