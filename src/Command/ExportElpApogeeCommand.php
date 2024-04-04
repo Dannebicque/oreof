@@ -446,13 +446,13 @@ class ExportElpApogeeCommand extends Command
                                 $errorMessage .= "L'{$ue->ue->display()} : a un code APOGEE supérieur à 8 caractères. ({$ue->getCodeApogee()})\n";
                             }
                             foreach($ue->elementConstitutifs as $ecUE){
-                                $codeEcUe = $ecUE->elementConstitutif->getCodeApogee() ?? $ecUE->elementConstitutif->getFicheMatiere()->getCodeApogee() ?? "";
+                                $codeEcUe = $ecUE->elementConstitutif->getCodeApogee() ?? $ecUE->elementConstitutif->getFicheMatiere()?->getCodeApogee() ?? "";
                                 if(mb_strlen($codeEcUe) > 8){
                                     $errorMessage .= "L'{$ecUE->elementConstitutif->getCode()} ({$ecUE->elementConstitutif->getUe()->display()}) :"
                                     . " a un code APOGEE supérieur à 8 caractères. ({$codeEcUe})\n";
                                 }
                                 foreach($ecUE->elementsConstitutifsEnfants as $ecE){
-                                    $codeEcE = $ecE->elementConstitutif->getCodeApogee() ?? $ecE->elementConstitutif->getFicheMatiere()->getCodeApogee() ?? "";
+                                    $codeEcE = $ecE->elementConstitutif->getCodeApogee() ?? $ecE->elementConstitutif->getFicheMatiere()?->getCodeApogee() ?? "";
                                     if(mb_strlen($codeEcE) > 8){
                                         $errorMessage .= "L'{$ecE->elementConstitutif->getCode()} ({$ecE->elementConstitutif->getUe()->display()}) :"
                                         . " a un code APOGEE supérieur à 8 caractères. ({$codeEcE})\n";
@@ -464,13 +464,13 @@ class ExportElpApogeeCommand extends Command
                                     $errorMessage .= "L'{$ueE->ue->display()} : a un code APOGEE supérieur à 8 caractères. ({$ueE->getCodeApogee()})\n";
                                 }
                                 foreach($ueE->elementConstitutifs as $ecUeE){
-                                    $codeEcUeE = $ecUeE->elementConstitutif->getCodeApogee() ?? $ecUeE->elementConstitutif->getFicheMatiere()->getCodeApogee() ?? "";
+                                    $codeEcUeE = $ecUeE->elementConstitutif->getCodeApogee() ?? $ecUeE->elementConstitutif->getFicheMatiere()?->getCodeApogee() ?? "";
                                     if(mb_strlen($codeEcUeE) > 8){
                                         $errorMessage .= "L'{$ecUeE->elementConstitutif->getCode()} ({$ecUeE->elementConstitutif->getUe()->display()}) :"
                                         . " a un code APOGEE supérieur à 8 caractères. ({$codeEcUeE})\n";
                                     }
                                     foreach($ecUeE->elementsConstitutifsEnfants as $ecE){
-                                        $codeEcEUeE = $ecE->elementConstitutif->getCodeApogee() ?? $ecE->elementConstitutif->getFicheMatiere()->getCodeApogee() ?? "";
+                                        $codeEcEUeE = $ecE->elementConstitutif->getCodeApogee() ?? $ecE->elementConstitutif->getFicheMatiere()?->getCodeApogee() ?? "";
                                         if(mb_strlen($codeEcEUeE) > 8){
                                             $errorMessage .= "L'{$ecE->elementConstitutif->getCode()} ({$ecE->elementConstitutif->getUe()->display()}) :"
                                             . " a un code APOGEE supérieur à 8 caractères. ({$codeEcEUeE})\n";

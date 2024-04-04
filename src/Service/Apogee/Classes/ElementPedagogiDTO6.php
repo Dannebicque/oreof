@@ -62,7 +62,7 @@ class ElementPedagogiDTO6
             // Création du code ELP
             $this->codElp = $this->checkCodeApogee(
                 $elementPedagogique->elementConstitutif->getCodeApogee() 
-                    ?? $elementPedagogique->elementConstitutif->getFicheMatiere()->getCodeApogee() 
+                    ?? $elementPedagogique->elementConstitutif->getFicheMatiere()?->getCodeApogee() 
                     ?? null,
                 "Type : EC - ID : {$elementPedagogique->elementConstitutif->getId()} - {$elementPedagogique->elementConstitutif->display()}",
                 $withChecks,
