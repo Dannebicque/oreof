@@ -47,8 +47,9 @@
     {{ include('formation/_gestion.html.twig', {formation: formation}) }}
     {# Versioning pour les parcours par défaut #}
     {% if formation.isHasParcours == false and formation.parcours|length == 1 %}   
-        {{ include('formation/_manage_versioning.html.twig', {parcours: formation.parcours[0]}) }}
+        {{ include('formation/_manage_versioning_parcours.html.twig', {parcours: formation.parcours[0]}) }}
     {% endif %}
+        {{ include('formation/_manage_versioning_formation.html.twig') }}
     {% endif %}
 
     <div class="row">

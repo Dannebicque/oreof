@@ -1,6 +1,6 @@
 <div class="row my-5">
+    <h3 class="small-title">Versions de ce parcours</h3>
     <div class="col-lg-3 col-sm-6">
-        <h3 class="small-title">Versions de ce parcours</h3>
         {% if parcours.parcoursVersionings|length > 0 %}
             <select class="form-select" id="selectVersion">
                 <option value="#" selected="selected">Choisir...</option>
@@ -33,7 +33,7 @@
             </button>
         </a>
     </div>
-    <div class="d-none col-lg-2 align-items-end justify-content-xl-center justify-content-end"
+    <div class="d-flex col-lg-2 justify-content-xl-center justify-content-lg-end justify-content-md-start align-items-center"
             id="spinner">
         <div class="spinner-border text-primary mb-1"></div>
     </div>
