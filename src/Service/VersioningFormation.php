@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use App\Entity\Formation;
+use App\Entity\FormationVersioning;
+use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
@@ -38,7 +40,9 @@ class VersioningFormation {
         );
     }
 
-    public function saveVersionOfFormation(Formation $formation){
-
+    public function saveVersionOfFormation(Formation $formation, DateTimeImmutable $now, bool $withFlush = false){
+        $dateHeure = $now->format('d-m-Y_H-i-s');
+        // Objet BD Formation Versioning
+        $formationVersioning = new FormationVersioning();
     }
 }

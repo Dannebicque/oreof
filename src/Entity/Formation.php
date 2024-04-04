@@ -196,6 +196,9 @@ class Formation
     /** @deprecated  */
     private ?string $codeMentionApogee = null;
 
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: FormationVersioning::class)]
+    private Collection $formationVersionings;
+
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
@@ -214,6 +217,7 @@ class Formation
         $this->historiqueFormations = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->dpeParcours = new ArrayCollection();
+        $this->formationVersionings = new ArrayCollection();
     }
 
     #[ORM\PreFlush]
@@ -1018,6 +1022,36 @@ class Formation
     public function setCodeMentionApogee(?string $codeMentionApogee): static
     {
         $this->codeMentionApogee = $codeMentionApogee;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FormationVersioning>
+     */
+    public function getFormationVersionings(): Collection
+    {
+        return $this->formationVersionings;
+    }
+
+    public function addFormationVersioning(FormationVersioning $formationVersioning): static
+    {
+        if (!$this->formationVersionings->contains($formationVersioning)) {
+            $this->formationVersionings->add($formationVersioning);
+            $formationVersioning->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormationVersioning(FormationVersioning $formationVersioning): static
+    {
+        if ($this->formationVersionings->removeElement($formationVersioning)) {
+            // set the owning side to null (unless already changed)
+            if ($formationVersioning->getFormation() === $this) {
+                $formationVersioning->setFormation(null);
+            }
+        }
 
         return $this;
     }
