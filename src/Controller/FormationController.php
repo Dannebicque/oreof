@@ -30,13 +30,16 @@ use App\Repository\MentionRepository;
 use App\Repository\RoleRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserCentreRepository;
+use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
+use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
@@ -524,5 +527,36 @@ class FormationController extends BaseController
         return $this->render("formation/parcours_list_with_id.html.twig", [
             'formations' => $formations
         ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/{slug}/versioning/save')]
+    public function saveFormationIntoJson(
+        Formation $formation,
+        VersioningFormation $versioningFormationService,
+        Filesystem $filesystem
+    ){
+        try{
+            /** @var User $utilisateur */
+            $utilisateur = $this->getUser();
+            $now = new DateTimeImmutable();
+            $dateHeure = $now->format('d-m-Y_H-i-s');
+            $versioningFormationService->saveVersionOfFormation($formation, $now, true);
+            // Log
+            $successMessage = "[{$dateHeure}] La formation a bien été sauvegardée ({$formation->getSlug()})"
+            . "\nUtilisateur : {$utilisateur->getPrenom()} {$utilisateur->getNom()} - ID : {$utilisateur->getUsername()}\n";
+            $filesystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/save_formation_success.log", $successMessage);
+
+            $this->addFlashBag('success', 'La formation a bien été sauvegardée.');
+            return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
+        }catch(\Exception $e){
+            $errorMessage = "[{$dateHeure}] Le versioning de la formation a rencontré une erreur."
+                . "\nUtilisateur : {$utilisateur->getPrenom()} {$utilisateur->getNom()} - ID : {$utilisateur->getUsername()}"
+                ."\nMessage : {$e->getMessage()}\n";
+            $filesystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/save_formation_error.log", $errorMessage);
+
+            $this->addFlashBag('error', 'Une erreur est survenue lors de la sauvegarde.');
+            return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
+        }
     }
 }

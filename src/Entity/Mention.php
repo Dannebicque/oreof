@@ -24,11 +24,11 @@ class Mention
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups('parcours_json_versioning', 'formation_json_versioning')]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $sigle = null;
 
