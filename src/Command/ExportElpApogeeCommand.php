@@ -58,7 +58,8 @@ class ExportElpApogeeCommand extends Command
     private static $fullLseExportDataTest = "COD_LSE_TEST-29-03-2024_11-57-29.json";
     private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-05-04-2024_09-28-46.json";
     // Fichier contenant les formations à exclure
-    private static $formationToExcludeFile = "testFormationFile.txt";
+    private static $formationToExcludeFile = "liste-formation-a-exclure-04-04-2024-15h00.txt";
+    private static $formationToExcludeJSON = "Formations-a-exclure-05-04-2024_15-22-04.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
@@ -176,6 +177,10 @@ class ExportElpApogeeCommand extends Command
             name: 'format-formation-to-exclude',
             mode: InputOption::VALUE_NONE,
             description: "Formate un fichier contenant les formations à exclure vers du JSON"
+        )->addOption(
+            name: 'dump-parcours-to-insert',
+            mode: InputOption::VALUE_REQUIRED,
+            description: "Dump les parcours disponibles pour l'insertion"
         );
     }
 
@@ -209,6 +214,7 @@ class ExportElpApogeeCommand extends Command
         $reportInvalidApogeeCode = $input->getOption('report-invalid-apogee-code');
         $checkDuplicatesFromJsonExport = $input->getOption('check-duplicates-from-json-export');
         $checkNestedChildren = $input->getOption('check-nested-children');
+        $dumpParcoursToInsert = $input->getOption('dump-parcours-to-insert');
         // Formatage des données
         $formatFormationFile = $input->getOption('format-formation-to-exclude');
 
@@ -819,10 +825,10 @@ class ExportElpApogeeCommand extends Command
                 $textData = array_map(function($text){
                     preg_match('/Slug : (.+) - ID : ([0-9]+) ((.*) \s*ID : ([0-9]+)){0,1}/u', $text, $matches);
                     return [
-                        'slug-formation' => $matches[1],
-                        'id-formation' => (int)$matches[2],
-                        'libelle-parcours' => isset($matches[4]) ? $matches[4] : null,
-                        'id-parcours' => isset($matches[5]) ? (int)$matches[5] : null
+                        'slugFormation' => $matches[1],
+                        'idFormation' => (int)$matches[2],
+                        'libelleParcours' => isset($matches[4]) ? $matches[4] : null,
+                        'idParcours' => isset($matches[5]) ? (int)$matches[5] : null
                     ];
                 }, $textData);
                 $io->writeln('Encodage en cours...');
@@ -831,6 +837,19 @@ class ExportElpApogeeCommand extends Command
                     json_encode($textData)
                 );
                 $io->success('Export réussi !');
+                return Command::SUCCESS;
+            }
+            if($dumpParcoursToInsert){
+                if($dumpParcoursToInsert !== "exclusion" && $dumpParcoursToInsert !== "no-exclusion"){
+                    $io->warning("Option non reconnue. Doit être ['exclusion', 'no-exclusion']");
+                    return Command::FAILURE;
+                }
+                $withExclusion = $dumpParcoursToInsert === "exclusion" ? true : false;
+                
+                $io->writeln("Dump des parcours disponibles...");
+                $this->retrieveParcoursDataFromDatabase($withExclusion, true);
+                $io->writeln("Enregistrement réussi !");
+                
                 return Command::SUCCESS;
             }    
             
@@ -1296,11 +1315,61 @@ class ExportElpApogeeCommand extends Command
      * Récupère les parcours disponibles et valides en base de données
      * @return array Tableau des parcours disponibles à traiter
      */
-    private function retrieveParcoursDataFromDatabase(){
+    private function retrieveParcoursDataFromDatabase(bool $withExclude = true, bool $withJsonExport = false){
+        if($withExclude){
+            $formationToExclude = json_decode(
+                file_get_contents(
+                    __DIR__ . "/../Service/Apogee/export/" . self::$formationToExcludeJSON
+                )
+            );
+            $formationIdArray = array_filter(
+                array_map(function($exclude){
+                    if($exclude->idParcours === null){
+                        return $exclude->idFormation;
+                    }
+                }, $formationToExclude)
+            );
+            $parcoursIdArray = array_filter(
+                array_map(function($exclude){
+                    if($exclude->idParcours !== null){
+                        return $exclude->idParcours;
+                    }
+                }, $formationToExclude)
+            );
+        }
         $dataArray = $this->entityManager->getRepository(Formation::class)->findAll();
         $dataArray = array_filter($dataArray, [$this, 'filterFormationByPublicationState']);
+        if($withExclude){
+            // Filtrage des formations
+            $dataArray = array_filter(
+                $dataArray, 
+                fn($formation) => in_array($formation->getId(), $formationIdArray) === false
+            );
+        }
         $dataArray = array_map(fn($formation) => $formation->getParcours()->toArray(), $dataArray);
-        return array_merge(...$dataArray);
+        $dataArray = array_merge(...$dataArray);
+        if($withExclude){
+            // Filtrage des parcours
+            $dataArray = array_filter(
+                $dataArray,
+                fn($parcours) => in_array($parcours->getId(), $parcoursIdArray) === false
+            );
+        }
+
+        if($withJsonExport){
+            $filtered = $withExclude ? "exclusion-" : ""; 
+            $now = new DateTime();
+            $date = $now->format('d-m-Y_H-i-s');
+            $exportJson = array_values(array_map(
+                fn($parcours) => $parcours->getFormation()->getDisplayLong() . " - " . $parcours->getLibelle(), 
+                $dataArray
+            ));
+            $this->filesystem->appendToFile(
+                __DIR__ . "/../Service/Apogee/export/liste-parcours-a-inserer-{$filtered}{$date}.json", 
+                json_encode($exportJson));
+        }
+
+        return $dataArray;
     }
 
     /**
