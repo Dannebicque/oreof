@@ -52,11 +52,11 @@ class ExportElpApogeeCommand extends Command
 {
 
     // Données extraites d'APOTEST
-    private static $codElpApogeeDataTest = "COD_ELP_02-04-2024-10_46.json";
+    private static $codElpApogeeDataTest = "COD_ELP_05-04-2024-09_39.json";
     private static $codLseApogeeDataTest = "COD_LSE_02-04-2024-10_47.json";
     // Données exportées depuis ORéOF
     private static $fullLseExportDataTest = "COD_LSE_TEST-29-03-2024_11-57-29.json";
-    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-02-04-2024_08-59-14.json";
+    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-05-04-2024_09-28-46.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
