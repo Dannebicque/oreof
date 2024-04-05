@@ -57,6 +57,8 @@ class ExportElpApogeeCommand extends Command
     // Données exportées depuis ORéOF
     private static $fullLseExportDataTest = "COD_LSE_TEST-29-03-2024_11-57-29.json";
     private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-05-04-2024_09-28-46.json";
+    // Fichier contenant les formations à exclure
+    private static $formationToExcludeFile = "testFormationFile.txt";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
@@ -170,6 +172,10 @@ class ExportElpApogeeCommand extends Command
             name: 'check-nested-children',
             mode: InputOption::VALUE_NONE,
             description: "Vérifie s'il n'y a pas trop d'éléments enfants imbriqués dans les parcours disponibles"
+        )->addOption(
+            name: 'format-formation-to-exclude',
+            mode: InputOption::VALUE_NONE,
+            description: "Formate un fichier contenant les formations à exclure vers du JSON"
         );
     }
 
@@ -203,6 +209,8 @@ class ExportElpApogeeCommand extends Command
         $reportInvalidApogeeCode = $input->getOption('report-invalid-apogee-code');
         $checkDuplicatesFromJsonExport = $input->getOption('check-duplicates-from-json-export');
         $checkNestedChildren = $input->getOption('check-nested-children');
+        // Formatage des données
+        $formatFormationFile = $input->getOption('format-formation-to-exclude');
 
         if($mode === "test"){
             // Export total des ELP selon le type : EC, UE ou Semestre
@@ -800,7 +808,31 @@ class ExportElpApogeeCommand extends Command
                     return Command::SUCCESS;
                 }
 
-            }     
+            } 
+            if($formatFormationFile){
+                $date = new DateTime();
+                $now = $date->format("d-m-Y_H-i-s");
+                $io->writeln('Ouveture du fichier contenant les formations...');
+                $textData = file_get_contents(__DIR__ . "/../Service/Apogee/data-test/" . self::$formationToExcludeFile);
+                $textData = preg_replace('/\xA0|\\t|\\r/um', ' ', $textData);
+                $textData = preg_split('/\s\\n/', $textData);
+                $textData = array_map(function($text){
+                    preg_match('/Slug : (.+) - ID : ([0-9]+) ((.*) \s*ID : ([0-9]+)){0,1}/u', $text, $matches);
+                    return [
+                        'slug-formation' => $matches[1],
+                        'id-formation' => (int)$matches[2],
+                        'libelle-parcours' => isset($matches[4]) ? $matches[4] : null,
+                        'id-parcours' => isset($matches[5]) ? (int)$matches[5] : null
+                    ];
+                }, $textData);
+                $io->writeln('Encodage en cours...');
+                $this->filesystem->appendToFile(
+                    __DIR__ . "/../Service/Apogee/export/Formations-a-exclure-{$now}.json", 
+                    json_encode($textData)
+                );
+                $io->success('Export réussi !');
+                return Command::SUCCESS;
+            }    
             
             return Command::SUCCESS;
         }
