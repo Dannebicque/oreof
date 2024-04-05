@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.52](https://github.com/Dannebicque/oreof/compare/v1.24.51...v1.24.52) (2024-04-04)
+
+
+### Features
+
+* export etat des fiches ([a653577](https://github.com/Dannebicque/oreof/commit/a6535771634a8793cb4dda579a97fd59de213ca1))
+
+
+### Bug Fixes
+
+* Codification ([b16130f](https://github.com/Dannebicque/oreof/commit/b16130fe6e929629855bad30b6bc59f77e4027a4))
+
 ### [1.24.51](https://github.com/Dannebicque/oreof/compare/v1.24.50...v1.24.51) (2024-04-03)
 
 

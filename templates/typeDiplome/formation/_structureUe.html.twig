@@ -1,7 +1,7 @@
 <tr>
     <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
     <th colspan="3" {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %}>
-        {{ ue.display }} | {{ ue.ue.libelle }} ({{ ue.codeApogee }}) {% if ue.raccroche == true %}<i class="fal fa-link"></i>{% endif %}
+        {{ ue.display }} | {{ ue.ue.libelle }} ({{ ue.codeApogee() }}) {% if ue.raccroche == true %}<i class="fal fa-link"></i>{% endif %}
         {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
             <span class="badge bg-secondary">
             UE à choix libre</span>

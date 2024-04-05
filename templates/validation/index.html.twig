@@ -10,7 +10,17 @@
 {% endblock %}
 
 {% block bouton_header %}
-
+    {% if is_granted('ROLE_SES') %}
+        <a href="{{ path('app_validation_verification_fiche_export') }}"
+           class="btn btn-sm btn-outline-success btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Export contrôle fiche"
+        >
+            <i class="fas fa-check"></i>
+            <span> Vérifier Fiches</span>
+        </a>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
