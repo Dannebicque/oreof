@@ -1338,7 +1338,7 @@ class ExportElpApogeeCommand extends Command
             );
         }
         $dataArray = $this->entityManager->getRepository(Formation::class)->findAll();
-        $dataArray = array_filter($dataArray, [$this, 'filterFormationByPublicationState']);
+        // $dataArray = array_filter($dataArray, [$this, 'filterFormationByPublicationState']);
         if($withExclude){
             // Filtrage des formations
             $dataArray = array_filter(
