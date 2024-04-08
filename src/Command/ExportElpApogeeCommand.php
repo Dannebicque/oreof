@@ -56,10 +56,10 @@ class ExportElpApogeeCommand extends Command
     private static $codLseApogeeDataTest = "COD_LSE_02-04-2024-10_47.json";
     // Données exportées depuis ORéOF
     private static $fullLseExportDataTest = "COD_LSE_TEST-29-03-2024_11-57-29.json";
-    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-05-04-2024_09-28-46.json";
+    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-05-04-2024_15-59-37.json";
     // Fichier contenant les formations à exclure
-    private static $formationToExcludeFile = "liste-formation-a-exclure-04-04-2024-15h00.txt";
-    private static $formationToExcludeJSON = "Formations-a-exclure-05-04-2024_15-22-04.json";
+    private static $formationToExcludeFile = "liste-formation-a-exclure-08-04-2024-10h12.txt";
+    private static $formationToExcludeJSON = "Formations-a-exclure-08-04-2024_10-16-21.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
