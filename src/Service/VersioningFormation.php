@@ -120,14 +120,14 @@ class VersioningFormation {
             $formationTextDifferences = [
                 "responsableDeFormation" => html_entity_decode(DiffHelper::calculate(
                     // Version
-                    ($lastVersion->getResponsableMention()->getNom() ?? ""
+                    ($lastVersion->getResponsableMention()->getNom()
                      . " " . 
-                     $lastVersion->getResponsableMention()->getPrenom() ?? ""
+                     $lastVersion->getResponsableMention()->getPrenom()
                     ) ,
                     // Actuel
-                    ($formation->getResponsableMention()->getNom() ?? ""
+                    ($formation->getResponsableMention()->getNom()
                      . " " . 
-                     $formation->getResponsableMention()->getPrenom() ?? ""
+                     $formation->getResponsableMention()->getPrenom()
                     ),
                     $rendererName,
                     $differOptions,
