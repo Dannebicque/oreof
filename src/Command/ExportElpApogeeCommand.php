@@ -52,11 +52,11 @@ class ExportElpApogeeCommand extends Command
 {
 
     // Données extraites d'APOTEST
-    private static $codElpApogeeDataTest = "COD_ELP_PRODUCTION-09-04-2024-14-41.json";
+    private static $codElpApogeeDataTest = "COD_ELP_PRODUCTION-AFTER-INSERT-09-04-2024-16-31.json";
     // private static $codElpApogeeDataTest = "COD_ELP_08-04-2024-15-45-AFTER-INSERT.json";
     private static $codLseApogeeDataTest = "COD_LSE_PRODUCTION-09-04-2024-14-43.json";
     // Données exportées depuis ORéOF
-    private static $fullLseExportDataTest = "COD_LSE_TEST-PROD-09-04-2024_14-48-44.json";
+    private static $fullLseExportDataTest = "COD_LSE_TEST-PROD-09-04-2024_16-38-47.json";
     private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-PROD-09-04-2024_14-47-47.json";
     // Fichier contenant les formations à exclure
     private static $formationToExcludeFile = "liste-formation-a-exclure-PRODUCTION-09-04-2024-14h12.txt";
@@ -914,6 +914,43 @@ class ExportElpApogeeCommand extends Command
                     return Command::SUCCESS;
                 }
             }
+            // Insère tous les LSE disponibles dans APOTEST
+            if($fullLseInsertion){
+                $io->writeln("Utilisation du Web Service APOGEE");
+                if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer les LSE de TOUS LES PARCOURS ?")){
+                    $parcoursArray = $this->retrieveParcoursDataFromDatabase();
+                    $nbParcours = count($parcoursArray);
+                    // LSE déjà traité
+                    $lseCreated = [];
+                    // ELP présents dans Apogée
+                    $elpApogeeData = json_decode(
+                        file_get_contents(
+                            __DIR__ . "/../Service/Apogee/data-test/" . self::$codElpApogeeDataTest
+                        )
+                    );
+                    if($this->verifyUserIntent($io, "Il y a {$nbParcours} parcours à traiter. Continuer ?")){
+                        $io->writeln("Initialisation du Web Service...");
+                        $this->createSoapClientProduction();
+                        $io->progressStart($nbParcours);
+                        foreach($parcoursArray as $parcours){
+                            $dto = $this->getDTOForParcours($parcours);
+                            $lseArray = $this->getLseObjectArrayForParcours($dto, $elpApogeeData, $lseCreated);
+                            $this->insertSeveralLSE($lseArray);
+                            $io->progressAdvance();
+                        }
+                        $io->writeln("\nInsertion réussie !");
+                        return Command::SUCCESS;
+                    }
+                    else {
+                        $io->warning("La commande d'insertion a été annulée.");
+                        return Command::SUCCESS;
+                    }
+                }
+                else {
+                    $io->warning("La commande d'insertion a été annulée.");
+                    return Command::SUCCESS;
+                }
+            }
             return Command::INVALID;
         }
         else{
@@ -1133,7 +1170,8 @@ class ExportElpApogeeCommand extends Command
      * Création du client SOAP pour la Production.
      */
     private function createSoapClientProduction() : void {
-        $wsdl = $this->parameterBag->get('WSDL_APOGEE_PRODUCTION');
+        // $wsdl = $this->parameterBag->get('WSDL_APOGEE_PRODUCTION');
+        $wsdl = "https://ws-apogee.univ-reims.fr/apo-webservices/services/CreationSEMetier?wsdl";
         $this->soapClient = new \SoapClient($wsdl, [
             "trace" => true
         ]);
