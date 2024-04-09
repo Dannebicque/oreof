@@ -55,7 +55,7 @@ class ExportElpApogeeCommand extends Command
     private static $codElpApogeeDataTest = "COD_ELP_08-04-2024-15-45-AFTER-INSERT.json";
     private static $codLseApogeeDataTest = "COD_LSE_08-04-2024-15-47.json";
     // Données exportées depuis ORéOF
-    private static $fullLseExportDataTest = "COD_LSE_TEST-09-04-2024_11-12-49.json";
+    private static $fullLseExportDataTest = "COD_LSE_TEST-09-04-2024_13-54-09.json";
     private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-05-04-2024_15-59-37.json";
     // Fichier contenant les formations à exclure
     private static $formationToExcludeFile = "liste-formation-a-exclure-08-04-2024-10h12.txt";
@@ -592,14 +592,22 @@ class ExportElpApogeeCommand extends Command
                 if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer les LSE de TOUS LES PARCOURS ?")){
                     $parcoursArray = $this->retrieveParcoursDataFromDatabase();
                     $nbParcours = count($parcoursArray);
+                    // LSE déjà traité
+                    $lseCreated = [];
+                    // ELP présents dans Apogée
+                    $elpApogeeData = json_decode(
+                        file_get_contents(
+                            __DIR__ . "/../Service/Apogee/data-test/" . self::$codElpApogeeDataTest
+                        )
+                    );
                     if($this->verifyUserIntent($io, "Il y a {$nbParcours} parcours à traiter. Continuer ?")){
                         $io->writeln("Initialisation du Web Service...");
-                        // $this->createSoapClient();
+                        $this->createSoapClient();
                         $io->progressStart($nbParcours);
                         foreach($parcoursArray as $parcours){
                             $dto = $this->getDTOForParcours($parcours);
-                            $lseArray = $this->getLseObjectArrayForParcours($dto);
-                            // $this->insertSeveralLSE($lseArray);
+                            $lseArray = $this->getLseObjectArrayForParcours($dto, $elpApogeeData, $lseCreated);
+                            $this->insertSeveralLSE($lseArray);
                             $io->progressAdvance();
                         }
                         $io->writeln("\nInsertion réussie !");
