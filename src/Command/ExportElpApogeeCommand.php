@@ -869,7 +869,43 @@ class ExportElpApogeeCommand extends Command
         }
 
         elseif($mode === "production"){
-            $io->warning("Commande en mode PRODUCTION - O.K");
+            $io->warning("Commande en mode PRODUCTION");
+            // Insère tous les ELP de tous les parcours disponibles
+            if($fullParcoursInsertion){
+                $io->writeln("Utilisation du Web Service APOGEE - PRODUCTION");
+                if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer les ELP de TOUS LES PARCOURS ?")){
+                    $parcoursArray = $this->retrieveParcoursDataFromDatabase();
+                    $nbParcours = count($parcoursArray);
+                    if($this->verifyUserIntent($io, "Il y a {$nbParcours} parcours disponibles. Continuer ?")){
+                        try{
+                            $io->writeln('Initialisation du Web Service...');
+                            $this->createSoapClientProduction();
+                            $io->writeln('Insertion des données en cours...');
+                            $io->progressStart($nbParcours);
+                            foreach($parcoursArray as $parcours){
+                                $soapObjectArray = $this->generateSoapObjectsForParcours($parcours);
+                                $soapObjectArray = $this->filterInvalidElpArray($soapObjectArray);
+                                $this->insertSeveralElp($soapObjectArray);
+                                $io->progressAdvance();
+                            }
+                            $io->writeln("\nInsertion réussie !");
+                            return Command::SUCCESS;
+                        }catch(\Exception $e){
+                            $io->writeln("\nUne erreur est survenue durant l'insertion.");
+                            $io->writeln("Message : " . $e->getMessage());
+                            return Command::FAILURE;
+                        }
+                    }
+                    else {
+                        $io->warning("La commande d'insertion a été annulée.");
+                        return Command::SUCCESS;
+                    }
+                }
+                else {
+                    $io->warning("La commande d'insertion a été annulée.");
+                    return Command::SUCCESS;
+                }
+            }
             return Command::INVALID;
         }
         else{
@@ -1080,6 +1116,16 @@ class ExportElpApogeeCommand extends Command
      */
     private function createSoapClient() : void {
         $wsdl = $this->parameterBag->get('WSDL_APOTEST');
+        $this->soapClient = new \SoapClient($wsdl, [
+            "trace" => true
+        ]);
+    }
+
+    /**
+     * Création du client SOAP pour la Production.
+     */
+    private function createSoapClientProduction() : void {
+        $wsdl = $this->parameterBag->get('WSDL_APOGEE_PRODUCTION');
         $this->soapClient = new \SoapClient($wsdl, [
             "trace" => true
         ]);
