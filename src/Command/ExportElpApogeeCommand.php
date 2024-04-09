@@ -52,14 +52,15 @@ class ExportElpApogeeCommand extends Command
 {
 
     // Données extraites d'APOTEST
-    private static $codElpApogeeDataTest = "COD_ELP_08-04-2024-15-45-AFTER-INSERT.json";
-    private static $codLseApogeeDataTest = "COD_LSE_08-04-2024-15-47.json";
+    private static $codElpApogeeDataTest = "COD_ELP_PRODUCTION-09-04-2024-14-41.json";
+    // private static $codElpApogeeDataTest = "COD_ELP_08-04-2024-15-45-AFTER-INSERT.json";
+    private static $codLseApogeeDataTest = "COD_LSE_PRODUCTION-09-04-2024-14-43.json";
     // Données exportées depuis ORéOF
-    private static $fullLseExportDataTest = "COD_LSE_TEST-09-04-2024_13-54-09.json";
-    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-05-04-2024_15-59-37.json";
+    private static $fullLseExportDataTest = "COD_LSE_TEST-PROD-09-04-2024_14-48-44.json";
+    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-PROD-09-04-2024_14-47-47.json";
     // Fichier contenant les formations à exclure
-    private static $formationToExcludeFile = "liste-formation-a-exclure-08-04-2024-10h12.txt";
-    private static $formationToExcludeJSON = "Formations-a-exclure-08-04-2024_10-16-21.json";
+    private static $formationToExcludeFile = "liste-formation-a-exclure-PRODUCTION-09-04-2024-14h12.txt";
+    private static $formationToExcludeJSON = "Formations-a-exclure-09-04-2024_14-20-07.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;

@@ -114,7 +114,9 @@ class ElementPedagogiDTO6
                 // )
                 
                 // Code CIP de la composante porteuse uniquement
-                [$dto->parcours->getFormation()->getComposantePorteuse()->getCodeApogee()]
+                // [$dto->parcours->getFormation()->getComposantePorteuse()->getCodeApogee()]
+                // CODE CIP DE LA COMPOSANTE D'INSCRIPTION
+                [$dto->parcours->getComposanteInscription()->getCodeApogee()]
             );
             // $this->listResponsables;
             // $this->listLibAnnexe;
@@ -169,7 +171,9 @@ class ElementPedagogiDTO6
                 // )
 
                 // Code CIP de la composante porteuse uniquement
-                [$dto->parcours->getFormation()->getComposantePorteuse()->getCodeApogee()]
+                // [$dto->parcours->getFormation()->getComposantePorteuse()->getCodeApogee()]
+                // CODE CIP DE LA COMPOSANTE D'INSCRIPTION
+                [$dto->parcours->getComposanteInscription()->getCodeApogee()]
             );
             // $this->listResponsables;
             // $this->listLibAnnexe;
@@ -213,7 +217,9 @@ class ElementPedagogiDTO6
                 // )
 
                 // Code CIP de la composante porteuse uniquement
-                [$dto->parcours->getFormation()->getComposantePorteuse()->getCodeApogee()]
+                // [$dto->parcours->getFormation()->getComposantePorteuse()->getCodeApogee()]
+                // CODE CIP DE LA COMPOSANTE D'INSCRIPTION
+                [$dto->parcours->getComposanteInscription()->getCodeApogee()]
             );
             // $this->listResponsables;
             // $this->listLibAnnexe;
@@ -297,11 +303,11 @@ class ElementPedagogiDTO6
      * @return string Code composante du parcours
      */
     private function checkCodeComposante(StructureParcours $dto, string $errorIdentifier, bool $withChecks) : string {
-        if($dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() === null && $withChecks){
+        if($dto->parcours->getComposanteInscription()?->getCodeComposante() === null && $withChecks){
             ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le code de la composante porteuse est 'null'. {$errorIdentifier}";
         }
 
-        return $dto->parcours->getFormation()?->getComposantePorteuse()?->getCodeComposante() ?? "ERROR";
+        return $dto->parcours->getComposanteInscription()?->getCodeComposante() ?? "ERROR";
     }
 
     /**
@@ -322,11 +328,8 @@ class ElementPedagogiDTO6
         $retour = // "UE " . $elementPedagogique->ue->getSemestre()->getOrdre() . "." . $elementPedagogique->ue->getOrdre()
             $elementPedagogique->display
         . " " . $dto->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() . " ";
-        if($dto->parcours->isParcoursDefaut() === false){
-            $retour .= $dto->parcours->getSigle();
-        }else {
-            $retour .= $dto->parcours->getFormation()?->getSigle();
-        }
+        $retour .= $dto->parcours->getFormation()?->getSigle() . " ";
+        $retour .= $dto->parcours->isParcoursDefaut() ? "" : $dto->parcours->getSigle();
         if($withChecks){
             if($elementPedagogique->ue->getSemestre()?->getOrdre() === null){
                 ExportElpApogeeCommand::$errorMessagesArray[$dto->parcours->getId()][] = "Le semestre de l'UE n'a pas d'ordre. UE {$elementPedagogique->ue->getId()}";
