@@ -52,10 +52,10 @@ class ExportElpApogeeCommand extends Command
 {
 
     // Données extraites d'APOTEST
-    private static $codElpApogeeDataTest = "COD_ELP_05-04-2024-09_39.json";
-    private static $codLseApogeeDataTest = "COD_LSE_02-04-2024-10_47.json";
+    private static $codElpApogeeDataTest = "COD_ELP_08-04-2024-15-45-AFTER-INSERT.json";
+    private static $codLseApogeeDataTest = "COD_LSE_08-04-2024-15-47.json";
     // Données exportées depuis ORéOF
-    private static $fullLseExportDataTest = "COD_LSE_TEST-29-03-2024_11-57-29.json";
+    private static $fullLseExportDataTest = "COD_LSE_TEST-09-04-2024_08-47-56.json";
     private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-05-04-2024_15-59-37.json";
     // Fichier contenant les formations à exclure
     private static $formationToExcludeFile = "liste-formation-a-exclure-08-04-2024-10h12.txt";
@@ -520,16 +520,28 @@ class ExportElpApogeeCommand extends Command
             }
             // Export Excel des LSE de tous les parcours disponibles
             if($fullLseExport){
+                // LSE déjà traité
+                $lseCreated = [];
+                // ELP présents dans Apogée
+                $elpApogeeData = json_decode(
+                    file_get_contents(
+                        __DIR__ . "/../Service/Apogee/data-test/" . self::$codElpApogeeDataTest
+                    )
+                );
                 $io->writeln("Génération des LSE pour tous les parcours...");
                 $parcoursArray = $this->retrieveParcoursDataFromDatabase();
                 $io->progressStart(count($parcoursArray));
                 $lseArray = [];
                 $exportName = "ALL";
                 foreach($parcoursArray as $parcours){
-                    $dataLSE = $this->getLseObjectArrayForParcours($this->getDTOForParcours($parcours));
-                    if($withFilter){
-                        $dataLSE = $this->mapLseArrayObjectForTest($dataLSE, $parcours->getId());
-                    }
+                    $dataLSE = $this->getLseObjectArrayForParcours(
+                        $this->getDTOForParcours($parcours), 
+                        $elpApogeeData,
+                        $lseCreated
+                    );
+                    // if($withFilter){
+                    //     $dataLSE = $this->mapLseArrayObjectForTest($dataLSE, $parcours->getId());
+                    // }
                     $lseArray[] = $dataLSE;
                     $io->progressAdvance();
                 }
@@ -587,7 +599,7 @@ class ExportElpApogeeCommand extends Command
                         foreach($parcoursArray as $parcours){
                             $dto = $this->getDTOForParcours($parcours);
                             $lseArray = $this->getLseObjectArrayForParcours($dto);
-                            $lseArray = $this->mapLseArrayObjectForTest($lseArray, $parcours->getId());
+                            // $lseArray = $this->mapLseArrayObjectForTest($lseArray, $parcours->getId());
                             // $this->insertSeveralLSE($lseArray);
                             $io->progressAdvance();
                         }
@@ -1410,10 +1422,21 @@ class ExportElpApogeeCommand extends Command
      * @return ListeElementPedagogiDTO3|null Liste d'éléments pédagogiques s'il y a des enfants, null sinon
      */
     private function getLseObjectForEcChildren(StructureEc $ec, string $libelleCourt, string $libelleLong) : ListeElementPedagogiDTO3|null {
+        $codeApogee = $ec->elementConstitutif->displayCodeApogee();
+        if($codeApogee === "Aucun code Apogée"){
+            $codeApogee = "ERROR";
+        }
         $return = null;
         if(count($ec->elementsConstitutifsEnfants) > 0){
-            $return = new ListeElementPedagogiDTO3($ec->elementConstitutif->getCodeApogee() ?? 'ERROR', 'X', $libelleCourt, $libelleLong, array_map(
-                fn($ecEnfant) => $ecEnfant->elementConstitutif->getCodeApogee(),
+            $return = new ListeElementPedagogiDTO3($codeApogee, 'X', $libelleCourt, $libelleLong, array_map(
+                function($ecEnfant) {
+                    // $ecEnfant->elementConstitutif->getCodeApogee()
+                    $codeApogeeEcEnfant = $ecEnfant->elementConstitutif->displayCodeApogee();
+                    if($codeApogeeEcEnfant === "Aucun code Apogée"){
+                        $codeApogeeEcEnfant = "ERROR";
+                    }
+                    return $codeApogeeEcEnfant;
+                },
                 $ec->elementsConstitutifsEnfants
             ));
         }
@@ -1430,8 +1453,8 @@ class ExportElpApogeeCommand extends Command
     private function getLseObjectForUeChildren(StructureUe $ue, string $libelleCourt, string $libelleLong) : ListeElementPedagogiDTO3|null {
         $return = null;
         if(count($ue->uesEnfants()) > 0){
-            $return = new ListeElementPedagogiDTO3($ue->ue->getCodeApogee() ?? 'ERROR', 'X', $libelleCourt, $libelleLong, array_map(
-                fn($ueEnfant) => $ueEnfant->ue->getCodeApogee(),
+            $return = new ListeElementPedagogiDTO3($ue->getCodeApogee() ?? 'ERROR', 'X', $libelleCourt, $libelleLong, array_map(
+                fn($ueEnfant) => $ueEnfant->getCodeApogee() ?? "ERROR",
                 $ue->uesEnfants()
             ));
         }
@@ -1446,8 +1469,14 @@ class ExportElpApogeeCommand extends Command
      * @return ListeElementPedagogiDTO3 Liste LSE
      */
     private function getLseEcFromUe(StructureUe $ue, string $libelleCourt, string $libelleLong) : ListeElementPedagogiDTO3 {
-        return new ListeElementPedagogiDTO3($ue->ue->getCodeApogee() ?? 'ERROR', 'O', $libelleCourt, $libelleLong, array_map(
-            fn($ec) => $ec->elementConstitutif->getCodeApogee(),
+        return new ListeElementPedagogiDTO3($ue->getCodeApogee() ?? 'ERROR', 'O', $libelleCourt, $libelleLong, array_map(
+            function($ec) {
+                $codeApogee = $ec->elementConstitutif->displayCodeApogee();
+                if($codeApogee === "Aucun code Apogée"){
+                    $codeApogee = "ERROR";
+                }
+                return $codeApogee;
+            },
             $ue->elementConstitutifs
         ));
     }
@@ -1514,7 +1543,7 @@ class ExportElpApogeeCommand extends Command
      * @param StructureParcours $parcours Parcours à utiliser
      * @return array Tableau comportant des LSE de type ListeElementPedagogiDTO3
      */
-    private function getLseObjectArrayForParcours(StructureParcours $parcours) : array {
+    private function getLseObjectArrayForParcours(StructureParcours $parcours, array $elpApogeeArray = [], array &$lseCreated = []) : array {
         $return = [];
         // Inclure la liste des semestres ?
         // $libelleListeSemestre = $parcours->parcours->getFormation()->getTypeDiplome()->getLibelleCourt() . " "
@@ -1531,7 +1560,33 @@ class ExportElpApogeeCommand extends Command
         foreach($parcours->semestres as $semestre){
             $return[] = $this->getLseObjectArrayForSemestre($semestre, $parcours);
         }
-        return array_merge(...$return);
+        // Filtrer les LSE pour éviter d'insérer avec des éléments manquants ou des doublons
+        $return = array_merge(...$return);
+        $return = array_filter($return, 
+            function($lse) use ($elpApogeeArray, &$lseCreated){
+                $result = true;
+                // Si ce code de LSE a déjà été inséré
+                if(in_array($lse->codListeElp, $lseCreated, true)){
+                    $result = false;
+                }else {
+                    $lseCreated[] = $lse->codListeElp;
+                }
+                foreach($lse->listElementPedagogi->elementPedagogi as $codElp){
+                    // Si tous les ELP sont présents dans l'export APOGEE
+                    if(!in_array($codElp->codElp, $elpApogeeArray, true) || $codElp->codElp === "ERROR"){
+                        $result = false;
+                    }
+                }
+                // Si pas de code apogée...
+                if($lse->codListeElp === "ERROR"){
+                    $result = false;
+                }
+
+                return $result;
+            }
+        );
+
+        return $return;
     }
 
     /**
