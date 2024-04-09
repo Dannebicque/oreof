@@ -55,7 +55,7 @@ class ExportElpApogeeCommand extends Command
     private static $codElpApogeeDataTest = "COD_ELP_08-04-2024-15-45-AFTER-INSERT.json";
     private static $codLseApogeeDataTest = "COD_LSE_08-04-2024-15-47.json";
     // Données exportées depuis ORéOF
-    private static $fullLseExportDataTest = "COD_LSE_TEST-09-04-2024_08-47-56.json";
+    private static $fullLseExportDataTest = "COD_LSE_TEST-09-04-2024_10-58-26.json";
     private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-05-04-2024_15-59-37.json";
     // Fichier contenant les formations à exclure
     private static $formationToExcludeFile = "liste-formation-a-exclure-08-04-2024-10h12.txt";
@@ -1692,10 +1692,13 @@ class ExportElpApogeeCommand extends Command
      * @return array Libellés long et court
      */
     private function getLibellesForUeWithChildren(StructureUe $ue, StructureParcours $dto){
+        $typeDiplome = $dto->parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() ?? "";
+        $sigleFormation = $dto->parcours->getFormation()->getSigle();
+        $sigleParcours = $dto->parcours->getSigle() ?? "";
         $libelleLong = "LISTE " . $ue->ue->display() . " " . $ue->ue->getSemestre()->display() 
-            . " " . $dto->parcours->getFormation()->getSigle() ?? ""; 
+            . " " . $typeDiplome . " " . $sigleFormation . " " . $sigleParcours; 
         $libelleCourt = $ue->ue->display() . " " . $ue->ue->getSemestre()->display() 
-            . " " . $dto->parcours->getFormation()->getSigle() ?? "";
+            . " " . $typeDiplome . " " . $sigleFormation . " " . $sigleParcours;;
         return [
             'libCourt' => $libelleCourt,
             'libLong' => $libelleLong
