@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,6 +20,16 @@ class ParcoursVersioningRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ParcoursVersioning::class);
+    }
+
+
+    public function findLastVersion(Parcours $parcours){
+        return $this->createQueryBuilder('pv')
+            ->orderBy('pv.version_timestamp', 'DESC')
+            ->where('pv.parcours = :parcours')
+            ->setParameter('parcours', $parcours)
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

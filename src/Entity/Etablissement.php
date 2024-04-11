@@ -25,7 +25,7 @@ class Etablissement
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
@@ -35,6 +35,7 @@ class Etablissement
     #[ORM\OneToMany(mappedBy: 'etablissement', targetEntity: Ville::class)]
     private Collection $villes;
 
+    #[Groups('formation_json_versioning')]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Adresse $adresse = null;
 

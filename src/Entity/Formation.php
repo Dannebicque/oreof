@@ -37,11 +37,11 @@ class Formation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups('parcours_json_versioning', 'formation_json_versioning')]
     #[ORM\ManyToOne]
     private ?Domaine $domaine = null;
 
-    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
     #[ORM\ManyToOne(targetEntity: Composante::class, inversedBy: 'formationsPortees')]
     private ?Composante $composantePorteuse = null;
 
@@ -50,73 +50,75 @@ class Formation
     /** @deprecated("Sur le Dpe")  */
     private ?CampagneCollecte $dpe;
 
-    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
     #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations')]
     private ?Mention $mention = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['formation:read', 'fiche_matiere_versioning'])]
+    #[Groups(['formation:read', 'fiche_matiere_versioning', 'formation_json_versioning'])]
     private ?string $mentionTexte = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(type: Types::INTEGER, enumType: NiveauFormationEnum::class)]
     private ?NiveauFormationEnum $niveauEntree = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(type: Types::INTEGER, enumType: NiveauFormationEnum::class)]
     private ?NiveauFormationEnum $niveauSortie = null;
 
     #[ORM\Column]
-    #[Groups(['formation:read'])]
+    #[Groups(['formation:read', 'formation_json_versioning'])]
     private ?bool $inRncp = true;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $codeRNCP = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'formationsResponsableMention')]
     private ?User $responsableMention = null;
 
+    #[Groups('formation_json_versioning')]
     #[ORM\Column]
     private ?int $semestreDebut = 1;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\ManyToMany(targetEntity: Ville::class)]
     private Collection $localisationMention;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\ManyToMany(targetEntity: Composante::class, inversedBy: 'formations')]
     private Collection $composantesInscription;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $regimeInscriptionTexte = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $modalitesAlternance = null;
 
+    #[Groups('formation_json_versioning')]
     #[ORM\Column(nullable: true)]
     private ?array $regimeInscription = [];
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $objectifsFormation = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $contenuFormation = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $resultatsAttendus = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $rythmeFormationTexte = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(nullable: true)]
     private ?bool $hasParcours = null;
 
@@ -130,7 +132,7 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: BlocCompetence::class)]
     private Collection $blocCompetences;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\ManyToOne]
     private ?RythmeFormation $rythmeFormation = null;
 
@@ -156,15 +158,15 @@ class Formation
     #[ORM\Column]
     private ?array $etatSteps = [];
 
-    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
     #[ORM\ManyToOne(inversedBy: 'formations')]
     private ?TypeDiplome $typeDiplome = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['formation:read', 'fiche_matiere_versioning'])]
+    #[Groups(['formation:read', 'fiche_matiere_versioning', 'formation_json_versioning'])]
     private ?string $sigle = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\ManyToOne(inversedBy: 'coFormations')]
     private ?User $coResponsable = null;
 
@@ -179,6 +181,7 @@ class Formation
     #[ORM\OrderBy(['created' => 'DESC'])]
     private Collection $historiqueFormations;
 
+    #[Groups('formation_json_versioning')]
     #[ORM\Column(length: 255, unique: true)]
     #[Gedmo\Slug(fields: ['sigle'], unique: true)]
     private ?string $slug = null;
@@ -195,6 +198,9 @@ class Formation
     #[ORM\Column(length: 1, nullable: true)]
     /** @deprecated  */
     private ?string $codeMentionApogee = null;
+
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: FormationVersioning::class)]
+    private Collection $formationVersionings;
 
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
@@ -214,6 +220,7 @@ class Formation
         $this->historiqueFormations = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->dpeParcours = new ArrayCollection();
+        $this->formationVersionings = new ArrayCollection();
     }
 
     #[ORM\PreFlush]
@@ -1018,6 +1025,36 @@ class Formation
     public function setCodeMentionApogee(?string $codeMentionApogee): static
     {
         $this->codeMentionApogee = $codeMentionApogee;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FormationVersioning>
+     */
+    public function getFormationVersionings(): Collection
+    {
+        return $this->formationVersionings;
+    }
+
+    public function addFormationVersioning(FormationVersioning $formationVersioning): static
+    {
+        if (!$this->formationVersionings->contains($formationVersioning)) {
+            $this->formationVersionings->add($formationVersioning);
+            $formationVersioning->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFormationVersioning(FormationVersioning $formationVersioning): static
+    {
+        if ($this->formationVersionings->removeElement($formationVersioning)) {
+            // set the owning side to null (unless already changed)
+            if ($formationVersioning->getFormation() === $this) {
+                $formationVersioning->setFormation(null);
+            }
+        }
 
         return $this;
     }

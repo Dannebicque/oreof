@@ -141,4 +141,14 @@ class ParcoursRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAllParcoursForDpe(CampagneCollecte $campagneCollecte){
+        return $this->createQueryBuilder('p')
+            ->join('p.dpeParcours', 'dp')
+            ->where('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte)
+            ->getQuery()
+            ->getResult();
+            
+    }
 }

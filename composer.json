@@ -96,7 +96,18 @@
             "Composer\\Config::disableProcessTimeout",
             "symfony server:start --port=8001"
         ],
-        "server:stop": "symfony server:stop"
+        "server:stop": "symfony server:stop",
+        "full-codification:basse": [
+            "Composer\\Config::disableProcessTimeout",
+            "php bin/console app:update-codification L basse",
+            "php bin/console app:update-codification LP basse",
+            "php bin/console app:update-codification M basse",
+            "php bin/console app:update-codification DNO basse",
+            "php bin/console app:update-codification DFG basse",
+            "php bin/console app:update-codification DFA basse",
+            "php bin/console app:update-codification DE basse",
+            "php bin/console app:update-codification DEUST basse"
+        ]
     },
     "conflict": {
         "symfony/symfony": "*"

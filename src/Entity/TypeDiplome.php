@@ -18,11 +18,11 @@ class TypeDiplome
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $libelle_court = null;
 
@@ -63,19 +63,19 @@ class TypeDiplome
     #[ORM\Column]
     private ?bool $debutSemestreFlexible = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column]
     private ?bool $hasStage = true;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column]
     private ?bool $hasProjet = true;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column]
     private ?bool $hasSituationPro = false;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column]
     private ?bool $hasMemoire = true;
 

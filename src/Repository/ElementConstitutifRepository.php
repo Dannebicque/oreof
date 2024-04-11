@@ -229,4 +229,14 @@ class ElementConstitutifRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function countDuplicatesCode() : array {
+        return $this->createQueryBuilder('ec')
+            ->select('count(ec.codeApogee)')
+            ->where('ec.codeApogee IS NOT NULL')
+            ->groupBy('ec.codeApogee')
+            ->having('count(ec.codeApogee) > 1')
+            ->getQuery()
+            ->getResult();
+    }
 }

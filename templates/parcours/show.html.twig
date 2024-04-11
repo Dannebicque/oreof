@@ -2,6 +2,14 @@
 
 {% block title %}Parcours{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        {{ cssDiff }}
+        {{ include('communs/versioning_view_style.html.twig') }}
+    </style>
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     <!-- Test Script -->
