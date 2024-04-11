@@ -117,6 +117,6 @@ class StructureUe
 
     public function getCodeApogee(): string
     {
-        return $this->ueOrigine->getCodeApogee();
+        return $this->ueOrigine?->getCodeApogee() ?? '';
     }
 }
