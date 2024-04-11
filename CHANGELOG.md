@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.54](https://github.com/Dannebicque/oreof/compare/v1.24.53...v1.24.54) (2024-04-11)
+
+
+### Bug Fixes
+
+* getCodeApogee si pas d'ue d'origine ([8dd1791](https://github.com/Dannebicque/oreof/commit/8dd1791bbdf3d966e0a89961c8ca30597936d305))
+
 ### [1.24.53](https://github.com/Dannebicque/oreof/compare/v1.24.52...v1.24.53) (2024-04-10)
 
 
