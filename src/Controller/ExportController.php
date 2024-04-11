@@ -104,15 +104,17 @@ class ExportController extends BaseController
         Request              $request
     ): Response {
         $composante = $composanteRepository->find($request->query->get('composante', null));
-
+//todo: gérer l'année du DPE en liste déroualante
         if (!$composante) {
             throw $this->createNotFoundException('La composante n\'existe pas');
         }
 
-        if ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser())) {
+        if ($this->isGranted('ROLE_SES')) {
+            $formations = $formationRepository->findByComposante($composante, $this->getDpe());
+        } elseif ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser())) {
             $formations = $formationRepository->findByComposanteCfvu($composante, $this->getDpe());
         } else {
-            $formations = $formationRepository->findByComposante($composante, $this->getDpe());
+            $formations = [];
         }
 
         return $this->render('export/_liste.html.twig', [

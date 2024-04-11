@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.53](https://github.com/Dannebicque/oreof/compare/v1.24.52...v1.24.53) (2024-04-10)
+
+
+### Bug Fixes
+
+* Liste des formations pour export ([5726d11](https://github.com/Dannebicque/oreof/commit/5726d118f422815cdf3d8ca08528eccc670b0239))
+
 ### [1.24.52](https://github.com/Dannebicque/oreof/compare/v1.24.51...v1.24.52) (2024-04-04)
 
 
