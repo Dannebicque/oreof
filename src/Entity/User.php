@@ -29,6 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('formation_json_versioning')]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;
 
@@ -51,15 +52,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $formationsResponsableMention;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['fiche_matiere:read', 'parcours_json_versioning', 'fiche_matiere_versioning'])]
+    #[Groups(['fiche_matiere:read', 'parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['fiche_matiere:read', 'parcours_json_versioning', 'fiche_matiere_versioning'])]
+    #[Groups(['fiche_matiere:read', 'parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['fiche_matiere:read', 'parcours_json_versioning', 'fiche_matiere_versioning'])]
+    #[Groups(['fiche_matiere:read', 'parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
     private ?string $email = null;
  
     #[ORM\Column]
@@ -83,12 +84,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isDeleted = false;
 
+    #[Groups('formation_json_versioning')]
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $civilite = null;
 
+    #[Groups('formation_json_versioning')]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $telFixe = null;
 
+    #[Groups('formation_json_versioning')]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $telPortable = null;
 

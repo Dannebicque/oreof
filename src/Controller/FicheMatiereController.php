@@ -20,6 +20,7 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\LangueRepository;
 use App\Repository\UeRepository;
+use App\Service\VersioningFicheMatiere;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -92,7 +93,8 @@ class FicheMatiereController extends AbstractController
      */
     #[Route('/{slug}', name: 'app_fiche_matiere_show', methods: ['GET'])]
     public function show(
-        FicheMatiere $ficheMatiere
+        FicheMatiere $ficheMatiere,
+        VersioningFicheMatiere $ficheMatiereVersioningService
     ): Response {
         $formation = $ficheMatiere->getParcours()?->getFormation();
 //        if ($formation === null) {
@@ -114,11 +116,17 @@ class FicheMatiereController extends AbstractController
             $typeDiplome = null;
         }
 
+        $cssDiff = DiffHelper::getStyleSheet();
+        $textDifferences = $ficheMatiereVersioningService
+            ->getStringDifferencesWithBetweenFicheMatiereAndLastVersion($ficheMatiere);
+
         return $this->render('fiche_matiere/show.html.twig', [
             'ficheMatiere' => $ficheMatiere,
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
-            'bccs' => $bccs
+            'bccs' => $bccs,
+            'stringDifferences' => $textDifferences,
+            'cssDiff' => $cssDiff
         ]);
     }
 
@@ -252,40 +260,15 @@ class FicheMatiereController extends AbstractController
     public function saveFicheMatiereIntoJson(
         FicheMatiere $ficheMatiere,
         EntityManagerInterface $entityManager,
-        Filesystem $fileSystem
+        Filesystem $fileSystem,
+        VersioningFicheMatiere $ficheMatiereVersioningService
     ){
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $serializer = new Serializer(
-            [new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor())],
-            [new JsonEncoder()]
-        );
         try{
             // Date / Heure
             $now = new DateTimeImmutable('now');
             $dateHeure = $now->format('d-m-Y_H-i-s');
-            // Objet BD fiche matiere versioning
-            $ficheMatiereVersioning = new FicheMatiereVersioning();
-            $ficheMatiereVersioning->setFicheMatiere($ficheMatiere);
-            $ficheMatiereVersioning->setVersionTimestamp($now);
-            $ficheMatiereVersioning->setSlug($ficheMatiere->getSlug());
-            // Fichier Json
-            $ficheMatiereFileName = "fiche-matiere-{$ficheMatiere->getId()}-{$dateHeure}";
-            $ficheMatiereVersioning->setFilename($ficheMatiereFileName);
-            // Serialization
-            $ficheMatiereJson = $serializer->serialize($ficheMatiere, 'json', [
-                AbstractObjectNormalizer::GROUPS => ['fiche_matiere_versioning', 'fiche_matiere_versioning_ec_parcours'],
-                'circular_reference_limit' => 2,
-                AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
-                AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true,
-                DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s'
-            ]);
-            // Enregistrement du fichier
-            $fileSystem->appendToFile(
-                __DIR__ . "/../../versioning_json/fiche-matiere/{$ficheMatiereVersioning->getSlug()}/{$ficheMatiereFileName}.json",
-                $ficheMatiereJson
-            );
-            // Enregistrement en BD
-            $entityManager->persist($ficheMatiereVersioning);
+            // Sauvegarde
+            $ficheMatiereVersioningService->saveFicheMatiereVersion($ficheMatiere, $now, false);
             $entityManager->flush();
             // Ajout dans les logs
             /**
@@ -305,7 +288,7 @@ class FicheMatiereController extends AbstractController
             // Log error
             $logTxt = "[{$dateHeure}] Le versioning de la fiche matière : "
                 . "{$ficheMatiere->getSlug()} - ID : {$ficheMatiere->getId()}"
-                . "- a rencontré une erreur.\n{$e->getMessage()}\n";
+                . " - a rencontré une erreur.\nMessage : {$e->getMessage()}\n";
             $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/save_fiche_matiere_error.log", $logTxt);
 
             $this->addFlash('toast', [
@@ -319,72 +302,45 @@ class FicheMatiereController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/versioning/view', name: 'app_fiche_matiere_versioning_view')]
     public function getJsonVersion(
-        FicheMatiereVersioning $ficheMatiereVersioning
+        FicheMatiereVersioning $ficheMatiereVersioning,
+        VersioningFicheMatiere $ficheMatiereVersioningService,
+        Filesystem $filesystem
     ){
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $serializer = new Serializer(
-            [
-                new ArrayDenormalizer(),
-                new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor())
-            ],
-            [new JsonEncoder()]
-        );
-        $ficheMatiereJson = file_get_contents(
-            __DIR__ . "/../../versioning_json/fiche-matiere/"
-            . "{$ficheMatiereVersioning->getSlug()}/"
-            . "{$ficheMatiereVersioning->getFilename()}.json"
-        );
-        $ficheMatiere = $serializer->deserialize($ficheMatiereJson, FicheMatiere::class, 'json');
-        $dateVersion = $ficheMatiereVersioning->getVersionTimestamp()->format('d-m-Y à H:i');
+        try{
+            $version = $ficheMatiereVersioningService->loadFicheMatiereVersion($ficheMatiereVersioning);
+            $ficheMatiere = $version['ficheMatiere'];
 
-        $bccs = [];
-        foreach ($ficheMatiere->getCompetences() as $competence) {
-            if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
-                $bccs[$competence->getBlocCompetence()?->getId()]['bcc'] = $competence->getBlocCompetence();
-                $bccs[$competence->getBlocCompetence()?->getId()]['competences'] = [];
+            $bccs = [];
+            foreach ($ficheMatiere->getCompetences() as $competence) {
+                if (!array_key_exists($competence->getBlocCompetence()?->getId(), $bccs)) {
+                    $bccs[$competence->getBlocCompetence()?->getId()]['bcc'] = $competence->getBlocCompetence();
+                    $bccs[$competence->getBlocCompetence()?->getId()]['competences'] = [];
+                }
+                $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
             }
-            $bccs[$competence->getBlocCompetence()?->getId()]['competences'][] = $competence;
+
+            return $this->render('fiche_matiere/show.versioning.html.twig', [
+                'ficheMatiere' => $ficheMatiere,
+                'formation' => $ficheMatiere->getParcours()?->getFormation(),
+                'typeDiplome' => $ficheMatiere->getParcours()?->getFormation()->getTypeDiplome(),
+                'bccs' => $bccs,
+                'dateHeure' => $version['dateVersion'],
+                'cssDiff' => ""
+            ]);
+        }catch(\Exception $e){
+            // Log error
+            $now = new DateTimeImmutable();
+            $dateHeure = $now->format('d-m-Y_H-i-s');
+            $logTxt = "[{$dateHeure}] La visualisation de la version de la fiche matière : "
+            . "{$ficheMatiere->getSlug()}"
+            . " - a rencontré une erreur.\nMessage : {$e->getMessage()}\n";
+            $filesystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/view_fiche_matiere_error.log", $logTxt);
+            $this->addFlash('toast', [
+                'type' => 'error',
+                'text' => "Une erreur est survenue lors de la visualisation."
+            ]);
+            return $this->redirectToRoute('app_fiche_matiere_show', ['slug' => $ficheMatiere->getSlug()]);
         }
-
-        $cssDiff = DiffHelper::getStyleSheet();
-
-        $rendererName = 'Inline';
-        $differOptions = [
-            'context' => 1,
-            'ignoreWhitespace' => true,
-            'ignoreLineEnding' => true,
-        ];
-        $rendererOptions = [
-            'detailLevel' => 'char',
-            'lineNumbers' => false,
-            'showHeader' => false,
-            'separateBlock' => false,
-        ];
-
-        return $this->render('fiche_matiere/show.versioning.html.twig', [
-            'ficheMatiere' => $ficheMatiere,
-            'formation' => $ficheMatiere->getParcours()->getFormation(),
-            'typeDiplome' => $ficheMatiere->getParcours()->getFormation()->getTypeDiplome(),
-            'bccs' => $bccs,
-            'dateHeure' => $dateVersion,
-            'stringDifferences' => [
-                'descriptionEnseignement' => html_entity_decode(DiffHelper::calculate(
-                    $ficheMatiere->getDescription(),
-                    $ficheMatiereVersioning->getFicheMatiere()->getDescription(),
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                )),
-                'objectifsEnseignement' => html_entity_decode(DiffHelper::calculate(
-                    $ficheMatiere->getObjectifs(),
-                    $ficheMatiereVersioning->getFicheMatiere()->getObjectifs(),
-                    $rendererName,
-                    $differOptions,
-                    $rendererOptions
-                ))
-            ],
-            'cssDiff' => $cssDiff
-        ]);
     }
 
 }

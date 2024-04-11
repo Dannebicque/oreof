@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+    Liste des identifiants des parcours
+{% endblock %}
+
+{% block content %}
+    {% if formations is defined and formations|length > 0 %}
+    <div class="row justify-content-center">
+        <div class="col-sm-11 col-md-10 col-lg-9 col-xl-6">
+            {% for f in formations %}
+                <div class="row border border-dark mt-4 p-2 rounded">
+                    <div class="col-12">
+                        <p>
+                            <strong>
+                                <a href="{{ path('app_formation_show', {slug: f.slug}) }}" class="text-primary">
+                                    {{ f.displayLong }}
+                                </a>
+                            </strong>
+                        </p>
+                        <p>
+                            Slug : <strong>{{ f.slug }}</strong> - ID : <strong>{{ f.id }}</strong>
+                        </p>
+                        {% if f.parcours is defined and f.parcours|length > 0 %}
+                            <p>
+                                <strong class="text-primary mb-1">
+                                    <u>Liste des parcours :</u>
+                                </strong> 
+                            </p>
+                            <ul>
+                            {% for p in f.parcours %}
+                                <li>
+                                    <p>
+                                        <a href="{{ path('app_parcours_show', {id: p.id}) }}">
+                                            {{ p.libelle }}
+                                        </a>
+                                        - ID : <strong>{{ p.id }}</strong>
+                                    </p>
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        {% else %}
+                            <strong>Aucun parcours...</strong>
+                        {% endif %}
+                    </div>
+                </div>        
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+        <h1>Aucune formation récupérée...</h1>
+    {% endif %}
+{% endblock %}

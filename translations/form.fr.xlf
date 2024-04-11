@@ -2383,12 +2383,6 @@
         <target>Numéro d'activité</target>
       </segment>
     </unit>
-    <unit id="pSBaTlP" name="Devenir des diplômés">
-      <segment>
-        <source>Devenir des diplômés</source>
-        <target>Devenir des diplômés</target>
-      </segment>
-    </unit>
     <unit id="wCeeAVn" name="Texte affiché en haut des pages parcours">
       <segment>
         <source>Texte affiché en haut des pages parcours</source>
@@ -2401,52 +2395,22 @@
         <target>Texte affiché en bas des pages parcours</target>
       </segment>
     </unit>
-    <unit id="wcDMXQe" name="Texte affiché si le parcours est une LAS1">
-      <segment>
-        <source>Texte affiché si le parcours est une LAS1</source>
-        <target>Texte affiché si le parcours est une LAS1</target>
-      </segment>
-    </unit>
-    <unit id="64cpNVA">
-      <segment>
-        <source>Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2</source>
-        <target>Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2</target>
-      </segment>
-    </unit>
-    <unit id="Zfi_o5w">
-      <segment>
-        <source>Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3</source>
-        <target>Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3</target>
-      </segment>
-    </unit>
-    <unit id="cJ7b5JS" name="Après la 1ère année de licence &quot;Sciences pour la Santé&quot; - Accès santé">
-      <segment>
-        <source>Après la 1ère année de licence "Sciences pour la Santé" - Accès santé</source>
-        <target>Après la 1ère année de licence "Sciences pour la Santé" - Accès santé</target>
-      </segment>
-    </unit>
-    <unit id="0cRxojT" name="Licence - Accès santé 2ème année (L.As 2)">
-      <segment>
-        <source>Licence - Accès santé 2ème année (L.As 2)</source>
-        <target>Licence - Accès santé 2ème année (L.As 2)</target>
-      </segment>
-    </unit>
-    <unit id="ro6kRBh" name="Licence - Accès santé 3ème année (L.As 3)">
-      <segment>
-        <source>Licence - Accès santé 3ème année (L.As 3)</source>
-        <target>Licence - Accès santé 3ème année (L.As 3)</target>
-      </segment>
-    </unit>
-    <unit id="OWjeu6s" name="Droit à la 2nde chance">
-      <segment>
-        <source>Droit à la 2nde chance</source>
-        <target>Droit à la 2nde chance</target>
-      </segment>
-    </unit>
     <unit id="kD.GgSB" name="parcours_step7.labels.codeRNCP">
       <segment>
         <source>parcours_step7.labels.codeRNCP</source>
         <target>parcours_step7.labels.codeRNCP</target>
+      </segment>
+    </unit>
+    <unit id="clFtJXP" name="parcours.labels.las1.label">
+      <segment>
+        <source>parcours.labels.las1.label</source>
+        <target>parcours.labels.las1.label</target>
+      </segment>
+    </unit>
+    <unit id="yeEc8Sl" name="parcours.labels.las23.label">
+      <segment>
+        <source>parcours.labels.las23.label</source>
+        <target>parcours.labels.las23.label</target>
       </segment>
     </unit>
     <unit id="3rvXLth" name="parcours.labels.typeParcours">
@@ -2473,6 +2437,180 @@
         <target>TYPE_PARCOURS_LAS23</target>
       </segment>
     </unit>
+    <unit id="wcDMXQe" name="Texte affiché si le parcours est une LAS1">
+      <segment>
+        <source>Texte affiché si le parcours est une LAS1</source>
+        <target>Texte affiché si le parcours est une LAS1</target>
+      </segment>
+    </unit>
+    <unit id="64cpNVA">
+      <segment>
+        <source>Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2</source>
+        <target>Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2</target>
+      </segment>
+    </unit>
+    <unit id="Zfi_o5w">
+      <segment>
+        <source>Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3</source>
+        <target>Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3</target>
+      </segment>
+    </unit>
+    <unit id="pSBaTlP" name="Devenir des diplômés">
+      <segment>
+        <source>Devenir des diplômés</source>
+        <target>Devenir des diplômés</target>
+      </segment>
+    </unit>
+    <unit id="cJ7b5JS" name="Après la 1ère année de licence &quot;Sciences pour la Santé&quot; - Accès santé">
+      <segment>
+        <source>Après la 1ère année de licence "Sciences pour la Santé" - Accès santé</source>
+        <target>Après la 1ère année de licence "Sciences pour la Santé" - Accès santé</target>
+      </segment>
+    </unit>
+    <unit id="0cRxojT" name="Licence - Accès santé 2ème année (L.As 2)">
+      <segment>
+        <source>Licence - Accès santé 2ème année (L.As 2)</source>
+        <target>Licence - Accès santé 2ème année (L.As 2)</target>
+      </segment>
+    </unit>
+    <unit id="ro6kRBh" name="Licence - Accès santé 3ème année (L.As 3)">
+      <segment>
+        <source>Licence - Accès santé 3ème année (L.As 3)</source>
+        <target>Licence - Accès santé 3ème année (L.As 3)</target>
+      </segment>
+    </unit>
+    <unit id="OWjeu6s" name="Droit à la 2nde chance">
+      <segment>
+        <source>Droit à la 2nde chance</source>
+        <target>Droit à la 2nde chance</target>
+      </segment>
+    </unit>
+    <unit id="To6xVam" name="parcours_step5.labels.adresses.label">
+      <segment>
+        <source>parcours_step5.labels.adresses.label</source>
+        <target>parcours_step5.labels.adresses.label</target>
+      </segment>
+    </unit>
+    <unit id="hZJmeY6" name="parcours_step5.labels.adresses.label.__name__.label">
+      <segment>
+        <source>parcours_step5.labels.adresses.label.__name__.label</source>
+        <target>parcours_step5.labels.adresses.label.__name__.label</target>
+      </segment>
+    </unit>
+    <unit id="ATXk205" name="parcours_step5.labels.adresses.label.0.label">
+      <segment>
+        <source>parcours_step5.labels.adresses.label.0.label</source>
+        <target>parcours_step5.labels.adresses.label.0.label</target>
+      </segment>
+    </unit>
+    <unit id="quXAU51" name="parcours_step5.labels.contacts.label">
+      <segment>
+        <source>parcours_step5.labels.contacts.label</source>
+        <target>parcours_step5.labels.contacts.label</target>
+      </segment>
+    </unit>
+    <unit id="8qfE_z_" name="parcours_step5.labels.contacts.label.__name__.label">
+      <segment>
+        <source>parcours_step5.labels.contacts.label.__name__.label</source>
+        <target>parcours_step5.labels.contacts.label.__name__.label</target>
+      </segment>
+    </unit>
+    <unit id="fN7al42" name="parcours_step5.labels.contacts.__name__.denomination">
+      <segment>
+        <source>parcours_step5.labels.contacts.__name__.denomination</source>
+        <target>parcours_step5.labels.contacts.__name__.denomination</target>
+      </segment>
+    </unit>
+    <unit id="sOGX9OQ" name="parcours_step5.labels.contacts.__name__.nom">
+      <segment>
+        <source>parcours_step5.labels.contacts.__name__.nom</source>
+        <target>parcours_step5.labels.contacts.__name__.nom</target>
+      </segment>
+    </unit>
+    <unit id="goBIWA8" name="parcours_step5.labels.contacts.__name__.prenom">
+      <segment>
+        <source>parcours_step5.labels.contacts.__name__.prenom</source>
+        <target>parcours_step5.labels.contacts.__name__.prenom</target>
+      </segment>
+    </unit>
+    <unit id="65RYlw7" name="parcours_step5.labels.contacts.__name__.telephone">
+      <segment>
+        <source>parcours_step5.labels.contacts.__name__.telephone</source>
+        <target>parcours_step5.labels.contacts.__name__.telephone</target>
+      </segment>
+    </unit>
+    <unit id="CuJK4Bu" name="parcours_step5.labels.contacts.__name__.email">
+      <segment>
+        <source>parcours_step5.labels.contacts.__name__.email</source>
+        <target>parcours_step5.labels.contacts.__name__.email</target>
+      </segment>
+    </unit>
+    <unit id="dV97suc" name="parcours_step5.labels.contacts.label.__name__.label.adresse.label">
+      <segment>
+        <source>parcours_step5.labels.contacts.label.__name__.label.adresse.label</source>
+        <target>parcours_step5.labels.contacts.label.__name__.label.adresse.label</target>
+      </segment>
+    </unit>
+    <unit id="GuLW8VC" name="parcours_step5.labels.contacts.label.0.label">
+      <segment>
+        <source>parcours_step5.labels.contacts.label.0.label</source>
+        <target>parcours_step5.labels.contacts.label.0.label</target>
+      </segment>
+    </unit>
+    <unit id="BS1Ma91" name="parcours_step5.labels.contacts.0.denomination">
+      <segment>
+        <source>parcours_step5.labels.contacts.0.denomination</source>
+        <target>parcours_step5.labels.contacts.0.denomination</target>
+      </segment>
+    </unit>
+    <unit id="W_CdKbB" name="parcours_step5.labels.contacts.0.nom">
+      <segment>
+        <source>parcours_step5.labels.contacts.0.nom</source>
+        <target>parcours_step5.labels.contacts.0.nom</target>
+      </segment>
+    </unit>
+    <unit id="T8MjuzF" name="parcours_step5.labels.contacts.0.prenom">
+      <segment>
+        <source>parcours_step5.labels.contacts.0.prenom</source>
+        <target>parcours_step5.labels.contacts.0.prenom</target>
+      </segment>
+    </unit>
+    <unit id="cBP7tmz" name="parcours_step5.labels.contacts.0.telephone">
+      <segment>
+        <source>parcours_step5.labels.contacts.0.telephone</source>
+        <target>parcours_step5.labels.contacts.0.telephone</target>
+      </segment>
+    </unit>
+    <unit id="HvDoq.y" name="parcours_step5.labels.contacts.0.email">
+      <segment>
+        <source>parcours_step5.labels.contacts.0.email</source>
+        <target>parcours_step5.labels.contacts.0.email</target>
+      </segment>
+    </unit>
+    <unit id="TxkhVQU" name="parcours_step5.labels.contacts.label.0.label.adresse.label">
+      <segment>
+        <source>parcours_step5.labels.contacts.label.0.label.adresse.label</source>
+        <target>parcours_step5.labels.contacts.label.0.label.adresse.label</target>
+      </segment>
+    </unit>
+    <unit id="sFJxfxa" name="Dénomination du contact">
+      <segment>
+        <source>Dénomination du contact</source>
+        <target>Dénomination du contact</target>
+      </segment>
+    </unit>
+    <unit id="zExCS1c" name="Téléphone">
+      <segment>
+        <source>Téléphone</source>
+        <target>Téléphone</target>
+      </segment>
+    </unit>
+    <unit id="lpzL089" name="Email">
+      <segment>
+        <source>Email</source>
+        <target>Email</target>
+      </segment>
+    </unit>
     <unit id="uUjzJ9n" name="contact.labels.adresse.label">
       <segment>
         <source>contact.labels.adresse.label</source>
@@ -2495,6 +2633,144 @@
       <segment>
         <source>Chaumont</source>
         <target>Chaumont</target>
+      </segment>
+    </unit>
+    <unit id="LVjzmgF" name="Composante d'inscription uniquement">
+      <segment>
+        <source>Composante d'inscription uniquement</source>
+        <target>Composante d'inscription uniquement</target>
+      </segment>
+    </unit>
+    <unit id="asEZuDq" name="composante.labels.composanteParent">
+      <segment>
+        <source>composante.labels.composanteParent</source>
+        <target>Composante parente</target>
+      </segment>
+    </unit>
+    <unit id="VtKhEZw" name="TYPE_PARCOURS_CPI">
+      <segment>
+        <source>TYPE_PARCOURS_CPI</source>
+        <target>Parcours CPI</target>
+      </segment>
+    </unit>
+    <unit id=".zg.7an" name="TYPE_PARCOURS_ALTERNANCE">
+      <segment>
+        <source>TYPE_PARCOURS_ALTERNANCE</source>
+        <target>Parcours en alternance uniquement</target>
+      </segment>
+    </unit>
+    <unit id="wn4O3KQ" name="Année Universitaire">
+      <segment>
+        <source>Année Universitaire</source>
+        <target>Année Universitaire</target>
+      </segment>
+    </unit>
+    <unit id="fRafWTE" name="Libellé du DPE">
+      <segment>
+        <source>Libellé du DPE</source>
+        <target>Libellé du DPE</target>
+      </segment>
+    </unit>
+    <unit id="JeZfVl3" name="Ex: DPE Accréditation 2024">
+      <segment>
+        <source>Ex: DPE Accréditation 2024</source>
+        <target>Ex: DPE Accréditation 2024</target>
+      </segment>
+    </unit>
+    <unit id="Nnm1O5u" name="Libellé de la campagne de collecte">
+      <segment>
+        <source>Libellé de la campagne de collecte</source>
+        <target>Libellé de la campagne de collecte</target>
+      </segment>
+    </unit>
+    <unit id="2AU69qJ" name="Ex: Accréditation 2024, 2025-2026, ...">
+      <segment>
+        <source>Ex: Accréditation 2024, 2025-2026, ...</source>
+        <target>Ex: Accréditation 2024, 2025-2026, ...</target>
+      </segment>
+    </unit>
+    <unit id="WDE4pa3" name="niveau IV (BP, BT, baccalauréat ou équivalent)">
+      <segment>
+        <source>niveau IV (BP, BT, baccalauréat ou équivalent)</source>
+        <target>niveau IV (BP, BT, baccalauréat ou équivalent)</target>
+      </segment>
+    </unit>
+    <unit id="8wrTPFF" name="formation_ses.labels.codeMentionApogee">
+      <segment>
+        <source>formation_ses.labels.codeMentionApogee</source>
+        <target>Code Apogée de la mention</target>
+      </segment>
+    </unit>
+    <unit id="Yrt0IjT" name="Date d'ouverture de la campagne de collecte DPE">
+      <segment>
+        <source>Date d'ouverture de la campagne de collecte DPE</source>
+        <target>Date d'ouverture de la campagne de collecte DPE</target>
+      </segment>
+    </unit>
+    <unit id="vB5iuZg" name="Date de clôture de la campagne de collecte DPE">
+      <segment>
+        <source>Date de clôture de la campagne de collecte DPE</source>
+        <target>Date de clôture de la campagne de collecte DPE</target>
+      </segment>
+    </unit>
+    <unit id="akMdOuC" name="type_ue.labels.type.label">
+      <segment>
+        <source>type_ue.labels.type.label</source>
+        <target>type_ue.labels.type.label</target>
+      </segment>
+    </unit>
+    <unit id="r5Dj4EK" name="STAGE">
+      <segment>
+        <source>STAGE</source>
+        <target>STAGE</target>
+      </segment>
+    </unit>
+    <unit id="Bs2pe_i" name="PROJET">
+      <segment>
+        <source>PROJET</source>
+        <target>PROJET</target>
+      </segment>
+    </unit>
+    <unit id="2yyz.ij" name="NORMAL">
+      <segment>
+        <source>NORMAL</source>
+        <target>NORMAL</target>
+      </segment>
+    </unit>
+    <unit id="kc6mVys" name="parcours_step5.labels.contacts">
+      <segment>
+        <source>parcours_step5.labels.contacts</source>
+        <target>Contacts de la formation/du parcours</target>
+      </segment>
+    </unit>
+    <unit id="Gxl11xv" name="parcours.labels.parcoursOrigine">
+      <segment>
+        <source>parcours.labels.parcoursOrigine</source>
+        <target>Parcours d'origine</target>
+      </segment>
+    </unit>
+    <unit id="bzrTKVV" name="ec_manage.labels.fiche_matiere_titre_libre_edit.label">
+      <segment>
+        <source>ec_manage.labels.fiche_matiere_titre_libre_edit.label</source>
+        <target>Libellé libre de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="Q33Oabc" name="ec.labels.typeEc.label">
+      <segment>
+        <source>ec.labels.typeEc.label</source>
+        <target>Type de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="MO9p.pM" name="type_ec.labels.type.label">
+      <segment>
+        <source>type_ec.labels.type.label</source>
+        <target>type_ec.labels.type.label</target>
+      </segment>
+    </unit>
+    <unit id="NiEBpCS" name="Codification intermédiaire">
+      <segment>
+        <source>Codification intermédiaire</source>
+        <target>Codification intermédiaire</target>
       </segment>
     </unit>
   </file>

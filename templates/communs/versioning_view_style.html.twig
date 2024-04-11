@@ -1,0 +1,41 @@
+:root {
+    --removed-text: #f09494;
+    --added-text: #94f094;
+}
+
+.diff-wrapper.diff.diff-html .change del {
+    background-color: unset; 
+    font-weight: unset;
+    text-decoration: line-through;
+    color: red;
+}
+.diff-wrapper.diff.diff-html .change .rep {
+    background-color: white;
+}
+
+p.list-item {
+    padding-left: 20px;
+    text-wrap: wrap;
+    display: block;
+}
+
+p.list-item::before { 
+    content: '';
+    display: inline-block;
+    border-radius: 50%;
+    height: 6px;
+    width: 6px;
+    background-color: black;
+    position: relative;
+    left: -10px;
+}
+
+ins > div, ins > p.list-item > span.list-item-text {
+    font-weight: normal;
+    background-color: var(--added-text);
+}
+
+.diff-wrapper.diff.diff-html .change .new,
+.diff-wrapper.diff.diff-html .change .old {
+	background: white;
+}

@@ -315,4 +315,14 @@ class FicheMatiereRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function countDuplicatesCode() : array {
+        return $this->createQueryBuilder('fm')
+            ->select('count(fm.codeApogee)')
+            ->where('fm.codeApogee IS NOT NULL')
+            ->groupBy('fm.codeApogee')
+            ->having('count(fm.codeApogee) > 1')
+            ->getQuery()
+            ->getResult();
+    }
 }

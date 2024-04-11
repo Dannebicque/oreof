@@ -2066,6 +2066,42 @@
         <target>etablissement.helps.etablissement_information.descriptifBasPage</target>
       </segment>
     </unit>
+    <unit id="cG1zFiO" name="parcours_step7.helps.descriptifHautPage">
+      <segment>
+        <source>parcours_step7.helps.descriptifHautPage</source>
+        <target>parcours_step7.helps.descriptifHautPage</target>
+      </segment>
+    </unit>
+    <unit id="bWAtYK3" name="parcours_step7.helps.descriptifBasPage">
+      <segment>
+        <source>parcours_step7.helps.descriptifBasPage</source>
+        <target>parcours_step7.helps.descriptifBasPage</target>
+      </segment>
+    </unit>
+    <unit id="8zcQPgU" name="parcours_step7.helps.codeRNCP">
+      <segment>
+        <source>parcours_step7.helps.codeRNCP</source>
+        <target>parcours_step7.helps.codeRNCP</target>
+      </segment>
+    </unit>
+    <unit id="E_SL_ev" name="parcours.helps.las1.help">
+      <segment>
+        <source>parcours.helps.las1.help</source>
+        <target>parcours.helps.las1.help</target>
+      </segment>
+    </unit>
+    <unit id="Gm5zIYw" name="parcours.helps.las23.help">
+      <segment>
+        <source>parcours.helps.las23.help</source>
+        <target>parcours.helps.las23.help</target>
+      </segment>
+    </unit>
+    <unit id="_xx5RC0" name="parcours.helps.typeParcours">
+      <segment>
+        <source>parcours.helps.typeParcours</source>
+        <target>parcours.helps.typeParcours</target>
+      </segment>
+    </unit>
     <unit id="uYNCuRO" name="etablissement.helps.etablissement_information.textLas1">
       <segment>
         <source>etablissement.helps.etablissement_information.textLas1</source>
@@ -2090,28 +2126,208 @@
         <target>etablissement.helps.etablissement_information.secondeChance</target>
       </segment>
     </unit>
-    <unit id="cG1zFiO" name="parcours_step7.helps.descriptifHautPage">
+    <unit id="MURVU0x" name="parcours_step5.helps.adresses.help">
       <segment>
-        <source>parcours_step7.helps.descriptifHautPage</source>
-        <target>parcours_step7.helps.descriptifHautPage</target>
+        <source>parcours_step5.helps.adresses.help</source>
+        <target>parcours_step5.helps.adresses.help</target>
       </segment>
     </unit>
-    <unit id="bWAtYK3" name="parcours_step7.helps.descriptifBasPage">
+    <unit id=".A_daxT" name="parcours_step5.helps.adresses.help.__name__.help">
       <segment>
-        <source>parcours_step7.helps.descriptifBasPage</source>
-        <target>parcours_step7.helps.descriptifBasPage</target>
+        <source>parcours_step5.helps.adresses.help.__name__.help</source>
+        <target>parcours_step5.helps.adresses.help.__name__.help</target>
       </segment>
     </unit>
-    <unit id="8zcQPgU" name="parcours_step7.helps.codeRNCP">
+    <unit id="Oj8LkdH" name="parcours_step5.helps.adresses.__name__.adresse1">
       <segment>
-        <source>parcours_step7.helps.codeRNCP</source>
-        <target>parcours_step7.helps.codeRNCP</target>
+        <source>parcours_step5.helps.adresses.__name__.adresse1</source>
+        <target>parcours_step5.helps.adresses.__name__.adresse1</target>
       </segment>
     </unit>
-    <unit id="_xx5RC0" name="parcours.helps.typeParcours">
+    <unit id="L8qvrsJ" name="parcours_step5.helps.adresses.__name__.adresse2">
       <segment>
-        <source>parcours.helps.typeParcours</source>
-        <target>parcours.helps.typeParcours</target>
+        <source>parcours_step5.helps.adresses.__name__.adresse2</source>
+        <target>parcours_step5.helps.adresses.__name__.adresse2</target>
+      </segment>
+    </unit>
+    <unit id="2ZWMSc0" name="parcours_step5.helps.adresses.__name__.codePostal">
+      <segment>
+        <source>parcours_step5.helps.adresses.__name__.codePostal</source>
+        <target>parcours_step5.helps.adresses.__name__.codePostal</target>
+      </segment>
+    </unit>
+    <unit id="Fy.yKf1" name="parcours_step5.helps.adresses.__name__.ville">
+      <segment>
+        <source>parcours_step5.helps.adresses.__name__.ville</source>
+        <target>parcours_step5.helps.adresses.__name__.ville</target>
+      </segment>
+    </unit>
+    <unit id="3JdE9bC" name="parcours_step5.helps.adresses.help.0.help">
+      <segment>
+        <source>parcours_step5.helps.adresses.help.0.help</source>
+        <target>parcours_step5.helps.adresses.help.0.help</target>
+      </segment>
+    </unit>
+    <unit id="3SREkaF" name="parcours_step5.helps.adresses.0.adresse1">
+      <segment>
+        <source>parcours_step5.helps.adresses.0.adresse1</source>
+        <target>parcours_step5.helps.adresses.0.adresse1</target>
+      </segment>
+    </unit>
+    <unit id="GkDgFVb" name="parcours_step5.helps.adresses.0.adresse2">
+      <segment>
+        <source>parcours_step5.helps.adresses.0.adresse2</source>
+        <target>parcours_step5.helps.adresses.0.adresse2</target>
+      </segment>
+    </unit>
+    <unit id="KtHiWBs" name="parcours_step5.helps.adresses.0.codePostal">
+      <segment>
+        <source>parcours_step5.helps.adresses.0.codePostal</source>
+        <target>parcours_step5.helps.adresses.0.codePostal</target>
+      </segment>
+    </unit>
+    <unit id="CBeTsc1" name="parcours_step5.helps.adresses.0.ville">
+      <segment>
+        <source>parcours_step5.helps.adresses.0.ville</source>
+        <target>parcours_step5.helps.adresses.0.ville</target>
+      </segment>
+    </unit>
+    <unit id="PoGnlBG" name="parcours_step5.helps.contacts.help">
+      <segment>
+        <source>parcours_step5.helps.contacts.help</source>
+        <target>parcours_step5.helps.contacts.help</target>
+      </segment>
+    </unit>
+    <unit id="_gWAWJ_" name="parcours_step5.helps.contacts.help.__name__.help">
+      <segment>
+        <source>parcours_step5.helps.contacts.help.__name__.help</source>
+        <target>parcours_step5.helps.contacts.help.__name__.help</target>
+      </segment>
+    </unit>
+    <unit id="hOsSuV6" name="parcours_step5.helps.contacts.__name__.denomination">
+      <segment>
+        <source>parcours_step5.helps.contacts.__name__.denomination</source>
+        <target>parcours_step5.helps.contacts.__name__.denomination</target>
+      </segment>
+    </unit>
+    <unit id="zPYWF5o" name="parcours_step5.helps.contacts.__name__.nom">
+      <segment>
+        <source>parcours_step5.helps.contacts.__name__.nom</source>
+        <target>parcours_step5.helps.contacts.__name__.nom</target>
+      </segment>
+    </unit>
+    <unit id="q.5jx.x" name="parcours_step5.helps.contacts.__name__.prenom">
+      <segment>
+        <source>parcours_step5.helps.contacts.__name__.prenom</source>
+        <target>parcours_step5.helps.contacts.__name__.prenom</target>
+      </segment>
+    </unit>
+    <unit id="wsQTeFl" name="parcours_step5.helps.contacts.__name__.telephone">
+      <segment>
+        <source>parcours_step5.helps.contacts.__name__.telephone</source>
+        <target>parcours_step5.helps.contacts.__name__.telephone</target>
+      </segment>
+    </unit>
+    <unit id="_ij2aHg" name="parcours_step5.helps.contacts.__name__.email">
+      <segment>
+        <source>parcours_step5.helps.contacts.__name__.email</source>
+        <target>parcours_step5.helps.contacts.__name__.email</target>
+      </segment>
+    </unit>
+    <unit id="rBRgd9w" name="parcours_step5.helps.contacts.help.__name__.help.adresse.help">
+      <segment>
+        <source>parcours_step5.helps.contacts.help.__name__.help.adresse.help</source>
+        <target>parcours_step5.helps.contacts.help.__name__.help.adresse.help</target>
+      </segment>
+    </unit>
+    <unit id="WlyDZx7" name="parcours_step5.helps.contacts.__name__.adresse.adresse1">
+      <segment>
+        <source>parcours_step5.helps.contacts.__name__.adresse.adresse1</source>
+        <target>parcours_step5.helps.contacts.__name__.adresse.adresse1</target>
+      </segment>
+    </unit>
+    <unit id="uoG2cJi" name="parcours_step5.helps.contacts.__name__.adresse.adresse2">
+      <segment>
+        <source>parcours_step5.helps.contacts.__name__.adresse.adresse2</source>
+        <target>parcours_step5.helps.contacts.__name__.adresse.adresse2</target>
+      </segment>
+    </unit>
+    <unit id="hQ6szWv" name="parcours_step5.helps.contacts.__name__.adresse.codePostal">
+      <segment>
+        <source>parcours_step5.helps.contacts.__name__.adresse.codePostal</source>
+        <target>parcours_step5.helps.contacts.__name__.adresse.codePostal</target>
+      </segment>
+    </unit>
+    <unit id="G7sqgtj" name="parcours_step5.helps.contacts.__name__.adresse.ville">
+      <segment>
+        <source>parcours_step5.helps.contacts.__name__.adresse.ville</source>
+        <target>parcours_step5.helps.contacts.__name__.adresse.ville</target>
+      </segment>
+    </unit>
+    <unit id="yjeNNXw" name="parcours_step5.helps.contacts.help.0.help">
+      <segment>
+        <source>parcours_step5.helps.contacts.help.0.help</source>
+        <target>parcours_step5.helps.contacts.help.0.help</target>
+      </segment>
+    </unit>
+    <unit id="XP7g7E4" name="parcours_step5.helps.contacts.0.denomination">
+      <segment>
+        <source>parcours_step5.helps.contacts.0.denomination</source>
+        <target>parcours_step5.helps.contacts.0.denomination</target>
+      </segment>
+    </unit>
+    <unit id="6j9TuFT" name="parcours_step5.helps.contacts.0.nom">
+      <segment>
+        <source>parcours_step5.helps.contacts.0.nom</source>
+        <target>parcours_step5.helps.contacts.0.nom</target>
+      </segment>
+    </unit>
+    <unit id="s755R.h" name="parcours_step5.helps.contacts.0.prenom">
+      <segment>
+        <source>parcours_step5.helps.contacts.0.prenom</source>
+        <target>parcours_step5.helps.contacts.0.prenom</target>
+      </segment>
+    </unit>
+    <unit id="VJgeSYJ" name="parcours_step5.helps.contacts.0.telephone">
+      <segment>
+        <source>parcours_step5.helps.contacts.0.telephone</source>
+        <target>parcours_step5.helps.contacts.0.telephone</target>
+      </segment>
+    </unit>
+    <unit id="381QRo5" name="parcours_step5.helps.contacts.0.email">
+      <segment>
+        <source>parcours_step5.helps.contacts.0.email</source>
+        <target>parcours_step5.helps.contacts.0.email</target>
+      </segment>
+    </unit>
+    <unit id="axFawCN" name="parcours_step5.helps.contacts.help.0.help.adresse.help">
+      <segment>
+        <source>parcours_step5.helps.contacts.help.0.help.adresse.help</source>
+        <target>parcours_step5.helps.contacts.help.0.help.adresse.help</target>
+      </segment>
+    </unit>
+    <unit id="yVEp4rG" name="parcours_step5.helps.contacts.0.adresse.adresse1">
+      <segment>
+        <source>parcours_step5.helps.contacts.0.adresse.adresse1</source>
+        <target>parcours_step5.helps.contacts.0.adresse.adresse1</target>
+      </segment>
+    </unit>
+    <unit id="EwFA.63" name="parcours_step5.helps.contacts.0.adresse.adresse2">
+      <segment>
+        <source>parcours_step5.helps.contacts.0.adresse.adresse2</source>
+        <target>parcours_step5.helps.contacts.0.adresse.adresse2</target>
+      </segment>
+    </unit>
+    <unit id="175Y8ya" name="parcours_step5.helps.contacts.0.adresse.codePostal">
+      <segment>
+        <source>parcours_step5.helps.contacts.0.adresse.codePostal</source>
+        <target>parcours_step5.helps.contacts.0.adresse.codePostal</target>
+      </segment>
+    </unit>
+    <unit id="VxHjoGm" name="parcours_step5.helps.contacts.0.adresse.ville">
+      <segment>
+        <source>parcours_step5.helps.contacts.0.adresse.ville</source>
+        <target>parcours_step5.helps.contacts.0.adresse.ville</target>
       </segment>
     </unit>
     <unit id="ngTvtZd" name="contact.helps.denomination">
@@ -2178,6 +2394,204 @@
       <segment>
         <source>type_diplome.helps.presentationFormation</source>
         <target>type_diplome.helps.presentationFormation</target>
+      </segment>
+    </unit>
+    <unit id="ZC6pVc6" name="composante.helps.inscriptionUniquement.help">
+      <segment>
+        <source>composante.helps.inscriptionUniquement.help</source>
+        <target>composante.helps.inscriptionUniquement.help</target>
+      </segment>
+    </unit>
+    <unit id="BMxD5G_" name="composante.helps.composanteParent">
+      <segment>
+        <source>composante.helps.composanteParent</source>
+        <target>composante.helps.composanteParent</target>
+      </segment>
+    </unit>
+    <unit id="HJPHtb_" name="dpe.helps.libelle">
+      <segment>
+        <source>dpe.helps.libelle</source>
+        <target>dpe.helps.libelle</target>
+      </segment>
+    </unit>
+    <unit id="pFDziNw" name="dpe.helps.anneeUniversitaire">
+      <segment>
+        <source>dpe.helps.anneeUniversitaire</source>
+        <target>dpe.helps.anneeUniversitaire</target>
+      </segment>
+    </unit>
+    <unit id="cxT_AHJ" name="dpe.helps.codeApogee">
+      <segment>
+        <source>dpe.helps.codeApogee</source>
+        <target>dpe.helps.codeApogee</target>
+      </segment>
+    </unit>
+    <unit id="TXu2AIa" name="dpe.helps.defaut.help">
+      <segment>
+        <source>dpe.helps.defaut.help</source>
+        <target>dpe.helps.defaut.help</target>
+      </segment>
+    </unit>
+    <unit id="W10_vQJ" name="dpe.helps.dateOuvertureDpe">
+      <segment>
+        <source>dpe.helps.dateOuvertureDpe</source>
+        <target>dpe.helps.dateOuvertureDpe</target>
+      </segment>
+    </unit>
+    <unit id="WDLCag1" name="dpe.helps.dateClotureDpe">
+      <segment>
+        <source>dpe.helps.dateClotureDpe</source>
+        <target>dpe.helps.dateClotureDpe</target>
+      </segment>
+    </unit>
+    <unit id="Cgjfb0V" name="dpe.helps.dateTransmissionSes">
+      <segment>
+        <source>dpe.helps.dateTransmissionSes</source>
+        <target>dpe.helps.dateTransmissionSes</target>
+      </segment>
+    </unit>
+    <unit id=".Oy7zdp" name="dpe.helps.dateCfvu">
+      <segment>
+        <source>dpe.helps.dateCfvu</source>
+        <target>dpe.helps.dateCfvu</target>
+      </segment>
+    </unit>
+    <unit id="gyi2qNN" name="dpe.helps.datePublication">
+      <segment>
+        <source>dpe.helps.datePublication</source>
+        <target>dpe.helps.datePublication</target>
+      </segment>
+    </unit>
+    <unit id="1Wyo_VN" name="campagne_collecte.helps.libelle">
+      <segment>
+        <source>campagne_collecte.helps.libelle</source>
+        <target>campagne_collecte.helps.libelle</target>
+      </segment>
+    </unit>
+    <unit id="MZ9u_qO" name="campagne_collecte.helps.anneeUniversitaire">
+      <segment>
+        <source>campagne_collecte.helps.anneeUniversitaire</source>
+        <target>campagne_collecte.helps.anneeUniversitaire</target>
+      </segment>
+    </unit>
+    <unit id="OOg44Ps" name="campagne_collecte.helps.codeApogee">
+      <segment>
+        <source>campagne_collecte.helps.codeApogee</source>
+        <target>campagne_collecte.helps.codeApogee</target>
+      </segment>
+    </unit>
+    <unit id="C4TMUql" name="campagne_collecte.helps.defaut.help">
+      <segment>
+        <source>campagne_collecte.helps.defaut.help</source>
+        <target>campagne_collecte.helps.defaut.help</target>
+      </segment>
+    </unit>
+    <unit id="S3oum9d" name="campagne_collecte.helps.dateOuvertureDpe">
+      <segment>
+        <source>campagne_collecte.helps.dateOuvertureDpe</source>
+        <target>campagne_collecte.helps.dateOuvertureDpe</target>
+      </segment>
+    </unit>
+    <unit id="jE0Wwh9" name="campagne_collecte.helps.dateClotureDpe">
+      <segment>
+        <source>campagne_collecte.helps.dateClotureDpe</source>
+        <target>campagne_collecte.helps.dateClotureDpe</target>
+      </segment>
+    </unit>
+    <unit id="20hFSHw" name="campagne_collecte.helps.dateTransmissionSes">
+      <segment>
+        <source>campagne_collecte.helps.dateTransmissionSes</source>
+        <target>campagne_collecte.helps.dateTransmissionSes</target>
+      </segment>
+    </unit>
+    <unit id="8MevSih" name="campagne_collecte.helps.dateCfvu">
+      <segment>
+        <source>campagne_collecte.helps.dateCfvu</source>
+        <target>campagne_collecte.helps.dateCfvu</target>
+      </segment>
+    </unit>
+    <unit id="xcudifH" name="campagne_collecte.helps.datePublication">
+      <segment>
+        <source>campagne_collecte.helps.datePublication</source>
+        <target>campagne_collecte.helps.datePublication</target>
+      </segment>
+    </unit>
+    <unit id="m8wSTMj" name="formation_ses.helps.codeMentionApogee">
+      <segment>
+        <source>formation_ses.helps.codeMentionApogee</source>
+        <target>formation_ses.helps.codeMentionApogee</target>
+      </segment>
+    </unit>
+    <unit id="bt4sopb" name="type_ue.helps.type.help">
+      <segment>
+        <source>type_ue.helps.type.help</source>
+        <target>type_ue.helps.type.help</target>
+      </segment>
+    </unit>
+    <unit id="WKAUWBQ" name="element_constitutif.helps.ordre">
+      <segment>
+        <source>element_constitutif.helps.ordre</source>
+        <target>Précisez l’ordre d’apparition de l’EC dans la maquette.</target>
+      </segment>
+    </unit>
+    <unit id="7Ml08A1" name="element_constitutif.helps.code">
+      <segment>
+        <source>element_constitutif.helps.code</source>
+        <target>Précisez le code de l'EC</target>
+      </segment>
+    </unit>
+    <unit id="W98Rf4q" name="parcours.helps.parcoursOrigine">
+      <segment>
+        <source>parcours.helps.parcoursOrigine</source>
+        <target>Indiquez le parcours d'origine si ce parcours est une évolution/adaptation d'un autre parcours. Cela est nécessaire pour la bonne codification Apogée</target>
+      </segment>
+    </unit>
+    <unit id="8L0Gjpn" name="ec_manage.helps.fiche_matiere_titre_libre_edit.help">
+      <segment>
+        <source>ec_manage.helps.fiche_matiere_titre_libre_edit.help</source>
+        <target>Saisissez un texte libre pour ce EC et préciser les modalités de choix dans la zone suivante</target>
+      </segment>
+    </unit>
+    <unit id="Li6vlgo" name="ec.helps.typeEc.help">
+      <segment>
+        <source>ec.helps.typeEc.help</source>
+        <target>Type d'EC</target>
+      </segment>
+    </unit>
+    <unit id="le1bVld" name="type_ec.helps.type.help">
+      <segment>
+        <source>type_ec.helps.type.help</source>
+        <target>type_ec.helps.type.help</target>
+      </segment>
+    </unit>
+    <unit id="1XwvVkt" name="form.helps.codeDiplome">
+      <segment>
+        <source>form.helps.codeDiplome</source>
+        <target>form.helps.codeDiplome</target>
+      </segment>
+    </unit>
+    <unit id="vPrvPx9" name="form.helps.codeVersionDiplome">
+      <segment>
+        <source>form.helps.codeVersionDiplome</source>
+        <target>form.helps.codeVersionDiplome</target>
+      </segment>
+    </unit>
+    <unit id="0PDc_TC" name="form.helps.codeEtape">
+      <segment>
+        <source>form.helps.codeEtape</source>
+        <target>form.helps.codeEtape</target>
+      </segment>
+    </unit>
+    <unit id="OUPHv6G" name="form.helps.codeVersionEtape">
+      <segment>
+        <source>form.helps.codeVersionEtape</source>
+        <target>form.helps.codeVersionEtape</target>
+      </segment>
+    </unit>
+    <unit id="0HMlD1t" name="type_diplome.helps.codifIntermediaire.help">
+      <segment>
+        <source>type_diplome.helps.codifIntermediaire.help</source>
+        <target>type_diplome.helps.codifIntermediaire.help</target>
       </segment>
     </unit>
   </file>

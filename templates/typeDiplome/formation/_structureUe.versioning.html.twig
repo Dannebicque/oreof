@@ -36,7 +36,7 @@
     <tr class="ec">
         <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
         <td {% if enfant %}class="border-left-ue-{{ ue.ue.ordre }}"{% endif %} colspan="{{ colspan+4 }}">
-            {{ ue.ue.descriptionUeLibre }}
+            {{ ue.ue.descriptionUeLibre is defined ? ue.ue.descriptionUeLibre : ""}}
         </td>
     </tr>
 {% else %}

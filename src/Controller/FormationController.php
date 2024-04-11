@@ -17,6 +17,9 @@ use App\DTO\StatsFichesMatieres;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\FormationDemande;
+use App\Entity\FormationVersioning;
+use App\Entity\Parcours;
+use App\Entity\ParcoursVersioning;
 use App\Entity\UserCentre;
 use App\Events\AddCentreFormationEvent;
 use App\Form\FormationDemandeType;
@@ -28,13 +31,29 @@ use App\Repository\MentionRepository;
 use App\Repository\RoleRepository;
 use App\Repository\TypeDiplomeRepository;
 use App\Repository\UserCentreRepository;
+use App\Service\VersioningFormation;
+use App\Service\VersioningParcours;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
+use DateTimeImmutable;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
+use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 #[Route('/formation')]
 class FormationController extends BaseController
@@ -366,7 +385,10 @@ class FormationController extends BaseController
     #[Route('/{slug}', name: 'app_formation_show', methods: ['GET'])]
     public function show(
         TypeDiplomeRegistry     $typeDiplomeRegistry,
-        Formation               $formation
+        Formation               $formation,
+        EntityManagerInterface $entityManager,
+        VersioningParcours $versioningParcours,
+        VersioningFormation $versioningFormation
     ): Response {
         $typeDiplome = $formation->getTypeDiplome();
 
@@ -381,11 +403,27 @@ class FormationController extends BaseController
             $tParcours[$parcours->getId()] = $typeD->calculStructureParcours($parcours);
         }
 
+        /**
+         * VERSIONING PARCOURS PAR DÉFAUT
+         */
+        $cssDiff = DiffHelper::getStyleSheet();
+        if($formation->isHasParcours() === false && count($formation->getParcours()) === 1){
+            $textDifferences = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);    
+        }
+
+        /**
+         * VERSIONING FORMATION
+         */
+        $formationStringDifferences = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
+
         return $this->render('formation/show.html.twig', [
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
             'tParcours' => $tParcours,
-            'typeD' => $typeD
+            'typeD' => $typeD,
+            'cssDiff' => $cssDiff,
+            'stringDifferences' => $textDifferences ?? [],
+            'formationStringDifferences' => $formationStringDifferences ?? []
         ]);
     }
 
@@ -484,5 +522,49 @@ class FormationController extends BaseController
         return $this->render('formation/maquette_iframe.html.twig', [
             'listeParcours' => $listeParcours
         ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/mention/list', name: 'app_formation_liste_id')]
+    public function getParcoursListForFormations(
+        EntityManagerInterface $entityManager
+    ) : Response {
+        
+        $formations = $entityManager->getRepository(Formation::class)->findBy(['dpe' => 1]);
+
+        return $this->render("formation/parcours_list_with_id.html.twig", [
+            'formations' => $formations
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/{slug}/versioning/save', name: "app_formation_versioning_save")]
+    public function saveFormationIntoJson(
+        Formation $formation,
+        VersioningFormation $versioningFormationService,
+        Filesystem $filesystem
+    ){
+        try{
+            /** @var User $utilisateur */
+            $utilisateur = $this->getUser();
+            $now = new DateTimeImmutable();
+            $dateHeure = $now->format('d-m-Y_H-i-s');
+            $versioningFormationService->saveVersionOfFormation($formation, $now, true);
+            // Log
+            $successMessage = "[{$dateHeure}] La formation a bien été sauvegardée ({$formation->getSlug()})"
+            . "\nUtilisateur : {$utilisateur->getPrenom()} {$utilisateur->getNom()} - ID : {$utilisateur->getUsername()}\n";
+            $filesystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/save_formation_success.log", $successMessage);
+
+            $this->addFlashBag('success', 'La formation a bien été sauvegardée.');
+            return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
+        }catch(\Exception $e){
+            $errorMessage = "[{$dateHeure}] Le versioning de la formation a rencontré une erreur."
+                . "\nUtilisateur : {$utilisateur->getPrenom()} {$utilisateur->getNom()} - ID : {$utilisateur->getUsername()}"
+                ."\nMessage : {$e->getMessage()}\n";
+            $filesystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/save_formation_error.log", $errorMessage);
+
+            $this->addFlashBag('error', 'Une erreur est survenue lors de la sauvegarde.');
+            return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
+        }
     }
 }

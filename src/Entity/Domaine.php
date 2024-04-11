@@ -24,14 +24,15 @@ class Domaine
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups('parcours_json_versioning', 'formation_json_versioning')]
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups('parcours_json_versioning', 'formation_json_versioning')]
     #[ORM\Column(length: 20)]
     private ?string $sigle = null;
 
+    #[Groups('formation_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'domaine', targetEntity: Mention::class)]
     private Collection $mentions;
 

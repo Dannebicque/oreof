@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: ComposanteRepository::class)]
 class Composante
@@ -25,13 +26,15 @@ class Composante
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
+    #[Groups('formation_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'composantes')]
     private ?User $directeur = null;
 
+    #[Groups('formation_json_versioning')]
     #[ORM\ManyToOne(inversedBy: 'composanteResponsableDpe')]
     private ?User $responsableDpe = null;
 
@@ -41,23 +44,23 @@ class Composante
     #[ORM\ManyToMany(targetEntity: Formation::class, mappedBy: 'composantesInscription')]
     private Collection $formations;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?Adresse $adresse = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $telStandard = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $telComplementaire = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $mailContact = null;
 
-    #[Groups('parcours_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $urlSite = null;
 
@@ -85,6 +88,8 @@ class Composante
     #[ORM\Column(nullable: true)]
     private ?bool $inscriptionUniquement = false;
 
+    #[MaxDepth(1)]
+    #[Groups('formation_json_versioning')]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'composantes')]
     private ?self $composanteParent = null;
 

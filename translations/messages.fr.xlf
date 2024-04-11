@@ -463,5 +463,29 @@
         <target>Email</target>
       </segment>
     </unit>
+    <unit id="44CXx0W" name="Code diplôme">
+      <segment>
+        <source>Code diplôme</source>
+        <target>Code diplôme</target>
+      </segment>
+    </unit>
+    <unit id="g7kmyIG" name="Version diplôme">
+      <segment>
+        <source>Version diplôme</source>
+        <target>Version diplôme</target>
+      </segment>
+    </unit>
+    <unit id=".9aguUx" name="Code étape">
+      <segment>
+        <source>Code étape</source>
+        <target>Code étape</target>
+      </segment>
+    </unit>
+    <unit id="iJb9JIO" name="Version étape">
+      <segment>
+        <source>Version étape</source>
+        <target>Version étape</target>
+      </segment>
+    </unit>
   </file>
 </xliff>
