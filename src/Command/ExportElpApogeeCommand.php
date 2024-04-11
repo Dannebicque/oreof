@@ -1171,7 +1171,8 @@ class ExportElpApogeeCommand extends Command
      */
     private function createSoapClientProduction() : void {
         // $wsdl = $this->parameterBag->get('WSDL_APOGEE_PRODUCTION');
-        $wsdl = "https://ws-apogee.univ-reims.fr/apo-webservices/services/CreationSEMetier?wsdl";
+        // $wsdl = "https://ws-apogee.univ-reims.fr/apo-webservices/services/CreationSEMetier?wsdl";
+        $wsdl = "";
         $this->soapClient = new \SoapClient($wsdl, [
             "trace" => true
         ]);
