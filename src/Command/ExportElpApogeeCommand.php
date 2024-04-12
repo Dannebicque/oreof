@@ -182,6 +182,10 @@ class ExportElpApogeeCommand extends Command
             name: 'dump-parcours-to-insert',
             mode: InputOption::VALUE_REQUIRED,
             description: "Dump les parcours disponibles pour l'insertion"
+        )->addOption(
+            name: 'with-exclusion',
+            mode: InputOption::VALUE_NONE,
+            description: "Exclut certaines données"
         );
     }
 
@@ -195,6 +199,7 @@ class ExportElpApogeeCommand extends Command
         // Options pour certaines commandes
         $withFilter = $input->getOption('with-filter');
         $withJsonExport = $input->getOption('with-json-export');
+        $withExclusionOption = $input->getOption('with-exclusion');
         // Insertion via le Web Service
         $dummyInsertion = $input->getOption('dummy-insertion');
         $dummyLseInsertion = $input->getOption('dummy-lse-insertion');
@@ -237,7 +242,7 @@ class ExportElpApogeeCommand extends Command
                         break;
                     case "PARCOURS":
                         $io->writeln("Génération de l'export Excel - Parcours...");
-                        $this->saveFullExportAsSpreadsheet($output, "PARCOURS", $withFilter, $withJsonExport);
+                        $this->saveFullExportAsSpreadsheet($output, "PARCOURS", $withFilter, $withJsonExport, $withExclusionOption);
                         break;
                     default: 
                         $io->warning("Type d'export inconnu. Il devrait être parmi la liste : ['PARCOURS', 'SEMESTRE', 'UE', 'EC']");
@@ -984,7 +989,13 @@ class ExportElpApogeeCommand extends Command
      * @param OutputInterface $output Sortie de la commande
      * @param string $type Sélectionne le type, dans la liste : [EC, UE, SEMESTRE]
      */
-    private function saveFullExportAsSpreadsheet(OutputInterface $output, string $type, bool $withFilter = false, $withJsonExport = false){
+    private function saveFullExportAsSpreadsheet(
+        OutputInterface $output,
+        string $type, 
+        bool $withFilter = false,
+        bool $withJsonExport = false,
+        bool $withExclusionOption = false    
+    ){
         // retrieve data
         $dataArray = $this->retrieveParcoursDataFromDatabase();
         $totalElement = count($dataArray);
@@ -1038,6 +1049,11 @@ class ExportElpApogeeCommand extends Command
                 if($withFilter){
                     $dataELP = $this->filterInvalidElpArray($dataELP);
                     $exportTypeName .= "-filtered";
+                }
+                if($withExclusionOption){
+                    $dataELP = $this->filterAlreadyInsertedElpArray($dataELP);
+                    $exportTypeName .= "-EXCLUDED";
+                    
                 }
                 $soapObjectArray[] = $dataELP;
                 $progressBar->advance();
@@ -1276,7 +1292,8 @@ class ExportElpApogeeCommand extends Command
      * @return boolean Vrai si la matière est mutualisée, Faux sinon
      */
     private function isEcMutualise(StructureEc $ec) : bool {
-        return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 1;
+        // return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 1;
+        return $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() === 'MATM';
     }
 
     /**
@@ -1836,5 +1853,16 @@ class ExportElpApogeeCommand extends Command
         }
 
         return $retour;
+    }
+
+    private function filterAlreadyInsertedElpArray(array $elpArray){
+        $dataElpApogee = json_decode(
+            file_get_contents(
+                __DIR__ . "/../Service/Apogee/data-test/" . self::$codElpApogeeDataTest)
+        );
+        return array_filter(
+            $elpArray, 
+            fn($elp) => in_array($elp->codElp, $dataElpApogee, true) === false
+        );
     }
 }
