@@ -61,6 +61,9 @@ class ExportElpApogeeCommand extends Command
     // Fichier contenant les formations à exclure
     private static $formationToExcludeFile = "liste-formation-a-exclure-PRODUCTION-09-04-2024-14h12.txt";
     private static $formationToExcludeJSON = "Formations-a-exclure-09-04-2024_14-20-07.json";
+    // Vérifications entre deux fichiers JSON
+    private static $oldJsonFile = "OLD-COD_ELP-ALL_PARCOURS-filtered-15-04-2024_10-21-48.json";
+    private static $newJsonFile = "NEW-COD_ELP-ALL_PARCOURS-filtered-15-04-2024_10-20-49.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
@@ -186,6 +189,10 @@ class ExportElpApogeeCommand extends Command
             name: 'with-exclusion',
             mode: InputOption::VALUE_NONE,
             description: "Exclut certaines données"
+        )->addOption(
+            name: 'check-diff',
+            mode: InputOption::VALUE_NONE,
+            description: "Vérifie les différences entre deux fichier JSON"
         );
     }
 
@@ -200,6 +207,7 @@ class ExportElpApogeeCommand extends Command
         $withFilter = $input->getOption('with-filter');
         $withJsonExport = $input->getOption('with-json-export');
         $withExclusionOption = $input->getOption('with-exclusion');
+        $checkDifferences = $input->getOption('check-diff');
         // Insertion via le Web Service
         $dummyInsertion = $input->getOption('dummy-insertion');
         $dummyLseInsertion = $input->getOption('dummy-lse-insertion');
@@ -876,6 +884,28 @@ class ExportElpApogeeCommand extends Command
                 $io->writeln("Enregistrement réussi !");
                 
                 return Command::SUCCESS;
+            }
+            if($checkDifferences){
+                $date = new DateTime();
+                $now = $date->format("d-m-Y_H-i-s");
+                $old = json_decode(
+                    file_get_contents(
+                        __DIR__ . "/../Service/Apogee/data-test/" . self::$oldJsonFile
+                    )
+                );
+                $new = json_decode(
+                    file_get_contents(
+                        __DIR__ . "/../Service/Apogee/data-test/" . self::$newJsonFile
+                    )
+                );
+                $differences = array_values(array_diff($new, $old));
+                $io->writeln("Calcul des différences...");
+                $this->filesystem->appendToFile(
+                    __DIR__ . "/../Service/Apogee/export/json-differences-{$now}.json",
+                    json_encode($differences)
+                );
+                $io->writeln("Rapport généré !");
+                return Command::SUCCESS;
             }    
             
             return Command::SUCCESS;
@@ -1292,8 +1322,8 @@ class ExportElpApogeeCommand extends Command
      * @return boolean Vrai si la matière est mutualisée, Faux sinon
      */
     private function isEcMutualise(StructureEc $ec) : bool {
-        // return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 1;
-        return $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() === 'MATM';
+        return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 1;
+        // return $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() === 'MATM';
     }
 
     /**
