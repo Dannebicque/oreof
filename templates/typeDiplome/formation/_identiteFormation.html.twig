@@ -31,18 +31,18 @@
         <dl>
             <dt>Responsable de la formation</dt>
             <dd>{{ formation.responsableMention != null ? formation.responsableMention.display : 'erreur' }}</dd>
-            {% if formationStringDifferences.responsableDeFormation is defined %}
+            {% if stringDifferencesFormation.responsableDeFormation is defined %}
                 {{ include('communs/_comparaison_formation_versioning.html.twig', 
-                        {stringData: formationStringDifferences.responsableDeFormation}
+                        {stringData: stringDifferencesFormation.responsableDeFormation}
                     ) 
                 }}
             {% endif %}
             {# {{ include('communs/_comparaison_formation_versioning.html.twig', {textField: "emailResponsableFormation"}) }} #}
             <dt>Email</dt>
             <dd>{{ formation.responsableMention != null ? formation.responsableMention.email : 'erreur' }}</dd>
-            {% if formationStringDifferences.emailResponsableFormation is defined %}
+            {% if stringDifferencesFormation.emailResponsableFormation is defined %}
                 {{ include('communs/_comparaison_formation_versioning.html.twig', 
-                        {stringData: formationStringDifferences.emailResponsableFormation}
+                        {stringData: stringDifferencesFormation.emailResponsableFormation}
                     ) 
                 }}
             {% endif %}
