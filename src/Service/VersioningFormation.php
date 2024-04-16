@@ -47,7 +47,7 @@ class VersioningFormation {
         );
     }
 
-    public function saveVersionOfFormation(Formation $formation, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu){
+    public function saveVersionOfFormation(Formation $formation, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu = false){
         $dateHeure = $now->format('d-m-Y_H-i-s');
         // Nom du fichier
         $formationFilename = "formation-{$formation->getId()}-{$dateHeure}";
