@@ -408,7 +408,7 @@ class FormationController extends BaseController
          */
         $cssDiff = DiffHelper::getStyleSheet();
         if($formation->isHasParcours() === false && count($formation->getParcours()) === 1){
-            $textDifferences = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);    
+            $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);    
         }
 
         /**
@@ -422,8 +422,8 @@ class FormationController extends BaseController
             'tParcours' => $tParcours,
             'typeD' => $typeD,
             'cssDiff' => $cssDiff,
-            'stringDifferences' => $textDifferences ?? [],
-            'formationStringDifferences' => $formationStringDifferences ?? []
+            'stringDifferencesParcours' => $textDifferencesParcours ?? [],
+            'stringDifferencesFormation' => $formationStringDifferences ?? []
         ]);
     }
 

@@ -30,6 +30,7 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\UeRepository;
 use App\Service\LheoXML;
+use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
@@ -217,7 +218,8 @@ class ParcoursController extends BaseController
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours            $parcours,
         LheoXML             $lheoXML,
-        VersioningParcours $versioningParcours
+        VersioningParcours $versioningParcours,
+        VersioningFormation $versioningFormation
     ): Response {
         $formation = $parcours->getFormation();
         if ($formation === null) {
@@ -231,7 +233,8 @@ class ParcoursController extends BaseController
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         $dto = $typeD->calculStructureParcours($parcours, true, false);
         
-        $textDifferences = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
+        $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
+        $textDifferencesFormation = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
         $cssDiff = DiffHelper::getStyleSheet();
 
         return $this->render('parcours/show.html.twig', [
@@ -242,7 +245,8 @@ class ParcoursController extends BaseController
             'dto' => $dto,
             'typeD' => $typeD,
             'lheoXML' => $lheoXML,
-            'stringDifferences' => $textDifferences,
+            'stringDifferencesParcours' => $textDifferencesParcours,
+            'stringDifferencesFormation' => $textDifferencesFormation,
             'cssDiff' => $cssDiff
         ]);
     }

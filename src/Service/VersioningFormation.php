@@ -153,7 +153,37 @@ class VersioningFormation {
                     $rendererName,
                     $differOptions,
                     $rendererOptions
-                ))
+                )),
+                'presentationFormationObjectifsFormation' => 
+                VersioningParcours::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        VersioningParcours::cleanUpHtmlTextForComparison($lastVersion->getObjectifsFormation() ?? ""),
+                        VersioningParcours::cleanUpHtmlTextForComparison($formation->getObjectifsFormation() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    ))
+                ),
+                'presentationFormationContenuFormation' => 
+                VersioningParcours::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        VersioningParcours::cleanUpHtmlTextForComparison($lastVersion->getContenuFormation() ?? ""),
+                        VersioningParcours::cleanUpHtmlTextForComparison($formation->getContenuFormation() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    ))
+                ),
+                'presentationFormationResultatsAttendus' => 
+                VersioningParcours::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        VersioningParcours::cleanUpHtmlTextForComparison($lastVersion->getResultatsAttendus() ?? ""),
+                        VersioningParcours::cleanUpHtmlTextForComparison($formation->getResultatsAttendus() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    ))
+                )
             ];
         }
 

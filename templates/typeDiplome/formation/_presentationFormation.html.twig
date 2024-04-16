@@ -5,9 +5,9 @@
             <dl>
                 <dt>Contenu de la formation</dt>
                 <dd>{{ formation.contenuFormation|raw }}</dd>
-                {% if is_granted('ROLE_ADMIN') and stringDifferences is defined 
-                   and stringDifferences.presentationFormationContenuFormation is defined 
-                   and stringDifferences.presentationFormationContenuFormation|length > 0
+                {% if is_granted('ROLE_ADMIN') and stringDifferencesFormation is defined 
+                   and stringDifferencesFormation.presentationFormationContenuFormation is defined 
+                   and stringDifferencesFormation.presentationFormationContenuFormation|length > 0
                 %}
                     <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
                         <button class="btn btn-primary btn-sm my-3"
@@ -18,15 +18,15 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-10 col-lg-8 collapse" id="diffContenuFormation">
-                            {{ stringDifferences.presentationFormationContenuFormation|raw  }} 
+                            {{ stringDifferencesFormation.presentationFormationContenuFormation|raw  }} 
                         </div>
                     </div>
                 {% endif %}
                 <dt>Résultats attendus de la formation</dt>
                 <dd>{{ formation.resultatsAttendus|raw }}</dd>
-                {% if is_granted('ROLE_ADMIN') and stringDifferences is defined 
-                   and stringDifferences.presentationFormationResultatsAttendus is defined 
-                   and stringDifferences.presentationFormationResultatsAttendus|length > 0
+                {% if is_granted('ROLE_ADMIN') and stringDifferencesFormation is defined 
+                   and stringDifferencesFormation.presentationFormationResultatsAttendus is defined 
+                   and stringDifferencesFormation.presentationFormationResultatsAttendus|length > 0
                 %}
                     <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
                         <button class="btn btn-primary btn-sm my-3"
@@ -37,7 +37,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-10 col-lg-8 collapse" id="diffResultatsAttendus">
-                            {{ stringDifferences.presentationFormationResultatsAttendus|raw  }} 
+                            {{ stringDifferencesFormation.presentationFormationResultatsAttendus|raw  }} 
                         </div>
                     </div>
                 {% endif %}
@@ -58,10 +58,10 @@
             <dd>
                 {{ formation.objectifsFormation|raw }}
             </dd>
-            {% if is_granted('ROLE_ADMIN') and stringDifferences is defined 
-               and stringDifferences.presentationFormationObjectifsFormation is defined 
+            {% if is_granted('ROLE_ADMIN') and stringDifferencesFormation is defined 
+               and stringDifferencesFormation.presentationFormationObjectifsFormation is defined 
             %}
-                {% if stringDifferences.presentationFormationObjectifsFormation|length > 0 %}
+                {% if stringDifferencesFormation.presentationFormationObjectifsFormation|length > 0 %}
                 <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
                     <button class="btn btn-primary btn-sm my-3"
                         data-bs-toggle="collapse" data-bs-target="#diffFormationObjectifsFormation"
@@ -71,7 +71,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 collapse" id="diffFormationObjectifsFormation">
-                        {{ stringDifferences.presentationFormationObjectifsFormation|raw  }}
+                        {{ stringDifferencesFormation.presentationFormationObjectifsFormation|raw  }}
                     </div>
                 </div>
                 {% endif %}
