@@ -52,15 +52,14 @@ class ExportElpApogeeCommand extends Command
 {
 
     // Données extraites d'APOTEST
-    private static $codElpApogeeDataTest = "COD_ELP_PRODUCTION-AFTER-INSERT-09-04-2024-16-31.json";
-    // private static $codElpApogeeDataTest = "COD_ELP_08-04-2024-15-45-AFTER-INSERT.json";
-    private static $codLseApogeeDataTest = "COD_LSE_PRODUCTION-09-04-2024-14-43.json";
+    private static $codElpApogeeDataTest = "COD_ELP_PRODUCTION-AVANT-DEUXIEME-16-04-2024-15-04.json";
+    private static $codLseApogeeDataTest = "COD_LSE_PRODUCTION-AVANT-DEUXIEME-16-04-2024-15-06.json";
     // Données exportées depuis ORéOF
-    private static $fullLseExportDataTest = "COD_LSE_TEST-PROD-09-04-2024_16-38-47.json";
-    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-PROD-09-04-2024_14-47-47.json";
+    private static $fullLseExportDataTest = "OREOF-COD_LSE_TEST-16-04-2024_15-31-27.json";
+    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-PROD-filtered-EXCLUDED-16-04-2024_15-36-39.json";
     // Fichier contenant les formations à exclure
-    private static $formationToExcludeFile = "liste-formation-a-exclure-PRODUCTION-09-04-2024-14h12.txt";
-    private static $formationToExcludeJSON = "Formations-a-exclure-09-04-2024_14-20-07.json";
+    private static $formationToExcludeFile = "liste-formations-a-INCLURE-16-04-2024.txt";
+    private static $formationToExcludeJSON = "Formations-a-inclure-DEUXIEME-DEVERSEMENT-PROD-16-04-2024_14-21-52.json";
     // Vérifications entre deux fichiers JSON
     private static $oldJsonFile = "OLD-COD_ELP-ALL_PARCOURS-filtered-15-04-2024_10-21-48.json";
     private static $newJsonFile = "NEW-COD_ELP-ALL_PARCOURS-filtered-15-04-2024_10-20-49.json";
@@ -330,6 +329,7 @@ class ExportElpApogeeCommand extends Command
                             foreach($parcoursArray as $parcours){
                                 $soapObjectArray = $this->generateSoapObjectsForParcours($parcours);
                                 $soapObjectArray = $this->filterInvalidElpArray($soapObjectArray);
+                                $soapObjectArray = $this->filterAlreadyInsertedElpArray($soapObjectArray);
                                 $this->insertSeveralElp($soapObjectArray);
                                 $io->progressAdvance();
                             }
@@ -733,6 +733,10 @@ class ExportElpApogeeCommand extends Command
                 $codeLseApogee = json_decode(file_get_contents(__DIR__ . "/../Service/Apogee/data-test/" . self::$codLseApogeeDataTest));
                 foreach($parcoursArray as $parcours){
                     $elpArray = $this->generateSoapObjectsForParcours($parcours);
+                    if($withFilter){
+                        $elpArray = $this->filterInvalidElpArray($elpArray);
+                        $elpArray = $this->filterAlreadyInsertedElpArray($elpArray);
+                    }
                     $elpArray = array_map(fn($elp) => $elp->codElp, $elpArray);
                     foreach($elpArray as $codeElp){
                         if(in_array($codeElp, $codeElpApogee, true)){
@@ -922,12 +926,13 @@ class ExportElpApogeeCommand extends Command
                     if($this->verifyUserIntent($io, "Il y a {$nbParcours} parcours disponibles. Continuer ?")){
                         try{
                             $io->writeln('Initialisation du Web Service...');
-                            $this->createSoapClientProduction();
+                            // $this->createSoapClientProduction();
                             $io->writeln('Insertion des données en cours...');
                             $io->progressStart($nbParcours);
                             foreach($parcoursArray as $parcours){
                                 $soapObjectArray = $this->generateSoapObjectsForParcours($parcours);
                                 $soapObjectArray = $this->filterInvalidElpArray($soapObjectArray);
+                                $soapObjectArray = $this->filterAlreadyInsertedElpArray($soapObjectArray);
                                 $this->insertSeveralElp($soapObjectArray);
                                 $io->progressAdvance();
                             }
@@ -1466,6 +1471,9 @@ class ExportElpApogeeCommand extends Command
      * @return array Tableau des parcours disponibles à traiter
      */
     private function retrieveParcoursDataFromDatabase(bool $withExclude = true, bool $withJsonExport = false){
+        /**
+         * FAIRE VARIER LE FILTRAGE SELON LE BESOIN
+         */
         if($withExclude){
             $formationToExclude = json_decode(
                 file_get_contents(
@@ -1489,20 +1497,22 @@ class ExportElpApogeeCommand extends Command
         }
         $dataArray = $this->entityManager->getRepository(Formation::class)->findAll();
         // $dataArray = array_filter($dataArray, [$this, 'filterFormationByPublicationState']);
-        if($withExclude){
-            // Filtrage des formations
-            $dataArray = array_filter(
-                $dataArray, 
-                fn($formation) => in_array($formation->getId(), $formationIdArray) === false
-            );
-        }
+        // if($withExclude){
+        //     // Filtrage des formations
+        //     $dataArray = array_filter(
+        //         $dataArray, 
+        //         // false si exclusion, true si inclusion
+        //         fn($formation) => in_array($formation->getId(), $formationIdArray, true) === true
+        //     );
+        // }
         $dataArray = array_map(fn($formation) => $formation->getParcours()->toArray(), $dataArray);
         $dataArray = array_merge(...$dataArray);
         if($withExclude){
             // Filtrage des parcours
             $dataArray = array_filter(
                 $dataArray,
-                fn($parcours) => in_array($parcours->getId(), $parcoursIdArray) === false
+                // false si exclusion, true si inclusion
+                fn($parcours) => in_array($parcours->getId(), $parcoursIdArray) === true
             );
         }
 
@@ -1721,6 +1731,10 @@ class ExportElpApogeeCommand extends Command
                 }
                 // Si la liste est sur un ELP qui n'est pas inséré...
                 if(in_array($lse->codListeElp, $elpApogeeArray) === false){
+                    $result = false;
+                }
+                // // Si la liste n'a pas d'éléments à relier (liste vide)
+                if(count($lse->listElementPedagogi->elementPedagogi) === 0){
                     $result = false;
                 }
 
