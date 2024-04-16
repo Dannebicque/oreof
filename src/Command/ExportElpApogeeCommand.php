@@ -1322,8 +1322,8 @@ class ExportElpApogeeCommand extends Command
      * @return boolean Vrai si la matière est mutualisée, Faux sinon
      */
     private function isEcMutualise(StructureEc $ec) : bool {
-        return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 1;
-        // return $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() === 'MATM';
+        // return count($ec->elementConstitutif->getFicheMatiere()?->getFicheMatiereParcours() ?? []) >= 1;
+        return $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() === 'MATM';
     }
 
     /**
