@@ -27,6 +27,9 @@ class ParcoursVersioning
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $dtoFileName = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $cvfuFlag = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +79,18 @@ class ParcoursVersioning
     public function setDtoFileName(?string $dtoFileName): static
     {
         $this->dtoFileName = $dtoFileName;
+
+        return $this;
+    }
+
+    public function isCvfuFlag(): ?bool
+    {
+        return $this->cvfuFlag;
+    }
+
+    public function setCvfuFlag(?bool $cvfuFlag): static
+    {
+        $this->cvfuFlag = $cvfuFlag;
 
         return $this;
     }
