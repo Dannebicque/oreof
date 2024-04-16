@@ -7,7 +7,11 @@
             </dd>
             {% if stringDifferencesFormation.localisationMention is defined %}
                 {{ include('communs/_comparaison_formation_versioning.html.twig', 
-                {stringData: stringDifferencesFormation.localisationMention}) 
+                        {
+                            stringData: stringDifferencesFormation.localisationMention,
+                            idCollapse: "diffLocalisationMention"
+                        }
+                    ) 
                 }}
             {% endif %}
             <dt>Régime(s) d'inscription</dt>

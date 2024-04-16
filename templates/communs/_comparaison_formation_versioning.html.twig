@@ -3,11 +3,13 @@
         and stringData != null
         and stringData|length > 0
     %}
-        <span class="badge rounded-pill text-bg-primary mt-2 mb-1">
-            Différences
-        </span>
-        <div class="row mt-1 mb-4">
-            <div class="col-6">
+        <a data-bs-toggle="collapse" data-bs-target="#{{idCollapse}}" role="button">
+            <span class="badge rounded-pill text-bg-primary mt-2 mb-3">
+                Voir les différences
+            </span>
+        </a>
+        <div class="row mb-4 collapse" id="{{idCollapse}}">
+            <div class="col-8">
                 <div class="d-inline-flex">
                     {{ stringData|raw }}  
                 </div>
