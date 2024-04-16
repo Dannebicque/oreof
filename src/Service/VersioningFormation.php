@@ -47,7 +47,7 @@ class VersioningFormation {
         );
     }
 
-    public function saveVersionOfFormation(Formation $formation, DateTimeImmutable $now, bool $withFlush = false){
+    public function saveVersionOfFormation(Formation $formation, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu){
         $dateHeure = $now->format('d-m-Y_H-i-s');
         // Nom du fichier
         $formationFilename = "formation-{$formation->getId()}-{$dateHeure}";
@@ -57,6 +57,9 @@ class VersioningFormation {
         $formationVersioning->setVersionTimestamp($now);
         $formationVersioning->setFilename($formationFilename);
         $formationVersioning->setSlug($formation->getSlug());
+        if($isCfvu){
+            $formationVersioning->setCfvuFlag(true);
+        }
         // Serialization
         $formationJSON = $this->serializer->serialize($formation, 'json', [
             AbstractObjectNormalizer::GROUPS => ['formation_json_versioning'],

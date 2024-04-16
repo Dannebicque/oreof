@@ -50,12 +50,15 @@ class VersioningParcours {
         );
     }
 
-    public function saveVersionOfParcours(Parcours $parcours, DateTimeImmutable $now, bool $withFlush = false){
+    public function saveVersionOfParcours(Parcours $parcours, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu = false){
         $dateHeure = $now->format('d-m-Y_H-i-s');
         // Objet BD Parcours Versioning
         $parcoursVersioning = new ParcoursVersioning();
         $parcoursVersioning->setParcours($parcours);
         $parcoursVersioning->setVersionTimestamp($now);
+        if($isCfvu){
+            $parcoursVersioning->setCvfuFlag(true);
+        }
         // Nom du fichier
         $parcoursFileName = "parcours-{$parcours->getId()}-{$dateHeure}";
         $dtoFileName = "dto-{$parcours->getId()}-{$dateHeure}";
