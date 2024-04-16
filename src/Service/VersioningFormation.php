@@ -145,6 +145,32 @@ class VersioningFormation {
                     $differOptions,
                     $rendererOptions
                 )),
+                "coResponsableDeFormation" => html_entity_decode(DiffHelper::calculate(
+                    // Version
+                    $lastVersion->getCoResponsable() ? 
+                    ($lastVersion->getCoResponsable()->getNom()
+                     . " " . 
+                     $lastVersion->getCoResponsable()->getPrenom()
+                    )  : "",
+                    // Actuel
+                    $formation->getCoResponsable() ? 
+                    ($formation->getCoResponsable()->getNom()
+                     . " " . 
+                     $formation->getCoResponsable()->getPrenom()
+                    ) : "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                "emailCoResponsable" => html_entity_decode(DiffHelper::calculate(
+                    // Version
+                    $lastVersion->getCoResponsable()?->getEmail() ?? "",
+                    // Actuel
+                    $formation->getCoResponsable()?->getEmail() ?? "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
                 "localisationMention" => html_entity_decode(DiffHelper::calculate(
                     // Version
                     $localisationVersion,

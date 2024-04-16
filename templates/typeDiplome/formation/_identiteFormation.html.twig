@@ -49,8 +49,20 @@
             {% if formation.coResponsable != null %}
                 <dt>Co-Responsable de la formation</dt>
                 <dd>{{ formation.coResponsable != null ? formation.coResponsable.display : 'erreur' }}</dd>
+                {% if stringDifferencesFormation.coResponsableDeFormation is defined %}
+                    {{ include('communs/_comparaison_formation_versioning.html.twig', 
+                            {stringData: stringDifferencesFormation.coResponsableDeFormation}
+                        ) 
+                    }}
+                {% endif %}
                 <dt>Email</dt>
                 <dd>{{ formation.coResponsable != null ? formation.coResponsable.email : 'erreur' }}</dd>
+                {% if stringDifferencesFormation.emailCoResponsable is defined %}
+                    {{ include('communs/_comparaison_formation_versioning.html.twig', 
+                            {stringData: stringDifferencesFormation.emailCoResponsable}
+                        ) 
+                    }}
+                {% endif %}
             {% endif %}
         </dl>
     </div>
