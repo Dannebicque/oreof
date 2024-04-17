@@ -61,7 +61,7 @@ class GetFormations
                 }
 
                 if ($centre->getFormation() !== null && (
-                    in_array('ROLE_FORMATION_LECTEUR', $centre->getDroits())
+                    in_array('ROLE_FORMATION_LECTEUR', $centre->getDroits()) || in_array('ROLE_GEST_FORM', $centre->getDroits() )
                 )) {
                     $formations[] = [$centre->getFormation()];
                 }
