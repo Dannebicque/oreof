@@ -144,10 +144,9 @@ class GlobalVoter extends Voter
 
     private function canAccessFormation(Formation $subject, mixed $centre): bool
     {
-        $canEdit = false;
-        if ($subject->getResponsableMention() === $this->user || $subject->getCoResponsable() === $this->user) {
-            $canEdit = $this->dpeWorkflow->can($subject, 'autoriser') || $this->dpeWorkflow->can($subject, 'valide_rf');
-        }
+
+        $canEdit = $this->dpeWorkflow->can($subject, 'autoriser') || $this->dpeWorkflow->can($subject, 'valide_rf');
+
 
         if (
             $subject->getComposantePorteuse() === $centre->getComposante()
