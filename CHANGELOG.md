@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.55](https://github.com/Dannebicque/oreof/compare/v1.24.54...v1.24.55) (2024-04-17)
+
+
+### Bug Fixes
+
+* accès gestionnaires ([a6821ec](https://github.com/Dannebicque/oreof/commit/a6821ec591fcb21ac3a3b843513fdd31b69905ec))
+* affichage comparaison avec n-1 ([8f9d492](https://github.com/Dannebicque/oreof/commit/8f9d4929e18860bc691fba35ddcb93a3c6bd28d1))
+* aucun libellé sur les ELP ([6d283c6](https://github.com/Dannebicque/oreof/commit/6d283c69ec9a11a84b28e1d6cd9c50c9608fc4eb))
+* block html retiré ([204decb](https://github.com/Dannebicque/oreof/commit/204decb2a3f419673d29fdc587def915337b7ec1))
+* code apogée EC pour les exports ([5b4e1ff](https://github.com/Dannebicque/oreof/commit/5b4e1ffed82b4b28101cadafdfeb9118f5009308))
+* code composante & libellés UE ([a0731cd](https://github.com/Dannebicque/oreof/commit/a0731cdff1786eefd272fa601ec7a7ea989cc0c8))
+* commande versioning global (dpe) ([c77e756](https://github.com/Dannebicque/oreof/commit/c77e756da9052e9fadad326d02e819c75bde5cbe))
+* comparaison de texte ([f97e3e6](https://github.com/Dannebicque/oreof/commit/f97e3e6bfb7a24c1735cae967d05c9e8175efab5))
+* EC à choix libre (natureUeEc NULL) ([f419f3a](https://github.com/Dannebicque/oreof/commit/f419f3a5dd9afe0d8e877a2f39c2127090e26e21))
+* ects export excel ([dbae256](https://github.com/Dannebicque/oreof/commit/dbae2563bde796e2168654f0691b0b9c62285d7b))
+* front end spinner ([6a3507e](https://github.com/Dannebicque/oreof/commit/6a3507e3d8ffa73d0f78a3db270cd15d23ef2600))
+* libellé semestre ELP ([f028b24](https://github.com/Dannebicque/oreof/commit/f028b24e3c9da4e79dbbd34f2f9c948faf5f0411))
+* libellés LSE ([c5edda9](https://github.com/Dannebicque/oreof/commit/c5edda9f8b5e2222cbf45eff2b259ad265ff1545))
+* libellés UE & Semestres ([66e7412](https://github.com/Dannebicque/oreof/commit/66e741299b282e1da81d83a767ed77157ff39b13))
+* LSE ([b047122](https://github.com/Dannebicque/oreof/commit/b0471221ea4177300e2d6b41815b04f742af20e0))
+* nature des ELP ([47f260c](https://github.com/Dannebicque/oreof/commit/47f260c312aeb99f55f9e7b50f0efd641417b0d6))
+* nature des ELP ([2b810f8](https://github.com/Dannebicque/oreof/commit/2b810f8fcbc0be038ee41dc5591b14b440795cde))
+* nature des ELP avec Oréof ([d2e73bd](https://github.com/Dannebicque/oreof/commit/d2e73bd4ea03331a9a37bf9dc94f7a5f38c90a28))
+* ordre des semestres ELP ([706c8a4](https://github.com/Dannebicque/oreof/commit/706c8a405424fa4f4d68f76607172538ea2049a5))
+* parcours display long sur fiche matière ([87b2695](https://github.com/Dannebicque/oreof/commit/87b26955153fed3331d93e57e0b368c3e67b9a46))
+* rapport codes invalides manquants ([7f23315](https://github.com/Dannebicque/oreof/commit/7f23315b45c8ef64fa7be223d779ae1838d08273))
+* récupération code apogée ([a018560](https://github.com/Dannebicque/oreof/commit/a018560e73448bf85e97135bc3d93bf7fb88acf4))
+* requête version n-1 ([34e9778](https://github.com/Dannebicque/oreof/commit/34e9778b458bd51d45c2838f40a0f8ac3f36d544))
+* vérification doublons ([8eb6f70](https://github.com/Dannebicque/oreof/commit/8eb6f70b6c4f5d564520fe2baeb7f80acc99e530))
+* visualisation d'une version ([8060faa](https://github.com/Dannebicque/oreof/commit/8060faa42e0c771497f00f8e239796a0dad906f2))
+* visualisation de l'évolution de la version ([12b2566](https://github.com/Dannebicque/oreof/commit/12b25664eac3bb4dda2870abb973b53d8456729e))
+* visualisation des changements - versioning ([255629c](https://github.com/Dannebicque/oreof/commit/255629c9c490cdb4bee2606b7ec444758bb68341))
+
 ### [1.24.54](https://github.com/Dannebicque/oreof/compare/v1.24.53...v1.24.54) (2024-04-11)
 
 
