@@ -52,8 +52,8 @@ class ExportElpApogeeCommand extends Command
 {
 
     // Données extraites d'APOTEST
-    private static $codElpApogeeDataTest = "COD_ELP_APOTEST-18-04-2024-09-28.json";
-    private static $codLseApogeeDataTest = "COD_LSE_APOTEST-18-04-2024-09-30.json";
+    private static $codElpApogeeDataTest = "COD_ELP_APOGEE-PRODUCTION-18-04-2024-10-42.json";
+    private static $codLseApogeeDataTest = "COD_LSE_APOGEE-PRODUCTION-18-04-2024-10-44.json";
     // Données exportées depuis ORéOF
     private static $fullLseExportDataTest = "OREOF-COD_LSE_TEST-16-04-2024_15-31-27.json";
     private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-18-04-2024_09-39-21.json";
@@ -331,7 +331,7 @@ class ExportElpApogeeCommand extends Command
                             foreach($parcoursArray as $parcours){
                                 $soapObjectArray = $this->generateSoapObjectsForParcours($parcours);
                                 $soapObjectArray = $this->filterInvalidElpArray($soapObjectArray);
-                                // $soapObjectArray = $this->filterAlreadyInsertedElpArray($soapObjectArray);
+                                $soapObjectArray = $this->filterAlreadyInsertedElpArray($soapObjectArray);
                                 $this->insertSeveralElp($soapObjectArray);
                                 $nbElpInsere += count($soapObjectArray);
                                 $io->progressAdvance();
@@ -608,6 +608,7 @@ class ExportElpApogeeCommand extends Command
             if($fullLseInsertion){
                 $io->writeln("Utilisation du Web Service APOTEST");
                 if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer les LSE de TOUS LES PARCOURS ?")){
+                    $nbLseInsere = 0;
                     $parcoursArray = $this->retrieveParcoursDataFromDatabase();
                     $nbParcours = count($parcoursArray);
                     // LSE déjà traité
@@ -627,8 +628,10 @@ class ExportElpApogeeCommand extends Command
                             $lseArray = $this->getLseObjectArrayForParcours($dto, $elpApogeeData, $lseCreated);
                             $this->insertSeveralLSE($lseArray);
                             $io->progressAdvance();
+                            $nbLseInsere += count($lseArray);
                         }
                         $io->writeln("\nInsertion réussie !");
+                        $io->writeln("{$nbLseInsere} LSE Insérés.");
                         return Command::SUCCESS;
                     }
                     else {
@@ -937,8 +940,9 @@ class ExportElpApogeeCommand extends Command
                     $nbParcours = count($parcoursArray);
                     if($this->verifyUserIntent($io, "Il y a {$nbParcours} parcours disponibles. Continuer ?")){
                         try{
+                            $nbElpInsere = 0;
                             $io->writeln('Initialisation du Web Service...');
-                            // $this->createSoapClientProduction();
+                            $this->createSoapClientProduction();
                             $io->writeln('Insertion des données en cours...');
                             $io->progressStart($nbParcours);
                             foreach($parcoursArray as $parcours){
@@ -947,8 +951,10 @@ class ExportElpApogeeCommand extends Command
                                 $soapObjectArray = $this->filterAlreadyInsertedElpArray($soapObjectArray);
                                 $this->insertSeveralElp($soapObjectArray);
                                 $io->progressAdvance();
+                                $nbElpInsere += count($soapObjectArray);
                             }
                             $io->writeln("\nInsertion réussie !");
+                            $io->writeln("{$nbElpInsere} ELP insérés.");
                             return Command::SUCCESS;
                         }catch(\Exception $e){
                             $io->writeln("\nUne erreur est survenue durant l'insertion.");
@@ -968,10 +974,11 @@ class ExportElpApogeeCommand extends Command
             }
             // Insère tous les LSE disponibles dans APOTEST
             if($fullLseInsertion){
-                $io->writeln("Utilisation du Web Service APOGEE");
+                $io->writeln("Utilisation du Web Service APOGEE - PRODUCTION");
                 if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer les LSE de TOUS LES PARCOURS ?")){
                     $parcoursArray = $this->retrieveParcoursDataFromDatabase();
                     $nbParcours = count($parcoursArray);
+                    $nbLseInsere = 0;
                     // LSE déjà traité
                     $lseCreated = [];
                     // ELP présents dans Apogée
@@ -982,15 +989,17 @@ class ExportElpApogeeCommand extends Command
                     );
                     if($this->verifyUserIntent($io, "Il y a {$nbParcours} parcours à traiter. Continuer ?")){
                         $io->writeln("Initialisation du Web Service...");
-                        $this->createSoapClientProduction();
+                        // $this->createSoapClientProduction();
                         $io->progressStart($nbParcours);
                         foreach($parcoursArray as $parcours){
                             $dto = $this->getDTOForParcours($parcours);
                             $lseArray = $this->getLseObjectArrayForParcours($dto, $elpApogeeData, $lseCreated);
                             $this->insertSeveralLSE($lseArray);
                             $io->progressAdvance();
+                            $nbLseInsere += count($lseArray);
                         }
                         $io->writeln("\nInsertion réussie !");
+                        $io->writeln("{$nbLseInsere} LSE insérés.");
                         return Command::SUCCESS;
                     }
                     else {
@@ -1763,6 +1772,17 @@ class ExportElpApogeeCommand extends Command
                 if(in_array($lse->codListeElp, $lseInApogee, true)){
                     $result = false;
                 } 
+                // Si les ELP de la liste ont des codes en double
+                $countElpDuplicates = array_count_values(
+                    array_map(
+                        fn($elp) => $elp->codElp, 
+                        $lse->listElementPedagogi->elementPedagogi)
+                    );
+                foreach($countElpDuplicates as $count){
+                    if($count > 1){
+                        $result = false;
+                    }
+                }
                 return $result;
             }
         );
