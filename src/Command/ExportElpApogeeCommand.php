@@ -52,17 +52,17 @@ class ExportElpApogeeCommand extends Command
 {
 
     // Données extraites d'APOTEST
-    private static $codElpApogeeDataTest = "COD_ELP_APOGEE-PRODUCTION-APRES-INSERTION-18-04-2024-11-45.json";
-    private static $codLseApogeeDataTest = "COD_LSE_APOGEE-PRODUCTION-18-04-2024-10-44.json";
+    private static $codElpApogeeDataTest = "COD_ELP_APOGEE-PRODUCTION-APRES-MATIERE-MANQUANTE-19-04-2024-14_35.json";
+    private static $codLseApogeeDataTest = "COD_LSE_APOGEE-PRODUCTION-19-04-2024-14_03.json";
     // Données exportées depuis ORéOF
     private static $fullLseExportDataTest = "OREOF-COD_LSE_TEST-16-04-2024_15-31-27.json";
-    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-EXCLUDED-18-04-2024_11-35-58.json";
+    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-EXCLUDED-19-04-2024_13-57-55.json";
     // Fichier contenant les formations à exclure
-    private static $formationToExcludeFile = "liste-formations-a-INCLURE-16-04-2024.txt";
+    private static $formationToExcludeFile = "liste-formation-a-exclure-MATIERES-MANQUANTES-19-04-2024-09h20.txt";
     private static $formationToExcludeJSON = "Formations-a-inclure-DEUXIEME-DEVERSEMENT-PROD-16-04-2024_14-21-52.json";
     // Vérifications entre deux fichiers JSON
-    private static $oldJsonFile = "OLD-COD_ELP-ALL_PARCOURS-filtered-15-04-2024_10-21-48.json";
-    private static $newJsonFile = "NEW-COD_ELP-ALL_PARCOURS-filtered-15-04-2024_10-20-49.json";
+    private static $oldJsonFile = "COD_ELP_APOGEE-PRODUCTION-18-04-2024-10-42.json";
+    private static $newJsonFile = "COD_ELP_APOGEE-PRODUCTION-APRES-INSERTION-18-04-2024-11-45.json";
 
     private EntityManagerInterface $entityManager;
     private ElementConstitutifRepository $elementConstitutifRepository;
@@ -942,7 +942,7 @@ class ExportElpApogeeCommand extends Command
                         try{
                             $nbElpInsere = 0;
                             $io->writeln('Initialisation du Web Service...');
-                            $this->createSoapClientProduction();
+                            // $this->createSoapClientProduction();
                             $io->writeln('Insertion des données en cours...');
                             $io->progressStart($nbParcours);
                             foreach($parcoursArray as $parcours){
@@ -989,7 +989,7 @@ class ExportElpApogeeCommand extends Command
                     );
                     if($this->verifyUserIntent($io, "Il y a {$nbParcours} parcours à traiter. Continuer ?")){
                         $io->writeln("Initialisation du Web Service...");
-                        $this->createSoapClientProduction();
+                        // $this->createSoapClientProduction();
                         $io->progressStart($nbParcours);
                         foreach($parcoursArray as $parcours){
                             $dto = $this->getDTOForParcours($parcours);
