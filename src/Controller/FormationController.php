@@ -415,7 +415,8 @@ class FormationController extends BaseController
             'typeD' => $typeD,
             'cssDiff' => $cssDiff,
             'stringDifferencesParcours' => $textDifferencesParcours ?? [],
-            'stringDifferencesFormation' => $formationStringDifferences ?? []
+            'stringDifferencesFormation' => $formationStringDifferences ?? [],
+            'versioningParcours' => $versioningParcours
         ]);
     }
 
