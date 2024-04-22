@@ -197,7 +197,7 @@
                             {{ include('typeDiplome/formation/_presentationParcours.html.twig', 
                                     {   
                                         parcours:parcours,
-                                        stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours)
+                                        stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
                                     }
                                 ) 
                             }}
