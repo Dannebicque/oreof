@@ -5,68 +5,35 @@
             <dd>
                 {{ parcours.contenuFormation|printTexte }}
             </dd>
-            {% if is_granted('ROLE_ADMIN') and stringDifferencesParcours is defined 
-               and stringDifferencesParcours.presentationParcoursContenuFormation is defined 
-            %}
-                {% if stringDifferencesParcours.presentationParcoursContenuFormation|length > 0 %}
-                <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
-                    <button class="btn btn-primary btn-sm my-3"
-                        data-bs-toggle="collapse" data-bs-target="#diffParcoursContenuFormation"
-                    >
-                        Voir les différences
-                    </button>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-md-10 col-lg-8 collapse mb-3" id="diffParcoursContenuFormation">
-                        {{ stringDifferencesParcours.presentationParcoursContenuFormation|raw  }} 
-                    </div>
-                </div>
-                {% endif %}
-            {% endif %}
+            {{ include('communs/_comparaison_parcours_versioning.html.twig', 
+                    {
+                        textDifferences: stringDifferencesParcours.presentationParcoursContenuFormation,
+                        idCollapse: "diffParcoursContenuFormation"
+                    }
+                ) 
+            }}
             <dt>Objectifs du parcours</dt>
             <dd>
                 {{ parcours.objectifsParcours|printTexte }}
             </dd>
-            {% if is_granted('ROLE_ADMIN') and stringDifferencesParcours is defined 
-               and stringDifferencesParcours.presentationParcoursObjectifsParcours is defined 
-            %}
-                {% if stringDifferencesParcours.presentationParcoursObjectifsParcours|length > 0 %}
-                <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
-                    <button class="btn btn-primary btn-sm mt-3 mb-3"
-                        data-bs-toggle="collapse" data-bs-target="#diffParcoursObjectifsParcours"
-                    >
-                        Voir les différences
-                    </button>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-md-10 col-lg-8 collapse mb-3" id="diffParcoursObjectifsParcours">
-                        {{ stringDifferencesParcours.presentationParcoursObjectifsParcours|raw  }} 
-                    </div>
-                </div>
-                {% endif %}
-            {% endif %}
+            {{ include('communs/_comparaison_parcours_versioning.html.twig', 
+                    {
+                        textDifferences: stringDifferencesParcours.presentationParcoursObjectifsParcours,
+                        idCollapse: "diffParcoursObjectifs"
+                    }
+                ) 
+            }}
             <dt>Résultats attendus du parcours</dt>
             <dd>
                 {{ parcours.resultatsAttendus|printTexte }}
-            </dd>
-            {% if is_granted('ROLE_ADMIN') and stringDifferencesParcours is defined 
-               and stringDifferencesParcours.presentationParcoursResultatsAttendus is defined 
-            %}
-                {% if stringDifferencesParcours.presentationParcoursResultatsAttendus|length > 0 %}
-                <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
-                    <button class="btn btn-primary btn-sm mt-3 mb-3"
-                        data-bs-toggle="collapse" data-bs-target="#diffParcoursResultatsAttendus"
-                    >
-                        Voir les différences
-                    </button>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-md-10 col-lg-8 collapse mb-3" id="diffParcoursResultatsAttendus">
-                        {{ stringDifferencesParcours.presentationParcoursResultatsAttendus|raw  }} 
-                    </div>
-                </div>
-                {% endif %}  
-            {% endif %}
+            </dd>            
+            {{ include('communs/_comparaison_parcours_versioning.html.twig', 
+                    {
+                        textDifferences: stringDifferencesParcours.presentationParcoursResultatsAttendus,
+                        idCollapse: "diffParcoursResultatsAttendus"
+                    }
+                ) 
+            }}
             <dt>Rythme de formation</dt>
             <dd>
                 {{ parcours.rythmeFormation != null ? parcours.rythmeFormation.libelle : 'Non précisé' }}
