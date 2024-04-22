@@ -189,7 +189,16 @@ class VersioningParcours {
                     $rendererName,
                     $differOptions,
                     $rendererOptions
-                ))
+                )),
+                "emailParcoursResponsableParcours" => html_entity_decode(DiffHelper::calculate(
+                    // Version
+                    $lastVersion->getRespParcours()?->getEmail() ?? "",
+                    // Actuel
+                    $parcours->getRespParcours()?->getEmail() ?? "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
                 
             ];
         }
