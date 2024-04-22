@@ -5,6 +5,7 @@
             <dd>
                 {{ parcours.contenuFormation|printTexte }}
             </dd>
+            {% if stringDifferencesParcours.presentationParcoursContenuFormation is defined %}
             {{ include('communs/_comparaison_parcours_versioning.html.twig', 
                     {
                         textDifferences: stringDifferencesParcours.presentationParcoursContenuFormation,
@@ -12,10 +13,12 @@
                     }
                 ) 
             }}
+            {% endif %}
             <dt>Objectifs du parcours</dt>
             <dd>
                 {{ parcours.objectifsParcours|printTexte }}
             </dd>
+            {% if stringDifferencesParcours.presentationParcoursObjectifsParcours is defined %}
             {{ include('communs/_comparaison_parcours_versioning.html.twig', 
                     {
                         textDifferences: stringDifferencesParcours.presentationParcoursObjectifsParcours,
@@ -23,10 +26,12 @@
                     }
                 ) 
             }}
+            {% endif %}
             <dt>Résultats attendus du parcours</dt>
             <dd>
                 {{ parcours.resultatsAttendus|printTexte }}
             </dd>            
+            {% if stringDifferencesParcours.presentationParcoursResultatsAttendus is defined %}
             {{ include('communs/_comparaison_parcours_versioning.html.twig', 
                     {
                         textDifferences: stringDifferencesParcours.presentationParcoursResultatsAttendus,
@@ -34,6 +39,7 @@
                     }
                 ) 
             }}
+            {% endif %}
             <dt>Rythme de formation</dt>
             <dd>
                 {{ parcours.rythmeFormation != null ? parcours.rythmeFormation.libelle : 'Non précisé' }}
