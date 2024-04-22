@@ -31,8 +31,26 @@
             {% if parcours.coResponsable != null %}
                 <dt>Co-responsable du parcours</dt>
                 <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.display : 'Non concerné' }}</dd>
+                {% if stringDifferencesParcours.contactsParcoursCoResponsableDuParcours is defined %}
+                    {{ include('communs/_comparaison_formation_versioning.html.twig', 
+                            {
+                                stringData: stringDifferencesParcours.contactsParcoursCoResponsableDuParcours,
+                                idCollapse: "diffParcoursCoResponsableDuParcours" ~ parcours.id
+                            }
+                        ) 
+                    }}
+                {% endif %}
                 <dt>Email</dt>
                 <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.email : 'Non concerné' }}</dd>
+                {% if stringDifferencesParcours.emailParcoursCoResponsableDuParcours is defined %}
+                    {{ include('communs/_comparaison_formation_versioning.html.twig', 
+                            {
+                                stringData: stringDifferencesParcours.emailParcoursCoResponsableDuParcours,
+                                idCollapse: "diffParcoursEmailCoResponsableDuParcours" ~ parcours.id
+                            }
+                        ) 
+                    }}
+                {% endif %}
             {% endif %}
         {% endif %}
         <dt>Coordonnées secrétariat</dt>

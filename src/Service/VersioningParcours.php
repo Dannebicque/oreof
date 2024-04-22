@@ -199,7 +199,32 @@ class VersioningParcours {
                     $differOptions,
                     $rendererOptions
                 )),
-                
+                'contactsParcoursCoResponsableDuParcours' => html_entity_decode(DiffHelper::calculate(
+                    // Version
+                    $lastVersion->getCoResponsable() ? 
+                    ($lastVersion->getCoResponsable()->getNom()
+                     . " " . 
+                     $lastVersion->getCoResponsable()->getPrenom()
+                    )  : "",
+                    // Actuel
+                    $parcours->getCoResponsable() ? 
+                    ($parcours->getCoResponsable()->getNom()
+                     . " " . 
+                     $parcours->getCoResponsable()->getPrenom()
+                    ) : "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                "emailParcoursCoResponsableDuParcours" => html_entity_decode(DiffHelper::calculate(
+                    // Version
+                    $lastVersion->getCoResponsable()?->getEmail() ?? "",
+                    // Actuel
+                    $parcours->getCoResponsable()?->getEmail() ?? "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
             ];
         }
 
