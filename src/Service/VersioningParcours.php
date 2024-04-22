@@ -173,6 +173,24 @@ class VersioningParcours {
                         $rendererOptions
                     ))
                 ),
+                'contactsParcoursResponsableParcours' => html_entity_decode(DiffHelper::calculate(
+                    // Version
+                    $lastVersion->getRespParcours() ? 
+                    ($lastVersion->getRespParcours()->getNom()
+                     . " " . 
+                     $lastVersion->getRespParcours()->getPrenom()
+                    )  : "",
+                    // Actuel
+                    $parcours->getRespParcours() ? 
+                    ($parcours->getRespParcours()->getNom()
+                     . " " . 
+                     $parcours->getRespParcours()->getPrenom()
+                    ) : "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                ))
+                
             ];
         }
 

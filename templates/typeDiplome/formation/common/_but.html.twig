@@ -299,7 +299,13 @@
                                 type: 'parcours',
                                 zone: 'contacts_'~ parcours.id,
                             }) }}
-                            {{ include('typeDiplome/formation/_contacts.html.twig', {parcours:parcours}) }}
+                            {{ include('typeDiplome/formation/_contacts.html.twig', 
+                                    {
+                                        parcours:parcours,
+                                        stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
+                                    }    
+                                ) 
+                            }}
                         </div>
                     </div>
                 </section>

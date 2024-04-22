@@ -8,6 +8,15 @@
         {% else %}
             <dt>Responsable du parcours</dt>
             <dd>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non concerné' }}</dd>
+            {% if stringDifferencesParcours.contactsParcoursResponsableParcours is defined %}
+                {{ include('communs/_comparaison_formation_versioning.html.twig', 
+                        {
+                            stringData: stringDifferencesParcours.contactsParcoursResponsableParcours,
+                            idCollapse: "diffParcoursResponsableParcours" ~ parcours.id
+                        }
+                    ) 
+                }}
+            {% endif %}
             <dt>Email</dt>
             <dd>{{ parcours.respParcours != null ? parcours.respParcours.email : 'Non concerné' }}</dd>
             {% if parcours.coResponsable != null %}
