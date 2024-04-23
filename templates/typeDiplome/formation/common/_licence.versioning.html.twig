@@ -159,7 +159,7 @@
         </section>
 
     {% else %}
-        {# <section class="scroll-section" id="presentation">
+        <section class="scroll-section" id="presentation">
             <h3 class="small-title">Présentation</h3>
             <div class="card mb-5">
                 <div class="card-body">
@@ -174,7 +174,7 @@
                     {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours:true}) }}
                 </div>
             </div>
-        </section> #}
+        </section>
         {% for p in parcoursVersionArray %}
             {% set parcours = p.parcours %}
             {% set dto = p.dto %}
