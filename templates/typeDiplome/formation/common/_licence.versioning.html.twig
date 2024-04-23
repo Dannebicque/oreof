@@ -3,7 +3,7 @@
         <h3 class="small-title">Identité de la formation </h3>
         <div class="card mb-5">
             <div class="card-body">
-                {% if (print is not defined or print == false) %}
+                {% if (print is not defined or print == false) and isVersioningView is not defined %}
                 {{ component('commentaire', {
                     commentaires: formation.commentaires,
                     id: formation.id,
@@ -20,7 +20,7 @@
         <h3 class="small-title">Localisation</h3>
         <div class="card mb-5">
             <div class="card-body">
-                {% if (print is not defined or print == false) %}
+                {% if (print is not defined or print == false) and isVersioningView is not defined %}
                 {{ component('commentaire', {
                     commentaires: formation.commentaires,
                     id: formation.id,
@@ -39,7 +39,7 @@
             <h3 class="small-title">Présentation</h3>
             <div class="card mb-5">
                 <div class="card-body">
-                    {% if (print is not defined or print == false) %}
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
@@ -57,7 +57,7 @@
             <h3 class="small-title">Descriptif</h3>
             <div class="card mb-5">
                 <div class="card-body">
-                    {% if (print is not defined or print == false) %}
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
@@ -74,7 +74,7 @@
             <h3 class="small-title">Compétences acquises</h3>
             <div class="card mb-5">
                 <div class="card-body">
-                    {% if (print is not defined or print == false) %}
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
@@ -91,7 +91,7 @@
             <h3 class="small-title">Structure</h3>
             <div class="card mb-5">
                 <div class="card-body">
-                    {% if (print is not defined or print == false) %}
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
@@ -108,7 +108,7 @@
             <h3 class="small-title">Admission</h3>
             <div class="card mb-5">
                 <div class="card-body">
-                    {% if (print is not defined or print == false) %}
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
@@ -126,7 +126,7 @@
             <h3 class="small-title">Et après ?</h3>
             <div class="card mb-5">
                 <div class="card-body">
-                    {% if (print is not defined or print == false) %}
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
@@ -144,7 +144,7 @@
             <h3 class="small-title">Contacts pédagogiques</h3>
             <div class="card mb-5">
                 <div class="card-body">
-                    {% if (print is not defined or print == false) %}
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
@@ -159,11 +159,11 @@
         </section>
 
     {% else %}
-        <section class="scroll-section" id="presentation">
+        {# <section class="scroll-section" id="presentation">
             <h3 class="small-title">Présentation</h3>
             <div class="card mb-5">
                 <div class="card-body">
-                    {% if (print is not defined or print == false) %}
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
@@ -174,19 +174,20 @@
                     {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours:true}) }}
                 </div>
             </div>
-        </section>
-        {% for parcours in formation.parcours|filter(parcours => tParcours[parcours.id] is defined) %}
-            {% set dto = tParcours[parcours.id] %}
+        </section> #}
+        {% for p in parcoursVersionArray %}
+            {% set parcours = p.parcours %}
+            {% set dto = p.dto %}
             <div>
                 <h2>Parcours {{ parcours.libelle }}</h2>
             </div>
 
             <div class="border-left-parcours border-left-parcours-{{ loop.index }} ">
-                <section class="scroll-section" id="presentation_{{ parcours.id }}">
+                <section class="scroll-section" id="presentation_{{ loop.index }}">
                     <h3 class="small-title">Présentation</h3>
                     <div class="card mb-5">
                         <div class="card-body">
-                            {% if (print is not defined or print == false) %}
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
@@ -206,11 +207,11 @@
                     </div>
                 </section>
 
-                <section class="scroll-section" id="descriptif_{{ parcours.id }}">
+                <section class="scroll-section" id="descriptif_{{ loop.index }}">
                     <h3 class="small-title">Descriptif de la formation</h3>
                     <div class="card mb-5">
                         <div class="card-body">
-                            {% if (print is not defined or print == false) %}
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
@@ -223,11 +224,11 @@
                     </div>
                 </section>
 
-                <section class="scroll-section" id="localisation_{{ parcours.id }}">
+                <section class="scroll-section" id="localisation_{{ loop.index }}">
                     <h3 class="small-title">Localisation</h3>
                     <div class="card mb-5">
                         <div class="card-body">
-                            {% if (print is not defined or print == false) %}
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
@@ -241,11 +242,11 @@
                     </div>
                 </section>
 
-                <section class="scroll-section" id="competences_{{ parcours.id }}">
+                <section class="scroll-section" id="competences_{{ loop.index }}">
                     <h3 class="small-title">Compétences Acquises</h3>
                     <div class="card mb-5">
                         <div class="card-body">
-                            {% if (print is not defined or print == false) %}
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
@@ -253,17 +254,17 @@
                                 zone: 'competences_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_competences.html.twig', {parcours:parcours}) }}
+                            {{ include('typeDiplome/formation/_competences.versioning.html.twig', {parcours:parcours}) }}
 
                         </div>
                     </div>
                 </section>
 
-                <section class="scroll-section" id="structure_{{ parcours.id }}">
+                <section class="scroll-section" id="structure_{{ loop.index }}">
                     <h3 class="small-title">Structure</h3>
                     <div class="card mb-5">
                         <div class="card-body">
-                            {% if (print is not defined or print == false) %}
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
@@ -271,16 +272,16 @@
                                 zone: 'structure_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_structure.html.twig', {parcours:parcours, dto:dto}) }}
+                            {{ include('typeDiplome/formation/_structure.versioning.html.twig', {parcours:parcours, dto:dto}) }}
                         </div>
                     </div>
                 </section>
 
-                <section class="scroll-section" id="admission_{{ parcours.id }}">
+                <section class="scroll-section" id="admission_{{ loop.index }}">
                     <h3 class="small-title">Admission</h3>
                     <div class="card mb-5">
                         <div class="card-body">
-                            {% if (print is not defined or print == false) %}
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
@@ -293,11 +294,11 @@
                     </div>
                 </section>
 
-                <section class="scroll-section" id="inscription_{{ parcours.id }}">
+                <section class="scroll-section" id="inscription_{{ loop.index }}">
                     <h3 class="small-title">Inscription</h3>
                     <div class="card mb-5">
                         <div class="card-body">
-                            {% if (print is not defined or print == false) %}
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
@@ -310,11 +311,11 @@
                     </div>
                 </section>
 
-                <section class="scroll-section" id="et_apres_{{ parcours.id }}">
+                <section class="scroll-section" id="et_apres_{{ loop.index }}">
                     <h3 class="small-title"> Et après...</h3>
                     <div class="card mb-5">
                         <div class="card-body">
-                            {% if (print is not defined or print == false) %}
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
@@ -327,11 +328,11 @@
                     </div>
                 </section>
 
-                <section class="scroll-section" id="contacts_{{ parcours.id }}">
+                <section class="scroll-section" id="contacts_{{ loop.index }}">
                     <h3 class="small-title">Contacts pédagogiques</h3>
                     <div class="card mb-5">
                         <div class="card-body">
-                            {% if (print is not defined or print == false) %}
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,

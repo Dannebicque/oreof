@@ -575,7 +575,8 @@ class FormationController extends BaseController
         try{
             $formation = $versionFormationService->loadFormationFromVersion($versionFormation);
             $typeD = $typeDiplomeRegistry->getTypeDiplome($versionFormation->getFormation()->getTypeDiplome()->getModeleMcc());
-            
+            $dateHeureVersion = $versionFormation->getVersionTimestamp()->format('d/m/Y à H:i');
+
             $parcoursVersionArray = [];
             foreach($versionFormation->getFormation()->getParcours() as $p){
                 $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($p);
@@ -591,9 +592,11 @@ class FormationController extends BaseController
 
             return $this->render('formation/show.versioning.html.twig', [
                 'typeD' => $typeD,
+                'typeDiplome' => $versionFormation->getFormation()->getTypeDiplome(),
                 'formation' => $formation,
                 'isVersioningView' => true,
-                'parcoursVersionArray' => $parcoursVersionArray
+                'parcoursVersionArray' => $parcoursVersionArray,
+                'dateHeureVersion' => $dateHeureVersion
             ]);
 
         }catch(\Exception $e){

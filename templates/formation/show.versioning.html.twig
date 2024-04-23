@@ -85,60 +85,61 @@
                         </a>
                     </li>
                 {% else %}
-                    {% for parcours in formation.parcours %}
+                    {% for p in parcoursVersionArray %}
+                        {% set parcours = p.parcours %}
                         <li>
                             <strong>Parcours {{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</strong>
                         </li>
                         <li class="border-left-parcours border-left-parcours-{{ loop.index }}">
-                            <a class="nav-link p-2" href="#presentation_{{ parcours.id }}">
+                            <a class="nav-link p-2" href="#presentation_{{ loop.index }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Présentation
                             </a>
                         </li>
                         <li class="border-left-parcours border-left-parcours-{{ loop.index }}">
-                            <a class="nav-link p-2" href="#descriptif_{{ parcours.id }}">
+                            <a class="nav-link p-2" href="#descriptif_{{ loop.index }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Descriptif de la formation
                             </a>
                         </li>
                         <li class="border-left-parcours border-left-parcours-{{ loop.index }}">
-                            <a class="nav-link p-2" href="#localisation_{{ parcours.id }}">
+                            <a class="nav-link p-2" href="#localisation_{{ loop.index }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Localisation
                             </a>
                         </li>
                         <li class="border-left-parcours border-left-parcours-{{ loop.index }}">
-                            <a class="nav-link p-2" href="#competences_{{ parcours.id }}">
+                            <a class="nav-link p-2" href="#competences_{{ loop.index }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Compétences Acquises
                             </a>
                         </li>
                         <li class="border-left-parcours border-left-parcours-{{ loop.index }}">
-                            <a class="nav-link p-2" href="#structure_{{ parcours.id }}">
+                            <a class="nav-link p-2" href="#structure_{{ loop.index }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Structure
                             </a>
                         </li>
                         <li class="border-left-parcours border-left-parcours-{{ loop.index }}">
-                            <a class="nav-link p-2" href="#admission_{{ parcours.id }}">
+                            <a class="nav-link p-2" href="#admission_{{ loop.index }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Admission
                             </a>
                         </li>
                         <li class="border-left-parcours border-left-parcours-{{ loop.index }}">
-                            <a class="nav-link p-2" href="#inscription_{{ parcours.id }}">
+                            <a class="nav-link p-2" href="#inscription_{{ loop.index }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Inscription
                             </a>
                         </li>
                         <li class="border-left-parcours border-left-parcours-{{ loop.index }}">
-                            <a class="nav-link p-2" href="#et_apres_{{ parcours.id }}">
+                            <a class="nav-link p-2" href="#et_apres_{{ loop.index }}">
                                 <i class="fal fa-chevron-right"></i>
                                 Et après...
                             </a>
                         </li>
                         <li class="border-left-parcours border-left-parcours-{{ loop.index }}">
-                            <a class="nav-link p-2" href="#contacts_{{ parcours.id }}">
+                            <a class="nav-link p-2" href="#contacts_{{ loop.index }}">
                                 <i class="fal fa-chevron-right text-start"></i>
                                 Contacts pédagogiques
                             </a>
@@ -152,7 +153,7 @@
 {% endblock %}
 
 {% block header %}
-    Détail de la formation : {{ formation.display }}
+    Détail de la formation : {{ formation.display }} - <span class="text-primary">Version du {{ dateHeureVersion }}</span>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -161,7 +162,7 @@
     ]}) }}
 {% endblock %}
 
-{% block bouton_header %}
+{# {% block bouton_header %}
     {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
         {% set parcours = formation.parcours[0] %}
         {{ include('btn/export_mccc.html.twig') }}
@@ -216,4 +217,4 @@
             <span> Modifier le DPE</span>
         </a>
     {% endif %}
-{% endblock %}
+{% endblock %} #}

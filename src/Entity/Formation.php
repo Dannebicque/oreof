@@ -37,7 +37,7 @@ class Formation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups('parcours_json_versioning', 'formation_json_versioning')]
+    #[Groups(['parcours_json_versioning', 'formation_json_versioning'])]
     #[ORM\ManyToOne]
     private ?Domaine $domaine = null;
 
