@@ -9,9 +9,9 @@
             <dt>Responsable du parcours</dt>
             <dd>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non concerné' }}</dd>
             {% if stringDifferencesParcours.contactsParcoursResponsableParcours is defined %}
-                {{ include('communs/_comparaison_versioning_small.html.twig', 
+                {{ include('communs/_comparaison_versioning_big.html.twig', 
                         {
-                            stringData: stringDifferencesParcours.contactsParcoursResponsableParcours,
+                            textDifferences: stringDifferencesParcours.contactsParcoursResponsableParcours,
                             idCollapse: "diffParcoursResponsableParcours" ~ parcours.id
                         }
                     ) 
@@ -20,9 +20,9 @@
             <dt>Email</dt>
             <dd>{{ parcours.respParcours != null ? parcours.respParcours.email : 'Non concerné' }}</dd>
             {% if stringDifferencesParcours.emailParcoursResponsableParcours is defined %}
-                {{ include('communs/_comparaison_versioning_small.html.twig', 
+                {{ include('communs/_comparaison_versioning_big.html.twig', 
                         {
-                            stringData: stringDifferencesParcours.emailParcoursResponsableParcours,
+                            textDifferences: stringDifferencesParcours.emailParcoursResponsableParcours,
                             idCollapse: "diffParcoursEmailResponsableParcours" ~ parcours.id
                         }
                     ) 
@@ -32,9 +32,9 @@
                 <dt>Co-responsable du parcours</dt>
                 <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.display : 'Non concerné' }}</dd>
                 {% if stringDifferencesParcours.contactsParcoursCoResponsableDuParcours is defined %}
-                    {{ include('communs/_comparaison_versioning_small.html.twig', 
+                    {{ include('communs/_comparaison_versioning_big.html.twig', 
                             {
-                                stringData: stringDifferencesParcours.contactsParcoursCoResponsableDuParcours,
+                                textDifferences: stringDifferencesParcours.contactsParcoursCoResponsableDuParcours,
                                 idCollapse: "diffParcoursCoResponsableDuParcours" ~ parcours.id
                             }
                         ) 
@@ -43,9 +43,9 @@
                 <dt>Email</dt>
                 <dd>{{ parcours.coResponsable != null ? parcours.coResponsable.email : 'Non concerné' }}</dd>
                 {% if stringDifferencesParcours.emailParcoursCoResponsableDuParcours is defined %}
-                    {{ include('communs/_comparaison_versioning_small.html.twig', 
+                    {{ include('communs/_comparaison_versioning_big.html.twig', 
                             {
-                                stringData: stringDifferencesParcours.emailParcoursCoResponsableDuParcours,
+                                textDifferences: stringDifferencesParcours.emailParcoursCoResponsableDuParcours,
                                 idCollapse: "diffParcoursEmailCoResponsableDuParcours" ~ parcours.id
                             }
                         ) 

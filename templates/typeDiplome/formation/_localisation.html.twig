@@ -6,9 +6,9 @@
                 {% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}
             </dd>
             {% if stringDifferencesFormation.localisationMention is defined %}
-                {{ include('communs/_comparaison_versioning_small.html.twig', 
+                {{ include('communs/_comparaison_versioning_big.html.twig', 
                         {
-                            stringData: stringDifferencesFormation.localisationMention,
+                            textDifferences: stringDifferencesFormation.localisationMention,
                             idCollapse: "diffLocalisationMention"
                         }
                     ) 

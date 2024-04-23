@@ -9,7 +9,9 @@
     </div>
     <div class="row">
         <div class="col-sm-12 col-md-10 col-lg-8 collapse mb-3" id="{{ idCollapse }}">
-            {{ textDifferences|raw  }} 
+            <div class="d-inline-flex">
+                {{ textDifferences|raw  }} 
+            </div>
         </div>
     </div>
     {% endif %}
