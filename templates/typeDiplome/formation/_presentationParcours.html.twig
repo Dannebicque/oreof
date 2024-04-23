@@ -6,7 +6,7 @@
                 {{ parcours.contenuFormation|printTexte }}
             </dd>
             {% if stringDifferencesParcours.presentationParcoursContenuFormation is defined %}
-            {{ include('communs/_comparaison_parcours_versioning.html.twig', 
+            {{ include('communs/_comparaison_versioning_big.html.twig', 
                     {
                         textDifferences: stringDifferencesParcours.presentationParcoursContenuFormation,
                         idCollapse: "diffParcoursContenuFormation" ~ parcours.id
@@ -19,7 +19,7 @@
                 {{ parcours.objectifsParcours|printTexte }}
             </dd>
             {% if stringDifferencesParcours.presentationParcoursObjectifsParcours is defined %}
-            {{ include('communs/_comparaison_parcours_versioning.html.twig', 
+            {{ include('communs/_comparaison_versioning_big.html.twig', 
                     {
                         textDifferences: stringDifferencesParcours.presentationParcoursObjectifsParcours,
                         idCollapse: "diffParcoursObjectifs" ~ parcours.id
@@ -32,7 +32,7 @@
                 {{ parcours.resultatsAttendus|printTexte }}
             </dd>            
             {% if stringDifferencesParcours.presentationParcoursResultatsAttendus is defined %}
-            {{ include('communs/_comparaison_parcours_versioning.html.twig', 
+            {{ include('communs/_comparaison_versioning_big.html.twig', 
                     {
                         textDifferences: stringDifferencesParcours.presentationParcoursResultatsAttendus,
                         idCollapse: "diffParcoursResultatsAttendus" ~ parcours.id

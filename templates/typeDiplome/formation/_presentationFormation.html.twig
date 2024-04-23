@@ -7,7 +7,7 @@
                 <dd>{{ formation.contenuFormation|raw }}</dd>
                 {% if stringDifferencesFormation.presentationFormationContenuFormation is defined %}
                     {{ 
-                        include('communs/_comparaison_parcours_versioning.html.twig', 
+                        include('communs/_comparaison_versioning_big.html.twig', 
                             {
                                 textDifferences: stringDifferencesFormation.presentationFormationContenuFormation,
                                 idCollapse: "diffContenuFormation"
@@ -19,7 +19,7 @@
                 <dd>{{ formation.resultatsAttendus|raw }}</dd>
                 {% if stringDifferencesFormation.presentationFormationResultatsAttendus is defined %}
                     {{ 
-                        include('communs/_comparaison_parcours_versioning.html.twig', 
+                        include('communs/_comparaison_versioning_big.html.twig', 
                             {
                                 textDifferences: stringDifferencesFormation.presentationFormationResultatsAttendus,
                                 idCollapse: "diffResultatsAttendus"
@@ -46,7 +46,7 @@
             </dd>
             {% if stringDifferencesFormation.presentationFormationObjectifsFormation is defined %}
                     {{ 
-                        include('communs/_comparaison_parcours_versioning.html.twig', 
+                        include('communs/_comparaison_versioning_big.html.twig', 
                             {
                                 textDifferences: stringDifferencesFormation.presentationFormationObjectifsFormation,
                                 idCollapse: "diffObjectifsFormation"
