@@ -25,7 +25,7 @@
         {% if isBut is defined and isBut == true %}
             {{ render(controller(
                 'App\\Controller\\BlocCompetenceController::afficheBUTReferentielVersioning',
-                { 'parcours': parcours }
+                { 'parcours': parcours, 'indexParcours': indexParcours }
             )) }}
         {% else %}
             <ul class="list-unstyled">

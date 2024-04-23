@@ -596,7 +596,8 @@ class FormationController extends BaseController
                 'formation' => $formation,
                 'isVersioningView' => true,
                 'parcoursVersionArray' => $parcoursVersionArray,
-                'dateHeureVersion' => $dateHeureVersion
+                'dateHeureVersion' => $dateHeureVersion,
+                'isBut' => $versionFormation->getFormation()->getTypeDiplome()->getLibelleCourt() === "BUT"
             ]);
 
         }catch(\Exception $e){

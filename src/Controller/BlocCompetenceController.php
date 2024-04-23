@@ -75,7 +75,8 @@ class BlocCompetenceController extends AbstractController
 
     public function afficheBUTReferentielVersioning(
         TypeDiplomeRegistry $typeDiplomeRegistry,
-        Parcours            $parcours
+        Parcours            $parcours,
+        int $indexParcours
     ): Response
     {
         $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($parcours->getFormation()->getTypeDiplome()->getModeleMcc());
@@ -83,6 +84,7 @@ class BlocCompetenceController extends AbstractController
         return $this->render('typeDiplome/but/_refCompetences.versioning.html.twig', [
             'competences' => $parcours->getFormation()->getButCompetences(),
             'parcours' => $parcours,
+            'indexParcours' => $indexParcours ?? ""
         ]);
     }
 
