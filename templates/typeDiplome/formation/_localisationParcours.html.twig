@@ -16,7 +16,7 @@
             {% if stringDifferencesParcours.regimeInscriptionParcours is defined %}
                 {{ include("communs/_comparaison_versioning_big.html.twig", {
                         textDifferences: stringDifferencesParcours.regimeInscriptionParcours,
-                        idCollapse: "diffParcoursRegimeInscription"
+                        idCollapse: "diffParcoursRegimeInscription" ~ parcours.id
                     }) 
                 }}
             {% endif %}

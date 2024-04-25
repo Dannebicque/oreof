@@ -226,8 +226,16 @@ class VersioningParcours {
                     $rendererOptions
                 )),
                 "regimeInscriptionParcours" => html_entity_decode(DiffHelper::calculate(
-                    implode(", ", array_map(fn($regime) => $regime->value, $lastVersion->getRegimeInscription())),
-                    implode(", ", array_map(fn($regime) => $regime->value, $parcours->getRegimeInscription())),
+                    "<p class=\"list-item\">"
+                    . implode("</p><p class=\"list-item\">", 
+                            array_map(fn($regime) => $regime->value, 
+                            $lastVersion->getRegimeInscription())
+                    ) . "</p>",
+                    "<p class=\"list-item\">"
+                    . implode("</p><p class=\"list-item\">", 
+                            array_map(fn($regime) => $regime->value, 
+                            $parcours->getRegimeInscription())
+                    ) . "</p>",
                     $rendererName,
                     $differOptions,
                     $rendererOptions
