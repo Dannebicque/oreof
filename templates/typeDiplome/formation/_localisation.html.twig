@@ -21,9 +21,14 @@
                     <li>{{ regime.value }}</li>
                     {% endfor %}
                 </ul>
-
-
                 {{ formation.regimeInscriptionTexte }}
+                {% if stringDifferencesFormation.regimeInscriptionFormation is defined %}
+                    {{ include("communs/_comparaison_versioning_big.html.twig", {
+                            textDifferences: stringDifferencesFormation.regimeInscriptionFormation,
+                            idCollapse: "diffRegimeInscriptionFormation"
+                        })
+                    }}
+                {% endif %}
             </dd>
             <dt>Modalités de l'alternance</dt>
             <dd>

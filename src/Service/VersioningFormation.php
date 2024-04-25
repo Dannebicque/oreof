@@ -121,6 +121,13 @@ class VersioningFormation {
             ));
 
             $formationTextDifferences = [
+                "regimeInscriptionFormation" => html_entity_decode(DiffHelper::calculate(
+                    implode(", ", array_map(fn($regime) => $regime->value, $lastVersion->getRegimeInscription())),
+                    implode(", ", array_map(fn($regime) => $regime->value, $formation->getRegimeInscription())),
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
                 "responsableDeFormation" => html_entity_decode(DiffHelper::calculate(
                     // Version
                     ($lastVersion->getResponsableMention()->getNom()
