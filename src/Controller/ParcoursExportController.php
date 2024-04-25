@@ -64,7 +64,6 @@ class ParcoursExportController extends AbstractController
 
     #[Route('/parcours/{parcours}/maquette/export-json', name: 'app_parcours_export_maquette_json')]
     public function exportMaquetteJson(
-        TypeEpreuveRepository    $typeEpreuveRepository,
         Parcours                $parcours,
         CalculStructureParcours $calculStructureParcours
     ): Response {
@@ -173,6 +172,10 @@ class ParcoursExportController extends AbstractController
                             'ects' => $ueEnfant->heuresEctsUe->sommeUeEcts,
 
                         ];
+                        if ($ueEnfant->ue->getNatureUeEc()?->isLibre()) {
+                            $tUeEnfant['description_libre_choix'] = $ueEnfant->ue->getDescriptionUeLibre();
+                        }
+
                         $nb++;
                         $tUe['nbChoix'] = $nb;
                         $tUeEnfant['ec'] = $this->getEcFromUe($ueEnfant);
