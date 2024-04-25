@@ -34,7 +34,8 @@
     </section>
 
 
-    {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
+    {% if formation.isHasParcours == false and parcoursVersionArray|length == 1 %}
+        {% set parcours = parcoursVersionArray[0].parcours %}
         <section class="scroll-section" id="presentation">
             <h3 class="small-title">Présentation</h3>
             <div class="card mb-5">
@@ -47,11 +48,12 @@
                         zone: 'presentation',
                     }) }}
                     {% endif %}
-                    {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours:true}) }}
+                    {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours: false, print: false}) }}
                 </div>
             </div>
         </section>
-        {% set dto = tParcours[formation.parcours[0].id] %}
+
+        {% set dto = parcoursVersionArray[0].dto %}
 
         <section class="scroll-section" id="descriptif">
             <h3 class="small-title">Descriptif</h3>
@@ -65,7 +67,7 @@
                         zone: 'descriptif',
                     }) }}
                     {% endif %}
-                    {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours:formation.parcours[0]}) }}
+                    {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours: parcours}) }}
                 </div>
             </div>
         </section>
@@ -82,7 +84,7 @@
                         zone: 'competences',
                     }) }}
                     {% endif %}
-                    {{ include('typeDiplome/formation/_competences.html.twig', {parcours:formation.parcours[0]}) }}
+                    {{ include('typeDiplome/formation/_competences.versioning.html.twig', {parcours: parcours}) }}
                 </div>
             </div>
         </section>
@@ -99,7 +101,7 @@
                         zone: 'structure',
                     }) }}
                     {% endif %}
-                    {{ include('typeDiplome/formation/_structure.html.twig', {parcours:formation.parcours[0], dto: dto}) }}
+                    {{ include('typeDiplome/formation/_structure.versioning.html.twig', {parcours: parcours, dto: dto}) }}
                 </div>
             </div>
         </section>
@@ -116,7 +118,7 @@
                         zone: 'admission',
                     }) }}
                     {% endif %}
-                    {{ include('typeDiplome/formation/_admission.html.twig', {parcours:formation.parcours[0]}) }}
+                    {{ include('typeDiplome/formation/_admission.html.twig', {parcours: parcours}) }}
 
                 </div>
             </div>
@@ -134,7 +136,7 @@
                         zone: 'et_apres',
                     }) }}
                     {% endif %}
-                    {{ include('typeDiplome/formation/_etApres.html.twig', {parcours:formation.parcours[0]}) }}
+                    {{ include('typeDiplome/formation/_etApres.html.twig', {parcours: parcours}) }}
 
                 </div>
             </div>
@@ -152,7 +154,7 @@
                         zone: 'contacts',
                     }) }}
                     {% endif %}
-                    {{ include('typeDiplome/formation/_contacts.html.twig', {parcours:formation.parcours[0]}) }}
+                    {{ include('typeDiplome/formation/_contacts.html.twig', {parcours: parcours}) }}
 
                 </div>
             </div>
@@ -171,7 +173,7 @@
                         zone: 'presentation',
                     }) }}
                     {% endif %}
-                    {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours:true}) }}
+                    {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours:true, print: false}) }}
                 </div>
             </div>
         </section>
