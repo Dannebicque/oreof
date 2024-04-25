@@ -225,6 +225,13 @@ class VersioningParcours {
                     $differOptions,
                     $rendererOptions
                 )),
+                "regimeInscriptionParcours" => html_entity_decode(DiffHelper::calculate(
+                    implode(", ", array_map(fn($regime) => $regime->value, $lastVersion->getRegimeInscription())),
+                    implode(", ", array_map(fn($regime) => $regime->value, $parcours->getRegimeInscription())),
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                ))
             ];
         }
 

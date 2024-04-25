@@ -13,6 +13,13 @@
                     {% endfor %}
                 </ul>
             </dd>
+            {% if stringDifferencesParcours.regimeInscriptionParcours is defined %}
+                {{ include("communs/_comparaison_versioning_big.html.twig", {
+                        textDifferences: stringDifferencesParcours.regimeInscriptionParcours,
+                        idCollapse: "diffParcoursRegimeInscription"
+                    }) 
+                }}
+            {% endif %}
             <dt>Modalités de l'alternance</dt>
             <dd>
                 {{ parcours.modalitesAlternance|raw }}
