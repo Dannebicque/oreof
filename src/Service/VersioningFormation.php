@@ -121,6 +121,22 @@ class VersioningFormation {
             ));
 
             $formationTextDifferences = [
+                "composanteInscriptionFormation" => html_entity_decode(DiffHelper::calculate(
+                    "<p class=\"list-item\">" 
+                    . implode("</p><p class=\"list-item\">", 
+                            array_map(fn($composante) => $composante->getLibelle(),
+                            $lastVersion->getComposantesInscription()->toArray()
+                        )
+                    ) . "</p>",
+                    "<p class=\"list-item\">" 
+                    . implode("</p><p class=\"list-item\">", 
+                            array_map(fn($composante) => $composante->getLibelle(), 
+                            $formation->getComposantesInscription()->toArray())
+                    ) . "</p>",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
                 "regimeInscriptionFormation" => html_entity_decode(DiffHelper::calculate(
                     implode(", ", array_map(fn($regime) => $regime->value, $lastVersion->getRegimeInscription())),
                     implode(", ", array_map(fn($regime) => $regime->value, $formation->getRegimeInscription())),

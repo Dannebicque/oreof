@@ -38,6 +38,13 @@
     </div>
     <div class="col-6">
         <strong>Composante(s) d'inscription</strong>
+        {% if stringDifferencesFormation.composanteInscriptionFormation is defined %}
+            {{ include("communs/_comparaison_versioning_big.html.twig", {
+                    textDifferences: stringDifferencesFormation.composanteInscriptionFormation,
+                    idCollapse: "diffComposantesInscriptionFormation"
+                }) 
+            }}
+        {% endif %}
         {% for composante in formation.composantesInscription %}
         <dl>
             <dt>Composante</dt>
