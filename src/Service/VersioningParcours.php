@@ -239,6 +239,13 @@ class VersioningParcours {
                     $rendererName,
                     $differOptions,
                     $rendererOptions
+                )),
+                "rythmeFormationParcours" => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getRythmeFormation()->getLibelle(),
+                    $parcours->getRythmeFormation()->getLibelle(),
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
                 ))
             ];
         }

@@ -44,6 +44,13 @@
             <dd>
                 {{ parcours.rythmeFormation != null ? parcours.rythmeFormation.libelle : 'Non précisé' }}
             </dd>
+            {% if stringDifferencesParcours.rythmeFormationParcours is defined %}
+                {{ include('communs/_comparaison_versioning_big.html.twig', {
+                        textDifferences: stringDifferencesParcours.rythmeFormationParcours,
+                        idCollapse: "diffParcoursRythmeFormation" ~ parcours.id
+                    })  
+                }}
+            {% endif %}
             <dt>Précisions sur le rythme de formation</dt>
             <dd>{{ parcours.rythmeFormationTexte|printTexte }}</dd>
         </dl>
