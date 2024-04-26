@@ -77,10 +77,6 @@ class FicheMatiereState
             $tab['error'][] = 'Vous devez indiquer le libellé en français.';
         }
 
-        if ($this->ficheMatiere->getResponsableFicheMatiere() === null) {
-            $tab['error'][] = 'Vous devez indiquer le responsable de la fiche EC/matière.';
-        }
-
         if ($this->ficheMatiere->isEnseignementMutualise() === true) {
             if ($this->ficheMatiere->isIsCmPresentielMutualise() === null) {
                 $tab['error'][] = 'Vous devez preciser si l\'enseignement en CM présentiel est mutualisé.';
