@@ -241,15 +241,15 @@ class VersioningParcours {
                     $rendererOptions
                 )),
                 "rythmeFormationParcours" => html_entity_decode(DiffHelper::calculate(
-                    $lastVersion->getRythmeFormation()->getLibelle(),
-                    $parcours->getRythmeFormation()->getLibelle(),
+                    $lastVersion->getRythmeFormation()->getLibelle() ?? "",
+                    $parcours->getRythmeFormation()->getLibelle() ?? "",
                     $rendererName,
                     $differOptions,
                     $rendererOptions
                 )),
                 "memoireTextParcours" => html_entity_decode(DiffHelper::calculate(
-                    $lastVersion->getMemoireText(),
-                    $parcours->getMemoireText(),
+                    $lastVersion->getMemoireText() ?? "",
+                    $parcours->getMemoireText() ?? "",
                     $rendererName,
                     $differOptions,
                     $rendererOptions

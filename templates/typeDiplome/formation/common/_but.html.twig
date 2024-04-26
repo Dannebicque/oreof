@@ -173,8 +173,8 @@
                                 zone: 'presentation_'~ parcours.id,
                             }) }}
                             {{ include('typeDiplome/formation/_presentationParcours.html.twig', {
-                                parcours:parcours,
-                                stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? [] 
+                                    parcours:parcours,
+                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? [] 
                                 }) 
                             }}
 
@@ -192,7 +192,11 @@
                                 type: 'parcours',
                                 zone: 'descriptif_'~ parcours.id,
                             }) }}
-                            {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours:parcours}) }}
+                            {{ include('typeDiplome/formation/_descriptif.html.twig', {
+                                    parcours:parcours,
+                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
+                                }) 
+                            }}
                         </div>
                     </div>
                 </section>
@@ -207,8 +211,11 @@
                                 type: 'parcours',
                                 zone: 'localisation_'~ parcours.id,
                             }) }}
-                            {{ include('typeDiplome/formation/_localisationParcours.html.twig', {parcours:parcours}) }}
-
+                            {{ include('typeDiplome/formation/_localisationParcours.html.twig', {
+                                    parcours:parcours,
+                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
+                                })
+                            }}
                         </div>
                     </div>
                 </section>
