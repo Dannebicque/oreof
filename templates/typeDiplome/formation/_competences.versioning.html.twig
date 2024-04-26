@@ -22,7 +22,7 @@
         </div>
     {% endif %} #}
     <div class="col-sm-12">
-        {% if isBut is defined and isBut == true %}
+        {% if parcours.formation.typeDiplome.libelleCourt == "BUT" %}
             {{ render(controller(
                 'App\\Controller\\BlocCompetenceController::afficheBUTReferentielVersioning',
                 { 'parcours': parcours, 'indexParcours': indexParcours ?? 1 }
