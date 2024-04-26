@@ -580,7 +580,8 @@ class ParcoursController extends BaseController
     public function parcoursVersion(
         ParcoursVersioning $parcours_versioning,
         Filesystem $fileSystem,
-        VersioningParcours $versioningParcours
+        VersioningParcours $versioningParcours,
+        TypeDiplomeRegistry $typeDiplomeRegistry
     ): Response {
         try {  
             $loadedVersion = $versioningParcours->loadParcoursFromVersion($parcours_versioning);
@@ -589,9 +590,10 @@ class ParcoursController extends BaseController
                 'parcours' => $loadedVersion['parcours'],
                 'formation' => $loadedVersion['parcours']->getFormation(),
                 'typeDiplome' => $loadedVersion['parcours']->getTypeDiplome(),
+                'typeD' => $typeDiplomeRegistry->getTypeDiplome($loadedVersion['parcours']->getTypeDiplome()->getModeleMcc()),
                 'dto' => $loadedVersion['dto'],
                 'hasParcours' => $loadedVersion['parcours']->getFormation()->isHasParcours(),
-                'isBut' => $loadedVersion['parcours']->getTypeDiplome()->getLibelleCourt() === 'BUT',
+                // 'isBut' => $loadedVersion['parcours']->getTypeDiplome()->getLibelleCourt() === 'BUT',
                 'dateVersion' => $loadedVersion['dateVersion'],
             ]);
         } catch(\Exception $e) {

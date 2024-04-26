@@ -256,7 +256,7 @@
                                 zone: 'competences_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_competences.versioning.html.twig', {parcours:parcours}) }}
+                            {{ include('typeDiplome/formation/_competences.versioning.html.twig', {parcours:parcours, indexParcours: loop.index}) }}
 
                         </div>
                     </div>

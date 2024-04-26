@@ -6,39 +6,39 @@
         {% if ec.elementConstitutif.ficheMatiere is defined and ec.elementConstitutif.ficheMatiere != null %}
             <a href="{{ url('app_fiche_matiere_show', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}">
                 {% if isBut is defined and isBut == true %}
-                    {% if ec.elementConstitutif.ficheMatiere.sigle is defined %}
-                        <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong>
-                    {% endif %}
-                    {{ ec.elementConstitutif.ficheMatiere.libelle }}
+                    <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }} {# ({{ ec.elementConstitutif.displayCodeApogee }}) #}
                 {% else %}
-                    {# {{ ec.elementConstitutif.ficheMatiere.display }} #}
                     {{ ec.elementConstitutif.ficheMatiere.libelle }}
-                    {% if ec.elementConstitutif.ficheMatiere.sigle is defined
-                        and ec.elementConstitutif.ficheMatiere.sigle is not null
-                        and ec.elementConstitutif.ficheMatiere.sigle|trim != ''
-                    %}
+                    {% if ec.elementConstitutif.ficheMatiere.sigle is defined %}      
                         {{ ' | ' ~ ec.elementConstitutif.ficheMatiere.sigle }}
-                    {% endif %}
+                    {% endif %} {# ({{ ec.elementConstitutif.displayCodeApogee }}) #}
                     {% if ec.elementConstitutif.ficheMatiere.ficheMatiereParcours|length > 0 %}
                         {{ ' (mutualisée)' }}
                     {% endif %}
                 {% endif %}
             </a>
-            {% if app.user != null and is_granted('CAN_PARCOURS_EDIT_MY', ec.elementConstitutif.ficheMatiere) %}
+            {# {% if app.user != null and
+                is_granted('CAN_PARCOURS_EDIT_MY', ec.elementConstitutif.ficheMatiere) and
+                workflow_can(ec.elementConstitutif.ficheMatiere, 'valider_fiche_compo')
+            %}
                 <a href="{{ url('app_fiche_matiere_edit', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}"
                    class="btn btn-sm text-warning">
                     <i class="{{ iconEdit }}"></i>
                 </a>
-            {% endif %}
+            {% endif %} #}
+            {# {{ ec.elementConstitutif.ficheMatiere.etatFiche|badgeFiche }} #}
         {% else %}
             {{ ec.elementConstitutif.libelle }}
         {% endif %}
-        {% if ec.elementConstitutif.natureEcUe is defined and ec.elementConstitutif.natureEcUe.isLibre == true %}
-            <span class="badge bg-success">EC à choix libre</span>
+        {% if ec.elementConstitutif.natureUeEc is defined 
+           and ec.elementConstitutif.natureUeEc != null
+           and ec.elementConstitutif.natureUeEc.libre == true 
+        %}
+            {# ({{ ec.elementConstitutif.displayCodeApogee }}) #} <span class="badge bg-success">EC à choix libre</span>
         {% endif %}
         {% if ec.elementsConstitutifsEnfants|length > 0 %}
-            <span class="badge bg-info">
-            EC à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possible(s)</span>
+            {# ({{ ec.elementConstitutif.displayCodeApogee }}) #} <span class="badge bg-info">
+             EC à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possible(s)</span>
         {% endif %}
     </td>
     <td>{{ ec.heuresEctsEc.ects|badgeEcts }}</td>
@@ -95,8 +95,7 @@
     {% endif %}
 
     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-        {# <td>{{ ec.heuresEctsEc.sommeEcTotalPresDist }}</td> #}
-        <td>{{ sommeEcTotalDist + sommeEcTotalPres }}</td>
+        <td>{{ ec.heuresEctsEc.sommeEcTotalPresDist }}</td>
     {% endif %}
 </tr>
 
