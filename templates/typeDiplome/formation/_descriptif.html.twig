@@ -29,6 +29,13 @@
                 <dd>
                     {% if parcours.hasMemoire == true %}
                         Oui. {{ parcours.memoireText|printTexte }}
+                        {% if stringDifferencesParcours.memoireTextParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_big.html.twig', {
+                                    textDifferences: stringDifferencesParcours.memoireTextParcours,
+                                    idCollapse: "diffMemoireTextParcours" ~ parcours.id
+                                }) 
+                            }}
+                        {% endif %}
                     {% else %}
                         Non
                     {% endif %}

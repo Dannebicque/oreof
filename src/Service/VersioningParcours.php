@@ -246,6 +246,13 @@ class VersioningParcours {
                     $rendererName,
                     $differOptions,
                     $rendererOptions
+                )),
+                "memoireTextParcours" => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getMemoireText(),
+                    $parcours->getMemoireText(),
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
                 ))
             ];
         }

@@ -218,7 +218,11 @@
                                 zone: 'descriptif_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours:parcours}) }}
+                            {{ include('typeDiplome/formation/_descriptif.html.twig', {
+                                    parcours:parcours,
+                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
+                                }) 
+                            }}
                         </div>
                     </div>
                 </section>
