@@ -95,7 +95,8 @@
     {% endif %}
 
     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-        <td>{{ ec.heuresEctsEc.sommeEcTotalPresDist }}</td>
+        {# <td>{{ ec.heuresEctsEc.sommeEcTotalPresDist }}</td> #}
+        <td>{{ sommeEcTotalDist + sommeEcTotalPres }}</td>
     {% endif %}
 </tr>
 
