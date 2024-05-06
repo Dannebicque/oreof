@@ -9,6 +9,13 @@
                 <dd>
                     {% if parcours.hasStage == true %}
                         Oui ({{ parcours.nbHeuresStages }} heures). {{ parcours.stageText|printTexte }}
+                        {% if stringDifferencesParcours.stageTextParcours is defined %}
+                            {{ include('communs/_comparaison_versioning_big.html.twig', {
+                                    textDifferences: stringDifferencesParcours.stageTextParcours,
+                                    idCollapse: "diffStageTextParcours" ~ parcours.id
+                                }) 
+                            }}
+                        {% endif %}
                     {% else %}
                         Non
                     {% endif %}

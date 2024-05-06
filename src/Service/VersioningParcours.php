@@ -253,7 +253,16 @@ class VersioningParcours {
                     $rendererName,
                     $differOptions,
                     $rendererOptions
-                ))
+                )),
+                "stageTextParcours" => 
+                self::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        self::cleanUpHtmlTextForComparison($lastVersion->getStageText() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getStageText() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                )))
             ];
         }
 
