@@ -262,7 +262,18 @@ class VersioningParcours {
                         $rendererName,
                         $differOptions,
                         $rendererOptions
-                )))
+                    )
+                )),
+                "prerequisRecommandesParcours" => 
+                self::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        self::cleanUpHtmlTextForComparison($lastVersion->getPrerequis() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getPrerequis() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    )
+                ))
             ];
         }
 
