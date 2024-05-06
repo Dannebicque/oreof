@@ -111,6 +111,7 @@ class VersioningFormation {
                 'lineNumbers' => false,
                 'showHeader' => false,
                 'separateBlock' => false,
+                'wordGlues' => [' ', '.']
             ];
 
             $localisationVersion = implode(", ", array_map(

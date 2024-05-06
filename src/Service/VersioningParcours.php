@@ -135,6 +135,7 @@ class VersioningParcours {
                 'lineNumbers' => false,
                 'showHeader' => false,
                 'separateBlock' => false,
+                'wordGlues' => [' ', '.']
             ];
             // Données du parcours en JSON
             $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
