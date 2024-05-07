@@ -284,6 +284,16 @@ class VersioningParcours {
                         $differOptions,
                         $rendererOptions
                     )
+                    )),
+                "poursuiteEtudesParcours" => 
+                self::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        self::cleanUpHtmlTextForComparison($lastVersion->getPoursuitesEtudes() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getPoursuitesEtudes() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    )
                 ))
             ];
         }
