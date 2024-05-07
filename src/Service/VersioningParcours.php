@@ -197,8 +197,8 @@ class VersioningParcours {
                     // Actuel
                     $parcours->getRespParcours()?->getEmail() ?? "",
                     $rendererName,
-                    $differOptions,
-                    $rendererOptions
+                    [...$differOptions, 'ignoreLineEnding' => false],
+                    [...$rendererOptions, 'detailLevel' => 'none']
                 )),
                 'contactsParcoursCoResponsableDuParcours' => html_entity_decode(DiffHelper::calculate(
                     // Version
@@ -223,8 +223,8 @@ class VersioningParcours {
                     // Actuel
                     $parcours->getCoResponsable()?->getEmail() ?? "",
                     $rendererName,
-                    $differOptions,
-                    $rendererOptions
+                    [...$differOptions, 'ignoreLineEnding' => false],
+                    [...$rendererOptions, 'detailLevel' => 'none']
                 )),
                 "regimeInscriptionParcours" => html_entity_decode(DiffHelper::calculate(
                     "<p class=\"list-item\">"

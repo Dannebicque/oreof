@@ -174,8 +174,8 @@ class VersioningFormation {
                     // Actuel
                     $formation->getResponsableMention()->getEmail() ?? "",
                     $rendererName,
-                    $differOptions,
-                    $rendererOptions
+                    [...$differOptions, 'ignoreLineEnding' => false],
+                    [...$rendererOptions, 'detailLevel' => 'none']
                 )),
                 "coResponsableDeFormation" => html_entity_decode(DiffHelper::calculate(
                     // Version
@@ -200,8 +200,8 @@ class VersioningFormation {
                     // Actuel
                     $formation->getCoResponsable()?->getEmail() ?? "",
                     $rendererName,
-                    $differOptions,
-                    $rendererOptions
+                    [...$differOptions, 'ignoreLineEnding' => false],
+                    [...$rendererOptions, 'detailLevel' => 'none']
                 )),
                 "localisationMention" => html_entity_decode(DiffHelper::calculate(
                     // Version
