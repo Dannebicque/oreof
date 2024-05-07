@@ -274,6 +274,16 @@ class VersioningParcours {
                         $differOptions,
                         $rendererOptions
                     )
+                    )),
+                "debouchesTextParcours" => 
+                self::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        self::cleanUpHtmlTextForComparison($lastVersion->getDebouches() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getDebouches() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    )
                 ))
             ];
         }
