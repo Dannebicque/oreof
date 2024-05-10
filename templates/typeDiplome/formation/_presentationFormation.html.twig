@@ -5,41 +5,27 @@
             <dl>
                 <dt>Contenu de la formation</dt>
                 <dd>{{ formation.contenuFormation|raw }}</dd>
-                {% if is_granted('ROLE_ADMIN') and stringDifferences is defined 
-                   and stringDifferences.presentationFormationContenuFormation is defined 
-                   and stringDifferences.presentationFormationContenuFormation|length > 0
-                %}
-                    <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
-                        <button class="btn btn-primary btn-sm my-3"
-                            data-bs-toggle="collapse" data-bs-target="#diffContenuFormation"
-                        >
-                            Voir les différences
-                        </button>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-10 col-lg-8 collapse" id="diffContenuFormation">
-                            {{ stringDifferences.presentationFormationContenuFormation|raw  }} 
-                        </div>
-                    </div>
+                {% if stringDifferencesFormation.presentationFormationContenuFormation is defined %}
+                    {{ 
+                        include('communs/_comparaison_versioning_big.html.twig', 
+                            {
+                                textDifferences: stringDifferencesFormation.presentationFormationContenuFormation,
+                                idCollapse: "diffContenuFormation"
+                            }
+                        ) 
+                    }}
                 {% endif %}
                 <dt>Résultats attendus de la formation</dt>
                 <dd>{{ formation.resultatsAttendus|raw }}</dd>
-                {% if is_granted('ROLE_ADMIN') and stringDifferences is defined 
-                   and stringDifferences.presentationFormationResultatsAttendus is defined 
-                   and stringDifferences.presentationFormationResultatsAttendus|length > 0
-                %}
-                    <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
-                        <button class="btn btn-primary btn-sm my-3"
-                            data-bs-toggle="collapse" data-bs-target="#diffResultatsAttendus"
-                        >
-                            Voir les différences
-                        </button>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-10 col-lg-8 collapse" id="diffResultatsAttendus">
-                            {{ stringDifferences.presentationFormationResultatsAttendus|raw  }} 
-                        </div>
-                    </div>
+                {% if stringDifferencesFormation.presentationFormationResultatsAttendus is defined %}
+                    {{ 
+                        include('communs/_comparaison_versioning_big.html.twig', 
+                            {
+                                textDifferences: stringDifferencesFormation.presentationFormationResultatsAttendus,
+                                idCollapse: "diffResultatsAttendus"
+                            }
+                        ) 
+                    }}
                 {% endif %}
                 <dt>Rythme de formation</dt>
                 <dd>
@@ -58,23 +44,15 @@
             <dd>
                 {{ formation.objectifsFormation|raw }}
             </dd>
-            {% if is_granted('ROLE_ADMIN') and stringDifferences is defined 
-               and stringDifferences.presentationFormationObjectifsFormation is defined 
-            %}
-                {% if stringDifferences.presentationFormationObjectifsFormation|length > 0 %}
-                <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
-                    <button class="btn btn-primary btn-sm my-3"
-                        data-bs-toggle="collapse" data-bs-target="#diffFormationObjectifsFormation"
-                    >
-                        Voir les différences
-                    </button>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 collapse" id="diffFormationObjectifsFormation">
-                        {{ stringDifferences.presentationFormationObjectifsFormation|raw  }}
-                    </div>
-                </div>
-                {% endif %}
+            {% if stringDifferencesFormation.presentationFormationObjectifsFormation is defined %}
+                    {{ 
+                        include('communs/_comparaison_versioning_big.html.twig', 
+                            {
+                                textDifferences: stringDifferencesFormation.presentationFormationObjectifsFormation,
+                                idCollapse: "diffObjectifsFormation"
+                            }
+                        ) 
+                    }}
             {% endif %}
         </dl>
     </div>

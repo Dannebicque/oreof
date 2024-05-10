@@ -3,12 +3,14 @@
         <h3 class="small-title">Identité de la formation </h3>
         <div class="card mb-5">
             <div class="card-body">
+                {% if (print is not defined or print == false) and isVersioningView is not defined %}
                 {{ component('commentaire', {
                     commentaires: formation.commentaires,
                     id: formation.id,
                     type: 'formation',
                     zone: 'identite_formation',
                 }) }}
+                {% endif %}
                 {{ include('typeDiplome/formation/_identiteFormation.html.twig') }}
             </div>
         </div>
@@ -18,46 +20,54 @@
         <h3 class="small-title">Localisation</h3>
         <div class="card mb-5">
             <div class="card-body">
+                {% if (print is not defined or print == false) and isVersioningView is not defined %}
                 {{ component('commentaire', {
                     commentaires: formation.commentaires,
                     id: formation.id,
                     type: 'formation',
                     zone: 'localisation',
                 }) }}
+                {% endif %}
                 {{ include('typeDiplome/formation/_localisation.html.twig') }}
             </div>
         </div>
     </section>
 
 
-    {% if formation.isHasParcours == false and formation.parcours|length == 1 %}
+    {% if formation.isHasParcours == false and parcoursVersionArray|length == 1 %}
+        {% set parcours = parcoursVersionArray[0].parcours %}
         <section class="scroll-section" id="presentation">
             <h3 class="small-title">Présentation</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'presentation',
                     }) }}
-                    {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours:true}) }}
+                    {% endif %}
+                    {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours: false, print: false}) }}
                 </div>
             </div>
         </section>
-        {% set dto = tParcours[formation.parcours[0].id] %}
+
+        {% set dto = parcoursVersionArray[0].dto %}
 
         <section class="scroll-section" id="descriptif">
             <h3 class="small-title">Descriptif</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'descriptif',
                     }) }}
-                    {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours:formation.parcours[0]}) }}
+                    {% endif %}
+                    {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours: parcours}) }}
                 </div>
             </div>
         </section>
@@ -66,13 +76,15 @@
             <h3 class="small-title">Compétences acquises</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'competences',
                     }) }}
-                    {{ include('typeDiplome/formation/_competences_but.html.twig', {parcours:formation.parcours[0]}) }}
+                    {% endif %}
+                    {{ include('typeDiplome/formation/_competences.versioning.html.twig', {parcours: parcours}) }}
                 </div>
             </div>
         </section>
@@ -81,13 +93,15 @@
             <h3 class="small-title">Structure</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'structure',
                     }) }}
-                    {{ include('typeDiplome/formation/_structure_but.html.twig', {parcours:formation.parcours[0], dto: dto}) }}
+                    {% endif %}
+                    {{ include('typeDiplome/formation/_structure.versioning.html.twig', {parcours: parcours, dto: dto}) }}
                 </div>
             </div>
         </section>
@@ -96,13 +110,15 @@
             <h3 class="small-title">Admission</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'admission',
                     }) }}
-                    {{ include('typeDiplome/formation/_admission.html.twig', {parcours:formation.parcours[0]}) }}
+                    {% endif %}
+                    {{ include('typeDiplome/formation/_admission.html.twig', {parcours: parcours}) }}
 
                 </div>
             </div>
@@ -112,13 +128,15 @@
             <h3 class="small-title">Et après ?</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'et_apres',
                     }) }}
-                    {{ include('typeDiplome/formation/_etApres.html.twig', {parcours:formation.parcours[0]}) }}
+                    {% endif %}
+                    {{ include('typeDiplome/formation/_etApres.html.twig', {parcours: parcours}) }}
 
                 </div>
             </div>
@@ -128,13 +146,15 @@
             <h3 class="small-title">Contacts pédagogiques</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'contacts',
                     }) }}
-                    {{ include('typeDiplome/formation/_contacts.html.twig', {parcours:formation.parcours[0]}) }}
+                    {% endif %}
+                    {{ include('typeDiplome/formation/_contacts.html.twig', {parcours: parcours}) }}
 
                 </div>
             </div>
@@ -145,180 +165,188 @@
             <h3 class="small-title">Présentation</h3>
             <div class="card mb-5">
                 <div class="card-body">
+                    {% if (print is not defined or print == false) and isVersioningView is not defined %}
                     {{ component('commentaire', {
                         commentaires: formation.commentaires,
                         id: formation.id,
                         type: 'formation',
                         zone: 'presentation',
                     }) }}
-                    {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours:true}) }}
+                    {% endif %}
+                    {{ include('typeDiplome/formation/_presentationFormation.html.twig', {hasParcours:true, print: true}) }}
                 </div>
             </div>
         </section>
-        {% for parcours in formation.parcours|filter(parcours => tParcours[parcours.id] is defined) %}
-            {% set dto = tParcours[parcours.id] %}
+        {% for p in parcoursVersionArray %}
+            {% set parcours = p.parcours %}
+            {% set dto = p.dto %}
             <div>
                 <h2>Parcours {{ parcours.libelle }}</h2>
             </div>
 
             <div class="border-left-parcours border-left-parcours-{{ loop.index }} ">
-                <section class="scroll-section" id="presentation_{{ parcours.id }}">
+                <section class="scroll-section" id="presentation_{{ loop.index }}">
                     <h3 class="small-title">Présentation</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'presentation_'~ parcours.id,
                             }) }}
-                            {{ include('typeDiplome/formation/_presentationParcours.html.twig', {
-                                    parcours:parcours,
-                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? [] 
-                                }) 
+                            {% endif %}
+                            {{ include('typeDiplome/formation/_presentationParcours.html.twig', 
+                                    {   
+                                        parcours:parcours,
+                                        stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
+                                    }
+                                ) 
                             }}
 
                         </div>
                     </div>
                 </section>
 
-                <section class="scroll-section" id="descriptif_{{ parcours.id }}">
+                <section class="scroll-section" id="descriptif_{{ loop.index }}">
                     <h3 class="small-title">Descriptif de la formation</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'descriptif_'~ parcours.id,
                             }) }}
-                            {{ include('typeDiplome/formation/_descriptif.html.twig', {
-                                    parcours:parcours,
-                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
-                                }) 
-                            }}
+                            {% endif %}
+                            {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours:parcours}) }}
                         </div>
                     </div>
                 </section>
 
-                <section class="scroll-section" id="localisation_{{ parcours.id }}">
+                <section class="scroll-section" id="localisation_{{ loop.index }}">
                     <h3 class="small-title">Localisation</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'localisation_'~ parcours.id,
                             }) }}
-                            {{ include('typeDiplome/formation/_localisationParcours.html.twig', {
-                                    parcours:parcours,
-                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
-                                })
-                            }}
+                            {% endif %}
+                            {{ include('typeDiplome/formation/_localisationParcours.html.twig', {parcours:parcours}) }}
+
                         </div>
                     </div>
                 </section>
 
-                <section class="scroll-section" id="competences_{{ parcours.id }}">
+                <section class="scroll-section" id="competences_{{ loop.index }}">
                     <h3 class="small-title">Compétences Acquises</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'competences_'~ parcours.id,
                             }) }}
-                            {{ include('typeDiplome/formation/_competences_but.html.twig', {parcours:parcours}) }}
+                            {% endif %}
+                            {{ include('typeDiplome/formation/_competences.versioning.html.twig', {parcours:parcours, indexParcours: loop.index}) }}
 
                         </div>
                     </div>
                 </section>
 
-                <section class="scroll-section" id="structure_{{ parcours.id }}">
+                <section class="scroll-section" id="structure_{{ loop.index }}">
                     <h3 class="small-title">Structure</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'structure_'~ parcours.id,
                             }) }}
-                            {{ include('typeDiplome/formation/_structure_but.html.twig', {parcours:parcours, dto:dto}) }}
+                            {% endif %}
+                            {{ include('typeDiplome/formation/_structure.versioning.html.twig', {parcours:parcours, dto:dto}) }}
                         </div>
                     </div>
                 </section>
 
-                <section class="scroll-section" id="admission_{{ parcours.id }}">
+                <section class="scroll-section" id="admission_{{ loop.index }}">
                     <h3 class="small-title">Admission</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'admission_'~ parcours.id,
                             }) }}
-                            {{ include('typeDiplome/formation/_admission.html.twig', {
-                                    parcours:parcours,
-                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
-                                })
-                            }}
+                            {% endif %}
+                            {{ include('typeDiplome/formation/_admission.html.twig', {parcours:parcours}) }}
                         </div>
                     </div>
                 </section>
 
-                <section class="scroll-section" id="inscription_{{ parcours.id }}">
+                <section class="scroll-section" id="inscription_{{ loop.index }}">
                     <h3 class="small-title">Inscription</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'inscription_'~ parcours.id,
                             }) }}
+                            {% endif %}
                             {{ include('typeDiplome/formation/_inscription.html.twig', {parcours:parcours}) }}
                         </div>
                     </div>
                 </section>
 
-                <section class="scroll-section" id="et_apres_{{ parcours.id }}">
+                <section class="scroll-section" id="et_apres_{{ loop.index }}">
                     <h3 class="small-title"> Et après...</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'et_apres_'~ parcours.id,
                             }) }}
-                            {{ include('typeDiplome/formation/_etApres.html.twig', {
-                                  parcours:parcours,
-                                  stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
-                                })
-                            }}
+                            {% endif %}
+                            {{ include('typeDiplome/formation/_etApres.html.twig', {parcours:parcours}) }}
                         </div>
                     </div>
                 </section>
 
-                <section class="scroll-section" id="contacts_{{ parcours.id }}">
+                <section class="scroll-section" id="contacts_{{ loop.index }}">
                     <h3 class="small-title">Contacts pédagogiques</h3>
                     <div class="card mb-5">
                         <div class="card-body">
+                            {% if (print is not defined or print == false) and isVersioningView is not defined %}
                             {{ component('commentaire', {
                                 commentaires: parcours.commentaires,
                                 id: parcours.id,
                                 type: 'parcours',
                                 zone: 'contacts_'~ parcours.id,
                             }) }}
+                            {% endif %}
                             {{ include('typeDiplome/formation/_contacts.html.twig', 
                                     {
                                         parcours:parcours,
                                         stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
-                                    }    
+                                    }
                                 ) 
                             }}
                         </div>

@@ -31,26 +31,49 @@
         <dl>
             <dt>Responsable de la formation</dt>
             <dd>{{ formation.responsableMention != null ? formation.responsableMention.display : 'erreur' }}</dd>
-            {% if formationStringDifferences.responsableDeFormation is defined %}
-                {{ include('communs/_comparaison_formation_versioning.html.twig', 
-                        {stringData: formationStringDifferences.responsableDeFormation}
+            {% if stringDifferencesFormation.responsableDeFormation is defined %}
+                {{ include('communs/_comparaison_versioning_big.html.twig', 
+                        {
+                            textDifferences: stringDifferencesFormation.responsableDeFormation,
+                            idCollapse: "diffResponsableDeFormation"
+                        }
                     ) 
                 }}
             {% endif %}
-            {# {{ include('communs/_comparaison_formation_versioning.html.twig', {textField: "emailResponsableFormation"}) }} #}
             <dt>Email</dt>
             <dd>{{ formation.responsableMention != null ? formation.responsableMention.email : 'erreur' }}</dd>
-            {% if formationStringDifferences.emailResponsableFormation is defined %}
-                {{ include('communs/_comparaison_formation_versioning.html.twig', 
-                        {stringData: formationStringDifferences.emailResponsableFormation}
+            {% if stringDifferencesFormation.emailResponsableFormation is defined %}
+                {{ include('communs/_comparaison_versioning_big.html.twig', 
+                        {
+                            textDifferences: stringDifferencesFormation.emailResponsableFormation,
+                            idCollapse: "diffEmailResponsableDeFormation"
+                        }
                     ) 
                 }}
             {% endif %}
             {% if formation.coResponsable != null %}
                 <dt>Co-Responsable de la formation</dt>
                 <dd>{{ formation.coResponsable != null ? formation.coResponsable.display : 'erreur' }}</dd>
+                {% if stringDifferencesFormation.coResponsableDeFormation is defined %}
+                    {{ include('communs/_comparaison_versioning_big.html.twig', 
+                            {
+                                textDifferences: stringDifferencesFormation.coResponsableDeFormation,
+                                idCollapse: "diffCoResponsableDeFormation"
+                            }
+                        ) 
+                    }}
+                {% endif %}
                 <dt>Email</dt>
                 <dd>{{ formation.coResponsable != null ? formation.coResponsable.email : 'erreur' }}</dd>
+                {% if stringDifferencesFormation.emailCoResponsable is defined %}
+                    {{ include('communs/_comparaison_versioning_big.html.twig', 
+                            {
+                                textDifferences: stringDifferencesFormation.emailCoResponsable,
+                                idCollapse: "diffEmailCoResponsable"
+                            }
+                        ) 
+                    }}
+                {% endif %}
             {% endif %}
         </dl>
     </div>

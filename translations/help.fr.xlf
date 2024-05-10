@@ -2594,5 +2594,11 @@
         <target>type_diplome.helps.codifIntermediaire.help</target>
       </segment>
     </unit>
+    <unit id="YkV_QB0" name="fiche_matiere_step1.helps.codeApogee">
+      <segment>
+        <source>fiche_matiere_step1.helps.codeApogee</source>
+        <target>fiche_matiere_step1.helps.codeApogee</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

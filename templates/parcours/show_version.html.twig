@@ -5,7 +5,8 @@
 {% block content %}
     {# {{ component('mention_manage', {parcours:parcours, type:'parcours'}) }} #}
     <div class="row">
-        {{ include('typeDiplome/parcours/common/_licence.versioning.html.twig') }}
+        {# {{ include('typeDiplome/parcours/common/_licence.versioning.html.twig') }} #}
+        {{ include('typeDiplome/parcours/common/_'~constant('SOURCE', typeD)~'.versioning.html.twig') }}
         <!-- Scrollspy Start -->
         <div class="col-md-auto d-none d-lg-block" id="scrollSpyMenu">
             <ul class="nav flex-column">
@@ -77,7 +78,7 @@
 {% endblock %}
 
 {% block header %}
-    Détail du parcours : {{ parcours.libelle }} - <span class="text-primary">Version du : {{ dateVersion }}</span>
+    Détail du parcours : {{ parcours.libelle }} <h2 class="text-primary">Version du : {{ dateVersion }}</h2>
 {% endblock %}
 
 {# 

@@ -47,7 +47,7 @@ class VersioningFormation {
         );
     }
 
-    public function saveVersionOfFormation(Formation $formation, DateTimeImmutable $now, bool $withFlush = false){
+    public function saveVersionOfFormation(Formation $formation, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu = false){
         $dateHeure = $now->format('d-m-Y_H-i-s');
         // Nom du fichier
         $formationFilename = "formation-{$formation->getId()}-{$dateHeure}";
@@ -57,6 +57,9 @@ class VersioningFormation {
         $formationVersioning->setVersionTimestamp($now);
         $formationVersioning->setFilename($formationFilename);
         $formationVersioning->setSlug($formation->getSlug());
+        if($isCfvu){
+            $formationVersioning->setCfvuFlag(true);
+        }
         // Serialization
         $formationJSON = $this->serializer->serialize($formation, 'json', [
             AbstractObjectNormalizer::GROUPS => ['formation_json_versioning'],
@@ -108,6 +111,7 @@ class VersioningFormation {
                 'lineNumbers' => false,
                 'showHeader' => false,
                 'separateBlock' => false,
+                'wordGlues' => [' ', '.']
             ];
 
             $localisationVersion = implode(", ", array_map(
@@ -118,6 +122,37 @@ class VersioningFormation {
             ));
 
             $formationTextDifferences = [
+                "composanteInscriptionFormation" => html_entity_decode(DiffHelper::calculate(
+                    "<p class=\"list-item\">" 
+                    . implode("</p><p class=\"list-item\">", 
+                            array_map(fn($composante) => $composante->getLibelle(),
+                            $lastVersion->getComposantesInscription()->toArray()
+                        )
+                    ) . "</p>",
+                    "<p class=\"list-item\">" 
+                    . implode("</p><p class=\"list-item\">", 
+                            array_map(fn($composante) => $composante->getLibelle(), 
+                            $formation->getComposantesInscription()->toArray())
+                    ) . "</p>",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                "regimeInscriptionFormation" => html_entity_decode(DiffHelper::calculate(
+                    "<p class=\"list-item\">"
+                    . implode("</p><p class=\"list-item\">", 
+                            array_map(fn($regime) => $regime->value, 
+                            $lastVersion->getRegimeInscription())
+                    ) . "</p>",
+                    "<p class=\"list-item\">"
+                    . implode("</p><p class=\"list-item\">", 
+                            array_map(fn($regime) => $regime->value, 
+                            $formation->getRegimeInscription())
+                    ) . "</p>",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
                 "responsableDeFormation" => html_entity_decode(DiffHelper::calculate(
                     // Version
                     ($lastVersion->getResponsableMention()->getNom()
@@ -139,8 +174,34 @@ class VersioningFormation {
                     // Actuel
                     $formation->getResponsableMention()->getEmail() ?? "",
                     $rendererName,
+                    [...$differOptions, 'ignoreLineEnding' => false],
+                    [...$rendererOptions, 'detailLevel' => 'none']
+                )),
+                "coResponsableDeFormation" => html_entity_decode(DiffHelper::calculate(
+                    // Version
+                    $lastVersion->getCoResponsable() ? 
+                    ($lastVersion->getCoResponsable()->getNom()
+                     . " " . 
+                     $lastVersion->getCoResponsable()->getPrenom()
+                    )  : "",
+                    // Actuel
+                    $formation->getCoResponsable() ? 
+                    ($formation->getCoResponsable()->getNom()
+                     . " " . 
+                     $formation->getCoResponsable()->getPrenom()
+                    ) : "",
+                    $rendererName,
                     $differOptions,
                     $rendererOptions
+                )),
+                "emailCoResponsable" => html_entity_decode(DiffHelper::calculate(
+                    // Version
+                    $lastVersion->getCoResponsable()?->getEmail() ?? "",
+                    // Actuel
+                    $formation->getCoResponsable()?->getEmail() ?? "",
+                    $rendererName,
+                    [...$differOptions, 'ignoreLineEnding' => false],
+                    [...$rendererOptions, 'detailLevel' => 'none']
                 )),
                 "localisationMention" => html_entity_decode(DiffHelper::calculate(
                     // Version
@@ -150,7 +211,37 @@ class VersioningFormation {
                     $rendererName,
                     $differOptions,
                     $rendererOptions
-                ))
+                )),
+                'presentationFormationObjectifsFormation' => 
+                VersioningParcours::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        VersioningParcours::cleanUpHtmlTextForComparison($lastVersion->getObjectifsFormation() ?? ""),
+                        VersioningParcours::cleanUpHtmlTextForComparison($formation->getObjectifsFormation() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    ))
+                ),
+                'presentationFormationContenuFormation' => 
+                VersioningParcours::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        VersioningParcours::cleanUpHtmlTextForComparison($lastVersion->getContenuFormation() ?? ""),
+                        VersioningParcours::cleanUpHtmlTextForComparison($formation->getContenuFormation() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    ))
+                ),
+                'presentationFormationResultatsAttendus' => 
+                VersioningParcours::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        VersioningParcours::cleanUpHtmlTextForComparison($lastVersion->getResultatsAttendus() ?? ""),
+                        VersioningParcours::cleanUpHtmlTextForComparison($formation->getResultatsAttendus() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    ))
+                )
             ];
         }
 

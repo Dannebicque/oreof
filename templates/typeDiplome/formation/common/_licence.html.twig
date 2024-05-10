@@ -194,7 +194,13 @@
                                 zone: 'presentation_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_presentationParcours.html.twig', {parcours:parcours}) }}
+                            {{ include('typeDiplome/formation/_presentationParcours.html.twig', 
+                                    {   
+                                        parcours:parcours,
+                                        stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
+                                    }
+                                ) 
+                            }}
 
                         </div>
                     </div>
@@ -212,7 +218,11 @@
                                 zone: 'descriptif_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_descriptif.html.twig', {parcours:parcours}) }}
+                            {{ include('typeDiplome/formation/_descriptif.html.twig', {
+                                    parcours:parcours,
+                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
+                                }) 
+                            }}
                         </div>
                     </div>
                 </section>
@@ -229,8 +239,11 @@
                                 zone: 'localisation_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_localisationParcours.html.twig', {parcours:parcours}) }}
-
+                            {{ include('typeDiplome/formation/_localisationParcours.html.twig', {
+                                parcours:parcours,
+                                stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
+                                }) 
+                            }}
                         </div>
                     </div>
                 </section>
@@ -282,7 +295,11 @@
                                 zone: 'admission_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_admission.html.twig', {parcours:parcours}) }}
+                            {{ include('typeDiplome/formation/_admission.html.twig', {
+                                    parcours:parcours,
+                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
+                                }) 
+                            }}
                         </div>
                     </div>
                 </section>
@@ -316,7 +333,11 @@
                                 zone: 'et_apres_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_etApres.html.twig', {parcours:parcours}) }}
+                            {{ include('typeDiplome/formation/_etApres.html.twig', {
+                                    parcours:parcours,
+                                    stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
+                                }) 
+                            }}
                         </div>
                     </div>
                 </section>
@@ -333,7 +354,13 @@
                                 zone: 'contacts_'~ parcours.id,
                             }) }}
                             {% endif %}
-                            {{ include('typeDiplome/formation/_contacts.html.twig', {parcours:parcours}) }}
+                            {{ include('typeDiplome/formation/_contacts.html.twig', 
+                                    {
+                                        parcours:parcours,
+                                        stringDifferencesParcours: versioningParcours.getDifferencesBetweenParcoursAndLastVersion(parcours) ?? []
+                                    }
+                                ) 
+                            }}
                         </div>
                     </div>
                 </section>

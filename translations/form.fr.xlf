@@ -2773,5 +2773,11 @@
         <target>Codification intermédiaire</target>
       </segment>
     </unit>
+    <unit id="DExy5Na" name="fiche_matiere_step1.labels.codeApogee">
+      <segment>
+        <source>fiche_matiere_step1.labels.codeApogee</source>
+        <target>fiche_matiere_step1.labels.codeApogee</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

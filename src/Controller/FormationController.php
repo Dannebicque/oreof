@@ -32,6 +32,7 @@ use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Jfcherng\Diff\DiffHelper;
@@ -396,7 +397,7 @@ class FormationController extends BaseController
          */
         $cssDiff = DiffHelper::getStyleSheet();
         if($formation->isHasParcours() === false && count($formation->getParcours()) === 1){
-            $textDifferences = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);
+            $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);    
         }
 
         /**
@@ -410,8 +411,9 @@ class FormationController extends BaseController
             'tParcours' => $tParcours,
             'typeD' => $typeD,
             'cssDiff' => $cssDiff,
-            'stringDifferences' => $textDifferences ?? [],
-            'formationStringDifferences' => $formationStringDifferences ?? []
+            'stringDifferencesParcours' => $textDifferencesParcours ?? [],
+            'stringDifferencesFormation' => $formationStringDifferences ?? [],
+            'versioningParcours' => $versioningParcours
         ]);
     }
 
@@ -553,6 +555,57 @@ class FormationController extends BaseController
 
             $this->addFlashBag('error', 'Une erreur est survenue lors de la sauvegarde.');
             return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
+        }
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/{id}/versioning/view', name: 'app_formation_versioning_view')]
+    public function viewFormationVersion(
+        FormationVersioning $versionFormation,
+        VersioningFormation $versionFormationService,
+        VersioningParcours $versionParcoursService,
+        Filesystem $filesystem,
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        EntityManagerInterface $entityManager
+    ){
+        try{
+            $formation = $versionFormationService->loadFormationFromVersion($versionFormation);
+            $typeD = $typeDiplomeRegistry->getTypeDiplome($versionFormation->getFormation()->getTypeDiplome()->getModeleMcc());
+            $dateHeureVersion = $versionFormation->getVersionTimestamp()->format('d/m/Y à H:i');
+
+            $parcoursVersionArray = [];
+            foreach($versionFormation->getFormation()->getParcours() as $p){
+                $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($p);
+                if(count($lastVersion) > 0){
+                    $parcoursVersionArray[] = $lastVersion[0];
+                }
+            }
+
+            $parcoursVersionArray = array_map(
+                fn($version) => $versionParcoursService->loadParcoursFromVersion($version), 
+                $parcoursVersionArray
+            );
+
+            return $this->render('formation/show.versioning.html.twig', [
+                'typeD' => $typeD,
+                'typeDiplome' => $versionFormation->getFormation()->getTypeDiplome(),
+                'formation' => $formation,
+                'isVersioningView' => true,
+                'parcoursVersionArray' => $parcoursVersionArray,
+                'dateHeureVersion' => $dateHeureVersion,
+                // 'isBut' => $versionFormation->getFormation()->getTypeDiplome()->getLibelleCourt() === "BUT"
+            ]);
+
+        }catch(\Exception $e){
+            $now = new DateTime();
+            $dateHeure = $now->format('d-m-Y_H-i-s');
+            $errorMessage = "[{$dateHeure}] La visualisation de version de la formation a rencontré une erreur."
+                . "\nFormation : {$versionFormation->getFormation()->getDisplayLong()} - ID : {$versionFormation->getFormation()->getId()}"
+                . "\nMessage : {$e->getMessage()}\n";
+            $filesystem->appendToFile(__DIR__ . "/../../versioning_json/error_log/view_formation_error.log", $errorMessage);
+
+            $this->addFlashBag('error', 'Une erreur est survenue lors de la visualisation');
+            return $this->redirectToRoute('app_formation_show', ['slug' => $versionFormation->getFormation()->getSlug()]);
         }
     }
 }

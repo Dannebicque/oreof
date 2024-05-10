@@ -5,9 +5,13 @@
             <dd>
                 {% for ville in formation.localisationMention %}{{ ville.libelle }}{% if not loop.last %}, {% endif %}{% endfor %}
             </dd>
-            {% if formationStringDifferences.localisationMention is defined %}
-                {{ include('communs/_comparaison_formation_versioning.html.twig', 
-                {stringData: formationStringDifferences.localisationMention}) 
+            {% if stringDifferencesFormation.localisationMention is defined %}
+                {{ include('communs/_comparaison_versioning_big.html.twig', 
+                        {
+                            textDifferences: stringDifferencesFormation.localisationMention,
+                            idCollapse: "diffLocalisationMention"
+                        }
+                    ) 
                 }}
             {% endif %}
             <dt>Régime(s) d'inscription</dt>
@@ -17,9 +21,14 @@
                     <li>{{ regime.value }}</li>
                     {% endfor %}
                 </ul>
-
-
                 {{ formation.regimeInscriptionTexte }}
+                {% if stringDifferencesFormation.regimeInscriptionFormation is defined %}
+                    {{ include("communs/_comparaison_versioning_big.html.twig", {
+                            textDifferences: stringDifferencesFormation.regimeInscriptionFormation,
+                            idCollapse: "diffRegimeInscriptionFormation"
+                        })
+                    }}
+                {% endif %}
             </dd>
             <dt>Modalités de l'alternance</dt>
             <dd>
@@ -29,6 +38,13 @@
     </div>
     <div class="col-6">
         <strong>Composante(s) d'inscription</strong>
+        {% if stringDifferencesFormation.composanteInscriptionFormation is defined %}
+            {{ include("communs/_comparaison_versioning_big.html.twig", {
+                    textDifferences: stringDifferencesFormation.composanteInscriptionFormation,
+                    idCollapse: "diffComposantesInscriptionFormation"
+                }) 
+            }}
+        {% endif %}
         {% for composante in formation.composantesInscription %}
         <dl>
             <dt>Composante</dt>
