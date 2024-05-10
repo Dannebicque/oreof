@@ -3,7 +3,7 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link {% if loop.first %}active{% endif %}"
                     data-bs-toggle="tab"
-                    data-bs-target="#competence_{{ loop.index }}"
+                    data-bs-target="#competence_{{ loop.index }}_P{{ indexParcours ?? '' }}"
                     role="tab" aria-selected="false" type="button">{{ competence.nomCourt }}</button>
         </li>
     {% endfor %}
@@ -11,7 +11,7 @@
 
 <div class="tab-content">
     {% for competence in competences %}
-        <div class="tab-pane {% if loop.first %}fade active show{% endif %}" id="competence_{{ loop.index }}">
+        <div class="tab-pane {% if loop.first %}fade active show{% endif %}" id="competence_{{ loop.index }}_P{{ indexParcours ?? '' }}">
             {{ include('typeDiplome/but/_competence.html.twig') }}
         </div>
     {% endfor %}

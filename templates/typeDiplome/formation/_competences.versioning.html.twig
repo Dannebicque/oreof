@@ -1,5 +1,5 @@
 <div class="row">
-    {% if (print is defined and print == false) %}
+    {# {% if (print is defined and print == false) %}
         <div class="col-sm-12 text-end mb-2 pe-40px">
             <div class="btn-group">
                 <button type="button"
@@ -20,12 +20,12 @@
                 </div>
             </div>
         </div>
-    {% endif %}
+    {% endif %} #}
     <div class="col-sm-12">
-        {% if isBut is defined and isBut == true %}
+        {% if parcours.formation.typeDiplome.libelleCourt == "BUT" %}
             {{ render(controller(
                 'App\\Controller\\BlocCompetenceController::afficheBUTReferentielVersioning',
-                { 'parcours': parcours }
+                { 'parcours': parcours, 'indexParcours': indexParcours ?? 1 }
             )) }}
         {% else %}
             <ul class="list-unstyled">

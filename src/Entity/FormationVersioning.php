@@ -26,6 +26,9 @@ class FormationVersioning
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $cfvuFlag = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class FormationVersioning
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function isCfvuFlag(): ?bool
+    {
+        return $this->cfvuFlag;
+    }
+
+    public function setCfvuFlag(?bool $cfvuFlag): static
+    {
+        $this->cfvuFlag = $cfvuFlag;
 
         return $this;
     }

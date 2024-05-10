@@ -12,20 +12,12 @@
             <dd>
                 <p>{{ ficheMatiere.description|raw }}</p>
             </dd>
-            {% if is_granted('ROLE_ADMIN') and stringDifferences is defined 
-               and stringDifferences.descriptionEnseignement is defined
-               and stringDifferences.descriptionEnseignement|length > 0
-            %}
-                <div class="col-sm-4 col-md-3 col-lg-2 col-xl-1">
-                    <button class="btn btn-primary btn-sm my-3"
-                        data-bs-toggle="collapse" data-bs-target="#diffFicheMatiereDescription"
-                    >
-                        Voir les différences
-                    </button>
-                </div>
-                <div class="col-sm-12 collapse" id="diffFicheMatiereDescription">
-                    {{ stringDifferences.descriptionEnseignement|raw  }} 
-                </div>
+            {% if stringDifferences.descriptionEnseignement is defined %}
+                {{ include("communs/_comparaison_versioning_big.html.twig", {
+                        textDifferences: stringDifferences.descriptionEnseignement,
+                        idCollapse: "diffDescriptionFicheMatiere"
+                    }) 
+                }}
             {% endif %}
         </dl>
     </div>

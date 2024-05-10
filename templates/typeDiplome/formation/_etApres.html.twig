@@ -3,8 +3,22 @@
         <dl>
             <dt>Poursuites d'études envisageables</dt>
             <dd>{{ parcours.poursuitesEtudes|raw }}</dd>
+            {% if stringDifferencesParcours.poursuiteEtudesParcours is defined %}
+                {{ include('communs/_comparaison_versioning_big.html.twig', {
+                        textDifferences: stringDifferencesParcours.poursuiteEtudesParcours,
+                        idCollapse: "diffPoursuiteEtudesParcours" ~ parcours.id
+                    }) 
+                }}
+            {% endif %}
             <dt>Débouchés</dt>
             <dd>{{ parcours.debouches|raw }}</dd>
+            {% if stringDifferencesParcours.debouchesTextParcours is defined %}
+                {{ include('communs/_comparaison_versioning_big.html.twig', {
+                        textDifferences: stringDifferencesParcours.debouchesTextParcours,
+                        idCollapse: "diffDebouchesParcours" ~ parcours.id
+                    }) 
+                }}
+            {% endif %}
         </dl>
     </div>
     <div class="col-12">

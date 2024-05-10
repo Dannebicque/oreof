@@ -1,0 +1,102 @@
+<div class="row"
+{{ stimulus_controller('structure--affichage') }}
+>
+    {# {% if (print is not defined or print == false) %}
+        <div class="col-sm-12 text-end mb-2 pe-40px">
+            <div class="btn-group">
+            <button type="button"
+                    class="btn btn-sm btn-outline-info btn-icon w-sm-auto mx-2 mb-1"
+                    {{ stimulus_action('structure--affichage', 'toggleEc') }}
+                    >
+                <i class="fal fa-eye-slash"></i> Masquer les EC
+            </button>
+            </div>
+            <div class="btn-group">
+                <button type="button"
+                        class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2 dropdown-toggle mb-1"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="{{ iconDownload }}"></i> Fiches EC/matières
+                </button>
+                <div class="dropdown-menu" style="">
+                    <a class="dropdown-item" href="{{ path('fiche_matiere_export_all', {parcours:parcours.id}) }}">
+                        Version complète (toutes les fiches dans 1 pdf)
+                    </a>
+                    <a class="dropdown-item" href="{{ path('fiche_matiere_export_zip', {parcours:parcours.id}) }}">
+                        Version zip (1 pdf par fiche)
+                    </a>
+                </div>
+            </div>
+
+            {{ include('btn/export_mccc.html.twig') }}
+        </div>
+    {% endif %} #}
+    <div class="col-sm-12">
+        <table class="table table-striped table-hover">
+            {% set presentiel = parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 0 or parcours.modalitesEnseignement.value == 1) %}
+            {% set distanciel = parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 2 or parcours.modalitesEnseignement.value == 1) %}
+
+            {% for ordre, semestre in dto.semestres %}
+                <tr>
+                    <th
+                            class="border-left-semestre-{{ ordre }}"
+                            colspan=" {% if presentiel %}8{% else %}13{% endif %}">{{ 'S' ~ ordre }} {% if semestre.raccroche == true %}<i class="fal fa-link"></i>{% endif %}</th>
+                </tr>
+
+                {% for ue in semestre.ues %}
+                    {{ include('typeDiplome/formation/_structureUe.versioning.html.twig', {semestreOrdre:ordre, enfant: false}) }}
+                {% endfor %}
+                <tr>
+                    <th class="border-left-semestre-{{ ordre }} text-end" colspan="3">Total Semestre {{ ordre }}</th>
+                    <th>{{ semestre.heuresEctsSemestre.sommeSemestreEcts|badgeEctsSemestre }}</th>
+
+                    {% set sommeSemestreTotalPres = semestre.heuresEctsSemestre.sommeSemestreCmPres
+                            + semestre.heuresEctsSemestre.sommeSemestreTdPres
+                            + semestre.heuresEctsSemestre.sommeSemestreTpPres %}
+                    {% set sommeSemestreTotalDist = semestre.heuresEctsSemestre.sommeSemestreCmDist
+                            + semestre.heuresEctsSemestre.sommeSemestreTdDist
+                            + semestre.heuresEctsSemestre.sommeSemestreTpDist %}
+
+                    {% if presentiel %}
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreCmPres }}</th>
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTdPres }}</th>
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTpPres }}</th>
+                        <th>{{ sommeSemestreTotalPres }}</th>
+                    {% endif %}
+
+                    {% if distanciel %}
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreCmDist }}</th>
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTdDist }}</th>
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTpDist }}</th>
+                        <th>{{ sommeSemestreTotalDist }}</th>
+                    {% endif %}
+
+                    {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
+                        <th>{{ semestre.heuresEctsSemestre.sommeSemestreTotalPresDist }}</th>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            <tr>
+                <th colspan="3" class="text-end">Total formation</th>
+                <th>{{ dto.heuresEctsFormation.sommeFormationEcts }}</th>
+
+                {% if presentiel %}
+                    <th>{{ dto.heuresEctsFormation.sommeFormationCmPres }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTdPres }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTpPres }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTotalPres }}</th>
+                {% endif %}
+
+                {% if distanciel %}
+                    <th>{{ dto.heuresEctsFormation.sommeFormationCmDist }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTdDist }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTpDist }}</th>
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTotalDist }}</th>
+                {% endif %}
+
+                {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
+                    <th>{{ dto.heuresEctsFormation.sommeFormationTotalPresDist }}</th>
+                {% endif %}
+            </tr>
+        </table>
+    </div>
+</div>

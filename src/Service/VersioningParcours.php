@@ -50,12 +50,15 @@ class VersioningParcours {
         );
     }
 
-    public function saveVersionOfParcours(Parcours $parcours, DateTimeImmutable $now, bool $withFlush = false){
+    public function saveVersionOfParcours(Parcours $parcours, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu = false){
         $dateHeure = $now->format('d-m-Y_H-i-s');
         // Objet BD Parcours Versioning
         $parcoursVersioning = new ParcoursVersioning();
         $parcoursVersioning->setParcours($parcours);
         $parcoursVersioning->setVersionTimestamp($now);
+        if($isCfvu){
+            $parcoursVersioning->setCvfuFlag(true);
+        }
         // Nom du fichier
         $parcoursFileName = "parcours-{$parcours->getId()}-{$dateHeure}";
         $dtoFileName = "dto-{$parcours->getId()}-{$dateHeure}";
@@ -132,6 +135,7 @@ class VersioningParcours {
                 'lineNumbers' => false,
                 'showHeader' => false,
                 'separateBlock' => false,
+                'wordGlues' => [' ', '.']
             ];
             // Données du parcours en JSON
             $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
@@ -170,36 +174,127 @@ class VersioningParcours {
                         $rendererOptions
                     ))
                 ),
-                'presentationFormationObjectifsFormation' => 
+                'contactsParcoursResponsableParcours' => html_entity_decode(DiffHelper::calculate(
+                    // Version
+                    $lastVersion->getRespParcours() ? 
+                    ($lastVersion->getRespParcours()->getNom()
+                     . " " . 
+                     $lastVersion->getRespParcours()->getPrenom()
+                    )  : "",
+                    // Actuel
+                    $parcours->getRespParcours() ? 
+                    ($parcours->getRespParcours()->getNom()
+                     . " " . 
+                     $parcours->getRespParcours()->getPrenom()
+                    ) : "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                "emailParcoursResponsableParcours" => html_entity_decode(DiffHelper::calculate(
+                    // Version
+                    $lastVersion->getRespParcours()?->getEmail() ?? "",
+                    // Actuel
+                    $parcours->getRespParcours()?->getEmail() ?? "",
+                    $rendererName,
+                    [...$differOptions, 'ignoreLineEnding' => false],
+                    [...$rendererOptions, 'detailLevel' => 'none']
+                )),
+                'contactsParcoursCoResponsableDuParcours' => html_entity_decode(DiffHelper::calculate(
+                    // Version
+                    $lastVersion->getCoResponsable() ? 
+                    ($lastVersion->getCoResponsable()->getNom()
+                     . " " . 
+                     $lastVersion->getCoResponsable()->getPrenom()
+                    )  : "",
+                    // Actuel
+                    $parcours->getCoResponsable() ? 
+                    ($parcours->getCoResponsable()->getNom()
+                     . " " . 
+                     $parcours->getCoResponsable()->getPrenom()
+                    ) : "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                "emailParcoursCoResponsableDuParcours" => html_entity_decode(DiffHelper::calculate(
+                    // Version
+                    $lastVersion->getCoResponsable()?->getEmail() ?? "",
+                    // Actuel
+                    $parcours->getCoResponsable()?->getEmail() ?? "",
+                    $rendererName,
+                    [...$differOptions, 'ignoreLineEnding' => false],
+                    [...$rendererOptions, 'detailLevel' => 'none']
+                )),
+                "regimeInscriptionParcours" => html_entity_decode(DiffHelper::calculate(
+                    "<p class=\"list-item\">"
+                    . implode("</p><p class=\"list-item\">", 
+                            array_map(fn($regime) => $regime->value, 
+                            $lastVersion->getRegimeInscription())
+                    ) . "</p>",
+                    "<p class=\"list-item\">"
+                    . implode("</p><p class=\"list-item\">", 
+                            array_map(fn($regime) => $regime->value, 
+                            $parcours->getRegimeInscription())
+                    ) . "</p>",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                "rythmeFormationParcours" => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getRythmeFormation()?->getLibelle() ?? "",
+                    $parcours->getRythmeFormation()?->getLibelle() ?? "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                "memoireTextParcours" => html_entity_decode(DiffHelper::calculate(
+                    $lastVersion->getMemoireText() ?? "",
+                    $parcours->getMemoireText() ?? "",
+                    $rendererName,
+                    $differOptions,
+                    $rendererOptions
+                )),
+                "stageTextParcours" => 
                 self::cleanUpComparison(
                     html_entity_decode(DiffHelper::calculate(
-                        self::cleanUpHtmlTextForComparison($lastVersion->getFormation()?->getObjectifsFormation() ?? ""),
-                        self::cleanUpHtmlTextForComparison($parcours->getFormation()?->getObjectifsFormation() ?? ""),
+                        self::cleanUpHtmlTextForComparison($lastVersion->getStageText() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getStageText() ?? ""),
                         $rendererName,
                         $differOptions,
                         $rendererOptions
-                    ))
-                ),
-                'presentationFormationContenuFormation' => 
+                    )
+                )),
+                "prerequisRecommandesParcours" => 
                 self::cleanUpComparison(
                     html_entity_decode(DiffHelper::calculate(
-                        self::cleanUpHtmlTextForComparison($lastVersion->getFormation()?->getContenuFormation() ?? ""),
-                        self::cleanUpHtmlTextForComparison($parcours->getFormation()?->getContenuFormation() ?? ""),
+                        self::cleanUpHtmlTextForComparison($lastVersion->getPrerequis() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getPrerequis() ?? ""),
                         $rendererName,
                         $differOptions,
                         $rendererOptions
-                    ))
-                ),
-                'presentationFormationResultatsAttendus' => 
+                    )
+                    )),
+                "debouchesTextParcours" => 
                 self::cleanUpComparison(
                     html_entity_decode(DiffHelper::calculate(
-                        self::cleanUpHtmlTextForComparison($lastVersion->getFormation()?->getResultatsAttendus() ?? ""),
-                        self::cleanUpHtmlTextForComparison($parcours->getFormation()?->getResultatsAttendus() ?? ""),
+                        self::cleanUpHtmlTextForComparison($lastVersion->getDebouches() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getDebouches() ?? ""),
                         $rendererName,
                         $differOptions,
                         $rendererOptions
-                    ))
-                )
+                    )
+                    )),
+                "poursuiteEtudesParcours" => 
+                self::cleanUpComparison(
+                    html_entity_decode(DiffHelper::calculate(
+                        self::cleanUpHtmlTextForComparison($lastVersion->getPoursuitesEtudes() ?? ""),
+                        self::cleanUpHtmlTextForComparison($parcours->getPoursuitesEtudes() ?? ""),
+                        $rendererName,
+                        $differOptions,
+                        $rendererOptions
+                    )
+                ))
             ];
         }
 

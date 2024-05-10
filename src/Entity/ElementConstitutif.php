@@ -75,6 +75,7 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $isTpDistancielMutualise;
 
+    #[Groups('DTO_json_versioning')]
     #[ORM\ManyToOne]
     private ?NatureUeEc $natureUeEc = null;
 

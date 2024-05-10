@@ -30,6 +30,7 @@ use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\UeRepository;
 use App\Service\LheoXML;
+use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
@@ -217,7 +218,8 @@ class ParcoursController extends BaseController
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Parcours            $parcours,
         LheoXML             $lheoXML,
-        VersioningParcours $versioningParcours
+        VersioningParcours $versioningParcours,
+        VersioningFormation $versioningFormation
     ): Response {
         $formation = $parcours->getFormation();
         if ($formation === null) {
@@ -231,7 +233,8 @@ class ParcoursController extends BaseController
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         $dto = $typeD->calculStructureParcours($parcours, true, false);
         
-        $textDifferences = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
+        $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
+        $textDifferencesFormation = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
         $cssDiff = DiffHelper::getStyleSheet();
 
         return $this->render('parcours/show.html.twig', [
@@ -242,7 +245,8 @@ class ParcoursController extends BaseController
             'dto' => $dto,
             'typeD' => $typeD,
             'lheoXML' => $lheoXML,
-            'stringDifferences' => $textDifferences,
+            'stringDifferencesParcours' => $textDifferencesParcours,
+            'stringDifferencesFormation' => $textDifferencesFormation,
             'cssDiff' => $cssDiff
         ]);
     }
@@ -576,7 +580,8 @@ class ParcoursController extends BaseController
     public function parcoursVersion(
         ParcoursVersioning $parcours_versioning,
         Filesystem $fileSystem,
-        VersioningParcours $versioningParcours
+        VersioningParcours $versioningParcours,
+        TypeDiplomeRegistry $typeDiplomeRegistry
     ): Response {
         try {  
             $loadedVersion = $versioningParcours->loadParcoursFromVersion($parcours_versioning);
@@ -585,9 +590,10 @@ class ParcoursController extends BaseController
                 'parcours' => $loadedVersion['parcours'],
                 'formation' => $loadedVersion['parcours']->getFormation(),
                 'typeDiplome' => $loadedVersion['parcours']->getTypeDiplome(),
+                'typeD' => $typeDiplomeRegistry->getTypeDiplome($loadedVersion['parcours']->getTypeDiplome()->getModeleMcc()),
                 'dto' => $loadedVersion['dto'],
                 'hasParcours' => $loadedVersion['parcours']->getFormation()->isHasParcours(),
-                'isBut' => $loadedVersion['parcours']->getTypeDiplome()->getLibelleCourt() === 'BUT',
+                // 'isBut' => $loadedVersion['parcours']->getTypeDiplome()->getLibelleCourt() === 'BUT',
                 'dateVersion' => $loadedVersion['dateVersion'],
             ]);
         } catch(\Exception $e) {

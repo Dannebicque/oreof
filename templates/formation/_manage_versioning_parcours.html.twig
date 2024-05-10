@@ -7,7 +7,7 @@
                 {% for p in parcours.parcoursVersionings %}
                     <option value="{{ p.getId }}">
                         Version du : {{ p.getVersionTimestamp()|date('d/m/Y') }}
-                        à {{ p.getVersionTimestamp()|date('H:i') }}
+                        à {{ p.getVersionTimestamp()|date('H:i') }} {{ p.isCvfuFlag() ? " - CFVU" : "" }}
                     </option>
                 {% endfor %}
             </select>
