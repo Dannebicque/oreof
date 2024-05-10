@@ -40,7 +40,7 @@ class FicheMatiereState
 
     public function isEmptyOnglet1(): bool
     {
-        return $this->ficheMatiere->getLibelle() === null && $this->ficheMatiere->getLibelleAnglais() === null && $this->ficheMatiere->getResponsableFicheMatiere() === null;
+        return $this->ficheMatiere->getLibelle() === null && $this->ficheMatiere->getLibelleAnglais() === null;
     }
 
     public function isEmptyOnglet2(): bool
