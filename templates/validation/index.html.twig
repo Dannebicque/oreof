@@ -51,6 +51,16 @@
                     Valider les fiches EC/matières
                 </a>
             </li>
+            {% if is_granted('ROLE_SES') %}
+            <li class="nav-item" role="presentation">
+                <a class="nav-link {% if step == 'changeRf' %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
+                   aria-selected="false"
+                        {{ stimulus_action('wizard', 'changeStep', 'click', {step: 'changeRf'}) }}
+                >
+                    Valider les demandes de change de responsable
+                </a>
+            </li>
+            {% endif %}
 
             <!-- An empty list to put overflowed links -->
             <li class="nav-item dropdown ms-auto pe-0 d-none responsive-tab-dropdown">

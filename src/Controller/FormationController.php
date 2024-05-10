@@ -17,9 +17,6 @@ use App\DTO\StatsFichesMatieres;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\FormationDemande;
-use App\Entity\FormationVersioning;
-use App\Entity\Parcours;
-use App\Entity\ParcoursVersioning;
 use App\Entity\UserCentre;
 use App\Events\AddCentreFormationEvent;
 use App\Form\FormationDemandeType;
@@ -42,7 +39,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 

@@ -202,6 +202,9 @@ class Formation
     #[ORM\OneToMany(mappedBy: 'formation', targetEntity: FormationVersioning::class)]
     private Collection $formationVersionings;
 
+    #[ORM\OneToMany(mappedBy: 'formation', targetEntity: ChangeRf::class)]
+    private Collection $changeRves;
+
     public function __construct(?CampagneCollecte $anneeUniversitaire)
     {
         $this->dpe = $anneeUniversitaire;
@@ -221,6 +224,7 @@ class Formation
         $this->commentaires = new ArrayCollection();
         $this->dpeParcours = new ArrayCollection();
         $this->formationVersionings = new ArrayCollection();
+        $this->changeRves = new ArrayCollection();
     }
 
     #[ORM\PreFlush]
@@ -1053,6 +1057,36 @@ class Formation
             // set the owning side to null (unless already changed)
             if ($formationVersioning->getFormation() === $this) {
                 $formationVersioning->setFormation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ChangeRf>
+     */
+    public function getChangeRves(): Collection
+    {
+        return $this->changeRves;
+    }
+
+    public function addChangeRf(ChangeRf $changeRf): static
+    {
+        if (!$this->changeRves->contains($changeRf)) {
+            $this->changeRves->add($changeRf);
+            $changeRf->setFormation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChangeRf(ChangeRf $changeRf): static
+    {
+        if ($this->changeRves->removeElement($changeRf)) {
+            // set the owning side to null (unless already changed)
+            if ($changeRf->getFormation() === $this) {
+                $changeRf->setFormation(null);
             }
         }
 

@@ -1,0 +1,70 @@
+<div class="card-body">
+    <table class="table" {{ stimulus_controller('check_all') }}>
+    <thead>
+    <tr>
+        <th>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
+                </label>
+            </div>
+        </th>
+        <th>
+            Formation
+        </th>
+        <th>
+            Actuel RF
+        </th>
+        <th>
+            Nouveau RF
+        </th>
+        <th>
+            Date demande
+        </th>
+        <th>
+            Etat
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for demande in demandes %}
+    <tr>
+        <td>
+            <div class="checkbox">
+                <label>
+                    <input
+                            {{ stimulus_action('check_all', 'check') }}
+                            type="checkbox"
+                            class="check-all"
+                            name="demandes[]"
+                            value="{{ demande.id }}"
+                    >
+                </label>
+            </div>
+        </td>
+        <td>
+            {{ demande.formation.displayLong }}
+        </td>
+        <td>
+            {{ demande.ancienResponsable.display }}
+        </td>
+        <td>
+            {{ demande.nouveauResponsable.display }}
+        </td>
+        <td>
+            {{ demande.dateDemande|date('d/m/Y H:i') }}
+        </td>
+        <td>
+           {{ demande.etatDemande|badgeEnum }}
+        </td>
+        <td>
+{#            <a href="{{ path('formation_demande', {id: demande.id}) }}" class="btn btn-primary">Voir</a>#}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+ </table>
+</div>

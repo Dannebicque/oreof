@@ -6,6 +6,8 @@ use App\Classes\Excel\ExcelWriter;
 use App\Classes\ValidationProcess;
 use App\Classes\ValidationProcessFicheMatiere;
 use App\Entity\Composante;
+use App\Enums\EtatDemandeChangeRfEnum;
+use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
@@ -104,6 +106,11 @@ class ValidationController extends BaseController
                     'composantes' => $composanteRepository->findAll(),
                     'types_validation' => $validationProcessFicheMatiere->getProcess(),
                 ]);
+            case 'changeRf':
+                return $this->render('validation/_changeRf.html.twig', [
+                    'composantes' => $composanteRepository->findAll(),
+                    'types_validation' => EtatDemandeChangeRfEnum::cases()
+                ]);
         }
     }
 
@@ -160,6 +167,42 @@ class ValidationController extends BaseController
             'process' => $process,
             'formations' => $formations,
             'composantes' => $composantes,
+            'etape' => $typeValidation ?? null,
+        ]);
+    }
+
+    #[Route('/validation/liste-change-rf', name: 'app_validation_formation_liste_changerf')]
+    public function listeChangeRf(
+        ChangeRfRepository $changeRfRepository,
+        ComposanteRepository $composanteRepository,
+        Request              $request
+    ): Response {
+        $typeValidation = $request->query->get('typeValidation');
+
+        if ($request->query->has('composante')) {
+            if ($request->query->get('composante') === 'all' && $request->query->get('composante') === 'all') {
+                $demandes = $changeRfRepository->findBy([], ['dateDemande' => 'DESC']);
+            }  elseif ($request->query->get('composante') === 'all' && $request->query->get('type_validation') !== 'all') {
+                $composante = null;
+                $demandes = $changeRfRepository->findByTypeValidation(['etatDemande' => $request->query->get('type_validation')]);
+            } else {
+                $composante = $composanteRepository->find($request->query->get('composante'));
+                if (!$composante) {
+                    throw $this->createNotFoundException('La composante n\'existe pas');
+                }
+                $demandes = $changeRfRepository->findByComposanteTypeValidation($composante, $request->query->get('type_validation'));
+            }
+
+
+
+
+        } else {
+            $formations = [];
+        }
+
+        $composantes = $composanteRepository->findAll();
+        return $this->render('validation/_listeChangeRf.html.twig', [
+            'demandes' => $demandes,
             'etape' => $typeValidation ?? null,
         ]);
     }
