@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.25.0](https://github.com/Dannebicque/oreof/compare/v1.24.57...v1.25.0) (2024-05-12)
+
+
+### Features
+
+* Affichage modifications structure en versionning ([6e6c46a](https://github.com/Dannebicque/oreof/commit/6e6c46af48c0ae13e9cbf8f048f3b3b3ecc15ea7))
+* demande de modification de RF ([97b5c79](https://github.com/Dannebicque/oreof/commit/97b5c7963057194f99258e5213b39fae35730c5a))
+
+
+### Bug Fixes
+
+* affichage comparaison prérequis recommandés ([fe48ef1](https://github.com/Dannebicque/oreof/commit/fe48ef1c58764ba64fdb40559bb0bff2710b82ea))
+* comparaison de texte : Formation & Parcours ([3987246](https://github.com/Dannebicque/oreof/commit/3987246cc378a7ee31abc4dc92ee084bfde951bb))
+* comparaison de texte du parcours ([2fee32d](https://github.com/Dannebicque/oreof/commit/2fee32d5dc93c9e1b295c126da735a78c85a6e3b))
+* comparaison email responsable ([d2ffb96](https://github.com/Dannebicque/oreof/commit/d2ffb96defafd2e6a1aa7b1f421e0ebf3d58f7b1))
+* comparaison email responsable parcours / formation ([a75ff8f](https://github.com/Dannebicque/oreof/commit/a75ff8fd51a58ffd4ec8faad253001adc37d557e))
+* comparaison localisation formation ([c4f16fb](https://github.com/Dannebicque/oreof/commit/c4f16fb3ff46150195de8ded2b6f4cfc4ea8f8f7))
+* comparaison parcours ([5200651](https://github.com/Dannebicque/oreof/commit/5200651f0f35baffc280869cf352da669fd93776))
+* comparaison regime inscription : Formation & Parcours ([ba0fae2](https://github.com/Dannebicque/oreof/commit/ba0fae23ce5cf8498fbf7a482642abf92869596f))
+* comparaison responsable de formation ([da8b1ff](https://github.com/Dannebicque/oreof/commit/da8b1ffde32f75beceb6678447f156135087e3e4))
+* référentiel de compétences BUT - versioning ([c862fbb](https://github.com/Dannebicque/oreof/commit/c862fbbacea4ec176adffaeb6b0649e79d5a7a7c))
+* responsable non obligatoire ([9d5c4c8](https://github.com/Dannebicque/oreof/commit/9d5c4c85bfbb45088899ddb12813f3c31170f694))
+* responsable non obligatoire ([239dac5](https://github.com/Dannebicque/oreof/commit/239dac5a18f522ea35b95276314a6874688a4046))
+* serialization group ([760cb0e](https://github.com/Dannebicque/oreof/commit/760cb0e07868ff7727ee92ab5864bf7fa645a15a))
+* total heure ec versioning ([b5ff295](https://github.com/Dannebicque/oreof/commit/b5ff295f5270f02d9d9d89ab5545c5432839ec07))
+* versioning ([7af18e6](https://github.com/Dannebicque/oreof/commit/7af18e647d0a0caf96361be96794d33edc3bb4b6))
+* versioning formation avec parcours ([8378105](https://github.com/Dannebicque/oreof/commit/83781054d623f7b5cac8cc1560fe1f5196c186ed))
+* versioning rythme formation parcours ([e673d16](https://github.com/Dannebicque/oreof/commit/e673d16493fc9b9d649e3f2ac94cc1d933dff0d6))
+* visualisation version de formation ([2f5f565](https://github.com/Dannebicque/oreof/commit/2f5f565a27dd49e66e8afbee7f94426b821c48f2))
+* WSDL production : variable environnement ([1f81360](https://github.com/Dannebicque/oreof/commit/1f81360bf3a3afc2275907fb528e4a3c21d9dcb9))
+
 ### [1.24.57](https://github.com/Dannebicque/oreof/compare/v1.24.56...v1.24.57) (2024-04-25)
 
 
