@@ -131,7 +131,6 @@ class MentionController extends AbstractController
                         }
                     }
                     $codeLettre = $codeLettre + $offset;
-
                 }
             }
         }

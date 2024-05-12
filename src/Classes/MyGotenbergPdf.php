@@ -11,8 +11,6 @@ namespace App\Classes;
 
 use App\Entity\Parcours;
 use App\Utils\Tools;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use Gotenberg\Gotenberg;
 use Gotenberg\Stream;
 use Psr\Http\Client\ClientInterface;
