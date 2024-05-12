@@ -2,12 +2,15 @@
 
 namespace App\Classes\Excel;
 
+use App\DTO\DiffObject;
 use App\Utils\Tools;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
@@ -248,12 +251,12 @@ class ExcelWriter
     public function setSpreadsheet(Spreadsheet $sheet): void
     {
         $this->spreadsheet = $sheet;
-//       if ($mcc === true) {
-//           foreach ($this->spreadsheet->getAllSheets() as $sh) {
-//               $sh->setShowGridlines(false);
-//               //$sh->getProtection()->setSheet(true);
-//           }
-//       }
+        //       if ($mcc === true) {
+        //           foreach ($this->spreadsheet->getAllSheets() as $sh) {
+        //               $sh->setShowGridlines(false);
+        //               //$sh->getProtection()->setSheet(true);
+        //           }
+        //       }
     }
 
     public function genereFichier(string $name, bool $grid = false): StreamedResponse
@@ -500,5 +503,32 @@ class ExcelWriter
     public function setRepeatRows(int $debut, int $fin)
     {
         $this->sheet->getPageSetup()->setRowsToRepeatAtTopByStartAndEnd($debut, $fin);
+    }
+
+    /**
+     * Mise en forme d'une cellule avec une différence entre deux valeurs
+     */
+    public function writeCellXYDiff(
+        int|string $col,
+        int $row,
+        DiffObject $diffObject,
+        array $options = []
+    ): void {
+        if (is_string($col)) {
+            $col = (int)Coordinate::columnIndexFromString($col);
+        }
+
+        $richText = new RichText();
+        $ancienneValeur = $richText->createTextRun($diffObject->original);
+        $ancienneValeur->getFont()?->setStrikethrough(true);
+        $ancienneValeur->getFont()?->setItalic(true);
+        $ancienneValeur->getFont()?->setColor(new Color(Color::COLOR_RED));
+        $nouvelleValeur = $richText->createTextRun($diffObject->new);
+        $nouvelleValeur->getFont()?->setStrikethrough(false);
+        $nouvelleValeur->getFont()?->setBold(true);
+        $nouvelleValeur->getFont()?->setColor(new Color(Color::COLOR_GREEN));
+
+        $this->sheet->setCellValue([$col, $row], $richText);
+
     }
 }

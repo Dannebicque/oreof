@@ -91,4 +91,14 @@ abstract class Tools
 
         return $dir;
     }
+
+    public static function filtreHeures(?float $heures)
+    {
+        if ($heures === null) {
+            return '-';
+        }
+
+        return $heures > 0.0 ? $heures : '-';
+    }
+
 }

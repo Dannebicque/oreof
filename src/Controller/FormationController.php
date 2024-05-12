@@ -17,6 +17,8 @@ use App\DTO\StatsFichesMatieres;
 use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\FormationDemande;
+use App\Entity\FormationVersioning;
+use App\Entity\ParcoursVersioning;
 use App\Entity\UserCentre;
 use App\Events\AddCentreFormationEvent;
 use App\Form\FormationDemandeType;
@@ -397,7 +399,7 @@ class FormationController extends BaseController
          */
         $cssDiff = DiffHelper::getStyleSheet();
         if($formation->isHasParcours() === false && count($formation->getParcours()) === 1){
-            $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);    
+            $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);
         }
 
         /**
@@ -582,7 +584,7 @@ class FormationController extends BaseController
             }
 
             $parcoursVersionArray = array_map(
-                fn($version) => $versionParcoursService->loadParcoursFromVersion($version), 
+                fn($version) => $versionParcoursService->loadParcoursFromVersion($version),
                 $parcoursVersionArray
             );
 

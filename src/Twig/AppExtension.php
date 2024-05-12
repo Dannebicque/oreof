@@ -63,11 +63,7 @@ class AppExtension extends AbstractExtension
 
     public function filtreHeures(?float $heures): string
     {
-        if ($heures === null) {
-            return '-';
-        }
-
-        return $heures > 0.0 ? $heures : '-';
+        return Tools::filtreHeures($heures);
     }
 
     public function printTexte(?string $texte): string

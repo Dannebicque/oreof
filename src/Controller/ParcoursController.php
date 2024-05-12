@@ -32,6 +32,7 @@ use App\Repository\UeRepository;
 use App\Service\LheoXML;
 use App\Service\VersioningFormation;
 use App\Service\VersioningParcours;
+use App\Service\VersioningStructure;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\JsonRequest;
 use DateTimeImmutable;
@@ -232,9 +233,12 @@ class ParcoursController extends BaseController
 
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
         $dto = $typeD->calculStructureParcours($parcours, true, false);
-        
+
         $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
         $textDifferencesFormation = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
+        $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
+        $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+
         $cssDiff = DiffHelper::getStyleSheet();
 
         return $this->render('parcours/show.html.twig', [
@@ -247,6 +251,7 @@ class ParcoursController extends BaseController
             'lheoXML' => $lheoXML,
             'stringDifferencesParcours' => $textDifferencesParcours,
             'stringDifferencesFormation' => $textDifferencesFormation,
+            'diffStructure' => $diffStructure,
             'cssDiff' => $cssDiff
         ]);
     }
@@ -559,10 +564,9 @@ class ParcoursController extends BaseController
             $fileSystem->appendToFile(__DIR__ . "/../../versioning_json/success_log/save_parcours_success.log", $successLogTxt);
             // Message de réussite + redirection
             $this->addFlashBag('success', 'La version du parcours à bien été sauvegardée.');
-            if($parcours->isParcoursDefaut() === false){
+            if($parcours->isParcoursDefaut() === false) {
                 return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
-            }
-            else {
+            } else {
                 return $this->redirectToRoute('app_formation_show', ['slug' => $parcours->getFormation()->getSlug()]);
             }
         } catch (\Exception $e) {
@@ -583,7 +587,7 @@ class ParcoursController extends BaseController
         VersioningParcours $versioningParcours,
         TypeDiplomeRegistry $typeDiplomeRegistry
     ): Response {
-        try {  
+        try {
             $loadedVersion = $versioningParcours->loadParcoursFromVersion($parcours_versioning);
 
             return $this->render('parcours/show_version.html.twig', [

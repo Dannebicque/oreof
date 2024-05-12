@@ -55,6 +55,43 @@ class ParcoursMcccExportController extends BaseController
         };
     }
 
+    #[Route('/parcours/mccc/export-version/{parcours}.{_format}', name: 'app_parcours_mccc_export_versionning')]
+    public function exportMcccVersionXlsx(
+        TypeDiplomeRegistry $typeDiplomeRegistry,
+        Parcours $parcours,
+        string $_format = 'xlsx'
+    ) {
+        $formation = $parcours->getFormation();
+
+        if (null === $formation) {
+            throw new \Exception('Pas de formation.');
+        }
+
+        $typeDiplome = $typeDiplomeRegistry->getTypeDiplome($formation->getTypeDiplome()?->getModeleMcc());
+
+        if (null === $typeDiplome) {
+            throw new \Exception('Aucun modèle MCC n\'est défini pour ce diplôme');
+        }
+
+
+
+        return match ($_format) {
+            'xlsx' => $typeDiplome->exportExcelMccc(
+                $this->getDpe(),
+                $parcours,
+                 null,
+                 null
+            ),
+            'pdf' => $typeDiplome->exportPdfMccc(
+                $this->getDpe(),
+                $parcours,
+                null,
+                 null
+            ),
+            default => throw new \Exception('Format non géré'),
+        };
+    }
+
     #[Route('/parcours/mccc/export-light/{parcours}.{_format}', name: 'app_parcours_mccc_export_light')]
     public function exportMcccLightXlsx(
         GetHistorique $getHistorique,

@@ -22,7 +22,8 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-class VersioningParcours {
+class VersioningParcours
+{
 
     private EntityManagerInterface $entityManager;
     private Serializer $serializer;
@@ -33,14 +34,14 @@ class VersioningParcours {
         EntityManagerInterface $entityManager,
         Filesystem $fileSystem,
         TypeDiplomeRegistry $typeD
-    ){  
+    ) {
         $this->entityManager = $entityManager;
         $this->typeD = $typeD;
         $this->fileSystem = $fileSystem;
         // Définition du serializer
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $this->serializer = new Serializer(
-        [
+            [
             new DateTimeNormalizer(),
             new BackedEnumNormalizer(),
             new ArrayDenormalizer(),
@@ -50,13 +51,14 @@ class VersioningParcours {
         );
     }
 
-    public function saveVersionOfParcours(Parcours $parcours, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu = false){
+    public function saveVersionOfParcours(Parcours $parcours, DateTimeImmutable $now, bool $withFlush = false, bool $isCfvu = false)
+    {
         $dateHeure = $now->format('d-m-Y_H-i-s');
         // Objet BD Parcours Versioning
         $parcoursVersioning = new ParcoursVersioning();
         $parcoursVersioning->setParcours($parcours);
         $parcoursVersioning->setVersionTimestamp($now);
-        if($isCfvu){
+        if($isCfvu) {
             $parcoursVersioning->setCvfuFlag(true);
         }
         // Nom du fichier
@@ -88,12 +90,13 @@ class VersioningParcours {
         $this->fileSystem->appendToFile(__DIR__ . "/../../versioning_json/parcours/{$parcours->getId()}/{$dtoFileName}.json", $dtoJson);
         // Enregistrement de la référence en BD
         $this->entityManager->persist($parcoursVersioning);
-        if($withFlush){
+        if($withFlush) {
             $this->entityManager->flush();
         }
     }
 
-    public function loadParcoursFromVersion(ParcoursVersioning $parcours_versioning){
+    public function loadParcoursFromVersion(ParcoursVersioning $parcours_versioning)
+    {
         $fileParcours = file_get_contents(
             __DIR__ . "/../../versioning_json/parcours/"
                                     . "{$parcours_versioning->getParcours()->getId()}/"
@@ -115,12 +118,13 @@ class VersioningParcours {
         ];
     }
 
-    public function getDifferencesBetweenParcoursAndLastVersion(Parcours $parcours){
+    public function getDifferencesBetweenParcoursAndLastVersion(Parcours $parcours): array
+    {
         $textDifferences = [];
         $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
         $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
 
-        if($lastVersion){
+        if($lastVersion) {
             // Configuration du calcul des différences
             $rendererName = 'Combined';
             $differOptions = [
@@ -129,7 +133,7 @@ class VersioningParcours {
                 'ignoreLineEnding' => true,
                 'lengthLimit' => 4500
             ];
-            // Affichage 
+            // Affichage
             $rendererOptions = [
                 'detailLevel' => 'word',
                 'lineNumbers' => false,
@@ -138,13 +142,14 @@ class VersioningParcours {
                 'wordGlues' => [' ', '.']
             ];
             // Données du parcours en JSON
-            $fileParcours = file_get_contents(__DIR__ . "/../../versioning_json/parcours/"
+            $fileParcours = file_get_contents(
+                __DIR__ . "/../../versioning_json/parcours/"
                                             . "{$lastVersion->getParcours()->getId()}/"
                                             . "{$lastVersion->getParcoursFileName()}.json"
-                            );
+            );
             $lastVersion = $this->serializer->deserialize($fileParcours, Parcours::class, 'json');
             $textDifferences = [
-                'presentationParcoursContenuFormation' => 
+                'presentationParcoursContenuFormation' =>
                 self::cleanUpComparison(
                     html_entity_decode(DiffHelper::calculate(
                         self::cleanUpHtmlTextForComparison($lastVersion->getContenuFormation() ?? ""),
@@ -154,7 +159,7 @@ class VersioningParcours {
                         $rendererOptions
                     ))
                 ),
-                'presentationParcoursObjectifsParcours' => 
+                'presentationParcoursObjectifsParcours' =>
                 self::cleanUpComparison(
                     html_entity_decode(DiffHelper::calculate(
                         self::cleanUpHtmlTextForComparison($lastVersion->getObjectifsParcours() ?? ""),
@@ -164,7 +169,7 @@ class VersioningParcours {
                         $rendererOptions
                     ))
                 ),
-                'presentationParcoursResultatsAttendus' => 
+                'presentationParcoursResultatsAttendus' =>
                 self::cleanUpComparison(
                     html_entity_decode(DiffHelper::calculate(
                         self::cleanUpHtmlTextForComparison($lastVersion->getResultatsAttendus() ?? ""),
@@ -176,15 +181,17 @@ class VersioningParcours {
                 ),
                 'contactsParcoursResponsableParcours' => html_entity_decode(DiffHelper::calculate(
                     // Version
-                    $lastVersion->getRespParcours() ? 
-                    ($lastVersion->getRespParcours()->getNom()
-                     . " " . 
+                    $lastVersion->getRespParcours() ?
+                    (
+                        $lastVersion->getRespParcours()->getNom()
+                     . " " .
                      $lastVersion->getRespParcours()->getPrenom()
                     )  : "",
                     // Actuel
-                    $parcours->getRespParcours() ? 
-                    ($parcours->getRespParcours()->getNom()
-                     . " " . 
+                    $parcours->getRespParcours() ?
+                    (
+                        $parcours->getRespParcours()->getNom()
+                     . " " .
                      $parcours->getRespParcours()->getPrenom()
                     ) : "",
                     $rendererName,
@@ -202,15 +209,17 @@ class VersioningParcours {
                 )),
                 'contactsParcoursCoResponsableDuParcours' => html_entity_decode(DiffHelper::calculate(
                     // Version
-                    $lastVersion->getCoResponsable() ? 
-                    ($lastVersion->getCoResponsable()->getNom()
-                     . " " . 
+                    $lastVersion->getCoResponsable() ?
+                    (
+                        $lastVersion->getCoResponsable()->getNom()
+                     . " " .
                      $lastVersion->getCoResponsable()->getPrenom()
                     )  : "",
                     // Actuel
-                    $parcours->getCoResponsable() ? 
-                    ($parcours->getCoResponsable()->getNom()
-                     . " " . 
+                    $parcours->getCoResponsable() ?
+                    (
+                        $parcours->getCoResponsable()->getNom()
+                     . " " .
                      $parcours->getCoResponsable()->getPrenom()
                     ) : "",
                     $rendererName,
@@ -228,14 +237,20 @@ class VersioningParcours {
                 )),
                 "regimeInscriptionParcours" => html_entity_decode(DiffHelper::calculate(
                     "<p class=\"list-item\">"
-                    . implode("</p><p class=\"list-item\">", 
-                            array_map(fn($regime) => $regime->value, 
-                            $lastVersion->getRegimeInscription())
+                    . implode(
+                        "</p><p class=\"list-item\">",
+                        array_map(
+                            fn ($regime) => $regime->value,
+                            $lastVersion->getRegimeInscription()
+                        )
                     ) . "</p>",
                     "<p class=\"list-item\">"
-                    . implode("</p><p class=\"list-item\">", 
-                            array_map(fn($regime) => $regime->value, 
-                            $parcours->getRegimeInscription())
+                    . implode(
+                        "</p><p class=\"list-item\">",
+                        array_map(
+                            fn ($regime) => $regime->value,
+                            $parcours->getRegimeInscription()
+                        )
                     ) . "</p>",
                     $rendererName,
                     $differOptions,
@@ -255,76 +270,106 @@ class VersioningParcours {
                     $differOptions,
                     $rendererOptions
                 )),
-                "stageTextParcours" => 
+                "stageTextParcours" =>
                 self::cleanUpComparison(
-                    html_entity_decode(DiffHelper::calculate(
-                        self::cleanUpHtmlTextForComparison($lastVersion->getStageText() ?? ""),
-                        self::cleanUpHtmlTextForComparison($parcours->getStageText() ?? ""),
-                        $rendererName,
-                        $differOptions,
-                        $rendererOptions
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            self::cleanUpHtmlTextForComparison($lastVersion->getStageText() ?? ""),
+                            self::cleanUpHtmlTextForComparison($parcours->getStageText() ?? ""),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
                     )
-                )),
-                "prerequisRecommandesParcours" => 
+                ),
+                "prerequisRecommandesParcours" =>
                 self::cleanUpComparison(
-                    html_entity_decode(DiffHelper::calculate(
-                        self::cleanUpHtmlTextForComparison($lastVersion->getPrerequis() ?? ""),
-                        self::cleanUpHtmlTextForComparison($parcours->getPrerequis() ?? ""),
-                        $rendererName,
-                        $differOptions,
-                        $rendererOptions
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            self::cleanUpHtmlTextForComparison($lastVersion->getPrerequis() ?? ""),
+                            self::cleanUpHtmlTextForComparison($parcours->getPrerequis() ?? ""),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
                     )
-                    )),
-                "debouchesTextParcours" => 
+                ),
+                "debouchesTextParcours" =>
                 self::cleanUpComparison(
-                    html_entity_decode(DiffHelper::calculate(
-                        self::cleanUpHtmlTextForComparison($lastVersion->getDebouches() ?? ""),
-                        self::cleanUpHtmlTextForComparison($parcours->getDebouches() ?? ""),
-                        $rendererName,
-                        $differOptions,
-                        $rendererOptions
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            self::cleanUpHtmlTextForComparison($lastVersion->getDebouches() ?? ""),
+                            self::cleanUpHtmlTextForComparison($parcours->getDebouches() ?? ""),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
                     )
-                    )),
-                "poursuiteEtudesParcours" => 
+                ),
+                "poursuiteEtudesParcours" =>
                 self::cleanUpComparison(
-                    html_entity_decode(DiffHelper::calculate(
-                        self::cleanUpHtmlTextForComparison($lastVersion->getPoursuitesEtudes() ?? ""),
-                        self::cleanUpHtmlTextForComparison($parcours->getPoursuitesEtudes() ?? ""),
-                        $rendererName,
-                        $differOptions,
-                        $rendererOptions
+                    html_entity_decode(
+                        DiffHelper::calculate(
+                            self::cleanUpHtmlTextForComparison($lastVersion->getPoursuitesEtudes() ?? ""),
+                            self::cleanUpHtmlTextForComparison($parcours->getPoursuitesEtudes() ?? ""),
+                            $rendererName,
+                            $differOptions,
+                            $rendererOptions
+                        )
                     )
-                ))
+                )
             ];
         }
 
         return $textDifferences;
     }
 
-    public static function cleanUpHtmlTextForComparison(string $html) : string {
+    public static function cleanUpHtmlTextForComparison(string $html) : string
+    {
         $cleaned = $html;
         $cleaned = preg_replace('/\<div\>/m', '', $cleaned);
         $cleaned = preg_replace('/\<\/div\>/m', '', $cleaned);
         $cleaned = preg_replace('/\<ul\>|\<\/ul\>/m', '', $cleaned);
         $cleaned = preg_replace('/\<li\>/m', '<p class="list-item"><span class="list-item-text">', $cleaned);
         $cleaned = preg_replace('/\<\/li\>/m', '</span></p>', $cleaned);
-        $cleaned = preg_replace('/\<\!--block--\>/m', '', $cleaned); 
+        $cleaned = preg_replace('/\<\!--block--\>/m', '', $cleaned);
         $cleaned = preg_replace('/\<br\>/m', '', $cleaned);
         // $cleaned = preg_replace('/\>(.+)\<br\>/m', '<p>$1</p>', $cleaned);
-        
+
 
         return $cleaned;
     }
 
-    public static function removeBlockHtml(string $html) : string {
+    public static function removeBlockHtml(string $html) : string
+    {
         return preg_replace('/\<\!--block--\>/m', '', $html);
     }
 
-    public static function cleanUpComparison(string $htmlComparison) : string {
+    public static function cleanUpComparison(string $htmlComparison) : string
+    {
         return preg_replace(
-            '/(\<del\>)(\<\/span\>\<\/p\>\<p class\="list-item"\>\<span class\="list-item-text"\>)/m', 
-            "$2$1", 
+            '/(\<del\>)(\<\/span\>\<\/p\>\<p class\="list-item"\>\<span class\="list-item-text"\>)/m',
+            "$2$1",
             $htmlComparison
         );
+    }
+
+    public function getStructureDifferencesBetweenParcoursAndLastVersion(Parcours $parcours)
+    {
+        $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
+        $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
+
+        if($lastVersion) {
+            $fileDTO = file_get_contents(
+                __DIR__ . "/../../versioning_json/parcours/"
+                . "{$lastVersion->getParcours()->getId()}/"
+                . "{$lastVersion->getDtoFileName()}.json"
+            );
+            $dto = $this->serializer->deserialize($fileDTO, StructureParcours::class, 'json');
+
+            return $dto;
+        }
+
+        return null;
     }
 }

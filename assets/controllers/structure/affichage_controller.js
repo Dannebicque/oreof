@@ -14,4 +14,13 @@ export default class extends Controller {
       ec.classList.toggle('d-none')
     })
   }
+
+  toggleVersioning() {
+    document.querySelectorAll('.show_versioning').forEach((ec) => {
+      ec.classList.toggle('d-none')
+    })
+    document.querySelectorAll('.show_current').forEach((ec) => {
+      ec.classList.toggle('d-none')
+    })
+  }
 }

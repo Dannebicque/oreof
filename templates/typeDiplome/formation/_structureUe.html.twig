@@ -1,7 +1,8 @@
 <tr>
     <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
     <th colspan="3" {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %}>
-        {{ ue.display }} | {{ ue.ue.libelle }} ({{ ue.codeApogee() }}) {% if ue.raccroche == true %}<i class="fal fa-link"></i>{% endif %}
+        {{ ue.display }} | {{ ue.ue.libelle }} ({{ ue.codeApogee() }}) {% if ue.raccroche == true %}<i
+                class="fal fa-link"></i>{% endif %}
         {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
             <span class="badge bg-secondary">
             UE à choix libre</span>
@@ -71,10 +72,20 @@
     {% endif %}
 
 
-    {% for ec in ue.elementConstitutifs %}
-        {{ include('typeDiplome/formation/_structureEc.html.twig', {ec:ec, semestreOrdre:semestreOrdre, ecEnfant:false}) }}
+    {% for ordEc, ec in ue.elementConstitutifs %}
+        {{ include('typeDiplome/formation/_structureEc.html.twig', {
+            ec:ec,
+            semestreOrdre:semestreOrdre,
+            ecEnfant:false,
+            diffEc: diffUe.elementConstitutifs[ordEc] ?? null
+        }) }}
         {% for ece in ec.elementsConstitutifsEnfants %}
-            {{ include('typeDiplome/formation/_structureEc.html.twig', {ec:ece, semestreOrdre:semestreOrdre, ecEnfant:true}) }}
+            {{ include('typeDiplome/formation/_structureEc.html.twig', {
+                ec:ece,
+                semestreOrdre:semestreOrdre,
+                ecEnfant:true,
+                diffEc: diffUe.elementConstitutifs[ordEc] ?? null
+            }) }}
         {% endfor %}
     {% endfor %}
 {% endif %}
@@ -89,25 +100,58 @@
     <th class="text-end">
         Total {{ ue.display }} {% if enfant == false and ue.ue.ueEnfants|length > 0 %}(Total max.){% endif %}</th>
 
-    <th>{{ ue.heuresEctsUe.sommeUeEcts|badgeEcts('primary') }}</th>
+    <th>
+        <span class="show_versioning d-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeEcts|displayDiff : '' }} ECTS</span>
+        <p class="show_current">{{ ue.heuresEctsUe.sommeUeEcts|badgeEcts('primary') }}</p>
+    </th>
     {% if presentiel %}
-        <th>{{ ue.heuresEctsUe.sommeUeCmPres|filtreHeures }}</th>
-        <th>{{ ue.heuresEctsUe.sommeUeTdPres|filtreHeures }}</th>
-        <th>{{ ue.heuresEctsUe.sommeUeTpPres|filtreHeures }}</th>
+        <th>
+            <span class="show_versioning d-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeCmPres|displayDiff : '' }} </span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeCmPres|filtreHeures }}</span>
+        </th>
+        <th>
+            <span class="show_versioning d-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTdPres|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTdPres|filtreHeures }}</span>
+        </th>
+        <th>
+            <span class="show_versioning d-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTpPres|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTpPres|filtreHeures }}</span>
+        </th>
         {% if isBut is defined and isBut == true %}
-            <th>{{ ue.heuresEctsUe.sommeUeTePres|filtreHeures }}</th>
+            <th>
+                <span class="show_versioning d-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTePres|displayDiff : '' }}</span>
+                <span class="show_current">{{ ue.heuresEctsUe.sommeUeTePres|filtreHeures }}</span>
+            </th>
         {% endif %}
-        <th>{{ ue.heuresEctsUe.sommeUeTotalPres|filtreHeures }}</th>
+        <th>
+            <span class="show_versioning d-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTotalPres|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTotalPres|filtreHeures }}</span>
+        </th>
     {% endif %}
 
     {% if distanciel %}
-        <th>{{ ue.heuresEctsUe.sommeUeCmDist|filtreHeures }}</th>
-        <th>{{ ue.heuresEctsUe.sommeUeTdDist|filtreHeures }}</th>
-        <th>{{ ue.heuresEctsUe.sommeUeTpDist|filtreHeures }}</th>
-        <th>{{ ue.heuresEctsUe.sommeUeTotalDist|filtreHeures }}</th>
+        <th>
+            <span class="show_versioning d-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeCmDist|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeCmDist|filtreHeures }}</span>
+        </th>
+        <th>
+            <span class="show_versioning d-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTdDist|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTdDist|filtreHeures }}</span>
+        </th>
+        <th>
+            <span class="show_versioning d-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTpDist|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTpDist|filtreHeures }}</span>
+        </th>
+        <th>
+            <span class="show_versioning d-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTotalDist|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTotalDist|filtreHeures }}</span>
+        </th>
     {% endif %}
 
     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
-        <th>{{ ue.heuresEctsUe.sommeUeTotalPresDist|filtreHeures }}</th>
+        <th>
+            <span class="show_versioning d-none">{{ diffUe ? diffUe.heuresEctsUe.sommeUeTotalPresDist|displayDiff : '' }}</span>
+            <span class="show_current">{{ ue.heuresEctsUe.sommeUeTotalPresDist|filtreHeures }}</span>
+        </th>
     {% endif %}
 </tr>
