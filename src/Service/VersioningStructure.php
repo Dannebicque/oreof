@@ -189,4 +189,61 @@ class VersioningStructure
 
         return $diff;
     }
+
+    public function mapStructureForComparison(StructureParcours $dto, bool $isVersion){
+        $structure = ['semestres' => []];
+        // Semestres
+        foreach($dto->semestres as $indexS => $semestre){
+            $structure['semestres'][$indexS] = $isVersion 
+                ? ['idSemestre' => $semestre['semestre']['id'], 'ues' => []] 
+                : ['idSemestre' => $semestre->semestre->getId(), 'ues' => []];
+            $ueArray = $isVersion ? $semestre['ues'] : $semestre->ues();
+            $structure['semestres'][$indexS]['ues'] = $this->mapUeArrayForComparison($ueArray, $isVersion);
+            foreach($ueArray as $indexUe => $ue){
+                $ecArray = $isVersion ? $ue['elementConstitutifs'] : $ue->elementConstitutifs;
+                $structure['semestres'][$indexS]['ues'][$indexUe]['listeEc'] = $this->mapEcArrayForComparison($ecArray, $isVersion);
+                foreach($ecArray as $indexEc => $ec){
+                    $ecEnfantData = $isVersion ? $ec['elementsConstitutifsEnfants'] : $ec->elementsConstitutifsEnfants;
+                    $structure['semestres'][$indexS]['ues'][$indexUe]['listeEc'][$indexEc]['listeEcsEnfants'] = $this->mapEcArrayForComparison($ecEnfantData, $isVersion);
+                }
+                $ueEnfantArrayData = $isVersion ? $ue['uesEnfants'] : $ue->uesEnfants();
+                $structure['semestres'][$indexS]['ues'][$indexUe]['uesEnfants'] = $this->mapUeArrayForComparison($ueEnfantArrayData, $isVersion);
+                foreach($ueEnfantArrayData as $indexUeEnfant => $ueEnfant){
+                    $ecArrayData = $isVersion ? $ueEnfant['elementConstitutifs'] : $ueEnfant->elementConstitutifs;
+                    $structure['semestres'][$indexS]['ues'][$indexUe]['uesEnfants'][$indexUeEnfant]['listeEc'] = $this->mapEcArrayForComparison($ecArrayData, $isVersion);
+                    foreach($ecArrayData as $indexEcEnfantUeEnfant => $ec){
+                        $ecEnfantData = $isVersion ? $ec['elementsConstitutifsEnfants'] : $ec->elementsConstitutifsEnfants;
+                        $structure['semestres'][$indexS]['ues'][$indexUe]['uesEnfants'][$indexUeEnfant]['listeEc'][$indexEcEnfantUeEnfant]['listeEcsEnfants'] = $this->mapEcArrayForComparison($ecEnfantData, $isVersion);
+                    }   
+                } 
+            }
+        }
+
+        return $structure;
+    }
+
+    public function mapUeArrayForComparison(array $ueArray, bool $isVersion){
+        return $isVersion 
+        ? array_values(array_map(
+            fn($ue) => ["idUe" => $ue['ue']['id']],
+                $ueArray)
+            )
+        : array_values(array_map(
+            fn($ue) => ["idUe" => $ue->ue->getId()],
+                $ueArray)
+        );
+    }
+
+    public function mapEcArrayForComparison(array $ecArray, bool $isVersion){
+        return $isVersion
+        ? array_values(array_map(
+            fn($ec) => ["idEc" => $ec['elementConstitutif']['id']],
+                $ecArray)
+        )
+        : array_values(array_map(
+            fn($ec) => ["idEc" => $ec->elementConstitutif->getId()],
+                $ecArray
+            )
+        );
+    }
 }

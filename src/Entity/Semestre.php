@@ -21,6 +21,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ORM\Entity(repositoryClass: SemestreRepository::class)]
 class Semestre
 {
+    #[Groups(['DTO_json_versioning'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
