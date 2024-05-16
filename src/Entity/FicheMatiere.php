@@ -61,7 +61,7 @@ class FicheMatiere
     #[Groups(['fiche_matiere:read', 'fiche_matiere_versioning'])]
     private ?string $objectifs = null;
 
-    #[Groups('fiche_matiere_versioning')]
+    #[Groups(['fiche_matiere_versioning', 'DTO_json_versioning'])]
     #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'ficheMatieres', cascade: ['persist'])]
     private Collection $competences;
 

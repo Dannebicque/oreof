@@ -39,12 +39,14 @@ class StructureEc
     #[Groups(['DTO_json_versioning'])]
     public array $heuresEctsEcEnfants = [];
 
-    public Collection $mcccs;
+    #[Groups(['DTO_json_versioning'])]
+    public ?array $mcccs;
 
     #[Groups(['DTO_json_versioning'])]
     public ?string $typeMccc;
 
-    public ?Collection $bccs;
+    #[Groups(['DTO_json_versioning'])]
+    public ?array $bccs;
 
     private bool $withEcts = true;
     private bool $withBcc = true;
@@ -66,12 +68,12 @@ class StructureEc
             $this->typeMccc = $getElement->getTypeMccc();
             $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures(), $isBut);
             $this->heuresEctsEc->addEcts($getElement->getEcts());
-            $this->mcccs = $getElement->getMcccsCollection();
+            $this->mcccs = $getElement->getMcccsCollection()?->toArray();
 
         }
 
         if ($this->withBcc && $parcours) {
-            $this->bccs = $getElement->getBccs();
+            $this->bccs = $getElement->getBccs()?->toArray();
         }
     }
 

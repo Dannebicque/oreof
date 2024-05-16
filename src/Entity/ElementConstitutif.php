@@ -139,6 +139,7 @@ class ElementConstitutif
     #[ORM\Column(nullable: true)]
     private ?bool $quitus = false;
 
+    #[Groups('DTO_json_versioning')]
     #[ORM\ManyToMany(targetEntity: Competence::class, inversedBy: 'elementConstitutifs')]
     private Collection $competences;
 
