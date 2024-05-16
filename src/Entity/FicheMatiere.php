@@ -38,7 +38,7 @@ class FicheMatiere
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['fiche_matiere:read'])]
+    #[Groups(['fiche_matiere:read', 'DTO_json_versioning'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 250)]
@@ -109,7 +109,7 @@ class FicheMatiere
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: ElementConstitutif::class, cascade: ['persist', 'remove'])]
     private Collection $elementConstitutifs;
 
-    #[Groups(['fiche_matiere_versioning'])]
+    #[Groups(['fiche_matiere_versioning', 'DTO_json_versioning'])]
     #[ORM\ManyToOne(inversedBy: 'ficheMatieres')]
     private ?Parcours $parcours = null;
 
@@ -144,6 +144,7 @@ class FicheMatiere
     #[ORM\Column(nullable: true)]
     private ?float $volumeTe = null;
 
+    #[Groups(['DTO_json_versioning'])]
     #[ORM\OneToMany(mappedBy: 'ficheMatiere', targetEntity: Mccc::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $mcccs;
 

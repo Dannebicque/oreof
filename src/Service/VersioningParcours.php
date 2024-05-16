@@ -11,10 +11,13 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManagerInterface;
 use Jfcherng\Diff\DiffHelper;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
@@ -40,12 +43,13 @@ class VersioningParcours
         $this->fileSystem = $fileSystem;
         // Définition du serializer
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $extractors = new PropertyInfoExtractor([], [new PhpDocExtractor(), new ReflectionExtractor()]);
         $this->serializer = new Serializer(
             [
             new DateTimeNormalizer(),
             new BackedEnumNormalizer(),
             new ArrayDenormalizer(),
-            new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: new ReflectionExtractor())
+            new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: $extractors)
         ],
             [new JsonEncoder()]
         );

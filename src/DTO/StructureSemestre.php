@@ -24,8 +24,9 @@ class StructureSemestre
     #[Groups(['DTO_json_versioning'])]
     public bool $raccroche = false;
 
+    /** @var StructureUe[] $ues */
     #[Groups(['DTO_json_versioning'])]
-    private array $ues = [];
+    public array $ues = [];
 
     #[Groups(['DTO_json_versioning'])]
     public int $ordre;
@@ -83,9 +84,9 @@ class StructureSemestre
         }
     }
 
-    public function ues(): array
-    {
-        sort($this->ues);
-        return $this->ues;
-    }
+    // public function ues(): array
+    // {
+    //     sort($this->ues);
+    //     return $this->ues;
+    // }
 }

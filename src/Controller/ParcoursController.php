@@ -239,9 +239,6 @@ class ParcoursController extends BaseController
         $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
         $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
 
-        // dump((new VersioningStructure($structureDifferencesParcours, $dto))->mapStructureForComparison($dto, false));exit;
-        // dump((new VersioningStructure($structureDifferencesParcours, $dto))->mapStructureForComparison($structureDifferencesParcours, true));exit;
-        // dump($dto);exit;
         $cssDiff = DiffHelper::getStyleSheet();
 
         return $this->render('parcours/show.html.twig', [

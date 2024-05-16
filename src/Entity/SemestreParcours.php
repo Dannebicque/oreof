@@ -56,7 +56,7 @@ class SemestreParcours
     {
         $this->setSemestre($semestre);
         $this->setParcours($parcours);
-        if ($semestre->getOrdre()) {
+        if ($semestre?->getOrdre()) {
             $this->setOrdre($semestre->getOrdre());
         }
     }

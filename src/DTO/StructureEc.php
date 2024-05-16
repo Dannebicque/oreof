@@ -25,6 +25,7 @@ class StructureEc
     #[Groups(['DTO_json_versioning'])]
     public bool $raccroche = false;
 
+    /** @var StructureEc[] $elementsConstitutifsEnfants */
     #[Groups(['DTO_json_versioning'])]
     public array $elementsConstitutifsEnfants = [];
 
@@ -34,32 +35,33 @@ class StructureEc
     #[Groups(['DTO_json_versioning'])]
     public ElementConstitutif|FicheMatiere|null $elementRaccroche = null;
 
+    /** @var HeuresEctsEc[] $heuresEctsEcEnfants */
     #[Groups(['DTO_json_versioning'])]
     public array $heuresEctsEcEnfants = [];
 
-    #[Groups(['DTO_json_versioning'])]
     public Collection $mcccs;
 
     #[Groups(['DTO_json_versioning'])]
     public ?string $typeMccc;
 
-    #[Groups(['DTO_json_versioning'])]
     public ?Collection $bccs;
 
     private bool $withEcts = true;
     private bool $withBcc = true;
 
     public function __construct(
-        ElementConstitutif $elementConstitutif, Parcours $parcours, bool $isBut = false, bool $withEcts = true, bool $withBcc = true)
+        ElementConstitutif $elementConstitutif, ?Parcours $parcours, bool $isBut = false, bool $withEcts = true, bool $withBcc = true)
     {
-        $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
-        $this->withEcts = $withEcts;
-        $this->withBcc = $withBcc;
-        $this->raccroche = $getElement->isRaccroche();
-        $this->elementRaccroche = $getElement->getElementConstitutif();
+        if($parcours){
+            $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
+            $this->withEcts = $withEcts;
+            $this->withBcc = $withBcc;
+            $this->raccroche = $getElement->isRaccroche();
+            $this->elementRaccroche = $getElement->getElementConstitutif();
+        }
 
         $this->elementConstitutif = $elementConstitutif;
-        if ($this->withEcts) {
+        if ($this->withEcts && $parcours) {
             $this->heuresEctsEc = new HeuresEctsEc();
             $this->typeMccc = $getElement->getTypeMccc();
             $this->heuresEctsEc->addEc($getElement->getElementConstitutifHeures(), $isBut);
@@ -68,7 +70,7 @@ class StructureEc
 
         }
 
-        if ($this->withBcc) {
+        if ($this->withBcc && $parcours) {
             $this->bccs = $getElement->getBccs();
         }
     }

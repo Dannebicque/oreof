@@ -79,6 +79,7 @@ class ElementConstitutif
     #[ORM\ManyToOne]
     private ?NatureUeEc $natureUeEc = null;
 
+    #[Groups(['DTO_json_versioning'])]
     #[ORM\OneToMany(mappedBy: 'ec', targetEntity: Mccc::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $mcccs;
 
@@ -94,7 +95,7 @@ class ElementConstitutif
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'elementConstitutifs')]
     private ?FicheMatiere $ficheMatiere = null;
 
-    #[Groups('fiche_matiere_versioning_ec_parcours')]
+    #[Groups(['fiche_matiere_versioning_ec_parcours', 'DTO_json_versioning'])]
     #[ORM\ManyToOne(inversedBy: 'elementConstitutifs')]
     private ?Parcours $parcours = null;
 
@@ -116,8 +117,6 @@ class ElementConstitutif
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ecEnfants')]
     private ?self $ecParent = null;
 
-    #[MaxDepth(1)]
-    #[Groups(['DTO_json_versioning'])]
     #[ORM\OneToMany(mappedBy: 'ecParent', targetEntity: self::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['ordre' => 'ASC'])]
     private Collection $ecEnfants;
