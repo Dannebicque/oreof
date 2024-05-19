@@ -31,7 +31,7 @@ class Parcours
 
     public const PARCOURS_DEFAUT = 'Parcours par défaut';
 
-    #[Groups('fiche_matiere_versioning_ec_parcours')]
+    #[Groups(['fiche_matiere_versioning_ec_parcours', 'DTO_json_versioning'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

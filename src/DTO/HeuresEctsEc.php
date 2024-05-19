@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 class HeuresEctsEc
 {
+    /** @var float $ects */
     #[Groups(['DTO_json_versioning'])]
     public float $ects = 0;
 

@@ -21,6 +21,7 @@
         "knplabs/knp-snappy-bundle": "^1.9",
         "mpdf/mpdf": "^8.1",
         "php-translation/symfony-bundle": "^0.13.0",
+        "phpdocumentor/reflection-docblock": "^5.4",
         "phpoffice/phpspreadsheet": "^1.28",
         "psr/http-client": "*",
         "scienta/doctrine-json-functions": "^5.3",
