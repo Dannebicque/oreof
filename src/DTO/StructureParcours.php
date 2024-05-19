@@ -20,6 +20,7 @@ class StructureParcours
     #[Groups(['DTO_json_versioning'])]
     public Parcours $parcours;
 
+    /** @var StructureSemestre[] $semestres */
     #[Groups(['DTO_json_versioning'])]
     public array $semestres = [];
 

@@ -28,12 +28,15 @@ class StructureUe
     #[Groups(['DTO_json_versioning'])]
     public bool $raccroche = false;
 
+    /** @var StructureEc[] $elementConstitutifs */
     #[Groups(['DTO_json_versioning'])]
     public array $elementConstitutifs = [];
 
+    /** @var StructureUe[] $uesEnfants */
     #[Groups(['DTO_json_versioning'])]
     private array $uesEnfants = [];
 
+    /** @var HeuresEctsUe[] $heuresEctsUeEnfants */
     #[Groups(['DTO_json_versioning'])]
     public array $heuresEctsUeEnfants = [];
 

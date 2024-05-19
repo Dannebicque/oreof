@@ -21,6 +21,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ORM\Entity(repositoryClass: UeRepository::class)]
 class Ue
 {
+    #[Groups(['DTO_json_versioning'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -60,8 +61,6 @@ class Ue
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'ueEnfants')]
     private ?self $ueParent = null;
 
-    #[MaxDepth(1)]
-    #[Groups('DTO_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'ueParent', targetEntity: self::class, cascade: [
         'persist',
         'remove'

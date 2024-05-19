@@ -29,17 +29,18 @@ class Competence
     #[ORM\ManyToOne(fetch: 'EAGER', inversedBy: 'competences')]
     private ?BlocCompetence $blocCompetence;
 
-    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'DTO_json_versioning'])]
     #[ORM\Column(length: 10)]
     private ?string $code = null;
 
-    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
+    #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'DTO_json_versioning'])]
     #[ORM\Column(type: 'text')]
     private ?string $libelle = null;
 
     #[ORM\ManyToMany(targetEntity: FicheMatiere::class, mappedBy: 'competences')]
     private Collection $ficheMatieres;
 
+    #[Groups('DTO_json_versioning')]
     #[ORM\Column]
     private ?int $ordre = null;
 
