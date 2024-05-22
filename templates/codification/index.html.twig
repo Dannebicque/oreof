@@ -7,9 +7,9 @@
                 step: step,
             }) }}
          data-action="base:refreshListe@window->wizard#changeStep"
-    >
+    ><br><br>
 
-        <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs" id="lineTitleTabsContainer"
+        <ul class="nav nav-tabs nav-tabs-title nav-tabs-line-title responsive-tabs mt-5" id="lineTitleTabsContainer"
             role="tablist">
             {% for parcours in formation.parcours %}
                 <li class="nav-item" role="presentation">
@@ -36,7 +36,7 @@
             </li>
         </ul>
 
-        <div class="card mb-5">
+        <div class="card mb-5 ">
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane fade active show" id="step_1" role="tabpanel" {{ stimulus_target
@@ -50,7 +50,7 @@
 {% endblock %}
 
 {% block header %}
-    Codification de la formation {{ formation.displayLong }}
+    Codification : {{ formation.displayLong }}
 {% endblock %}
 
 {% block breadcrumb %}
