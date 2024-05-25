@@ -10,6 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\CalculStructureParcours;
+use App\Classes\GetDpeParcours;
 use App\Classes\GetFormations;
 use App\Classes\verif\FormationState;
 use App\Classes\verif\ParcoursState;
@@ -44,7 +45,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-
 
 #[Route('/formation')]
 class FormationController extends BaseController
@@ -111,17 +111,28 @@ class FormationController extends BaseController
     public function parcoursFormation(
         Request $request,
         FormationRepository $formationRepository,
-    ): Response
-    {
+    ): Response {
         if ($request->query->has('formation')) {
             $formation = $formationRepository->find($request->query->get('formation'));
+            if ($formation === null) {
+                throw new \Exception('Formation non trouvée');
+            }
         } else {
             throw new \Exception('Formation non trouvée');
         }
 
+        $parcourss = $formation->getParcours();
+
+        $dpesParcours = [];
+
+        foreach ($parcourss as $parcours) {
+            $dpesParcours[$parcours->getId()] = GetDpeParcours::getFromParcours($parcours);
+        }
+
         return $this->render('formation/_parcoursFormation.html.twig', [
             'formation' => $formation,
-            'parcours' => $formation->getParcours()
+            'parcours' => $parcourss,
+            'dpesParcours' => $dpesParcours,
         ]);
     }
 
@@ -377,7 +388,6 @@ class FormationController extends BaseController
     public function show(
         TypeDiplomeRegistry     $typeDiplomeRegistry,
         Formation               $formation,
-        EntityManagerInterface $entityManager,
         VersioningParcours $versioningParcours,
         VersioningFormation $versioningFormation
     ): Response {
@@ -389,16 +399,11 @@ class FormationController extends BaseController
 
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
-        $tParcours = [];
-        foreach ($formation->getParcours() as $parcours) {
-            $tParcours[$parcours->getId()] = $typeD->calculStructureParcours($parcours);
-        }
-
         /**
          * VERSIONING PARCOURS PAR DÉFAUT
          */
         $cssDiff = DiffHelper::getStyleSheet();
-        if($formation->isHasParcours() === false && count($formation->getParcours()) === 1){
+        if($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
             $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);
         }
 
@@ -410,7 +415,6 @@ class FormationController extends BaseController
         return $this->render('formation/show.html.twig', [
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
-            'tParcours' => $tParcours,
             'typeD' => $typeD,
             'cssDiff' => $cssDiff,
             'stringDifferencesParcours' => $textDifferencesParcours ?? [],
@@ -535,8 +539,8 @@ class FormationController extends BaseController
         Formation $formation,
         VersioningFormation $versioningFormationService,
         Filesystem $filesystem
-    ){
-        try{
+    ) {
+        try {
             /** @var User $utilisateur */
             $utilisateur = $this->getUser();
             $now = new DateTimeImmutable();
@@ -549,7 +553,7 @@ class FormationController extends BaseController
 
             $this->addFlashBag('success', 'La formation a bien été sauvegardée.');
             return $this->redirectToRoute('app_formation_show', ['slug' => $formation->getSlug()]);
-        }catch(\Exception $e){
+        } catch(\Exception $e) {
             $errorMessage = "[{$dateHeure}] Le versioning de la formation a rencontré une erreur."
                 . "\nUtilisateur : {$utilisateur->getPrenom()} {$utilisateur->getNom()} - ID : {$utilisateur->getUsername()}"
                 ."\nMessage : {$e->getMessage()}\n";
@@ -569,22 +573,22 @@ class FormationController extends BaseController
         Filesystem $filesystem,
         TypeDiplomeRegistry $typeDiplomeRegistry,
         EntityManagerInterface $entityManager
-    ){
-        try{
+    ) {
+        try {
             $formation = $versionFormationService->loadFormationFromVersion($versionFormation);
             $typeD = $typeDiplomeRegistry->getTypeDiplome($versionFormation->getFormation()->getTypeDiplome()->getModeleMcc());
             $dateHeureVersion = $versionFormation->getVersionTimestamp()->format('d/m/Y à H:i');
 
             $parcoursVersionArray = [];
-            foreach($versionFormation->getFormation()->getParcours() as $p){
+            foreach($versionFormation->getFormation()->getParcours() as $p) {
                 $lastVersion = $entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($p);
-                if(count($lastVersion) > 0){
+                if(count($lastVersion) > 0) {
                     $parcoursVersionArray[] = $lastVersion[0];
                 }
             }
 
             $parcoursVersionArray = array_map(
-                fn($version) => $versionParcoursService->loadParcoursFromVersion($version),
+                fn ($version) => $versionParcoursService->loadParcoursFromVersion($version),
                 $parcoursVersionArray
             );
 
@@ -598,7 +602,7 @@ class FormationController extends BaseController
                 // 'isBut' => $versionFormation->getFormation()->getTypeDiplome()->getLibelleCourt() === "BUT"
             ]);
 
-        }catch(\Exception $e){
+        } catch(\Exception $e) {
             $now = new DateTime();
             $dateHeure = $now->format('d-m-Y_H-i-s');
             $errorMessage = "[{$dateHeure}] La visualisation de version de la formation a rencontré une erreur."

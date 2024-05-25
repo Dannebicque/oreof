@@ -60,7 +60,10 @@
         <h3 class="small-title">Structure du parcours</h3>
         <div class="card mb-5">
             <div class="card-body">
-                {{ include('typeDiplome/formation/_structure.html.twig', {parcours:parcours}) }}
+                {{ render(controller('App\\Controller\\StructureShowController::licence', {
+                    parcours: parcours.id,
+                    hasLastVersion: hasLastVersion ?? false,
+                })) }}
             </div>
         </div>
     </section>

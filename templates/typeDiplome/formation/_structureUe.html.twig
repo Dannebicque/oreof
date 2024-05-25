@@ -1,7 +1,11 @@
 <tr>
     <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
     <th colspan="3" {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %}>
-        {{ ue.display }} | {{ ue.ue.libelle }} ({{ ue.codeApogee() }}) {% if ue.raccroche == true %}<i
+        <span class="show_versioning d-none">{{ diffUe ? diffUe.display|displayDiff : '' }}</span>
+        <span class="show_current"> {{ ue.display }}</span> |
+        <span class="show_versioning d-none">{{ diffUe ? diffUe.libelle|displayDiff : '' }}</span>
+        <span class="show_current"> {{ ue.ue.libelle }}</span>
+        ({{ ue.codeApogee() }}) {% if ue.raccroche == true %}<i
                 class="fal fa-link"></i>{% endif %}
         {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
             <span class="badge bg-secondary">

@@ -1,8 +1,8 @@
 {% set formation = parcours.formation %}
 
-{#{% if is_granted('ROLE_ADMIN') %}#}
+{# {% if is_granted('ROLE_ADMIN') %} #}
         {{ component('mention_manage', {parcours:parcours, type:'parcours'}) }}
-{#{% endif %}#}
+{# {% endif %} #}
 
 <div class="card">
     <div class="card-body">
@@ -31,14 +31,18 @@
                     <dd>
                         {{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}
                         {% if parcours.coResponsable != null %}
-                        <i class="fal fa-users" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                           title="Co-responsable : {{ parcours.coResponsable.display }}"></i>
+                            <i class="fal fa-users" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               title="Co-responsable : {{ parcours.coResponsable.display }}"></i>
                         {% endif %}
                     </dd>
                 </dl>
             </div>
             <div class="col-3 d-grid">
+                {% if version is defined and version != null %}
+                    {{ include('communs/_boutonSynthese_version.html.twig', {parcours: parcours, col:3}) }}
+                {% else %}
                 {{ include('communs/_boutonSynthese.html.twig', {parcours: parcours, col:3}) }}
+                {% endif %}
             </div>
         </div>
     </div>

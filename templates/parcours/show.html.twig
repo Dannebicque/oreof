@@ -47,57 +47,57 @@
         <div class="row mt-5 mb-5">
             <h3 class="small-title">Gestion du parcours</h3>
             <div class="card">
-            <div class="card-body">
-                <p>Format d'export LHEO
-                    <a href="{{ path('app_parcours_export_xml_lheo', {'parcours': parcours.id}) }}">
+                <div class="card-body">
+                    <p>Format d'export LHEO
+                        <a href="{{ path('app_parcours_export_xml_lheo', {'parcours': parcours.id}) }}">
                 <span class="mt-4 ms-3 badge {{ lheoXML.isValidLheo(parcours) ? 'bg-success' : 'bg-danger' }}">
                     {{ lheoXML.isValidLheo(parcours) ? 'Valide' : 'Invalide' }}
                 </span>
-                    </a>
-                </p>
+                        </a>
+                    </p>
 
 
-                <div class="row my-3">
-                    <div class="col-lg-3 col-sm-6">
-                        <h3 class="small-title">Versions de ce parcours</h3>
+                    <div class="row my-3">
+                        <div class="col-lg-3 col-sm-6">
+                            <h3 class="small-title">Versions de ce parcours</h3>
+                            {% if parcours.parcoursVersionings|length > 0 %}
+                                <select class="form-select" id="selectVersion">
+                                    <option value="#" selected="selected">Choisir...</option>
+                                    {% for p in parcours.parcoursVersionings %}
+                                        <option value="{{ p.getId }}">
+                                            Version du : {{ p.getVersionTimestamp()|date('d/m/Y') }}
+                                            à {{ p.getVersionTimestamp()|date('H:i') }} {{ p.isCvfuFlag() ? " - CFVU" : "" }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            {% else %}
+                                Aucune version enregistrée.
+                            {% endif %}
+                        </div>
                         {% if parcours.parcoursVersionings|length > 0 %}
-                            <select class="form-select" id="selectVersion">
-                                <option value="#" selected="selected">Choisir...</option>
-                                {% for p in parcours.parcoursVersionings %}
-                                    <option value="{{ p.getId }}">
-                                        Version du : {{ p.getVersionTimestamp()|date('d/m/Y') }}
-                                        à {{ p.getVersionTimestamp()|date('H:i') }} {{ p.isCvfuFlag() ? " - CFVU" : "" }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        {% else %}
-                            Aucune version enregistrée.
+                            <div class="d-flex col-lg-1 col-sm-3 align-items-end">
+                                <a href="#">
+                                    <button class="btn btn-sm btn-primary mb-1" id="buttonShowVersion"
+                                            onclick="showVersion()">
+                                        Visionner
+                                    </button>
+                                </a>
+                            </div>
                         {% endif %}
-                    </div>
-                    {% if parcours.parcoursVersionings|length > 0 %}
                         <div class="d-flex col-lg-1 col-sm-3 align-items-end">
-                            <a href="#">
-                                <button class="btn btn-sm btn-primary mb-1" id="buttonShowVersion"
-                                        onclick="showVersion()">
-                                    Visionner
+                            <a href="{{ path('app_parcours_versioning_save', {parcours: parcours.id}) }}"
+                               onclick="saveVersion(event)">
+                                <button class="btn btn-sm btn-success mb-1 ms-lg-1">
+                                    Sauvegarder la version
                                 </button>
                             </a>
                         </div>
-                    {% endif %}
-                    <div class="d-flex col-lg-1 col-sm-3 align-items-end">
-                        <a href="{{ path('app_parcours_versioning_save', {parcours: parcours.id}) }}"
-                           onclick="saveVersion(event)">
-                            <button class="btn btn-sm btn-success mb-1 ms-lg-1">
-                                Sauvegarder la version
-                            </button>
-                        </a>
-                    </div>
-                    <div class="d-none col-lg-2 align-items-end justify-content-xl-center justify-content-end"
-                         id="spinner">
-                        <div class="spinner-border text-primary mb-1"></div>
+                        <div class="d-none col-lg-2 align-items-end justify-content-xl-center justify-content-end"
+                             id="spinner">
+                            <div class="spinner-border text-primary mb-1"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     {% endif %}
@@ -188,16 +188,17 @@
 {% endblock %}
 
 {% block bouton_header %}
-{# todo: si une version existe #}
-    <a href="{{ path('app_parcours_mccc_export_versionning', {parcours:parcours.id, _format:'xlsx'}) }}"
-       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-       data-bs-toggle="tooltip"
-       data-bs-placement="bottom"
-       title="Télécharger en XLSX"
-    >
-        <i class="{{ iconDownload }}"></i>
-        <span> MCCC versionnés</span>
-    </a>
+    {% if hasLastVersion %}
+        <a href="{{ path('app_parcours_mccc_export_versionning', {parcours:parcours.id, _format:'xlsx'}) }}"
+           class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Télécharger en XLSX"
+        >
+            <i class="{{ iconDownload }}"></i>
+            <span> MCCC versionnés</span>
+        </a>
+    {% endif %}
 
     {{ include('btn/export_mccc.html.twig') }}
 
@@ -233,7 +234,7 @@
         <span> Fiche descriptive (PDF)</span>
     </a>
 
-    {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) %}
+    {% if is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours) %}
         <a href="{{ path('app_parcours_edit', {id:parcours.id}) }}"
            class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
            data-bs-toggle="tooltip"

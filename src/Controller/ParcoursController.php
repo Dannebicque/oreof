@@ -11,6 +11,7 @@ namespace App\Controller;
 
 use App\Classes\CalculButStructureParcours;
 use App\Classes\CalculStructureParcours;
+use App\Classes\GetDpeParcours;
 use App\Classes\JsonReponse;
 use App\Classes\ParcoursDupliquer;
 use App\Classes\verif\ParcoursState;
@@ -232,26 +233,25 @@ class ParcoursController extends BaseController
         }
 
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-        $dto = $typeD->calculStructureParcours($parcours, true, false);
 
         $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
         $textDifferencesFormation = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
-        $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
-        $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+
+
 
         $cssDiff = DiffHelper::getStyleSheet();
 
         return $this->render('parcours/show.html.twig', [
             'parcours' => $parcours,
+            'dpeParcours' => GetDpeParcours::getFromParcours($parcours),
             'formation' => $formation,
             'typeDiplome' => $typeDiplome,
             'hasParcours' => $formation->isHasParcours(),
-            'dto' => $dto,
             'typeD' => $typeD,
             'lheoXML' => $lheoXML,
             'stringDifferencesParcours' => $textDifferencesParcours,
             'stringDifferencesFormation' => $textDifferencesFormation,
-            'diffStructure' => $diffStructure,
+            'hasLastVersion' => $versioningParcours->hasLastVersion(),
             'cssDiff' => $cssDiff
         ]);
     }
@@ -264,11 +264,22 @@ class ParcoursController extends BaseController
         TypeDiplomeRegistry $typeDiplomeRegistry,
         Request             $request,
         ParcoursState       $parcoursState,
-        Parcours            $parcour
+        Parcours            $parcour,
+        VersioningParcours $versioningParcours,
     ): Response {
-        if (!$this->isGranted('CAN_PARCOURS_EDIT_MY', $parcour)) {
+
+        $dpeParcours = GetDpeParcours::getFromParcours($parcour);
+
+        if ($dpeParcours === null) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours)) {
             return $this->redirectToRoute('app_parcours_show', ['id' => $parcour->getId()]);
         }
+
+        $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcour);
+        $version = $versioningParcours->hasLastVersion($parcour);
 
         $parcoursState->setParcours($parcour);
         $typeDiplome = $parcour->getFormation()?->getTypeDiplome();
@@ -280,6 +291,7 @@ class ParcoursController extends BaseController
             'formation' => $parcour->getFormation(),
             'parcoursState' => $parcoursState,
             'step' => $request->query->get('step') ?? 0,
+            'version' => $version,
         ]);
     }
 
@@ -543,7 +555,7 @@ class ParcoursController extends BaseController
         }
     }
 
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_SES')]
     #[Route('/{parcours}/versioning/save', name: 'app_parcours_versioning_save')]
     public function saveParcoursIntoJson(
         Parcours               $parcours,
