@@ -22,7 +22,7 @@ class DpeParcours
     private ?Parcours $parcours = null;
 
     #[ORM\Column]
-    private array $etatValidation = [];
+    private array $etatValidation = []; //le workflow
 
     #[ORM\Column(length: 10)]
     private ?string $version = null;

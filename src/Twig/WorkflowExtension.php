@@ -9,6 +9,7 @@
 
 namespace App\Twig;
 
+use App\Classes\GetDpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
@@ -24,12 +25,10 @@ use Twig\TwigFunction;
 class WorkflowExtension extends AbstractExtension
 {
     public function __construct(
-        #[Target('dpe')]
-        private readonly WorkflowInterface $dpeWorkflow,
-        #[Target('parcours')]
-        private readonly WorkflowInterface $parcoursWorkflow,
         #[Target('fiche')]
         private readonly WorkflowInterface $ficheWorkflow,
+        #[Target('dpeParcours')]
+        private readonly WorkflowInterface $dpeParcoursWorkflow,
     ) {
     }
 
@@ -47,8 +46,8 @@ class WorkflowExtension extends AbstractExtension
 
     public function hasHistorique(
         Parcours|FicheMatiere|Formation $entity,
-        string                          $key,
-        array                           $historique
+        string                $key,
+        array                 $historique
     ): string {
         if ($key === 'vp') { //todo: temporaire pour phase 1 ou VP = SES
             $key = 'ses';
@@ -69,7 +68,7 @@ class WorkflowExtension extends AbstractExtension
 
     public function isPlace(string $workflow, Parcours|FicheMatiere|Formation $entity, string $place): bool
     {
-        $actualPlaces = $this->getWorkflow($workflow)->getMarking($entity)->getPlaces();
+        $actualPlaces = $this->getPlacesFromEntity($entity, $workflow);
 
         if (array_key_exists('en_cours_redaction', $actualPlaces) && $entity instanceof Formation && $place === 'formation') {
             return true;
@@ -122,41 +121,44 @@ class WorkflowExtension extends AbstractExtension
 
     public function isPass(string $workflowTexte, Parcours|FicheMatiere|Formation $entity, string $place): bool
     {
-        $workflow = $this->getWorkflow($workflowTexte);
+        $actualPlaces = $this->getPlacesFromEntity($entity, $workflowTexte);
+
+
+        $workflow = $this->getWorkflow('parcours');
 
         $definition = $workflow->getDefinition();
         $places = array_keys($definition->getPlaces());
-        $actualPlaces = $this->getWorkflow($workflowTexte)->getMarking($entity)->getPlaces();
 
         $indexActualPlace = array_search(array_keys($actualPlaces)[0], $places);
         $indexPlace = array_search($place, $places);
-        if ($indexActualPlace > $indexPlace) {
-            return true;
-        }
-
-        return false;
+        return $indexActualPlace > $indexPlace;
     }
 
     public function isRefuse(string $workflow, Parcours|FicheMatiere|Formation $entity): bool
     {
-        $places = $this->getWorkflow($workflow)->getMarking($entity)->getPlaces();
-        if (count($places) > 0) {
-            return str_starts_with(array_keys($places)[0], 'refuse');
+        $actualPlaces = $this->getPlacesFromEntity($entity, $workflow);
+
+        if (count($actualPlaces) > 0) {
+            return str_starts_with(array_keys($actualPlaces)[0], 'refuse');
         }
 
         return false;
     }
 
-    public function isPublie(Formation|Parcours $entity, string $type): bool
+    public function isPublie(Parcours|Formation $entity, string $type): bool
     {
         if ($type === 'formation') {
-            $formation = $entity;
+            $dpeParcours = GetDpeParcours::getFromFormation($entity); //todo: comment gérer depuis Formation?
         } elseif ($type === 'parcours') {
-            $formation = $entity->getFormation();
+            $dpeParcours = GetDpeParcours::getFromParcours($entity);
+        }
+        //passer par le DpeWorkflow
+
+        if (null === $dpeParcours) {
+            return false;
         }
 
-
-        $places = $this->getWorkflow('dpe')->getMarking($formation)->getPlaces();
+        $places = $this->getWorkflow('dpe')->getMarking($dpeParcours)->getPlaces();
         if (count($places) > 0) {
             return str_starts_with(array_keys($places)[0], 'valide_a_publier');
         }
@@ -167,9 +169,30 @@ class WorkflowExtension extends AbstractExtension
     private function getWorkflow(string $workflow): WorkflowInterface
     {
         return match ($workflow) {
-            'dpe' => $this->dpeWorkflow,
-            'parcours' => $this->parcoursWorkflow,
+            'dpe' => $this->dpeParcoursWorkflow,
+            'parcours' => $this->dpeParcoursWorkflow,
             'fiche' => $this->ficheWorkflow,
         };
+    }
+
+    private function getPlacesFromEntity(Formation|Parcours|FicheMatiere $entity, string $workflow): array|false
+    {
+        if ($entity instanceof Parcours) {
+            $dpeParcours = GetDpeParcours::getFromParcours($entity);
+            if (null === $dpeParcours) {
+                return false;
+            }
+            $actualPlaces = $this->getWorkflow('parcours')->getMarking($dpeParcours)->getPlaces();
+        } elseif ($workflow === 'dpe' && $entity instanceof Formation) {
+            $dpeParcours = GetDpeParcours::getFromFormation($entity);
+            if (null === $dpeParcours) {
+                return false;
+            }
+            $actualPlaces = $this->getWorkflow('parcours')->getMarking($dpeParcours)->getPlaces();
+        } else {
+            $actualPlaces = $this->getWorkflow($workflow)->getMarking($entity)->getPlaces();
+        }
+
+        return $actualPlaces;
     }
 }

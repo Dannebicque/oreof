@@ -3,6 +3,7 @@
 namespace App\Security\Voter;
 
 use App\Entity\Composante;
+use App\Entity\DpeParcours;
 use App\Entity\FicheMatiere;
 use App\Entity\Formation;
 use App\Entity\Parcours;
@@ -23,11 +24,12 @@ class GlobalVoter extends Voter
     private string $roleNiveau;
     private string $permission;
     private string $portee;
-    private User $user;
+    private User|UserInterface $user;
 
     public function __construct(
         private WorkflowInterface       $dpeWorkflow,
         private WorkflowInterface       $parcoursWorkflow,
+        private WorkflowInterface       $dpeParcoursWorkflow,
         private readonly Security       $security,
         private readonly RoleRepository $roleRepository,
     ) {
@@ -61,11 +63,8 @@ class GlobalVoter extends Voter
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $this->user = $token->getUser();
-        // if the user is anonymous, do not grant access
-        if (!$this->user instanceof UserInterface) {
-            return false;
-        }
-        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_SES')) {
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
@@ -74,8 +73,8 @@ class GlobalVoter extends Voter
         // si non, accès interdit.
         // si oui, vérifier la portée du rôle, si besoin vérifier par hierarchie
         $roles = $this->roleRepository->findByPermission($this->getRoleFromAttribute()); // on récupère les rôles qui ont la permission demandée
-        foreach ($this->user->getUserCentres() as $centre) {
-            if (array_intersect($centre->getDroits(), $roles)) {
+        foreach ($this->user->getUserCentres()  as $centre) {
+            if (array_intersect($centre->getDroits(), $roles) || $this->security->isGranted('ROLE_SES')) {
                 // on a au moins un centre en commun, on vérifie la portée
                 if ($this->portee === PorteeEnum::ALL->value) {
                     return true; //pas de portée, c'est OK
@@ -100,6 +99,12 @@ class GlobalVoter extends Voter
 
                     if ($subject instanceof Parcours) {
                         if ($this->canAccessParcours($subject, $centre) === true) {
+                            return true;
+                        }
+                    }
+
+                    if ($subject instanceof DpeParcours) {
+                        if ($this->canAccessDpeParcours($subject, $centre) === true) {
                             return true;
                         }
                     }
@@ -144,13 +149,27 @@ class GlobalVoter extends Voter
 
     private function canAccessFormation(Formation $subject, mixed $centre): bool
     {
-
+        //        $canEdit = false;
+        //        if (
+        //            $subject->getResponsableMention() === $this->user ||
+        //            $subject->getCoResponsable() === $this->user ||
+        //            $this->formation === $centre->getUser
+        //
+        //        ) {
+        //todo: ou vérifier que le droit permet d'éditer ?
         $canEdit = $this->dpeWorkflow->can($subject, 'autoriser') || $this->dpeWorkflow->can($subject, 'valide_rf');
+        //        }
+        //
 
 
-        if (
-            $subject->getComposantePorteuse() === $centre->getComposante()
-        ) { //todo: le gestionnaire n'est pas le DPE, gérer son cas spécifiquement ?
+        if ($this->security->isGranted('ROLE_SES')) {
+            $canEdit =
+                $this->dpeWorkflow->can($subject, 'autoriser') ||
+                $this->dpeWorkflow->can($subject, 'valide_rf') ||
+                $this->dpeWorkflow->can($subject, 'valide_dpe_composante') ||
+                $this->dpeWorkflow->can($subject, 'valider_conseil') ||
+                $this->dpeWorkflow->can($subject, 'valider_central');
+        } elseif ($subject->getComposantePorteuse() === $centre->getComposante()) { //todo: le gestionnaire n'est pas le DPE, gérer son cas spécifiquement ?
             //&& $centre->getComposante()->getResponsableDpe() === $this->user
             $canEdit =
                 $this->dpeWorkflow->can($subject, 'autoriser') ||
@@ -170,7 +189,7 @@ class GlobalVoter extends Voter
             $canEdit = $this->parcoursWorkflow->can($subject, 'autoriser') || $this->parcoursWorkflow->can($subject, 'valider_parcours');
         }
 
-        if ($subject->getFormation()?->getResponsableMention() === $this->user || $subject->getFormation()->getCoResponsable() === $this->user) {
+        if ($subject->getFormation()?->getResponsableMention() === $this->user || $subject->getFormation()?->getCoResponsable() === $this->user) {
             $canEdit = $this->parcoursWorkflow->can($subject, 'autoriser') ||
                 $this->parcoursWorkflow->can($subject, 'valider_parcours') ||
                 $this->parcoursWorkflow->can($subject, 'valider_rf') ||
@@ -189,6 +208,66 @@ class GlobalVoter extends Voter
                 $this->dpeWorkflow->can($subject->getFormation(), 'valide_rf') ||
                 $this->dpeWorkflow->can($subject->getFormation(), 'valide_dpe_composante') ||
                 $this->dpeWorkflow->can($subject->getFormation(), 'valider_conseil');
+        }
+
+        if ($this->security->isGranted('ROLE_SES')) {
+            $canEdit =
+                $this->dpeWorkflow->can($subject->getFormation(), 'autoriser') ||
+                $this->parcoursWorkflow->can($subject, 'autoriser') ||
+                $this->parcoursWorkflow->can($subject, 'valider_parcours') ||
+                $this->parcoursWorkflow->can($subject, 'valider_rf') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'valide_rf') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'valide_dpe_composante') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'valider_conseil') ||
+                $this->dpeWorkflow->can($subject->getFormation(), 'valider_central');
+        }
+
+        return $canEdit;
+    }
+
+    private function canAccessDpeParcours(DpeParcours $subject, mixed $centre): bool
+    {
+        $parcours = $subject->getParcours();
+        if ($parcours === null) {
+            return false;
+        }
+        $canEdit = false;
+        if ($parcours->getRespParcours() === $this->user || $parcours->getCoResponsable() === $this->user) {
+            $canEdit = $this->parcoursWorkflow->can($parcours, 'autoriser') || $this->parcoursWorkflow->can($parcours, 'valider_parcours');
+        }
+
+        if ($parcours->getFormation()?->getResponsableMention() === $this->user || $parcours->getFormation()?->getCoResponsable() === $this->user) {
+            $canEdit = $this->parcoursWorkflow->can($parcours, 'autoriser') ||
+                $this->parcoursWorkflow->can($parcours, 'valider_parcours') ||
+                $this->parcoursWorkflow->can($parcours, 'valider_rf') ||
+                $this->dpeWorkflow->can($parcours->getFormation(), 'autoriser') ||
+                $this->dpeWorkflow->can($parcours->getFormation(), 'valide_rf');
+        }
+
+        if (
+            $parcours->getFormation()?->getComposantePorteuse() === $centre->getComposante() &&
+            ($centre->getComposante()?->getResponsableDpe() === $this->user || $parcours->getFormation()?->getComposantePorteuse() === $centre->getComposante())) {
+            //todo: filtre pas si les bons droits... Edit ou lecture ?
+            $canEdit = $this->parcoursWorkflow->can($parcours, 'autoriser') ||
+                $this->parcoursWorkflow->can($parcours, 'valider_parcours') ||
+                $this->parcoursWorkflow->can($parcours, 'valider_rf') ||
+                $this->dpeWorkflow->can($parcours->getFormation(), 'autoriser') ||
+                $this->dpeWorkflow->can($parcours->getFormation(), 'valide_rf') ||
+                $this->dpeWorkflow->can($parcours->getFormation(), 'valide_dpe_composante') ||
+                $this->dpeWorkflow->can($parcours->getFormation(), 'valider_conseil');
+        }
+
+        if ($this->security->isGranted('ROLE_SES')) {
+            $canEdit =
+                $this->dpeWorkflow->can($parcours->getFormation(), 'autoriser') ||
+                $this->parcoursWorkflow->can($parcours, 'autoriser') ||
+                $this->parcoursWorkflow->can($parcours, 'valider_parcours') ||
+                $this->parcoursWorkflow->can($parcours, 'valider_rf') ||
+                $this->dpeParcoursWorkflow->can($subject, 'valider_central') || // todo: gérer avec le nouveau workflow?
+                $this->dpeWorkflow->can($parcours->getFormation(), 'valide_rf') ||
+                $this->dpeWorkflow->can($parcours->getFormation(), 'valide_dpe_composante') ||
+                $this->dpeWorkflow->can($parcours->getFormation(), 'valider_conseil') ||
+                $this->dpeWorkflow->can($parcours->getFormation(), 'valider_central');
         }
 
         return $canEdit;

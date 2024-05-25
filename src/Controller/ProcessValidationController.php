@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Classes\GetDpeParcours;
 use App\Classes\GetHistorique;
 use App\Classes\JsonReponse;
 use App\Classes\Process\FicheMatiereProcess;
@@ -18,6 +19,8 @@ use App\Repository\DpeParcoursRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
 use App\Repository\ParcoursRepository;
+use App\Service\VersioningParcours;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -157,8 +160,8 @@ class ProcessValidationController extends BaseController
                 if ($objet === null) {
                     return JsonReponse::error('Fiche EC/matière non trouvée');
                 }
-//                $place = $dpeWorkflow->getMarking($objet);
-//                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
+                //                $place = $dpeWorkflow->getMarking($objet);
+                //                $transitions = $dpeWorkflow->getEnabledTransitions($objet);
                 break;
         }
 
@@ -312,18 +315,18 @@ class ProcessValidationController extends BaseController
                 return JsonReponse::error('Formation non trouvée');
             }
             $tFormations[] = $objet;
-//            if ($etape === 'cfvu') {
-//                $histo = $objet->getHistoriqueFormations();
-//                foreach ($histo as $h) {
-//                    if ($h->getEtape() === 'conseil') {
-//                        if ($h->getEtat() === 'laisserPasser' && ($laisserPasser === false || $laisserPasser->getCreated() < $h->getCreated())) {
-//                            $laisserPasser = $h;
-//                        } elseif ($h->getEtat() === 'valide' && $laisserPasser->getCreated() < $h->getCreated()) {
-//                            $laisserPasser = false;
-//                        }
-//                    }
-//                }
-//            }
+            //            if ($etape === 'cfvu') {
+            //                $histo = $objet->getHistoriqueFormations();
+            //                foreach ($histo as $h) {
+            //                    if ($h->getEtape() === 'conseil') {
+            //                        if ($h->getEtat() === 'laisserPasser' && ($laisserPasser === false || $laisserPasser->getCreated() < $h->getCreated())) {
+            //                            $laisserPasser = $h;
+            //                        } elseif ($h->getEtat() === 'valide' && $laisserPasser->getCreated() < $h->getCreated()) {
+            //                            $laisserPasser = false;
+            //                        }
+            //                    }
+            //                }
+            //            }
 
             $processData = $this->formationProcess->etatFormation($objet, $process);
 
@@ -446,10 +449,9 @@ class ProcessValidationController extends BaseController
     public function demandeReouverture(
         ParcoursRepository  $parcoursRepository,
         FormationRepository $formationRepository,
-        FicheMatiereRepository $ficheMatiereRepository,
+        VersioningParcours $versioningParcours,
         Request             $request
-    ): Response
-    {
+    ): Response {
         $type = $request->query->get('type');
         $id = $request->query->get('id');
 
@@ -479,6 +481,31 @@ class ProcessValidationController extends BaseController
 
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+
+            if ($this->isGranted('ROLE_SES')) {
+                $dpe = GetDpeParcours::getFromParcours($parcours);
+                //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
+                if ($data['demandeReouverture'] === 'MODIFICATION_SANS_CFVU') {
+
+                    $dpe->setEtatValidation(['soumis_central' => 1]); //un état de processus différent pour connaitre le branchement ensuite
+                   $dpe->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_TEXTE);
+                    $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'soumis_central', 'valide', $request);
+                    $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
+                    $this->entityManager->flush();
+                } elseif ($data['demandeReouverture'] === 'MODIFICATION_AVEC_CFVU') {
+                    $dpe->setEtatValidation(['soumis_central' => 1]);
+                    $dpe->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_MCCC);
+                   // todo: créer un nouveau DPE?
+                    // faire la copie de version
+                    $now = new DateTimeImmutable('now');
+                    $versioningParcours->saveVersionOfParcours($parcours, $now, true, true);
+
+                    $this->entityManager->flush();
+                }
+                $this->addFlash('success', 'DPE ouvert');
+                return $this->redirectToRoute('app_parcours_edit', ['id' => $parcours->getId()]);
+            }
+
             $demande = new DpeDemande();
             $demande->setFormation($formation);
             $demande->setParcours($parcours);
@@ -495,6 +522,88 @@ class ProcessValidationController extends BaseController
             $this->eventDispatcher->dispatch($dpeDemandeEvent, DpeDemandeEvent::DPE_DEMANDE_CREATED);
 
             return JsonReponse::success('Demande de réouverture enregistrée');
+        }
+
+        if ($this->isGranted('ROLE_SES')) {
+            return $this->render('process_validation/_demande_reouverture_ses.html.twig', [
+                'type' => $type,
+                'id' => $id,
+            ]);
+        }
+
+        return $this->render('process_validation/_demande_reouverture.html.twig', [
+            'type' => $type,
+            'id' => $id,
+        ]);
+
+    }
+
+    #[Route('/demande/reouverture/cloture', name: 'app_validation_demande_reouverture_cloture')]
+    public function demandeReouvertureCloture(
+        ParcoursRepository  $parcoursRepository,
+        FormationRepository $formationRepository,
+        Request             $request
+    ): Response {
+        $type = $request->query->get('type');
+        $id = $request->query->get('id');
+
+        $formation = null;
+        $parcours = null;
+
+        switch ($type) {
+            case 'formation':
+                $formation = $formationRepository->find($id);
+                $parcours = null;
+                $typeDpe = 'F';
+
+                if ($formation === null) {
+                    return JsonReponse::error('Formation non trouvée');
+                }
+                break;
+            case 'parcours':
+                $parcours = $parcoursRepository->find($id);
+
+                if ($parcours === null) {
+                    return JsonReponse::error('Parcours non trouvé');
+                }
+                $formation = $parcours->getFormation();
+                $typeDpe = 'P';
+                break;
+        }
+
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+
+            if ($this->isGranted('ROLE_SES')) {
+                //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
+                if ($data['demandeReouverture'] === 'VALIDE_MODIFICATION_SANS_CFVU') {
+                    $dpe = GetDpeParcours::getFromParcours($parcours);
+                    $dpe->setEtatValidation(['valide_a_publier' => 1]); //un état de processus différent pour connaitre le branchement ensuite
+                    $parcours->getDpeParcours()->first()->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
+
+                    $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'cloture_ses_ss_cfvu', 'valide', $request);
+                    $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
+
+                    $this->entityManager->flush();
+                } elseif ($data['demandeReouverture'] === 'MODIFICATION_AVEC_CFVU') {
+                    $parcours->getDpeParcours()?->first()->setEtatValidation(['central' => 1]); //un état de processus différent pour connaitre le branchement ensuite
+                    $formation->getDpe()?->getDpeParcours()->first()->setEtatValidation(['soumis_central' => 1]);
+                    $this->entityManager->flush();
+                }
+
+                $this->addFlash('success', 'DPE cloturé.');
+                return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
+            }
+
+
+            return JsonReponse::success('Demande de réouverture enregistrée');
+        }
+
+        if ($this->isGranted('ROLE_SES')) {
+            return $this->render('process_validation/_demande_reouverture_cloture_ses.html.twig', [
+                'type' => $type,
+                'id' => $id,
+            ]);
         }
 
         return $this->render('process_validation/_demande_reouverture.html.twig', [

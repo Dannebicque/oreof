@@ -10,6 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\Bcc;
+use App\Classes\GetDpeParcours;
 use App\Classes\UpdateEntity;
 use App\Classes\verif\ParcoursState;
 use App\Entity\Parcours;
@@ -54,7 +55,11 @@ class ParcoursSaveController extends AbstractController
         Parcours $parcours
     ): Response {
         $updateEntity->setGroups(['parcours:read']);
-        $this->denyAccessUnlessGranted('CAN_PARCOURS_EDIT_MY', $parcours);
+        $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+        if (null === $dpeParcours) {
+            return $this->json(['error' => 'DPE non trouvé']);
+        }
+        $this->denyAccessUnlessGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours);
 
 //        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
 //            $parcours, 'autoriser')) && !$this->isGranted('ROLE_SES')) {

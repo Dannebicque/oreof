@@ -141,5 +141,30 @@ process:
     hasDate: true
     transition: 'valide_pour_publication'
     canValide: 'valider_publication'
-
+  ouverture_ses_ss_cfvu:
+    page: 'parcours'
+    icon: 'fa-edit'
+    label: 'validation.ouverture_ses_ss_cfvu'
+    hasValid: true
+    hasReserve: false
+    hasRefuse: false
+    hasUpload: false
+    isTimeline: false
+    showOn: false
+    hasDate: false
+    transition: 'valide_pour_publication'
+    canValide: 'valider_publication'
+  cloture_ses_ss_cfvu:
+    page: 'parcours'
+    icon: 'fa-times'
+    label: 'validation.cloture_ses_ss_cfvu'
+    hasValid: true
+    hasReserve: false
+    hasRefuse: false
+    hasUpload: false
+    showOn: false
+    isTimeline: false
+    hasDate: false
+    transition: 'valide_pour_publication'
+    canValide: 'valider_publication'
 

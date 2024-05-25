@@ -50,7 +50,11 @@ class SemestreParcours
     private ?string $codeApogeeDiplome = null; //sera identique sur plusieurs semestres, mais peut changer selon la présence d'un tronc commun ou pas
 
     #[ORM\Column(length: 3, nullable: true)]
-    private ?string $codeApogeeVersionDiplome = null; //ne devrait pas changer mais plus cohérent de le mettre ici
+    private ?string $codeApogeeVersionDiplome = null;
+
+    #[ORM\Column]
+    #[Groups('parcours_json_versioning')]
+    private ?bool $isOuvert = null;
 
     public function __construct(?Semestre $semestre, ?Parcours $parcours)
     {
@@ -204,6 +208,18 @@ class SemestreParcours
     public function setCodeApogeeVersionDiplome(?string $codeApogeeVersionDiplome): static
     {
         $this->codeApogeeVersionDiplome = $codeApogeeVersionDiplome;
+
+        return $this;
+    }
+
+    public function isOuvert(): ?bool
+    {
+        return $this->isOuvert ?? true;
+    }
+
+    public function setOuvert(bool $isOuvert): static
+    {
+        $this->isOuvert = $isOuvert;
 
         return $this;
     }

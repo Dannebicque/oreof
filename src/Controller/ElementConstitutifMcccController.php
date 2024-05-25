@@ -10,6 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\EcOrdre;
+use App\Classes\GetDpeParcours;
 use App\Classes\GetElementConstitutif;
 use App\Classes\JsonReponse;
 use App\Entity\ElementConstitutif;
@@ -51,6 +52,13 @@ class ElementConstitutifMcccController extends AbstractController
         ElementConstitutif           $elementConstitutif,
         Parcours                     $parcours
     ): Response {
+
+        $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+
+        if ($dpeParcours === null) {
+            throw new RuntimeException('DPE Parcours non trouvé');
+        }
+
         $formation = $parcours?->getFormation();
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
@@ -61,8 +69,9 @@ class ElementConstitutifMcccController extends AbstractController
         }
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
 
-        if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
-            $this->isGranted('CAN_PARCOURS_EDIT_MY', $parcours)) {
+
+
+        if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours)) {
             if ($request->isMethod('POST')) {
                 if (
                     ($elementConstitutif->isSynchroEcts() === false &&

@@ -1,4 +1,4 @@
-#bin/console workflow:dump parcours | dot -Tpng -o graph.png
+#bin/console workflow:dump dpe | dot -Tpng -o dpe.png
 framework:
     workflows:
         dpe:
@@ -41,6 +41,111 @@ framework:
                     to: 'soumis_dpe_composante'
                 reserver_rf:
                     from: 'soumis_rf'
+                    to: 'en_cours_redaction'
+                refuser_dpe_composante:
+                    from: 'soumis_dpe_composante'
+                    to: 'refuse_dpe_composante'
+                valide_dpe_composante:
+                    from: 'soumis_dpe_composante'
+                    to: 'soumis_conseil'
+                reserver_dpe_composante:
+                    from: 'soumis_dpe_composante'
+                    to: 'en_cours_redaction'
+                refuser_conseil:
+                    from: 'soumis_conseil'
+                    to: 'refuse_conseil'
+                valider_conseil:
+                    from: 'soumis_conseil'
+                    to: 'soumis_central'
+                reserver_conseil:
+                    from: 'soumis_conseil'
+                    to: 'en_cours_redaction'
+                refuser_central:
+                    from: 'soumis_central'
+                    to: 'refuse_central'
+                valider_central:
+                    from: 'soumis_central'
+                    to: 'soumis_cfvu'
+                reserver_central:
+                    from: 'soumis_central'
+                    to: 'en_cours_redaction'
+                transmettre_cfvu:
+                    from: 'soumis_central' #TODO: VP + Central fusionné
+                    to: 'soumis_cfvu'
+                refuser_definitif_cfvu:
+                    from: 'soumis_cfvu'
+                    to: 'refuse_definitif_cfvu'
+                refuser_revoir_cfvu:
+                    from: 'soumis_cfvu'
+                    to: 'en_cours_redaction'
+                valider_reserve_cfvu:
+                    from: 'soumis_cfvu'
+                    to: 'en_cours_redaction'
+                valider_reserve_conseil_cfvu:
+                    from: 'soumis_cfvu'
+                    to: 'soumis_conseil_reserve' #todo mais on court-circuite le retour directement vers valider publicatio
+                valider_reserve_central_cfvu:
+                    from: 'soumis_conseil_reserve'
+                    to: 'valide_pour_publication'
+                valider_cfvu:
+                    from: 'soumis_cfvu'
+                    to: 'valide_pour_publication' #todo: renommer en valide_cfvu
+                valider_publication:
+                    from: 'valide_pour_publication' #todo: renommer en valide_cfvu
+                    to: 'valide_a_publier'
+                publier:
+                    from: 'valide_a_publier'
+                    to: 'publie'
+        dpeParcours:
+            type: 'workflow'
+            marking_store:
+                type: 'method'
+                property: 'etatValidation'
+            supports:
+                - App\Entity\DpeParcours
+            initial_marking: 'initialisation_dpe'
+            places:
+                - 'initialisation_dpe'
+                - 'autorisation_saisie'
+                - 'en_cours_redaction'
+                - 'soumis_parcours'
+                - 'valide_parcours_rf'
+                - 'soumis_dpe_composante'
+                - 'refuse_rf'
+                - 'refuse_dpe_composante'
+                - 'soumis_conseil'
+                - 'refuse_conseil'
+                - 'refuse_central'
+                - 'soumis_central'
+                - 'soumis_vp'
+                - 'soumis_cfvu'
+                - 'refuse_definitif_cfvu'
+                - 'valide_a_publier'
+                - 'publie'
+                - 'valide_pour_publication'
+                - 'soumis_conseil_reserve'
+            transitions:
+                initialiser:
+                    guard: "is_granted('ROLE_ADMIN')"
+                    from: 'initialisation_dpe'
+                    to: 'autorisation_saisie'
+                autoriser:
+                    from: 'autorisation_saisie'
+                    to: 'en_cours_redaction'
+                valider_parcours: # Soumettre du resp de parcours vers formation
+                    from: 'en_cours_redaction'
+                    to: 'soumis_parcours'
+                reserver_parcours_rf:
+                    from: 'soumis_parcours'
+                    to: 'en_cours_redaction'
+                valider_parcours_rf:
+                    from: 'soumis_parcours'
+                    to: 'valide_parcours_rf'
+                valide_rf:
+                    from: 'valide_parcours_rf'
+                    to: 'soumis_dpe_composante'
+                reserver_rf:
+                    from: 'valide_parcours_rf'
                     to: 'en_cours_redaction'
                 refuser_dpe_composante:
                     from: 'soumis_dpe_composante'

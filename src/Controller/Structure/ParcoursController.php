@@ -9,6 +9,7 @@
 
 namespace App\Controller\Structure;
 
+use App\Classes\GetDpeParcours;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Repository\ParcoursRepository;
@@ -64,6 +65,13 @@ class ParcoursController extends AbstractController
         if (null === $formation) {
             throw $this->createNotFoundException('La formation n\'existe pas');
         }
+
+        $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+
+        if (null === $dpeParcours) {
+            throw $this->createNotFoundException('Le DPE du parcours n\'existe pas');
+        }
+
         $typeDiplome = $formation->getTypeDiplome();
 
         if (null === $typeDiplome) {
@@ -82,6 +90,7 @@ class ParcoursController extends AbstractController
         return $this->render('structure/semestre/_liste.html.twig', [
             'semestres' => $semestres,
             'parcours' => $parcours,
+            'dpeParcours' => $dpeParcours,
             'debut' => $debut,
             'fin' => $typeDiplome->getSemestreFin(),
             'hasParcours' => $parcours->getFormation()?->isHasParcours()

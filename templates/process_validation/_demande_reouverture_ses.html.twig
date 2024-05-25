@@ -1,0 +1,54 @@
+{{ component('alerte', {
+    type: 'info',
+    message: ('demande.reouverture.ses.alerte')|trans({}, 'process')|nl2br|raw
+}) }}
+
+<form action="{{ path('app_validation_demande_reouverture', {type:type, id:id}) }}" method="post"
+      enctype="multipart/form-data">
+    <p>
+        <strong>{{ ('demande.reouverture.ses.label')|trans({}, 'process') }}</strong>
+        <i
+                class="fal fa-question-circle ms-1"
+                data-controller="tooltip"
+                data-tooltip-placement-value="bottom"
+                aria-label="{{ ('demande.reouverture.ses.help')|trans({}, 'process') }}"
+                data-bs-original-title="{{ ('demande.reouverture.ses.help')|trans({}, 'process') }}"></i>
+    </p>
+    <div class="form-check mt-2">
+        <input class="form-check-input" type="radio" value="MODIFICATION_SANS_CFVU" id="modificationTexte"
+               name="demandeReouverture">
+        <label class="form-check-label" for="modificationTexte">
+            <strong>{{ ('demande.reouverture.modification.ses.sans_cfvu.label')|trans({}, 'process') }}</strong>
+            <i
+                    class="fal fa-question-circle ms-1"
+                    data-controller="tooltip"
+                    data-tooltip-placement-value="bottom"
+                    aria-label="{{ ('demande.reouverture.modification.ses.sans_cfvu.help')|trans({}, 'process') }}"
+                    data-bs-original-title="{{ ('demande.reouverture.modification.ses.sans_cfvu.help')|trans({}, 'process') }}"></i>
+        </label>
+    </div>
+    <div class="form-check mt-2">
+        <input class="form-check-input" type="radio" value="MODIFICATION_AVEC_CFVU" id="modificationMaquette"
+               name="demandeReouverture">
+        <label class="form-check-label" for="modificationMaquette">
+            <strong>{{ ('demande.reouverture.modification.ses.avec_cfvu.label')|trans({}, 'process') }}</strong>
+            <i
+                    class="fal fa-question-circle ms-1"
+                    data-controller="tooltip"
+                    data-tooltip-placement-value="bottom"
+                    aria-label="{{ ('demande.reouverture.modification.maquette.help')|trans({}, 'process') }}"
+                    data-bs-original-title="{{ ('demande.reouverture.modification.ses.avec_cfvu.help')|trans({}, 'process') }}"></i>
+        </label>
+    </div>
+
+    <div class="mt-2">
+        <button type="submit" class="btn btn-success"
+                {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+                data-action="live#emit"
+                data-event="valide"
+        >
+            <i class="fal fa-floppy-disk"></i>
+            {{ ('btn.demande.reouverture.modification')|trans({}, 'process') }}
+        </button>
+    </div>
+</form>

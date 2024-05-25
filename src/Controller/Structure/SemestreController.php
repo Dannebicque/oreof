@@ -10,6 +10,7 @@
 namespace App\Controller\Structure;
 
 use _PHPStan_a4fa95a42\Nette\Neon\Entity;
+use App\Classes\GetDpeParcours;
 use App\Classes\JsonReponse;
 use App\Classes\SemestreOrdre;
 use App\Entity\FicheMatiereMutualisable;
@@ -41,14 +42,22 @@ class SemestreController extends AbstractController
         Route('/detail/parcours/{parcours}', name: 'detail_parcours')
     ]
     public function detailParcours(
-        TypeDiplomeRegistry        $registry,
         SemestreParcoursRepository $semestreRepository,
         Parcours                   $parcours
     ): Response {
         $formation = $parcours->getFormation();
+
         if (null === $formation) {
             throw $this->createNotFoundException('La formation n\'existe pas');
         }
+
+        $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+
+        if (null === $dpeParcours) {
+            throw $this->createNotFoundException('Le DPE du parcours n\'existe pas');
+        }
+
+
         $typeDiplome = $formation->getTypeDiplome();
 
         if (null === $typeDiplome) {
@@ -67,6 +76,7 @@ class SemestreController extends AbstractController
         return $this->render('structure/semestre/_liste.html.twig', [
             'semestres' => $semestres,
             'parcours' => $parcours,
+            'dpeParcours' => $dpeParcours,
             'debut' => $debut,
             'fin' => $typeDiplome->getSemestreFin(),
         ]);

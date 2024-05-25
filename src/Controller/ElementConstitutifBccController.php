@@ -10,6 +10,7 @@
 namespace App\Controller;
 
 use App\Classes\EcOrdre;
+use App\Classes\GetDpeParcours;
 use App\Classes\GetElementConstitutif;
 use App\Classes\JsonReponse;
 use App\Entity\ElementConstitutif;
@@ -55,11 +56,19 @@ class ElementConstitutifBccController extends AbstractController
         ElementConstitutif                 $elementConstitutif,
         Parcours                           $parcours
     ): Response {
+        $dpeParcours = GetDpeParcours::getFromParcours($parcours);
+        //todo: quel parcours celui-ci ? ou celui de l'EC
+
+        if ($dpeParcours === null) {
+            throw new RuntimeException('DPE Parcours non trouvé');
+        }
+
         $formation = $elementConstitutif->getParcours()?->getFormation();
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours() !== $parcours;
         if ($formation === null) {
             throw new RuntimeException('Formation non trouvée');
         }
+
         $ficheMatiere = $elementConstitutif->getFicheMatiere();
         $typeDiplome = $formation->getTypeDiplome();
 
@@ -77,7 +86,6 @@ class ElementConstitutifBccController extends AbstractController
                     }
 
                     //on regarde si c'est déjà là, soit dans EC, soit dans fichematiere
-
                     $existe = $elementConstitutif->getFicheMatiere()?->getApprentissagesCritiques()->contains($competence);
                     if ($existe && (bool)$data['checked'] === false) {
                         $elementConstitutif->getFicheMatiere()?->removeApprentissagesCritique($competence);
@@ -106,8 +114,7 @@ class ElementConstitutifBccController extends AbstractController
                 $apprentissageCritiques = [];
             }
 
-            if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
-                $this->isGranted('CAN_PARCOURS_EDIT_MY', $elementConstitutif->getParcours())) { //todo: ajouter le workflow...
+            if ($this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours)) {
                 return $this->render('element_constitutif/_bccEcButModal.html.twig', [
                     'competence' => $competence,
                     'ec' => $elementConstitutif,
@@ -188,8 +195,8 @@ class ElementConstitutifBccController extends AbstractController
             }
 
 
-            if ($this->isGranted('CAN_FORMATION_EDIT_MY', $formation) ||
-                $this->isGranted('CAN_PARCOURS_EDIT_MY', $parcours)) {
+            if (
+                $this->isGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours)) {
                 return $this->render('element_constitutif/_bccEcModal.html.twig', [
                     'ec' => $elementConstitutif,
                     'bccs' => $bccs,

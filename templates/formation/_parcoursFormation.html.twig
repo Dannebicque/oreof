@@ -17,7 +17,7 @@
                     <td>{{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}</td>
                     <td>{{ parcours.localisation != null ? parcours.localisation.libelle : 'Non défini' }}</td>
                     <td>{{ parcours.respParcours != null ? parcours.respParcours.display : 'Non défini' }}</td>
-                    <td>{{ parcours.etatParcours|badgeDpe }}</td>
+                    <td>{{ dpesParcours[parcours.id].etatValidation|badgeDpe }}</td>
                     <td>
                         {{ parcours.remplissage|remplissage }}
                     </td>
@@ -48,8 +48,7 @@
                             <span> vérifier</span>
                         </a><br>
 
-                        {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) or is_granted('ROLE_SES') %}
-                        {# todo: filtrer sur ROLE_SES => Parcours Edit #}
+                        {% if is_granted('CAN_PARCOURS_EDIT_MY', dpesParcours[parcours.id]) %}
                             <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
                                class="btn btn-sm text-warning"
                                data-bs-toggle="tooltip"

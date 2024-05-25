@@ -1,0 +1,54 @@
+{{ component('alerte', {
+    type: 'info',
+    message: ('demande.reouverture.ses.cloture.alerte')|trans({}, 'process')|nl2br|raw
+}) }}
+
+<form action="{{ path('app_validation_demande_reouverture_cloture', {type:type, id:id}) }}" method="post"
+      enctype="multipart/form-data">
+    <p>
+        <strong>{{ ('demande.reouverture.cloture.ses.label')|trans({}, 'process') }}</strong>
+        <i
+                class="fal fa-question-circle ms-1"
+                data-controller="tooltip"
+                data-tooltip-placement-value="bottom"
+                aria-label="{{ ('demande.reouverture.ses.help')|trans({}, 'process') }}"
+                data-bs-original-title="{{ ('demande.reouverture.ses.help')|trans({}, 'process') }}"></i>
+    </p>
+    <div class="form-check mt-2">
+        <input class="form-check-input" type="radio" value="VALIDE_MODIFICATION_SANS_CFVU" id="modificationTexte"
+               name="demandeReouverture">
+        <label class="form-check-label" for="modificationTexte">
+            <strong>{{ ('demande.reouverture.modification.ses.sans_cfvu.label')|trans({}, 'process') }}</strong>
+            <i
+                    class="fal fa-question-circle ms-1"
+                    data-controller="tooltip"
+                    data-tooltip-placement-value="bottom"
+                    aria-label="{{ ('demande.reouverture.modification.ses.sans_cfvu.help')|trans({}, 'process') }}"
+                    data-bs-original-title="{{ ('demande.reouverture.modification.ses.sans_cfvu.help')|trans({}, 'process') }}"></i>
+        </label>
+    </div>
+
+    <div>
+        <label class="form-label" for="argumentaire">
+            <strong>{{ ('demande.reouverture.modification.ses.cloture.commentaire.label')|trans({}, 'process') }}</strong>
+            <i
+                    class="fal fa-question-circle ms-1"
+                    data-controller="tooltip"
+                    data-tooltip-placement-value="bottom"
+                    aria-label="{{ ('demande.reouverture.modification.ses.cloture.commentaire.help')|trans({}, 'process') }}"
+                    data-bs-original-title="{{ ('demande.reouverture.modification.ses.cloture.commentaire.help')|trans({}, 'process') }}"></i>
+        </label>
+        <textarea class="form-control" name="argumentaire" id="argumentaire" rows="3"></textarea>
+    </div>
+
+    <div class="mt-2">
+        <button type="submit" class="btn btn-success"
+                {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+                data-action="live#emit"
+                data-event="valide"
+        >
+            <i class="fal fa-floppy-disk"></i>
+            {{ ('btn.demande.reouverture.cloture')|trans({}, 'process') }}
+        </button>
+    </div>
+</form>

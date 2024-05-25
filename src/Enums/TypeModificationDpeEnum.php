@@ -21,6 +21,7 @@ enum TypeModificationDpeEnum: string implements BadgeEnumInterface
      */
     case ATTENTE = 'ATTENTE';
     case CREATION = 'CREATION';
+    case OUVERT = 'OUVERT';
     case NON_OUVERTURE = 'NON_OUVERTURE';
     case MODIFICATION = 'MODIFICATION';
     case MODIFICATION_INTITULE = 'MODIFICATION_INTITULE';

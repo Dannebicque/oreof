@@ -9,8 +9,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { Modal } from 'bootstrap'
 
-import TomSelect from 'tom-select'
-import callOut from '../js/callOut'
 import JsonResponse from '../js/JsonResponse'
 
 export default class extends Controller {
@@ -31,12 +29,9 @@ export default class extends Controller {
       body: new FormData(form),
     })
       .then((response) => {
-        // response.json()
         JsonResponse(response)
       })
       .then(async () => {
-        // callOut('Sauvegarde effectuée', 'success')
-
         this.modal.hide()
 
         // tester si l'objet json updateComponent n'est pas vide et contient les clés id et event

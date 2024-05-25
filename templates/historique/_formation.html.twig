@@ -13,6 +13,8 @@
         {% set color='success' %}
     {% elseif histo.etat == 'refuse' %}
         {% set color='danger' %}
+    {% elseif histo.etat == 'info' %}
+        {% set color='info' %}
     {% else %}
         {% set color='warning' %}
     {% endif %}

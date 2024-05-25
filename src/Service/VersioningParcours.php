@@ -5,6 +5,7 @@ namespace App\Service;
 use App\DTO\StructureParcours;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
+use App\Serializer\McccCollectionDenormalizer;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use DateTimeImmutable;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -17,7 +18,6 @@ use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
@@ -32,6 +32,8 @@ class VersioningParcours
     private Serializer $serializer;
     private Filesystem $fileSystem;
     private TypeDiplomeRegistry $typeD;
+
+    private bool $hasLastVersion = false;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -49,6 +51,7 @@ class VersioningParcours
             new DateTimeNormalizer(),
             new BackedEnumNormalizer(),
             new ArrayDenormalizer(),
+
             new ObjectNormalizer($classMetadataFactory, propertyTypeExtractor: $extractors)
         ],
             [new JsonEncoder()]
@@ -129,6 +132,7 @@ class VersioningParcours
         $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
 
         if($lastVersion) {
+            $this->hasLastVersion = true;
             // Configuration du calcul des différences
             $rendererName = 'Combined';
             $differOptions = [
@@ -369,11 +373,17 @@ class VersioningParcours
                 . "{$lastVersion->getParcours()->getId()}/"
                 . "{$lastVersion->getDtoFileName()}.json"
             );
+           // dd($fileDTO);
             $dto = $this->serializer->deserialize($fileDTO, StructureParcours::class, 'json');
 
             return $dto;
         }
 
         return null;
+    }
+
+    public function hasLastVersion(): bool
+    {
+        return $this->hasLastVersion;
     }
 }
