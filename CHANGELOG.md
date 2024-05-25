@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.26.0](https://github.com/Dannebicque/oreof/compare/v1.25.0...v1.26.0) (2024-05-25)
+
+
+### Features
+
+* affichage des versions en affichage ([e250a93](https://github.com/Dannebicque/oreof/commit/e250a9394daf3c40ffe65dc4deb40e67798e1e95))
+* export avec versionning du fichier Excel ([1d67da9](https://github.com/Dannebicque/oreof/commit/1d67da9424358b10944156f8f184df6f619cb1b7))
+* gestion du DpeParcours + ouverture niveau SES ([02e5ee3](https://github.com/Dannebicque/oreof/commit/02e5ee34bcd0ce1fbd302cb5987c08569220e8b5))
+
+
+### Bug Fixes
+
+* onglets masqués si titre très long ([52b3a08](https://github.com/Dannebicque/oreof/commit/52b3a088d3e0b6e7a2e3ee67e6cd69d20a31fa14))
+
 ## [1.25.0](https://github.com/Dannebicque/oreof/compare/v1.24.57...v1.25.0) (2024-05-12)
 
 
