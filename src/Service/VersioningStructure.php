@@ -17,6 +17,7 @@ use App\DTO\StructureEc;
 use App\DTO\StructureParcours;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
+use App\Entity\Mccc;
 use App\Utils\Tools;
 
 class VersioningStructure
@@ -80,35 +81,39 @@ class VersioningStructure
 
     private function compareUe(StructureUe $ueOriginale, StructureUe $ueNouvelle): array
     {
-/*
- * "display" => "UE 1.1"
-  "ueOrigine" => array:4 [▶]
-  "ue" => array:4 [▶]
-  "raccroche" => false
-  "elementConstitutifs" => array:1 [▶]
-  "uesEnfants" => []
-  "heuresEctsUeEnfants" => []
-  "heuresEctsUe" => array:8 [▼
-    "sommeUeEcts" => 6.0
-    "sommeUeCmPres" => 20.0
-    "sommeUeTdPres" => 20.0
-    "sommeUeTpPres" => 0.0
-    "sommeUeTePres" => 0.0
-    "sommeUeCmDist" => 0.0
-    "sommeUeTdDist" => 0.0
-    "sommeUeTpDist" => 0.0
-  ]
- */
+        /*
+         * "display" => "UE 1.1"
+          "ueOrigine" => array:4 [▶]
+          "ue" => array:4 [▶]
+          "raccroche" => false
+          "elementConstitutifs" => array:1 [▶]
+          "uesEnfants" => []
+          "heuresEctsUeEnfants" => []
+          "heuresEctsUe" => array:8 [▼
+            "sommeUeEcts" => 6.0
+            "sommeUeCmPres" => 20.0
+            "sommeUeTdPres" => 20.0
+            "sommeUeTpPres" => 0.0
+            "sommeUeTePres" => 0.0
+            "sommeUeCmDist" => 0.0
+            "sommeUeTdDist" => 0.0
+            "sommeUeTpDist" => 0.0
+          ]
+         */
         $diff = [];
 
         $diff['display'] = new DiffObject($ueOriginale->display, $ueNouvelle->display);
+        $diff['libelle'] = new DiffObject($ueOriginale->ue->getLibelle(), $ueNouvelle->ue->getLibelle());
         $diff['raccroche'] = new DiffObject($ueOriginale->raccroche, $ueNouvelle->raccroche);
         foreach ($ueOriginale->elementConstitutifs as $ordreEc => $ec) {
             $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, $ueNouvelle->elementConstitutifs[$ordreEc]);
         }
 
+        foreach ($ueOriginale->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
+            $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe($ueEnfant, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
+        }
+
         $diff['heuresEctsUe'] = $this->compareHeuresEctsUe($ueOriginale->heuresEctsUe, $ueNouvelle->heuresEctsUe);
-        //ue enfant ?
 
         return $diff;
     }
@@ -118,8 +123,11 @@ class VersioningStructure
         $diff = [];
         //$diff['libelle'] = new DiffObject($ecOriginal['libelle'], $ecNouveau->elementConstitutif->getLibelle());
         $diff['raccroche'] = new DiffObject($ecOriginal->raccroche, $ecNouveau->raccroche);
-       // $diff['elementConstitutif'] = new DiffObject($ecOriginal['elementConstitutif'], $ecNouveau->elementConstitutif);
+        // $diff['elementConstitutif'] = new DiffObject($ecOriginal['elementConstitutif'], $ecNouveau->elementConstitutif);
         $diff['heuresEctsEc'] = $this->compareHeuresEctsEc($ecOriginal->heuresEctsEc, $ecNouveau->heuresEctsEc);
+        $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, $ecNouveau->typeMccc);
+        $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
+
 
         return $diff;
     }
@@ -159,8 +167,10 @@ class VersioningStructure
         $diff['tdDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tdDist), Tools::filtreHeures($heuresEctsEc1->tdDist));
         $diff['tpDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->tpDist), Tools::filtreHeures($heuresEctsEc1->tpDist));
 
-        $sommeEcTotalPres = $heuresEctsEc->cmPres + $heuresEctsEc->tdPres + $heuresEctsEc->tpPres;
-        $diff['sommeEcTotalPres'] = new DiffObject(Tools::filtreHeures($sommeEcTotalPres), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalPres()));
+
+        $diff['sommeEcTotalPres'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalPres()), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalPres()));
+        $diff['sommeEcTotalDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalDist()), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalDist()));
+        $diff['sommeEcTotalPresDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalPresDist()), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalPresDist()));
 
         return $diff;
 
@@ -190,48 +200,99 @@ class VersioningStructure
         return $diff;
     }
 
-    public function mapStructureForComparison(StructureParcours $dto){
+    public function mapStructureForComparison(StructureParcours $dto)
+    {
         $structure = ['semestres' => []];
         // Semestres
-        foreach($dto->semestres as $indexS => $semestre){
+        foreach($dto->semestres as $indexS => $semestre) {
             $structure['semestres'][$indexS] = ['idSemestre' => $semestre->semestre->getId(), 'ues' => []];
             $ueArray = $semestre->ues;
             $structure['semestres'][$indexS]['ues'] = $this->mapUeArrayForComparison($ueArray);
-            foreach($ueArray as $indexUe => $ue){
+            foreach($ueArray as $indexUe => $ue) {
                 $ecArray = $ue->elementConstitutifs;
                 $structure['semestres'][$indexS]['ues'][$indexUe]['listeEc'] = $this->mapEcArrayForComparison($ecArray);
-                foreach($ecArray as $indexEc => $ec){
+                foreach($ecArray as $indexEc => $ec) {
                     $ecEnfantData = $ec->elementsConstitutifsEnfants;
                     $structure['semestres'][$indexS]['ues'][$indexUe]['listeEc'][$indexEc]['listeEcsEnfants'] = $this->mapEcArrayForComparison($ecEnfantData);
                 }
                 $ueEnfantArrayData = $ue->uesEnfants();
                 $structure['semestres'][$indexS]['ues'][$indexUe]['uesEnfants'] = $this->mapUeArrayForComparison($ueEnfantArrayData);
-                foreach($ueEnfantArrayData as $indexUeEnfant => $ueEnfant){
+                foreach($ueEnfantArrayData as $indexUeEnfant => $ueEnfant) {
                     $ecArrayData = $ueEnfant->elementConstitutifs;
                     $structure['semestres'][$indexS]['ues'][$indexUe]['uesEnfants'][$indexUeEnfant]['listeEc'] = $this->mapEcArrayForComparison($ecArrayData);
-                    foreach($ecArrayData as $indexEcEnfantUeEnfant => $ec){
+                    foreach($ecArrayData as $indexEcEnfantUeEnfant => $ec) {
                         $ecEnfantData = $ec->elementsConstitutifsEnfants;
                         $structure['semestres'][$indexS]['ues'][$indexUe]['uesEnfants'][$indexUeEnfant]['listeEc'][$indexEcEnfantUeEnfant]['listeEcsEnfants'] = $this->mapEcArrayForComparison($ecEnfantData);
-                    }   
-                } 
+                    }
+                }
             }
         }
 
         return $structure;
     }
 
-    public function mapUeArrayForComparison(array $ueArray){
-        return array_values(array_map(
-            fn($ue) => ["idUe" => $ue->ue->getId()],
-                $ueArray)
-            );
+    public function mapUeArrayForComparison(array $ueArray)
+    {
+        return array_values(
+            array_map(
+                fn ($ue) => ["idUe" => $ue->ue->getId()],
+                $ueArray
+            )
+        );
     }
 
-    public function mapEcArrayForComparison(array $ecArray){
-        return array_values(array_map(
-            fn($ec) => ["idEc" => $ec->elementConstitutif->getId()],
+    public function mapEcArrayForComparison(array $ecArray)
+    {
+        return array_values(
+            array_map(
+                fn ($ec) => ["idEc" => $ec->elementConstitutif->getId()],
                 $ecArray
             )
         );
+    }
+
+    private function compareMcccs(?array $mcccsOriginal, ?array $mcccsNouveau): array
+    {
+        if (null === $mcccsOriginal && null === $mcccsNouveau) {
+            return [];
+        }
+
+        $diff = [];
+
+        foreach ($mcccsNouveau as $mcccNouveau) {
+            $diff['new'][$mcccNouveau->getId()] = $mcccNouveau;
+        }
+
+        foreach ($mcccsOriginal as $mcccOriginal) {
+            $diff['original'][$mcccOriginal['id']] = $this->createMcccFromArray($mcccOriginal);
+        }
+
+
+        return $diff;
+    }
+
+    private function createMcccFromArray(array $mcccOriginal): Mccc
+    {
+        $mccc = new Mccc();
+        $mccc->setId($mcccOriginal['id']);
+        if (array_key_exists('duree', $mcccOriginal)) {
+            // création d'un objet DateTime à partir d'une chaine de caractères
+            $mccc->setDuree(new \DateTime($mcccOriginal['duree']));
+        }
+        $mccc->setLibelle($mcccOriginal['libelle']);
+        $mccc->setNumeroSession($mcccOriginal['numeroSession']);
+        $mccc->setSecondeChance($mcccOriginal['secondeChance'] == 1);
+        $mccc->setPourcentage($mcccOriginal['pourcentage']);
+        $mccc->setNbEpreuves($mcccOriginal['nbEpreuves']);
+        $mccc->setTypeEpreuve($mcccOriginal['typeEpreuve']);
+        $mccc->setControleContinu($mcccOriginal['controleContinu'] == 1);
+        $mccc->setExamenTerminal($mcccOriginal['examenTerminal'] == 1);
+        $mccc->setNumeroEpreuve($mcccOriginal['numeroEpreuve']);
+
+        if (array_key_exists('options', $mcccOriginal)) {
+            $mccc->setOptions($mcccOriginal['options']);
+        }
+
+        return $mccc;
     }
 }

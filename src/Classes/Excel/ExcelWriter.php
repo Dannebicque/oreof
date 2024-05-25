@@ -518,17 +518,22 @@ class ExcelWriter
             $col = (int)Coordinate::columnIndexFromString($col);
         }
 
-        $richText = new RichText();
-        $ancienneValeur = $richText->createTextRun($diffObject->original);
-        $ancienneValeur->getFont()?->setStrikethrough(true);
-        $ancienneValeur->getFont()?->setItalic(true);
-        $ancienneValeur->getFont()?->setColor(new Color(Color::COLOR_RED));
-        $nouvelleValeur = $richText->createTextRun($diffObject->new);
-        $nouvelleValeur->getFont()?->setStrikethrough(false);
-        $nouvelleValeur->getFont()?->setBold(true);
-        $nouvelleValeur->getFont()?->setColor(new Color(Color::COLOR_GREEN));
+        if ($diffObject->isDifferent()) {
 
-        $this->sheet->setCellValue([$col, $row], $richText);
+            $richText = new RichText();
+            $ancienneValeur = $richText->createTextRun($diffObject->original);
+            $ancienneValeur->getFont()?->setStrikethrough(true);
+            $ancienneValeur->getFont()?->setItalic(true);
+            $ancienneValeur->getFont()?->setColor(new Color(Color::COLOR_RED));
+            $nouvelleValeur = $richText->createTextRun($diffObject->new);
+            $nouvelleValeur->getFont()?->setStrikethrough(false);
+            $nouvelleValeur->getFont()?->setBold(true);
+            $nouvelleValeur->getFont()?->setColor(new Color(Color::COLOR_DARKGREEN));
+
+            $this->sheet->setCellValue([$col, $row], $richText);
+        } else {
+            $this->writeCellXY($col, $row, $diffObject->original, $options);
+        }
 
     }
 }

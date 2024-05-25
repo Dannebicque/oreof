@@ -11,6 +11,7 @@ namespace App\TypeDiplome\Export;
 
 use App\Classes\CalculStructureParcours;
 use App\Classes\Excel\ExcelWriter;
+use App\DTO\DiffObject;
 use App\DTO\StructureEc;
 use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
@@ -36,19 +37,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class LicenceMccc extends AbstractLicenceMccc
+class LicenceMcccVersion extends AbstractLicenceMccc
 {
     //todo: ajouter un watermark sur le doc ou une mention que la mention est définitive ou pas.
     //todo: gérer la date de vote
-
-
 
     public function __construct(
         KernelInterface                   $kernel,
         protected ClientInterface         $client,
         protected CalculStructureParcours $calculStructureParcours,
+        protected VersioningParcours      $versioningParcours,
         protected ExcelWriter             $excelWriter,
-        protected TypeEpreuveRepository             $typeEpreuveRepository
+        protected TypeEpreuveRepository   $typeEpreuveRepository
     ) {
 
         $this->dir = $kernel->getProjectDir() . '/public';
@@ -70,13 +70,20 @@ class LicenceMccc extends AbstractLicenceMccc
         $this->getTypeEpreuves();
         $this->versionFull = $versionFull;
         $formation = $parcours->getFormation();
-        $parcours1 = $parcours;
-        $dto = $this->calculStructureParcours->calcul($parcours1);
-        $totalFormation = $dto->heuresEctsFormation;
 
         if (null === $formation) {
             throw new \Exception('La formation n\'existe pas');
         }
+
+        $dto = $this->calculStructureParcours->calcul($parcours);
+        $totalFormation = $dto->heuresEctsFormation;
+
+        // version
+        $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parcours);
+        if ($structureDifferencesParcours !== null) {
+            $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+        }
+
         $this->excelWriter->createFromTemplate('Annexe_MCCC.xlsx');
 
         // Prépare le modèle avant de dupliquer
@@ -111,9 +118,9 @@ class LicenceMccc extends AbstractLicenceMccc
             //changer le pied de page.
             $modele->getHeaderFooter()
                 ->setOddFooter(
-                    '&L&B' . 'Document généré depuis ORéOF'.
-                    '&C&B' . 'Document validé en CFVU le '. $dateCfvu->format('d/m/Y')
-                . '&R&B' . 'Université de Reims Champagne-Ardenne'
+                    '&L&B' . 'Document généré depuis ORéOF' .
+                    '&C&B' . 'Document validé en CFVU le ' . $dateCfvu->format('d/m/Y')
+                    . '&R&B' . 'Université de Reims Champagne-Ardenne'
                 );
         }
 
@@ -155,15 +162,19 @@ class LicenceMccc extends AbstractLicenceMccc
             $ligne = 19;
             if (array_key_exists($i, $tabSemestresAnnee)) {
                 $totalAnnee = new TotalVolumeHeure();
+                $totalAnneeOriginal = new TotalVolumeHeure();
                 $this->excelWriter->setSheet($clonedWorksheet);
                 $this->excelWriter->writeCellName(self::CEL_ANNEE_ETUDE, $i . ' année');
                 $this->lignesSemestre = [];
                 $this->lignesEcColorees = [];
                 /** @var StructureSemestre $semestre */
-                foreach ($semestres as $semestre) {
+                foreach ($semestres as $ordre => $semestre) {
+                    $diffSemestre = $diffStructure['semestres'][$ordre];
                     $totalAnnee->addSemestre($semestre->heuresEctsSemestre);
+                    $totalAnneeOriginal->addSemestreDiff($diffSemestre['heuresEctsSemestre']);
                     $debutSemestre = $ligne;
-                    foreach ($semestre->ues as $ue) { //todo: changement ici avec modif du DTO ? un impact ?
+                    foreach ($semestre->ues as $ordUe => $ue) { //todo: changement ici avec modif du DTO ? un impact ?
+                        $diffUe = $diffSemestre['ues'][$ordUe];
                         //UE
                         $debut = $ligne;
                         if (count($ue->uesEnfants()) === 0) {
@@ -171,10 +182,13 @@ class LicenceMccc extends AbstractLicenceMccc
                                 $ligne = $this->afficheUeLibre($ligne, $ue);
                             } else {
                                 //Si des UE enfants, on affiche pas les éventuels EC résiduels,
-                                foreach ($ue->elementConstitutifs as $ec) {
-                                    $ligne = $this->afficheEc($ligne, $ec);
-                                    foreach ($ec->elementsConstitutifsEnfants as $ece) {
-                                        $ligne = $this->afficheEc($ligne, $ece);
+                                foreach ($ue->elementConstitutifs as $ordEc => $ec) {
+                                    $diffEc = $diffUe['elementConstitutifs'][$ordEc];
+                                    $ligne = $this->afficheEc($ligne, $ec, $diffEc);
+                                    foreach ($ec->elementsConstitutifsEnfants as $ordEce => $ece) {
+                                        if (array_key_exists('ecEnfants', $diffEc) && array_key_exists($ordEce, $diffEc['ecEnfants'])) {
+                                            $ligne = $this->afficheEc($ligne, $ece, $diffEc['ecEnfants'][$ordEce]);
+                                        }//todo: sinon mettre un e ligne d'erreur. Idem UE?
                                     }
                                 }
 
@@ -213,112 +227,111 @@ class LicenceMccc extends AbstractLicenceMccc
                                     $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne - 1);
                                 }
                             }
-                            $this->excelWriter->writeCellXY(self::COL_UE, $debut, $ue->display, ['wrap' => true, 'style' => 'HORIZONTAL_CENTER', 'font-weight' => false]);
-                            $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $debut, $ue->ue->getLibelle(), ['wrap' => true]);
+                            $this->excelWriter->writeCellXYDiff(
+                                self::COL_UE,
+                                $debut,
+                                $diffUe['display'],
+                                ['wrap' => true, 'style' => 'HORIZONTAL_CENTER', 'font-weight' => false]
+                            );
+                            $this->excelWriter->writeCellXYDiff(self::COL_INTITULE_UE, $debut, $diffUe['libelle'], ['wrap' => true]);
                         }
-                        foreach ($ue->uesEnfants() as $uee) {
-                            $debut = $ligne;
-                            if ($uee->ue->getNatureUeEc() !== null && $uee->ue->getNatureUeEc()->isLibre()) {
-                                $ligne = $this->afficheUeLibre($ligne, $uee);
-                            } else {
-                                foreach ($uee->elementConstitutifs as $ec) {
-                                    $ligne = $this->afficheEc($ligne, $ec);
-                                    foreach ($ec->elementsConstitutifsEnfants as $ece) {
-                                        $ligne = $this->afficheEc($ligne, $ece);
+                        foreach ($ue->uesEnfants() as $ordUee => $uee) {
+                            if (array_key_exists('uesEnfants', $diffUe) && array_key_exists($ordUee, $diffUe['uesEnfants'])) {
+                                $diffUee = $diffUe['uesEnfants'][$ordUee];
+                                $debut = $ligne;
+                                if ($uee->ue->getNatureUeEc() !== null && $uee->ue->getNatureUeEc()->isLibre()) {
+                                    $ligne = $this->afficheUeLibre($ligne, $uee);
+                                } else {
+                                    foreach ($uee->elementConstitutifs as $ordEc => $ec) {
+
+                                        $diffEc = $diffUee['elementConstitutifs'][$ordEc];
+                                        $ligne = $this->afficheEc($ligne, $ec, $diffEc);
+                                        foreach ($ec->elementsConstitutifsEnfants as $ordEce => $ece) {
+                                            $ligne = $this->afficheEc($ligne, $ece, $diffEc['ecEnfants'][$ordEce]);
+                                        }
+                                    }
+
+                                    if ($debut < $ligne - 1) {
+                                        $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
+                                        $this->excelWriter->mergeCellsCaR(self::COL_INTITULE_UE, $debut, self::COL_INTITULE_UE, $ligne - 1);
                                     }
                                 }
-
-                                if ($debut < $ligne - 1) {
-                                    $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
-                                    $this->excelWriter->mergeCellsCaR(self::COL_INTITULE_UE, $debut, self::COL_INTITULE_UE, $ligne - 1);
-                                }
+                                $this->excelWriter->writeCellXY(self::COL_UE, $debut, $uee->display, ['wrap' => true, 'style' => 'HORIZONTAL_CENTER', 'font-weight' => false]);
+                                $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $debut, $uee->ue->getLibelle(), ['wrap' => true]);
                             }
-                            $this->excelWriter->writeCellXY(self::COL_UE, $debut, $uee->display, ['wrap' => true, 'style' => 'HORIZONTAL_CENTER', 'font-weight' => false]);
-                            $this->excelWriter->writeCellXY(self::COL_INTITULE_UE, $debut, $uee->ue->getLibelle(), ['wrap' => true]);
                         }
                     }
-                    $ligne = $this->afficheSommeSemestre($ligne, $totalAnnee, $semestre);
+                    $ligne = $this->afficheSommeSemestre($ligne, $semestre, $diffSemestre);
 
                     $this->excelWriter->mergeCellsCaR(self::COL_SEMESTRE, $debutSemestre, self::COL_SEMESTRE, $ligne - 1);
                     $this->excelWriter->writeCellXY(self::COL_SEMESTRE, $debutSemestre, 'S' . $semestre->ordre);
 
-                    $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $totalAnnee->totalCmPresentiel === 0.0 ? '' : $totalAnnee->totalCmPresentiel, ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $totalAnnee->totalTdPresentiel === 0.0 ? '' : $totalAnnee->totalTdPresentiel, ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $totalAnnee->totalTpPresentiel === 0.0 ? '' : $totalAnnee->totalTpPresentiel, ['style' => 'HORIZONTAL_CENTER']);
-                    $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TOTAL, $ligne, $totalAnnee->getTotalPresentiel() === 0.0 ? '' : $totalAnnee->getTotalPresentiel(), ['style' => 'HORIZONTAL_CENTER']);
+                    $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_CM, $ligne, new DiffObject($totalAnneeOriginal->totalCmPresentiel, $totalAnnee->totalCmPresentiel));
+                    $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TD, $ligne, new DiffObject($totalAnneeOriginal->totalTdPresentiel, $totalAnnee->totalTdPresentiel));
+                    $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TP, $ligne, new DiffObject($totalAnneeOriginal->totalTpPresentiel, $totalAnnee->totalTpPresentiel));
+                    $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TOTAL, $ligne, new DiffObject($totalAnneeOriginal->getTotalPresentiel(), $totalAnnee->getTotalPresentiel()));
                 }
-                $this->excelWriter->writeCellXY(
+                $this->excelWriter->writeCellXYDiff(
                     self::COL_HEURES_DIST_CM,
                     $ligne,
-                    $totalAnnee->totalCmDistanciel === 0.0 ? '' : $totalAnnee->totalCmDistanciel,
-                    ['style' => 'HORIZONTAL_CENTER']
+                    new DiffObject($totalAnneeOriginal->totalCmDistanciel, $totalAnnee->totalCmDistanciel)
                 );
-                $this->excelWriter->writeCellXY(
+                $this->excelWriter->writeCellXYDiff(
                     self::COL_HEURES_DIST_TD,
                     $ligne,
-                    $totalAnnee->totalTdDistanciel === 0.0 ? '' : $totalAnnee->totalTdDistanciel,
-                    ['style' => 'HORIZONTAL_CENTER']
+                    new DiffObject($totalAnneeOriginal->totalTdDistanciel, $totalAnnee->totalTdDistanciel)
                 );
-                $this->excelWriter->writeCellXY(
+                $this->excelWriter->writeCellXYDiff(
                     self::COL_HEURES_DIST_TP,
                     $ligne,
-                    $totalAnnee->totalTpDistanciel === 0.0 ? '' : $totalAnnee->totalTpDistanciel,
-                    ['style' => 'HORIZONTAL_CENTER']
+                    new DiffObject($totalAnneeOriginal->totalTpDistanciel, $totalAnnee->totalTpDistanciel)
                 );
-                $this->excelWriter->writeCellXY(
+                $this->excelWriter->writeCellXYDiff(
                     self::COL_HEURES_DIST_TOTAL,
                     $ligne,
-                    $totalAnnee->getTotalDistanciel() === 0.0 ? '' : $totalAnnee->getTotalDistanciel(),
-                    ['style' => 'HORIZONTAL_CENTER']
+                    new DiffObject($totalAnneeOriginal->getTotalDistanciel(), $totalAnnee->getTotalDistanciel())
                 );
 
-                $this->excelWriter->writeCellXY(
+                $this->excelWriter->writeCellXYDiff(
                     self::COL_HEURES_TOTAL,
                     $ligne,
-                    $totalAnnee->getVolumeTotal() === 0.0 ? '' : $totalAnnee->getVolumeTotal(),
-                    ['style' => 'HORIZONTAL_CENTER']
+                    new DiffObject($totalAnneeOriginal->getVolumeTotal(), $totalAnnee->getVolumeTotal())
                 );
 
-                $this->excelWriter->writeCellXY(
+                $this->excelWriter->writeCellXYDiff(
                     self::COL_HEURES_PRES_CM,
                     $ligne + 1,
-                    $totalAnnee->getVolumeTotal() === 0.0 ? '' : $totalAnnee->getVolumeTotal(),
-                    ['style' => 'HORIZONTAL_CENTER']
+                    new DiffObject($totalAnneeOriginal->getVolumeTotal(), $totalAnnee->getVolumeTotal())
                 );
 
-                $this->excelWriter->writeCellXY(
+                $this->excelWriter->writeCellXYDiff(
                     self::COL_HEURES_PRES_CM,
                     $ligne + 3,
-                    $totalFormation->sommeFormationTotalPresDist() === 0.0 ? '' : $totalFormation->sommeFormationTotalPresDist(),
-                    ['style' => 'HORIZONTAL_CENTER']
+                    $diffStructure['heuresEctsFormation']['sommeFormationTotalPresDist']
                 );
 
-                $this->excelWriter->writeCellXY(
+                $this->excelWriter->writeCellXYDiff(
                     self::COL_HEURES_AUTONOMIE,
                     $ligne + 3,
-                    $totalAnnee->getTotalVolumeTe() === 0.0 ? '' : $totalAnnee->getTotalVolumeTe(),
-                    ['style' => 'HORIZONTAL_CENTER']
+                    new DiffObject($totalAnneeOriginal->getTotalVolumeTe(), $totalAnnee->getTotalVolumeTe())
                 );
 
-                $this->excelWriter->writeCellXY(
+                $this->excelWriter->writeCellXYDiff(
                     self::COL_HEURES_AUTONOMIE,
                     $ligne,
-                    $totalAnnee->getTotalVolumeTe() === 0.0 ? '' : $totalAnnee->getTotalVolumeTe(),
-                    ['style' => 'HORIZONTAL_CENTER']
+                    new DiffObject($totalAnneeOriginal->getTotalVolumeTe(), $totalAnnee->getTotalVolumeTe())
                 );
 
-                $this->excelWriter->writeCellXY(
+                $this->excelWriter->writeCellXYDiff(
                     self::COL_HEURES_AUTONOMIE,
                     $ligne + 1,
-                    $totalAnnee->getTotalVolumeTe() === 0.0 ? '' : $totalAnnee->getTotalVolumeTe(),
-                    ['style' => 'HORIZONTAL_CENTER']
+                    new DiffObject($totalAnneeOriginal->getTotalVolumeTe(), $totalAnnee->getTotalVolumeTe())
                 );
 
-                $this->excelWriter->writeCellXY(
+                $this->excelWriter->writeCellXYDiff(
                     self::COL_HEURES_PRES_CM,
                     $ligne + 2,
-                    $totalAnnee->getTotalEtudiant() === 0.0 ? '' : $totalAnnee->getTotalEtudiant(),
-                    ['style' => 'HORIZONTAL_CENTER']
+                    new DiffObject($totalAnneeOriginal->getTotalEtudiant(), $totalAnnee->getTotalEtudiant())
                 );
             }
 
@@ -448,17 +461,16 @@ class LicenceMccc extends AbstractLicenceMccc
         return Gotenberg::save($request, $dir);
     }
 
-    public function getMcccs(StructureEc $structureEc): array
+    public function getMcccs(array $mcccs, string $typeMccc): array
     {
         if ($this->typeEpreuves === []) {
             $this->getTypeEpreuves();
         }
 
         //todo: a mutualiser avec le code dans LicenceTypeDiplome
-        $mcccs = $structureEc->mcccs;
         $tabMcccs = [];
 
-        if ($structureEc->typeMccc === 'cci') {
+        if ($typeMccc === 'cci') {
             foreach ($mcccs as $mccc) {
                 $tabMcccs[$mccc->getNumeroSession()] = $mccc;
             }
@@ -520,7 +532,7 @@ class LicenceMccc extends AbstractLicenceMccc
         );
     }
 
-    private function afficheEc(int $ligne, StructureEc $structureEc): int
+    private function afficheEc(int $ligne, StructureEc $structureEc, array $diffEc): int
     {
         $ec = $structureEc->elementConstitutif;
         $this->excelWriter->insertNewRowBefore($ligne);
@@ -575,190 +587,54 @@ class LicenceMccc extends AbstractLicenceMccc
         }
 
         // MCCC
-        $mcccs = $this->getMcccs($structureEc);
 
-        switch ($structureEc->typeMccc) {
-            case 'cc':
-                $texte = '';
-                $texteAvecTp = '';
-                $hasTp = false;
-                $pourcentageTp = 0;
-                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
-                    $nb = 1;
-                    $nb2 = 1;
-                    foreach ($mcccs[1]['cc'] as $mccc) {
-                        for ($i = 1; $i <= $mccc->getNbEpreuves(); $i++) {
-                            $texte .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
-                            $nb++;
-                        }
+        if (array_key_exists('original', $diffEc['mcccs']) && array_key_exists('new', $diffEc['mcccs'])) {
+            $mcccsOriginal = $this->getMcccs($diffEc['mcccs']['original'], $diffEc['typeMccc']->original);
+            $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
 
-                        if ($mccc->hasTp()) {
-                            $hasTp = true;
-                            if ($mccc->getNbEpreuves() === 1) {
-                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
-                                //todo: interdire la saisie d'un pourcentage de TP si une seule épreuve de CC
-                                $pourcentageTp += $mccc->getPourcentage();
-                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
-                            } else {
-                                $pourcentageTp += $mccc->pourcentageTp();
-                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
-                            }
+            //cas Original sans écrire dans les cellules
+            $displayMcccOriginal = $this->calculDisplayMccc($mcccsOriginal, $diffEc['typeMccc']->original, false);
+            $displayMcccNew =$this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, false);
 
 
-                            $nb2++;
-                        }
-                    }
-
-                    $texte = substr($texte, 0, -2);
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
-                }
-
-                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && is_array($mcccs[2]['et'])) {
-                    $texte = '';
-                    $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
-                    foreach ($mcccs[2]['et'] as $mccc) {
-                        $texte .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
-                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
-                    }
-
-                    $texte = substr($texte, 0, -2);
-                }
-
-                if ($hasTp) {
-                    $texteAvecTp = substr($texteAvecTp, 0, -2);
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
+            //fusionner les deux tableaux $displayMcccOriginal et $displayMcccNew en construisant un objet DiffObject
+            foreach ($displayMcccOriginal as $key => $value) {
+                if (array_key_exists($key, $displayMcccNew)) {
+                    $diffMccc[$key] = new DiffObject($value, $displayMcccNew[$key]);
                 } else {
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texte);
+                    $diffMccc[$key] = new DiffObject($value, '');
                 }
+            }
 
-                break;
-            case 'cci':
-                $texte = '';
-                foreach ($mcccs as $mccc) {
-                    $texte .= 'CC' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
+            foreach ($displayMcccNew as $key => $value) {
+                if (!array_key_exists($key, $displayMcccOriginal)) {
+                    $diffMccc[$key] = new DiffObject('', $value);
                 }
-                $texte = substr($texte, 0, -2);
-                $this->excelWriter->writeCellXY(self::COL_MCCC_CCI, $ligne, $texte);
+            }
 
-                break;
-            case 'cc_ct':
-                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1]) && $mcccs[1]['cc'] !== null) {
-                    $texte = '';
-                    foreach ($mcccs[1]['cc'] as $mccc) {
-                        $texte .= 'CC ' . $mccc->getNbEpreuves() . ' épreuve(s) (' . $mccc->getPourcentage() . '%); ';
-                    }
-                    $texte = substr($texte, 0, -2);
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
-                }
+            foreach ($diffMccc as $key => $value) {
+                $this->excelWriter->writeCellXYDiff($key, $ligne, $value);
 
-                $texteAvecTp = '';
-                $texteCc = '';
-                $pourcentageTp = 0;
-                $pourcentageCc = 0;
-                $nb = 1;
-                $hasTp = false;
-                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
-                    foreach ($mcccs[1]['cc'] as $mccc) {
-                        if ($mccc->hasTp()) {
-                            $hasTp = true;
-                            if ($mccc->getNbEpreuves() === 1) {
-                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
-                                $pourcentageTp += $mccc->getPourcentage();
-                            } else {
-                                $pourcentageTp += $mccc->pourcentageTp();
-                            }
-                        }
-                        $pourcentageCc += $mccc->getPourcentage();
-                        $texteCc .= 'CC (' . $mccc->getPourcentage() . '%); ';
-                    }
-
-                    if ($hasTp) {
-                        $texteAvecTp .= 'TPr (' . $pourcentageTp . '%); ';
-                    }
-
-                    if (array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
-                        $texteEpreuve = '';
-                        foreach ($mcccs[1]['et'] as $mccc) {
-                            $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
-                        }
-
-                        $texteEpreuve = substr($texteEpreuve, 0, -2);
-                        $this->excelWriter->writeCellXY(self::COL_MCCC_CT, $ligne, $texteEpreuve);
-                    }
-                }
-
-                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
-                    $texteEpreuve = '';
-                    $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
-                    $pourcentageCcEt = $pourcentageCc / count($mcccs[2]['et']);
-                    foreach ($mcccs[2]['et'] as $mccc) {
-                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
-                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
-                        $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCcEt);
-                    }
-
-                    $texteEpreuve = substr($texteEpreuve, 0, -2);
-                    $texteCc = substr($texteCc, 0, -2);
-                    $texteCc = str_replace('CC', 'CCr', $texteCc);
-                    $texteAvecTp = substr($texteAvecTp, 0, -2);
-
-
-                    if ($hasTp) {
-                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
-                    } else {
-                        //si TP cette celulle est vide...
-                        $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $ligne, $texteEpreuve);
-                    }
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne, str_replace(';', '+', $texteCc));
-                }
-
-                //on garde CC et on complète avec le reste de pourcentage de l'ET
-
-
-                break;
-            case 'ct':
-                $quitus = $ec->isQuitus();
-                if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
-                    $texteEpreuve = '';
-                    foreach ($mcccs[1]['et'] as $mccc) {
-                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $quitus);
-                    }
-
-                    $texteEpreuve = substr($texteEpreuve, 0, -2);
-
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_CT, $ligne, $texteEpreuve);
-                }
-
-                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
-                    $texteEpreuve = '';
-                    foreach ($mcccs[2]['et'] as $mccc) {
-                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $quitus);
-                    }
-
-                    $texteEpreuve = substr($texteEpreuve, 0, -2);
-                    $this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CT, $ligne, $texteEpreuve);
-                }
-                break;
+            }
         }
-
 
         $this->excelWriter->writeCellXY(self::COL_TYPE_EC, $ligne, $ec->getTypeEc() ? $ec->getTypeEc()->getLibelle() : '');
 
         // Heures
-        $this->excelWriter->writeCellXY(self::COL_ECTS, $ligne, $structureEc->heuresEctsEc->ects === 0.0 ? '' : $structureEc->heuresEctsEc->ects);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $structureEc->heuresEctsEc->cmPres === 0.0 ? '' : $structureEc->heuresEctsEc->cmPres);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $structureEc->heuresEctsEc->tdPres === 0.0 ? '' : $structureEc->heuresEctsEc->tdPres);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $structureEc->heuresEctsEc->tpPres === 0.0 ? '' : $structureEc->heuresEctsEc->tpPres);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TOTAL, $ligne, $structureEc->heuresEctsEc->sommeEcTotalPres() === 0.0 ? '' : $structureEc->heuresEctsEc->sommeEcTotalPres());
+        $this->excelWriter->writeCellXYDiff(self::COL_ECTS, $ligne, $diffEc['heuresEctsEc']['ects']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_CM, $ligne, $diffEc['heuresEctsEc']['cmPres']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TD, $ligne, $diffEc['heuresEctsEc']['tdPres']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TP, $ligne, $diffEc['heuresEctsEc']['tpPres']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TOTAL, $ligne, $diffEc['heuresEctsEc']['sommeEcTotalPres']);
 
         //si pas distanciel, griser...
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_CM, $ligne, $structureEc->heuresEctsEc->cmDist === 0.0 ? '' : $structureEc->heuresEctsEc->cmDist);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TD, $ligne, $structureEc->heuresEctsEc->tdDist === 0.0 ? '' : $structureEc->heuresEctsEc->tdDist);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TP, $ligne, $structureEc->heuresEctsEc->tpDist === 0.0 ? '' : $structureEc->heuresEctsEc->tpDist);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TOTAL, $ligne, $structureEc->heuresEctsEc->sommeEcTotalDist() === 0.0 ? '' : $structureEc->heuresEctsEc->sommeEcTotalDist());
-        $this->excelWriter->writeCellXY(self::COL_HEURES_AUTONOMIE, $ligne, $structureEc->heuresEctsEc->tePres === 0.0 ? '' : $structureEc->heuresEctsEc->tePres);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_CM, $ligne, $diffEc['heuresEctsEc']['cmDist']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_TD, $ligne, $diffEc['heuresEctsEc']['tdDist']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_TP, $ligne, $diffEc['heuresEctsEc']['tpDist']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_TOTAL, $ligne, $diffEc['heuresEctsEc']['sommeEcTotalDist']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_AUTONOMIE, $ligne, $diffEc['heuresEctsEc']['tePres']);
 
-        $this->excelWriter->writeCellXY(self::COL_HEURES_TOTAL, $ligne, $structureEc->heuresEctsEc->sommeEcTotalPresDist() === 0.0 ? '' : $structureEc->heuresEctsEc->sommeEcTotalPresDist());
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_TOTAL, $ligne, $diffEc['heuresEctsEc']['sommeEcTotalPresDist']);
 
         $ligne++;
         return $ligne;
@@ -817,33 +693,205 @@ class LicenceMccc extends AbstractLicenceMccc
         return $texte;
     }
 
-    private function afficheSommeSemestre(int $ligne, TotalVolumeHeure $totalAnnee, StructureSemestre $semestre): int
+    private function afficheSommeSemestre(int $ligne, StructureSemestre $semestre, $diffSemestre): int
     {
+        //  dump($diffSemestre);
         $this->excelWriter->insertNewRowBefore($ligne);
 
         $this->excelWriter->mergeCellsCaR(self::COL_UE, $ligne, self::COL_COMPETENCES, $ligne);
         $this->excelWriter->mergeCellsCaR(self::COL_MCCC_CCI, $ligne, self::COL_MCCC_SECONDE_CHANCE_CT, $ligne);
         $this->excelWriter->writeCellXY(self::COL_UE, $ligne, 'Total semestre S' . $semestre->ordre . ' ', ['style' => 'HORIZONTAL_RIGHT']);
         //somme ECTS semestre
-        $this->excelWriter->writeCellXY(self::COL_ECTS, $ligne, $semestre->heuresEctsSemestre->sommeSemestreEcts === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreEcts, ['style' => 'HORIZONTAL_CENTER']);
+        $this->excelWriter->writeCellXYDiff(self::COL_ECTS, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreEcts']);
 
         //ligne de somme du semestre
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_CM, $ligne, $semestre->heuresEctsSemestre->sommeSemestreCmPres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreCmPres, ['style' => 'HORIZONTAL_CENTER']);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TD, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTdPres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTdPres, ['style' => 'HORIZONTAL_CENTER']);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TP, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTpPres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTpPres, ['style' => 'HORIZONTAL_CENTER']);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_PRES_TOTAL, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTotalPres() === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTotalPres(), ['style' => 'HORIZONTAL_CENTER']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_CM, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreCmPres']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TD, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTdPres']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TP, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTpPres']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TOTAL, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTotalPres']);
 
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_CM, $ligne, $semestre->heuresEctsSemestre->sommeSemestreCmDist === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreCmDist, ['style' => 'HORIZONTAL_CENTER']);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TD, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTdDist === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTdDist, ['style' => 'HORIZONTAL_CENTER']);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TP, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTpDist === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTpDist, ['style' => 'HORIZONTAL_CENTER']);
-        $this->excelWriter->writeCellXY(self::COL_HEURES_DIST_TOTAL, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTotalDist() === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTotalDist(), ['style' => 'HORIZONTAL_CENTER']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_CM, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreCmDist']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_TD, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTdDist']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_TP, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTpDist']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_TOTAL, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTotalDist']);
 
-        $this->excelWriter->writeCellXY(self::COL_HEURES_TOTAL, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTotalPresDist() === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTotalPresDist(), ['style' => 'HORIZONTAL_CENTER']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_TOTAL, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTotalPresDist']);
 
-        $this->excelWriter->writeCellXY(self::COL_HEURES_AUTONOMIE, $ligne, $semestre->heuresEctsSemestre->sommeSemestreTePres === 0.0 ? '' : $semestre->heuresEctsSemestre->sommeSemestreTePres, ['style' => 'HORIZONTAL_CENTER']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_AUTONOMIE, $ligne, $diffSemestre['heuresEctsSemestre']['sommeSemestreTePres']);
         $this->lignesSemestre[] = $ligne;
 
         $ligne++;
         return $ligne;
+    }
+
+    private function calculDisplayMccc(array $mcccs, string $typeMccc, bool $isQuitus): array
+    {
+        $tDisplay = [];
+
+        switch ($typeMccc) {
+            case 'cc':
+                $texte = '';
+                $texteAvecTp = '';
+                $hasTp = false;
+                $pourcentageTp = 0;
+                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
+                    $nb = 1;
+                    $nb2 = 1;
+                    /** @var Mccc $mccc */
+                    foreach ($mcccs[1]['cc'] as $mccc) {
+                        for ($i = 1; $i <= $mccc->getNbEpreuves(); $i++) {
+                            $texte .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
+                            $nb++;
+                        }
+
+                        if ($mccc->hasTp()) {
+                            $hasTp = true;
+                            if ($mccc->getNbEpreuves() === 1) {
+                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
+                                //todo: interdire la saisie d'un pourcentage de TP si une seule épreuve de CC
+                                $pourcentageTp += $mccc->getPourcentage();
+                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
+                            } else {
+                                $pourcentageTp += $mccc->pourcentageTp();
+                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
+                            }
+
+
+                            $nb2++;
+                        }
+                    }
+
+                    $texte = substr($texte, 0, -2);
+                    $tDisplay[self::COL_MCCC_CC] = $texte;
+                }
+
+                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && is_array($mcccs[2]['et'])) {
+                    $texte = '';
+                    $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
+                    foreach ($mcccs[2]['et'] as $mccc) {
+                        $texte .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
+                    }
+
+                    $texte = substr($texte, 0, -2);
+                }
+
+                if ($hasTp) {
+                    $texteAvecTp = substr($texteAvecTp, 0, -2);
+                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP] = str_replace(';', '+', $texteAvecTp);
+                } else {
+                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP] = $texte;
+                }
+
+                break;
+            case 'cci':
+                $texte = '';
+                /** @var Mccc $mccc */
+                foreach ($mcccs as $mccc) {
+                    $texte .= 'CC' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
+                }
+                $texte = substr($texte, 0, -2);
+                $tDisplay[self::COL_MCCC_CCI] = $texte;
+
+                break;
+            case 'cc_ct':
+                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1]) && $mcccs[1]['cc'] !== null) {
+                    $texte = '';
+                    /** @var Mccc $mccc */
+                    foreach ($mcccs[1]['cc'] as $mccc) {
+                        $texte .= 'CC ' . $mccc->getNbEpreuves() . ' épreuve(s) (' . $mccc->getPourcentage() . '%); ';
+                    }
+                    $texte = substr($texte, 0, -2);
+                    $tDisplay[self::COL_MCCC_CC] = $texte;
+                }
+
+                $texteAvecTp = '';
+                $texteCc = '';
+                $pourcentageTp = 0;
+                $pourcentageCc = 0;
+                $nb = 1;
+                $hasTp = false;
+                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
+                    foreach ($mcccs[1]['cc'] as $mccc) {
+                        if ($mccc->hasTp()) {
+                            $hasTp = true;
+                            if ($mccc->getNbEpreuves() === 1) {
+                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
+                                $pourcentageTp += $mccc->getPourcentage();
+                            } else {
+                                $pourcentageTp += $mccc->pourcentageTp();
+                            }
+                        }
+                        $pourcentageCc += $mccc->getPourcentage();
+                        $texteCc .= 'CC (' . $mccc->getPourcentage(). '%); ';
+                    }
+
+                    if ($hasTp) {
+                        $texteAvecTp .= 'TPr (' . $pourcentageTp . '%); ';
+                    }
+
+                    if (array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
+                        $texteEpreuve = '';
+                        foreach ($mcccs[1]['et'] as $mccc) {
+                            $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        }
+
+                        $texteEpreuve = substr($texteEpreuve, 0, -2);
+                        $tDisplay[self::COL_MCCC_CT] = $texteEpreuve;
+                    }
+                }
+
+                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
+                    $texteEpreuve = '';
+                    $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
+                    $pourcentageCcEt = $pourcentageCc / count($mcccs[2]['et']);
+                    foreach ($mcccs[2]['et'] as $mccc) {
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
+                        $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCcEt);
+                    }
+
+                    $texteEpreuve = substr($texteEpreuve, 0, -2);
+                    $texteCc = substr($texteCc, 0, -2);
+                    $texteCc = str_replace('CC', 'CCr', $texteCc);
+                    $texteAvecTp = substr($texteAvecTp, 0, -2);
+
+                    if ($hasTp) {
+                        $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP] = str_replace(';', '+', $texteAvecTp);
+                    } else {
+                        //si TP cette celulle est vide...
+                        $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP] = $texteEpreuve;
+                    }
+                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10] = str_replace(';', '+', $texteCc);
+                }
+
+                //on garde CC et on complète avec le reste de pourcentage de l'ET
+
+                break;
+            case 'ct':
+                if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
+                    $texteEpreuve = '';
+                    foreach ($mcccs[1]['et'] as $mccc) {
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $isQuitus);
+                    }
+
+                    $texteEpreuve = substr($texteEpreuve, 0, -2);
+
+                    $tDisplay[self::COL_MCCC_CT] = $texteEpreuve;
+                }
+
+                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
+                    $texteEpreuve = '';
+                    foreach ($mcccs[2]['et'] as $mccc) {
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $isQuitus);
+                    }
+
+                    $texteEpreuve = substr($texteEpreuve, 0, -2);
+                    $tDisplay[self::COL_MCCC_SECONDE_CHANCE_CT] = $texteEpreuve;
+                }
+                break;
+        }
+
+        return $tDisplay;
     }
 }

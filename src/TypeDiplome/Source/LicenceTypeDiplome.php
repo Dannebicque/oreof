@@ -18,6 +18,7 @@ use App\Entity\Mccc;
 use App\Entity\Parcours;
 use App\Repository\TypeEpreuveRepository;
 use App\TypeDiplome\Export\LicenceMccc;
+use App\TypeDiplome\Export\LicenceMcccVersion;
 use App\TypeDiplome\TypeDiplomeRegistry;
 use App\Utils\Tools;
 use DateTimeInterface;
@@ -41,7 +42,8 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         TypeEpreuveRepository  $typeEpreuveRepository,
         EntityManagerInterface $entityManager,
         TypeDiplomeRegistry    $typeDiplomeRegistry,
-        protected LicenceMccc  $licenceMccc
+        protected LicenceMccc  $licenceMccc,
+        protected LicenceMcccVersion  $licenceMcccVersion,
     ) {
         parent::__construct($entityManager, $typeDiplomeRegistry);
         $this->typeEpreuves = [];
@@ -64,6 +66,16 @@ class LicenceTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInter
         bool               $versionFull = true
     ): StreamedResponse {
         return $this->licenceMccc->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
+    }
+
+    public function exportExcelVersionMccc(
+        CampagneCollecte   $anneeUniversitaire,
+        Parcours           $parcours,
+        ?DateTimeInterface $dateCfvu = null,
+        ?DateTimeInterface $dateConseil = null,
+        bool               $versionFull = true
+    ): StreamedResponse {
+        return $this->licenceMcccVersion->exportExcelLicenceMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
     }
 
     public function exportPdfMccc(

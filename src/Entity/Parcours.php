@@ -237,6 +237,7 @@ class Parcours
     private ?string $codeApogeeNumeroVersion = "1";
 
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: DpeParcours::class)]
+    #[ORM\OrderBy(['created' => 'DESC'])]
     private Collection $dpeParcours;
 
     #[ORM\ManyToOne(targetEntity: self::class)]

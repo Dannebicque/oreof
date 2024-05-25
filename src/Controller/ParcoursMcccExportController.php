@@ -76,7 +76,7 @@ class ParcoursMcccExportController extends BaseController
 
 
         return match ($_format) {
-            'xlsx' => $typeDiplome->exportExcelMccc(
+            'xlsx' => $typeDiplome->exportExcelVersionMccc(
                 $this->getDpe(),
                 $parcours,
                  null,

@@ -251,4 +251,9 @@ class Mccc
 
         return $this;
     }
+
+    public function setId(mixed $id): void
+    {
+        $this->id = $id;
+    }
 }
