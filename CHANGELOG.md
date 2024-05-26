@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.26.1](https://github.com/Dannebicque/oreof/compare/v1.26.0...v1.26.1) (2024-05-26)
+
+
+### Features
+
+* Gestion ouverture des semestres. ([4a5fd24](https://github.com/Dannebicque/oreof/commit/4a5fd24b464ab93d4c275d7987f216d6834c9373)), closes [#43](https://github.com/Dannebicque/oreof/issues/43)
+
+
+### Bug Fixes
+
+* comparaison libellé EC ([8e389f1](https://github.com/Dannebicque/oreof/commit/8e389f1d1f1cf0d08dbbec50b9395827e7334295))
+
 ## [1.26.0](https://github.com/Dannebicque/oreof/compare/v1.25.0...v1.26.0) (2024-05-25)
 
 
