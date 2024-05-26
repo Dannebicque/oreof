@@ -29,9 +29,13 @@
                         text-secondary text-small">
                             Détails
                         </div>
-                        <div class="col-6 col-md-4 d-flex align-items-center justify-content-center
+                        <div class="col-6 col-md-3 d-flex align-items-center justify-content-center
                         text-secondary text-small">
                             Actions
+                        </div>
+                        <div class="col-6 col-md-1 d-flex align-items-center justify-content-center
+                        text-secondary text-small">
+                            Ouvert ?
                         </div>
                     </div>
                 </div>
@@ -123,9 +127,6 @@
                                                 semestre: sem,
                                                 parcours: parcours,
                                             }) }}
-                                            {#                                            <span id="ects_semestre_{{ sem.id }}_{{ parcours.id }}"> #}
-                                            {#                                            {{ sem.totalEctsSemestre|badgeEctsSemestre }} #}
-                                            {#                                        </span> #}
                                         </div>
                                         <div class="col-6 col-md-1 d-flex flex-column justify-content-center mb-1 mb-md-0">
                                             <div class="text-muted text-small d-md-none">Nb UE</div>
@@ -172,7 +173,7 @@
                                             <div class="text-muted text-small d-md-none">Actions</div>
                                             <div class="row">
                                                 <div class="col-1">&nbsp;</div>
-                                                <div class="col-7 d-grid">
+                                                <div class="col-5 d-grid">
                                                     <div class="btn-group d-block">
                                                         <button class="btn btn-outline-primary btn-sm dropdown-toggle"
                                                                 type="button" id="dropdownMenuClickableInside"
@@ -264,28 +265,28 @@
                                                                 </a>
                                                             </li>
                                                             {% if sem.troncCommun == false %}
-                                                            <li>
-                                                                <button
-                                                                        {{ stimulus_action('structure--semestre', 'transformeTroncCommun', 'click', {
-                                                                            url: path
-                                                                                ('structure_semestre_definir_tronc_commun',
-                                                                                {semestreParcours:semestre.id, parcours: parcours.id})
-                                                                        }) }}
-                                                                        href="#"
-                                                                        class="dropdown-item text-danger"
-                                                                        data-size="lg"
-                                                                        data-bs-toggle="tooltip"
-                                                                        {% if raccroche %}
-                                                                            disabled
-                                                                        {% endif %}
-                                                                        data-bs-placement="bottom"
-                                                                        title="Définir ce {{ semestre.display }} comme tronc commun de la mention"
-                                                                >
-                                                                    <i class="fal fa-merge"></i>
-                                                                    <span> Définir tronc commun de la mention</span>
-                                                                </button>
-                                                            </li>
-                                                                {% endif %}
+                                                                <li>
+                                                                    <button
+                                                                            {{ stimulus_action('structure--semestre', 'transformeTroncCommun', 'click', {
+                                                                                url: path
+                                                                                    ('structure_semestre_definir_tronc_commun',
+                                                                                    {semestreParcours:semestre.id, parcours: parcours.id})
+                                                                            }) }}
+                                                                            href="#"
+                                                                            class="dropdown-item text-danger"
+                                                                            data-size="lg"
+                                                                            data-bs-toggle="tooltip"
+                                                                            {% if raccroche %}
+                                                                                disabled
+                                                                            {% endif %}
+                                                                            data-bs-placement="bottom"
+                                                                            title="Définir ce {{ semestre.display }} comme tronc commun de la mention"
+                                                                    >
+                                                                        <i class="fal fa-merge"></i>
+                                                                        <span> Définir tronc commun de la mention</span>
+                                                                    </button>
+                                                                </li>
+                                                            {% endif %}
                                                             <li>
                                                                 <button
                                                                         {{ stimulus_action('structure--semestre', 'reinitSemestre', 'click', {
@@ -311,7 +312,9 @@
                                                 <div class="col-4">{# todo: boutons non centrés dans la
                                             ligne #}
 
-                                                    {% if (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)) %}
+                                                    {% if
+                                                        (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)) or
+                                                        (is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours)) %}
                                                         {#                                                    and #}
                                                         {#                                                    (workflow_can(ec, 'valider_parcours') or workflow_can(ec, #}
                                                         {#                                                    'initialiser'))) or (is_granted #}
@@ -339,6 +342,22 @@
                                                                 <i class="fal fa-circle-down"></i>
                                                             </button>
                                                         {% endif %}
+
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-2">
+                                                    {% if
+                                                        (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)) or
+                                                        (is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours)) %}
+                                                        <span class="form-check form-switch">
+                                                            <input class="form-check-input"
+                                                                   type="checkbox"
+                                                                   title="Semestre ouvert ?"
+                                                                   id="semestre_open_{{ semestre.id }}"
+                                                                   {{ semestre.isOuvert == true ? 'checked="checked"' : '' }}">
+                                                            <label class="form-check-label sr-only"
+                                                                   for="semestre_open_{{ semestre.id }}">Ouvert ?</label>
+                                                        </span>
                                                     {% endif %}
                                                 </div>
                                             </div>

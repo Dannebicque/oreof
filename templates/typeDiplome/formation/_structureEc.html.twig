@@ -9,12 +9,14 @@
                 {% if isBut is defined and isBut == true %}
                     <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }} ({{ ec.elementConstitutif.displayCodeApogee }})
                 {% else %}
-                    {{ ec.elementConstitutif.ficheMatiere.display }} ({{ ec.elementConstitutif.displayCodeApogee }})
+                    <span class="show_versioning d-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span>
+                    <span class="show_current">{{ ec.elementConstitutif.ficheMatiere.display }} ({{ ec.elementConstitutif.displayCodeApogee }})</span>
                 {% endif %}
             </a>
             {% if app.user != null and
                 is_granted('CAN_PARCOURS_EDIT_MY', ec.elementConstitutif.ficheMatiere) and
                 workflow_can(ec.elementConstitutif.ficheMatiere, 'valider_fiche_compo') %}
+
                 <a href="{{ url('app_fiche_matiere_edit', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}"
                    class="btn btn-sm text-warning">
                     <i class="{{ iconEdit }}"></i>
@@ -22,7 +24,7 @@
             {% endif %}
             {{ ec.elementConstitutif.ficheMatiere.etatFiche|badgeFiche }}
         {% else %}
-            {#            <span class="show_versioning d-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span> #}
+            <span class="show_versioning d-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span>
             <span class="show_current">{{ ec.elementConstitutif.libelle }}</span>
         {% endif %}
         {% if ec.elementConstitutif.natureUeEc is defined

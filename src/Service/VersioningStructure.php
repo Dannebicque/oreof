@@ -121,9 +121,21 @@ class VersioningStructure
     private function compareElementConstitutif(StructureEc $ecOriginal, StructureEc $ecNouveau): array
     {
         $diff = [];
-        //$diff['libelle'] = new DiffObject($ecOriginal['libelle'], $ecNouveau->elementConstitutif->getLibelle());
+
+        if ($ecOriginal->elementConstitutif->getFicheMatiere() !== null) {
+            $libelleOriginal = $ecOriginal->elementConstitutif->getFicheMatiere()->getLibelle();
+        } else {
+            $libelleOriginal = $ecOriginal->elementConstitutif->getLibelle();
+        }
+
+        if ($ecNouveau->elementConstitutif->getFicheMatiere() !== null) {
+            $libelleNew = $ecNouveau->elementConstitutif->getFicheMatiere()->getLibelle();
+        } else {
+            $libelleNew = $ecNouveau->elementConstitutif->getLibelle();
+        }
+
+        $diff['libelle'] = new DiffObject($libelleOriginal, $libelleNew);
         $diff['raccroche'] = new DiffObject($ecOriginal->raccroche, $ecNouveau->raccroche);
-        // $diff['elementConstitutif'] = new DiffObject($ecOriginal['elementConstitutif'], $ecNouveau->elementConstitutif);
         $diff['heuresEctsEc'] = $this->compareHeuresEctsEc($ecOriginal->heuresEctsEc, $ecNouveau->heuresEctsEc);
         $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, $ecNouveau->typeMccc);
         $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
