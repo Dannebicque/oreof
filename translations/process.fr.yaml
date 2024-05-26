@@ -282,11 +282,11 @@ historique.de.validation.fiche_matiere.title: 'Historique de validation fiche EC
 historique.de.validation.fiche_matiere.infobulle: 'Historique de validation fiche EC/matière'
 validation.fiche_matiere: 'Fiche EC/Matière en cours de rédaction, attente de validation'
 validation.valider.fiche_matiere.title: 'Valider et soumettre la fiche EC/matière'
-validation.valider.fiche_matiere: 'Valider et soumettre la fiche EC/matière'
-validation.fiche_matiere.valide.alerte: validation.fiche_matiere.valide.alerte
+validation.valider.fiche_matiere: 'Soumettre la fiche EC/matière'
+validation.fiche_matiere.valide.alerte: "La validation de la fiche EC/matière permet sa transmission au central en vue de la publication. Après transmission, la fiche \"EC/matière\" ne sera plus modifiable. \n La fiche EC/matière n'est publiable que si elle est complète."
 btn.validation.fiche_matiere.valide.en_cours_redaction: btn.validation.fiche_matiere.valide.en_cours_redaction
-validation.fiche_matiere.valide.impossible.en_cours_redaction: validation.fiche_matiere.valide.impossible.en_cours_redaction
-ficheMatiere.valide.fiche_matiere.flash.success: 'Valider et soumettre la fiche EC/matière'
+validation.fiche_matiere.valide.impossible.en_cours_redaction: 'La validation de la fiche EC/matière est impossible. Les informations de cette fiche sont incomplètes/erronées.'
+ficheMatiere.valide.fiche_matiere.flash.success: 'Fiche EC/matière validée et transmise au central'
 validation.fiche_matiere.ses: 'Validation par le central'
 validation.fiche_matiere.publication: 'Fiche EC/Matière prête pour publication'
 fiche_matiere.publie: 'Fiche EC/Matière publiée'
@@ -303,25 +303,25 @@ validation.valider.transmis_pour_publication.title: validation.valider.transmis_
 validation.valider.transmis_pour_publication: validation.valider.transmis_pour_publication
 historique.validation.fiche_matiere.ses: 'Historique de validation fiche EC/matière'
 validation.valider.fiches_matieres: 'Valider et soumettre les fiches EC/matière'
-demande.reouverture: demande.reouverture
+demande.reouverture: 'Demander la réouverture du DPE'
 demande.reouverture.title: demande.reouverture.title
 validation.cfvu.valide.cas.acceptation.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.directe.valide_a_publier
 validation.cfvu.valide.cas.acceptation.non.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.non.directe.valide_a_publier
 validation.cfvu.valide.cas.sous.reserve.conseil.valide_a_publier: validation.cfvu.valide.cas.sous.reserve.conseil.valide_a_publier
 validation.cfvu.valide.cas.sous.reserve.modifications.valide_a_publier: validation.cfvu.valide.cas.sous.reserve.modifications.valide_a_publier
-demande.reouverture.alerte: demande.reouverture.alerte
-demande.reouverture.modification.mccc.label: demande.reouverture.modification.mccc.label
+demande.reouverture.alerte: 'La demande de réouverture permet la réouvertue des onglets du formulaire de saisie. Les demandes doivent être argumentés afin de déterminer si les modifications impliquent un passage en conseil de composantes, en CFVU ou peuvent être appliqués directement.'
+demande.reouverture.modification.mccc.label: 'modifications de la maquette et/ou des MCCC'
 demande.reouverture.modification.mccc.help: demande.reouverture.modification.mccc.help
-demande.reouverture.modification.maquette.label: demande.reouverture.modification.maquette.label
+demande.reouverture.modification.maquette.label: 'modifications de la maquette et/ou des MCCC'
 demande.reouverture.modification.maquette.help: demande.reouverture.modification.maquette.help
-demande.reouverture.modification.argumentaire.label: demande.reouverture.modification.argumentaire.label
+demande.reouverture.modification.argumentaire.label: 'Motif(s) de la demande de réouverture (texte servant de justificatif en cas de passage en CFVU)'
 demande.reouverture.modification.argumentaire.help: demande.reouverture.modification.argumentaire.help
-btn.demande.reouverture.modification: btn.demande.reouverture.modification
-demande.reouverture.modification.texte.label: demande.reouverture.modification.texte.label
+btn.demande.reouverture.modification: 'Demander la réouverture du projet DPE'
+demande.reouverture.modification.texte.label: 'modifications des descriptifs'
 demande.reouverture.modification.texte.help: demande.reouverture.modification.texte.help
-demande.reouverture.modification.mccc.texte.label: demande.reouverture.modification.mccc.texte.label
+demande.reouverture.modification.mccc.texte.label: 'modifications des descriptifs et de la maquette/MCCC'
 demande.reouverture.modification.mccc.texte.help: demande.reouverture.modification.mccc.texte.help
-demande.reouverture.label: demande.reouverture.label
+demande.reouverture.label: 'Précisez quelle(s) modification(s) vous souhaitez apporter à la formation'
 demande.reouverture.help: demande.reouverture.help
 historique.validation.fiche_matiere: 'Historique de validation fiche EC/matière'
 validation.cfvu.valide.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier: validation.cfvu.valide.commentaire.cas.sous.reserve.modifications.argumentaire.valide_a_publier
@@ -352,3 +352,22 @@ refuse.validation.fiche_matiere.ses.argumentaire.label: refuse.validation.fiche_
 refuse.validation.fiche_matiere.ses.helps.argumentaire.help: refuse.validation.fiche_matiere.ses.helps.argumentaire.help
 btn.validation.fiche_matiere.ses.refuse: 'Refuser les fiches EC/matière'
 formation.edit.valide.cfvu.flash.success: 'Modification enregistrée pour la validation par la CFVU'
+ficheMatiere.reserve.soumis_central.flash.success: ficheMatiere.reserve.soumis_central.flash.success
+demande.reouverture.ses.alerte: demande.reouverture.ses.alerte
+demande.reouverture.ses.label: demande.reouverture.ses.label
+demande.reouverture.ses.help: demande.reouverture.ses.help
+demande.reouverture.modification.ses.sans_cfvu.label: 'Demande de réouverture sans passage en CFVU'
+demande.reouverture.modification.ses.sans_cfvu.help: 'Les modifications apportées à la formation ne nécessitent pas de passage en CFVU'
+demande.reouverture.modification.ses.avec_cfvu.label: 'Demande de réouverture avec passage en CFVU'
+demande.reouverture.modification.ses.avec_cfvu.help: 'Les modifications apportées à la formation nécessitent un passage en CFVU'
+historique.validation.ouverture_ses_ss_cfvu: 'Demande de réouverture du DPE'
+validation.ouverture_ses_ss_cfvu: validation.ouverture_ses_ss_cfvu
+demande.reouverture.clore.title: 'Fermeture de la demande de réouverture'
+demande.reouverture.clore: 'Fermer la demande de réouverture'
+demande.reouverture.ses.cloture.alerte: demande.reouverture.ses.cloture.alerte
+demande.reouverture.cloture.ses.label: demande.reouverture.cloture.ses.label
+demande.reouverture.modification.ses.cloture.commentaire.label: demande.reouverture.modification.ses.cloture.commentaire.label
+demande.reouverture.modification.ses.cloture.commentaire.help: demande.reouverture.modification.ses.cloture.commentaire.help
+btn.demande.reouverture.cloture: btn.demande.reouverture.cloture
+historique.validation.cloture_ses_ss_cfvu: 'Demande de réouverture clôturée le %date%'
+validation.cloture_ses_ss_cfvu: validation.cloture_ses_ss_cfvu
