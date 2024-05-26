@@ -78,6 +78,18 @@ export default class extends Controller {
     })
   }
 
+  modificationOuverture(event) {
+    const body = {
+      method: 'POST',
+      body: JSON.stringify({
+        check: event.target.checked,
+      }),
+    }
+    fetch(this.urlValue, body).then((response) => {
+      JsonResponse(response)
+    })
+  }
+
   valideDeplacer(event) {
     event.preventDefault()
     const { value } = document.getElementById('changer')

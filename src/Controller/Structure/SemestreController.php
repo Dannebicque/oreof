@@ -97,6 +97,23 @@ class SemestreController extends AbstractController
     }
 
     #[
+        Route('/actions/ouverture/{semestre}', name: 'action_ouverture')
+    ]
+    public function ouvertureSemestre(
+        EntityManagerInterface     $entityManager,
+        Request                    $request,
+        SemestreParcours           $semestre
+    ): Response {
+        $valeur = JsonRequest::getValueFromRequest($request, 'check');
+
+        $semestre->setOuvert((bool) $valeur);
+
+        $entityManager->flush();
+        return JsonReponse::success('Semestre modifié');
+
+    }
+
+    #[
         Route('/actions/{parcours}', name: 'actions')
     ]
     public function init(

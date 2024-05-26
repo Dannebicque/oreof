@@ -349,8 +349,13 @@
                                                     {% if
                                                         (is_granted('CAN_FORMATION_EDIT_MY', parcours.formation)) or
                                                         (is_granted('CAN_PARCOURS_EDIT_MY', dpeParcours)) %}
-                                                        <span class="form-check form-switch">
+                                                        <span class="form-check form-switch"
+                                                        {{ stimulus_controller('semestre--manage', {
+                                                            url: path('structure_semestre_action_ouverture', {semestre: semestre.id}),
+                                                        }) }}
+                                                        >
                                                             <input class="form-check-input"
+                                                                   {{ stimulus_action('semestre--manage', 'modificationOuverture', 'change') }}
                                                                    type="checkbox"
                                                                    title="Semestre ouvert ?"
                                                                    id="semestre_open_{{ semestre.id }}"
