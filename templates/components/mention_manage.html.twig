@@ -442,7 +442,9 @@
                                 <button class="btn btn-sm btn-outline-info d-block">Gérer les versions</button>
                             </div>
                             <div class="col-3 d-grid">
-                                <button class="btn btn-sm btn-outline-info d-block">Gérer la codification</button>
+                                {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', parcours.formation) %}
+                                    <a href="{{ path('app_codification_index', {formation: formation.id, parcours:parcours.id}) }}" class="btn btn-sm btn-outline-info">Gérer la codification</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -478,6 +480,14 @@
                             <div class="col-3 d-grid">
                                 <button class="btn btn-sm btn-outline-warning d-block">Demandes de modifications
                                 </button>
+                            </div>
+                            <div class="col-3 d-grid">
+
+                            </div>
+                            <div class="col-3 d-grid">
+                                {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}
+                                    <a href="{{ path('app_codification_index', {formation: formation.id}) }}" class="btn btn-sm btn-outline-info">Gérer la codification</a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

@@ -194,11 +194,15 @@ class CodificationController extends BaseController
 
     #[Route('/codification/{formation}', name: 'app_codification_index')]
     public function index(
-        Formation $formation
+        Formation $formation,
+        Request $request
     ): Response {
+
+        $selectedParcours = $request->query->get('parcours', null);
+
         return $this->render('codification/index.html.twig', [
             'formation' => $formation,
-            'step' => $formation->getParcours()->first()->getId(),
+            'step' => $selectedParcours ?? $formation->getParcours()->first()->getId(),
         ]);
     }
 

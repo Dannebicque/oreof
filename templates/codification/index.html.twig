@@ -13,7 +13,7 @@
             role="tablist">
             {% for parcours in formation.parcours %}
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link {% if loop.first %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
+                    <a class="nav-link {% if (loop.first and step is not defined or step == parcours.id) or (not loop.first and step == parcours.id)  %}active{% endif %}" data-bs-toggle="tab" href="#" role="tab"
                             {{ stimulus_action('wizard', 'changeStep', 'click', {step: parcours.id}) }}
                     >
                         {{ parcours.libelle }} {{ parcours.typeParcours|badgeTypeParcours }}
