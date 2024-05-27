@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.26.2](https://github.com/Dannebicque/oreof/compare/v1.26.1...v1.26.2) (2024-05-27)
+
+
+### Bug Fixes
+
+* affichage 1er 2eme sur fichier excel ([58fab97](https://github.com/Dannebicque/oreof/commit/58fab97988f2963e584502b3e132910808c00237))
+* bouton version masqué ([618257c](https://github.com/Dannebicque/oreof/commit/618257c08959b89c11c5c6e82c252e99158b73d7))
+* boutons sur EC en mode édition ([a66c310](https://github.com/Dannebicque/oreof/commit/a66c310315921849af69943fc03608cd53f4c688))
+* demande de modificaiton de RF + structuration menu ([bf0b842](https://github.com/Dannebicque/oreof/commit/bf0b84221994840ba233c962a0f634aa530e4680))
+* traduction process ([9c6a0e6](https://github.com/Dannebicque/oreof/commit/9c6a0e619a733ccc938671ad449abfcc1d7d0141))
+
 ### [1.26.1](https://github.com/Dannebicque/oreof/compare/v1.26.0...v1.26.1) (2024-05-26)
 
 
