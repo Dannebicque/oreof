@@ -5,19 +5,20 @@ namespace App\Controller;
 use App\Classes\JsonReponse;
 use App\DTO\ChangeRf;
 use App\Entity\Formation;
-use App\Entity\User;
 use App\Form\ChangeRfFormationType;
-use App\Form\UserAddType;
-use App\Repository\ChangeRfRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class FormationResponsableController extends BaseController
 {
-    #[Route('/formation/change-responsable/{formation}', name: 'app_formation_change_rf')]
+    public function __construct(
+        private EntityManagerInterface $entityManager
+    ) {
+    }
+
+    #[Route('/formation/change-responsable/ajout/{formation}', name: 'app_formation_change_rf')]
     public function index(
         Formation $formation,
         Request $request
@@ -56,5 +57,17 @@ class FormationResponsableController extends BaseController
             'form' => $form->createView(),
             'formation' => $formation,
         ]);
+    }
+
+    #[Route('/formation/change-responsable/suppression/{demande}', name: 'app_formation_change_rf_suppression')]
+    public function suppressionDemande(
+        \App\Entity\ChangeRf $demande,
+    ): Response {
+
+        $this->entityManager->remove($demande);
+        $this->entityManager->flush();
+
+        return JsonReponse::success('Le changement de responsable de formation a bien été supprimé.');
+
     }
 }

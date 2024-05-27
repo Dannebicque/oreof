@@ -4,28 +4,6 @@
     {% form_theme form 'communs/form_theme.html.twig' %}
     {{ form_start(form) }}
     {{ form_row(form.responsableMention) }}
-    <a
-            href="#"
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'fiche_matiere.step1_change_rf.title'|trans({}, 'form'),
-                nomEvenement: 'refreshStep',
-                modalUrl: path('app_formation_change_rf', {formation: formation.id}) }) }}
-            data-action="click->modal#openModal"
-            data-size="lg"
-            class="ms-4 text-warning"
-            data-bs-toggle="tooltip"
-            data-bs-placement="bottom"
-            title="{{ 'fiche_matiere.step1_change_rf.title'|trans({}, 'form') }}"
-    >
-        <i class="fal fa-repeat"></i>
-        <span> {{ 'fiche_matiere.step1_change_rf.label'|trans({}, 'form') }}</span>
-    </a>
-    {% for demande in formation.changeRves|filter(demande => demande.etatDemande == 'EN_ATTENTE') %}
-        <div class="alert alert-info">
-            Une demande de modification est en attente de validation par la CFVU. Remplacement de {{ demande.ancienResponsable.display }} par {{ demande.nouveauResponsable.display }}. <a href="" class="text-danger"><i class="{{ iconDelete }}"></i> Annuler la demande ?</a>
-        </div>
-    {% endfor %}
     {{ form_row(form.coResponsable) }}
     <a
             href="#"

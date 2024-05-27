@@ -155,8 +155,7 @@
                             {% endif %}
                         {% else %}
                             {% if this.process[this.etape] is defined and
-                                this.process[this.etape].page == this.type
-                            %}
+                                this.process[this.etape].page == this.type %}
                                 {% if
                                     (this.type == 'formation' and
                                     is_granted('CAN_FORMATION_VALIDATE_MY', this.formation) or is_granted('CAN_FORMATION_VALIDATE_ALL')) or
@@ -421,6 +420,78 @@
                     </div>
                 </div>
             </div>
+
+            {% if this.type == 'parcours' %}
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <div class="text-extra-small fw-medium text-muted text-center text-divider mb-2">
+                            Gestion du parcours
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row mt-2">
+                            <div class="col-3 d-grid">
+                                <button class="btn btn-sm btn-outline-warning d-block">Demandes de modifications
+                                    (cloture si non)
+                                </button>
+                            </div>
+                            <div class="col-3 d-grid">
+
+                            </div>
+                            <div class="col-3 d-grid">
+                                <button class="btn btn-sm btn-outline-info d-block">Gérer les versions</button>
+                            </div>
+                            <div class="col-3 d-grid">
+                                <button class="btn btn-sm btn-outline-info d-block">Gérer la codification</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <div class="text-extra-small fw-medium text-muted text-center text-divider mb-2">
+                            Gestion de la formation
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row mt-2">
+                            <div class="col-3 d-grid">
+                                <button
+                                        href="#"
+                                        {{ stimulus_controller('modal', {
+                                            size: 'lg',
+                                            modalTitle: 'fiche_matiere.step1_change_rf.title'|trans({}, 'form'),
+                                            nomEvenement: 'refreshStep',
+                                            modalUrl: path('app_formation_change_rf', {formation: formation.id}) }) }}
+                                        data-action="click->modal#openModal"
+                                        data-size="lg"
+                                        class="btn btn-sm btn-outline-warning"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom"
+                                        title="{{ 'fiche_matiere.step1_change_rf.title'|trans({}, 'form') }}"
+                                >
+                                    <i class="fal fa-repeat"></i>
+                                    <span> {{ 'fiche_matiere.step1_change_rf.label'|trans({}, 'form') }}</span>
+                                </button>
+                            </div>
+                            <div class="col-3 d-grid">
+                                <button class="btn btn-sm btn-outline-warning d-block">Demandes de modifications
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% for demande in formation.changeRves|filter(demande => demande.etatDemande.value == 'EN_ATTENTE') %}
+                        <div class="col-12  mt-2">
+                            <div class="alert alert-info">
+                                Une demande de modification est en attente de validation par la CFVU. Remplacement
+                                de {{ demande.ancienResponsable.display }} par {{ demande.nouveauResponsable.display }}.
+                                <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}" class="text-danger"><i class="{{ iconDelete }}"></i> Annuler la demande ?</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
