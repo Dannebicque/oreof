@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.26.3](https://github.com/Dannebicque/oreof/compare/v1.26.2...v1.26.3) (2024-05-27)
+
+
+### Bug Fixes
+
+* Liens vers codification ([fe5768f](https://github.com/Dannebicque/oreof/commit/fe5768fa3d526b2a33e847a75c2f8bf4192885b1))
+* redirection après ouverture/cloture dpe ([a3ee55e](https://github.com/Dannebicque/oreof/commit/a3ee55ece67fb40d3f2a926f2938bee1e9b53a2f))
+
 ### [1.26.2](https://github.com/Dannebicque/oreof/compare/v1.26.1...v1.26.2) (2024-05-27)
 
 
