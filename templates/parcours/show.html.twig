@@ -43,7 +43,7 @@
     {{ component('mention_manage', {parcours:parcours, type:'parcours'}) }}
 
 
-    {% if is_granted('ROLE_SES') %}
+    {% if is_granted('ROLE_ADMIN') %}
         <div class="row mt-5 mb-5">
             <h3 class="small-title">Gestion du parcours</h3>
             <div class="card">
