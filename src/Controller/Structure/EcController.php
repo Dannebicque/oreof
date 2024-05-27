@@ -9,6 +9,7 @@
 
 namespace App\Controller\Structure;
 
+use App\Classes\GetDpeParcours;
 use App\Controller\BaseController;
 use App\Entity\Parcours;
 use App\Entity\Ue;
@@ -50,6 +51,7 @@ class EcController extends BaseController
         return $this->render('structure/ec/_liste.html.twig', [
             'isBut' => $parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() === 'BUT',
             'ecs' => $ecs,
+            'dpeParcours' => GetDpeParcours::getFromParcours($parcours),
             'ue' => $ue,
             'parcours' => $parcours,
             'deplacer' => true,
