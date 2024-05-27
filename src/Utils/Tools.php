@@ -101,4 +101,16 @@ abstract class Tools
         return $heures > 0.0 ? $heures : '-';
     }
 
+    public static function adjNumeral(int $number): string
+    {
+        //si 1 => 1ére
+        //si 2 ou plus => 2éme
+
+        if ($number === 1) {
+            return $number.'ère';
+        }
+
+        return $number.'ème';
+    }
+
 }

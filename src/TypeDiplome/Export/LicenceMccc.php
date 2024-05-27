@@ -156,7 +156,7 @@ class LicenceMccc extends AbstractLicenceMccc
             if (array_key_exists($i, $tabSemestresAnnee)) {
                 $totalAnnee = new TotalVolumeHeure();
                 $this->excelWriter->setSheet($clonedWorksheet);
-                $this->excelWriter->writeCellName(self::CEL_ANNEE_ETUDE, $i . ' année');
+                $this->excelWriter->writeCellName(self::CEL_ANNEE_ETUDE, Tools::adjNumeral($i) . ' année');
                 $this->lignesSemestre = [];
                 $this->lignesEcColorees = [];
                 /** @var StructureSemestre $semestre */
