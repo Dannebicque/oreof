@@ -662,7 +662,9 @@
 </div>
 <!-- Content Container End -->
 
-<div {{ stimulus_controller('base') }} data-action="modal:openModal@window->base#openModal">
+<div {{ stimulus_controller('base') }}
+        data-action="modal:openModal@window->base#openModal base:refreshPage@window->base#refreshPage"
+>
     {{ include('communs/_modal.html.twig') }}
 </div>
 

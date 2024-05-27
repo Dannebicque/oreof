@@ -36,8 +36,16 @@ export default class extends Controller {
 
         // tester si l'objet json updateComponent n'est pas vide et contient les clés id et event
         if (Object.keys(this.updateComponent).length > 0 && this.updateComponent.id && this.updateComponent.event) {
-          const component = document.getElementById(this.updateComponent.id).__component
-          component.emit(this.updateComponent.event)
+          console.log(this.updateComponent)
+          const element = document.getElementById(this.updateComponent.id);
+          element.addEventListener('live:connect', (event) => {
+            console.log(event)
+            const { component } = event.detail;
+            component.emit(this.updateComponent.event)
+          });
+
+          // console.log(document.getElementById())
+          // const component = document.getElementById(this.updateComponent.id).__component
         }
         this.dispatch(this.nomEvenement, { detail: this.details })
       })
@@ -94,5 +102,10 @@ export default class extends Controller {
     this.modalBodyTarget.innerHTML = ''
     const response = await fetch(`${event.detail.url}`)
     this.modalBodyTarget.innerHTML = await response.text()
+  }
+
+  refreshPage() {
+    console.log('refresh')
+    window.location.reload()
   }
 }

@@ -38,7 +38,9 @@ final class MentionManageComponent extends AbstractController
         'refuse_conseil' => 'ses',
         'refuse_central' => 'ses',
         'soumis_central' => 'ses',
+        'ses' => 'ses',
         'soumis_vp' => 'vp',
+        'cfvu' => 'cfvu',
         'soumis_cfvu' => 'cfvu',
         'refuse_definitif_cfvu' => 'cfvu',
         'valide_a_publier' => 'cfvu',
@@ -56,6 +58,7 @@ final class MentionManageComponent extends AbstractController
         'dpe' => 3,
         'conseil' => 4,
         'ses' => 5,
+        'soumis_central' => 5,
         'cfvu' => 6,
         'publication' => 7
     ];
@@ -157,17 +160,19 @@ final class MentionManageComponent extends AbstractController
             }
         } elseif ($this->type === 'parcours') {
             $historiques = $this->historiqueParcoursRepository->findBy(['parcours' => $this->parcours], ['created' => 'ASC']);
+
             foreach ($historiques as $historique) {
-                if (self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[$this->etape]) {
+                if (self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[self::TAB[$this->etape]]) {
                     $this->historiques[$historique->getEtape()] = $historique;
                 }
             }
             $historiques = $this->historiqueFormationRepository->findBy(['formation' => $this->parcours->getFormation()], ['created' => 'ASC']);
             foreach ($historiques as $historique) {
-                if (self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[$this->etape]) {
+                if (self::TAB_PROCESS[$historique->getEtape()] < self::TAB_PROCESS[self::TAB[$this->etape]]) {
                     $this->historiques[$historique->getEtape()] = $historique;
                 }
             }
+
         }
 
     }

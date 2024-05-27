@@ -502,8 +502,9 @@ class ProcessValidationController extends BaseController
 
                     $this->entityManager->flush();
                 }
-                $this->addFlash('success', 'DPE ouvert');
-                return $this->redirectToRoute('app_parcours_edit', ['id' => $parcours->getId()]);
+//                $this->addFlash('success', 'DPE ouvert');
+//                return $this->redirectToRoute('app_parcours_edit', ['id' => $parcours->getId()]);
+                return JsonReponse::success('DPE ouvert');
             }
 
             $demande = new DpeDemande();
@@ -591,8 +592,9 @@ class ProcessValidationController extends BaseController
                     $this->entityManager->flush();
                 }
 
-                $this->addFlash('success', 'DPE cloturé.');
-                return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
+//                $this->addFlash('success', 'DPE cloturé.');
+               // return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
+                return JsonReponse::success('DPE cloturé');
             }
 
 
