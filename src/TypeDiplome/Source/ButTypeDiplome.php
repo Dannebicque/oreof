@@ -26,6 +26,7 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\InputBag;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -165,7 +166,7 @@ class ButTypeDiplome extends AbstractTypeDiplome implements TypeDiplomeInterface
         ?DateTimeInterface $dateCfvu = null,
         ?DateTimeInterface $dateConseil = null,
         bool               $versionFull = true
-    ): StreamedResponse {
+    ): Response {
         //todo: exploiter la date...
         return $this->butMccc->exportPdfButMccc($anneeUniversitaire, $parcours, $dateCfvu, $dateConseil, $versionFull);
     }

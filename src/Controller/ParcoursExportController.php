@@ -119,7 +119,7 @@ class ParcoursExportController extends AbstractController
                 'ects' => $sem->heuresEctsSemestre->sommeSemestreEcts,
                 'ues' => []
             ];
-            foreach ($sem->ues() as $ue) {
+            foreach ($sem->ues as $ue) {
                 $tUe = [
                     'ordre' => $ue->ordre(),
                     'libelleOrdre' => $ue->display,
