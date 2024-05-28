@@ -20,10 +20,12 @@ use App\DTO\HeuresEctsSemestre;
 use App\DTO\HeuresEctsUe;
 use App\DTO\StructureParcours;
 use App\Entity\CampagneCollecte;
+use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\ParcoursVersioning;
 use App\Entity\SemestreParcours;
+use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
 use App\Events\AddCentreParcoursEvent;
 use App\Form\ParcoursType;
@@ -66,7 +68,9 @@ use Symfony\Component\Serializer\Serializer;
 class ParcoursController extends BaseController
 {
     public function __construct(
-        private WorkflowInterface $parcoursWorkflow
+        private WorkflowInterface $parcoursWorkflow,
+        private WorkflowInterface $dpeParcoursWorkflow,
+        private readonly EntityManagerInterface $entityManager
     ) {
     }
 
@@ -150,8 +154,18 @@ class ParcoursController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->parcoursWorkflow->apply($parcour, 'initialiser');
+            $this->parcoursWorkflow->apply($parcour, 'initialiser');//todo: devenu inutile a vérifier et supprimer
             $parcoursRepository->save($parcour, true);
+
+            $dpeParcours = new DpeParcours();
+            $dpeParcours->setParcours($parcour);
+            $dpeParcours->setFormation($formation);
+            $dpeParcours->setCampagneCollecte($this->getDpe());
+            $dpeParcours->setVersion('1.0');
+            $dpeParcours->setEtatReconduction(TypeModificationDpeEnum::CREATION);
+            $this->dpeParcoursWorkflow->apply($dpeParcours, 'initialiser');
+            $this->entityManager->persist($dpeParcours);
+            $this->entityManager->flush();
 
             $event = new AddCentreParcoursEvent($parcour, ['ROLE_RESP_PARCOURS'], $parcour->getRespParcours());
             $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
