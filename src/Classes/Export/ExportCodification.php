@@ -144,7 +144,7 @@ class ExportCodification
                 $this->excelWriter->writeCellXY(3, $ligne, $semestre->semestre->getCodeApogee(), ['bold' => true]);
                 $this->excelWriter->writeCellXY(4, $ligne, 'SEMESTRE', ['color' => self::BLUE]);
                 $this->excelWriter->writeCellXY(5, $ligne, $semestre->heuresEctsSemestre->sommeSemestreEcts, ['color' => self::GREEN]);
-                foreach ($semestre->ues() as $ue) {
+                foreach ($semestre->ues as $ue) {
                     $ligne++;
                     if ($ue->ue->getUeParent() === null) {
                         $this->excelWriter->writeCellXY(3, $ligne, $ue->display);
