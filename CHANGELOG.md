@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.26.8](https://github.com/Dannebicque/oreof/compare/v1.26.7...v1.26.8) (2024-05-28)
+
+
+### Bug Fixes
+
+* création d'un EC enfant ([1912a44](https://github.com/Dannebicque/oreof/commit/1912a441b4c8f10e435c577e1a9345fbc89cda0e))
+* Initialisation DPE à la création d'un parcours ([f34382f](https://github.com/Dannebicque/oreof/commit/f34382f0b1ab4f15b20bc133f1f39cda51868cc1))
+
 ### [1.26.7](https://github.com/Dannebicque/oreof/compare/v1.26.6...v1.26.7) (2024-05-28)
 
 
