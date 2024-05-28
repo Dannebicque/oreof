@@ -212,6 +212,7 @@ class ElementConstitutifController extends AbstractController
 
     #[Route('/new-enfant/{ue}/{parcours}', name: 'app_element_constitutif_new_enfant', methods: ['GET', 'POST'])]
     public function newEnfant(
+        NatureUeEcRepository         $natureUeEcRepository,
         TypeEcRepository         $typeEcRepository,
         EcOrdre                      $ecOrdre,
         Request                      $request,
@@ -241,13 +242,27 @@ class ElementConstitutifController extends AbstractController
             'action' => $this->generateUrl(
                 'app_element_constitutif_new_enfant',
                 ['ue' => $ue->getId(), 'parcours' => $parcours->getId(), 'element' => $request->query->get('element')]
-            )
+            ),
+            'typeDiplome' => $typeDiplome,
+            'formation' => $parcours->getFormation(),
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $typeEc = $typeEcRepository->find($request->request->get('typeEc'));
-            $elementConstitutif->setTypeEc($typeEc);
+            //            $typeEc = $typeEcRepository->find($request->request->get('typeEc'));
+            //            $elementConstitutif->setTypeEc($typeEc);
+
+            $natureEc = $natureUeEcRepository->findOneBy(['choix' => false, 'libre' => false, 'type' => 'ec']);
+            $elementConstitutif->setNatureUeEc($natureEc);
+
+            if ($form->get('typeEcTexte')->getData() !== null && $form->get('typeEc')->getData() === null) {
+                $tu = new TypeEc();
+                $tu->setLibelle($form->get('typeEcTexte')->getData());
+                $tu->addTypeDiplome($typeDiplome);
+                $tu->setFormation($parcours->getFormation());
+                $typeEcRepository->save($tu, true);
+                $elementConstitutif->setTypeEc($tu);
+            }
 
             if (str_starts_with($request->request->get('ficheMatiere'), 'id_')) {
                 $ficheMatiere = $ficheMatiereRepository->find((int)str_replace(
@@ -497,10 +512,10 @@ class ElementConstitutifController extends AbstractController
         ElementConstitutif           $elementConstitutif,
         Parcours                     $parcours
     ): Response {
-//        if ($this->isGranted(
-//            'ROLE_FORMATION_EDIT_MY',
-//            $elementConstitutif->getParcours()->getFormation()
-//        )) { //todo: ajouter le workflow...
+        //        if ($this->isGranted(
+        //            'ROLE_FORMATION_EDIT_MY',
+        //            $elementConstitutif->getParcours()->getFormation()
+        //        )) { //todo: ajouter le workflow...
 
         $raccroche = $elementConstitutif->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
         $getElement = new GetElementConstitutif($elementConstitutif, $parcours);
@@ -545,10 +560,10 @@ class ElementConstitutifController extends AbstractController
             'parcours' => $parcours
         ]);
         // }
-//
-//        return $this->render('element_constitutif/_structureEcNonEditable.html.twig', [
-//            'ec' => $elementConstitutif,
-//        ]);
+        //
+        //        return $this->render('element_constitutif/_structureEcNonEditable.html.twig', [
+        //            'ec' => $elementConstitutif,
+        //        ]);
     }
 
     #[Route('/{id}/structure-but', name: 'app_element_constitutif_structure_but', methods: ['GET', 'POST'])]

@@ -10,6 +10,9 @@
 namespace App\Form;
 
 use App\Entity\ElementConstitutif;
+use App\Entity\TypeEc;
+use App\Repository\TypeEcRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,11 +22,25 @@ class ElementConstitutifEnfantType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $typeDiplome = $options['typeDiplome'];
+        $formation = $options['formation'];
 
         $builder
-            ->add('libelle', TextType::class, [
-                'attr' => ['maxlength' => 255],
-                'required' => false
+            ->add('typeEc', EntityType::class, [
+                'class' => TypeEc::class,
+                'autocomplete' => true,
+                'choice_label' => 'libelle',
+                'query_builder' => fn (
+                    TypeEcRepository $typeEcRepository
+                ) => $typeEcRepository->findByTypeDiplomeAndFormationBuilder($typeDiplome, $formation),
+                'required' => false,
+            ])
+            ->add('typeEcTexte', TextType::class, [
+                'attr' => [
+                    'maxlength' => 100,
+                ],
+                'required' => false,
+                'mapped' => false,
             ])
         ;
     }
@@ -33,6 +50,8 @@ class ElementConstitutifEnfantType extends AbstractType
         $resolver->setDefaults([
             'data_class' => ElementConstitutif::class,
             'translation_domain' => 'form',
+            'typeDiplome' => null,
+            'formation' => null,
         ]);
     }
 }

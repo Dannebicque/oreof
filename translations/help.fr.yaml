@@ -423,4 +423,17 @@ element_constitutif.helps.ordre: 'Précisez l’ordre d’apparition de l’EC d
 element_constitutif.helps.code: "Précisez le code de l'EC"
 parcours.helps.parcoursOrigine: "Indiquez le parcours d'origine si ce parcours est une évolution/adaptation d'un autre parcours. Cela est nécessaire pour la bonne codification Apogée"
 ec_manage.helps.fiche_matiere_titre_libre_edit.help: 'Saisissez un texte libre pour ce EC et préciser les modalités de choix dans la zone suivante'
-ec.helps.typeEc.help: 'Type d''EC'
+ec.helps.typeEc.help: "Type d'EC"
+form.helps.codeDiplome: "Indiquez le code Apogée du diplôme."
+form.helps.codeVersionDiplome: "Indiquez le code Apogée de la version du diplôme."
+form.helps.codeEtape: "Indiquez le code Apogée de l'étape."
+form.helps.codeVersionEtape: "Indiquez le code Apogée de la version de l'étape."
+form.helps.codeMentionApogee: "Indiquez le code Apogée de la mention."
+fiche_matiere_step1.helps.codeApogee: "Indiquez le code Apogée de la fiche matière/EC."
+type_ec.helps.type.help: "Type d'EC"
+type_diplome.helps.codifIntermediaire.help: type_diplome.helps.codifIntermediaire.help
+change_rf_formation.helps.user: change_rf_formation.helps.user
+change_rf_formation.helps.commentaire: change_rf_formation.helps.commentaire
+parcours.helps.codeMentionApogee: parcours.helps.codeMentionApogee
+element_constitutif_enfant.helps.typeEc: "Précisez le type d'EC si il n'est pas présent dans la liste déroulante du champ précédent."
+element_constitutif_enfant.helps.typeEcTexte: "Précisez le type d'EC si il n'est pas présent dans la liste déroulante du champ précédent."
