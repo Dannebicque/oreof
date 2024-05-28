@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.26.7](https://github.com/Dannebicque/oreof/compare/v1.26.6...v1.26.7) (2024-05-28)
+
+
+### Bug Fixes
+
+* Contacts dans vérification et state du parcours ([ea2de5a](https://github.com/Dannebicque/oreof/commit/ea2de5a7892a230f88f008b3d43a8591d6d5a3c0))
+* Formation sans parcours initié ([2e5e20f](https://github.com/Dannebicque/oreof/commit/2e5e20f2ad5cc0d3843254819f33ec54dbe3ffb6))
+* Formation sans parcours initié ([c010883](https://github.com/Dannebicque/oreof/commit/c010883cafe1c5668ae1af2353c445a892f43ab7))
+
 ### [1.26.6](https://github.com/Dannebicque/oreof/compare/v1.26.5...v1.26.6) (2024-05-28)
 
 
