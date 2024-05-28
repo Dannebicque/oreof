@@ -70,6 +70,10 @@ class WorkflowExtension extends AbstractExtension
     {
         $actualPlaces = $this->getPlacesFromEntity($entity, $workflow);
 
+        if ($actualPlaces === false) {
+            return false;
+        }
+
         if (array_key_exists('en_cours_redaction', $actualPlaces) && $entity instanceof Formation && $place === 'formation') {
             return true;
         }
@@ -123,6 +127,9 @@ class WorkflowExtension extends AbstractExtension
     {
         $actualPlaces = $this->getPlacesFromEntity($entity, $workflowTexte);
 
+        if ($actualPlaces === false) {
+            return false;
+        }
 
         $workflow = $this->getWorkflow('parcours');
 
@@ -137,6 +144,9 @@ class WorkflowExtension extends AbstractExtension
     public function isRefuse(string $workflow, Parcours|FicheMatiere|Formation $entity): bool
     {
         $actualPlaces = $this->getPlacesFromEntity($entity, $workflow);
+        if ($actualPlaces === false) {
+            return false;
+        }
 
         if (count($actualPlaces) > 0) {
             return str_starts_with(array_keys($actualPlaces)[0], 'refuse');

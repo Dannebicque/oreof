@@ -183,7 +183,7 @@ final class MentionManageComponent extends AbstractController
         if ($this->type === 'formation') {
             $this->typeDiplome = $this->formation->getTypeDiplome();
             $this->place = $this->getPlace($this->type);
-        } elseif ($this->type === 'parcours') {
+        } elseif ($this->type === 'parcours' && $this->parcours !== null) {
             $this->typeDiplome = $this->parcours?->getFormation()?->getTypeDiplome();
             $this->formation = $this->parcours?->getFormation();
             $this->place = $this->getPlace($this->type);
@@ -218,7 +218,7 @@ final class MentionManageComponent extends AbstractController
 
     private function getPlace(string $type): string
     {
-        $objet = $type === 'formation' ? GetDpeParcours::getFromFormation($this->formation) : GetDpeParcours::getFromParcours($this->parcours);
+        $objet = $type === 'formation' || $this->parcours === null ? GetDpeParcours::getFromFormation($this->formation) : GetDpeParcours::getFromParcours($this->parcours);
         if (null === $objet) {
             return 'initialisation_dpe';
         }

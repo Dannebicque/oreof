@@ -26,7 +26,7 @@ abstract class GetDpeParcours {
     {
         if (null !== $formation) {
             $parcours = $formation->getParcours();
-            if (null !== $parcours) {
+            if ($parcours->count() > 0) {
                 return self::getFromParcours($parcours->first()); //todo: quel parcours prendre ?
             }
         }
