@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.26.6](https://github.com/Dannebicque/oreof/compare/v1.26.5...v1.26.6) (2024-05-28)
+
+
+### Bug Fixes
+
+* export + ues() ([ec9f95a](https://github.com/Dannebicque/oreof/commit/ec9f95a847162be1e4d0cc6410e3ae9260c38848))
+
 ### [1.26.5](https://github.com/Dannebicque/oreof/compare/v1.26.4...v1.26.5) (2024-05-28)
 
 
