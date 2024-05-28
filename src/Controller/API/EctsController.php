@@ -24,7 +24,6 @@ class EctsController extends AbstractController
         Ue       $ue,
         Parcours $parcours,
     ): Response {
-        $totalEctsUe = 0;
         $ectsSemestre = 0;
         $typeDiplome = $parcours->getTypeDiplome();
         $semestre = $ue->getSemestre();
@@ -32,30 +31,15 @@ class EctsController extends AbstractController
         if ($semestre === null || $typeDiplome === null) {
             throw $this->createNotFoundException();
         }
-        GetUeEcts::getEcts($ue, $parcours, $typeDiplome);
-
+        $totalEctsUe = GetUeEcts::getEcts($ue, $parcours, $typeDiplome);
 
         $uesInSemestre = $semestre->getUes();
 
         foreach ($uesInSemestre as $u) {
-            $ecsInUe = $u->getElementConstitutifs();
-            foreach ($ecsInUe as $ec) {
-                if ($ec->getEcParent() !== null) {
-                    $ectsSemestre += $ec->getEcParent()->getEcts();
-                } else {
-                    $raccroche = $ec->getFicheMatiere()?->getParcours()?->getId() !== $parcours->getId();
-                    $getElement = new GetElementConstitutif($ec, $parcours);
-                    $getElement->setIsRaccroche($raccroche);
-                    if ($raccroche && $ec->isSynchroEcts()) {
-                        $ects = $getElement->getEcts();
-                        $ectsSemestre += $ects;
-                    } else {
-                        $ectsSemestre += $ec->getEcts();
-                    }
-                }
+            if ($u->getUeParent() === null) {
+                $ectsSemestre += GetUeEcts::getEcts($u, $parcours, $typeDiplome);
             }
         }
-
         return $this->json(
             [
                 'ue' => $totalEctsUe,
