@@ -161,7 +161,7 @@ class ParcoursValide extends AbstractValide
 
         // onglet 5
         $this->etat['preRequis'] = $this->nonVide($this->parcours->getPrerequis());
-        $this->etat['coordSecretariat'] = $this->nonVide($this->parcours->getCoordSecretariat());
+        $this->etat['coordSecretariat'] = $this->parcours->getContacts()->count() > 0 ? self::COMPLET : self::VIDE;
 
 
         if ($this->parcours->isParcoursDefaut() === false) {

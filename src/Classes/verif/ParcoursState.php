@@ -85,7 +85,7 @@ class ParcoursState
 
     public function isEmptyOnglet5(): bool
     {
-        return ($this->parcours->getPrerequis() === null || trim($this->parcours->getPrerequis()) === '') && ($this->parcours->getCoordSecretariat() === null || trim($this->parcours->getCoordSecretariat()) === '');
+        return ($this->parcours->getPrerequis() === null || trim($this->parcours->getPrerequis()) === '') && ($this->parcours->getContacts()->count() === 0 || $this->parcours->getContacts()->count() === 0);
     }
 
     public function isEmptyOnglet6(): bool
@@ -251,7 +251,7 @@ class ParcoursState
             }
         }
 
-        if ($this->parcours->getCoordSecretariat() === null || trim($this->parcours->getCoordSecretariat()) === '') {
+        if ($this->parcours->getContacts()->count() === 0 || $this->parcours->getContacts()->count() === null) {
             $tab['error'][] = 'Vous devez indiquer les coordonnées du secrétariat.';
         }
 
