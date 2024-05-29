@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.26.9](https://github.com/Dannebicque/oreof/compare/v1.26.8...v1.26.9) (2024-05-29)
+
+
+### Bug Fixes
+
+* ajout bouton modifier sur fiche matiere ([03939a6](https://github.com/Dannebicque/oreof/commit/03939a69816adacc0efcb527e9750da05107e904))
+
 ### [1.26.8](https://github.com/Dannebicque/oreof/compare/v1.26.7...v1.26.8) (2024-05-28)
 
 
