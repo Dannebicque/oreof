@@ -144,6 +144,19 @@
 {% endblock %}
 
 {% block bouton_header %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a
+                href="{{ path('app_fiche_matiere_edit',{slug: ficheMatiere.slug}) }}"
+                class="btn btn-sm btn-outline-warning"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Modifier une fiche EC/matière"
+        >
+            <i class="{{ iconEdit }}"></i>
+            <span> modifier</span>
+        </a>
+    {% endif %}
+
     <a href="{{ path('app_fiche_matiere_export', {id:ficheMatiere.id}) }}"
        class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
        data-bs-toggle="tooltip"
