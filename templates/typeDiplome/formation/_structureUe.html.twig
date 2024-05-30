@@ -7,6 +7,7 @@
         <span class="show_current"> {{ ue.ue.libelle }}</span>
         ({{ ue.codeApogee() }}) {% if ue.raccroche == true %}<i
                 class="fal fa-link"></i>{% endif %}
+
         {% if ue.ue.natureUeEc is defined and ue.ue.natureUeEc != null and ue.ue.natureUeEc.libre == true %}
             <span class="badge bg-secondary">
             UE à choix libre</span>

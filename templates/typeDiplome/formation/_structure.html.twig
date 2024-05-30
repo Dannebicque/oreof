@@ -4,6 +4,9 @@
     {% if (print is not defined or print == false) %}
         <div class="col-sm-12 text-end mb-2 pe-40px">
             {% if source is defined and source == 'codification' %}
+                <a href="{{ path('app_codification_parcours_modifier', {parcours:parcours.id}) }}"
+                   class="btn btn-sm btn-outline-warning mx-2"
+                >Modifier codification</a>
                 <a href="{{ path('app_codification_parcours_export', {parcours:parcours.id, _format:'xlsx'}) }}"
                    class="btn btn-sm btn-outline-info mx-2"
                 >Export codification</a>
@@ -59,7 +62,9 @@
                             colspan=" {% if presentiel %}8{% else %}13{% endif %}">S{{ semestre.ordre }}
                         ({{ semestre.semestre.codeApogee }} | {{ semestre.semestreParcours.codeApogeeEtapeAnnee }}
                         - {{ semestre.semestreParcours.codeApogeeEtapeVersion }}) {% if semestre.raccroche == true %}<i
-                                class="fal fa-link"></i>{% endif %}</th>
+                                class="fal fa-link"></i>{% endif %}
+
+                    </th>
                 </tr>
 
                 {% for ordUe, ue in semestre.ues %}

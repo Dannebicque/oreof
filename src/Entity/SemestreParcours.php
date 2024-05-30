@@ -9,6 +9,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\HasBeenEditedTrait;
 use App\Repository\SemestreParcoursRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,6 +18,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: SemestreParcoursRepository::class)]
 class SemestreParcours
 {
+    use HasBeenEditedTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

@@ -1,0 +1,46 @@
+<tr class="ec">
+    <th class="border-left-semestre-{{ semestreOrdre }}">&nbsp;</th>
+    <th {% if enfant %}class="border-left-ue-{{ ue.ordre }}"{% endif %}>&nbsp;</th>
+    <td>{% if ecEnfant %}<span class="badge bg-ec-{{ ec.elementConstitutif.ordre }}">&nbsp;</span>{% endif %}
+        {% if (isBut is defined and isBut == false) or isBut is not defined %}
+            <strong>{{ ec.elementConstitutif.code }}</strong>{% endif %}
+        {% if ec.elementConstitutif.ficheMatiere != null %}
+            <a href="{{ url('app_fiche_matiere_show', {slug: ec.elementConstitutif.ficheMatiere.slug}) }}">
+                {% if isBut is defined and isBut == true %}
+                    <strong>{{ ec.elementConstitutif.ficheMatiere.sigle }}</strong> {{ ec.elementConstitutif.ficheMatiere.libelle }} ({{ ec.elementConstitutif.displayCodeApogee }})
+                {% else %}
+                    <span class="show_versioning d-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span>
+                    <span class="show_current">{{ ec.elementConstitutif.ficheMatiere.display }} ({{ ec.elementConstitutif.displayCodeApogee }})</span>
+                {% endif %}
+            </a>
+
+
+            {% if source is defined and source != 'codification' %}
+            {{ ec.elementConstitutif.ficheMatiere.etatFiche|badgeFiche }}
+                {% endif %}
+        {% else %}
+            <span class="show_versioning d-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span>
+            <span class="show_current">{{ ec.elementConstitutif.libelle }}</span>
+        {% endif %}
+        {% if ec.elementConstitutif.natureUeEc is defined
+            and ec.elementConstitutif.natureUeEc != null
+            and ec.elementConstitutif.natureUeEc.isLibre == true %}
+            ({{ ec.elementConstitutif.displayCodeApogee }}) <span class="badge bg-success">EC à choix libre</span>
+        {% endif %}
+        {% if ec.elementsConstitutifsEnfants|length > 0 %}
+            ({{ ec.elementConstitutif.displayCodeApogee }}) <span class="badge bg-info">
+             EC à choix restreint : {{ ec.elementsConstitutifsEnfants|length }} choix possible(s)</span>
+        {% endif %}
+    </td>
+    <th>
+        {% if ec.elementConstitutif.hasBeenEditedManually %}
+            <span class="badge bg-warning">Modifié manuellement</span>
+        {% endif %}
+    </th>
+    <td>
+        <label for="ec_{{ ec.elementConstitutif.id }}" class="sr-only">Code Apogée</label>
+        <input type="text" id="ec_{{ ec.elementConstitutif.id }}" name="ec_{{ ec.elementConstitutif.id }}" value="{{ ec.elementConstitutif.displayCodeApogee }}" class="form-control">
+    </td>
+</tr>
+
+

@@ -9,6 +9,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\HasBeenEditedTrait;
 use App\Repository\SemestreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -21,6 +22,8 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ORM\Entity(repositoryClass: SemestreRepository::class)]
 class Semestre
 {
+    use HasBeenEditedTrait;
+
     #[Groups(['DTO_json_versioning'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]

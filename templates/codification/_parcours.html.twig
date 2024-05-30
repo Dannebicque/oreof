@@ -1,109 +1,13 @@
 <div class="row mb-2">
-    <div class="col-10"></div>
-    <div class="col-2">
+    <div class="col-8"></div>
+    <div class="col-4">
         <a href="{{ path('app_parcours_show', {id:parcours.id}) }}" class="btn btn-sm btn-outline-info">
             <i class="{{ iconShow }}"></i>
             Voir la fiche descriptive du parcours</a>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-2 text-center">
-        <p class="font-weight-bold">Type Diplôme</p>
-        <p>{{ formation.typeDiplome != null ?  formation.typeDiplome.codeApogee : '--' }}</p>
-    </div>
-    <div class="col-2 text-center">
-        <p class="font-weight-bold">Domaine</p>
-        <p>{{ formation.domaine != null ?  formation.domaine.codeApogee : '--' }}</p>
-    </div>
-    <div class="col-2 text-center">
-        <p class="font-weight-bold">Mention</p>
-        <p>{{ parcours.codeMentionApogee }}</p>
-    </div>
-    {% if parcours.parcoursDefaut %}
-        <div class="col-2 text-center">
-            <p class="font-weight-bold">Ville</p>
-            <p>{{ formation.localisationMention.first != null ? formation.localisationMention.first.codeApogee : '--' }}</p>
-        </div>
-        <div class="col-2 text-center">
-            <p class="font-weight-bold">Code compo.</p>
-            <p>
-                {{ parcours.composanteInscription != null ? parcours.composanteInscription.codeComposante : '--' }}
-            </p>
-        </div>
-        <div class="col-2 text-center">
-            <p class="font-weight-bold">code compo. 2</p>
-            <p>{{ parcours.composanteInscription != null ? parcours.composanteInscription.codeApogee : '--' }}</p>
-        </div>
-    {% else %}
-        <div class="col-2 text-center">
-            <p class="font-weight-bold">Ville</p>
-            <p>{{ parcours.localisation != null ? parcours.localisation.codeApogee : '--' }}</p>
-        </div>
-        <div class="col-2 text-center">
-            <p class="font-weight-bold">Code compo.</p>
-            <p>
-                {{ parcours.composanteInscription != null ? parcours.composanteInscription.codeComposante : '--' }}
-            </p>
-        </div>
-        <div class="col-2 text-center">
-            <p class="font-weight-bold">Code compo. 2</p>
-            <p>{{ parcours.composanteInscription != null ? parcours.composanteInscription.codeApogee : '--' }}</p>
-        </div>
-    {% endif %}
-</div>
-
-
-<div class="row">
-    <div class="col-12">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Année d'étude</th>
-                <th>Ville</th>
-                <th>Parcours</th>
-                <th>Code Diplôme</th>
-                <th>Version Diplôme</th>
-                <th>Code Etape</th>
-                <th>Version Etape</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for annee in parcours.annees %}
-                <tr>
-                    <td>{{ annee }}</td>
-                    <td>{{ parcours.localisation != null ? parcours.localisation.libelle : '' }}</td>
-                    <td>{{ parcours.codeMentionApogee }}</td>
-                    <td>{{ parcours.codeDiplome(annee) }}</td>
-                    <td>{{ parcours.codeVersionDiplome(annee) }}</td>
-                    <td>{{ parcours.codeEtape(annee) }}</td>
-                    <td>{{ parcours.codeVersionEtape(annee) }}</td>
-                    <td>
-                        {% if is_granted('ROLE_SES') %}
-                        <a href="#"
-                           class="btn btn-sm text-warning"
-                                {{ stimulus_controller('modal', {
-                                    size: 'lg',
-                                    modalTitle: 'Modifier la codification',
-                                    modalUrl: path('app_codification_edit', {parcours:parcours.id, annee:annee}) }) }}
-                           data-action="click->modal#openModal"
-                           data-size="lg"
-                           data-bs-toggle="tooltip"
-                           data-bs-placement="bottom"
-                           title="Modifier Codes"
-                        >
-                            <i class="{{ iconEdit }}"></i>
-                            <span> Modifier Codes</span>
-                        </a>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
+{{ include('codification/_enteteParcours.html.twig') }}
 
 {{ include('typeDiplome/formation/_structure.html.twig', {parcours:parcours, source: 'codification'}) }}
 

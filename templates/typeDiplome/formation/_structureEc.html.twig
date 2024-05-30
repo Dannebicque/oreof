@@ -22,7 +22,10 @@
                     <i class="{{ iconEdit }}"></i>
                 </a>
             {% endif %}
+
+            {% if source is defined and source != 'codification' %}
             {{ ec.elementConstitutif.ficheMatiere.etatFiche|badgeFiche }}
+                {% endif %}
         {% else %}
             <span class="show_versioning d-none">{{ diffEc ? diffEc.libelle|displayDiff : '' }}</span>
             <span class="show_current">{{ ec.elementConstitutif.libelle }}</span>

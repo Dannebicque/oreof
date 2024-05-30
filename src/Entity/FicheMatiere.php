@@ -10,6 +10,7 @@
 namespace App\Entity;
 
 use App\DTO\Remplissage;
+use App\Entity\Traits\HasBeenEditedTrait;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\FicheMatiereRepository;
@@ -28,6 +29,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class FicheMatiere
 {
     use LifeCycleTrait;
+    use HasBeenEditedTrait;
 
     public const TYPE_MATIERE_COURS = 'matiere';
     public const TYPE_MATIERE_SAE = 'sae';

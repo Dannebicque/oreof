@@ -10,6 +10,7 @@
 namespace App\Entity;
 
 use App\Classes\GetElementConstitutif;
+use App\Entity\Traits\HasBeenEditedTrait;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Repository\ElementConstitutifRepository;
@@ -25,6 +26,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 class ElementConstitutif
 {
     use LifeCycleTrait;
+    use HasBeenEditedTrait;
 
     #[Groups(['fiche_matiere_versioning_ec_parcours', 'DTO_json_versioning'])]
     #[ORM\Id]
