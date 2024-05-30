@@ -21,12 +21,12 @@ enum NiveauLangueEnum: string
     public function libelle(): string
     {
         return match ($this) {
-            self::A1 => 'Utilisateur élémentaire débutant (A1)',
-            self::A2 => 'Utilisateur élémentaire intermédiaire (A2)',
-            self::B1 => 'Utilisateur indépendant (B1)',
-            self::B2 => 'Utilisateur indépendant avancé (B2)',
-            self::C1 => 'Utilisateur expérimenté autonome (C1)',
-            self::C2 => 'Utilisateur expérimenté maîtrise (C2)',
+            self::A1 => 'A1 (Utilisateur élémentaire débutant)',
+            self::A2 => 'A2 (Utilisateur élémentaire intermédiaire)',
+            self::B1 => 'B1 (Utilisateur indépendant)',
+            self::B2 => 'B2 (Utilisateur indépendant avancé)',
+            self::C1 => 'C1 (Utilisateur expérimenté autonome)',
+            self::C2 => 'C2 (Utilisateur expérimenté maîtrise)',
         };
     }
 }
