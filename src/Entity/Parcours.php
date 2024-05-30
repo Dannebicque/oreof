@@ -13,6 +13,7 @@ use App\Classes\verif\ParcoursValide;
 use App\DTO\Remplissage;
 use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
+use App\Enums\NiveauLangueEnum;
 use App\Enums\RegimeInscriptionEnum;
 use App\Enums\TypeParcoursEnum;
 use App\Repository\ParcoursRepository;
@@ -245,6 +246,10 @@ class Parcours
 
     #[ORM\Column(length: 1, nullable: true)]
     private ?string $codeMentionApogee = null;
+
+    #[ORM\Column(type: Types::STRING, length: 5, enumType: NiveauLangueEnum::class)]
+    #[Groups('parcours_json_versioning')]
+    private ?NiveauLangueEnum $niveauFrancais = null;
 
     public function __construct(?Formation $formation)
     {
@@ -1403,6 +1408,18 @@ class Parcours
     public function setCodeMentionApogee(?string $codeMentionApogee): static
     {
         $this->codeMentionApogee = $codeMentionApogee;
+
+        return $this;
+    }
+
+    public function getNiveauFrancais(): ?NiveauLangueEnum
+    {
+        return $this->niveauFrancais ?? NiveauLangueEnum::B2;
+    }
+
+    public function setNiveauFrancais(?NiveauLangueEnum $niveauFrancais): static
+    {
+        $this->niveauFrancais = $niveauFrancais;
 
         return $this;
     }

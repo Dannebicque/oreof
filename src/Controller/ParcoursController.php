@@ -526,6 +526,7 @@ class ParcoursController extends BaseController
                 'localisation' => $localisationMetadata,
                 'faculte-ecole-institut' => $faculteEcoleInstitut,
                 'public-concerne' => $parcours->getRegimeInscription() ?? [], //Certains sont des tableaux, d'autres en JSON
+                'niveau-francais' => $parcours->getNiveauFrancais()?->libelle() ?? '-',
             ],
             'xml-lheo' => $this->generateUrl('app_parcours_export_xml_lheo', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),
             'fiche-pdf' => $this->generateUrl('app_parcours_export', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL),

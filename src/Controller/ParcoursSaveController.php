@@ -16,6 +16,7 @@ use App\Classes\verif\ParcoursState;
 use App\Entity\Parcours;
 use App\Enums\EtatRemplissageEnum;
 use App\Enums\ModaliteEnseignementEnum;
+use App\Enums\NiveauLangueEnum;
 use App\Events\AddCentreParcoursEvent;
 use App\Repository\ComposanteRepository;
 use App\Repository\RythmeFormationRepository;
@@ -61,12 +62,12 @@ class ParcoursSaveController extends AbstractController
         }
         $this->denyAccessUnlessGranted('CAN_PARCOURS_EDIT_MY', $dpeParcours);
 
-//        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
-//            $parcours, 'autoriser')) && !$this->isGranted('ROLE_SES')) {
-//            //si on est pas dans un état qui permet de modifier la formation
-//            return $this->json('Vous ne pouvez plus modifier cette formation', Response::HTTP_FORBIDDEN);
+        //        if (!($this->parcoursWorkflow->can($parcours, 'valider_parcours') || $this->parcoursWorkflow->can(
+        //            $parcours, 'autoriser')) && !$this->isGranted('ROLE_SES')) {
+        //            //si on est pas dans un état qui permet de modifier la formation
+        //            return $this->json('Vous ne pouvez plus modifier cette formation', Response::HTTP_FORBIDDEN);
         //todo: bloquant + pas erreur envoyée ou pas traitée dans JS
-//        }
+        //        }
 
         if ($this->parcoursWorkflow->can($parcours, 'autoriser')) {
             //un champ est modifié, on met à jour l'état
@@ -124,7 +125,7 @@ class ParcoursSaveController extends AbstractController
 
                 return $this->json($rep);
             case 'respParcours':
-                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'],$parcours->getRespParcours());
+                $event = new AddCentreParcoursEvent($parcours, ['ROLE_RESP_PARCOURS'], $parcours->getRespParcours());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'respParcours', $user);
@@ -132,7 +133,7 @@ class ParcoursSaveController extends AbstractController
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::ADD_CENTRE_PARCOURS);
                 return $this->json($rep);
             case 'coRespParcours':
-                $event = new AddCentreParcoursEvent($parcours, ['ROLE_CO_RESP_PARCOURS'],$parcours->getCoResponsable());
+                $event = new AddCentreParcoursEvent($parcours, ['ROLE_CO_RESP_PARCOURS'], $parcours->getCoResponsable());
                 $eventDispatcher->dispatch($event, AddCentreParcoursEvent::REMOVE_CENTRE_PARCOURS);
                 $user = $userRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'coResponsable', $user);
@@ -142,6 +143,10 @@ class ParcoursSaveController extends AbstractController
             case 'localisation':
                 $ville = $villeRepository->find($data['value']);
                 $rep = $updateEntity->saveField($parcours, 'localisation', $ville);
+
+                return $this->json($rep);
+            case 'niveauFrancais':
+                $rep = $updateEntity->saveField($parcours, 'niveauFrancais', NiveauLangueEnum::tryFrom($data['value']));
 
                 return $this->json($rep);
             case 'composanteInscription':

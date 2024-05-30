@@ -380,13 +380,13 @@ mccc.ec.labels.sansHeures: 'EC sans volume horaire'
 'Code Apogée': 'Code Apogée'
 type_diplome.labels.codeApogee: 'Code Apogée'
 'Code Composante': 'Code Composante'
-etablissement.labels.etablissement_information.label: "Informations sur l'établissement"
+etablissement.labels.etablissement_information.label: etablissement.labels.etablissement_information.label
 'Calendrier universitaire': 'Calendrier universitaire'
 "Calendrier d'inscription": "Calendrier d'inscription"
 'Informations pratiques': 'Informations pratiques'
 'Informations diverses': 'Informations diverses'
 "Modalités d'admission": "Modalités d'admission"
-parcours_step5.labels.modalitesAdmission: "Modalités d'admission"
+parcours_step5.labels.modalitesAdmission: parcours_step5.labels.modalitesAdmission
 'Insertion professionnelle': 'Insertion professionnelle'
 Restauration: Restauration
 Hébergement: Hébergement
@@ -397,13 +397,13 @@ Transport: Transport
 "Numéro d'activité": "Numéro d'activité"
 'Texte affiché en haut des pages parcours': 'Texte affiché en haut des pages parcours'
 'Texte affiché en bas des pages parcours': 'Texte affiché en bas des pages parcours'
-parcours_step7.labels.codeRNCP: "Code RNCP"
-parcours.labels.las1.label: "Parcours LAS1"
-parcours.labels.las23.label: "Parcours LAS2 ou 3"
-parcours.labels.typeParcours: "Type de parcours"
-TYPE_PARCOURS_CLASSIQUE: "Parcours classique"
-TYPE_PARCOURS_LAS1: "Parcours LAS1"
-TYPE_PARCOURS_LAS23: "Parcours LAS2 ou 3"
+parcours_step7.labels.codeRNCP: parcours_step7.labels.codeRNCP
+parcours.labels.las1.label: parcours.labels.las1.label
+parcours.labels.las23.label: parcours.labels.las23.label
+parcours.labels.typeParcours: parcours.labels.typeParcours
+TYPE_PARCOURS_CLASSIQUE: TYPE_PARCOURS_CLASSIQUE
+TYPE_PARCOURS_LAS1: TYPE_PARCOURS_LAS1
+TYPE_PARCOURS_LAS23: TYPE_PARCOURS_LAS23
 'Texte affiché si le parcours est une LAS1': 'Texte affiché si le parcours est une LAS1'
 'Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2': 'Texte affiché si le parcours est une LAS2 ou 3, avec les règles pour accéder à la LAS2'
 'Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3': 'Texte affiché si le parcours est une LAS1-2 ou 3, avec les règles pour accéder à la LAS3'
@@ -412,24 +412,24 @@ TYPE_PARCOURS_LAS23: "Parcours LAS2 ou 3"
 'Licence - Accès santé 2ème année (L.As 2)': 'Licence - Accès santé 2ème année (L.As 2)'
 'Licence - Accès santé 3ème année (L.As 3)': 'Licence - Accès santé 3ème année (L.As 3)'
 'Droit à la 2nde chance': 'Droit à la 2nde chance'
-parcours_step5.labels.adresses.label: "Adresses de la formation/du parcours"
-parcours_step5.labels.adresses.label.__name__.label: "Adresses de la formation/du parcours"
-parcours_step5.labels.adresses.label.0.label: "Adresses de la formation/du parcours"
-parcours_step5.labels.contacts.label: "Contacts de la formation/du parcours"
-parcours_step5.labels.contacts.label.__name__.label: "Contacts de la formation/du parcours"
-parcours_step5.labels.contacts.__name__.denomination: "Dénomination du contact"
-parcours_step5.labels.contacts.__name__.nom: "Nom du contact"
-parcours_step5.labels.contacts.__name__.prenom: "Prénom du contact"
-parcours_step5.labels.contacts.__name__.telephone: "Téléphone du contact"
-parcours_step5.labels.contacts.__name__.email: "Email du contact"
-parcours_step5.labels.contacts.label.__name__.label.adresse.label: "Adresses du contact de la formation/du parcours"
-parcours_step5.labels.contacts.label.0.label: "Adresses du contact de la formation/du parcours"
-parcours_step5.labels.contacts.0.denomination: "Dénomination du contact"
-parcours_step5.labels.contacts.0.nom: "Nom du contact"
-parcours_step5.labels.contacts.0.prenom: "Prénom du contact"
-parcours_step5.labels.contacts.0.telephone: "Téléphone du contact"
-parcours_step5.labels.contacts.0.email: "Email du contact"
-parcours_step5.labels.contacts.label.0.label.adresse.label: "Adresses du contact de la formation/du parcours"
+parcours_step5.labels.adresses.label: parcours_step5.labels.adresses.label
+parcours_step5.labels.adresses.label.__name__.label: parcours_step5.labels.adresses.label.__name__.label
+parcours_step5.labels.adresses.label.0.label: parcours_step5.labels.adresses.label.0.label
+parcours_step5.labels.contacts.label: parcours_step5.labels.contacts.label
+parcours_step5.labels.contacts.label.__name__.label: parcours_step5.labels.contacts.label.__name__.label
+parcours_step5.labels.contacts.__name__.denomination: parcours_step5.labels.contacts.__name__.denomination
+parcours_step5.labels.contacts.__name__.nom: parcours_step5.labels.contacts.__name__.nom
+parcours_step5.labels.contacts.__name__.prenom: parcours_step5.labels.contacts.__name__.prenom
+parcours_step5.labels.contacts.__name__.telephone: parcours_step5.labels.contacts.__name__.telephone
+parcours_step5.labels.contacts.__name__.email: parcours_step5.labels.contacts.__name__.email
+parcours_step5.labels.contacts.label.__name__.label.adresse.label: parcours_step5.labels.contacts.label.__name__.label.adresse.label
+parcours_step5.labels.contacts.label.0.label: parcours_step5.labels.contacts.label.0.label
+parcours_step5.labels.contacts.0.denomination: parcours_step5.labels.contacts.0.denomination
+parcours_step5.labels.contacts.0.nom: parcours_step5.labels.contacts.0.nom
+parcours_step5.labels.contacts.0.prenom: parcours_step5.labels.contacts.0.prenom
+parcours_step5.labels.contacts.0.telephone: parcours_step5.labels.contacts.0.telephone
+parcours_step5.labels.contacts.0.email: parcours_step5.labels.contacts.0.email
+parcours_step5.labels.contacts.label.0.label.adresse.label: parcours_step5.labels.contacts.label.0.label.adresse.label
 'Dénomination du contact': 'Dénomination du contact'
 Téléphone: Téléphone
 Email: Email
@@ -458,13 +458,26 @@ parcours_step5.labels.contacts: 'Contacts de la formation/du parcours'
 parcours.labels.parcoursOrigine: "Parcours d'origine"
 ec_manage.labels.fiche_matiere_titre_libre_edit.label: "Libellé libre de l'EC"
 ec.labels.typeEc.label: "Type de l'EC"
-semestre.decrocher.bouton: "Décrocher le semestre"
+semestre.decrocher.bouton: semestre.decrocher.bouton
 fiche_matiere_step1.labels.codeApogee: fiche_matiere_step1.labels.codeApogee
 type_ec.labels.type.label: type_ec.labels.type.label
 'Codification intermédiaire': 'Codification intermédiaire'
-fiche_matiere.step1_change_rf.title: "Changer le responsable de l'enseignement"
-fiche_matiere.step1_change_rf.label: "Changer le responsable de l'enseignement"
-ue.decrocher.bouton: "Décrocher l'UE"
+fiche_matiere.step1_change_rf.title: fiche_matiere.step1_change_rf.title
+fiche_matiere.step1_change_rf.label: fiche_matiere.step1_change_rf.label
+ue.decrocher.bouton: ue.decrocher.bouton
 parcours.labels.codeMentionApogee: parcours.labels.codeMentionApogee
-element_constitutif_enfant.labels.typeEc: "Type d'EC si non présent dans la liste"
-element_constitutif_enfant.labels.typeEcTexte: "Type d'EC si non présent dans la liste"
+element_constitutif_enfant.labels.typeEc: element_constitutif_enfant.labels.typeEc
+element_constitutif_enfant.labels.typeEcTexte: element_constitutif_enfant.labels.typeEcTexte
+parcours_step5.labels.niveauFrancais: 'Niveau de français requis'
+'Utilisateur élémentaire débutant': 'Utilisateur élémentaire débutant'
+'Utilisateur élémentaire intermédiaire': 'Utilisateur élémentaire intermédiaire'
+'Utilisateur indépendant': 'Utilisateur indépendant'
+'Utilisateur indépendant avancé': 'Utilisateur indépendant avancé'
+'Utilisateur expérimenté autonome': 'Utilisateur expérimenté autonome'
+'Utilisateur expérimenté maîtrise': 'Utilisateur expérimenté maîtrise'
+'Utilisateur élémentaire débutant (A1)': 'Utilisateur élémentaire débutant (A1)'
+'Utilisateur élémentaire intermédiaire (A2)': 'Utilisateur élémentaire intermédiaire (A2)'
+'Utilisateur indépendant (B1)': 'Utilisateur indépendant (B1)'
+'Utilisateur indépendant avancé (B2)': 'Utilisateur indépendant avancé (B2)'
+'Utilisateur expérimenté autonome (C1)': 'Utilisateur expérimenté autonome (C1)'
+'Utilisateur expérimenté maîtrise (C2)': 'Utilisateur expérimenté maîtrise (C2)'

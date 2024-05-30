@@ -1,13 +1,15 @@
 <div class="row">
     <div class="col-12">
         <dl>
+            <dt>Niveau de français requis</dt>
+            <dd>{{ parcours.niveauFrancais != null ? parcours.niveauFrancais.libelle : 'Non précisé' }}</dd>
             <dt>Prérequis recommandés</dt>
             <dd>{{ parcours.prerequis|raw }}</dd>
             {% if stringDifferencesParcours.prerequisRecommandesParcours is defined %}
                 {{ include("communs/_comparaison_versioning_big.html.twig", {
                         textDifferences: stringDifferencesParcours.prerequisRecommandesParcours,
                         idCollapse: "diffParcoursPrerequisRecommandes" ~ parcours.id
-                    }) 
+                    })
                 }}
             {% endif %}
         </dl>

@@ -2,6 +2,7 @@
     url: path('app_parcours_save', {parcours:parcours.id}),
 }) }}>
     {% form_theme form 'communs/form_theme.html.twig' %}
+    {{ form_row(form.niveauFrancais) }}
     {{ form_row(form.prerequis) }}
     {{ form_row(form.composanteInscription) }}
 

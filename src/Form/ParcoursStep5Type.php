@@ -11,6 +11,8 @@ namespace App\Form;
 
 use App\Entity\Composante;
 use App\Entity\Parcours;
+use App\Enums\NiveauFormationEnum;
+use App\Enums\NiveauLangueEnum;
 use App\Enums\RegimeInscriptionEnum;
 use App\Form\Type\TextareaAutoSaveType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -18,12 +20,20 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use UnitEnum;
 
 class ParcoursStep5Type extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('niveauFrancais', EnumType::class, [
+        'class' => NiveauLangueEnum::class,
+        'choice_label' => static function (UnitEnum $choice): string {
+            return $choice->libelle();
+        },
+                'attr' => ['data-action' => 'change->parcours--step5#changeNiveauLangue'],
+    ])
             ->add('prerequis', TextareaAutoSaveType::class, [
                 'attr' => ['rows' => 15, 'maxlength' => 3000, 'data-action' => 'change->parcours--step5#savePrerequis'],
                 'help' => '-',

@@ -21,6 +21,14 @@ export default class extends Controller {
     url: String,
   }
 
+  changeNiveauLangue(event) {
+    this._save({
+      field: 'niveauFrancais',
+      action: 'niveauFrancais',
+      value: event.target.value,
+    })
+  }
+
   connect() {
     document.getElementById('parcours_step5_prerequis').addEventListener('trix-blur', this.savePrerequis.bind(this))
     document.getElementById('parcours_step5_coordSecretariat').addEventListener('trix-blur', this.coordSecretariat.bind(this))
