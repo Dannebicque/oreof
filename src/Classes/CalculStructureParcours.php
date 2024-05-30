@@ -91,10 +91,10 @@ class CalculStructureParcours
                                 foreach ($ecsUeEnfant as $elementConstitutif) {
                                     if ($elementConstitutif !== null && $elementConstitutif->getEcParent() === null) {
                                         $dtoEc = new StructureEc($elementConstitutif, $parcours, false, $withEcts, $withBcc);
-                                        $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutif, $raccrocheUe);
+                                        $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutif, $raccrocheUeEnfant);
                                         foreach ($elementConstitutif->getEcEnfants() as $elementConstitutifEnfant) {
                                             $dtoEcEnfant = new StructureEc($elementConstitutifEnfant, $parcours, false, $withEcts, $withBcc);
-                                            $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutifEnfant, $raccrocheUe);
+                                            $dtoStructure->statsFichesMatieresParcours->addEc($elementConstitutifEnfant, $raccrocheUeEnfant);
                                             $dtoEc->addEcEnfant($elementConstitutifEnfant->getId(), $dtoEcEnfant);
                                         }
                                         $dtoUeEnfant->addEc($dtoEc);

@@ -32,7 +32,7 @@ class StatsFichesMatieresParcours
     public function addEc(ElementConstitutif $ec, bool $raccroche) :void
     {
         if ($raccroche === false) {
-            if ($ec->getFicheMatiere() !== null && $ec->getFicheMatiere()?->getParcours() === $this->parcours && !$ec->getNatureUeEc()?->isLibre()) {
+            if ($ec->getFicheMatiere() !== null && $ec->getFicheMatiere()?->getParcours()?->getId() === $this->parcours?->getId() && !$ec->getNatureUeEc()?->isLibre()) {
                 $this->addStasEc($ec->getFicheMatiere());
 
             }
