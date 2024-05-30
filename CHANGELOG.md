@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.28.0](https://github.com/Dannebicque/oreof/compare/v1.27.0...v1.28.0) (2024-05-30)
+
+
+### Features
+
+* Mise à jour codification ([487c5b2](https://github.com/Dannebicque/oreof/commit/487c5b2582b270239ea98c1612ba3535e5f4d699))
+
+
+### Bug Fixes
+
+* calcul liste des EC validés ([7b414e0](https://github.com/Dannebicque/oreof/commit/7b414e0578b36aebd962d47ff445bb04c3b6f125))
+* ordre libellé ([82a5e74](https://github.com/Dannebicque/oreof/commit/82a5e744fceb31f5b06be614ea1c51ccafdfc509))
+
 ## [1.27.0](https://github.com/Dannebicque/oreof/compare/v1.26.9...v1.27.0) (2024-05-30)
 
 
