@@ -208,18 +208,18 @@
                                    class="btn btn-sm text-warning"
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
-                                            modalTitle: 'Modifier la codification',
+                                            modalTitle: 'Modifier la codification haute',
                                             modalUrl: path('app_codification_edit', {parcours:parcours.id, annee:annee}) }) }}
                                    data-action="click->modal#openModal"
                                    data-size="lg"
                                    data-bs-toggle="tooltip"
                                    data-bs-placement="bottom"
-                                   title="Modifier Codes"
+                                   title="Modifier la codification haute"
                                 >
                                     <i class="{{ iconEdit }}"></i>
-                                    <span> Modifier Codes</span>
+                                    <span> Modifier la codif. haute</span>
                                 </a>
-
+{# todo: supprimer la modal, juste confirm + générer codif basse #}
                                 <a href="#"
                                    class="btn btn-sm text-warning"
                                         {{ stimulus_controller('modal', {
@@ -233,13 +233,13 @@
                                    title="Générer Codes"
                                 >
                                     <i class="fal fa-wrench"></i>
-                                    <span> Générer</span>
+                                    <span> Générer codif. basse</span>
                                 </a>
 {% endif %}
                                 <a href="{{ path('app_codification_index', {formation:formation.id}) }}"
                                    class="btn btn-sm text-info">
                                     <i class="{{ iconShow }}"></i>
-                                    Détails</a>
+                                    Détails codif. basse</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -268,17 +268,18 @@
                                class="btn btn-sm text-warning"
                                     {{ stimulus_controller('modal', {
                                         size: 'lg',
-                                        modalTitle: 'Modifier la codification',
+                                        modalTitle: 'Modifier la codification haute',
                                         modalUrl: path('app_codification_edit', {parcours:parcours.id, annee:annee}) }) }}
                                data-action="click->modal#openModal"
                                data-size="lg"
                                data-bs-toggle="tooltip"
                                data-bs-placement="bottom"
-                               title="Modifier Codes"
+                               title="Modifier la codification haute"
                             >
                                 <i class="{{ iconEdit }}"></i>
-                                <span> Modifier Codes</span>
+                                <span> Modifier la codif. haute</span>
                             </a>
+                                {# todo: supprimer la modal, juste confirm + générer codif basse #}
 
                             <a href="#"
                                class="btn btn-sm text-warning"
@@ -293,14 +294,14 @@
                                title="Générer Codes"
                             >
                                 <i class="fal fa-wrench"></i>
-                                <span> Générer</span>
+                                <span> Générer codif. basse</span>
                             </a>
                             {% endif %}
 
                             <a href="{{ path('app_codification_index', {formation:formation.id}) }}"
                                class="btn btn-sm text-info">
                                 <i class="{{ iconShow }}"></i>
-                                Détails</a>
+                                Détails codif. basse</a>
                         </td>
                     </tr>
                 {% endfor %}

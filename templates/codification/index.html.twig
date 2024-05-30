@@ -102,7 +102,7 @@
         <span> Retour à la codification</span>
     </a>
     {% if is_granted('ROLE_SES') %}
-
+        {# todo: supprimer la modal, juste confirm + générer codif basse #}
     <a href="#"
        class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
             {{ stimulus_controller('modal', {
@@ -116,7 +116,7 @@
        title="Générer Codes"
     >
         <i class="fal fa-wrench"></i>
-        <span> Générer</span>
+        <span> Générer codif. basse</span>
     </a>
     {% endif %}
 {% endblock %}

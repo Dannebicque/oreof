@@ -76,16 +76,16 @@
                                class="btn btn-sm text-warning"
                                     {{ stimulus_controller('modal', {
                                         size: 'lg',
-                                        modalTitle: 'Modifier la codification',
+                                        modalTitle: 'Modifier la codification haute',
                                         modalUrl: path('app_codification_edit', {parcours:parcours.id, annee:annee}) }) }}
                                data-action="click->modal#openModal"
                                data-size="lg"
                                data-bs-toggle="tooltip"
                                data-bs-placement="bottom"
-                               title="Modifier Codes"
+                               title="Modifier la codification haute"
                             >
                                 <i class="{{ iconEdit }}"></i>
-                                <span> Modifier Codes</span>
+                                <span> Modifier la codification haute</span>
                             </a>
                         {% endif %}
                     </td>

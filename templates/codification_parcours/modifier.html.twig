@@ -115,7 +115,7 @@
                     data-bs-toggle="tooltip"
                     data-bs-placement="bottom"
                     title="Retour à la codification des formations"
-                    href="{{ path('app_codification', {formation:formation.id}) }}"
+                    href="{{ path('app_codification_index', {formation:formation.id, parcours:parcours.id}) }}"
             >
                 <i class="{{ iconBack }}"></i>
                 <span> Retour à la codification</span>
