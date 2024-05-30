@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.27.0](https://github.com/Dannebicque/oreof/compare/v1.26.9...v1.27.0) (2024-05-30)
+
+
+### Features
+
+* Ajout du niveau de langue pré-requis ([0997b39](https://github.com/Dannebicque/oreof/commit/0997b39d4727e640e97db40cb0e3f7314c07595c))
+
 ### [1.26.9](https://github.com/Dannebicque/oreof/compare/v1.26.8...v1.26.9) (2024-05-29)
 
 
