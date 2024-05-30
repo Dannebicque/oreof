@@ -65,8 +65,9 @@ class CodificationParcoursController extends AbstractController
                         }
                     }
                 }
+                $em->flush(); // sauvegarde à chaque itération pour éviter de perdre des données
             }
-            $em->flush();
+
         }
 
         $dto = $typeD->calculStructureParcours($parcours, true, false);
