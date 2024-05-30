@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.28.2](https://github.com/Dannebicque/oreof/compare/v1.28.1...v1.28.2) (2024-05-30)
+
+
+### Bug Fixes
+
+* correction libellés boutons + routages ([04a1deb](https://github.com/Dannebicque/oreof/commit/04a1debdc68a603953d874ddb884d6af42990779))
+
 ### [1.28.1](https://github.com/Dannebicque/oreof/compare/v1.28.0...v1.28.1) (2024-05-30)
 
 
