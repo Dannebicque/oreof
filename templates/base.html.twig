@@ -663,8 +663,10 @@
 <!-- Content Container End -->
 
 <div {{ stimulus_controller('base') }}
-        data-action="modal:openModal@window->base#openModal base:refreshPage@window->base#refreshPage"
->
+        data-action="modal:openModal@window->base#openModal
+        base:refreshPage@window->base#refreshPage
+        modal_confirm:refreshPage2@window->base#refreshPage {# todo: ne fonctionne pas #}
+">
     {{ include('communs/_modal.html.twig') }}
 </div>
 

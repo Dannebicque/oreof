@@ -45,143 +45,143 @@
         <th>Version<br>Etape</th>
         <th>&nbsp;</th>
     </tr>
-{#    <tr>#}
-{#        <th>#}
-{#            <label for="filter-composante" class="sr-only">Composante</label>#}
-{#            <select#}
-{#                    {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                        'field': 'composantePorteuse'#}
-{#                    }) }}#}
-{#                    id="filter-composante"#}
-{#                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}#}
-{#                    class="form-select form-select-sm">#}
-{#                <option value="">Toutes</option>#}
-{#                {% for composante in composantes %}#}
-{#                    <option value="{{ composante.id }}"#}
-{#                            {% if params['composantePorteuse'] is defined and params['composantePorteuse']  == composante.id %}selected{% endif %}#}
-{#                    >{{ composante.sigle }}</option>#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#        </th>#}
-{#        <th>#}
-{#            <label for="filter-mention" class="sr-only">Mentions</label>#}
-{#            <select#}
-{#                    {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                        'field': 'mention'#}
-{#                    }) }}#}
-{#                    id="filter-mention"#}
-{#                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}#}
-{#                    class="form-select form-select-sm">#}
-{#                <option value="">Toutes</option>#}
-{#                {% for mention in mentions %}#}
-{#                    <option value="{{ mention.id }}"#}
-{#                            {% if params['mention'] is defined and params['mention']  == mention.id %}selected{% endif %}#}
-{#                    >{{ mention.libelle }}</option>#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#        </th>#}
-{#        <th>Parcours</th>#}
-{#        <th>#}
-{#            <label for="filter-domaine" class="sr-only">Domaine</label>#}
-{#            <select#}
-{#                    {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                        'field': 'domaine'#}
-{#                    }) }}#}
-{#                    id="filter-domaine"#}
-{#                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}#}
-{#                    class="form-select form-select-sm">#}
-{#                <option value="">Toutes les domaines</option>#}
-{#                {% for domaine in domaines %}#}
-{#                    <option value="{{ domaine.id }}"#}
-{#                            {% if params['domaine'] is defined and params['domaine']  == domaine.id %}selected{% endif %}#}
-{#                    >{{ domaine.sigle }}</option>#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#        </th>#}
-{#        <th>#}
-{#            <label for="filter-ville" class="sr-only">Ville</label>#}
-{#            <select#}
-{#                    {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                        'field': 'ville'#}
-{#                    }) }}#}
-{#                    id="filter-ville"#}
-{#                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}#}
-{#                    class="form-select form-select-sm">#}
-{#                <option value="">Tous</option>#}
-{#                {% for ville in villes %}#}
-{#                    <option value="{{ ville.id }}"#}
-{#                            {% if params['ville'] is defined and params['ville']  == ville.id %}selected{% endif %}#}
-{#                    >{{ ville.libelle }}</option>#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#        </th>#}
-{#        <th><label for="filter-versionEtape" class="sr-only">Version Etape</label>#}
-{#            <input type="text" name="filter-versionEtape"#}
-{#                   id="filter-versionEtape"#}
-{#                   class="form-control"#}
-{#                   value="{{ params['versionEtape'] ?? '' }}"#}
-{#                    {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                        'field': 'versionEtape'#}
-{#                    }) }}#}
-{#            ></th>#}
-{#        <th><label for="filter-versionEtape" class="sr-only">Version Etape</label>#}
-{#            <input type="text" name="filter-versionEtape"#}
-{#                   id="filter-versionEtape"#}
-{#                   class="form-control"#}
-{#                   value="{{ params['versionEtape'] ?? '' }}"#}
-{#                    {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                        'field': 'versionEtape'#}
-{#                    }) }}#}
-{#                   placeholder="Version Etape"#}
-{#            ></th>#}
-{#        <th>#}
-{#            <label for="filter-annee" class="sr-only">Année</label>#}
-{#            <select#}
-{#                    {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                        'field': 'annee'#}
-{#                    }) }}#}
-{#                    id="filter-annee"#}
-{#                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }}#}
-{#                    class="form-select form-select-sm">#}
-{#                <option value="">Toutes</option>#}
-{#                {% for annee in 1..5 %}#}
-{#                    <option value="{{ annee }}"#}
-{#                            {% if params['annee'] is defined and params['annee']  == annee %}selected{% endif %}#}
-{#                    >{{ annee }}</option>#}
-{#                {% endfor %}#}
-{#            </select>#}
-{#        </th>#}
-{#        <th><label for="filter-versionEtape" class="sr-only">Version Etape</label>#}
-{#            <input type="text" name="filter-versionEtape"#}
-{#                   id="filter-versionEtape"#}
-{#                   class="form-control"#}
-{#                   value="{{ params['versionEtape'] ?? '' }}"#}
-{#                    {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                        'field': 'versionEtape'#}
-{#                    }) }}#}
-{#                   placeholder="Version Etape"#}
-{#            ></th>#}
-{#        <th>#}
-{#            <label for="filter-versionEtape" class="sr-only">Version Etape</label>#}
-{#            <input type="text" name="filter-versionEtape"#}
-{#                   id="filter-versionEtape"#}
-{#                   class="form-control"#}
-{#                   value="{{ params['versionEtape'] ?? '' }}"#}
-{#                    {{ stimulus_action('crud', 'filter', 'change', {#}
-{#                        'field': 'versionEtape'#}
-{#                    }) }}#}
-{#                    placeholder="Version Etape"#}
-{#            >#}
-{#        </th>#}
-{#        <th>#}
-{#            <button class="btn btn-outline-danger"#}
-{#                    {{ stimulus_action('crud', 'effaceFiltre', 'click', {#}
-{#                    }) }}#}
-{#            >#}
-{#                Effacer les filtres#}
-{#            </button>#}
-{#        </th>#}
-{#    </tr>#}
+    {#    <tr> #}
+    {#        <th> #}
+    {#            <label for="filter-composante" class="sr-only">Composante</label> #}
+    {#            <select #}
+    {#                    {{ stimulus_action('crud', 'filter', 'change', { #}
+    {#                        'field': 'composantePorteuse' #}
+    {#                    }) }} #}
+    {#                    id="filter-composante" #}
+    {#                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }} #}
+    {#                    class="form-select form-select-sm"> #}
+    {#                <option value="">Toutes</option> #}
+    {#                {% for composante in composantes %} #}
+    {#                    <option value="{{ composante.id }}" #}
+    {#                            {% if params['composantePorteuse'] is defined and params['composantePorteuse']  == composante.id %}selected{% endif %} #}
+    {#                    >{{ composante.sigle }}</option> #}
+    {#                {% endfor %} #}
+    {#            </select> #}
+    {#        </th> #}
+    {#        <th> #}
+    {#            <label for="filter-mention" class="sr-only">Mentions</label> #}
+    {#            <select #}
+    {#                    {{ stimulus_action('crud', 'filter', 'change', { #}
+    {#                        'field': 'mention' #}
+    {#                    }) }} #}
+    {#                    id="filter-mention" #}
+    {#                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }} #}
+    {#                    class="form-select form-select-sm"> #}
+    {#                <option value="">Toutes</option> #}
+    {#                {% for mention in mentions %} #}
+    {#                    <option value="{{ mention.id }}" #}
+    {#                            {% if params['mention'] is defined and params['mention']  == mention.id %}selected{% endif %} #}
+    {#                    >{{ mention.libelle }}</option> #}
+    {#                {% endfor %} #}
+    {#            </select> #}
+    {#        </th> #}
+    {#        <th>Parcours</th> #}
+    {#        <th> #}
+    {#            <label for="filter-domaine" class="sr-only">Domaine</label> #}
+    {#            <select #}
+    {#                    {{ stimulus_action('crud', 'filter', 'change', { #}
+    {#                        'field': 'domaine' #}
+    {#                    }) }} #}
+    {#                    id="filter-domaine" #}
+    {#                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }} #}
+    {#                    class="form-select form-select-sm"> #}
+    {#                <option value="">Toutes les domaines</option> #}
+    {#                {% for domaine in domaines %} #}
+    {#                    <option value="{{ domaine.id }}" #}
+    {#                            {% if params['domaine'] is defined and params['domaine']  == domaine.id %}selected{% endif %} #}
+    {#                    >{{ domaine.sigle }}</option> #}
+    {#                {% endfor %} #}
+    {#            </select> #}
+    {#        </th> #}
+    {#        <th> #}
+    {#            <label for="filter-ville" class="sr-only">Ville</label> #}
+    {#            <select #}
+    {#                    {{ stimulus_action('crud', 'filter', 'change', { #}
+    {#                        'field': 'ville' #}
+    {#                    }) }} #}
+    {#                    id="filter-ville" #}
+    {#                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }} #}
+    {#                    class="form-select form-select-sm"> #}
+    {#                <option value="">Tous</option> #}
+    {#                {% for ville in villes %} #}
+    {#                    <option value="{{ ville.id }}" #}
+    {#                            {% if params['ville'] is defined and params['ville']  == ville.id %}selected{% endif %} #}
+    {#                    >{{ ville.libelle }}</option> #}
+    {#                {% endfor %} #}
+    {#            </select> #}
+    {#        </th> #}
+    {#        <th><label for="filter-versionEtape" class="sr-only">Version Etape</label> #}
+    {#            <input type="text" name="filter-versionEtape" #}
+    {#                   id="filter-versionEtape" #}
+    {#                   class="form-control" #}
+    {#                   value="{{ params['versionEtape'] ?? '' }}" #}
+    {#                    {{ stimulus_action('crud', 'filter', 'change', { #}
+    {#                        'field': 'versionEtape' #}
+    {#                    }) }} #}
+    {#            ></th> #}
+    {#        <th><label for="filter-versionEtape" class="sr-only">Version Etape</label> #}
+    {#            <input type="text" name="filter-versionEtape" #}
+    {#                   id="filter-versionEtape" #}
+    {#                   class="form-control" #}
+    {#                   value="{{ params['versionEtape'] ?? '' }}" #}
+    {#                    {{ stimulus_action('crud', 'filter', 'change', { #}
+    {#                        'field': 'versionEtape' #}
+    {#                    }) }} #}
+    {#                   placeholder="Version Etape" #}
+    {#            ></th> #}
+    {#        <th> #}
+    {#            <label for="filter-annee" class="sr-only">Année</label> #}
+    {#            <select #}
+    {#                    {{ stimulus_action('crud', 'filter', 'change', { #}
+    {#                        'field': 'annee' #}
+    {#                    }) }} #}
+    {#                    id="filter-annee" #}
+    {#                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete') }} #}
+    {#                    class="form-select form-select-sm"> #}
+    {#                <option value="">Toutes</option> #}
+    {#                {% for annee in 1..5 %} #}
+    {#                    <option value="{{ annee }}" #}
+    {#                            {% if params['annee'] is defined and params['annee']  == annee %}selected{% endif %} #}
+    {#                    >{{ annee }}</option> #}
+    {#                {% endfor %} #}
+    {#            </select> #}
+    {#        </th> #}
+    {#        <th><label for="filter-versionEtape" class="sr-only">Version Etape</label> #}
+    {#            <input type="text" name="filter-versionEtape" #}
+    {#                   id="filter-versionEtape" #}
+    {#                   class="form-control" #}
+    {#                   value="{{ params['versionEtape'] ?? '' }}" #}
+    {#                    {{ stimulus_action('crud', 'filter', 'change', { #}
+    {#                        'field': 'versionEtape' #}
+    {#                    }) }} #}
+    {#                   placeholder="Version Etape" #}
+    {#            ></th> #}
+    {#        <th> #}
+    {#            <label for="filter-versionEtape" class="sr-only">Version Etape</label> #}
+    {#            <input type="text" name="filter-versionEtape" #}
+    {#                   id="filter-versionEtape" #}
+    {#                   class="form-control" #}
+    {#                   value="{{ params['versionEtape'] ?? '' }}" #}
+    {#                    {{ stimulus_action('crud', 'filter', 'change', { #}
+    {#                        'field': 'versionEtape' #}
+    {#                    }) }} #}
+    {#                    placeholder="Version Etape" #}
+    {#            > #}
+    {#        </th> #}
+    {#        <th> #}
+    {#            <button class="btn btn-outline-danger" #}
+    {#                    {{ stimulus_action('crud', 'effaceFiltre', 'click', { #}
+    {#                    }) }} #}
+    {#            > #}
+    {#                Effacer les filtres #}
+    {#            </button> #}
+    {#        </th> #}
+    {#    </tr> #}
     </thead>
 
     <tbody>
@@ -204,38 +204,39 @@
                             <td>
                                 {% if is_granted('ROLE_SES') %}
 
-                                <a href="#"
-                                   class="btn btn-sm text-warning"
-                                        {{ stimulus_controller('modal', {
-                                            size: 'lg',
-                                            modalTitle: 'Modifier la codification haute',
-                                            modalUrl: path('app_codification_edit', {parcours:parcours.id, annee:annee}) }) }}
-                                   data-action="click->modal#openModal"
-                                   data-size="lg"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="bottom"
-                                   title="Modifier la codification haute"
-                                >
-                                    <i class="{{ iconEdit }}"></i>
-                                    <span> Modifier la codif. haute</span>
-                                </a>
-{# todo: supprimer la modal, juste confirm + générer codif basse #}
-                                <a href="#"
-                                   class="btn btn-sm text-warning"
-                                        {{ stimulus_controller('modal', {
-                                            size: 'lg',
-                                            modalTitle: 'Générer la codification',
-                                            modalUrl: path('app_codification_modal', {formation:formation.id}) }) }}
-                                   data-action="click->modal#openModal"
-                                   data-size="lg"
-                                   data-bs-toggle="tooltip"
-                                   data-bs-placement="bottom"
-                                   title="Générer Codes"
-                                >
-                                    <i class="fal fa-wrench"></i>
-                                    <span> Générer codif. basse</span>
-                                </a>
-{% endif %}
+                                    <a href="#"
+                                       class="text-warning"
+                                            {{ stimulus_controller('modal', {
+                                                size: 'lg',
+                                                modalTitle: 'Modifier la codification haute',
+                                                modalUrl: path('app_codification_edit', {parcours:parcours.id, annee:annee}) }) }}
+                                       data-action="click->modal#openModal"
+                                       data-size="lg"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="bottom"
+                                       title="Modifier la codification haute"
+                                    >
+                                        <i class="{{ iconEdit }}"></i>
+                                        <span> Modifier la codif. haute</span>
+                                    </a>
+                                    <span {{ stimulus_controller('modal_confirm', {
+                                        titre: 'Générer la codification basse',
+                                        body: 'Êtes-vous sûr de vouloir recalculer la codification basse de cette formation ?',
+                                        reload: true,
+                                    }) }}>
+        <a
+                class="text-warning"
+                 {{ stimulus_action('modal_confirm', 'confirm') }}
+                href="{{ path('app_codification', {formation:formation.id}) }}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Générer codif. basse"
+        >
+            <i class="fal fa-wrench"></i>
+            <span> Générer codif. basse</span>
+        </a>
+        </span>
+                                {% endif %}
                                 <a href="{{ path('app_codification_index', {formation:formation.id}) }}"
                                    class="btn btn-sm text-info">
                                     <i class="{{ iconShow }}"></i>
@@ -264,38 +265,39 @@
                         <td>{{ parcours.codeVersionEtape(annee) }}</td>
                         <td>
                             {% if is_granted('ROLE_SES') %}
-                            <a href="#"
-                               class="btn btn-sm text-warning"
-                                    {{ stimulus_controller('modal', {
-                                        size: 'lg',
-                                        modalTitle: 'Modifier la codification haute',
-                                        modalUrl: path('app_codification_edit', {parcours:parcours.id, annee:annee}) }) }}
-                               data-action="click->modal#openModal"
-                               data-size="lg"
-                               data-bs-toggle="tooltip"
-                               data-bs-placement="bottom"
-                               title="Modifier la codification haute"
-                            >
-                                <i class="{{ iconEdit }}"></i>
-                                <span> Modifier la codif. haute</span>
-                            </a>
-                                {# todo: supprimer la modal, juste confirm + générer codif basse #}
+                                <a href="#"
+                                   class="btn btn-sm text-warning"
+                                        {{ stimulus_controller('modal', {
+                                            size: 'lg',
+                                            modalTitle: 'Modifier la codification haute',
+                                            modalUrl: path('app_codification_edit', {parcours:parcours.id, annee:annee}) }) }}
+                                   data-action="click->modal#openModal"
+                                   data-size="lg"
+                                   data-bs-toggle="tooltip"
+                                   data-bs-placement="bottom"
+                                   title="Modifier la codification haute"
+                                >
+                                    <i class="{{ iconEdit }}"></i>
+                                    <span> Modifier la codif. haute</span>
+                                </a>
 
-                            <a href="#"
-                               class="btn btn-sm text-warning"
-                                    {{ stimulus_controller('modal', {
-                                        size: 'lg',
-                                        modalTitle: 'Générer la codification',
-                                        modalUrl: path('app_codification_modal', {formation:formation.id}) }) }}
-                               data-action="click->modal#openModal"
-                               data-size="lg"
-                               data-bs-toggle="tooltip"
-                               data-bs-placement="bottom"
-                               title="Générer Codes"
-                            >
-                                <i class="fal fa-wrench"></i>
-                                <span> Générer codif. basse</span>
-                            </a>
+                                <span {{ stimulus_controller('modal_confirm', {
+                                    titre: 'Générer la codification basse',
+                                    body: 'Êtes-vous sûr de vouloir recalculer la codification basse de cette formation ?',
+                                    reload: true,
+                                }) }}>
+        <a
+                class="text-warning"
+                 {{ stimulus_action('modal_confirm', 'confirm') }}
+                href="{{ path('app_codification', {formation:formation.id}) }}"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Générer codif. basse"
+        >
+            <i class="fal fa-wrench"></i>
+            <span> Générer codif. basse</span>
+        </a>
+        </span>
                             {% endif %}
 
                             <a href="{{ path('app_codification_index', {formation:formation.id}) }}"

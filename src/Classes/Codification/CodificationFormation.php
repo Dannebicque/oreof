@@ -237,7 +237,7 @@ class CodificationFormation
 
     private function setCodificationUe(StructureSemestre $semestre, bool $isLas = false): void
     {
-        $ues = $semestre->ues();
+        $ues = $semestre->ues;
         if ($isLas === true) {
             //code sans le S à la fin
             $codeApogeeSemestre = substr($semestre->semestre->getCodeApogee(), 0, -1);

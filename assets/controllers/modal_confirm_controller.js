@@ -15,6 +15,7 @@ export default class extends Controller {
   static values = {
     titre: String,
     body: String,
+    reload: { type: Boolean, default: false },
   }
 
   connect() {
@@ -34,6 +35,10 @@ export default class extends Controller {
       modal = null
       await fetch(url).then((e) => {
         if (e.status === 200) {
+          if (this.reloadValue === true) {
+            console.log('refreshPage')
+            this.dispatch('refreshPage2', {})
+          }
           callOut('Opération effectuée', 'success')
         } else {
           callOut('Erreur lors de l\'opération', 'danger')

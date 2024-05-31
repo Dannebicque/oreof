@@ -36,10 +36,8 @@ export default class extends Controller {
 
         // tester si l'objet json updateComponent n'est pas vide et contient les clés id et event
         if (Object.keys(this.updateComponent).length > 0 && this.updateComponent.id && this.updateComponent.event) {
-          console.log(this.updateComponent)
           const element = document.getElementById(this.updateComponent.id);
           element.addEventListener('live:connect', (event) => {
-            console.log(event)
             const { component } = event.detail;
             component.emit(this.updateComponent.event)
           });
@@ -105,7 +103,7 @@ export default class extends Controller {
   }
 
   refreshPage() {
-    console.log('refresh')
+    console.log('base refreshPage')
     window.location.reload()
   }
 }

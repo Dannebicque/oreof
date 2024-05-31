@@ -102,21 +102,23 @@
         <span> Retour à la codification</span>
     </a>
     {% if is_granted('ROLE_SES') %}
-        {# todo: supprimer la modal, juste confirm + générer codif basse #}
-    <a href="#"
-       class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
-            {{ stimulus_controller('modal', {
-                size: 'lg',
-                modalTitle: 'Générer la codification',
-                modalUrl: path('app_codification_modal', {formation:formation.id}) }) }}
-       data-action="click->modal#openModal"
-       data-size="lg"
-       data-bs-toggle="tooltip"
-       data-bs-placement="bottom"
-       title="Générer Codes"
-    >
-        <i class="fal fa-wrench"></i>
-        <span> Générer codif. basse</span>
-    </a>
+        <span {{ stimulus_controller('modal_confirm', {
+            titre: 'Générer la codification basse',
+            body: 'Êtes-vous sûr de vouloir recalculer la codification basse de cette formation ?',
+            reload: true,
+        }) }}>
+        <a
+           class="btn btn-sm btn-outline-warning btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                 {{ stimulus_action('modal_confirm', 'confirm') }}
+                href="{{ path('app_codification', {formation:formation.id}) }}"
+           data-bs-toggle="tooltip"
+           data-bs-placement="bottom"
+           title="Générer codif. basse"
+        >
+            <i class="fal fa-wrench"></i>
+            <span> Générer codif. basse</span>
+        </a>
+        </span>
+
     {% endif %}
 {% endblock %}

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Classes\Codification\CodificationFormation;
 use App\Classes\Export\ExportCodification;
 use App\Classes\GetFormations;
+use App\Classes\JsonReponse;
 use App\Entity\Formation;
 use App\Entity\Parcours;
 use App\Entity\TypeDiplome;
@@ -310,29 +311,11 @@ class CodificationController extends BaseController
     }
 
     #[Route('/codification/genere/{formation}', name: 'app_codification')]
-    public function genere(
-        Request              $request,
+    public function genereCodifBasse(
         CodificationFormation $codificationFormation,
         Formation             $formation
     ): Response {
-        $typeCodification = $request->request->get('typeCodification');
-
-        if ($typeCodification === null) {
-            throw new \Exception('Type de codification non trouvé');
-        }
-
-        switch ($typeCodification) {
-            case 'codifHaute':
-                $codificationFormation->setCodificationHaute($formation);
-                break;
-            case 'codifBasse':
-                $codificationFormation->setCodificationBasse($formation);
-                break;
-            case 'codifHauteBasse':
-                $codificationFormation->setCodificationFormation($formation);
-                break;
-        }
-
-        return $this->redirectToRoute('app_codification_index', ['formation' => $formation->getId(), 'step' => $formation->getParcours()->first()->getId()]);
+        $codificationFormation->setCodificationBasse($formation);
+        return JsonReponse::success('Codification mise à jour');
     }
 }
