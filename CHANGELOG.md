@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.28.3](https://github.com/Dannebicque/oreof/compare/v1.28.2...v1.28.3) (2024-05-31)
+
+
+### Bug Fixes
+
+* simplification modal codification avec uniquement codif basse et confirm ([e673d71](https://github.com/Dannebicque/oreof/commit/e673d71438dcc5f9ffc0b3c6c88013a471f49b80))
+* type de parcours sur page de validation fiche ([52bf3be](https://github.com/Dannebicque/oreof/commit/52bf3be749eaefcd68cdfa1b1addf47eb10ae5bd))
+
 ### [1.28.2](https://github.com/Dannebicque/oreof/compare/v1.28.1...v1.28.2) (2024-05-30)
 
 
