@@ -199,13 +199,13 @@ class ParcoursExportController extends AbstractController
         $tEcs = [];
         foreach ($ue->elementConstitutifs as $ec) {
             if ($ec->elementConstitutif->getNatureUeEc()?->isLibre()) {
-                $tEcs['description_libre_choix'] =  $ec->elementConstitutif->gettexteEcLibre();
+                $tEcs['description_libre_choix'] =  $ec->elementConstitutif->getTexteEcLibre();
             } elseif ($ec->elementConstitutif->getNatureUeEc()?->isChoix()) {
                 $tEc['ordre'] = $ec->elementConstitutif->getOrdre();
                 $tEc['numero'] = $ec->elementConstitutif->getCode();
                 $tEc['libelle'] = $ec->elementConstitutif?->getFicheMatiere()?->getLibelle() ?? '-';
                 $tEc['ecsEnfants'] =  [];
-                $tEc['description_libre_choix'] =  $ec->elementConstitutif->gettexteEcLibre();
+                $tEc['description_libre_choix'] =  $ec->elementConstitutif->getTexteEcLibre();
                 $nb = 0;
                 foreach ($ec->elementsConstitutifsEnfants as $ecEnfant) {
                     $tEc['ecsEnfants'][] = $this->getEc($ecEnfant);
@@ -232,13 +232,22 @@ class ParcoursExportController extends AbstractController
             $valide = false;
         }
 
+        if ($ec->elementConstitutif->getNatureUeEc()?->isLibre()) {
+            $libelle = $ec->elementConstitutif->getTexteEcLibre();
+            $ecLibre = true;
+        } else {
+            $libelle = $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-';
+            $ecLibre = false;
+        }
+
         return [
             'ordre' => $ec->elementConstitutif->getOrdre(),
             'valide' => $valide,
+            'ec_libre' => $ecLibre,
             'nature_ec' => $ec->elementConstitutif->getTypeEc()?->getLibelle(),
             'valide_date' => new DateTime(),
             'numero'=> $ec->elementConstitutif->getCode(),
-            'libelle'=> $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-',
+            'libelle'=> $libelle,
             'libelle_anglais' => $ec->elementConstitutif->getFicheMatiere()?->getLibelleAnglais() ?? '-',
             'sigle'=> $ec->elementConstitutif->getFicheMatiere()?->getSigle() ?? '-', "",
             'enseignant_referent' => [
