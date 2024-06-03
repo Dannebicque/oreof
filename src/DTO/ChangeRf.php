@@ -10,10 +10,12 @@
 namespace App\DTO;
 
 use App\Entity\User;
+use App\Enums\TypeRfEnum;
 
 class ChangeRf {
     private ?User $user = null;
     private ?string $commentaire = '';
+    private ?TypeRfEnum $typeRf = TypeRfEnum::RF;
 
     public function getUser(): ?User
     {
@@ -35,5 +37,13 @@ class ChangeRf {
         $this->commentaire = $commentaire;
     }
 
+    public function getTypeRf(): ?TypeRfEnum
+    {
+        return $this->typeRf;
+    }
 
+    public function setTypeRf(?TypeRfEnum $typeRf = null): void
+    {
+        $this->typeRf = $typeRf;
+    }
 }

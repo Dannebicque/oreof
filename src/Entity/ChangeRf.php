@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Enums\EtatDemandeChangeRfEnum;
+use App\Enums\TypeRfEnum;
 use App\Repository\ChangeRfRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,6 +18,9 @@ class ChangeRf
 
     #[ORM\ManyToOne(inversedBy: 'changeRves')]
     private ?Formation $formation = null;
+
+    #[ORM\Column(length: 20, enumType: TypeRfEnum::class)]
+    private ?TypeRfEnum $typeRf = null;
 
     #[ORM\Column(length: 20, enumType: EtatDemandeChangeRfEnum::class)]
     private ?EtatDemandeChangeRfEnum $etatDemande = null;
@@ -39,6 +43,7 @@ class ChangeRf
     public function __construct()
     {
         $this->etatDemande = EtatDemandeChangeRfEnum::EN_ATTENTE;
+        $this->typeRf = TypeRfEnum::RF;
     }
 
     public function getId(): ?int
@@ -66,6 +71,18 @@ class ChangeRf
     public function setEtatDemande(EtatDemandeChangeRfEnum $etatDemande): static
     {
         $this->etatDemande = $etatDemande;
+
+        return $this;
+    }
+
+    public function getTypeRf(): ?TypeRfEnum
+    {
+        return $this->typeRf;
+    }
+
+    public function setTypeRf(TypeRfEnum $typeRf): static
+    {
+        $this->typeRf = $typeRf;
 
         return $this;
     }

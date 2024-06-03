@@ -481,3 +481,9 @@ parcours_step5.labels.niveauFrancais: 'Niveau de français requis'
 'Utilisateur indépendant avancé (B2)': 'Utilisateur indépendant avancé (B2)'
 'Utilisateur expérimenté autonome (C1)': 'Utilisateur expérimenté autonome (C1)'
 'Utilisateur expérimenté maîtrise (C2)': 'Utilisateur expérimenté maîtrise (C2)'
+change_rf_formation:
+  labels:
+    typeRf:
+      label: 'la demande concerne le responsable ou Co-Responsale de la formation'
+formation.change_rf.title: 'Changer le responsable ou le co-responsable de la formation'
+formation.change_rf.label: 'Changer resp. co-resp. formation'

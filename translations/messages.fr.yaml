@@ -72,3 +72,19 @@ Ouverture: Ouverture
 form.labels.email: form.labels.email
 user_add.labels.email: "Indiquer l'email URCA du collègue à ajouter"
 form.labels.objectifsFormation: 'Description générale de la formation'
+'Dénomination du contact': 'Dénomination du contact'
+Téléphone: Téléphone
+Email: Email
+'Code diplôme': 'Code diplôme'
+'Version diplôme': 'Version diplôme'
+'Code étape': 'Code étape'
+'Version étape': 'Version étape'
+'Lettre Mention': 'Lettre Mention'
+'Directeur de composante': 'Directeur de composante'
+'Choisir dans la liste ou choisir "+" pour ajouter un utilisateur': 'Choisir dans la liste ou choisir "+" pour ajouter un utilisateur'
+Commentaire: Commentaire
+'Nouveau responsable de formation': 'Nouveau responsable de formation'
+'Commentaire sur le changement de responsable de formation': 'Commentaire sur le changement de responsable de formation'
+fiche_matiere:
+  step1_change_rf:
+    title: 'Changement de responsable ou de co-responsable de formation'

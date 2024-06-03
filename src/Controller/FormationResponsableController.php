@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Classes\JsonReponse;
 use App\DTO\ChangeRf;
 use App\Entity\Formation;
+use App\Enums\TypeRfEnum;
 use App\Form\ChangeRfFormationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,9 +44,14 @@ class FormationResponsableController extends BaseController
             $newRf = new \App\Entity\ChangeRf();
             $newRf->setFormation($formation);
             $newRf->setNouveauResponsable($user);
+            $newRf->setTypeRf($datas->getTypeRf());
             $newRf->setCommentaire($commentaire);
             $newRf->setDateDemande(new \DateTime());
-            $newRf->setAncienResponsable($formation->getResponsableMention());
+            if ($newRf->getTypeRf() === TypeRfEnum::RF) {
+                $newRf->setAncienResponsable($formation->getResponsableMention());
+            } else {
+                $newRf->setAncienResponsable($formation->getCoResponsable());
+            }
 
             $this->entityManager->persist($newRf);
             $this->entityManager->flush();

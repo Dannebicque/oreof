@@ -459,7 +459,7 @@
                                         href="#"
                                         {{ stimulus_controller('modal', {
                                             size: 'lg',
-                                            modalTitle: 'fiche_matiere.step1_change_rf.title'|trans({}, 'form'),
+                                            modalTitle: 'formation.change_rf.title'|trans({}, 'form'),
                                             nomEvenement: 'refreshStep',
                                             modalUrl: path('app_formation_change_rf', {formation: formation.id}) }) }}
                                         data-action="click->modal#openModal"
@@ -467,10 +467,10 @@
                                         class="btn btn-sm btn-outline-warning"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom"
-                                        title="{{ 'fiche_matiere.step1_change_rf.title'|trans({}, 'form') }}"
+                                        title="{{ 'formation.change_rf.title'|trans({}, 'form') }}"
                                 >
                                     <i class="fal fa-repeat"></i>
-                                    <span> {{ 'fiche_matiere.step1_change_rf.label'|trans({}, 'form') }}</span>
+                                    <span> {{ 'formation.change_rf.label'|trans({}, 'form') }}</span>
                                 </button>
                             </div>
                             <div class="col-3 d-grid">
