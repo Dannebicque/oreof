@@ -219,7 +219,9 @@ class ValidationController extends BaseController
 
         if ($request->query->has('composante')) {
             if ($request->query->get('composante') === 'all') {
-                $fiches = $ficheMatiereRepository->findByTypeValidation($this->getDpe(), $typeValidation);
+                $fiches[] = $ficheMatiereRepository->findByTypeValidation($this->getDpe(), $typeValidation);
+                $fiches[] = $ficheMatiereRepository->findByTypeValidationHorsDiplome($this->getDpe(), $typeValidation);
+                $fiches = array_merge(...$fiches);
             } else {
                 $composante = $composanteRepository->find($request->query->get('composante'));
                 if (!$composante) {

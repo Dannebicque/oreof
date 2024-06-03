@@ -325,4 +325,16 @@ class FicheMatiereRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByTypeValidationHorsDiplome(CampagneCollecte $campagneCollecte, mixed $transition): array
+    {
+        $qb = $this->createQueryBuilder('f')
+            ->where('f.horsDiplome = 1')
+            //->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->andWhere("JSON_CONTAINS(f.etatFiche, :transition) = 1")
+            ->setParameter('transition', json_encode([$transition => 1]));
+           // ->setParameter('campagneCollecte', $campagneCollecte);
+
+        return $qb->getQuery()->getResult();
+    }
 }

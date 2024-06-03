@@ -21,7 +21,7 @@ class FicheMatiereValide extends AbstractValide
 
     public function __construct(
         protected FicheMatiere $ficheMatiere,
-        protected TypeDiplome $typeDiplome
+        protected ?TypeDiplome $typeDiplome = null
     ) {
     }
 

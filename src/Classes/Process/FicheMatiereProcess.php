@@ -37,14 +37,17 @@ class FicheMatiereProcess extends AbstractProcess
         parent::__construct($entityManager, $eventDispatcher, $translator);
     }
 
-    public function etatFicheMatiere(FicheMatiere $ficheMatiere, $process): ProcessData
+    public function etatFicheMatiere(FicheMatiere $ficheMatiere, array $process): ProcessData
     {
         $formation = $ficheMatiere->getParcours()?->getFormation();
         $processData = new ProcessData();
         $processData->definition = $this->ficheMatiereWorkflow->getDefinition();
-
         if (array_key_exists('check', $process) && $formation !== null) {
             $ficheMatiereValide = new FicheMatiereValide($ficheMatiere, $formation->getTypeDiplome());
+            $processData->validation['ficheMatiere'] = $ficheMatiereValide->valideFicheMatiere();
+            $processData->valid = $ficheMatiereValide->isFicheMatiereValide();
+        } else if (array_key_exists('check', $process) && $formation === null) {
+            $ficheMatiereValide = new FicheMatiereValide($ficheMatiere);
             $processData->validation['ficheMatiere'] = $ficheMatiereValide->valideFicheMatiere();
             $processData->valid = $ficheMatiereValide->isFicheMatiereValide();
         }

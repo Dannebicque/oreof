@@ -38,7 +38,7 @@ validation.cfvu.valide.helps.commentaire.cas.sous.reserve.modifications.argument
 validation.cfvu.valide.cas.acceptation.non.directe.soumis_cfvu: 'Validation du projet DPE "formation" SOUS RESERVE :'
 valide.validation.cfvu.helps.acceptation.non.directe.help: ' '
 formation.valide.cfvu.flash.success: 'Validation de la formation par la CFVU'
-historique.validation.cfvu: 'Validation de la CFVU du %date%'
+historique.validation.cfvu: 'Validation de la CFVU'
 historique.validation.vp: 'Visa des VP'
 validation.publication.valide.alerte: 'La validation  entraîne la publication de la formation à la date indiquée.'
 btn.validation.publication.valide: 'A publier'
@@ -284,7 +284,7 @@ validation.fiche_matiere: 'Fiche EC/Matière en cours de rédaction, attente de 
 validation.valider.fiche_matiere.title: 'Valider et soumettre la fiche EC/matière'
 validation.valider.fiche_matiere: 'Soumettre la fiche EC/matière'
 validation.fiche_matiere.valide.alerte: "La validation de la fiche EC/matière permet sa transmission au central en vue de la publication. Après transmission, la fiche \"EC/matière\" ne sera plus modifiable. \n La fiche EC/matière n'est publiable que si elle est complète."
-btn.validation.fiche_matiere.valide.en_cours_redaction: btn.validation.fiche_matiere.valide.en_cours_redaction
+btn.validation.fiche_matiere.valide.en_cours_redaction: "Valider et soumettre la fiche EC/matière"
 validation.fiche_matiere.valide.impossible.en_cours_redaction: 'La validation de la fiche EC/matière est impossible. Les informations de cette fiche sont incomplètes/erronées.'
 ficheMatiere.valide.fiche_matiere.flash.success: 'Fiche EC/matière validée et transmise au central'
 validation.fiche_matiere.ses: 'Validation par le central'
