@@ -31,17 +31,8 @@ export default class extends Controller {
 
   connect() {
     document.getElementById('parcours_step5_prerequis').addEventListener('trix-blur', this.savePrerequis.bind(this))
-    document.getElementById('parcours_step5_coordSecretariat').addEventListener('trix-blur', this.coordSecretariat.bind(this))
     document.getElementById('parcours_step5_modalitesAlternance').addEventListener('trix-blur', this.saveModalitesAlternance.bind(this))
     this._checkIfAlternance()
-  }
-
-  coordSecretariat() {
-    this._save({
-      field: 'coordSecretariat',
-      action: 'textarea',
-      value: trixEditor('parcours_step5_coordSecretariat'),
-    })
   }
 
   etatStep(event) {
@@ -88,6 +79,7 @@ export default class extends Controller {
       document.getElementById('parcours_step5_modalitesAlternance').disabled = false
     } else {
       document.getElementById('parcours_step5_modalitesAlternance').disabled = true
+      document.getElementById('parcours_step5_modalitesAlternance').addEventListener('trix-blur', this.saveModalitesAlternance.bind(this))
     }
   }
 
