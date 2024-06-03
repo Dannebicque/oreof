@@ -34,7 +34,7 @@ export default class extends Controller {
       message = '<div class="alert alert-danger">La somme des pourcentages ne peut pas dépasser 100</div>'
     }
 
-    if (total < 100.0) {
+    if (total < 99.0) {
       message = '<div class="alert alert-danger">La somme des pourcentages doit être égale à 100</div>'
     }
 
