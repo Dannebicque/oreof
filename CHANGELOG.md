@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.28.7](https://github.com/Dannebicque/oreof/compare/v1.28.6...v1.28.7) (2024-06-03)
+
+
+### Bug Fixes
+
+* Affichage des fiches hors diplôme ([5a579a2](https://github.com/Dannebicque/oreof/commit/5a579a2419c3d15f97f02ce17bcdf5505a16cb15))
+* demande avec Co/Rf ([62092ea](https://github.com/Dannebicque/oreof/commit/62092ea0cf4a6a345058dfb76669b3b21fe35ff1))
+
 ### [1.28.6](https://github.com/Dannebicque/oreof/compare/v1.28.5...v1.28.6) (2024-06-03)
 
 
