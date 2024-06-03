@@ -51,6 +51,7 @@ class ExportEc implements ExportInterface
         $this->excelWriter->writeCellXY(7, 1, 'EC');
         $this->excelWriter->writeCellXY(8, 1, 'Fiche EC/matière');
         $this->excelWriter->writeCellXY(9, 1, 'Type EC');
+        $this->excelWriter->writeCellXY(10, 1, 'Référent');
 
         $ligne = 2;
         /** @var ElementConstitutif $ec */
@@ -69,6 +70,7 @@ class ExportEc implements ExportInterface
             $this->excelWriter->writeCellXY(7, $ligne, $ec->getLibelle());
             $this->excelWriter->writeCellXY(8, $ligne, $ec->getFicheMatiere()?->getLibelle());
             $this->excelWriter->writeCellXY(9, $ligne, $ec->getTypeEc()?->getType()->value);
+            $this->excelWriter->writeCellXY(10, $ligne, $ec->getFicheMatiere()?->getResponsableFicheMatiere() !== null ? $ec->getFicheMatiere()?->getResponsableFicheMatiere()?->getDisplay() : 'Non défini - RP ou RF');
 
             $this->excelWriter->getColumnsAutoSize('A', 'M');
             $ligne++;
