@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.28.5](https://github.com/Dannebicque/oreof/compare/v1.28.4...v1.28.5) (2024-06-03)
+
+
+### Bug Fixes
+
+* Coefficients MCCC avec arrondi. ([3d5d204](https://github.com/Dannebicque/oreof/commit/3d5d20435fdbb3dac930c7ce09725f43c6ad9757))
+
 ### [1.28.4](https://github.com/Dannebicque/oreof/compare/v1.28.3...v1.28.4) (2024-05-31)
 
 
