@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.28.6](https://github.com/Dannebicque/oreof/compare/v1.28.5...v1.28.6) (2024-06-03)
+
+
+### Features
+
+* Ajout de la demande d'un co-RF ([178f0e9](https://github.com/Dannebicque/oreof/commit/178f0e9935242b3d613044fcba63d7bb8e4d23e3))
+
+
+### Bug Fixes
+
+* référent dans export des EC ([6c2d678](https://github.com/Dannebicque/oreof/commit/6c2d678bfca79c47cf7f4e7abadf13234dbd1d43))
+* Suppression données secretariat saisie libre step 5 parcours ([02be5c4](https://github.com/Dannebicque/oreof/commit/02be5c4446d134862f53f02ee46235d39f5161ee))
+
 ### [1.28.5](https://github.com/Dannebicque/oreof/compare/v1.28.4...v1.28.5) (2024-06-03)
 
 
