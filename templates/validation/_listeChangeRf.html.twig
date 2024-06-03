@@ -13,10 +13,13 @@
             Formation
         </th>
         <th>
-            Actuel RF
+            Co/RF
         </th>
         <th>
-            Nouveau RF
+            Actuel Co/RF
+        </th>
+        <th>
+            Nouveau Co/RF
         </th>
         <th>
             Date demande
@@ -47,6 +50,9 @@
         </td>
         <td>
             {{ demande.formation.displayLong }}
+        </td>
+        <td>
+            {{ demande.typeRf.value }}
         </td>
         <td>
             {{ demande.ancienResponsable.display }}
