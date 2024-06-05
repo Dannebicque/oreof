@@ -31,6 +31,7 @@ class Export
         protected ExportRegime       $exportRegime,
         protected ExportCfvu         $exportCfvu,
         protected ExportCarif        $exportCarif,
+        protected ExportCap        $exportCap,
         protected ExportSynthese     $exportSynthese,
         protected ExportSeip           $exportSeip,
         protected ExportEc           $exportEc,
@@ -76,6 +77,8 @@ class Export
                 return $this->exportRegime();
             case 'cfvu':
                 return $this->exportCfvu();
+            case 'cap':
+                return $this->exportCap();
             case 'fiches_matieres':
                 return $this->exportFicheMatiere();
             case 'seip':
@@ -113,17 +116,17 @@ class Export
         return $this->exportMccc->exportZip();
     }
 
-    private function exportCarif()
+    private function exportCarif() : string
     {
         return $this->exportCarif->exportLink($this->annee);
     }
 
-    private function exportSeip()
+    private function exportSeip() : string
     {
         return $this->exportSeip->exportLink($this->annee);
     }
 
-    private function exportEc()
+    private function exportEc() : string
     {
         return $this->exportEc->exportLink($this->annee);
     }
@@ -133,18 +136,23 @@ class Export
         return $this->exportSynthese->exportLink($this->annee);
     }
 
-    private function exportRegime()
+    private function exportRegime() : string
     {
         return $this->exportRegime->exportLink($this->annee);
     }
 
-    private function exportCfvu()
+    private function exportCfvu() : string
     {
         return $this->exportCfvu->exportLink($this->annee);
     }
 
-    private function exportFicheMatiere()
+    private function exportFicheMatiere() : string
     {
         return $this->exportFicheMatiere->exportLink($this->formations);
+    }
+
+    private function exportCap() : string
+    {
+        return $this->exportCap->exportLink($this->formations);
     }
 }

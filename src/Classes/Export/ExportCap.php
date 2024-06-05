@@ -1,0 +1,157 @@
+<?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Classes/Export/ExportSynthese.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 11/11/2023 13:07
+ */
+
+namespace App\Classes\Export;
+
+use App\Classes\CalculStructureParcours;
+use App\Classes\Excel\ExcelWriter;
+use App\Classes\GetHistorique;
+use App\DTO\StructureEc;
+use App\DTO\StructureUe;
+use App\Entity\CampagneCollecte;
+use App\Entity\SemestreParcours;
+use App\Repository\FormationRepository;
+use App\Utils\CleanTexte;
+use App\Utils\Tools;
+use DateTime;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpKernel\KernelInterface;
+
+class ExportCap
+{
+    private string $fileName;
+    private string $dir;
+    private int $ligne = 2;
+    private array $data;
+
+    public function __construct(
+        protected CalculStructureParcours $calculStructureParcours,
+        protected ExcelWriter             $excelWriter,
+        KernelInterface                   $kernel,
+        protected FormationRepository     $formationRepository,
+    ) {
+        $this->dir = $kernel->getProjectDir() . '/public/temp/';
+    }
+
+    private function prepareExport(
+        array $formations,
+    ): void {
+
+        $this->excelWriter->nouveauFichier('Export CAP');
+        $this->excelWriter->setActiveSheetIndex(0);
+
+        $this->excelWriter->writeCellXY(1, 1, 'Composante');
+        $this->excelWriter->writeCellXY(2, 1, 'Type Diplôme');
+        $this->excelWriter->writeCellXY(3, 1, 'Mention');
+        $this->excelWriter->writeCellXY(4, 1, 'Parcours');
+        $this->excelWriter->writeCellXY(5, 1, 'Code Dip.');
+        $this->excelWriter->writeCellXY(6, 1, 'VDI');
+        $this->excelWriter->writeCellXY(7, 1, 'Code étape');
+        $this->excelWriter->writeCellXY(8, 1, 'VET');
+        $this->excelWriter->writeCellXY(9, 1, 'Fiche EC/matière');
+        $this->excelWriter->writeCellXY(10, 1, 'Code élément');
+        $this->excelWriter->writeCellXY(11, 1, 'CM');
+        $this->excelWriter->writeCellXY(12, 1, 'TD');
+        $this->excelWriter->writeCellXY(13, 1, 'TP');
+
+        $this->ligne = 2;
+        foreach ($formations as $idFormation) {
+            $formation = $this->formationRepository->find($idFormation);
+
+            if ($formation !== null) {
+                foreach ($formation->getParcours() as $parcours) {
+                    $this->data[1] = $formation->getComposantePorteuse()?->getLibelle();
+                    $this->data[2] = $formation->getTypeDiplome()?->getLibelle();
+                    $this->data[3] = $formation->getDisplay();
+                    if ($formation->isHasParcours()) {
+                        $this->data[4] = $parcours->getLibelle();
+                    } else {
+                        $this->data[4] = 'Pas de parcours';
+                    }
+
+                    //récuération de la structure et des EC
+                    $dto = $this->calculStructureParcours->calcul($parcours);
+                    foreach ($dto->semestres as $ordre => $sem) {
+                        foreach ($sem->ues as $ue) {
+                            if ($ue->ue->getNatureUeEc()?->isChoix()) {
+                                foreach ($ue->uesEnfants() as $ueEnfant) {
+
+                                    if ($ueEnfant->ue->getNatureUeEc()?->isLibre() === false) {
+                                        $this->getEcFromUe($ueEnfant, $sem->semestreParcours);
+                                    }
+                                }
+                            } elseif ($ue->ue->getNatureUeEc()?->isLibre() === false) {
+                                $this->getEcFromUe($ue, $sem->semestreParcours);
+                            }
+                        }
+
+                        $this->excelWriter->getColumnsAutoSize('A', 'I');
+                    }
+                }
+            }
+        }
+
+        $this->fileName = Tools::FileName('EXPORT-CAP - ' . (new DateTime())->format('d-m-Y-H-i'), 30);
+    }
+
+    private function getEcFromUe(StructureUe $ue, ?SemestreParcours $codeApogeeParcours): void
+    {
+
+        foreach ($ue->elementConstitutifs as $ec) {
+            if ($ec->elementConstitutif->getNatureUeEc()?->isChoix()) {
+
+                foreach ($ec->elementsConstitutifsEnfants as $ecEnfant) {
+                    $this->getEc($ecEnfant, $codeApogeeParcours);
+                }
+            } else {
+                $this->getEc($ec, $codeApogeeParcours);
+            }
+        }
+    }
+
+    private function getEc(StructureEc $ec, ?SemestreParcours $semestreParcours): void
+    {
+
+        if ($ec->elementConstitutif->getNatureUeEc()?->isLibre() === false) {
+            $this->writeDebutLigne($this->ligne, $this->data);
+            $this->excelWriter->writeCellXY(5, $this->ligne, $semestreParcours?->getCodeApogeeDiplome());
+            $this->excelWriter->writeCellXY(6, $this->ligne, $semestreParcours?->getCodeApogeeVersionDiplome());
+            $this->excelWriter->writeCellXY(7, $this->ligne, $semestreParcours?->getCodeApogeeEtapeAnnee());
+            $this->excelWriter->writeCellXY(8, $this->ligne, $semestreParcours?->getCodeApogeeEtapeVersion());
+            $this->excelWriter->writeCellXY(9, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getLibelle() ?? '-');
+            $this->excelWriter->writeCellXY(10, $this->ligne, $ec->elementConstitutif->getCodeApogee() ?? '-');
+            $this->excelWriter->writeCellXY(11, $this->ligne, $ec->heuresEctsEc->cmPres);
+            $this->excelWriter->writeCellXY(12, $this->ligne, $ec->heuresEctsEc->tdPres);
+            $this->excelWriter->writeCellXY(13, $this->ligne, $ec->heuresEctsEc->tpPres);
+           // $this->excelWriter->writeCellXY(9, $this->ligne, 'Mutualisé');
+            $this->ligne++;
+        }
+    }
+
+
+    public function export(CampagneCollecte $anneeUniversitaire): StreamedResponse
+    {
+        $this->prepareExport($anneeUniversitaire);
+        return $this->excelWriter->genereFichier($this->fileName);
+    }
+
+    public function exportLink(array $formations): string
+    {
+        $this->prepareExport($formations);
+        $this->excelWriter->saveFichier($this->fileName, $this->dir . 'zip/');
+        return $this->fileName . '.xlsx';
+    }
+
+    private function writeDebutLigne(int $ligne, $data): void
+    {
+        foreach ($data as $key => $value) {
+            $this->excelWriter->writeCellXY($key, $ligne, $value);
+        }
+    }
+}
