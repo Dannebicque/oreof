@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.28.8](https://github.com/Dannebicque/oreof/compare/v1.28.7...v1.28.8) (2024-06-05)
+
+
+### Features
+
+* Ajout d'un export CAP ([17963b6](https://github.com/Dannebicque/oreof/commit/17963b644322280bc5ed829b25c27998e31dce60))
+
 ### [1.28.7](https://github.com/Dannebicque/oreof/compare/v1.28.6...v1.28.7) (2024-06-03)
 
 
