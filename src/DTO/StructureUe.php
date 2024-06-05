@@ -81,6 +81,8 @@ class StructureUe
             }
         }
 
+        ksort($this->uesEnfants, SORT_NUMERIC);
+
         //gérer pour prendre le max des heures et ects sur tous les enfants de l'EC
     }
 
