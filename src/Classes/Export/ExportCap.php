@@ -59,6 +59,7 @@ class ExportCap
         $this->excelWriter->writeCellXY(11, 1, 'CM');
         $this->excelWriter->writeCellXY(12, 1, 'TD');
         $this->excelWriter->writeCellXY(13, 1, 'TP');
+        $this->excelWriter->writeCellXY(14, 1, 'MATI/MATM');
 
         $this->ligne = 2;
         foreach ($formations as $idFormation) {
@@ -129,7 +130,7 @@ class ExportCap
             $this->excelWriter->writeCellXY(11, $this->ligne, $ec->heuresEctsEc->cmPres);
             $this->excelWriter->writeCellXY(12, $this->ligne, $ec->heuresEctsEc->tdPres);
             $this->excelWriter->writeCellXY(13, $this->ligne, $ec->heuresEctsEc->tpPres);
-           // $this->excelWriter->writeCellXY(9, $this->ligne, 'Mutualisé');
+            $this->excelWriter->writeCellXY(14, $this->ligne, $ec->elementConstitutif->getFicheMatiere()?->getTypeApogee() ?? '-');
             $this->ligne++;
         }
     }
