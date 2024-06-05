@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.28.9](https://github.com/Dannebicque/oreof/compare/v1.28.8...v1.28.9) (2024-06-05)
+
+
+### Features
+
+* Ajout dans l'export CAP MATI/MATM ([b00f061](https://github.com/Dannebicque/oreof/commit/b00f0619dbbce004fd0b94a70e4c5282f6a6a545))
+* Export des demandes de changement de RF/CO ([4f05d80](https://github.com/Dannebicque/oreof/commit/4f05d80ef1139661c3600be8ac2ce0a72e08216a))
+
 ### [1.28.8](https://github.com/Dannebicque/oreof/compare/v1.28.7...v1.28.8) (2024-06-05)
 
 
