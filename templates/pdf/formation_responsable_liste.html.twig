@@ -1,0 +1,25 @@
+{% extends 'pdf/base-pdf.html.twig' %}
+
+{% block content %}
+    {% for composante in composantes|filter(composante => demandes[composante.id]|length > 0) %}
+        <h2><strong>{{ composante.libelle }}</strong></h2>
+        {% for demande in demandes[composante.id] %}
+            <h3> > {{ demande.formation.display }}</h3>
+            {% for dem in demande.demandes %}
+                <ul>
+                    <li>Ancien {{ dem.typeRf.value == 'RF' ? 'Responsable' : 'Co-Responsable' }}
+                        : {{ dem.ancienResponsable.display }}</li>
+                    <li>Nouveau {{ dem.typeRf.value == 'RF' ? 'Responsable' : 'Co-Responsable' }}
+                        : {{ dem.nouveauResponsable.display }}</li>
+                    <li>Commentaire : {{ dem.commentaire }}</li>
+                    <li>Date de la demande : {{ dem.dateDemande|date('d/m/Y') }}</li>
+                </ul>
+            {% endfor %}
+        {% else %}
+            <p>-- Pas de demandes --</p>
+
+        {% endfor %}
+    {% endfor %}
+
+
+{% endblock %}

@@ -222,6 +222,7 @@ class ValidationController extends BaseController
                 $fiches[] = $ficheMatiereRepository->findByTypeValidation($this->getDpe(), $typeValidation);
                 $fiches[] = $ficheMatiereRepository->findByTypeValidationHorsDiplome($this->getDpe(), $typeValidation);
                 $fiches = array_merge(...$fiches);
+                //todo: doublons possibles ?
             } else {
                 $composante = $composanteRepository->find($request->query->get('composante'));
                 if (!$composante) {
