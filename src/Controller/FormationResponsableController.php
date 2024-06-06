@@ -123,9 +123,10 @@ class FormationResponsableController extends BaseController
 
 
         return $myGotenbergPdf->render('pdf/formation_responsable_liste.html.twig', [
-            'titre' => 'Liste des demande de changement de responsable de formation',
+            'titre' => 'Demandes de modification de responsable de formation',
             'demandes' => $tDemandes,
-            'composantes' => $composantes
+            'composantes' => $composantes,
+            'dpe' => $this->getDpe()
         ], 'synthese_changement_rf_'.(new DateTime())->format('d-m-Y_H-i-s'));
     }
 }
