@@ -147,8 +147,11 @@ class VersioningStructure
         $diff['code'] = new DiffObject($ecOriginal->elementConstitutif->getCode(), $ecNouveau->elementConstitutif->getCode());
         $diff['raccroche'] = new DiffObject($ecOriginal->raccroche, $ecNouveau->raccroche);
         $diff['heuresEctsEc'] = $this->compareHeuresEctsEc($ecOriginal->heuresEctsEc, $ecNouveau->heuresEctsEc);
-        $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, $ecNouveau->typeMccc);
-        $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
+        if ($ecOriginal->typeMccc !== null && $ecNouveau->typeMccc !== null) {
+            $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, $ecNouveau->typeMccc);
+            $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
+        }
+
 
 
         return $diff;
