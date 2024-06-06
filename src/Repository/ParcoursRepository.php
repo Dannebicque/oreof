@@ -15,6 +15,8 @@ use App\Entity\Formation;
 use App\Entity\Mention;
 use App\Entity\Parcours;
 use App\Entity\User;
+use App\Enums\EtatDpeEnum;
+use App\Enums\TypeModificationDpeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -68,6 +70,24 @@ class ParcoursRepository extends ServiceEntityRepository
             ->innerJoin('p.formation', 'f')
             ->andWhere("JSON_CONTAINS(dp.etatValidation, :etatDpe) = 1")
             ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte);
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
+    public function findByTypeValidationAttenteCfvu(CampagneCollecte $campagneCollecte, mixed $typeValidation): array
+    {
+        $query = $this->createQueryBuilder('p')
+            ->join('p.dpeParcours', 'dp')
+            ->innerJoin('p.formation', 'f')
+            ->andWhere("JSON_CONTAINS(dp.etatValidation, :etatDpe) = 1")
+            ->andWhere('dp.etatReconduction = :etatReconduction')
+            ->orWhere('dp.etatReconduction = :etatReconduction2')
+            ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
+            ->setParameter('etatReconduction', TypeModificationDpeEnum::MODIFICATION_MCCC)
+            ->setParameter('etatReconduction2', TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE)
             ->andWhere('dp.campagneCollecte = :campagneCollecte')
             ->setParameter('campagneCollecte', $campagneCollecte);
 
@@ -149,6 +169,6 @@ class ParcoursRepository extends ServiceEntityRepository
             ->setParameter('campagneCollecte', $campagneCollecte)
             ->getQuery()
             ->getResult();
-            
+
     }
 }

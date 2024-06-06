@@ -1,0 +1,13 @@
+{% if sem.raccroche.isDifferent == true %}
+    <li>Semestre initialement
+        <span class="diff-original">{{ sem.raccroche.original == true ? 'raccroché' : 'non raccroché' }}</span>
+        maintenant
+        <span class="diff-new">{{ sem.raccroche.new == true ? 'raccroché' : 'non raccroché' }}</span>
+    </li>
+{% endif %}
+
+{% if sem.ordre.isDifferent == true %}
+    <li>Semestre initialement en position
+        <span class="diff-original">{{ sem.ordre.original }}</span> maintenant en position
+        <span class="diff-new">{{ sem.ordre.new }}</span></li>
+{% endif %}

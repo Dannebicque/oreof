@@ -154,6 +154,7 @@ class VersioningStructure
         $diff['sommeUeTePres'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTePres), Tools::filtreHeures($heuresEctsUe1->sommeUeTePres));
         $diff['sommeUeCmDist'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeCmDist), Tools::filtreHeures($heuresEctsUe1->sommeUeCmDist));
         $diff['sommeUeTdDist'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTdDist), Tools::filtreHeures($heuresEctsUe1->sommeUeTdDist));
+        $diff['sommeUeTpDist'] = new DiffObject(Tools::filtreHeures($heuresEctsUe->sommeUeTpDist), Tools::filtreHeures($heuresEctsUe1->sommeUeTpDist));
 
         $sommeUeTotalPres = $heuresEctsUe->sommeUeCmPres + $heuresEctsUe->sommeUeTdPres + $heuresEctsUe->sommeUeTpPres;
         $diff['sommeUeTotalPres'] = new DiffObject(Tools::filtreHeures($sommeUeTotalPres), Tools::filtreHeures($heuresEctsUe1->sommeUeTotalPres()));

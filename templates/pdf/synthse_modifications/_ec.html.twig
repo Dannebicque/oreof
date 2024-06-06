@@ -1,0 +1,23 @@
+{% if ec.raccroche.isDifferent == true %}
+    <li>EC initialement
+        <span class="diff-original">{{ sem.raccroche.original == true ? 'raccrochée' : 'non raccrochée' }}</span>
+        maintenant
+        <span class="diff-new">{{ ue.raccroche.new == true ? 'raccrochée' : 'non raccrochée' }}</span>
+    </li>
+{% endif %}
+
+{% if ec.libelle.isDifferent == true %}
+    <li>Modification du libellé de l'EC
+        <span class="diff-original">{{ ec.libelle.original }}</span> pour
+        <span class="diff-new">{{ ec.libelle.new }}</span></li>
+{% endif %}
+
+{{ include('pdf/synthse_modifications/_ec_heures.html.twig', { heuresEctsEc: ec.heuresEctsEc}) }}
+
+{{ include('pdf/synthse_modifications/_ec_mccc.html.twig') }}
+
+{#
+//heuresEctsEc
+//typeMccc
+//mcccs
+#}
