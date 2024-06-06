@@ -373,9 +373,11 @@ class VersioningParcours
                 . "{$lastVersion->getParcours()->getId()}/"
                 . "{$lastVersion->getDtoFileName()}.json"
             );
-           // dd($fileDTO);
-            $dto = $this->serializer->deserialize($fileDTO, StructureParcours::class, 'json');
 
+            $dto = $this->serializer->deserialize($fileDTO, StructureParcours::class, 'json');
+//            if ($parcours ->getId() === 405) {
+//                dd($dto);
+//            }
             return $dto;
         }
 

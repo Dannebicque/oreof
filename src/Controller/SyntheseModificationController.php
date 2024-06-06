@@ -23,8 +23,7 @@ class SyntheseModificationController extends BaseController
         ComposanteRepository $composanteRepository,
         VersioningParcours $versioningParcours,
         MyGotenbergPdf $myGotenbergPdf
-    ): Response
-    {
+    ): Response {
         $composantes = $composanteRepository->findAll();
         $tDemandes = [];
 
@@ -36,20 +35,25 @@ class SyntheseModificationController extends BaseController
         $parcours = $parcoursRepository->findByTypeValidationAttenteCfvu($this->getDpe(), 'soumis_central'); //soumis_cfvu
 
         foreach ($parcours as $parc) {
-            $composante = $parc->getFormation()?->getComposantePorteuse();
-            if (null !== $composante) {
-                $typeD = $typeDiplomeRegistry->getTypeDiplome($parc->getFormation()?->getTypeDiplome()?->getModeleMcc());
-                // récupérer les demandes de changement et de modification
-                $dto = $typeD->calculStructureParcours($parc, true, true);
-                $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc);
-                if ($structureDifferencesParcours !== null) {
-                    $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
-                } else {
-                    $diffStructure = null;
-                }
+//            if ($parc->getId() === 405) {
+                $composante = $parc->getFormation()?->getComposantePorteuse();
+                if (null !== $composante) {
+                    $typeD = $typeDiplomeRegistry->getTypeDiplome($parc->getFormation()?->getTypeDiplome()?->getModeleMcc());
+                    // récupérer les demandes de changement et de modification
+                    $dto = $typeD->calculStructureParcours($parc, true, false);
+                    $structureDifferencesParcours = $versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc);
+                    //                if ($parc->getId() === 405) {
+                    //                   dd($structureDifferencesParcours);
+                    //                }
+                    if ($structureDifferencesParcours !== null) {
+                        $diffStructure = (new VersioningStructure($structureDifferencesParcours, $dto))->calculDiff();
+                    } else {
+                        $diffStructure = null;
+                    }
 //dd($diffStructure);
-                $tDemandes[$composante->getId()][] = ['parcours' => $parc, 'diffStructure' => $diffStructure, 'dto' => $dto];
-            }
+                    $tDemandes[$composante->getId()][] = ['parcours' => $parc, 'diffStructure' => $diffStructure, 'dto' => $dto];
+                }
+            //}
         }
 
         return $myGotenbergPdf->render('pdf/synthese_modifications.html.twig', [
