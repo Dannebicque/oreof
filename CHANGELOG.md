@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.1](https://github.com/Dannebicque/oreof/compare/v1.29.0...v1.29.1) (2024-06-06)
+
+
+### Features
+
+* Commande export des synthèses ([c728499](https://github.com/Dannebicque/oreof/commit/c72849967a6dbaf7ab5f840cbfb9897ca1842d33))
+
+
+### Bug Fixes
+
+* Affichage libellé sur MCCC versionné ([5c2600c](https://github.com/Dannebicque/oreof/commit/5c2600c78037a5528f440217c8eb92bf4d69f881))
+* Export PDF de synthèse ([f0c711d](https://github.com/Dannebicque/oreof/commit/f0c711d69cfd65ecd84af635cd65b652c328340f))
+* Export PDF de synthèse ([e10ada5](https://github.com/Dannebicque/oreof/commit/e10ada588a9b006f14cd3890ba9384c457540be0))
+
 ## [1.29.0](https://github.com/Dannebicque/oreof/compare/v1.28.9...v1.29.0) (2024-06-06)
 
 
