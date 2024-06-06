@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Composante</th>
+                    <th>Formation</th>
+                    <th>CO-RF / RF</th>
+                    <th>Ancien Co/RF</th>
+                    <th>Nouveau Co/RF</th>
+                    <th>Date demande</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for demande in demandes %}
+                    <tr>
+                        <td>{{ demande.formation.composantePorteuse.libelle }}</td>
+                        <td>{{ demande.formation.display }}</td>
+                        <td>{{ demande.typeRf.value == 'RF' ? 'Responsable' : 'Co-Responsable' }}</td>
+                        <td>{{ demande.ancienResponsable.display }}</td>
+                        <td>{{ demande.nouveauResponsable.display }}</td>
+                        <td>{{ demande.dateDemande|date('d/m/Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-end">Commentaire :</td>
+                        <td colspan="5">{{ demande.commentaire }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block header %}
+    Détails des mentions/spécialités
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <a href="{{ path('app_formation_responsable_liste_export') }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Exporter les données en PDF"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Exporter les données en PDF</span>
+    </a>
+
+{% endblock %}
