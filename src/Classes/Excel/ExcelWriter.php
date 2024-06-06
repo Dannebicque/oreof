@@ -523,7 +523,7 @@ class ExcelWriter
             $richText = new RichText();
             $ancienneValeur = $richText->createTextRun($diffObject->original);
             $ancienneValeur->getFont()?->setStrikethrough(true);
-            $ancienneValeur->getFont()?->setItalic(true);
+            //$ancienneValeur->getFont()?->setItalic(true);
             $ancienneValeur->getFont()?->setColor(new Color(Color::COLOR_RED));
             $nouvelleValeur = $richText->createTextRun($diffObject->new);
             $nouvelleValeur->getFont()?->setStrikethrough(false);

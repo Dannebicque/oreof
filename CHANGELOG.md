@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.29.0](https://github.com/Dannebicque/oreof/compare/v1.28.9...v1.29.0) (2024-06-06)
+
+
+### Features
+
+* export modifications CFVU ([1fef70d](https://github.com/Dannebicque/oreof/commit/1fef70d954a613bfc664eef899ab6605151bf669))
+
+
+### Bug Fixes
+
+* ordre des Ues ([18d5975](https://github.com/Dannebicque/oreof/commit/18d59755f498fa3ea9aae008d82e08332054eb23))
+* sécurité des parties configs ([9837fff](https://github.com/Dannebicque/oreof/commit/9837fff67b0bfffd84bbb6a16db561649a01fe93))
+* suppression de l'italique dans l'excel des MCCC ([23b22b4](https://github.com/Dannebicque/oreof/commit/23b22b4c7617685479dafe5019d951ff0bd7756d))
+* titre + date CFVU ([5836cf0](https://github.com/Dannebicque/oreof/commit/5836cf02f25ee54d4d9aaa5cfceeab1444e20a1e))
+
 ### [1.28.9](https://github.com/Dannebicque/oreof/compare/v1.28.8...v1.28.9) (2024-06-05)
 
 

@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/type/epreuve')]
+#[Route('/administration/type-epreuve')]
 class TypeEpreuveController extends AbstractController
 {
     #[Route('/', name: 'app_type_epreuve_index', methods: ['GET'])]

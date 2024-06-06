@@ -1,0 +1,26 @@
+<h4>Bilan Semestre {{ ordre }}</h4>
+{% if heuresEctsSemestre.sommeSemestreEcts.isDifferent == true %}
+    <p>Modification du total des ECTS du semestre {{ ordre }}
+        <span class="diff-original">{{ heuresEctsSemestre.sommeSemestreEcts.original }} ECTS</span> pour
+        <span class="diff-new">{{ heuresEctsSemestre.sommeSemestreEcts.new }} ECTS</span></p>
+{% endif %}
+
+{% if heuresEctsSemestre.sommeSemestreCmPres.isDifferent == true or
+    heuresEctsSemestre.sommeSemestreTdPres.isDifferent == true or
+    heuresEctsSemestre.sommeSemestreTpPres.isDifferent == true
+%}
+    <p>Modification du total des heures présentiels du semestre {{ ordre }} : CM : {{ heuresEctsSemestre.sommeSemestreCmPres.new }} heures, TD : {{ heuresEctsSemestre.sommeSemestreTdPres.new }} heures, TP : {{ heuresEctsSemestre.sommeSemestreTpPres.new }} heures au lieu de CM : CM : {{ heuresEctsSemestre.sommeSemestreCmPres.original }} heures, TD : {{ heuresEctsSemestre.sommeSemestreTdPres.original }} heures, TP : {{ heuresEctsSemestre.sommeSemestreTpPres.original }} heures. Soit un total présentiel de {{ heuresEctsSemestre.sommeSemestreTotalPres.new }} heures au lieu de {{ heuresEctsSemestre.sommeSemestreTotalPres.original }} heures</p>
+{% endif %}
+
+{% if heuresEctsSemestre.sommeSemestreCmDist.isDifferent == true or
+    heuresEctsSemestre.sommeSemestreTdDist.isDifferent == true or
+    heuresEctsSemestre.sommeSemestreTpDist.isDifferent == true
+%}
+    <p>Modification du total des heures du semestre {{ ordre }} : CM : {{ heuresEctsSemestre.sommeSemestreCmDist.new }} heures, TD : {{ heuresEctsSemestre.sommeSemestreTdDist.new }} heures, TP : {{ heuresEctsSemestre.sommeSemestreTpDist.new }} heures au lieu de CM : CM : {{ heuresEctsSemestre.sommeSemestreCmDist.original }} heures, TD : {{ heuresEctsSemestre.sommeSemestreTdDist.original }} heures, TP : {{ heuresEctsSemestre.sommeSemestreTpDist.original }} heures. Soit un total distanciel de {{ heuresEctsSemestre.sommeSemestreTotalDist.new }} heures au lieu de {{ heuresEctsSemestre.sommeSemestreTotalDist.original }} heures</p>
+{% endif %}
+
+{% if heuresEctsSemestre.sommeSemestreTotalPresDist.isDifferent == true %}
+    <p>Modification du total des heures totales (pres. et dist.) du semestre {{ ordre }}
+        <span class="diff-original">{{ heuresEctsSemestre.sommeSemestreTotalPresDist.original }} heures</span> pour
+        <span class="diff-new">{{ heuresEctsSemestre.sommeSemestreTotalPresDist.new }} heures</span></p>
+{% endif %}

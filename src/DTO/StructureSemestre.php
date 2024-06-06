@@ -58,6 +58,8 @@ class StructureSemestre
             $this->ues[] = $structureUe;
         }
 
+        ksort($this->ues, SORT_NUMERIC);
+
         if ($this->withEcts) {
             $this->heuresEctsSemestre->addUe($structureUe->getHeuresEctsUe());
         }
