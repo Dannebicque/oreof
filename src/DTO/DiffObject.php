@@ -12,8 +12,8 @@ namespace App\DTO;
 class DiffObject {
 
     public function __construct(
-        public string|float|int $original,
-        public string|float|int $new
+        public string|float|int|null $original,
+        public string|float|int|null $new
     )
     {}
 
