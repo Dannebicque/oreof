@@ -1,17 +1,18 @@
 {% if ue.raccroche.isDifferent == true %}
-    <li>UE initialement
-        <span class="diff-original">{{ ue.raccroche.original == true ? 'raccrochée' : 'non raccrochée' }}</span>
-        maintenant
-        <span class="diff-new">{{ ue.raccroche.new == true ? 'raccrochée' : 'non raccrochée' }}</span>
-    </li>
+    <p>
+        UE <span class="diff-new">{{ ue.raccroche.new == true ? 'raccrochée' : 'non raccrochée' }}</span>
+        (au lieu de <span class="diff-original">{{ ue.raccroche.original == true ? 'raccrochée' : 'non raccrochée' }}</span>)
+    </p>
 {% endif %}
 {% if ue.display.isDifferent == true %}
-    <li>Modification du texte de l'UE
-        <span class="diff-original">{{ ue.display.original }}</span> pour
-        <span class="diff-new">{{ ue.display.new }}</span></li>
+    <p>
+        UE
+        {{ ue.display|diffNewOriginal }}
+    </p>
 {% endif %}
 {% if ue.libelle.isDifferent == true %}
-    <li>Modification du libellé de l'UE
-        <span class="diff-original">{{ ue.libelle.original }}</span> pour
-        <span class="diff-new">{{ ue.libelle.new }}</span></li>
+    <p>
+        Modification du libellé de l'UE
+        {{ ue.libelle|diffNewOriginal }}
+    </p>
 {% endif %}

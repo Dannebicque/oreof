@@ -1,26 +1,24 @@
 <h4>Bilan UE {{ ue.display.new }}</h4>
 {% if heuresEctsUe.sommeUeEcts.isDifferent == true %}
-    <p>Modification du total des ECTS de l'UE {{ ue.display.new }}
-        <span class="diff-original">{{ heuresEctsUe.sommeUeEcts.original }} ECTS</span> pour
-        <span class="diff-new">{{ heuresEctsUe.sommeUeEcts.new }} ECTS</span></p>
+    <p>Modification du total des ECTS de l'UE {{ ue.display.new }} :
+        {{ heuresEctsUe.sommeUeEcts|diffNewOriginal }}</p>
 {% endif %}
 
 {% if heuresEctsUe.sommeUeCmPres.isDifferent == true or
     heuresEctsUe.sommeUeTdPres.isDifferent == true or
     heuresEctsUe.sommeUeTpPres.isDifferent == true
 %}
-    <p>Modification du total des heures présentielles de l'ue : CM : {{ heuresEctsUe.sommeUeCmPres.new }} heures, TD : {{ heuresEctsUe.sommeUeTdPres.new }} heures, TP : {{ heuresEctsUe.sommeUeTpPres.new }} heures au lieu de CM : CM : {{ heuresEctsUe.sommeUeCmPres.original }} heures, TD : {{ heuresEctsUe.sommeUeTdPres.original }} heures, TP : {{ heuresEctsUe.sommeUeTpPres.original }} heures. Soit un total présentiel de {{ heuresEctsUe.sommeUeTotalPres.new }} heures au lieu de {{ heuresEctsUe.sommeUeTotalPres.original }} heures</p>
+    <p>Modification du total des heures présentielles de l'ue : CM : {{ heuresEctsUe.sommeUeCmPres|diffNew }} heures, TD : {{ heuresEctsUe.sommeUeTdPres|diffNew }} heures, TP : {{ heuresEctsUe.sommeUeTpPres|diffNew }} heures (au lieu de : CM : {{ heuresEctsUe.sommeUeCmPres|diffOriginal }} heures, TD : {{ heuresEctsUe.sommeUeTdPres|diffOriginal }} heures, TP : {{ heuresEctsUe.sommeUeTpPres|diffOriginal }} heures). Soit un total présentiel de {{ heuresEctsUe.sommeUeTotalPres|diffNewOriginal }}</p>
 {% endif %}
 
 {% if heuresEctsUe.sommeUeCmDist.isDifferent == true or
     heuresEctsUe.sommeUeTdDist.isDifferent == true or
     heuresEctsUe.sommeUeTpDist.isDifferent == true
 %}
-    <p>Modification du total des heures du semestre {{ ordre }} : CM : {{ heuresEctsUe.sommeUeCmDist.new }} heures, TD : {{ heuresEctsUe.sommeUeTdDist.new }} heures, TP : {{ heuresEctsUe.sommeUeTpDist.new }} heures au lieu de CM : CM : {{ heuresEctsUe.sommeUeCmDist.original }} heures, TD : {{ heuresEctsUe.sommeUeTdDist.original }} heures, TP : {{ heuresEctsUe.sommeUeTpDist.original }} heures. Soit un total distanciel de {{ heuresEctsUe.sommeUeTotalDist.new }} heures au lieu de {{ heuresEctsUe.sommeUeTotalDist.original }} heures</p>
+    <p>Modification du total des heures du semestre {{ ordre }} : CM : {{ heuresEctsUe.sommeUeCmDist|diffNew }} heures, TD : {{ heuresEctsUe.sommeUeTdDist|diffNew }} heures, TP : {{ heuresEctsUe.sommeUeTpDist|diffNew }} heures (au lieu de : CM : {{ heuresEctsUe.sommeUeCmDist|diffOriginal }} heures, TD : {{ heuresEctsUe.sommeUeTdDist|diffOriginal }} heures, TP : {{ heuresEctsUe.sommeUeTpDist|diffOriginal }} heures). Soit un total distanciel de {{ heuresEctsUe.sommeUeTotalDist|diffNewOriginal }}</p>
 {% endif %}
 
 {% if heuresEctsUe.sommeUeTotalPresDist.isDifferent == true %}
-    <p>Modification du total des heures totales (pres. et dist.) de l'UE
-        <span class="diff-original">{{ heuresEctsUe.sommeUeTotalPresDist.original }} heures</span> pour
-        <span class="diff-new">{{ heuresEctsUe.sommeUeTotalPresDist.new }} heures</span></p>
+    <p>Modification du total des heures totales (pres. et dist.) de l'UE :
+        {{ heuresEctsUe.sommeUeTotalPresDist|diffNewOriginal }}</p>
 {% endif %}

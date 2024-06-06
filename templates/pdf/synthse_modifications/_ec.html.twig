@@ -1,23 +1,32 @@
-{% if ec.raccroche.isDifferent == true %}
-    <li>EC initialement
-        <span class="diff-original">{{ sem.raccroche.original == true ? 'raccrochée' : 'non raccrochée' }}</span>
-        maintenant
-        <span class="diff-new">{{ ue.raccroche.new == true ? 'raccrochée' : 'non raccrochée' }}</span>
-    </li>
+{% if ec.heuresEctsEc.cmPres.isDifferent == true or
+    ec.heuresEctsEc.tdPres.isDifferent == true or
+    ec.heuresEctsEc.tpPres.isDifferent == true or
+    ec.heuresEctsEc.ects.isDifferent == true or
+    ec.heuresEctsEc.cmDist.isDifferent == true or
+    ec.heuresEctsEc.tdDist.isDifferent == true or
+    ec.heuresEctsEc.tpDist.isDifferent == true or
+    ec.libelle.isDifferent == true or
+    ec.raccroche.isDifferent == true %}
+    <h5> > {{ ec.code.new }} : {{ ec.libelle.new }}</h5>
 {% endif %}
 
+
 {% if ec.libelle.isDifferent == true %}
-    <li>Modification du libellé de l'EC
-        <span class="diff-original">{{ ec.libelle.original }}</span> pour
-        <span class="diff-new">{{ ec.libelle.new }}</span></li>
+    <p>Modification du libellé de l'EC :
+        {{ ec.libelle|diffNewOriginal }}
+    </p>
 {% endif %}
+
+{% if ec.raccroche.isDifferent == true %}
+    <p>EC initialement
+        <span class="diff-new">{{ sem.raccroche.new == true ? 'raccrochée' : 'non raccrochée' }}</span>
+        (au lieu de
+        <span class="diff-original">{{ ue.raccroche.original == true ? 'raccrochée' : 'non raccrochée' }}</span>)
+    </p>
+{% endif %}
+
+
 
 {{ include('pdf/synthse_modifications/_ec_heures.html.twig', { heuresEctsEc: ec.heuresEctsEc}) }}
 
 {{ include('pdf/synthse_modifications/_ec_mccc.html.twig') }}
-
-{#
-//heuresEctsEc
-//typeMccc
-//mcccs
-#}

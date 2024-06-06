@@ -55,7 +55,8 @@ class SyntheseModificationController extends BaseController
         return $myGotenbergPdf->render('pdf/synthese_modifications.html.twig', [
             'titre' => 'Liste des demande de changement MCCC et maquettes',
             'demandes' => $tDemandes,
-            'composantes' => $composantes
+            'composantes' => $composantes,
+            'dpe' => $this->getDpe(),
         ], 'synthese_changement_cfvu'.(new DateTime())->format('d-m-Y_H-i-s'));
 
     }

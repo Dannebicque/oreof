@@ -27,12 +27,14 @@
                                 {% endfor %}
                             {% endif %}
                             {# //total des heures UE heuresEctsUe #}
-                            {{ include('pdf/synthse_modifications/_ue_heures.html.twig', {heuresEctsUe: ue.heuresEctsUe}) }}
+{#                            {{ include('pdf/synthse_modifications/_ue_heures.html.twig', {heuresEctsUe: ue.heuresEctsUe}) }}#}
                         {% endfor %}
                         {# //total des heures.... heuresEctsSemestre #}
                         {{ include('pdf/synthse_modifications/_semestre_heures.html.twig', {heuresEctsSemestre: sem.heuresEctsSemestre}) }}
                     {% endif %}
                 {% endfor %}
+                {{ include('pdf/synthse_modifications/_formation_heures.html.twig', {heuresEctsFormation: diffStructure.heuresEctsFormation}) }}
+
             </div>
             <div class="page_break"></div>
         {% endfor %}

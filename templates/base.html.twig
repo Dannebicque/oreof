@@ -230,6 +230,14 @@
                                         <span class="label">Codification</span>
                                     </a>
                                 </li>
+                                {% if is_granted('ROLE_SES') %}
+                                <li>
+                                    <a href="{{ path('app_synthese_modification_export_pdf') }}">
+                                        <i class="fal fa-book icon"></i>
+                                        <span class="label">Synthèse Modifications</span>
+                                    </a>
+                                </li>
+                                {% endif %}
                             </ul>
                         </li>
                     {% endif %}

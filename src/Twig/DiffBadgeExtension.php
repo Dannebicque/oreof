@@ -18,7 +18,10 @@ class DiffBadgeExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('displayDiff', [$this, 'displayDiff'], ['is_safe' => ['html']])
+            new TwigFilter('displayDiff', [$this, 'displayDiff'], ['is_safe' => ['html']]),
+            new TwigFilter('diffNew', [$this, 'diffNew'], ['is_safe' => ['html']]),
+            new TwigFilter('diffOriginal', [$this, 'diffOriginal'], ['is_safe' => ['html']]),
+            new TwigFilter('diffNewOriginal', [$this, 'diffNewOriginal'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -29,5 +32,31 @@ class DiffBadgeExtension extends AbstractExtension
         }
 
         return '<span class="text-danger text-decoration-line-through">'.$value->original.'</span> <span class="text-success">'.$value->new.'</span>';
+    }
+
+    public function diffNew(DiffObject $value): string
+    {
+        if (false === $value->isDifferent()) {
+            return $value->new;
+        }
+
+        return '<span class="diff-new">'.$value->new.'</span>';
+    }
+
+    public function diffOriginal(DiffObject $value): string
+    {
+        if (false === $value->isDifferent()) {
+            return $value->original;
+        }
+
+        return '<span class="diff-original">'.$value->original.'</span>';
+    }
+
+    public function diffNewOriginal(DiffObject $value): string
+    {
+        if (false === $value->isDifferent()) {
+            return $value->original;
+        }
+        return '<span class="diff-new">'.$value->new.'</span> (au lieu de <span class="diff-original">'.$value->new.'</span>)';
     }
 }
