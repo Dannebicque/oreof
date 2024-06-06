@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/type/ue')]
+#[Route('/administration/type-ue')]
 class TypeUeController extends AbstractController
 {
     #[Route('/', name: 'app_type_ue_index', methods: ['GET'])]

@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/etablissement')]
+#[Route('/administration/etablissement')]
 class EtablissementController extends BaseController
 {
     #[Route('/', name: 'app_etablissement_index', methods: ['GET'])]

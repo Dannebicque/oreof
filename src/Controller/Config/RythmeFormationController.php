@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/rythme/formation')]
+#[Route('/administration/rythme/formation')]
 class RythmeFormationController extends AbstractController
 {
     #[Route('/', name: 'app_rythme_formation_index', methods: ['GET'])]

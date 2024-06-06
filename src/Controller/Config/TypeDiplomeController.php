@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/type/diplome')]
+#[Route('/administration/type-diplome')]
 class TypeDiplomeController extends AbstractController
 {
     #[Route('/', name: 'app_type_diplome_index', methods: ['GET'])]
@@ -54,7 +54,7 @@ class TypeDiplomeController extends AbstractController
 
             $this->addFlash('toast', [
                 'type' => 'success',
-                'text' => 'Création du type de diplôme réussie', 
+                'text' => 'Création du type de diplôme réussie',
                 'title' => 'Succès',
             ]);
             return $this->redirectToRoute('app_type_diplome_index');
@@ -93,7 +93,7 @@ class TypeDiplomeController extends AbstractController
             // return $this->json(true);
             $this->addFlash('toast', [
                 'type' => 'success',
-                'text' => 'Type Diplôme modifié avec succès', 
+                'text' => 'Type Diplôme modifié avec succès',
                 'title' => 'Succès',
             ]);
             return $this->redirectToRoute('app_type_diplome_index');

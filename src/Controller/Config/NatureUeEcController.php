@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/nature-ue-ec')]
+#[Route('/administration/nature-ue-ec')]
 class NatureUeEcController extends AbstractController
 {
     #[Route('/', name: 'app_nature_ue_ec_index', methods: ['GET'])]

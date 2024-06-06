@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/mention')]
+#[Route('/administration/mention')]
 class MentionController extends AbstractController
 {
     public const TAB_CODE_PARCOURS = [

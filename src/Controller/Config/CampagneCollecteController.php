@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/campagne_collecte')]
+#[Route('/administration/campagne-collecte')]
 class CampagneCollecteController extends AbstractController
 {
     #[Route('/', name: 'app_campagne_collecte_index', methods: ['GET'])]
