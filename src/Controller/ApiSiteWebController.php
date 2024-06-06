@@ -22,6 +22,10 @@ class ApiSiteWebController extends AbstractController
     {
         $data = [];
         $formations = $formatinRepository->findAll();
+
+        // COMPTEUR DES PARCOURS A ENVOYER
+        $countParcours = 0;
+
         foreach ($formations as $formation) {
             /**
              * 
@@ -42,6 +46,7 @@ class ApiSiteWebController extends AbstractController
                         $lastItem = array_keys($etatValidation)[$count - 1];
                         if($lastItem === 'valide_a_publier'){
                             $isPubliable = true;
+                            ++$countParcours;
                         }
                     }
                 }
@@ -64,6 +69,10 @@ class ApiSiteWebController extends AbstractController
                 'dateValidation' => $getHistorique->getHistoriqueFormationLastStep($formation, 'publication')?->getDate()?->format('Y-m-d H:i:s') ?? null,
             ];
         }
+
+        // VERIFICATION NOMBRE DE PARCOURS ENVOYÉS
+        // dump("Nombre de parcours envoyés : {$countParcours}.");exit;
+
 
         return new JsonResponse($data);
     }
