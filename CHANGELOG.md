@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.2](https://github.com/Dannebicque/oreof/compare/v1.29.1...v1.29.2) (2024-06-07)
+
+
+### Features
+
+* Commande export des synthèses ([0eba6e5](https://github.com/Dannebicque/oreof/commit/0eba6e59a6f7cadf5f5f09e6e01bb31cee4ea92e))
+* Commande export des synthèses ([bd45600](https://github.com/Dannebicque/oreof/commit/bd45600f7dcf7b6c40d6326b3273dbc9a64d9456))
+* Commande export des synthèses ([7bebcb9](https://github.com/Dannebicque/oreof/commit/7bebcb9faaa9df0a3f98e81c12aa2eccb7c37cc5))
+* export des synthèses ([82bb2df](https://github.com/Dannebicque/oreof/commit/82bb2df20e101c0e52c2d31d78009c6ff36dc035))
+
 ### [1.29.1](https://github.com/Dannebicque/oreof/compare/v1.29.0...v1.29.1) (2024-06-06)
 
 
