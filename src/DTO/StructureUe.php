@@ -34,7 +34,7 @@ class StructureUe
 
     /** @var StructureUe[] $uesEnfants */
     #[Groups(['DTO_json_versioning'])]
-    private array $uesEnfants = [];
+    public array $uesEnfants = [];
 
     /** @var HeuresEctsUe[] $heuresEctsUeEnfants */
     #[Groups(['DTO_json_versioning'])]

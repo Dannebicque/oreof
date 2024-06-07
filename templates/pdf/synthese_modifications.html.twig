@@ -2,10 +2,9 @@
 
 {% block content %}
     <h1 class="text-center">CFVU du {{ dpe.dateCfvu|date('d/m/Y') }}</h1>
-    {% for composante in composantes|filter(composante => demandes[composante.id]|length > 0) %}
+{#    {% for composante in composantes|filter(composante => demandes[composante.id]|length > 0) %}#}
         <h2 class="text-center">{{ composante.libelle }}</h2>
         <div class="page_break"></div>
-        {% for demande in demandes[composante.id] %}
             {% set parcours = demande.parcours %}
             {% set dto = demande.dto %}
             {% set diffStructure = demande.diffStructure %}
@@ -21,22 +20,30 @@
                         {% for ue in sem.ues %}
                             <p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ ue.display.new }}</strong></p>
                             {{ include('pdf/synthse_modifications/_ue.html.twig', {ue:ue}) }}
+                            {% if ue.uesEnfants is defined %}
+                                {% for uee in ue.uesEnfants %}
+                                    {{ include('pdf/synthse_modifications/_ue.html.twig', {ue:uee}) }}
+                                    {% if uee.elementConstitutifs is defined %}
+                                        {% for ec in uee.elementConstitutifs %}
+                                            {{ include('pdf/synthse_modifications/_ec.html.twig', {ec:ec}) }}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                             {% if ue.elementConstitutifs is defined %}
                                 {% for ec in ue.elementConstitutifs %}
                                     {{ include('pdf/synthse_modifications/_ec.html.twig', {ec:ec}) }}
                                 {% endfor %}
                             {% endif %}
                             {# //total des heures UE heuresEctsUe #}
-                            {{ include('pdf/synthse_modifications/_ue_heures.html.twig', {heuresEctsUe: ue.heuresEctsUe}) }}
+                            {#                            {{ include('pdf/synthse_modifications/_ue_heures.html.twig', {heuresEctsUe: ue.heuresEctsUe}) }} #}
                         {% endfor %}
                         {# //total des heures.... heuresEctsSemestre #}
                         {{ include('pdf/synthse_modifications/_semestre_heures.html.twig', {heuresEctsSemestre: sem.heuresEctsSemestre}) }}
                     {% endif %}
                 {% endfor %}
+                {# bilan pour la formation #}
+                {{ include('pdf/synthse_modifications/_formation_heures.html.twig', {heuresEctsFormation: diffStructure.heuresEctsFormation}) }}
             </div>
-            <div class="page_break"></div>
-        {% endfor %}
-    {% endfor %}
-
-
+{#    {% endfor %}#}
 {% endblock %}

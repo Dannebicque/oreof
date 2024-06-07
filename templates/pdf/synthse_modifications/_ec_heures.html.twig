@@ -1,36 +1,24 @@
-{% if heuresEctsEc.cmPres.isDifferent == true or
-    heuresEctsEc.tdPres.isDifferent == true or
-    heuresEctsEc.tpPres.isDifferent == true or
-    heuresEctsEc.ects.isDifferent == true or
-    heuresEctsEc.cmDist.isDifferent == true or
-    heuresEctsEc.tdDist.isDifferent == true or
-    heuresEctsEc.tpDist.isDifferent == true
-%}
-<h5> > EC {{ ec.libelle.new}}</h5>
-{% endif %}
-
 {% if heuresEctsEc.ects.isDifferent == true %}
     <p>Modification du total des ECTS de l'EC {{ ec.libelle.new}}
-        <span class="diff-original">{{ heuresEctsEc.ects.original }} ECTS</span> pour
-        <span class="diff-new">{{ heuresEctsEc.ects.new }} ECTS</span></p>
+    {{ heuresEctsEc.ects|diffNewOriginal }}
+    </p>
 {% endif %}
 
 {% if heuresEctsEc.cmPres.isDifferent == true or
     heuresEctsEc.tdPres.isDifferent == true or
     heuresEctsEc.tpPres.isDifferent == true
 %}
-    <p>Modification du total des heures présentielles de l'EC {{ ec.libelle.new}} : CM : {{ heuresEctsEc.cmPres.new }} heures, TD : {{ heuresEctsEc.tdPres.new }} heures, TP : {{ heuresEctsEc.tpPres.new }} heures au lieu de CM : CM : {{ heuresEctsEc.cmPres.original }} heures, TD : {{ heuresEctsEc.tdPres.original }} heures, TP : {{ heuresEctsEc.tpPres.original }} heures. Soit un total présentiel de {{ heuresEctsEc.sommeEcTotalPres.new }} heures au lieu de {{ heuresEctsEc.sommeEcTotalPres.original }} heures</p>
+    <p>Modification du total des heures présentielles de l'EC {{ ec.libelle.new}} : CM : {{ heuresEctsEc.cmPres|diffNew }} heures, TD : {{ heuresEctsEc.tdPres|diffNew }} heures, TP : {{ heuresEctsEc.tpPres|diffNew }} heures (au lieu de : CM : {{ heuresEctsEc.cmPres|diffOriginal }} heures, TD : {{ heuresEctsEc.tdPres|diffOriginal }} heures, TP : {{ heuresEctsEc.tpPres|diffOriginal }} heures). Soit un total présentiel de {{ heuresEctsEc.sommeEcTotalPres|diffNewOriginal }}</p>
 {% endif %}
 
 {% if heuresEctsEc.cmDist.isDifferent == true or
     heuresEctsEc.tdDist.isDifferent == true or
     heuresEctsEc.tpDist.isDifferent == true
 %}
-    <p>Modification du total des heures de l'EC {{ ec.libelle.new}} : CM : {{ heuresEctsEc.cmDist.new }} heures, TD : {{ heuresEctsEc.tdDist.new }} heures, TP : {{ heuresEctsEc.tpDist.new }} heures au lieu de CM : CM : {{ heuresEctsEc.cmDist.original }} heures, TD : {{ heuresEctsEc.tdDist.original }} heures, TP : {{ heuresEctsEc.tpDist.original }} heures. Soit un total distanciel de {{ heuresEctsEc.sommeEcTotalPresDist.new }} heures au lieu de {{ heuresEctsEc.sommeEcTotalPresDist.original }} heures</p>
+    <p>Modification du total des heures de l'EC {{ ec.libelle.new}} : CM : {{ heuresEctsEc.cmDist|diffNew }} heures, TD : {{ heuresEctsEc.tdDist|diffNew }} heures, TP : {{ heuresEctsEc.tpDist|diffNew }} heures (au lieu de : CM : {{ heuresEctsEc.cmDist|diffOriginal }} heures, TD : {{ heuresEctsEc.tdDist|diffOriginal }} heures, TP : {{ heuresEctsEc.tpDist|diffOriginal }} heures). Soit un total distanciel de {{ heuresEctsEc.sommeEcTotalPresDist|diffNewOriginal }}</p>
 {% endif %}
 
-{% if heuresEctsEc.sommeEcTotalPresDist.isDifferent == true %}
-    <p>Modification du total des heures totales (pres. et dist.) de l'EC {{ ec.libelle.new}}
-        <span class="diff-original">{{ heuresEctsEc.sommeEcTotalPresDist.original }} heures</span> pour
-        <span class="diff-new">{{ heuresEctsEc.sommeEcTotalPresDist.new }} heures</span></p>
-{% endif %}
+{#{% if heuresEctsEc.sommeEcTotalPresDist.isDifferent == true %}#}
+{#    <p>Modification du total des heures totales (pres. et dist.) de l'EC {{ ec.libelle.new}} :#}
+{#        {{ heuresEctsEc.sommeEcTotalPresDist|diffNewOriginal }}</p>#}
+{#{% endif %}#}

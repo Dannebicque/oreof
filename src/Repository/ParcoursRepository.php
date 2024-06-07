@@ -171,4 +171,26 @@ class ParcoursRepository extends ServiceEntityRepository
             ->getResult();
 
     }
+
+    public function findByTypeValidationAttenteCfvuAndComposante(CampagneCollecte $campagneCollecte, string $typeValidation, Composante $composante)
+    {
+
+        $query = $this->createQueryBuilder('p')
+            ->join('p.dpeParcours', 'dp')
+            ->innerJoin('p.formation', 'f')
+            ->andWhere('f.composantePorteuse = :composante')
+            ->andWhere("JSON_CONTAINS(dp.etatValidation, :etatDpe) = 1")
+            ->andWhere('dp.etatReconduction = :etatReconduction')
+            ->orWhere('dp.etatReconduction = :etatReconduction2')
+            ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
+            ->setParameter('composante', $composante)
+            ->setParameter('etatReconduction', TypeModificationDpeEnum::MODIFICATION_MCCC)
+            ->setParameter('etatReconduction2', TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE)
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte);
+
+        return $query->getQuery()
+            ->getResult();
+
+    }
 }

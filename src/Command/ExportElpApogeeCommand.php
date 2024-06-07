@@ -95,10 +95,10 @@ class ExportElpApogeeCommand extends Command
         $this->addOption(
             name: 'mode',
             mode: InputOption::VALUE_OPTIONAL,
-            description: "Mode d'exécution : 'test' ou 'production'", 
+            description: "Mode d'exécution : 'test' ou 'production'",
             default: 'test'
         )->addOption(
-            name: 'full-excel-export', 
+            name: 'full-excel-export',
             mode: InputOption::VALUE_REQUIRED,
             description: 'Génère un export Excel des ELP pour toutes les formations - Type : Semestre, UE, EC'
         )->addOption(
@@ -251,14 +251,14 @@ class ExportElpApogeeCommand extends Command
                         $io->writeln("Génération de l'export Excel - Parcours...");
                         $this->saveFullExportAsSpreadsheet($output, "PARCOURS", $withFilter, $withJsonExport, $withExclusionOption);
                         break;
-                    default: 
+                    default:
                         $io->warning("Type d'export inconnu. Il devrait être parmi la liste : ['PARCOURS', 'SEMESTRE', 'UE', 'EC']");
                         return Command::INVALID;
                 }
                 $io->success("Fichier généré avec succès.");
 
                 return Command::SUCCESS;
-            }  
+            }
             // Export Excel d'un parcours suivant l'ID
             if($parcoursExport){
                 $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($parcoursExport);
@@ -280,7 +280,7 @@ class ExportElpApogeeCommand extends Command
                     return Command::INVALID;
                 }
             }
-            // Insertion d'un parcours suivant l'ID 
+            // Insertion d'un parcours suivant l'ID
             if($parcoursInsertion){
                 $io->write("Utilisation du Web Service APOTEST");
                 if($this->verifyUserIntent($io, "Voulez-vous vraiment insérer un parcours dans la base de données ?")){
@@ -441,7 +441,7 @@ class ExportElpApogeeCommand extends Command
                 return Command::SUCCESS;
             }
             // Export Excel des LSE d'un parcours
-            if($parcoursLseExport){ 
+            if($parcoursLseExport){
                 $io->writeln("Génération d'export Excel des LSE d'un parcours.");
                 $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($parcoursLseExport);
                 if($parcours){
@@ -488,7 +488,7 @@ class ExportElpApogeeCommand extends Command
                                     if(mb_strlen($codeEcE) > 8){
                                         $errorMessage .= "L'{$ecE->elementConstitutif->getCode()} ({$ecE->elementConstitutif->getUe()->display()}) :"
                                         . " a un code APOGEE supérieur à 8 caractères. ({$codeEcE})\n";
-                                    }   
+                                    }
                                 }
                             }
                             foreach($ue->uesEnfants() as $ueE){
@@ -522,8 +522,8 @@ class ExportElpApogeeCommand extends Command
                     $date = new DateTime();
                     $now = $date->format("d-m-Y_H-i-s");
                     $this->filesystem->appendToFile(
-                        __DIR__ . "/../Service/Apogee/export/" 
-                        . "Report-invalid-Apogee-codes-{$now}.txt", 
+                        __DIR__ . "/../Service/Apogee/export/"
+                        . "Report-invalid-Apogee-codes-{$now}.txt",
                         implode($errorTxt)
                     );
                     $io->writeln("\nRapport généré !");
@@ -553,7 +553,7 @@ class ExportElpApogeeCommand extends Command
                 $exportName = "ALL";
                 foreach($parcoursArray as $parcours){
                     $dataLSE = $this->getLseObjectArrayForParcours(
-                        $this->getDTOForParcours($parcours), 
+                        $this->getDTOForParcours($parcours),
                         $elpApogeeData,
                         $lseCreated,
                     );
@@ -818,14 +818,14 @@ class ExportElpApogeeCommand extends Command
 
                     }else {
                         $io->warning('La commande a été annulée.');
-                        return Command::SUCCESS;    
+                        return Command::SUCCESS;
                     }
                 }
                 else {
                     $io->warning('La commande a été annulée.');
                     return Command::SUCCESS;
                 }
-            
+
                 return Command::SUCCESS;
             }
             // Insertion de test d'une liste (LSE)
@@ -834,7 +834,7 @@ class ExportElpApogeeCommand extends Command
                     // Création des données à insérer
                     $lseObject = new ListeElementPedagogiDTO3(
                         'TEST110', 'O', 'TEST INSERT LISTE WS',
-                        'TEST INSERTION LISTE WEB SERVICE 12032024', 
+                        'TEST INSERTION LISTE WEB SERVICE 12032024',
                         ['TEST111', 'TEST112']
                     );
                     dump($lseObject);
@@ -858,7 +858,7 @@ class ExportElpApogeeCommand extends Command
                     }
                     else {
                         $io->warning('La commande a été annulée.');
-                        return Command::SUCCESS;    
+                        return Command::SUCCESS;
                     }
                 }
                 else {
@@ -866,7 +866,7 @@ class ExportElpApogeeCommand extends Command
                     return Command::SUCCESS;
                 }
 
-            } 
+            }
             if($formatFormationFile){
                 $date = new DateTime();
                 $now = $date->format("d-m-Y_H-i-s");
@@ -885,7 +885,7 @@ class ExportElpApogeeCommand extends Command
                 }, $textData);
                 $io->writeln('Encodage en cours...');
                 $this->filesystem->appendToFile(
-                    __DIR__ . "/../Service/Apogee/export/Formations-a-exclure-{$now}.json", 
+                    __DIR__ . "/../Service/Apogee/export/Formations-a-exclure-{$now}.json",
                     json_encode($textData)
                 );
                 $io->success('Export réussi !');
@@ -897,11 +897,11 @@ class ExportElpApogeeCommand extends Command
                     return Command::FAILURE;
                 }
                 $withExclusion = $dumpParcoursToInsert === "exclusion" ? true : false;
-                
+
                 $io->writeln("Dump des parcours disponibles...");
                 $this->retrieveParcoursDataFromDatabase($withExclusion, true);
                 $io->writeln("Enregistrement réussi !");
-                
+
                 return Command::SUCCESS;
             }
             if($checkDifferences){
@@ -925,8 +925,8 @@ class ExportElpApogeeCommand extends Command
                 );
                 $io->writeln("Rapport généré !");
                 return Command::SUCCESS;
-            }    
-            
+            }
+
             return Command::SUCCESS;
         }
 
@@ -1028,7 +1028,7 @@ class ExportElpApogeeCommand extends Command
      * @param bool $withChecks Si des messages d'erreurs doivent être générés
      */
     private function setObjectForSoapCall(
-        StructureEc|StructureUe|StructureSemestre $elementPedagogique, 
+        StructureEc|StructureUe|StructureSemestre $elementPedagogique,
         StructureParcours $dto,
         ?CodeNatuElpEnum $natureElp = null,
         bool $withChecks = false
@@ -1047,10 +1047,10 @@ class ExportElpApogeeCommand extends Command
      */
     private function saveFullExportAsSpreadsheet(
         OutputInterface $output,
-        string $type, 
+        string $type,
         bool $withFilter = false,
         bool $withJsonExport = false,
-        bool $withExclusionOption = false    
+        bool $withExclusionOption = false
     ){
         // retrieve data
         $dataArray = $this->retrieveParcoursDataFromDatabase();
@@ -1065,7 +1065,7 @@ class ExportElpApogeeCommand extends Command
             $dto = $this->getDTOForParcours($parcours);
             if($type === "EC"){
                 foreach($dto->semestres as $semestre) {
-                    // UE 
+                    // UE
                     foreach($semestre->ues() as $ue) {
                         // EC à insérer
                         foreach($ue->elementConstitutifs as $ec) {
@@ -1109,12 +1109,12 @@ class ExportElpApogeeCommand extends Command
                 if($withExclusionOption){
                     $dataELP = $this->filterAlreadyInsertedElpArray($dataELP);
                     $exportTypeName .= "-EXCLUDED";
-                    
+
                 }
                 $soapObjectArray[] = $dataELP;
                 $progressBar->advance();
             }
-            
+
         }
         if($type === "PARCOURS"){
             $soapObjectArray = array_merge(...$soapObjectArray);
@@ -1123,7 +1123,7 @@ class ExportElpApogeeCommand extends Command
                 $date = new DateTime();
                 $now = $date->format("d-m-Y_H-i-s");
                 $this->filesystem->appendToFile(
-                    __DIR__ . "/../Service/Apogee/export/OREOF-COD_ELP-" . $exportTypeName . "-" . $now . ".json", 
+                    __DIR__ . "/../Service/Apogee/export/OREOF-COD_ELP-" . $exportTypeName . "-" . $now . ".json",
                     json_encode($jsonCodeApogee)
                 );
             }
@@ -1150,7 +1150,7 @@ class ExportElpApogeeCommand extends Command
                 }
             }
         }
-        
+
         return $soapObjectArray;
     }
 
@@ -1161,7 +1161,7 @@ class ExportElpApogeeCommand extends Command
      */
     private function getDTOForParcours(Parcours $parcours){
         if($parcours->getFormation()->getTypeDiplome()->getLibelleCourt() === "BUT"){
-            $calculStructure = new CalculButStructureParcours(); 
+            $calculStructure = new CalculButStructureParcours();
         }
         else {
             $calculStructure = new CalculStructureParcours($this->entityManager, $this->elementConstitutifRepository, $this->ueRepository);
@@ -1185,8 +1185,8 @@ class ExportElpApogeeCommand extends Command
         // cast element into array values
         $ElpArray = array_map(
             fn($elp) => [
-                $elp->codElp, $elp->libCourtElp, $elp->libElp, 
-                $elp->codNatureElp, $elp->codComposante, $elp->temModaliteControle, 
+                $elp->codElp, $elp->libCourtElp, $elp->libElp,
+                $elp->codNatureElp, $elp->codComposante, $elp->temModaliteControle,
                 $elp->nbrCredits ?? "", $elp->volume, $elp->uniteVolume, $elp->codPeriode,
                 // CIP list
                 implode(", ", array_map(
@@ -1194,7 +1194,7 @@ class ExportElpApogeeCommand extends Command
                         $elp->listCentreInsPedagogi->centreInsPedagogi
                     )
                 ), isset($elp->listParamChargEns) ? $elp->listParamChargEns->printInformation() : ""
-            ], 
+            ],
             $ElpArray
         );
         // Write to spreadsheet
@@ -1214,7 +1214,7 @@ class ExportElpApogeeCommand extends Command
     /**
      * Prompt pour poser une question à l'utilisateur de la commande
      * @param SymfonyStyle $io Entrée / Sortie de la commande
-     * @param string $message Question à poser 
+     * @param string $message Question à poser
      * @return boolean Vrai si l'utilisateur confirme la question, Faux sinon
      */
     private function verifyUserIntent(SymfonyStyle $io, string $message) : bool {
@@ -1279,7 +1279,7 @@ class ExportElpApogeeCommand extends Command
     }
 
     /**
-     * Appelle le Web Service d'insertion d'ELP d'Apogee, 
+     * Appelle le Web Service d'insertion d'ELP d'Apogee,
      * et insère plusieurs valeurs d'un coup
      * @param array $elpArray
      */
@@ -1296,7 +1296,7 @@ class ExportElpApogeeCommand extends Command
 
     /**
      * Appelle le Web Service d'insertion des listes LSE d'Apogee
-     * avec plusieurs valeurs 
+     * avec plusieurs valeurs
      * @param array $lseArray Tableau contenant les objets LSE
      */
     private function insertSeveralLSE(array $lseArray){
@@ -1329,7 +1329,7 @@ class ExportElpApogeeCommand extends Command
             // exclusion des IUT
             && in_array($formation->getComposantePorteuse()?->getCodeComposante(), ['980', '983', '984', '985']) === false;
         }
-        
+
         return $return;
     }
 
@@ -1430,10 +1430,10 @@ class ExportElpApogeeCommand extends Command
      * @return void
      */
     private function addUeToElpArray(array &$elpArray, StructureUe $ue, StructureParcours $dto, bool $withChecks = false, bool $withEcChildren = true) : void {
-        if(count($ue->uesEnfants()) > 0){
+        if(count($ue->uesEnfants) > 0){
             // Ne pas insérer les éléments de nature 'CHOI' ?
             $elpArray[] = $this->setObjectForSoapCall($ue, $dto, CodeNatuElpEnum::CHOI, $withChecks);
-            foreach($ue->uesEnfants() as $ueEnfant){
+            foreach($ue->uesEnfants as $ueEnfant){
                 if($ueEnfant->ue->getNatureUeEc()?->isLibre()){
                     $elpArray[] = $this->setObjectForSoapCall($ueEnfant, $dto, CodeNatuElpEnum::CHOI, $withChecks);
                 }else {
@@ -1521,7 +1521,7 @@ class ExportElpApogeeCommand extends Command
         // if($withExclude){
         //     // Filtrage des formations
         //     $dataArray = array_filter(
-        //         $dataArray, 
+        //         $dataArray,
         //         // false si exclusion, true si inclusion
         //         fn($formation) => in_array($formation->getId(), $formationIdArray, true) === true
         //     );
@@ -1538,15 +1538,15 @@ class ExportElpApogeeCommand extends Command
         }
 
         if($withJsonExport){
-            $filtered = $withExclude ? "exclusion-" : ""; 
+            $filtered = $withExclude ? "exclusion-" : "";
             $now = new DateTime();
             $date = $now->format('d-m-Y_H-i-s');
             $exportJson = array_values(array_map(
-                fn($parcours) => $parcours->getFormation()->getDisplayLong() . " - " . $parcours->getLibelle(), 
+                fn($parcours) => $parcours->getFormation()->getDisplayLong() . " - " . $parcours->getLibelle(),
                 $dataArray
             ));
             $this->filesystem->appendToFile(
-                __DIR__ . "/../Service/Apogee/export/liste-parcours-a-inserer-{$filtered}{$date}.json", 
+                __DIR__ . "/../Service/Apogee/export/liste-parcours-a-inserer-{$filtered}{$date}.json",
                 json_encode($exportJson));
         }
 
@@ -1582,7 +1582,7 @@ class ExportElpApogeeCommand extends Command
         }
 
     }
-    
+
     /**
      * Crée la liste d'éléments pédagogiques pour les enfants d'un EC à choix
      * @param StructureEc $ec EC à traiter
@@ -1615,16 +1615,16 @@ class ExportElpApogeeCommand extends Command
     /**
      * Crée la liste d'éléments pédagogiques pour les enfants d'une UE à choix
      * @param StructureUe $ue UE à traiter
-     * @param string $libelleCourt Libellé court à utiliser 
+     * @param string $libelleCourt Libellé court à utiliser
      * @param string $libelleLong Libellé long à utiliser
-     * @return ListeElementPedagogiDTO3|null Liste d'éléments pédagogiques s'il y a des enfants, null sinon  
+     * @return ListeElementPedagogiDTO3|null Liste d'éléments pédagogiques s'il y a des enfants, null sinon
      */
     private function getLseObjectForUeChildren(StructureUe $ue, string $libelleCourt, string $libelleLong) : ListeElementPedagogiDTO3|null {
         $return = null;
-        if(count($ue->uesEnfants()) > 0){
+        if(count($ue->uesEnfants) > 0){
             $return = new ListeElementPedagogiDTO3($ue->getCodeApogee() ?? 'ERROR', 'X', $libelleCourt, $libelleLong, array_map(
                 fn($ueEnfant) => $ueEnfant->getCodeApogee() ?? "ERROR",
-                $ue->uesEnfants()
+                $ue->uesEnfants
             ));
         }
         return $return;
@@ -1665,9 +1665,9 @@ class ExportElpApogeeCommand extends Command
     }
 
     /**
-     * Crée le tableau de liste d'éléments pédagogiques pour un semestre. 
+     * Crée le tableau de liste d'éléments pédagogiques pour un semestre.
      * Descend l'arborescence jusqu'aux EC et leurs enfants possibles
-     * @param StructureSemestre $semestre Semestre à utiliser 
+     * @param StructureSemestre $semestre Semestre à utiliser
      * @param StructureParcours $dto DTO du parcours
      * @return array Tableau de listes LSE
      */
@@ -1703,7 +1703,7 @@ class ExportElpApogeeCommand extends Command
                 }
             }
         }
-    
+
         return $return;
     }
 
@@ -1713,8 +1713,8 @@ class ExportElpApogeeCommand extends Command
      * @return array Tableau comportant des LSE de type ListeElementPedagogiDTO3
      */
     private function getLseObjectArrayForParcours(
-        StructureParcours $parcours, 
-        array $elpApogeeArray = [], 
+        StructureParcours $parcours,
+        array $elpApogeeArray = [],
         array &$lseCreated = [],
     ) : array {
         $return = [];
@@ -1741,7 +1741,7 @@ class ExportElpApogeeCommand extends Command
         }
         // Filtrer les LSE pour éviter d'insérer avec des éléments manquants ou des doublons
         $return = array_merge(...$return);
-        $return = array_filter($return, 
+        $return = array_filter($return,
             function($lse) use ($elpApogeeArray, &$lseCreated, $lseInApogee){
                 $result = true;
                 // Si ce code de LSE a déjà été inséré
@@ -1771,11 +1771,11 @@ class ExportElpApogeeCommand extends Command
                 // Si le code de la liste est déjà présent dans APOGEE
                 if(in_array($lse->codListeElp, $lseInApogee, true)){
                     $result = false;
-                } 
+                }
                 // Si les ELP de la liste ont des codes en double
                 $countElpDuplicates = array_count_values(
                     array_map(
-                        fn($elp) => $elp->codElp, 
+                        fn($elp) => $elp->codElp,
                         $lse->listElementPedagogi->elementPedagogi)
                     );
                 foreach($countElpDuplicates as $count){
@@ -1803,9 +1803,9 @@ class ExportElpApogeeCommand extends Command
             fn($lse) => [
                 $lse->codListeElp, $lse->typListeElp, $lse->libCourtListeElp, $lse->libListeElp,
                 implode(
-                    ", ", 
+                    ", ",
                     array_map(fn($elp) => $elp->codElp,
-                        $lse->listElementPedagogi->elementPedagogi                
+                        $lse->listElementPedagogi->elementPedagogi
                     )
                 )
             ],
@@ -1835,10 +1835,10 @@ class ExportElpApogeeCommand extends Command
         $typeDiplome = $dto->parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() ?? "";
         $sigleFormation = $dto->parcours->getFormation()?->getSigle() ?? "";
         $sigleParcours = $dto->parcours->getSigle() ?? "";
-        $libelleCourt = "LISTE UE S" . $semestre->semestre->getOrdre() . " " 
+        $libelleCourt = "LISTE UE S" . $semestre->semestre->getOrdre() . " "
         . $sigleFormation . " " . $sigleParcours;
-        $libelleLong = "LISTE UE SEMESTRE " . $semestre->semestre->getOrdre() . " " 
-            . $typeDiplome . " " . $sigleFormation . " " . $sigleParcours; 
+        $libelleLong = "LISTE UE SEMESTRE " . $semestre->semestre->getOrdre() . " "
+            . $typeDiplome . " " . $sigleFormation . " " . $sigleParcours;
         return [
             'libCourt' => $libelleCourt,
             'libLong' => $libelleLong
@@ -1855,10 +1855,10 @@ class ExportElpApogeeCommand extends Command
         $typeDiplome = $dto->parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() ?? "";
         $sigleFormation = $dto->parcours->getFormation()?->getSigle() ?? "";
         $sigleParcours = $dto->parcours->getSigle() ?? "";
-        $libelleCourt = "ECs " . $ue->display . " S" . $ue->ue->getSemestre()->getOrdre() . " " 
+        $libelleCourt = "ECs " . $ue->display . " S" . $ue->ue->getSemestre()->getOrdre() . " "
             . $sigleFormation . " " . $sigleParcours;
-        $libelleLong = "LISTE EC " . $ue->display . " S" . $ue->ue->getSemestre()->getOrdre() 
-            . " " . $typeDiplome . " " . $sigleFormation . " " . $sigleParcours; 
+        $libelleLong = "LISTE EC " . $ue->display . " S" . $ue->ue->getSemestre()->getOrdre()
+            . " " . $typeDiplome . " " . $sigleFormation . " " . $sigleParcours;
         return [
             'libCourt' => $libelleCourt,
             'libLong' => $libelleLong
@@ -1875,7 +1875,7 @@ class ExportElpApogeeCommand extends Command
         $typeDiplome = $dto->parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() ?? "";
         $sigleFormation = $dto->parcours->getFormation()?->getSigle() ?? "";
         $sigleParcours = $dto->parcours->getSigle() ?? "";
-        $libelleCourt = $ec->elementConstitutif->getCode() . " " . $ec->elementConstitutif->getUe()?->display() 
+        $libelleCourt = $ec->elementConstitutif->getCode() . " " . $ec->elementConstitutif->getUe()?->display()
             . " S" . $ec->elementConstitutif->getUe()?->getSemestre()?->getOrdre() . " "
             . $typeDiplome . " " . $sigleFormation . " " . $sigleParcours;
         $libelleLong = $ec->elementConstitutif->getCode() . " " . $ec->elementConstitutif->getUe()?->display() . " S"
@@ -1896,9 +1896,9 @@ class ExportElpApogeeCommand extends Command
         $typeDiplome = $dto->parcours->getFormation()?->getTypeDiplome()?->getLibelleCourt() ?? "";
         $sigleFormation = $dto->parcours->getFormation()->getSigle();
         $sigleParcours = $dto->parcours->getSigle() ?? "";
-        $libelleLong = "LISTE " . $ue->ue->display() . " " . $ue->ue->getSemestre()->display() 
-            . " " . $typeDiplome . " " . $sigleFormation . " " . $sigleParcours; 
-        $libelleCourt = $ue->ue->display() . " " . $ue->ue->getSemestre()->display() 
+        $libelleLong = "LISTE " . $ue->ue->display() . " " . $ue->ue->getSemestre()->display()
+            . " " . $typeDiplome . " " . $sigleFormation . " " . $sigleParcours;
+        $libelleCourt = $ue->ue->display() . " " . $ue->ue->getSemestre()->display()
             . " " . $typeDiplome . " " . $sigleFormation . " " . $sigleParcours;;
         return [
             'libCourt' => $libelleCourt,
@@ -1913,9 +1913,9 @@ class ExportElpApogeeCommand extends Command
      */
     private function filterInvalidElpArray(array $elpArray) : array {
         return array_filter(
-            $elpArray, 
-            fn($elp) => $elp->codElp !== "ERROR" 
-                        && $elp->codElp !== null 
+            $elpArray,
+            fn($elp) => $elp->codElp !== "ERROR"
+                        && $elp->codElp !== null
                         && mb_strlen($elp->codElp) <= 8
         );
     }
@@ -1950,7 +1950,7 @@ class ExportElpApogeeCommand extends Command
                 __DIR__ . "/../Service/Apogee/data-test/" . self::$codElpApogeeDataTest)
         );
         return array_filter(
-            $elpArray, 
+            $elpArray,
             fn($elp) => in_array($elp->codElp, $dataElpApogee, true) === false
         );
     }

@@ -40,10 +40,10 @@ class StructureEc
     public array $heuresEctsEcEnfants = [];
 
     #[Groups(['DTO_json_versioning'])]
-    public ?array $mcccs;
+    public ?array $mcccs = [];
 
     #[Groups(['DTO_json_versioning'])]
-    public ?string $typeMccc;
+    public ?string $typeMccc = null;
 
     #[Groups(['DTO_json_versioning'])]
     public ?array $bccs;

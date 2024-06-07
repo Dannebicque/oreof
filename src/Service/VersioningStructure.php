@@ -26,6 +26,7 @@ class VersioningStructure
         private StructureParcours $dtoOrigine,
         private StructureParcours $dtoNouveau
     ) {
+//        dd($this->dtoOrigine);
     }
 
     public function calculDiff()
@@ -106,11 +107,19 @@ class VersioningStructure
         $diff['libelle'] = new DiffObject($ueOriginale->ue->getLibelle(), $ueNouvelle->ue->getLibelle());
         $diff['raccroche'] = new DiffObject($ueOriginale->raccroche, $ueNouvelle->raccroche);
         foreach ($ueOriginale->elementConstitutifs as $ordreEc => $ec) {
-            $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, $ueNouvelle->elementConstitutifs[$ordreEc]);
+            if (!array_key_exists($ordreEc, $ueNouvelle->elementConstitutifs)) {
+                //donc n'existe plus ?
+            } else {
+                $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, $ueNouvelle->elementConstitutifs[$ordreEc]);
+            }
         }
-
+//dump($ueOriginale);
         foreach ($ueOriginale->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
-            $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe($ueEnfant, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
+            if (array_key_exists($ordreUeEnfant, $ueNouvelle->uesEnfants())) {
+                $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe($ueEnfant, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
+            } else {
+                //donc n'existe plus ?
+            }
         }
 
         $diff['heuresEctsUe'] = $this->compareHeuresEctsUe($ueOriginale->heuresEctsUe, $ueNouvelle->heuresEctsUe);
@@ -135,10 +144,14 @@ class VersioningStructure
         }
 
         $diff['libelle'] = new DiffObject($libelleOriginal, $libelleNew);
+        $diff['code'] = new DiffObject($ecOriginal->elementConstitutif->getCode(), $ecNouveau->elementConstitutif->getCode());
         $diff['raccroche'] = new DiffObject($ecOriginal->raccroche, $ecNouveau->raccroche);
         $diff['heuresEctsEc'] = $this->compareHeuresEctsEc($ecOriginal->heuresEctsEc, $ecNouveau->heuresEctsEc);
-        $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, $ecNouveau->typeMccc);
-        $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
+        if ($ecOriginal->typeMccc !== null && $ecNouveau->typeMccc !== null) {
+            $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, $ecNouveau->typeMccc);
+            $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
+        }
+
 
 
         return $diff;
@@ -300,7 +313,11 @@ class VersioningStructure
         $mccc->setTypeEpreuve($mcccOriginal['typeEpreuve']);
         $mccc->setControleContinu($mcccOriginal['controleContinu'] == 1);
         $mccc->setExamenTerminal($mcccOriginal['examenTerminal'] == 1);
-        $mccc->setNumeroEpreuve($mcccOriginal['numeroEpreuve']);
+        if (array_key_exists('numeroEpreuve', $mcccOriginal)) {
+            // création d'un objet DateTime à partir d'une chaine de caractères
+            $mccc->setNumeroEpreuve($mcccOriginal['numeroEpreuve']);
+        }
+
 
         if (array_key_exists('options', $mcccOriginal)) {
             $mccc->setOptions($mcccOriginal['options']);
