@@ -183,6 +183,12 @@ final class MentionManageComponent extends AbstractController
         if ($this->type === 'formation') {
             $this->typeDiplome = $this->formation->getTypeDiplome();
             $this->place = $this->getPlace($this->type);
+
+            if ($this->formation !== null && $this->formation->isHasParcours() === false) {
+                $parcours = $this->formation->getParcours()->first();
+                $this->hasDemande =
+                    GetDpeParcours::getFromParcours($parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_TEXTE || GetDpeParcours::getFromParcours($parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE || GetDpeParcours::getFromParcours($parcours)?->getEtatReconduction() === TypeModificationDpeEnum::MODIFICATION_MCCC;
+            }
         } elseif ($this->type === 'parcours' && $this->parcours !== null) {
             $this->typeDiplome = $this->parcours?->getFormation()?->getTypeDiplome();
             $this->formation = $this->parcours?->getFormation();

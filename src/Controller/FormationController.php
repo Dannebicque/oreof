@@ -398,13 +398,14 @@ class FormationController extends BaseController
         }
 
         $typeD = $typeDiplomeRegistry->getTypeDiplome($typeDiplome->getModeleMcc());
-
+        $hasLastVersion = false;
         /**
          * VERSIONING PARCOURS PAR DÉFAUT
          */
         $cssDiff = DiffHelper::getStyleSheet();
         if($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
             $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);
+            $hasLastVersion = $versioningParcours->hasLastVersion();
         }
 
         /**
@@ -419,7 +420,8 @@ class FormationController extends BaseController
             'cssDiff' => $cssDiff,
             'stringDifferencesParcours' => $textDifferencesParcours ?? [],
             'stringDifferencesFormation' => $formationStringDifferences ?? [],
-            'versioningParcours' => $versioningParcours
+            'versioningParcours' => $versioningParcours,
+            'hasLastVersion' => $hasLastVersion,
         ]);
     }
 

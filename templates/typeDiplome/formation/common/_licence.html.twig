@@ -64,7 +64,6 @@
                         zone: 'descriptif',
                     }) }}
                     {% endif %}
-                    //render controller
                     {{ render(controller('App\\Controller\\StructureShowController::licence', {
                         parcours: formation.parcours[0].id,
                         hasLastVersion: hasLastVersion ?? false,

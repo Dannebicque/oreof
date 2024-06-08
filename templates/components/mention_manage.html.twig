@@ -474,8 +474,49 @@
                                 </button>
                             </div>
                             <div class="col-3 d-grid">
-                                <button class="btn btn-sm btn-outline-warning d-block">Demandes de modifications
-                                </button>
+                                {% if formation.hasParcours == false %}
+                                    {% if not this.hasDemande %}
+                                        <button class="btn btn-sm d-block btn-outline-warning"
+                                                type="button"
+                                                {{ stimulus_controller('modal', {
+                                                    size: 'lg',
+                                                    nomEvenement: 'refreshPage',
+                                                    modalTitle: ('demande.reouverture.title')|trans({}, 'process'),
+                                                    modalUrl: path('app_validation_demande_reouverture', {
+                                                        id:formation.parcours[0].id,
+                                                        type:'parcours'
+                                                    }) }) }}
+                                                data-action="click->modal#openModal"
+                                                data-controller="tooltip"
+                                                data-tooltip-placement-value="bottom"
+
+                                                aria-label="{{ ('demande.reouverture')|trans({}, 'process') }}"
+                                                data-bs-original-title="{{ ('demande.reouverture')|trans({}, 'process') }}"
+                                        >
+                                            <i class="fal fa-question"></i> {{ ('demande.reouverture')|trans({}, 'process') }}
+                                        </button>
+                                    {% else %}
+                                        <button class="btn btn-sm d-block btn-outline-warning"
+                                                type="button"
+                                                {{ stimulus_controller('modal', {
+                                                    size: 'lg',
+                                                    nomEvenement: 'refreshPage',
+                                                    modalTitle: ('demande.reouverture.clore.title')|trans({}, 'process'),
+                                                    modalUrl: path('app_validation_demande_reouverture_cloture', {
+                                                        id:formation.parcours[0].id,
+                                                        type:'parcours'
+                                                    }) }) }}
+                                                data-action="click->modal#openModal"
+                                                data-controller="tooltip"
+                                                data-tooltip-placement-value="bottom"
+
+                                                aria-label="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
+                                                data-bs-original-title="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
+                                        >
+                                            <i class="fal fa-close"></i> {{ ('demande.reouverture.clore')|trans({}, 'process') }}
+                                        </button>
+                                    {% endif %}
+                                {% endif %}
                             </div>
                             <div class="col-3 d-grid">
 
