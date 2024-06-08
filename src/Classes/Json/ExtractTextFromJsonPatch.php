@@ -79,12 +79,27 @@ abstract class ExtractTextFromJsonPatch
                 'sommeUeCmPres' => 'Total CM UE',
                 'sommeUeTdPres' => 'Total TD UE',
                 'sommeUeTpPres' => 'Total TP UE',
+                'sommeUeEcts' => 'Total ECTS UE',
                 'sommeSemestreCmPres' => 'Total CM Semestre',
                 'sommeSemestreTdPres' => 'Total TD Semestre',
                 'sommeSemestreTpPres' => 'Total TP Semestre',
                 'sommeFormationCmPres' => 'Total CM Formation',
                 'sommeFormationTdPres' => 'Total TD Formation',
                 'sommeFormationTpPres' => 'Total TP Formation',
+                'id' => 'id',
+                'ects' => 'ECTS',
+                'pourcentage' => 'Pourcentage',
+                'controleContinu' => 'Contrôle Continu',
+                'examenTerminal' => 'Examen Terminal',
+                'numeroSession' => 'Numéro de session',
+                'numeroEpreuve' => 'Numéro d\'épreuve',
+                'typeMccc' => 'Type de MCCC',
+                'libre' => 'Libre',
+                'raccroche' => 'Raccroché',
+                'nbEpreuves' => 'Nb épreuves',
+                'code' => 'Code',
+                'ordre' => 'Ordre',
+                'sigle' => 'Sigle',
             ];
             return $translateField[$tab[count($tab) - 1]];
         }
@@ -95,6 +110,9 @@ abstract class ExtractTextFromJsonPatch
         string $path,
         string  $jsonCourant
     ) {
+
+        // todo: identifier les regex des cas possibles pour traiter ...Pourrait se faire avant sur le tableau de patch pour essayer de fusionner des lignes ?
+
         $tab = JsonPointer::splitPath($path);
         //selon la dernière valeur du tableau $tab, reconstruire un path avec les éléments précédents
         if (count($tab) > 2 &&
@@ -111,13 +129,36 @@ abstract class ExtractTextFromJsonPatch
                 array_pop($tab);
             }
 
-            $pathh = JsonPointer::buildPath($tab);
-
             $elt = JsonPointer::get(json_decode($jsonCourant), $tab);
             if (!is_array($elt)) {
                 return $elt->elementConstitutif->code;
             }
         }
+
+        if (count($tab) > 4 && $tab[count($tab) - 3] === 'mcccs') {
+            //EC enfants
+            array_pop($tab);
+            array_pop($tab);
+            array_pop($tab);
+            $elt = JsonPointer::get(json_decode($jsonCourant), $tab);
+
+            if (!is_array($elt) && property_exists($elt, 'code')) {
+                return $elt->code;
+            }
+        }
+
         return '';
+    }
+
+    public static function getLastItem(string $path): bool
+    {
+        $tab = JsonPointer::splitPath($path);
+
+        if (count($tab) > 1 && ($tab[count($tab) - 1] === 'id' || $tab[count($tab) - 1] === 'slug')) {
+            return false;
+        }
+
+        return true;
+
     }
 }
