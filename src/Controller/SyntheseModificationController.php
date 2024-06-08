@@ -136,8 +136,6 @@ class SyntheseModificationController extends BaseController
             }
         }
 
-        dump($string);
-
         return null;
     }
 }
