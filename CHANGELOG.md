@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.3](https://github.com/Dannebicque/oreof/compare/v1.29.2...v1.29.3) (2024-06-08)
+
+
+### Features
+
+* export des synthèses ([df5ff89](https://github.com/Dannebicque/oreof/commit/df5ff89f6532b5aae2a6d80fdbbff9d928dc3f22))
+
+
+### Bug Fixes
+
+* Ouverture si formation sans parcours ([38728e2](https://github.com/Dannebicque/oreof/commit/38728e2be241015da4638aa521645a51572785bf))
+
 ### [1.29.2](https://github.com/Dannebicque/oreof/compare/v1.29.1...v1.29.2) (2024-06-07)
 
 
