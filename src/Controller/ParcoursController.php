@@ -250,6 +250,7 @@ class ParcoursController extends BaseController
 
         $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcours);
         $textDifferencesFormation = $versioningFormation->getDifferencesBetweenFormationAndLastVersion($formation);
+        $version = $versioningParcours->hasLastVersion();
 
         $cssDiff = DiffHelper::getStyleSheet();
 
@@ -264,7 +265,8 @@ class ParcoursController extends BaseController
             'stringDifferencesParcours' => $textDifferencesParcours,
             'stringDifferencesFormation' => $textDifferencesFormation,
             'hasLastVersion' => $versioningParcours->hasLastVersion(),
-            'cssDiff' => $cssDiff
+            'cssDiff' => $cssDiff,
+            'version' => $version,
         ]);
     }
 
@@ -291,7 +293,7 @@ class ParcoursController extends BaseController
         }
 
         $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($parcour);
-        $version = $versioningParcours->hasLastVersion($parcour);
+        $version = $versioningParcours->hasLastVersion();
 
         $parcoursState->setParcours($parcour);
         $typeDiplome = $parcour->getFormation()?->getTypeDiplome();

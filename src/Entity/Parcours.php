@@ -15,6 +15,7 @@ use App\Entity\Traits\LifeCycleTrait;
 use App\Enums\ModaliteEnseignementEnum;
 use App\Enums\NiveauLangueEnum;
 use App\Enums\RegimeInscriptionEnum;
+use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
 use App\Repository\ParcoursRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -1422,5 +1423,15 @@ class Parcours
         $this->niveauFrancais = $niveauFrancais;
 
         return $this;
+    }
+
+    public function etatDpeParcours() : array
+    {
+        return $this->dpeParcours->first()?->getEtatValidation();
+    }
+
+    public function withCfvu() : bool
+    {
+        return $this->dpeParcours->first()?->withCfvu();
     }
 }
