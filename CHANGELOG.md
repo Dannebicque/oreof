@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.4](https://github.com/Dannebicque/oreof/compare/v1.29.3...v1.29.4) (2024-06-09)
+
+
+### Bug Fixes
+
+* affichage indicateur si CFVU ou pas + bouton export excel versionné ([723eb35](https://github.com/Dannebicque/oreof/commit/723eb35b7e77365c8d2c62579bb0cbb86be4a732))
+* affichage status formation selon le DPE ([0fc8bd6](https://github.com/Dannebicque/oreof/commit/0fc8bd6879002437fd979478196ef90ed2cee116))
+* affichage type de parcours ([47d255d](https://github.com/Dannebicque/oreof/commit/47d255da4525ff0a39790705c77270b673802899))
+* export avec ECEnfants ([4fbe760](https://github.com/Dannebicque/oreof/commit/4fbe760a77ac69130b826c86086abbd114c199aa))
+* export modifs ([709828e](https://github.com/Dannebicque/oreof/commit/709828ec52def13ce192c066dfb86241ae415684))
+* Ouverture si formation sans parcours ([9ddb887](https://github.com/Dannebicque/oreof/commit/9ddb88782c30d942c23c0eab682970cd18322827))
+
 ### [1.29.3](https://github.com/Dannebicque/oreof/compare/v1.29.2...v1.29.3) (2024-06-08)
 
 
