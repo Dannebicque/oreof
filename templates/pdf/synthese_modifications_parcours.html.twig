@@ -22,22 +22,24 @@
                             <p>{{ pp.nouveau }} (au lieu de {{ pp.original }})</p>
                         {% endfor %}
                     {% elseif key == 'added' %}
-                        {% for ppp in patch %}
-                        {% for pp in ppp %}
+                        {% for pp in patch %}
+{#                        {% for pp in ppp %}#}
                             {% if loop.first %}
                                 <p><strong>Elément ajouté :</strong></p>
+                                <p>{{ pp.libelle }}</p>
                             {% endif %}
-                            <p>{{ pp }}</p>
-                        {% endfor %}
+                            <p>{{ pp.nouveau }}</p>
+{#                        {% endfor %}#}
                         {% endfor %}
                     {% elseif key == 'removed' %}
-                        {% for ppp in patch %}
-                        {% for pp in ppp %}
+                        {% for pp in patch %}
+{#                        {% for pp in ppp %}#}
                             {% if loop.first %}
-                                <p><strong>Elément supprimé : {# pp.libelle #}</strong></p>
+                                <p><strong>Elément supprimé : </strong></p>
+                                <p>{{ pp.libelle }}</p>
                             {% endif %}
-                            <p>{{ pp }}</p>
-                        {% endfor %}
+                            <p>{{ pp.origine }}</p>
+{#                        {% endfor %}#}
                         {% endfor %}
                     {% endif %}
                 {% endfor %}

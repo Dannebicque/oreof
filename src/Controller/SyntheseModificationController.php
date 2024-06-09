@@ -84,7 +84,6 @@ class SyntheseModificationController extends BaseController
                 $r = new JsonDiff(json_decode($jsonCfvu), json_decode($jsonCourant));
                 $tDemandes[$comp->getId()][$parcours->getId()]['parcours'] = $parcours;
                 $tDemandes[$comp->getId()][$parcours->getId()]['nbDiff'] = $r->getDiffCnt();
-
                 $result['modified'] = [];
                 $result['added'] = [];
                 $result['removed'] = [];
@@ -103,10 +102,13 @@ class SyntheseModificationController extends BaseController
                                     $result['modified'][$key['path']][$key['key']]['nouveau'] = ExtractTextFromJsonPatch::getNewValueFromPatch($patch);
                                     break;
                                 case 'add':
-                                    $result['added'][$key['path']][$key['key']][] = ExtractTextFromJsonPatch::getAddFromPatch($patch);
+                                    $result['added'][$key['path']][$key['key']]['nouveau'] = ExtractTextFromJsonPatch::getLibelle($patch->path, $jsonCourant);
+                                    $result['added'][$key['path']][$key['key']]['libelle'] = ExtractTextFromJsonPatch::getTextFromPath($patch);
                                     break;
                                 case 'remove':
-                                    $result['removed'][$key['path']][$key['key']][] = ExtractTextFromJsonPatch::getRemoveFromPatch($patch);
+                                    //$result['removed'][$key['path']][$key['key']][] =ExtractTextFromJsonPatch::getRemoveFromPatch($patch);
+                                    $result['removed'][$key['path']][$key['key']]['origine'] = ExtractTextFromJsonPatch::getLibelle($patch->path, $jsonCfvu);
+                                    $result['removed'][$key['path']][$key['key']]['libelle'] = ExtractTextFromJsonPatch::getTextFromPath($patch);
                                     break;
                             }
                         }

@@ -9,7 +9,6 @@
 
 namespace App\Classes\Json;
 
-use Swaggest\JsonDiff\JsonDiff;
 use Swaggest\JsonDiff\JsonPointer;
 
 abstract class ExtractTextFromJsonPatch
@@ -110,9 +109,6 @@ abstract class ExtractTextFromJsonPatch
         string $path,
         string  $jsonCourant
     ) {
-
-        // todo: identifier les regex des cas possibles pour traiter ...Pourrait se faire avant sur le tableau de patch pour essayer de fusionner des lignes ?
-
         $tab = JsonPointer::splitPath($path);
         //selon la dernière valeur du tableau $tab, reconstruire un path avec les éléments précédents
         if (count($tab) > 2 &&
@@ -145,6 +141,16 @@ abstract class ExtractTextFromJsonPatch
             if (!is_array($elt) && property_exists($elt, 'code')) {
                 return $elt->code;
             }
+        }
+
+        if (count($tab) > 4 && $tab[count($tab) - 2] === 'typeEpreuve') {
+            array_pop($tab);
+            array_pop($tab);
+            $elt = JsonPointer::get(json_decode($jsonCourant), $tab);
+            if (!is_array($elt) && property_exists($elt, 'libelle')) {
+                return 'Type d\'épreuve : '.$elt->libelle.', Session : '.$elt->numeroSession.', % '.$elt->pourcentage;
+            }
+            return 'Type d\'épreuve';
         }
 
         return '';
