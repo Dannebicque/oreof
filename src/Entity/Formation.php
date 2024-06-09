@@ -745,17 +745,17 @@ class Formation
         return $this;
     }
 
-//    public function valideStep(mixed $value)
-//    {
-//        switch ((int) $value) {
-//            case 0:
-//                return true;
-//            case 1:
-//                return false;
-//            case 2:
-//                return false;
-//        }
-//    }
+    //    public function valideStep(mixed $value)
+    //    {
+    //        switch ((int) $value) {
+    //            case 0:
+    //                return true;
+    //            case 1:
+    //                return false;
+    //            case 2:
+    //                return false;
+    //        }
+    //    }
 
     public function getObjectifsFormation(): ?string
     {
@@ -1091,5 +1091,15 @@ class Formation
         }
 
         return $this;
+    }
+
+    public function etatDpeParcours() : array
+    {
+        //synthèse des états des parcours de la formation
+        $etatParcours = [];
+        foreach ($this->getParcours() as $parcours) {
+            $etatParcours[] = $parcours->getDpeParcours()->first()?->getEtatValidation();
+        }
+        return array_merge(...$etatParcours);
     }
 }
