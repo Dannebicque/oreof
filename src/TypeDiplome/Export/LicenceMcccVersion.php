@@ -188,7 +188,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                     foreach ($ec->elementsConstitutifsEnfants as $ordEce => $ece) {
                                         if (array_key_exists('ecEnfants', $diffEc) && array_key_exists($ordEce, $diffEc['ecEnfants'])) {
                                             $ligne = $this->afficheEc($ligne, $ece, $diffEc['ecEnfants'][$ordEce]);
-                                        }//todo: sinon mettre un e ligne d'erreur. Idem UE?
+                                        }
                                     }
                                 }
 
@@ -247,6 +247,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                         $diffEc = $diffUee['elementConstitutifs'][$ordEc];
                                         $ligne = $this->afficheEc($ligne, $ec, $diffEc);
                                         foreach ($ec->elementsConstitutifsEnfants as $ordEce => $ece) {
+
                                             $ligne = $this->afficheEc($ligne, $ece, $diffEc['ecEnfants'][$ordEce]);
                                         }
                                     }
@@ -588,7 +589,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
 
         // MCCC
 
-        if (array_key_exists('original', $diffEc['mcccs']) && array_key_exists('new', $diffEc['mcccs'])) {
+        if (array_key_exists('mcccs', $diffEc) && array_key_exists('original', $diffEc['mcccs']) && array_key_exists('new', $diffEc['mcccs'])) {
             $mcccsOriginal = $this->getMcccs($diffEc['mcccs']['original'], $diffEc['typeMccc']->original);
             $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
 

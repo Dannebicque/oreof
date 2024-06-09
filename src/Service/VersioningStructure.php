@@ -152,6 +152,15 @@ class VersioningStructure
             $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
         }
 
+        if ($ecNouveau->elementConstitutif->getNatureUeEc()?->isChoix()) {
+            //EC enfants
+            foreach ($ecNouveau->elementsConstitutifsEnfants as $ordreEc => $ecEnfant) {
+                if (array_key_exists($ordreEc, $ecOriginal->elementsConstitutifsEnfants)) {
+                    $diff['ecEnfants'][$ordreEc] = $this->compareElementConstitutif($ecOriginal->elementsConstitutifsEnfants[$ordreEc], $ecEnfant);
+                } //else supprimé
+            }
+        }
+
 
 
         return $diff;
