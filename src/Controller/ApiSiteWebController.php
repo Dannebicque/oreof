@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Classes\GetHistorique;
+use App\Entity\DpeParcours;
 use App\Repository\FormationRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,14 +22,42 @@ class ApiSiteWebController extends AbstractController
     {
         $data = [];
         $formations = $formatinRepository->findAll();
+
+        // COMPTEUR DES PARCOURS A ENVOYER
+        $countParcours = 0;
+
         foreach ($formations as $formation) {
+            /**
+             * 
+             * NE PRENDRE QUE LES PARCOURS QUI SONT ÉTIQUETÉS COMME PUBLIÉS
+             *  - Filtrer avec : array_filter()
+             * 
+             */
             $tParcours = [];
             foreach ($formation->getParcours() as $parcours) {
-                $tParcours[] = [
-                    'id' => $parcours->getId(),
-                    'libelle' => $parcours->getDisplay(),
-                    'url' => $this->generateUrl('app_parcours_export_json_urca', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL)
-                ];
+                $isPubliable = false;
+
+                if($parcours->getDpeParcours()?->last() instanceof DpeParcours){
+
+                    $etatValidation = $parcours->getDpeParcours()?->last()->getEtatValidation();        
+                    $count = count($parcours->getDpeParcours()?->last()->getEtatValidation()) ?? 0;
+
+                    if($count > 0 && isset($etatValidation)){
+                        $lastItem = array_keys($etatValidation)[$count - 1];
+                        if($lastItem === 'valide_a_publier'){
+                            $isPubliable = true;
+                            ++$countParcours;
+                        }
+                    }
+                }
+
+                if($isPubliable){
+                    $tParcours[] = [
+                        'id' => $parcours->getId(),
+                        'libelle' => $parcours->getDisplay(),
+                        'url' => $this->generateUrl('app_parcours_export_json_urca', ['parcours' => $parcours->getId()], UrlGenerator::ABSOLUTE_URL)
+                    ];
+                }
             }
 
 
@@ -40,6 +69,10 @@ class ApiSiteWebController extends AbstractController
                 'dateValidation' => $getHistorique->getHistoriqueFormationLastStep($formation, 'publication')?->getDate()?->format('Y-m-d H:i:s') ?? null,
             ];
         }
+
+        // VERIFICATION NOMBRE DE PARCOURS ENVOYÉS
+        // dump("Nombre de parcours envoyés : {$countParcours}.");exit;
+
 
         return new JsonResponse($data);
     }
