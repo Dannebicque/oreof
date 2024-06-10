@@ -46,22 +46,29 @@ class SyntheseModificationController extends BaseController
          */
 
         $patterns = [
-//            '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementConstitutif\/mcccs\/\d+\/',
-//             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementRaccroche\/mcccs\/\d+\/',
+
              '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/mcccs\/\d+\/', //(doublons avec le 1er?)
              '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/heuresEctsEc\/',
              '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/',
-             '\/semestres\/\d+\/ues\/\d+\/heuresEctsUe\/',
+
              '\/semestres\/\d+\/heuresEctsSemestre\/',
-             '\/semestres\/\d+\/ues\/\d+\/uesEnfants\/\d+\/elementConstitutifs\/\d+\/heuresEctsEc\/',
-             '\/semestres\/\d+\/ues\/\d+\/uesEnfants\/\d+\/heuresEctsUe\/',
-             '\/semestres\/\d+\/ues\/\d+\/heuresEctsUeEnfants\/\d+\/',
+
             '\/semestres\/\d+\/ues\/\d+\/uesEnfants\/\d+',
             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementsConstitutifsEnfants\/\d+\/elementConstitutif\/ficheMatiere\/',
              '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementsConstitutifsEnfants\/\d+\/heuresEctsEc\/',
-             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/heuresEctsEcEnfants\/',
              '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementConstitutif\/natureUeEc\/',
              '\/heuresEctsFormation\/',
+        ];
+
+        $patternsAIgnorer = [
+            '\/semestres\/\d+\/ues\/\d+\/heuresEctsUe\/',
+            '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementConstitutif\/mcccs\/\d+\/',
+            '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementRaccroche\/mcccs\/\d+\/',
+            '\/semestres\/\d+\/ues\/\d+\/uesEnfants\/\d+\/elementConstitutifs\/\d+\/heuresEctsEc\/',
+            '\/semestres\/\d+\/ues\/\d+\/uesEnfants\/\d+\/heuresEctsUe\/',
+            '\/semestres\/\d+\/ues\/\d+\/heuresEctsUeEnfants\/\d+\/',
+            '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/heuresEctsEcEnfants\/',
+
         ];
 
         $allparcours = $parcoursRepository->findByTypeValidationAttenteCfvu($this->getDpe(), 'soumis_central'); //soumis_cfvu
@@ -90,7 +97,7 @@ class SyntheseModificationController extends BaseController
 
                 foreach ($r->getPatch()->jsonSerialize() as $patch) {
                     if (ExtractTextFromJsonPatch::getLastItem($patch->path)) {
-                        $key = $this->extractPatternsFromString($patterns, $patch->path);
+                        $key = $this->extractPatternsFromString($patterns, $patch->path, $patternsAIgnorer);
                         if ($key !== null) {
                             switch ($patch->op) {
                                 case 'test':
@@ -127,8 +134,17 @@ class SyntheseModificationController extends BaseController
 
     }
 
-    private function extractPatternsFromString(array $patterns, string $string): ?array
+    private function extractPatternsFromString(array $patterns, string $string, array $patternsAIgnorer = []): ?array
     {
+        // on regarde si c'est un pattern à ignorer
+        foreach ($patternsAIgnorer as $pattern) {
+            preg_match("/^(".$pattern.")/", $string, $matches);
+            if (!empty($matches[0])) {
+                return null;
+            }
+        }
+
+
         foreach ($patterns as $pattern) {
             preg_match("/^(".$pattern.")/", $string, $matches);
             if (!empty($matches[0])) {

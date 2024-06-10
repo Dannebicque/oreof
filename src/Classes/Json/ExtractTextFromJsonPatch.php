@@ -153,7 +153,7 @@ abstract class ExtractTextFromJsonPatch
             return 'Type d\'épreuve';
         }
 
-        return $path;
+        return '';
     }
 
     public static function getLastItem(string $path): bool
