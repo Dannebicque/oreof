@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.6](https://github.com/Dannebicque/oreof/compare/v1.29.5...v1.29.6) (2024-06-10)
+
+
+### Bug Fixes
+
+* export en CFVU ([e676f12](https://github.com/Dannebicque/oreof/commit/e676f12de9007ab52cebd24a502f9e42fcc05a89))
+
 ### [1.29.5](https://github.com/Dannebicque/oreof/compare/v1.29.4...v1.29.5) (2024-06-09)
 
 
