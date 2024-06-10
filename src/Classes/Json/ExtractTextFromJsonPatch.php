@@ -84,9 +84,13 @@ abstract class ExtractTextFromJsonPatch
             'sommeSemestreCmPres' => 'Total CM Semestre',
             'sommeSemestreTdPres' => 'Total TD Semestre',
             'sommeSemestreTpPres' => 'Total TP Semestre',
+            'sommeSemestreTePres' => 'Total TA Semestre',
+            'sommeSemestreEcts' => 'Total ECTS Semestre',
             'sommeFormationCmPres' => 'Total CM Formation',
             'sommeFormationTdPres' => 'Total TD Formation',
             'sommeFormationTpPres' => 'Total TP Formation',
+            'sommeFormationTePres' => 'Total TA Formation',
+            'sommeFormationEcts' => 'Total ECTS Formation',
             'id' => 'id',
             'ects' => 'ECTS',
             'pourcentage' => 'Pourcentage',
@@ -101,6 +105,13 @@ abstract class ExtractTextFromJsonPatch
             'code' => 'Code',
             'ordre' => 'Ordre',
             'sigle' => 'Sigle',
+            'iut_portfolio' => 'Portfolio',
+            'iut_livrable' => 'Livrable',
+            'iut_rapport' => 'Rapport',
+            'iut_soutenance' => 'Soutenance',
+            'hors_iut_entreprise' => 'Entreprise',
+            'hors_iut_rapport' => 'Rapport Entreprise',
+            'tePres' => 'Travail en autonomie',
         ];
         if (array_key_exists(self::$key, $translateField)) {
             return $translateField[self::$key];
