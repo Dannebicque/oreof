@@ -28,33 +28,17 @@ class SyntheseModificationController extends BaseController
             $tDemandes[$composante->getId()] = [];
         }
 
-        /**
-         * /semestres/1/ues/5/elementConstitutifs/0/elementConstitutif/mcccs/0/
-         * /semestres/1/ues/5/elementConstitutifs/0/elementRaccroche/mcccs/0/
-         * /semestres/1/ues/5/elementConstitutifs/0/mcccs/0/ (doublons avec le 1er?)
-         * /semestres/1/ues/5/elementConstitutifs/1/heuresEctsEc/
-         * /semestres/1/ues/5/heuresEctsUe/
-         * /semestres/1/heuresEctsSemestre/"
-         * /semestres/4/ues/4/uesEnfants/0/elementConstitutifs/1/heuresEctsEc/"
-         * /semestres/4/ues/4/uesEnfants/0/heuresEctsUe/"
-         * /semestres/4/ues/4/heuresEctsUeEnfants/1/"
-         * /semestres/4/ues/5/elementConstitutifs/2/elementsConstitutifsEnfants/31941/elementConstitutif/ficheMatiere/"
-         * /semestres/4/ues/5/elementConstitutifs/2/elementsConstitutifsEnfants/31941/heuresEctsEc/"
-         * /semestres/4/ues/5/elementConstitutifs/2/heuresEctsEcEnfants/"
-         * /semestres/6/ues/5/elementConstitutifs/1/elementConstitutif/natureUeEc/"
-         * /heuresEctsFormation/"
-         */
-
         $patterns = [
             '\/heuresEctsFormation\/',
              '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/heuresEctsEc\/',
-             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/',
+
              '\/semestres\/\d+\/heuresEctsSemestre\/',
             '\/semestres\/\d+\/ues\/\d+\/uesEnfants\/\d+',
             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementsConstitutifsEnfants\/\d+\/elementConstitutif\/ficheMatiere\/',
              '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementsConstitutifsEnfants\/\d+\/heuresEctsEc\/',
              '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementConstitutif\/natureUeEc\/',
-             '\/heuresEctsFormation\/',
+            '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/',
+            '\/heuresEctsFormation\/',
         ];
 
         $patternsAIgnorer = [
@@ -75,6 +59,7 @@ class SyntheseModificationController extends BaseController
             //récupère JSON CFVU
             $lastVersion = $parcoursVersioningRepository->findLastVersion($parcours);
             $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
+            //dump($parcours->getLibelle());
 
             //on fait une copie de la version courante en json
             $jsonCourant = $versioningParcours->saveVersionOfParcoursCourant($parcours);
@@ -110,7 +95,6 @@ class SyntheseModificationController extends BaseController
                                     $result['added'][$key['path']][$key['key']]['libelle'] = ExtractTextFromJsonPatch::getTextFromPath($patch);
                                     break;
                                 case 'remove':
-                                    //$result['removed'][$key['path']][$key['key']][] =ExtractTextFromJsonPatch::getRemoveFromPatch($patch);
                                     $result['removed'][$key['path']][$key['key']]['origine'] = ExtractTextFromJsonPatch::getLibelle($patch->path, $jsonCfvu);
                                     $result['removed'][$key['path']][$key['key']]['libelle'] = ExtractTextFromJsonPatch::getTextFromPath($patch);
                                     break;
@@ -118,7 +102,7 @@ class SyntheseModificationController extends BaseController
                         }
                     }
                 }
-
+//dump($result);
                 $tDemandes[$comp->getId()][$parcours->getId()]['patch'] = $result;
             }
         }
