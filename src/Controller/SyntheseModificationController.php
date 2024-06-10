@@ -46,13 +46,10 @@ class SyntheseModificationController extends BaseController
          */
 
         $patterns = [
-
-             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/mcccs\/\d+\/', //(doublons avec le 1er?)
+            '\/heuresEctsFormation\/',
              '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/heuresEctsEc\/',
              '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/',
-
              '\/semestres\/\d+\/heuresEctsSemestre\/',
-
             '\/semestres\/\d+\/ues\/\d+\/uesEnfants\/\d+',
             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementsConstitutifsEnfants\/\d+\/elementConstitutif\/ficheMatiere\/',
              '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementsConstitutifsEnfants\/\d+\/heuresEctsEc\/',
@@ -61,6 +58,7 @@ class SyntheseModificationController extends BaseController
         ];
 
         $patternsAIgnorer = [
+            '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/mcccs\/\d+\/', //todo: temporairement le temps de gérer l'affichage propre des MCCC
             '\/semestres\/\d+\/ues\/\d+\/heuresEctsUe\/',
             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementConstitutif\/mcccs\/\d+\/',
             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementRaccroche\/mcccs\/\d+\/',
@@ -68,7 +66,6 @@ class SyntheseModificationController extends BaseController
             '\/semestres\/\d+\/ues\/\d+\/uesEnfants\/\d+\/heuresEctsUe\/',
             '\/semestres\/\d+\/ues\/\d+\/heuresEctsUeEnfants\/\d+\/',
             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/heuresEctsEcEnfants\/',
-
         ];
 
         $allparcours = $parcoursRepository->findByTypeValidationAttenteCfvu($this->getDpe(), 'soumis_central'); //soumis_cfvu
@@ -121,6 +118,7 @@ class SyntheseModificationController extends BaseController
                         }
                     }
                 }
+
                 $tDemandes[$comp->getId()][$parcours->getId()]['patch'] = $result;
             }
         }

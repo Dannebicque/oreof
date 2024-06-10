@@ -17,10 +17,10 @@ abstract class ExtractTextFromJsonPatch
     public static function getNewValueFromPatch($patch): string
     {
         if (!is_object($patch->value)) {
-            return 'Nouvelle valeur pour "' . self::getField($patch->path) . '" : ' . $patch->value;
+            return self::getField($patch->path) . '" : ' . $patch->value;
         }
 
-        return 'Nouvelle valeur pour "' . self::getField($patch->path) . '" : valeur objet...';
+        return self::getField($patch->path) . '" : valeur objet...';
 
     }
 
