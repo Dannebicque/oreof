@@ -110,7 +110,7 @@ class ExportController extends BaseController
             throw $this->createNotFoundException('La composante n\'existe pas');
         }
 
-        if ($this->isGranted('ROLE_SES')) {
+        if ($this->isGranted('ROLE_SES') || $this->isGranted('CAN_ETABLISSEMENT_SHOW_ALL', $this->getUser())) {
             $formations = $formationRepository->findByComposante($composante, $this->getDpe());
         } elseif ($this->isGranted('CAN_ETABLISSEMENT_CONSEILLER_ALL', $this->getUser())) {
             $formations = $formationRepository->findByComposanteCfvu($composante, $this->getDpe());
