@@ -106,7 +106,7 @@ abstract class ExtractTextFromJsonPatch
             return $translateField[self::$key];
         }
 
-        return '?field';
+        return '?field ' . self::$key;
     }
 
     public static function getLibelle(
