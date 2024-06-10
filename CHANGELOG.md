@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.7](https://github.com/Dannebicque/oreof/compare/v1.29.6...v1.29.7) (2024-06-10)
+
+
+### Bug Fixes
+
+* affichage synthèse PDF ([dfb9052](https://github.com/Dannebicque/oreof/commit/dfb90527aed22a174e7c504e85acc3fced8995ca))
+* suppression bundle translation ([6865b38](https://github.com/Dannebicque/oreof/commit/6865b384d230ec9cc76d557f1cdab17f4b567ab1))
+* suppression bundle translation ([52c6b40](https://github.com/Dannebicque/oreof/commit/52c6b403e46251bd7cb936c06d59a0790541f4f5))
+
 ### [1.29.6](https://github.com/Dannebicque/oreof/compare/v1.29.5...v1.29.6) (2024-06-10)
 
 
