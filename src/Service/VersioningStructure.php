@@ -125,8 +125,8 @@ class VersioningStructure
                 $libelleNew = $ecNouveau->elementConstitutif->getLibelle();
             }
 
-            $diff['libelle'] = new DiffObject('', $libelleNew);
-            $diff['code'] = new DiffObject('', $ecNouveau->elementConstitutif->getCode());
+            $diff['libelle'] = new DiffObject('-', $libelleNew);
+            $diff['code'] = new DiffObject('-', $ecNouveau->elementConstitutif->getCode());
             $diff['raccroche'] = new DiffObject(null, $ecNouveau->raccroche);
             $diff['heuresEctsEc'] = $this->compareHeuresEctsEc(null, $ecNouveau->heuresEctsEc);
             $diff['typeMccc'] = new DiffObject('', $ecNouveau->typeMccc);
