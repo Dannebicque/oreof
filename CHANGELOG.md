@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.10](https://github.com/Dannebicque/oreof/compare/v1.29.9...v1.29.10) (2024-06-12)
+
+
+### Features
+
+* Ajout des EC ajoutées ([93725ee](https://github.com/Dannebicque/oreof/commit/93725eebb5e9875e84f6ba6dd27f4cb9ca61f51a))
+* Ajout des EC ajoutées ([c2adb8d](https://github.com/Dannebicque/oreof/commit/c2adb8deed755c87e32c770dd8f9236afc1b49de))
+* is ouvert valeur par défaut sur semestre ([64619da](https://github.com/Dannebicque/oreof/commit/64619da6cf6166ce4fb759be3d8a06adefa26720))
+
 ### [1.29.9](https://github.com/Dannebicque/oreof/compare/v1.29.8...v1.29.9) (2024-06-12)
 
 
