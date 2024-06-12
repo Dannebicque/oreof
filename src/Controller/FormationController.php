@@ -405,7 +405,7 @@ class FormationController extends BaseController
         $cssDiff = DiffHelper::getStyleSheet();
         if($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
             $textDifferencesParcours = $versioningParcours->getDifferencesBetweenParcoursAndLastVersion($formation->getParcours()[0]);
-            $hasLastVersion = $versioningParcours->hasLastVersion();
+            $hasLastVersion = $versioningParcours->hasLastVersion($formation->getParcours()[0]);
         }
 
         /**
@@ -430,6 +430,7 @@ class FormationController extends BaseController
      */
     #[Route('/{slug}/edit', name: 'app_formation_edit', methods: ['GET', 'POST'])]
     public function edit(
+        VersioningParcours $versioningParcours,
         ParcoursState       $parcoursState,
         FormationState      $formationState,
         Request             $request,
@@ -446,13 +447,18 @@ class FormationController extends BaseController
             $parcoursState->setParcours($formation->getParcours()?->first());
         }
 
+        if($formation->isHasParcours() === false && count($formation->getParcours()) === 1) {
+            $hasLastVersion = $versioningParcours->hasLastVersion($formation->getParcours()[0]);
+        }
+
         return $this->render('formation/edit.html.twig', [
             'formation' => $formation,
             'selectedStep' => $request->query->get('step', 1),
             'typeDiplome' => $formation->getTypeDiplome(),
             'parcoursState' => $parcoursState,
             'formationState' => $formationState,
-            'typeD' => $typeD
+            'typeD' => $typeD,
+            'hasLastVersion' => $hasLastVersion ?? null
         ]);
     }
 

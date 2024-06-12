@@ -39,8 +39,14 @@
                 </dl>
             </div>
             {% if formation.hasParcours == false and formation.parcours[0] is defined %}
-                {{ include('communs/_boutonSynthese.html.twig', {parcours: formation.parcours[0], col:col}) }}
+                {% if hasLastVersion is defined and hasLastVersion != null %}
+                    {{ include('communs/_boutonSynthese_version.html.twig', {parcours: formation.parcours[0], col:'col-3'}) }}
+                {% else %}
+                    {{ include('communs/_boutonSynthese.html.twig', {parcours: formation.parcours[0], col:'col-3'}) }}
+                {% endif %}
             {% endif %}
+
+
             <div class="d-flex d-grid justify-content-end">
 
                 {% if is_granted('ROLE_SES') %}

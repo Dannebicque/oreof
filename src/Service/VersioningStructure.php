@@ -26,10 +26,9 @@ class VersioningStructure
         private StructureParcours $dtoOrigine,
         private StructureParcours $dtoNouveau
     ) {
-//        dd($this->dtoOrigine);
     }
 
-    public function calculDiff()
+    public function calculDiff(): array
     {
         // parcourir les deux structures et comparer. Construire un tableau de différences
         $diff = [];
@@ -42,7 +41,7 @@ class VersioningStructure
         return $diff;
     }
 
-    private function compareSemestre(StructureSemestre $semestreOriginal, StructureSemestre $semestreNouveau)
+    private function compareSemestre(StructureSemestre $semestreOriginal, StructureSemestre $semestreNouveau): array
     {
         $diff = [];
 
@@ -82,25 +81,6 @@ class VersioningStructure
 
     private function compareUe(StructureUe $ueOriginale, StructureUe $ueNouvelle): array
     {
-        /*
-         * "display" => "UE 1.1"
-          "ueOrigine" => array:4 [▶]
-          "ue" => array:4 [▶]
-          "raccroche" => false
-          "elementConstitutifs" => array:1 [▶]
-          "uesEnfants" => []
-          "heuresEctsUeEnfants" => []
-          "heuresEctsUe" => array:8 [▼
-            "sommeUeEcts" => 6.0
-            "sommeUeCmPres" => 20.0
-            "sommeUeTdPres" => 20.0
-            "sommeUeTpPres" => 0.0
-            "sommeUeTePres" => 0.0
-            "sommeUeCmDist" => 0.0
-            "sommeUeTdDist" => 0.0
-            "sommeUeTpDist" => 0.0
-          ]
-         */
         $diff = [];
 
         $diff['display'] = new DiffObject($ueOriginale->display, $ueNouvelle->display);
@@ -113,7 +93,6 @@ class VersioningStructure
                 $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, $ueNouvelle->elementConstitutifs[$ordreEc]);
             }
         }
-//dump($ueOriginale);
         foreach ($ueOriginale->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
             if (array_key_exists($ordreUeEnfant, $ueNouvelle->uesEnfants())) {
                 $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe($ueEnfant, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
@@ -161,12 +140,10 @@ class VersioningStructure
             }
         }
 
-
-
         return $diff;
     }
 
-    private function compareHeuresEctsUe(HeuresEctsUe $heuresEctsUe, HeuresEctsUe $heuresEctsUe1)
+    private function compareHeuresEctsUe(HeuresEctsUe $heuresEctsUe, HeuresEctsUe $heuresEctsUe1): array
     {
         $diff = [];
         $diff['sommeUeEcts'] = new DiffObject($heuresEctsUe->sommeUeEcts, $heuresEctsUe1->sommeUeEcts);
@@ -190,7 +167,7 @@ class VersioningStructure
         return $diff;
     }
 
-    private function compareHeuresEctsEc(HeuresEctsEc $heuresEctsEc, HeuresEctsEc $heuresEctsEc1)
+    private function compareHeuresEctsEc(HeuresEctsEc $heuresEctsEc, HeuresEctsEc $heuresEctsEc1): array
     {
         $diff = [];
         $diff['ects'] = new DiffObject($heuresEctsEc->ects, $heuresEctsEc1->ects);
@@ -211,7 +188,7 @@ class VersioningStructure
 
     }
 
-    private function compareHeuresEctsFormation(mixed $heuresEctsFormation, $heuresEctsFormationNouveau)
+    private function compareHeuresEctsFormation(mixed $heuresEctsFormation, $heuresEctsFormationNouveau): array
     {
         $diff = [];
         $diff['sommeFormationEcts'] = new DiffObject($heuresEctsFormation->sommeFormationEcts, $heuresEctsFormationNouveau->sommeFormationEcts);

@@ -84,12 +84,12 @@
             ecEnfant:false,
             diffEc: diffUe.elementConstitutifs[ordEc] ?? null
         }) }}
-        {% for ece in ec.elementsConstitutifsEnfants %}
+        {% for ordEce, ece in ec.elementsConstitutifsEnfants %}
             {{ include('typeDiplome/formation/_structureEc.html.twig', {
                 ec:ece,
                 semestreOrdre:semestreOrdre,
                 ecEnfant:true,
-                diffEc: diffUe.elementConstitutifs[ordEc] ?? null
+                diffEc: diffUe.elementConstitutifs[ordEc].ecEnfants[ordEce] ?? null
             }) }}
         {% endfor %}
     {% endfor %}

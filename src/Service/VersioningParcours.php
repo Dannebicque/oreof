@@ -33,7 +33,7 @@ class VersioningParcours
     private Filesystem $fileSystem;
     private TypeDiplomeRegistry $typeD;
 
-    private bool $hasLastVersion = false;
+    private ?bool $hasLastVersion = null;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -125,14 +125,23 @@ class VersioningParcours
         ];
     }
 
+    private function getLastVersion(Parcours $parcours): void
+    {
+        $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
+        $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
+        if($lastVersion) {
+            $this->hasLastVersion = true;
+        }
+    }
+
     public function getDifferencesBetweenParcoursAndLastVersion(Parcours $parcours): array
     {
         $textDifferences = [];
-        $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
-        $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
 
-        if($lastVersion) {
-            $this->hasLastVersion = true;
+        $this->getLastVersion($parcours);
+        if($this->hasLastVersion) {
+            $lastVersion = $this->entityManager->getRepository(ParcoursVersioning::class)->findLastVersion($parcours);
+            $lastVersion = $lastVersion[0];
             // Configuration du calcul des différences
             $rendererName = 'Combined';
             $differOptions = [
@@ -384,9 +393,10 @@ class VersioningParcours
         return null;
     }
 
-    public function hasLastVersion(): bool
+    public function hasLastVersion(Parcours $parcours): bool
     {
-        return $this->hasLastVersion;
+        $this->getLastVersion($parcours);
+        return $this->hasLastVersion ?? false;
     }
 
     public function loadJsonCfvu(Parcours $parcours, ParcoursVersioning $lastVersion) : ?string
