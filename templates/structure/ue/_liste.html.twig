@@ -523,15 +523,15 @@
                                                                 </li>
                                                                 <li>
                                                                     <a
-                                                                            {% if raccrocheEnfant == true %}
-                                                                                disabled
-                                                                                title="UE raccrochée, modifiable uniquement depuis le parcours d'origine"
-                                                                            {% else %}
+{#                                                                            {% if raccrocheEnfant == true %}#}
+{#                                                                                disabled#}
+{#                                                                                title="UE raccrochée, modifiable uniquement depuis le parcours d'origine"#}
+{#                                                                            {% else %}#}
                                                                                 {{ stimulus_action('structure--ue', 'delete', 'click', {
                                                                                     url:path('structure_ue_delete',{'id': uee.id}),
                                                                                     csrf: csrf_token('delete' ~ uee.id)
                                                                                 }) }}
-                                                                            {% endif %}
+{#                                                                            {% endif %}#}
                                                                             class="btn btn-sm text-danger">
                                                                         <i class="{{ iconDelete }}"></i> Supprimer
                                                                     </a>
