@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.9](https://github.com/Dannebicque/oreof/compare/v1.29.8...v1.29.9) (2024-06-12)
+
+
+### Features
+
+* Ajout des EC ajoutées ([f9b359f](https://github.com/Dannebicque/oreof/commit/f9b359ffbb2cdfc7f8dac7c304379e34d2a3522b))
+
+
+### Bug Fixes
+
+* bouton MCCC sur header ([4bb789b](https://github.com/Dannebicque/oreof/commit/4bb789bf618206a3379bd5f1eb8663880cdd390f))
+
 ### [1.29.8](https://github.com/Dannebicque/oreof/compare/v1.29.7...v1.29.8) (2024-06-12)
 
 
