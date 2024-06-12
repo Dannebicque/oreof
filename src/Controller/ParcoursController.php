@@ -29,8 +29,10 @@ use App\Enums\TypeModificationDpeEnum;
 use App\Enums\TypeParcoursEnum;
 use App\Events\AddCentreParcoursEvent;
 use App\Form\ParcoursType;
+use App\Repository\DpeParcoursRepository;
 use App\Repository\ElementConstitutifRepository;
 use App\Repository\ParcoursRepository;
+use App\Repository\ParcoursVersioningRepository;
 use App\Repository\UeRepository;
 use App\Service\LheoXML;
 use App\Service\VersioningFormation;
@@ -405,6 +407,8 @@ class ParcoursController extends BaseController
 
     #[Route('/{parcours}/maquette_iframe', name: 'app_parcours_maquette_iframe')]
     public function getMaquetteIframe(
+        ParcoursRepository $parcoursRepository,
+        ParcoursVersioningRepository $parcoursVersioningRepository,
         Parcours                     $parcours,
         EntityManagerInterface       $em,
         ElementConstitutifRepository $ecRepo,
@@ -421,12 +425,16 @@ class ParcoursController extends BaseController
 
         if ($formation->getTypeDiplome()->getLibelleCourt() === 'BUT') {
             $calcul = new CalculButStructureParcours();
+            $dto = $calcul->calcul($parcours);
         } else {
+            // todo: récupérer le dernier DPE du parcours, regarder s'il est publié, si oui, cas classique, si non récupérer la version sauvegardée
+
             $calcul = new CalculStructureParcours($em, $ecRepo, $ueRepository);
+            $dto = $calcul->calcul($parcours);
         }
 
         return $this->render('parcours/maquette_iframe.html.twig', [
-            'parcours' => $calcul->calcul($parcours)
+            'parcours' => $dto
         ]);
     }
 
