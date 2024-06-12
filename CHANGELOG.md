@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.12](https://github.com/Dannebicque/oreof/compare/v1.29.11...v1.29.12) (2024-06-12)
+
+
+### Features
+
+* Ajout semestre export CAP ([90225c1](https://github.com/Dannebicque/oreof/commit/90225c10c097b87eaf4e2ae12ee3ddaef59d0d19))
+
 ### [1.29.11](https://github.com/Dannebicque/oreof/compare/v1.29.10...v1.29.11) (2024-06-12)
 
 
