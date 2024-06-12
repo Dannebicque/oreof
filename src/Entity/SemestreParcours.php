@@ -57,7 +57,7 @@ class SemestreParcours
 
     #[ORM\Column]
     #[Groups('parcours_json_versioning')]
-    private ?bool $isOuvert = null;
+    private ?bool $isOuvert = true;
 
     public function __construct(?Semestre $semestre, ?Parcours $parcours)
     {
