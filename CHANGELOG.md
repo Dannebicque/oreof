@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.8](https://github.com/Dannebicque/oreof/compare/v1.29.7...v1.29.8) (2024-06-12)
+
+
+### Bug Fixes
+
+* affichage synthèse PDF ([c2af5df](https://github.com/Dannebicque/oreof/commit/c2af5df846aed797a051a25d4350f1be9e1559be))
+* affichage synthèse PDF ([7548b41](https://github.com/Dannebicque/oreof/commit/7548b4154a63ee52b9cca0cda5f3136bc1eace50))
+* affichage synthèse PDF ([0a2bdd8](https://github.com/Dannebicque/oreof/commit/0a2bdd8cc6e5a54faefeb87b33cc56734ee42842))
+* affichage synthèse PDF ([604efed](https://github.com/Dannebicque/oreof/commit/604efedb40f512bae19a2be9eb60d40f70351b06))
+* bouton MCCC si formation sans parcours ([5fed648](https://github.com/Dannebicque/oreof/commit/5fed648161c3a8ceeb38219fc69798d03d9a7f6c))
+* bouton MCCC sur header ([a75a860](https://github.com/Dannebicque/oreof/commit/a75a860c6d30941eaccc2609345a728166162203))
+
 ### [1.29.7](https://github.com/Dannebicque/oreof/compare/v1.29.6...v1.29.7) (2024-06-10)
 
 
