@@ -181,8 +181,10 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                             if ($ue->ue->getNatureUeEc() !== null && $ue->ue->getNatureUeEc()->isLibre()) {
                                 $ligne = $this->afficheUeLibre($ligne, $ue);
                             } else {
+                                $tabEcAffiches = [];
                                 //Si des UE enfants, on affiche pas les éventuels EC résiduels,
                                 foreach ($ue->elementConstitutifs as $ordEc => $ec) {
+                                    $tabEcAffiches[] = $ordEc;
                                     $diffEc = $diffUe['elementConstitutifs'][$ordEc];
                                     $ligne = $this->afficheEc($ligne, $ec, $diffEc);
                                     foreach ($ec->elementsConstitutifsEnfants as $ordEce => $ece) {
@@ -191,6 +193,15 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                         }
                                     }
                                 }
+
+                                //traitement des EC supprimés
+                                foreach ($diffUe['elementConstitutifs'] as $ordEce => $ece) {
+                                    if (!in_array($ordEce, $tabEcAffiches)) {
+                                        //EC supprimé
+                                        $ligne = $this->afficheEcSupprime($ligne, $ece);
+                                    }
+                                }
+
 
                                 if ($debut < $ligne - 1) {
                                     $this->excelWriter->mergeCellsCaR(self::COL_UE, $debut, self::COL_UE, $ligne - 1);
@@ -243,11 +254,9 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                                     $ligne = $this->afficheUeLibre($ligne, $uee);
                                 } else {
                                     foreach ($uee->elementConstitutifs as $ordEc => $ec) {
-
                                         $diffEc = $diffUee['elementConstitutifs'][$ordEc];
                                         $ligne = $this->afficheEc($ligne, $ec, $diffEc);
                                         foreach ($ec->elementsConstitutifsEnfants as $ordEce => $ece) {
-
                                             $ligne = $this->afficheEc($ligne, $ece, $diffEc['ecEnfants'][$ordEce]);
                                         }
                                     }
@@ -550,7 +559,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
             $this->excelWriter->writeCellXY(self::COL_RESP_EC, $ligne, '', ['wrap' => true]);
             $this->lignesEcColorees[] = $ligne;
         } elseif ($ec->getFicheMatiere() !== null) {
-            $this->excelWriter->writeCellXYDiff(self::COL_INTITULE_EC, $ligne,  $diffEc['libelle'], ['wrap' => true]);
+            $this->excelWriter->writeCellXYDiff(self::COL_INTITULE_EC, $ligne, $diffEc['libelle'], ['wrap' => true]);
             $this->excelWriter->writeCellXY(self::COL_INTITULE_EC_EN, $ligne, $ec->getFicheMatiere()->getLibelleAnglais(), ['wrap' => true]);
             $this->excelWriter->writeCellXY(self::COL_RESP_EC, $ligne, $ec->getFicheMatiere()->getResponsableFicheMatiere()?->getDisplay(), ['wrap' => true]);
 
@@ -895,4 +904,31 @@ class LicenceMcccVersion extends AbstractLicenceMccc
 
         return $tDisplay;
     }
+
+    private function afficheEcSupprime(int $ligne, array $diffEc): int
+    {
+        $this->excelWriter->insertNewRowBefore($ligne);
+        $this->excelWriter->writeCellXYDiff(self::COL_NUM_EC, $ligne, $diffEc['code']);
+        $this->excelWriter->writeCellXYDiff(self::COL_INTITULE_EC, $ligne, $diffEc['libelle'], ['wrap' => true]);
+
+        // Heures
+        $this->excelWriter->writeCellXYDiff(self::COL_ECTS, $ligne, $diffEc['heuresEctsEc']['ects']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_CM, $ligne, $diffEc['heuresEctsEc']['cmPres']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TD, $ligne, $diffEc['heuresEctsEc']['tdPres']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TP, $ligne, $diffEc['heuresEctsEc']['tpPres']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_PRES_TOTAL, $ligne, $diffEc['heuresEctsEc']['sommeEcTotalPres']);
+
+        //si pas distanciel, griser...
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_CM, $ligne, $diffEc['heuresEctsEc']['cmDist']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_TD, $ligne, $diffEc['heuresEctsEc']['tdDist']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_TP, $ligne, $diffEc['heuresEctsEc']['tpDist']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_DIST_TOTAL, $ligne, $diffEc['heuresEctsEc']['sommeEcTotalDist']);
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_AUTONOMIE, $ligne, $diffEc['heuresEctsEc']['tePres']);
+
+        $this->excelWriter->writeCellXYDiff(self::COL_HEURES_TOTAL, $ligne, $diffEc['heuresEctsEc']['sommeEcTotalPresDist']);
+
+        $ligne++;
+        return $ligne;
+    }
+
 }
