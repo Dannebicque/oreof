@@ -170,6 +170,7 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                 /** @var StructureSemestre $semestre */
                 foreach ($semestres as $ordre => $semestre) {
                     $diffSemestre = $diffStructure['semestres'][$ordre];
+                    dump($diffSemestre);
                     $totalAnnee->addSemestre($semestre->heuresEctsSemestre);
                     $totalAnneeOriginal->addSemestreDiff($diffSemestre['heuresEctsSemestre']);
                     $debutSemestre = $ligne;

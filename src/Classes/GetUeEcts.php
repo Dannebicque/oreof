@@ -41,7 +41,6 @@ abstract class GetUeEcts
         if ($ue->getNatureUeEc()?->isLibre()) {
             return $ue->getEcts();
         }
-
         $ecsInUe = $ue->getElementConstitutifs();
         $totalEctsUe = 0.0;
         foreach ($ecsInUe as $ec) {
@@ -60,7 +59,6 @@ abstract class GetUeEcts
                 }
             }
         }
-
         return $totalEctsUe;
     }
 
