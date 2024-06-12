@@ -500,10 +500,10 @@
                                                                 </li>
                                                                 <li>
                                                                     <a
-                                                                            {% if raccrocheEnfant == true %}
-                                                                                disabled
-                                                                                title="UE raccrochée, modifiable uniquement depuis le parcours d'origine"
-                                                                            {% else %}
+{#                                                                            {% if raccrocheEnfant == true %}#}
+{#                                                                                disabled#}
+{#                                                                                title="UE raccrochée, modifiable uniquement depuis le parcours d'origine"#}
+{#                                                                            {% else %}#}
                                                                                 {{ stimulus_controller('modal', {
                                                                                     size: 'lg',
                                                                                     modalTitle: 'Raccrocher une UE mutualisé pour l\'UE ' ~
@@ -511,12 +511,11 @@
                                                                                     modalUrl: path('structure_ue_raccrocher', {ue:uee.id, parcours: parcours.id})
                                                                                 }) }}
                                                                                 data-action="click->modal#openModal"
-                                                                            {% endif %}
+{#                                                                            {% endif %}#}
                                                                             class="btn btn-sm text-quaternary me-1"
                                                                             data-size="lg"
                                                                             data-bs-toggle="tooltip"
                                                                             data-bs-placement="bottom"
-                                                                            {#                                                title="Modifier le semestre {{ semestre.semestre.display }}" #}
                                                                     >
                                                                         <i class="fal fa-down-to-bracket"></i>
                                                                         <span> Raccrocher une UE</span>
