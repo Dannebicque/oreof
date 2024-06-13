@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.14](https://github.com/Dannebicque/oreof/compare/v1.29.13...v1.29.14) (2024-06-13)
+
+
+### Bug Fixes
+
+* maquette iframe - "Maquette en cours de validation ..." ([57ee8e9](https://github.com/Dannebicque/oreof/commit/57ee8e9c29b0c377d542b622f3a37bc0ccbd5f67))
+* modificationec avec enfants ([6fb4426](https://github.com/Dannebicque/oreof/commit/6fb44269e5f2d97b797a7b8ae7e12f0bcf934d35))
+* traductions ([4fbf58a](https://github.com/Dannebicque/oreof/commit/4fbf58ac0ef90fa356c87282d63325b1b1b31780))
+
 ### [1.29.13](https://github.com/Dannebicque/oreof/compare/v1.29.12...v1.29.13) (2024-06-13)
 
 
