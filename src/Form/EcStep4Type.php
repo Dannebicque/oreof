@@ -23,10 +23,10 @@ class EcStep4Type extends AbstractType
     {
         $isModal = $options['isModal'];
 
-        $modalites = $options['data']->getModaliteEnseignement();
-        $modalitesParcours = $options['data']->getParcours()?->getModalitesEnseignement();
+//        $modalites = $options['data']->getModaliteEnseignement();
+//        $modalitesParcours = $options['data']->getParcours()?->getModalitesEnseignement();
 
-        if ($modalitesParcours === ModaliteEnseignementEnum::HYBRIDE || $modalites === null || $modalites === ModaliteEnseignementEnum::NON_DEFINI) {
+        if ($options['modalite']) {
             $builder->add('modaliteEnseignement', EnumType::class, [
                 'class' => ModaliteEnseignementEnum::class,
                 'choice_label' => fn ($choice) => match ($choice) {
@@ -118,6 +118,7 @@ class EcStep4Type extends AbstractType
         $resolver->setDefaults([
             'data_class' => ElementConstitutif::class,
             'isModal' => false,
+            'modalite' => null,
             'translation_domain' => 'form'
         ]);
     }
