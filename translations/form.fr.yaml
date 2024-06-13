@@ -450,7 +450,7 @@ TYPE_PARCOURS_ALTERNANCE: 'Parcours en alternance uniquement'
 formation_ses.labels.codeMentionApogee: 'Code Apogée de la mention'
 "Date d'ouverture de la campagne de collecte DPE": "Date d'ouverture de la campagne de collecte DPE"
 'Date de clôture de la campagne de collecte DPE': 'Date de clôture de la campagne de collecte DPE'
-type_ue.labels.type.label: type_ue.labels.type.label
+type_ue.labels.type.label: 'Type d''UE'
 STAGE: STAGE
 PROJET: PROJET
 NORMAL: NORMAL
@@ -458,13 +458,13 @@ parcours_step5.labels.contacts: 'Contacts de la formation/du parcours'
 parcours.labels.parcoursOrigine: "Parcours d'origine"
 ec_manage.labels.fiche_matiere_titre_libre_edit.label: "Libellé libre de l'EC"
 ec.labels.typeEc.label: "Type de l'EC"
-semestre.decrocher.bouton: semestre.decrocher.bouton
+semestre.decrocher.bouton: 'Décrocher le semestre'
 fiche_matiere_step1.labels.codeApogee: fiche_matiere_step1.labels.codeApogee
 type_ec.labels.type.label: type_ec.labels.type.label
 'Codification intermédiaire': 'Codification intermédiaire'
 fiche_matiere.step1_change_rf.title: fiche_matiere.step1_change_rf.title
 fiche_matiere.step1_change_rf.label: fiche_matiere.step1_change_rf.label
-ue.decrocher.bouton: ue.decrocher.bouton
+ue.decrocher.bouton: 'Décrocher l''UE'
 parcours.labels.codeMentionApogee: parcours.labels.codeMentionApogee
 element_constitutif_enfant.labels.typeEc: element_constitutif_enfant.labels.typeEc
 element_constitutif_enfant.labels.typeEcTexte: element_constitutif_enfant.labels.typeEcTexte
