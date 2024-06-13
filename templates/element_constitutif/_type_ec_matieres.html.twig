@@ -24,7 +24,7 @@
     </tr>
     </thead>
     {% if ec != null %}
-        {% for ecEnfant in ec.ecEnfants %}
+        {% for ecEnfant in ec.ecEnfants|filter(ecEnfant => ecEnfant.ficheMatiere != null) %}
             <tr>
                 <td data-id="id_{{ ecEnfant.ficheMatiere.id }}">
                     {{ ecEnfant.display }}
