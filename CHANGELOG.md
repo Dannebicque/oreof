@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.13](https://github.com/Dannebicque/oreof/compare/v1.29.12...v1.29.13) (2024-06-13)
+
+
+### Features
+
+* raccrocher UE bloquée si raccrochée... ([9aedc2f](https://github.com/Dannebicque/oreof/commit/9aedc2fdf3434d74e5d8fa0e5d1a1e11c2b8e511))
+* raccrocher UE bloquée si raccrochée... ([7ae06f7](https://github.com/Dannebicque/oreof/commit/7ae06f7925de6a0edd7f1eefe1de1e7b28fcdd63))
+* raccrocher UE bloquée si raccrochée... ([faadf9a](https://github.com/Dannebicque/oreof/commit/faadf9a8a7d73ad5ffbfa404e5cd3e1219325086))
+
+
+### Bug Fixes
+
+* formulaires modalités heures ([4e195dd](https://github.com/Dannebicque/oreof/commit/4e195ddd2735dbe29bced6562912b5fcc6957de8))
+
 ### [1.29.12](https://github.com/Dannebicque/oreof/compare/v1.29.11...v1.29.12) (2024-06-12)
 
 
