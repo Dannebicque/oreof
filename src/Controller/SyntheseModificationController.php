@@ -71,7 +71,8 @@ class SyntheseModificationController extends BaseController
                 $tDemandes[$comp->getId()][$parcours->getId()] = [];
 
                 $r = new JsonDiff(json_decode($jsonCfvu), json_decode($jsonCourant));
-                $tDemandes[$comp->getId()][$parcours->getId()]['parcours'] = $parcours;
+                $tDemandes[$comp->getId()][$parcours->getId()]['parcours']['display'] = $parcours->getLibelle();
+                $tDemandes[$comp->getId()][$parcours->getId()]['parcours']['formation'] = $parcours->getFormation()?->getDisplayLong();
                 $tDemandes[$comp->getId()][$parcours->getId()]['nbDiff'] = $r->getDiffCnt();
                 $result['modified'] = [];
                 $result['added'] = [];
