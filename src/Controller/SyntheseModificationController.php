@@ -102,7 +102,6 @@ class SyntheseModificationController extends BaseController
                         }
                     }
                 }
-//dump($result);
                 $tDemandes[$comp->getId()][$parcours->getId()]['patch'] = $result;
             }
         }
