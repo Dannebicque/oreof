@@ -203,7 +203,8 @@ abstract class ExtractTextFromJsonPatch
                 'ct' => 'Contrôle Terminal',
                 'cc' => 'Contrôle Continu',
                 'cci' => 'Contrôle Continu Intégral',
-                'cc_ct' => 'Contrôle Continu + Contrôle Terminal'
+                'cc_ct' => 'Contrôle Continu + Contrôle Terminal',
+                default => 'Erreur'
             };
         }
 
