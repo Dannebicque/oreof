@@ -18,9 +18,9 @@
                     {% if key == 'modified' %}
                         {% for  pp in patch %}
                             {% if loop.first %}
-                                {% if pp.texte == 'Total Formation' %}
-                                    <div class="border border-1">
-                                {% endif %}
+{#                                {% if pp.texte == 'Total Formation' %}#}
+{#                                    <div class="border border-1">#}
+{#                                {% endif %}#}
                                 <p>
                                     <strong>Elément modifié : {{ pp.libelle }}</strong> ({{ pp.texte }})
                                 </p>
@@ -29,9 +29,9 @@
                             {{ pp.nouveau }} (au lieu de {{ pp.original }}).
                             {% if loop.last %}
                                 </p>
-                                {% if pp.texte == 'Total Formation' %}
-                                    </div>
-                                {% endif %}
+{#                                {% if pp.texte == 'Total Formation' %}#}
+{#                                    </div>#}
+{#                                {% endif %}#}
                             {% endif %}
                         {% endfor %}
                     {% elseif key == 'added' %}
