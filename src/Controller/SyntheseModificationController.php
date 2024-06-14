@@ -23,9 +23,9 @@ class SyntheseModificationController extends BaseController
         ComposanteRepository $composanteRepository,
         MyGotenbergPdf       $myGotenbergPdf
     ): Response {
-        $composantes = $composanteRepository->findAll();
+        $composantes = $composanteRepository->findAllId();
         foreach ($composantes as $composante) {
-            $tDemandes[$composante->getId()] = [];
+            $tDemandes[$composante['id']] = [];
         }
 
         $patterns = [
@@ -67,13 +67,14 @@ class SyntheseModificationController extends BaseController
 
             $comp = $parcours->getFormation()?->getComposantePorteuse();
             if ($comp !== null) {
-
-                $tDemandes[$comp->getId()][$parcours->getId()] = [];
+                $idP = $parcours->getId();
+                $idComp = $comp->getId();
+                $tDemandes[$comp->getId()][$idP] = [];
 
                 $r = new JsonDiff(json_decode($jsonCfvu), json_decode($jsonCourant));
-                $tDemandes[$comp->getId()][$parcours->getId()]['parcours']['display'] = $parcours->getLibelle();
-                $tDemandes[$comp->getId()][$parcours->getId()]['parcours']['formation'] = $parcours->getFormation()?->getDisplayLong();
-                $tDemandes[$comp->getId()][$parcours->getId()]['nbDiff'] = $r->getDiffCnt();
+                $tDemandes[$idComp][$idP]['parcours']['display'] = $parcours->getLibelle();
+                $tDemandes[$idComp][$idP]['parcours']['formation'] = $parcours->getFormation()?->getDisplayLong();
+                $tDemandes[$idComp][$idP]['nbDiff'] = $r->getDiffCnt();
                 $result['modified'] = [];
                 $result['added'] = [];
                 $result['removed'] = [];
@@ -103,7 +104,7 @@ class SyntheseModificationController extends BaseController
                         }
                     }
                 }
-                $tDemandes[$comp->getId()][$parcours->getId()]['patch'] = $result;
+                $tDemandes[$idComp][$idP]['patch'] = $result;
             }
         }
 
