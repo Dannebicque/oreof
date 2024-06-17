@@ -74,7 +74,7 @@ class ComposanteRepository extends ServiceEntityRepository
     public function findAllId()
     {
         $qb = $this->createQueryBuilder('c');
-        $qb->select('c.id');
+        $qb->select('c.id, c.libelle, c.sigle');
         return $qb->getQuery()->getResult();
     }
 }
