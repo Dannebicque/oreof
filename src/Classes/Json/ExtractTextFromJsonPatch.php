@@ -184,11 +184,7 @@ abstract class ExtractTextFromJsonPatch
     {
         $tab = JsonPointer::splitPath($path);
 
-        if (count($tab) > 1 && ($tab[count($tab) - 1] === 'id' || $tab[count($tab) - 1] === 'slug')) {
-            return false;
-        }
-
-        return true;
+        return !(count($tab) > 1 && ($tab[count($tab) - 1] === 'id' || $tab[count($tab) - 1] === 'slug'));
 
     }
 

@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1 class="text-center">CFVU du {{ dpe.dateCfvu|date('d/m/Y') }}</h1>
-    {% for composante in composantes|filter(composante => demandes[composante.id]|length > 0) %}
+{#    {% for composante in composantes|filter(composante => demandes[composante.id]|length > 0) %}#}
 
 
         {% for demande in demandes[composante.id]|filter(demande => demande.nbDiff > 0) %}
@@ -54,5 +54,5 @@
                 {% endfor %}
             {% endfor %}
         {% endfor %}
-    {% endfor %}
+{#    {% endfor %}#}
 {% endblock %}

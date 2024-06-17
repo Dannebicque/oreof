@@ -11,18 +11,21 @@ use App\Service\VersioningParcours;
 use DateTime;
 use Swaggest\JsonDiff\JsonDiff;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class SyntheseModificationController extends BaseController
 {
     #[Route('/synthese/modification/pdf', name: 'app_synthese_modification_export_pdf')]
     public function pdf(
+        KernelInterface $kernel,
         ParcoursVersioningRepository $parcoursVersioningRepository,
         ParcoursRepository   $parcoursRepository,
         VersioningParcours   $versioningParcours,
         ComposanteRepository $composanteRepository,
         MyGotenbergPdf       $myGotenbergPdf
     ): Response {
+        $dir = $kernel->getProjectDir().'/public/';
 
         ##### /!\ WARNING /!\ #####
         #   ENSURE YOU HAVE 10 Go #
@@ -63,68 +66,89 @@ class SyntheseModificationController extends BaseController
             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/heuresEctsEcEnfants\/',
         ];
 
-        $allparcours = $parcoursRepository->findByTypeValidationAttenteCfvu($this->getDpe(), 'soumis_central'); //soumis_cfvu
+        foreach ($composantes as $cmp) {
+            $allparcours = $parcoursRepository->findByTypeValidationAttenteCfvuAndComposante($this->getDpe(), 'soumis_central', $cmp['id']); //soumis_cfvu
 
-        foreach ($allparcours as $parcours) {
-            //créer la sauvegarde JSON
-            //récupère JSON CFVU
-            $lastVersion = $parcoursVersioningRepository->findLastVersion($parcours);
-            $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
-            //dump($parcours->getLibelle());
+            foreach ($allparcours as $parcours) {
+                //créer la sauvegarde JSON
+                //récupère JSON CFVU
+                $lastVersion = $parcoursVersioningRepository->findLastVersion($parcours);
+                $lastVersion = count($lastVersion) > 0 ? $lastVersion[0] : null;
 
-            //on fait une copie de la version courante en json
-            $jsonCourant = $versioningParcours->saveVersionOfParcoursCourant($parcours);
-            $jsonCfvu = $versioningParcours->loadJsonCfvu($parcours, $lastVersion);
+                //on fait une copie de la version courante en json
+                $jsonCourant = $versioningParcours->saveVersionOfParcoursCourant($parcours);
+                $jsonCfvu = $versioningParcours->loadJsonCfvu($parcours, $lastVersion);
 
-            $comp = $parcours->getFormation()?->getComposantePorteuse();
-            if ($comp !== null) {
-                $idP = $parcours->getId();
-                $idComp = $comp->getId();
-                $tDemandes[$comp->getId()][$idP] = [];
+                $comp = $parcours->getFormation()?->getComposantePorteuse();
+                if ($comp !== null) {
+                    $idP = $parcours->getId();
+                    $idComp = $comp->getId();
+                    $tDemandes[$comp->getId()][$idP] = [];
 
-                $r = new JsonDiff(json_decode($jsonCfvu), json_decode($jsonCourant));
-                $tDemandes[$idComp][$idP]['parcours']['display'] = $parcours->getLibelle();
-                $tDemandes[$idComp][$idP]['parcours']['formation'] = $parcours->getFormation()?->getDisplayLong();
-                $tDemandes[$idComp][$idP]['nbDiff'] = $r->getDiffCnt();
-                $result['modified'] = [];
-                $result['added'] = [];
-                $result['removed'] = [];
-
-                foreach ($r->getPatch()->jsonSerialize() as $patch) {
-                    if (ExtractTextFromJsonPatch::getLastItem($patch->path)) {
-                        $key = $this->extractPatternsFromString($patterns, $patch->path, $patternsAIgnorer);
-                        if ($key !== null) {
-                            switch ($patch->op) {
-                                case 'test':
-                                    $result['modified'][$key['path']][$key['key']]['libelle'] = ExtractTextFromJsonPatch::getLibelle($patch->path, $jsonCourant);
-                                    $result['modified'][$key['path']][$key['key']]['texte'] = ExtractTextFromJsonPatch::getTextFromPath($patch);
-                                    $result['modified'][$key['path']][$key['key']]['original'] = ExtractTextFromJsonPatch::getOriginalValueFromPatch($patch);
-                                    break;
-                                case 'replace':
-                                    $result['modified'][$key['path']][$key['key']]['nouveau'] = ExtractTextFromJsonPatch::getNewValueFromPatch($patch);
-                                    break;
-                                case 'add':
-                                    $result['added'][$key['path']][$key['key']]['nouveau'] = ExtractTextFromJsonPatch::getLibelle($patch->path, $jsonCourant);
-                                    $result['added'][$key['path']][$key['key']]['libelle'] = ExtractTextFromJsonPatch::getTextFromPath($patch);
-                                    break;
-                                case 'remove':
-                                    $result['removed'][$key['path']][$key['key']]['origine'] = ExtractTextFromJsonPatch::getLibelle($patch->path, $jsonCfvu);
-                                    $result['removed'][$key['path']][$key['key']]['libelle'] = ExtractTextFromJsonPatch::getTextFromPath($patch);
-                                    break;
+                    $r = new JsonDiff(json_decode($jsonCfvu), json_decode($jsonCourant));
+                    $tDemandes[$idComp][$idP]['parcours']['display'] = $parcours->getLibelle();
+                    $tDemandes[$idComp][$idP]['parcours']['formation'] = $parcours->getFormation()?->getDisplayLong();
+                    $tDemandes[$idComp][$idP]['nbDiff'] = $r->getDiffCnt();
+                    $result['modified'] = [];
+                    $result['added'] = [];
+                    $result['removed'] = [];
+                    $hasPatch = false;
+                    foreach ($r->getPatch()->jsonSerialize() as $patch) {
+                        if (ExtractTextFromJsonPatch::getLastItem($patch->path)) {
+                            $key = $this->extractPatternsFromString($patterns, $patch->path, $patternsAIgnorer);
+                            if ($key !== null) {
+                                switch ($patch->op) {
+                                    case 'test':
+                                        $hasPatch = true;
+                                        $result['modified'][$key['path']][$key['key']]['libelle'] = ExtractTextFromJsonPatch::getLibelle($patch->path, $jsonCourant);
+                                        $result['modified'][$key['path']][$key['key']]['texte'] = ExtractTextFromJsonPatch::getTextFromPath($patch);
+                                        $result['modified'][$key['path']][$key['key']]['original'] = ExtractTextFromJsonPatch::getOriginalValueFromPatch($patch);
+                                        break;
+                                    case 'replace':
+                                        $hasPatch = true;
+                                        $result['modified'][$key['path']][$key['key']]['nouveau'] = ExtractTextFromJsonPatch::getNewValueFromPatch($patch);
+                                        break;
+                                    case 'add':
+                                        $hasPatch = true;
+                                        $result['added'][$key['path']][$key['key']]['nouveau'] = ExtractTextFromJsonPatch::getLibelle($patch->path, $jsonCourant);
+                                        $result['added'][$key['path']][$key['key']]['libelle'] = ExtractTextFromJsonPatch::getTextFromPath($patch);
+                                        break;
+                                    case 'remove':
+                                        $hasPatch = true;
+                                        $result['removed'][$key['path']][$key['key']]['origine'] = ExtractTextFromJsonPatch::getLibelle($patch->path, $jsonCfvu);
+                                        $result['removed'][$key['path']][$key['key']]['libelle'] = ExtractTextFromJsonPatch::getTextFromPath($patch);
+                                        break;
+                                }
                             }
                         }
                     }
+                    $tDemandes[$idComp][$idP]['patch'] = $result;
                 }
-                $tDemandes[$idComp][$idP]['patch'] = $result;
             }
+            if ($hasPatch) {
+                $myGotenbergPdf->renderAndSave(
+                    'pdf/synthese_modifications_parcours.html.twig',
+                    'uploads/syntheses/',
+                    [
+                        'titre' => 'Liste des demandes de changement MCCC et maquettes',
+                        'demandes' => $tDemandes,
+                        'composante' => $cmp,
+                        'dpe' => $this->getDpe(),
+                    ],
+                    'synthese_changement_cfvu_'.$cmp['sigle'] .'_'. (new DateTime())->format('d-m-Y_H-i-s')
+                );
+            }
+
         }
 
-        return $myGotenbergPdf->render('pdf/synthese_modifications_parcours.html.twig', [
-            'titre' => 'Liste des demandes de changement MCCC et maquettes',
-            'demandes' => $tDemandes,
-            'composantes' => $composantes,
-            'dpe' => $this->getDpe(),
-        ], 'synthese_changement_cfvu' . (new DateTime())->format('d-m-Y_H-i-s'));
+
+
+        //        return $this->render('pdf/synthese_modifications_parcours.html.twig', [
+        //            'titre' => 'Liste des demandes de changement MCCC et maquettes',
+        //            'demandes' => $tDemandes,
+        //            'composantes' => $composantes,
+        //            'dpe' => $this->getDpe(),
+        //        ]);
 
     }
 

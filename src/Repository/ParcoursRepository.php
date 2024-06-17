@@ -172,8 +172,11 @@ class ParcoursRepository extends ServiceEntityRepository
 
     }
 
-    public function findByTypeValidationAttenteCfvuAndComposante(CampagneCollecte $campagneCollecte, string $typeValidation, Composante $composante)
+    public function findByTypeValidationAttenteCfvuAndComposante(CampagneCollecte $campagneCollecte, string $typeValidation, Composante|int $composante)
     {
+        if (!is_int($composante)) {
+            $composante = $composante->getId();
+        }
 
         $query = $this->createQueryBuilder('p')
             ->join('p.dpeParcours', 'dp')
@@ -192,5 +195,26 @@ class ParcoursRepository extends ServiceEntityRepository
         return $query->getQuery()
             ->getResult();
 
+    }
+
+    public function findByComposanteTypeValidation(Composante $composante,
+                                                   CampagneCollecte $campagneCollecte,
+                                                   string $typeValidation): array
+    {
+        $query = $this->createQueryBuilder('p')
+            ->innerJoin('p.formation', 'f')
+            ->innerJoin(Composante::class, 'c', 'WITH', 'f.composantePorteuse = c.id')
+            ->leftJoin('p.dpeParcours', 'dp')
+            ->addSelect('dp')
+            ->andWhere('c.id = :composante')
+            ->andWhere("JSON_CONTAINS(dp.etatValidation, :etatDpe) = 1")
+            ->setParameter('etatDpe', json_encode([$typeValidation => 1]))
+            ->andWhere('dp.campagneCollecte = :campagneCollecte')
+            ->setParameter('campagneCollecte', $campagneCollecte)
+            ->setParameter('composante', $composante);
+
+
+        return $query->getQuery()
+            ->getResult();
     }
 }
