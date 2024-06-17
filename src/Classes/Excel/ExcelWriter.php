@@ -511,28 +511,31 @@ class ExcelWriter
     public function writeCellXYDiff(
         int|string $col,
         int $row,
-        DiffObject $diffObject,
+        ?DiffObject $diffObject,
         array $options = []
     ): void {
-        if (is_string($col)) {
-            $col = (int)Coordinate::columnIndexFromString($col);
-        }
+        if ($diffObject !== null) {
 
-        if ($diffObject->isDifferent()) {
+            if (is_string($col)) {
+                $col = (int)Coordinate::columnIndexFromString($col);
+            }
 
-            $richText = new RichText();
-            $ancienneValeur = $richText->createTextRun($diffObject->original);
-            $ancienneValeur->getFont()?->setStrikethrough(true);
-            //$ancienneValeur->getFont()?->setItalic(true);
-            $ancienneValeur->getFont()?->setColor(new Color(Color::COLOR_RED));
-            $nouvelleValeur = $richText->createTextRun($diffObject->new);
-            $nouvelleValeur->getFont()?->setStrikethrough(false);
-            $nouvelleValeur->getFont()?->setBold(true);
-            $nouvelleValeur->getFont()?->setColor(new Color(Color::COLOR_DARKGREEN));
+            if ($diffObject->isDifferent()) {
 
-            $this->sheet->setCellValue([$col, $row], $richText);
-        } else {
-            $this->writeCellXY($col, $row, $diffObject->original, $options);
+                $richText = new RichText();
+                $ancienneValeur = $richText->createTextRun($diffObject->original);
+                $ancienneValeur->getFont()?->setStrikethrough(true);
+                //$ancienneValeur->getFont()?->setItalic(true);
+                $ancienneValeur->getFont()?->setColor(new Color(Color::COLOR_RED));
+                $nouvelleValeur = $richText->createTextRun($diffObject->new);
+                $nouvelleValeur->getFont()?->setStrikethrough(false);
+                $nouvelleValeur->getFont()?->setBold(true);
+                $nouvelleValeur->getFont()?->setColor(new Color(Color::COLOR_DARKGREEN));
+
+                $this->sheet->setCellValue([$col, $row], $richText);
+            } else {
+                $this->writeCellXY($col, $row, $diffObject->original, $options);
+            }
         }
 
     }
