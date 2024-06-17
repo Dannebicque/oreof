@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.15](https://github.com/Dannebicque/oreof/compare/v1.29.14...v1.29.15) (2024-06-17)
+
+
+### Bug Fixes
+
+* Affichage bilan formation ([e3c63a3](https://github.com/Dannebicque/oreof/commit/e3c63a3130fcaa48767523de4b8cafdbd00809e5))
+* Affichage bilan formation ([2df820f](https://github.com/Dannebicque/oreof/commit/2df820fa4212bd288159abe560985be0776a0702))
+* Affichage bilan formation ([de6ba6a](https://github.com/Dannebicque/oreof/commit/de6ba6a5cd52489ac9e93e1c845eda62e8d13b76))
+* Affichage bilan formation ([4c9b028](https://github.com/Dannebicque/oreof/commit/4c9b028c6091480727bedeffe7f6c8e153959805))
+* Affichage bilan formation ([babd224](https://github.com/Dannebicque/oreof/commit/babd2240aaafac1c45235b6f9a3edb21ba3968de))
+* Affichage bilan formation ([423d60e](https://github.com/Dannebicque/oreof/commit/423d60efffb3f839107d9cec4434fe4464f0b411))
+* Génération documents synthèse ([44f2642](https://github.com/Dannebicque/oreof/commit/44f2642267559b5121e32b5ace63d289b5835501))
+
 ### [1.29.14](https://github.com/Dannebicque/oreof/compare/v1.29.13...v1.29.14) (2024-06-13)
 
 
