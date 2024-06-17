@@ -23,6 +23,17 @@ class SyntheseModificationController extends BaseController
         ComposanteRepository $composanteRepository,
         MyGotenbergPdf       $myGotenbergPdf
     ): Response {
+
+        ##### /!\ WARNING /!\ #####
+        #   ENSURE YOU HAVE 10 Go #
+        #   RAM AVAILABLE BEFORE  #
+        #   STARTING THIS ROUTE   #
+        ###########################
+        /** 
+        * // // // ini_set('memory_limit', '5000M');
+        */  
+        ###########################
+
         $composantes = $composanteRepository->findAllId();
         foreach ($composantes as $composante) {
             $tDemandes[$composante['id']] = [];
