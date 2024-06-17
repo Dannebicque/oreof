@@ -60,15 +60,17 @@ class TotalVolumeHeure
         return $this->getTotalPresentiel() + $this->getTotalDistanciel();
     }
 
-    public function addSemestreDiff(array $heuresEctsSemestre): void
+    public function addSemestreDiff(?array $heuresEctsSemestre): void
     {
-        $this->totalCmPresentiel += $heuresEctsSemestre['sommeSemestreCmPres']->original !== '-' ? $heuresEctsSemestre['sommeSemestreCmPres']->original : 0;
-        $this->totalTdPresentiel += $heuresEctsSemestre['sommeSemestreTdPres']->original !== '-' ? $heuresEctsSemestre['sommeSemestreTdPres']->original : 0;
-        $this->totalTpPresentiel += $heuresEctsSemestre['sommeSemestreTpPres']->original !== '-' ? $heuresEctsSemestre['sommeSemestreTpPres']->original : 0;
-        $this->totalCmDistanciel += $heuresEctsSemestre['sommeSemestreCmDist']->original !== '-' ? $heuresEctsSemestre['sommeSemestreCmDist']->original : 0;
-        $this->totalTdDistanciel += $heuresEctsSemestre['sommeSemestreTdDist']->original !== '-' ? $heuresEctsSemestre['sommeSemestreTdDist']->original : 0;
-        $this->totalTpDistanciel += $heuresEctsSemestre['sommeSemestreTpDist']->original !== '-' ? $heuresEctsSemestre['sommeSemestreTpDist']->original : 0;
+        if ($heuresEctsSemestre !== null) {
+            $this->totalCmPresentiel += $heuresEctsSemestre['sommeSemestreCmPres']->original !== '-' ? $heuresEctsSemestre['sommeSemestreCmPres']->original : 0;
+            $this->totalTdPresentiel += $heuresEctsSemestre['sommeSemestreTdPres']->original !== '-' ? $heuresEctsSemestre['sommeSemestreTdPres']->original : 0;
+            $this->totalTpPresentiel += $heuresEctsSemestre['sommeSemestreTpPres']->original !== '-' ? $heuresEctsSemestre['sommeSemestreTpPres']->original : 0;
+            $this->totalCmDistanciel += $heuresEctsSemestre['sommeSemestreCmDist']->original !== '-' ? $heuresEctsSemestre['sommeSemestreCmDist']->original : 0;
+            $this->totalTdDistanciel += $heuresEctsSemestre['sommeSemestreTdDist']->original !== '-' ? $heuresEctsSemestre['sommeSemestreTdDist']->original : 0;
+            $this->totalTpDistanciel += $heuresEctsSemestre['sommeSemestreTpDist']->original !== '-' ? $heuresEctsSemestre['sommeSemestreTpDist']->original : 0;
 
-        $this->totalVolumeTe += $heuresEctsSemestre['sommeSemestreTePres']->original !== '-' ? $heuresEctsSemestre['sommeSemestreTePres']->original : 0;
+            $this->totalVolumeTe += $heuresEctsSemestre['sommeSemestreTePres']->original !== '-' ? $heuresEctsSemestre['sommeSemestreTePres']->original : 0;
+        }
     }
 }
