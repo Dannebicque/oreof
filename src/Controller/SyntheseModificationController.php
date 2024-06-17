@@ -55,8 +55,8 @@ class SyntheseModificationController extends BaseController
             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/heuresEctsEcEnfants\/',
         ];
 
-        foreach ($composantes as $comp) {
-            $allparcours = $parcoursRepository->findByTypeValidationAttenteCfvuAndComposante($this->getDpe(), 'soumis_central', $comp['id']); //soumis_cfvu
+        foreach ($composantes as $cmp) {
+            $allparcours = $parcoursRepository->findByTypeValidationAttenteCfvuAndComposante($this->getDpe(), 'soumis_central', $cmp['id']); //soumis_cfvu
 
             foreach ($allparcours as $parcours) {
                 //créer la sauvegarde JSON
@@ -121,10 +121,10 @@ class SyntheseModificationController extends BaseController
                     [
                         'titre' => 'Liste des demandes de changement MCCC et maquettes',
                         'demandes' => $tDemandes,
-                        'composante' => $comp,
+                        'composante' => $cmp,
                         'dpe' => $this->getDpe(),
                     ],
-                    'synthese_changement_cfvu_'.$comp->getSigle() .'_'. (new DateTime())->format('d-m-Y_H-i-s')
+                    'synthese_changement_cfvu_'.$cmp['sigle'] .'_'. (new DateTime())->format('d-m-Y_H-i-s')
                 );
             }
 
