@@ -7,6 +7,7 @@ use App\Classes\MyGotenbergPdf;
 use App\Entity\Composante;
 use App\Entity\DpeParcours;
 use App\Enums\TypeModificationDpeEnum;
+use App\Repository\ComposanteRepository;
 use App\Repository\DpeParcoursRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\ParcoursVersioningRepository;
@@ -203,9 +204,14 @@ class ComposanteController extends BaseController
 
     #[IsGranted("ROLE_ADMIN")]
     #[Route("/composante/cfvu/list", "app_composante_list_for_cfvu")]
-    public function listComposanteToDownloadCfvuChanges(){
-        return $this->render("composante/cfvu_composante_list.html.twig", [
+    public function listComposanteToDownloadCfvuChanges(
+        ComposanteRepository $composanteRepository
+    ){
 
+        $composantes = $composanteRepository->findAll();
+
+        return $this->render("composante/cfvu_composante_list.html.twig", [
+            'composantes' => $composantes
         ]);
     }
 }
