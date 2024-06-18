@@ -542,8 +542,12 @@ class LicenceMcccVersion extends AbstractLicenceMccc
         );
     }
 
-    private function afficheEc(int $ligne, StructureEc $structureEc, array $diffEc): int
+    private function afficheEc(int $ligne, StructureEc $structureEc, ?array $diffEc): int
     {
+        if ($diffEc === null) {
+            return $ligne;
+        }
+
         $ec = $structureEc->elementConstitutif;
         $this->excelWriter->insertNewRowBefore($ligne);
         $this->excelWriter->writeCellXY(self::COL_NUM_EC, $ligne, $ec->getCode());//todo: gérer les cas

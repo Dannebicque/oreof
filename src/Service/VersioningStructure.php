@@ -82,41 +82,42 @@ class VersioningStructure
         return $diff;
     }
 
-    private function compareUe(StructureUe $ueOriginale, StructureUe $ueNouvelle): array
+    private function compareUe(StructureUe $ueOriginale, ?StructureUe $ueNouvelle): array
     {
         $diff = [];
 
-        $diff['display'] = new DiffObject($ueOriginale->display, $ueNouvelle->display);
-        $diff['libelle'] = new DiffObject($ueOriginale->ue->getLibelle(), $ueNouvelle->ue->getLibelle());
-        $diff['raccroche'] = new DiffObject($ueOriginale->raccroche, $ueNouvelle->raccroche);
-        foreach ($ueOriginale->elementConstitutifs as $ordreEc => $ec) {
-            if (!array_key_exists($ordreEc, $ueNouvelle->elementConstitutifs)) {
-                //donc n'existe plus ?
-                $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, null);
+        if ($ueNouvelle !== null) {
+            $diff['display'] = new DiffObject($ueOriginale->display, $ueNouvelle->display);
+            $diff['libelle'] = new DiffObject($ueOriginale->ue->getLibelle(), $ueNouvelle->ue->getLibelle());
+            $diff['raccroche'] = new DiffObject($ueOriginale->raccroche, $ueNouvelle->raccroche);
+            foreach ($ueOriginale->elementConstitutifs as $ordreEc => $ec) {
+                if (!array_key_exists($ordreEc, $ueNouvelle->elementConstitutifs)) {
+                    //donc n'existe plus ?
+                    $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, null);
 
-            } else {
-                $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, $ueNouvelle->elementConstitutifs[$ordreEc]);
+                } else {
+                    $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, $ueNouvelle->elementConstitutifs[$ordreEc]);
+                }
             }
-        }
 
-        foreach ($ueNouvelle->elementConstitutifs as $ordreEc => $ec) {
-            if (!array_key_exists($ordreEc, $ueOriginale->elementConstitutifs)) {
-                //donc nouvel EC
-                $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif(null, $ec);
+            foreach ($ueNouvelle->elementConstitutifs as $ordreEc => $ec) {
+                if (!array_key_exists($ordreEc, $ueOriginale->elementConstitutifs)) {
+                    //donc nouvel EC
+                    $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif(null, $ec);
+                }
             }
-        }
 
 
-        foreach ($ueOriginale->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
-            if (array_key_exists($ordreUeEnfant, $ueNouvelle->uesEnfants())) {
-                $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe($ueEnfant, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
-            } else {
-                //donc n'existe plus ?
+            foreach ($ueOriginale->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
+                if (array_key_exists($ordreUeEnfant, $ueNouvelle->uesEnfants())) {
+                    $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe($ueEnfant, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
+                } else {
+                    //donc n'existe plus ?
+                }
             }
+
+            $diff['heuresEctsUe'] = $this->compareHeuresEctsUe($ueOriginale->heuresEctsUe, $ueNouvelle->heuresEctsUe);
         }
-
-        $diff['heuresEctsUe'] = $this->compareHeuresEctsUe($ueOriginale->heuresEctsUe, $ueNouvelle->heuresEctsUe);
-
         return $diff;
     }
 
