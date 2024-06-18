@@ -200,4 +200,12 @@ class ComposanteController extends BaseController
 
         return null;
     }
+
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route("/composante/cfvu/list", "app_composante_list_for_cfvu")]
+    public function listComposanteToDownloadCfvuChanges(){
+        return $this->render("composante/cfvu_composante_list.html.twig", [
+
+        ]);
+    }
 }
