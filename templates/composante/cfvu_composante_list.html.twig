@@ -2,7 +2,7 @@
 
 
 {% block header %}
-
+    Téléchargement des rapports de changements
 {% endblock %}
 
 {% block content %}
@@ -18,9 +18,14 @@
                 <span class="text-dark fs-5">
                     {{ c.libelle }}
                 <span>
-                <button class="btn btn-sm btn-primary rounded border border-dark text-white text-center ms-5 fw-bold">
-                    Télécharger le rapport
-                </button>
+                <a href="{{ path('export_pdf_synthese_modification_composante', {composante_id: c.id}) }}">
+                    <button 
+                        class="btn btn-sm btn-primary rounded border border-dark text-white text-center ms-5 fw-bold" 
+                        role="button"
+                    >
+                        Télécharger le rapport
+                    </button>
+                </a>
             </div>
         {% endfor %}
     </div>
