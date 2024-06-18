@@ -11,4 +11,16 @@
     Liste des composantes pour générer les rapports des changements
 </h1>
 
+<div class="row justify-content-center mt-5">
+    <div class="col-8 mt-2">
+        {% for c in composantes %}
+            <div class="row border border-primary rounded my-4 ms-2 py-4">
+                <span class="text-dark fs-5">
+                    {{ c.libelle }}
+                <span>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
 {% endblock %}
