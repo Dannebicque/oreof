@@ -279,6 +279,15 @@
                                                 <span class="label">Actualités ORéOF</span>
                                             </a>
                                         </li>
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <li>
+                                                <a href="{{ path('app_homepage') }}">
+                                                    <span class="label">
+                                                        Synthèse par composante
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        {% endif %}
                                     </ul>
                                 </li>
 
