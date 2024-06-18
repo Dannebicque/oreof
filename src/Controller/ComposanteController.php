@@ -55,7 +55,7 @@ class ComposanteController extends BaseController
         ]);
     }
 
-    #[IsGranted("ROLE_ADMIN")]
+    #[IsGranted("ROLE_PDF_DOWNLOADER")]
     #[Route('/composante/{composante_id}/synthese_modification/pdf', 'export_pdf_synthese_modification_composante')]
     public function exportSyntheseAsPdfForComposante(
         int $composante_id,
@@ -65,6 +65,22 @@ class ComposanteController extends BaseController
         MyGotenbergPdf $myGotenbergPdf,
         EntityManagerInterface $entityManager,
     ) : Response {
+
+        /**
+         * 
+         *     /!\ WARNING /!\
+         * 
+         *     ENSURE YOU HAVE ENOUGH SYSTEM RESOURCES
+         *     FOR THIS ROUTE
+         * 
+         */
+         ini_set('memory_limit', '2048M');
+         ini_set('max_execution_time', '240');
+         /**
+          * 
+          *    END WARNING
+          *
+          */
 
         $cmp = $entityManager->getRepository(Composante::class)->findOneById($composante_id);
 
