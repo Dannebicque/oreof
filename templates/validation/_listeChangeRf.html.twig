@@ -70,6 +70,19 @@
 {#            <a href="{{ path('formation_demande', {id: demande.id}) }}" class="btn btn-primary">Voir</a>#}
         </td>
     </tr>
+        <tr>
+            <td colspan="2" class="text-end"> Commentaire :</td>
+            <td colspan="5">
+                {{ demande.commentaire }}
+            </td>
+            <td></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="8">
+                <div class="alert alert-info">Aucune demande de changement de Co/RF dans cette état de demande</div>
+            </td>
+        </tr>
     {% endfor %}
     </tbody>
  </table>
