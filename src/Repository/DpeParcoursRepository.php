@@ -6,6 +6,7 @@ use App\Entity\Composante;
 use App\Entity\CampagneCollecte;
 use App\Entity\DpeParcours;
 use App\Entity\Mention;
+use App\Entity\Parcours;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -62,5 +63,19 @@ class DpeParcoursRepository extends ServiceEntityRepository
             $this->_em->persist($newParcours);
         }
         $this->_em->flush();
+    }
+
+    public function findLastDpeForParcours(Parcours $objet): ?DpeParcours
+    {
+        $query = $this->createQueryBuilder('d')
+            ->innerJoin('d.parcours', 'p')
+            ->addSelect('p')
+            ->where('p.id = :parcours')
+            ->setParameter('parcours', $objet)
+            ->orderBy('d.created', 'DESC')
+            ->setMaxResults(1);
+
+        return $query->getQuery()
+            ->getOneOrNullResult();
     }
 }

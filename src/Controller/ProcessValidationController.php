@@ -294,27 +294,32 @@ class ProcessValidationController extends BaseController
 
     #[Route('/validation/valide-lot/{etape}', name: 'app_validation_valide_lot')]
     public function valideLot(
-        FormationRepository $formationRepository,
+        DpeParcoursRepository $dpeParcoursRepository,
+        ParcoursRepository $parcoursRepository,
         string              $etape,
         Request             $request
     ): Response {
         if ($request->isMethod('POST')) {
-            $sFormations = $request->request->get('formations');
+            $sParcours = $request->request->get('parcours');
         } else {
-            $sFormations = $request->query->get('formations');
+            $sParcours = $request->query->get('parcours');
         }
-        $formations = explode(',', $sFormations);
+        $allParcours = explode(',', $sParcours);
 
         $process = $this->validationProcess->getEtape($etape);
         $laisserPasser = false;
-        $tFormations = [];
-        foreach ($formations as $id) {
-            $objet = $formationRepository->find($id);
+        $tParcours = [];
+        foreach ($allParcours as $id) {
+            $objet = $parcoursRepository->find($id);
 
             if ($objet === null) {
-                return JsonReponse::error('Formation non trouvée');
+                return JsonReponse::error('Parcours non trouvé');
             }
-            $tFormations[] = $objet;
+            $dpe = $dpeParcoursRepository->findLastDpeForParcours($objet);
+            if ($dpe === null) {
+                return JsonReponse::error('Parcours non trouvé');
+            }
+            $tParcours[] = $dpe;
             //            if ($etape === 'cfvu') {
             //                $histo = $objet->getHistoriqueFormations();
             //                foreach ($histo as $h) {
@@ -328,22 +333,22 @@ class ProcessValidationController extends BaseController
             //                }
             //            }
 
-            $processData = $this->formationProcess->etatFormation($objet, $process);
+            $processData = $this->parcoursProcess->etatParcours($dpe, $process);
 
             if ($request->isMethod('POST')) {
-                $this->formationProcess->valideFormation($objet, $this->getUser(), $process, $etape, $request);
+                $this->parcoursProcess->valideParcours($dpe, $this->getUser(), $process, $etape, $request);
             }
         }
 
         if ($request->isMethod('POST')) {
-            $this->toast('success', 'Formations validées');
+            $this->toast('success', 'Parcours validés');
             return $this->redirectToRoute('app_validation_index');
         }
 
 
         return $this->render('process_validation/_valide_lot.html.twig', [
-            'formations' => $tFormations,
-            'sFormations' => $sFormations,
+            'formations' => $tParcours,
+            'sParcours' => $sParcours,
             'process' => $process,
             'type' => 'lot',
             'id' => $id,
@@ -355,41 +360,46 @@ class ProcessValidationController extends BaseController
 
     #[Route('/validation/refuse-lot/{etape}', name: 'app_validation_refuse_lot')]
     public function refuseLot(
-        FormationRepository $formationRepository,
+        DpeParcoursRepository $dpeParcoursRepository,
+        ParcoursRepository $parcoursRepository,
         string              $etape,
         Request             $request
     ): Response {
         if ($request->isMethod('POST')) {
-            $sFormations = $request->request->get('formations');
+            $sParcours = $request->request->get('parcours');
         } else {
-            $sFormations = $request->query->get('formations');
+            $sParcours = $request->query->get('parcours');
         }
-        $formations = explode(',', $sFormations);
+        $allParcours = explode(',', $sParcours);
 
         $process = $this->validationProcess->getEtape($etape);
-        $tFormations = [];
-        foreach ($formations as $id) {
-            $objet = $formationRepository->find($id);
+        $tParcours = [];
+        foreach ($allParcours as $id) {
+            $objet = $parcoursRepository->find($id);
 
             if ($objet === null) {
                 return JsonReponse::error('Formation non trouvée');
             }
-            $tFormations[] = $objet;
-            $processData = $this->formationProcess->etatFormation($objet, $process);
+            $dpe = $dpeParcoursRepository->findLastDpeForParcours($objet);
+            if ($dpe === null) {
+                return JsonReponse::error('Parcours non trouvé');
+            }
+            $tParcours[] = $dpe;
+            $processData = $this->parcoursProcess->etatParcours($dpe, $process);
 
             if ($request->isMethod('POST')) {
-                $this->formationProcess->refuseFormation($objet, $this->getUser(), $process, $etape, $request);
+                $this->parcoursProcess->refuseParcours($dpe, $this->getUser(), $process, $etape, $request);
             }
         }
 
         if ($request->isMethod('POST')) {
-            $this->toast('success', 'Formations refusées');
+            $this->toast('success', 'Parcours refusés');
             return $this->redirectToRoute('app_validation_index');
         }
 
         return $this->render('process_validation/_refuse_lot.html.twig', [
-            'formations' => $tFormations,
-            'sFormations' => $sFormations,
+            'formations' => $tParcours,
+            'sParcours' => $sParcours,
             'process' => $process,
             'type' => 'lot',
             'id' => $id,
@@ -401,30 +411,35 @@ class ProcessValidationController extends BaseController
 
     #[Route('/validation/reserve-lot/{etape}', name: 'app_validation_reserve_lot')]
     public function reserveLot(
-        FormationRepository $formationRepository,
+        DpeParcoursRepository $dpeParcoursRepository,
+        ParcoursRepository $parcoursRepository,
         string              $etape,
         Request             $request
     ): Response {
         if ($request->isMethod('POST')) {
-            $sFormations = $request->request->get('formations');
+            $sParcours = $request->request->get('parcours');
         } else {
-            $sFormations = $request->query->get('formations');
+            $sParcours = $request->query->get('formations');
         }
-        $formations = explode(',', $sFormations);
+        $allParcours = explode(',', $sParcours);
 
         $process = $this->validationProcess->getEtape($etape);
-        $tFormations = [];
-        foreach ($formations as $id) {
-            $objet = $formationRepository->find($id);
+        $tParcours = [];
+        foreach ($allParcours as $id) {
+            $objet = $parcoursRepository->find($id);
 
             if ($objet === null) {
-                return JsonReponse::error('Formation non trouvée');
+                return JsonReponse::error('Parcours non trouvé');
             }
-            $tFormations[] = $objet;
-            $processData = $this->formationProcess->etatFormation($objet, $process);
+            $dpe = $dpeParcoursRepository->findLastDpeForParcours($objet);
+            if ($dpe === null) {
+                return JsonReponse::error('Parcours non trouvé');
+            }
+            $tParcours[] = $objet;
+            $processData = $this->parcoursProcess->etatParcours($dpe, $process);
 
             if ($request->isMethod('POST')) {
-                $this->formationProcess->reserveFormation($objet, $this->getUser(), $process, $etape, $request);
+                $this->parcoursProcess->reserveParcours($dpe, $this->getUser(), $process, $etape, $request);
             }
         }
 
@@ -434,8 +449,8 @@ class ProcessValidationController extends BaseController
         }
 
         return $this->render('process_validation/_reserve_lot.html.twig', [
-            'formations' => $tFormations,
-            'sFormations' => $sFormations,
+            'formations' => $tParcours,
+            'sParcours' => $sParcours,
             'process' => $process,
             'objet' => $objet,
             'processData' => $processData ?? null,
@@ -488,22 +503,22 @@ class ProcessValidationController extends BaseController
                 if ($data['demandeReouverture'] === 'MODIFICATION_SANS_CFVU') {
 
                     $dpe->setEtatValidation(['soumis_central' => 1]); //un état de processus différent pour connaitre le branchement ensuite
-                   $dpe->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_TEXTE);
+                    $dpe->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_TEXTE);
                     $histoEvent = new HistoriqueParcoursEvent($parcours, $this->getUser(), 'soumis_central', 'valide', $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                     $this->entityManager->flush();
                 } elseif ($data['demandeReouverture'] === 'MODIFICATION_AVEC_CFVU') {
                     $dpe->setEtatValidation(['soumis_central' => 1]);
                     $dpe->setEtatReconduction(TypeModificationDpeEnum::MODIFICATION_MCCC);
-                   // todo: créer un nouveau DPE?
+                    // todo: créer un nouveau DPE?
                     // faire la copie de version
                     $now = new DateTimeImmutable('now');
                     $versioningParcours->saveVersionOfParcours($parcours, $now, true, true);
 
                     $this->entityManager->flush();
                 }
-//                $this->addFlash('success', 'DPE ouvert');
-//                return $this->redirectToRoute('app_parcours_edit', ['id' => $parcours->getId()]);
+                //                $this->addFlash('success', 'DPE ouvert');
+                //                return $this->redirectToRoute('app_parcours_edit', ['id' => $parcours->getId()]);
                 return JsonReponse::success('DPE ouvert');
             }
 
@@ -592,8 +607,8 @@ class ProcessValidationController extends BaseController
                     $this->entityManager->flush();
                 }
 
-//                $this->addFlash('success', 'DPE cloturé.');
-               // return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
+                //                $this->addFlash('success', 'DPE cloturé.');
+                // return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
                 return JsonReponse::success('DPE cloturé');
             }
 

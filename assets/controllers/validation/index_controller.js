@@ -43,15 +43,15 @@ export default class extends Controller {
     const liste = document.querySelectorAll('.check-all:checked')
     if (liste.length === 0) {
       this.actionTarget.innerHTML = ''
-      callOut('Veuillez sélectionner au moins une formation', 'danger')
+      callOut('Veuillez sélectionner au moins un parcours', 'danger')
     } else {
-      const formations = []
+      const parcours = []
       liste.forEach((item) => {
-        formations.push(item.value)
+        parcours.push(item.value)
       })
 
       const body = new URLSearchParams({
-        formations,
+        parcours,
       })
 
       this.actionTarget.innerHTML = ''
