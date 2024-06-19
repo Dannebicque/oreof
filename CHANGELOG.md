@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.16](https://github.com/Dannebicque/oreof/compare/v1.29.15...v1.29.16) (2024-06-19)
+
+
+### Bug Fixes
+
+* comparaison si UeNouvelle vide ([a08e731](https://github.com/Dannebicque/oreof/commit/a08e7310ea80e6083cd3b40025017bc7f615fafd))
+* comparaison si UeNouvelle vide ([929a69a](https://github.com/Dannebicque/oreof/commit/929a69a5d11efef7ff9eb3bae2c152b70d00308d))
+* comparaison si UeNouvelle vide ([ec15d8c](https://github.com/Dannebicque/oreof/commit/ec15d8c2122e0940eb94c708461fe451fd191bdc))
+* comparaison si UeNouvelle vide ([5eaa190](https://github.com/Dannebicque/oreof/commit/5eaa19072720a202e4e90a43203d7b417a8a688c))
+* Génération documents synthèse ([eb772ba](https://github.com/Dannebicque/oreof/commit/eb772ba3fb71749d3211ba44d7afe8537ae7b87b))
+* mise en page iframe ([fbefc20](https://github.com/Dannebicque/oreof/commit/fbefc205542e90f328cc8c9853ad0a35dad67b37))
+
 ### [1.29.15](https://github.com/Dannebicque/oreof/compare/v1.29.14...v1.29.15) (2024-06-17)
 
 
