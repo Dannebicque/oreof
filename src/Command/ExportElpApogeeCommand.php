@@ -56,7 +56,7 @@ class ExportElpApogeeCommand extends Command
     private static $codLseApogeeDataTest = "COD_LSE-LISTE_APOGEE-TEST-20-06-2024-10_14.json";
     // Données exportées depuis ORéOF
     private static $fullLseExportDataTest = "OREOF-COD_LSE_TEST-16-04-2024_15-31-27.json";
-    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-EXCLUDED-20-06-2024_10-38-35.json";
+    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-EXCLUDED-20-06-2024_11-25-51.json";
     // Fichier contenant les formations à exclure
     private static $formationToExcludeFile = "INSERTION-INCLUSION-APOGEE-20062024-09_44 FR.txt";
     private static $formationToExcludeJSON = "Formations-a-inclure-20-06-2024_10-46-58.json";
@@ -1917,6 +1917,7 @@ class ExportElpApogeeCommand extends Command
             fn($elp) => $elp->codElp !== "ERROR"
                         && $elp->codElp !== null
                         && mb_strlen($elp->codElp) <= 8
+                        && !empty($elp->codElp)
         );
     }
 
