@@ -52,14 +52,14 @@ class ExportElpApogeeCommand extends Command
 {
 
     // Données extraites d'APOTEST
-    private static $codElpApogeeDataTest = "COD_ELP_APOGEE-PRODUCTION-APRES-MATIERE-MANQUANTE-19-04-2024-14_35.json";
-    private static $codLseApogeeDataTest = "COD_LSE_APOGEE-PRODUCTION-19-04-2024-14_03.json";
+    private static $codElpApogeeDataTest = "COD_ELP_APOGEE-TEST-20-06-2024-10_13.json";
+    private static $codLseApogeeDataTest = "COD_LSE-LISTE_APOGEE-TEST-20-06-2024-10_14.json";
     // Données exportées depuis ORéOF
     private static $fullLseExportDataTest = "OREOF-COD_LSE_TEST-16-04-2024_15-31-27.json";
-    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-EXCLUDED-19-04-2024_13-57-55.json";
+    private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-EXCLUDED-20-06-2024_10-38-35.json";
     // Fichier contenant les formations à exclure
     private static $formationToExcludeFile = "INSERTION-INCLUSION-APOGEE-20062024-09_44 FR.txt";
-    private static $formationToExcludeJSON = "Formations-a-inclure-DEUXIEME-DEVERSEMENT-PROD-16-04-2024_14-21-52.json";
+    private static $formationToExcludeJSON = "Formations-a-inclure-20-06-2024_10-46-58.json";
     // Vérifications entre deux fichiers JSON
     private static $oldJsonFile = "COD_ELP_APOGEE-PRODUCTION-18-04-2024-10-42.json";
     private static $newJsonFile = "COD_ELP_APOGEE-PRODUCTION-APRES-INSERTION-18-04-2024-11-45.json";
@@ -1411,7 +1411,7 @@ class ExportElpApogeeCommand extends Command
         // si c'est une matière standard
         if($hasChildren === false && $nature === 'MATI'){
             $natureApogee = CodeNatuElpEnum::MATI;
-            if ($ec->elementConstitutif->getTypeEc()->getType() === TypeUeEcEnum::STAGE){
+            if ($ec->elementConstitutif->getTypeEc()?->getType() === TypeUeEcEnum::STAGE){
                 $natureApogee = CodeNatuElpEnum::MATS;
             }
             if($ec->elementConstitutif->getNatureUeEc()?->isLibre()){
