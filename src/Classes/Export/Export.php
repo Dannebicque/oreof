@@ -22,7 +22,7 @@ class Export
     private string $format;
     private string $typeDocument;
     private array $formations;
-    private ?CampagneCollecte $annee;
+    private ?CampagneCollecte $campagneCollecte;
     private ?DateTimeInterface $date;
     private string $dir;
     private mixed $export;
@@ -57,10 +57,10 @@ class Export
         $this->typeDocument = $t[1];
     }
 
-    public function exportFormations(array $formations, ?CampagneCollecte $annee = null): string
+    public function exportFormations(array $formations, ?CampagneCollecte $campagneCollecte = null): string
     {
         $this->formations = $formations;
-        $this->annee = $annee;
+        $this->campagneCollecte = $campagneCollecte;
         return $this->export();
     }
 
@@ -100,7 +100,7 @@ class Export
             $this->dir,
             $this->myPDF,
             $this->formations,
-            $this->annee,
+            $this->campagneCollecte,
             $this->date
         );
         return $this->export->exportZip();
@@ -112,7 +112,7 @@ class Export
             $this->dir,
             $this->typeDiplomeRegistry,
             $this->formations,
-            $this->annee,
+            $this->campagneCollecte,
             $this->date,
             $this->format,
             $isLight
@@ -122,32 +122,32 @@ class Export
 
     private function exportCarif() : string
     {
-        return $this->exportCarif->exportLink($this->annee);
+        return $this->exportCarif->exportLink($this->campagneCollecte);
     }
 
     private function exportSeip() : string
     {
-        return $this->exportSeip->exportLink($this->annee);
+        return $this->exportSeip->exportLink($this->campagneCollecte);
     }
 
     private function exportEc() : string
     {
-        return $this->exportEc->exportLink($this->annee);
+        return $this->exportEc->exportLink($this->campagneCollecte);
     }
 
     private function exportSynthese(): string
     {
-        return $this->exportSynthese->exportLink($this->annee);
+        return $this->exportSynthese->exportLink($this->campagneCollecte);
     }
 
     private function exportRegime() : string
     {
-        return $this->exportRegime->exportLink($this->annee);
+        return $this->exportRegime->exportLink($this->campagneCollecte);
     }
 
     private function exportCfvu() : string
     {
-        return $this->exportCfvu->exportLink($this->annee);
+        return $this->exportCfvu->exportLink($this->campagneCollecte);
     }
 
     private function exportFicheMatiere() : string
@@ -162,6 +162,6 @@ class Export
 
     private function exportSyntheseModifications(): string
     {
-        return $this->exportSyntheseModification->exportLink($this->formations, $this->annee);
+        return $this->exportSyntheseModification->exportLink($this->formations, $this->campagneCollecte);
     }
 }

@@ -31,8 +31,7 @@ class VersioningStructureExtractDiff
     public function __construct(
         private StructureParcours $dtoOrigine,
         private StructureParcours $dtoNouveau
-    )
-    {
+    ) {
     }
 
     //todo: gérer le cas d'ajout d'une UE, voire d'un Semestre
@@ -42,12 +41,10 @@ class VersioningStructureExtractDiff
     {
         // parcourir les deux structures et comparer. Construire un tableau de différences
         foreach ($this->dtoOrigine->semestres as $ordreSemestre => $semestre) {
-            if ($semestre->semestre->isNonDispense() === false) {
-                if (array_key_exists($ordreSemestre, $this->dtoNouveau->semestres)) {
-                    $this->diff['semestres'][$ordreSemestre]['heuresEctsSemestre'] = $this->compareHeuresEctsSemestre($semestre->heuresEctsSemestre, $this->dtoNouveau->semestres[$ordreSemestre]->heuresEctsSemestre);
+            if (array_key_exists($ordreSemestre, $this->dtoNouveau->semestres)) {
+                $this->diff['semestres'][$ordreSemestre]['heuresEctsSemestre'] = $this->compareHeuresEctsSemestre($semestre->heuresEctsSemestre, $this->dtoNouveau->semestres[$ordreSemestre]->heuresEctsSemestre);
 
-                    $this->compareSemestre($semestre, $this->dtoNouveau->semestres[$ordreSemestre], $ordreSemestre);
-                }
+                $this->compareSemestre($semestre, $this->dtoNouveau->semestres[$ordreSemestre], $ordreSemestre);
             }
         }
         $this->diff['heuresEctsFormation'] = $this->compareHeuresEctsFormation($this->dtoOrigine->heuresEctsFormation, $this->dtoNouveau->heuresEctsFormation);
@@ -57,8 +54,7 @@ class VersioningStructureExtractDiff
         StructureSemestre $semestreOriginal,
         StructureSemestre $semestreNouveau,
         int               $ordreSemestre
-    ): void
-    {
+    ): void {
         foreach ($semestreOriginal->ues as $ordreUe => $ue) {
             $this->hasModification = false;
             $modifs = $this->compareUe($ue, $semestreNouveau->ues[$ordreUe]);//cas si UE n'existe plus ou si ajouté dans nouveau ?

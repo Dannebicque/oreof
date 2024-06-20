@@ -138,7 +138,7 @@ class ExportController extends BaseController
             $this->getUser()?->getId(),
             $request->request->get('type_document'),
             $request->request->all()['liste'] ?? [],
-            $annee->getId(),
+            $this->getDpe(),
             Tools::convertDate($request->request->get('date', null))
         ));
 

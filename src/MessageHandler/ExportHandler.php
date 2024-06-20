@@ -21,7 +21,7 @@ class ExportHandler
 {
     public function __construct(
         private UserRepository             $userRepository,
-        private CampagneCollecteRepository $anneeUniversitaireRepository,
+        private CampagneCollecteRepository $campagneCollecteRepository,
         private readonly MailerInterface   $mailer,
         private Export                     $export
     )
@@ -34,11 +34,8 @@ class ExportHandler
         $this->export->setDate($exportMessage->getDate());
 
         $user = $this->userRepository->find($exportMessage->getUser());
-        if ($exportMessage->getAnnee() !== null) {
-            $annee = $this->anneeUniversitaireRepository->find($exportMessage->getAnnee());
-        }
 
-        $lien = $this->export->exportFormations($exportMessage->getFormations(), $annee ?? null);
+        $lien = $this->export->exportFormations($exportMessage->getFormations(), $exportMessage->getCampagneCollecte());
 
         if (null !== $user && $lien !== null) {
             $mail = (new TemplatedEmail())

@@ -139,9 +139,9 @@ class ExportCap
     }
 
 
-    public function export(CampagneCollecte $anneeUniversitaire): StreamedResponse
+    public function export(array $formations): StreamedResponse
     {
-        $this->prepareExport($anneeUniversitaire);
+        $this->prepareExport($formations);
         return $this->excelWriter->genereFichier($this->fileName);
     }
 

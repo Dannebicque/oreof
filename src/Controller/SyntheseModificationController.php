@@ -54,7 +54,7 @@ class SyntheseModificationController extends BaseController
                 $this->getUser()?->getId(),
                 'synthese_modification',
                 $formations,
-                $this->getDpe()->getAnneeUniversitaire()?->getId(),
+                $this->getDpe(),
                 null
             )
         );
@@ -86,15 +86,15 @@ class SyntheseModificationController extends BaseController
         }
 
 
-        //$link = $exportSyntheseModification->exportLink($formations, $this->getDpe());
-
-       // dd($link);
+//        $link = $exportSyntheseModification->exportLink($formations, $this->getDpe());
+//
+//        dd($link);
         $messageBus->dispatch(
             new Export(
                 $this->getUser()?->getId(),
                 'pdf-synthese_modification',
                 $formations,
-                $this->getDpe()->getAnneeUniversitaire()?->getId(),
+                $this->getDpe(),
                 null
             )
         );
