@@ -8,7 +8,8 @@
         {% set diffStructure = demande.diffStructure %}
         {% set diffSemestres = demande.diffStructure.diff.semestres %}
         {% set diffUe = demande.diffStructure.diffUe %}
-        {% if not loop.last %}
+        {% if not loop.first %}
+        <br><br>
         <br><br>
         {% endif %}
         <h2 class="text-center">{{ formation.display }}</h2>

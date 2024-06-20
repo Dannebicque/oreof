@@ -25,7 +25,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class ExportSyntheseModification
 {
-    private string $fileName;
     private string $dir;
 
     public function __construct(
@@ -54,11 +53,10 @@ class ExportSyntheseModification
                 } else {
                     $diffStructure = null;
                 }
-                //                dd($diffStructure);
                 $tDemandes[] = ['parcours' => $parc, 'diffStructure' => $diffStructure, 'dto' => $dto];
             }
-
-           // dump($tDemandes);
+//            dump($form->getSlug());
+//            dump($tDemandes);
 
             $fichiers[] = $this->myGotenbergPdf->renderAndSave(
                 'pdf/synthese_modifications.html.twig',
@@ -74,26 +72,25 @@ class ExportSyntheseModification
             );
         }
 
-
         $zip = new \ZipArchive();
         $fileName = 'synthese_modification_cfvu_' . date('YmdHis') . '.zip';
-                        $zipName = $this->dir . 'temp/zip/' . $fileName;
-                        $zip->open($zipName, \ZipArchive::CREATE);
+        $zipName = $this->dir . 'temp/zip/' . $fileName;
+        $zip->open($zipName, \ZipArchive::CREATE);
 
-                        foreach ($fichiers as $fichier) {
-                            $zip->addFile(
-                                $this->dir . 'pdftests/' . $fichier,
-                                $fichier
-                            );
-                        }
+        foreach ($fichiers as $fichier) {
+            $zip->addFile(
+                $this->dir . 'pdftests/' . $fichier,
+                $fichier
+            );
+        }
 
-                        $zip->close();
+        $zip->close();
 
-                        foreach ($fichiers as $fichier) {
-                            if (file_exists($this->dir . 'pdftests/' . $fichier)) {
-                                unlink($this->dir . 'pdftests/' . $fichier);
-                            }
-                        }
+        foreach ($fichiers as $fichier) {
+            if (file_exists($this->dir . 'pdftests/' . $fichier)) {
+                unlink($this->dir . 'pdftests/' . $fichier);
+            }
+        }
 
         return $fileName;
     }
