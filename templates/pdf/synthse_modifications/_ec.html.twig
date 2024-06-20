@@ -5,8 +5,7 @@
     ec.heuresEctsEc.cmDist.isDifferent == true or
     ec.heuresEctsEc.tdDist.isDifferent == true or
     ec.heuresEctsEc.tpDist.isDifferent == true or
-    ec.libelle.isDifferent == true or
-    ec.raccroche.isDifferent == true %}
+    ec.libelle.isDifferent == true %}
     <h5> > {{ ec.code.new }} : {{ ec.libelle.new }}</h5>
 {% endif %}
 
@@ -17,16 +16,6 @@
     </p>
 {% endif %}
 
-{% if ec.raccroche.isDifferent == true %}
-    <p>EC initialement
-        <span class="diff-new">{{ sem.raccroche.new == true ? 'raccrochée' : 'non raccrochée' }}</span>
-        (au lieu de
-        <span class="diff-original">{{ ue.raccroche.original == true ? 'raccrochée' : 'non raccrochée' }}</span>)
-    </p>
-{% endif %}
-
-
-
 {{ include('pdf/synthse_modifications/_ec_heures.html.twig', { heuresEctsEc: ec.heuresEctsEc}) }}
 
-{#{{ include('pdf/synthse_modifications/_ec_mccc.html.twig') }}#}
+{{ include('pdf/synthse_modifications/_ec_mccc.html.twig') }}

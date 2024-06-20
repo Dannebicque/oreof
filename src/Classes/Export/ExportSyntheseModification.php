@@ -1,0 +1,100 @@
+<?php
+/*
+ * Copyright (c) 2023. | David Annebicque | ORéOF  - All Rights Reserved
+ * @file /Users/davidannebicque/Sites/oreof/src/Classes/Export/ExportSynthese.php
+ * @author davidannebicque
+ * @project oreof
+ * @lastUpdate 11/11/2023 13:07
+ */
+
+namespace App\Classes\Export;
+
+use App\Classes\Excel\ExcelWriter;
+use App\Classes\MyGotenbergPdf;
+use App\Entity\CampagneCollecte;
+use App\Enums\RegimeInscriptionEnum;
+use App\Repository\FormationRepository;
+use App\Service\VersioningParcours;
+use App\Service\VersioningStructure;
+use App\Service\VersioningStructureExtractDiff;
+use App\TypeDiplome\TypeDiplomeRegistry;
+use App\Utils\Tools;
+use DateTime;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpKernel\KernelInterface;
+
+class ExportSyntheseModification
+{
+    private string $fileName;
+    private string $dir;
+
+    public function __construct(
+        protected TypeDiplomeRegistry $typeDiplomeRegistry,
+        protected VersioningParcours $versioningParcours,
+        protected MyGotenbergPdf      $myGotenbergPdf,
+        KernelInterface               $kernel,
+        protected FormationRepository $formationRepository,
+    ) {
+        $this->dir = $kernel->getProjectDir() . '/public/';
+    }
+
+    public function exportLink(array $formations, CampagneCollecte $dpe): string
+    {
+        foreach ($formations as $formation) {
+            $tDemandes = [];
+            $form = $formation['formation'];
+            foreach ($formation['parcours'] as $parc) {
+                $composante = $form->getComposantePorteuse();
+                $typeD = $this->typeDiplomeRegistry->getTypeDiplome($form?->getTypeDiplome()?->getModeleMcc());
+                $dto = $typeD->calculStructureParcours($parc, true, false);
+                $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc);
+                if ($structureDifferencesParcours !== null) {
+                    $diffStructure = new VersioningStructureExtractDiff($structureDifferencesParcours, $dto);
+                    $diffStructure->extractDiff();
+                } else {
+                    $diffStructure = null;
+                }
+//                dd($diffStructure);
+                $tDemandes[] = ['parcours' => $parc, 'diffStructure' => $diffStructure, 'dto' => $dto];
+            }
+
+//            dump($tDemandes);
+
+            $fichiers[] = $this->myGotenbergPdf->renderAndSave(
+                'pdf/synthese_modifications.html.twig',
+                'pdftests/',
+                [
+                    'titre' => 'Liste des demande de changement MCCC et maquettes',
+                    'demandes' => $tDemandes,
+                    'formation' => $form,
+                    'dpe' => $dpe,
+                    'composante' => $composante,
+                ],
+                Tools::FileName($form->getSlug())
+            );
+        }
+
+
+        $zip = new \ZipArchive();
+        $fileName = 'synthese_modification_cfvu_' . date('YmdHis') . '.zip';
+                $zipName = $this->dir . 'temp/zip/' . $fileName;
+                $zip->open($zipName, \ZipArchive::CREATE);
+
+                foreach ($fichiers as $fichier) {
+                    $zip->addFile(
+                        $this->dir . 'pdftests/' . $fichier,
+                        $fichier
+                    );
+                }
+
+                $zip->close();
+
+                foreach ($fichiers as $fichier) {
+                    if (file_exists($this->dir . 'pdftests/' . $fichier)) {
+                        unlink($this->dir . 'pdftests/' . $fichier);
+                    }
+                }
+
+        return $fileName;
+    }
+}

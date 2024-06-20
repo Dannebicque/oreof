@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+    Synthèse des modifications CFVU
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ include('communs/_breadcrumb.html.twig', {liens:[
+    ]}) }}
+{% endblock %}
+
+{% block bouton_header %}
+    <a href="{{ path('app_synthese_modification_export_all') }}"
+       class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom"
+       title="Télécharger toutes les modifications"
+    >
+        <i class="{{ iconDownload }}"></i>
+        <span> Récupérer toutes les modifications</span>
+    </a>
+{% endblock %}
+
+{% block content %}
+    <h2 class="small-title">Les composantes</h2>
+    <div class="card">
+        <div class="card-title"></div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Composante</th>
+                    <th>Export</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for composante in composantes %}
+                    <tr>
+                        <td>{{ composante.libelle }}</td>
+                        <td>
+                            {% if comp[composante.id] is defined %}
+                            <a href="{{ path('app_synthese_modification_export_composante', {composante: composante.id}) }}"
+                               class="btn btn-sm btn-outline-info btn-icon btn-icon-end w-100 w-sm-auto mx-2"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="bottom"
+                               title="Télécharger toutes les modifications de la composante {{ composante.libelle }}"
+                            >
+                                <i class="{{ iconDownload }}"></i>
+                                <span> Récupérer toutes les modifications de la composante ({{ comp[composante.id] }})</span>
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

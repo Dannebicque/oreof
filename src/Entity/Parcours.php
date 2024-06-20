@@ -45,7 +45,7 @@ class Parcours
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning'])]
     #[ORM\ManyToOne(targetEntity: Formation::class, inversedBy: 'parcours')]
-    private ?Formation $formation;
+    private ?Formation $formation = null;
 
     #[Groups('parcours_json_versioning')]
     #[ORM\OneToMany(mappedBy: 'parcours', targetEntity: BlocCompetence::class, cascade: ['persist', 'remove'])]

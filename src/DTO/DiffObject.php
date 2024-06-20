@@ -21,4 +21,9 @@ class DiffObject {
     {
         return $this->original !== $this->new;
     }
+
+    public function getDataDiff() : DiffObject|false
+    {
+        return $this->isDifferent() === true ? $this : false;
+    }
 }

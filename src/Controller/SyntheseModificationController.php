@@ -2,30 +2,128 @@
 
 namespace App\Controller;
 
+use App\Classes\Export\ExportSyntheseModification;
 use App\Classes\Json\ExtractTextFromJsonPatch;
+use App\Classes\JsonReponse;
 use App\Classes\MyGotenbergPdf;
+use App\Entity\Composante;
+use App\Message\Export;
 use App\Repository\ComposanteRepository;
+use App\Repository\DpeParcoursRepository;
 use App\Repository\ParcoursRepository;
 use App\Repository\ParcoursVersioningRepository;
 use App\Service\VersioningParcours;
+use App\Utils\Tools;
 use DateTime;
 use Swaggest\JsonDiff\JsonDiff;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class SyntheseModificationController extends BaseController
 {
-    #[Route('/synthese/modification/pdf', name: 'app_synthese_modification_export_pdf')]
-    public function pdf(
-        KernelInterface $kernel,
-        ParcoursVersioningRepository $parcoursVersioningRepository,
-        ParcoursRepository   $parcoursRepository,
-        VersioningParcours   $versioningParcours,
+    #[Route('/synthese/modifications', name: 'app_synthese_modification_export_pdf')]
+    public function exportSynthese(
+        DpeParcoursRepository $dpeParcoursRepository,
         ComposanteRepository $composanteRepository,
-        MyGotenbergPdf       $myGotenbergPdf
     ): Response {
-        $dir = $kernel->getProjectDir().'/public/';
+        $dpes = $dpeParcoursRepository->findByCampagneWithModification($this->getDpe());
+        $comp = [];
+        foreach ($dpes as $dpe) {
+            if (!array_key_exists($dpe->getFormation()?->getComposantePorteuse()?->getId(), $comp)) {
+                $comp[$dpe->getFormation()?->getComposantePorteuse()?->getId()] = 0;
+            }
+            $comp[$dpe->getFormation()?->getComposantePorteuse()?->getId()] ++;
+        }
+
+
+        return $this->render('synthese_modification/index.html.twig', [
+            'composantes' => $composanteRepository->findPorteuse(),
+            'comp' => $comp
+        ]);
+    }
+
+    #[Route('/synthese/modifications/all', name: 'app_synthese_modification_export_all')]
+    public function exportSyntheseAll(
+        DpeParcoursRepository $dpeParcoursRepository,
+        MessageBusInterface $messageBus,
+    ): Response {
+        // récupèrer les formations qui sont ouvertes avec CFVU
+        $dpes = $dpeParcoursRepository->findByCampagneWithModification($this->getDpe());
+        $formations = [];
+        foreach ($dpes as $dpe) {
+            $formation = $dpe->getFormation();
+            if (!array_key_exists($formation?->getId(), $formations)) {
+                $formations[$formation?->getId()] = [];
+            }
+            $formations[$formation?->getId()][] = $dpe->getParcours();
+        }
+
+        dump($formations);
+
+        $messageBus->dispatch(
+            new Export(
+                $this->getUser()?->getId(),
+                'synthese_modification',
+                $formations,
+                $this->getDpe()->getAnneeUniversitaire()?->getId(),
+                null
+            )
+        );
+
+        return JsonReponse::success('Les documents sont en cours de génération, un mail vous sera envoyé une fois les documents prêts.');
+    }
+
+    #[Route('/synthese/modifications/composante/{composante}', name: 'app_synthese_modification_export_composante')]
+    public function exportSyntheseComposante(
+        ExportSyntheseModification $exportSyntheseModification,
+        MessageBusInterface $messageBus,
+        DpeParcoursRepository $dpeParcoursRepository,
+        Composante          $composante
+    ): Response {
+        //récupère toutes les formations de la composante qui sont ouvertes en CFVU
+        $dpes = $dpeParcoursRepository->findParcoursByComposante($this->getDpe(), $composante);
+
+        $formations = [];
+        foreach ($dpes as $dpe) {
+            $parcours = $dpe->getParcours();
+            $formation = $parcours->getFormation();
+            if (!array_key_exists($formation?->getId(), $formations)) {
+                $formations[$formation?->getId()]['parcours'] = [];
+                $formations[$formation?->getId()]['formation'] = $formation;
+            }
+            $formations[$formation?->getId()]['parcours'][] = $parcours;
+        }
+
+
+     //   $link = $exportSyntheseModification->exportLink($formations, $this->getDpe());
+
+    //    dd($link);
+        $messageBus->dispatch(
+            new Export(
+                $this->getUser()?->getId(),
+                'pdf-synthese_modification',
+                $formations,
+                $this->getDpe()->getAnneeUniversitaire()?->getId(),
+                null
+            )
+        );
+
+        return JsonReponse::success('Les documents sont en cours de génération, un mail vous sera envoyé une fois les documents prêts.');
+    }
+
+
+    #[Route('/synthese/modification/pdf/old', name: 'app_synthese_modification_export_pdf_old')]
+    public function pdf(
+        KernelInterface              $kernel,
+        ParcoursVersioningRepository $parcoursVersioningRepository,
+        ParcoursRepository           $parcoursRepository,
+        VersioningParcours           $versioningParcours,
+        ComposanteRepository         $composanteRepository,
+        MyGotenbergPdf               $myGotenbergPdf
+    ): Response {
+        $dir = $kernel->getProjectDir() . '/public/';
         $composantes = $composanteRepository->findAllId();
         foreach ($composantes as $composante) {
             $tDemandes[$composante['id']] = [];
@@ -33,13 +131,13 @@ class SyntheseModificationController extends BaseController
 
         $patterns = [
             '\/heuresEctsFormation\/',
-             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/heuresEctsEc\/',
+            '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/heuresEctsEc\/',
 
-             '\/semestres\/\d+\/heuresEctsSemestre\/',
+            '\/semestres\/\d+\/heuresEctsSemestre\/',
             '\/semestres\/\d+\/ues\/\d+\/uesEnfants\/\d+',
             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementsConstitutifsEnfants\/\d+\/elementConstitutif\/ficheMatiere\/',
-             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementsConstitutifsEnfants\/\d+\/heuresEctsEc\/',
-             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementConstitutif\/natureUeEc\/',
+            '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementsConstitutifsEnfants\/\d+\/heuresEctsEc\/',
+            '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/elementConstitutif\/natureUeEc\/',
             '\/semestres\/\d+\/ues\/\d+\/elementConstitutifs\/\d+\/',
             '\/heuresEctsFormation\/',
         ];
@@ -124,12 +222,11 @@ class SyntheseModificationController extends BaseController
                         'composante' => $cmp,
                         'dpe' => $this->getDpe(),
                     ],
-                    'synthese_changement_cfvu_'.$cmp['sigle'] .'_'. (new DateTime())->format('d-m-Y_H-i-s')
+                    'synthese_changement_cfvu_' . $cmp['sigle'] . '_' . (new DateTime())->format('d-m-Y_H-i-s')
                 );
             }
 
         }
-
 
 
         //        return $this->render('pdf/synthese_modifications_parcours.html.twig', [
@@ -145,7 +242,7 @@ class SyntheseModificationController extends BaseController
     {
         // on regarde si c'est un pattern à ignorer
         foreach ($patternsAIgnorer as $pattern) {
-            preg_match("/^(".$pattern.")/", $string, $matches);
+            preg_match("/^(" . $pattern . ")/", $string, $matches);
             if (!empty($matches[0])) {
                 return null;
             }
@@ -153,11 +250,11 @@ class SyntheseModificationController extends BaseController
 
 
         foreach ($patterns as $pattern) {
-            preg_match("/^(".$pattern.")/", $string, $matches);
+            preg_match("/^(" . $pattern . ")/", $string, $matches);
             if (!empty($matches[0])) {
                 return ['path' => $matches[0],
                     'key' => substr($string, strlen($matches[0]))
-                    ];
+                ];
             }
         }
 

@@ -7,6 +7,8 @@ use App\Entity\CampagneCollecte;
 use App\Entity\DpeParcours;
 use App\Entity\Mention;
 use App\Entity\Parcours;
+use App\Enums\EtatDpeEnum;
+use App\Enums\TypeModificationDpeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -77,5 +79,47 @@ class DpeParcoursRepository extends ServiceEntityRepository
 
         return $query->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function findParcoursByComposante(CampagneCollecte $getDpe, Composante $composante): array
+    {
+        $query = $this->createQueryBuilder('d')
+            ->innerJoin('d.parcours', 'p')
+            ->addSelect('p')
+            ->innerJoin('p.formation', 'f')
+            ->addSelect('f')
+            ->where('d.campagneCollecte = :campagneCollecte')
+            ->andWhere('f.composantePorteuse = :composante')
+            ->andWhere('d.etatReconduction = :etatReconduction')
+            ->orWhere('d.etatReconduction = :etatReconduction2')
+            ->setParameter('etatReconduction', TypeModificationDpeEnum::MODIFICATION_MCCC)
+            ->setParameter('etatReconduction2', TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE)
+            ->setParameter('campagneCollecte', $getDpe)
+            ->setParameter('composante', $composante)
+            ->orderBy('f.typeDiplome', 'ASC')
+            ->addOrderBy('f.mentionTexte', 'ASC')
+            ;
+
+        return $query->getQuery()
+            ->getResult();
+    }
+
+    public function findByCampagneWithModification(CampagneCollecte $getDpe)
+    {
+        $query = $this->createQueryBuilder('d')
+            ->innerJoin('d.formation', 'f')
+            ->addSelect('f')
+            ->where('d.campagneCollecte = :campagneCollecte')
+            ->andWhere('d.etatReconduction = :etatReconduction')
+            ->orWhere('d.etatReconduction = :etatReconduction2')
+            ->setParameter('etatReconduction', TypeModificationDpeEnum::MODIFICATION_MCCC)
+            ->setParameter('etatReconduction2', TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE)
+            ->setParameter('campagneCollecte', $getDpe)
+            ->orderBy('f.typeDiplome', 'ASC')
+            ->addOrderBy('f.mentionTexte', 'ASC')
+        ;
+
+        return $query->getQuery()
+            ->getResult();
     }
 }

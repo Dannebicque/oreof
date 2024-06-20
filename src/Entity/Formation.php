@@ -159,7 +159,7 @@ class Formation
     private ?array $etatSteps = [];
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
-    #[ORM\ManyToOne(inversedBy: 'formations')]
+    #[ORM\ManyToOne(inversedBy: 'formations', fetch: 'EAGER')]
     private ?TypeDiplome $typeDiplome = null;
 
     #[ORM\Column(length: 255, nullable: true)]

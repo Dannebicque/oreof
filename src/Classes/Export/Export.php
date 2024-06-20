@@ -9,6 +9,7 @@
 
 namespace App\Classes\Export;
 
+use App\Classes\Export\ExportSyntheseModification;
 use App\Classes\MyPDF;
 use App\Entity\CampagneCollecte;
 use App\TypeDiplome\TypeDiplomeRegistry;
@@ -28,17 +29,18 @@ class Export
 
     public function __construct(
         protected ExportFicheMatiere $exportFicheMatiere,
-        protected ExportRegime       $exportRegime,
-        protected ExportCfvu         $exportCfvu,
-        protected ExportCarif        $exportCarif,
-        protected ExportCap        $exportCap,
-        protected ExportSynthese     $exportSynthese,
-        protected ExportSeip           $exportSeip,
-        protected ExportEc           $exportEc,
-        protected ExportMccc         $exportMccc,
-        KernelInterface              $kernel,
-        private TypeDiplomeRegistry  $typeDiplomeRegistry,
-        private MyPDF                $myPDF
+        protected ExportRegime      $exportRegime,
+        protected ExportCfvu        $exportCfvu,
+        protected ExportCarif       $exportCarif,
+        protected ExportCap         $exportCap,
+        protected ExportSynthese    $exportSynthese,
+        protected ExportSeip        $exportSeip,
+        protected ExportEc          $exportEc,
+        protected ExportMccc        $exportMccc,
+        KernelInterface             $kernel,
+        private TypeDiplomeRegistry $typeDiplomeRegistry,
+        private MyPDF               $myPDF,
+        private readonly ExportSyntheseModification $exportSyntheseModification
     ) {
         $this->dir = $kernel->getProjectDir().'/public/temp';
     }
@@ -87,6 +89,8 @@ class Export
                 return $this->exportEc();
             case 'synthese':
                 return $this->exportSynthese();
+            case 'synthese_modification':
+                return $this->exportSyntheseModifications();
         }
     }
 
@@ -154,5 +158,10 @@ class Export
     private function exportCap() : string
     {
         return $this->exportCap->exportLink($this->formations);
+    }
+
+    private function exportSyntheseModifications(): string
+    {
+        return $this->exportSyntheseModification->exportLink($this->formations, $this->annee);
     }
 }
