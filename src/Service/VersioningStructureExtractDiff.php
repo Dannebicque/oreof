@@ -26,6 +26,7 @@ class VersioningStructureExtractDiff
 
     public array $diffUe = [];
     public array $diff = [];
+    private bool $hasModification = false;
 
     public function __construct(
         private StructureParcours $dtoOrigine,
@@ -49,10 +50,11 @@ class VersioningStructureExtractDiff
         $this->diff['heuresEctsFormation'] = $this->compareHeuresEctsFormation($this->dtoOrigine->heuresEctsFormation, $this->dtoNouveau->heuresEctsFormation);
     }
 
-    private function compareSemestre(StructureSemestre $semestreOriginal,
-                                     StructureSemestre $semestreNouveau,
-                                     int $ordreSemestre): void
-    {
+    private function compareSemestre(
+        StructureSemestre $semestreOriginal,
+        StructureSemestre $semestreNouveau,
+        int $ordreSemestre
+    ): void {
         foreach ($semestreOriginal->ues as $ordreUe => $ue) {
             $this->hasModification = false;
             $modifs = $this->compareUe($ue, $semestreNouveau->ues[$ordreUe]);//cas si UE n'existe plus ou si ajouté dans nouveau ?
@@ -84,12 +86,12 @@ class VersioningStructureExtractDiff
         $sommeSemestreTotalPresDist = $sommeSemestreTotalPres + $sommeSemestreTotalDist;
         $diff['sommeSemestreTotalPresDist'] = new DiffObject(Tools::filtreHeures($sommeSemestreTotalPresDist), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTotalPresDist()));
 
-        $this->hasModifications($diff);
+        $this->hasModification = $this->hasModifications($diff);
 
         return $diff;
     }
 
-    private function compareUe(StructureUe $ueOriginale, ?StructureUe $ueNouvelle): ?array
+    private function compareUe(StructureUe $ueOriginale, ?StructureUe $ueNouvelle): array|false
     {
         $diff = [];
 
@@ -123,10 +125,12 @@ class VersioningStructureExtractDiff
             }
         }
 
-        return $diff;
+        $this->hasModification = $this->hasModifications($diff);
+
+        return $this->hasModification ? $diff : false;
     }
 
-    private function compareElementConstitutif(?StructureEc $ecOriginal, ?StructureEc $ecNouveau): array
+    private function compareElementConstitutif(?StructureEc $ecOriginal, ?StructureEc $ecNouveau): array|false
     {
         $diff = [];
         if ($ecOriginal === null && $ecNouveau !== null) {
@@ -206,7 +210,10 @@ class VersioningStructureExtractDiff
             //EC enfants
             foreach ($ecNouveau->elementsConstitutifsEnfants as $ordreEc => $ecEnfant) {
                 if (array_key_exists($ordreEc, $ecOriginal->elementsConstitutifsEnfants)) {
-                    $diff['ecEnfants'][$ordreEc] = $this->compareElementConstitutif($ecOriginal->elementsConstitutifsEnfants[$ordreEc], $ecEnfant);
+                    $modif = $this->compareElementConstitutif($ecOriginal->elementsConstitutifsEnfants[$ordreEc], $ecEnfant);
+                    if ($modif !== null) {
+                        $diff['ecEnfants'][$ordreEc] = $modif;
+                    }
                 } else {
                     //création
                     $diff['ecEnfants'][$ordreEc] = $this->compareElementConstitutif(null, $ecEnfant);
@@ -214,10 +221,12 @@ class VersioningStructureExtractDiff
             }
         }
 
-        return $diff;
+        $this->hasModification = $this->hasModifications($diff);
+
+        return $this->hasModification ? $diff : false;
     }
 
-    private function compareHeuresEctsEc(?HeuresEctsEc $heuresEctsEc, ?HeuresEctsEc $heuresEctsEc1): array
+    private function compareHeuresEctsEc(?HeuresEctsEc $heuresEctsEc, ?HeuresEctsEc $heuresEctsEc1): array|false
     {
         $diff = [];
 
@@ -263,12 +272,12 @@ class VersioningStructureExtractDiff
             $diff['sommeEcTotalPresDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalPresDist()), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalPresDist()));
         }
 
-        $this->hasModifications($diff);
+        $this->hasModification = $this->hasModifications($diff);
 
-        return $diff;
+        return $this->hasModification ? $diff : false;
     }
 
-    private function compareHeuresEctsFormation(mixed $heuresEctsFormation, $heuresEctsFormationNouveau): array
+    private function compareHeuresEctsFormation(mixed $heuresEctsFormation, $heuresEctsFormationNouveau): array|false
     {
         $diff = [];
         $diff['sommeFormationEcts'] = new DiffObject($heuresEctsFormation->sommeFormationEcts, $heuresEctsFormationNouveau->sommeFormationEcts);
@@ -292,7 +301,7 @@ class VersioningStructureExtractDiff
         return $diff;
     }
 
-    private function compareMcccs(?array $mcccsOriginal, ?array $mcccsNouveau): array
+    private function compareMcccs(?array $mcccsOriginal, ?array $mcccsNouveau): array|false
     {
         if (null === $mcccsOriginal && null === $mcccsNouveau) {
             return [];
@@ -309,7 +318,9 @@ class VersioningStructureExtractDiff
         }
 
 
-        return $diff;
+        $this->hasModification = $this->hasModifications($diff);
+
+        return $this->hasModification ? $diff : false;
     }
 
     private function createMcccFromArray(array $mcccOriginal): Mccc
@@ -341,12 +352,20 @@ class VersioningStructureExtractDiff
         return $mccc;
     }
 
-    private function hasModifications(array $diff): void
+    private function hasModifications(array $diff): bool
     {
         foreach ($diff as $key => $value) {
-            if ($value->isDifferent()) {
-                $this->hasModification = true;
+            if (is_array($value)) {
+                if ($this->hasModifications($value)) {
+                    return true;
+                }
+            }
+
+            if ($value instanceof DiffObject && $value->isDifferent()) {
+                 return true;
             }
         }
+
+        return false;
     }
 }
