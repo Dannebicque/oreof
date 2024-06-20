@@ -58,7 +58,7 @@ class ExportElpApogeeCommand extends Command
     private static $fullLseExportDataTest = "OREOF-COD_LSE_TEST-16-04-2024_15-31-27.json";
     private static $allParcoursCodElpExport = "OREOF-COD_ELP-ALL_PARCOURS-filtered-EXCLUDED-19-04-2024_13-57-55.json";
     // Fichier contenant les formations à exclure
-    private static $formationToExcludeFile = "liste-formation-a-exclure-MATIERES-MANQUANTES-19-04-2024-09h20.txt";
+    private static $formationToExcludeFile = "INSERTION-INCLUSION-APOGEE-20062024-09_44 FR.txt";
     private static $formationToExcludeJSON = "Formations-a-inclure-DEUXIEME-DEVERSEMENT-PROD-16-04-2024_14-21-52.json";
     // Vérifications entre deux fichiers JSON
     private static $oldJsonFile = "COD_ELP_APOGEE-PRODUCTION-18-04-2024-10-42.json";
@@ -473,7 +473,7 @@ class ExportElpApogeeCommand extends Command
                         if(mb_strlen($semestre->semestre->getCodeApogee()) > 8){
                             $errorMessage .= "Le Semestre {$semestre->ordre} : a un code APOGEE supérieur à 8 caractères. ({$semestre->semestre->getCodeApogee()})\n";
                         }
-                        foreach($semestre->ues() as $ue){
+                        foreach($semestre->ues as $ue){
                             if(mb_strlen($ue->getCodeApogee()) > 8){
                                 $errorMessage .= "L'{$ue->ue->display()} : a un code APOGEE supérieur à 8 caractères. ({$ue->getCodeApogee()})\n";
                             }
@@ -687,7 +687,7 @@ class ExportElpApogeeCommand extends Command
                     $dto = $this->getDTOForParcours($p);
                     $errorMessage = "";
                     foreach($dto->semestres as $semestre){
-                        foreach($semestre->ues() as $ue){
+                        foreach($semestre->ues as $ue){
                             // Si trop d'UE imbriquées
                             foreach($ue->uesEnfants() as $ueEnfant){
                                 if(count($ueEnfant->uesEnfants()) > 0){
@@ -789,7 +789,7 @@ class ExportElpApogeeCommand extends Command
                     // Récupération des donnéees à insérer
                     $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById(405);
                     $dto = $this->getDTOForParcours($parcours);
-                    $ec = $dto->semestres[1]->ues()[0]->elementConstitutifs[0];
+                    $ec = $dto->semestres[1]->ues[0]->elementConstitutifs[0];
                     // $elp = new ElementPedagogiDTO6($ec, $dto);
                     $elp = $this->setObjectForSoapCall($ec, $dto, CodeNatuElpEnum::MATI, false);
                     $elp->codElp = 'TEST112';
@@ -1066,7 +1066,7 @@ class ExportElpApogeeCommand extends Command
             if($type === "EC"){
                 foreach($dto->semestres as $semestre) {
                     // UE
-                    foreach($semestre->ues() as $ue) {
+                    foreach($semestre->ues as $ue) {
                         // EC à insérer
                         foreach($ue->elementConstitutifs as $ec) {
                             $this->addEcToElpArray($soapObjectArray, $ec, $dto);
@@ -1085,7 +1085,7 @@ class ExportElpApogeeCommand extends Command
             }
             elseif ($type === "UE") {
                 foreach($dto->semestres as $semestre){
-                    foreach($semestre->ues() as $ue){
+                    foreach($semestre->ues as $ue){
                         $this->addUeToElpArray($soapObjectArray, $ue, $dto, false, false);
                     }
                 }
@@ -1142,7 +1142,7 @@ class ExportElpApogeeCommand extends Command
         foreach($dto->semestres as $semestre){
             if($semestre->semestre->isNonDispense() === false){
                 $this->addSemestreToElpArray($soapObjectArray, $semestre, $dto, $withChecks);
-                foreach($semestre->ues() as $ue){
+                foreach($semestre->ues as $ue){
                     $this->addUeToElpArray($soapObjectArray, $ue, $dto, $withChecks);
                     foreach($ue->elementConstitutifs as $ec){
                         $this->addEcToElpArray($soapObjectArray, $ec, $dto, $withChecks);
@@ -1660,7 +1660,7 @@ class ExportElpApogeeCommand extends Command
     private function getLseUeFromSemestre(StructureSemestre $semestre, string $libCourt, string $libLong) : ListeElementPedagogiDTO3 {
         return new ListeElementPedagogiDTO3($semestre->semestre->getCodeApogee() ?? 'ERROR', 'O', $libCourt, $libLong, array_map(
             fn($ue) => $ue->getCodeApogee(),
-            $semestre->ues()
+            $semestre->ues
         ));
     }
 
@@ -1675,7 +1675,7 @@ class ExportElpApogeeCommand extends Command
         $return = [];
         $libelles = $this->getLibellesForListeUE($semestre, $dto);
         $return[] = $this->getLseUeFromSemestre($semestre, $libelles['libCourt'], $libelles['libLong']);
-        foreach($semestre->ues() as $ue){
+        foreach($semestre->ues as $ue){
             if(count($ue->elementConstitutifs) > 0){
                 $libelles = $this->getLibellesForListeEC($ue, $dto);
                 $return[] = $this->getLseEcFromUe($ue, $libelles['libCourt'], $libelles['libLong']);
