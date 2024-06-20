@@ -8,6 +8,9 @@
         {% set diffStructure = demande.diffStructure %}
         {% set diffSemestres = demande.diffStructure.diff.semestres %}
         {% set diffUe = demande.diffStructure.diffUe %}
+        {% if not loop.last %}
+        <br><br>
+        {% endif %}
         <h2 class="text-center">{{ formation.display }}</h2>
         <h3 class="text-center">Parcours {{ parcours.display }}</h3>
         <h4 class="text-center">Composante {{ composante.libelle }}</h4>

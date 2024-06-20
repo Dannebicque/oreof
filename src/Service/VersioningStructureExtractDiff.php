@@ -31,7 +31,8 @@ class VersioningStructureExtractDiff
     public function __construct(
         private StructureParcours $dtoOrigine,
         private StructureParcours $dtoNouveau
-    ) {
+    )
+    {
     }
 
     //todo: gérer le cas d'ajout d'une UE, voire d'un Semestre
@@ -41,10 +42,12 @@ class VersioningStructureExtractDiff
     {
         // parcourir les deux structures et comparer. Construire un tableau de différences
         foreach ($this->dtoOrigine->semestres as $ordreSemestre => $semestre) {
-            if (array_key_exists($ordreSemestre, $this->dtoNouveau->semestres)) {
-                $this->diff['semestres'][$ordreSemestre]['heuresEctsSemestre'] = $this->compareHeuresEctsSemestre($semestre->heuresEctsSemestre, $this->dtoNouveau->semestres[$ordreSemestre]->heuresEctsSemestre);
+            if ($semestre->semestre->isNonDispense() === false) {
+                if (array_key_exists($ordreSemestre, $this->dtoNouveau->semestres)) {
+                    $this->diff['semestres'][$ordreSemestre]['heuresEctsSemestre'] = $this->compareHeuresEctsSemestre($semestre->heuresEctsSemestre, $this->dtoNouveau->semestres[$ordreSemestre]->heuresEctsSemestre);
 
-                $this->compareSemestre($semestre, $this->dtoNouveau->semestres[$ordreSemestre], $ordreSemestre);
+                    $this->compareSemestre($semestre, $this->dtoNouveau->semestres[$ordreSemestre], $ordreSemestre);
+                }
             }
         }
         $this->diff['heuresEctsFormation'] = $this->compareHeuresEctsFormation($this->dtoOrigine->heuresEctsFormation, $this->dtoNouveau->heuresEctsFormation);
@@ -53,8 +56,9 @@ class VersioningStructureExtractDiff
     private function compareSemestre(
         StructureSemestre $semestreOriginal,
         StructureSemestre $semestreNouveau,
-        int $ordreSemestre
-    ): void {
+        int               $ordreSemestre
+    ): void
+    {
         foreach ($semestreOriginal->ues as $ordreUe => $ue) {
             $this->hasModification = false;
             $modifs = $this->compareUe($ue, $semestreNouveau->ues[$ordreUe]);//cas si UE n'existe plus ou si ajouté dans nouveau ?
@@ -156,7 +160,9 @@ class VersioningStructureExtractDiff
             //                }
             //            }
 
-            return $diff;
+            $this->hasModification = $this->hasModifications($diff);
+
+            return $this->hasModification ? $diff : false;
         }
 
         if ($ecOriginal !== null && $ecNouveau === null) {
@@ -182,7 +188,9 @@ class VersioningStructureExtractDiff
             //                }
             //            }
 
-            return $diff;
+            $this->hasModification = $this->hasModifications($diff);
+
+            return $this->hasModification ? $diff : false;
         }
 
         if ($ecOriginal->elementConstitutif->getFicheMatiere() !== null) {
@@ -199,7 +207,6 @@ class VersioningStructureExtractDiff
 
         $diff['libelle'] = new DiffObject($libelleOriginal, $libelleNew);
         $diff['code'] = new DiffObject($ecOriginal->elementConstitutif->getCode(), $ecNouveau->elementConstitutif->getCode());
-        // $diff['raccroche'] = new DiffObject($ecOriginal->raccroche, $ecNouveau->raccroche);
         $diff['heuresEctsEc'] = $this->compareHeuresEctsEc($ecOriginal->heuresEctsEc, $ecNouveau->heuresEctsEc);
         if ($ecOriginal->typeMccc !== null && $ecNouveau->typeMccc !== null) {
             $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, $ecNouveau->typeMccc);
@@ -362,7 +369,7 @@ class VersioningStructureExtractDiff
             }
 
             if ($value instanceof DiffObject && $value->isDifferent()) {
-                 return true;
+                return true;
             }
         }
 

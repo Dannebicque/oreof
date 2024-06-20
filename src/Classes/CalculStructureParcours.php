@@ -43,7 +43,7 @@ class CalculStructureParcours
                 $raccrocheSemestre = false;
             }
 
-            if ($semestre !== null) {
+            if ($semestre !== null && $semestre->isNonDispense() === false) {
                 $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours, $withEcts, $withBcc);
                 $ues = $this->ueRepository->getBySemestre($semestre);
                 foreach ($ues as $ue) {
@@ -127,7 +127,7 @@ class CalculStructureParcours
                 $raccrocheSemestre = false;
             }
 
-            if ($semestre !== null) {
+            if ($semestre !== null && $semestre->isNonDispense() === false) {
                 $dtoSemestre = new StructureSemestre($semestre, $semestreParcours->getOrdre(), $raccrocheSemestre, $semestreParcours);
 
                 foreach ($semestre->getUes() as $ue) {
