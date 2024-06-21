@@ -25,7 +25,7 @@
                 {{ parcour.remplissage|remplissage }}
             </td>
             <td>
-                {{ parcour.etatDpeParcours|badgeDpe }} {{ parcours.withCfvu == true ? '<span class="badge bg-warning">CFVU</span>' : '' }}
+                {{ parcour.etatDpeParcours|badgeDpe }} {{ parcours.withCfvu is defined and parcours.withCfvu == true ? '<span class="badge bg-warning">CFVU</span>' : '' }}
             </td>
             <td class="text-end">
                 <button
