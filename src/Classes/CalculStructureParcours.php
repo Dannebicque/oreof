@@ -23,17 +23,21 @@ use Doctrine\ORM\EntityManagerInterface;
 class CalculStructureParcours
 {
     public function __construct(
-        protected ParcoursRepository $parcoursRepository,
+
         protected EntityManagerInterface $entityManager,
         protected ElementConstitutifRepository $elementConstitutifRepository,
-        protected UeRepository $ueRepository
+        protected UeRepository $ueRepository,
+        protected ?ParcoursRepository $parcoursRepository = null,
     )
     {
     }
 
     public function calcul(Parcours $parcours, bool $withEcts = true, bool $withBcc = true): StructureParcours
     {
-        $parcours = $this->parcoursRepository->find($parcours->getId());
+        if ($this->parcoursRepository !== null) {
+            $parcours = $this->parcoursRepository->find($parcours->getId());
+        }
+
         $dtoStructure = new StructureParcours($withEcts, $withBcc);
         $dtoStructure->setParcours($parcours);
 
