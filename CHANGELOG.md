@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.20](https://github.com/Dannebicque/oreof/compare/v1.29.19...v1.29.20) (2024-06-21)
+
+
+### Bug Fixes
+
+* Parametre optionnel CalculStructureParcours.php ([8ee1822](https://github.com/Dannebicque/oreof/commit/8ee1822bfc6cd0f5d957174ac8b64d1fa15a180a))
+* Refonte des documents de synthèse, page de collecte des éléments ([956294b](https://github.com/Dannebicque/oreof/commit/956294bff408e8720f356e772d0e6a8ea1dc634c))
+* Refonte des documents de synthèse, page de collecte des éléments ([c1d58fb](https://github.com/Dannebicque/oreof/commit/c1d58fb970270fe8581f573d6ed1a69435ac79b1))
+* Refonte des documents de synthèse, page de collecte des éléments ([da4cd82](https://github.com/Dannebicque/oreof/commit/da4cd829b8a8c22c1af0035acb875081742abc2d))
+* Refonte des documents de synthèse, page de collecte des éléments ([c702128](https://github.com/Dannebicque/oreof/commit/c702128b07b94d63188ec95bba3a84ea20b5cfc2))
+* withCfvu sur parcours ([b30d8da](https://github.com/Dannebicque/oreof/commit/b30d8dae205d9b5aadab6f5a483d8ae003bd6e5b))
+
 ### [1.29.19](https://github.com/Dannebicque/oreof/compare/v1.29.18...v1.29.19) (2024-06-20)
 
 
