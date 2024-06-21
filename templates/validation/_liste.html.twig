@@ -18,9 +18,12 @@
             <th>
                 Mention/spécialité
             </th>
+            <th>
+                Parcours
+            </th>
             <th>Etat</th>
             {% if etape == 'cfvu' %}
-            <th>PV ?</th>
+                <th>PV ?</th>
             {% endif %}
             <th>Remplissage</th>
             <th></th>
@@ -28,7 +31,8 @@
 
         </thead>
         <tbody>
-        {% for formation in formations %}
+        {% for parcours in allparcours %}
+            {% set formation = parcours.formation %}
             <tr>
                 <td>
                     <div class="checkbox">
@@ -37,8 +41,8 @@
                                     {{ stimulus_action('check_all', 'check') }}
                                     type="checkbox"
                                     class="check-all"
-                                    name="formations[]"
-                                    value="{{ formation.id }}"
+                                    name="parcours[]"
+                                    value="{{ parcours.id }}"
                             >
                         </label>
                     </div>
@@ -60,9 +64,15 @@
                         <span class="badge bg-danger">Non définie</span>
                     {% endif %}
                 </td>
-
                 <td>
-                    {{ formation.etatDpe|badgeDpe }}
+                    {% if formation.hasParcours %}
+                        {{ parcours.libelle }}
+                    {% else %}
+                        Sans parcours
+                    {% endif %}
+                </td>
+                <td>
+                    {{ parcours.etatDpeParcours|badgeDpe }}
                 </td>
                 {% if etape == 'cfvu' %}
                     <td>
@@ -70,49 +80,56 @@
                     </td>
                 {% endif %}
                 <td>
-                    {{ formation.remplissage|remplissage }}
+                    {{ parcours.remplissage|remplissage }}
                 </td>
                 <td class="text-end">
                     {% if formation.hasParcours and formation.parcours|length > 0 %}
-                        <button class="btn btn-sm btn-outline-primary"
-                                {{ stimulus_action('structure--formation', 'afficherParcours', 'click',
-                                    {formation:formation.id}) }}
-                        >
-                            <i class="fal fa-caret-right"></i>
-                            {{ formation.parcours|length }} parcours
-                        </button>
-                    {% endif %}
-
-                    <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}"
-                       class="btn btn-sm text-info"
-                       data-bs-toggle="tooltip"
-                       data-bs-placement="bottom"
-                       title="Voir une formation"
-                    >
-                        <i class="{{ iconShow }}"></i>
-                        <span> Voir</span>
-                    </a>
-
-                    {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
-                        <a href="{{ path('app_formation_edit',{'slug': formation.slug}) }}"
-                           class="btn btn-sm text-warning"
+                        <a href="{{ path('app_parcours_show',{'id': parcours.id}) }}"
+                           class="btn btn-sm text-info"
                            data-bs-toggle="tooltip"
                            data-bs-placement="bottom"
-                           title="Modifier la fiche d'identité de la formation"
+                           title="Voir le parcours"
                         >
-                            <i class="{{ iconEdit }}"></i>
-                            <span> Modifier</span>
+                            <i class="{{ iconShow }}"></i>
+                            <span> Voir</span>
                         </a>
+
+                        {% if is_granted('CAN_PARCOURS_EDIT_MY', parcours) %}
+                            <a href="{{ path('app_parcours_edit',{'id': parcours.id}) }}"
+                               class="btn btn-sm text-warning"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="bottom"
+                               title="Modifier la fiche d'identité du parcours"
+                            >
+                                <i class="{{ iconEdit }}"></i>
+                                <span> Modifier</span>
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ path('app_formation_show',{'slug': formation.slug}) }}"
+                           class="btn btn-sm text-info"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="bottom"
+                           title="Voir la formation"
+                        >
+                            <i class="{{ iconShow }}"></i>
+                            <span> Voir</span>
+                        </a>
+
+                        {% if is_granted('CAN_FORMATION_EDIT_MY', formation) %}
+                            <a href="{{ path('app_formation_edit',{'slug': formation.slug}) }}"
+                               class="btn btn-sm text-warning"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="bottom"
+                               title="Modifier la fiche d'identité de la formation"
+                            >
+                                <i class="{{ iconEdit }}"></i>
+                                <span> Modifier</span>
+                            </a>
+                        {% endif %}
                     {% endif %}
 
-                    {% if is_granted('ROLE_SES') %}
-                        <button {{ stimulus_action('crud', 'delete', 'click', {
-                            url:path('app_formation_delete',{'id': formation.id}),
-                            csrf: csrf_token('delete' ~ formation.id)
-                        }) }} class="btn btn-sm text-danger">
-                            <i class="{{ iconDelete }}"></i> Supprimer
-                        </button>
-                    {% endif %}
+
                 </td>
             </tr>
         {% else %}

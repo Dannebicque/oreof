@@ -222,9 +222,9 @@ class ExportSynthese
         return $this->excelWriter->genereFichier($this->fileName);
     }
 
-    public function exportLink(CampagneCollecte $annee): string
+    public function exportLink(CampagneCollecte $campagneCollecte): string
     {
-        $this->prepareExport($annee);
+        $this->prepareExport($campagneCollecte);
         $this->excelWriter->saveFichier($this->fileName, $this->dir . 'zip/');
         return $this->fileName . '.xlsx';
     }

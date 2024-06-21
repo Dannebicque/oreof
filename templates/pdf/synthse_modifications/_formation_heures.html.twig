@@ -1,10 +1,12 @@
-<h4>Bilan formation</h4>
-{% if heuresEctsFormation.sommeFormationEcts.isDifferent == true %}
-    <p>Modification des ECTS :
-        {{ heuresEctsFormation.sommeFormationEcts|diffNewOriginal }}</p>
-{% endif %}
+<div class="border">
+    <h4>Bilan formation</h4>
+    <p>Nombre d'ECTS de la formation : <strong>{{ heuresEctsFormation.sommeFormationEcts.new }}</strong></p>
 
-{% if heuresEctsFormation.sommeFormationTotalPresDist.isDifferent == true %}
-    <p>Modification du total des heures totales (pres. et dist.) de la formation :
-        {{ heuresEctsFormation.sommeFormationTotalPresDist|diffNewOriginal }}</p>
-{% endif %}
+    {% if heuresEctsFormation.sommeFormationTotalPresDist.isDifferent == true or heuresEctsFormation.sommeFormationTotalPres.isDifferent == true %}
+        <p>Modification du total des heures totales (pres. et dist.) de la formation :
+            {{ heuresEctsFormation.sommeFormationTotalPresDist|diffNewOriginal }} heures</p>
+    {% else %}
+        <p>Pas de modification du total des heures totales (pres. et dist.) de la formation :
+            {{ heuresEctsFormation.sommeFormationTotalPresDist.new|filtreHeures }} heures</p>
+    {% endif %}
+</div>

@@ -88,9 +88,9 @@ class ExportSeip implements ExportInterface
         return $this->excelWriter->genereFichier($this->fileName);
     }
 
-    public function exportLink(CampagneCollecte $anneeUniversitaire): string
+    public function exportLink(CampagneCollecte $campagneCollecte): string
     {
-        $this->prepareExport($anneeUniversitaire);
+        $this->prepareExport($campagneCollecte);
         $this->excelWriter->saveFichier($this->fileName, $this->dir . 'zip/');
         return $this->fileName . '.xlsx';
     }

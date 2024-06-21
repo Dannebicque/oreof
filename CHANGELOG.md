@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.21](https://github.com/Dannebicque/oreof/compare/v1.29.20...v1.29.21) (2024-06-21)
+
+
+### Bug Fixes
+
+* correctif textes modèle MCCC ([1afd8c5](https://github.com/Dannebicque/oreof/commit/1afd8c534a6a821d1fd884b97fe06cdf3b2b301a))
+
+### [1.29.20](https://github.com/Dannebicque/oreof/compare/v1.29.19...v1.29.20) (2024-06-21)
+
+
+### Bug Fixes
+
+* Parametre optionnel CalculStructureParcours.php ([8ee1822](https://github.com/Dannebicque/oreof/commit/8ee1822bfc6cd0f5d957174ac8b64d1fa15a180a))
+* Refonte des documents de synthèse, page de collecte des éléments ([956294b](https://github.com/Dannebicque/oreof/commit/956294bff408e8720f356e772d0e6a8ea1dc634c))
+* Refonte des documents de synthèse, page de collecte des éléments ([c1d58fb](https://github.com/Dannebicque/oreof/commit/c1d58fb970270fe8581f573d6ed1a69435ac79b1))
+* Refonte des documents de synthèse, page de collecte des éléments ([da4cd82](https://github.com/Dannebicque/oreof/commit/da4cd829b8a8c22c1af0035acb875081742abc2d))
+* Refonte des documents de synthèse, page de collecte des éléments ([c702128](https://github.com/Dannebicque/oreof/commit/c702128b07b94d63188ec95bba3a84ea20b5cfc2))
+* withCfvu sur parcours ([b30d8da](https://github.com/Dannebicque/oreof/commit/b30d8dae205d9b5aadab6f5a483d8ae003bd6e5b))
+
+### [1.29.19](https://github.com/Dannebicque/oreof/compare/v1.29.18...v1.29.19) (2024-06-20)
+
+
+### Bug Fixes
+
+* Refonte des documents de synthèse, page de collecte des éléments ([7cc8820](https://github.com/Dannebicque/oreof/commit/7cc88209c0410146c2d92ad3924e1daf14fbe4d0))
+* Refonte des documents de synthèse, page de collecte des éléments ([1fd531c](https://github.com/Dannebicque/oreof/commit/1fd531c2d211f34785398c9dc87f0b3537c963a9))
+
+### [1.29.18](https://github.com/Dannebicque/oreof/compare/v1.29.17...v1.29.18) (2024-06-20)
+
+
+### Bug Fixes
+
+* Refonte des documents de synthèse, page de collecte des éléments ([403b973](https://github.com/Dannebicque/oreof/commit/403b97376971fa348e7e3b3f4b6f3322dc94ad5b))
+
+### [1.29.17](https://github.com/Dannebicque/oreof/compare/v1.29.16...v1.29.17) (2024-06-19)
+
+
+### Bug Fixes
+
+* liste des demandes de RF ([d37e049](https://github.com/Dannebicque/oreof/commit/d37e0497fe0a734215e1c38bd7afe8190d6ba101))
+* process corrections ([db0f53a](https://github.com/Dannebicque/oreof/commit/db0f53aacf51e13942da390699ba76f7e347e4ee))
+
+### [1.29.16](https://github.com/Dannebicque/oreof/compare/v1.29.15...v1.29.16) (2024-06-19)
+
+
+### Bug Fixes
+
+* comparaison si UeNouvelle vide ([a08e731](https://github.com/Dannebicque/oreof/commit/a08e7310ea80e6083cd3b40025017bc7f615fafd))
+* comparaison si UeNouvelle vide ([929a69a](https://github.com/Dannebicque/oreof/commit/929a69a5d11efef7ff9eb3bae2c152b70d00308d))
+* comparaison si UeNouvelle vide ([ec15d8c](https://github.com/Dannebicque/oreof/commit/ec15d8c2122e0940eb94c708461fe451fd191bdc))
+* comparaison si UeNouvelle vide ([5eaa190](https://github.com/Dannebicque/oreof/commit/5eaa19072720a202e4e90a43203d7b417a8a688c))
+* Génération documents synthèse ([eb772ba](https://github.com/Dannebicque/oreof/commit/eb772ba3fb71749d3211ba44d7afe8537ae7b87b))
+* mise en page iframe ([fbefc20](https://github.com/Dannebicque/oreof/commit/fbefc205542e90f328cc8c9853ad0a35dad67b37))
+
 ### [1.29.15](https://github.com/Dannebicque/oreof/compare/v1.29.14...v1.29.15) (2024-06-17)
 
 

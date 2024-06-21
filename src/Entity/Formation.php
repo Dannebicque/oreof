@@ -51,7 +51,7 @@ class Formation
     private ?CampagneCollecte $dpe;
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
-    #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations')]
+    #[ORM\ManyToOne(targetEntity: Mention::class, inversedBy: 'formations', fetch: 'EAGER')]
     private ?Mention $mention = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -159,7 +159,7 @@ class Formation
     private ?array $etatSteps = [];
 
     #[Groups(['parcours_json_versioning', 'fiche_matiere_versioning', 'formation_json_versioning'])]
-    #[ORM\ManyToOne(inversedBy: 'formations')]
+    #[ORM\ManyToOne(inversedBy: 'formations', fetch: 'EAGER')]
     private ?TypeDiplome $typeDiplome = null;
 
     #[ORM\Column(length: 255, nullable: true)]

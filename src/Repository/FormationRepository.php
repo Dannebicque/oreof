@@ -274,6 +274,9 @@ class FormationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+
+
+    /** @deprecated  */
     public function findByComposanteTypeValidation(Composante $composante, CampagneCollecte $campagneCollecte, string $typeValidation): array
     {
         $query = $this->createQueryBuilder('f')

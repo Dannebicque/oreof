@@ -12,6 +12,7 @@ use App\Repository\ComposanteRepository;
 use App\Repository\FicheMatiereRepository;
 use App\Repository\FormationRepository;
 
+use App\Repository\ParcoursRepository;
 use App\Utils\Tools;
 use DateTime;
 use Symfony\Component\HttpFoundation\Request;
@@ -136,7 +137,7 @@ class ValidationController extends BaseController
     public function liste(
         ValidationProcess    $validationProcess,
         ComposanteRepository $composanteRepository,
-        FormationRepository  $formationRepository,
+        ParcoursRepository  $parcoursRepository,
         Request              $request
     ): Response {
         $typeValidation = $request->query->get('typeValidation');
@@ -145,13 +146,13 @@ class ValidationController extends BaseController
         if ($request->query->has('composante')) {
             if ($request->query->get('composante') === 'all') {
                 $composante = null;
-                $formations = $formationRepository->findByTypeValidation($this->getDpe(), $process['transition']);
+                $allparcours = $parcoursRepository->findByTypeValidation($this->getDpe(), $process['transition']);
             } else {
                 $composante = $composanteRepository->find($request->query->get('composante'));
                 if (!$composante) {
                     throw $this->createNotFoundException('La composante n\'existe pas');
                 }
-                $formations = $formationRepository->findByComposanteTypeValidation($composante, $this->getDpe(), $process['transition']);
+                $allparcours = $parcoursRepository->findByComposanteTypeValidation($composante, $this->getDpe(), $process['transition']);
             }
 
 
@@ -165,7 +166,7 @@ class ValidationController extends BaseController
         $composantes = $composanteRepository->findAll();
         return $this->render('validation/_liste.html.twig', [
             'process' => $process,
-            'formations' => $formations,
+            'allparcours' => $allparcours,
             'composantes' => $composantes,
             'etape' => $typeValidation ?? null,
         ]);
@@ -182,20 +183,16 @@ class ValidationController extends BaseController
         if ($request->query->has('composante')) {
             if ($request->query->get('composante') === 'all' && $request->query->get('composante') === 'all') {
                 $demandes = $changeRfRepository->findBy([], ['dateDemande' => 'DESC']);
-            }  elseif ($request->query->get('composante') === 'all' && $request->query->get('type_validation') !== 'all') {
+            }  elseif ($request->query->get('composante') === 'all' && $request->query->get('typeValidation') !== 'all') {
                 $composante = null;
-                $demandes = $changeRfRepository->findByTypeValidation(['etatDemande' => $request->query->get('type_validation')]);
+                $demandes = $changeRfRepository->findByTypeValidation(['etatDemande' => $request->query->get('typeValidation')]);
             } else {
                 $composante = $composanteRepository->find($request->query->get('composante'));
                 if (!$composante) {
                     throw $this->createNotFoundException('La composante n\'existe pas');
                 }
-                $demandes = $changeRfRepository->findByComposanteTypeValidation($composante, $request->query->get('type_validation'));
+                $demandes = $changeRfRepository->findByComposanteTypeValidation($composante, $request->query->get('typeValidation'));
             }
-
-
-
-
         } else {
             $formations = [];
         }

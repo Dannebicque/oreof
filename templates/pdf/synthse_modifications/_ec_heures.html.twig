@@ -1,24 +1,19 @@
-{% if heuresEctsEc.ects.isDifferent == true %}
+{% if heuresEctsEc != false and heuresEctsEc.ects.isDifferent == true %}
     <p>Modification du total des ECTS de l'EC {{ ec.libelle.new}}
     {{ heuresEctsEc.ects|diffNewOriginal }}
     </p>
 {% endif %}
 
-{% if heuresEctsEc.cmPres.isDifferent == true or
+{% if heuresEctsEc != false and (heuresEctsEc.cmPres.isDifferent == true or
     heuresEctsEc.tdPres.isDifferent == true or
-    heuresEctsEc.tpPres.isDifferent == true
+    heuresEctsEc.tpPres.isDifferent == true)
 %}
     <p>Modification du total des heures présentielles de l'EC {{ ec.libelle.new}} : CM : {{ heuresEctsEc.cmPres|diffNew }} heures, TD : {{ heuresEctsEc.tdPres|diffNew }} heures, TP : {{ heuresEctsEc.tpPres|diffNew }} heures (au lieu de : CM : {{ heuresEctsEc.cmPres|diffOriginal }} heures, TD : {{ heuresEctsEc.tdPres|diffOriginal }} heures, TP : {{ heuresEctsEc.tpPres|diffOriginal }} heures). Soit un total présentiel de {{ heuresEctsEc.sommeEcTotalPres|diffNewOriginal }}</p>
 {% endif %}
 
-{% if heuresEctsEc.cmDist.isDifferent == true or
+{% if heuresEctsEc != false and (heuresEctsEc.cmDist.isDifferent == true or
     heuresEctsEc.tdDist.isDifferent == true or
-    heuresEctsEc.tpDist.isDifferent == true
+    heuresEctsEc.tpDist.isDifferent == true)
 %}
     <p>Modification du total des heures de l'EC {{ ec.libelle.new}} : CM : {{ heuresEctsEc.cmDist|diffNew }} heures, TD : {{ heuresEctsEc.tdDist|diffNew }} heures, TP : {{ heuresEctsEc.tpDist|diffNew }} heures (au lieu de : CM : {{ heuresEctsEc.cmDist|diffOriginal }} heures, TD : {{ heuresEctsEc.tdDist|diffOriginal }} heures, TP : {{ heuresEctsEc.tpDist|diffOriginal }} heures). Soit un total distanciel de {{ heuresEctsEc.sommeEcTotalPresDist|diffNewOriginal }}</p>
 {% endif %}
-
-{#{% if heuresEctsEc.sommeEcTotalPresDist.isDifferent == true %}#}
-{#    <p>Modification du total des heures totales (pres. et dist.) de l'EC {{ ec.libelle.new}} :#}
-{#        {{ heuresEctsEc.sommeEcTotalPresDist|diffNewOriginal }}</p>#}
-{#{% endif %}#}
