@@ -39,11 +39,11 @@ class VersioningStructureExtractDiff
         $this->trad = [
 'COL_MCCC_CC' => 'Contrôle Continu',
 'COL_MCCC_CT' => 'Contrôle Terminal',
-            'COL_MCCC_SECONDE_CHANCE_CC_SUP_10' => 'Seconde chance CC > 10',
-            'COL_SECONDE_CHANCE_CT' => 'Seconde chance Contrôle Terminal',
+            'COL_MCCC_SECONDE_CHANCE_CC_SUP_10' => 'Session 2 CC > 10',
+            'COL_SECONDE_CHANCE_CT' => 'Session 2 Contrôle Terminal',
 'COL_MCCC_TP' => 'Travaux Pratiques',
-           'COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP' => 'Seconde chance CC avec TP',
-              'COL_MCCC_SECONDE_CHANCE_CC_SANS_TP' => 'Seconde chance CC sans TP',
+           'COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP' => 'Session 2 CC avec TP',
+              'COL_MCCC_SECONDE_CHANCE_CC_SANS_TP' => 'Session 2 CC sans TP',
             'COL_MCCC_CCI' => 'Contrôle Continu Intégral',
         ];
     }
@@ -430,10 +430,10 @@ class VersioningStructureExtractDiff
 
                 if ($hasTp) {
                     $texteAvecTp = substr($texteAvecTp, 0, -2);
-                    $texte .= " Seconde chance : ".str_replace(';', '+', $texteAvecTp);
+                    $texte .= " Session 2 : ".str_replace(';', '+', $texteAvecTp);
                     //$this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
                 } else {
-                    $texte .= " Seconde chance : ".$texte2;
+                    $texte .= " Session 2 : ".$texte2;
                 }
 
                 break;
@@ -506,13 +506,13 @@ class VersioningStructureExtractDiff
 
 
                     if ($hasTp) {
-                        $texte .= " Seconde chance : ".str_replace(';', '+', $texteAvecTp);
+                        $texte .= " Session 2 : ".str_replace(';', '+', $texteAvecTp);
                     } else {
                         //si TP cette celulle est vide...
-                        $texte .= " Seconde chance : ".$texteEpreuve;
+                        $texte .= " Session 2 : ".$texteEpreuve;
                     }
 
-                    $texte .= " Seconde chance : ".str_replace(';', '+', $texteCc);
+                    $texte .= " Session 2 : ".str_replace(';', '+', $texteCc);
                 }
                 break;
             case 'ct':
@@ -535,7 +535,7 @@ class VersioningStructureExtractDiff
                     }
 
                     $texteEpreuve = substr($texteEpreuve, 0, -2);
-                    $texte .= ' Seconde chance : ' . $texteEpreuve;
+                    $texte .= ' Session 2 : ' . $texteEpreuve;
                 }
                 break;
         }
