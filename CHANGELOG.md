@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.22](https://github.com/Dannebicque/oreof/compare/v1.29.21...v1.29.22) (2024-06-23)
+
+
+### Features
+
+* affichage des MCCC dans doc de synthèse ([d020c7b](https://github.com/Dannebicque/oreof/commit/d020c7b5a4c02a5c81dabe169287203b5c6ad40b))
+
 ### [1.29.21](https://github.com/Dannebicque/oreof/compare/v1.29.20...v1.29.21) (2024-06-21)
 
 
