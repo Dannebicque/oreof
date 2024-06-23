@@ -87,7 +87,7 @@ class SyntheseModificationController extends BaseController
 
 
 //        $link = $exportSyntheseModification->exportLink($formations, $this->getDpe());
-//
+////
 //        dd($link);
         $messageBus->dispatch(
             new Export(

@@ -9,8 +9,8 @@
         {% set diffSemestres = diffStructure.diff.semestres is defined ? diffStructure.diff.semestres :  [] %}
         {% set diffUe = diffStructure.diffUe %}
         {% if not loop.first %}
-        <br><br>
-        <br><br>
+            <br><br>
+            <br><br>
         {% endif %}
         <h2 class="text-center">{{ formation.display }}</h2>
         <h3 class="text-center">Parcours {{ parcours.display }}</h3>
@@ -22,11 +22,25 @@
                 <p><strong>Semestre {{ key }}</strong></p>
                 {% for ue in ues %}
                     <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ ue.ue.display }}</strong></p>
-                    {% for ec in ue.modifications.elementConstitutifs %}
-                        {{ include('pdf/synthse_modifications/_ec.html.twig', {ec:ec}) }}
+                    {% if ue.modifications.elementConstitutifs is defined %}
+                        {% for ec in ue.modifications.elementConstitutifs %}
+                            {{ include('pdf/synthse_modifications/_ec.html.twig', {ec:ec}) }}
+                        {% endfor %}
+                    {% endif %}
+                    {% if ue.modifications.uesEnfants is defined %}
+                    {% for uee in ue.modifications.uesEnfants %}
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ uee.display.new }}</strong></p>
+                        {% if uee.elementConstitutifs is defined %}
+                            {% for ec in uee.elementConstitutifs %}
+                                {{ include('pdf/synthse_modifications/_ec.html.twig', {ec:ec}) }}
+                            {% endfor %}
+                        {% endif %}
                     {% endfor %}
+                    {% endif %}
                 {% endfor %}
             {% endfor %}
+            <hr>
+            <h4>Bilan des semestres</h4>
             {% for ordre, sem in diffSemestres %}
                 {{ include('pdf/synthse_modifications/_semestre_heures.html.twig', {heuresEctsSemestre: sem.heuresEctsSemestre}) }}
             {% endfor %}

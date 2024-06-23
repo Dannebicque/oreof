@@ -1,4 +1,10 @@
 {% if ec.typeMccc.isDifferent == true %}
-    <p>Modification du type de MCCC pour l'EC :
+    <p><strong>{{ ec.code.new }} - {{ ec.libelle.new }}</strong> : Modification du type de MCCC :
         {{ ec.typeMccc|diffNewOriginal }}</p>
+    <p>Nouvelles MCCC : {{ ec.mcccs }}</p>
+    {% else %}
+    {% if ec.mcccs != '' %}
+        <p><strong>{{ ec.code.new }} - {{ ec.libelle.new }}</strong> : Modification des MCCC</p>
+        <p>{{ ec.mcccs }}</p>
+        {% endif %}
 {% endif %}
