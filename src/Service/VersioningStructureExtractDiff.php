@@ -27,10 +27,9 @@ class VersioningStructureExtractDiff
 
     public array $diffUe = [];
     public array $diff = [];
-    public array $diffAdd = [];
+    public array $diffAdd = []; //todo: a gérer
     public array $trad = [];
-    public array $diffRemove = [];
-    //    private bool $hasModification = false;
+    public array $diffRemove = [];//todo: a gérer
 
     public function __construct(
         private StructureParcours $dtoOrigine,
@@ -279,8 +278,6 @@ class VersioningStructureExtractDiff
             $diff['sommeEcTotalDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalDist()), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalDist()));
             $diff['sommeEcTotalPresDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalPresDist()), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalPresDist()));
         }
-
-        //$this->hasModification = $this->hasModifications($diff);
 
         return $this->hasModifications($diff) ? $diff : false;
     }
