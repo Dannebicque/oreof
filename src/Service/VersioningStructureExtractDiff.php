@@ -377,8 +377,12 @@ class VersioningStructureExtractDiff
         return false;
     }
 
-    private function getMcccFromNew(?array $mcccsNouveau, string $typeMccc): string
+    private function getMcccFromNew(?array $mcccsNouveau, ?string $typeMccc): string
     {
+        if ($typeMccc === null) {
+            return 'Pas de type de MCCC';
+        }
+
         $mcccs = $this->getMcccs($mcccsNouveau, $typeMccc);
         $texte = '';
 

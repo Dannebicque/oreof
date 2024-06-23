@@ -12,7 +12,7 @@
     {% endif %}
 
     {% if ec.libelle.isDifferent == true %}
-        <p>Modification du libellé de l'EC :
+        <p>Modification du libellé de l'EC {{ ec.code.new }} :
             {{ ec.libelle|diffNewOriginal }}
         </p>
     {% endif %}
