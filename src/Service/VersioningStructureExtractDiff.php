@@ -418,14 +418,14 @@ class VersioningStructureExtractDiff
                 }
 
                 if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && is_array($mcccs[2]['et'])) {
-                    $texte = '';
+                    $texte2 = '';
                     $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
                     foreach ($mcccs[2]['et'] as $mccc) {
-                        $texte .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        $texte2 .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
                         $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
                     }
 
-                    $texte = substr($texte, 0, -2);
+                    $texte2 = substr($texte2, 0, -2);
                 }
 
                 if ($hasTp) {
@@ -433,7 +433,7 @@ class VersioningStructureExtractDiff
                     $texte .= " Seconde chance : ".str_replace(';', '+', $texteAvecTp);
                     //$this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
                 } else {
-                    $texte .= " Seconde chance : ".$texte;
+                    $texte .= " Seconde chance : ".$texte2;
                 }
 
                 break;
