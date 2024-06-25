@@ -21,21 +21,21 @@
             {% for key, ues in diffUe %}
                 <p><strong>Semestre {{ key }}</strong></p>
                 {% for ue in ues %}
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ ue.ue.display }}</strong></p>
+{#                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ ue.ue.display }}</strong></p>#}
                     {% if ue.modifications.elementConstitutifs is defined %}
                         {% for ec in ue.modifications.elementConstitutifs %}
-                            {{ include('pdf/synthse_modifications/_ec.html.twig', {ec:ec}) }}
+                            {{ include('pdf/synthse_modifications/_ec.html.twig', {ec:ec, ued: ue.ue.display}) }}
                         {% endfor %}
                     {% endif %}
                     {% if ue.modifications.uesEnfants is defined %}
-                    {% for uee in ue.modifications.uesEnfants %}
-                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ uee.display.new }}</strong></p>
-                        {% if uee.elementConstitutifs is defined %}
-                            {% for ec in uee.elementConstitutifs %}
-                                {{ include('pdf/synthse_modifications/_ec.html.twig', {ec:ec}) }}
-                            {% endfor %}
-                        {% endif %}
-                    {% endfor %}
+                        {% for uee in ue.modifications.uesEnfants %}
+{#                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ uee.display.new }}</strong></p>#}
+                            {% if uee.elementConstitutifs is defined %}
+                                {% for ec in uee.elementConstitutifs %}
+                                    {{ include('pdf/synthse_modifications/_ec.html.twig', {ec:ec, ued: uee.display.new}) }}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
                 {% endfor %}
             {% endfor %}

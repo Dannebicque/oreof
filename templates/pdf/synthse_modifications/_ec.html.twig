@@ -8,7 +8,7 @@
         ec.heuresEctsEc.tpDist.isDifferent == true or
         ec.mcccs != '' or
         ec.libelle.isDifferent == true) %}
-        <h5> > {{ ec.code.new }} : {{ ec.libelle.new }}</h5>
+        <h5> > {{ ued }} | {{ ec.code.new }} : {{ ec.libelle.new }}</h5>
     {% endif %}
 
     {% if ec.libelle.isDifferent == true %}
@@ -25,7 +25,7 @@
         {% for enfant in ec.ecEnfants %}
             {% if enfant != false %}
                 <h5> > {{ enfant.code.new }} : {{ enfant.libelle.new }}</h5>
-                {{ include('pdf/synthse_modifications/_ec_heures.html.twig', { heuresEctsEc: enfant.heuresEctsEc}) }}
+                {{ include('pdf/synthse_modifications/_ec_heures.html.twig', { heuresEctsEc: enfant.heuresEctsEc, ec: enfant}) }}
 
                 {{ include('pdf/synthse_modifications/_ec_mccc.html.twig', {ec:enfant}) }}
             {% endif %}

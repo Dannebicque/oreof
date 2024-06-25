@@ -397,7 +397,7 @@ class VersioningStructureExtractDiff
                     $nb2 = 1;
                     foreach ($mcccs[1]['cc'] as $mccc) {
                         for ($i = 1; $i <= $mccc->getNbEpreuves(); $i++) {
-                            $texte .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
+                            $texte .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%) + ';
                             $nb++;
                         }
 
@@ -452,7 +452,7 @@ class VersioningStructureExtractDiff
                 if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1]) && $mcccs[1]['cc'] !== null) {
                     $texte = '';
                     foreach ($mcccs[1]['cc'] as $mccc) {
-                        $texte .= 'CC ' . $mccc->getNbEpreuves() . ' épreuve(s) (' . $mccc->getPourcentage() . '%); ';
+                        $texte .= 'CC ' . $mccc->getNbEpreuves() . ' épreuve(s) (' . $mccc->getPourcentage() . '%) + ';
                     }
                     $texte = substr($texte, 0, -2);
                 }
