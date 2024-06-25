@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.24](https://github.com/Dannebicque/oreof/compare/v1.29.23...v1.29.24) (2024-06-25)
+
+
+### Features
+
+* ajout des heures TE ([a346a60](https://github.com/Dannebicque/oreof/commit/a346a60f8abdeba6121390d7b792495cf9997e53))
+* ajout des heures TE ([a0f81ad](https://github.com/Dannebicque/oreof/commit/a0f81ad0faa8bf7bc52f46dc233df6300f4406ed))
+
+
+### Bug Fixes
+
+* ajout des heures TE ([7ef6668](https://github.com/Dannebicque/oreof/commit/7ef66683427883de6d877242b0e438c7c7ebe3e6))
+* typos sur document de synthèse ([3dd3577](https://github.com/Dannebicque/oreof/commit/3dd357760896449f0b2a7fc61e91ee8ce475aab2))
+
 ### [1.29.23](https://github.com/Dannebicque/oreof/compare/v1.29.22...v1.29.23) (2024-06-23)
 
 
