@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [](https://github.com/Dannebicque/oreof/compare/v1.29.24...v) (2024-06-28)
+
+
+### Bug Fixes
+
+* ajout d'un espace sur textes LHEO ([2a10e13](https://github.com/Dannebicque/oreof/commit/2a10e134424d9981b5b5f3f844cb3ab9ba262f9e))
+* export codification ([ea4bf94](https://github.com/Dannebicque/oreof/commit/ea4bf94ec92623bd90eceea67c71273b8d5f1caf))
+* typos sur document de synthèse ([ef229d3](https://github.com/Dannebicque/oreof/commit/ef229d3bedd1745532dc82c9cf84762cac8cd59e))
+
 ### [1.29.24](https://github.com/Dannebicque/oreof/compare/v1.29.23...v1.29.24) (2024-06-25)
 
 
