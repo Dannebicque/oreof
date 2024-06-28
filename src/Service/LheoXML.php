@@ -384,7 +384,7 @@ HTML;
         $prerequis .= '<br><strong>Niveau de français requis :</strong><br>';
         $prerequis .= $parcours->getNiveauFrancais()?->libelle() ?? 'Aucune condition spécifique.';
 
-        $prerequis .= '<br><strong>Prérequis recommandés :</strong><br>';
+        $prerequis .= '<br><br><strong>Prérequis recommandés :</strong><br>';
         $prerequis .= $this->cleanString($parcours->getPrerequis()) ?? 'Aucune condition spécifique.';
 
         // Rythme de la formation
