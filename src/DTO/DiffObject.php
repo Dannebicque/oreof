@@ -26,4 +26,9 @@ class DiffObject {
     {
         return $this->isDifferent() === true ? $this : false;
     }
+
+    public function displayDiff(): string
+    {
+        return $this->new . ' (au lieu de ' . $this->original.')';
+    }
 }

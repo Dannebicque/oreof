@@ -19,6 +19,7 @@ use App\DTO\StructureSemestre;
 use App\DTO\StructureUe;
 use App\Entity\Mccc;
 use App\Utils\Tools;
+use DateTimeInterface;
 
 class VersioningStructureExtractDiff
 {
@@ -26,12 +27,25 @@ class VersioningStructureExtractDiff
 
     public array $diffUe = [];
     public array $diff = [];
-    private bool $hasModification = false;
+    public array $diffAdd = []; //todo: a gérer
+    public array $trad = [];
+    public array $diffRemove = [];//todo: a gérer
 
     public function __construct(
         private StructureParcours $dtoOrigine,
-        private StructureParcours $dtoNouveau
+        private StructureParcours $dtoNouveau,
+        private array $typeEpreuves
     ) {
+        $this->trad = [
+'COL_MCCC_CC' => 'Contrôle Continu',
+'COL_MCCC_CT' => 'Contrôle Terminal',
+            'COL_MCCC_SECONDE_CHANCE_CC_SUP_10' => 'Session 2 CC > 10',
+            'COL_SECONDE_CHANCE_CT' => 'Session 2 Contrôle Terminal',
+'COL_MCCC_TP' => 'Travaux Pratiques',
+           'COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP' => 'Session 2 CC avec TP',
+              'COL_MCCC_SECONDE_CHANCE_CC_SANS_TP' => 'Session 2 CC sans TP',
+            'COL_MCCC_CCI' => 'Contrôle Continu Intégral',
+        ];
     }
 
     //todo: gérer le cas d'ajout d'une UE, voire d'un Semestre
@@ -43,6 +57,8 @@ class VersioningStructureExtractDiff
         foreach ($this->dtoOrigine->semestres as $ordreSemestre => $semestre) {
             if (array_key_exists($ordreSemestre, $this->dtoNouveau->semestres)) {
                 $this->diff['semestres'][$ordreSemestre]['heuresEctsSemestre'] = $this->compareHeuresEctsSemestre($semestre->heuresEctsSemestre, $this->dtoNouveau->semestres[$ordreSemestre]->heuresEctsSemestre);
+                $this->diffAdd['semestres'][$ordreSemestre] = [];
+                $this->diffRemove['semestres'][$ordreSemestre] = [];
 
                 $this->compareSemestre($semestre, $this->dtoNouveau->semestres[$ordreSemestre], $ordreSemestre);
             }
@@ -56,9 +72,9 @@ class VersioningStructureExtractDiff
         int               $ordreSemestre
     ): void {
         foreach ($semestreOriginal->ues as $ordreUe => $ue) {
-            $this->hasModification = false;
+            //            $this->hasModification = false;
             $modifs = $this->compareUe($ue, $semestreNouveau->ues[$ordreUe]);//cas si UE n'existe plus ou si ajouté dans nouveau ?
-            if ($this->hasModification === true) {
+            if ($modifs !== false) {
                 $this->diffUe[$ordreSemestre][] =
                     ['ue' => $ue, 'modifications' => $modifs];
             }
@@ -86,7 +102,7 @@ class VersioningStructureExtractDiff
         $sommeSemestreTotalPresDist = $sommeSemestreTotalPres + $sommeSemestreTotalDist;
         $diff['sommeSemestreTotalPresDist'] = new DiffObject(Tools::filtreHeures($sommeSemestreTotalPresDist), Tools::filtreHeures($heuresEctsSemestreNouveau->sommeSemestreTotalPresDist()));
 
-        $this->hasModification = $this->hasModifications($diff);
+        //$this->hasModification = $this->hasModifications($diff);
 
         return $diff;
     }
@@ -94,6 +110,7 @@ class VersioningStructureExtractDiff
     private function compareUe(StructureUe $ueOriginale, ?StructureUe $ueNouvelle): array|false
     {
         $diff = [];
+        $ueDiff = false;
 
         if ($ueNouvelle !== null) {
             $diff['display'] = new DiffObject($ueOriginale->display, $ueNouvelle->display);
@@ -101,33 +118,45 @@ class VersioningStructureExtractDiff
             foreach ($ueOriginale->elementConstitutifs as $ordreEc => $ec) {
                 if (!array_key_exists($ordreEc, $ueNouvelle->elementConstitutifs)) {
                     //donc n'existe plus ?
-                    $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, null);
-
+                    $diffEc = $this->compareElementConstitutif($ec, null);
+                    if ($diffEc !== false) {
+                        $ueDiff = true;
+                        $diff['elementConstitutifs'][$ordreEc] = $diffEc;
+                    }
                 } else {
-                    $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif($ec, $ueNouvelle->elementConstitutifs[$ordreEc]);
+                    $diffEc = $this->compareElementConstitutif($ec, $ueNouvelle->elementConstitutifs[$ordreEc]);
+                    if ($diffEc !== false) {
+                        $ueDiff = true;
+                        $diff['elementConstitutifs'][$ordreEc] = $diffEc;
+                    }
                 }
             }
 
             foreach ($ueNouvelle->elementConstitutifs as $ordreEc => $ec) {
                 if (!array_key_exists($ordreEc, $ueOriginale->elementConstitutifs)) {
                     //donc nouvel EC
-                    $diff['elementConstitutifs'][$ordreEc] = $this->compareElementConstitutif(null, $ec);
+                    $diffEc = $this->compareElementConstitutif(null, $ec);
+                    if ($diffEc !== false) {
+                        $ueDiff = true;
+                        $diff['elementConstitutifs'][$ordreEc] = $diffEc;
+                    }
                 }
             }
 
 
             foreach ($ueOriginale->uesEnfants() as $ordreUeEnfant => $ueEnfant) {
                 if (array_key_exists($ordreUeEnfant, $ueNouvelle->uesEnfants())) {
-                    $diff['uesEnfants'][$ordreUeEnfant] = $this->compareUe($ueEnfant, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
+                    $diffCompare = $this->compareUe($ueEnfant, $ueNouvelle->uesEnfants()[$ordreUeEnfant]);
+                    if ($diffCompare !== false) {
+                        $diff['uesEnfants'][$ordreUeEnfant] = $diffCompare;
+                    }
                 } else {
                     //donc n'existe plus ?
                 }
             }
         }
 
-        $this->hasModification = $this->hasModifications($diff);
-
-        return $this->hasModification ? $diff : false;
+        return $this->hasModifications($diff) || $ueDiff ? $diff : false;
     }
 
     private function compareElementConstitutif(?StructureEc $ecOriginal, ?StructureEc $ecNouveau): array|false
@@ -145,20 +174,9 @@ class VersioningStructureExtractDiff
             //  $diff['raccroche'] = new DiffObject(null, $ecNouveau->raccroche);
             $diff['heuresEctsEc'] = $this->compareHeuresEctsEc(null, $ecNouveau->heuresEctsEc);
             $diff['typeMccc'] = new DiffObject('', $ecNouveau->typeMccc);
-            $diff['mcccs'] = $this->compareMcccs([], $ecNouveau->mcccs);
+            $diff['mcccs'] = $this->compareMcccs([], $ecNouveau->mcccs, $diff['typeMccc']);
 
-            // todo: gérer si un EC est ajouté avec des enfants           if ($ecNouveau->elementConstitutif->getNatureUeEc()?->isChoix()) {
-            //                //EC enfants
-            //                foreach ($ecNouveau->elementsConstitutifsEnfants as $ordreEc => $ecEnfant) {
-            //                    if (array_key_exists($ordreEc, $ecOriginal->elementsConstitutifsEnfants)) {
-            //                        $diff['ecEnfants'][$ordreEc] = $this->compareElementConstitutif($ecOriginal->elementsConstitutifsEnfants[$ordreEc], $ecEnfant);
-            //                    } //else supprimé
-            //                }
-            //            }
-
-            $this->hasModification = $this->hasModifications($diff);
-
-            return $this->hasModification ? $diff : false;
+            return $this->hasModifications($diff) ? $diff : false;
         }
 
         if ($ecOriginal !== null && $ecNouveau === null) {
@@ -170,23 +188,11 @@ class VersioningStructureExtractDiff
 
             $diff['libelle'] = new DiffObject($libelleNew, '-');
             $diff['code'] = new DiffObject($ecOriginal->elementConstitutif->getCode(), '');
-            //  $diff['raccroche'] = new DiffObject($ecOriginal->raccroche, null);
             $diff['heuresEctsEc'] = $this->compareHeuresEctsEc($ecOriginal->heuresEctsEc, null);
             $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, '-');
-            $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, []);
+            $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, [], $diff['typeMccc']);
 
-            // todo: gérer si un EC est ajouté avec des enfants           if ($ecNouveau->elementConstitutif->getNatureUeEc()?->isChoix()) {
-            //                //EC enfants
-            //                foreach ($ecNouveau->elementsConstitutifsEnfants as $ordreEc => $ecEnfant) {
-            //                    if (array_key_exists($ordreEc, $ecOriginal->elementsConstitutifsEnfants)) {
-            //                        $diff['ecEnfants'][$ordreEc] = $this->compareElementConstitutif($ecOriginal->elementsConstitutifsEnfants[$ordreEc], $ecEnfant);
-            //                    } //else supprimé
-            //                }
-            //            }
-
-            $this->hasModification = $this->hasModifications($diff);
-
-            return $this->hasModification ? $diff : false;
+            return $this->hasModifications($diff) ? $diff : false;
         }
 
         if ($ecOriginal->elementConstitutif->getFicheMatiere() !== null) {
@@ -206,7 +212,7 @@ class VersioningStructureExtractDiff
         $diff['heuresEctsEc'] = $this->compareHeuresEctsEc($ecOriginal->heuresEctsEc, $ecNouveau->heuresEctsEc);
         if ($ecOriginal->typeMccc !== null && $ecNouveau->typeMccc !== null) {
             $diff['typeMccc'] = new DiffObject($ecOriginal->typeMccc, $ecNouveau->typeMccc);
-            $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs);
+            $diff['mcccs'] = $this->compareMcccs($ecOriginal->mcccs, $ecNouveau->mcccs, $diff['typeMccc']);
         }
 
         if ($ecNouveau->elementConstitutif->getNatureUeEc()?->isChoix()) {
@@ -224,9 +230,7 @@ class VersioningStructureExtractDiff
             }
         }
 
-        $this->hasModification = $this->hasModifications($diff);
-
-        return $this->hasModification ? $diff : false;
+        return $this->hasModifications($diff) ? $diff : false;
     }
 
     private function compareHeuresEctsEc(?HeuresEctsEc $heuresEctsEc, ?HeuresEctsEc $heuresEctsEc1): array|false
@@ -275,9 +279,7 @@ class VersioningStructureExtractDiff
             $diff['sommeEcTotalPresDist'] = new DiffObject(Tools::filtreHeures($heuresEctsEc->sommeEcTotalPresDist()), Tools::filtreHeures($heuresEctsEc1->sommeEcTotalPresDist()));
         }
 
-        $this->hasModification = $this->hasModifications($diff);
-
-        return $this->hasModification ? $diff : false;
+        return $this->hasModifications($diff) ? $diff : false;
     }
 
     private function compareHeuresEctsFormation(mixed $heuresEctsFormation, $heuresEctsFormationNouveau): array|false
@@ -304,26 +306,25 @@ class VersioningStructureExtractDiff
         return $diff;
     }
 
-    private function compareMcccs(?array $mcccsOriginal, ?array $mcccsNouveau): array|false
+    private function compareMcccs(?array $mcccsOriginal, ?array $mcccsNouveau, DiffObject $typeMccc): ?string
     {
         if (null === $mcccsOriginal && null === $mcccsNouveau) {
-            return [];
+            return 'Pas de MCCC';
         }
 
-        $diff = [];
-
-        foreach ($mcccsNouveau as $mcccNouveau) {
-            $diff['new'][$mcccNouveau->getId()] = $mcccNouveau;
+        if ($typeMccc->isDifferent()) {
+            //construire la phrase en partant de Original
+            return $this->getMcccFromNew($mcccsNouveau, $typeMccc->new);
         }
 
-        foreach ($mcccsOriginal as $mcccOriginal) {
-            $diff['original'][$mcccOriginal['id']] = $this->createMcccFromArray($mcccOriginal);
+        //construire la phrase avec les différences
+
+        $original = [];
+        foreach ($mcccsOriginal as $mccc) {
+            $original[] = $this->createMcccFromArray($mccc);
         }
 
-
-        $this->hasModification = $this->hasModifications($diff);
-
-        return $this->hasModification ? $diff : false;
+        return $this->getMcccFromDiff($original, $mcccsNouveau, $typeMccc->new);
     }
 
     private function createMcccFromArray(array $mcccOriginal): Mccc
@@ -367,8 +368,465 @@ class VersioningStructureExtractDiff
             if ($value instanceof DiffObject && $value->isDifferent()) {
                 return true;
             }
+
+            if ($key === 'mcccs' && $value !== '') {
+                return true;
+            }
         }
 
         return false;
+    }
+
+    private function getMcccFromNew(?array $mcccsNouveau, ?string $typeMccc): string
+    {
+        if ($typeMccc === null) {
+            return 'Pas de type de MCCC';
+        }
+
+        $mcccs = $this->getMcccs($mcccsNouveau, $typeMccc);
+        $texte = '';
+
+        switch ($typeMccc) {
+            case 'cc':
+                $texte = '';
+                $texteAvecTp = '';
+                $hasTp = false;
+                $pourcentageTp = 0;
+                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
+                    $nb = 1;
+                    $nb2 = 1;
+                    foreach ($mcccs[1]['cc'] as $mccc) {
+                        for ($i = 1; $i <= $mccc->getNbEpreuves(); $i++) {
+                            $texte .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%) + ';
+                            $nb++;
+                        }
+
+                        if ($mccc->hasTp()) {
+                            $hasTp = true;
+                            if ($mccc->getNbEpreuves() === 1) {
+                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
+                                $pourcentageTp += $mccc->getPourcentage();
+                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
+                            } else {
+                                $pourcentageTp += $mccc->pourcentageTp();
+                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
+                            }
+
+
+                            $nb2++;
+                        }
+                    }
+
+                    $texte = substr($texte, 0, -2);
+                    //$this->excelWriter->writeCellXY(self::COL_MCCC_CC, $ligne, $texte);
+                }
+
+                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && is_array($mcccs[2]['et'])) {
+                    $texte2 = '';
+                    $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
+                    foreach ($mcccs[2]['et'] as $mccc) {
+                        $texte2 .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
+                    }
+
+                    $texte2 = substr($texte2, 0, -2);
+                }
+
+                if ($hasTp) {
+                    $texteAvecTp = substr($texteAvecTp, 0, -2);
+                    $texte .= " Session 2 : ".str_replace(';', '+', $texteAvecTp);
+                    //$this->excelWriter->writeCellXY(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne, str_replace(';', '+', $texteAvecTp));
+                } else {
+                    $texte .= " Session 2 : ".$texte2;
+                }
+
+                break;
+            case 'cci':
+                $texte = '';
+                foreach ($mcccs as $mccc) {
+                    $texte .= 'CC' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
+                }
+                $texte = substr($texte, 0, -2);
+                break;
+            case 'cc_ct':
+                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1]) && $mcccs[1]['cc'] !== null) {
+                    $texte = '';
+                    foreach ($mcccs[1]['cc'] as $mccc) {
+                        $texte .= 'CC ' . $mccc->getNbEpreuves() . ' épreuve(s) (' . $mccc->getPourcentage() . '%) + ';
+                    }
+                    $texte = substr($texte, 0, -2);
+                }
+
+                $texteAvecTp = '';
+                $texteCc = '';
+                $pourcentageTp = 0;
+                $pourcentageCc = 0;
+                $nb = 1;
+                $hasTp = false;
+                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
+                    foreach ($mcccs[1]['cc'] as $mccc) {
+                        if ($mccc->hasTp()) {
+                            $hasTp = true;
+                            if ($mccc->getNbEpreuves() === 1) {
+                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
+                                $pourcentageTp += $mccc->getPourcentage();
+                            } else {
+                                $pourcentageTp += $mccc->pourcentageTp();
+                            }
+                        }
+                        $pourcentageCc += $mccc->getPourcentage();
+                        $texteCc .= 'CC (' . $mccc->getPourcentage() . '%); ';
+                    }
+
+                    if ($hasTp) {
+                        $texteAvecTp .= 'TPr (' . $pourcentageTp . '%); ';
+                    }
+
+                    if (array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
+                        $texteEpreuve = '';
+                        foreach ($mcccs[1]['et'] as $mccc) {
+                            $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        }
+
+                        $texteEpreuve = substr($texteEpreuve, 0, -2);
+                        $texte .= $texteEpreuve;
+                    }
+                }
+
+                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
+                    $texteEpreuve = '';
+                    $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
+                    $pourcentageCcEt = $pourcentageCc / count($mcccs[2]['et']);
+                    foreach ($mcccs[2]['et'] as $mccc) {
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
+                        $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCcEt);
+                    }
+
+                    $texteEpreuve = substr($texteEpreuve, 0, -2);
+                    $texteCc = substr($texteCc, 0, -2);
+                    $texteCc = str_replace('CC', 'CCr', $texteCc);
+                    $texteAvecTp = substr($texteAvecTp, 0, -2);
+
+
+                    if ($hasTp) {
+                        $texte .= " Session 2 : ".str_replace(';', '+', $texteAvecTp);
+                    } else {
+                        //si TP cette celulle est vide...
+                        $texte .= " Session 2 : ".$texteEpreuve;
+                    }
+
+                    $texte .= " Session 2 : ".str_replace(';', '+', $texteCc);
+                }
+                break;
+            case 'ct':
+                $quitus = false; //todo: $ec->isQuitus();
+                if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
+                    $texteEpreuve = '';
+                    foreach ($mcccs[1]['et'] as $mccc) {
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $quitus);
+                    }
+
+                    $texteEpreuve = substr($texteEpreuve, 0, -2);
+                    $texte .= $texteEpreuve;
+                    //$this->excelWriter->writeCellXY(self::COL_MCCC_CT, $ligne, $texteEpreuve);
+                }
+
+                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
+                    $texteEpreuve = '';
+                    foreach ($mcccs[2]['et'] as $mccc) {
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $quitus);
+                    }
+
+                    $texteEpreuve = substr($texteEpreuve, 0, -2);
+                    $texte .= ' Session 2 : ' . $texteEpreuve;
+                }
+                break;
+        }
+
+        return $texte;
+    }
+
+    private function displayTypeEpreuveWithDureePourcentage(Mccc $mccc, ?bool $quitus = false): string
+    {
+        $texte = '';
+        foreach ($mccc->getTypeEpreuve() as $type) {
+            if ($type !== "" && $this->typeEpreuves[$type] !== null) {
+                if ($quitus === true) {
+                    $texte .= 'QUITUS ' . $this->typeEpreuves[$type]->getSigle();
+                } else {
+                    $duree = '';
+                    if ($this->typeEpreuves[$type]->isHasDuree() === true) {
+                        $duree = ' ' . $this->displayDuree($mccc->getDuree());
+                    }
+
+                    $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . $mccc->getPourcentage() . '%); ';
+                }
+            } else {
+                $texte .= 'erreur épreuve; ';
+            }
+        }
+
+        return $texte;
+    }
+
+    private function displayTypeEpreuveWithDureePourcentageTp(Mccc $mccc, float $pourcentage): string
+    {
+        $texte = '';
+        foreach ($mccc->getTypeEpreuve() as $type) {
+            if ($type !== "" && $this->typeEpreuves[$type] !== null) {
+                $duree = '';
+                if ($this->typeEpreuves[$type]->isHasDuree() === true) {
+                    $duree = ' ' . $this->displayDuree($mccc->getDuree());
+                }
+                if (($mccc->getPourcentage() - $pourcentage) > 0.0) {
+                    $texte .= $this->typeEpreuves[$type]->getSigle() . $duree . ' (' . ($mccc->getPourcentage() - $pourcentage) . '%); ';
+                }
+            } else {
+                $texte .= 'erreur épreuve; ';
+            }
+        }
+
+        return $texte;
+    }
+
+    private function getMcccs(array $mcccs, string $typeMccc): array
+    {
+        $tabMcccs = [];
+
+        if ($typeMccc === 'cci') {
+            foreach ($mcccs as $mccc) {
+                $tabMcccs[$mccc->getNumeroSession()] = $mccc;
+            }
+        } else {
+            foreach ($mcccs as $mccc) {
+                if ($mccc->isSecondeChance()) {
+                    $tabMcccs[3]['chance'] = $mccc;
+                } elseif ($mccc->isControleContinu() === true && $mccc->isExamenTerminal() === false) {
+                    $tabMcccs[$mccc->getNumeroSession()]['cc'][$mccc->getNumeroEpreuve() ?? 1] = $mccc;
+                } elseif ($mccc->isControleContinu() === false && $mccc->isExamenTerminal() === true) {
+                    $tabMcccs[$mccc->getNumeroSession()]['et'][$mccc->getNumeroEpreuve() ?? 1] = $mccc;
+                }
+            }
+        }
+
+        return $tabMcccs;
+    }
+
+    protected function displayDuree(?DateTimeInterface $duree): string
+    {
+        if ($duree === null) {
+            return '';
+        }
+
+        return $duree->format('H\hi');
+    }
+
+    private function getMcccFromDiff(array $original, ?array $mcccsNouveau, string $typeMccc)
+    {
+        $texte ='';
+        $diffMccc = [];
+        $mcccsOriginal = $this->getMcccs($original, $typeMccc);
+        $mcccsNew = $this->getMcccs($mcccsNouveau, $typeMccc);
+
+        //cas Original sans écrire dans les cellules
+        $displayMcccOriginal = $this->calculDisplayMccc($mcccsOriginal, $typeMccc, false);
+        $displayMcccNew =$this->calculDisplayMccc($mcccsNew, $typeMccc, false);
+
+
+        //fusionner les deux tableaux $displayMcccOriginal et $displayMcccNew en construisant un objet DiffObject
+        foreach ($displayMcccOriginal as $key => $value) {
+            if (array_key_exists($key, $displayMcccNew)) {
+                $diffMccc[$key] = new DiffObject($value, $displayMcccNew[$key]);
+            } else {
+                $diffMccc[$key] = new DiffObject($value, '');
+            }
+        }
+
+        foreach ($displayMcccNew as $key => $value) {
+            if (!array_key_exists($key, $displayMcccOriginal)) {
+                $diffMccc[$key] = new DiffObject('', $value);
+            }
+        }
+
+        foreach ($diffMccc as $key => $value) {
+            if ($value->isDifferent()) {
+                $texte .= $this->trad[$key] . ' : ' . $value->displayDiff() . '; ';
+            }
+        }
+
+
+        return $texte;
+    }
+
+    private function calculDisplayMccc(array $mcccs, string $typeMccc, bool $isQuitus): array
+    {
+        $tDisplay = [];
+
+        switch ($typeMccc) {
+            case 'cc':
+                $texte = '';
+                $texteAvecTp = '';
+                $hasTp = false;
+                $pourcentageTp = 0;
+                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
+                    $nb = 1;
+                    $nb2 = 1;
+                    /** @var Mccc $mccc */
+                    foreach ($mcccs[1]['cc'] as $mccc) {
+                        for ($i = 1; $i <= $mccc->getNbEpreuves(); $i++) {
+                            $texte .= 'CC' . $nb . ' (' . $mccc->getPourcentage() . '%); ';
+                            $nb++;
+                        }
+
+                        if ($mccc->hasTp()) {
+                            $hasTp = true;
+                            if ($mccc->getNbEpreuves() === 1) {
+                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
+                                //todo: interdire la saisie d'un pourcentage de TP si une seule épreuve de CC
+                                $pourcentageTp += $mccc->getPourcentage();
+                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
+                            } else {
+                                $pourcentageTp += $mccc->pourcentageTp();
+                                $texteAvecTp .= 'TPr' . $nb2 . ' (' . $mccc->getPourcentage() . '%); ';
+                            }
+
+
+                            $nb2++;
+                        }
+                    }
+
+                    $texte = substr($texte, 0, -2);
+                    $tDisplay['COL_MCCC_CC'] = $texte;
+                }
+
+                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && is_array($mcccs[2]['et'])) {
+                    $texte = '';
+                    $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
+                    foreach ($mcccs[2]['et'] as $mccc) {
+                        $texte .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
+                    }
+
+                    $texte = substr($texte, 0, -2);
+                }
+
+                if ($hasTp) {
+                    $texteAvecTp = substr($texteAvecTp, 0, -2);
+                    $tDisplay['COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP'] = str_replace(';', '+', $texteAvecTp);
+                } else {
+                    $tDisplay['COL_MCCC_SECONDE_CHANCE_CC_SANS_TP'] = $texte;
+                }
+
+                break;
+            case 'cci':
+                $texte = '';
+                /** @var Mccc $mccc */
+                foreach ($mcccs as $mccc) {
+                    $texte .= 'CC' . $mccc->getNumeroSession() . ' (' . $mccc->getPourcentage() . '%); ';
+                }
+                $texte = substr($texte, 0, -2);
+                $tDisplay['COL_MCCC_CCI'] = $texte;
+
+                break;
+            case 'cc_ct':
+                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1]) && $mcccs[1]['cc'] !== null) {
+                    $texte = '';
+                    /** @var Mccc $mccc */
+                    foreach ($mcccs[1]['cc'] as $mccc) {
+                        $texte .= 'CC ' . $mccc->getNbEpreuves() . ' épreuve(s) (' . $mccc->getPourcentage() . '%); ';
+                    }
+                    $texte = substr($texte, 0, -2);
+                    $tDisplay['COL_MCCC_CC'] = $texte;
+                }
+
+                $texteAvecTp = '';
+                $texteCc = '';
+                $pourcentageTp = 0;
+                $pourcentageCc = 0;
+                $nb = 1;
+                $hasTp = false;
+                if (array_key_exists(1, $mcccs) && array_key_exists('cc', $mcccs[1])) {
+                    foreach ($mcccs[1]['cc'] as $mccc) {
+                        if ($mccc->hasTp()) {
+                            $hasTp = true;
+                            if ($mccc->getNbEpreuves() === 1) {
+                                //si une seule épreuve de CC, pas de prise en compte du %de TP en seconde session
+                                $pourcentageTp += $mccc->getPourcentage();
+                            } else {
+                                $pourcentageTp += $mccc->pourcentageTp();
+                            }
+                        }
+                        $pourcentageCc += $mccc->getPourcentage();
+                        $texteCc .= 'CC (' . $mccc->getPourcentage(). '%); ';
+                    }
+
+                    if ($hasTp) {
+                        $texteAvecTp .= 'TPr (' . $pourcentageTp . '%); ';
+                    }
+
+                    if (array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
+                        $texteEpreuve = '';
+                        foreach ($mcccs[1]['et'] as $mccc) {
+                            $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        }
+
+                        $texteEpreuve = substr($texteEpreuve, 0, -2);
+                        $tDisplay['COL_MCCC_CT'] = $texteEpreuve;
+                    }
+                }
+
+                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
+                    $texteEpreuve = '';
+                    $pourcentageTpEt = $pourcentageTp / count($mcccs[2]['et']);
+                    $pourcentageCcEt = $pourcentageCc / count($mcccs[2]['et']);
+                    foreach ($mcccs[2]['et'] as $mccc) {
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc);
+                        $texteAvecTp .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageTpEt);
+                        $texteCc .= $this->displayTypeEpreuveWithDureePourcentageTp($mccc, $pourcentageCcEt);
+                    }
+
+                    $texteEpreuve = substr($texteEpreuve, 0, -2);
+                    $texteCc = substr($texteCc, 0, -2);
+                    $texteCc = str_replace('CC', 'CCr', $texteCc);
+                    $texteAvecTp = substr($texteAvecTp, 0, -2);
+
+                    if ($hasTp) {
+                        $tDisplay['COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP'] = str_replace(';', '+', $texteAvecTp);
+                    } else {
+                        //si TP cette celulle est vide...
+                        $tDisplay['COL_MCCC_SECONDE_CHANCE_CC_SANS_TP'] = $texteEpreuve;
+                    }
+                    $tDisplay['COL_MCCC_SECONDE_CHANCE_CC_SUP_10'] = str_replace(';', '+', $texteCc);
+                }
+
+                //on garde CC et on complète avec le reste de pourcentage de l'ET
+
+                break;
+            case 'ct':
+                if (array_key_exists(1, $mcccs) && array_key_exists('et', $mcccs[1]) && $mcccs[1]['et'] !== null) {
+                    $texteEpreuve = '';
+                    foreach ($mcccs[1]['et'] as $mccc) {
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $isQuitus);
+                    }
+
+                    $texteEpreuve = substr($texteEpreuve, 0, -2);
+
+                    $tDisplay['COL_MCCC_CT'] = $texteEpreuve;
+                }
+
+                if (array_key_exists(2, $mcccs) && array_key_exists('et', $mcccs[2]) && $mcccs[2]['et'] !== null) {
+                    $texteEpreuve = '';
+                    foreach ($mcccs[2]['et'] as $mccc) {
+                        $texteEpreuve .= $this->displayTypeEpreuveWithDureePourcentage($mccc, $isQuitus);
+                    }
+
+                    $texteEpreuve = substr($texteEpreuve, 0, -2);
+                    $tDisplay['COL_MCCC_SECONDE_CHANCE_CT'] = $texteEpreuve;
+                }
+                break;
+        }
+
+        return $tDisplay;
     }
 }

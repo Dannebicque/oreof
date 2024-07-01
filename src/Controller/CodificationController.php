@@ -179,7 +179,8 @@ class CodificationController extends BaseController
         );
         $formations[] = $formationRepository->findByResponsableOuCoResponsableParcours(
             $this->getUser(),
-            $this->getDpe()
+            $this->getDpe(),
+            []
         );
         $formations = array_merge(...$formations);
 

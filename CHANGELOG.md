@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.25](https://github.com/Dannebicque/oreof/compare/v1.29.24...v1.29.25) (2024-06-28)
+
+
+### Bug Fixes
+
+* ajout d'un espace sur textes LHEO ([2a10e13](https://github.com/Dannebicque/oreof/commit/2a10e134424d9981b5b5f3f844cb3ab9ba262f9e))
+* export codification ([ea4bf94](https://github.com/Dannebicque/oreof/commit/ea4bf94ec92623bd90eceea67c71273b8d5f1caf))
+* typos sur document de synthèse ([ef229d3](https://github.com/Dannebicque/oreof/commit/ef229d3bedd1745532dc82c9cf84762cac8cd59e))
+
+### [1.29.24](https://github.com/Dannebicque/oreof/compare/v1.29.23...v1.29.24) (2024-06-25)
+
+
+### Features
+
+* ajout des heures TE ([a346a60](https://github.com/Dannebicque/oreof/commit/a346a60f8abdeba6121390d7b792495cf9997e53))
+* ajout des heures TE ([a0f81ad](https://github.com/Dannebicque/oreof/commit/a0f81ad0faa8bf7bc52f46dc233df6300f4406ed))
+
+
+### Bug Fixes
+
+* ajout des heures TE ([7ef6668](https://github.com/Dannebicque/oreof/commit/7ef66683427883de6d877242b0e438c7c7ebe3e6))
+* typos sur document de synthèse ([3dd3577](https://github.com/Dannebicque/oreof/commit/3dd357760896449f0b2a7fc61e91ee8ce475aab2))
+
+### [1.29.23](https://github.com/Dannebicque/oreof/compare/v1.29.22...v1.29.23) (2024-06-23)
+
+
+### Features
+
+* ajout des heures TE ([2e9ad03](https://github.com/Dannebicque/oreof/commit/2e9ad0359d90aea6014f4ba4bc8c9cefabb3276f))
+
+### [1.29.22](https://github.com/Dannebicque/oreof/compare/v1.29.21...v1.29.22) (2024-06-23)
+
+
+### Features
+
+* affichage des MCCC dans doc de synthèse ([d020c7b](https://github.com/Dannebicque/oreof/commit/d020c7b5a4c02a5c81dabe169287203b5c6ad40b))
+
 ### [1.29.21](https://github.com/Dannebicque/oreof/compare/v1.29.20...v1.29.21) (2024-06-21)
 
 

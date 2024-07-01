@@ -14,6 +14,7 @@ use App\Classes\MyGotenbergPdf;
 use App\Entity\CampagneCollecte;
 use App\Enums\RegimeInscriptionEnum;
 use App\Repository\FormationRepository;
+use App\Repository\TypeEpreuveRepository;
 use App\Service\VersioningParcours;
 use App\Service\VersioningStructure;
 use App\Service\VersioningStructureExtractDiff;
@@ -28,6 +29,7 @@ class ExportSyntheseModification
     private string $dir;
 
     public function __construct(
+        protected TypeEpreuveRepository $typeEpreuveRepository,
         protected TypeDiplomeRegistry $typeDiplomeRegistry,
         protected VersioningParcours $versioningParcours,
         protected MyGotenbergPdf      $myGotenbergPdf,
@@ -39,6 +41,11 @@ class ExportSyntheseModification
 
     public function exportLink(array $formations, CampagneCollecte $dpe): string
     {
+        $epreuves = $this->typeEpreuveRepository->findAll();
+        foreach ($epreuves as $epreuve) {
+            $typeEpreuves[$epreuve->getId()] = $epreuve;
+        }
+
         foreach ($formations as $formation) {
             $tDemandes = [];
             $form = $formation['formation'];
@@ -48,7 +55,7 @@ class ExportSyntheseModification
                 $dto = $typeD->calculStructureParcours($parc, true, false);
                 $structureDifferencesParcours = $this->versioningParcours->getStructureDifferencesBetweenParcoursAndLastVersion($parc);
                 if ($structureDifferencesParcours !== null) {
-                    $diffStructure = new VersioningStructureExtractDiff($structureDifferencesParcours, $dto);
+                    $diffStructure = new VersioningStructureExtractDiff($structureDifferencesParcours, $dto, $typeEpreuves);
                     $diffStructure->extractDiff();
                 } else {
                     $diffStructure = null;

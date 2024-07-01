@@ -15,5 +15,9 @@
     heuresEctsEc.tdDist.isDifferent == true or
     heuresEctsEc.tpDist.isDifferent == true)
 %}
-    <p>Modification du total des heures de l'EC {{ ec.libelle.new}} : CM : {{ heuresEctsEc.cmDist|diffNew }} heures, TD : {{ heuresEctsEc.tdDist|diffNew }} heures, TP : {{ heuresEctsEc.tpDist|diffNew }} heures (au lieu de : CM : {{ heuresEctsEc.cmDist|diffOriginal }} heures, TD : {{ heuresEctsEc.tdDist|diffOriginal }} heures, TP : {{ heuresEctsEc.tpDist|diffOriginal }} heures). Soit un total distanciel de {{ heuresEctsEc.sommeEcTotalPresDist|diffNewOriginal }}</p>
+    <p>Modification du total des heures distancielles de l'EC {{ ec.libelle.new}} : CM : {{ heuresEctsEc.cmDist|diffNew }} heures, TD : {{ heuresEctsEc.tdDist|diffNew }} heures, TP : {{ heuresEctsEc.tpDist|diffNew }} heures (au lieu de : CM : {{ heuresEctsEc.cmDist|diffOriginal }} heures, TD : {{ heuresEctsEc.tdDist|diffOriginal }} heures, TP : {{ heuresEctsEc.tpDist|diffOriginal }} heures). Soit un total distanciel de {{ heuresEctsEc.sommeEcTotalPresDist|diffNewOriginal }}</p>
+{% endif %}
+
+{% if heuresEctsEc != false and (heuresEctsEc.tePres.isDifferent == true) %}
+    <p>Modification du total des heures de travail en autonomie de l'EC {{ ec.libelle.new}} :  {{ heuresEctsEc.tePres|diffNew }} heures (au lieu de : {{ heuresEctsEc.tePres|diffOriginal }}).</p>
 {% endif %}
