@@ -721,7 +721,6 @@ class LicenceMcccVersion extends AbstractLicenceMccc
 
     private function afficheSommeSemestre(int $ligne, StructureSemestre $semestre, $diffSemestre): int
     {
-        //  dump($diffSemestre);
         $this->excelWriter->insertNewRowBefore($ligne);
 
         $this->excelWriter->mergeCellsCaR(self::COL_UE, $ligne, self::COL_COMPETENCES, $ligne);
