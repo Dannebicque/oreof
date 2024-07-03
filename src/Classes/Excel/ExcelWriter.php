@@ -523,14 +523,18 @@ class ExcelWriter
             if ($diffObject->isDifferent()) {
 
                 $richText = new RichText();
-                $ancienneValeur = $richText->createTextRun($diffObject->original);
-                $ancienneValeur->getFont()?->setStrikethrough(true);
-                //$ancienneValeur->getFont()?->setItalic(true);
-                $ancienneValeur->getFont()?->setColor(new Color(Color::COLOR_RED));
-                $nouvelleValeur = $richText->createTextRun($diffObject->new);
-                $nouvelleValeur->getFont()?->setStrikethrough(false);
-                $nouvelleValeur->getFont()?->setBold(true);
-                $nouvelleValeur->getFont()?->setColor(new Color(Color::COLOR_DARKGREEN));
+                if ($diffObject->original !== null && $diffObject->original !== '') {
+                    $ancienneValeur = $richText->createTextRun($diffObject->original);
+                    $ancienneValeur->getFont()?->setStrikethrough(true);
+                    $ancienneValeur->getFont()?->setColor(new Color(Color::COLOR_RED));
+                }
+
+                if ($diffObject->new !== null && $diffObject->new !== '') {
+                    $nouvelleValeur = $richText->createTextRun($diffObject->new);
+                    $nouvelleValeur->getFont()?->setStrikethrough(false);
+                    $nouvelleValeur->getFont()?->setBold(true);
+                    $nouvelleValeur->getFont()?->setColor(new Color(Color::COLOR_DARKGREEN));
+                }
 
                 $this->sheet->setCellValue([$col, $row], $richText);
             } else {

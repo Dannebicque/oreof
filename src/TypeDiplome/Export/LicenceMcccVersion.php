@@ -232,7 +232,6 @@ class LicenceMcccVersion extends AbstractLicenceMccc
 
                                     $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_SUP_10, $ligne - 1);
 
-                                    //$this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne - 1);
                                     $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CT, $debut, self::COL_MCCC_SECONDE_CHANCE_CT, $ligne - 1);
 
                                     $this->excelWriter->borderOutsiteInside(self::COL_MCCC_SECONDE_CHANCE_CC_SANS_TP, $debut, self::COL_MCCC_SECONDE_CHANCE_CC_AVEC_TP, $ligne - 1);
@@ -624,6 +623,19 @@ class LicenceMcccVersion extends AbstractLicenceMccc
                 if (!array_key_exists($key, $displayMcccOriginal)) {
                     $diffMccc[$key] = new DiffObject('', $value);
                 }
+            }
+
+            foreach ($diffMccc as $key => $value) {
+                $this->excelWriter->writeCellXYDiff($key, $ligne, $value);
+
+            }
+        } elseif (array_key_exists('mcccs', $diffEc) && array_key_exists('new', $diffEc['mcccs'])) {
+            $mcccsNew = $this->getMcccs($diffEc['mcccs']['new'], $diffEc['typeMccc']->new);
+
+            $displayMcccNew =$this->calculDisplayMccc($mcccsNew, $diffEc['typeMccc']->new, false);
+
+            foreach ($displayMcccNew as $key => $value) {
+                $diffMccc[$key] = new DiffObject('', $value);
             }
 
             foreach ($diffMccc as $key => $value) {
