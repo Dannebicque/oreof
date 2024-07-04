@@ -33,3 +33,4 @@ phpstan.neon
 
 ### EXPORT MCCC PDF ###
 mccc-export/
+public/temp/*
