@@ -39,7 +39,8 @@ class McccPdfCommand extends Command
         EntityManagerInterface $entityManager,
         Filesystem $fs,
         HttpClientInterface $httpClient,
-        LicenceMccc $licenceMccc
+        LicenceMccc $licenceMccc,
+        ButMccc $butMccc
     )
     {
         parent::__construct();
@@ -48,6 +49,7 @@ class McccPdfCommand extends Command
         $this->httpClient = $httpClient;
 
         $this->licenceMccc = $licenceMccc;
+        $this->butMccc = $butMccc;
     }
 
     protected function configure(): void
@@ -122,6 +124,32 @@ class McccPdfCommand extends Command
             $nombreParcoursValides = count($parcoursArray);
 
             $io->writeln("Il y a {$nombreParcoursValides} parcours valides, à exporter.");
+
+            $anneeDpe = $this->entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
+
+            $io->progressStart($nombreParcoursValides);
+            foreach($parcoursArray as $parcours){
+                $typeDiplome = $parcours->getTypeDiplome()->getLibelleCourt();
+                if($typeDiplome !== "BUT"){
+                    $pdf = $this->licenceMccc->exportPdfLicenceMccc(
+                        anneeUniversitaire: $anneeDpe,
+                        parcours : $parcours,
+                    );
+                }
+                elseif($typeDiplome === "BUT"){
+                    $pdf = $this->butMccc->exportPdfbutMccc(
+                        anneeUniversitaire: $anneeDpe,
+                        parcours: $parcours
+                    );
+                }
+                $this->fs->appendToFile(
+                    __DIR__ . "/../../mccc-export/MCCC - " . $parcours->getDisplay() . ".pdf", $pdf
+                );
+                $io->progressAdvance(1);
+            }
+            $io->progressFinish();
+            
+            $io->success("Tous les exports MCCC au format PDF ont été générés.");
 
             return Command::SUCCESS;
         }
