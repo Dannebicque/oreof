@@ -270,11 +270,12 @@ class ProcessValidationController extends BaseController
                     break;
                 case 'parcours':
                     $objet = $parcoursRepository->find($id);
+                    $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet, 'campagneCollecte' => $this->getDpe()]);
                     if ($objet === null) {
                         return JsonReponse::error('Parcours non trouvé');
                     }
 
-                    $objet->setEtatParcours([$process['transition'] => 1]);
+                    $dpe->setEtatValidation([$process['transition'] => 1]);
                     //mettre à jour l'historique
                     $histoEvent = new HistoriqueParcoursEvent($objet, $this->getUser(), $data['etat'], 'valide', $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
