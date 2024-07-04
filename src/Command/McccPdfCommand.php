@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\CampagneCollecte;
+use App\Entity\DpeParcours;
 use App\Entity\Parcours;
 use App\TypeDiplome\Export\ButMccc;
 use App\TypeDiplome\Export\LicenceMccc;
@@ -51,18 +52,27 @@ class McccPdfCommand extends Command
 
     protected function configure(): void
     {
-        $this->addOption(
-                name: 'generate-parcours',
-                mode: InputOption::VALUE_REQUIRED,
-                description: "Identifiant (PK) du parcours pour lequel on souhaite générer l'export des MCCC au format PDF"
-            );
+        $this
+        ->addOption(
+            name: 'generate-parcours',
+            mode: InputOption::VALUE_REQUIRED,
+            description: "Identifiant (PK) du parcours pour lequel on souhaite générer l'export des MCCC au format PDF"
+        )->addOption(
+            name: 'generate-all-parcours',
+            mode: InputOption::VALUE_NONE,
+            description: "Génère tous les PDF des MCCC pour tous les parcours validés ('valide_a_publier')"
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        ini_set('memory_limit', '2048M');
+
         $io = new SymfonyStyle($input, $output);
         
         $generateParcours = $input->getOption("generate-parcours");
+
+        $generateAllParcours = $input->getOption("generate-all-parcours");
 
         if($generateParcours){
             $parcours = $this->entityManager->getRepository(Parcours::class)->findOneById($generateParcours);
@@ -91,6 +101,29 @@ class McccPdfCommand extends Command
                 $io->warning("L'identifiant du parcours semble incorrect, récupération impossible ({$generateParcours}).");
                 return Command::FAILURE;
             }
+        }
+        elseif($generateAllParcours){
+
+            $io->writeln("\nCommande pour générer les exports 'MCCC' au format PDF, de tous les parcours valides.\n");
+
+            $parcoursArray = $this->entityManager->getRepository(Parcours::class)->findAll();
+            $parcoursArray = array_filter(
+                $parcoursArray,
+                fn($p) => 
+                $p->getDpeParcours()->last() instanceof DpeParcours && 
+                array_keys(
+                    $p->getDpeParcours()->last()->getEtatValidation()
+                )[0] === 'valide_a_publier' 
+                && array_values(
+                    $p->getDpeParcours()->last()->getEtatValidation()
+                )[0] === 1
+            );
+
+            $nombreParcoursValides = count($parcoursArray);
+
+            $io->writeln("Il y a {$nombreParcoursValides} parcours valides, à exporter.");
+
+            return Command::SUCCESS;
         }
 
         return Command::SUCCESS;
