@@ -567,6 +567,7 @@ class ProcessValidationController extends BaseController
 
     #[Route('/demande/reouverture/cloture', name: 'app_validation_demande_reouverture_cloture')]
     public function demandeReouvertureCloture(
+        DpeParcoursRepository  $dpeParcoursRepository,
         ParcoursRepository  $parcoursRepository,
         FormationRepository $formationRepository,
         Request             $request
@@ -581,7 +582,6 @@ class ProcessValidationController extends BaseController
             case 'formation':
                 $formation = $formationRepository->find($id);
                 $parcours = null;
-                $typeDpe = 'F';
 
                 if ($formation === null) {
                     return JsonReponse::error('Formation non trouvée');
@@ -589,12 +589,12 @@ class ProcessValidationController extends BaseController
                 break;
             case 'parcours':
                 $parcours = $parcoursRepository->find($id);
+                $dpeParcours = $dpeParcoursRepository->findLastDpeForParcours($parcours);
 
-                if ($parcours === null) {
+                if ($parcours === null ||  $dpeParcours === null) {
                     return JsonReponse::error('Parcours non trouvé');
                 }
                 $formation = $parcours->getFormation();
-                $typeDpe = 'P';
                 break;
         }
 
@@ -602,9 +602,10 @@ class ProcessValidationController extends BaseController
             $data = $request->request->all();
 
             if ($this->isGranted('ROLE_SES')) {
+                $dpe = GetDpeParcours::getFromParcours($parcours);
                 //réouverture directe sans sauvegarde ou avec sauvegarde selon le choix
-                if ($data['demandeReouverture'] === 'VALIDE_MODIFICATION_SANS_CFVU') {
-                    $dpe = GetDpeParcours::getFromParcours($parcours);
+                if ($data['confirmeCloture'] === TypeModificationDpeEnum::MODIFICATION_TEXTE->value) {
+
                     $dpe->setEtatValidation(['valide_a_publier' => 1]); //un état de processus différent pour connaitre le branchement ensuite
                     $parcours->getDpeParcours()->first()->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
 
@@ -612,14 +613,18 @@ class ProcessValidationController extends BaseController
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
 
                     $this->entityManager->flush();
-                } elseif ($data['demandeReouverture'] === 'MODIFICATION_AVEC_CFVU') {
-                    $parcours->getDpeParcours()?->first()->setEtatValidation(['central' => 1]); //un état de processus différent pour connaitre le branchement ensuite
-                    $formation->getDpe()?->getDpeParcours()->first()->setEtatValidation(['soumis_central' => 1]);
-                    $this->entityManager->flush();
+                } elseif ($data['confirmeCloture'] === TypeModificationDpeEnum::MODIFICATION_MCCC->value || $data['confirmeCloture'] === TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE->value) {
+                    $process = $this->validationProcess->getEtape('ses');
+                    $this->parcoursProcess->etatParcours($dpe, $process);
+                    $dpe->setEtatReconduction(TypeModificationDpeEnum::OUVERT);
+                    $this->parcoursProcess->valideParcours($dpe, $this->getUser(), $process, 'ses', $request);
+
+                    //                    $parcours->getDpeParcours()?->first()->setEtatValidation(['central' => 1]); //un état de processus différent pour connaitre le branchement ensuite
+                    //                    $formation->getDpe()?->getDpeParcours()->first()->setEtatValidation(['soumis_central' => 1]);
+                    //processus de passage en cfvu
+
                 }
 
-                //                $this->addFlash('success', 'DPE cloturé.');
-                // return $this->redirectToRoute('app_parcours_show', ['id' => $parcours->getId()]);
                 return JsonReponse::success('DPE cloturé');
             }
 
@@ -631,6 +636,7 @@ class ProcessValidationController extends BaseController
             return $this->render('process_validation/_demande_reouverture_cloture_ses.html.twig', [
                 'type' => $type,
                 'id' => $id,
+                'type_modif' =>$dpeParcours->getEtatReconduction()->value
             ]);
         }
 

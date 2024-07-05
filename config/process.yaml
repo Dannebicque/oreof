@@ -95,7 +95,7 @@ process:
     isTimeline: false
     hasDate: false
     transition: 'soumis_central'
-    canValide: 'transmettre_cfvu'
+    canValide: 'valider_central'
     canRefuse: 'refuser_central'
     canReserve: 'reserver_central'
   vp: #todo: sur cette phase VP = SES
@@ -109,7 +109,7 @@ process:
     isTimeline: false
     hasDate: false
     transition: 'soumis_central'
-    canValide: 'transmettre_cfvu'
+    canValide: 'valider_central'
     canRefuse: 'refuser_central'
     canReserve: 'reserver_central'
   cfvu:

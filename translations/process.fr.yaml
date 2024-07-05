@@ -364,10 +364,15 @@ historique.validation.ouverture_ses_ss_cfvu: 'Demande de réouverture du DPE'
 validation.ouverture_ses_ss_cfvu: validation.ouverture_ses_ss_cfvu
 demande.reouverture.clore.title: 'Fermeture de la demande de réouverture'
 demande.reouverture.clore: 'Fermer la demande de réouverture'
-demande.reouverture.ses.cloture.alerte: demande.reouverture.ses.cloture.alerte
-demande.reouverture.cloture.ses.label: demande.reouverture.cloture.ses.label
-demande.reouverture.modification.ses.cloture.commentaire.label: demande.reouverture.modification.ses.cloture.commentaire.label
-demande.reouverture.modification.ses.cloture.commentaire.help: demande.reouverture.modification.ses.cloture.commentaire.help
-btn.demande.reouverture.cloture: btn.demande.reouverture.cloture
+demande.reouverture.ses.cloture.alerte: 'La demande de réouverture sera clôturée et transmise au central pour traitement.'
+demande.reouverture.cloture.ses.label: 'Je confirme la clôture et soumets les modifications'
+demande.reouverture.cloture.ses.help: 'Confirmer la demande de réouverture et soumettre les modifications à la CFVU'
+demande.reouverture.cloture.sans_cfvu.ses.label: 'Je confirme la clôture. Les modifications ne nécessitent pas de passage en CFVU'
+demande.reouverture.cloture.sans_cfvu.ses.help: 'Confirmer la demande de réouverture. Les éléments seront publiés automatiquement.'
+demande.reouverture.modification.ses.cloture.commentaire.label: 'Commentaire obligatoire exposant les raisons des modifications :'
+demande.reouverture.modification.ses.cloture.commentaire.help: ' '
+btn.demande.reouverture.cloture: 'Clore et soumettre les modifications'
+btn.demande.reouverture.cloture.ses: 'Clore et soumettre les modifications'
+btn.demande.reouverture.cloture.sans_cfvu.ses: 'Clore et publier les modifications'
 historique.validation.cloture_ses_ss_cfvu: 'Demande de réouverture clôturée le %date%'
 validation.cloture_ses_ss_cfvu: validation.cloture_ses_ss_cfvu

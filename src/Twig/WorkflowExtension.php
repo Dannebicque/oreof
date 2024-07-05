@@ -90,7 +90,7 @@ class WorkflowExtension extends AbstractExtension
         }
 
         if (
-            array_key_exists('soumis_cfvu', $actualPlaces) && $entity instanceof Formation && $place === 'cfvu') {
+            array_key_exists('soumis_cfvu', $actualPlaces) && ($entity instanceof Formation || $entity instanceof Parcours ) && $place === 'cfvu') {
             return true;
         }
 
