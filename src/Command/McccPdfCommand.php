@@ -88,10 +88,10 @@ class McccPdfCommand extends Command
                     parcours : $parcours,
                 );
                 
-                $fileName = "MCCC - " . $anneeDpe->getAnnee() . " - " . $parcours->getFormation()->getSlug() ?? '---';
-
+                // $fileName = "MCCC - " . $anneeDpe->getAnnee() . " - " . $parcours->getFormation()->getSlug() ?? '---';
+                $fileName = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}.pdf";
                 $this->fs->appendToFile(
-                    __DIR__ . "/../../mccc-export/" . $fileName . ".pdf",
+                    __DIR__ . "/../../mccc-export/" . $fileName,
                     $pdf
                 );
 
@@ -143,7 +143,7 @@ class McccPdfCommand extends Command
                     );
                 }
                 $this->fs->appendToFile(
-                    __DIR__ . "/../../mccc-export/MCCC - " . $parcours->getDisplay() . ".pdf", $pdf
+                    __DIR__ . "/../../mccc-export/MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}.pdf", $pdf
                 );
                 $io->progressAdvance(1);
             }
