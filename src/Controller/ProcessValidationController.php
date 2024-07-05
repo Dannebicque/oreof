@@ -258,31 +258,42 @@ class ProcessValidationController extends BaseController
             switch ($type) {
                 case 'formation':
                     $objet = $formationRepository->find($id);
-                    $dpe = $dpeParcoursRepository->findOneBy(['formation' => $objet, 'campagneCollecte' => $this->getDpe()]);
-                    if ($objet === null || $dpe === null) {
+
+                    if ($objet === null) {
                         return JsonReponse::error('Formation non trouvée');
                     }
-                    $dpe->setEtatValidation([$process['transition'] => 1]);
-                    //mettre à jour l'historique
-                    $histoEvent = new HistoriqueFormationEvent($objet, $this->getUser(), $data['etat'], 'valide', $request);
-                    $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
-                    $this->entityManager->flush();
+
+                    if ($objet->isHasParcours() === false) {
+                        //formation sans parcours
+                        $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet->getParcours()->first(), 'campagneCollecte' => $this->getDpe()]);
+                        if ($dpe === null) {
+                            return JsonReponse::error('Formation non trouvée');
+                        }
+                        $dpe->setEtatValidation([$process['transition'] => 1]);
+                        $histoEvent = new HistoriqueFormationEvent($objet, $this->getUser(), $data['etat'], 'valide', $request);
+                        $this->eventDispatcher->dispatch($histoEvent, HistoriqueFormationEvent::ADD_HISTORIQUE_FORMATION);
+                        $this->entityManager->flush();
+                        return JsonReponse::success('Validation modifiée');
+                    }
+
                     break;
                 case 'parcours':
                     $objet = $parcoursRepository->find($id);
+                    $dpe = $dpeParcoursRepository->findOneBy(['parcours' => $objet, 'campagneCollecte' => $this->getDpe()]);
                     if ($objet === null) {
                         return JsonReponse::error('Parcours non trouvé');
                     }
 
-                    $objet->setEtatParcours([$process['transition'] => 1]);
+                    $dpe->setEtatValidation([$process['transition'] => 1]);
                     //mettre à jour l'historique
                     $histoEvent = new HistoriqueParcoursEvent($objet, $this->getUser(), $data['etat'], 'valide', $request);
                     $this->eventDispatcher->dispatch($histoEvent, HistoriqueParcoursEvent::ADD_HISTORIQUE_PARCOURS);
                     $this->entityManager->flush();
+                    return JsonReponse::success('Validation modifiée');
                     break;
             }
 
-            return JsonReponse::success('Validation modifiée');
+            return JsonReponse::error('Erreur lors de la modification de l\'état de validation');
         }
 
         return $this->render('process_validation/_edit.html.twig', [
