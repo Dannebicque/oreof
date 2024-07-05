@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.28](https://github.com/Dannebicque/oreof/compare/v1.29.27...v1.29.28) (2024-07-05)
+
+
+### Bug Fixes
+
+* Edit historique avec le process complet et DpeParcours ([6c4572c](https://github.com/Dannebicque/oreof/commit/6c4572c81b39cecd56ccb0aae78d5d58988980a9))
+* modification de l'état de validation ([a63f9f4](https://github.com/Dannebicque/oreof/commit/a63f9f4c14908b2943adea8141729d4780750c22))
+
+### [1.29.26](https://github.com/Dannebicque/oreof/compare/v1.29.25...v1.29.26) (2024-07-03)
+
 ### [1.29.27](https://github.com/Dannebicque/oreof/compare/v1.29.25...v1.29.27) (2024-07-03)
 
 
