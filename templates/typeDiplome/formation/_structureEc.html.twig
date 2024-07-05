@@ -47,7 +47,7 @@
 
     {% if presentiel %}
         {% if ec.elementsConstitutifsEnfants|length > 0 %}
-            <td colspan="{% if isBut is defined and isBut == true %}5{% else %}4{% endif %}"></td>
+            <td colspan="5"></td>
         {% else %}
             <td>
                 <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.cmPres|displayDiff : '' }}</span>
@@ -61,12 +61,14 @@
                 <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.tpPres|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.tpPres|filtreHeures }}</span>
             </td>
-            {% if isBut is defined and isBut == true %}
-                <td>{{ ec.heuresEctsEc.tePres|filtreHeures }}</td>
-            {% endif %}
+
             <td>
                 <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.sommeEcTotalPres|displayDiff : '' }}</span>
                 <span class="show_current">{{ ec.heuresEctsEc.sommeEcTotalPres|filtreHeures }}</span>
+            </td>
+            <td>
+                <span class="show_versioning d-none">{{ diffEc ? diffEc.heuresEctsEc.tePres|displayDiff : '' }}</span>
+                <span class="show_current">{{ ec.heuresEctsEc.tePres|filtreHeures }}</span>
             </td>
         {% endif %}
     {% endif %}
@@ -92,7 +94,6 @@
                 <span class="show_current">{{ ec.heuresEctsEc.sommeEcTotalDist|filtreHeures }}</span>
             </td>
         {% endif %}
-
     {% endif %}
 
     {% if parcours.modalitesEnseignement != null and (parcours.modalitesEnseignement.value == 1) %}
