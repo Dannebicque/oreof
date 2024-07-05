@@ -439,7 +439,8 @@
                             </div>
                             <div class="col-3 d-grid">
                                 {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', parcours.formation) %}
-                                    <a href="{{ path('app_codification_index', {formation: formation.id, parcours:parcours.id}) }}" class="btn btn-sm btn-outline-info">Gérer la codification</a>
+                                    <a href="{{ path('app_codification_index', {formation: formation.id, parcours:parcours.id}) }}"
+                                       class="btn btn-sm btn-outline-info">Gérer la codification</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -496,25 +497,29 @@
                                             <i class="fal fa-question"></i> {{ ('demande.reouverture')|trans({}, 'process') }}
                                         </button>
                                     {% else %}
-                                        <button class="btn btn-sm d-block btn-outline-warning"
-                                                type="button"
-                                                {{ stimulus_controller('modal', {
-                                                    size: 'lg',
-                                                    nomEvenement: 'refreshPage',
-                                                    modalTitle: ('demande.reouverture.clore.title')|trans({}, 'process'),
-                                                    modalUrl: path('app_validation_demande_reouverture_cloture', {
-                                                        id:formation.parcours[0].id,
-                                                        type:'parcours'
-                                                    }) }) }}
-                                                data-action="click->modal#openModal"
-                                                data-controller="tooltip"
-                                                data-tooltip-placement-value="bottom"
+                                        {% if formation.parcours[0] is defined %}
+                                            <button class="btn btn-sm d-block btn-outline-warning"
+                                                    type="button"
+                                                    {{ stimulus_controller('modal', {
+                                                        size: 'lg',
+                                                        nomEvenement: 'refreshPage',
+                                                        modalTitle: ('demande.reouverture.clore.title')|trans({}, 'process'),
+                                                        modalUrl: path('app_validation_demande_reouverture_cloture', {
+                                                            id:formation.parcours[0].id,
+                                                            type:'parcours'
+                                                        }) }) }}
+                                                    data-action="click->modal#openModal"
+                                                    data-controller="tooltip"
+                                                    data-tooltip-placement-value="bottom"
 
-                                                aria-label="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
-                                                data-bs-original-title="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
-                                        >
-                                            <i class="fal fa-close"></i> {{ ('demande.reouverture.clore')|trans({}, 'process') }}
-                                        </button>
+                                                    aria-label="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
+                                                    data-bs-original-title="{{ ('demande.reouverture.clore')|trans({}, 'process') }}"
+                                            >
+                                                <i class="fal fa-close"></i> {{ ('demande.reouverture.clore')|trans({}, 'process') }}
+                                            </button>
+                                        {% else %}
+                                            <span class="text-danger">Pas de parcours même par défaut</span>
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -523,7 +528,8 @@
                             </div>
                             <div class="col-3 d-grid">
                                 {% if is_granted('ROLE_SES') or is_granted('CAN_ETABLISSEMENT_SCOLARITE_ALL') or is_granted('CAN_FORMATION_SCOLARITE_MY', formation) %}
-                                    <a href="{{ path('app_codification_index', {formation: formation.id}) }}" class="btn btn-sm btn-outline-info">Gérer la codification</a>
+                                    <a href="{{ path('app_codification_index', {formation: formation.id}) }}"
+                                       class="btn btn-sm btn-outline-info">Gérer la codification</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -533,7 +539,8 @@
                             <div class="alert alert-info">
                                 Une demande de modification est en attente de validation par la CFVU. Remplacement
                                 de {{ demande.ancienResponsable.display }} par {{ demande.nouveauResponsable.display }}.
-                                <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}" class="text-danger"><i class="{{ iconDelete }}"></i> Annuler la demande ?</a>
+                                <a href="{{ path('app_formation_change_rf_suppression', {demande:demande.id}) }}"
+                                   class="text-danger"><i class="{{ iconDelete }}"></i> Annuler la demande ?</a>
                             </div>
                         </div>
                     {% endfor %}
