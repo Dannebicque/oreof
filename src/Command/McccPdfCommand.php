@@ -7,6 +7,7 @@ use App\Entity\DpeParcours;
 use App\Entity\Parcours;
 use App\TypeDiplome\Export\ButMccc;
 use App\TypeDiplome\Export\LicenceMccc;
+use App\Utils\Tools;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -89,7 +90,10 @@ class McccPdfCommand extends Command
                 );
                 
                 // $fileName = "MCCC - " . $anneeDpe->getAnnee() . " - " . $parcours->getFormation()->getSlug() ?? '---';
+                // $fileName = "MCC-Parcours-{$parcours->getId()}-" . Tools::slug($parcours->getLibelle()) . "-" . $anneeDpe->getAnnee() . ".pdf";
+                
                 $fileName = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}.pdf";
+
                 $this->fs->appendToFile(
                     __DIR__ . "/../../mccc-export/" . $fileName,
                     $pdf
@@ -142,8 +146,12 @@ class McccPdfCommand extends Command
                         parcours: $parcours
                     );
                 }
+
+                // $fileName = "MCC-Parcours-{$parcours->getId()}-" . Tools::slug($parcours->getLibelle()) . "-" . $anneeDpe->getAnnee() . ".pdf";
+                $fileName = "MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}.pdf";
+
                 $this->fs->appendToFile(
-                    __DIR__ . "/../../mccc-export/MCCC-Parcours-{$parcours->getId()}-{$anneeDpe->getAnnee()}.pdf", $pdf
+                    __DIR__ . "/../../mccc-export/" . $fileName, $pdf
                 );
                 $io->progressAdvance(1);
             }

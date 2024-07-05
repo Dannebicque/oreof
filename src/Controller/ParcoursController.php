@@ -682,4 +682,43 @@ class ParcoursController extends BaseController
             'errorArray' => $errorArray
         ]);
     }
+
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route('/{idParcours}/mccc/export/pdf', 'app_parcours_valid_mccc_pdf_export')]
+    public function getMcccAsPdfForParcours(
+        int $idParcours,
+        EntityManagerInterface $entityManager
+    ) : Response|JsonResponse {  
+
+        if(is_integer($idParcours) === false){
+            throw $this->createNotFoundException();
+        }
+
+        $dpe = $entityManager->getRepository(CampagneCollecte::class)->findOneBy(['defaut' => 1]);
+        $annee = $dpe->getAnnee();
+ 
+        try{
+            $file = file_get_contents(__DIR__ . "/../../mccc-export/MCCC-Parcours-{$idParcours}-{$annee}.pdf");
+            if($file){
+                return new Response(
+                    $file,
+                    200, 
+                    [
+                        'Content-Type' => 'application/pdf'
+                    ]
+                );
+            }
+        }
+        catch(\Exception $error) {
+            return new Response(
+                json_encode(
+                    ['error' => "Le parcours n'a pas été trouvé"]
+                ), 
+                404,
+                [
+                    'Content-Type' => 'application/json'
+                ]
+            ) ;
+        }
+    }
 }
