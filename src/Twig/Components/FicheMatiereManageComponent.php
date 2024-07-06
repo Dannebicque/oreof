@@ -43,6 +43,7 @@ final class FicheMatiereManageComponent extends AbstractController
 
     #[LiveProp(writable: true)]
     public string $event = 'none';
+    public bool $hasDemande = false;
 
     public function __construct(
         private HistoriqueFicheMatiereRepository $historiqueFicheMatiereRepository,
@@ -64,10 +65,10 @@ final class FicheMatiereManageComponent extends AbstractController
 
     private function getHistorique(): void
     {
-            $historiques = $this->historiqueFicheMatiereRepository->findBy(['ficheMatiere' => $this->ficheMatiere], ['created' => 'ASC']);
-            foreach ($historiques as $historique) {
-                $this->historiques[$historique->getEtape()] = $historique;
-            }
+        $historiques = $this->historiqueFicheMatiereRepository->findBy(['ficheMatiere' => $this->ficheMatiere], ['created' => 'ASC']);
+        foreach ($historiques as $historique) {
+            $this->historiques[$historique->getEtape()] = $historique;
+        }
     }
 
     #[LiveListener('mention_manage:edit')]
@@ -98,10 +99,14 @@ final class FicheMatiereManageComponent extends AbstractController
     public function postMount(): void
     {
         $this->getHistorique();
+        $lastHistorique = $this->historiqueFicheMatiereRepository->findOneBy(['ficheMatiere' => $this->ficheMatiere], ['created' => 'DESC']);
+        if ($lastHistorique !== null && $lastHistorique->getEtape() === 'rouvrir_fiche_matiere') {
+            $this->hasDemande = true;
+        }
 
         // dépend du type et de l'étape...
         $place = $this->getPlace();
-       $this->etape = self::TAB[$place] ;
+        $this->etape = self::TAB[$place] ;
     }
 
 

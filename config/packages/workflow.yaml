@@ -282,4 +282,7 @@ framework:
                 valider_fiche_pour_publication:
                     from: 'valide_pour_publication'
                     to: 'publie'
+                rouvrir_fiche_matiere:
+                    from: 'publie'
+                    to: 'en_cours_redaction'
 

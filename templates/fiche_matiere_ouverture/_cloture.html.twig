@@ -1,0 +1,44 @@
+{{ component('alerte', {
+    type: 'info',
+    message: ('fiche_matiere.demande.cloture.alerte')|trans({}, 'process')|nl2br|raw
+}) }}
+
+<form action="{{ path('app_fiche_matiere_validation_demande_cloture', {id:ficheMatiere.id}) }}" method="post">
+    <div class="form-check mt-2">
+        <input class="form-check-input" type="radio" value="CONFIRME_CLOTURE" id="confirmeCloture"
+               name="confirmeCloture">
+        <label class="form-check-label" for="confirmeCloture">
+            <strong>{{ ('fiche_matiere.demande.cloture.label')|trans({}, 'process') }}</strong>
+            <i
+                    class="fal fa-question-circle ms-1"
+                    data-controller="tooltip"
+                    data-tooltip-placement-value="bottom"
+                    aria-label="{{ ('fiche_matiere.demande.cloture.help')|trans({}, 'process') }}"
+                    data-bs-original-title="{{ ('fiche_matiere.demande.clotureu.help')|trans({}, 'process') }}"></i>
+        </label>
+    </div>
+
+    <div>
+        <label class="form-label" for="argumentaire">
+            <strong>{{ ('fiche_matiere.demande.cloture.commentaire.label')|trans({}, 'process') }}</strong>
+            <i
+                    class="fal fa-question-circle ms-1"
+                    data-controller="tooltip"
+                    data-tooltip-placement-value="bottom"
+                    aria-label="{{ ('fiche_matiere.demande.cloture.commentaire.help')|trans({}, 'process') }}"
+                    data-bs-original-title="{{ ('fiche_matiere.demande.cloture.commentaire.help')|trans({}, 'process') }}"></i>
+        </label>
+        <textarea class="form-control" name="argumentaire" id="argumentaire" rows="3"></textarea>
+    </div>
+
+    <div class="mt-2">
+        <button type="submit" class="btn btn-success"
+                {{ stimulus_action('base','sauvegardeFormModal', 'click') }}
+                {#                data-action="live#emit" #}
+                {#                data-event="valide" #}
+        >
+            <i class="fal fa-floppy-disk"></i>
+            {{ ('btn.fiche_matiere.demande.cloture')|trans({}, 'process') }}
+        </button>
+    </div>
+</form>
