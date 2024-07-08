@@ -57,7 +57,7 @@
                             {#                            {% if #}
                             {#                                (is_granted('CAN_EC_VALIDATE_MY', this.ficheMatiere) or is_granted('CAN_FORMATION_VALIDATE_ALL') or is_granted('CAN_PARCOURS_VALIDATE_MY', this.ficheMatiere)) #}
                             {#                            %} #}
-                            {% if this.process[this.etape].transition == 'publie' %}
+                            {% if this.process[this.etape].transition == 'publie' or this.process[this.etape].transition == 'transmis_pour_publication' %}
                                 <div class="col-2 d-grid">
                                     <button class="btn btn-sm btn-success d-block">
                                         Fiche publiée
