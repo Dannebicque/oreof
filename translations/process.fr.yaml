@@ -304,7 +304,7 @@ validation.valider.transmis_pour_publication: validation.valider.transmis_pour_p
 historique.validation.fiche_matiere.ses: 'Historique de validation fiche EC/matière'
 validation.valider.fiches_matieres: 'Valider et soumettre les fiches EC/matière'
 demande.reouverture: 'Demander la réouverture du DPE'
-demande.reouverture.title: demande.reouverture.title
+demande.reouverture.title: 'Réouverture de fiche EC/matière'
 validation.cfvu.valide.cas.acceptation.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.directe.valide_a_publier
 validation.cfvu.valide.cas.acceptation.non.directe.valide_a_publier: validation.cfvu.valide.cas.acceptation.non.directe.valide_a_publier
 validation.cfvu.valide.cas.sous.reserve.conseil.valide_a_publier: validation.cfvu.valide.cas.sous.reserve.conseil.valide_a_publier
@@ -392,3 +392,4 @@ fiche_matiere.demande.reouverture.help: 'Confirmer la demande de réouverture.'
 historique:
   fiche_matiere:
     rouvrir_fiche_matiere: 'Demande de réouverture de la fiche EC/matière'
+fiche_matiere.demande.reouverture.ses.alerte : 'Vous avez demandé la réouverture de la fiche EC/matière pour y apporter des modifications.'
