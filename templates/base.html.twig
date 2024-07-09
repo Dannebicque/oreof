@@ -238,6 +238,14 @@
                                     </a>
                                 </li>
                                 {% endif %}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li>
+                                        <a href="#">
+                                            <i class="fal fa-magnifying-glass icon"></i>
+                                            <span class="label">Effectuer une recherche</span>
+                                        </a>    
+                                    </li>
+                                {% endif %}
                             </ul>
                         </li>
                     {% endif %}
