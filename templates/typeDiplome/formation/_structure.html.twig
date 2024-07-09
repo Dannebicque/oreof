@@ -62,7 +62,7 @@
                 <tr>
                     <th
                             class="border-left-semestre-{{ ordre }}"
-                            colspan=" {% if presentiel %}8{% else %}13{% endif %}">S{{ semestre.ordre }}
+                            colspan=" {% if presentiel %}9{% else %}14{% endif %}">S{{ semestre.ordre }}
                         ({{ semestre.semestre.codeApogee }} | {{ semestre.semestreParcours.codeApogeeEtapeAnnee }}
                         - {{ semestre.semestreParcours.codeApogeeEtapeVersion }}) {% if semestre.raccroche == true %}<i
                                 class="fal fa-link"></i>{% endif %}
@@ -100,6 +100,10 @@
                         <th>
                             <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTotalPres|displayDiff : '' }}</span>
                             <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTotalPres|filtreHeures }}</span>
+                        </th>
+                        <th>
+                            <span class="show_versioning d-none">{{ diffSemestre is defined and diffSemestre != null ? diffSemestre.heuresEctsSemestre.sommeSemestreTePres|displayDiff : '' }}</span>
+                            <span class="show_current">{{ semestre.heuresEctsSemestre.sommeSemestreTePres|filtreHeures }}</span>
                         </th>
                     {% endif %}
 
@@ -153,6 +157,10 @@
                     <th>
                         <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTotalPres|displayDiff : '' }}</span>
                         <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTotalPres|filtreHeures }}</span>
+                    </th>
+                    <th>
+                        <span class="show_versioning d-none">{{ diffStructure is defined and diffStructure != null ? diffStructure.heuresEctsFormation.sommeFormationTePres|displayDiff : '' }}</span>
+                        <span class="show_current">{{ dto.heuresEctsFormation.sommeFormationTePres|filtreHeures }}</span>
                     </th>
                 {% endif %}
 

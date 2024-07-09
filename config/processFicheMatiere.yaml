@@ -40,14 +40,27 @@ process:
     canValide: 'valider_fiche_pour_publication'
   publie:
     page: 'fiche_matiere'
+    showOn: true
     icon: 'fa-bullhorn'
     label: 'fiche_matiere.publie'
     hasValid: false
     hasReserve: false
     hasRefuse: false
     hasUpload: false
-    isTimeline: true
+    isTimeline: false
     hasDate: false
     transition: 'publie'
     canValide: ''
-
+  rouvrir_fiche_matiere:
+    page: 'fiche_matiere'
+    showOn: false
+    icon: 'fa-pencil'
+    label: 'fiche_matiere.rouvrir_fiche_matiere'
+    hasValid: false
+    hasReserve: false
+    hasRefuse: false
+    hasUpload: false
+    isTimeline: false
+    hasDate: false
+    transition: 'publie'
+    canValide: ''

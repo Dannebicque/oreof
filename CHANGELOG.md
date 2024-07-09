@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.31](https://github.com/Dannebicque/oreof/compare/v1.29.30...v1.29.31) (2024-07-08)
+
+
+### Features
+
+* ouverture/fermeture fiche matières ([a7281c6](https://github.com/Dannebicque/oreof/commit/a7281c666378a3ad9dbffb3053198ab5aba40823))
+
+
+### Bug Fixes
+
+* fiche et bouton ([3a44df4](https://github.com/Dannebicque/oreof/commit/3a44df4604083a8f4ecd891fa4d8688f171826cf))
+
+### [1.29.30](https://github.com/Dannebicque/oreof/compare/v1.29.29...v1.29.30) (2024-07-05)
+
+
+### Features
+
+* Ajout des heures autonomies ([1b3bf1e](https://github.com/Dannebicque/oreof/commit/1b3bf1e4489cd32a99aab87a4af968c8a46ec3d0))
+
+
+### Bug Fixes
+
+* cloture d'une demande de modif avec CFVU ([a9f3040](https://github.com/Dannebicque/oreof/commit/a9f304035aade46e8b8436e8217486d7c668bc68))
+
 ### [1.29.29](https://github.com/Dannebicque/oreof/compare/v1.29.28...v1.29.29) (2024-07-05)
 
 
