@@ -8,13 +8,18 @@ use App\DTO\ChangeRf;
 use App\Entity\Formation;
 use App\Enums\EtatDemandeChangeRfEnum;
 use App\Enums\TypeRfEnum;
+use App\Events\NotifCentreFormationEvent;
+use App\Events\UserEvent;
 use App\Form\ChangeRfFormationType;
 use App\Repository\ChangeRfRepository;
 use App\Repository\ComposanteRepository;
+use App\Utils\Tools;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class FormationResponsableController extends BaseController
@@ -109,13 +114,11 @@ class FormationResponsableController extends BaseController
 
         $composantes = $composanteRepository->findAll();
         $tDemandes = [];
-        foreach ($composantes as $composante)
-        {
+        foreach ($composantes as $composante) {
             $tDemandes[$composante->getId()] = [];
         }
 
-        foreach ($demandes as $demande)
-        {
+        foreach ($demandes as $demande) {
             $tDemandes[$demande->getFormation()?->getComposantePorteuse()?->getId()][$demande->getFormation()?->getId()]['formation'] = $demande->getFormation();
             $tDemandes[$demande->getFormation()?->getComposantePorteuse()?->getId()][$demande->getFormation()?->getId()]['demandes'][] = $demande;
         }
@@ -128,5 +131,78 @@ class FormationResponsableController extends BaseController
             'composantes' => $composantes,
             'dpe' => $this->getDpe()
         ], 'synthese_changement_rf_'.(new DateTime())->format('d-m-Y_H-i-s'));
+    }
+
+    #[Route(
+        '/formation/change-responsable/valide-confirm-form/{etape}',
+        name: 'app_formation_responsable_valide_confirme'
+    )]
+    public function valideConfirmeForm(
+        EventDispatcherInterface $eventDispatcher,
+        KernelInterface $kernel,
+        ChangeRfRepository $changeRfRepository,
+        string $etape,
+        Request $request
+    ): Response {
+
+        if ($request->isMethod('POST')) {
+            $dir = $kernel->getProjectDir() . '/public/uploads/change_rf/pv/';
+            $demandes = explode(',', $request->request->get('demandes'));
+            if ($request->files->has('file') && $request->files->get('file') !== null) {
+                $file = $request->files->get('file');
+                $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
+                $file->move(
+                    $dir,
+                    $fileName
+                );
+                $nomFichier = $fileName;
+            }
+
+            foreach ($demandes as $idDemande) {
+                $demande = $changeRfRepository->find($idDemande);
+                if ($demande !== null) {
+                    $demande->setEtatDemande(EtatDemandeChangeRfEnum::VALIDE);
+                    $demande->setDateValidationCfvu(Tools::convertDate($request->request->get('dateCFVU')));
+                    $demande->setFichierPv($nomFichier);
+                    $formation = $demande->getFormation();
+
+                    if ($formation === null) {
+                        $this->toast('error', 'Erreur lors de la validation de la demande.');
+                        return $this->redirectToRoute('app_validation_index');
+                    }
+
+                    if ($demande->getTypeRf() === TypeRfEnum::RF) {
+                        $droits = ['ROLE_RESP_FORMATION'];
+                        $formation->setResponsableMention(null);
+                    } else {
+                        $droits = ['ROLE_CO_RESP_FORMATION'];
+                        $formation->setCoResponsable(null);
+                    }
+
+                    if ($demande->getNouveauResponsable() !== null) {
+                        $eventDispatcher->dispatch(new NotifCentreFormationEvent($demande->getFormation(), $demande->getNouveauResponsable(), $droits), NotifCentreFormationEvent::NOTIF_ADD_CENTRE_FORMATION);
+
+                        if ($demande->getTypeRf() === TypeRfEnum::RF) {
+                            $formation->setResponsableMention($demande->getNouveauResponsable());
+                        } else {
+                            $formation->setCoResponsable($demande->getNouveauResponsable());
+                        }
+                    }
+
+                    if ($demande->getAncienResponsable() !== null) {
+                        $eventDispatcher->dispatch(new NotifCentreFormationEvent($demande->getFormation(), $demande->getAncienResponsable(), $droits), NotifCentreFormationEvent::NOTIF_REMOVE_CENTRE_FORMATION);
+                    }
+                    $this->entityManager->flush();
+                }
+            }
+
+            $this->toast('success', 'Demandes validées, les droits ont été modifiés.');
+            return $this->redirectToRoute('app_validation_index');
+        }
+
+        return $this->render('formation_responsable/_valide_confirm_form.html.twig', [
+            'etape' => $etape,
+            'sDemandes' => $request->query->get('demandes'),
+        ]);
     }
 }

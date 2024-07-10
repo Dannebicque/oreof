@@ -181,23 +181,21 @@ class ValidationController extends BaseController
         $typeValidation = $request->query->get('typeValidation');
 
         if ($request->query->has('composante')) {
-            if ($request->query->get('composante') === 'all' && $request->query->get('composante') === 'all') {
+            if ($request->query->get('composante') === 'all' && $typeValidation === 'all') {
                 $demandes = $changeRfRepository->findBy([], ['dateDemande' => 'DESC']);
-            }  elseif ($request->query->get('composante') === 'all' && $request->query->get('typeValidation') !== 'all') {
-                $composante = null;
-                $demandes = $changeRfRepository->findByTypeValidation(['etatDemande' => $request->query->get('typeValidation')]);
+            } elseif ($request->query->get('composante') === 'all' && $typeValidation !== 'all') {
+                $demandes = $changeRfRepository->findByEtatDemande($typeValidation);
             } else {
                 $composante = $composanteRepository->find($request->query->get('composante'));
                 if (!$composante) {
                     throw $this->createNotFoundException('La composante n\'existe pas');
                 }
-                $demandes = $changeRfRepository->findByComposanteTypeValidation($composante, $request->query->get('typeValidation'));
+                $demandes = $changeRfRepository->findByComposanteTypeValidation($composante, $typeValidation);
             }
         } else {
             $formations = [];
         }
 
-        $composantes = $composanteRepository->findAll();
         return $this->render('validation/_listeChangeRf.html.twig', [
             'demandes' => $demandes,
             'etape' => $typeValidation ?? null,

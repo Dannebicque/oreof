@@ -40,6 +40,9 @@ class ChangeRf
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $commentaire = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $fichier_pv = null;
+
     public function __construct()
     {
         $this->etatDemande = EtatDemandeChangeRfEnum::EN_ATTENTE;
@@ -143,6 +146,18 @@ class ChangeRf
     public function setCommentaire(?string $commentaire): static
     {
         $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function getFichierPv(): ?string
+    {
+        return $this->fichier_pv;
+    }
+
+    public function setFichierPv(?string $fichier_pv): static
+    {
+        $this->fichier_pv = $fichier_pv;
 
         return $this;
     }

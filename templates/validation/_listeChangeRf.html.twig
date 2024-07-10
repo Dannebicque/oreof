@@ -1,89 +1,127 @@
 <div class="card-body">
     <table class="table" {{ stimulus_controller('check_all') }}>
-    <thead>
-    <tr>
-        <th>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
-                </label>
-            </div>
-        </th>
-        <th>
-            Formation
-        </th>
-        <th>
-            Co/RF
-        </th>
-        <th>
-            Actuel Co/RF
-        </th>
-        <th>
-            Nouveau Co/RF
-        </th>
-        <th>
-            Date demande
-        </th>
-        <th>
-            Etat
-        </th>
-        <th>
-            Actions
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for demande in demandes %}
-    <tr>
-        <td>
-            <div class="checkbox">
-                <label>
-                    <input
-                            {{ stimulus_action('check_all', 'check') }}
-                            type="checkbox"
-                            class="check-all"
-                            name="demandes[]"
-                            value="{{ demande.id }}"
-                    >
-                </label>
-            </div>
-        </td>
-        <td>
-            {{ demande.formation.displayLong }}
-        </td>
-        <td>
-            {{ demande.typeRf.value }}
-        </td>
-        <td>
-            {{ demande.ancienResponsable.display }}
-        </td>
-        <td>
-            {{ demande.nouveauResponsable.display }}
-        </td>
-        <td>
-            {{ demande.dateDemande|date('d/m/Y H:i') }}
-        </td>
-        <td>
-           {{ demande.etatDemande|badgeEnum }}
-        </td>
-        <td>
-{#            <a href="{{ path('formation_demande', {id: demande.id}) }}" class="btn btn-primary">Voir</a>#}
-        </td>
-    </tr>
+        <thead>
         <tr>
-            <td colspan="2" class="text-end"> Commentaire :</td>
-            <td colspan="5">
-                {{ demande.commentaire }}
-            </td>
-            <td></td>
+            <th>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="check-all" {{ stimulus_action('check_all', 'checkAll') }}>
+                    </label>
+                </div>
+            </th>
+            <th>
+                Formation
+            </th>
+            <th>
+                Co/RF
+            </th>
+            <th>
+                Actuel Co/RF
+            </th>
+            <th>
+                Nouveau Co/RF
+            </th>
+            <th>
+                Date demande
+            </th>
+            <th>
+                Etat
+            </th>
+            <th>
+                Actions
+            </th>
         </tr>
+        </thead>
+        <tbody>
+        {% for demande in demandes %}
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input
+                                    {{ stimulus_action('check_all', 'check') }}
+                                    type="checkbox"
+                                    class="check-all"
+                                    name="demandes[]"
+                                    value="{{ demande.id }}"
+                            >
+                        </label>
+                    </div>
+                </td>
+                <td>
+                    {{ demande.formation.displayLong }}
+                </td>
+                <td>
+                    {{ demande.typeRf.value }}
+                </td>
+                <td>
+                    {{ demande.ancienResponsable != null ? demande.ancienResponsable.display : 'Non défini' }}
+                </td>
+                <td>
+                    {{ demande.nouveauResponsable != null ? demande.nouveauResponsable.display : 'Non défini' }}
+                </td>
+                <td>
+                    {{ demande.dateDemande|date('d/m/Y H:i') }}
+                </td>
+                <td>
+                    {{ demande.etatDemande|badgeEnum }}
+                </td>
+                <td>
+                    {#            <a href="{{ path('formation_demande', {id: demande.id}) }}" class="btn btn-primary">Voir</a> #}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-end"> Commentaire :</td>
+                <td colspan="5">
+                    {{ demande.commentaire }}
+                </td>
+                <td></td>
+            </tr>
         {% else %}
-        <tr>
-            <td colspan="8">
-                <div class="alert alert-info">Aucune demande de changement de Co/RF dans cette état de demande</div>
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
- </table>
+            <tr>
+                <td colspan="8">
+                    <div class="alert alert-info">Aucune demande de changement de Co/RF dans cette état de demande</div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if etape == 'EN_ATTENTE' %}
+        <div class="row mt-2">
+            <div class="col-3 d-grid">
+                <button class="btn btn-sm d-block btn-outline-success"
+                        type="button"
+                        data-action="validation--index#valide_rf"
+                        data-validation--index-url-param="{{ path('app_formation_responsable_valide_confirme', {etape:etape}) }}"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('validation.valider.'~etape)|trans({}, 'process') }}"
+                >
+                    <i class="fal fa-check"></i> {{ ('validation.valider.'~etape)|trans({}, 'process') }}
+                </button>
+            </div>
+
+
+            <div class="col-3 d-grid">
+            </div>
+
+            <div class="col-3 d-grid">
+                <button class="btn btn-sm d-block btn-outline-danger"
+                        type="button"
+                        data-action="validation--index#valide"
+                        data-validation--index-url-param="{{ path('app_validation_refuse_lot', {etape:etape}) }}"
+                        data-controller="tooltip"
+                        data-tooltip-placement-value="bottom"
+                        aria-label="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"
+                        data-bs-original-title="{{ ('validation.refuser.'~etape)|trans({}, 'process') }}"
+                >
+                    <i class="fal fa-ban"></i> {{ ('validation.refuser.'~etape)|trans({}, 'process') }}
+                </button>
+            </div>
+        </div>
+        <div class="row mt-2" {{ stimulus_target('validation--index', 'action') }}>
+
+        </div>
+    {% endif %}
 </div>
