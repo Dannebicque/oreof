@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.33](https://github.com/Dannebicque/oreof/compare/v1.29.32...v1.29.33) (2024-07-10)
+
+
+### Features
+
+* Validation des demandes de changement de RF par la CFVu ([0e7ad1f](https://github.com/Dannebicque/oreof/commit/0e7ad1fba65230c2f1760b23769fadccf9db28d1))
+
 ### [1.29.32](https://github.com/Dannebicque/oreof/compare/v1.29.31...v1.29.32) (2024-07-10)
 
 
