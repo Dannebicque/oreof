@@ -1179,7 +1179,7 @@ class Parcours
             $t[] = $regime;
         }
 
-        if ((count($t) === 1 || count($t) === 4 ) && in_array(RegimeInscriptionEnum::FI, $t, true)) {
+        if ((count($t) === 1 || count($t) === 4) && in_array(RegimeInscriptionEnum::FI, $t, true)) {
             return 1;
         }
 
@@ -1428,6 +1428,15 @@ class Parcours
     public function etatDpeParcours() : array
     {
         return $this->dpeParcours->first()?->getEtatValidation();
+    }
+
+    public function hasReouverture() : bool
+    {
+        return in_array($this->dpeParcours->first()?->getEtatReconduction(), [
+            TypeModificationDpeEnum::MODIFICATION_TEXTE,
+            TypeModificationDpeEnum::MODIFICATION_MCCC,
+            TypeModificationDpeEnum::MODIFICATION_MCCC_TEXTE,
+        ])  ;
     }
 
     public function withCfvu() : bool

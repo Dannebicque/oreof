@@ -65,7 +65,7 @@ class ParcoursProcess extends AbstractProcess
 
     public function valideParcours(DpeParcours $dpeParcours, UserInterface $user, $process, $etape, $request): Response
     {
-        $this->dpeParcoursWorkflow->apply($dpeParcours, $process['canValide']);
+        $this->dpeParcoursWorkflow->apply($dpeParcours, $process['canValide'], ['motif' => $request->request->get('argumentaire', ''), 'date' => $request->request->get('date', '')]);
         $this->entityManager->flush();
         return $this->dispatchEventParcours($dpeParcours, $user, $etape, $request, 'valide');
     }

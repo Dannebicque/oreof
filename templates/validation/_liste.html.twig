@@ -40,6 +40,7 @@
                             <input
                                     {{ stimulus_action('check_all', 'check') }}
                                     type="checkbox"
+                                    {% if parcours.hasReouverture %}disabled{% endif %}
                                     class="check-all"
                                     name="parcours[]"
                                     value="{{ parcours.id }}"
@@ -73,6 +74,9 @@
                 </td>
                 <td>
                     {{ parcours.etatDpeParcours|badgeDpe }}
+                    {% if parcours.hasReouverture %}
+                        <span class="badge bg-warning">Revouverture en cours</span>
+                    {% endif %}
                 </td>
                 {% if etape == 'cfvu' %}
                     <td>
