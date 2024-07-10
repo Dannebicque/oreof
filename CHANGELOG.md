@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.32](https://github.com/Dannebicque/oreof/compare/v1.29.31...v1.29.32) (2024-07-10)
+
+
+### Features
+
+* Sauvegarde d'un fichier MCCC au changement de version après CFVU ([8e252b7](https://github.com/Dannebicque/oreof/commit/8e252b76c6dbb6ec2bedc4929fddcf5b384c8a24))
+
+
+### Bug Fixes
+
+* fiche et bouton ([3e20cb7](https://github.com/Dannebicque/oreof/commit/3e20cb79a335823aa171278d54ae6ebbd3f3f517))
+
 ### [1.29.31](https://github.com/Dannebicque/oreof/compare/v1.29.30...v1.29.31) (2024-07-08)
 
 
