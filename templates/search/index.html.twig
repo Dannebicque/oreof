@@ -14,17 +14,33 @@ input:focus{
 
 {% block content %}
 
-<h1 class="small-title">Outil de recherche</h1>
+<h1 class="small-title fs-3 mb-4">Outil de recherche</h1>
 
 <div class="row justify-content-center">
-    <div class="col-8 mt-5">
-        <form>
+    <div class="col-8 mt-5 mb-3">
+        <form action="{{ path('app_search_action') }}">
             <div class="form-group">
                 <div class="row">
                     <label for="keyword" class="fs-4 w-25 text-center">
                         Mot-clé
                     </label>
-                    <input class="form-control border border-primary rounded ps-2 ms-3 w-50" type="text" placeholder="Entrez votre recherche...">
+                    <input 
+                        class="form-control border border-primary rounded ps-2 ms-3 w-50" 
+                        type="text" 
+                        placeholder="Entrez votre recherche..."
+                        id="keyword"
+                        name="keyword_1"
+                    >
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-3">
+                    <button 
+                        type="submit"
+                        class="btn btn-primary btn-small border border-light rounded mt-5"
+                    >
+                        Rechercher
+                    </button>
                 </div>
             </div>
         </form>
