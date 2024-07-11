@@ -1,0 +1,32 @@
+<form action="{{ path('app_formation_responsable_valide_confirme', {etape:etape}) }}" method="post"
+      enctype="multipart/form-data">
+    <input type="hidden" name="demandes" value="{{ sDemandes }}">
+    <div>
+        <label for="date" class="form-label">{{ ('valide.change_rf.attente.date.label')|trans({}, 'process') }}
+            <span class="required"></span> <i
+                    class="fal fa-question-circle ms-1"
+                    data-controller="tooltip"
+                    data-tooltip-placement-value="bottom"
+                    aria-label="{{ ('valide.change_rf.attente.helps.date.help')|trans({}, 'process') }}"
+                    data-bs-original-title="{{ ('valide.change_rf.attente.helps.date.help')|trans({}, 'process') }}"></i></label>
+        <input type="date" name="dateCFVU"
+               class="form-control"
+               id="date"
+        >
+    </div>
+    <div>
+        <label for="file" class="form-label">{{ ('valide.change_rf.attente.fichier.label')|trans({}, 'process') }}
+            <i class="fal fa-question-circle ms-1"
+               data-controller="tooltip"
+               data-tooltip-placement-value="bottom"
+               aria-label="{{ ('valide.change_rf.attente.helps.fichier.help')|trans({}, 'process') }}"
+               data-bs-original-title="{{ ('valide.change_rf.attente.helps.fichier.help')|trans({}, 'process') }}"></i></label>
+        <input type="file" name="file" id="file" accept="application/pdf" class="form-control">
+    </div>
+    <div class="mt-2">
+        <button type="submit" class="btn btn-success">
+            <i class="fal fa-floppy-disk"></i>
+            {{ ('btn.change_rf.valide')|trans({}, 'process') }}
+        </button>
+    </div>
+</form>

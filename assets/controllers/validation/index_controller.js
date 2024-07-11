@@ -59,4 +59,25 @@ export default class extends Controller {
       this.actionTarget.innerHTML = await reponse.text()
     }
   }
+
+  async valide_rf(event) {
+    const liste = document.querySelectorAll('.check-all:checked')
+    if (liste.length === 0) {
+      this.actionTarget.innerHTML = ''
+      callOut('Veuillez sélectionner au moins une demande', 'danger')
+    } else {
+      const demandes = []
+      liste.forEach((item) => {
+        demandes.push(item.value)
+      })
+
+      const body = new URLSearchParams({
+        demandes,
+      })
+
+      this.actionTarget.innerHTML = ''
+      const reponse = await fetch(`${event.params.url}?${body.toString()}`)
+      this.actionTarget.innerHTML = await reponse.text()
+    }
+  }
 }

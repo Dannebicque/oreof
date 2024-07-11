@@ -11,6 +11,7 @@ namespace App\EventSubscriber\DpeWorkflow;
 
 use App\Classes\GetHistorique;
 use App\Classes\Mailer;
+use App\Entity\DpeParcours;
 use App\Entity\Formation;
 use App\Repository\ComposanteRepository;
 use App\Repository\FormationRepository;
@@ -38,6 +39,13 @@ class DpeCfvuMailSubscriber extends AbstractDpeMailSubscriber implements EventSu
             'workflow.dpe.transition.valider_reserve_conseil_cfvu' => 'onValideCfvu',
             'workflow.dpe.transition.valider_reserve_central_cfvu' => 'onValideCfvu',
             'workflow.dpe.transition.valider_cfvu' => 'onValideCfvu',
+
+            'workflow.dpeParcours.transition.refuser_definitif_cfvu' => 'onRefuseCfvu',
+            'workflow.dpeParcours.transition.refuser_revoir_cfvu' => 'onRefuseCfvu',
+            'workflow.dpeParcours.transition.valider_reserve_cfvu' => 'onValideCfvu',
+            'workflow.dpeParcours.transition.valider_reserve_conseil_cfvu' => 'onValideCfvu',
+            'workflow.dpeParcours.transition.valider_reserve_central_cfvu' => 'onValideCfvu',
+            'workflow.dpeParcours.transition.valider_cfvu' => 'onValideCfvu',
         ];
     }
 
@@ -68,9 +76,14 @@ class DpeCfvuMailSubscriber extends AbstractDpeMailSubscriber implements EventSu
 
     public function onValideCfvu(Event $event): void
     {
-        //mail au RF
-        /** @var Formation $formation */
-        $formation = $event->getSubject();
+        if ($event->getSubject() instanceof Formation) {
+            $formation = $event->getSubject();
+        } elseif($event->getSubject() instanceof DpeParcours) {
+            $formation = $event->getSubject()->getParcours()->getFormation();
+        } else {
+            return;
+        }
+
         $dpe = $formation->getComposantePorteuse()?->getResponsableDpe();
         //todo: check si le responsable de formation accepte le mail
         $this->myMailer->initEmail();
