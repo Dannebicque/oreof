@@ -24,11 +24,13 @@ use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ProcessValidationController extends BaseController
 {
+    private string $dir;
     public function __construct(
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly EntityManagerInterface   $entityManager,
@@ -37,7 +39,9 @@ class ProcessValidationController extends BaseController
         private readonly FormationProcess         $formationProcess,
         private readonly ParcoursProcess          $parcoursProcess,
         private readonly FicheMatiereProcess          $ficheMatiereProcess,
+        KernelInterface $kernel
     ) {
+        $this->dir = $kernel->getProjectDir().'/public/uploads/conseils/';
     }
 
     #[Route('/validation/valide/{etape}', name: 'app_validation_valide')]
@@ -310,8 +314,19 @@ class ProcessValidationController extends BaseController
         string              $etape,
         Request             $request
     ): Response {
+        $fileName = null;
         if ($request->isMethod('POST')) {
             $sParcours = $request->request->get('parcours');
+
+            if ($request->files->has('file') && $request->files->get('file') !== null) {
+                $file = $request->files->get('file');
+                $fileName = md5(uniqid('', true)) . '.' . $file->guessExtension();
+                $file->move(
+                    $this->dir,
+                    $fileName
+                );
+            }
+
         } else {
             $sParcours = $request->query->get('parcours');
         }
@@ -320,6 +335,7 @@ class ProcessValidationController extends BaseController
         $process = $this->validationProcess->getEtape($etape);
         $laisserPasser = false;
         $tParcours = [];
+
         foreach ($allParcours as $id) {
             $objet = $parcoursRepository->find($id);
 
@@ -347,7 +363,7 @@ class ProcessValidationController extends BaseController
             $processData = $this->parcoursProcess->etatParcours($dpe, $process);
 
             if ($request->isMethod('POST')) {
-                $this->parcoursProcess->valideParcours($dpe, $this->getUser(), $process, $etape, $request);
+                $this->parcoursProcess->valideParcours($dpe, $this->getUser(), $process, $etape, $request, $fileName);
             }
         }
 

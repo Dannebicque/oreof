@@ -154,6 +154,7 @@ class HistoriqueSubscriber implements EventSubscriberInterface
     public function createHistoriqueParcours(HistoriqueParcoursEvent $event): void
     {
         $request = $event->getRequest();
+        $fileName = $event->getFileName();
 
         if ($request === null) {
             throw new \Exception('Pas de requete');
@@ -166,6 +167,25 @@ class HistoriqueSubscriber implements EventSubscriberInterface
         $histo->setEtape($event->getEtape());
         $histo->setCommentaire($this->getCommentaire($request));
         $histo->setEtat($event->getEtat());
+
+        foreach ($this->cases as $cas) {
+            if ($request->request->has($cas)) {
+                $tab[$cas] = $request->request->get($cas);
+                if ($cas === 'laisserPasser') {
+                    $histo->setEtat('laisserPasser');
+                }
+            }
+
+            if ($request->request->has('argumentaire_'.$cas)) {
+                $tab['argumentaire_'.$cas] = $request->request->get('argumentaire_'.$cas);
+            }
+        }
+
+        if ($fileName !== null) {
+            $tab['fichier'] = $fileName;
+        }
+
+        $histo->setComplements($tab ?? []);
 
         $this->entityManager->persist($histo);
         $this->entityManager->flush();
