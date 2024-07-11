@@ -23,9 +23,10 @@ class SearchController extends AbstractController
     #[Route('/search/keyword', name: 'app_search_action')]
     public function searchWithKeyword(){
         $request = Request::createFromGlobals();
+        $keyword_1 = $request->query->get('keyword_1');
 
-        dump($request->query->get('keyword_1'));
-
-        exit;
+        return $this->render('search/search_result.html.twig', [
+            'keyword_1' => $keyword_1
+        ]);
     }
 }
