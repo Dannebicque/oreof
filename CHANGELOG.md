@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.29.34](https://github.com/Dannebicque/oreof/compare/v1.29.33...v1.29.34) (2024-07-11)
+
+
+### Features
+
+* Validation conseil + dépôt PV en lot sur parcours (DpeParcours) ([aa3f6ac](https://github.com/Dannebicque/oreof/commit/aa3f6ac6bf306776b6c56c15f8901c5fd18b3708))
+* Validation des demandes de changement de RF par la CFVu ([fc97761](https://github.com/Dannebicque/oreof/commit/fc97761ee421c2728660fd4b6330e9a21f3f2b09))
+
 ### [1.29.33](https://github.com/Dannebicque/oreof/compare/v1.29.32...v1.29.33) (2024-07-10)
 
 
