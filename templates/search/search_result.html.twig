@@ -5,7 +5,25 @@
 <h1 class="small-title fs-3 mb-4">Résultats de la recherche</h1>
 
 <p class="fs-3 text-dark text-center mt-5">
-    Keyword : {{ keyword_1 ?? 'Aucun mot-clé renseigné.'}}
+    {{ keyword_1 is not empty ? 'Keyword : ' ~ keyword_1 : 'Aucun mot-clé renseigné.' }}
 </p>
+
+<div class="row justify-content-center">
+    <div class="col-8">
+        {% if parcoursArray|length > 0 %}
+            <ul>
+                {% for p in parcoursArray %}
+                    <li>
+                        ID : {{ p.id }} - Sigle : {{ p.sigle }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h1 class="fs-4 my-2 text-dark">
+                Aucun parcours trouvé pour le mot-clé fourni...
+            </h1>
+        {% endif %}
+    </div>
+</div>
 
 {% endblock %}

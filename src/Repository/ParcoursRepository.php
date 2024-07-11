@@ -14,6 +14,7 @@ use App\Entity\Composante;
 use App\Entity\Formation;
 use App\Entity\Mention;
 use App\Entity\Parcours;
+use App\Entity\TypeDiplome;
 use App\Entity\User;
 use App\Enums\EtatDpeEnum;
 use App\Enums\TypeModificationDpeEnum;
@@ -216,5 +217,18 @@ class ParcoursRepository extends ServiceEntityRepository
 
         return $query->getQuery()
             ->getResult();
+    }
+
+    public function findWithKeyword(string $keyword) {
+        $qb = $this->createQueryBuilder('p');
+
+        $qb = $qb
+            ->select('p.id, p.libelle, p.sigle')
+            ->where(
+                $qb->expr()->like('UPPER(p.objectifsParcours)', 'UPPER(:keyword)')
+            )
+            ->setParameter('keyword', '%' . $keyword . '%');
+
+        return $qb->getQuery()->getResult();
     }
 }

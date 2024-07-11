@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Parcours;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,12 +23,17 @@ class SearchController extends AbstractController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/search/keyword', name: 'app_search_action')]
-    public function searchWithKeyword(){
+    public function searchWithKeyword(
+        EntityManagerInterface $entityManager
+    ){
         $request = Request::createFromGlobals();
         $keyword_1 = $request->query->get('keyword_1');
 
+        $parcoursArray = $entityManager->getRepository(Parcours::class)->findWithKeyword($keyword_1);
+
         return $this->render('search/search_result.html.twig', [
-            'keyword_1' => $keyword_1
+            'keyword_1' => $keyword_1,
+            'parcoursArray' => $parcoursArray
         ]);
     }
 }
