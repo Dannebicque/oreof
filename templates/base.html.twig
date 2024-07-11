@@ -180,7 +180,7 @@
                                 </li>
                                 {% if is_granted('ROLE_ADMIN') %}
                                     <li>
-                                        <a href="#">
+                                        <a href="{{ path('app_search') }}">
                                             <i class="fal fa-magnifying-glass icon"></i>
                                             <span class="label">Effectuer une recherche</span>
                                         </a>    
