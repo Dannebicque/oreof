@@ -2,8 +2,34 @@
 
 {% block title %}ORéOF - Recherche{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+
+<style>
+input:focus{
+    border-color: black !important;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 
 <h1 class="small-title">Outil de recherche</h1>
+
+<div class="row justify-content-center">
+    <div class="col-8 mt-5">
+        <form>
+            <div class="form-group">
+                <div class="row">
+                    <label for="keyword" class="fs-4 w-25 text-center">
+                        Mot-clé
+                    </label>
+                    <input class="form-control border border-primary rounded ps-2 ms-3 w-50" type="text" placeholder="Entrez votre recherche...">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 {% endblock %}
