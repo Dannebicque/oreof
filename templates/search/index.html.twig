@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ORéOF - Recherche{% endblock %}
+{% block header %}
+    <h1 class="small-title fs-3">Outil de recherche</h1>
+{% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -9,39 +11,43 @@
 input:focus{
     border-color: black !important;
 }
+
+input[name='keyword_1']::placeholder {
+    color: black;
+}
 </style>
 {% endblock %}
 
 {% block content %}
 
-<h1 class="small-title fs-3 mb-4">Outil de recherche</h1>
-
-<div class="row justify-content-center">
+<div class="row justify-content-center mt-5">
     <div class="col-8 mt-5 mb-3">
         <form action="{{ path('app_search_action') }}">
             <div class="form-group">
                 <div class="row">
-                    <label for="keyword" class="fs-4 w-25 text-center">
-                        Mot-clé
-                    </label>
+                    <div class="col-12 col-md-4 text-center mb-3 mb-md-0">
+                        <label for="keyword" class="fs-4 text-center">
+                            Mot-clé
+                        </label>
+                    </div>
+                    <div class="col-12 col-md-8 col-lg-6">
                     <input 
-                        class="form-control border border-primary rounded ps-2 ms-3 w-50" 
+                        class="form-control border border-primary rounded ps-2 ms-md-3" 
                         type="text" 
                         placeholder="Entrez votre recherche..."
                         id="keyword"
                         name="keyword_1"
                     >
+                    </div>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-3">
-                    <button 
-                        type="submit"
-                        class="btn btn-primary btn-small border border-light rounded mt-5"
-                    >
-                        Rechercher
-                    </button>
-                </div>
+            <div class="d-flex col-12 justify-content-center">
+                <button 
+                    type="submit"
+                    class="btn btn-primary btn-small border border-light rounded mt-5"
+                >
+                    Rechercher
+                </button>
             </div>
         </form>
     </div>
