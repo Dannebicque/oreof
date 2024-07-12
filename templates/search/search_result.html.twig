@@ -36,13 +36,18 @@
                                     </span>
                                 {% endif %}
                                 {% if 'poursuitesEtudes' in resultArrayBadge[loop.index0] %}
-                                    <span class="badge rounded-pill text-bg-success">
+                                    <span class="badge rounded-pill text-bg-warning">
                                         Poursuite d'études
                                     </span> 
                                 {% endif %}
                                 {% if 'contenuFormation' in resultArrayBadge[loop.index0] %}
-                                    <span class="badge rounded-pill text-bg-success">
+                                    <span class="badge rounded-pill text-bg-primary">
                                         Contenu de la formation
+                                    </span>
+                                {% endif %}
+                                {% if 'resultatsAttendus' in resultArrayBadge[loop.index0] %}
+                                    <span class="badge rounded-pill text-bg-info">
+                                        Résultats attendus
                                     </span>
                                 {% endif %}
                             </div>

@@ -58,6 +58,14 @@ class SearchController extends AbstractController
             ){
                 $textContains[] = 'objectifsParcours';
             }
+            if(
+                mb_strstr(
+                    mb_strtoupper($parcoursArray[$i]['resultatsAttendus']),
+                    mb_strtoupper($keyword_1))
+                !== false
+            ){
+                $textContains[] = 'resultatsAttendus';
+            }
 
             $resultArrayBadge[] = $textContains;
         }

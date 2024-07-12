@@ -223,7 +223,11 @@ class ParcoursRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p');
 
         $qb = $qb
-            ->select('p.id, p.libelle, p.sigle, p.objectifsParcours, p.poursuitesEtudes, p.contenuFormation')
+            ->select('
+                    p.id, p.libelle, p.sigle, p.objectifsParcours,
+                    p.poursuitesEtudes, p.contenuFormation,
+                    p.resultatsAttendus
+            ')
             ->where(
                 $qb->expr()->like('UPPER(p.objectifsParcours)', 'UPPER(:keyword)')
             )
@@ -232,6 +236,9 @@ class ParcoursRepository extends ServiceEntityRepository
             )
             ->orWhere(
                 $qb->expr()->like('UPPER(p.contenuFormation)', 'UPPER(:keyword)')
+            )
+            ->orWhere(
+                $qb->expr()->like('UPPER(p.resultatsAttendus)', 'UPPER(:keyword)')
             )
             ->setParameter('keyword', '%' . $keyword . '%');
 
